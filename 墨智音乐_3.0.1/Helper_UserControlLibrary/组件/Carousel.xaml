@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:墨智音乐_3._0._1.Helper_UserControlLibrary.组件"
+                    >
+
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="墨智音乐_3.0.1/Helper_UserControlLibrary/组件/Carousel.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+
+
+</ResourceDictionary>

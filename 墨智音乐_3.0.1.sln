@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Blend for Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "墨智音乐_3.0.1", "墨智音乐_3.0.1\墨智音乐_3.0.1.csproj", "{E8C46005-F2C8-4215-A8FB-07219859613E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Music_Player_Test", "..\Music_Player_Test(KRC)\WindowsFormsApplication1\Music_Player_Test.csproj", "{E8040602-E187-4D94-855F-A9E35EC0A899}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "墨智音乐_WPF", "..\墨智音乐_WPF\墨智音乐_WPF\墨智音乐_WPF.csproj", "{05951649-7DD2-4D2B-9569-44E3BE82DA36}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E8C46005-F2C8-4215-A8FB-07219859613E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8C46005-F2C8-4215-A8FB-07219859613E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8C46005-F2C8-4215-A8FB-07219859613E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E8C46005-F2C8-4215-A8FB-07219859613E}.Debug|x86.Build.0 = Debug|Any CPU
+		{E8C46005-F2C8-4215-A8FB-07219859613E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8C46005-F2C8-4215-A8FB-07219859613E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8C46005-F2C8-4215-A8FB-07219859613E}.Release|x86.ActiveCfg = Release|Any CPU
+		{E8C46005-F2C8-4215-A8FB-07219859613E}.Release|x86.Build.0 = Release|Any CPU
+		{E8040602-E187-4D94-855F-A9E35EC0A899}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{E8040602-E187-4D94-855F-A9E35EC0A899}.Debug|Any CPU.Build.0 = Debug|x86
+		{E8040602-E187-4D94-855F-A9E35EC0A899}.Debug|x86.ActiveCfg = Debug|x86
+		{E8040602-E187-4D94-855F-A9E35EC0A899}.Debug|x86.Build.0 = Debug|x86
+		{E8040602-E187-4D94-855F-A9E35EC0A899}.Release|Any CPU.ActiveCfg = Release|x86
+		{E8040602-E187-4D94-855F-A9E35EC0A899}.Release|Any CPU.Build.0 = Release|x86
+		{E8040602-E187-4D94-855F-A9E35EC0A899}.Release|x86.ActiveCfg = Release|x86
+		{E8040602-E187-4D94-855F-A9E35EC0A899}.Release|x86.Build.0 = Release|x86
+		{05951649-7DD2-4D2B-9569-44E3BE82DA36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05951649-7DD2-4D2B-9569-44E3BE82DA36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05951649-7DD2-4D2B-9569-44E3BE82DA36}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{05951649-7DD2-4D2B-9569-44E3BE82DA36}.Debug|x86.Build.0 = Debug|Any CPU
+		{05951649-7DD2-4D2B-9569-44E3BE82DA36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05951649-7DD2-4D2B-9569-44E3BE82DA36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05951649-7DD2-4D2B-9569-44E3BE82DA36}.Release|x86.ActiveCfg = Release|Any CPU
+		{05951649-7DD2-4D2B-9569-44E3BE82DA36}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {42F9209C-441E-4C76-B457-30727E8E00DB}
+	EndGlobalSection
+EndGlobal

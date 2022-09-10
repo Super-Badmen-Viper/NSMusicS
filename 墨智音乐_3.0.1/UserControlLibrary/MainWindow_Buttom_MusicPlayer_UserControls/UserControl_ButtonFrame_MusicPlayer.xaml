@@ -1,0 +1,404 @@
+﻿<UserControl x:Class="墨智音乐_3._0._1.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls.UserControl_ButtonFrame_MusicPlayer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:墨智音乐_3._0._1.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="70" d:DesignWidth="810"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+             >
+    <Grid>
+        <Slider x:Name="Silder_Music_Width" Value="8" Background="#1C444444" 
+                Height="10" Margin="0,-4,0,0" 
+                VerticalAlignment="Top" HorizontalContentAlignment="Stretch" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                Style="{DynamicResource SliderStyle1}" 
+                IsMoveToPointEnabled="True" Cursor="Hand"
+                Focusable="False" HorizontalAlignment="Stretch" />
+        <Slider x:Name="Silder_Music_Temp_Width" 
+                Height="10" Margin="0,-4,0,0" 
+                VerticalAlignment="Top" HorizontalContentAlignment="Stretch" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                ScrollViewer.VerticalScrollBarVisibility="Disabled" Style="{DynamicResource SliderStyle2}" 
+                IsMoveToPointEnabled="True" Cursor="Hand" BorderBrush="{x:Null}" 
+                Visibility="Hidden"/>
+
+
+
+        <Button x:Name="Button_Music_Order" 
+                Style="{StaticResource MyButton}" Content="" 
+                HorizontalAlignment="Center" Height="16" Width="16" 
+                BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Margin="0,27,145,27" Cursor="Hand" >
+            <Button.Background>
+                <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/顺序播放.png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="Button_Before" 
+                Style="{StaticResource MyButton}" Content="" 
+                Height="26" Width="28" 
+                BorderBrush="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                RenderTransformOrigin="-5.75,0.5" 
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="0,0,80,0">
+            <Button.Background>
+                <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/上一首.png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="Button_Play_Pause_Player" 
+                Style="{StaticResource MyButton}" Content="" 
+                Height="40" Width="40" 
+                BorderBrush="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+            <Button.Background>
+                <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/24gf-playCircle.png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="Button_Next" 
+                Style="{StaticResource MyButton}" Content="" 
+                Height="26" Width="28" 
+                BorderBrush="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="80,0,0,0">
+            <Button.Background>
+                <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/下一首.png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="Button_Music_Voice_Speed" 
+                Style="{StaticResource MyButton}" Content="" 
+                HorizontalAlignment="Center" Height="20" Margin="146,0,0,0" VerticalAlignment="Stretch" Width="20" 
+                BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Cursor="Hand" >
+            <Button.Background>
+                <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/音量.png"/>
+            </Button.Background>
+        </Button>
+
+        <StackPanel x:Name="Stack_Panel_Order"
+            Width="120" Height="160"  Margin="0,-218,148,0" HorizontalAlignment="Center">
+            <Border x:Name="Song_Order_Panel"            
+                HorizontalAlignment="Stretch" 
+                BorderThickness="0.6" CornerRadius="4.3,4.3,4.3,4.3" BorderBrush="#FFD8D8D8" 
+                Margin="0,0,0,0" Background="White" Height="160"
+                >
+            </Border>
+            <StackPanel x:Name="Stack_Button_Radom_Order" Height="40" Margin="0,-280,0,0">
+                <Border BorderThickness="0,0,0,1" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"></Border>
+                <Image Height="20" Margin="20,-40,0,0" Width="20" HorizontalAlignment="Left" 
+                       Source="/墨智音乐_3.0.1;component/ico_ui_library/随机播放_32.png"/>
+                <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" Width="70" Text="随机播放" FontSize="14"/>
+            </StackPanel>
+            <StackPanel x:Name="Stack_Button_Normal_Order" Height="40" Margin="0,-200,0,0">
+                <Border BorderThickness="0,0,0,1" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"></Border>
+                <Image Height="20" Margin="20,-40,0,0" Width="20" HorizontalAlignment="Left" 
+                       Source="/墨智音乐_3.0.1;component/ico_ui_library/顺序播放.png"/>
+                <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" 
+                           Width="70" Text="顺序播放" FontSize="14"/>
+            </StackPanel>
+            <StackPanel x:Name="Stack_Button_OnlyOne_Order" Height="40" Margin="0,-120,0,0">
+                <Border BorderThickness="0,0,0,1" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"></Border>
+                <Image Height="20" Margin="20,-40,0,0" Width="20" HorizontalAlignment="Left" 
+                       Source="/墨智音乐_3.0.1;component/ico_ui_library/24gl-repeatOnce2.png"/>
+                <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" 
+                           Width="70" Text="单曲循环" FontSize="14"/>
+            </StackPanel>
+            <StackPanel x:Name="Stack_Button_List_Order" Height="40" Margin="0,-40,0,0">
+                <Border BorderThickness="0,0,0,0" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"></Border>
+                <Image Height="20" Margin="20,-40,0,0" Width="20" HorizontalAlignment="Left" 
+                       Source="/墨智音乐_3.0.1;component/ico_ui_library/列表循环.png"/>
+                <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" 
+                           Width="70" Text="列表循环" FontSize="14"/>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel x:Name="Stack_Panel_Voice"
+            Width="70" Height="240"  Margin="148,-234,0,64" HorizontalAlignment="Center">
+            <Border x:Name="Song_VoIce_Panel" 
+                BorderThickness="0.6" CornerRadius="4.3,4.3,4.3,4.3" BorderBrush="#FFD8D8D8" 
+                Background="White" Height="240"
+                />
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Height="200" Width="40" Margin="0,-240,0,0">
+                <Slider IsMoveToPointEnabled="True" Cursor="Hand"  x:Name="Slider_Voice" 
+                        Style="{DynamicResource SliderStyle1}" Margin="-68,78,-68,0" Height="22" 
+                        Background="#BF000000" RenderTransformOrigin="0.5,0.5" Width="160">
+                    <Slider.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Slider.RenderTransform>
+                </Slider>
+                <TextBlock x:Name="Voice_Nums" TextWrapping="Wrap" Text="50%" 
+                           RenderTransformOrigin="1.46,0.333" Height="20" 
+                           Foreground="Black" FontStyle="Normal" HorizontalAlignment="Stretch" 
+                           VerticalAlignment="Bottom" Margin="0,80,0,0"
+                           TextBlock.TextAlignment="Center"
+                           />
+            </StackPanel>
+            <StackPanel Height="20" Margin="0,-36,0,0" VerticalAlignment="Top" Width="20" >
+                <StackPanel.Background>
+                    <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/音量.png" Stretch="UniformToFill"/>
+                </StackPanel.Background>
+
+            </StackPanel>
+        </StackPanel>
+
+
+        <Grid x:Name="Grid_MusicPlayer_MainWindow_Left"
+              Visibility="Visible"
+              >
+            <Border x:Name="Border_Song_Image"
+                BorderThickness="0.1" CornerRadius="4.3,4.3,4.3,4.3" BorderBrush="#00000000" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                Margin="40,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Stretch" 
+                Width="40" Height="40" 
+                MouseEnter="Border_Hover_BackGround_MouseEnter" 
+                >
+                <Border.Background>
+                    <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/初学者.jpg" Stretch="Uniform"/>
+                </Border.Background>
+            </Border>
+            <Border x:Name="Border_Hover_BackGround"
+                BorderThickness="0" CornerRadius="4.3,4.3,4.3,4.3" BorderBrush="#00000000" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                Margin="40,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Stretch" 
+                Width="40" Height="40"
+                MouseLeave="Border_Hover_BackGround_MouseLeave">
+                <Border.Background>
+                    <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/上箭头-03 (1).png"/>
+                </Border.Background>
+            </Border>
+
+
+            <Canvas 
+                x:Name="Canvas_Song_Name"
+                VerticalAlignment="Top" ClipToBounds="True" 
+                    Height="20"  Margin="85,14,0,0" Width="161" HorizontalAlignment="Left">
+                <StackPanel Name="content1"
+                            VerticalAlignment="Center" HorizontalAlignment="Left" 
+                            Height="20" Width="531" Orientation="Horizontal">
+                    <StackPanel.RenderTransform>
+                        <TranslateTransform Y="0" />
+                    </StackPanel.RenderTransform>
+                    <TextBox 
+                        x:Name="Song_Name"
+                        Text="演员 - 薛之谦" TextWrapping="NoWrap" Width="531" FontSize="13"    
+                        TextChanged="Song_Name_DataContextChanged" 
+                        Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" 
+                        Focusable="False"
+                    />
+                </StackPanel>
+                <Canvas.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard>
+                            <Storyboard x:Name="StoryBorad_Song_Name">
+                                <DoubleAnimationUsingKeyFrames
+                                    Name="DoubleAnimationUsingKeyFrames_TextBlock_Song_Name"
+                                    RepeatBehavior="Forever"
+                                    Storyboard.TargetName="content1"
+                                    Storyboard.TargetProperty="RenderTransform.X"
+                                    Duration="0:0:6">
+                                    <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0" />
+                                    <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.7" />
+                                    <LinearDoubleKeyFrame x:Name="LinearDoubleKeyFrame_Song_Name_Text_Length" 
+                                                          Value="-6" KeyTime="0:0:4" />
+                                    <LinearDoubleKeyFrame x:Name="LinearDoubleKeyFrame_Song_Name_Text_Length_other"
+                                                          Value="-6" KeyTime="0:0:5.2" />
+                                    <LinearDoubleKeyFrame Value="0" KeyTime="0:0:6" />
+                                    <!-- 空余4s用来延迟动画效果（与QQ音乐界面更相似） -->
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Canvas.Triggers>
+            </Canvas>
+            <Button Name="Button_MV" Style="{StaticResource MyButton}" 
+                    Margin="253,15,0,0"
+                    Width="16" Height="16" HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand">
+                <Button.Background>
+                    <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/视频播放.png"/>
+                </Button.Background>
+            </Button>
+
+            <Button x:Name="Button_Love"
+            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
+            Width="18" Height="18" Margin="92,38,0,0" VerticalAlignment="Top" BorderBrush="{x:Null}"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            >
+                <Button.Background>
+                    <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/爱心.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="Button_Download"
+            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
+            Width="18" Height="18" Margin="123,38,0,0" VerticalAlignment="Top" BorderBrush="{x:Null}"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            >
+                <Button.Background>
+                    <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/保存到本地.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="Button_More"
+            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
+            Width="18" Height="18" Margin="155,38,0,0" VerticalAlignment="Top" BorderBrush="{x:Null}"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            >
+                <Button.Background>
+                    <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/更多.png"/>
+                </Button.Background>
+            </Button>
+        </Grid>
+        <Grid Name="Grid_MusicPlayer_MainWindow_Right"
+              Visibility="Visible"
+              >
+            <TextBox x:Name="TextBox_Song_Time" 
+                 HorizontalAlignment="Right" Height="26" 
+                 TextWrapping="Wrap" VerticalAlignment="Stretch" Width="115" 
+                 Background="{x:Null}" SelectionBrush="{x:Null}" BorderBrush="{x:Null}" 
+                 Foreground="#FF7C7C7C" HorizontalContentAlignment="Right" 
+                 FontSize="12" Text="00:00 / 00:00" BorderThickness="0" 
+                 Focusable="False" VerticalContentAlignment="Center" 
+                 UseLayoutRounding="True" SnapsToDevicePixels="True" Margin="0,0,98,0"/>
+            <Button x:Name="Button_Desk_KRC" Style="{StaticResource MyButton}" 
+                Content="词" Foreground="#FF7C7C7C" FontSize="15"
+                HorizontalAlignment="Right" Height="20" 
+                VerticalAlignment="Stretch" Width="20" 
+                BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,77,0" />
+            <Button x:Name="Button_ListView_Selected" Style="{StaticResource MyButton}" 
+                Content="" HorizontalAlignment="Right" Height="15" 
+                VerticalAlignment="Stretch" Width="15" 
+                BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Cursor="Hand" Margin="0,0,56,0" >
+                <Button.Background>
+                    <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/播放队列.png"/>
+                </Button.Background>
+            </Button>
+            <TextBox x:Name="TextBox_SongList_NumLength" 
+                 Text="999+"
+                 HorizontalAlignment="Right" Height="15" 
+                 TextWrapping="Wrap" VerticalAlignment="Stretch" Width="35" 
+                 Background="{x:Null}" SelectionBrush="{x:Null}" BorderBrush="{x:Null}" 
+                 Foreground="#FF7C7C7C" HorizontalContentAlignment="Right" 
+                 FontSize="12" BorderThickness="0" 
+                 Focusable="False" VerticalContentAlignment="Center" 
+                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" Margin="0,0,21,0"/>
+        </Grid>
+
+
+        <Grid 
+            x:Name="Grid_MusicPlayer_Main_Left"
+            Visibility="Hidden">
+            <Button x:Name="Button_Love_1"
+            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
+            Width="17" Height="17" Margin="0,0,0,0" VerticalAlignment="Center" BorderBrush="{x:Null}"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+            >
+                <Button.Background>
+                    <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/爱心 (1).png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="Button_Download_1"
+            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
+            Width="17" Height="17" Margin="31,0,0,0" VerticalAlignment="Center" BorderBrush="{x:Null}"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            >
+                <Button.Background>
+                    <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/保存到本地 (1).png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="Button_More_1"
+            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
+            Width="17" Height="17" Margin="62,0,0,0" VerticalAlignment="Center" BorderBrush="{x:Null}"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            >
+                <Button.Background>
+                    <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/更多 (1).png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="Button_Talk"
+            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
+            Width="17" Height="17" Margin="94,0,0,0" VerticalAlignment="Center" BorderBrush="{x:Null}"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                >
+                <Button.Background>
+                    <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/评论 (1).png"/>
+                </Button.Background>
+            </Button>
+            <TextBox x:Name="TextBox_Song_Time_Left" 
+                 HorizontalAlignment="Left" Height="26" 
+                 TextWrapping="Wrap" Width="83" 
+                 Background="{x:Null}" SelectionBrush="{x:Null}" BorderBrush="{x:Null}" 
+                 Foreground="#FF7C7C7C" HorizontalContentAlignment="Right" 
+                 FontSize="12" Text="00:00 / 00:00" BorderThickness="0" 
+                 Focusable="False" VerticalContentAlignment="Center" 
+                 UseLayoutRounding="True" SnapsToDevicePixels="True" 
+                 Margin="129,22,0,22"/>
+        </Grid>
+        <Grid x:Name="Grid_MusicPlayer_Main_Right"
+              Visibility="Hidden"
+              >
+
+            <StackPanel
+                x:Name="Button_Singer_Image_Animation"
+                HorizontalAlignment="Right" Width="45" Margin="0,0,190,0" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Height="16" VerticalAlignment="Center" >
+                <TextBlock Height="15" Foreground="#FF7C7C7C" HorizontalAlignment="Left" Width="24" Text="写真"/>
+                <Image x:Name="Button_Singer_Image_Animation_Image" Source="/ico_ui_library/开关-关 (1).png" Width="20" Height="10" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,-14,0,0"/>
+            </StackPanel>
+
+            <StackPanel x:Name="Button_Tone_Quality"
+                HorizontalAlignment="Right" Height="12" 
+                VerticalAlignment="Center" Width="32" 
+                RenderTransformOrigin="0.5,1" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Margin="0,0,144,0" >
+                <Border Height="12" BorderBrush="#FF7C7C7C" BorderThickness="0.6,0.6,0.6,0.6"
+                        CornerRadius="1,1,1,1" 
+                        />
+                <TextBlock Margin="4,-13.5,0,0" Height="8" Text="标准" Foreground="#FF7C7C7C" FontSize="6" Width="13" HorizontalAlignment="Left"/>
+                <Image Height="8" Margin="0,-13.5,4,0" Width="8" HorizontalAlignment="Right" Source="/ico_ui_library/上-02.png"/>
+            </StackPanel>
+            <StackPanel x:Name="Button_Sound_Effect"
+                HorizontalAlignment="Right" Height="12" 
+                VerticalAlignment="Center" Width="32" 
+                RenderTransformOrigin="0.5,1" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Margin="0,0,104,0" >
+                <Border Height="12" BorderBrush="#FF7C7C7C" BorderThickness="0.6,0.6,0.6,0.6"
+                        CornerRadius="1,1,1,1" 
+                        />
+                <TextBlock Margin="0,-13.5,0,0" Height="8" Text="音效 off" Foreground="#FF7C7C7C" FontSize="6" Width="22"/>
+            </StackPanel>
+
+
+            <Button x:Name="Button_Desk_KRC_Right" Style="{StaticResource MyButton}" 
+                Content="词" Foreground="#FF7C7C7C" FontSize="15"
+                HorizontalAlignment="Right" Height="20" 
+                VerticalAlignment="Center" Width="20" 
+                BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,77,0" />
+            <Button x:Name="Button_ListView_Selected_Right" Style="{StaticResource MyButton}" 
+                Content="" HorizontalAlignment="Right" Height="15" 
+                VerticalAlignment="Stretch" Width="15" 
+                BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Cursor="Hand" Margin="0,0,56,0" >
+                <Button.Background>
+                    <ImageBrush ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/播放队列.png"/>
+                </Button.Background>
+            </Button>
+            <TextBox x:Name="TextBox_SongList_NumLength_Right" 
+                 Text="999+"
+                 HorizontalAlignment="Right" Height="15" 
+                 TextWrapping="Wrap" VerticalAlignment="Center" Width="35" 
+                 Background="{x:Null}" SelectionBrush="{x:Null}" BorderBrush="{x:Null}" 
+                 Foreground="#FF7C7C7C" HorizontalContentAlignment="Right" 
+                 FontSize="12" BorderThickness="0" 
+                 Focusable="False" VerticalContentAlignment="Center" 
+                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" Margin="0,0,21,0"/>
+        </Grid>
+
+    </Grid>
+</UserControl>

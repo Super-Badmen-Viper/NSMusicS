@@ -1,0 +1,1201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E8C46005-F2C8-4215-A8FB-07219859613E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>墨智音乐_3._0._1</RootNamespace>
+    <AssemblyName>墨智音乐_3.0.1</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>墨智音乐.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Interop.Shell32">
+      <HintPath>..\..\墨智音乐_2.0.1_.NETFrame\墨智音乐_2.0.1\墨智音乐_2.0.1\bin\Debug\Interop.Shell32.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Magick.NET-Q16-AnyCPU, Version=12.1.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
+      <HintPath>..\packages\Magick.NET-Q16-AnyCPU.12.1.0\lib\netstandard20\Magick.NET-Q16-AnyCPU.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Magick.NET.Core, Version=12.1.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
+      <HintPath>..\packages\Magick.NET.Core.12.1.0\lib\netstandard20\Magick.NET.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\墨智音乐_2.0.1_.NETFrame\墨智音乐_2.0.1\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Dao_UserControl\Song_View\AudioVisualizer.cs" />
+    <Compile Include="Dao_UserControl\WAVReader\WAVReader.cs" />
+    <Compile Include="Helper_UserControlLibrary\UserControl_Image.xaml.cs">
+      <DependentUpon>UserControl_Image.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper_UserControlLibrary\UserControl_Song_Image.cs" />
+    <Compile Include="Helper_UserControlLibrary\UserControl_电台.xaml.cs">
+      <DependentUpon>UserControl_电台.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper_UserControlLibrary\UserControl_视频.xaml.cs">
+      <DependentUpon>UserControl_视频.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper_UserControlLibrary\UserControl_音乐馆.xaml.cs">
+      <DependentUpon>UserControl_音乐馆.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper_UserControlLibrary\电台\UserControl_电台.xaml.cs">
+      <DependentUpon>UserControl_电台.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper_UserControlLibrary\组件\MasterCarousel.cs" />
+    <Compile Include="Helper_UserControlLibrary\视频\UserControl_排行榜.xaml.cs">
+      <DependentUpon>UserControl_排行榜.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper_UserControlLibrary\视频\UserControl_推荐.xaml.cs">
+      <DependentUpon>UserControl_推荐.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper_UserControlLibrary\视频\UserControl_视频库.xaml.cs">
+      <DependentUpon>UserControl_视频库.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper_UserControlLibrary\音乐馆\UserControl_分类歌单.xaml.cs">
+      <DependentUpon>UserControl_分类歌单.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper_UserControlLibrary\音乐馆\UserControl_手机专享.xaml.cs">
+      <DependentUpon>UserControl_手机专享.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper_UserControlLibrary\音乐馆\UserControl_排行.xaml.cs">
+      <DependentUpon>UserControl_排行.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper_UserControlLibrary\音乐馆\UserControl_数字专辑.xaml.cs">
+      <DependentUpon>UserControl_数字专辑.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper_UserControlLibrary\音乐馆\UserControl_有声电台.xaml.cs">
+      <DependentUpon>UserControl_有声电台.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper_UserControlLibrary\音乐馆\UserControl_歌手.xaml.cs">
+      <DependentUpon>UserControl_歌手.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper_UserControlLibrary\音乐馆\UserControl_精选.xaml.cs">
+      <DependentUpon>UserControl_精选.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\MainWindow_Buttom_MusicPlayer_UserControls\UserControl_ButtonFrame_MusicPlayer.xaml.cs">
+      <DependentUpon>UserControl_ButtonFrame_MusicPlayer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_MusicLove.xaml.cs">
+      <DependentUpon>UserControl_ButtonFrame_MusicLove.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_MusicRecentlyPlayed.xaml.cs">
+      <DependentUpon>UserControl_ButtonFrame_MusicRecentlyPlayed.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_MusicTryListenList.xaml.cs">
+      <DependentUpon>UserControl_ButtonFrame_MusicTryListenList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_ThisWindowsMusicAndDownload.xaml.cs">
+      <DependentUpon>UserControl_ButtonFrame_ThisWindowsMusicAndDownload.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_MusicRecommend.xaml.cs">
+      <DependentUpon>UserControl_ButtonFrame_MusicRecommend.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_MusicSquare.xaml.cs">
+      <DependentUpon>UserControl_ButtonFrame_MusicSquare.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_MusicVideo.xaml.cs">
+      <DependentUpon>UserControl_ButtonFrame_MusicVideo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_RadioStation.xaml.cs">
+      <DependentUpon>UserControl_ButtonFrame_RadioStation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\MainWindow_TOP_UserControls\UserControl_ButtonFrame_Search.xaml.cs">
+      <DependentUpon>UserControl_ButtonFrame_Search.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\MainWindow_TOP_UserControls\UserControl_ButtonFrame_TopPanel.xaml.cs">
+      <DependentUpon>UserControl_ButtonFrame_TopPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_My_Love.xaml.cs">
+      <DependentUpon>UserControl_Main_Home_Left_MyMusic_My_Love.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_Recent_Play.xaml.cs">
+      <DependentUpon>UserControl_Main_Home_Left_MyMusic_Recent_Play.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.xaml.cs">
+      <DependentUpon>UserControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_Try_Listen.xaml.cs">
+      <DependentUpon>UserControl_Main_Home_Left_MyMusic_Try_Listen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Main_UserControl.xaml.cs">
+      <DependentUpon>MusicPlayer_Main_UserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_UserControls\UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_Add.xaml.cs">
+      <DependentUpon>UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_Add.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_UserControls\UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_More.xaml.cs">
+      <DependentUpon>UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_More.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_UserControls\UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_PlayALL.xaml.cs">
+      <DependentUpon>UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_PlayALL.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlLibrary\Window_Hover_KRC_Panel\Window_Hover_KRC_Panel.xaml.cs">
+      <DependentUpon>Window_Hover_KRC_Panel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Helper_UserControlLibrary\UserControl_Image.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\UserControl_电台.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\UserControl_视频.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\UserControl_音乐馆.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\电台\UserControl_电台.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\组件\Carousel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\视频\UserControl_排行榜.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\视频\UserControl_推荐.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\视频\UserControl_视频库.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\音乐馆\UserControl_分类歌单.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\音乐馆\UserControl_手机专享.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\音乐馆\UserControl_排行.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\音乐馆\UserControl_数字专辑.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\音乐馆\UserControl_有声电台.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\音乐馆\UserControl_歌手.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Helper_UserControlLibrary\音乐馆\UserControl_精选.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dao_Init_Info\Init_SongList_Info\Load_SongList_Info.cs" />
+    <Compile Include="Dao_Init_Info\Init_SongList_Info\Save_SongList_Info.cs" />
+    <Compile Include="Dao_Init_Info\Init_Song_Mrc_Info\Load_Song_Mrc_Info.cs" />
+    <Compile Include="Dao_UserControl\GridViewSort.cs" />
+    <Compile Include="Dao_UserControl\SongList_Info\Add_Selected_SongList.cs" />
+    <Compile Include="Dao_UserControl\SongList_Info\Bool_listView_Temp_Info_End_Clear.cs" />
+    <Compile Include="Dao_UserControl\SongList_Info\ListView_Item_Bing.cs" />
+    <Compile Include="Dao_UserControl\SongList_Info\ListView_Item_Bing_ALL.cs" />
+    <Compile Include="Dao_UserControl\Song_Mrc_Info\Dao_ListBox_Temp_KRC.cs" />
+    <Compile Include="Dao_UserControl\Song_Mrc_Info\Dao_ListBox_Temp_KRC_Bing.cs" />
+    <Compile Include="Dao_UserControl\Song_Mrc_Info\Dao_ListBox_Temp_Krc_OneLine.cs" />
+    <Compile Include="Dao_UserControl\Song_Mrc_Info\Dao_ListBox_Temp_Krc_OneLine_MoreByte.cs" />
+    <Compile Include="Dao_UserControl\Song_Mrc_Info\Krc_Line_Info.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="UserControlLibrary\MainWindow_Buttom_MusicPlayer_UserControls\UserControl_ButtonFrame_MusicPlayer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_MusicLove.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_MusicRecentlyPlayed.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_MusicTryListenList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_ThisWindowsMusicAndDownload.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_MusicRecommend.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_MusicSquare.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_MusicVideo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_RadioStation.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\MainWindow_TOP_UserControls\UserControl_ButtonFrame_Search.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\MainWindow_TOP_UserControls\UserControl_ButtonFrame_TopPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_My_Love.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_Recent_Play.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_Try_Listen.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Main_UserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_UserControls\UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_Add.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_UserControls\UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_More.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_UserControls\UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_PlayALL.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControlLibrary\Window_Hover_KRC_Panel\Window_Hover_KRC_Panel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\24gf-playCircle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\24gl-repeatOnce2 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\24gl-repeatOnce2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\Music_Album.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\QQ音乐logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\Streamlined mode %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\Streamlined mode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\爱心 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\爱心.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\保存到本地 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\保存到本地.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\本地 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\本地.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\编辑-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\编辑-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\播放队列 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\播放队列.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\播放全部.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\菜单 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\菜单.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\初学者.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\错误 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\错误.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\单选框-选中-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\单选框-选中-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\导出-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\导出-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\点赞 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\点赞.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\电脑、显示屏 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\电脑、显示屏.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\电台 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\电台.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\定位-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\定位-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\定位-03 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\定位-03.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\定位 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\定位.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\二维码 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\二维码.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\方向-向右-粗 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\方向-向右-粗.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\方向-向右 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\方向-向右.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\方向-向左 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\方向-向左.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\分类 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\分类.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\分享 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\分享.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\复选框-全选 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\复选框-全选.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\复选框-未全选 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\复选框-未全选.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\复制-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\复制-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\歌词未点击 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\歌词未点击.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\更多 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\更多.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\公告 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\公告.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\购物车 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\购物车.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\关闭 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\关闭.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\关闭音量-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\关闭音量-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\关于我们-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\关于我们-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\广播电台 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\广播电台.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\会员 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\会员.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\加-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\加-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\加 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\加.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\加载 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\加载.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\开关-关 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\开关-关.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\开关-开 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\开关-开.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\客服-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\客服-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\礼物 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\礼物.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\链接-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\链接-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\链接-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\链接-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\列表-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\列表-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\列表-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\列表-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\列表循环 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\列表循环.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\浏览记录-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\浏览记录-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\密码-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\密码-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\密码-04 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\密码-04.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\昵称 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\昵称.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\排序-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\排序-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\排序-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\排序-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\皮肤 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\皮肤.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\评论 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\评论.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\钱袋 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\钱袋.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\全屏-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\全屏-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\扫码-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\扫码-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\扫码-05 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\扫码-05.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\删除 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\删除.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\商品 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\商品.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\上-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\上-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\上-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\上传 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\上传.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\上箭头-03 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\上箭头-03.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\上一首 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\上一首.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\设置-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\设置-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\摄像机 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\摄像机.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\身份识别 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\身份识别.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\时间 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\时间.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\视频播放 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\视频播放.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\收藏 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\收藏.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\手机号 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\手机号.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\数据库-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\数据库-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\数据库-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\数据库-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\刷新 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\刷新.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\顺序播放 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\顺序播放.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\搜索 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\搜索.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\随机播放_32 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\随机播放_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\添加用户 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\添加用户.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\听歌识曲 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\听歌识曲.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\推荐.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\退出全屏-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\退出全屏-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\退出全屏-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\退出全屏-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\未读 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\未读.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\文件夹-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\文件夹-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\文件夹视图 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\文件夹视图.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\文章 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\文章.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\物流-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\物流-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\下-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\下-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\下箭头-03 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\下箭头-03.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\下一首 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\下一首.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\下载 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\下载.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\下载本地 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\下载本地.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\相机 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\相机.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\消息-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\消息-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\薛之谦.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\已读-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\已读-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\音乐 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\音乐.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\音乐娱乐 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\音乐娱乐.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\音乐娱乐Test - 副本.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\音乐娱乐Test - 副本~1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\音乐娱乐Test.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\音量 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\音量.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\音量加-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\音量加-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\音量减-01 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\音量减-01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\用户切换 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\用户切换.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\用户信息 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\用户信息.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\优惠券 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\优惠券.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\邮件接收 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\邮件接收.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\邮箱-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\邮箱-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\邮箱-03 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\邮箱-03.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\右-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\右-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\语音 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\语音.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\圆圈、单选框 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\圆圈、单选框.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\云盘 - 列表视图 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\云盘 - 列表视图.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\云下载 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\云下载.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\暂停-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\暂停-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\暂停.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\增加 - 副本.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\增加 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\增加.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\专辑 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\专辑，光盘 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\专辑，光盘.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\专辑.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\专辑播放 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\专辑播放.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\最大化 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\最大化.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\最小化 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\最小化.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\左-02 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\左-02.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\匹配.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="墨智音乐.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\唱片3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\0_官方歌单.jpg" />
+    <Resource Include="ico_ui_library\0_推荐有声电台.jpg" />
+    <Resource Include="ico_ui_library\0_推荐视频.jpg" />
+    <Resource Include="ico_ui_library\0_最新发行.jpg" />
+    <Resource Include="ico_ui_library\0_轮播图.jpg" />
+    <Resource Include="ico_ui_library\1_分类歌单.jpg" />
+    <Resource Include="ico_ui_library\1_手机专享.jpg" />
+    <Resource Include="ico_ui_library\1_排行.jpg" />
+    <Resource Include="ico_ui_library\1_排行榜.jpg" />
+    <Resource Include="ico_ui_library\1_推荐.jpg" />
+    <Resource Include="ico_ui_library\1_数字专辑.jpg" />
+    <Resource Include="ico_ui_library\1_有声电台.jpg" />
+    <Resource Include="ico_ui_library\1_歌手.jpg" />
+    <Resource Include="ico_ui_library\1_电台.jpg" />
+    <Resource Include="ico_ui_library\1_精选.jpg" />
+    <Resource Include="ico_ui_library\1_视频库.jpg" />
+    <Resource Include="ico_ui_library\2_分类歌单.jpg" />
+    <Resource Include="ico_ui_library\2_手机专享.jpg" />
+    <Resource Include="ico_ui_library\2_排行.jpg" />
+    <Resource Include="ico_ui_library\2_推荐.jpg" />
+    <Resource Include="ico_ui_library\2_数字专辑.jpg" />
+    <Resource Include="ico_ui_library\2_有声电台.jpg" />
+    <Resource Include="ico_ui_library\2_歌手.jpg" />
+    <Resource Include="ico_ui_library\2_电台.jpg" />
+    <Resource Include="ico_ui_library\2_精选.jpg" />
+    <Resource Include="ico_ui_library\2_视频库.jpg" />
+    <Resource Include="ico_ui_library\3_分类歌单.jpg" />
+    <Resource Include="ico_ui_library\3_手机专享.jpg" />
+    <Resource Include="ico_ui_library\3_排行.jpg" />
+    <Resource Include="ico_ui_library\3_推荐.jpg" />
+    <Resource Include="ico_ui_library\3_数字专辑.jpg" />
+    <Resource Include="ico_ui_library\3_有声电台.jpg" />
+    <Resource Include="ico_ui_library\3_歌手.jpg" />
+    <Resource Include="ico_ui_library\3_电台.jpg" />
+    <Resource Include="ico_ui_library\3_精选.jpg" />
+    <Resource Include="ico_ui_library\3_视频库.jpg" />
+    <Resource Include="ico_ui_library\官方歌单.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\云.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ico_ui_library\升级.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Magick.NET-Q16-AnyCPU.12.1.0\build\netstandard20\Magick.NET-Q16-AnyCPU.targets" Condition="Exists('..\packages\Magick.NET-Q16-AnyCPU.12.1.0\build\netstandard20\Magick.NET-Q16-AnyCPU.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Magick.NET-Q16-AnyCPU.12.1.0\build\netstandard20\Magick.NET-Q16-AnyCPU.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Magick.NET-Q16-AnyCPU.12.1.0\build\netstandard20\Magick.NET-Q16-AnyCPU.targets'))" />
+  </Target>
+</Project>

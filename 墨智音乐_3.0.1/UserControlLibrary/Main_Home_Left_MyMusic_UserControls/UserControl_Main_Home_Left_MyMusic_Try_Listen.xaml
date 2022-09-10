@@ -1,0 +1,292 @@
+﻿<UserControl x:Class="墨智音乐_3._0._1.UserControlLibrary.Main_Home_Left_MyMusic_UserControls.UserControl_Main_Home_Left_MyMusic_Try_Listen"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sort="clr-namespace:墨智音乐_3._0._1.Dao_UserControl"
+             mc:Ignorable="d" 
+             d:DesignHeight="443" d:DesignWidth="810"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+             Background="#F6F6F6"
+             >
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Height="50" Text="试听列表" TextWrapping="Wrap" 
+                   VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                   />
+        <TextBlock 
+            x:Name="TryListen_Song_Nums"
+            Foreground="#1ECC94"
+                   HorizontalAlignment="Left" Height="20" Text="试听歌曲0" TextWrapping="Wrap" 
+                   VerticalAlignment="Top" Margin="42,74,0,0" FontSize="14"
+                   Block.TextAlignment="Center"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                   />
+
+
+        <TextBlock Text="下载历史漫游" Width="87" Foreground="#7C7C7C" FontSize="13" 
+                   HorizontalAlignment="Right" VerticalAlignment="Top"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                   Margin="0,75,91,0"
+                   />
+
+        <StackPanel Margin="0,75,34,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="50" >
+            <TextBlock Text="更多" Width="28" Foreground="#7C7C7C" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Image Width="14" Height="14" Margin="0,-15,5,0" Source="/ico_ui_library/下-01.png" 
+                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Right" VerticalAlignment="Top" />
+        </StackPanel>
+        <StackPanel
+            x:Name="Button_Play_ALL_Song"
+            HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="40,122,0,0"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" MouseEnter="Button_Play_ALL_Song_MouseEnter" MouseLeave="Button_Play_ALL_Song_MouseLeave"      
+            >
+            <Border 
+                x:Name="Border_Play_ALL_Song"
+                HorizontalAlignment="Stretch" 
+                BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Background="#FF1EC79D" Height="32" 
+                 />
+            <Image Source="/墨智音乐_3.0.1;component/ico_ui_library/播放全部.png" 
+               Stretch="Fill" Margin="20,-24,75,8"
+               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+               />
+            <TextBlock                
+                Text="播放全部" Margin="40,-24,0,8" 
+                   Foreground="White"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                   />
+        </StackPanel>
+        <StackPanel
+            HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="161,122,0,0"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"          
+            >
+            <Border HorizontalAlignment="Stretch" 
+                    BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                    Background="#FFE3E3E3" Height="32" 
+                     />
+            <Image Source="/墨智音乐_3.0.1;component/ico_ui_library/增加 - 副本.png" 
+                   Stretch="Fill" Margin="35,-22,63,10"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                   />
+            <TextBlock Text="添加" VerticalAlignment="Center" Margin="49,-32,6,0" 
+                       Foreground="Black"
+                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                       />
+        </StackPanel>
+        <StackPanel
+            HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="32" Margin="283,122,0,0"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            MouseLeftButtonDown="StackPanel_MouseLeftButtonDown_1">
+            <Border HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" 
+                BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                Background="#FFE3E3E3" Height="32" 
+                 />
+            <Image Source="/墨智音乐_3.0.1;component/ico_ui_library/更多.png" 
+               Stretch="UniformToFill"
+               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Margin="0,-32,0,0"
+               />
+        </StackPanel>
+
+
+
+        <ListView x:Name="ListView_Download_SongList_Info" Foreground="Black"
+            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            IsSynchronizedWithCurrentItem="True"
+            sort:GridViewSort.AutoSort="True" Margin="0,180,0,0" 
+            BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0"
+            
+            Loaded="UserControl_Loaded" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  >
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+
+                    <!-- 边框大小 -->
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <!-- 边框颜色 -->
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+
+                    <Setter Property="FontSize" Value="13"/>
+
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#FFEFEFEF"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Background" Value="#FFEFEFEF"/>
+                        </Trigger>
+                    </Style.Triggers>
+
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.Resources>
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Setter Property="Background" Value="#00000000"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    <Setter Property="Padding" Value="9,0,0,0"/>
+                    <Setter Property="BorderBrush" Value="#00000000"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Foreground" Value="#FF9F9F9F"/>
+                </Style>
+            </ListView.Resources>
+            <ListView.View>
+                <GridView>
+                    <GridView.Columns>
+                        <!--设置行高-->
+                        <GridViewColumn Width="0">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Height="50"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                            <TextBlock/>
+                        </GridViewColumn>
+
+                        <GridViewColumn x:Name="GridViewColumn_Check_ListView_Song">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox x:Name="Check_ListView_Song" Tag="{Binding Song_No}" 
+                                              Click="Check_ListView_Song_Click"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn x:Name="GridViewColumn_Love_Add_ListView_Song_Normal">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button x:Name="Love_ListView_Song" Background="{Binding Song_Like_Image}" 
+                                            Tag="{Binding Song_No}" MinHeight="{Binding Song_Like}"  
+                                            Click="Love_ListView_Song_Click" 
+                                            Style="{StaticResource MyButton}" 
+                                            Width="18" Height="18" FontSize="5"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn
+                                        Header="歌曲" 
+                                        Width="470"                                         
+                                        sort:GridViewSort.PropertyName="Song_Name" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Song_Name}" Margin="0,5,0,0"/>
+                                        <Button HorizontalAlignment="Left" Background="{Binding Song_MV_Image}"
+                                                Style="{StaticResource MyButton}" 
+                                                Width="16" Height="16" Margin="8,6,0,0"
+                                                />
+                                        <Button HorizontalAlignment="Left" Background="{Binding Song_Agora_Image}"
+                                                Style="{StaticResource MyButton}" 
+                                                Width="16" Height="16" Margin="8,6,0,0"
+                                                />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Singer_Name}" Header="歌手"
+                                        Width="160"
+                                        sort:GridViewSort.PropertyName="Singer_Name"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Album_Name}" Header="专辑"
+                                        Width="156"
+                                        sort:GridViewSort.PropertyName="Album_Name"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Song_Url}" Header="歌曲路径"
+                                        Width="290"
+                                        sort:GridViewSort.PropertyName="Song_Url"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Song_No}" Header="歌曲序号"
+                                        Width="60"
+                                        sort:GridViewSort.PropertyName="Song_No"/>
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+
+        <StackPanel x:Name="Stack_Panel_Add_Song"
+            Width="150" Height="70"  Margin="162,166,0,64" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+            <Grid Height="70">
+                <Rectangle                                        
+                RadiusX="5" RadiusY="5"
+                Fill="White">
+                    <!--Fill="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"  -->
+                    <Rectangle.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="0"/>
+                    </Rectangle.Effect>
+                </Rectangle>
+                <Border CornerRadius="5" >
+                    <ContentPresenter />
+                </Border>
+            </Grid>
+            <StackPanel x:Name="Stack_Button_Add_Select_Song" Height="28" VerticalAlignment="Top" Margin="0,-64,0,0" 
+                        MouseEnter="Stack_Button_Add_Select_Song_MouseEnter" MouseLeave="Stack_Button_Add_Select_Song_MouseLeave">
+                <Image Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
+                       Source="/墨智音乐_3.0.1;component/ico_ui_library/24gl-repeatOnce2.png" VerticalAlignment="Stretch"/>
+                <TextBlock HorizontalAlignment="Left" Text="手动添加歌曲" Margin="35,-18,0,0"/>
+            </StackPanel>
+            <StackPanel x:Name="Stack_Button_Add_PC_ALL_Song" Height="28" VerticalAlignment="Top" Margin="0,-35,0,0" MouseEnter="Stack_Button_Add_PC_ALL_Song_MouseEnter" MouseLeave="Stack_Button_Add_PC_ALL_Song_MouseLeave">
+                <Image Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
+                       Source="/墨智音乐_3.0.1;component/ico_ui_library/24gl-repeatOnce2.png" VerticalAlignment="Stretch"/>
+                <TextBlock HorizontalAlignment="Left" Text="查找本地音乐" Margin="35,-18,0,0"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel x:Name="Stack_Panel_More_Takes"
+            Width="150" Height="140"  Margin="288,166,0,64" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+            <Grid Height="140">
+                <Rectangle                                        
+                RadiusX="5" RadiusY="5"
+                Fill="White">
+                    <!--Fill="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"  -->
+                    <Rectangle.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="0"/>
+                    </Rectangle.Effect>
+                </Rectangle>
+                <Border CornerRadius="5" >
+                    <ContentPresenter />
+                </Border>
+            </Grid>
+            <StackPanel x:Name="Stack_Button_LotSelects_Take" Height="28" VerticalAlignment="Top" Margin="0,-134,0,0" 
+                        MouseEnter="Stack_Button_LotSelects_Take_MouseEnter" MouseLeave="Stack_Button_LotSelects_Take_MouseLeave" 
+                        >
+                <Image Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
+                       Source="/墨智音乐_3.0.1;component/ico_ui_library/列表-01.png" VerticalAlignment="Stretch"/>
+                <TextBlock HorizontalAlignment="Left" Text="批量操作" Margin="35,-18,0,0"/>
+            </StackPanel>
+            <StackPanel x:Name="Stack_Button_Find_Song_Info" Height="28" VerticalAlignment="Top" Margin="0,-105,0,0" 
+                        MouseEnter="Stack_Button_Find_Song_Info_MouseEnter" MouseLeave="Stack_Button_Find_Song_Info_MouseLeave" 
+                        
+                        >
+                <Image Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
+                       Source="/墨智音乐_3.0.1;component/ico_ui_library/匹配.png" VerticalAlignment="Stretch"/>
+                <TextBlock HorizontalAlignment="Left" Text="匹配歌曲" Margin="35,-18,0,0"/>
+            </StackPanel>
+            <StackPanel x:Name="Stack_Button_ThisPcSong_Find" Height="28" VerticalAlignment="Top" Margin="0,-72,0,0" 
+                        MouseEnter="Stack_Button_ThisPcSong_Find_MouseEnter" MouseLeave="Stack_Button_ThisPcSong_Find_MouseLeave" 
+                        
+                        >
+                <Image Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
+                       Source="/墨智音乐_3.0.1;component/ico_ui_library/云.png" VerticalAlignment="Stretch"/>
+                <TextBlock HorizontalAlignment="Left" Text="本地歌曲恢复助手" Margin="35,-18,0,0"/>
+            </StackPanel>
+            <StackPanel x:Name="Stack_Button_Update_Song_Better" Height="28" VerticalAlignment="Top" Margin="0,-40,0,0" 
+                        MouseEnter="Stack_Button_Update_Song_Better_MouseEnter" MouseLeave="Stack_Button_Update_Song_Better_MouseLeave" 
+                        
+                        >
+                <Image Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
+                       Source="/墨智音乐_3.0.1;component/ico_ui_library/升级.png" VerticalAlignment="Stretch"/>
+                <TextBlock HorizontalAlignment="Left" Text="升级音质" Margin="35,-18,0,0"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>
