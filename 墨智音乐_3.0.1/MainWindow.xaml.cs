@@ -3457,7 +3457,7 @@ namespace 墨智音乐_3._0._1
                 userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
                 listView_SongList = userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info;
             }
-
+			MessageBox.Show("导入成功");
         }
 
         #endregion
