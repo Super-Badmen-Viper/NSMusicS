@@ -119,7 +119,7 @@ namespace 墨智音乐_3._0._1.Dao_Init_Info.Init_SongList_Info
             FileStream FS_List_Save = new FileStream(temp, FileMode.Open);
             SR_List = new StreamReader(FS_List_Save);
 
-            Load_Data_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_Auto, FS_List_Save, SR_List, 4, RowCount);
+            Load_Data_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen, FS_List_Save, SR_List, 4, RowCount);
 
             SR_List = null;
         }
@@ -136,7 +136,7 @@ namespace 墨智音乐_3._0._1.Dao_Init_Info.Init_SongList_Info
             FileStream FS_List_Save = new FileStream(temp, FileMode.Open);
             SR_List = new StreamReader(FS_List_Save);
 
-            Load_Data_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_Auto, FS_List_Save, SR_List, 0, RowCount);
+            Load_Data_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_Temp, FS_List_Save, SR_List, 0, RowCount);
 
             SR_List = null;
         }

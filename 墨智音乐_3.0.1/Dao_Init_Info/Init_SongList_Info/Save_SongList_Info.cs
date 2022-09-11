@@ -68,7 +68,7 @@ namespace 墨智音乐_3._0._1.Dao_Init_Info.Init_SongList_Info
 
             FS_List_Save = new FileStream(temp, FileMode.Create);
             SW_List = new StreamWriter(FS_List_Save);//无法静态
-            Write_Song_Info(listView_Item_Bing_ALL.listView_Temp_Info_End_Auto, FS_List_Save);
+            Write_Song_Info(listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen, FS_List_Save);
         }
         public void Clear_File_Info(string FullName)
         {

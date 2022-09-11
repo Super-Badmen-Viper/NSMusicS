@@ -360,7 +360,7 @@ namespace 墨智音乐_3._0._1
                     {
                         listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen.ElementAt(i).Song_No = i + 1;
                     }
-                    userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
+                    userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
 
                 }
                 bool_ListView_Temp_Info_End_Clear.userControl_主界面_FrmMain_ListView_Temp_Info_ItemSource_Name = "listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen";
@@ -1707,8 +1707,8 @@ namespace 墨智音乐_3._0._1
             ListBox_MRC_Song_MRC_Time = new double[999];
             //创建获取 歌词数组信息输出类 
             dao_ListBox_Temp_MRC = new Dao_ListBox_Temp_MRC();
-            //设置要分析的歌词文件（mrc）路径
-            string MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".mrc";
+            //设置要分析的歌词文件（krc）路径
+            string MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".krc";
 
             try
             {
@@ -1771,7 +1771,7 @@ namespace 墨智音乐_3._0._1
                 }
                 else
                 {
-                    //获取mrc歌词失败，转而获取Lrc歌词
+                    //获取krc歌词失败，转而获取Lrc歌词
 
                     //停止歌词同步
                     thread_DispatcherTimer_MRC = new Thread(new ThreadStart(() =>
@@ -1795,7 +1795,7 @@ namespace 墨智音乐_3._0._1
             }
             catch
             {
-                //获取mrc歌词失败，转而获取Lrc歌词
+                //获取krc歌词失败，转而获取Lrc歌词
 
                 //停止歌词同步
                 thread_DispatcherTimer_MRC = new Thread(new ThreadStart(() =>
@@ -3199,7 +3199,7 @@ namespace 墨智音乐_3._0._1
             System.Diagnostics.Process.Start(SongList_Path); //调用该命令，在程序启动时打开Excel程序
 
             //创建定时器，每隔1秒读取ini配置，检查里面的数值是否被更改（被本地歌曲扫描.exe更改则重启歌单数据源）
-            DispatcherTimer_Add_PC_Select_Song();
+            DispatcherTimer_Add_PC_Select_Song();           
         }
         private void My_Love_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -3226,6 +3226,16 @@ namespace 墨智音乐_3._0._1
         /// </summary>
         private void DispatcherTimer_Add_PC_Select_Song()
         {
+            MessageBox.Show("需要歌单操作的歌单，在歌曲完全导入之前，所有的歌单会保持冻结状态");
+            userControl_ButtonFrame_MusicLove.IsEnabled = false;
+            userControl_ButtonFrame_ThisWindowsMusicAndDownload.IsEnabled = false;
+            userControl_ButtonFrame_MusicRecentlyPlayed.IsEnabled = false;
+            userControl_ButtonFrame_MusicTryListenList.IsEnabled = false;
+            userControl_Main_Home_Left_MyMusic_My_Love.IsEnabled = false;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.IsEnabled = false;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.IsEnabled = false;
+            userControl_Main_Home_Left_MyMusic_Try_Listen.IsEnabled = false;
+
             dispatcher_Add_PC_Select_Song = new DispatcherTimer();
             dispatcher_Add_PC_Select_Song.Tick += DispatcherTimer_Add_PC_Select_Song_Tick;
             dispatcher_Add_PC_Select_Song.Interval = new TimeSpan(0, 0, 0, 3);
@@ -3243,7 +3253,6 @@ namespace 墨智音乐_3._0._1
             {
                 if (bool_make_true.Equals("已检索"))
                 {
-                    dispatcher_Add_PC_Select_Song.Stop();
                     dispatcher_Add_PC_Select_Song = null;
 
                     FS_List_Save = new FileStream(temp, FileMode.Create);
@@ -3260,7 +3269,6 @@ namespace 墨智音乐_3._0._1
                 }
                 else if (bool_make_true.Equals("未完成"))
                 {
-                    dispatcher_Add_PC_Select_Song.Stop();
                     dispatcher_Add_PC_Select_Song = null;
 
                     FS_List_Save = new FileStream(temp, FileMode.Create);
@@ -3281,7 +3289,7 @@ namespace 墨智音乐_3._0._1
         private void Hand_Add_listView_SongList_Source()
         {
             if (bool_ListView_Temp_Info_End_Clear.userControl_主界面_FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Love"))
-            {
+            {              
                 load_SongList_Info.Load_Data_ALL_D_Grid_View_Select_Songs();
                 Add_Select_Songs_To_listView_Item_Bing_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_Love);
                 userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = null;
@@ -3313,6 +3321,14 @@ namespace 墨智音乐_3._0._1
                 listView_SongList = userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info;
             }
 
+            userControl_ButtonFrame_MusicLove.IsEnabled = true;
+            userControl_ButtonFrame_ThisWindowsMusicAndDownload.IsEnabled = true;
+            userControl_ButtonFrame_MusicRecentlyPlayed.IsEnabled = true;
+            userControl_ButtonFrame_MusicTryListenList.IsEnabled = true;
+            userControl_Main_Home_Left_MyMusic_My_Love.IsEnabled = true;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.IsEnabled = true;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.IsEnabled = true;
+            userControl_Main_Home_Left_MyMusic_Try_Listen.IsEnabled = true;
         }
         /// <summary>
         /// 添加选中歌曲至末尾
@@ -3375,6 +3391,16 @@ namespace 墨智音乐_3._0._1
         /// </summary>
         private void DispatcherTimer_Add_PC_ALL_Song()
         {
+            MessageBox.Show("需要歌单操作的歌单，在歌曲完全导入之前，所有的歌单会保持冻结状态");
+            userControl_ButtonFrame_MusicLove.IsEnabled = false;
+            userControl_ButtonFrame_ThisWindowsMusicAndDownload.IsEnabled = false;
+            userControl_ButtonFrame_MusicRecentlyPlayed.IsEnabled = false;
+            userControl_ButtonFrame_MusicTryListenList.IsEnabled = false;
+            userControl_Main_Home_Left_MyMusic_My_Love.IsEnabled = false;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.IsEnabled = false;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.IsEnabled = false;
+            userControl_Main_Home_Left_MyMusic_Try_Listen.IsEnabled = false;
+
             dispatcher_Add_PC_ALL_Song = new DispatcherTimer();
             dispatcher_Add_PC_ALL_Song.Tick += DispatcherTimer_Add_PC_ALL_Song_Tick;
             dispatcher_Add_PC_ALL_Song.Interval = new TimeSpan(0,0,0,3);
@@ -3392,7 +3418,6 @@ namespace 墨智音乐_3._0._1
             {
                 if (bool_make_true.Equals("已检索"))
                 {
-                    dispatcher_Add_PC_ALL_Song.Stop();
                     dispatcher_Add_PC_ALL_Song = null;
 
                     FS_List_Save = new FileStream(temp, FileMode.Create);
@@ -3409,7 +3434,6 @@ namespace 墨智音乐_3._0._1
                 }
                 else if (bool_make_true.Equals("未完成"))
                 {
-                    dispatcher_Add_PC_ALL_Song.Stop();
                     dispatcher_Add_PC_ALL_Song = null;
 
                     FS_List_Save = new FileStream(temp, FileMode.Create);
@@ -3432,39 +3456,41 @@ namespace 墨智音乐_3._0._1
             if (bool_ListView_Temp_Info_End_Clear.userControl_主界面_FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Love"))
             {
                 load_SongList_Info.Load_Data_ALL_D_Grid_View_2();
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Love;
                 userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = null;
                 userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Love;
                 listView_SongList = userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info;
-                MessageBox.Show("导入成功");
             }
             else if (bool_ListView_Temp_Info_End_Clear.userControl_主界面_FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_ALL"))
             {
                 load_SongList_Info.Load_Data_ALL_D_Grid_View_1();
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = null;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL;
                 listView_SongList = userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info;
-                MessageBox.Show("导入成功");
-            }
+            }       
             else if (bool_ListView_Temp_Info_End_Clear.userControl_主界面_FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Auto"))
             {
                 load_SongList_Info.Load_Data_ALL_D_Grid_View_3();
-                userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
                 userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = null;
                 userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
                 listView_SongList = userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info;
-                MessageBox.Show("导入成功");
             }
             else if (bool_ListView_Temp_Info_End_Clear.userControl_主界面_FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen"))
             {
                 load_SongList_Info.Load_Data_ALL_D_Grid_View_4();
-                userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
                 userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = null;
                 userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
-                listView_SongList = userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info;
-                MessageBox.Show("导入成功");
+                listView_SongList = userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info;            
             }
+
+            userControl_ButtonFrame_MusicLove.IsEnabled = true;
+            userControl_ButtonFrame_ThisWindowsMusicAndDownload.IsEnabled = true;
+            userControl_ButtonFrame_MusicRecentlyPlayed.IsEnabled = true;
+            userControl_ButtonFrame_MusicTryListenList.IsEnabled = true;
+            userControl_Main_Home_Left_MyMusic_My_Love.IsEnabled = true;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.IsEnabled = true;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.IsEnabled = true;
+            userControl_Main_Home_Left_MyMusic_Try_Listen.IsEnabled = true;
+            MessageBox.Show("导入成功");
         }
 
         #endregion

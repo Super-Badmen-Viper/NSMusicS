@@ -82,16 +82,24 @@
                         Width="160" Height="30" Margin="0,10,0,0"
                         UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                         MouseLeftButtonDown="UserControl_ButtonFrame_ThisWindowsMusicAndDownload_MouseLeftButtonDown" />
+                    
+                    <!--BUG，待修复-->
                     <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_MusicRecentlyPlayed 
                         x:Name="userControl_ButtonFrame_MusicRecentlyPlayed"
                         Width="160" Height="30" Margin="0,10,0,0"
                         UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                        MouseLeftButtonDown="UserControl_ButtonFrame_MusicRecentlyPlayed_MouseLeftButtonDown" />
+                        MouseLeftButtonDown="UserControl_ButtonFrame_MusicRecentlyPlayed_MouseLeftButtonDown" 
+                        
+                        
+                        />
                     <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_MusicTryListenList 
                         x:Name="userControl_ButtonFrame_MusicTryListenList"
                         Width="160" Height="30" Margin="0,10,0,0"
                         UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                        MouseLeftButtonDown="UserControl_ButtonFrame_MusicTryListenList_MouseLeftButtonDown" />
+                        MouseLeftButtonDown="UserControl_ButtonFrame_MusicTryListenList_MouseLeftButtonDown" 
+                        
+                        
+                        />
                 </StackPanel>
                 <ComboBox Visibility="Hidden" Height="20" Margin="25,535,25,0" VerticalAlignment="Top" IsEditable="True" Text="创建的歌单" Foreground="#FF7C7C7C" Background="{x:Null}" BorderBrush="{x:Null}"/>
                 <StackPanel Margin="0,489,0,150" >
