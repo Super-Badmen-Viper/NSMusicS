@@ -79,6 +79,61 @@ namespace 墨智音乐_3._0._1
             musicPlayer_Main_UserControl.BeginAnimation(UserControl.HeightProperty, doubleAnimation);
 
             //this.MediaElement_Song.LoadedBehavior = MediaState.Manual;
+
+            //检查歌单保险触发是否正确
+            Init_MakeTrue_IniSystemInfo();
+        }
+
+        #endregion
+        #region 检查歌单保险触发是否正确
+        /// <summary>
+        /// 检查歌单保险触发是否正确
+        /// </summary>
+        public void Init_MakeTrue_IniSystemInfo()
+        {
+            //检查歌单保险触发是否正确
+            string temp = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource\SongListInfo_ini\SongList_MakeSure_Ini\SongList_MakeSure.ini";
+            FileStream FS_List_Save = new FileStream(temp, FileMode.Open);
+            StreamReader SR_List = new StreamReader(FS_List_Save);
+            string bool_make_true = SR_List.ReadLine();
+            SR_List.Close();
+            FS_List_Save.Close();
+            if (bool_make_true != null)
+            {
+                if (bool_make_true.Equals("已检索"))
+                {
+                    FS_List_Save = new FileStream(temp, FileMode.Create);
+                    StreamWriter SW_List = new StreamWriter(FS_List_Save);//无法静态
+                    SW_List.WriteLine("未检索");
+                    //清空缓冲区
+                    //关闭流
+                    SW_List.Flush();
+                    SW_List.Close();
+                    //FS_List.Flush();
+                    FS_List_Save.Close();
+                }
+            }
+            temp = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource\SongListInfo_ini\SongList_MakeSure_Ini\SongList_Find_Select_Song_MakeSure.ini";
+            FS_List_Save = new FileStream(temp, FileMode.Open);
+            SR_List = new StreamReader(FS_List_Save);
+            bool_make_true = SR_List.ReadLine();
+            SR_List.Close();
+            FS_List_Save.Close();
+            if (bool_make_true != null)
+            {
+                if (bool_make_true.Equals("已检索"))
+                {
+                    FS_List_Save = new FileStream(temp, FileMode.Create);
+                    StreamWriter SW_List = new StreamWriter(FS_List_Save);//无法静态
+                    SW_List.WriteLine("未检索");
+                    //清空缓冲区
+                    //关闭流
+                    SW_List.Flush();
+                    SW_List.Close();
+                    //FS_List.Flush();
+                    FS_List_Save.Close();
+                }
+            }
         }
 
         #endregion
