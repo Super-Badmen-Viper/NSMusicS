@@ -1,2 +1,2 @@
 # MoZhiMusicPlayer
-基于dotNET_WPF的音乐客户端，非常牛逼的个人开发的企业级项目
+基于dotNET_WPF的音乐客户端
