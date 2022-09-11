@@ -76,10 +76,13 @@ namespace 墨智音乐_3._0._1.Helper_UserControlLibrary.视频
 
             if (Grid_This_Background.ActualWidth > 0)
             {
-                //减一，保持Image_的大小随ActualWidth变化
-                Image_.Width = Grid_This_Background.ActualWidth - 1;
-                Image_.Height = Grid_This_Background.ActualHeight - 1;
-
+                try
+                {
+                    //减一，保持Image_的大小随ActualWidth变化
+                    Image_.Width = Grid_This_Background.ActualWidth - 1;
+                    Image_.Height = Grid_This_Background.ActualHeight - 1;
+                }
+                catch { }
             }
 
             //Thread.Sleep(10);
