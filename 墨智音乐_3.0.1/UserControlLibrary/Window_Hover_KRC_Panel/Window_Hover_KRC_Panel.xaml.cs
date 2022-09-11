@@ -10,14 +10,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace 墨智音乐_3._0._1.UserControlLibrary.Window_Hover_KRC_Panel
+namespace 墨智音乐_3._0._1.UserControlLibrary.Window_Hover_MRC_Panel
 {
     /// <summary>
     /// Window1.xaml 的交互逻辑
     /// </summary>
-    public partial class Window_Hover_KRC_Panel : Window
+    public partial class Window_Hover_MRC_Panel : Window
     {
-        public Window_Hover_KRC_Panel()
+        public Window_Hover_MRC_Panel()
         {
             InitializeComponent();
 
@@ -31,7 +31,7 @@ namespace 墨智音乐_3._0._1.UserControlLibrary.Window_Hover_KRC_Panel
             this.ResizeMode = ResizeMode.NoResize;
         }
 
-        public bool Bool_Open_Krc_Panel;
+        public bool Bool_Open_MRC_Panel;
 
         /// <summary>
         /// 拖动窗口
@@ -47,13 +47,13 @@ namespace 墨智音乐_3._0._1.UserControlLibrary.Window_Hover_KRC_Panel
             catch { }
         }
 
-        private void Window_Desk_KRC1_MouseLeave(object sender, MouseEventArgs e)
+        private void Window_Desk_MRC1_MouseLeave(object sender, MouseEventArgs e)
         {
             //#A8343434
             this.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
         }
 
-        private void Window_Desk_KRC1_MouseMove(object sender, MouseEventArgs e)
+        private void Window_Desk_MRC1_MouseMove(object sender, MouseEventArgs e)
         {
             //#A8343434
             this.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A8343434"));

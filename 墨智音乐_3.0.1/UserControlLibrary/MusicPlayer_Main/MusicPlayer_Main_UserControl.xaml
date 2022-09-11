@@ -125,7 +125,7 @@
                 <ListView 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
                     ItemsPanel="{DynamicResource ItemsPanelTemplate2}" 
-                    x:Name="ListView_Temp_KRC" Background="{x:Null}" BorderBrush="{x:Null}" 
+                    x:Name="ListView_Temp_MRC" Background="{x:Null}" BorderBrush="{x:Null}" 
                     Foreground="White" FontSize="16" FontWeight="Medium"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                     Margin="488,231,0,0" Width="555" MinHeight="310"
@@ -192,7 +192,7 @@
                     <ListView.View>
                         <GridView AllowsColumnReorder="True">
                             <!--ListviewItem的长度-->
-                            <GridViewColumn Width="888" x:Name="ListView_Temp_KRC_GridViewColumn">
+                            <GridViewColumn Width="888" x:Name="ListView_Temp_MRC_GridViewColumn">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock HorizontalAlignment="Stretch"
@@ -200,7 +200,7 @@
                                                LineStackingStrategy="BlockLineHeight" LineHeight="22"
                                                Padding="0,0,0,0"
                                                x:Name="Text_TextBlock"
-                                               Text="{Binding Song_KRC_Line}"
+                                               Text="{Binding Song_MRC_Line}"
                                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                                                >
                                             <!--编辑文字段落的行高，防止溢出 LineStackingStrategy="BlockLineHeight" LineHeight="20" -->
@@ -236,8 +236,8 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <!-- 掩盖ListViewKRC,形成不同层次 -->
-                <TextBox x:Name="TextBox_ListViewKRC_Up" 
+                <!-- 掩盖ListViewMRC,形成不同层次 -->
+                <TextBox x:Name="TextBox_ListViewMRC_Up" 
                      Margin="488,231,0,0" Width="555" MinHeight="310"
                      TextWrapping="Wrap" Text="TextBox" BorderBrush="{x:Null}" Background="{x:Null}" SelectionBrush="{x:Null}" Foreground="{x:Null}" HorizontalAlignment="Center" UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top">
                     <TextBox.RenderTransform>
@@ -259,7 +259,7 @@
                 </TextBox>
                 <ListView 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                    x:Name="ListView_Temp_KRC_Temp" Background="{x:Null}" BorderBrush="{x:Null}" 
+                    x:Name="ListView_Temp_MRC_Temp" Background="{x:Null}" BorderBrush="{x:Null}" 
                     Foreground="White" FontSize="16" FontWeight="Medium"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                     Margin="488,231,0,0" Width="444" 
@@ -281,10 +281,10 @@
                     </ListView.Resources>
                     <ListView.View>
                         <GridView AllowsColumnReorder="True">
-                            <GridViewColumn Width="440" x:Name="ListView_Temp_KRC_Temp_GridViewColumn">
+                            <GridViewColumn Width="440" x:Name="ListView_Temp_MRC_Temp_GridViewColumn">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Song_KRC_Line}" HorizontalAlignment="Center"
+                                        <TextBlock Text="{Binding Song_MRC_Line}" HorizontalAlignment="Center"
                                                TextWrapping="Wrap" TextAlignment="Center" 
                                                LineStackingStrategy="BlockLineHeight" LineHeight="22"
                                                Padding="0,0,0,0"

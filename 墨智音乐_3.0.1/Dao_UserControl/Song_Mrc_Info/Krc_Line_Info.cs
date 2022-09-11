@@ -13,14 +13,14 @@ namespace 墨智音乐_3._0._1.Dao_UserControl.Song_Mrc_Info
     /// <summary>
     /// 歌词行信息及歌词字符信息
     /// </summary>
-    public class Krc_Line_Info
+    public class MRC_Line_Info
     {
         //当前 歌词行行数
-        public int This_Krc_Line;
+        public int This_MRC_Line;
         //当前 歌词行开始时间
-        public int This_Krc_Start_Time;
+        public int This_MRC_Start_Time;
         //当前 歌词行持续时间
-        public int This_Krc_Duration;
+        public int This_MRC_Duration;
 
         //当前 歌词行所有字节的数量
         public int Int_MoreByte_Nums;

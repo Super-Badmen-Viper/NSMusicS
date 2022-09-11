@@ -22,7 +22,7 @@ using System.IO;
 using 墨智音乐_3._0._1.Dao_UserControl.Song_Mrc_Info;
 using 墨智音乐_3._0._1.Dao_UserControl.WAVReader;
 using System.Windows.Media.Animation;
-using 墨智音乐_3._0._1.UserControlLibrary.Window_Hover_KRC_Panel;
+using 墨智音乐_3._0._1.UserControlLibrary.Window_Hover_MRC_Panel;
 using System.Windows.Media.Effects;
 using System.Threading;
 using System.Collections;
@@ -591,7 +591,7 @@ namespace 墨智音乐_3._0._1
 
                 userControl_ButtonFrame_TopPanel.Button_Max.Background = brush_MaxNormal;
 
-                //KRC_Line_Nums = (int)((System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height - 240) / 40 / 2) + 2;
+                //MRC_Line_Nums = (int)((System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height - 240) / 40 / 2) + 2;
 
 
             }
@@ -601,13 +601,13 @@ namespace 墨智音乐_3._0._1
                 
                 userControl_ButtonFrame_TopPanel.Button_Max.Background = brush_Max;
 
-                //KRC_Line_Nums = 9;
+                //MRC_Line_Nums = 9;
             }
 
 
             //歌词上下行移动
             //生成歌词路径
-            //Create_Steam_Song_KRC();
+            //Create_Steam_Song_MRC();
         }
         /// <summary>
         /// 最小化
@@ -645,9 +645,9 @@ namespace 墨智音乐_3._0._1
             dispatcherTimer_Silder.Interval = TimeSpan.FromMilliseconds(100); // 间隔1秒
 
             //初始化桌面歌词
-            DispatcherTimer_KRC = new DispatcherTimer();
-            DispatcherTimer_KRC.Tick += new EventHandler(Media_Song_KRC_Play_Tick); // 超过计时器间隔时发生，时间轴向前走1秒       
-            DispatcherTimer_KRC.Interval = TimeSpan.FromMilliseconds(50); // 间隔1秒
+            DispatcherTimer_MRC = new DispatcherTimer();
+            DispatcherTimer_MRC.Tick += new EventHandler(Media_Song_MRC_Play_Tick); // 超过计时器间隔时发生，时间轴向前走1秒       
+            DispatcherTimer_MRC.Interval = TimeSpan.FromMilliseconds(50); // 间隔1秒
 
             //播放器缓冲流绑定
             MediaElement_Song.MediaOpened += MediaElement_Song_MediaOpened;
@@ -667,13 +667,13 @@ namespace 墨智音乐_3._0._1
 
             musicPlayer_Main_UserControl.Button_Return_MainWindow.Click += Button_Return_MainWindow_Click_CloseMainMusicPlayer;
             //选中项更改
-            musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectionChanged += ListView_Temp_KRC_ScrollIntoView;
+            musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectionChanged += ListView_Temp_MRC_ScrollIntoView;
             //鼠标滚轮
-            musicPlayer_Main_UserControl.TextBox_ListViewKRC_Up.MouseWheel += ListView_Temp_KRC_MouseWheel;
+            musicPlayer_Main_UserControl.TextBox_ListViewMRC_Up.MouseWheel += ListView_Temp_MRC_MouseWheel;
             //鼠标移出
-            musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.MouseLeave += ListView_Temp_KRC_MouseLeave;
+            musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.MouseLeave += ListView_Temp_MRC_MouseLeave;
             //跳转至选中歌词歌曲进度
-            musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.MouseDoubleClick += ListView_Temp_KRC_Temp_MouseDoubleClick;
+            musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.MouseDoubleClick += ListView_Temp_MRC_Temp_MouseDoubleClick;
 
             //设置专辑背景封面
             Image_墨智音乐 = new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\Music_Album.png"));
@@ -723,8 +723,8 @@ namespace 墨智音乐_3._0._1
 
             //设置进入播放器界面，返回主界面事件
             userControl_ButtonFrame_MusicPlayer.Button_Singer_Image_Animation.MouseLeftButtonDown += Button_Singer_Image_Animation_Click;
-            userControl_ButtonFrame_MusicPlayer.Button_Desk_KRC.Click += Button_Window_Hover_KRC_Panel;
-            userControl_ButtonFrame_MusicPlayer.Button_Desk_KRC_Right.Click += Button_Window_Hover_KRC_Panel;
+            userControl_ButtonFrame_MusicPlayer.Button_Desk_MRC.Click += Button_Window_Hover_MRC_Panel;
+            userControl_ButtonFrame_MusicPlayer.Button_Desk_MRC_Right.Click += Button_Window_Hover_MRC_Panel;
             //隐藏播放顺序与音量设置按键
             userControl_ButtonFrame_MusicPlayer.Stack_Panel_Order.Visibility = Visibility.Hidden;
             userControl_ButtonFrame_MusicPlayer.Stack_Panel_Voice.Visibility = Visibility.Hidden;
@@ -756,7 +756,7 @@ namespace 墨智音乐_3._0._1
             userControl_Main_Home_Left_MyMusic_Try_Listen.brush_LoveEnter.ImageSource = new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心 - 副本.png"));
 
             //调整歌词列表的边距
-            thickness_ListView_Temp_KRC_Margin = musicPlayer_Main_UserControl.ListView_Temp_KRC.Margin;
+            thickness_ListView_Temp_MRC_Margin = musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin;
 
             //设置触发器，检测当前歌曲数量
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.SourceUpdated += ListView_Download_SongList_Info_SourceUpdated;
@@ -920,14 +920,14 @@ namespace 墨智音乐_3._0._1
                     userControl_ButtonFrame_MusicPlayer.Silder_Music_Temp_Width.Visibility = Visibility.Hidden;
 
                     //歌词滚动
-                    if (ListBox_KRC_Song_KRC_Time != null)
+                    if (ListBox_MRC_Song_MRC_Time != null)
                     {
                         //如果选中的  跳转的播放进度  在  当前播放进度  之前
                         if (userControl_ButtonFrame_MusicPlayer.Silder_Music_Temp_Width.Value < userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Value)
                         {
-                            musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex = 0;
-                            musicPlayer_Main_UserControl.ListView_Temp_KRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_KRC.Items[0]);//先滚动至第一行歌词
-                            //ListView_KRC.ScrollIntoView(ListView_KRC.Items[0]);//先滚动至第一行歌词                          
+                            musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex = 0;
+                            musicPlayer_Main_UserControl.ListView_Temp_MRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_MRC.Items[0]);//先滚动至第一行歌词
+                            //ListView_MRC.ScrollIntoView(ListView_MRC.Items[0]);//先滚动至第一行歌词                          
                         }
                         //歌词时间匹配方法  会自动跳转至指定选中歌词行
                     }
@@ -969,7 +969,7 @@ namespace 墨智音乐_3._0._1
         Thickness thickness_Grid_MusicPlayer_Main_UserControl_Enter = new Thickness();
 
 
-        Thickness thickness_ListView_Temp_KRC_Margin_Center;
+        Thickness thickness_ListView_Temp_MRC_Margin_Center;
         /// <summary>
         /// 打开主播放器
         /// </summary>
@@ -1012,7 +1012,7 @@ namespace 墨智音乐_3._0._1
                 userControl_ButtonFrame_MusicPlayer.Button_Music_Voice_Speed.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/音量 (1).png")));
 
 
-                musicPlayer_Main_UserControl.ListView_Temp_KRC.Visibility = Visibility.Hidden;
+                musicPlayer_Main_UserControl.ListView_Temp_MRC.Visibility = Visibility.Hidden;
                 //实例化一个DoubleAnimation类。
                 doubleAnimation = new DoubleAnimation();
                 //设置From属性。
@@ -1071,7 +1071,7 @@ namespace 墨智音乐_3._0._1
                 userControl_ButtonFrame_MusicPlayer.Button_Next.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/下一首.png")));
                 userControl_ButtonFrame_MusicPlayer.Button_Music_Voice_Speed.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/音量.png")));
 
-                musicPlayer_Main_UserControl.ListView_Temp_KRC.Visibility = Visibility.Hidden;
+                musicPlayer_Main_UserControl.ListView_Temp_MRC.Visibility = Visibility.Hidden;
                 //实例化一个DoubleAnimation类。
                 doubleAnimation = new DoubleAnimation();
                 //设置From属性。
@@ -1089,7 +1089,7 @@ namespace 墨智音乐_3._0._1
 
         }
 
-        Thickness thickness_ListView_Temp_KRC_Margin = new Thickness();
+        Thickness thickness_ListView_Temp_MRC_Margin = new Thickness();
         /// <summary>
         /// 主界面切换动画完成事件
         /// </summary>
@@ -1100,7 +1100,7 @@ namespace 墨智音乐_3._0._1
             blurEffect.Radius = 46;
             musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Effect = blurEffect;
 
-            musicPlayer_Main_UserControl.ListView_Temp_KRC.Visibility = Visibility.Visible;
+            musicPlayer_Main_UserControl.ListView_Temp_MRC.Visibility = Visibility.Visible;
         }
 
         /// <summary>
@@ -1119,13 +1119,13 @@ namespace 墨智音乐_3._0._1
                 musicPlayer_Main_UserControl.TextBox_SongAlbumName.Visibility = Visibility.Hidden;
 
 
-                thickness_ListView_Temp_KRC_Margin_Center = musicPlayer_Main_UserControl.ListView_Temp_KRC.Margin;
-                thickness_ListView_Temp_KRC_Margin_Center.Left = 0;
-                thickness_ListView_Temp_KRC_Margin_Center.Right = 0;
-                musicPlayer_Main_UserControl.ListView_Temp_KRC.Margin = thickness_ListView_Temp_KRC_Margin_Center;
-                musicPlayer_Main_UserControl.TextBox_ListViewKRC_Up.Margin = thickness_ListView_Temp_KRC_Margin_Center;
-                musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.Margin = thickness_ListView_Temp_KRC_Margin_Center;
-                musicPlayer_Main_UserControl.ListView_Temp_KRC.Width = 1000;
+                thickness_ListView_Temp_MRC_Margin_Center = musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin;
+                thickness_ListView_Temp_MRC_Margin_Center.Left = 0;
+                thickness_ListView_Temp_MRC_Margin_Center.Right = 0;
+                musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin = thickness_ListView_Temp_MRC_Margin_Center;
+                musicPlayer_Main_UserControl.TextBox_ListViewMRC_Up.Margin = thickness_ListView_Temp_MRC_Margin_Center;
+                musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.Margin = thickness_ListView_Temp_MRC_Margin_Center;
+                musicPlayer_Main_UserControl.ListView_Temp_MRC.Width = 1000;
             }
             else
             {
@@ -1166,10 +1166,10 @@ namespace 墨智音乐_3._0._1
                 musicPlayer_Main_UserControl.TextBox_SingerName.Visibility = Visibility.Visible;
                 musicPlayer_Main_UserControl.TextBox_SongAlbumName.Visibility = Visibility.Visible;
 
-                musicPlayer_Main_UserControl.ListView_Temp_KRC.Margin = thickness_ListView_Temp_KRC_Margin;
-                musicPlayer_Main_UserControl.TextBox_ListViewKRC_Up.Margin = thickness_ListView_Temp_KRC_Margin;
-                musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.Margin = thickness_ListView_Temp_KRC_Margin;
-                musicPlayer_Main_UserControl.ListView_Temp_KRC.Width = 444;
+                musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin = thickness_ListView_Temp_MRC_Margin;
+                musicPlayer_Main_UserControl.TextBox_ListViewMRC_Up.Margin = thickness_ListView_Temp_MRC_Margin;
+                musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.Margin = thickness_ListView_Temp_MRC_Margin;
+                musicPlayer_Main_UserControl.ListView_Temp_MRC.Width = 444;
             }
         }
         public void Open_Singer_Image_Animation()
@@ -1212,19 +1212,19 @@ namespace 墨智音乐_3._0._1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void Button_Window_Hover_KRC_Panel(object sender, EventArgs e)
+        public void Button_Window_Hover_MRC_Panel(object sender, EventArgs e)
         {
-            if (!window_Hover_KRC_Panel.Bool_Open_Krc_Panel)
+            if (!window_Hover_MRC_Panel.Bool_Open_MRC_Panel)
             {
-                window_Hover_KRC_Panel.Show();
+                window_Hover_MRC_Panel.Show();
 
-                window_Hover_KRC_Panel.Bool_Open_Krc_Panel = true;
+                window_Hover_MRC_Panel.Bool_Open_MRC_Panel = true;
             }
             else
             {
-                window_Hover_KRC_Panel.Hide();
+                window_Hover_MRC_Panel.Hide();
 
-                window_Hover_KRC_Panel.Bool_Open_Krc_Panel = false;
+                window_Hover_MRC_Panel.Bool_Open_MRC_Panel = false;
             }
         }
 
@@ -1249,10 +1249,10 @@ namespace 墨智音乐_3._0._1
                 if (myTextBlock_Storyboard != null)
                 {
                     myTextBlock_Storyboard.Resume();
-                    window_Hover_KRC_Panel.Text_Storyboard.Resume();
-                    if (window_Hover_KRC_Panel.Text_Storyboard_slider_Up != null) {
-                        window_Hover_KRC_Panel.Text_Storyboard_slider_Up.Resume();
-                        window_Hover_KRC_Panel.Text_Storyboard_slider_Down.Resume();
+                    window_Hover_MRC_Panel.Text_Storyboard.Resume();
+                    if (window_Hover_MRC_Panel.Text_Storyboard_slider_Up != null) {
+                        window_Hover_MRC_Panel.Text_Storyboard_slider_Up.Resume();
+                        window_Hover_MRC_Panel.Text_Storyboard_slider_Down.Resume();
                     }
                 }
             }
@@ -1269,11 +1269,11 @@ namespace 墨智音乐_3._0._1
                 if (myTextBlock_Storyboard != null)
                 {
                     myTextBlock_Storyboard.Pause();
-                    window_Hover_KRC_Panel.Text_Storyboard.Pause();
-                    if (window_Hover_KRC_Panel.Text_Storyboard_slider_Up != null)
+                    window_Hover_MRC_Panel.Text_Storyboard.Pause();
+                    if (window_Hover_MRC_Panel.Text_Storyboard_slider_Up != null)
                     {
-                        window_Hover_KRC_Panel.Text_Storyboard_slider_Up.Pause();
-                        window_Hover_KRC_Panel.Text_Storyboard_slider_Down.Pause();
+                        window_Hover_MRC_Panel.Text_Storyboard_slider_Up.Pause();
+                        window_Hover_MRC_Panel.Text_Storyboard_slider_Down.Pause();
                     }
                 }
             }
@@ -1474,7 +1474,7 @@ namespace 墨智音乐_3._0._1
         }
 
 
-        public string Song_KRC_Path;
+        public string Song_MRC_Path;
         string Singer_Name;
         string Song_Name;
         string Song_Url;
@@ -1485,12 +1485,12 @@ namespace 墨智音乐_3._0._1
         /// </summary>
         public void Change_MediaElement_Source()
         {
-            window_Hover_KRC_Panel.TextBlock_1.Text = "科技源于生活，技术源于创新";
-            window_Hover_KRC_Panel.TextBlock_2.Text = "毒蛇云生态，致力于生活更便捷";
-            if (window_Hover_KRC_Panel.Bool_Open_Krc_Panel)
+            window_Hover_MRC_Panel.TextBlock_1.Text = "科技源于生活，技术源于创新";
+            window_Hover_MRC_Panel.TextBlock_2.Text = "毒蛇云生态，致力于生活更便捷";
+            if (window_Hover_MRC_Panel.Bool_Open_MRC_Panel)
             {
-                window_Hover_KRC_Panel.Text_DoubleAnimation.Duration = new Duration(new TimeSpan(0, 0, 0, 0, 3333));
-                window_Hover_KRC_Panel.Text_Storyboard.Begin();
+                window_Hover_MRC_Panel.Text_DoubleAnimation.Duration = new Duration(new TimeSpan(0, 0, 0, 0, 3333));
+                window_Hover_MRC_Panel.Text_Storyboard.Begin();
             }
 
             if (Select_DoubleClick_ListView == 1)
@@ -1529,7 +1529,7 @@ namespace 墨智音乐_3._0._1
                 //歌曲逻辑
                 //Change_MediaElement_Song_Source();//打开歌词显示
                 //生成歌曲名
-                Song_KRC_Path = Singer_Name + " - " + Song_Name;
+                Song_MRC_Path = Singer_Name + " - " + Song_Name;
                 //切换歌曲，歌手，专辑名
                 Change_TextBox_To_SingerSong_Name();
                 //选中播放的列
@@ -1548,7 +1548,7 @@ namespace 墨智音乐_3._0._1
                 }
 
                 //生成歌词路径
-                Create_Steam_Song_KRC();
+                Create_Steam_Song_MRC();
 
                 try
                 {
@@ -1632,47 +1632,47 @@ namespace 墨智音乐_3._0._1
 
         #region 歌词切换
 
-        public string[] ListBox_KRC_Song_KRC_Text;//歌词文件文本歌词内容的集合
-        public double[] ListBox_KRC_Song_KRC_Time;//歌词文件文本歌词时间的集合
-        public double Start_Song_KRC_Time;
-        public double End_Song_KRC_Time;
+        public string[] ListBox_MRC_Song_MRC_Text;//歌词文件文本歌词内容的集合
+        public double[] ListBox_MRC_Song_MRC_Time;//歌词文件文本歌词时间的集合
+        public double Start_Song_MRC_Time;
+        public double End_Song_MRC_Time;
 
         //歌词信息类
-        Dao_ListBox_Temp_KRC dao_ListBox_Temp_KRC = new Dao_ListBox_Temp_KRC();
+        Dao_ListBox_Temp_MRC dao_ListBox_Temp_MRC = new Dao_ListBox_Temp_MRC();
         /// <summary>
         /// 生成歌词路径
         /// </summary>
-        public void Create_Steam_Song_KRC()
+        public void Create_Steam_Song_MRC()
         {
-            //歌词数组信息输出类指代为 Dao_ListBox_Temp_KRC
+            //歌词数组信息输出类指代为 Dao_ListBox_Temp_MRC
 
             //歌词文件文本歌词内容的集合
-            ListBox_KRC_Song_KRC_Text = new string[999];
+            ListBox_MRC_Song_MRC_Text = new string[999];
             //歌词文件文本歌词时间的集合
-            ListBox_KRC_Song_KRC_Time = new double[999];
+            ListBox_MRC_Song_MRC_Time = new double[999];
             //创建获取 歌词数组信息输出类 
-            dao_ListBox_Temp_KRC = new Dao_ListBox_Temp_KRC();
-            //设置要分析的歌词文件（krc）路径
-            string KRC_URL = Path_App + @"\Mrc\" + Song_KRC_Path + @".krc";
+            dao_ListBox_Temp_MRC = new Dao_ListBox_Temp_MRC();
+            //设置要分析的歌词文件（mrc）路径
+            string MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".mrc";
 
             try
             {
                 //如果歌词文件存在
-                if (File.Exists(KRC_URL))
+                if (File.Exists(MRC_URL))
                 {
-                    //调用 Dao_ListBox_Temp_KRC内的方法 生成歌词数组方法，分析歌词数组信息并存储在 Dao_ListBox_Temp_KRC内
-                    dao_ListBox_Temp_KRC.player_lrc_Save_Text(KRC_URL);
+                    //调用 Dao_ListBox_Temp_MRC内的方法 生成歌词数组方法，分析歌词数组信息并存储在 Dao_ListBox_Temp_MRC内
+                    dao_ListBox_Temp_MRC.player_lrc_Save_Text(MRC_URL);
                     try
                     {
                         //字同步  生成树状结构(优化)
-                        dao_ListBox_Temp_KRC.Take_TreeKrcInfo(KRC_URL);
+                        dao_ListBox_Temp_MRC.Take_TreeMRCInfo(MRC_URL);
                         //行同步   分析树状歌词结构（未优化）
-                        dao_ListBox_Temp_KRC.Take_TreeKrcInfo();
+                        dao_ListBox_Temp_MRC.Take_TreeMRCInfo();
 
                         //读取不到的动画，需要往后增加读取不到的行数，防止动画不对应
                         int count = 0;
-                        count = dao_ListBox_Temp_KRC.Return_ListBox_Temp_KRC_Bing().Length - dao_ListBox_Temp_KRC.krc_Line_Info.Length - dao_ListBox_Temp_KRC.LRC_Text_Null_Nums * 2;
-                        dao_ListBox_Temp_KRC.LRC_Text_Null_Nums += count;
+                        count = dao_ListBox_Temp_MRC.Return_ListBox_Temp_MRC_Bing().Length - dao_ListBox_Temp_MRC.MRC_Line_Info.Length - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums * 2;
+                        dao_ListBox_Temp_MRC.LRC_Text_Null_Nums += count;
                     }
                     catch (Exception ex)
                     {
@@ -1681,86 +1681,86 @@ namespace 墨智音乐_3._0._1
 
                     
 
-                    //传递歌词数组，将listview的数据源绑定至 分析完成的在Dao_ListBox_Temp_KRC内存储的歌词数组信息
-                    musicPlayer_Main_UserControl.ListView_Temp_KRC.ItemsSource = dao_ListBox_Temp_KRC.Return_ListBox_Temp_KRC_Bing();
-                    musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.ItemsSource = dao_ListBox_Temp_KRC.Return_ListBox_Temp_KRC_Bing();
+                    //传递歌词数组，将listview的数据源绑定至 分析完成的在Dao_ListBox_Temp_MRC内存储的歌词数组信息
+                    musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemsSource = dao_ListBox_Temp_MRC.Return_ListBox_Temp_MRC_Bing();
+                    musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.ItemsSource = dao_ListBox_Temp_MRC.Return_ListBox_Temp_MRC_Bing();
                     
                     //获取当前歌词文件文本的   歌词内容数组和歌词时间数组
-                    //获取分析完成的在 Dao_ListBox_Temp_KRC 内存储的 歌词文件文本歌词内容Text的集合
-                    ListBox_KRC_Song_KRC_Text = dao_ListBox_Temp_KRC.Return_ListBox_Temp_KRC_Text();
-                    //获取分析完成的在 Dao_ListBox_Temp_KRC 内存储的 歌词文件文本歌词内容Time的集合
-                    ListBox_KRC_Song_KRC_Time = dao_ListBox_Temp_KRC.Return_ListBox_Temp_KRC_Time();
+                    //获取分析完成的在 Dao_ListBox_Temp_MRC 内存储的 歌词文件文本歌词内容Text的集合
+                    ListBox_MRC_Song_MRC_Text = dao_ListBox_Temp_MRC.Return_ListBox_Temp_MRC_Text();
+                    //获取分析完成的在 Dao_ListBox_Temp_MRC 内存储的 歌词文件文本歌词内容Time的集合
+                    ListBox_MRC_Song_MRC_Time = dao_ListBox_Temp_MRC.Return_ListBox_Temp_MRC_Time();
 
                     //生成歌曲第一句和最后一句的时间
-                    //获取分析完成的在 Dao_ListBox_Temp_KRC 内存储的 歌曲第一句的时间（毫秒）
-                    Start_Song_KRC_Time = dao_ListBox_Temp_KRC.Return_Start_Song_KRC_Time();
-                    //获取分析完成的在 Dao_ListBox_Temp_KRC 内存储的 歌曲最后一句的时间（毫秒）
-                    End_Song_KRC_Time = dao_ListBox_Temp_KRC.Return_End_Song_KRC_Time();
+                    //获取分析完成的在 Dao_ListBox_Temp_MRC 内存储的 歌曲第一句的时间（毫秒）
+                    Start_Song_MRC_Time = dao_ListBox_Temp_MRC.Return_Start_Song_MRC_Time();
+                    //获取分析完成的在 Dao_ListBox_Temp_MRC 内存储的 歌曲最后一句的时间（毫秒）
+                    End_Song_MRC_Time = dao_ListBox_Temp_MRC.Return_End_Song_MRC_Time();
 
                     //歌词滚动
-                    if (ListBox_KRC_Song_KRC_Time != null)
+                    if (ListBox_MRC_Song_MRC_Time != null)
                     {
-                        musicPlayer_Main_UserControl.ListView_Temp_KRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_KRC.Items[0]);//先滚动至第一行歌词              
-                        //ListView_KRC.ScrollIntoView(ListView_KRC.Items[0]);//先滚动至第一行歌词             
+                        musicPlayer_Main_UserControl.ListView_Temp_MRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_MRC.Items[0]);//先滚动至第一行歌词              
+                        //ListView_MRC.ScrollIntoView(ListView_MRC.Items[0]);//先滚动至第一行歌词             
                     }
 
                     //开启定时器，歌词同步           
-                    thread_DispatcherTimer_KRC = new Thread(new ThreadStart(() =>
+                    thread_DispatcherTimer_MRC = new Thread(new ThreadStart(() =>
                     {
                         Dispatcher.BeginInvoke(new Action(delegate ()
                         {
-                            DispatcherTimer_KRC.Start();
+                            DispatcherTimer_MRC.Start();
                         }));
                     }));
-                    thread_DispatcherTimer_KRC.Start();
+                    thread_DispatcherTimer_MRC.Start();
                 }
                 else
                 {
-                    //获取krc歌词失败，转而获取Lrc歌词
+                    //获取mrc歌词失败，转而获取Lrc歌词
 
                     //停止歌词同步
-                    thread_DispatcherTimer_KRC = new Thread(new ThreadStart(() =>
+                    thread_DispatcherTimer_MRC = new Thread(new ThreadStart(() =>
                     {
                         Dispatcher.BeginInvoke(new Action(delegate ()
                         {
-                            DispatcherTimer_KRC.Stop();
+                            DispatcherTimer_MRC.Stop();
                         }));
                     }));
-                    thread_DispatcherTimer_KRC.Start();
+                    thread_DispatcherTimer_MRC.Start();
 
-                    //ListView_KRC.ItemsSource = null;
-                    musicPlayer_Main_UserControl.ListView_Temp_KRC.ItemsSource = null;
-                    musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.ItemsSource = null;
+                    //ListView_MRC.ItemsSource = null;
+                    musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemsSource = null;
+                    musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.ItemsSource = null;
                         
-                    ListBox_KRC_Song_KRC_Text = null;
-                    ListBox_KRC_Song_KRC_Time = null;
-                    Start_Song_KRC_Time = 0;
-                    End_Song_KRC_Time = 0;                 
+                    ListBox_MRC_Song_MRC_Text = null;
+                    ListBox_MRC_Song_MRC_Time = null;
+                    Start_Song_MRC_Time = 0;
+                    End_Song_MRC_Time = 0;                 
                 }
             }
             catch
             {
-                //获取krc歌词失败，转而获取Lrc歌词
+                //获取mrc歌词失败，转而获取Lrc歌词
 
                 //停止歌词同步
-                thread_DispatcherTimer_KRC = new Thread(new ThreadStart(() =>
+                thread_DispatcherTimer_MRC = new Thread(new ThreadStart(() =>
                 {
                     Dispatcher.BeginInvoke(new Action(delegate ()
                     {
-                        DispatcherTimer_KRC.Stop();
+                        DispatcherTimer_MRC.Stop();
                     }));
                 }));
-                thread_DispatcherTimer_KRC.Start();
-                //Bool_Timer_KRC = false;
+                thread_DispatcherTimer_MRC.Start();
+                //Bool_Timer_MRC = false;
 
-                //ListView_KRC.ItemsSource = null;
-                musicPlayer_Main_UserControl.ListView_Temp_KRC.ItemsSource = null;
-                musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.ItemsSource = null;
+                //ListView_MRC.ItemsSource = null;
+                musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemsSource = null;
+                musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.ItemsSource = null;
                 
-                ListBox_KRC_Song_KRC_Text = null;
-                ListBox_KRC_Song_KRC_Time = null;
-                Start_Song_KRC_Time = 0;
-                End_Song_KRC_Time = 0;
+                ListBox_MRC_Song_MRC_Text = null;
+                ListBox_MRC_Song_MRC_Time = null;
+                Start_Song_MRC_Time = 0;
+                End_Song_MRC_Time = 0;
                 
             }
         }
@@ -1769,11 +1769,11 @@ namespace 墨智音乐_3._0._1
 
         #endregion
 
-        Window_Hover_KRC_Panel window_Hover_KRC_Panel = new Window_Hover_KRC_Panel();
+        Window_Hover_MRC_Panel window_Hover_MRC_Panel = new Window_Hover_MRC_Panel();
         #region 歌词行同步动画
-        DispatcherTimer DispatcherTimer_KRC;
-        TimeSpan Krc_Span;
-        int KRC_Line_Nums = 3;
+        DispatcherTimer DispatcherTimer_MRC;
+        TimeSpan MRC_Span;
+        int MRC_Line_Nums = 3;
 
         ListBoxItem myListBoxItem;
         ContentPresenter myContentPresenter;
@@ -1782,46 +1782,46 @@ namespace 墨智音乐_3._0._1
         DoubleAnimationUsingKeyFrames myTextBlock_DoubleAnimationUsingKeyFrames;
         LinearDoubleKeyFrame linearDoubleKeyFrame;
         TextBlock myTextBlock_TextBlock;
-        DoubleAnimationUsingKeyFrames window_Hover_KRC_PanelmyTextBlock_DoubleAnimationUsingKeyFrames;
+        DoubleAnimationUsingKeyFrames window_Hover_MRC_PanelmyTextBlock_DoubleAnimationUsingKeyFrames;
 
-        Thread thread_ListView_Temp_KRC_ScrollIntoView;
+        Thread thread_ListView_Temp_MRC_ScrollIntoView;
         Thread thread_myTextBlock_Storyboard;
-        Thread thread_window_Hover_KRC_Panel_Text_Storyboard_slider_UpDown;
-        Thread thread_DispatcherTimer_KRC;
+        Thread thread_window_Hover_MRC_Panel_Text_Storyboard_slider_UpDown;
+        Thread thread_DispatcherTimer_MRC;
         Thread thread_timer_Singer_Photo_One;
         Thread thread_timer_Singer_Photo_One_Lot;
         /// <summary>
-        /// 当musicPlayer_Main_UserControl.ListView_Temp_KRC选中项发送改变时
+        /// 当musicPlayer_Main_UserControl.ListView_Temp_MRC选中项发送改变时
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void ListView_Temp_KRC_ScrollIntoView(object sender, EventArgs e)
+        public void ListView_Temp_MRC_ScrollIntoView(object sender, EventArgs e)
         {
-            if (DispatcherTimer_KRC.IsEnabled)
+            if (DispatcherTimer_MRC.IsEnabled)
             {
-                if (musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex != -1 && musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex < musicPlayer_Main_UserControl.ListView_Temp_KRC.Items.Count)
+                if (musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex != -1 && musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex < musicPlayer_Main_UserControl.ListView_Temp_MRC.Items.Count)
                 {
-                    thread_ListView_Temp_KRC_ScrollIntoView = new Thread(new ThreadStart(() => {
+                    thread_ListView_Temp_MRC_ScrollIntoView = new Thread(new ThreadStart(() => {
                         Dispatcher.BeginInvoke(new Action(delegate () {
-                            musicPlayer_Main_UserControl.ListView_Temp_KRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_KRC.Items[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex + KRC_Line_Nums]);//移动到指定行                   
+                            musicPlayer_Main_UserControl.ListView_Temp_MRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_MRC.Items[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex + MRC_Line_Nums]);//移动到指定行                   
                         }));
                     }));
-                    thread_ListView_Temp_KRC_ScrollIntoView.Priority = ThreadPriority.Lowest;
-                    thread_ListView_Temp_KRC_ScrollIntoView.Start();
+                    thread_ListView_Temp_MRC_ScrollIntoView.Priority = ThreadPriority.Lowest;
+                    thread_ListView_Temp_MRC_ScrollIntoView.Start();
 
                     //生成歌词提词同步动画
-                    if (ListBox_KRC_Song_KRC_Time[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex] != 0)
+                    if (ListBox_MRC_Song_MRC_Time[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex] != 0)
                     {
                         try
                         {
-                            int temp = dao_ListBox_Temp_KRC.krc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex - dao_ListBox_Temp_KRC.LRC_Text_Null_Nums].This_Krc_Duration;
-                            //int temp = (int)(ListBox_KRC_Song_KRC_Time[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex + 1] - ListBox_KRC_Song_KRC_Time[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex]);
+                            int temp = dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].This_MRC_Duration;
+                            //int temp = (int)(ListBox_MRC_Song_MRC_Time[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex + 1] - ListBox_MRC_Song_MRC_Time[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex]);
 
 
                             if (myTextBlock_Storyboard != null)
                                 myTextBlock_Storyboard.Remove();//清空渐变过的歌词行颜色
                             myListBoxItem =
-                                (ListBoxItem)(musicPlayer_Main_UserControl.ListView_Temp_KRC.ItemContainerGenerator.ContainerFromIndex(musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex));
+                                (ListBoxItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex));
                             if (myListBoxItem != null)
                             {
                                 myContentPresenter = FindVisualChild<ContentPresenter>(myListBoxItem);
@@ -1838,7 +1838,7 @@ namespace 墨智音乐_3._0._1
                                 TimeSpan KeyTime = new TimeSpan(0, 0, 0, 0, 0);
                                 //用来递增的动画位置
                                 double values = Convert.ToDouble(1.0 / 
-                                    dao_ListBox_Temp_KRC.krc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex - dao_ListBox_Temp_KRC.LRC_Text_Null_Nums]
+                                    dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
                                     .Int_MoreByte_Nums);
                                 ArrayList temp_nums = new ArrayList();
                                 ArrayList line_nums = new ArrayList();
@@ -1846,26 +1846,26 @@ namespace 墨智音乐_3._0._1
                                 int temp_TimeSpan = 0;
                                 int temp_BeginTime = 0;
                                 int temp_Duration = 0;
-                                for (int i = 0; i < dao_ListBox_Temp_KRC.krc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex - dao_ListBox_Temp_KRC.LRC_Text_Null_Nums].Int_MoreByte_Nums; i++)
+                                for (int i = 0; i < dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].Int_MoreByte_Nums; i++)
                                 {
                                     /*if (i > 0)
                                     {
                                         //如果歌词时间序列中有停顿
-                                        if (Convert.ToInt16(dao_ListBox_Temp_KRC.krc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex - dao_ListBox_Temp_KRC.LRC_Text_Null_Nums]
+                                        if (Convert.ToInt16(dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
                                     .Array_Morebyte_BeginTime[i]) != temp_BeginTime + temp_Duration)
                                         {
                                             //取停顿时间
-                                            temp_TimeSpan = Convert.ToInt16(dao_ListBox_Temp_KRC.krc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex - dao_ListBox_Temp_KRC.LRC_Text_Null_Nums]
+                                            temp_TimeSpan = Convert.ToInt16(dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
                                     .Array_Morebyte_BeginTime[i]) - (temp_BeginTime + temp_Duration);
                                             timeSpan_nums.Add(temp_TimeSpan);
                                         }
                                     }*/
 
                                     temp_BeginTime = Convert.ToInt16(
-                                        dao_ListBox_Temp_KRC.krc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex - dao_ListBox_Temp_KRC.LRC_Text_Null_Nums]
+                                        dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
                                     .Array_Morebyte_BeginTime[i]);
                                     temp_Duration = Convert.ToInt16(
-                                        dao_ListBox_Temp_KRC.krc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex - dao_ListBox_Temp_KRC.LRC_Text_Null_Nums]
+                                        dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
                                     .Array_Morebyte_Duration[i]);                                  
 
                                     temp_TimeSpan = temp_BeginTime + temp_Duration;
@@ -1883,7 +1883,7 @@ namespace 墨智音乐_3._0._1
                                 {
                                     linearDoubleKeyFrame = new LinearDoubleKeyFrame();
                                     X += values;//固定的区间内，动画该持续的时间
-                                    if (i != dao_ListBox_Temp_KRC.krc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex - dao_ListBox_Temp_KRC.LRC_Text_Null_Nums].Int_MoreByte_Nums - 1)
+                                    if (i != dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].Int_MoreByte_Nums - 1)
                                         linearDoubleKeyFrame.Value = X;
                                     else
                                         linearDoubleKeyFrame.Value = 0.5;
@@ -1904,33 +1904,33 @@ namespace 墨智音乐_3._0._1
 
 
                             //保持同步
-                            window_Hover_KRC_Panel.Text_DoubleAnimation.Duration = new Duration(new TimeSpan(0, 0, 0, 0, temp));
+                            window_Hover_MRC_Panel.Text_DoubleAnimation.Duration = new Duration(new TimeSpan(0, 0, 0, 0, temp));
                             //动画进度设置为0
                             linearDoubleKeyFrame = new LinearDoubleKeyFrame();
                             linearDoubleKeyFrame.Value = -0.5;
                             linearDoubleKeyFrame.KeyTime = new TimeSpan(0, 0, 0, 0, 0);
                             myTextBlock_DoubleAnimationUsingKeyFrames.KeyFrames.Add(linearDoubleKeyFrame);
-                            window_Hover_KRC_Panel.Text_DoubleAnimation.KeyFrames = myTextBlock_DoubleAnimationUsingKeyFrames.KeyFrames;
-                            window_Hover_KRC_Panel.Text_Storyboard.Begin();
+                            window_Hover_MRC_Panel.Text_DoubleAnimation.KeyFrames = myTextBlock_DoubleAnimationUsingKeyFrames.KeyFrames;
+                            window_Hover_MRC_Panel.Text_Storyboard.Begin();
 
 
 
                             try
                             {
-                                temp = (int)(ListBox_KRC_Song_KRC_Time[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex + 1] - ListBox_KRC_Song_KRC_Time[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex]);
+                                temp = (int)(ListBox_MRC_Song_MRC_Time[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex + 1] - ListBox_MRC_Song_MRC_Time[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex]);
                                 if (temp < 0)
-                                    temp = (int)(MediaElement_Song.NaturalDuration.TimeSpan.TotalMilliseconds - ListBox_KRC_Song_KRC_Time[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex]);
+                                    temp = (int)(MediaElement_Song.NaturalDuration.TimeSpan.TotalMilliseconds - ListBox_MRC_Song_MRC_Time[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex]);
                                 //生成歌词同步进度Silder动画
-                                window_Hover_KRC_Panel.Text_DoubleAnimation_slider_Up.Duration = new Duration(new TimeSpan(0, 0, 0, 0, temp));
-                                window_Hover_KRC_Panel.Text_DoubleAnimation_slider_Down.Duration = new Duration(new TimeSpan(0, 0, 0, 0, temp));
-                                thread_window_Hover_KRC_Panel_Text_Storyboard_slider_UpDown = new Thread(new ThreadStart(() => {
+                                window_Hover_MRC_Panel.Text_DoubleAnimation_slider_Up.Duration = new Duration(new TimeSpan(0, 0, 0, 0, temp));
+                                window_Hover_MRC_Panel.Text_DoubleAnimation_slider_Down.Duration = new Duration(new TimeSpan(0, 0, 0, 0, temp));
+                                thread_window_Hover_MRC_Panel_Text_Storyboard_slider_UpDown = new Thread(new ThreadStart(() => {
                                     Dispatcher.BeginInvoke(new Action(delegate () {                                                                              
-                                        window_Hover_KRC_Panel.Text_Storyboard_slider_Up.Begin();                                             
-                                        window_Hover_KRC_Panel.Text_Storyboard_slider_Down.Begin();
+                                        window_Hover_MRC_Panel.Text_Storyboard_slider_Up.Begin();                                             
+                                        window_Hover_MRC_Panel.Text_Storyboard_slider_Down.Begin();
                                     }));
                                 }));
-                                thread_window_Hover_KRC_Panel_Text_Storyboard_slider_UpDown.Priority = ThreadPriority.Highest;
-                                thread_window_Hover_KRC_Panel_Text_Storyboard_slider_UpDown.Start();
+                                thread_window_Hover_MRC_Panel_Text_Storyboard_slider_UpDown.Priority = ThreadPriority.Highest;
+                                thread_window_Hover_MRC_Panel_Text_Storyboard_slider_UpDown.Start();
                             }
                             catch { }
                         }
@@ -1963,27 +1963,27 @@ namespace 墨智音乐_3._0._1
 
         #region 歌词行同步
 
-        public void Media_Song_KRC_Play_Tick(object sender, EventArgs e)
+        public void Media_Song_MRC_Play_Tick(object sender, EventArgs e)
         {
             //使用双区间来判定同步当前音频文件时间信息所处歌词时间信息的位置
             //0有时访问不到
-            if (ListBox_KRC_Song_KRC_Time != null)
+            if (ListBox_MRC_Song_MRC_Time != null)
             {
-                if (MediaElement_Song.Position.TotalMilliseconds <= Start_Song_KRC_Time)
+                if (MediaElement_Song.Position.TotalMilliseconds <= Start_Song_MRC_Time)
                 {
-                    for (int i = 0; i < ListBox_KRC_Song_KRC_Time.Length; i++)
+                    for (int i = 0; i < ListBox_MRC_Song_MRC_Time.Length; i++)
                     {
-                        if (ListBox_KRC_Song_KRC_Time[i] != 0)
+                        if (ListBox_MRC_Song_MRC_Time[i] != 0)
                         {
-                            if(musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex != i)
+                            if(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex != i)
                             {
-                                musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex = i;                                
+                                musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex = i;                                
                             }
 
-                            if (window_Hover_KRC_Panel.Bool_Open_Krc_Panel)
+                            if (window_Hover_MRC_Panel.Bool_Open_MRC_Panel)
                             {
-                                window_Hover_KRC_Panel.TextBlock_1.Text = ListBox_KRC_Song_KRC_Text[i];
-                                window_Hover_KRC_Panel.TextBlock_2.Text = ListBox_KRC_Song_KRC_Text[i + 1];
+                                window_Hover_MRC_Panel.TextBlock_1.Text = ListBox_MRC_Song_MRC_Text[i];
+                                window_Hover_MRC_Panel.TextBlock_2.Text = ListBox_MRC_Song_MRC_Text[i + 1];
                             }
                             
 
@@ -1991,21 +1991,21 @@ namespace 墨智音乐_3._0._1
                         }
                     }
                 }
-                else if (MediaElement_Song.Position.TotalMilliseconds >= End_Song_KRC_Time)
+                else if (MediaElement_Song.Position.TotalMilliseconds >= End_Song_MRC_Time)
                 {
-                    for (int i = ListBox_KRC_Song_KRC_Time.Length - 1; i >= 0; i--)
+                    for (int i = ListBox_MRC_Song_MRC_Time.Length - 1; i >= 0; i--)
                     {
-                        if (ListBox_KRC_Song_KRC_Time[i] != 0)
+                        if (ListBox_MRC_Song_MRC_Time[i] != 0)
                         {
-                            if (musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex != i)
+                            if (musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex != i)
                             {
-                                musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex = i;                               
+                                musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex = i;                               
                             }
 
-                            if (window_Hover_KRC_Panel.Bool_Open_Krc_Panel)
+                            if (window_Hover_MRC_Panel.Bool_Open_MRC_Panel)
                             {
-                                window_Hover_KRC_Panel.TextBlock_1.Text = ListBox_KRC_Song_KRC_Text[i];
-                                window_Hover_KRC_Panel.TextBlock_2.Text = ListBox_KRC_Song_KRC_Text[i + 1];
+                                window_Hover_MRC_Panel.TextBlock_1.Text = ListBox_MRC_Song_MRC_Text[i];
+                                window_Hover_MRC_Panel.TextBlock_2.Text = ListBox_MRC_Song_MRC_Text[i + 1];
                             }
 
                             break;
@@ -2014,23 +2014,23 @@ namespace 墨智音乐_3._0._1
                 }
                 else
                 {
-                    for (int i = 7; i < ListBox_KRC_Song_KRC_Time.Length; i++)
+                    for (int i = 7; i < ListBox_MRC_Song_MRC_Time.Length; i++)
                     {
-                        if (ListBox_KRC_Song_KRC_Time[i] != 0)
+                        if (ListBox_MRC_Song_MRC_Time[i] != 0)
                         {
-                            if (MediaElement_Song.Position.TotalMilliseconds >= ListBox_KRC_Song_KRC_Time[i])
+                            if (MediaElement_Song.Position.TotalMilliseconds >= ListBox_MRC_Song_MRC_Time[i])
                             {
-                                if (MediaElement_Song.Position.TotalMilliseconds < ListBox_KRC_Song_KRC_Time[i + 1])
+                                if (MediaElement_Song.Position.TotalMilliseconds < ListBox_MRC_Song_MRC_Time[i + 1])
                                 {
-                                    if (musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex != i)
+                                    if (musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex != i)
                                     {
-                                        musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex = i;                              
+                                        musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex = i;                              
                                     }
 
-                                    if (window_Hover_KRC_Panel.Bool_Open_Krc_Panel)
+                                    if (window_Hover_MRC_Panel.Bool_Open_MRC_Panel)
                                     {
-                                        window_Hover_KRC_Panel.TextBlock_1.Text = ListBox_KRC_Song_KRC_Text[i];
-                                        window_Hover_KRC_Panel.TextBlock_2.Text = ListBox_KRC_Song_KRC_Text[i + 1];
+                                        window_Hover_MRC_Panel.TextBlock_1.Text = ListBox_MRC_Song_MRC_Text[i];
+                                        window_Hover_MRC_Panel.TextBlock_2.Text = ListBox_MRC_Song_MRC_Text[i + 1];
                                     }
 
                                     break;
@@ -2042,49 +2042,49 @@ namespace 墨智音乐_3._0._1
             }
             else
             {
-                thread_DispatcherTimer_KRC = new Thread(new ThreadStart(() =>
+                thread_DispatcherTimer_MRC = new Thread(new ThreadStart(() =>
                 {
                     Dispatcher.BeginInvoke(new Action(delegate ()
                     {
-                        DispatcherTimer_KRC.Stop();
+                        DispatcherTimer_MRC.Stop();
                     }));
                 }));
-                thread_DispatcherTimer_KRC.Start();
+                thread_DispatcherTimer_MRC.Start();
             }
         }
 
         /// <summary>
-        /// 当ListView_Temp_KRC   鼠标滚轮
+        /// 当ListView_Temp_MRC   鼠标滚轮
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void ListView_Temp_KRC_MouseWheel(object sender, EventArgs e)
+        public void ListView_Temp_MRC_MouseWheel(object sender, EventArgs e)
         {
-            if (musicPlayer_Main_UserControl.ListView_Temp_KRC.Visibility == Visibility.Visible)
+            if (musicPlayer_Main_UserControl.ListView_Temp_MRC.Visibility == Visibility.Visible)
             {
-                if (musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex != -1)
+                if (musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex != -1)
                 {
-                    musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.SelectedIndex = musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex;
-                    musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.Items[musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.SelectedIndex + KRC_Line_Nums]);//移动到指定行   
+                    musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.SelectedIndex = musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex;
+                    musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.Items[musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.SelectedIndex + MRC_Line_Nums]);//移动到指定行   
 
-                    musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.Visibility = Visibility.Visible;
-                    musicPlayer_Main_UserControl.ListView_Temp_KRC.Visibility = Visibility.Hidden;
+                    musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.Visibility = Visibility.Visible;
+                    musicPlayer_Main_UserControl.ListView_Temp_MRC.Visibility = Visibility.Hidden;
                 }
             }
 
         }
         /// <summary>
-        /// 当ListView_Temp_KRC   鼠标移出
+        /// 当ListView_Temp_MRC   鼠标移出
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void ListView_Temp_KRC_MouseLeave(object sender, EventArgs e)
+        public void ListView_Temp_MRC_MouseLeave(object sender, EventArgs e)
         {
             Show_Media_Siler();
 
-            if(musicPlayer_Main_UserControl.ListView_Temp_KRC.Items.Count > 0)
-                if(musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex >= 0)
-                    musicPlayer_Main_UserControl.ListView_Temp_KRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_KRC.Items[musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex + KRC_Line_Nums]);//先滚动至第一行歌词
+            if(musicPlayer_Main_UserControl.ListView_Temp_MRC.Items.Count > 0)
+                if(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex >= 0)
+                    musicPlayer_Main_UserControl.ListView_Temp_MRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_MRC.Items[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex + MRC_Line_Nums]);//先滚动至第一行歌词
 
         }
         /// <summary>
@@ -2092,9 +2092,9 @@ namespace 墨智音乐_3._0._1
         /// </summary>
         public void Show_Media_Siler()
         {
-            //ListView_KRC.Visibility = Visibility.Visible;
-            musicPlayer_Main_UserControl.ListView_Temp_KRC.Visibility = Visibility.Visible;
-            musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.Visibility = Visibility.Hidden;
+            //ListView_MRC.Visibility = Visibility.Visible;
+            musicPlayer_Main_UserControl.ListView_Temp_MRC.Visibility = Visibility.Visible;
+            musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.Visibility = Visibility.Hidden;
         }
 
         /// <summary>
@@ -2102,26 +2102,26 @@ namespace 墨智音乐_3._0._1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ListView_Temp_KRC_Temp_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void ListView_Temp_MRC_Temp_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //歌词滚动
-            if (ListBox_KRC_Song_KRC_Time != null)
+            if (ListBox_MRC_Song_MRC_Time != null)
             {
-                int line_num = musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.SelectedIndex;
+                int line_num = musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.SelectedIndex;
 
-                if (ListBox_KRC_Song_KRC_Time[line_num] != 0)
+                if (ListBox_MRC_Song_MRC_Time[line_num] != 0)
                 {
                     //如果选中的  跳转的播放进度  在  当前播放进度  之前
-                    if (line_num < musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex)
+                    if (line_num < musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex)
                     {
-                        musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex = 0;
-                        musicPlayer_Main_UserControl.ListView_Temp_KRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_KRC.Items[0]);//先滚动至第一行歌词                     
+                        musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex = 0;
+                        musicPlayer_Main_UserControl.ListView_Temp_MRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_MRC.Items[0]);//先滚动至第一行歌词                     
                     }
                     //歌词时间匹配方法  会自动跳转至指定选中歌词行
 
                     //跳转至指定Value的进度
-                    //ts_Song = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(ListBox_KRC_Song_KRC_Time[line_num]));
-                    MediaElement_Song.Position = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(ListBox_KRC_Song_KRC_Time[line_num]));
+                    //ts_Song = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(ListBox_MRC_Song_MRC_Time[line_num]));
+                    MediaElement_Song.Position = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(ListBox_MRC_Song_MRC_Time[line_num]));
                  
                     //关闭歌词选择进度面板
                     Show_Media_Siler();
@@ -3578,29 +3578,29 @@ namespace 墨智音乐_3._0._1
             thickness.Left = this.ActualWidth / 8;
             musicPlayer_Main_UserControl.Panel_Image.Margin = thickness;
 
-            thickness = musicPlayer_Main_UserControl.ListView_Temp_KRC.Margin;
+            thickness = musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin;
             thickness.Left = musicPlayer_Main_UserControl.TextBox_SongName.Margin.Left;//以TextBox_SongName的margin为锚定位置
             thickness.Right = musicPlayer_Main_UserControl.TextBox_SongName.Margin.Right;
             if (!Bool_Button_Singer_Image_Animation)
             {
-                thickness_ListView_Temp_KRC_Margin = thickness;
-                musicPlayer_Main_UserControl.ListView_Temp_KRC.Margin = thickness;
+                thickness_ListView_Temp_MRC_Margin = thickness;
+                musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin = thickness;
             }
 
-            /*musicPlayer_Main_UserControl.ListView_Temp_KRC.Margin = thickness;
-            musicPlayer_Main_UserControl.ListView_Temp_KRC.Width = (290 + (this.ActualHeight - 690)) * 4;*/
-            musicPlayer_Main_UserControl.ListView_Temp_KRC.Height = 290 + (this.ActualHeight - 710);
-            musicPlayer_Main_UserControl.ListView_Temp_KRC_Temp.Height = musicPlayer_Main_UserControl.ListView_Temp_KRC.Height;
-            musicPlayer_Main_UserControl.TextBox_ListViewKRC_Up.Height = musicPlayer_Main_UserControl.ListView_Temp_KRC.Height;
+            /*musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin = thickness;
+            musicPlayer_Main_UserControl.ListView_Temp_MRC.Width = (290 + (this.ActualHeight - 690)) * 4;*/
+            musicPlayer_Main_UserControl.ListView_Temp_MRC.Height = 290 + (this.ActualHeight - 710);
+            musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.Height = musicPlayer_Main_UserControl.ListView_Temp_MRC.Height;
+            musicPlayer_Main_UserControl.TextBox_ListViewMRC_Up.Height = musicPlayer_Main_UserControl.ListView_Temp_MRC.Height;
 
-            KRC_Line_Nums = Convert.ToInt32((musicPlayer_Main_UserControl.ListView_Temp_KRC.Height - 60) / 60 / 2);
+            MRC_Line_Nums = Convert.ToInt32((musicPlayer_Main_UserControl.ListView_Temp_MRC.Height - 60) / 60 / 2);
 
             //歌词上下行移动
-            if (musicPlayer_Main_UserControl.ListView_Temp_KRC.ItemsSource != null)
+            if (musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemsSource != null)
             {
-                int line_temp = musicPlayer_Main_UserControl.ListView_Temp_KRC.SelectedIndex;
-                musicPlayer_Main_UserControl.ListView_Temp_KRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_KRC.Items[0]);//移动到指定行
-                musicPlayer_Main_UserControl.ListView_Temp_KRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_KRC.Items[line_temp + KRC_Line_Nums]);//移动到指定行
+                int line_temp = musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex;
+                musicPlayer_Main_UserControl.ListView_Temp_MRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_MRC.Items[0]);//移动到指定行
+                musicPlayer_Main_UserControl.ListView_Temp_MRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_MRC.Items[line_temp + MRC_Line_Nums]);//移动到指定行
                 //Thread.Sleep(50);
             }
         }

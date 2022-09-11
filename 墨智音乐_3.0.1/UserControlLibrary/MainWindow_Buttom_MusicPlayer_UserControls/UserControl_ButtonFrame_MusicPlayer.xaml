@@ -263,7 +263,7 @@
                  FontSize="12" Text="00:00 / 00:00" BorderThickness="0" 
                  Focusable="False" VerticalContentAlignment="Center" 
                  UseLayoutRounding="True" SnapsToDevicePixels="True" Margin="0,0,98,0"/>
-            <Button x:Name="Button_Desk_KRC" Style="{StaticResource MyButton}" 
+            <Button x:Name="Button_Desk_MRC" Style="{StaticResource MyButton}" 
                 Content="词" Foreground="#FF7C7C7C" FontSize="15"
                 HorizontalAlignment="Right" Height="20" 
                 VerticalAlignment="Stretch" Width="20" 
@@ -374,7 +374,7 @@
             </StackPanel>
 
 
-            <Button x:Name="Button_Desk_KRC_Right" Style="{StaticResource MyButton}" 
+            <Button x:Name="Button_Desk_MRC_Right" Style="{StaticResource MyButton}" 
                 Content="词" Foreground="#FF7C7C7C" FontSize="15"
                 HorizontalAlignment="Right" Height="20" 
                 VerticalAlignment="Center" Width="20" 
