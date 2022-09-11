@@ -8,5 +8,6 @@
 # 演示效果：（B站链接：）
 # 音乐资源下载（百度网盘资源）：
 #（声明：作者个人的百度网盘资源(歌手写真，专辑图片等等)和此项目文件，都是来自网络的公开数据，仅做分享，无任何商业侵权行为，如果就普通网盘分享一些合法在平常不过的照片和文件也算侵权，你也是牛逼上天了，我就一普通大学生，真吃不起您这官司
-<img src="doc/1.png" align="center">
+<img src="doc/3.png" align="center">
 <img src="doc/2.png" align="center">
+<img src="doc/1.png" align="center">
