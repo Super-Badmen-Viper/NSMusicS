@@ -8,6 +8,6 @@
 # 演示效果：（B站链接：）
 # 音乐资源下载（百度网盘资源）：
 #（声明：作者个人的百度网盘资源(歌手写真，专辑图片等等)和此项目文件，都是来自网络的公开数据，仅做分享，无任何商业侵权行为，如有异议，请联系我，我将删除这些文件
-<img src="doc/3.png" align="center">
-<img src="doc/2.png" align="center">
-<img src="doc/1.png" align="center">
+<img src="doc/3.png" align="center" width="660">
+<img src="doc/2.png" align="center" width="660">
+<img src="doc/1.png" align="center" width="660">
