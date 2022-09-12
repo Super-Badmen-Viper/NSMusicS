@@ -8,6 +8,7 @@
 # 不给个Star，你好意思白嫖？？？
 # 基于Apache License 2.0开源协议，声明：禁止商用，禁止未经作者允许作为教学，论文等知识，商业产权使用（你需要得到我的允许，不然将起诉你的违法行为）
 # 演示效果：（B站链接：https://www.bilibili.com/video/BV1uG41137jY/?vd_source=6e56ca0b155a60e6a6878e5775fdcc35）
+# 资源所在位置：MoZhiMusicPlayer\墨智音乐_3.0.1\bin\Debug\Resource\之内（歌词，歌手写真，专辑图片等，可自行编辑）
 # 音乐附加资源下载（百度网盘资源）：
   链接：https://pan.baidu.com/s/1LbmClxXrEsO4-R9ISBKCoQ?pwd=zake 提取码：zake  
   请将此网盘的Resource压缩包解压并覆盖至MoZhiMusicPlayer\墨智音乐_3.0.1\bin\Debug\，取代同名文件夹
