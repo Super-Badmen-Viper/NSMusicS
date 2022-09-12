@@ -5,6 +5,8 @@
   2.支持多歌手写真动画交叉轮播  
   3.基本的音乐播放器功能（无需解释这些）  
   4.基本的歌曲导入（选择导入，本地全盘扫描导入）  
+# 不给个Star，你好意思白嫖？？？
+# 基于Apache License 2.0开源协议，声明：禁止商用，禁止未经作者允许作为教学，论文等知识，商业产权使用（你需要得到我的允许）
 # 演示效果：（B站链接：https://www.bilibili.com/video/BV1uG41137jY/?vd_source=6e56ca0b155a60e6a6878e5775fdcc35）
 # 音乐附加资源下载（百度网盘资源）：
   链接：https://pan.baidu.com/s/1LbmClxXrEsO4-R9ISBKCoQ?pwd=zake 提取码：zake  
