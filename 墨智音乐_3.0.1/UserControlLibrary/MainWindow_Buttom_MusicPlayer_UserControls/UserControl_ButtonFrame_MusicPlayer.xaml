@@ -340,7 +340,7 @@
                  Margin="129,22,0,22"/>
         </Grid>
         <Grid x:Name="Grid_MusicPlayer_Main_Right"
-              Visibility="Visible"
+              Visibility="Hidden"
               >
             <StackPanel
                 x:Name="Button_Singer_Image_Animation_To_WindowsDesktop"
