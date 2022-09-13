@@ -16,11 +16,17 @@
              >
     <Grid>
         <Grid x:Name="Grid_Animation">
-            <Grid x:Name="Image_Singer_Buttom" Visibility="Hidden" Grid.RowSpan="2">
+            <Grid x:Name="Grid_Up_Singer_Photo" Width="1920" Height="1080">
+                
+            </Grid>
+            <Grid x:Name="Grid_down_Singer_Photo" Width="1920" Height="1080">
                 <Grid.Background>
-                    <ImageBrush x:Name="Grid_Image_Singer_Buttom" Stretch="UniformToFill" 
+                    <ImageBrush x:Name="Grid_Image_Singer_Buttom" Stretch="Uniform" 
                                 ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/薛之谦.jpg"/>
                 </Grid.Background>
+            </Grid>
+            <Grid x:Name="Image_Singer_Buttom" Visibility="Hidden" Grid.RowSpan="2">
+                
 
                 <Grid x:Name="Grid_BackGround_Black_Top" Height="170" VerticalAlignment="Top"
                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
@@ -128,13 +134,13 @@
                     x:Name="ListView_Temp_MRC" Background="{x:Null}" BorderBrush="{x:Null}" 
                     Foreground="White" FontSize="16" FontWeight="Medium"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                    Margin="488,231,0,0" Width="555" MinHeight="310"
+                    Margin="488,230,0,150" Width="555" MinHeight="310"
                     BorderThickness="0" IsSynchronizedWithCurrentItem="False" Focusable="False" 
                     IsTextSearchEnabled="False" HorizontalContentAlignment="Center" 
                     VerticalContentAlignment="Stretch" HorizontalAlignment="Center"                
                     ClipToBounds="True"                  
                     TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Fixed" 
-                    Height="310" VerticalAlignment="Top" ScrollViewer.CanContentScroll="True"                 
+                    Height="310" ScrollViewer.CanContentScroll="True"                 
                     >
                     <ListView.Resources>
                         <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -238,8 +244,8 @@
                 </ListView>
                 <!-- 掩盖ListViewMRC,形成不同层次 -->
                 <TextBox x:Name="TextBox_ListViewMRC_Up" 
-                     Margin="488,231,0,0" Width="555" MinHeight="310"
-                     TextWrapping="Wrap" Text="TextBox" BorderBrush="{x:Null}" Background="{x:Null}" SelectionBrush="{x:Null}" Foreground="{x:Null}" HorizontalAlignment="Center" UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top">
+                     Margin="488,230,0,150" Width="555" MinHeight="310"
+                     TextWrapping="Wrap" Text="TextBox" BorderBrush="{x:Null}" Background="{x:Null}" SelectionBrush="{x:Null}" Foreground="{x:Null}" HorizontalAlignment="Center" UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" Height="310">
                     <TextBox.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -262,13 +268,12 @@
                     x:Name="ListView_Temp_MRC_Temp" Background="{x:Null}" BorderBrush="{x:Null}" 
                     Foreground="White" FontSize="16" FontWeight="Medium"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                    Margin="488,231,0,0" Width="444" 
+                    Margin="488,230,0,150" Width="555" 
                     BorderThickness="0" IsSynchronizedWithCurrentItem="False" Focusable="False" 
                     IsTextSearchEnabled="False" HorizontalContentAlignment="Center" 
                     VerticalContentAlignment="Stretch" HorizontalAlignment="Center"                
-                    ClipToBounds="True"      
-                    Visibility="Hidden"
-                    TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Fixed" Height="290" VerticalAlignment="Top"
+                    ClipToBounds="True"
+                    TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Fixed" Height="290" Visibility="Hidden"
                     >
                     <ListView.Resources>
                         <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -281,7 +286,7 @@
                     </ListView.Resources>
                     <ListView.View>
                         <GridView AllowsColumnReorder="True">
-                            <GridViewColumn Width="440" x:Name="ListView_Temp_MRC_Temp_GridViewColumn">
+                            <GridViewColumn Width="555" x:Name="ListView_Temp_MRC_Temp_GridViewColumn">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Song_MRC_Line}" HorizontalAlignment="Center"

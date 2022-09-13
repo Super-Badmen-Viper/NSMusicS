@@ -340,9 +340,15 @@
                  Margin="129,22,0,22"/>
         </Grid>
         <Grid x:Name="Grid_MusicPlayer_Main_Right"
-              Visibility="Hidden"
+              Visibility="Visible"
               >
-
+            <StackPanel
+                x:Name="Button_Singer_Image_Animation_To_WindowsDesktop"
+                HorizontalAlignment="Right" Width="70" Margin="0,0,243,0" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Height="16" VerticalAlignment="Center" >
+                <TextBlock Height="15" Foreground="#FF7C7C7C" HorizontalAlignment="Left" Width="48" Text="桌面写真"/>
+                <Image x:Name="Button_Singer_Image_Animation_Image_To_WindowsDesktop" Source="/ico_ui_library/开关-关 (1).png" Width="20" Height="10" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,-14,0,0"/>
+            </StackPanel>
             <StackPanel
                 x:Name="Button_Singer_Image_Animation"
                 HorizontalAlignment="Right" Width="45" Margin="0,0,190,0" 

@@ -27,6 +27,7 @@ using System.Windows.Media.Effects;
 using System.Threading;
 using System.Collections;
 using 墨智音乐_3._0._1.UserControlLibrary.Main_Home_Left_MyMusic_UserControls;
+using 墨智音乐_3._0._1.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls;
 
 namespace 墨智音乐_3._0._1
 {
@@ -646,17 +647,16 @@ namespace 墨智音乐_3._0._1
 
                 userControl_ButtonFrame_TopPanel.Button_Max.Background = brush_MaxNormal;
 
-                //MRC_Line_Nums = (int)((System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height - 240) / 40 / 2) + 2;
-
-
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1920;
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 1080;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1920;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 1080;
             }
             else//最小化按钮
             {
                 this.WindowState = System.Windows.WindowState.Normal;
                 
                 userControl_ButtonFrame_TopPanel.Button_Max.Background = brush_Max;
-
-                //MRC_Line_Nums = 9;
             }
 
 
@@ -777,7 +777,9 @@ namespace 墨智音乐_3._0._1
             timer_Singer_Photo_One_Lot.Tick += Change_Singer_Photo_To_Grid_Back_Lot;
 
             //设置进入播放器界面，返回主界面事件
+            userControl_ButtonFrame_MusicPlayer.Button_Singer_Image_Animation_To_WindowsDesktop.Visibility = Visibility.Hidden;
             userControl_ButtonFrame_MusicPlayer.Button_Singer_Image_Animation.MouseLeftButtonDown += Button_Singer_Image_Animation_Click;
+            userControl_ButtonFrame_MusicPlayer.Button_Singer_Image_Animation_To_WindowsDesktop.MouseLeftButtonDown += button_Open_Windows_Picture_Click;
             userControl_ButtonFrame_MusicPlayer.Button_Desk_MRC.Click += Button_Window_Hover_MRC_Panel;
             userControl_ButtonFrame_MusicPlayer.Button_Desk_MRC_Right.Click += Button_Window_Hover_MRC_Panel;
             //隐藏播放顺序与音量设置按键
@@ -795,6 +797,14 @@ namespace 墨智音乐_3._0._1
             userControl_ButtonFrame_MusicPlayer.Slider_Voice.Value = MediaElement_Song.Volume;
             userControl_ButtonFrame_MusicPlayer.Voice_Nums.Text = Convert.ToInt32((userControl_ButtonFrame_MusicPlayer.Slider_Voice.Value) * 100) + "%";
             userControl_ButtonFrame_MusicPlayer.Slider_Voice.ValueChanged += WMP_Song_Slider_Voice_Value_Changed;
+
+            //存储Windows背景图片
+            //定义存储缓冲区大小
+            StringBuilder s = new StringBuilder(300);
+            //获取Window 桌面背景图片地址，使用缓冲区
+            SystemParametersInfo(SPI_GETDESKWALLPAPER, 300, s, 0);
+            //缓冲区中字符进行转换
+            wallpaper_path.Append(s.ToString()); //系统桌面背景图片路径
 
             //设置按键背景
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
@@ -1172,7 +1182,7 @@ namespace 墨智音乐_3._0._1
                 musicPlayer_Main_UserControl.TextBox_SongName.Visibility = Visibility.Hidden;
                 musicPlayer_Main_UserControl.TextBox_SingerName.Visibility = Visibility.Hidden;
                 musicPlayer_Main_UserControl.TextBox_SongAlbumName.Visibility = Visibility.Hidden;
-
+                userControl_ButtonFrame_MusicPlayer.Button_Singer_Image_Animation_To_WindowsDesktop.Visibility = Visibility.Visible;
 
                 thickness_ListView_Temp_MRC_Margin_Center = musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin;
                 thickness_ListView_Temp_MRC_Margin_Center.Left = 0;
@@ -1204,6 +1214,12 @@ namespace 墨智音乐_3._0._1
                 //musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close.Visibility = Visibility.Visible;
                 musicPlayer_Main_UserControl.Border_SingerPhoto_Mode_Close_BackGround.Visibility = Visibility.Visible;
                 musicPlayer_Main_UserControl.Panel_Image.Visibility = Visibility.Visible;
+                //关闭桌面写真
+                userControl_ButtonFrame_MusicPlayer.Button_Singer_Image_Animation_To_WindowsDesktop.Visibility = Visibility.Hidden;
+                SystemParametersInfo(20, 1, wallpaper_path, 1);
+                Bool_Windows_Wallpaper = false;
+                userControl_ButtonFrame_MusicPlayer.Button_Singer_Image_Animation_Image_To_WindowsDesktop.Source = new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/开关-关 (1).png"));
+
 
                 //实例化一个DoubleAnimation类。
                 doubleAnimation = new DoubleAnimation();
@@ -1828,7 +1844,7 @@ namespace 墨智音乐_3._0._1
         #region 歌词行同步动画
         DispatcherTimer DispatcherTimer_MRC;
         TimeSpan MRC_Span;
-        int MRC_Line_Nums = 3;
+        int MRC_Line_Nums = 2;
 
         ListBoxItem myListBoxItem;
         ContentPresenter myContentPresenter;
@@ -2357,8 +2373,8 @@ namespace 墨智音乐_3._0._1
                     if (File.Exists(Singer_Image_Url))
                     {
                         ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                        test.Stretch = Stretch.UniformToFill;
-                        musicPlayer_Main_UserControl.Image_Singer_Buttom.Background = test;
+                        test.Stretch = Stretch.Uniform;
+                        musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                     }
                     else
                     {
@@ -2372,32 +2388,33 @@ namespace 墨智音乐_3._0._1
                             if (File.Exists(Singer_Image_Url))
                             {
                                 ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                                test.Stretch = Stretch.UniformToFill;
-                                musicPlayer_Main_UserControl.Image_Singer_Buttom.Background = test;
+                                test.Stretch = Stretch.Uniform;
+                                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                             }
                             else
                             {
                                 Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
                                 ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                                test.Stretch = Stretch.UniformToFill;
-                                musicPlayer_Main_UserControl.Image_Singer_Buttom.Background = test;
+                                test.Stretch = Stretch.Uniform;
+                                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                             }
                         }
                         else
                         {
                             Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
                             ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                            test.Stretch = Stretch.UniformToFill;
-                            musicPlayer_Main_UserControl.Image_Singer_Buttom.Background = test;
+                            test.Stretch = Stretch.Uniform;
+                            musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                         }
 
 
                     }
 
-                    /*if (Bool_Windows_Wallpaper == true)
+                    if (Bool_Windows_Wallpaper == true)
                     {
                         Change_Windows_Background();//切换桌面写真
-                    }*/
+                    }
+                    
 
 
                 }
@@ -2452,8 +2469,8 @@ namespace 墨智音乐_3._0._1
                             {
                                 Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
                                 ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                                test.Stretch = Stretch.UniformToFill;
-                                musicPlayer_Main_UserControl.Image_Singer_Buttom.Background = test;                        
+                                test.Stretch = Stretch.Uniform;
+                                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;                        
 
                                 //清空歌手图片轮播信息
                                 //周杰伦、梁心颐、杨瑞代
@@ -2467,10 +2484,10 @@ namespace 墨智音乐_3._0._1
                                 Singer_Name_Temp = "未知歌手";
                                 Singer_Name_Temp_Nums = 0;
 
-                                /*if (Bool_Windows_Wallpaper == true)
+                                if (Bool_Windows_Wallpaper == true)
                                 {
                                     Change_Windows_Background();//切换桌面写真
-                                }*/
+                                }
                             }
                         }
                     }
@@ -2481,8 +2498,8 @@ namespace 墨智音乐_3._0._1
                         Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
 
                         ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                        test.Stretch = Stretch.UniformToFill;
-                        musicPlayer_Main_UserControl.Image_Singer_Buttom.Background = test;
+                        test.Stretch = Stretch.Uniform;
+                        musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                         
 
                         //清空歌手图片轮播信息
@@ -2497,10 +2514,10 @@ namespace 墨智音乐_3._0._1
                         Singer_Name_Temp = "未知歌手";
                         Singer_Name_Temp_Nums = 0;
 
-                        /*if (Bool_Windows_Wallpaper == true)
+                        if (Bool_Windows_Wallpaper == true)
                         {
                             Change_Windows_Background();//切换桌面写真
-                        }*/
+                        }
                     }
                 }
                 else
@@ -2642,8 +2659,8 @@ namespace 墨智音乐_3._0._1
                 {
                     //1719,10
                     ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                    test.Stretch = Stretch.UniformToFill;
-                    musicPlayer_Main_UserControl.Image_Singer_Buttom.Background = test;
+                    test.Stretch = Stretch.Uniform;
+                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
 
                     if (List_Singer_Names.Length - 1 == 0)
                     {
@@ -2665,8 +2682,8 @@ namespace 墨智音乐_3._0._1
                     Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
 
                     ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                    test.Stretch = Stretch.UniformToFill;
-                    musicPlayer_Main_UserControl.Image_Singer_Buttom.Background = test;
+                    test.Stretch = Stretch.Uniform;
+                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                 }
             }
             catch(Exception ex) {
@@ -2674,8 +2691,8 @@ namespace 墨智音乐_3._0._1
 
                 Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
                 ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                test.Stretch = Stretch.UniformToFill;
-                musicPlayer_Main_UserControl.Image_Singer_Buttom.Background = test;
+                test.Stretch = Stretch.Uniform;
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
             }
         }
 
@@ -2765,22 +2782,22 @@ namespace 墨智音乐_3._0._1
                 if (File.Exists(Singer_Image_Url))
                 {
                     ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                    test.Stretch = Stretch.UniformToFill;
-                    musicPlayer_Main_UserControl.Background = test;
+                    test.Stretch = Stretch.Uniform;
+                    musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
                     BgSwitch(Singer_Image_Url);
 
                     thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
                     {
                         Dispatcher.BeginInvoke(new Action(delegate ()
                         {
-                            bgstoryboard.Begin(musicPlayer_Main_UserControl);
+                            bgstoryboard.Begin(musicPlayer_Main_UserControl.Grid_down_Singer_Photo);
                         }));
                     }));
                     thread_timer_Singer_Photo_One_Lot.Start();
-                    /*if (Bool_Windows_Wallpaper == true)
+                    if (Bool_Windows_Wallpaper == true)
                     {
                         Change_Windows_Background();//切换桌面写真
-                    }*/
+                    }
 
                     singer_times++;
                     singer_photo_nums++;
@@ -2836,21 +2853,21 @@ namespace 墨智音乐_3._0._1
                     if (File.Exists(Singer_Image_Url))
                     {
                         ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                        test.Stretch = Stretch.UniformToFill;
-                        musicPlayer_Main_UserControl.Background = test;
+                        test.Stretch = Stretch.Uniform;
+                        musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                         BgSwitch(Singer_Image_Url);
                         thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
                         {
                             Dispatcher.BeginInvoke(new Action(delegate ()
                             {
-                                bgstoryboard.Begin(musicPlayer_Main_UserControl);
+                                bgstoryboard.Begin(musicPlayer_Main_UserControl.Grid_down_Singer_Photo);
                             }));
                         }));
                         thread_timer_Singer_Photo_One_Lot.Start();
-                        /*if (Bool_Windows_Wallpaper == true)
+                        if (Bool_Windows_Wallpaper == true)
                         {
                             Change_Windows_Background();//切换桌面写真
-                        }*/
+                        }
 
                         //超过当前文件夹序号
                         if (singer_photo_nums_More[singer_times] > Singer_Photo_Nums[singer_times] - 2)
@@ -2886,21 +2903,21 @@ namespace 墨智音乐_3._0._1
                     if (File.Exists(Singer_Image_Url))
                     {
                         ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                        test.Stretch = Stretch.UniformToFill;
-                        musicPlayer_Main_UserControl.Background = test;
+                        test.Stretch = Stretch.Uniform;
+                        musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                         BgSwitch(Singer_Image_Url);
                         thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
                         {
                             Dispatcher.BeginInvoke(new Action(delegate ()
                             {
-                                bgstoryboard.Begin(musicPlayer_Main_UserControl);
+                                bgstoryboard.Begin(musicPlayer_Main_UserControl.Grid_down_Singer_Photo);
                             }));
                         }));
                         thread_timer_Singer_Photo_One_Lot.Start();
-                        /*if (Bool_Windows_Wallpaper == true)
+                        if (Bool_Windows_Wallpaper == true)
                         {
                             Change_Windows_Background();//切换桌面写真
-                        }*/
+                        }
 
                         singer_times++;
                         singer_photo_nums++;
@@ -2965,21 +2982,21 @@ namespace 墨智音乐_3._0._1
                         if (File.Exists(Singer_Image_Url))
                         {
                             ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                            test.Stretch = Stretch.UniformToFill;
-                            musicPlayer_Main_UserControl.Background = test;
+                            test.Stretch = Stretch.Uniform;
+                            musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                             BgSwitch(Singer_Image_Url);
                             thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
                             {
                                 Dispatcher.BeginInvoke(new Action(delegate ()
                                 {
-                                    bgstoryboard.Begin(musicPlayer_Main_UserControl);
+                                    bgstoryboard.Begin(musicPlayer_Main_UserControl.Grid_down_Singer_Photo);
                                 }));
                             }));
                             thread_timer_Singer_Photo_One_Lot.Start();
-                            /*if (Bool_Windows_Wallpaper == true)
+                            if (Bool_Windows_Wallpaper == true)
                             {
                                 Change_Windows_Background();//切换桌面写真
-                            }*/
+                            }
 
                             //超过当前文件夹序号
                             if (singer_photo_nums_More[singer_times] > Singer_Photo_Nums[singer_times] - 2)
@@ -3015,21 +3032,21 @@ namespace 墨智音乐_3._0._1
                         if (File.Exists(Singer_Image_Url))
                         {
                             ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                            test.Stretch = Stretch.UniformToFill;
-                            musicPlayer_Main_UserControl.Background = test;
+                            test.Stretch = Stretch.Uniform;
+                            musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                             BgSwitch(Singer_Image_Url);
                             thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
                             {
                                 Dispatcher.BeginInvoke(new Action(delegate ()
                                 {
-                                    bgstoryboard.Begin(musicPlayer_Main_UserControl);
+                                    bgstoryboard.Begin(musicPlayer_Main_UserControl.Grid_down_Singer_Photo);
                                 }));
                             }));
                             thread_timer_Singer_Photo_One_Lot.Start();
-                            /*if (Bool_Windows_Wallpaper == true)
+                            if (Bool_Windows_Wallpaper == true)
                             {
                                 Change_Windows_Background();//切换桌面写真
-                            }*/
+                            }
 
                             singer_times++;
                             singer_photo_nums++;
@@ -3089,9 +3106,9 @@ namespace 墨智音乐_3._0._1
             //此动画效果为渲染所有的像素，效率过低
             //应更改为     多区块渲染过渡 / 线性渲染过渡 / 淡化渲染过渡 / 模糊重叠过渡渲染
             DoubleAnimationUsingKeyFrames da = new DoubleAnimationUsingKeyFrames();
-            EasingDoubleKeyFrame sd = new EasingDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(500)));
+            EasingDoubleKeyFrame sd = new EasingDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(200)));
             da.KeyFrames.Add(sd);
-            Storyboard.SetTargetName(da, musicPlayer_Main_UserControl.Image_Singer_Buttom.Name);
+            Storyboard.SetTargetName(da, musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Name);
             DependencyProperty[] propertyChain = new DependencyProperty[]
             {
                     Panel.BackgroundProperty,
@@ -3103,7 +3120,7 @@ namespace 墨智音乐_3._0._1
             DiscreteObjectKeyFrame diso = new DiscreteObjectKeyFrame(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\Space.png", UriKind.Relative)), KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(10)));
             oa.KeyFrames.Add(diso);
             oa.BeginTime = new TimeSpan(0, 0, 0, 1, 0);
-            Storyboard.SetTargetName(oa, musicPlayer_Main_UserControl.Image_Singer_Buttom.Name);
+            Storyboard.SetTargetName(oa, musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Name);
             DependencyProperty[] propertyChain2 = new DependencyProperty[]
             {
                     Panel.BackgroundProperty,
@@ -3113,18 +3130,14 @@ namespace 墨智音乐_3._0._1
 
             DoubleAnimationUsingKeyFrames da2 = new DoubleAnimationUsingKeyFrames();
             da2.BeginTime = new TimeSpan(0, 0, 0, 1, 5);
-            EasingDoubleKeyFrame sd2 = new EasingDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(500)));
+            EasingDoubleKeyFrame sd2 = new EasingDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(200)));
             da2.KeyFrames.Add(sd2);
-            Storyboard.SetTargetName(da2, musicPlayer_Main_UserControl.Image_Singer_Buttom.Name);
+            Storyboard.SetTargetName(da2, musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Name);
             Storyboard.SetTargetProperty(da2, new PropertyPath("(0).(1)", propertyChain));
 
             bgstoryboard.Children.Add(da);
             bgstoryboard.Children.Add(oa);
             bgstoryboard.Children.Add(da2);
-
-
-
-
         }
 
 
@@ -3661,35 +3674,28 @@ namespace 墨智音乐_3._0._1
 
             musicPlayer_Main_UserControl.Height = this.ActualHeight - 20;
 
-            thickness = new Thickness();
-            thickness = musicPlayer_Main_UserControl.Panel_Image.Margin;
-            thickness.Left = this.ActualWidth / 8;
-            musicPlayer_Main_UserControl.Panel_Image.Margin = thickness;
+            //DoEvents();
 
-            thickness = musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin;
-            thickness.Left = musicPlayer_Main_UserControl.TextBox_SongName.Margin.Left;//以TextBox_SongName的margin为锚定位置
-            thickness.Right = musicPlayer_Main_UserControl.TextBox_SongName.Margin.Right;
-            if (!Bool_Button_Singer_Image_Animation)
+            if (this.Width >= 1000 && this.Width <= 1100 || this.Height >= 562 && this.Height <= 662)
             {
-                thickness_ListView_Temp_MRC_Margin = thickness;
-                musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin = thickness;
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1300;
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 731;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1300;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 731;
             }
-
-            /*musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin = thickness;
-            musicPlayer_Main_UserControl.ListView_Temp_MRC.Width = (290 + (this.ActualHeight - 690)) * 4;*/
-            musicPlayer_Main_UserControl.ListView_Temp_MRC.Height = 290 + (this.ActualHeight - 710);
-            musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.Height = musicPlayer_Main_UserControl.ListView_Temp_MRC.Height;
-            musicPlayer_Main_UserControl.TextBox_ListViewMRC_Up.Height = musicPlayer_Main_UserControl.ListView_Temp_MRC.Height;
-
-            MRC_Line_Nums = Convert.ToInt32((musicPlayer_Main_UserControl.ListView_Temp_MRC.Height - 60) / 60 / 2);
-
-            //歌词上下行移动
-            if (musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemsSource != null)
+            else if (this.Width >= 1300 && this.Width <= 1400 || this.Height >= 731 && this.Height <= 831)
             {
-                int line_temp = musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex;
-                musicPlayer_Main_UserControl.ListView_Temp_MRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_MRC.Items[0]);//移动到指定行
-                musicPlayer_Main_UserControl.ListView_Temp_MRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_MRC.Items[line_temp + MRC_Line_Nums]);//移动到指定行
-                //Thread.Sleep(50);
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1600;
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 900;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1600;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 900;
+            }
+            else if (this.Width >= 1600 && this.Width <= 1700 || this.Height >= 900 && this.Height <= 1000)
+            {
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1920;
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 1080;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1920;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 1080;
             }
         }
 
@@ -3698,8 +3704,102 @@ namespace 墨智音乐_3._0._1
 
         #endregion
 
+        /// <summary>
+        /// 桌面写真模式
+        /// 应制作悬浮于桌面的画布，仅歌手图片切换动画，歌词同步悬浮于桌面且置于底层
+        /// 桌面无法直接控制(取消焦点 Fousable = false)，桌面无响应操作
+        /// </summary>
+        /// <param name="uAction"></param>
+        /// <param name="uParam"></param>
+        /// <param name="lpvParam"></param>
+        /// <param name="fuWinIni"></param>
+        /// <returns></returns>
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, SetLastError = true)]
+        public static extern int SystemParametersInfo(int uAction, int uParam, StringBuilder lpvParam, int fuWinIni);
+        private const int SPI_GETDESKWALLPAPER = 0x0073;
+        #region 桌面写真模式
+
+        //调用
+        public static StringBuilder wallpaper_path = new StringBuilder();
+        StringBuilder SingerPicPath = new StringBuilder();
+        public bool Bool_Windows_Wallpaper = false;
+
+        /// <summary>
+        /// 桌面写真模式
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_Open_Windows_Picture_Click(object sender, EventArgs e)
+        {
+            if(Singer_Image_Url == null || Singer_Image_Url.Length <= 0)
+            {
+                MessageBox.Show("请先播放音乐，打开歌手写真");
+            }
+            else if (Bool_Windows_Wallpaper == false)
+            {
+                //刷新Windows存储的背景图片信息
+                wallpaper_path.Clear();
+                //存储Windows背景图片
+                //定义存储缓冲区大小
+                StringBuilder s = new StringBuilder(300);
+                //获取Window 桌面背景图片地址，使用缓冲区
+                SystemParametersInfo(SPI_GETDESKWALLPAPER, 300, s, 0);
+                //缓冲区中字符进行转换
+                wallpaper_path.Append(s.ToString()); //系统桌面背景图片路径
+
+                Change_Windows_Background();
+
+                //顺便开启桌面歌词
+                if (!window_Hover_MRC_Panel.Bool_Open_MRC_Panel)
+                {
+                    window_Hover_MRC_Panel.Show();
+
+                    window_Hover_MRC_Panel.Bool_Open_MRC_Panel = true;
+                }
+
+                Bool_Windows_Wallpaper = true;
+                userControl_ButtonFrame_MusicPlayer.Button_Singer_Image_Animation_Image_To_WindowsDesktop.Source = new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/开关-开 (1).png"));
+            }
+            else
+            {
+                SystemParametersInfo(20, 1, wallpaper_path, 1);            
+
+                //刷新Windows存储的背景图片信息
+                wallpaper_path.Clear();
+                //存储Windows背景图片
+                //定义存储缓冲区大小
+                StringBuilder s = new StringBuilder(300);
+                //获取Window 桌面背景图片地址，使用缓冲区
+                SystemParametersInfo(SPI_GETDESKWALLPAPER, 300, s, 0);
+                //缓冲区中字符进行转换
+                wallpaper_path.Append(s.ToString()); //系统桌面背景图片路径
+
+                Bool_Windows_Wallpaper = false;
+                userControl_ButtonFrame_MusicPlayer.Button_Singer_Image_Animation_Image_To_WindowsDesktop.Source = new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/开关-关 (1).png"));
+            }          
+        }
+        public void Change_Windows_Background()
+        {
+            SingerPicPath.Clear();
+
+            //如果歌手图片存在
+            if (File.Exists(Singer_Image_Url))
+                SingerPicPath.Append(Singer_Image_Url);//获取歌手图片所在路径  
+
+            SystemParametersInfo(20, 1, SingerPicPath, 1);
+
+            Bool_Windows_Wallpaper = true;
+        }
+        #endregion
+
         private void Window_Closed(object sender, EventArgs e)
         {
+            //关闭桌面写真
+            if (Bool_Windows_Wallpaper == true)
+            {
+                SystemParametersInfo(20, 1, wallpaper_path, 1);
+            }
+
             save_SongList_Info.Save_ALL_SongListInfo();
         }
     }

@@ -546,11 +546,8 @@ namespace 墨智音乐_3._0._1.UserControlLibrary.Main_Home_Left_MyMusic_UserCon
         /// <param name="e"></param>
         private void Button_Sort_Click(object sender, RoutedEventArgs e)
         {
-
             //歌单歌曲排序
             Sort_SongList();
-
-
         }
 
         public void Sort_SongList()
