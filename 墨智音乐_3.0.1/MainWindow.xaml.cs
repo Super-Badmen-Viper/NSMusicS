@@ -1733,8 +1733,8 @@ namespace 墨智音乐_3._0._1
             ListBox_MRC_Song_MRC_Time = new double[999];
             //创建获取 歌词数组信息输出类 
             dao_ListBox_Temp_MRC = new Dao_ListBox_Temp_MRC();
-            //设置要分析的歌词文件（krc）路径
-            string MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".krc";
+            //设置要分析的歌词文件（mrc）路径
+            string MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".mrc";
 
             try
             {
@@ -1797,7 +1797,7 @@ namespace 墨智音乐_3._0._1
                 }
                 else
                 {
-                    //获取krc歌词失败，转而获取Lrc歌词
+                    //获取mrc歌词失败，转而获取Lrc歌词
 
                     //停止歌词同步
                     thread_DispatcherTimer_MRC = new Thread(new ThreadStart(() =>
@@ -1821,7 +1821,7 @@ namespace 墨智音乐_3._0._1
             }
             catch
             {
-                //获取krc歌词失败，转而获取Lrc歌词
+                //获取mrc歌词失败，转而获取Lrc歌词
 
                 //停止歌词同步
                 thread_DispatcherTimer_MRC = new Thread(new ThreadStart(() =>
