@@ -2373,7 +2373,7 @@ namespace 墨智音乐_3._0._1
                     if (File.Exists(Singer_Image_Url))
                     {
                         ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                        test.Stretch = Stretch.Uniform;
+                        test.Stretch = Stretch.UniformToFill;
                         musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                     }
                     else
@@ -2388,14 +2388,14 @@ namespace 墨智音乐_3._0._1
                             if (File.Exists(Singer_Image_Url))
                             {
                                 ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                                test.Stretch = Stretch.Uniform;
+                                test.Stretch = Stretch.UniformToFill;
                                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                             }
                             else
                             {
                                 Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
                                 ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                                test.Stretch = Stretch.Uniform;
+                                test.Stretch = Stretch.UniformToFill;
                                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                             }
                         }
@@ -2403,7 +2403,7 @@ namespace 墨智音乐_3._0._1
                         {
                             Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
                             ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                            test.Stretch = Stretch.Uniform;
+                            test.Stretch = Stretch.UniformToFill;
                             musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                         }
 
@@ -2469,7 +2469,7 @@ namespace 墨智音乐_3._0._1
                             {
                                 Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
                                 ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                                test.Stretch = Stretch.Uniform;
+                                test.Stretch = Stretch.UniformToFill;
                                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;                        
 
                                 //清空歌手图片轮播信息
@@ -2498,7 +2498,7 @@ namespace 墨智音乐_3._0._1
                         Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
 
                         ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                        test.Stretch = Stretch.Uniform;
+                        test.Stretch = Stretch.UniformToFill;
                         musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                         
 
@@ -2659,7 +2659,7 @@ namespace 墨智音乐_3._0._1
                 {
                     //1719,10
                     ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                    test.Stretch = Stretch.Uniform;
+                    test.Stretch = Stretch.UniformToFill;
                     musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
 
                     if (List_Singer_Names.Length - 1 == 0)
@@ -2682,7 +2682,7 @@ namespace 墨智音乐_3._0._1
                     Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
 
                     ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                    test.Stretch = Stretch.Uniform;
+                    test.Stretch = Stretch.UniformToFill;
                     musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                 }
             }
@@ -2691,7 +2691,7 @@ namespace 墨智音乐_3._0._1
 
                 Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
                 ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                test.Stretch = Stretch.Uniform;
+                test.Stretch = Stretch.UniformToFill;
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
             }
         }
@@ -2782,7 +2782,7 @@ namespace 墨智音乐_3._0._1
                 if (File.Exists(Singer_Image_Url))
                 {
                     ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                    test.Stretch = Stretch.Uniform;
+                    test.Stretch = Stretch.UniformToFill;
                     musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
                     BgSwitch(Singer_Image_Url);
 
@@ -2853,7 +2853,7 @@ namespace 墨智音乐_3._0._1
                     if (File.Exists(Singer_Image_Url))
                     {
                         ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                        test.Stretch = Stretch.Uniform;
+                        test.Stretch = Stretch.UniformToFill;
                         musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                         BgSwitch(Singer_Image_Url);
                         thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
@@ -2903,7 +2903,7 @@ namespace 墨智音乐_3._0._1
                     if (File.Exists(Singer_Image_Url))
                     {
                         ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                        test.Stretch = Stretch.Uniform;
+                        test.Stretch = Stretch.UniformToFill;
                         musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                         BgSwitch(Singer_Image_Url);
                         thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
@@ -2982,7 +2982,7 @@ namespace 墨智音乐_3._0._1
                         if (File.Exists(Singer_Image_Url))
                         {
                             ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                            test.Stretch = Stretch.Uniform;
+                            test.Stretch = Stretch.UniformToFill;
                             musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                             BgSwitch(Singer_Image_Url);
                             thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
@@ -3032,7 +3032,7 @@ namespace 墨智音乐_3._0._1
                         if (File.Exists(Singer_Image_Url))
                         {
                             ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                            test.Stretch = Stretch.Uniform;
+                            test.Stretch = Stretch.UniformToFill;
                             musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
                             BgSwitch(Singer_Image_Url);
                             thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
@@ -3676,25 +3676,56 @@ namespace 墨智音乐_3._0._1
 
             //DoEvents();
 
-            if (this.Width >= 1000 && this.Width <= 1100 || this.Height >= 562 && this.Height <= 662)
+           /* if (this.Width >= 1000 && this.Width <= 1100 && this.Height >= 562 && this.Height <= 731)
             {
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1300;
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 731;
                 musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1300;
                 musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 731;
             }
-            else if (this.Width >= 1300 && this.Width <= 1400 || this.Height >= 731 && this.Height <= 831)
+            else if (this.Width >= 1100 && this.Width <= 1400 && this.Height >= 731 && this.Height <= 900)
             {
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1600;
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 900;
                 musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1600;
                 musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 900;
             }
-            else if (this.Width >= 1600 && this.Width <= 1700 || this.Height >= 900 && this.Height <= 1000)
+            else if (this.Width >= 1400 && this.Width <= 1700 && this.Height >= 900 && this.Height <= 1000)
             {
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1920;
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 1080;
                 musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1920;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 1080;
+            }*/
+
+            if (this.Width >= 1000 && this.Width <= 1100)
+            {
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1300;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1300;
+            }
+            else if (this.Width >= 1100 && this.Width <= 1400)
+            {
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1600;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1600;
+            }
+            else if (this.Width >= 1400 && this.Width <= 1700)
+            {
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1920;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1920;
+            }
+            if (this.Height >= 562 && this.Height <= 731)
+            {
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 731;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 731;
+            }
+            else if (this.Height >= 731 && this.Height <= 900)
+            {
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 900;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 900;
+            }
+            else if (this.Height >= 900 && this.Height <= 1000)
+            {
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 1080;
                 musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 1080;
             }
         }
