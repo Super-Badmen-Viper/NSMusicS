@@ -16,15 +16,18 @@
              >
     <Grid>
         <Grid x:Name="Grid_Animation">
+            
             <Grid x:Name="Grid_Up_Singer_Photo">
-                
+                <Grid.Background>
+                    <ImageBrush Stretch="Uniform"/>
+                </Grid.Background>
             </Grid>
             <Grid x:Name="Grid_down_Singer_Photo">
                 <Grid.Background>
-                    <ImageBrush x:Name="Grid_Image_Singer_Buttom" Stretch="Uniform" 
-                                ImageSource="/墨智音乐_3.0.1;component/ico_ui_library/薛之谦.jpg"/>
+                    <ImageBrush Stretch="Uniform"/>
                 </Grid.Background>
             </Grid>
+
             <Grid x:Name="Image_Singer_Buttom" Visibility="Hidden" Grid.RowSpan="2">
                 
 
