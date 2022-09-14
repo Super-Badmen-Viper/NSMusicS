@@ -5,6 +5,10 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "墨智音乐_3.0.1", "墨智音乐_3.0.1\墨智音乐_3.0.1.csproj", "{E8C46005-F2C8-4215-A8FB-07219859613E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "本地歌曲扫描", "本地歌曲扫描\本地歌曲扫描\本地歌曲扫描.csproj", "{45F7F8AC-444B-41C6-A0B0-25E1DC5C6048}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "本地歌曲扫描_手动添加音乐", "本地歌曲扫描_手动添加音乐\本地歌曲扫描_手动添加音乐\本地歌曲扫描_手动添加音乐.csproj", "{C5544191-824D-4ABB-9C58-CC4533884055}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,22 @@ Global
 		{E8C46005-F2C8-4215-A8FB-07219859613E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E8C46005-F2C8-4215-A8FB-07219859613E}.Release|x86.ActiveCfg = Release|Any CPU
 		{E8C46005-F2C8-4215-A8FB-07219859613E}.Release|x86.Build.0 = Release|Any CPU
+		{45F7F8AC-444B-41C6-A0B0-25E1DC5C6048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45F7F8AC-444B-41C6-A0B0-25E1DC5C6048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45F7F8AC-444B-41C6-A0B0-25E1DC5C6048}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{45F7F8AC-444B-41C6-A0B0-25E1DC5C6048}.Debug|x86.Build.0 = Debug|Any CPU
+		{45F7F8AC-444B-41C6-A0B0-25E1DC5C6048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45F7F8AC-444B-41C6-A0B0-25E1DC5C6048}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45F7F8AC-444B-41C6-A0B0-25E1DC5C6048}.Release|x86.ActiveCfg = Release|Any CPU
+		{45F7F8AC-444B-41C6-A0B0-25E1DC5C6048}.Release|x86.Build.0 = Release|Any CPU
+		{C5544191-824D-4ABB-9C58-CC4533884055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5544191-824D-4ABB-9C58-CC4533884055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5544191-824D-4ABB-9C58-CC4533884055}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C5544191-824D-4ABB-9C58-CC4533884055}.Debug|x86.Build.0 = Debug|Any CPU
+		{C5544191-824D-4ABB-9C58-CC4533884055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5544191-824D-4ABB-9C58-CC4533884055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5544191-824D-4ABB-9C58-CC4533884055}.Release|x86.ActiveCfg = Release|Any CPU
+		{C5544191-824D-4ABB-9C58-CC4533884055}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
