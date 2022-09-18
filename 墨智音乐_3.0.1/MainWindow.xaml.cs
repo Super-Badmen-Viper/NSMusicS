@@ -260,125 +260,6 @@ namespace 墨智音乐_3._0._1
             Grid_Animation_MouseLeftClick();/// 窗体进入动画
         }
 
-<<<<<<< HEAD
-=======
-        private void UserControl_ButtonFrame_MusicLove_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love != null)
-            {
-                Clear_Windows_Left_ALL_UserControl_BackGround();
-                userControl_ButtonFrame_MusicLove.BoolMouseLeftDown = true;
-                userControl_ButtonFrame_MusicLove.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF1FD3AD"));
-
-                if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Count > 0)
-                {
-                    userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = null;
-                    //歌曲序号重构
-                    for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Count; i++)
-                    {
-                        listView_Item_Bing_ALL.listView_Temp_Info_End_Love.ElementAt(i).Song_No = i + 1;
-                    }
-                    userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Love;
-                    
-                }
-                bool_ListView_Temp_Info_End_Clear.userControl_主界面_FrmMain_ListView_Temp_Info_ItemSource_Name = "listView_Item_Bing_ALL.listView_Temp_Info_End_Love";
-                userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
-                userControl_Main_Home_Left_MyMusic_Try_Listen.Visibility = Visibility.Hidden;
-                Grid_Animation_MouseLeftClick();/// 窗体进入动画
-            }
-        }
-
-        private void UserControl_ButtonFrame_ThisWindowsMusicAndDownload_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (listView_Item_Bing_ALL.listView_Temp_Info_End_ALL != null)
-            {
-                Clear_Windows_Left_ALL_UserControl_BackGround();
-                userControl_ButtonFrame_ThisWindowsMusicAndDownload.BoolMouseLeftDown = true;
-                userControl_ButtonFrame_ThisWindowsMusicAndDownload.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF1FD3AD"));
-
-                if (listView_Item_Bing_ALL.listView_Temp_Info_End_ALL.Count > 0)
-                {
-                    userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = null;
-                    //歌曲序号重构
-                    for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_ALL.Count; i++)
-                    {
-                        listView_Item_Bing_ALL.listView_Temp_Info_End_ALL.ElementAt(i).Song_No = i + 1;
-                    }
-                    userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL;
-                    
-                }
-                bool_ListView_Temp_Info_End_Clear.userControl_主界面_FrmMain_ListView_Temp_Info_ItemSource_Name = "listView_Item_Bing_ALL.listView_Temp_Info_End_ALL";
-                userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
-                userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Try_Listen.Visibility = Visibility.Hidden;
-                Grid_Animation_MouseLeftClick();/// 窗体进入动画
-            }
-        }
-
-
-        private void UserControl_ButtonFrame_MusicRecentlyPlayed_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (listView_Item_Bing_ALL.listView_Temp_Info_End_Auto != null)
-            {
-                Clear_Windows_Left_ALL_UserControl_BackGround();
-                userControl_ButtonFrame_MusicRecentlyPlayed.BoolMouseLeftDown = true;
-                userControl_ButtonFrame_MusicRecentlyPlayed.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF1FD3AD"));
-
-                if (listView_Item_Bing_ALL.listView_Temp_Info_End_Auto.Count > 0)
-                {
-                    userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = null;
-                    //歌曲序号重构
-                    for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_Auto.Count; i++)
-                    {
-                        listView_Item_Bing_ALL.listView_Temp_Info_End_Auto.ElementAt(i).Song_No = i + 1;
-                    }
-                    userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
-                    
-                }
-                bool_ListView_Temp_Info_End_Clear.userControl_主界面_FrmMain_ListView_Temp_Info_ItemSource_Name = "listView_Item_Bing_ALL.listView_Temp_Info_End_Auto";
-                userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
-                userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
-                userControl_Main_Home_Left_MyMusic_Try_Listen.Visibility = Visibility.Hidden;
-                Grid_Animation_MouseLeftClick();/// 窗体进入动画
-            }
-        }
-
-        private void UserControl_ButtonFrame_MusicTryListenList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen != null)
-            {
-                Clear_Windows_Left_ALL_UserControl_BackGround();
-                userControl_ButtonFrame_MusicTryListenList.BoolMouseLeftDown = true;
-                userControl_ButtonFrame_MusicTryListenList.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF1FD3AD"));
-
-                if (listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen.Count > 0)
-                {
-                    userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = null;
-                    //歌曲序号重构
-                    for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen.Count; i++)
-                    {
-                        listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen.ElementAt(i).Song_No = i + 1;
-                    }
-                    userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
-
-                }
-                bool_ListView_Temp_Info_End_Clear.userControl_主界面_FrmMain_ListView_Temp_Info_ItemSource_Name = "listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen";
-                userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
-                userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
-                userControl_Main_Home_Left_MyMusic_Try_Listen.Visibility = Visibility.Visible;
-                Grid_Animation_MouseLeftClick();/// 窗体进入动画
-            }
-        }
-
-
-
-
->>>>>>> 26296c86d298c970ba5f0226059c84a5a88cda8d
         #endregion
 
         #region Main_Top
@@ -866,7 +747,6 @@ namespace 墨智音乐_3._0._1
             userControl_Main_Home_Left_MyMusic_My_Love.Button_Play_ALL_Song.MouseLeftButtonDown += Paly_ALL_Song;
             userControl_Main_Home_Left_MyMusic_Recent_Play.Button_Play_ALL_Song.MouseLeftButtonDown += Paly_ALL_Song;
             userControl_Main_Home_Left_MyMusic_Try_Listen.Button_Play_ALL_Song.MouseLeftButtonDown += Paly_ALL_Song;
-<<<<<<< HEAD
             /*//设置选中删除按钮
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Button_Delete_Select_ItemSong.MouseLeftButtonDown += Button_Delete_Click;
             userControl_Main_Home_Left_MyMusic_My_Love.Stack_Button_Delete_Select_ItemSong.MouseLeftButtonDown += Button_Delete_Click;
@@ -877,13 +757,6 @@ namespace 墨智音乐_3._0._1
 
 
 
-=======
-        }
-
-        
-
-      
->>>>>>> 26296c86d298c970ba5f0226059c84a5a88cda8d
         #endregion
 
 
@@ -1653,11 +1526,7 @@ namespace 墨智音乐_3._0._1
         }
         #endregion
 
-<<<<<<< HEAD
         
-=======
-        ListView listView_SongList;//当前的播放列表
->>>>>>> 26296c86d298c970ba5f0226059c84a5a88cda8d
         #region 音乐播放
 
         public int WMP_Song_Order;//播放顺序 
@@ -3484,11 +3353,7 @@ namespace 墨智音乐_3._0._1
         /// </summary>
         private void Hand_Add_listView_SongList_Source()
         {
-<<<<<<< HEAD
             if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Love"))
-=======
-            if (bool_ListView_Temp_Info_End_Clear.userControl_主界面_FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Love"))
->>>>>>> 26296c86d298c970ba5f0226059c84a5a88cda8d
             {              
                 load_SongList_Info.Load_Data_ALL_D_Grid_View_Select_Songs();
                 Add_Select_Songs_To_listView_Item_Bing_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_Love);
@@ -3679,11 +3544,7 @@ namespace 墨智音乐_3._0._1
                 load_SongList_Info.Load_Data_ALL_D_Grid_View_4();
                 userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = null;
                 userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
-<<<<<<< HEAD
                 listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info;            
-=======
-                listView_SongList = userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info;            
->>>>>>> 26296c86d298c970ba5f0226059c84a5a88cda8d
             }
 
             userControl_ButtonFrame_MusicLove.IsEnabled = true;
