@@ -9,7 +9,8 @@ namespace 墨智音乐_3._0._1.Dao_UserControl.SongList_Info
         public bool Bool_listView_Temp_Info_End_ALL_Clear;
         public bool Bool_listView_Temp_Info_End_Love_Clear;
         public bool Bool_listView_Temp_Info_End_Auto_Clear;
-        public string userControl_主界面_FrmMain_ListView_Temp_Info_ItemSource_Name;
+        public bool Bool_listView_Temp_Info_End_TryListen_Clear;
+        public string FrmMain_ListView_Temp_Info_ItemSource_Name;
 
 
         private static Bool_listView_Temp_Info_End_Clear bool_ListView_Temp_Info_End_Clear;

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Controls;
 
 namespace 墨智音乐_3._0._1.Dao_UserControl.SongList_Info
 {
     public class ListView_Item_Bing_ALL
     {
+        public ListView listView_SongList;//当前的播放列表
+
         public List<ListView_Item_Bing> listView_Temp_Info_End_ALL = new List<ListView_Item_Bing>();
         public List<ListView_Item_Bing> listView_Temp_Info_End_Love = new List<ListView_Item_Bing>();
         public List<ListView_Item_Bing> listView_Temp_Info_End_Auto = new List<ListView_Item_Bing>();

@@ -102,7 +102,6 @@ namespace 墨智音乐_3._0._1.Dao_Init_Info.Init_SongList_Info
 
                         if (Save_Load_List_Name[i].Song_No != 0)
                             SW_List.WriteLine(Save_Load_List_Name[i].Song_No);
-
                     }
 
                 }
