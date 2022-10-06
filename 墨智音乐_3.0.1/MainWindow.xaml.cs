@@ -1761,7 +1761,7 @@ namespace 墨智音乐_3._0._1
             //创建获取 歌词数组信息输出类 
             dao_ListBox_Temp_MRC = new Dao_ListBox_Temp_MRC();
             //设置要分析的歌词文件（krc）路径
-            string MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".krc";
+            string MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".mrc";
 
             try
             {
