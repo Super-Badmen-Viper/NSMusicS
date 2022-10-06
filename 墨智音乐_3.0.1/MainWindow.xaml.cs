@@ -28,6 +28,7 @@ using System.Threading;
 using System.Collections;
 using 墨智音乐_3._0._1.UserControlLibrary.Main_Home_Left_MyMusic_UserControls;
 using 墨智音乐_3._0._1.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls;
+using System.Globalization;
 
 namespace 墨智音乐_3._0._1
 {
@@ -1760,7 +1761,7 @@ namespace 墨智音乐_3._0._1
             ListBox_MRC_Song_MRC_Time = new double[999];
             //创建获取 歌词数组信息输出类 
             dao_ListBox_Temp_MRC = new Dao_ListBox_Temp_MRC();
-            //设置要分析的歌词文件（krc）路径
+            //设置要分析的歌词文件（mrc）路径
             string MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".mrc";
 
             try
@@ -1824,7 +1825,7 @@ namespace 墨智音乐_3._0._1
                 }
                 else
                 {
-                    //获取krc歌词失败，转而获取Lrc歌词
+                    //获取mrc歌词失败，转而获取Lrc歌词
 
                     //停止歌词同步
                     thread_DispatcherTimer_MRC = new Thread(new ThreadStart(() =>
@@ -1848,7 +1849,7 @@ namespace 墨智音乐_3._0._1
             }
             catch
             {
-                //获取krc歌词失败，转而获取Lrc歌词
+                //获取mrc歌词失败，转而获取Lrc歌词
 
                 //停止歌词同步
                 thread_DispatcherTimer_MRC = new Thread(new ThreadStart(() =>
@@ -1948,6 +1949,31 @@ namespace 墨智音乐_3._0._1
                                 double values = Convert.ToDouble(1.0 / 
                                     dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
                                     .Int_MoreByte_Nums);
+
+
+                                //添加每个字符的物理长度
+                                ArrayList Values_temp = new ArrayList();
+                                //每个字符相加_>的总长度
+                                double Sum_Values_temp = 0;
+                                for (int i = 0; i < dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                    .Int_MoreByte_Nums; i++)
+                                {
+                                    double temp_double = Convert.ToDouble(MeasureString(dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                    .Array_Morebyte_Text[i].ToString()));
+                                    Sum_Values_temp += temp_double;
+                                    Values_temp.Add(temp_double);
+                                }
+                                //获取歌词字符统一间距——常数
+                                double ALL_Byte_Width = Convert.ToDouble(1.0 / Sum_Values_temp);
+                                //获取每个字符同步时动画所移动的距离
+                                ArrayList ALL_Byte_Values = new ArrayList();
+                                for (int i = 0; i < dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                    .Int_MoreByte_Nums; i++)
+                                {
+                                    ALL_Byte_Values.Add(Convert.ToDouble(Values_temp[i]) * ALL_Byte_Width);
+                                }
+
+
                                 ArrayList temp_nums = new ArrayList();
                                 ArrayList line_nums = new ArrayList();
                                 ArrayList timeSpan_nums = new ArrayList();
@@ -1956,19 +1982,6 @@ namespace 墨智音乐_3._0._1
                                 int temp_Duration = 0;
                                 for (int i = 0; i < dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].Int_MoreByte_Nums; i++)
                                 {
-                                    /*if (i > 0)
-                                    {
-                                        //如果歌词时间序列中有停顿
-                                        if (Convert.ToInt16(dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                    .Array_Morebyte_BeginTime[i]) != temp_BeginTime + temp_Duration)
-                                        {
-                                            //取停顿时间
-                                            temp_TimeSpan = Convert.ToInt16(dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                    .Array_Morebyte_BeginTime[i]) - (temp_BeginTime + temp_Duration);
-                                            timeSpan_nums.Add(temp_TimeSpan);
-                                        }
-                                    }*/
-
                                     temp_BeginTime = Convert.ToInt16(
                                         dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
                                     .Array_Morebyte_BeginTime[i]);
@@ -1990,7 +2003,7 @@ namespace 墨智音乐_3._0._1
                                 for (int i = 0; i < timeSpan_nums.Count; i++)
                                 {
                                     linearDoubleKeyFrame = new LinearDoubleKeyFrame();
-                                    X += values;//固定的区间内，动画该持续的时间
+                                    X += Convert.ToDouble(ALL_Byte_Values[i]);//固定的区间内，动画该持续的时间
                                     if (i != dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].Int_MoreByte_Nums - 1)
                                         linearDoubleKeyFrame.Value = X;
                                     else
@@ -2065,6 +2078,24 @@ namespace 墨智音乐_3._0._1
                 }
             }
             return null;       
+        }
+        TextBlock textBlock_Mrc_Byte_Width = new TextBlock();
+        private double MeasureString(string candidate)
+        {
+            var formattedText = new FormattedText(
+                candidate,
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                new Typeface(this.textBlock_Mrc_Byte_Width.FontFamily, 
+                this.textBlock_Mrc_Byte_Width.FontStyle, 
+                this.textBlock_Mrc_Byte_Width.FontWeight, 
+                this.textBlock_Mrc_Byte_Width.FontStretch),
+                this.textBlock_Mrc_Byte_Width.FontSize,
+                Brushes.Black,
+                new NumberSubstitution(),
+                1);
+            Size size = new Size(formattedText.Width, formattedText.Height);
+            return size.Width;
         }
 
         #endregion
