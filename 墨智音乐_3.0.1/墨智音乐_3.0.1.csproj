@@ -40,6 +40,9 @@
     <ApplicationIcon>墨智音乐.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.8.9\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="Interop.Shell32">
       <HintPath>..\..\墨智音乐_2.0.1_.NETFrame\墨智音乐_2.0.1\墨智音乐_2.0.1\bin\Debug\Interop.Shell32.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -51,14 +54,60 @@
     <Reference Include="Magick.NET.Core, Version=12.1.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
       <HintPath>..\packages\Magick.NET.Core.12.1.0\lib\netstandard20\Magick.NET.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.5.0.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.5.0.0\lib\net461\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.5.0.0\lib\net461\Microsoft.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.5.0.0\lib\net461\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Options.5.0.0\lib\net461\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.5.0.0\lib\net461\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\墨智音乐_2.0.1_.NETFrame\墨智音乐_2.0.1\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.5.0.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Common.6.0.0\lib\net461\System.Drawing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -174,15 +223,6 @@
     <Compile Include="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Main_UserControl.xaml.cs">
       <DependentUpon>MusicPlayer_Main_UserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControlLibrary\Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_UserControls\UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_Add.xaml.cs">
-      <DependentUpon>UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_Add.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControlLibrary\Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_UserControls\UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_More.xaml.cs">
-      <DependentUpon>UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_More.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControlLibrary\Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_UserControls\UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_PlayALL.xaml.cs">
-      <DependentUpon>UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_PlayALL.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControlLibrary\Window_Hover_KRC_Panel\Window_Hover_KRC_Panel.xaml.cs">
       <DependentUpon>Window_Hover_KRC_Panel.xaml</DependentUpon>
     </Compile>
@@ -270,7 +310,7 @@
     <Compile Include="Dao_UserControl\Song_Mrc_Info\Dao_ListBox_Temp_KRC_Bing.cs" />
     <Compile Include="Dao_UserControl\Song_Mrc_Info\Dao_ListBox_Temp_Krc_OneLine.cs" />
     <Compile Include="Dao_UserControl\Song_Mrc_Info\Dao_ListBox_Temp_Krc_OneLine_MoreByte.cs" />
-    <Compile Include="Dao_UserControl\Song_Mrc_Info\Krc_Line_Info.cs" />
+    <Compile Include="Dao_UserControl\Song_Mrc_Info\Mrc_Line_Info.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -336,18 +376,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Main_UserControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControlLibrary\Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_UserControls\UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_Add.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControlLibrary\Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_UserControls\UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_More.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControlLibrary\Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_UserControls\UserControl_Page_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload_PlayALL.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

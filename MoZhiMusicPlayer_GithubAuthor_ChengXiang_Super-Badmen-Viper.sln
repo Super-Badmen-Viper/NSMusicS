@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoZhiMusicPlayer_GithubAuthor_ChengXiang_Super-Badmen-Viper", "MoZhiMusicPlayer_GithubAuthor_ChengXiang_Super-Badmen-Viper\MoZhiMusicPlayer_GithubAuthor_ChengXiang_Super-Badmen-Viper.csproj", "{09D1E99F-E24B-45D4-A493-ED20BB025A65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "墨智音乐_3.0.1", "墨智音乐_3.0.1\墨智音乐_3.0.1.csproj", "{E8C46005-F2C8-4215-A8FB-07219859613E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "本地歌曲扫描_手动添加音乐", "本地歌曲扫描_手动添加音乐\本地歌曲扫描_手动添加音乐\本地歌曲扫描_手动添加音乐.csproj", "{C5544191-824D-4ABB-9C58-CC4533884055}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "本地歌曲扫描", "本地歌曲扫描\本地歌曲扫描\本地歌曲扫描.csproj", "{21347B71-2566-49DA-A1AA-94E5CF38CA89}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{09D1E99F-E24B-45D4-A493-ED20BB025A65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09D1E99F-E24B-45D4-A493-ED20BB025A65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09D1E99F-E24B-45D4-A493-ED20BB025A65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09D1E99F-E24B-45D4-A493-ED20BB025A65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8C46005-F2C8-4215-A8FB-07219859613E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8C46005-F2C8-4215-A8FB-07219859613E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8C46005-F2C8-4215-A8FB-07219859613E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8C46005-F2C8-4215-A8FB-07219859613E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5544191-824D-4ABB-9C58-CC4533884055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5544191-824D-4ABB-9C58-CC4533884055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5544191-824D-4ABB-9C58-CC4533884055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5544191-824D-4ABB-9C58-CC4533884055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21347B71-2566-49DA-A1AA-94E5CF38CA89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21347B71-2566-49DA-A1AA-94E5CF38CA89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21347B71-2566-49DA-A1AA-94E5CF38CA89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21347B71-2566-49DA-A1AA-94E5CF38CA89}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5B513B14-6076-407F-BC93-ADD5D1CB80F0}
+	EndGlobalSection
+EndGlobal
