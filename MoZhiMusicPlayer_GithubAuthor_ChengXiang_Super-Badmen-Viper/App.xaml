@@ -1,9 +1,0 @@
-﻿<Application x:Class="MoZhiMusicPlayer_GithubAuthor_ChengXiang_Super_Badmen_Viper.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_ChengXiang_Super_Badmen_Viper"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
-</Application>

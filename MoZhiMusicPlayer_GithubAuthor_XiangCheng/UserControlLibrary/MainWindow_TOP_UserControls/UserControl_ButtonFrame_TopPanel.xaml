@@ -1,0 +1,121 @@
+﻿<UserControl x:Class="MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_TOP_UserControls.UserControl_ButtonFrame_TopPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_TOP_UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="77" d:DesignWidth="800" Background="#F6F6F6">
+    <Grid>
+        <Button 
+            
+            Style="{StaticResource MyButton}"
+                HorizontalAlignment="Left" Height="18" Margin="37,0,0,0" 
+                VerticalAlignment="Stretch" Width="18"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                >
+            <Button.Background>
+                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/方向-向左.png"/>
+            </Button.Background>
+        </Button>
+
+        <Button 
+            
+            Style="{StaticResource MyButton}"
+                HorizontalAlignment="Left" Height="18" Margin="72,0,0,0" 
+                VerticalAlignment="Stretch" Width="18"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                >
+            <Button.Background>
+                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/方向-向右 (1).png"/>
+            </Button.Background>
+        </Button>
+
+        <local:UserControl_ButtonFrame_Search Height="33" Margin="105,22,511,22" MaxWidth="280"/>
+
+
+
+        <Image HorizontalAlignment="Right" Height="24" VerticalAlignment="Stretch" Width="24" 
+               Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/初学者.jpg" Margin="0,0,423,0"
+               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+               >
+            <Image.Clip>
+                <EllipseGeometry RadiusX="12" RadiusY="12" Center="12,12"/>
+            </Image.Clip>
+        </Image>
+
+        <TextBlock HorizontalAlignment="Right" Height="14" 
+                   Text="就是爱音乐" TextWrapping="Wrap" 
+                   VerticalAlignment="Stretch" Width="65" 
+                   Margin="0,0,347,0" Foreground="#FF7C7C7C"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                   />
+
+        <Button 
+            
+            Style="{StaticResource MyButton}"
+                HorizontalAlignment="Right" Height="14" Width="16" Margin="0,31,198,32"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                >
+            <Button.Background>
+                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/皮肤.png"/>
+            </Button.Background>
+        </Button>
+        <Button 
+            
+            Style="{StaticResource MyButton}"
+                HorizontalAlignment="Right" Height="18" Width="18" Cursor="Hand" Margin="0,29,167,30"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                >
+            <Button.Background>
+                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/菜单.png"/>
+            </Button.Background>
+        </Button>
+        <Button 
+            x:Name="Button_Streamlined"
+            Style="{StaticResource MyButton}"
+                HorizontalAlignment="Right" Height="16" 
+                VerticalAlignment="Stretch" Width="16" Margin="0,0,123,0"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                >
+            <Button.Background>
+                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/Streamlined mode.png"/>
+            </Button.Background>
+        </Button>
+        <Button 
+            x:Name="Button_Min"
+            Style="{StaticResource MyButton}"
+                HorizontalAlignment="Right" Height="20" 
+                VerticalAlignment="Stretch" Width="20" Cursor="Hand" Margin="0,0,90,0"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                >
+            <Button.Background>
+                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/最小化.png"/>
+            </Button.Background>
+        </Button>
+        <Button 
+            x:Name="Button_Max"
+            Style="{StaticResource MyButton}"
+                HorizontalAlignment="Right" Height="14" Width="14" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,31,65,32" Cursor="Hand" 
+                >
+            <Button.Background>
+                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/最大化.png" Stretch="Uniform"/>
+            </Button.Background>
+        </Button>
+        <Button 
+            x:Name="Button_Exit"
+            Style="{StaticResource MyButton}"
+                HorizontalAlignment="Right" Height="20" 
+                VerticalAlignment="Stretch" Width="20" Cursor="Hand" Margin="0,0,20,0"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                >
+            <Button.Background>
+                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/关闭.png"/>
+            </Button.Background>
+        </Button>
+
+
+    </Grid>
+</UserControl>

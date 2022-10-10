@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.组件"
+                    >
+
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="MoZhiMusicPlayer_GithubAuthor_XiangCheng/Helper_UserControlLibrary/组件/Carousel.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+
+
+</ResourceDictionary>

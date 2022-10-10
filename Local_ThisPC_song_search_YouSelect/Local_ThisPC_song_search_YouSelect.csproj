@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Interop.Shell32">
+      <HintPath>C:\Users\Administrator\Downloads\Interop.Shell32\X86\2013.0.0.0\Interop.Shell32.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

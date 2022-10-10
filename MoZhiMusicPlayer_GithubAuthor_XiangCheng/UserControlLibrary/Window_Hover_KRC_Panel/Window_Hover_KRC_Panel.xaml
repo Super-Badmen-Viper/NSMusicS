@@ -1,0 +1,125 @@
+﻿<Window x:Class="MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hover_MRC_Panel.Window_Hover_MRC_Panel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hover_MRC_Panel"
+        mc:Ignorable="d"
+        Title="Window1" 
+        d:DesignHeight="146" 
+        MinWidth="660" MinHeight="146"
+        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Background="#00FFFFFF" WindowStyle="None" AllowsTransparency = "True"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown" Height="146" Foreground="{x:Null}"
+        MouseLeave="Window_Desk_MRC1_MouseLeave" MouseMove="Window_Desk_MRC1_MouseMove"
+             >
+    <Grid>
+        <TextBlock x:Name="TextBlock_1"  HorizontalAlignment="Center" Text="科技源于生活，技术源于创新" 
+                    FontSize="36" Height="68" IsEnabled="False" FontWeight="Bold" VerticalAlignment="Top" >
+            <TextBlock.Triggers>
+                <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                    <!--占用属性，没有用处但是必须得有，不然报参数缺失-->
+                    <!--事件绑定，触发一次就重置执行一次-->
+                    <BeginStoryboard>
+                        <Storyboard x:Name="Text_Storyboard">
+                            <DoubleAnimationUsingKeyFrames x:Name="Text_DoubleAnimation"
+                                            Duration="0:0:4"
+                                            Storyboard.TargetName="Trans" Storyboard.TargetProperty="X"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </TextBlock.Triggers>
+            <TextBlock.Foreground>
+                <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TranslateTransform X="-0.5" x:Name="Trans"/>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FF00FFA2" Offset="0.49"/>
+                    <GradientStop Color="#FFF99F00" Offset="0.51"/>
+                </LinearGradientBrush>
+            </TextBlock.Foreground>
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+        <TextBlock x:Name="TextBlock_2"   HorizontalAlignment="Center" Text="毒蛇云生态，致力于生活更便捷"
+                       FontSize="36" Height="68" IsEnabled="False" FontWeight="Bold" 
+                       Foreground="#FFF99F00" VerticalAlignment="Bottom">
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <TextBlock x:Name="TextBlock_Panel_1"  HorizontalAlignment="Center" Margin="485,0,470,0" Width="500" FontSize="28" Height="68" Foreground="{x:Null}" Background="#02000000" IsEnabled="False" Cursor="Hand" VerticalAlignment="Top"/>
+        <TextBlock x:Name="TextBlock_Panel_2"  HorizontalAlignment="Center" Margin="485,0,470,0" Width="500" FontSize="28" Height="68" Background="#02000000" IsEnabled="False" Cursor="Hand" VerticalAlignment="Bottom"/>
+
+
+        <TextBlock x:Name="TextBlock_Slider_Up_1" Height="2" Width="150" 
+                    FlowDirection="RightToLeft" 
+                   Cursor="Hand" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-150,0,0,0">
+            <TextBlock.Triggers>
+                <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                    <!--占用属性，没有用处但是必须得有，不然报参数缺失-->
+                    <!--事件绑定，触发一次就重置执行一次-->
+                    <BeginStoryboard>
+                        <Storyboard x:Name="Text_Storyboard_slider_Up">
+                            <DoubleAnimation x:Name="Text_DoubleAnimation_slider_Up"
+                                            From="0.5" To="-0.5" Duration="0:0:4"
+                                            Storyboard.TargetName="Trans_slider_Up" Storyboard.TargetProperty="X"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </TextBlock.Triggers>
+            <TextBlock.Background>
+                <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TranslateTransform X="-0.5" x:Name="Trans_slider_Up"/>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FFF99F00" Offset="0.50"/>
+                    <GradientStop Color="#00000000" Offset="0.50"/>
+                </LinearGradientBrush>
+            </TextBlock.Background>
+        </TextBlock>
+
+        <TextBlock x:Name="TextBlock_Slider_Down_1" Height="2" Width="150" 
+                   FlowDirection="LeftToRight" 
+                   VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,-150,0" Cursor="Hand">
+            <TextBlock.Triggers>
+                <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                    <!--占用属性，没有用处但是必须得有，不然报参数缺失-->
+                    <!--事件绑定，触发一次就重置执行一次-->
+                    <BeginStoryboard>
+                        <Storyboard x:Name="Text_Storyboard_slider_Down">
+                            <DoubleAnimation x:Name="Text_DoubleAnimation_slider_Down"
+                                             From="0.5" To="-0.5" Duration="0:0:4"
+                                             Storyboard.TargetName="Trans_slider_Down" Storyboard.TargetProperty="X"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </TextBlock.Triggers>
+            <TextBlock.Background>
+                <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TranslateTransform X="-0.5" x:Name="Trans_slider_Down"/>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FFF99F00" Offset="0.50"/>
+                    <GradientStop Color="#00000000" Offset="0.50"/>
+                </LinearGradientBrush>
+            </TextBlock.Background>
+        </TextBlock>
+    </Grid>
+
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="10"/>
+
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Hand" />
+
+        </Style>
+
+
+    </Window.Resources>
+</Window>
