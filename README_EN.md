@@ -13,7 +13,7 @@ Imitateing the current mainstream music software of a certain T, based on dotNET
 Link: https://pan.baidu.com/s/1LbmClxXrEsO4-R9ISBKCoQ?pwd=zake Extraction code: zake
 Please unzip the resource compressed package of this network disk and overwrite it to MoZhiMusicPlayer  Mozi Music_ 3.0.1  bin  Debug , replace the folder with the same name
 ## (Statement: The author's personal music additional resources Baidu online disk resources (artist photos, album pictures, etc.) and this project file are all public data from the network, only for sharing, without any commercial infringement. If you have any objection, please contact me to delete
-## My QQ learning group number: 228440692. Welcome to join the group. Give it to a star first. There are projects I have sorted out in the group, which is easier to use out of the box than my Github project
-<img src="doc/3.png" align="center" width="660">
-<img src="doc/2.png" align="center" width="660">
-<img src="doc/1.png" align="center" width="660">
+## My QQ learning group number: 228440692. Welcome to join the group. Give it to a star first. There are projects I have sorted out in the group, which is easier to use out of the box than my Github project 
+<img src="doc/3.png" align="center" width="660"> 
+<img src="doc/2.png" align="center" width="660"> 
+<img src="doc/1.png" align="center" width="660"> 
