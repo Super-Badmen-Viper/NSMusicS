@@ -8,7 +8,7 @@
   4.基本的歌曲导入（选择导入，本地全盘扫描导入，支持mp3,wav,flac音乐文件(仅扫描带有歌手歌曲名文件名的文件)）  
 ## 基于AGPL-3.0 license开源协议，你可以随心所欲的截取其中的部分代码，声明：禁止商用，禁止未经作者允许将此解决方案作为教学，论文等知识，商业产权使用（你需要得到我的允许，不然将起诉你的违法行为）
 ## 演示效果：（B站链接：https://www.bilibili.com/video/BV1uG41137jY/?vd_source=6e56ca0b155a60e6a6878e5775fdcc35）
-## 资源所在位置：MoZhiMusicPlayer\墨智音乐_3.0.1\bin\Debug\Resource\之内（歌词，歌手写真，专辑图片等，可自行编辑）
+## 资源所在位置：MoZhiMusicPlayer/MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/Resource/之内（歌词，歌手写真，专辑图片等，可自行编辑）
 ## 音乐附加资源下载（百度网盘资源）：
   链接：https://pan.baidu.com/s/1LbmClxXrEsO4-R9ISBKCoQ?pwd=zake 提取码：zake  
   请将此网盘的Resource压缩包解压并覆盖至MoZhiMusicPlayer\墨智音乐_3.0.1\net6.0-windows\bin\Debug\，取代同名文件夹
