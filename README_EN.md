@@ -1,5 +1,5 @@
 # MoZhiMusicPlayer
-Copying the current mainstream music software of a certain T, based on dotNET_ C#_ WPF's personal open source music client
+Imitateing the current mainstream music software of a certain T, based on dotNET_ C#_ WPF's personal open source music client
 ## Note: The performance or system version is low, which may affect the runtime performance. WIn11 is recommended. Win11 is specially optimized [doge]
 # Function:
 1. Support synchronized animation of lyrics and synchronized progress of lyrics (compatible with lyrics files of other music software)
