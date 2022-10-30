@@ -19,8 +19,8 @@ Please unzip the resource compressed package of this network disk and overwrite 
 <img src="doc/2.png" align="center" width="660"> 
 <img src="doc/1.png" align="center" width="660"> 
 
-
-
+# 
+# 
 # README Chinese
 
 # MoZhiMusicPlayer
