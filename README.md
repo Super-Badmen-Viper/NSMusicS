@@ -21,7 +21,7 @@ Please unzip the resource compressed package of this network disk and overwrite 
 
 # 
 # 
-# README Chinese
+# README Chinese 中文版
 
 # MoZhiMusicPlayer
 仿制当前主流的某T的音乐软件，基于dotNET_C#_WPF的个人开源音乐客户端  
