@@ -1,5 +1,5 @@
 # MoZhiMusicPlayer
-Imitateing the current mainstream music software of a certain T, based on dotNET_ C#_ WPF's personal open source music client
+Copying QQ music PC, based on dotNET_ C#_ WPF's personal open source music client
 ## Note: The performance or system version is low, which may affect the runtime performance. WIn11 is recommended. Win11 is specially optimized [doge]
 ## Download：https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer
 # Function:
@@ -24,7 +24,7 @@ Please unzip the resource compressed package of this network disk and overwrite 
 # README Chinese 中文版
 
 # MoZhiMusicPlayer
-仿制当前主流的某T的音乐软件，基于dotNET_C#_WPF的个人开源音乐客户端  
+仿制QQ音乐PC端，基于dotNET_C#_WPF的个人开源音乐客户端  
 ## 注意：性能或系统版本较低，可能会影响运行时的性能，推荐WIn11，Win11有特别优化[doge]
 ## 下载：https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer
 # 功能：
