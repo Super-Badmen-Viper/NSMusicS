@@ -314,7 +314,8 @@
 
   <ItemGroup>
     <Reference Include="Interop.Shell32">
-      <HintPath>C:\Users\Administrator\Downloads\Interop.Shell32\X86\2013.0.0.0\Interop.Shell32.dll</HintPath>
+      <HintPath>bin\Debug\net6.0-windows\Interop.Shell32.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors">
       <HintPath>..\..\MoZhiMusicPlayer\MoZhiMusicPlayer_GithubAuthor_XiangCheng\bin\Debug\Microsoft.Xaml.Behaviors.dll</HintPath>
@@ -484,8 +485,6 @@
     <Resource Include="ico_ui_library\开关-开.png" />
     <Resource Include="ico_ui_library\手机号 (1).png" />
     <Resource Include="ico_ui_library\手机号.png" />
-    <Resource Include="ico_ui_library\扫码-02 (1).png" />
-    <Resource Include="ico_ui_library\扫码-02.png" />
     <Resource Include="ico_ui_library\扫码-05 (1).png" />
     <Resource Include="ico_ui_library\扫码-05.png" />
     <Resource Include="ico_ui_library\排序-01 (1).png" />
