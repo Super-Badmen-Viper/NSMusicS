@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SongList_Info
 {
-    internal class SongList_Info_WebSave
+    public class SongList_Info_WebSave
     {
+
     }
 }

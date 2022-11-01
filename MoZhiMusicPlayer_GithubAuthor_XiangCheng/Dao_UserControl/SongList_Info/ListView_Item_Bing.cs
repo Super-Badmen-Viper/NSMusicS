@@ -16,7 +16,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SongList_Info
         public int Song_Like { get; set; }
         public ImageBrush Song_Like_Image { get; set; }
         public ImageBrush Song_MV_Image { get; set; }
-        public ImageBrush Song_Agora_Image { get; set; }
+        public ImageBrush Song_Agora_Image { get; set; }//音质
 
         public static explicit operator ListBoxItem(ListView_Item_Bing v)
         {
