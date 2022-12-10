@@ -25,12 +25,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.视
         {
             InitializeComponent();
 
-            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\1_视频库.jpg", out JpgSize, out Wpx, out Hpx);
-            nums_1 = JpgSize.Width / JpgSize.Height;
-            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\2_视频库.jpg", out JpgSize, out Wpx, out Hpx);
-            nums_2 = JpgSize.Width / JpgSize.Height;
-            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\3_视频库.jpg", out JpgSize, out Wpx, out Hpx);
-            nums_3 = JpgSize.Width / JpgSize.Height;
+            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\1_视频库.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
+            if (JpgSize.Height != 0)
+                nums_1 = JpgSize.Width / JpgSize.Height;
+            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\2_视频库.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
+            if (JpgSize.Height != 0)
+                nums_2 = JpgSize.Width / JpgSize.Height;
+            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\3_视频库.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
+            if (JpgSize.Height != 0)
+                nums_3 = JpgSize.Width / JpgSize.Height;
 
             Image_.Source = new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\1_视频库.jpg"));
         }
@@ -90,7 +93,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.视
             MessageBox.Show("此功能未开发");
         }
 
-        public static void GetJpgSizeByMagickImage(string JpgPath, out Size JpgSize, out double Wpx, out double Hpx)
+        public static void GetJpgSizeByMagickImage(string JpgPath, /*out*/ Size JpgSize, /*out*/ double Wpx, /*out*/ double Hpx)
         {
             try
             {
@@ -108,6 +111,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.视
             }
             catch
             {
+
                 JpgSize = new Size(0, 0);
                 Wpx = 0; Hpx = 0;
             }

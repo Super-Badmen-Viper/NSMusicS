@@ -10,7 +10,8 @@
 
   <ItemGroup>
     <Reference Include="Interop.Shell32">
-      <HintPath>C:\Users\Administrator\Downloads\Interop.Shell32\X86\2013.0.0.0\Interop.Shell32.dll</HintPath>
+      <HintPath>..\MoZhiMusicPlayer_GithubAuthor_XiangCheng\bin\Debug\net6.0-windows\Interop.Shell32.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
   </ItemGroup>
 

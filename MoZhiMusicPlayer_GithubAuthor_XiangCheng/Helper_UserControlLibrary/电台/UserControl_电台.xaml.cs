@@ -26,12 +26,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.电
         {
             InitializeComponent();
 
-            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\1_电台.jpg", out JpgSize, out Wpx, out Hpx);
-            nums_1 = JpgSize.Width / JpgSize.Height;
-            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\2_电台.jpg", out JpgSize, out Wpx, out Hpx);
-            nums_2 = JpgSize.Width / JpgSize.Height;
-            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\3_电台.jpg", out JpgSize, out Wpx, out Hpx);
-            nums_3 = JpgSize.Width / JpgSize.Height;
+            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\1_电台.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
+            if (JpgSize.Height != 0)
+                nums_1 = JpgSize.Width / JpgSize.Height;
+            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\2_电台.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
+            if (JpgSize.Height != 0)
+                nums_2 = JpgSize.Width / JpgSize.Height;
+            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\3_电台.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
+            if (JpgSize.Height != 0)
+                nums_3 = JpgSize.Width / JpgSize.Height;
 
             Image_.Source = new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\1_电台.jpg"));
         }
@@ -94,7 +97,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.电
             MessageBox.Show("此功能未开发");
         }
 
-        public static void GetJpgSizeByMagickImage(string JpgPath, out Size JpgSize, out double Wpx, out double Hpx)
+        public static void GetJpgSizeByMagickImage(string JpgPath, /*out*/ Size JpgSize, /*out*/ double Wpx, /*out*/ double Hpx)
         {
             try
             {
