@@ -25,13 +25,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.音
         {
             InitializeComponent();
 
-            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\1_手机专享.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
+            JpgSize = GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\1_手机专享.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
             if (JpgSize.Height != 0)
                 nums_1 = JpgSize.Width / JpgSize.Height;
-            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\2_手机专享.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
+            JpgSize = GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\2_手机专享.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
             if (JpgSize.Height != 0)
                 nums_2 = JpgSize.Width / JpgSize.Height;
-            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\3_手机专享.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
+            JpgSize = GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\3_手机专享.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
             if (JpgSize.Height != 0)
                 nums_3 = JpgSize.Width / JpgSize.Height;
 
@@ -41,9 +41,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.音
         Size JpgSize;
         double Wpx;
         double Hpx;
-        public static double nums_1 = 0.553;//1061 * 1917
-        public static double nums_2 = 0.678;//1326 * 1954
-        public static double nums_3 = 0.966;//2631 * 2722
+        public static double nums_1 = 1.370;//729 * 532
+        public static double nums_2 = 1.724;//912 * 529
+        public static double nums_3 = 2.126;//1112 * 523
         string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
         int Image_Num = 1;//控件大小调整时，不用一直刷新Image_.Source图片，节省资源
 
@@ -93,7 +93,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.音
             MessageBox.Show("此功能未开发");
         }
 
-        public static void GetJpgSizeByMagickImage(string JpgPath, /*out*/ Size JpgSize, /*out*/ double Wpx, /*out*/ double Hpx)
+        public static Size GetJpgSizeByMagickImage(string JpgPath, /*out*/ Size JpgSize, /*out*/ double Wpx, /*out*/ double Hpx)
         {
             try
             {
@@ -114,6 +114,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.音
                 JpgSize = new Size(0, 0);
                 Wpx = 0; Hpx = 0;
             }
+
+            return JpgSize;
         }
 
     }

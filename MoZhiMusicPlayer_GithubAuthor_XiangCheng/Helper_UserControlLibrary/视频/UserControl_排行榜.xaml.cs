@@ -25,13 +25,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.视
         {
             InitializeComponent();
 
-            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\1_排行榜.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
+            JpgSize = GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\1_排行榜.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
             if (JpgSize.Height != 0)
                 nums_1 = JpgSize.Width / JpgSize.Height;
-            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\2_排行榜.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
+            JpgSize = GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\2_排行榜.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
             if (JpgSize.Height != 0)
                 nums_2 = JpgSize.Width / JpgSize.Height;
-            GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\3_排行榜.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
+            JpgSize = GetJpgSizeByMagickImage(Path_App + @"\Button_Image_Ico\3_排行榜.jpg", /*out*/ JpgSize, /*out*/ Wpx, /*out*/ Hpx);
             if (JpgSize.Height != 0)
                 nums_3 = JpgSize.Width / JpgSize.Height;
 
@@ -105,7 +105,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.视
         /// <param name="JpgSize"></param>
         /// <param name="Wpx"></param>
         /// <param name="Hpx"></param>
-        public static void GetJpgSizeByMagickImage(string JpgPath, /*out*/ Size JpgSize, /*out*/ double Wpx, /*out*/ double Hpx)
+        public static Size GetJpgSizeByMagickImage(string JpgPath, /*out*/ Size JpgSize, /*out*/ double Wpx, /*out*/ double Hpx)
         {
             try
             {
@@ -126,6 +126,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.视
                 JpgSize = new Size(0, 0);
                 Wpx = 0; Hpx = 0;
             }
+
+            return JpgSize;
         }
     }
 }
