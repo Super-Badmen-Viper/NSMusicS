@@ -2,11 +2,6 @@
 
 # MoZhiMusicPlayer
 仿制QQ音乐PC端，基于dotNET_C#_WPF的个人开源音乐客户端  
-
-<img src="doc/3.png" align="center" width="660">
-<img src="doc/2.png" align="center" width="660">
-<img src="doc/1.png" align="center" width="660">
-
 ## 注意：性能或系统版本较低，可能会影响运行时的性能，推荐WIn11，Win11有特别优化[doge]
 ## 下载：https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer
 # 功能：
@@ -14,6 +9,11 @@
   2.支持多歌手写真动画交叉轮播  
   3.基本的音乐播放器功能（无需解释这些）  
   4.基本的歌曲导入（选择导入，本地全盘扫描导入，支持mp3,wav,flac音乐文件(仅扫描带有歌手歌曲名文件名的文件)）  
+
+<img src="doc/3.png" align="center" width="660">
+<img src="doc/2.png" align="center" width="660">
+<img src="doc/1.png" align="center" width="660">
+
 ## 基于AGPL-3.0 license开源协议，你可以随心所欲的截取其中的部分代码，声明：禁止商用，禁止未经作者允许将此解决方案作为教学，论文等知识，商业产权使用（你需要得到我的允许，不然将起诉你的违法行为）
 ## 演示效果：（B站链接：https://www.bilibili.com/video/BV1uG41137jY/?vd_source=6e56ca0b155a60e6a6878e5775fdcc35）
 ## 资源所在位置：MoZhiMusicPlayer/MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/Resource/之内（歌词，歌手写真，专辑图片等，可自行编辑）
@@ -27,18 +27,18 @@
 # 
 # MoZhiMusicPlayer
 Copying QQ music PC, based on dotNET_ C#_ WPF's personal open source music client
+## Note: The performance or system version is low, which may affect the runtime performance. WIn11 is recommended. Win11 is specially optimized [doge]
+## Download：https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer
+# Function:
+1. Support synchronized animation of lyrics and synchronized progress of lyrics (compatible with lyrics files of other music software)Lyrics Synchronization Algorithm
+2. Support cross broadcast of multi singer realistic animation
+3. Basic music player functions (no need to explain these)
+4. Basic song import (select import, local full disk scan import, support MP3, wav, flac music files (only scan files with singer song name and file name))
 
 <img src="doc/3.png" align="center" width="660"> 
 <img src="doc/2.png" align="center" width="660"> 
 <img src="doc/1.png" align="center" width="660"> 
 
-## Note: The performance or system version is low, which may affect the runtime performance. WIn11 is recommended. Win11 is specially optimized [doge]
-## Download：https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer
-# Function:
-1. Support synchronized animation of lyrics and synchronized progress of lyrics (compatible with lyrics files of other music software)Lyrics Synchronization Algorithm  
-2. Support cross broadcast of multi singer realistic animation
-3. Basic music player functions (no need to explain these)
-4. Basic song import (select import, local full disk scan import, support MP3, wav, flac music files (only scan files with singer song name and file name))
 ## Based on the AGPL-3.0 license open source agreement, you can intercept some of the code as you wish, stating that it is prohibited to use the solution for commercial purposes, and it is prohibited to use the solution as teaching, thesis and other knowledge, commercial property rights without the permission of the author (you need my permission, or you will be prosecuted for your illegal acts)
 ## Demo effect: (B station link: https://www.bilibili.com/video/BV1uG41137jY/?vd_source=6e56ca0b155a60e6a6878e5775fdcc35 ）
 ## Resource location: MoZhiMusicPlayer/MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/Resource/(Lyrics, artist portraits, album pictures, etc. can be edited by yourself) 
