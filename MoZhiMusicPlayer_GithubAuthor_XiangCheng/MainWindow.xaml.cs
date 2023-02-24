@@ -2009,7 +2009,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                         dao_ListBox_Temp_MRC.MRC_Line_Info
                                             [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
                                                 - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+<<<<<<< HEAD
                                     .Array_Morebyte_Duration[i]);//此字符持续时间
+=======
+                                    .Array_Morebyte_Duration[i]);//此字符持续时间  （不包含空白时间段） 待优化
+>>>>>>> 8902854730c142c948ff92a240fbe6ad3ae72919
 
                                     if (null_time == true)
                                     {
@@ -2023,7 +2027,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                             - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
                                                 .Int_MoreByte_Nums - 1//if  i != Array_Morebyte_BeginTime的最后一位（防止数组越界）
                                         &&
+<<<<<<< HEAD
                                         temp_BeginTime + temp_Duration !=  //if  此动画的开始时间+持续时间 != 下一段动画的开始时间
+=======
+                                        temp_BeginTime + temp_Duration !=
+>>>>>>> 8902854730c142c948ff92a240fbe6ad3ae72919
                                         Convert.ToInt16(dao_ListBox_Temp_MRC.MRC_Line_Info
                                             [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
                                                 - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
@@ -2058,7 +2066,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                         dao_ListBox_Temp_MRC.MRC_Line_Info
                                             [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex 
                                                 - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+<<<<<<< HEAD
                                     .Array_Morebyte_Duration[i]);//此字符持续时间                     
+=======
+                                    .Array_Morebyte_Duration[i]);//此字符持续时间  （不包含空白时间段） 待优化                          
+>>>>>>> 8902854730c142c948ff92a240fbe6ad3ae72919
 
                                     if (null_time == true)
                                     {
@@ -2071,12 +2083,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                             - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
                                                 .Int_MoreByte_Nums - 1//if  i != Array_Morebyte_BeginTime的最后一位（防止数组越界）
                                         && 
+<<<<<<< HEAD
                                         temp_BeginTime + temp_Duration != //if  此动画的开始时间+持续时间 != 下一段动画的开始时间
+=======
+                                        temp_BeginTime + temp_Duration != 
+>>>>>>> 8902854730c142c948ff92a240fbe6ad3ae72919
                                         Convert.ToInt16(dao_ListBox_Temp_MRC.MRC_Line_Info
                                             [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
                                                 - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
                                                     .Array_Morebyte_BeginTime[i+1]))//if 动画时间 中间有 空白时间（动画停顿）
                                     {
+<<<<<<< HEAD
                                         temp_null_time = //求出此停顿动画的序列时间，并插入至动画序列timeSpan_nums
                                             Convert.ToInt16(
                                                 dao_ListBox_Temp_MRC.MRC_Line_Info
@@ -2087,6 +2104,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                              - 
                                             (temp_BeginTime + temp_Duration);//动画停顿的时间
 
+=======
+                                        temp_null_time = Convert.ToInt16(dao_ListBox_Temp_MRC.MRC_Line_Info
+                                            [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                                    .Array_Morebyte_BeginTime[i + 1])
+                                                    - (temp_BeginTime + temp_Duration);//动画停顿的时间
+>>>>>>> 8902854730c142c948ff92a240fbe6ad3ae72919
                                         null_time = true;
                                     }
 
@@ -2269,6 +2293,25 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         {
             TextBox box = (TextBox)sender;
             e.Handled = box.Text.Length > 5;
+        }
+
+        /// <summary>
+        /// 数字科学计数法处理
+        /// </summary>
+        /// <param name="strData"></param>
+        /// <returns></returns>
+        private Decimal ChangeToDecimal(string strData)
+        {
+            Decimal dData = 0.0M;
+            if (strData.Contains("E"))
+            {
+                dData = Convert.ToDecimal(Decimal.Parse(strData.ToString(), System.Globalization.NumberStyles.Float));
+            }
+            else
+            {
+                dData = Convert.ToDecimal(strData);
+            }
+            return Math.Round(dData, 7);
         }
 
         #endregion
@@ -3411,6 +3454,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
         #region 音乐可视化
 
+<<<<<<< HEAD
         DispatcherTimer dispatcherTimer_Spectrum_Visualization;
 
         /// <summary>
@@ -3428,6 +3472,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
                         audioSpectrogram.StartStopBtn_Click();
         }
+=======
+>>>>>>> 8902854730c142c948ff92a240fbe6ad3ae72919
 
         public void Spectrum_Visualization_Play_Tick(object sender, EventArgs e)
         {
