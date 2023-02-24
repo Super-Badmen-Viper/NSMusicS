@@ -28,12 +28,39 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             TextBox_SongAlbumName.TextAlignment = TextAlignment.Center;
 
             Image_Song_Storyboard = Resources["Image_Song_Animation"] as Storyboard;
-
             ellipseGeometry = new EllipseGeometry();
             ellipseGeometry.RadiusX = 175;
             ellipseGeometry.RadiusY = 175;
             ellipseGeometry.Center = new Point(175,175);
+
+            Storyboard_BeginMusic_Jukebox_Open = Resources["RotateTransform_BeginMusic_Jukebox_Open"] as Storyboard;
+            Storyboard_BeginMusic_Jukebox_Open.Completed += Storyboard_BeginMusic_Jukebox_Open_Completed;
+            Storyboard_BeginMusic_Jukebox_Close = Resources["RotateTransform_BeginMusic_Jukebox_Close"] as Storyboard;
+            Storyboard_BeginMusic_Jukebox_Close.Completed += Storyboard_BeginMusic_Jukebox_Close_Completed;
+            Storyboard_BeginMusic_Jukebox_Playing = Resources["RotateTransform_BeginMusic_Jukebox_Up_And_Down"] as Storyboard;
+            
         }
+
+        private void Storyboard_BeginMusic_Jukebox_Open_Completed(object? sender, EventArgs e)
+        {
+            Storyboard_BeginMusic_Jukebox_Open.Stop();
+            RotateTransform_BeginMusic_Jukebox.Angle = 0;
+
+            Storyboard_BeginMusic_Jukebox_Playing.Begin();
+        }
+        private void Storyboard_BeginMusic_Jukebox_Close_Completed(object? sender, EventArgs e)
+        {
+            Storyboard_BeginMusic_Jukebox_Open.Stop();
+            RotateTransform_BeginMusic_Jukebox.Angle = -20;
+
+            Storyboard_BeginMusic_Jukebox_Playing.Stop();
+        }
+
+       
+
+        public Storyboard Storyboard_BeginMusic_Jukebox_Open = new Storyboard();
+        public Storyboard Storyboard_BeginMusic_Jukebox_Close = new Storyboard();
+        public Storyboard Storyboard_BeginMusic_Jukebox_Playing;
 
         public Storyboard Image_Song_Storyboard;
         public EllipseGeometry ellipseGeometry;

@@ -636,6 +636,46 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
         #endregion
 
 
+        #region 歌词翻译
+
+        /// <summary>
+        /// 为韩文添加翻译
+        /// </summary>
+        public ArrayList Add_Chinese_To_Kera(string CRC_URL)
+        {
+            ArrayList arrayList = new ArrayList();
+
+            arrayList = Take_TreeCRCInfo(CRC_URL, arrayList);
+
+            return arrayList;
+        }
+        /// <summary>
+        /// 获取初始MRC行数据
+        /// </summary>
+        /// <param name="SongLrcPath">歌词文件的文件路径</param>
+        public ArrayList Take_TreeCRCInfo(string SongLrcPath, ArrayList arrayList)
+        {
+            try
+            {
+                Song_Lrc_StreamReader = new StreamReader(SongLrcPath, Encoding.UTF8);//完成后继续自动清理缓存
+
+                if (Song_Lrc_StreamReader.EndOfStream == false)//指示当前流位置是否在结尾
+                {
+                    while ((A_String_Read = Song_Lrc_StreamReader.ReadLine()) != null)
+                    {
+                        arrayList.Add(A_String_Read.Trim() + "\n");
+                    }
+                }
+            }
+            catch { }
+            Console.WriteLine();
+
+            return arrayList;
+        }
+
+        #endregion
+
+
         /// <summary>
         /// 获取歌词信息方法集合
         /// </summary>
@@ -646,7 +686,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
         /// 返回ListBox所包含的歌词文本
         /// </summary>
         /// <returns>数据绑定,返回ListBox所包含的歌词文本</returns>
-        public Dao_ListBox_Temp_MRC_Bing[] Return_ListBox_Temp_MRC_Bing()
+        public Dao_ListBox_Temp_MRC_Bing[] Return_ListBox_Temp_MRC_Bing(string CRC_URL)
         {
             dao_ListBox_Temp_MRC_Bing = new Dao_ListBox_Temp_MRC_Bing[9999];
 
@@ -674,7 +714,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                             break;
                         }
                     }
-                     */
+                     */                   
                 }
             }
 
@@ -709,6 +749,31 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                     }
                 }
             }
+
+            if (CRC_URL != null)
+            {
+                ArrayList arrayList = Add_Chinese_To_Kera(CRC_URL);
+                //添加歌词翻译
+                for (int i = Temp_MRC_Bing.Length - 1; i >= 0; i--)
+                {
+                    if (arrayList.Count == 0)
+                        break;
+                    if (Temp_MRC_Bing[i] != null)
+                    {
+                        Dao_ListBox_Temp_MRC_Bing temp = new Dao_ListBox_Temp_MRC_Bing();
+                        temp = Temp_MRC_Bing[i];
+
+                        string singer_Mrc_To_Substring = arrayList[arrayList.Count - 1].ToString();
+
+                        temp.Song_MRC_Line += ("\n" + singer_Mrc_To_Substring);
+                        arrayList.RemoveAt(arrayList.Count - 1);
+
+                        Temp_MRC_Bing[i] = temp;
+                    }
+                }
+            }
+
+
 
             //可解决当listViewItem为Null时，无法滚动至底部的问题
             for (int i = 0; i < Temp_MRC_Bing.Length; i++)
@@ -749,6 +814,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                 }
             }
 
+
             count += 14;//前后需要3，3行空行
             string[] Temp_MRC_Bing = new string[count];
 
@@ -763,6 +829,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                 }
             }
 
+            
             //可解决当listViewItem为Null时，无法滚动至底部的问题
             for (int i = 0; i < Temp_MRC_Bing.Length; i++)
             {
@@ -859,5 +926,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
         }
 
         #endregion
+
+
     }
 }

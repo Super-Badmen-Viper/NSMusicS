@@ -20,7 +20,6 @@ using WinInterop = System.Windows.Interop;//最大化显示任务栏
 using System.Runtime.InteropServices;
 using System.IO;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info;
-using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.WAVReader;
 using System.Windows.Media.Animation;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hover_MRC_Panel;
 using System.Windows.Media.Effects;
@@ -29,6 +28,12 @@ using System.Collections;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Left_MyMusic_UserControls;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls;
 using System.Globalization;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using NAudio.Wave;
+using NAudio.Dsp;
+using VisioForge.MediaFramework.NAudio.VisioForge;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main.UserControls;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 {
@@ -42,7 +47,14 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             InitializeComponent();
             
             init();
+
+
+            Once_Animation();
+
+            Init_Spectrum_Visualization();
         }
+
+        
 
         #region 初始化
         /// <summary>
@@ -297,7 +309,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// <param name="e"></param>
         private void Button_Exit_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();//关闭
+            Application.Current.Shutdown(-1);//关闭
         }
 
         #region 窗口最大化，显示任务栏
@@ -583,6 +595,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             dispatcherTimer_Silder = new DispatcherTimer();
             dispatcherTimer_Silder.Tick += new EventHandler(DispatcherTimer_Silder_Tick); // 超过计时器间隔时发生，时间轴向前走1秒       
             dispatcherTimer_Silder.Interval = TimeSpan.FromMilliseconds(100); // 间隔1秒
+            dispatcherTimer_Silder.Start();
 
             //初始化桌面歌词
             DispatcherTimer_MRC = new DispatcherTimer();
@@ -792,6 +805,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Love;
 
                 }
+
+                listView_Item_Bing_ALL.listView_SongList.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Love;
                 bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_Love_Clear = true;
                 bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name = "listView_Item_Bing_ALL.listView_Temp_Info_End_Love";
                 userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Visible;
@@ -827,6 +842,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL;
 
                 }
+
+                listView_Item_Bing_ALL.listView_SongList.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL;
                 bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_ALL_Clear = true;
                 bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name = "listView_Item_Bing_ALL.listView_Temp_Info_End_ALL";
                 userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
@@ -836,8 +853,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 Grid_Animation_MouseLeftClick();/// 窗体进入动画
             }
         }
-
-
         private void UserControl_ButtonFrame_MusicRecentlyPlayed_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (listView_Item_Bing_ALL.listView_Temp_Info_End_Auto != null)
@@ -861,7 +876,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     }
                     userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
 
-                }               
+                }
+
+                listView_Item_Bing_ALL.listView_SongList.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
                 bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_Auto_Clear = true;
                 bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name = "listView_Item_Bing_ALL.listView_Temp_Info_End_Auto";
                 userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
@@ -871,7 +888,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 Grid_Animation_MouseLeftClick();/// 窗体进入动画
             }
         }
-
         private void UserControl_ButtonFrame_MusicTryListenList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen != null)
@@ -894,8 +910,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen.ElementAt(i).Song_No = i + 1;
                     }
                     userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
-
                 }
+
+                listView_Item_Bing_ALL.listView_SongList.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
                 bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_TryListen_Clear = true;
                 bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name = "listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen";
                 userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
@@ -940,6 +957,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_ButtonFrame_MusicPlayer.Grid_MusicPlayer_MainWindow_Right.Visibility = Visibility.Hidden;
                 userControl_ButtonFrame_MusicPlayer.Grid_MusicPlayer_Main_Left.Visibility = Visibility.Visible;
                 userControl_ButtonFrame_MusicPlayer.Grid_MusicPlayer_Main_Right.Visibility = Visibility.Visible;
+                userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.Visibility = Visibility.Visible;
 
                 if (Int_Button_WMP_Song_Order == 0)
                     userControl_ButtonFrame_MusicPlayer.Button_Music_Order.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/顺序播放 (1).png")));
@@ -1000,6 +1018,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_ButtonFrame_MusicPlayer.Grid_MusicPlayer_MainWindow_Right.Visibility = Visibility.Visible;
                 userControl_ButtonFrame_MusicPlayer.Grid_MusicPlayer_Main_Left.Visibility = Visibility.Hidden;
                 userControl_ButtonFrame_MusicPlayer.Grid_MusicPlayer_Main_Right.Visibility = Visibility.Hidden;
+                userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.Visibility = Visibility.Hidden;
 
                 if (Int_Button_WMP_Song_Order == 0)
                     userControl_ButtonFrame_MusicPlayer.Button_Music_Order.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/顺序播放.png")));
@@ -1044,6 +1063,32 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Effect = blurEffect;
 
             musicPlayer_Main_UserControl.ListView_Temp_MRC.Visibility = Visibility.Visible;
+        }
+
+        
+
+        #endregion
+        #region MusicPlayer_Buttom控件按键操作  
+
+        /// <summary>
+        /// 桌面歌词
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Button_Window_Hover_MRC_Panel(object sender, EventArgs e)
+        {
+            if (!window_Hover_MRC_Panel.Bool_Open_MRC_Panel)
+            {
+                window_Hover_MRC_Panel.Show();
+
+                window_Hover_MRC_Panel.Bool_Open_MRC_Panel = true;
+            }
+            else
+            {
+                window_Hover_MRC_Panel.Hide();
+
+                window_Hover_MRC_Panel.Bool_Open_MRC_Panel = false;
+            }
         }
 
         /// <summary>
@@ -1123,11 +1168,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         }
         public void Open_Singer_Image_Animation()
         {
-            //如果位于主界面
-            //if (musicPlayer_Main_UserControl.Height == 0)                   
             Change_Image_Singer();//切换歌手图片
-            /*else                  
-                Change_Image_Singer_FrmMain_OnePhoto();//生成歌手图片切换——仅主页模式*/
 
             userControl_ButtonFrame_MusicPlayer.Button_Singer_Image_Animation_Image.Source = new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/开关-开 (1).png"));
             Bool_Button_Singer_Image_Animation = true;
@@ -1153,30 +1194,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
 
 
-        #endregion
-        #region MusicPlayer_Buttom控件按键操作  
-
-        /// <summary>
-        /// 桌面歌词
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void Button_Window_Hover_MRC_Panel(object sender, EventArgs e)
-        {
-            if (!window_Hover_MRC_Panel.Bool_Open_MRC_Panel)
-            {
-                window_Hover_MRC_Panel.Show();
-
-                window_Hover_MRC_Panel.Bool_Open_MRC_Panel = true;
-            }
-            else
-            {
-                window_Hover_MRC_Panel.Hide();
-
-                window_Hover_MRC_Panel.Bool_Open_MRC_Panel = false;
-            }
-        }
-
 
         /// <summary>
         /// 播放/暂停
@@ -1192,8 +1209,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                 MediaElement_Song.Play();
                 MediaElement_Song.LoadedBehavior = MediaState.Play;
-
-                dispatcherTimer_Silder.Start();
+                dispatcherTimer_Spectrum_Visualization.Start();
+                musicPlayer_Main_UserControl.Image_Song_Storyboard.Resume();
 
                 if (myTextBlock_Storyboard != null)
                 {
@@ -1204,6 +1221,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         window_Hover_MRC_Panel.Text_Storyboard_slider_Down.Resume();
                     }
                 }
+
+                //为元素设置BeginAnimation方法。
+                musicPlayer_Main_UserControl.Storyboard_BeginMusic_Jukebox_Open.Begin();
             }
             else
             {
@@ -1212,8 +1232,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                 MediaElement_Song.Pause();
                 MediaElement_Song.LoadedBehavior = MediaState.Pause;
-
-                dispatcherTimer_Silder.Stop();
+                dispatcherTimer_Spectrum_Visualization.Stop();
+                musicPlayer_Main_UserControl.Image_Song_Storyboard.Pause();
 
                 if (myTextBlock_Storyboard != null)
                 {
@@ -1225,6 +1245,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         window_Hover_MRC_Panel.Text_Storyboard_slider_Down.Pause();
                     }
                 }
+
+                //为元素设置BeginAnimation方法。
+                musicPlayer_Main_UserControl.Storyboard_BeginMusic_Jukebox_Close.Begin();
             }
         }
         /// <summary>
@@ -1385,8 +1408,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             test2 = MediaElement_Song.NaturalDuration.TimeSpan;
 
-            dispatcherTimer_Silder.Start();
-
             //是否开启歌手写真轮播
             if (Bool_Button_Singer_Image_Animation)
             {
@@ -1413,15 +1434,20 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
                 test.Stretch = Stretch.UniformToFill;
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
-                BgSwitch(Singer_Image_Url);
             }
+
+            musicPlayer_Main_UserControl.Image_Song_Storyboard.Begin();
+
+            //为元素设置BeginAnimation方法。
+            musicPlayer_Main_UserControl.Storyboard_BeginMusic_Jukebox_Open.Begin();
         }
 
         private void MediaElement_Song_MediaEnded(object sender, RoutedEventArgs e)
         {
-            dispatcherTimer_Silder.Stop();
-
             WMP_Song_Play_Ids_UP_DOWN = 1;
+
+            userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Value = 0;
+            userControl_ButtonFrame_MusicPlayer.Silder_Music_Temp_Width.Value = 0;
 
             if (WMP_Song_Order == 1)
             {
@@ -1434,6 +1460,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 Change_MediaElement_Song_id_incrse();
                 Change_MediaElement_Source();
             }
+
+            //为元素设置BeginAnimation方法。
+            musicPlayer_Main_UserControl.Storyboard_BeginMusic_Jukebox_Close.Begin();
         }
 
         #endregion
@@ -1526,7 +1555,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
         }
         #endregion
-
         
         #region 音乐播放
 
@@ -1618,6 +1646,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 //指定播放路径
                 MediaElement_Song.Source = new Uri(path);
                 Song_Url = MediaElement_Song.Source.ToString();
+                if (dispatcherTimer_Spectrum_Visualization != null)
+                {
+                    //userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.Take_Spectrum_Visualization(Song_Url);
+                    dispatcherTimer_Spectrum_Visualization.Start();
+                }
 
                 //保存当前正在播放的歌曲信息
                 //Song_No = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Song_No;
@@ -1762,7 +1795,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //创建获取 歌词数组信息输出类 
             dao_ListBox_Temp_MRC = new Dao_ListBox_Temp_MRC();
             //设置要分析的歌词文件（mrc）路径
-            string MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".mrc";
+            string MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".krc";
+            string CRC_URL = MRC_URL.Replace("Mrc", "Crc"); CRC_URL = CRC_URL.Replace("krc", "crc");
 
             try
             {
@@ -1780,7 +1814,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                         //读取不到的动画，需要往后增加读取不到的行数，防止动画不对应
                         int count = 0;
-                        count = dao_ListBox_Temp_MRC.Return_ListBox_Temp_MRC_Bing().Length - dao_ListBox_Temp_MRC.MRC_Line_Info.Length - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums * 2;
+                        count = dao_ListBox_Temp_MRC.Return_ListBox_Temp_MRC_Bing(CRC_URL).Length - dao_ListBox_Temp_MRC.MRC_Line_Info.Length - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums * 2;
                         dao_ListBox_Temp_MRC.LRC_Text_Null_Nums += count;
                     }
                     catch (Exception ex)
@@ -1791,8 +1825,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     
 
                     //传递歌词数组，将listview的数据源绑定至 分析完成的在Dao_ListBox_Temp_MRC内存储的歌词数组信息
-                    musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemsSource = dao_ListBox_Temp_MRC.Return_ListBox_Temp_MRC_Bing();
-                    musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.ItemsSource = dao_ListBox_Temp_MRC.Return_ListBox_Temp_MRC_Bing();
+                    musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemsSource = dao_ListBox_Temp_MRC.Return_ListBox_Temp_MRC_Bing(CRC_URL);
+                    musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.ItemsSource = dao_ListBox_Temp_MRC.Return_ListBox_Temp_MRC_Bing(null);
                     
                     //获取当前歌词文件文本的   歌词内容数组和歌词时间数组
                     //获取分析完成的在 Dao_ListBox_Temp_MRC 内存储的 歌词文件文本歌词内容Text的集合
@@ -1882,7 +1916,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         #region 歌词行同步动画
         DispatcherTimer DispatcherTimer_MRC;
         TimeSpan MRC_Span;
-        int MRC_Line_Nums = 2;
+        int MRC_Line_Nums = 1;
 
         ListBoxItem myListBoxItem;
         ContentPresenter myContentPresenter;
@@ -1933,10 +1967,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                 (ListBoxItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex));
                             if (myListBoxItem != null)
                             {
+                                //查找并获取ListView选中项中的对象
                                 myContentPresenter = FindVisualChild<ContentPresenter>(myListBoxItem);
                                 myDataTemplate = myContentPresenter.ContentTemplate;
-
-                                //myDataTemplate.Triggers.
                                 myTextBlock_Storyboard = (Storyboard)myDataTemplate.FindName("Text_Storyboard", myContentPresenter);
                                 myTextBlock_TextBlock = (TextBlock)myDataTemplate.FindName("Text_TextBlock", myContentPresenter);
                                 myTextBlock_DoubleAnimationUsingKeyFrames = (DoubleAnimationUsingKeyFrames)myDataTemplate.FindName("Text_DoubleAnimationUsingKeyFrames", myContentPresenter);
@@ -1944,14 +1977,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                                 //初始动画位置，-0.5为左边的原点，长度为1
                                 double X = -0.5;
-                                TimeSpan KeyTime = new TimeSpan(0, 0, 0, 0, 0);
-                                //用来递增的动画位置
-                                double values = Convert.ToDouble(1.0 / 
-                                    dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                    .Int_MoreByte_Nums);
 
-
-                                //添加每个字符的物理长度
+                                //每个字符的物理长度
                                 ArrayList Values_temp = new ArrayList();
                                 //每个字符相加_>的总长度
                                 double Sum_Values_temp = 0;
@@ -1960,59 +1987,170 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                 {
                                     double temp_double = Convert.ToDouble(MeasureString(dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
                                     .Array_Morebyte_Text[i].ToString()));
-                                    Sum_Values_temp += temp_double;
-                                    Values_temp.Add(temp_double);
+                                    Sum_Values_temp += temp_double;//每个字符相加_>的总长度
+                                    Values_temp.Add(temp_double);//每个字符的物理长度
                                 }
-                                //获取歌词字符统一间距——常数
-                                double ALL_Byte_Width = Convert.ToDouble(1.0 / Sum_Values_temp);
+
+                                //状态，是否停顿
+                                bool null_time = false;
+                                //获取歌词字符统一间距的比率
+                                double ALL_Byte_Width = Math.Round(Convert.ToDouble(1.0 / Sum_Values_temp),6);
                                 //获取每个字符同步时动画所移动的距离
                                 ArrayList ALL_Byte_Values = new ArrayList();
                                 for (int i = 0; i < dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
                                     .Int_MoreByte_Nums; i++)
                                 {
+                                    int temp_BeginTime = Convert.ToInt16(
+                                        dao_ListBox_Temp_MRC.MRC_Line_Info
+                                            [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                    .Array_Morebyte_BeginTime[i]);//此字符开始时间
+                                    int temp_Duration = Convert.ToInt16(
+                                        dao_ListBox_Temp_MRC.MRC_Line_Info
+                                            [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                    .Array_Morebyte_Duration[i]);//此字符持续时间
+
+                                    if (null_time == true)
+                                    {
+                                        ALL_Byte_Values.Add(0);
+                                        null_time = false;
+                                    }
+
+                                    //判别动画是否有停顿
+                                    if (i != dao_ListBox_Temp_MRC.MRC_Line_Info
+                                        [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                            - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                                .Int_MoreByte_Nums - 1//if  i != Array_Morebyte_BeginTime的最后一位（防止数组越界）
+                                        &&
+                                        temp_BeginTime + temp_Duration !=  //if  此动画的开始时间+持续时间 != 下一段动画的开始时间
+                                        Convert.ToInt16(dao_ListBox_Temp_MRC.MRC_Line_Info
+                                            [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                                    .Array_Morebyte_BeginTime[i + 1]))//if 动画时间 中间有 空白时间（动画停顿）
+                                    {
+                                        null_time = true;
+                                    }
+
+                                    //将字符相加_>的总长度缩小为1
+                                    //同时各字符的长度 按相对应的比率 缩小，使之相加为1
+                                    //得到了每个字符同步时动画所移动的距离
                                     ALL_Byte_Values.Add(Convert.ToDouble(Values_temp[i]) * ALL_Byte_Width);
                                 }
 
-
-                                ArrayList temp_nums = new ArrayList();
-                                ArrayList line_nums = new ArrayList();
+                                //                        
                                 ArrayList timeSpan_nums = new ArrayList();
-                                int temp_TimeSpan = 0;
-                                int temp_BeginTime = 0;
-                                int temp_Duration = 0;
-                                for (int i = 0; i < dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].Int_MoreByte_Nums; i++)
+                              
+                                int temp_null_time = 0;
+                                for (int i = 0; 
+                                    i < dao_ListBox_Temp_MRC.MRC_Line_Info
+                                        [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex 
+                                            - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                                .Int_MoreByte_Nums; //歌词字符总数
+                                    i++)
                                 {
-                                    temp_BeginTime = Convert.ToInt16(
-                                        dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                    .Array_Morebyte_BeginTime[i]);
-                                    temp_Duration = Convert.ToInt16(
-                                        dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                    .Array_Morebyte_Duration[i]);                                  
+                                    int temp_BeginTime = Convert.ToInt16(
+                                        dao_ListBox_Temp_MRC.MRC_Line_Info
+                                            [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex 
+                                                - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                    .Array_Morebyte_BeginTime[i]);//此字符开始时间
+                                    int temp_Duration = Convert.ToInt16(
+                                        dao_ListBox_Temp_MRC.MRC_Line_Info
+                                            [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex 
+                                                - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                    .Array_Morebyte_Duration[i]);//此字符持续时间                     
 
-                                    temp_TimeSpan = temp_BeginTime + temp_Duration;
-                                    timeSpan_nums.Add(temp_TimeSpan);
+                                    if (null_time == true)
+                                    {
+                                        timeSpan_nums.Add(":" + temp_null_time);// : 作为动画停顿标记
+                                        null_time = false;
+                                    }                
+                                    //判别动画是否有停顿
+                                    if (i != dao_ListBox_Temp_MRC.MRC_Line_Info
+                                        [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                            - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                                .Int_MoreByte_Nums - 1//if  i != Array_Morebyte_BeginTime的最后一位（防止数组越界）
+                                        && 
+                                        temp_BeginTime + temp_Duration != //if  此动画的开始时间+持续时间 != 下一段动画的开始时间
+                                        Convert.ToInt16(dao_ListBox_Temp_MRC.MRC_Line_Info
+                                            [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                                    .Array_Morebyte_BeginTime[i+1]))//if 动画时间 中间有 空白时间（动画停顿）
+                                    {
+                                        temp_null_time = //求出此停顿动画的序列时间，并插入至动画序列timeSpan_nums
+                                            Convert.ToInt16(
+                                                dao_ListBox_Temp_MRC.MRC_Line_Info
+                                                    [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                        - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                                    .Array_Morebyte_BeginTime[i + 1]
+                                                    )
+                                             - 
+                                            (temp_BeginTime + temp_Duration);//动画停顿的时间
+
+                                        null_time = true;
+                                    }
+
+                                    timeSpan_nums.Add(temp_BeginTime + temp_Duration);//求字符总动画时间->毫秒数字
                                 }
+                                ArrayList temp_nums = new ArrayList();//字符动画，timeSpan的Duration秒数
+                                ArrayList line_nums = new ArrayList();//字符动画，timeSpan的Duration毫秒数
                                 for (int i = 0; i < timeSpan_nums.Count; i++)
                                 {
-                                    int temp_seconds = Convert.ToInt16(timeSpan_nums[i]) / 1000;
-                                    int temp_milliseconds = Convert.ToInt16(timeSpan_nums[i].ToString()
-                                        .Substring(timeSpan_nums[i].ToString().Trim().Length - 3,3));
-                                    line_nums.Add(temp_seconds);
-                                    temp_nums.Add(temp_milliseconds);
+                                    try
+                                    {
+                                        if (timeSpan_nums[i].ToString().IndexOf(":") < 0)
+                                        {
+                                            int temp_seconds = Convert.ToInt16(timeSpan_nums[i]) / 1000;
+                                            int temp_milliseconds = Convert.ToInt16(timeSpan_nums[i].ToString()
+                                                .Substring(timeSpan_nums[i].ToString().Trim().Length - 3, 3));
+                                            line_nums.Add(temp_seconds);//求动画秒数
+                                            temp_nums.Add(temp_milliseconds);//求动画毫秒数
+                                        }
+                                        else//此动画需要停顿
+                                        {
+                                            //i+1；将停顿动画时间 设置为下一个下标的 Begion时间
+                                            int temp_seconds = Convert.ToInt16(timeSpan_nums[i + 1]) / 1000;
+                                            int temp_milliseconds = Convert.ToInt16(timeSpan_nums[i + 1].ToString()
+                                                .Substring(timeSpan_nums[i + 1].ToString().Trim().Length - 3, 3));
+                                            line_nums.Add(temp_seconds);//求动画秒数
+                                            temp_nums.Add(temp_milliseconds);//求动画毫秒数
+                                        }
+                                    }
+                                    catch { }
                                 }
+
+                                myTextBlock_DoubleAnimationUsingKeyFrames.KeyFrames.Clear();
                                 for (int i = 0; i < timeSpan_nums.Count; i++)
                                 {
                                     linearDoubleKeyFrame = new LinearDoubleKeyFrame();
-                                    X += Convert.ToDouble(ALL_Byte_Values[i]);//固定的区间内，动画该持续的时间
-                                    if (i != dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].Int_MoreByte_Nums - 1)
+
+                                    if (timeSpan_nums[i].ToString().IndexOf(":") < 0)
+                                    {
+                                        //设置动画的X轴距离
+                                        X += Convert.ToDouble(ALL_Byte_Values[i].ToString());//固定的区间内，动画该持续的时间
+                                        //科学计数法转换，防止出现科学计数法
+                                        X = Convert.ToDouble(ChangeToDecimal(X.ToString()));
+
+                                        if (i != dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].Int_MoreByte_Nums - 1)
+                                            linearDoubleKeyFrame.Value = X;
+                                        else
+                                            linearDoubleKeyFrame.Value = 0.5;
+                                        //设置动画完成所需的时间
+                                        linearDoubleKeyFrame.KeyTime = new TimeSpan(0, 0, 0,
+                                            Convert.ToInt16(line_nums[i]), Convert.ToInt16(temp_nums[i]));
+                                    }
+                                    else//此动画需要停顿
+                                    {
                                         linearDoubleKeyFrame.Value = X;
-                                    else
-                                        linearDoubleKeyFrame.Value = 0.5;
-                                    linearDoubleKeyFrame.KeyTime = new TimeSpan(0, 0, 0,
-                                        Convert.ToInt16(line_nums[i]), Convert.ToInt16(temp_nums[i]));
+                                        //设置动画完成所需的时间
+                                        linearDoubleKeyFrame.KeyTime = new TimeSpan(0, 0, 0,
+                                            Convert.ToInt16(line_nums[i]), Convert.ToInt16(temp_nums[i]));
+                                    }
+                                    //添加至DoubleAnimationUsingKeyFrames
                                     myTextBlock_DoubleAnimationUsingKeyFrames.KeyFrames.Add(linearDoubleKeyFrame);
                                 }
 
+                                //开启动画                              
                                 thread_myTextBlock_Storyboard = new Thread(new ThreadStart(() =>{
                                     Dispatcher.BeginInvoke(new Action(delegate (){
                                         myTextBlock_Storyboard.Begin();
@@ -2060,6 +2198,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 }
             }
         }
+        /// <summary>
+        /// 查找元素
+        /// </summary>
+        /// <typeparam name="childItem"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         private childItem FindVisualChild<childItem>(DependencyObject obj)
             where childItem : DependencyObject
         {
@@ -2079,6 +2223,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             }
             return null;       
         }
+        /// <summary>
+        /// 获取字符宽度width
+        /// </summary>
         TextBlock textBlock_Mrc_Byte_Width = new TextBlock();
         private double MeasureString(string candidate)
         {
@@ -2096,6 +2243,32 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 1);
             Size size = new Size(formattedText.Width, formattedText.Height);
             return size.Width;
+        }
+        /// <summary>
+        /// 数字科学计数法处理
+        /// </summary>
+        /// <param name="strData"></param>
+        /// <returns></returns>
+        private Decimal ChangeToDecimal(string strData)
+        {
+            Decimal dData = 0.0M;
+            if (strData.Contains("E"))
+            {
+                dData = Convert.ToDecimal(Decimal.Parse(strData.ToString(), System.Globalization.NumberStyles.Float));
+            }
+            else
+            {
+                dData = Convert.ToDecimal(strData);
+            }
+            return Math.Round(dData, 7);
+        }
+
+        
+
+        void textbox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            TextBox box = (TextBox)sender;
+            e.Handled = box.Text.Length > 5;
         }
 
         #endregion
@@ -2171,7 +2344,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                         window_Hover_MRC_Panel.TextBlock_1.Text = ListBox_MRC_Song_MRC_Text[i];
                                         window_Hover_MRC_Panel.TextBlock_2.Text = ListBox_MRC_Song_MRC_Text[i + 1];
                                     }
-
                                     break;
                                 }
                             }
@@ -2290,6 +2462,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 if (File.Exists(Song_Image_Url))
                 {
                     musicPlayer_Main_UserControl.Image_Song.Source = new BitmapImage(new Uri(Song_Image_Url));
+                    musicPlayer_Main_UserControl.Image_Song.Stretch = Stretch.UniformToFill;
                     musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(new BitmapImage(new Uri(Song_Image_Url)));
                     musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
                     musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
@@ -2311,6 +2484,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         if (File.Exists(Song_Image_Url))
                         {
                             musicPlayer_Main_UserControl.Image_Song.Source = new BitmapImage(new Uri(Song_Image_Url));
+                            musicPlayer_Main_UserControl.Image_Song.Stretch = Stretch.UniformToFill;
                             musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(new BitmapImage(new Uri(Song_Image_Url)));
                             musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
                             musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
@@ -2328,6 +2502,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                             if (File.Exists(Song_Image_Url))
                             {
                                 musicPlayer_Main_UserControl.Image_Song.Source = new BitmapImage(new Uri(Song_Image_Url));
+                                musicPlayer_Main_UserControl.Image_Song.Stretch = Stretch.UniformToFill;
                                 musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(new BitmapImage(new Uri(Song_Image_Url)));
                                 musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
                                 musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
@@ -2337,6 +2512,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                             else
                             {
                                 musicPlayer_Main_UserControl.Image_Song.Source = Image_墨智音乐;
+                                musicPlayer_Main_UserControl.Image_Song.Stretch = Stretch.UniformToFill;
                                 musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(Image_墨智音乐);
                                 musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
                                 musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
@@ -2374,6 +2550,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     if (File.Exists(Song_Image_Url))
                     {
                         musicPlayer_Main_UserControl.Image_Song.Source = new BitmapImage(new Uri(Song_Image_Url));
+                        musicPlayer_Main_UserControl.Image_Song.Stretch = Stretch.UniformToFill;
                         musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(new BitmapImage(new Uri(Song_Image_Url)));
                         musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
                         musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
@@ -2391,6 +2568,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         if (File.Exists(Song_Image_Url))
                         {
                             musicPlayer_Main_UserControl.Image_Song.Source = new BitmapImage(new Uri(Song_Image_Url));
+                            musicPlayer_Main_UserControl.Image_Song.Stretch = Stretch.UniformToFill;
                             musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(new BitmapImage(new Uri(Song_Image_Url)));
                             musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
                             musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
@@ -2400,6 +2578,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         else
                         {
                             musicPlayer_Main_UserControl.Image_Song.Source = Image_墨智音乐;
+                            musicPlayer_Main_UserControl.Image_Song.Stretch = Stretch.UniformToFill;
                             musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(Image_墨智音乐);
                             musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
                             musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
@@ -2443,8 +2622,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
                         test.Stretch = Stretch.UniformToFill;
                         musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
-                        BgSwitch(Singer_Image_Url);
-                        
+                        BgSwitch(Singer_Image_Url);  
                     }
                     else
                     {
@@ -2468,7 +2646,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                 ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
                                 test.Stretch = Stretch.UniformToFill;
                                 musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
-                                
+                                BgSwitch(Singer_Image_Url);
                             }
                         }
                         else
@@ -2477,19 +2655,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                             ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
                             test.Stretch = Stretch.UniformToFill;
                             musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
-                            
+                            BgSwitch(Singer_Image_Url);
                         }
-
-
                     }
 
                     if (Bool_Windows_Wallpaper == true)
-                    {
                         Change_Windows_Background();//切换桌面写真
-                    }
-                    
-
-
                 }
             }
         }
@@ -2576,7 +2747,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
                         BgSwitch(Singer_Image_Url);
 
-
                         //清空歌手图片轮播信息
                         //周杰伦、梁心颐、杨瑞代
                         temp = null;
@@ -2612,6 +2782,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                         Bool_Timer_Singer_Photo_1 = true;
                         Bool_Timer_Singer_Photo_1_lot = false;
+
+                        SongBegin_OnceAnimation();
                     }
                     else if (Singer_Name_Temp_Nums == 2)
                     {
@@ -2628,6 +2800,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                         Bool_Timer_Singer_Photo_1 = false;
                         Bool_Timer_Singer_Photo_1_lot = true;
+
+                        SongBegin_OnceAnimation();
                     }
 
                 }
@@ -2649,9 +2823,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     Singer_Image_Name = Singer_Image_Name.Substring(Singer_Image_Name.IndexOf("、") + 1);
                 }
                 else
-                {
                     break;
-                }
             }
 
             return nums;//歌手的数量
@@ -2679,13 +2851,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
 
             for (int i = 0; i < singer_nums; i++)
-            {
                 if (temp[i] == null)
-                {
                     temp[i] = Singer_Name.Trim();
-                }
-            }
-
 
             List_Singer_Names = new string[singer_nums];
 
@@ -2705,12 +2872,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                 string tempstring = temp[i + 1].Substring(temp[i].IndexOf("、") + 1);
                                 //清除所有字符前一位的
                                 for (int j = i + 1; j < List_Singer_Names.Length; j++)
-                                {
                                     if (temp[j] != null)
-                                    {
                                         temp[j] = tempstring;
-                                    }
-                                }
                             }
                         }
                         else
@@ -2739,18 +2902,14 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     BgSwitch(Singer_Image_Url);
 
                     if (List_Singer_Names.Length - 1 == 0)
-                    {
                         singer_times = 0;
-                    }
                     else
                     {
                         singer_times = 1;
-
                         singer_photo_nums_More[0] = 1;
                     }
 
                     singer_photo_nums = 1;
-
                     Start_Singer_Photo_Change_Timer();
                 }
                 else
@@ -2760,7 +2919,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
                     test.Stretch = Stretch.UniformToFill;
                     musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
-                    
+                    BgSwitch(Singer_Image_Url);
                 }
             }
             catch(Exception ex) {
@@ -2770,7 +2929,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
                 test.Stretch = Stretch.UniformToFill;
                 musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
-                
+                BgSwitch(Singer_Image_Url);
             }
         }
 
@@ -2799,6 +2958,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 Bool_Timer_Singer_Photo_1_lot = false;
 
                 Singer_Name_Temp_Nums = 1;
+
+                SongBegin_OnceAnimation();
             }
             else
             {
@@ -2816,6 +2977,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 Bool_Timer_Singer_Photo_1_lot = true;
 
                 Singer_Name_Temp_Nums = 2;
+
+                SongBegin_OnceAnimation();
             }
         }
 
@@ -2830,9 +2993,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             {
                 Singer_Image_Url = Path_App + @"\Singer_Image\" + singer_photo[i] + @"\" + singer_name + @".jpg";
                 if (File.Exists(Singer_Image_Url))
-                {
                     Singer_Photo_Nums[singer_index]++;
-                }
             }
         }
 
@@ -2873,20 +3034,14 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     }));
                     thread_timer_Singer_Photo_One_Lot.Start();
                     if (Bool_Windows_Wallpaper == true)
-                    {
                         Change_Windows_Background();//切换桌面写真
-                    }
 
                     singer_times++;
                     singer_photo_nums++;
                     if (singer_times > List_Singer_Names_nums)
-                    {
                         singer_times = 0;
-                    }
                     if (singer_photo_nums > singer_photo.Length - 1)
-                    {
                         singer_photo_nums = 0;
-                    }
                 }
                 else
                 {
@@ -2932,8 +3087,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     {
                         ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
                         test.Stretch = Stretch.UniformToFill;
-                        musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
-                        
+                        musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;                   
                         BgSwitch(Singer_Image_Url);
                         thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
                         {
@@ -2944,31 +3098,21 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         }));
                         thread_timer_Singer_Photo_One_Lot.Start();
                         if (Bool_Windows_Wallpaper == true)
-                        {
                             Change_Windows_Background();//切换桌面写真
-                        }
 
                         //超过当前文件夹序号
                         if (singer_photo_nums_More[singer_times] > Singer_Photo_Nums[singer_times] - 2)
-                        {
                             singer_photo_nums_More[singer_times] = 0;
-                        }
                         else
-                        {
                             singer_photo_nums_More[singer_times]++;
-                        }
 
                         //歌手名下标变化
                         singer_times++;
                         if (singer_times > List_Singer_Names_nums)
-                        {
                             singer_times = 0;
-                        }
                     }
                     else
-                    {
                         timer_Singer_Photo_One_Lot.Stop();
-                    }
                 }
                 else if (Singer_Photo_Nums[singer_times] == 1)
                 {
@@ -2984,8 +3128,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
                         test.Stretch = Stretch.UniformToFill;
                         musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
-                        
                         BgSwitch(Singer_Image_Url);
+
                         thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
                         {
                             Dispatcher.BeginInvoke(new Action(delegate ()
@@ -2995,155 +3139,120 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         }));
                         thread_timer_Singer_Photo_One_Lot.Start();
                         if (Bool_Windows_Wallpaper == true)
-                        {
                             Change_Windows_Background();//切换桌面写真
-                        }
 
                         singer_times++;
                         singer_photo_nums++;
                         if (singer_times > List_Singer_Names_nums)
-                        {
                             singer_times = 0;
-                        }
                         if (singer_photo_nums > singer_photo.Length - 1)
-                        {
                             singer_photo_nums = 0;
-                        }
                     }
                     else
                     {
                         timer_Singer_Photo_One_Lot.Stop();
                     }
                 }
-                else //如果该歌手没有图片
-                if (Singer_Photo_Nums[singer_times] == 0)
+                else
                 {
-                    List_Singer_Names_nums -= 1;
+                    //如果该歌手没有图片
+                    if (Singer_Photo_Nums[singer_times] == 0)
+                    {
+                        List_Singer_Names_nums -= 1;
 
-                    //从歌手图片切换列表中清除该歌手
-                    int[] temp_nums = new int[Singer_Photo_Nums.Length - 1];
-                    for (int i = 0; i < Singer_Photo_Nums.Length; i++)
-                    {
-                        if (Singer_Photo_Nums[i] != 0)
-                        {
-                            if (temp_nums[i] == 0)
-                            {
-                                temp_nums[i] = Singer_Photo_Nums[i];
-                            }
-                        }
-                    }
-                    Singer_Photo_Nums = new int[temp_nums.Length];
-                    for (int i = 0; i < Singer_Photo_Nums.Length; i++)
-                    {
-                        if (temp_nums[i] != 0)
-                        {
-                            if (Singer_Photo_Nums[i] == 0)
-                            {
-                                Singer_Photo_Nums[i] = temp_nums[i];
-                            }
-                        }
-                    }
-                    //歌手名下标变化
-                    singer_times++;
-                    singer_photo_nums++;
-                    if (singer_times > List_Singer_Names_nums)
-                    {
-                        singer_times = 0;
-                    }
-                    if (singer_photo_nums > singer_photo.Length - 1)
-                    {
-                        singer_photo_nums = 0;
-                    }
+                        //从歌手图片切换列表中清除该歌手
+                        int[] temp_nums = new int[Singer_Photo_Nums.Length - 1];
+                        for (int i = 0; i < Singer_Photo_Nums.Length; i++)
+                            if (Singer_Photo_Nums[i] != 0)
+                                if (temp_nums[i] == 0)
+                                    temp_nums[i] = Singer_Photo_Nums[i];
 
-                    //如果该歌手图片数量超过1张
-                    if (Singer_Photo_Nums[singer_times] > 1)
-                    {
-                        Singer_Image_Url = Path_App + @"\Singer_Image\" + singer_photo[singer_photo_nums_More[singer_times]] + @"\" + List_Singer_Names[singer_times] + @".jpg";
-                        if (File.Exists(Singer_Image_Url))
+                        Singer_Photo_Nums = new int[temp_nums.Length];
+                        for (int i = 0; i < Singer_Photo_Nums.Length; i++)
+                            if (temp_nums[i] != 0)
+                                if (Singer_Photo_Nums[i] == 0)
+                                    Singer_Photo_Nums[i] = temp_nums[i];
+
+                        //歌手名下标变化
+                        singer_times++;
+                        singer_photo_nums++;
+                        if (singer_times > List_Singer_Names_nums)
+                            singer_times = 0;
+                        if (singer_photo_nums > singer_photo.Length - 1)
+                            singer_photo_nums = 0;
+
+                        //如果该歌手图片数量超过1张
+                        if (Singer_Photo_Nums[singer_times] > 1)
                         {
-                            ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                            test.Stretch = Stretch.UniformToFill;
-                            musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
-                            
-                            BgSwitch(Singer_Image_Url);
-                            thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
+                            Singer_Image_Url = Path_App + @"\Singer_Image\" + singer_photo[singer_photo_nums_More[singer_times]] + @"\" + List_Singer_Names[singer_times] + @".jpg";
+                            if (File.Exists(Singer_Image_Url))
                             {
-                                Dispatcher.BeginInvoke(new Action(delegate ()
+                                ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
+                                test.Stretch = Stretch.UniformToFill;
+                                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
+                                BgSwitch(Singer_Image_Url);
+
+                                thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
                                 {
-                                    bgstoryboard.Begin(musicPlayer_Main_UserControl.Grid_down_Singer_Photo);
+                                    Dispatcher.BeginInvoke(new Action(delegate ()
+                                    {
+                                        bgstoryboard.Begin(musicPlayer_Main_UserControl.Grid_down_Singer_Photo);
+                                    }));
                                 }));
-                            }));
-                            thread_timer_Singer_Photo_One_Lot.Start();
-                            if (Bool_Windows_Wallpaper == true)
-                            {
-                                Change_Windows_Background();//切换桌面写真
-                            }
+                                thread_timer_Singer_Photo_One_Lot.Start();
+                                if (Bool_Windows_Wallpaper == true)
+                                    Change_Windows_Background();//切换桌面写真
 
-                            //超过当前文件夹序号
-                            if (singer_photo_nums_More[singer_times] > Singer_Photo_Nums[singer_times] - 2)
-                            {
-                                singer_photo_nums_More[singer_times] = 0;
+                                //超过当前文件夹序号
+                                if (singer_photo_nums_More[singer_times] > Singer_Photo_Nums[singer_times] - 2)
+                                    singer_photo_nums_More[singer_times] = 0;
+                                else
+                                    singer_photo_nums_More[singer_times]++;
+
+                                //歌手名下标变化
+                                singer_times++;
+                                if (singer_times > List_Singer_Names_nums)
+                                    singer_times = 0;
                             }
                             else
-                            {
-                                singer_photo_nums_More[singer_times]++;
-                            }
-
-                            //歌手名下标变化
-                            singer_times++;
-                            if (singer_times > List_Singer_Names_nums)
-                            {
-                                singer_times = 0;
-                            }
+                                timer_Singer_Photo_One_Lot.Stop();
                         }
-                        else
+                        else if (Singer_Photo_Nums[singer_times] == 1)
                         {
-                            timer_Singer_Photo_One_Lot.Stop();
-                        }
-                    }
-                    else if (Singer_Photo_Nums[singer_times] == 1)
-                    {
-                        Singer_Image_Url = Path_App + @"\Singer_Image\" + singer_photo[singer_photo_nums] + @"\" + List_Singer_Names[singer_times] + @".jpg";
-                        if (!File.Exists(Singer_Image_Url))
-                        {
-                            singer_photo_nums = 0;
                             Singer_Image_Url = Path_App + @"\Singer_Image\" + singer_photo[singer_photo_nums] + @"\" + List_Singer_Names[singer_times] + @".jpg";
-                        }
-
-                        if (File.Exists(Singer_Image_Url))
-                        {
-                            ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
-                            test.Stretch = Stretch.UniformToFill;
-                            musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
-                            
-                            BgSwitch(Singer_Image_Url);
-                            thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
-                            {
-                                Dispatcher.BeginInvoke(new Action(delegate ()
-                                {
-                                    bgstoryboard.Begin(musicPlayer_Main_UserControl.Grid_down_Singer_Photo);
-                                }));
-                            }));
-                            thread_timer_Singer_Photo_One_Lot.Start();
-                            if (Bool_Windows_Wallpaper == true)
-                            {
-                                Change_Windows_Background();//切换桌面写真
-                            }
-
-                            singer_times++;
-                            singer_photo_nums++;
-                            if (singer_times > List_Singer_Names_nums)
-                            {
-                                singer_times = 0;
-                            }
-                            if (singer_photo_nums > singer_photo.Length - 1)
+                            if (!File.Exists(Singer_Image_Url))
                             {
                                 singer_photo_nums = 0;
+                                Singer_Image_Url = Path_App + @"\Singer_Image\" + singer_photo[singer_photo_nums] + @"\" + List_Singer_Names[singer_times] + @".jpg";
                             }
-                        }
-                        else
-                        {
-                            timer_Singer_Photo_One_Lot.Stop();
+
+                            if (File.Exists(Singer_Image_Url))
+                            {
+                                ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
+                                test.Stretch = Stretch.UniformToFill;
+                                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
+                                BgSwitch(Singer_Image_Url);
+
+                                thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
+                                {
+                                    Dispatcher.BeginInvoke(new Action(delegate ()
+                                    {
+                                        bgstoryboard.Begin(musicPlayer_Main_UserControl.Grid_down_Singer_Photo);
+                                    }));
+                                }));
+                                thread_timer_Singer_Photo_One_Lot.Start();
+                                if (Bool_Windows_Wallpaper == true)
+                                    Change_Windows_Background();//切换桌面写真
+
+                                singer_times++;
+                                singer_photo_nums++;
+                                if (singer_times > List_Singer_Names_nums)
+                                    singer_times = 0;
+                                if (singer_photo_nums > singer_photo.Length - 1)
+                                    singer_photo_nums = 0;
+                            }
+                            else
+                                timer_Singer_Photo_One_Lot.Stop();
                         }
                     }
                 }
@@ -3223,42 +3332,255 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             bgstoryboard.Children.Add(da2);
         }
 
+        DispatcherTimer once_animation;
+        DispatcherTimer once_animation_end;
+        int init_animation_bacnground;
+        ArrayList animation_image_url;
+        public void Once_Animation()
+        {
+            init_animation_bacnground = 0;
+            animation_image_url = new ArrayList
+            {
+                Path_App + @"\Button_Image_Ico\默认背景1 (1).jpg",
+                Path_App + @"\Button_Image_Ico\默认背景1 (2).jpg"
+            };
+
+            //初始化桌面歌词
+            once_animation = new DispatcherTimer();
+            once_animation.Tick += Once_animation_Tick;
+            once_animation.Interval = TimeSpan.FromMilliseconds(66); // 间隔1秒
+            once_animation.Start();
+
+            once_animation_end = new DispatcherTimer();
+            once_animation_end.Tick += Once_animation_end_Tick;
+            once_animation_end.Interval = TimeSpan.FromMilliseconds(88); // 间隔1秒
+            once_animation_end.Start();
+        }
+
+        private void Once_animation_end_Tick(object? sender, EventArgs e)
+        {
+            once_animation.Stop();
+            once_animation_end.Stop();
+        }
+        private void Once_animation_Tick(object? sender, EventArgs e)
+        {
+            string Singer_Image_Url = animation_image_url[init_animation_bacnground].ToString();
+
+            ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
+            test.Stretch = Stretch.UniformToFill;
+            musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
+            BgSwitch(Singer_Image_Url);
+            thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
+            {
+                Dispatcher.BeginInvoke(new Action(delegate ()
+                {
+                    bgstoryboard.Begin(musicPlayer_Main_UserControl.Grid_down_Singer_Photo);
+                }));
+            }));
+            thread_timer_Singer_Photo_One_Lot.Start();
+
+            init_animation_bacnground++;
+        }
+        bool bool_SongBegin_OnceAnimation = false;
+        /// <summary>
+        /// 启动一次动画，覆盖第一次歌手动画不启动的Bug，仅覆盖一次
+        /// </summary>
+        private void SongBegin_OnceAnimation()
+        {
+            if (bool_SongBegin_OnceAnimation == false)
+            {
+                //先启动动画，防止不刷新
+                BgSwitch(Singer_Image_Url);
+                thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
+                {
+                    Dispatcher.BeginInvoke(new Action(delegate ()
+                    {
+                        bgstoryboard.Begin(musicPlayer_Main_UserControl.Grid_down_Singer_Photo);
+                    }));
+                }));
+                thread_timer_Singer_Photo_One_Lot.Start();
+
+                bool_SongBegin_OnceAnimation = true;
+            }
+        }
 
         #endregion
 
         #endregion
-
 
 
         #region 音乐可视化
 
-        WAVReader wAVReader = new WAVReader();
-        public void WavReader_Silder_Animation_Start()
+        DispatcherTimer dispatcherTimer_Spectrum_Visualization;
+
+        /// <summary>
+        /// 初始化歌曲频谱同步
+        /// </summary>
+        public void Init_Spectrum_Visualization()
         {
-            /*WAVReader wr = new WAVReader();
-            string path = @"E:\work\camer\GDI\GDI\bin\Debug\20171013T035701.wav";
-            wr.ReadWAVFile(path);
-            int ww = pictureBox1.Width;
-            int hh = pictureBox1.Height;
-            Graphics g = pictureBox1.CreateGraphics();
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-            g.DrawLine(new Pen(Color.DarkSeaGreen, 1), new Point(0, hh / 2), new Point(ww, hh / 2));
-            int prex = 0, prey = 0; //上一个坐标  
-            int x = 0, y = 0;
-            double k = hh / 2.0 / 32768.0;
-            for (int i = 0; i < ww; i++)
-            {
-                x = i;
-                y = hh - (int)(wr.wavdata[i * 3] * k + hh / 2);
-                if (i != 0)
-                {
-                    g.DrawLine(new Pen(Color.Red, 1), x, y, prex, prey);
-                }
-                prex = x;
-                prey = y;
-            }*/
+            dispatcherTimer_Spectrum_Visualization = new DispatcherTimer();
+            dispatcherTimer_Spectrum_Visualization.Tick += Spectrum_Visualization_Play_Tick;
+            dispatcherTimer_Spectrum_Visualization.Interval = new TimeSpan(0,0,0,0,600);
+
+            Spectrum_time = 5;
+            dispatcherTimer_Spectrum_Visualization.Interval = new TimeSpan(0, 0, 0, 0, Spectrum_time * 2);
+
+            userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                        audioSpectrogram.StartStopBtn_Click();
         }
 
+        public void Spectrum_Visualization_Play_Tick(object sender, EventArgs e)
+        {
+            //使用双区间来判定同步当前音频文件时间信息所处歌词时间信息的位置
+            //0有时访问不到
+            if (ListBox_MRC_Song_MRC_Time != null)
+            {
+                if (MediaElement_Song.Position.TotalMilliseconds <= Start_Song_MRC_Time)
+                {
+                    for (int i = 0; i < ListBox_MRC_Song_MRC_Time.Length; i++)
+                    {
+                        if (ListBox_MRC_Song_MRC_Time[i] != 0)
+                        {
+                            Take_Spectrum_Visualization();
+                            break;
+                        }
+                    }
+                }
+                else if (MediaElement_Song.Position.TotalMilliseconds >= End_Song_MRC_Time)
+                {
+                    for (int i = ListBox_MRC_Song_MRC_Time.Length - 1; i >= 0; i--)
+                    {
+                        if (ListBox_MRC_Song_MRC_Time[i] != 0)
+                        {
+                            Take_Spectrum_Visualization();
+
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 7; i < ListBox_MRC_Song_MRC_Time.Length; i++)
+                    {
+                        if (ListBox_MRC_Song_MRC_Time[i] != 0)
+                        {
+                            if (MediaElement_Song.Position.TotalMilliseconds >= ListBox_MRC_Song_MRC_Time[i])
+                            {
+                                if (MediaElement_Song.Position.TotalMilliseconds < ListBox_MRC_Song_MRC_Time[i + 1])
+                                {
+                                    Take_Spectrum_Visualization();
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        
+        int Spectrum_time = 0;
+        float Spectrum_Value = 0;
+        public void Take_Spectrum_Visualization()
+        {
+            if (userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                        audioSpectrogram.animation_points != null)
+            {
+                int half_animation_points_length = userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                        audioSpectrogram.animation_points.Count;
+
+                if (half_animation_points_length == 53)
+                {
+                    for (int i = 0; i < userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                List_storyboard.Count; i++)
+                    {
+                        userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                            List_doubleAnimation[i].KeyFrames.Clear();
+
+                        LinearDoubleKeyFrame linearDoubleKeyFrame_1 = new LinearDoubleKeyFrame();
+                        LinearDoubleKeyFrame linearDoubleKeyFrame_2 = new LinearDoubleKeyFrame();
+
+                        linearDoubleKeyFrame_1.KeyTime = new TimeSpan(0, 0, 0, 0,
+                            (int)Spectrum_time);
+
+                        linearDoubleKeyFrame_2.Value = Spectrum_Value;//结束值设置为上次动画的位置
+                        linearDoubleKeyFrame_2.KeyTime = new TimeSpan(0, 0, 0, 0,
+                            (int)Spectrum_time);
+
+                        /*假如只有26 而非  106
+                         则左13，右13，
+                         则左[53-13]->[53]  ，  右[54]->[54+13]   
+                         */
+                        if (i < half_animation_points_length)
+                        {
+                            linearDoubleKeyFrame_1.Value = userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                audioSpectrogram.animation_points[i];
+
+                            userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                            List_doubleAnimation[
+                                    half_animation_points_length - i + (53 - half_animation_points_length)
+                                ].KeyFrames.Add(linearDoubleKeyFrame_1);
+                            userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                List_doubleAnimation[
+                                    half_animation_points_length - i + (53 - half_animation_points_length)
+                                ].KeyFrames.Add(linearDoubleKeyFrame_2);
+
+                            userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                List_doubleAnimation[
+                                    half_animation_points_length - i + (53 - half_animation_points_length)
+                                ].Duration = new TimeSpan(0, 0, 0, 0, (int)Spectrum_time * 2);
+                            userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                List_storyboard[
+                                    half_animation_points_length - i + (53 - half_animation_points_length)
+                                ].Children[0] = userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                    List_doubleAnimation[
+                                        half_animation_points_length - i + (53 - half_animation_points_length)
+                                    ];
+                            userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                List_storyboard[
+                                    half_animation_points_length - i + (53 - half_animation_points_length)
+                                ].Begin();
+                        }
+                        else
+                        {
+                            linearDoubleKeyFrame_1.Value = userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                audioSpectrogram.animation_points[i - half_animation_points_length + (53 - half_animation_points_length)];
+
+
+                            userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                            List_doubleAnimation[
+                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
+                                ].KeyFrames.Add(linearDoubleKeyFrame_1);
+                            userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                List_doubleAnimation[
+                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
+                                ].KeyFrames.Add(linearDoubleKeyFrame_2);
+
+                            userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                List_doubleAnimation[
+                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
+                                ].Duration = new TimeSpan(0, 0, 0, 0, (int)Spectrum_time * 2);
+                            userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                List_storyboard[
+                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
+                                ].Children[0] = userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                    List_doubleAnimation[
+                                        i - half_animation_points_length + 53 + (53 - half_animation_points_length)
+                                    ];
+                            userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                List_storyboard[
+                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
+                                ].Begin();
+                        }
+
+                        Spectrum_Value = (float)linearDoubleKeyFrame_1.Value;//保留此次动画的Value值
+                    }
+                }
+            }
+        }
+
+        
         #endregion
 
 
@@ -3885,11 +4207,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         {
             //关闭桌面写真
             if (Bool_Windows_Wallpaper == true)
-            {
                 SystemParametersInfo(20, 1, wallpaper_path, 1);
-            }
 
             save_SongList_Info.Save_ALL_SongListInfo();
+
+            Environment.Exit(-1);
         }
     }
 }

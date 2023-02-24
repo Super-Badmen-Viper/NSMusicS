@@ -23,7 +23,7 @@
                     <BeginStoryboard>
                         <Storyboard x:Name="Text_Storyboard">
                             <DoubleAnimationUsingKeyFrames x:Name="Text_DoubleAnimation"
-                                            Duration="0:0:4"
+                                            Duration="0:0:6"
                                             Storyboard.TargetName="Trans" Storyboard.TargetProperty="X"/>
                         </Storyboard>
                     </BeginStoryboard>
@@ -80,7 +80,6 @@
                 </LinearGradientBrush>
             </TextBlock.Background>
         </TextBlock>
-
         <TextBlock x:Name="TextBlock_Slider_Down_1" Height="2" Width="150" 
                    FlowDirection="LeftToRight" 
                    VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,-150,0" Cursor="Hand">

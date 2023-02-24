@@ -130,6 +130,9 @@
     <None Remove="ico_ui_library\听歌识曲 %281%29.png" />
     <None Remove="ico_ui_library\听歌识曲.png" />
     <None Remove="ico_ui_library\唱片3.png" />
+    <None Remove="ico_ui_library\唱片3_黑胶.png" />
+    <None Remove="ico_ui_library\唱片撞针.png" />
+    <None Remove="ico_ui_library\唱片机_底座.png" />
     <None Remove="ico_ui_library\商品 %281%29.png" />
     <None Remove="ico_ui_library\商品.png" />
     <None Remove="ico_ui_library\圆圈、单选框 %281%29.png" />
@@ -310,6 +313,8 @@
   <ItemGroup>
     <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="12.2.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="NAudio" Version="2.1.0" />
+    <PackageReference Include="VisioForge.DotNet.Core.TRIAL" Version="15.1.12" />
   </ItemGroup>
 
   <ItemGroup>
@@ -445,6 +450,9 @@
     <Resource Include="ico_ui_library\听歌识曲 (1).png" />
     <Resource Include="ico_ui_library\听歌识曲.png" />
     <Resource Include="ico_ui_library\唱片3.png" />
+    <Resource Include="ico_ui_library\唱片3_黑胶.png" />
+    <Resource Include="ico_ui_library\唱片撞针.png" />
+    <Resource Include="ico_ui_library\唱片机_底座.png" />
     <Resource Include="ico_ui_library\商品 (1).png" />
     <Resource Include="ico_ui_library\商品.png" />
     <Resource Include="ico_ui_library\圆圈、单选框 (1).png" />

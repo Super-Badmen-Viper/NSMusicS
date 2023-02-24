@@ -1,9 +1,10 @@
-﻿<UserControl x:Class="MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls.UserControl_ButtonFrame_MusicPlayer"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls"
+             xmlns:UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main.UserControls" x:Class="MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls.UserControl_ButtonFrame_MusicPlayer"
              mc:Ignorable="d" 
              d:DesignHeight="70" d:DesignWidth="810"
              UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
@@ -82,30 +83,29 @@
                 HorizontalAlignment="Stretch" 
                 BorderThickness="0.6" CornerRadius="4.3,4.3,4.3,4.3" BorderBrush="#FFD8D8D8" 
                 Margin="0,0,0,0" Background="White" Height="160"
-                >
-            </Border>
+                />
             <StackPanel x:Name="Stack_Button_Radom_Order" Height="40" Margin="0,-280,0,0">
-                <Border BorderThickness="0,0,0,1" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"></Border>
+                <Border BorderThickness="0,0,0,1" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"/>
                 <Image Height="20" Margin="20,-40,0,0" Width="20" HorizontalAlignment="Left" 
                        Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/随机播放_32.png"/>
                 <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" Width="70" Text="随机播放" FontSize="14"/>
             </StackPanel>
             <StackPanel x:Name="Stack_Button_Normal_Order" Height="40" Margin="0,-200,0,0">
-                <Border BorderThickness="0,0,0,1" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"></Border>
+                <Border BorderThickness="0,0,0,1" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"/>
                 <Image Height="20" Margin="20,-40,0,0" Width="20" HorizontalAlignment="Left" 
                        Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/顺序播放.png"/>
                 <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" 
                            Width="70" Text="顺序播放" FontSize="14"/>
             </StackPanel>
             <StackPanel x:Name="Stack_Button_OnlyOne_Order" Height="40" Margin="0,-120,0,0">
-                <Border BorderThickness="0,0,0,1" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"></Border>
+                <Border BorderThickness="0,0,0,1" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"/>
                 <Image Height="20" Margin="20,-40,0,0" Width="20" HorizontalAlignment="Left" 
                        Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/24gl-repeatOnce2.png"/>
                 <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" 
                            Width="70" Text="单曲循环" FontSize="14"/>
             </StackPanel>
             <StackPanel x:Name="Stack_Button_List_Order" Height="40" Margin="0,-40,0,0">
-                <Border BorderThickness="0,0,0,0" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"></Border>
+                <Border BorderThickness="0,0,0,0" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"/>
                 <Image Height="20" Margin="20,-40,0,0" Width="20" HorizontalAlignment="Left" 
                        Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/列表循环.png"/>
                 <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" 
@@ -178,26 +178,12 @@
                 x:Name="Canvas_Song_Name"
                 VerticalAlignment="Top" ClipToBounds="True" 
                     Height="20"  Margin="85,14,0,0" Width="161" HorizontalAlignment="Left">
-                <StackPanel Name="content1"
-                            VerticalAlignment="Center" HorizontalAlignment="Left" 
-                            Height="20" Width="531" Orientation="Horizontal">
-                    <StackPanel.RenderTransform>
-                        <TranslateTransform Y="0" />
-                    </StackPanel.RenderTransform>
-                    <TextBox 
-                        x:Name="Song_Name"
-                        Text="演员 - 薛之谦" TextWrapping="NoWrap" Width="531" FontSize="13"    
-                        TextChanged="Song_Name_DataContextChanged" 
-                        Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" 
-                        Focusable="False"
-                    />
-                </StackPanel>
                 <Canvas.Triggers>
-                    <EventTrigger RoutedEvent="Loaded">
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                         <BeginStoryboard>
                             <Storyboard x:Name="StoryBorad_Song_Name">
                                 <DoubleAnimationUsingKeyFrames
-                                    Name="DoubleAnimationUsingKeyFrames_TextBlock_Song_Name"
+                                    x:Name="DoubleAnimationUsingKeyFrames_TextBlock_Song_Name"
                                     RepeatBehavior="Forever"
                                     Storyboard.TargetName="content1"
                                     Storyboard.TargetProperty="RenderTransform.X"
@@ -215,8 +201,22 @@
                         </BeginStoryboard>
                     </EventTrigger>
                 </Canvas.Triggers>
+                <StackPanel x:Name="content1"
+                            VerticalAlignment="Center" HorizontalAlignment="Left" 
+                            Height="20" Width="531" Orientation="Horizontal">
+                    <StackPanel.RenderTransform>
+                        <TranslateTransform Y="0" />
+                    </StackPanel.RenderTransform>
+                    <TextBox 
+                        x:Name="Song_Name"
+                        Text="演员 - 薛之谦" TextWrapping="NoWrap" Width="531" FontSize="13"    
+                        TextChanged="Song_Name_DataContextChanged" 
+                        Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" 
+                        Focusable="False"
+                    />
+                </StackPanel>
             </Canvas>
-            <Button Name="Button_MV" Style="{StaticResource MyButton}" 
+            <Button x:Name="Button_MV" Style="{StaticResource MyButton}" 
                     Margin="253,15,0,0"
                     Width="16" Height="16" HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand">
                 <Button.Background>
@@ -252,7 +252,7 @@
                 </Button.Background>
             </Button>
         </Grid>
-        <Grid Name="Grid_MusicPlayer_MainWindow_Right"
+        <Grid x:Name="Grid_MusicPlayer_MainWindow_Right"
               Visibility="Visible"
               >
             <TextBox x:Name="TextBox_Song_Time" 
@@ -406,5 +406,13 @@
                  UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" Margin="0,0,21,0"/>
         </Grid>
 
+
+        <Grid>
+            <UserControls:UserControl_Spectrum_Visualization_2 
+                x:Name="userControl_Spectrum_Visualization" 
+                VerticalAlignment="Top" Height="160" Margin="0,-98,0,0"
+                Visibility="Hidden"
+                />
+        </Grid>
     </Grid>
 </UserControl>
