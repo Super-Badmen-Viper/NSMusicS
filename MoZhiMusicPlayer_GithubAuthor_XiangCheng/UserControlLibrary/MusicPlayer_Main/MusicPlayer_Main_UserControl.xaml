@@ -16,7 +16,7 @@
              >
     <Grid>
         <Grid x:Name="Grid_Animation">
-            
+
             <Grid x:Name="Grid_Up_Singer_Photo">
                 <Grid.Background>
                     <ImageBrush Stretch="UniformToFill"/>
@@ -29,7 +29,7 @@
             </Grid>
 
             <Grid x:Name="Image_Singer_Buttom" Visibility="Hidden" Grid.RowSpan="2">
-                
+
 
                 <Grid x:Name="Grid_BackGround_Black_Top" Height="170" VerticalAlignment="Top"
                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
@@ -107,27 +107,71 @@
 
                 <Border x:Name="Border_SingerPhoto_Mode_Close_BackGround" Background="#9C000000"/>
 
-                <StackPanel 
-                x:Name="Panel_Image" 
-                Margin="130,-70,0,0" 
-                ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                    Width="350" Height="350" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                    <StackPanel.Background>
-                        <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/唱片3.png" Stretch="UniformToFill"/>
-                    </StackPanel.Background>
-                    <Image x:Name="Image_Song"
-                       Margin="0,0,0,0"
-                       ScrollViewer.VerticalScrollBarVisibility="Disabled" Stretch="Uniform" 
-                       Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/初学者.jpg" 
-                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                       RenderTransformOrigin="0.5,0.5" Width="350" Height="350" HorizontalAlignment="Left" VerticalAlignment="Stretch" MouseLeftButtonDown="Image_Song_MouseLeftButtonDown">
-                        <Image.RenderTransform>
-                            <RotateTransform x:Name="Image_Song_Rotate"/>
-                        </Image.RenderTransform>
-                    </Image>
+                <StackPanel
+                    x:Name="Panel_Image" 
+                    Margin="130,-70,0,0" Width="350" Height="350" HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                    >
+                    <StackPanel 
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Height="350"
+                        >
+                        <StackPanel.Background>
+                            <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/唱片机_底座.png" Stretch="UniformToFill"/>
+                        </StackPanel.Background>
+                        <StackPanel>
+                            <StackPanel.RenderTransform>
+                                <RotateTransform x:Name="Image_Song_Rotate" CenterX="175" CenterY="175"/>
+                            </StackPanel.RenderTransform>
+                            <Image
+                               ScrollViewer.VerticalScrollBarVisibility="Disabled" Stretch="Uniform" 
+                               Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/唱片3_黑胶.png" 
+                               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                               RenderTransformOrigin="0.5,0.5" Width="300" Height="300" HorizontalAlignment="Center" MouseLeftButtonDown="Image_Song_MouseLeftButtonDown" VerticalAlignment="Top" Margin="0,23,0,0">
+                                <Image.Clip>
+                                    <EllipseGeometry Center="150,150" RadiusX="150" RadiusY="150"/>
+                                </Image.Clip>
+                            </Image>
+                            <Image x:Name="Image_Song"
+                               ScrollViewer.VerticalScrollBarVisibility="Disabled" Stretch="UniformToFill" 
+                               Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/初学者.jpg" 
+                               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                               RenderTransformOrigin="0.5,0.5" Width="130" Height="130" 
+                               HorizontalAlignment="Center" MouseLeftButtonDown="Image_Song_MouseLeftButtonDown" VerticalAlignment="Top" Margin="0,-215,0,0">
+                                <Image.Clip>
+                                    <EllipseGeometry Center="65,65" RadiusX="65" RadiusY="65"/>
+                                </Image.Clip>
+                            </Image>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel 
+                        x:Name="StackPanel_Record_Striker"
+                        HorizontalAlignment="Right" Margin="0,-496,0,0" Width="76" Height="228"
+                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" RenderTransformOrigin="0.5,0.5"
+                                >
+                        <StackPanel.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform x:Name="RotateTransform_BeginMusic_Jukebox" Angle="-20" CenterX="0" CenterY="-60"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </StackPanel.RenderTransform>
+                        <StackPanel.Triggers>
+                            <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                                <BeginStoryboard>
+                                    <Storyboard x:Name="BeginMusic_Jukebox">
+                                        <DoubleAnimationUsingKeyFrames
+                                            Duration="0:0:1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </StackPanel.Triggers>
+                        <StackPanel.Background>
+                            <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/唱片撞针.png" Stretch="Uniform"/>
+                        </StackPanel.Background>
+                    </StackPanel>
                 </StackPanel>
-
 
 
                 <!--歌词列表（行同步）-->
@@ -137,7 +181,7 @@
                     x:Name="ListView_Temp_MRC" Background="{x:Null}" BorderBrush="{x:Null}" 
                     Foreground="White" FontSize="16" FontWeight="Medium"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                    Margin="488,230,0,150" Width="555" MinHeight="310"
+                    Margin="488,230,0,150" Width="777" MinHeight="310"
                     BorderThickness="0" IsSynchronizedWithCurrentItem="False" Focusable="False" 
                     IsTextSearchEnabled="False" HorizontalContentAlignment="Center" 
                     VerticalContentAlignment="Stretch" HorizontalAlignment="Center"                
@@ -162,7 +206,7 @@
                             <!-- text居中 -->
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                             <!-- 行高 -->
-                            <Setter Property="Height" Value="50"/>
+                            <Setter Property="Height" Value="55"/>
 
                             <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
 
@@ -173,7 +217,7 @@
                                         <Border x:Name="bd"  
                                             BorderThickness="0"  
                                             SnapsToDevicePixels="True">
-                                            <GridViewRowPresenter HorizontalAlignment="Center" Height="43" />
+                                            <GridViewRowPresenter HorizontalAlignment="Center" Height="55" />
                                         </Border>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsSelected" Value="False">
@@ -185,12 +229,12 @@
                                             />
                                             开启超级特效：圆形楼梯循环动画：Value小于444时开启
                                             -->
-                                                <Setter Property="FontSize" Value="24"/>
+                                                <Setter Property="FontSize" Value="23"/>
                                                 <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
                                                 <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
                                                 <Setter Property="VerticalContentAlignment" Value="Stretch"/>
                                                 <Setter Property="FontWeight" Value="Bold"/>
-                                                <Setter Property="Height" Value="66"/>
+                                                <Setter x:Name="Select_Item_Height" Property="Height" Value="88"/>
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
@@ -201,16 +245,17 @@
                     <ListView.View>
                         <GridView AllowsColumnReorder="True">
                             <!--ListviewItem的长度-->
-                            <GridViewColumn Width="888" x:Name="ListView_Temp_MRC_GridViewColumn">
+                            <GridViewColumn Width="1000" x:Name="ListView_Temp_MRC_GridViewColumn">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock HorizontalAlignment="Stretch"
                                                TextWrapping="Wrap" TextAlignment="Center"
-                                               LineStackingStrategy="BlockLineHeight" LineHeight="22"
+                                               LineStackingStrategy="BlockLineHeight" LineHeight="26"
                                                Padding="0,0,0,0"
                                                x:Name="Text_TextBlock"
                                                Text="{Binding Song_MRC_Line}"
                                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                                                IsHitTestVisible="False" Focusable="False" IsEnabled="False" 
                                                >
                                             <!--编辑文字段落的行高，防止溢出 LineStackingStrategy="BlockLineHeight" LineHeight="20" -->
                                             <TextBlock.Triggers>
@@ -459,8 +504,22 @@
         </ItemsPanelTemplate>
 
         <!--专辑封面旋转-->
-        <Storyboard x:Key="Image_Song_Animation" RepeatBehavior="Forever">
-            <DoubleAnimation Storyboard.TargetName="Image_Song_Rotate" Storyboard.TargetProperty="Angle" BeginTime="00:00:00" Duration="00:01:30" From="0" To="360"/>
+        <Storyboard x:Name="Storyboard_Image_Song_Rotate" x:Key="Image_Song_Animation" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="Image_Song_Rotate" Storyboard.TargetProperty="Angle" BeginTime="00:00:00" Duration="00:00:10" From="0" To="360"/>
+        </Storyboard>
+        <Storyboard x:Name="Storyboard_RotateTransform_BeginMusic_Jukebox_Open" x:Key="RotateTransform_BeginMusic_Jukebox_Open">
+            <DoubleAnimation Storyboard.TargetName="RotateTransform_BeginMusic_Jukebox" Storyboard.TargetProperty="Angle" BeginTime="00:00:00" Duration="00:00:0.2" From="-20" To="0"/>
+        </Storyboard>
+        <Storyboard x:Name="Storyboard_RotateTransform_BeginMusic_Jukebox_Close" x:Key="RotateTransform_BeginMusic_Jukebox_Close">
+            <DoubleAnimation Storyboard.TargetName="RotateTransform_BeginMusic_Jukebox" Storyboard.TargetProperty="Angle" BeginTime="00:00:00" Duration="00:00:0.2" From="0" To="-20"/>
+        </Storyboard>
+        <Storyboard x:Name="Storyboard_RotateTransform_BeginMusic_Jukebox_Up_And_Down" x:Key="RotateTransform_BeginMusic_Jukebox_Up_And_Down"  RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames x:Name="Text_DoubleAnimationUsingKeyFrames"
+                                            Storyboard.TargetName="RotateTransform_BeginMusic_Jukebox" Storyboard.TargetProperty="Angle" 
+                                            BeginTime="00:00:00" Duration="00:00:0.4">
+                <LinearDoubleKeyFrame KeyTime="00:00:0.2" Value="2"/>
+                <LinearDoubleKeyFrame KeyTime="00:00:0.4" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </UserControl.Resources>
 </UserControl>

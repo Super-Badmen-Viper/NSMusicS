@@ -26,6 +26,22 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         public UserControl_Main_Home_Left_MyMusic_My_Love()
         {
             InitializeComponent();
+
+            userControl_Main_Home_Left_MyMusic_My_Love = this;
+        }
+
+        private static UserControl_Main_Home_Left_MyMusic_My_Love userControl_Main_Home_Left_MyMusic_My_Love;
+        public static UserControl_Main_Home_Left_MyMusic_My_Love Retuen_This()
+        {
+            userControl_Main_Home_Left_MyMusic_My_Love = Return_This_userControl_Main_Home_Left_MyMusic_My_Love();
+            return userControl_Main_Home_Left_MyMusic_My_Love;
+        }
+        public static UserControl_Main_Home_Left_MyMusic_My_Love Return_This_userControl_Main_Home_Left_MyMusic_My_Love()
+        {
+            if (userControl_Main_Home_Left_MyMusic_My_Love == null)
+                userControl_Main_Home_Left_MyMusic_My_Love = new UserControl_Main_Home_Left_MyMusic_My_Love();
+
+            return userControl_Main_Home_Left_MyMusic_My_Love;
         }
 
         public string Path_App;
@@ -44,6 +60,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
             Stack_Panel_Add_Song.Visibility = Visibility.Hidden;
             Stack_Panel_More_Takes.Visibility = Visibility.Hidden;
+
+            ListView_Download_SongList_Info.MouseDoubleClick += ListView_Download_SongList_Info_MouseDoubleClick;
+        }
+
+        private void ListView_Download_SongList_Info_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            listView_Item_Bing_ALL.In_process_of_SongList_listView_Temp_Info_End_ALL = false;
+            listView_Item_Bing_ALL.In_process_of_SongList_listView_Temp_Info_End_Love = true;
+            listView_Item_Bing_ALL.In_process_of_SongList_listView_Temp_Info_End_Auto = false;
+            listView_Item_Bing_ALL.In_process_of_SongList_listView_Temp_Info_End_TryListen = false;
         }
 
 
@@ -103,213 +129,42 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love == null)
                 listView_Item_Bing_ALL.listView_Temp_Info_End_Love = new List<ListView_Item_Bing>();
 
-            //添加
-            if (Convert.ToInt32(ck_Selected.MinHeight) == 0)//初始为0，代表未添加至我的收藏
+            ck_Selected.MinHeight = 0;
+            ck_Selected.Background = brush_LoveNormal;
+
+            ListView_Item_Bing temp = listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Find(delegate (ListView_Item_Bing x) { return x.Song_No == Convert.ToInt32(ck_Selected.Tag); });
+            string songurl = temp.Song_Url;
+
+            foreach (ListView_Item_Bing _Item_Bing in listView_Item_Bing_ALL.listView_Temp_Info_End_Love)
             {
-                ck_Selected.MinHeight = 1;
-                ck_Selected.Background = brush_LoveEnter;
-
-                if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_ALL"))
+                if (_Item_Bing.Song_Url.Equals(songurl))
                 {
-                    ListView_Item_Bing temp = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL.Find(delegate (ListView_Item_Bing x) { return x.Song_No == Convert.ToInt32(ck_Selected.Tag); });
+                    ListView_Item_Bing temp_love = listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Find(delegate (ListView_Item_Bing x) { return x.Song_Url.Equals(songurl); });
 
-                    if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Contains(temp) == false)
+                    temp.Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心.png")));
+                    temp.Song_Like = 0;
+                    listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Remove(temp_love);
+
+                    if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love != null)
                     {
-                        bool Simple_Song = false;
-                        //查找是否重复
-                        for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Count; i++)
-                        {
-                            if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love.ElementAt(i).Singer_Name == temp.Singer_Name)
-                            {
-                                if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love.ElementAt(i).Song_Name == temp.Song_Name)
-                                {
-                                    Simple_Song = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (Simple_Song == false)
-                        {
-                            //原歌单图片设置为喜欢
-                            temp.Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心 - 副本.png")));
-                            temp.Song_Like = 1;
-                            listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Add(temp);
-                        }
-                        else
-                            MessageBox.Show("该歌曲已添加至我的收藏");
-
+                        ListView_Download_SongList_Info.ItemsSource = null;
+                        ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Love;
                     }
-                    else
-                        MessageBox.Show("该歌曲已添加至我的收藏");
-
+                    break;
                 }
-                else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Auto"))
-                {
-                    ListView_Item_Bing temp = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto.Find(delegate (ListView_Item_Bing x) { return x.Song_No == Convert.ToInt32(ck_Selected.Tag); });
-
-                    if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Contains(temp) == false)
-                    {
-                        bool Simple_Song = false;
-                        //查找是否重复
-                        for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Count; i++)
-                        {
-                            if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love.ElementAt(i).Singer_Name == temp.Singer_Name)
-                            {
-                                if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love.ElementAt(i).Song_Name == temp.Song_Name)
-                                {
-                                    Simple_Song = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (Simple_Song == false)
-                        {
-                            //原歌单图片设置为喜欢
-                            temp.Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心 - 副本.png")));
-                            temp.Song_Like = 1;
-                            listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Add(temp);
-                        }
-                        else
-                            MessageBox.Show("该歌曲已添加至我的收藏");
-
-                    }
-                    else
-                        MessageBox.Show("该歌曲已添加至我的收藏");
-
-                }
-                else
-                {
-                    MessageBox.Show("该歌曲已添加至我的收藏");
-                }
-
-
-                //我的收藏歌曲序号重构
-                //歌曲序号重构
-                for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Count; i++)
-                {
-                    listView_Item_Bing_ALL.listView_Temp_Info_End_Love.ElementAt(i).Song_No = i + 1;
-                }
-
-
-
-                Sort_SongList();
-
-
-                //移除
-            }
-            else
-            {
-                ck_Selected.MinHeight = 0;
-                ck_Selected.Background = brush_LoveNormal;
-
-
-                if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_ALL"))
-                {
-                    ListView_Item_Bing temp = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL.Find(delegate (ListView_Item_Bing x) { return x.Song_No == Convert.ToInt32(ck_Selected.Tag); });
-
-                    string songurl = temp.Song_Url;
-
-                    foreach (ListView_Item_Bing _Item_Bing in listView_Item_Bing_ALL.listView_Temp_Info_End_Love)
-                    {
-                        if (_Item_Bing.Song_Url.Equals(songurl))
-                        {
-                            ListView_Item_Bing temp_love = listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Find(delegate (ListView_Item_Bing x) { return x.Song_Url.Equals(songurl); });
-
-                            //原歌单图片设置为喜欢
-                            temp_love.Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心.png")));
-                            temp_love.Song_Like = 0;
-                            listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Remove(temp_love);
-
-                            temp.Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心.png")));
-                            temp.Song_Like = 0;
-
-                            if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love != null)
-                            {
-                                ListView_Download_SongList_Info.ItemsSource = null;
-                                ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL;
-                            }
-
-                            break;
-                        }
-                    }
-
-                }
-                else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Auto"))
-                {
-                    ListView_Item_Bing temp = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto.Find(delegate (ListView_Item_Bing x) { return x.Song_No == Convert.ToInt32(ck_Selected.Tag); });
-
-                    string songurl = temp.Song_Url;
-
-                    foreach (ListView_Item_Bing _Item_Bing in listView_Item_Bing_ALL.listView_Temp_Info_End_Love)
-                    {
-                        if (_Item_Bing.Song_Url.Equals(songurl))
-                        {
-                            ListView_Item_Bing temp_love = listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Find(delegate (ListView_Item_Bing x) { return x.Song_Url.Equals(songurl); });
-
-                            //原歌单图片设置为喜欢
-                            temp_love.Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心.png")));
-                            temp_love.Song_Like = 0;
-                            listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Remove(temp_love);
-
-                            temp.Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心.png")));
-                            temp.Song_Like = 0;
-
-                            if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love != null)
-                            {
-                                ListView_Download_SongList_Info.ItemsSource = null;
-                                ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
-                            }
-
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    ListView_Item_Bing temp = listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Find(delegate (ListView_Item_Bing x) { return x.Song_No == Convert.ToInt32(ck_Selected.Tag); });
-
-                    if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Contains(temp) == true)
-                    {
-                        bool Simple_Song = false;
-                        //查找是否重复
-                        for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Count; i++)
-                        {
-                            if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love.ElementAt(i).Singer_Name == temp.Singer_Name)
-                            {
-                                if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love.ElementAt(i).Song_Name == temp.Song_Name)
-                                {
-                                    Simple_Song = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (Simple_Song == true)
-                        {
-                            //原歌单图片设置为喜欢
-                            temp.Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心.png")));
-                            temp.Song_Like = 0;
-                            listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Remove(temp);//移除出数据源                       
-                        }
-
-
-                    }
-                }
-
-
-                //我的收藏歌曲序号重构
-                //歌曲序号重构
-                for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Count; i++)
-                {
-                    listView_Item_Bing_ALL.listView_Temp_Info_End_Love.ElementAt(i).Song_No = i + 1;
-                }
-
-                Sort_SongList();
             }
 
+            //我的收藏歌曲序号重构
+            //歌曲序号重构
+            for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Count; i++)
+            {
+                listView_Item_Bing_ALL.listView_Temp_Info_End_Love.ElementAt(i).Song_No = i + 1;
+            }
+
+            Sort_SongList();
         }
+
+        
         #endregion
 
 
@@ -387,15 +242,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         {
             //歌单歌曲排序
             Sort_SongList();
-
-            /*if (ListBox_Select_ListView.Visibility == Visibility.Hidden)
-            {
-                ListBox_Select_ListView.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ListBox_Select_ListView.Visibility = Visibility.Hidden;
-            }*/
         }
 
         /// <summary>
