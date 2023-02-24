@@ -118,7 +118,7 @@
                         <StackPanel.Background>
                             <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/唱片机_底座.png" Stretch="UniformToFill"/>
                         </StackPanel.Background>
-                        <StackPanel>
+                        <StackPanel Height="350">
                             <StackPanel.RenderTransform>
                                 <RotateTransform x:Name="Image_Song_Rotate" CenterX="175" CenterY="175"/>
                             </StackPanel.RenderTransform>

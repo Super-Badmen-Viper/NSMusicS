@@ -1795,8 +1795,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //创建获取 歌词数组信息输出类 
             dao_ListBox_Temp_MRC = new Dao_ListBox_Temp_MRC();
             //设置要分析的歌词文件（mrc）路径
-            string MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".krc";
-            string CRC_URL = MRC_URL.Replace("Mrc", "Crc"); CRC_URL = CRC_URL.Replace("krc", "crc");
+            string MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".mrc";
+            string CRC_URL = MRC_URL.Replace("Mrc", "Crc"); CRC_URL = CRC_URL.Replace("mrc", "crc");
+
+            if (!File.Exists(MRC_URL))
+                MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".krc"; CRC_URL = MRC_URL.Replace("Mrc", "Crc"); CRC_URL = CRC_URL.Replace("krc", "crc");
 
             try
             {
