@@ -242,27 +242,31 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
                     for (int j = 0; j < points.Length / 2; j++)
                     {
                         animation_points.Add(points[i].Y);
-
-                        animation_points[animation_points.Count - 1] = (float)(animation_points[animation_points.Count - 1] / 100 - 1);
+                        animation_points[animation_points.Count - 1] = (float)(animation_points[animation_points.Count - 1] / 100 - 0.6);
                         break;
                     }
                 }
             }
-            for (int i = 0; i < (int)(animation_points.Count / 53 * 20); i++)
-            {
-                animation_points[animation_points.Count - 1 - i] = animation_points[i];
-            }
 
-            if (animation_points.Count > 53)
+            //显示频谱的动画个数
+            int animation_points_Count = 53;
+
+            for (int i = 0; i < (int)(animation_points.Count / animation_points_Count * (int)(animation_points_Count / 2)); i++)
+                animation_points[animation_points.Count - 1 - i] = animation_points[i];
+
+            if (animation_points.Count > animation_points_Count)
             {
                 List<float> temp = new List<float>();
-                for (int i = 0; i < 53; i++)
-                {
+                for (int i = 0; i < animation_points_Count; i++)
                     temp.Add(animation_points[i]);
-                }
 
                 animation_points = temp;
             }
+
+            if(animation_points.Count == animation_points_Count)
+                for (int i = 0; i < (int)(animation_points_Count / 4); i++)
+                    animation_points[animation_points.Count - 1 - i] = animation_points[i];
+
         }
 
         /// <summary>
