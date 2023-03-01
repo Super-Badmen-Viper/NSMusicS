@@ -40,7 +40,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             InitializeCapture();
 
             Timer timer = new Timer();
-            timer.Interval = 10;
+            timer.Interval = 20;
             timer.Tick += ProcessFrame;
             timer.Tick += RenderPanel;
             timer.Start();
@@ -242,6 +242,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
                     for (int j = 0; j < points.Length / 2; j++)
                     {
                         animation_points.Add(points[i].Y);
+
                         animation_points[animation_points.Count - 1] = (float)(animation_points[animation_points.Count - 1] / 100 - 1);
                         break;
                     }

@@ -48,7 +48,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             
             init();
 
-
             Once_Animation();
 
             Init_Spectrum_Visualization();
@@ -774,10 +773,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         #endregion
 
 
-
         bool Bool_Button_Play_Pause_Player;//播放状态
         bool Bool_OpenMainMusicPlayer;//是否打开播放器
         bool Bool_Button_Singer_Image_Animation;//歌手写真动画
+        bool Bool_Animation_Storyboard_BeginMusic_Jukebox_Playing;//是否已启动动画
         DoubleAnimation doubleAnimation;//窗体动画
         BlurEffect blurEffect = new BlurEffect();
         #region MusicPlayer_Left控件进入
@@ -1436,10 +1435,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
             }
 
+            //每次歌曲下标判定时，都启动专辑动画
             musicPlayer_Main_UserControl.Image_Song_Storyboard.Begin();
 
             //为元素设置BeginAnimation方法。
-            musicPlayer_Main_UserControl.Storyboard_BeginMusic_Jukebox_Open.Begin();
+            if (!Bool_Animation_Storyboard_BeginMusic_Jukebox_Playing)
+            {
+                musicPlayer_Main_UserControl.Storyboard_BeginMusic_Jukebox_Close.Begin();
+                musicPlayer_Main_UserControl.Storyboard_BeginMusic_Jukebox_Open.Begin();
+                Bool_Animation_Storyboard_BeginMusic_Jukebox_Playing = true;
+            }
         }
 
         private void MediaElement_Song_MediaEnded(object sender, RoutedEventArgs e)
@@ -1460,9 +1465,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 Change_MediaElement_Song_id_incrse();
                 Change_MediaElement_Source();
             }
-
-            //为元素设置BeginAnimation方法。
-            musicPlayer_Main_UserControl.Storyboard_BeginMusic_Jukebox_Close.Begin();
         }
 
         #endregion
@@ -1608,7 +1610,22 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             {
                 WMP_Song_Play_Ids = rd.Next(1, this.listView_Item_Bing_ALL.listView_SongList.Items.Count + 1);//(生成1~10之间的随机数，不包括10)
             }
+
+            //每次歌曲下标判定时，都启动专辑动画
+            musicPlayer_Main_UserControl.Image_Song_Storyboard.Begin();
+
+            //为元素设置BeginAnimation方法。
+            musicPlayer_Main_UserControl.Storyboard_BeginMusic_Jukebox_Close.Begin();
+            musicPlayer_Main_UserControl.Storyboard_BeginMusic_Jukebox_Open.Begin();        
         }
+
+        private void Storyboard_BeginMusic_Jukebox_Close_Completed(object? sender, EventArgs e)
+        {
+            musicPlayer_Main_UserControl.Storyboard_BeginMusic_Jukebox_Close.Completed -= Storyboard_BeginMusic_Jukebox_Close_Completed;
+            musicPlayer_Main_UserControl.Storyboard_BeginMusic_Jukebox_Open.Begin();
+        }
+
+
 
 
         public string Song_MRC_Path;
@@ -3425,7 +3442,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             dispatcherTimer_Spectrum_Visualization.Tick += Spectrum_Visualization_Play_Tick;
             dispatcherTimer_Spectrum_Visualization.Interval = new TimeSpan(0,0,0,0,600);
 
-            Spectrum_time = 5;
+            Spectrum_time = 75;
             dispatcherTimer_Spectrum_Visualization.Interval = new TimeSpan(0, 0, 0, 0, Spectrum_time * 2);
 
             userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
@@ -3519,6 +3536,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         {
                             linearDoubleKeyFrame_1.Value = userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
                                 audioSpectrogram.animation_points[i];
+                            if (linearDoubleKeyFrame_1.Value < -0.5)
+                                linearDoubleKeyFrame_1.Value = -0.48;
 
                             userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
                             List_doubleAnimation[
@@ -3549,7 +3568,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         {
                             linearDoubleKeyFrame_1.Value = userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
                                 audioSpectrogram.animation_points[i - half_animation_points_length + (53 - half_animation_points_length)];
-
+                            if (linearDoubleKeyFrame_1.Value < -0.5)
+                                linearDoubleKeyFrame_1.Value = -0.48;
 
                             userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
                             List_doubleAnimation[
