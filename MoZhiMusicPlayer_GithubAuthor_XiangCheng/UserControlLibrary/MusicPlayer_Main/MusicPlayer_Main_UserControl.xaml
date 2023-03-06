@@ -158,7 +158,7 @@
                             </TransformGroup>
                         </StackPanel.RenderTransform>
                         <StackPanel.Triggers>
-                            <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <EventTrigger RoutedEvent="StackPanel.Loaded">
                                 <BeginStoryboard>
                                     <Storyboard x:Name="BeginMusic_Jukebox">
                                         <DoubleAnimationUsingKeyFrames
