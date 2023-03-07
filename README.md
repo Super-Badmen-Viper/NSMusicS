@@ -37,5 +37,5 @@
 # 相关项目：
 - [comSlimeNullAudioTest.git](https://github.com/SlimeNull/AudioTest)（我提取分离了此项目的实时音频频谱数据提取功能，修改部分代码后集成类，应用到了MoZhiMusicPlayer的频谱动画作为频谱数据源）
 
-# 赞助：
+# 赞助(微信/支付宝)：
   <img src="doc/Test (4).png" align="center" width="400">
