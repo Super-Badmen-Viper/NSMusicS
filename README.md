@@ -10,8 +10,8 @@
 
 # 界面预览：
   <img src="doc/Test (1).png" align="center" width="1200">
-  <img src="doc/Test (2).png" align="left" width="600">
-  <img src="doc/Test (3).png" align="right" width="600">
+  <img src="doc/Test (2).png" align="left" width="500">
+  <img src="doc/Test (3).png" align="right" width="500">
   
 # 
 # 
