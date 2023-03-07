@@ -23,6 +23,10 @@
   - 请将此网盘的Resource压缩包解压并覆盖至MoZhiMusicPlayer_GithubAuthor_XiangCheng\bin\Debug\net6.0-windows，取代同名文件夹
   -（声明：作者个人的音乐附加资源百度网盘资源(歌手写真，专辑图片等等)和此项目文件，都是来自网络的公开数据，仅做分享，无任何商业侵权行为，如有异议，请联系我删除
 
+
+
+
+
 # 赞助：
   <img src="doc/4.png" align="center" width="400">
 
