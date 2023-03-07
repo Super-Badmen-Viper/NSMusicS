@@ -11,10 +11,8 @@
 # 界面预览：
   <img src="doc/Test (1).png" align="center" width="800">
   <img src="doc/Test (2).png" align="left" width="400">
-  <img src="doc/Test (3).png" align="left" width="400">
+  <img src="doc/Test (3).png" align="right" width="400">
   
-  
-
 # 快速使用：
   - 下载：https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer1.0.4
   - 我的QQ学习群号：228440692，欢迎加群，先给个star吧，群里有我整理好的项目，比Github更加容易开箱即用
