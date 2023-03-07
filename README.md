@@ -9,9 +9,11 @@
 - 注意：性能或系统版本较低，可能会影响运行时的性能(些许影响)，推荐WIn11，Win11有特别优化[doge]
 
 # 界面预览：
-  <img src="doc/Test (1).png" align="center" width="800" margin="200,0,0,0">
+  <img src="doc/Test (1).png" align="center" width="1200">
   <img src="doc/Test (2).png" align="left" width="400">
   <img src="doc/Test (3).png" align="right" width="400">
+  
+  
   
 # 快速使用：
   - 下载：https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer1.0.4
