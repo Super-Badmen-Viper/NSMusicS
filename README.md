@@ -44,4 +44,4 @@
 - 因使用本软件产生的版权问题，软件作者概不负责。
 
 # 相关项目：
-- [comSlimeNullAudioTest.git](https://github.com/SlimeNull/AudioTest)（我提取分离了此项目的实时音频频谱数据提取模块，并应用到了MoZhiMusicPlayer的频谱动画作为频谱数据源）
+- [comSlimeNullAudioTest.git](https://github.com/SlimeNull/AudioTest)（我提取分离了此项目的实时音频频谱数据提取功能，修改部分代码后集成类，应用到了MoZhiMusicPlayer的频谱动画作为频谱数据源）
