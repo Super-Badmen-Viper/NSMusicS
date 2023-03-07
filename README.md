@@ -11,8 +11,8 @@
 
 # 界面预览：
   <img src="doc/Test (1).png" align="center" width="1200">
-  <img src="doc/Test (2).png" align="left" width="400">
-  <img src="doc/Test (3).png" align="right" width="400">
+  <img src="doc/Test (2).png" align="left" width="300">
+  <img src="doc/Test (3).png" align="right" width="300">
   <img align="center" width="400">
 
 # 快速使用：
