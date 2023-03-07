@@ -31,10 +31,6 @@
   - 请将此网盘的Resource压缩包解压并覆盖至MoZhiMusicPlayer_GithubAuthor_XiangCheng\bin\Debug\net6.0-windows，取代同名文件夹
   -（声明：作者个人的音乐附加资源百度网盘资源(歌手写真，专辑图片等等)和此项目文件，都是来自网络的公开数据，仅做分享，无任何商业侵权行为，如有异议，请联系我删除
 
-
-# 赞助：
-  <img src="doc/4.png" align="center" width="400">
-
 # 免责申明：
 
 - 本软件只提供其他开源项目接口的使用来获取数据，不提供任何资源上传、存储到服务器的功能。
@@ -45,3 +41,6 @@
 
 # 相关项目：
 - [comSlimeNullAudioTest.git](https://github.com/SlimeNull/AudioTest)（我提取分离了此项目的实时音频频谱数据提取功能，修改部分代码后集成类，应用到了MoZhiMusicPlayer的频谱动画作为频谱数据源）
+
+# 赞助：
+  <img src="doc/Test (4).png" align="center" width="400">
