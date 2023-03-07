@@ -19,10 +19,11 @@
   - 下载：https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer1.0.4
   - 我的QQ学习群号：228440692，欢迎加群，先给个star吧，群里有我整理好的项目，比Github更加容易开箱即用
   - 资源所在位置：MoZhiMusicPlayer/MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/Resource/之内（歌词，歌手写真，专辑图片等，可自行编辑）
-  - 音乐附加资源下载（百度网盘资源）：
+  - 音乐附加资源下载（百度网盘资源）： 
   - - 链接：https://pan.baidu.com/s/1LbmClxXrEsO4-R9ISBKCoQ?pwd=zake 提取码：zake  
-  - - 请将此网盘的Resource压缩包解压并覆盖至MoZhiMusicPlayer_GithubAuthor_XiangCheng\bin\Debug\net6.0-windows，取代同名文件夹
-  - -（声明：作者个人的音乐附加资源百度网盘资源(歌手写真，专辑图片等等)和此项目文件，都是来自网络的公开数据，仅做分享，无任何商业侵权行为，如有异议，请联系我删除
+  - - 请将此网盘的Resource压缩包解压并覆盖至MoZhiMusicPlayer_GithubAuthor_XiangCheng\bin\Debug\net6.0-windows，取代同名文件夹 
+  - -（声明：作者个人的音乐附加资源百度网盘资源(歌手写真，专辑图片等等)和此项目文件，都是来自网络的公开数据，仅做分享，无任何商业侵权行为，如有异议，请联系我删除 
+
 
 # 免责申明：
 
