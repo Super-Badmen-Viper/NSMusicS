@@ -8,6 +8,11 @@
   - 5.基本的歌曲导入（选择导入，本地全盘扫描导入，支持mp3,wav,flac音乐文件(仅扫描带有歌手歌曲名文件名的文件)）
 - 注意：性能或系统版本较低，可能会影响运行时的性能(些许影响)，推荐WIn11，Win11有特别优化[doge]
 
+# 界面预览：
+  <img src="doc/Test (1).png" align="left" width="400">
+  <img src="doc/Test (2).png" align="left" width="400">
+  <img src="doc/Test (3).png" align="left" width="400">
+
 # 快速使用：
   - 下载：https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer1.0.4
   - 我的QQ学习群号：228440692，欢迎加群，先给个star吧，群里有我整理好的项目，比Github更加容易开箱即用
