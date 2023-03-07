@@ -1,18 +1,18 @@
 # MoZhiMusicPlayer功能说明：
 仿制QQ音乐PC端，基于dotNET_C#_WPF的个人开源音乐客户端  
 ## 功能：
-  - [1.支持歌词字同步动画，同步歌词进度 （可兼容其它音乐软件的歌词文件）歌词字同步算法]
-  - [2.支持多歌手写真动画交叉轮播]
-  - [3.音频动态频谱动画]
-  - [4.基本的音乐播放器功能（无需解释，该有的肯定有）]
-  - [5.基本的歌曲导入（选择导入，本地全盘扫描导入，支持mp3,wav,flac音乐文件(仅扫描带有歌手歌曲名文件名的文件)）]
+  - 1.支持歌词字同步动画，同步歌词进度 （可兼容其它音乐软件的歌词文件）歌词字同步算法
+  - 2.支持多歌手写真动画交叉轮播
+  - 3.音频动态频谱动画
+  - 4.基本的音乐播放器功能（无需解释，该有的肯定有）
+  - 5.基本的歌曲导入（选择导入，本地全盘扫描导入，支持mp3,wav,flac音乐文件(仅扫描带有歌手歌曲名文件名的文件)）
 ## 注意：性能或系统版本较低，可能会影响运行时的性能(些许影响)，推荐WIn11，Win11有特别优化[doge]
 
 # 快速使用：
-## 下载：https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer1.0.4
-## 我的QQ学习群号：228440692，欢迎加群，先给个star吧，群里有我整理好的项目，比Github更加容易开箱即用
-## 演示效果：（B站链接：https://www.bilibili.com/video/BV1uG41137jY/?vd_source=6e56ca0b155a60e6a6878e5775fdcc35）
-## 资源所在位置：MoZhiMusicPlayer/MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/Resource/之内（歌词，歌手写真，专辑图片等，可自行编辑）
+  - 下载：https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer1.0.4
+  - 我的QQ学习群号：228440692，欢迎加群，先给个star吧，群里有我整理好的项目，比Github更加容易开箱即用
+  - 演示效果：（B站链接：https://www.bilibili.com/video/BV1uG41137jY/?vd_source=6e56ca0b155a60e6a6878e5775fdcc35）
+  - 资源所在位置：MoZhiMusicPlayer/MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/Resource/之内（歌词，歌手写真，专辑图片等，可自行编辑）
 ## 音乐附加资源下载（百度网盘资源）：
   链接：https://pan.baidu.com/s/1LbmClxXrEsO4-R9ISBKCoQ?pwd=zake 提取码：zake  
   请将此网盘的Resource压缩包解压并覆盖至MoZhiMusicPlayer_GithubAuthor_XiangCheng\bin\Debug\net6.0-windows，取代同名文件夹
