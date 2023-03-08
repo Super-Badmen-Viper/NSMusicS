@@ -1,6 +1,9 @@
 # MoZhiMusicPlayer功能说明：
 - 仿制QQ音乐PC端，基于dotNET_C#_WPF的个人开源音乐客户端  
-- 演示效果：B站链接：https://www.bilibili.com/video/BV1rM411s7J9/?spm_id_from=333.999.0.0&vd_source=6e56ca0b155a60e6a6878e5775fdcc35
+- 演示效果：B站链接：
+- - 最新版：https://www.bilibili.com/video/BV1rM411s7J9
+- - 旧版：https://www.bilibili.com/video/BV1uG41137jY
+
 ## 功能：
   - 1.支持歌词字同步动画，同步歌词进度 （可兼容其它音乐软件的歌词文件）歌词字同步算法
   - 2.支持多歌手写真动画交叉轮播
