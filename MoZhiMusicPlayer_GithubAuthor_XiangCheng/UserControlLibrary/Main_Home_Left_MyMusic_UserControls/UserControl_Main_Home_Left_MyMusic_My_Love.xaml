@@ -213,6 +213,8 @@
                                             <TextBlock Text="{Binding Song_Name}" Margin="0,5,0,0"/>
                                             <Button HorizontalAlignment="Left" Background="{Binding Song_MV_Image}"
                                                 Style="{StaticResource MyButton}" 
+                                                Tag="{Binding Song_Url}"
+                                                Click="MV_Play_ListView_Song_Click" 
                                                 Width="16" Height="16" Margin="8,6,0,0"
                                                 />
                                             <Button HorizontalAlignment="Left" Background="{Binding Song_Agora_Image}"

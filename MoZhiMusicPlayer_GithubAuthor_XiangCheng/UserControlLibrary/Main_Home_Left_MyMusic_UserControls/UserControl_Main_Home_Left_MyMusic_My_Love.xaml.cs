@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_Init_Info.Init_SongList_Info;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SongList_Info;
+using Gst;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
 {
@@ -45,6 +46,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         }
 
         public string Path_App;
+        private MainWindow mainWindow;
+        public ListView_Item_Bing listView_Item_Bing_ThisPlaying_Song_Info = ListView_Item_Bing.Return_This_listView_Item_Bing();
         public ListView_Item_Bing_ALL listView_Item_Bing_ALL = ListView_Item_Bing_ALL.Retuen_This();
         public Bool_listView_Temp_Info_End_Clear bool_ListView_Temp_Info_End_Clear = Bool_listView_Temp_Info_End_Clear.Retuen_This();
 
@@ -141,7 +144,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                 {
                     ListView_Item_Bing temp_love = listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Find(delegate (ListView_Item_Bing x) { return x.Song_Url.Equals(songurl); });
 
-                    temp.Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心.png")));
+                    temp.Song_Like_Image = new ImageBrush(new BitmapImage(new System.Uri(Path_App + @"\Button_Image_Ico\爱心.png")));
                     temp.Song_Like = 0;
                     listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Remove(temp_love);
 
@@ -164,8 +167,46 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             Sort_SongList();
         }
 
-        
+
         #endregion
+
+
+        
+        /// <summary>
+        /// 点击播放MV
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void MV_Play_ListView_Song_Click(object sender, RoutedEventArgs e)
+        {
+            // 在 Test 窗口中，获取 MainWindow 的实例
+            //mainWindow = (MainWindow)System.Windows.Application.Current.MainWindow;
+
+            Button tag = sender as Button;
+            
+            string mv_path = tag.Tag.ToString();
+
+            mv_path = listView_Item_Bing_ThisPlaying_Song_Info.Song_Url;
+
+            if (mv_path != null)
+            {
+                mv_path = mv_path.Substring(mv_path.LastIndexOf("/") + 1);
+                mv_path = Path_App + "\\MV\\" + mv_path;
+                mv_path = mv_path.Replace("mp3", "mp4");
+
+                /*if (mainWindow.musicPlayer_MV_Player_UserControl.Visibility == Visibility.Visible)
+                {
+                    mainWindow.musicPlayer_MV_Player_UserControl.Visibility = Visibility.Hidden;
+
+                }
+                else
+                {
+                    mainWindow.musicPlayer_MV_Player_UserControl.Visibility = Visibility.Visible;
+
+                    mainWindow.musicPlayer_MV_Player_UserControl.userControl_MediaMV.MediaMent_MV.Source = new System.Uri(mv_path);
+                }*/
+            }
+        }
 
 
         #region 批量操作

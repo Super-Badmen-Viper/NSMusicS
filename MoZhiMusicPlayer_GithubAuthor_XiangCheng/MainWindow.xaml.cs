@@ -1628,11 +1628,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
 
 
-        public string Song_MRC_Path;
-        string Singer_Name;
-        string Song_Name;
-        string Song_Url;
-        string Song_Image_Name;
+        ListView_Item_Bing listView_Item_Bing_ThisPlaying_Song_Info = ListView_Item_Bing.Return_This_listView_Item_Bing();
         public int Select_DoubleClick_ListView = 0;
         /// <summary>
         /// 根据歌曲id的值，播放指定路径
@@ -1662,7 +1658,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                 //指定播放路径
                 MediaElement_Song.Source = new Uri(path);
-                Song_Url = MediaElement_Song.Source.ToString();
+                listView_Item_Bing_ThisPlaying_Song_Info.Song_Url = MediaElement_Song.Source.ToString();
                 if (dispatcherTimer_Spectrum_Visualization != null)
                 {
                     //userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.Take_Spectrum_Visualization(Song_Url);
@@ -1671,10 +1667,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                 //保存当前正在播放的歌曲信息
                 //Song_No = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Song_No;
-                Song_Name = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Song_Name.Trim();
-                Singer_Name = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Singer_Name;
+                listView_Item_Bing_ThisPlaying_Song_Info.Song_Name = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Song_Name.Trim();
+                listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Singer_Name;
                 //Song_Url = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Song_Url;
-                Song_Image_Name = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Album_Name;
+                listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Album_Name;
 
                 //开始播放
                 MediaElement_Song.Play();
@@ -1688,14 +1684,14 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 //歌曲逻辑
                 //Change_MediaElement_Song_Source();//打开歌词显示
                 //生成歌曲名
-                Song_MRC_Path = Singer_Name + " - " + Song_Name;
+                listView_Item_Bing_ThisPlaying_Song_Info.Song_MRC_Path = listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name + " - " + listView_Item_Bing_ThisPlaying_Song_Info.Song_Name;
                 //切换歌曲，歌手，专辑名
                 Change_TextBox_To_SingerSong_Name();
                 //选中播放的列
                 listView_Item_Bing_ALL.listView_SongList.SelectedIndex = WMP_Song_Play_Ids - 1;
 
                 //检测歌手数量，设置歌手动画循环方式
-                if (Singer_Name.IndexOf("、") <= 0)//单歌手
+                if (listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name.IndexOf("、") <= 0)//单歌手
                 {
                     Bool_Timer_Singer_Photo_1 = true;
                     Bool_Timer_Singer_Photo_1_lot = false;
@@ -1740,14 +1736,14 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         public void Change_TextBox_To_SingerSong_Name()
         {
             //如果当前播放的歌曲信息不为空
-            if (Song_Name != null)
+            if (listView_Item_Bing_ThisPlaying_Song_Info.Song_Name != null)
             {
-                string Song_Name_Temp = Song_Name;
+                string Song_Name_Temp = listView_Item_Bing_ThisPlaying_Song_Info.Song_Name;
 
                 //设置歌手名
-                musicPlayer_Main_UserControl.TextBox_SingerName.Text = "歌手 :  "+Singer_Name;
+                musicPlayer_Main_UserControl.TextBox_SingerName.Text = "歌手 :  " + listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name;
                 musicPlayer_Main_UserControl.TextBox_SingerName.TextAlignment = TextAlignment.Center;
-                musicPlayer_Main_UserControl.TextBox_SingerName_Animation.Text = "歌手 :  " + Singer_Name;
+                musicPlayer_Main_UserControl.TextBox_SingerName_Animation.Text = "歌手 :  " + listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name;
                 musicPlayer_Main_UserControl.TextBox_SingerName_Animation.TextAlignment = TextAlignment.Center;
                 //设置歌曲名
                 musicPlayer_Main_UserControl.TextBox_SongName.Text = Song_Name_Temp/*.Substring(Song_Name_Temp_Last_Num + 3)*/.Trim();
@@ -1755,12 +1751,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 musicPlayer_Main_UserControl.TextBox_SongName_Animation.Text = Song_Name_Temp/*.Substring(Song_Name_Temp_Last_Num + 3)*/.Trim();
                 musicPlayer_Main_UserControl.TextBox_SongName_Animation.TextAlignment = TextAlignment.Center;
                 //设置专辑名
-                musicPlayer_Main_UserControl.TextBox_SongAlbumName.Text = "专辑 :  " + Song_Image_Name;
+                musicPlayer_Main_UserControl.TextBox_SongAlbumName.Text = "专辑 :  " + listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name;
                 musicPlayer_Main_UserControl.TextBox_SongAlbumName.TextAlignment = TextAlignment.Center;
-                musicPlayer_Main_UserControl.TextBox_SongAlbumName_Animation.Text = "专辑 :  " + Song_Image_Name;
+                musicPlayer_Main_UserControl.TextBox_SongAlbumName_Animation.Text = "专辑 :  " + listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name;
                 musicPlayer_Main_UserControl.TextBox_SongAlbumName_Animation.TextAlignment = TextAlignment.Center;
                 //设置歌曲全名
-                userControl_ButtonFrame_MusicPlayer.Song_Name.Text = Singer_Name + " - " + Song_Name;
+                userControl_ButtonFrame_MusicPlayer.Song_Name.Text = listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name + " - " + listView_Item_Bing_ThisPlaying_Song_Info.Song_Name;
             }
         }
 
@@ -1812,11 +1808,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //创建获取 歌词数组信息输出类 
             dao_ListBox_Temp_MRC = new Dao_ListBox_Temp_MRC();
             //设置要分析的歌词文件（mrc）路径
-            string MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".mrc";
+            string MRC_URL = Path_App + @"\Mrc\" + listView_Item_Bing_ThisPlaying_Song_Info.Song_MRC_Path + @".mrc";
             string CRC_URL = MRC_URL.Replace("Mrc", "Crc"); CRC_URL = CRC_URL.Replace("mrc", "crc");
 
             if (!File.Exists(MRC_URL))
-                MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".krc"; CRC_URL = MRC_URL.Replace("Mrc", "Crc"); CRC_URL = CRC_URL.Replace("krc", "crc");
+                MRC_URL = Path_App + @"\Mrc\" + listView_Item_Bing_ThisPlaying_Song_Info.Song_MRC_Path + @".krc"; CRC_URL = MRC_URL.Replace("Mrc", "Crc"); CRC_URL = CRC_URL.Replace("krc", "crc");
 
             try
             {
@@ -2474,10 +2470,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         public void Change_Image_Song()
         {
             //如果读取到专辑名
-            if (Song_Image_Name.Length > 0) //专辑模式
+            if (listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name.Length > 0) //专辑模式
             {
                 //生成专辑名所在路径
-                Song_Image_Url = Path_App + @"\Song_ALbum\" + Song_Image_Name + @".jpg";
+                Song_Image_Url = Path_App + @"\Song_ALbum\" + listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name + @".jpg";
                 //如果专辑文件存在
                 if (File.Exists(Song_Image_Url))
                 {
@@ -2493,13 +2489,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 else
                 {
                     //如果当前歌曲名不为空
-                    if (Song_Name != null)
+                    if (listView_Item_Bing_ThisPlaying_Song_Info.Song_Name != null)
                     {
                         //专辑名为歌曲名
-                        Song_Image_Name = Song_Name;
+                        listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name = listView_Item_Bing_ThisPlaying_Song_Info.Song_Name;
 
                         //生成专辑名所在路径
-                        Song_Image_Url = Path_App + @"\Song_ALbum\" + Song_Image_Name + @".jpg";
+                        Song_Image_Url = Path_App + @"\Song_ALbum\" + listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name + @".jpg";
                         //如果歌曲图片文件存在
                         if (File.Exists(Song_Image_Url))
                         {
@@ -2515,7 +2511,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         else
                         {
                             //获取歌手名
-                            string Singer_Image_Name = Singer_Name.Trim();
+                            string Singer_Image_Name = listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name.Trim();
                             //生成专辑名所在路径
                             Song_Image_Url = Path_App + @"\Song_ALbum\" + Singer_Image_Name + @".jpg";
                             //如果歌曲图片存在
@@ -2551,9 +2547,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 musicPlayer_Main_UserControl.TextBox_SongAlbumName.TextAlignment = TextAlignment.Center;
 
                 //如果当前歌曲名不为空
-                if (Song_Name != null)
+                if (listView_Item_Bing_ThisPlaying_Song_Info.Song_Name != null)
                 {
-                    string Song_Name_Temp = Song_Name;
+                    string Song_Name_Temp = listView_Item_Bing_ThisPlaying_Song_Info.Song_Name;
                     int Song_Name_Temp_Last_Num = Song_Name_Temp.LastIndexOf("-");
                     if (Song_Name_Temp_Last_Num > 0)
                     {
@@ -2561,11 +2557,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     }
 
                     //专辑名为歌曲名
-                    Song_Image_Name = Song_Name_Temp.Substring(Song_Name_Temp_Last_Num + 1).Trim();
+                    listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name = Song_Name_Temp.Substring(Song_Name_Temp_Last_Num + 1).Trim();
 
 
                     //生成专辑名所在路径
-                    Song_Image_Url = Path_App + @"\Song_ALbum\" + Song_Image_Name + @".jpg";
+                    Song_Image_Url = Path_App + @"\Song_ALbum\" + listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name + @".jpg";
                     //如果歌曲图片存在
                     if (File.Exists(Song_Image_Url))
                     {
@@ -2581,7 +2577,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     else
                     {
                         //获取歌手名
-                        string Singer_Image_Name = Singer_Name.Trim();
+                        string Singer_Image_Name = listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name.Trim();
                         //生成专辑名所在路径
                         Song_Image_Url = Path_App + @"\Song_ALbum\" + Singer_Image_Name + @".jpg";
                         //如果歌曲图片存在
@@ -2627,13 +2623,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         public void Change_Image_Singer_FrmMain_OnePhoto()
         {
             //如果歌手名不为空
-            if (Singer_Name != null)
+            if (listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name != null)
             {
                 //如果当前播放的歌曲信息不为空
-                if (Singer_Name != null)
+                if (listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name != null)
                 {      
                     //获取歌手名
-                    string Singer_Image_Name = Singer_Name.Trim();
+                    string Singer_Image_Name = listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name.Trim();
                     //生成歌手图片所在路径
                     Singer_Image_Url = Path_App + @"\Singer_Image\" + singer_photo[0] + @"\" + Singer_Image_Name + @".jpg";
                     //如果歌手图片存在
@@ -2691,10 +2687,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         public void Change_Image_Singer()
         {
             //如果歌手名不为空
-            if (Singer_Name != null)
+            if (listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name != null)
             {
                 //如果当前歌手不是上一位歌手
-                if (Singer_Name_Temp != Singer_Name.Trim())
+                if (Singer_Name_Temp != listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name.Trim())
                 {
                     //关闭多歌手模式
                     thread_timer_Singer_Photo_One = new Thread(new ThreadStart(() =>
@@ -2708,10 +2704,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     thread_timer_Singer_Photo_One.Start();
 
                     //如果当前播放的歌曲信息不为空
-                    if (Singer_Name != null)
+                    if (listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name != null)
                     {
                         //获取歌手名
-                        string Singer_Image_Name = Singer_Name.Trim();
+                        string Singer_Image_Name = listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name.Trim();
                         //生成歌手图片所在路径
                         Singer_Image_Url = Path_App + @"\Singer_Image\" + singer_photo[0] + @"\" + Singer_Image_Name + @".jpg";
                         //如果歌手图片存在
@@ -2872,7 +2868,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             for (int i = 0; i < singer_nums; i++)
                 if (temp[i] == null)
-                    temp[i] = Singer_Name.Trim();
+                    temp[i] = listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name.Trim();
 
             List_Singer_Names = new string[singer_nums];
 
@@ -3597,7 +3593,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                 ].Begin();
                         }
 
-                        Spectrum_Value = (float)linearDoubleKeyFrame_1.Value;//保留此次动画的Value值
+                        Spectrum_Value = (float)(linearDoubleKeyFrame_1.Value);//保留此次动画的Value值
                     }
                 }
             }

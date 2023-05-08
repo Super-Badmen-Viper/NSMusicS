@@ -27,11 +27,13 @@ using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SongList_Info;
 
+
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main.UserControls
 {
     /// <summary>
-    /// 主要代码来源：comSlimeNullAudioTest.git  
-    /// 老夫想偷懒了[doge]，频谱分析暂时就先用别人的代码[doge]，改改又不是不能用[doge]
+    /// 部分代码来源：comSlimeNullAudioTest.git  
+    /// 老夫想偷懒了[doge]，频谱提取暂时就先用别人的代码[doge]，改改又不是不能用[doge]
+    /// 这个参数真TM难调，在239行有4个参数，应该是算法还不够牛逼，不管了，先到这
     /// </summary>
     public class AudioSpectrogram
     {
@@ -225,8 +227,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             int hz2500index = (int)(curveFrequencyEnd / frequencyPerIndex);
             double[] resultPaint = DftData.Take(hz2500index).ToArray(); // 106  0~105     71  1~71    ->>>   
 
-            float
-                dataRight = resultPaint.Length, panelRight = 1040, panelHeight = 100;
+            float dataRight = resultPaint.Length, panelRight = 1040, panelHeight = 100;
             dftDataFilter ??= (v) => v;
             PointF[] points = Enumerable.Range(0, resultPaint.Length).Select(i =>
                 new PointF(
@@ -234,19 +235,33 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
                     panelHeight - dftDataFilter((float)resultPaint[i] * curveMultiple)))
                 .ToArray();
 
+            //参数调整,为0则不执行
+            int size_1_SmoothData = 0;//预处理数据，第一次SmoothData平滑
+            int size_average = 12;//对animation_points超出的部分进行平均量增减(上下波动幅度)。
+            double size_Error_point = 0.5;//超出频谱动画范围，重新设置为？
+            int size_2_SmoothData = 3;//第二次SmoothData平滑
+
+            #region 频谱数据，浓缩平滑预处理
+
             animation_points.Clear();
+            //数据浓缩为53长度
+            points = CondenseData(points, 53);
             for (int i = 0; i < points.Length; i++)
             {
-                if(i % 2 == 0)
+                for (int j = points.Length / 4; j < points.Length / 4 + points.Length / 2; j++)
                 {
-                    for (int j = 0; j < points.Length / 2; j++)
-                    {
-                        animation_points.Add(points[i].Y);
-                        animation_points[animation_points.Count - 1] = (float)(animation_points[animation_points.Count - 1] / 100 - 0.6);
-                        break;
-                    }
+                    animation_points.Add(points[i].Y);
+                    animation_points[animation_points.Count - 1] = (float)(animation_points[animation_points.Count - 1] / 100 - 0.3);
+                    break;
                 }
             }
+//w,b参数
+            //对animation_points进行SmoothData平滑
+            if(size_1_SmoothData != 0)
+                animation_points = SmoothData(animation_points, size_1_SmoothData);
+            #endregion
+
+            #region 频谱数据常规处理，防止越界
 
             //显示频谱的动画个数
             int animation_points_Count = 53;
@@ -254,20 +269,129 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             for (int i = 0; i < (int)(animation_points.Count / animation_points_Count * (int)(animation_points_Count / 2)); i++)
                 animation_points[animation_points.Count - 1 - i] = animation_points[i];
 
+            //使频谱数据相反转置
+            for (int i = 0; i < animation_points.Count; i++)
+                animation_points[i] = -(float)(animation_points[i]);
+
+            //此处temp防止下标越界超过53
+            List<float> temp = new List<float>();
             if (animation_points.Count > animation_points_Count)
             {
-                List<float> temp = new List<float>();
+                temp = new List<float>();
                 for (int i = 0; i < animation_points_Count; i++)
                     temp.Add(animation_points[i]);
-
                 animation_points = temp;
             }
+            #endregion
 
-            if(animation_points.Count == animation_points_Count)
+            #region 频谱数据转置，再次平滑处理
+
+            if (animation_points.Count == animation_points_Count)
+            {
+                //对animation_points数据相反转置操作
+                animation_points.Reverse(0, 26);
+                animation_points.Reverse(26, 27);
+
+                if (size_average != 0)
+                {
+                    //对超过0的数据，求增量平均值，处理
+                    float sum_average = 0;
+                    int count_sum_average = 0;
+                    for (int j = 0; j < animation_points.Count; j++)
+                    {
+                        if (animation_points[j] > 0)
+                        {
+                            sum_average += animation_points[j];
+                            count_sum_average++;
+                        }
+                    }
+    //w,b参数
+                    //对animation_points超出的部分进行平均量增减。减少方差，增加均匀度
+                    sum_average /= (count_sum_average + size_average);
+                    for (int i = 0; i < animation_points.Count; i++)
+                    {
+                        if (animation_points[i] <= 0)
+                            animation_points[i] += sum_average;
+                        else if (animation_points[i] > 0.4)
+                        {
+                            animation_points[i] = (float)size_Error_point;
+                            animation_points[i] -= sum_average;
+                        }
+                    }
+                }
+//w,b参数
+                //对animation_points进行SmoothData平滑
+                if(size_2_SmoothData != 0)
+                    animation_points = SmoothData(animation_points, size_2_SmoothData);
+
                 for (int i = 0; i < (int)(animation_points_Count / 4); i++)
                     animation_points[animation_points.Count - 1 - i] = animation_points[i];
-
+            }
+            #endregion
         }
+
+        #region 数据浓缩平滑所使用的函数
+
+        /// <summary>
+        /// PointF[]数据浓缩
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="newSize"></param>
+        /// <returns></returns>
+        public static PointF[] CondenseData(PointF[] data, int newSize)
+        {
+            PointF[] condensedData = new PointF[newSize];
+            float stepSize = (float)data.Length / newSize;
+            float i = 0;
+            for (int j = 0; j < newSize; j++)
+            {
+                condensedData[j] = data[(int)i];
+                i += stepSize;
+            }
+            return condensedData;
+        }
+        /// <summary>
+        /// 创建一个SmoothData平滑函数，使音频频谱数据分布更均匀平滑
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="windowSize"></param>
+        /// <returns></returns>
+        public static PointF[] SmoothData(PointF[] data, int windowSize)
+        {
+            PointF[] smoothedData = new PointF[data.Length];
+            for (int i = 0; i < data.Length; i++)
+            {
+                float sumX = 0;
+                float sumY = 0;
+                int count = 0;
+                for (int j = Math.Max(0, i - windowSize / 2); j < Math.Min(data.Length, i + windowSize / 2); j++)
+                {
+                    sumX += data[j].X;
+                    sumY += data[j].Y;
+                    count++;
+                }
+                smoothedData[i] = new PointF(sumX / count, sumY / count);
+            }
+            return smoothedData;
+        }
+        public static List<float> SmoothData(List<float> data, int windowSize)
+        {        
+            List<float> smoothedData = new List<float>();
+            for (int i = 0; i < data.Count; i++)
+            {
+                int windowStartIndex = Math.Max(0, i - windowSize / 2);
+                int windowEndIndex = Math.Min(data.Count - 1, i + windowSize / 2);
+                double sum = 0;
+                for (int j = windowStartIndex; j <= windowEndIndex; j++)
+                {
+                    sum += data[j];
+                }
+                smoothedData.Add((float)(sum / (windowEndIndex - windowStartIndex + 1)));
+            }
+            return smoothedData;
+        }
+        #endregion
+
 
         /// <summary>
         /// 根据 Samples, 将采样进行傅里叶变换以求得 DftData

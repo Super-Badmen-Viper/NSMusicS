@@ -5,9 +5,9 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoZhiMusicPlayer_GithubAuthor_XiangCheng", "MoZhiMusicPlayer_GithubAuthor_XiangCheng\MoZhiMusicPlayer_GithubAuthor_XiangCheng.csproj", "{DE9CE32C-9228-443F-90AE-3709337AFBE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Local_ThisPC_song_search_ALL", "Local_ThisPC_song_search_ALL\Local_ThisPC_song_search_ALL.csproj", "{B4B2D831-5686-4920-8BCC-86BCBA013B71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Local_ThisPC_song_search_ALL", "Local_ThisPC_song_search_ALL\Local_ThisPC_song_search_ALL.csproj", "{B4B2D831-5686-4920-8BCC-86BCBA013B71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Local_ThisPC_song_search_YouSelect", "Local_ThisPC_song_search_YouSelect\Local_ThisPC_song_search_YouSelect.csproj", "{05E6EA1E-13A2-4305-BD14-59EDF45AFDA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Local_ThisPC_song_search_YouSelect", "Local_ThisPC_song_search_YouSelect\Local_ThisPC_song_search_YouSelect.csproj", "{05E6EA1E-13A2-4305-BD14-59EDF45AFDA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

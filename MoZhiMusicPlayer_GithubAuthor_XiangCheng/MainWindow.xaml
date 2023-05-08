@@ -11,6 +11,7 @@
         xmlns:MainWindow_TOP_UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_TOP_UserControls" 
         xmlns:Main_Home_Left_MyMusic_UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Left_MyMusic_UserControls" 
         xmlns:MusicPlayer_Main="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main" 
+        xmlns:MusicPlayer_MV_Player="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_MV_Player" 
         xmlns:Helper_UserControlLibrary="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary" 
         x:Class="MoZhiMusicPlayer_GithubAuthor_XiangCheng.MainWindow"
         
@@ -82,15 +83,11 @@
                         Width="160" Height="30" Margin="0,10,0,0"
                         UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                         MouseLeftButtonDown="UserControl_ButtonFrame_ThisWindowsMusicAndDownload_MouseLeftButtonDown" />
-                    
-                    <!--BUG，待修复-->
                     <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_MusicRecentlyPlayed 
                         x:Name="userControl_ButtonFrame_MusicRecentlyPlayed"
                         Width="160" Height="30" Margin="0,10,0,0"
                         UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                         MouseLeftButtonDown="UserControl_ButtonFrame_MusicRecentlyPlayed_MouseLeftButtonDown" 
-                        
-                        
                         />
                     <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_MusicTryListenList 
                         x:Name="userControl_ButtonFrame_MusicTryListenList"
@@ -151,6 +148,11 @@
                     />
                 <Main_Home_Left_MyMusic_UserControls:UserControl_Main_Home_Left_MyMusic_Try_Listen
                     x:Name="userControl_Main_Home_Left_MyMusic_Try_Listen"
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                    Visibility="Hidden"
+                    />
+                <MusicPlayer_MV_Player:MusicPlayer_MV_Player_UserControl 
+                    x:Name="musicPlayer_MV_Player_UserControl"
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
                     Visibility="Hidden"
                     />

@@ -16,6 +16,15 @@
     <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization_3.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_MV_Player\MainWindow_Top_MediaMV\UserControl_MediaMV.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_MV_Player\MainWindow_Top_MediaMV\UserControl_Media\UserControl_Media_ButtomSilderPanel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_MV_Player\MusicPlayer_MV_Player_UserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="MainWindow.xaml">
@@ -28,6 +37,15 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization_3.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_MV_Player\MainWindow_Top_MediaMV\UserControl_MediaMV.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_MV_Player\MainWindow_Top_MediaMV\UserControl_Media\UserControl_Media_ButtomSilderPanel.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_MV_Player\MusicPlayer_MV_Player_UserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

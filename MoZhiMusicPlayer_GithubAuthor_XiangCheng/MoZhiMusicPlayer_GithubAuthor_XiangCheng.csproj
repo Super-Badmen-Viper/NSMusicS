@@ -304,6 +304,14 @@
     <None Remove="ico_ui_library\音量加-01.png" />
     <None Remove="ico_ui_library\顺序播放 %281%29.png" />
     <None Remove="ico_ui_library\顺序播放.png" />
+    <None Remove="Resource\EXO Lotto ALL.jpg" />
+    <None Remove="Resource\EXO Obsession ALL.jpg" />
+    <None Remove="Resource\EXO Obsession.jpg" />
+    <None Remove="Resource\EXO Obsession_2.jpg" />
+    <None Remove="Resource\EXO-K 중독 %28Overdose%29.jpg" />
+    <None Remove="Resource\EXO-K.jpg" />
+    <None Remove="Resource\lotto.jpg" />
+    <None Remove="Resource\Obsession.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -622,6 +630,14 @@
     <Resource Include="ico_ui_library\音量加-01.png" />
     <Resource Include="ico_ui_library\顺序播放 (1).png" />
     <Resource Include="ico_ui_library\顺序播放.png" />
+    <Resource Include="Resource\EXO Lotto ALL.jpg" />
+    <Resource Include="Resource\EXO Obsession ALL.jpg" />
+    <Resource Include="Resource\EXO Obsession.jpg" />
+    <Resource Include="Resource\EXO Obsession_2.jpg" />
+    <Resource Include="Resource\EXO-K 중독 (Overdose).jpg" />
+    <Resource Include="Resource\EXO-K.jpg" />
+    <Resource Include="Resource\lotto.jpg" />
+    <Resource Include="Resource\Obsession.jpg" />
   </ItemGroup>
 
 </Project>
