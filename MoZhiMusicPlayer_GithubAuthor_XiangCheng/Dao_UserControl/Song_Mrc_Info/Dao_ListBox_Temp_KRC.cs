@@ -500,39 +500,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                 {
                     while ((A_String_Read = Song_Lrc_StreamReader.ReadLine()) != null)
                     {
-                        if (A_String_Read.ToString().Length < 3)//跳过空格
-                            continue;
-                        if (A_String_Read.ToString().Substring(1, 2).Equals("id"))//跳过offset标签
-                            continue;
-                        if (A_String_Read.ToString().Substring(1, 2).Equals("ar"))//跳过ar标签
-                            continue;
-                        if (A_String_Read.ToString().Substring(1, 2).Equals("ti"))//跳过ti标签
-                            continue;
-                        if (A_String_Read.ToString().Substring(1, 2).Equals("by"))//跳过by标签
-                            continue;
-                        if (A_String_Read.ToString().Substring(1, 2).Equals("ha"))//跳过by标签
-                            continue;
-                        if (A_String_Read.ToString().Substring(1, 2).Equals("al"))//跳过by标签
-                            continue;
-                        if (A_String_Read.ToString().Substring(1, 2).Equals("si"))//跳过by标签
-                            continue;
-                        if (A_String_Read.ToString().Substring(1, 2).Equals("qq"))//跳过by标签
-                            continue;
-                        if (A_String_Read.ToString().Substring(1, 2).Equals("to"))//跳过by标签
-                            continue;
-                        if (A_String_Read.ToString().Substring(1, 2).Equals("of"))//跳过offset标签
-                            continue;
-                        if (A_String_Read.ToString().Substring(1, 2).Equals("la"))//跳过by标签
-                            continue;
-                        if (A_String_Read.ToString().Length > 222)
-                            continue;
+                        if (isPureNum(A_String_Read.ToString().Substring(1, 1).ToString()))
+                        {
+                            int nums_temp_1 = A_String_Read.IndexOf("]");
+                            //int nums_temp_2 = A_String_Read.IndexOf("[") + 1;
+                            if (A_String_Read.Length <= nums_temp_1)//过滤歌词内容为空的行
+                                continue;
 
-                        int nums_temp_1 = A_String_Read.IndexOf("]");
-                        //int nums_temp_2 = A_String_Read.IndexOf("[") + 1;
-                        if (A_String_Read.Length <= nums_temp_1)//过滤歌词内容为空的行
-                            continue;
-
-                        arrayList_MRC_line.Add(A_String_Read);
+                            arrayList_MRC_line.Add(A_String_Read);
+                        }
                     }
                 }
             }
@@ -545,6 +521,24 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
 
             Init_MRC_Info();
         }
+        public bool isPureNum(string str)
+        {
+            if (str.Length == 0 || str == null)//验证这个字符串是否为空
+            {
+                return false;
+            }
+            byte[] strBytes = Encoding.ASCII.GetBytes(str);//获取字符串的byte类型的字符数组，编码方式ASCII
+            foreach (byte strByte in strBytes)
+            {
+                if ((strByte < 48) || (strByte > 57))     //判断每个字符是否为数字，根据每个字符的ASCII值所在范围判断
+                {
+                    return false;                     //不是，就返回false
+                }
+            }
+            return true;                              //是，就返回true
+        }
+
+
         /// <summary>
         /// 初始化歌词行字节信息
         /// </summary>
