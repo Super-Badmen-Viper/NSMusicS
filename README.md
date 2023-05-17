@@ -16,7 +16,7 @@
   - 1.基于深度学习的听歌识曲模块（同时作为单独项目模型开源）
   - 2.基于大数据用户行为分析的猜你喜欢模块
   - 3.基于nlp的AI乐谱绘制模块（同时作为单独项目模型开源）
-- PS：相信我的技术好吗[doge] ，请等待更新，MoZhiMusic将会成为最牛逼的开源音乐软件[doge]
+- PS：相信我的技术好吗[doge] ，请等待更新，MoZhiMusicPlayer将会成为全世界最牛逼的开源音乐软件[doge]
 
 # 界面预览：
   <img src="doc/Test (1).png" align="center" width="1200">
