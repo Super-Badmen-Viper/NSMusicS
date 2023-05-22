@@ -5,8 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main"
              
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="690" MinWidth="1020" 
              Height="690" Width="1020" 
@@ -22,10 +21,25 @@
                     <ImageBrush Stretch="UniformToFill"/>
                 </Grid.Background>
             </Grid>
-            <Grid x:Name="Grid_down_Singer_Photo">
-                <Grid.Background>
-                    <ImageBrush Stretch="UniformToFill"/>
-                </Grid.Background>
+            <Grid x:Name="Grid_down_Singer_Photo" >
+                <ItemsControl x:Name="ItemsControl_SingerImageCut" Grid.Row="1" ItemsSource="{Binding Singer_ImagerCut_Infos}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4" Rows="4"/>
+                            <!--<WrapPanel/>-->
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <materialDesign:TransitioningContent OpeningEffect="{Binding Effact}">
+                                <Border Width="{Binding Width}" Height="{Binding Height}" Background="{Binding image_i}" Margin="0">
+                                    
+                                </Border>
+                            </materialDesign:TransitioningContent>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Button x:Name="SingerImageCut_Animation_Begin_Button" Command="{Binding RefCommand}" Visibility="Hidden"/>
             </Grid>
 
             <Grid x:Name="Image_Singer_Buttom" Visibility="Hidden" Grid.RowSpan="2">
