@@ -42,15 +42,22 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_I
         private void btCut(string tbImagePath)
         {
             FileInfo fileImg = new FileInfo(tbImagePath);
-            using (Bitmap b = new Bitmap(fileImg.FullName))
+            try
             {
-                List<Rectangle> lstRect = CreateAvgCutRectangle(b.Width, b.Height, (int)numCutRows, (int)numCutCells);
-                for (int i = 0; i < lstRect.Count; i++)
+                using (Bitmap b = new Bitmap(fileImg.FullName))
                 {
-                    CutImage(tbImagePath, lstRect[i].X, lstRect[i].Y, lstRect[i].Width, lstRect[i].Height,
-                        string.Format("{0}_{1}.bmp", fileImg.Name.Remove(fileImg.Name.LastIndexOf(".")),
-                            NumToNostring(i)));
+                    List<Rectangle> lstRect = CreateAvgCutRectangle(b.Width, b.Height, (int)numCutRows, (int)numCutCells);
+                    for (int i = 0; i < lstRect.Count; i++)
+                    {
+                        CutImage(tbImagePath, lstRect[i].X, lstRect[i].Y, lstRect[i].Width, lstRect[i].Height,
+                            string.Format("{0}_{1}.bmp", fileImg.Name.Remove(fileImg.Name.LastIndexOf(".")),
+                                NumToNostring(i)));
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex+"此图像数据：ERROE\n"+ fileImg.FullName);
             }
         }
 
