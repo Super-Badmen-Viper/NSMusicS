@@ -75,7 +75,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
                             Duration = new TimeSpan(0, 0, 0, 0, 200)
                         }
                     });
-                    await Task.Delay(10);
+                    await Task.Delay(50);
                     Num_Singer_ImagerCut_Infos++;
                 }
             });

@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_Init_Info.Init_SongList_Info;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SongList_Info;
@@ -25,21 +21,11 @@ using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hover_M
 using System.Windows.Media.Effects;
 using System.Threading;
 using System.Collections;
-using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Left_MyMusic_UserControls;
-using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls;
 using System.Globalization;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
-using NAudio.Wave;
-using NAudio.Dsp;
-using VisioForge.MediaFramework.NAudio.VisioForge;
-using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main.UserControls;
-using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_Info;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main.UserControls.UserControl_Animation.ViewModel;
-using System.Windows.Automation.Peers;
-using System.Windows.Automation.Provider;
-using ImageMagick;
 using TextAlignment = System.Windows.TextAlignment;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 {
@@ -2780,8 +2766,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                         Bool_Timer_Singer_Photo_1 = true;
                         Bool_Timer_Singer_Photo_1_lot = false;
-
-                        SongBegin_OnceAnimation();
                     }
                     else if (Singer_Name_Temp_Nums == 2)
                     {
@@ -2798,8 +2782,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                         Bool_Timer_Singer_Photo_1 = false;
                         Bool_Timer_Singer_Photo_1_lot = true;
-
-                        SongBegin_OnceAnimation();
                     }
 
                 }
@@ -2948,8 +2930,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 Bool_Timer_Singer_Photo_1_lot = false;
 
                 Singer_Name_Temp_Nums = 1;
-
-                SongBegin_OnceAnimation();
             }
             else
             {
@@ -2967,8 +2947,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 Bool_Timer_Singer_Photo_1_lot = true;
 
                 Singer_Name_Temp_Nums = 2;
-
-                SongBegin_OnceAnimation();
             }
         }
 
@@ -3209,25 +3187,31 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// <param name="imgPath"></param>
         private void BgSwitch(string imgPath)
         {
-            musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Visibility = Visibility.Visible;
+            musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Visibility = Visibility.Visible;   
+            singerImage_Cut = new SingerImage_Cut();
+            musicPlayer_Main_UserControl.DataContext = null;
 
             musicPlayer_Main_UserControl.DataContext = new MainViewModel_Animation_1(
                                     singerImage_Cut.CutImage_ImageBrush(imgPath),
                                     musicPlayer_Main_UserControl.Grid_down_Singer_Photo.ActualWidth / 4,
                                     musicPlayer_Main_UserControl.Grid_down_Singer_Photo.ActualHeight / 4);
+
             MyVM = musicPlayer_Main_UserControl.DataContext as MainViewModel_Animation_1;
             if (MyVM != null && MyVM.RefCommand.CanExecute(null))
                 MyVM.RefCommand.Execute(null);
+            
 
 
             //初始化歌曲进度
             this.imgPath = imgPath;
             dispatcherTimer_SingerImageCut = new DispatcherTimer();
             dispatcherTimer_SingerImageCut.Tick += DispatcherTimer_SingerImageCut_Tick;
-            dispatcherTimer_SingerImageCut.Interval = TimeSpan.FromMilliseconds(100); // 间隔1秒
+            dispatcherTimer_SingerImageCut.Interval = TimeSpan.FromMilliseconds(10); // 间隔1秒
             dispatcherTimer_SingerImageCut.Start();
 
 
+
+            //动画0：三层动画：耗性能
             /*oa = bgstoryboard.Children.FirstOrDefault(c => c is ObjectAnimationUsingKeyFrames) as ObjectAnimationUsingKeyFrames;
             oa.KeyFrames[0].Value = new BitmapImage(new Uri(imgPath));*/
 
@@ -3242,16 +3226,20 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         }
         private void DispatcherTimer_SingerImageCut_Tick(object? sender, EventArgs e)
         {
-            if(MyVM.Num_Singer_ImagerCut_Infos == 16)
-            {
-                ImageBrush test = new ImageBrush(new BitmapImage(new Uri(imgPath)));
-                test.Stretch = Stretch.UniformToFill;
-                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
+            if(MyVM != null)
+                if(MyVM.Num_Singer_ImagerCut_Infos == 16)
+                {
+                    ImageBrush test = new ImageBrush(new BitmapImage(new Uri(imgPath)));
+                    test.Stretch = Stretch.UniformToFill;
+                    musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
 
-                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Visibility = Visibility.Hidden;
+                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Visibility = Visibility.Hidden;
 
-                dispatcherTimer_SingerImageCut.Stop();
-            }
+                    dispatcherTimer_SingerImageCut.Stop();
+                    dispatcherTimer_SingerImageCut = null;
+                    MyVM = null;
+                    singerImage_Cut = null;
+                }
         }
 
         #region 已弃用 歌手写真动画
@@ -3341,20 +3329,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             BgSwitch(Singer_Image_Url);
 
             init_animation_bacnground++;
-        }
-        bool bool_SongBegin_OnceAnimation = false;
-        /// <summary>
-        /// 启动一次动画，覆盖第一次歌手动画不启动的Bug，仅覆盖一次
-        /// </summary>
-        private void SongBegin_OnceAnimation()
-        {
-            if (bool_SongBegin_OnceAnimation == false)
-            {
-                //先启动动画，防止不刷新
-                BgSwitch(Singer_Image_Url);
-
-                bool_SongBegin_OnceAnimation = true;
-            }
         }
         #endregion
 
