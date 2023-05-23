@@ -1,5 +1,5 @@
 # MoZhiMusicPlayer说明：
-- 仿制QQ音乐PC端，基于dotNET_C#_WPF的个人开源音乐客户端  
+- 基于dotNET_C#_WPF的个人开源音乐客户端  
 - 演示效果：B站链接：
 - - 最新版：https://www.bilibili.com/video/BV1rM411s7J9
 - - 旧版：https://www.bilibili.com/video/BV1uG41137jY
