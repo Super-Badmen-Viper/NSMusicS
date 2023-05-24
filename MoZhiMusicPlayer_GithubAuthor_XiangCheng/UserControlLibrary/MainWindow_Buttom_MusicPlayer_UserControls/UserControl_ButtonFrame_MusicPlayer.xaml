@@ -159,7 +159,7 @@
                 MouseEnter="Border_Hover_BackGround_MouseEnter" 
                 >
                 <Border.Background>
-                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/初学者.jpg" Stretch="Uniform"/>
+                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/Music_Album.png" Stretch="Uniform"/>
                 </Border.Background>
             </Border>
             <Border x:Name="Border_Hover_BackGround"
@@ -209,7 +209,7 @@
                     </StackPanel.RenderTransform>
                     <TextBox 
                         x:Name="Song_Name"
-                        Text="演员 - 薛之谦" TextWrapping="NoWrap" Width="531" FontSize="13"    
+                        Text="MoZhi音乐，开源技术" TextWrapping="NoWrap" Width="531" FontSize="13"    
                         TextChanged="Song_Name_DataContextChanged" 
                         Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" 
                         Focusable="False"

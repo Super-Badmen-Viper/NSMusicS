@@ -16,7 +16,10 @@
     <Grid>
         <Grid x:Name="Grid_Animation">
 
-            <Grid x:Name="Grid_Up_Singer_Photo">
+            <Grid x:Name="Grid_Up_Singer_Photo"
+                    Width="{Binding ActualWidth, ElementName=Grid_down_Singer_Photo, Mode=OneWay}"
+                    Height="{Binding ActualHeight, ElementName=Grid_down_Singer_Photo, Mode=OneWay}"
+                  >
                 <Grid.Background>
                     <ImageBrush Stretch="UniformToFill"/>
                 </Grid.Background>
@@ -25,7 +28,7 @@
                 <ItemsControl x:Name="ItemsControl_SingerImageCut" Grid.Row="1" ItemsSource="{Binding Singer_ImagerCut_Infos}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <UniformGrid Columns="4" Rows="4"/>
+                            <UniformGrid Columns="2" Rows="2"/>
                             <!--<WrapPanel/>-->
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>

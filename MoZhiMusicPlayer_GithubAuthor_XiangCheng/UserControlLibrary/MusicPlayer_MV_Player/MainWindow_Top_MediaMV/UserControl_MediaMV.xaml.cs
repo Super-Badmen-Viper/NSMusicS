@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_TOP_UserControls;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +32,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             Init();//初始化数据，可在 VS2022 XAML预览界面直接预览
         }
 
+        string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
+
         /// <summary>
         /// 初始化事件
         /// </summary>
@@ -36,21 +41,18 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         {
             //隐藏控件
             userControl_Media_ButtomSilderPanel.Visibility = Visibility.Hidden;
-            StackPanel_Voice.Visibility = Visibility.Hidden;
 
             //所有重叠层绑定鼠标移入移出事件
             userControl_Media_ButtomSilderPanel.MouseEnter += Mouse_Over_Silder_Music_Width;
             userControl_Media_ButtomSilderPanel.MouseLeave += Mouse_Leave_Silder_Music_Width;
             userControl_MV_Take_TextBlock.MouseEnter += Mouse_Over_Silder_Music_Width;
             userControl_MV_Take_TextBlock.MouseLeave += Mouse_Leave_Silder_Music_Width;
-            StackPanel_Voice.MouseEnter += Mouse_Over_Silder_Music_Width;
-            StackPanel_Voice.MouseLeave += Mouse_Leave_Silder_Voice_Width;
 
             //音量控制
             //userControl_Media_ButtomSilderPanel.Button_Music_Voice_Speed.Click += Show_Voice_Silder;
-            Slider_Voice.Maximum = 1;
-            Slider_Voice.Value = 0.5;
-            Slider_Voice.ValueChanged += Slider_Voice_ValueChanged;
+            userControl_Media_ButtomSilderPanel.Slider_Voice.Maximum = 1;
+            userControl_Media_ButtomSilderPanel.Slider_Voice.Value = 0.5;
+            userControl_Media_ButtomSilderPanel.Slider_Voice.ValueChanged += Slider_Voice_ValueChanged;
 
             //加载siler鼠标是否悬浮事件          
             userControl_Media_ButtomSilderPanel.Silder_Music_Width.MouseMove += Mouse_Over_Silder_Music_Width_MV;
@@ -67,6 +69,92 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
 
             //加载歌曲进度条
             userControl_Media_ButtomSilderPanel.Silder_Music_Temp_Width.ValueChanged += Timeline_ValueChanged_MV;
+
+            userControl_Media_ButtomSilderPanel.Button_Play_Pause_Player.Click += Button_Play_Pause_Player_Click;
+            userControl_Media_ButtomSilderPanel.Button_Pull_APP.Click += Button_Pull_APP_Click;
+            userControl_Media_ButtomSilderPanel.Button_Max.Click += Button_Max_Click;
+            
+            brush_MaxNormal.ImageSource = new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\退出全屏-01 (1).png"));
+            brush_Max.ImageSource = new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\全屏-01 (1).png"));
+            brush_Pull_APPNormal.ImageSource = new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\缩小 (1).png"));
+            brush_Pull_APP.ImageSource = new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\/放大 (1).png"));
+            userControl_Media_ButtomSilderPanel.Button_Max.Background = brush_Max;
+            userControl_Media_ButtomSilderPanel.Button_Pull_APP.Background = brush_Pull_APP;
+        }
+
+        double width_normal = 0;
+        double height_normal = 0;
+        ImageBrush brush_Max = new ImageBrush();//最大化
+        ImageBrush brush_MaxNormal = new ImageBrush();//正常窗口
+        ImageBrush brush_Pull_APP = new ImageBrush();//最大化
+        ImageBrush brush_Pull_APPNormal = new ImageBrush();//正常窗口
+        private void Button_Pull_APP_Click(object sender, RoutedEventArgs e)
+        {
+            Window mainWindow;
+            width_normal = this.ActualWidth;
+            height_normal = this.ActualHeight;
+            if (userControl_Media_ButtomSilderPanel.Button_Pull_APP.Background == brush_Pull_APP)//最大化按钮
+            {
+                mainWindow = Window.GetWindow(this);
+                mainWindow.WindowState = WindowState.Maximized;
+
+                userControl_Media_ButtomSilderPanel.Button_Pull_APP.Background = brush_Pull_APPNormal;
+
+                
+            }
+            else//最小化按钮
+            {
+                mainWindow = Window.GetWindow(this);
+                mainWindow.WindowState = WindowState.Normal;
+
+                userControl_Media_ButtomSilderPanel.Button_Pull_APP.Background = brush_Pull_APP;
+            }
+        }
+        private void Button_Max_Click(object sender, RoutedEventArgs e)
+        {
+            Window mainWindow;
+            width_normal = this.ActualWidth;
+            height_normal = this.ActualHeight;
+            if (userControl_Media_ButtomSilderPanel.Button_Max.Background == brush_Max)//最大化按钮
+            {
+                mainWindow = Window.GetWindow(this);
+                mainWindow.WindowState = WindowState.Maximized;
+
+                userControl_Media_ButtomSilderPanel.Button_Max.Background = brush_MaxNormal;
+
+                this.Width = mainWindow.ActualWidth;
+                this.Height = mainWindow.ActualHeight;
+            }
+            else//最小化按钮
+            {
+                mainWindow = Window.GetWindow(this);
+                mainWindow.WindowState = WindowState.Normal;
+
+                userControl_Media_ButtomSilderPanel.Button_Max.Background = brush_Max;
+            }
+        }
+        
+
+        /// <summary>
+        /// 播放or暂停
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void Button_Play_Pause_Player_Click(object sender, RoutedEventArgs e)
+        {
+            if (MediaMent_MV.LoadedBehavior == MediaState.Play)
+            {
+                MediaMent_MV.Pause();
+                MediaMent_MV.LoadedBehavior = MediaState.Pause;
+                userControl_Media_ButtomSilderPanel.Button_Play_Pause_Player.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\24gf-playCircle.png")));
+            }
+            else
+            {
+                MediaMent_MV.Play();
+                MediaMent_MV.LoadedBehavior = MediaState.Play;
+                userControl_Media_ButtomSilderPanel.Button_Play_Pause_Player.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\暂停.png")));
+            }
         }
 
         #region 鼠标移入silder_TextBlock
@@ -88,10 +176,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         public void Mouse_Leave_Silder_Music_Width(object sender, MouseEventArgs e)
         {
             userControl_Media_ButtomSilderPanel.Visibility = Visibility.Hidden;
-        }
-        public void Mouse_Leave_Silder_Voice_Width(object sender, MouseEventArgs e)
-        {
-            StackPanel_Voice.Visibility = Visibility.Hidden;
         }
         /// <summary>
         /// 鼠标移入silder_调整播放进度
@@ -119,22 +203,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         #endregion
 
         #region 音量
-        /// <summary>
-        /// 开启音量条
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void Show_Voice_Silder(object sender, EventArgs e)
-        {
-            if (StackPanel_Voice.Visibility == Visibility.Hidden)
-            {
-                StackPanel_Voice.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                StackPanel_Voice.Visibility = Visibility.Hidden;
-            }
-        }
 
         /// <summary>
         /// 更改音量
@@ -143,9 +211,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         /// <param name="e"></param>
         private void Slider_Voice_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            MediaMent_MV.Volume = Slider_Voice.Value;
-
-            Voice_Nums.Text = (Slider_Voice.Value * 100).ToString();
+            MediaMent_MV.Volume = userControl_Media_ButtomSilderPanel.Slider_Voice.Value;
         }
         #endregion
 
@@ -239,5 +305,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
 
         #endregion
 
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            MediaMent_MV.Source = new Uri(Path_App + @"/MV/AOA - 짧은 치마 (Miniskirt) Music Video Teaser Drama ver..mp4");
+            dispatcherTimer_Silder.Start();
+        }
     }
 }

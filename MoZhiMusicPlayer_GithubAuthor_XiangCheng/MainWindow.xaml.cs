@@ -26,6 +26,8 @@ using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_Info;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main.UserControls.UserControl_Animation.ViewModel;
 using TextAlignment = System.Windows.TextAlignment;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main;
+using System.Windows.Controls.Primitives;
+using MaterialDesignThemes.Wpf.Transitions;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 {
@@ -664,6 +666,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             timer_Singer_Photo_One_Lot = new DispatcherTimer();
             timer_Singer_Photo_One_Lot.Interval = TimeSpan.FromMilliseconds(7777);
             timer_Singer_Photo_One_Lot.Tick += Change_Singer_Photo_To_Grid_Back_Lot;
+            //动画参数设置
+            num_duration = 200;
+            num_Delay = 200;
+            singerImage_Cut.numCutCells = 2;
+            singerImage_Cut.numCutRows = 2;
+
 
             //设置进入播放器界面，返回主界面事件
             userControl_ButtonFrame_MusicPlayer.Button_Singer_Image_Animation_To_WindowsDesktop.Visibility = Visibility.Hidden;
@@ -2594,7 +2602,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
         #endregion
 
-        SingerImage_Cut singerImage_Cut = new SingerImage_Cut();
+        SingerImage_Cut singerImage_Cut = SingerImage_Cut.Retuen_This();
         #region   切换歌手图片背景
 
         public bool Bool_Button_Back_Click = true;
@@ -2639,13 +2647,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                             else
                             {
                                 Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
-                                BgSwitch(Singer_Image_Url);
+                                ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
+                                test.Stretch = Stretch.UniformToFill;
+                                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
                             }
                         }
                         else
                         {
                             Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
-                            BgSwitch(Singer_Image_Url);
+                            ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
+                            test.Stretch = Stretch.UniformToFill;
+                            musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
                         }
                     }
 
@@ -2702,7 +2714,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                             else
                             {
                                 Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
-                                BgSwitch(Singer_Image_Url);
+                                ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
+                                test.Stretch = Stretch.UniformToFill;
+                                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
 
                                 //清空歌手图片轮播信息
                                 //周杰伦、梁心颐、杨瑞代
@@ -2728,8 +2742,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     else
                     {
                         Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
-
-                        BgSwitch(Singer_Image_Url);
+                        ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
+                        test.Stretch = Stretch.UniformToFill;
+                        musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
 
                         //清空歌手图片轮播信息
                         //周杰伦、梁心颐、杨瑞代
@@ -2892,16 +2907,18 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 else
                 {
                     Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
-
-                    BgSwitch(Singer_Image_Url);
+                    ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
+                    test.Stretch = Stretch.UniformToFill;
+                    musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
                 }
             }
             catch(Exception ex) {
                 MessageBox.Show("应用程序发生不可恢复的异常，将要退出！"+ ex.ToString());
 
                 Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\巨浪.jpg";
-
-                BgSwitch(Singer_Image_Url);
+                ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Singer_Image_Url)));
+                test.Stretch = Stretch.UniformToFill;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
             }
         }
 
@@ -3181,6 +3198,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         MainViewModel_Animation_1 MyVM;
         string imgPath;
         DispatcherTimer dispatcherTimer_SingerImageCut;
+        int num_SingerImageAnimation_no = 0;//写真切分组合多参数动画，参数下标值，已弃用
+        int num_duration = 0;
+        int num_Delay = 0;
         /// <summary>
         /// 对指定的图片路径进行动画处理
         /// </summary>
@@ -3188,13 +3208,20 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         private void BgSwitch(string imgPath)
         {
             musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Visibility = Visibility.Visible;   
-            singerImage_Cut = new SingerImage_Cut();
             musicPlayer_Main_UserControl.DataContext = null;
+
+            num_duration = 200;
+            num_Delay = 200;
 
             musicPlayer_Main_UserControl.DataContext = new MainViewModel_Animation_1(
                                     singerImage_Cut.CutImage_ImageBrush(imgPath),
-                                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.ActualWidth / 4,
-                                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.ActualHeight / 4);
+                                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.ActualWidth / singerImage_Cut.numCutCells,
+                                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.ActualHeight / singerImage_Cut.numCutRows,
+                                    singerImage_Cut.numCutCells,
+                                    singerImage_Cut.numCutRows,
+                                    num_duration,
+                                    num_Delay
+                                    );
 
             MyVM = musicPlayer_Main_UserControl.DataContext as MainViewModel_Animation_1;
             if (MyVM != null && MyVM.RefCommand.CanExecute(null))
@@ -3208,7 +3235,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             dispatcherTimer_SingerImageCut.Tick += DispatcherTimer_SingerImageCut_Tick;
             dispatcherTimer_SingerImageCut.Interval = TimeSpan.FromMilliseconds(10); // 间隔1秒
             dispatcherTimer_SingerImageCut.Start();
-
 
 
             //动画0：三层动画：耗性能
@@ -3227,7 +3253,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         private void DispatcherTimer_SingerImageCut_Tick(object? sender, EventArgs e)
         {
             if(MyVM != null)
-                if(MyVM.Num_Singer_ImagerCut_Infos == 16)
+                if(MyVM.Num_Singer_ImagerCut_Infos == singerImage_Cut.numCutCells * singerImage_Cut.numCutRows)
                 {
                     ImageBrush test = new ImageBrush(new BitmapImage(new Uri(imgPath)));
                     test.Stretch = Stretch.UniformToFill;
@@ -3238,7 +3264,76 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     dispatcherTimer_SingerImageCut.Stop();
                     dispatcherTimer_SingerImageCut = null;
                     MyVM = null;
-                    singerImage_Cut = null;
+
+
+                    #region 图片切分组合，多参数轮播动画，已弃用，UniformGrid组合图片默认不在左上角，多参数轮播不够美观
+                    /*UniformGrid uniformGrid = (UniformGrid)musicPlayer_Main_UserControl.ItemsControl_SingerImageCut.ItemsPanel.LoadContent();
+                    if (num_SingerImageAnimation_no == 0)
+                    {
+                        singerImage_Cut.numCutCells = 2;
+                        singerImage_Cut.numCutRows = 1;
+
+                        uniformGrid.Columns = 2;
+                        uniformGrid.Rows = 1;
+                        musicPlayer_Main_UserControl.ItemsControl_SingerImageCut.ItemsPanel = new ItemsPanelTemplate(new FrameworkElementFactory(typeof(UniformGrid)));
+
+                        num_Delay = 200;
+
+                        num_SingerImageAnimation_no++;
+                    }
+                    else if (num_SingerImageAnimation_no == 1)
+                    {
+                        singerImage_Cut.numCutCells = 1;
+                        singerImage_Cut.numCutRows = 2;
+
+                        uniformGrid.Columns = 1;
+                        uniformGrid.Rows = 2;
+                        musicPlayer_Main_UserControl.ItemsControl_SingerImageCut.ItemsPanel = new ItemsPanelTemplate(new FrameworkElementFactory(typeof(UniformGrid)));
+
+                        num_Delay = 200;
+
+                        num_SingerImageAnimation_no++;
+                    }
+                    else if (num_SingerImageAnimation_no == 2)
+                    {
+                        singerImage_Cut.numCutCells = 2;
+                        singerImage_Cut.numCutRows = 2;
+
+                        uniformGrid.Columns = 2;
+                        uniformGrid.Rows = 2;
+                        musicPlayer_Main_UserControl.ItemsControl_SingerImageCut.ItemsPanel = new ItemsPanelTemplate(new FrameworkElementFactory(typeof(UniformGrid)));
+
+                        num_Delay = 100;
+
+                        num_SingerImageAnimation_no++;
+                    }
+                    else if (num_SingerImageAnimation_no == 3)
+                    {
+                        singerImage_Cut.numCutCells = 3;
+                        singerImage_Cut.numCutRows = 3;
+
+                        uniformGrid.Columns = 3;
+                        uniformGrid.Rows = 3;
+                        musicPlayer_Main_UserControl.ItemsControl_SingerImageCut.ItemsPanel = new ItemsPanelTemplate(new FrameworkElementFactory(typeof(UniformGrid)));
+
+                        num_Delay = 45;
+
+                        num_SingerImageAnimation_no++;
+                    }
+                    else
+                    {
+                        singerImage_Cut.numCutCells = 4;
+                        singerImage_Cut.numCutRows = 4;
+
+                        uniformGrid.Columns = 4;
+                        uniformGrid.Rows = 4;
+                        musicPlayer_Main_UserControl.ItemsControl_SingerImageCut.ItemsPanel = new ItemsPanelTemplate(new FrameworkElementFactory(typeof(UniformGrid)));
+
+                        num_Delay = 25;
+
+                        num_SingerImageAnimation_no = 0;
+                    }*/
+                    #endregion
                 }
         }
 
@@ -4007,35 +4102,31 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             musicPlayer_Main_UserControl.Height = this.ActualHeight - 20;
 
+            //补齐歌手写真切换动画产生的缝隙，切分动画参数为奇数时需要
+            int num_epos_SingerImageAnimation = 0;
 
             if (this.Width >= 1000 && this.Width <= 1100)
             {
-                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1300;
-                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1300;
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1300 - num_epos_SingerImageAnimation;
             }
             else if (this.Width >= 1100 && this.Width <= 1400)
             {
-                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1600;
-                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1600;
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1600 - num_epos_SingerImageAnimation;
             }
             else if (this.Width >= 1400 && this.Width <= 1700)
             {
-                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1920;
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1920;
             }
             if (this.Height >= 562 && this.Height <= 731)
             {
-                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 731;
-                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 731;
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 731 - num_epos_SingerImageAnimation;
             }
             else if (this.Height >= 731 && this.Height <= 900)
             {
-                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 900;
-                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 900;
+                musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 900 - num_epos_SingerImageAnimation;
             }
             else if (this.Height >= 900 && this.Height <= 1000)
             {
-                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 1080;
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 1080;
             }
 

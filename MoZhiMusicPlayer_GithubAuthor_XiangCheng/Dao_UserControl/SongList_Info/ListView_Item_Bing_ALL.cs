@@ -26,7 +26,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SongList_Info
             listView_Item_Bing_ALL = Return_This_listView_Item_Bing_ALL();
             return listView_Item_Bing_ALL;
         }
-        public static ListView_Item_Bing_ALL Return_This_listView_Item_Bing_ALL()
+        private static ListView_Item_Bing_ALL Return_This_listView_Item_Bing_ALL()
         {
             if (listView_Item_Bing_ALL == null)
                 listView_Item_Bing_ALL = new ListView_Item_Bing_ALL();

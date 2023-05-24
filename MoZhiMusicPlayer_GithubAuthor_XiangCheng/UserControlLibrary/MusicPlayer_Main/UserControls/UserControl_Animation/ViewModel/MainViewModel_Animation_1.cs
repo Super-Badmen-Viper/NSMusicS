@@ -38,11 +38,14 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         List<ImageBrush> List_ImageBrush_SingerImageCut { get; set; }
         public int Num_Singer_ImagerCut_Infos { get; set; }//检测是否已完成RelayCommand
 
-        public MainViewModel_Animation_1(List<ImageBrush> List_ImageBrush_SingerImageCut, double width, double height)
+        public MainViewModel_Animation_1(List<ImageBrush> List_ImageBrush_SingerImageCut, double width, double height,int numCutCells, int numCutRows, int duration, int num_Delay)
         {
             Singer_ImagerCut_Infos = new ObservableCollection<Singer_ImagerCut_Info>();
 
             this.List_ImageBrush_SingerImageCut = List_ImageBrush_SingerImageCut;
+
+            if(numCutCells == 4)
+                num_Delay = 25;
 
             kinds = new List<TransitionEffectKind>
             {
@@ -61,7 +64,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
 
                 Num_Singer_ImagerCut_Infos = 0;
                 Singer_ImagerCut_Infos.Clear();
-                for (int i = 0; i < 16; i++)
+                for (int i = 0; i < numCutCells * numCutRows; i++)
                 {
                     Singer_ImagerCut_Infos.Add(new Singer_ImagerCut_Info()
                     {
@@ -72,10 +75,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
                         Effact = new TransitionEffect()
                         {
                             Kind = kinds[new Random().Next(2, 6)],
-                            Duration = new TimeSpan(0, 0, 0, 0, 200)
+                            Duration = new TimeSpan(0, 0, 0, 0, duration)
                         }
                     });
-                    await Task.Delay(50);
+                    await Task.Delay(num_Delay);
                     Num_Singer_ImagerCut_Infos++;
                 }
             });
@@ -89,7 +92,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             get { return singer_ImagerCut_Infos; }
             set { singer_ImagerCut_Infos = value; RaisePropertyChanged(); }
         }
-
         public static implicit operator ObservableCollection<object>(MainViewModel_Animation_1 v)
         {
             throw new NotImplementedException();

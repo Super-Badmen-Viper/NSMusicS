@@ -5,12 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_MV_Player"
              xmlns:MainWindow_Top_MediaMV="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_MV_Player.MainWindow_Top_MediaMV" x:Class="MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_MV_Player.MusicPlayer_MV_Player_UserControl"
-             mc:Ignorable="d" 
-             d:DesignHeight="543" d:DesignWidth="810" Background="#FFF6F6F6">
+             mc:Ignorable="d" d:DesignWidth="780" Background="#FFF6F6F6" Height="1200">
     <Grid>
         <MainWindow_Top_MediaMV:UserControl_MediaMV 
-            x:Name="userControl_MediaMV"
-            Width="810" Height="370" VerticalAlignment="Top" Margin="0,-31,0,0"/>
+            x:Name="userControl_MediaMV" Margin="0,-30,0,760" 
+            MinHeight="456" Height="486"
+            />
         
     </Grid>
 </UserControl>

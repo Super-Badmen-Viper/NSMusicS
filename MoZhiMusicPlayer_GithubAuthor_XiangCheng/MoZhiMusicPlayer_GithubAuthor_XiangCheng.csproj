@@ -48,6 +48,8 @@
     <None Remove="ico_ui_library\3_电台.jpg" />
     <None Remove="ico_ui_library\3_精选.jpg" />
     <None Remove="ico_ui_library\3_视频库.jpg" />
+    <None Remove="ico_ui_library\K歌 %281%29.png" />
+    <None Remove="ico_ui_library\K歌.png" />
     <None Remove="ico_ui_library\Music_Album.png" />
     <None Remove="ico_ui_library\QQ音乐logo.png" />
     <None Remove="ico_ui_library\Streamlined mode %281%29.png" />
@@ -77,6 +79,7 @@
     <None Remove="ico_ui_library\专辑播放.png" />
     <None Remove="ico_ui_library\专辑，光盘 %281%29.png" />
     <None Remove="ico_ui_library\专辑，光盘.png" />
+    <None Remove="ico_ui_library\乐谱绘制与演奏.png" />
     <None Remove="ico_ui_library\二维码 %281%29.png" />
     <None Remove="ico_ui_library\二维码.png" />
     <None Remove="ico_ui_library\云.png" />
@@ -191,6 +194,8 @@
     <None Remove="ico_ui_library\播放队列.png" />
     <None Remove="ico_ui_library\收藏 %281%29.png" />
     <None Remove="ico_ui_library\收藏.png" />
+    <None Remove="ico_ui_library\放大 %281%29.png" />
+    <None Remove="ico_ui_library\放大.png" />
     <None Remove="ico_ui_library\数据库-01 %281%29.png" />
     <None Remove="ico_ui_library\数据库-01.png" />
     <None Remove="ico_ui_library\数据库-02 %281%29.png" />
@@ -238,6 +243,8 @@
     <None Remove="ico_ui_library\爱心.png" />
     <None Remove="ico_ui_library\物流-01 %281%29.png" />
     <None Remove="ico_ui_library\物流-01.png" />
+    <None Remove="ico_ui_library\猜你喜欢 %281%29.png" />
+    <None Remove="ico_ui_library\猜你喜欢.png" />
     <None Remove="ico_ui_library\用户信息 %281%29.png" />
     <None Remove="ico_ui_library\用户信息.png" />
     <None Remove="ico_ui_library\用户切换 %281%29.png" />
@@ -254,6 +261,8 @@
     <None Remove="ico_ui_library\礼物.png" />
     <None Remove="ico_ui_library\编辑-01 %281%29.png" />
     <None Remove="ico_ui_library\编辑-01.png" />
+    <None Remove="ico_ui_library\缩小 %281%29.png" />
+    <None Remove="ico_ui_library\缩小.png" />
     <None Remove="ico_ui_library\菜单 %281%29.png" />
     <None Remove="ico_ui_library\菜单.png" />
     <None Remove="ico_ui_library\薛之谦.jpg" />
@@ -378,6 +387,8 @@
     <Resource Include="ico_ui_library\3_电台.jpg" />
     <Resource Include="ico_ui_library\3_精选.jpg" />
     <Resource Include="ico_ui_library\3_视频库.jpg" />
+    <Resource Include="ico_ui_library\K歌 (1).png" />
+    <Resource Include="ico_ui_library\K歌.png" />
     <Resource Include="ico_ui_library\Music_Album.png" />
     <Resource Include="ico_ui_library\QQ音乐logo.png" />
     <Resource Include="ico_ui_library\Streamlined mode (1).png" />
@@ -407,6 +418,7 @@
     <Resource Include="ico_ui_library\专辑播放.png" />
     <Resource Include="ico_ui_library\专辑，光盘 (1).png" />
     <Resource Include="ico_ui_library\专辑，光盘.png" />
+    <Resource Include="ico_ui_library\乐谱绘制与演奏.png" />
     <Resource Include="ico_ui_library\二维码 (1).png" />
     <Resource Include="ico_ui_library\二维码.png" />
     <Resource Include="ico_ui_library\云.png" />
@@ -519,6 +531,8 @@
     <Resource Include="ico_ui_library\播放队列.png" />
     <Resource Include="ico_ui_library\收藏 (1).png" />
     <Resource Include="ico_ui_library\收藏.png" />
+    <Resource Include="ico_ui_library\放大 (1).png" />
+    <Resource Include="ico_ui_library\放大.png" />
     <Resource Include="ico_ui_library\数据库-01 (1).png" />
     <Resource Include="ico_ui_library\数据库-01.png" />
     <Resource Include="ico_ui_library\数据库-02 (1).png" />
@@ -566,6 +580,8 @@
     <Resource Include="ico_ui_library\爱心.png" />
     <Resource Include="ico_ui_library\物流-01 (1).png" />
     <Resource Include="ico_ui_library\物流-01.png" />
+    <Resource Include="ico_ui_library\猜你喜欢 (1).png" />
+    <Resource Include="ico_ui_library\猜你喜欢.png" />
     <Resource Include="ico_ui_library\用户信息 (1).png" />
     <Resource Include="ico_ui_library\用户信息.png" />
     <Resource Include="ico_ui_library\用户切换 (1).png" />
@@ -582,6 +598,8 @@
     <Resource Include="ico_ui_library\礼物.png" />
     <Resource Include="ico_ui_library\编辑-01 (1).png" />
     <Resource Include="ico_ui_library\编辑-01.png" />
+    <Resource Include="ico_ui_library\缩小 (1).png" />
+    <Resource Include="ico_ui_library\缩小.png" />
     <Resource Include="ico_ui_library\菜单 (1).png" />
     <Resource Include="ico_ui_library\菜单.png" />
     <Resource Include="ico_ui_library\薛之谦.jpg" />

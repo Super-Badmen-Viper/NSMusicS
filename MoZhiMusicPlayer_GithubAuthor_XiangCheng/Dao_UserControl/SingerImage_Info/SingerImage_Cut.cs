@@ -12,11 +12,25 @@ using System.Windows.Forms;
 using System.Windows.Controls;
 using Image = System.Drawing.Image;
 using System.Runtime.InteropServices;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SongList_Info;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_Info
 {
     public class SingerImage_Cut
     {
+        private static SingerImage_Cut singerImage_Cut;
+        public static SingerImage_Cut Retuen_This()
+        {
+            singerImage_Cut = Return_This_SingerImage_Cut();
+            return singerImage_Cut;
+        }
+        public static SingerImage_Cut Return_This_SingerImage_Cut()
+        {
+            if (singerImage_Cut == null)
+                singerImage_Cut = new SingerImage_Cut();
+
+            return singerImage_Cut;
+        }
 
         List<ImageBrush> imageBrushs = new List<ImageBrush>();
 
@@ -35,8 +49,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_I
             return imageBrushs;
         }
 
-        int numCutCells = 4;
-        int numCutRows = 4;
+        public int numCutCells = 4;
+        public int numCutRows = 4;
 
         //开始图片切割
         private void btCut(string tbImagePath)

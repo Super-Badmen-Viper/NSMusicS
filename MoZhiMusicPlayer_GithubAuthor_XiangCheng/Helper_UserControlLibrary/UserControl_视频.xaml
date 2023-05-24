@@ -3,11 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary"
+             xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary" xmlns:MusicPlayer_MV_Player="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_MV_Player"
              mc:Ignorable="d" 
              d:DesignHeight="443" d:DesignWidth="810"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                Background="#F6F6F6" SizeChanged="UserControl_SizeChanged">
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+             Background="#F6F6F6" SizeChanged="UserControl_SizeChanged">
     <Grid>
         <TextBlock HorizontalAlignment="Left" Height="50" Text="视频" TextWrapping="Wrap" 
                    VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
@@ -33,6 +33,14 @@
             <TabItem Header="视频库" Style="{DynamicResource TabItemStyle1}" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
                 <ScrollViewer x:Name="ScrollViewer_3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <Frame Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/Helper_UserControlLibrary/视频/UserControl_视频库.xaml" NavigationUIVisibility="Hidden"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Width="46" Visibility="Hidden" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TabItem Header="MV播放器" Style="{DynamicResource TabItemStyle1}" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+                <ScrollViewer x:Name="ScrollViewer_4" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" MinWidth="810">
+                    <MusicPlayer_MV_Player:MusicPlayer_MV_Player_UserControl 
+                        x:Name="musicPlayer_MV_Player_UserControl" 
+                        />
                 </ScrollViewer>
             </TabItem>
         </TabControl>

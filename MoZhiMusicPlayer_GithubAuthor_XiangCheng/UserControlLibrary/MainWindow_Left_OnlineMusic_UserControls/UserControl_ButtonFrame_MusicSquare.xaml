@@ -21,7 +21,7 @@
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/音乐.png"/>
             </TextBlock.Background>
         </TextBlock>
-        <TextBlock Margin="40,5,0,5" Text="音乐广场" Foreground="#FF313131" FontSize="13.5" Padding="0,1,0,0" 
+        <TextBlock Margin="40,5,0,5" Text="音乐广场 （开发中）" Foreground="#FF313131" FontSize="13.5" Padding="0,1,0,0" 
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                    />
     </Grid>
