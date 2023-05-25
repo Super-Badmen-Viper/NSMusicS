@@ -669,8 +669,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //动画参数设置
             num_duration = 200;
             num_Delay = 200;
-            singerImage_Cut.numCutCells = 2;
-            singerImage_Cut.numCutRows = 2;
+            singerImage_Cut.numCutCells = 4;
+            singerImage_Cut.numCutRows = 4;
 
 
             //设置进入播放器界面，返回主界面事件
