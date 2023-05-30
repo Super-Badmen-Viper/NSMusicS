@@ -3213,8 +3213,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             num_duration = 200;
             num_Delay = 200;
 
+            //会造成UI约0.4s的卡顿，需优化
+            List<ImageBrush> List_ImageBrush_SingerImageCut = singerImage_Cut.CutImage_ImageBrush(imgPath);
+
             musicPlayer_Main_UserControl.DataContext = new MainViewModel_Animation_1(
-                                    singerImage_Cut.CutImage_ImageBrush(imgPath),
+                                    List_ImageBrush_SingerImageCut,
                                     musicPlayer_Main_UserControl.Grid_down_Singer_Photo.ActualWidth / singerImage_Cut.numCutCells,
                                     musicPlayer_Main_UserControl.Grid_down_Singer_Photo.ActualHeight / singerImage_Cut.numCutRows,
                                     singerImage_Cut.numCutCells,
@@ -3264,7 +3267,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     dispatcherTimer_SingerImageCut.Stop();
                     dispatcherTimer_SingerImageCut = null;
                     MyVM = null;
-
+                    singerImage_Cut = null;
+                    singerImage_Cut = SingerImage_Cut.Retuen_This();
 
                     #region 图片切分组合，多参数轮播动画，已弃用，UniformGrid组合图片默认不在左上角，多参数轮播不够美观
                     /*UniformGrid uniformGrid = (UniformGrid)musicPlayer_Main_UserControl.ItemsControl_SingerImageCut.ItemsPanel.LoadContent();

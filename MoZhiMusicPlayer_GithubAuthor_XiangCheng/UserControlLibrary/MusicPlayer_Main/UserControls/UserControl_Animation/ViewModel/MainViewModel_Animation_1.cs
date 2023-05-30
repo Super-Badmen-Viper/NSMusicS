@@ -34,15 +34,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             public double Width { get; set; }
             public double Height { get; set; }
         }
-
-        List<ImageBrush> List_ImageBrush_SingerImageCut { get; set; }
         public int Num_Singer_ImagerCut_Infos { get; set; }//检测是否已完成RelayCommand
 
         public MainViewModel_Animation_1(List<ImageBrush> List_ImageBrush_SingerImageCut, double width, double height,int numCutCells, int numCutRows, int duration, int num_Delay)
         {
             Singer_ImagerCut_Infos = new ObservableCollection<Singer_ImagerCut_Info>();
-
-            this.List_ImageBrush_SingerImageCut = List_ImageBrush_SingerImageCut;
 
             if(numCutCells == 4)
                 num_Delay = 25;
@@ -56,6 +52,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
                 TransitionEffectKind.SlideInFromRight,
                 TransitionEffectKind.SlideInFromBottom
             };
+
+
 
             //多线程
             RefCommand = new RelayCommand(async () =>

@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Windows;
 using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
-using System.Windows.Controls;
 using Image = System.Drawing.Image;
 using System.Runtime.InteropServices;
-using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SongList_Info;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_Info
 {
@@ -24,7 +18,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_I
             singerImage_Cut = Return_This_SingerImage_Cut();
             return singerImage_Cut;
         }
-        public static SingerImage_Cut Return_This_SingerImage_Cut()
+        private static SingerImage_Cut Return_This_SingerImage_Cut()
         {
             if (singerImage_Cut == null)
                 singerImage_Cut = new SingerImage_Cut();
@@ -67,12 +61,14 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_I
                             string.Format("{0}_{1}.bmp", fileImg.Name.Remove(fileImg.Name.LastIndexOf(".")),
                                 NumToNostring(i)));
                     }
-                }
+                    lstRect = null;
+                } 
             }
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(ex+"此图像数据：ERROE\n"+ fileImg.FullName);
             }
+            fileImg = null;
         }
 
         /// <summary>

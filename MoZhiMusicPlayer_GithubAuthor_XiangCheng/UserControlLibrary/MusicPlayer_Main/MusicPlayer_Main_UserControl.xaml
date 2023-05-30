@@ -17,8 +17,8 @@
         <Grid x:Name="Grid_Animation">
 
             <Grid x:Name="Grid_Up_Singer_Photo"
-                    Width="{Binding ActualWidth, ElementName=Grid_down_Singer_Photo, Mode=OneWay}"
-                    Height="{Binding ActualHeight, ElementName=Grid_down_Singer_Photo, Mode=OneWay}"
+                    Width="{Binding Width, ElementName=Grid_down_Singer_Photo, Mode=OneWay}"
+                    Height="{Binding Height, ElementName=Grid_down_Singer_Photo, Mode=OneWay}"
                     Margin="{Binding Margin, ElementName=Grid_down_Singer_Photo, Mode=OneWay}"
                   >
                 <Grid.Background>
