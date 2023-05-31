@@ -669,8 +669,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //动画参数设置
             num_duration = 200;
             num_Delay = 200;
-            singerImage_Cut.numCutCells = 4;
-            singerImage_Cut.numCutRows = 4;
+            singerImage_Cut.numCutCells = 2;
+            singerImage_Cut.numCutRows = 2;
 
 
             //设置进入播放器界面，返回主界面事件
@@ -3211,7 +3211,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             musicPlayer_Main_UserControl.DataContext = null;
 
             num_duration = 200;
-            num_Delay = 200;
+            num_Delay = 100;
 
             //会造成UI约0.4s的卡顿，需优化
             List<ImageBrush> List_ImageBrush_SingerImageCut = singerImage_Cut.CutImage_ImageBrush(imgPath);
@@ -4112,26 +4112,32 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             if (this.Width >= 1000 && this.Width <= 1100)
             {
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1300 - num_epos_SingerImageAnimation;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1300 - num_epos_SingerImageAnimation;
             }
             else if (this.Width >= 1100 && this.Width <= 1400)
             {
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1600 - num_epos_SingerImageAnimation;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1600 - num_epos_SingerImageAnimation;
             }
             else if (this.Width >= 1400 && this.Width <= 1700)
             {
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1920;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width = 1920;
             }
             if (this.Height >= 562 && this.Height <= 731)
             {
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 731 - num_epos_SingerImageAnimation;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 731 - num_epos_SingerImageAnimation;
             }
             else if (this.Height >= 731 && this.Height <= 900)
             {
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 900 - num_epos_SingerImageAnimation;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 900 - num_epos_SingerImageAnimation;
             }
             else if (this.Height >= 900 && this.Height <= 1000)
             {
                 musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 1080;
+                musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 1080;
             }
 
         }

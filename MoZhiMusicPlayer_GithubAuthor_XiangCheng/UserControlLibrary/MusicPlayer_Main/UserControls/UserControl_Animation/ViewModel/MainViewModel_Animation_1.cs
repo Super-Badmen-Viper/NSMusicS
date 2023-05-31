@@ -36,12 +36,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         }
         public int Num_Singer_ImagerCut_Infos { get; set; }//检测是否已完成RelayCommand
 
-        public MainViewModel_Animation_1(List<ImageBrush> List_ImageBrush_SingerImageCut, double width, double height,int numCutCells, int numCutRows, int duration, int num_Delay)
+        public MainViewModel_Animation_1(
+            List<ImageBrush> List_ImageBrush_SingerImageCut, 
+            double width, 
+            double height,
+            int numCutCells, 
+            int numCutRows, 
+            int duration, 
+            int num_Delay)
         {
             Singer_ImagerCut_Infos = new ObservableCollection<Singer_ImagerCut_Info>();
-
-            if(numCutCells == 4)
-                num_Delay = 25;
 
             kinds = new List<TransitionEffectKind>
             {
@@ -53,13 +57,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
                 TransitionEffectKind.SlideInFromBottom
             };
 
-
-
-            //多线程
             RefCommand = new RelayCommand(async () =>
             {
-                //开始视图，设置为Visual
-
                 Num_Singer_ImagerCut_Infos = 0;
                 Singer_ImagerCut_Infos.Clear();
                 for (int i = 0; i < numCutCells * numCutRows; i++)
