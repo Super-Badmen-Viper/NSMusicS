@@ -1,4 +1,4 @@
-# MoZhiMusicPlayer [中文REANME_CN.md](https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/blob/main/README_CN.md)
+## MoZhiMusicPlayer 跳转 [中文REANME_CN.md](https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/blob/main/README_CN.md)
 # MoZhiMusicPlayer Description:
 - Based on dotNET_ C#_ WPF's Personal Open Source Music Client
 - Demo effect: B-site link:
