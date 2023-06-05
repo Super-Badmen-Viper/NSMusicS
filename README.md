@@ -4,7 +4,7 @@
 - - 最新版：https://www.bilibili.com/video/BV1rM411s7J9
 - - 旧版：https://www.bilibili.com/video/BV1uG41137jY
 
-# 注意：此项目即将更新完个人正式版1.0版本，版本迭代完成后将复制至开源社区：MoZhiYun(墨智云)
+## 注意：此项目即将更新完个人正式版1.0版本，版本迭代完成后将复制至开源社区：MoZhiYun(墨智云)
 ## 此项目的版权和更新将分为两个分支
 - - 1.[MoZhiYunOpenSourceCommunity](https://github.com/MoZhiYunOpenSourceCommunity) (墨智云开源社区)：MoZhiMusic Community Edition（开源的音乐版权，免费，开源共建，版权为社区内各管理员共同拥有，贡献度超过规定数量即可升为管理员）
 - - 2.[MoZhiYunStudio](https://github.com/SnakeBigBossDemo) (墨智云工作室)：MoZhiMusic Ultimate（收费的音乐版权，部分开源，版权为 程翔(第一作者) 拥有）
