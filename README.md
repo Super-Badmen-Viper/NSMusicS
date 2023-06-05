@@ -5,12 +5,12 @@
 - - Latest version:[ https://www.bilibili.com/video/BV1rM411s7J9 ](https://www.bilibili.com/video/BV1Dc411g74T/?spm_id_from=333.999.0.0&vd_source=6e56ca0b155a60e6a6878e5775fdcc35)
 - - Old version: https://www.bilibili.com/video/BV1uG41137jY
 
-## Note: This project is about to complete the personal official version 1.0 update. After the iteration of the version is completed, it will be copied to the open source community: MoZhiYun (墨智云)
+### Note: This project is about to complete the personal official version 1.0 update. After the iteration of the version is completed, it will be copied to the open source community: MoZhiYun (墨智云)
 ## The copyright and updates for this project will be divided into two branches (sharing the majority of the copyright with each other)
 - - 1. [MoZhiYunOpenSourceCommunity](https://github.com/MoZhiYunOpenSourceCommunity) (墨智云开源社区): MoZhiMusic Community Edition
 - - 2. [MoZhiYunStudio](https://github.com/SnakeBigBossDemo) (墨智云工作室): MoZhiMusic Ultimate (paid music copyright, partly open source, copyright owned by Cheng Xiang (lead author))
 
-# Participated in open source co construction, QQ group communication group number: 610551734: MoZhiYunOpenSourceCommunity
+## Participated in open source co construction, QQ group communication group number: 610551734: MoZhiYunOpenSourceCommunity
 
 ## Function:
 - 1. Support for synchronized animation and progress of lyrics (compatible with lyrics files from other music software), lyrics synchronization algorithm
