@@ -9,7 +9,7 @@
 - - 1.[MoZhiYunOpenSourceCommunity](https://github.com/MoZhiYunOpenSourceCommunity) (墨智云开源社区)：MoZhiMusic Community Edition（开源的音乐版权，免费，开源共建，版权为社区内各管理员共同拥有，贡献度超过规定数量即可升为管理员）
 - - 2.[MoZhiYunStudio](https://github.com/SnakeBigBossDemo) (墨智云工作室)：MoZhiMusic Ultimate（收费的音乐版权，部分开源，版权为 程翔(第一作者) 拥有）
 
-# 参与开源共建，QQ群交流群号：610551734：-》 MoZhiYunOpenSourceCommunity(墨智云开源社区)
+## 参与开源共建，QQ群交流群号：610551734：-》 MoZhiYunOpenSourceCommunity(墨智云开源社区)
 
 ## 功能：
   - 1.支持歌词字同步动画，同步歌词进度 （可兼容其它音乐软件的歌词文件）歌词字同步算法
