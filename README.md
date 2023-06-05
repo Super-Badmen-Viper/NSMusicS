@@ -2,13 +2,13 @@
 # MoZhiMusicPlayer Description:
 - Based on dotNET_ C#_ WPF's Personal Open Source Music Client
 - Demo effect: B-site link:
-- - Latest version:[ https://www.bilibili.com/video/BV1rM411s7J9 ]（ https://www.bilibili.com/video/BV1Dc411g74T/?spm_id_from=333.999.0.0&vd_source=6e56ca0b155a60e6a6878e5775fdcc35 ）
+- - Latest version:[ https://www.bilibili.com/video/BV1rM411s7J9 ](https://www.bilibili.com/video/BV1Dc411g74T/?spm_id_from=333.999.0.0&vd_source=6e56ca0b155a60e6a6878e5775fdcc35)
 - - Old version: https://www.bilibili.com/video/BV1uG41137jY
 
 ## Note: This project is about to complete the personal official version 1.0 update. After the iteration of the version is completed, it will be copied to the open source community: MoZhiYun (墨智云)
 ## The copyright and updates for this project will be divided into two branches (sharing the majority of the copyright with each other)
-- - 1. [MoZhiYunOpenSourceCommunity]（ https://github.com/MoZhiYunOpenSourceCommunity ）(墨智云开源社区): MoZhiMusic Community Edition
-- - 2. [MoZhiYunStudio]（ https://github.com/SnakeBigBossDemo ）(墨智云工作室): MoZhiMusic Ultimate (paid music copyright, partly open source, copyright owned by Cheng Xiang (lead author))
+- - 1. [MoZhiYunOpenSourceCommunity](https://github.com/MoZhiYunOpenSourceCommunity) (墨智云开源社区): MoZhiMusic Community Edition
+- - 2. [MoZhiYunStudio](https://github.com/SnakeBigBossDemo) (墨智云工作室): MoZhiMusic Ultimate (paid music copyright, partly open source, copyright owned by Cheng Xiang (lead author))
 
 # Participated in open source co construction, QQ group communication group number: 610551734: MoZhiYunOpenSourceCommunity
 
@@ -35,7 +35,7 @@
 
 # Quick to use:
 - Please use Visual Studio 2022 version for Git clone and pull, otherwise older versions of Visual Studio may not be able to generate
-- Download: https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer1.0.4
+- [Download](https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer1.0.4): https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer1.0.4
 - My QQ learning group number is 228440692. Welcome to join the group. Give me a star first. There are projects I have organized in the group, which is easier to use out of the box than Github
 - Resource location: MoZhiMusicPlayer/MoZhiMusicPlayer_ GithubAuthor_ XiangCheng/bin/Debug/net6.0 windows/Resource/within (lyrics, artist photos, album images, etc. can be edited by oneself)
 - Download additional music resources (Baidu Netdisk resources):
