@@ -20,7 +20,7 @@
 - Note: Low performance or system version may affect runtime performance (with some impact). WIn11 is recommended, as Win11 has special optimizations [doge]
 
 ## MoZhiYunStudio: Future feature updates
-- 1. Music listening and music recognition module based on sound fingerprint technology (also open source as a separate project model)
+- 1. identify songs module based on sound fingerprint technology (also open source as a separate project model)
 - 2. Guessing Your Favorite Module Based on Big Data User Behavior Analysis
 - 3. AI singing module based on nlp, replacing the sound of the song with your own (also open source as a separate project model)
 - 4. AI score drawing module based on nlp (also open source as a separate project model)
