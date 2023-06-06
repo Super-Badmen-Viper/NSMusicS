@@ -44,12 +44,12 @@
 - - Statement: The author's personal music additional resources, such as artist photos, album images, etc., and the project files are all public data from the internet and are for sharing purposes only. There are no commercial infringements. If you have any objections, please contact me to delete them
 
 # Disclaimer:
-- This software only provides the use of interfaces for other open source projects to obtain data, and does not provide any function of uploading or storing resources to the server.
-- This software only parses content from interfaces of other open source projects, and will not perform secondary encoding on the parsed audio and video. Some videos will undergo limited format conversion, splicing, and other operations.
-- All content analyzed by this software comes from other open source project interfaces, and its copyright belongs to the original author. Content providers, uploaders, and download users shall bear full responsibility for the content they provide, upload, and download.
-- All content provided by this software can only be used for learning and communication purposes. Without the authorization of the original author, it is prohibited to use it for other purposes. Please delete within 24 hours of downloading. To respect the copyright of the author, please go to the original publishing website of the resource to watch. It supports originality. Thank you**
+- This software only uses interfaces of other open source projects to retrieve data, and does not provide any functions for uploading or storing resources to servers.
+- This software only parses content from other open source project interfaces, and does not perform secondary encoding on parsed audio and video. Some videos may undergo limited format conversion, splicing, and other operations.
+- All content parsed by this software comes from APIs of other open source projects and legally authorized commercial APIs, and their copyrights belong to the original authors and authorizers. Content providers, uploaders, and downloaders are responsible for all content they provide, upload, and download.
+- All content provided by this software is for learning and communication purposes only, and may not be used for other purposes without the authorization of the original author. Please delete within 24 hours of downloading. To respect the copyright of the author, please go to the original publication website to view the resources, support original creation, thank you.**
 - The software author is not responsible for any copyright issues arising from the use of this software.
-- All resources used in this software are sourced from public networks and there are no incoming or outgoing profits. The software author is not responsible. (If needed, please contact the author to delete it)
+- All resources used by this software come from public networks and legally authorized networks, and all profits and losses are legal. The software author is not responsible. (If necessary, please contact the author for deletion.)
 
 # Open source protocol: AGPL-3.0 license Reason:
 - You can extract and apply the functional modules to any activity (some MIT), but you cannot skin MoZhiMusicPlayer and almost take it away for commercial activities
