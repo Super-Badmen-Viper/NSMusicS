@@ -23,7 +23,7 @@
 - 1. identify songs module based on sound fingerprint technology (also open source as a separate project model)
 - 2. Guessing Your Favorite Module Based on Big Data User Behavior Analysis
 - 3. AI singing module based on nlp, replacing the sound of the song with your own (also open source as a separate project model)
-- 4. AI score drawing module based on nlp (also open source as a separate project model)
+- 4. AI music notation module based on nlp (also open source as a separate project model)
 - 5. AI extraction of audio lyrics synchronization information based on nlp (breaking copyright barriers such as Krc and Qrc)
 - 6. Implement functions such as MoZhi singing bar scoring and evaluation, similar to the national karaoke (Tencent's national karaoke technology sharing video on Machine Heart has been canceled, so we will independently develop it)
 
