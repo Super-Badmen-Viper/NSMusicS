@@ -8,7 +8,7 @@
 ### Note: This project is about to complete the personal official version 1.0 update. After the iteration of the version is completed, it will be copied to the open source community: MoZhiYun (墨智云)
 ## The copyright and updates for this project will be divided into two branches (sharing the majority of the copyright with each other)
 - - 1. [MoZhiYunOpenSourceCommunity](https://github.com/MoZhiYunOpenSourceCommunity) (墨智云开源社区): MoZhiMusic Community Edition
-- - 2. [MoZhiYunStudio](https://github.com/SnakeBigBossDemo) (墨智云工作室): MoZhiMusic Ultimate (paid music copyright, partly open source, copyright owned by Cheng Xiang (lead author))
+- - 2. [MoZhiYunStudio](https://github.com/SnakeBigBossDemo) (墨智云工作室): MoZhiMusic Ultimate (Except for paid music copyrights, all other copyrights are open source and belong to Cheng Xiang (main author))
 
 ## Participated in open source co construction, QQ group communication group number: 610551734: MoZhiYunOpenSourceCommunity
 
