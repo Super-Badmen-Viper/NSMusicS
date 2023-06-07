@@ -26,6 +26,8 @@
   <img align="center" width="400">
   
 # 该项目的研发管理看板(仪表盘)：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
+## 如果你想加入，请发邮件到我的QQ邮箱：1774148579@qq.com，超过5个人，我将会开展开源项目管理模式，墨智云开源组织正式开始活动
+
 ### 注意：此项目即将更新完个人正式版1.0版本，版本迭代完成后将复制至开源社区：MoZhiYun(墨智云)
 ## 此项目的版权和更新将分为两个分支(彼此共享绝大部分的版权)
 - - 1.[MoZhiYunOpenSourceCommunity](https://github.com/MoZhiYunOpenSourceCommunity) (墨智云开源社区)：MoZhiMusic Community Edition（开源的音乐版权，免费，开源共建，版权为社区内各管理员共同拥有，贡献度超过规定数量即可升为管理员）
