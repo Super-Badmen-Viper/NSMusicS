@@ -27,6 +27,8 @@
   <img align="center" width="400">
   
 # The R&D management dashboard for this project：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
+## If you want to join, please send an email to my QQmail: 1774148579@qq.com More than 5 people, I will launch an open source project management model, and the Mozi Cloud open source organization will officially begin its activities
+
 ### Note: This project is about to complete the personal official version 1.0 update. After the iteration of the version is completed, it will be copied to the open source community: MoZhiYun (墨智云)
 ## The copyright and updates for this project will be divided into two branches (sharing the majority of the copyright with each other)
 - - 1. [MoZhiYunOpenSourceCommunity](https://github.com/MoZhiYunOpenSourceCommunity) (墨智云开源社区): MoZhiMusic Community Edition（Jointly owned by administrators (if the submitted code exceeds a certain contribution level and is approved as an administrator)）
