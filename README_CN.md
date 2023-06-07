@@ -4,13 +4,6 @@
 - - 最新版：[https://www.bilibili.com/video/BV1rM411s7J9](https://www.bilibili.com/video/BV1Dc411g74T/?spm_id_from=333.999.0.0&vd_source=6e56ca0b155a60e6a6878e5775fdcc35)
 - - 旧版：https://www.bilibili.com/video/BV1uG41137jY
 
-### 注意：此项目即将更新完个人正式版1.0版本，版本迭代完成后将复制至开源社区：MoZhiYun(墨智云)
-## 此项目的版权和更新将分为两个分支(彼此共享绝大部分的版权)
-- - 1.[MoZhiYunOpenSourceCommunity](https://github.com/MoZhiYunOpenSourceCommunity) (墨智云开源社区)：MoZhiMusic Community Edition（开源的音乐版权，免费，开源共建，版权为社区内各管理员共同拥有，贡献度超过规定数量即可升为管理员）
-- - 2.[MoZhiYunStudio](https://github.com/SnakeBigBossDemo) (墨智云工作室)：MoZhiMusic Ultimate（收费的音乐版权，部分开源，版权为 程翔(第一作者) 拥有）
-
-## 参与开源共建，QQ群交流群号：610551734：-》 MoZhiYunOpenSourceCommunity(墨智云开源社区)
-
 ## 功能：
   - 1.支持歌词字同步动画，同步歌词进度 （可兼容其它音乐软件的歌词文件）歌词字同步算法
   - 2.支持多歌手写真动画交叉轮播
@@ -31,6 +24,14 @@
   <img src="doc/Test (2).png" align="left" width="300">
   <img src="doc/Test (3).png" align="right" width="300">
   <img align="center" width="400">
+  
+# 该项目的研发管理看板(仪表盘)：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
+### 注意：此项目即将更新完个人正式版1.0版本，版本迭代完成后将复制至开源社区：MoZhiYun(墨智云)
+## 此项目的版权和更新将分为两个分支(彼此共享绝大部分的版权)
+- - 1.[MoZhiYunOpenSourceCommunity](https://github.com/MoZhiYunOpenSourceCommunity) (墨智云开源社区)：MoZhiMusic Community Edition（开源的音乐版权，免费，开源共建，版权为社区内各管理员共同拥有，贡献度超过规定数量即可升为管理员）
+- - 2.[MoZhiYunStudio](https://github.com/SnakeBigBossDemo) (墨智云工作室)：MoZhiMusic Ultimate（收费的音乐版权，部分开源，版权为 程翔(第一作者) 拥有）
+
+## 参与开源共建，QQ群交流群号：610551734：-》 MoZhiYunOpenSourceCommunity(墨智云开源社区)
 
 # 快速使用：
   - 请使用Visual Studio 2022版本进行Git clone与pull，否则旧版本的Visual Studio可能会出现无法生成的情况
