@@ -26,7 +26,7 @@
   <img src="doc/Test (3).png" align="right" width="300">
   <img align="center" width="400">
   
-## Research and development management of this project：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
+# The R&D management dashboard for this project：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
 ### Note: This project is about to complete the personal official version 1.0 update. After the iteration of the version is completed, it will be copied to the open source community: MoZhiYun (墨智云)
 ## The copyright and updates for this project will be divided into two branches (sharing the majority of the copyright with each other)
 - - 1. [MoZhiYunOpenSourceCommunity](https://github.com/MoZhiYunOpenSourceCommunity) (墨智云开源社区): MoZhiMusic Community Edition（Jointly owned by administrators (if the submitted code exceeds a certain contribution level and is approved as an administrator)）
