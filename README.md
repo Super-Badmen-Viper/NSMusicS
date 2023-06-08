@@ -27,7 +27,7 @@
   <img align="center" width="400">
   
 # MoZhiMusic 4th Edition Project Development Document/Plan:
-  <img src="doc/MoZhiMusic 4th Edition Development Document Plan (under update). png" align="center" width="1200">
+  <img src="doc/MoZhiMusic 第4版 开发文档 规划 （更新中）.png" align="center" width="1200">
   
 # The R&D management dashboard for this project：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
 ## If you want to join, please send an email to my QQmail: 1774148579@qq.com More than 5 people, I will launch an open source project management model, and the Mozi Cloud open source organization will officially begin its activities
