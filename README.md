@@ -26,7 +26,7 @@
   <img src="doc/Test (3).png" align="right" width="300">
   <img align="center" width="400">
   
-# MoZhiMusic 4th Edition Project Development Document/Plan:
+# MoZhiMusic 4th Edition Project Development Document/Plan: -》 MoZhiMusic_Ultimate
   <img src="doc/MoZhiMusic 第4版 开发文档 规划 （更新中）.png" align="center" width="1200">
   
 # The R&D management dashboard for this project：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
