@@ -25,7 +25,7 @@
   <img src="doc/Test (3).png" align="right" width="300">
   <img align="center" width="400">
   
-# MoZhiMusic第4版正在开发中：
+# MoZhiMusic第4版项目 开发文档/规划：
   <img src="doc/MoZhiMusic 第4版 开发文档 规划 （更新中）.png" align="center" width="1200">
   
 # 该项目的研发管理看板(仪表盘)：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
