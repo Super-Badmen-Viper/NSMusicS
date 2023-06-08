@@ -13,7 +13,7 @@
         xmlns:MusicPlayer_Main="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main" 
         xmlns:MusicPlayer_MV_Player="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_MV_Player" 
         xmlns:Helper_UserControlLibrary="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:MainWindow_Left_MoZhiAI_Music_UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Left_MoZhiAI_Music_UserControls"
-    x:Class="MoZhiMusicPlayer_GithubAuthor_XiangCheng.MainWindow"
+        x:Class="MoZhiMusicPlayer_GithubAuthor_XiangCheng.MainWindow"
         
         mc:Ignorable="d"
         Title="墨智音乐" Height="710" Width="1040" 
@@ -98,7 +98,8 @@
                     <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_MusicLove
                         x:Name="userControl_ButtonFrame_MusicLove"
                         Width="160" Height="30" Margin="0,16,0,0"
-                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" MouseLeftButtonDown="UserControl_ButtonFrame_MusicLove_MouseLeftButtonDown" />
+                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                        MouseLeftButtonDown="UserControl_ButtonFrame_MusicLove_MouseLeftButtonDown" />
                     <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_ThisWindowsMusicAndDownload 
                         x:Name="userControl_ButtonFrame_ThisWindowsMusicAndDownload"
                         Width="160" Height="30" Margin="0,10,0,0"

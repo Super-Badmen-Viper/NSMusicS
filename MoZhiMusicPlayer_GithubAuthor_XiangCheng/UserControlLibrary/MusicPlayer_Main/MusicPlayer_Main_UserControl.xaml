@@ -150,10 +150,10 @@
                                ScrollViewer.VerticalScrollBarVisibility="Disabled" Stretch="UniformToFill" 
                                Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/初学者.jpg" 
                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                               RenderTransformOrigin="0.5,0.5" Width="130" Height="130" 
-                               HorizontalAlignment="Center" MouseLeftButtonDown="Image_Song_MouseLeftButtonDown" VerticalAlignment="Top" Margin="0,-215,0,0">
+                               RenderTransformOrigin="0.5,0.5" Width="240" Height="240" 
+                               HorizontalAlignment="Center" MouseLeftButtonDown="Image_Song_MouseLeftButtonDown" VerticalAlignment="Top" Margin="0,-270,0,0">
                                 <Image.Clip>
-                                    <EllipseGeometry Center="65,65" RadiusX="65" RadiusY="65"/>
+                                    <EllipseGeometry Center="120,120" RadiusX="120" RadiusY="120"/>
                                 </Image.Clip>
                             </Image>
                         </StackPanel>
@@ -521,7 +521,7 @@
 
         <!--专辑封面旋转-->
         <Storyboard x:Name="Storyboard_Image_Song_Rotate" x:Key="Image_Song_Animation" RepeatBehavior="Forever">
-            <DoubleAnimation Storyboard.TargetName="Image_Song_Rotate" Storyboard.TargetProperty="Angle" BeginTime="00:00:00" Duration="00:00:10" From="0" To="360"/>
+            <DoubleAnimation Storyboard.TargetName="Image_Song_Rotate" Storyboard.TargetProperty="Angle" BeginTime="00:00:00" Duration="00:00:20" From="0" To="360"/>
         </Storyboard>
         <Storyboard x:Name="Storyboard_RotateTransform_BeginMusic_Jukebox_Open" x:Key="RotateTransform_BeginMusic_Jukebox_Open">
             <DoubleAnimation Storyboard.TargetName="RotateTransform_BeginMusic_Jukebox" Storyboard.TargetProperty="Angle" BeginTime="00:00:00" Duration="00:00:0.2" From="-20" To="0"/>

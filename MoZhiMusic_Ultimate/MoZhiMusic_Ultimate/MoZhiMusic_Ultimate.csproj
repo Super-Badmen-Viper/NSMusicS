@@ -1,0 +1,99 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="bin\Debug\net6.0-windows\UserData\User_Account_Information\User_SongList.xml" />
+    <Content Include="bin\Debug\net6.0-windows\UserData\User_Profile\User_App_Software_Settings.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="bin\Debug\net6.0-windows\Output_And_Log\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_AI_MoZhiYun\AI_identify_songs_module\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_AI_MoZhiYun\AI_Guessing_Your_Favorite_Module\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_AI_MoZhiYun\AI_singing_module\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_AI_MoZhiYun\AI_music_notation_module\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_AI_MoZhiYun\AI_Synchronized_audio_lyrics_extraction_module\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_AI_MoZhiYun\AI_MoZhi_singing_bar_module\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_App_XAML\App_Button_Image\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_App_XAML\App_Background_Image\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_App_XAML\App_Fonts\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_App_XAML\App_Personalized_Skin\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_Music\Crc\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_Music\Mrc\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_Music\Song\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_Music\MV\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_Music\Singer_Image\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_Music\Song_ALbum\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_Web\Web_MV\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_Web\Web_SongList\" />
+    <Folder Include="bin\Debug\net6.0-windows\Resource_Web\Web_Song\" />
+    <Folder Include="Models\AI_MoZhiYun_Info\AI_identify_songs_Info\" />
+    <Folder Include="Models\AI_MoZhiYun_Info\AI_Guessing_Your_Favorite_Info\" />
+    <Folder Include="Models\AI_MoZhiYun_Info\AI_singing_Info\" />
+    <Folder Include="Models\AI_MoZhiYun_Info\AI_music_notation_Info\" />
+    <Folder Include="Models\AI_MoZhiYun_Info\AI_Synchronized_audio_lyrics_extraction_Info\" />
+    <Folder Include="Models\AI_MoZhiYun_Info\AI_MoZhi_singing_bar_Info\" />
+    <Folder Include="Models\Audio_Spectrogram_Info\Extracting_Audio_Spectrum_Info\" />
+    <Folder Include="Models\Audio_Spectrogram_Info\Processing_Audio_Spectrum_Info\" />
+    <Folder Include="Models\Song_Mrc_Info\" />
+    <Folder Include="Models\Song_Audio_Info\" />
+    <Folder Include="Models\Song_List_Info\" />
+    <Folder Include="Models\Singer_Image_Info\" />
+    <Folder Include="Services\Web_Load\" />
+    <Folder Include="Services\Web_Download\" />
+    <Folder Include="Services\Web_Update\" />
+    <Folder Include="ViewModels\Init_Resource_AI_MoZhiYun_Info\Init_AI_identify_songs_Info\" />
+    <Folder Include="ViewModels\Init_Resource_AI_MoZhiYun_Info\Init_AI_Guessing_Your_Favorite_Info\" />
+    <Folder Include="ViewModels\Init_Resource_AI_MoZhiYun_Info\Init_AI_singing_Info\" />
+    <Folder Include="ViewModels\Init_Resource_AI_MoZhiYun_Info\Init_AI_music_notation_Info\" />
+    <Folder Include="ViewModels\Init_Resource_AI_MoZhiYun_Info\Init_AI_Synchronized_audio_lyrics_extraction_Info\" />
+    <Folder Include="ViewModels\Init_Resource_AI_MoZhiYun_Info\Init_AI_MoZhi_singing_bar_Info\" />
+    <Folder Include="ViewModels\Init_Resource_App_XAML_Info\Init_App_Button_Image_Info\" />
+    <Folder Include="ViewModels\Init_Resource_App_XAML_Info\Init_App_Fonts_Info\" />
+    <Folder Include="ViewModels\Init_Resource_App_XAML_Info\Init_App_Personalized_Skin_Info\" />
+    <Folder Include="ViewModels\Init_Resource_App_XAML_Info\Init_App_Background_Image_Info\" />
+    <Folder Include="ViewModels\Init_Resource_Music_Info\Init_Crc_Info\" />
+    <Folder Include="ViewModels\Init_Resource_Music_Info\Init_Mrc_Info\" />
+    <Folder Include="ViewModels\Init_Resource_Music_Info\Init_MV_Info\" />
+    <Folder Include="ViewModels\Init_Resource_Music_Info\Init_Singer_Image_Info\" />
+    <Folder Include="ViewModels\Init_Resource_Music_Info\Init_Song_Info\" />
+    <Folder Include="ViewModels\Init_Resource_Music_Info\Init_Song_ALbum_Info\" />
+    <Folder Include="ViewModels\Init_Services\Init_Web_Download_Info\" />
+    <Folder Include="ViewModels\Init_Services\Init_Web_Load_Info\" />
+    <Folder Include="ViewModels\Init_Services\Init_Web_Update_Info\" />
+    <Folder Include="ViewModels\Init_UserData_Info\Init_Account_Information_Info\Init_SongList_Info\" />
+    <Folder Include="ViewModels\Init_UserData_Info\Init_Profile_Info\" />
+    <Folder Include="ViewModels\Init_Output_And_Log_Info\" />
+    <Folder Include="ViewModels\Init_Audio_Spectrogram_Info\" />
+    <Folder Include="Views\AI_MoZhiYun_Page\AI_identify_songs_Page\" />
+    <Folder Include="Views\AI_MoZhiYun_Page\AI_Guessing_Your_Favorite_Page\" />
+    <Folder Include="Views\AI_MoZhiYun_Page\AI_singing_Page\" />
+    <Folder Include="Views\AI_MoZhiYun_Page\AI_music_notation_Page\" />
+    <Folder Include="Views\AI_MoZhiYun_Page\AI_Synchronized_audio_lyrics_extraction_Page\" />
+    <Folder Include="Views\AI_MoZhiYun_Page\AI_MoZhi_singing_bar_Page\" />
+    <Folder Include="Views\Floating_Control_Page\Floating_Desktop_LyricsBar_Panel\" />
+    <Folder Include="Views\Floating_Control_Page\Floating_MV_Playback_Window_Panel\" />
+    <Folder Include="Views\Floating_Control_Page\Floating_Desktop_Wallpaper_Animation\" />
+    <Folder Include="Views\Floating_Control_Page\Floating_Current_Song_Playlist_Panel\" />
+    <Folder Include="Views\Home_Page\Home_Topbar_Panel\" />
+    <Folder Include="Views\Home_Page\Home_Sidebar_Panel\" />
+    <Folder Include="Views\Home_Page\Home_Buttombar_Panel\" />
+    <Folder Include="Views\MusicPlayer_Page\" />
+    <Folder Include="Views\MVPlayer_Page\" />
+    <Folder Include="Views\Online_Music_Page\Online_Music_Square_Panel\" />
+    <Folder Include="Views\Online_Music_Page\Online_Video_MV_Panel\" />
+    <Folder Include="Views\Online_Music_Page\Online_Yourradio_Personalized_Panel\" />
+    <Folder Include="Views\0_UI_Image_Library\" />
+    <Folder Include="Views\SongList_Page\SongList_My _Favorite_Panel\" />
+    <Folder Include="Views\SongList_Page\SongList_Local music_Panel\" />
+    <Folder Include="Views\SongList_Page\SongList_Recently _Listening_Panel\" />
+    <Folder Include="Views\SongList_Page\SongList_CustomLists_Panel\" />
+  </ItemGroup>
+
+</Project>

@@ -10,7 +10,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_Init_Info.Init_SongList_I
 {
     public class Load_SongList_Info
     {
-        public string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
+        public static string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
 
         //实例化一个文件流--->与写入文件相关联
         //静态读取Resource文件会一直占用，导致只能写入不能导出，出现文件内容清空
@@ -18,131 +18,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_Init_Info.Init_SongList_I
         private StreamWriter SW_List = null;//写入 
         private StreamReader SR_List = null;//读取
 
-        string[] singer_Name;
-        string[] song_Name;
-        string[] album_Name;
-        string[] song_Url;
-        int[] song_No;
+        static string[] singer_Name;
+        static string[] song_Name;
+        static string[] album_Name;
+        static string[] song_Url;
+        static int[] song_No;
 
-        private ListView_Item_Bing_ALL listView_Item_Bing_ALL = ListView_Item_Bing_ALL.Retuen_This();
+        private static ListView_Item_Bing_ALL listView_Item_Bing_ALL = ListView_Item_Bing_ALL.Retuen_This();
 
-        public void DataGridView_List_ALL_Loaded()
-        {
-            #region
-            /* ListBox_Select_ListView.Items.Add("本地音乐_listView_Temp_Info_End_ALL");
-             ListBox_Select_ListView.Items.Add("我的收藏_listView_Temp_Info_End_Love");
-             ListBox_Select_ListView.Items.Add("默认列表_listView_Temp_Info_End_Auto");*/
-
-            //加载歌单歌曲信息，多线程
-            //解析mp3文件绝对路径，通过引用Shell32_Class包读取mp3文件流中的专辑信息
-            //解析时占用线程Resource较多，需要多线程
-            /*var t1 = new Thread(Load_Data_ALL_D_Grid_View_1);//读取歌曲文件信息
-            t1.Start();
-            var t2 = new Thread(Load_Data_ALL_D_Grid_View_2);//读取歌曲文件信息
-            t2.Start();
-            var t3 = new Thread(Load_Data_ALL_D_Grid_View_3);//读取歌曲文件信息
-            t3.Start();*/
-            #endregion
-
-            //先读取我的收藏歌单里的歌曲信息
-            Load_Data_ALL_D_Grid_View_2();
-
-            Load_Data_ALL_D_Grid_View_1();
-
-            Load_Data_ALL_D_Grid_View_3();
-
-            Load_Data_ALL_D_Grid_View_4();
-        }
-
-
-        /// <summary>
-        /// 读取歌单
-        /// </summary>
-        public void Load_Data_ALL_D_Grid_View_1()
-        {
-            string temp = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + @"\Resource\SongListInfo_ini\SongList_Ini\本地音乐.ini");
-
-            var lines = File.ReadAllLines(temp);
-            int RowCount = lines.Length;
-
-            FileStream FS_List_Save = new FileStream(temp, FileMode.Open);
-            SR_List = new StreamReader(FS_List_Save);
-
-            Load_Data_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_ALL, FS_List_Save, SR_List, 1, RowCount);
-
-            SR_List = null;
-        }
-        /// <summary>
-        /// 读取歌单
-        /// </summary>
-        public void Load_Data_ALL_D_Grid_View_2()
-        {
-            string temp = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + @"\Resource\SongListInfo_ini\SongList_Ini\我喜欢.ini");
-
-            var lines = File.ReadAllLines(temp);
-            int RowCount = lines.Length;
-
-            FileStream FS_List_Save = new FileStream(temp, FileMode.Open);
-            SR_List = new StreamReader(FS_List_Save);            
-
-            Load_Data_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_Love, FS_List_Save, SR_List, 2, RowCount);
-
-            SR_List = null;
-        }
-        /// <summary>
-        /// 读取歌单
-        /// </summary>
-        public void Load_Data_ALL_D_Grid_View_3()
-        {
-            string temp = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + @"\Resource\SongListInfo_ini\SongList_Ini\最近播放.ini");
-
-            var lines = File.ReadAllLines(temp);
-            int RowCount = lines.Length;
-
-            FileStream FS_List_Save = new FileStream(temp, FileMode.Open);
-            SR_List = new StreamReader(FS_List_Save);
-
-            Load_Data_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_Auto, FS_List_Save, SR_List, 3, RowCount);
-
-            SR_List = null;
-        }
-        /// <summary>
-        /// 读取歌单
-        /// </summary>
-        public void Load_Data_ALL_D_Grid_View_4()
-        {
-            string temp = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + @"\Resource\SongListInfo_ini\SongList_Ini\试听列表.ini");
-
-            var lines = File.ReadAllLines(temp);
-            int RowCount = lines.Length;
-
-            FileStream FS_List_Save = new FileStream(temp, FileMode.Open);
-            SR_List = new StreamReader(FS_List_Save);
-
-            Load_Data_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen, FS_List_Save, SR_List, 4, RowCount);
-
-            SR_List = null;
-        }
-        /// <summary>
-        /// 读取歌单
-        /// </summary>
-        public void Load_Data_ALL_D_Grid_View_Select_Songs()
-        {
-            string temp = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + @"\Resource\SongListInfo_ini\SongList_Find_Select_Song\Find_Song.ini");
-
-            var lines = File.ReadAllLines(temp);
-            int RowCount = lines.Length;
-
-            FileStream FS_List_Save = new FileStream(temp, FileMode.Open);
-            SR_List = new StreamReader(FS_List_Save);
-
-            Load_Data_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_Temp, FS_List_Save, SR_List, 0, RowCount);
-
-            SR_List = null;
-        }
-
-
-        private void Load_Data_ALL(List<ListView_Item_Bing> Save_Load_List_Name, FileStream FS_List_Save, StreamReader SR_List,int num, int RowCount)
+        public static void Load_Data_ALL(List<ListView_Item_Bing> Save_Load_List_Name, FileStream FS_List_Save, StreamReader SR_List,int num, int RowCount)
         {
             if (RowCount > 0)
             {

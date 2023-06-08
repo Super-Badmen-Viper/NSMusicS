@@ -43,8 +43,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SongList_Info
         {
             listView_Item_Bing_ALL = ListView_Item_Bing_ALL.Retuen_This();
 
-
-
             if (listView_Item_Bing_ALL.listView_Temp_Info_End_Auto == null)
                 listView_Item_Bing_ALL.listView_Temp_Info_End_Auto = new List<ListView_Item_Bing>();
 

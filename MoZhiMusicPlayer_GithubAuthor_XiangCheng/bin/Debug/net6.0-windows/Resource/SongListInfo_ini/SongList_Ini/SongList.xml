@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SongList>
+  <ListName id="1">本地音乐</ListName>
+  <ListName id="2">我喜欢</ListName>
+  <ListName id="3">最近播放</ListName>
+  <ListName id="4">试听列表</ListName>
+</SongList>

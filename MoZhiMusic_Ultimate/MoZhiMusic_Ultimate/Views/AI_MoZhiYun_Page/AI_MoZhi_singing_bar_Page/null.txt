@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MoZhiMusic_Ultimate.bin.Debug.net6._0_windows.Output_And_Log
+{
+    class @null
+    {
+    }
+}

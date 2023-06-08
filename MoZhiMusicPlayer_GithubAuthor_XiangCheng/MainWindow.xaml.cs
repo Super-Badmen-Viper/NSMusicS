@@ -28,6 +28,7 @@ using TextAlignment = System.Windows.TextAlignment;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main;
 using System.Windows.Controls.Primitives;
 using MaterialDesignThemes.Wpf.Transitions;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SongList_Info.ViewModel;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 {
@@ -68,7 +69,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.MouseDoubleClick += userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick;
             userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.MouseDoubleClick += userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick;
 
-            load_SongList_Info.DataGridView_List_ALL_Loaded();//读取歌单信息，并存储
+            playlistViewModel = new PlaylistViewModel();//读取歌单信息，并存储
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL;
             userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Love;
             userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
@@ -159,6 +160,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             catch { }
         }
 
+        PlaylistViewModel playlistViewModel;
         Load_SongList_Info load_SongList_Info = new Load_SongList_Info();
         Save_SongList_Info save_SongList_Info = new Save_SongList_Info();
         public ListView_Item_Bing_ALL listView_Item_Bing_ALL = ListView_Item_Bing_ALL.Retuen_This();
@@ -3736,9 +3738,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// </summary>
         private void Hand_Add_listView_SongList_Source()
         {
+            playlistViewModel = new PlaylistViewModel();
+
             if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Love"))
             {              
-                load_SongList_Info.Load_Data_ALL_D_Grid_View_Select_Songs();
                 Add_Select_Songs_To_listView_Item_Bing_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_Love);
                 userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = null;
                 userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Love;
@@ -3746,7 +3749,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             }
             else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_ALL"))
             {
-                load_SongList_Info.Load_Data_ALL_D_Grid_View_Select_Songs();
                 Add_Select_Songs_To_listView_Item_Bing_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_ALL);
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = null;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL;
@@ -3754,7 +3756,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             }
             else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Auto"))
             {
-                load_SongList_Info.Load_Data_ALL_D_Grid_View_Select_Songs();
                 Add_Select_Songs_To_listView_Item_Bing_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_Auto);
                 userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = null;
                 userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
@@ -3762,7 +3763,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             }
             else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen"))
             {
-                load_SongList_Info.Load_Data_ALL_D_Grid_View_Select_Songs();
                 Add_Select_Songs_To_listView_Item_Bing_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen);
                 userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = null;
                 userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
@@ -3901,35 +3901,31 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// </summary>
         private void Reset_listView_SongList_Source()
         {
+            playlistViewModel = new PlaylistViewModel();
             if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Love"))
             {
-                load_SongList_Info.Load_Data_ALL_D_Grid_View_2();
                 userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = null;
                 userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Love;
                 listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info;
             }
             else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_ALL"))
             {
-                load_SongList_Info.Load_Data_ALL_D_Grid_View_1();
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = null;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL;
                 listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info;
-            }       
+            }
             else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Auto"))
             {
-                load_SongList_Info.Load_Data_ALL_D_Grid_View_3();
                 userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = null;
                 userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
                 listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info;
             }
             else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen"))
             {
-                load_SongList_Info.Load_Data_ALL_D_Grid_View_4();
                 userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = null;
                 userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info;            
+                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info;
             }
-
             userControl_ButtonFrame_MusicLove.IsEnabled = true;
             userControl_ButtonFrame_ThisWindowsMusicAndDownload.IsEnabled = true;
             userControl_ButtonFrame_MusicRecentlyPlayed.IsEnabled = true;
