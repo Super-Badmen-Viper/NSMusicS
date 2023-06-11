@@ -7,7 +7,93 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Views\Home_Page\Home_Sidebar_Panel\Home_Page_Selection.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Home_Page\Home_Topbar_Panel\Home_TopApp_UserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\MusicPlayer_Page\UserControls\Panel_Playing_Media_Audio_Spectrum_Circle.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Buttombar_Panel\Home_Media_UserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Buttombar_Panel\UserControls\Panel_MediaPlaying_Display_Process_Silder.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Buttombar_Panel\UserControls\Panel_Media_Navigation_Normal.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Buttombar_Panel\UserControls\Panel_Media_Navigation_PlayMode.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Buttombar_Panel\UserControls\Panel_Player_Normal.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Buttombar_Panel\UserControls\Panel_Player_SongOrder.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Buttombar_Panel\UserControls\Panel_Playing_MediaVoice.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Buttombar_Panel\UserControls\Panel_Playing_Media_Audio_Spectrum_Line.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Buttombar_Panel\UserControls\Panel_Play_Seting_Normal.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Buttombar_Panel\UserControls\Panel_Play_Seting_PlayMode.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Sidebar_Panel\Home_Page_Selection.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Sidebar_Panel\UserControls\Panel_ButtonFrame_MusicGuessLove.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Sidebar_Panel\UserControls\Panel_ButtonFrame_MusicIdentify.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Sidebar_Panel\UserControls\Panel_ButtonFrame_MusicLove.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Sidebar_Panel\UserControls\Panel_ButtonFrame_MusicRecentlyPlayed.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Sidebar_Panel\UserControls\Panel_ButtonFrame_MusicRecommend.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Sidebar_Panel\UserControls\Panel_ButtonFrame_MusicScoreDrawing_And_PlayMusic.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Sidebar_Panel\UserControls\Panel_ButtonFrame_MusicSingIt.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Sidebar_Panel\UserControls\Panel_ButtonFrame_MusicSquare.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Sidebar_Panel\UserControls\Panel_ButtonFrame_MusicVideo.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Sidebar_Panel\UserControls\Panel_ButtonFrame_RadioStation.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Sidebar_Panel\UserControls\Panel_ButtonFrame_ThisWindowsMusicAndDownload.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Topbar_Panel\Home_TopApp_UserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Home_Page\Home_Topbar_Panel\UserControls\Panel_ButtonFrame_Search.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\MusicPlayer_Page\UserControls\Panel_Playing_Media_Audio_Spectrum_Circle.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

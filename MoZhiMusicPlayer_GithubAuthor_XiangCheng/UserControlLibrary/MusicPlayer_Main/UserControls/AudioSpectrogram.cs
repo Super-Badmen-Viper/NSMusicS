@@ -143,7 +143,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
                               .Range(0, e.BytesRecorded / 4)
                               .Select(i => BitConverter.ToSingle(e.Buffer, i * 4)).ToArray();   // 获取采样
         }
-
+        
         /// <summary>
         /// 将录制的数据写入到保存到文件或流
         /// </summary>

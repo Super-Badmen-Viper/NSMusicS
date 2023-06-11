@@ -4,6 +4,96 @@
              xmlns:local="clr-namespace:MoZhiMusic_Ultimate"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <!-- Button取消悬浮 -->
+        <Style x:Key="MyButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="1" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--  改写 WPF Slider 样式  -->
+        <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Focusable" Value="false" />
+            <Setter Property="IsTabStop" Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Rectangle
+                            Width="{TemplateBinding Width}"
+                            Height="{TemplateBinding Height}"
+                            Fill="{TemplateBinding Background}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="SliderThumbHorizontalDefault" TargetType="{x:Type Thumb}">
+            <Grid
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                UseLayoutRounding="True">
+                <Ellipse
+                    Width="{TemplateBinding Width}"
+                    Height="{TemplateBinding Height}"
+                    Fill="{TemplateBinding Foreground}" />
+            </Grid>
+        </ControlTemplate>
+        <ControlTemplate x:Key="SliderHorizontal" TargetType="{x:Type Slider}">
+            <Grid Background="Transparent" SnapsToDevicePixels="True">
+                <Border
+                    x:Name="TrackBackground"
+                    Height="1.0"
+                    VerticalAlignment="center"
+                    Background="{TemplateBinding Background}" />
+                <Track x:Name="PART_Track">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton
+                            Height="1.5"
+                            Background="{TemplateBinding Foreground}"
+                            Style="{StaticResource RepeatButtonTransparent}" />
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb
+                            x:Name="Thumb"
+                            Width="{TemplateBinding Height}"
+                            Height="{TemplateBinding Height}"
+                            VerticalAlignment="Center"
+                            Focusable="False"
+                            Foreground="{TemplateBinding Foreground}"
+                            OverridesDefaultStyle="True"
+                            Template="{StaticResource SliderThumbHorizontalDefault}" />
+                    </Track.Thumb>
+                </Track>
+            </Grid>
+        </ControlTemplate>
+        <Style x:Key="SliderStyle1" TargetType="{x:Type Slider}">
+            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
+            <Setter Property="Background" Value="#BF444444" />
+            <Setter Property="Foreground" Value="#6AD2FF" />
+            <Setter Property="Template" Value="{StaticResource SliderHorizontal}" />
+        </Style>
+        <Style x:Key="SliderStyle2" TargetType="{x:Type Slider}">
+            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
+            <Setter Property="Background" Value="{x:Null}" />
+            <Setter Property="Foreground" Value="{x:Null}" />
+            <Setter Property="Template" Value="{StaticResource SliderHorizontal}" />
+        </Style>
+        
+        
+        
+        
     </Application.Resources>
 </Application>

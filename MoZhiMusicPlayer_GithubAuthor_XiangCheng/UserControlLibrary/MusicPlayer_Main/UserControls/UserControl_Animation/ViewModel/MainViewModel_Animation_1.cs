@@ -1,19 +1,12 @@
 ﻿using MaterialDesignThemes.Wpf.Transitions;
-using Microsoft.Xaml.Behaviors.Media;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using TransitionEffect = MaterialDesignThemes.Wpf.Transitions.TransitionEffect;
-using System.Windows.Media.Imaging;
-using System.Windows;
-using System.Threading;
-using System.Windows.Threading;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main.UserControls.UserControl_Animation.ViewModel
 {

@@ -1,0 +1,145 @@
+﻿<UserControl x:Class="MoZhiMusic_Ultimate.Views.Home_Page.Home_Buttombar_Panel.UserControls.Panel_Media_Navigation_Normal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MoZhiMusic_Ultimate.Views.Home_Page.Home_Buttombar_Panel.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="70" Width="355"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+             >
+    <Grid>
+        <Border x:Name="Border_Song_Image"
+                BorderThickness="0.1" CornerRadius="4.3,4.3,4.3,4.3" BorderBrush="#00000000" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Stretch" 
+                Width="50" Height="50" 
+                
+                >
+            <Border.Background>
+                <ImageBrush Stretch="UniformToFill" 
+                            ImageSource="/MoZhiMusic_Ultimate;component/Views/Home_Page/Home_Buttombar_Panel/UI_Image/唱片3.png"/>
+            </Border.Background>
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </Border.Effect>
+        </Border>
+        <Border x:Name="Border_Hover_BackGround_Black"
+                BorderThickness="0" CornerRadius="4.3,4.3,4.3,4.3" BorderBrush="#00000000" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                Margin="11,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Stretch" 
+                Width="50" Height="50"
+                Visibility="Hidden" Background="#4C000000"/>
+        <Border x:Name="Border_Hover_BackGround"
+                BorderThickness="0" CornerRadius="4.3,4.3,4.3,4.3" BorderBrush="#00000000" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                Margin="11,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Stretch" 
+                Width="50" Height="50"
+                Visibility="Hidden"
+                >
+            <Border.Background>
+                <ImageBrush ImageSource="/MoZhiMusic_Ultimate;component/Views/Home_Page/Home_Buttombar_Panel/UI_Image/上箭头-03 (1).png" Stretch="UniformToFill" />
+            </Border.Background>
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </Border.Effect>
+        </Border>
+
+
+        <Canvas 
+                x:Name="Canvas_Song_Name"
+                VerticalAlignment="Top" ClipToBounds="True" 
+                    Height="26"  Margin="70,9,0,0" Width="173" HorizontalAlignment="Left">
+            <Canvas.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard x:Name="StoryBorad_Song_Name">
+                            <DoubleAnimationUsingKeyFrames
+                                    x:Name="DoubleAnimationUsingKeyFrames_TextBlock_Song_Name"
+                                    RepeatBehavior="Forever"
+                                    Storyboard.TargetName="content1"
+                                    Storyboard.TargetProperty="RenderTransform.X"
+                                    Duration="0:0:6">
+                                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0" />
+                                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.7" />
+                                <LinearDoubleKeyFrame x:Name="LinearDoubleKeyFrame_Text_Direction_Left" 
+                                                          Value="-6" KeyTime="0:0:4" />
+                                <LinearDoubleKeyFrame x:Name="LinearDoubleKeyFrame_Text_Direction_Right"
+                                                          Value="-6" KeyTime="0:0:5.2" />
+                                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:6" />
+                                <!-- 空余4s用来延迟动画效果（与QQ音乐界面更相似） -->
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Canvas.Triggers>
+            <StackPanel x:Name="content1"
+                            VerticalAlignment="Center" HorizontalAlignment="Left" 
+                            Height="26" Width="531" Orientation="Horizontal">
+                <StackPanel.RenderTransform>
+                    <TranslateTransform Y="0" />
+                </StackPanel.RenderTransform>
+                <TextBox 
+                        x:Name="Song_Name"
+                        Text="MoZhi音乐，拥抱开源，永无止境" TextWrapping="NoWrap" 
+                        Width="531" FontSize="15"    
+                        TextChanged="Song_Name_DataContextChanged" 
+                        Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" 
+                        Focusable="False" Foreground="White"
+                >
+                    <TextBox.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                    </TextBox.Effect>
+                </TextBox>
+            </StackPanel>
+        </Canvas>
+
+
+        <Button x:Name="Button_Love"
+            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
+            Width="21" Height="21" Margin="79,38,0,0" VerticalAlignment="Top" BorderBrush="{x:Null}"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            >
+            <Button.Background>
+                <ImageBrush ImageSource="/MoZhiMusic_Ultimate;component/Views/Home_Page/Home_Buttombar_Panel/UI_Image/爱心 (1).png" />
+            </Button.Background>
+            <Button.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
+        </Button>
+        <Button x:Name="Button_Download"
+            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
+            Width="21" Height="21" Margin="114,38,0,0" VerticalAlignment="Top" BorderBrush="{x:Null}"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            >
+            <Button.Background>
+                <ImageBrush ImageSource="/MoZhiMusic_Ultimate;component/Views/Home_Page/Home_Buttombar_Panel/UI_Image/下载 (1).png"/>
+            </Button.Background>
+            <Button.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
+        </Button>
+        <Button x:Name="Button_More"
+            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
+            Width="21" Height="21" Margin="152,38,0,0" VerticalAlignment="Top" BorderBrush="{x:Null}"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            >
+            <Button.Background>
+                <ImageBrush ImageSource="/MoZhiMusic_Ultimate;component/Views/Home_Page/Home_Buttombar_Panel/UI_Image/更多 (1).png" />
+            </Button.Background>
+            <Button.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
+        </Button>
+        <Button x:Name="Button_MV" Style="{StaticResource MyButton}" 
+                    Margin="190,36,0,0"
+                    Width="25" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand">
+            <Button.Background>
+                <ImageBrush ImageSource="/MoZhiMusic_Ultimate;component/Views/Home_Page/Home_Buttombar_Panel/UI_Image/视频播放 (1).png" />
+            </Button.Background>
+            <Button.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
+        </Button>
+    </Grid>
+</UserControl>

@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="MoZhiMusic_Ultimate.Views.Home_Page.Home_Buttombar_Panel.UserControls.Panel_Play_Seting_Normal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MoZhiMusic_Ultimate.Views.Home_Page.Home_Buttombar_Panel.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="70" Width="240"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+             >
+    <Grid>
+        <TextBox x:Name="TextBox_Song_Time" 
+                 HorizontalAlignment="Left" Height="26" 
+                 TextWrapping="Wrap" Width="118" 
+                 Background="{x:Null}" SelectionBrush="{x:Null}" BorderBrush="{x:Null}" 
+                 Foreground="White" HorizontalContentAlignment="Right" 
+                 FontSize="16" Text="00:00 / 00:00" BorderThickness="0" 
+                 Focusable="False" VerticalContentAlignment="Center" 
+                 UseLayoutRounding="True" SnapsToDevicePixels="True" Margin="10,24,0,21">
+            <TextBox.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBox.Effect>
+        </TextBox>
+        <Button x:Name="Button_Desk_MRC" Style="{StaticResource MyButton}" 
+                HorizontalAlignment="Right" Height="26" 
+                VerticalAlignment="Stretch" Width="26" 
+                BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
+                Margin="0,4,71,0">
+            <Button.Background>
+                <ImageBrush Stretch="UniformToFill" 
+                            ImageSource="/MoZhiMusic_Ultimate;component/Views/Home_Page/Home_Buttombar_Panel/UI_Image/桌面歌词 (2).png" 
+                            RenderOptions.BitmapScalingMode="HighQuality" 
+                            />
+            </Button.Background>
+            <Button.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
+        </Button>
+
+        <Button x:Name="Button_ListView_Selected" Style="{StaticResource MyButton}" 
+                Content="" HorizontalAlignment="Right" Height="20" 
+                VerticalAlignment="Stretch" Width="20" 
+                BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Cursor="Hand" 
+                Margin="0,4,36,0" >
+            <Button.Background>
+                <ImageBrush 
+                    RenderOptions.BitmapScalingMode="HighQuality" 
+                    ImageSource="/MoZhiMusic_Ultimate;component/Views/Home_Page/Home_Buttombar_Panel/UI_Image/播放队列 (2).png" />
+            </Button.Background>
+            <Button.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
+        </Button>
+        <TextBox x:Name="TextBox_SongList_NumLength" 
+                 Text="999+"
+                 HorizontalAlignment="Right" Height="15" 
+                 TextWrapping="Wrap" VerticalAlignment="Stretch" Width="35" 
+                 Background="{x:Null}" SelectionBrush="{x:Null}" BorderBrush="{x:Null}" 
+                 Foreground="White" HorizontalContentAlignment="Right" 
+                 FontSize="12" BorderThickness="0" 
+                 Focusable="False" VerticalContentAlignment="Center" 
+                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" Margin="0,4,1,0">
+            <TextBox.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBox.Effect>
+        </TextBox>
+    </Grid>
+</UserControl>
