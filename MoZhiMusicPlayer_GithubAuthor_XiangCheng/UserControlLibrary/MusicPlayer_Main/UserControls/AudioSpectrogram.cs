@@ -237,15 +237,18 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
 
             //参数调整,为0则不执行
             int size_1_SmoothData = 0;//预处理数据，第一次SmoothData平滑
-            int size_average = 10;//对animation_points超出的部分进行平均量增减(上下波动幅度)。
+            int size_average = 20;//对animation_points超出的部分进行平均量增减(上下波动幅度)。
             double size_Error_point = 0.5;//超出频谱动画范围，重新设置为？
-            int size_2_SmoothData = 1;//第二次SmoothData平滑
+            int size_2_SmoothData = 2;//第二次SmoothData平滑
 
+
+            //显示频谱的动画个数
+            int animation_points_Count = 106;
             #region 频谱数据，浓缩平滑预处理
 
             animation_points.Clear();
-            //数据浓缩为53长度
-            points = CondenseData(points, 53);
+            //数据浓缩为animation_points_Count长度
+            points = CondenseData(points, animation_points_Count);
             for (int i = 0; i < points.Length; i++)
             {
                 for (int j = points.Length / 4; j < points.Length / 4 + points.Length / 2; j++)
@@ -255,16 +258,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
                     break;
                 }
             }
-//w,b参数
+            //w,b参数
             //对animation_points进行SmoothData平滑
-            if(size_1_SmoothData != 0)
+            if (size_1_SmoothData != 0)
                 animation_points = SmoothData(animation_points, size_1_SmoothData);
             #endregion
 
             #region 频谱数据常规处理，防止越界
-
-            //显示频谱的动画个数
-            int animation_points_Count = 53;
 
             for (int i = 0; i < (int)(animation_points.Count / animation_points_Count * (int)(animation_points_Count / 2)); i++)
                 animation_points[animation_points.Count - 1 - i] = animation_points[i];
@@ -289,8 +289,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             if (animation_points.Count == animation_points_Count)
             {
                 //对animation_points数据相反转置操作
-                animation_points.Reverse(0, 26);
-                animation_points.Reverse(26, 27);
+                //Reverse (int index, int count);
+                //  参数: index,要反转的范围的从零开始的起始索引
+                //        count,要反转的范围内的元素数。
+                animation_points.Reverse(0, 53);
+                animation_points.Reverse(53, 53);
 
                 if (size_average != 0)
                 {
@@ -305,7 +308,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
                             count_sum_average++;
                         }
                     }
-    //w,b参数
+                    //w,b参数
                     //对animation_points超出的部分进行平均量增减。减少方差，增加均匀度
                     sum_average /= (count_sum_average + size_average);
                     for (int i = 0; i < animation_points.Count; i++)
@@ -319,9 +322,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
                         }
                     }
                 }
-//w,b参数
+                //w,b参数
                 //对animation_points进行SmoothData平滑
-                if(size_2_SmoothData != 0)
+                if (size_2_SmoothData != 0)
                     animation_points = SmoothData(animation_points, size_2_SmoothData);
 
                 for (int i = 0; i < (int)(animation_points_Count / 4); i++)

@@ -59,15 +59,14 @@
                                     RepeatBehavior="Forever"
                                     Storyboard.TargetName="content1"
                                     Storyboard.TargetProperty="RenderTransform.X"
-                                    Duration="0:0:6">
+                                    Duration="0:0:4">
                                 <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0" />
                                 <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0.7" />
                                 <LinearDoubleKeyFrame x:Name="LinearDoubleKeyFrame_Text_Direction_Left" 
-                                                          Value="-6" KeyTime="0:0:4" />
+                                                          Value="-6" KeyTime="0:0:3" />
                                 <LinearDoubleKeyFrame x:Name="LinearDoubleKeyFrame_Text_Direction_Right"
-                                                          Value="-6" KeyTime="0:0:5.2" />
-                                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:6" />
-                                <!-- 空余4s用来延迟动画效果（与QQ音乐界面更相似） -->
+                                                          Value="-6" KeyTime="0:0:3.8" />
+                                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:4" />
                             </DoubleAnimationUsingKeyFrames>
                         </Storyboard>
                     </BeginStoryboard>

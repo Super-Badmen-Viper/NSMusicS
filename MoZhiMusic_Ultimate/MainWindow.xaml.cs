@@ -1,6 +1,8 @@
 ﻿using MoZhiMusic_Ultimate.Views.Home_Page.Home_Buttombar_Panel;
+using MoZhiMusic_Ultimate.Views.MusicPlayer_Page;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -11,6 +13,8 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -29,15 +33,19 @@ namespace MoZhiMusic_Ultimate
 
             Init_ALL_UI();
 
-            /*MediaElement_Song.Source = new Uri(@"E:\\KuGou\\aespa - 怪火 (Illusion).mp3");
+
+            MediaElement_Song.Source = new Uri(@"E:\\KuGou\\aespa - 怪火 (Illusion).mp3");
             MediaElement_Song.Play();
-            MediaElement_Song.LoadedBehavior = MediaState.Play;*/
+            MediaElement_Song.LoadedBehavior = MediaState.Play;
         }
 
         #region UI Binding
         private void Init_ALL_UI()
         {
             Init_UI_Home_Page();
+            Init_UI_MusicPlayer_Page();
+
+            Init_Spectrum_Visualization();//初始化音频频谱
 
             MediaElement_Song.MediaOpened += MediaElement_Song_MediaOpened;
             MediaElement_Song.MediaEnded += MediaElement_Song_MediaEnded;
@@ -62,6 +70,7 @@ namespace MoZhiMusic_Ultimate
         {
             home_Media_UserControl.panel_Media_Navigation_Normal.Border_Song_Image.MouseEnter += Border_Hover_BackGround_MouseEnter;
             home_Media_UserControl.panel_Media_Navigation_Normal.Border_Hover_BackGround.MouseLeave += Border_Hover_BackGround_MouseLeave;
+            home_Media_UserControl.panel_Media_Navigation_Normal.Border_Hover_BackGround.MouseLeftButtonDown += Border_Hover_BackGround_MouseLeftButtonDown;
 
             //加载siler事件
             home_Media_UserControl.panel_MediaPlaying_Display_Process_Silder.Silder_Music_Temp_Width.ValueChanged += Timeline_ValueChanged;
@@ -75,8 +84,10 @@ namespace MoZhiMusic_Ultimate
         }
 
         #region Home_Page/Home_Buttombar_Panel
+        
+        Thickness thickness_ListView_Temp_MRC_Margin = new Thickness();
         /// <summary>
-        /// 播放器界面专辑图标悬浮
+        /// 播放器界面专辑图标 悬浮与点击事件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -90,8 +101,42 @@ namespace MoZhiMusic_Ultimate
             home_Media_UserControl.panel_Media_Navigation_Normal.Border_Hover_BackGround.Visibility = Visibility.Hidden;
             home_Media_UserControl.panel_Media_Navigation_Normal.Border_Hover_BackGround_Black.Visibility = Visibility.Hidden;
         }
+        private void Border_Hover_BackGround_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                blurEffect.Radius = 0;
+                musicPlayer_Song_Playback.VerticalAlignment = VerticalAlignment.Bottom;
 
-        DispatcherTimer dispatcherTimer_Silder;    // 用于时间轴  
+                if (!Bool_Singer_Image_Animation)
+                    musicPlayer_Song_Playback.Panel_Image.Visibility = Visibility.Visible;
+
+                home_Media_UserControl.panel_Media_Navigation_Normal.Visibility = Visibility.Hidden;
+                home_Media_UserControl.panel_Play_Seting_Normal.Visibility = Visibility.Hidden;
+                home_Media_UserControl.panel_Media_Navigation_PlayMode.Visibility = Visibility.Visible;
+                home_Media_UserControl.panel_Play_Seting_PlayMode.Visibility = Visibility.Visible;
+                home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.Visibility = Visibility.Visible;
+
+                musicPlayer_Song_Playback.ListView_Temp_MRC.Visibility = Visibility.Hidden;
+                //实例化一个DoubleAnimation类。
+                doubleAnimation = new DoubleAnimation();
+                //设置From属性。
+                doubleAnimation.From = 0;
+                //设置To属性。
+                doubleAnimation.To = this.ActualHeight - 40;
+                //设置Duration属性。
+                doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(200));
+                //设置动画完成事件
+                doubleAnimation.Completed += DoubleAnimation_Completed;
+                //为元素设置BeginAnimation方法。
+                musicPlayer_Song_Playback.BeginAnimation(UserControl.HeightProperty, doubleAnimation);
+            }
+            catch { }
+        }
+        
+
+
+        DispatcherTimer dispatcherTimer_Silder;
         public static double TimeLine_Nums;
         TimeSpan TimeSpan_This_Media_NaturalDuration;
         /// <summary>
@@ -172,6 +217,69 @@ namespace MoZhiMusic_Ultimate
 
         #region MusicPlayer_Page Binding
 
+        //bool Bool_Button_Play_Pause_Player;//播放状态
+        //bool Bool_OpenMainMusicPlayer;//是否打开播放器
+        bool Bool_Singer_Image_Animation;   //歌手写真动画
+        bool Bool_Jukebox_Playing;          //专辑动画
+        DoubleAnimation doubleAnimation;//进入音频播放器窗体动画
+        BlurEffect blurEffect = new BlurEffect();//专辑播放界面，模糊玻璃
+
+        private void Init_UI_MusicPlayer_Page()
+        {
+            //初始化musicPlayer_Song_Playback位置
+            doubleAnimation = new DoubleAnimation();
+            doubleAnimation.From = this.ActualHeight;
+            doubleAnimation.To = 0;
+            doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(200));
+            doubleAnimation.Completed += DoubleAnimation_Completed;
+            musicPlayer_Song_Playback.BeginAnimation(UserControl.HeightProperty, doubleAnimation);
+            musicPlayer_Song_Playback.Panel_Image.Visibility = Visibility.Hidden;
+
+            musicPlayer_Song_Playback.Button_Return_MainWindow.Click += Button_Return_MainWindow_Click; ;
+        }
+
+        private void Button_Return_MainWindow_Click(object sender, RoutedEventArgs e)
+        {
+            //blurEffect.Radius数值超过0会造成动画UI卡顿
+            blurEffect.Radius = 0;
+            musicPlayer_Song_Playback.VerticalAlignment = VerticalAlignment.Bottom;
+
+            try
+            {
+                musicPlayer_Song_Playback.Panel_Image.Visibility = Visibility.Hidden;
+
+                home_Media_UserControl.panel_Media_Navigation_Normal.Visibility = Visibility.Visible;
+                home_Media_UserControl.panel_Play_Seting_Normal.Visibility = Visibility.Visible;
+                home_Media_UserControl.panel_Media_Navigation_PlayMode.Visibility = Visibility.Hidden;
+                home_Media_UserControl.panel_Play_Seting_PlayMode.Visibility = Visibility.Hidden;
+                home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.Visibility = Visibility.Hidden;
+
+                musicPlayer_Song_Playback.ListView_Temp_MRC.Visibility = Visibility.Hidden;
+                //实例化一个DoubleAnimation类。
+                doubleAnimation = new DoubleAnimation();
+                //设置From属性。
+                doubleAnimation.From = this.ActualHeight - 20;
+                //设置To属性。
+                doubleAnimation.To = 0;
+                //设置Duration属性。
+                doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(200));
+                //设置动画完成事件
+                doubleAnimation.Completed += DoubleAnimation_Completed;
+                //为元素设置BeginAnimation方法。
+                musicPlayer_Song_Playback.BeginAnimation(UserControl.HeightProperty, doubleAnimation);
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// 主界面切换动画完成事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DoubleAnimation_Completed(object sender, EventArgs e)
+        {
+            musicPlayer_Song_Playback.ListView_Temp_MRC.Visibility = Visibility.Visible;
+        }
         #endregion
 
         #region MVPlayer_Page Binding
@@ -194,7 +302,7 @@ namespace MoZhiMusic_Ultimate
 
         #endregion
 
-        #region MediaElement_Song歌曲资源初始化加载
+        #region MediaElement_Song 歌曲资源初始化加载
 
         private void MediaElement_Song_MediaOpened(object sender, RoutedEventArgs e)//一定几率导致双缓冲,同时执行开启与结束事件
         {
@@ -211,6 +319,12 @@ namespace MoZhiMusic_Ultimate
             TimeSpan_This_Media_NaturalDuration = MediaElement_Song.NaturalDuration.TimeSpan;
             //设置播放
             MediaElement_Song.LoadedBehavior = MediaState.Play;
+            //专辑封面转动
+            musicPlayer_Song_Playback.Image_Song_Storyboard.Begin();
+            musicPlayer_Song_Playback.Storyboard_BeginMusic_Jukebox_Close.Begin();//关闭所有指针动画
+            musicPlayer_Song_Playback.Storyboard_BeginMusic_Jukebox_Open.Begin();//开启指针动画，并来回动画
+            //开启频谱动画
+            dispatcherTimer_Spectrum_Visualization.Start();
         }
 
         private void MediaElement_Song_MediaEnded(object sender, RoutedEventArgs e)
@@ -222,8 +336,168 @@ namespace MoZhiMusic_Ultimate
             Load_MediaElement_Song_MediaOpened();
         }
 
+
+        #endregion
+
+        #region 音乐可视化
+
+        DispatcherTimer dispatcherTimer_Spectrum_Visualization;
+        /// <summary>
+        /// 初始化歌曲频谱同步
+        /// </summary>
+        public void Init_Spectrum_Visualization()
+        {
+            dispatcherTimer_Spectrum_Visualization = new DispatcherTimer();
+            dispatcherTimer_Spectrum_Visualization.Tick += Spectrum_Visualization_Play_Tick;
+            dispatcherTimer_Spectrum_Visualization.Interval = new TimeSpan(0, 0, 0, 0, 600);
+
+            Spectrum_time = 75;
+            dispatcherTimer_Spectrum_Visualization.Interval = new TimeSpan(0, 0, 0, 0, Spectrum_time * 2);
+
+            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                        audioSpectrogram.StartStopBtn_Click();
+        }
+        public void Spectrum_Visualization_Play_Tick(object sender, EventArgs e)
+        {
+            Take_Spectrum_Visualization();
+        }
+        int Spectrum_time = 0;
+        float Spectrum_Value = 0;
+        public void Take_Spectrum_Visualization()
+        {
+            if (home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                        audioSpectrogram.animation_points != null)
+            {
+                int half_animation_points_length = home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                        audioSpectrogram.animation_points.Count;
+
+                if (half_animation_points_length == 106)
+                {
+                    for (int i = 0; i < home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                List_storyboard.Count; i++)
+                    {
+                        home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                            List_doubleAnimation[i].KeyFrames.Clear();
+
+                        LinearDoubleKeyFrame linearDoubleKeyFrame_1 = new LinearDoubleKeyFrame();
+                        LinearDoubleKeyFrame linearDoubleKeyFrame_2 = new LinearDoubleKeyFrame();
+
+                        linearDoubleKeyFrame_1.KeyTime = new TimeSpan(0, 0, 0, 0,
+                            (int)Spectrum_time);
+
+                        //结束值设置为上次动画保存的位置
+                        linearDoubleKeyFrame_2.Value = Spectrum_Value;
+                        linearDoubleKeyFrame_2.KeyTime = new TimeSpan(0, 0, 0, 0,
+                            (int)Spectrum_time);
+
+                        linearDoubleKeyFrame_1.Value = home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                audioSpectrogram.animation_points[i];
+                        if (linearDoubleKeyFrame_1.Value < -0.5)
+                            linearDoubleKeyFrame_1.Value = -0.48;
+
+                        home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                            List_doubleAnimation[i]
+                                .KeyFrames.Add(linearDoubleKeyFrame_1);
+                        home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                            List_doubleAnimation[i]
+                                .KeyFrames.Add(linearDoubleKeyFrame_2);
+                        home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                            List_doubleAnimation[i]
+                                .Duration = new TimeSpan(0, 0, 0, 0, (int)Spectrum_time * 2);
+
+                        home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                            List_storyboard[i]
+                                .Children[0] = home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                    List_doubleAnimation[i];
+                        home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                            List_storyboard[i]
+                                .Begin();
+
+                        /*假如只有26 而非  106
+                         则左13，右13，
+                         则左[53-13]->[53]  ，  右[54]->[54+13]   
+                         */
+                        /*if (i < half_animation_points_length)
+                        {
+                            linearDoubleKeyFrame_1.Value = home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                audioSpectrogram.animation_points[i];
+                            if (linearDoubleKeyFrame_1.Value < -0.5)
+                                linearDoubleKeyFrame_1.Value = -0.48;
+
+                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                List_doubleAnimation[half_animation_points_length - i + (53 - half_animation_points_length)]
+                                    .KeyFrames.Add(linearDoubleKeyFrame_1);
+                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                List_doubleAnimation[half_animation_points_length - i + (53 - half_animation_points_length)]
+                                    .KeyFrames.Add(linearDoubleKeyFrame_2);
+                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                List_doubleAnimation[half_animation_points_length - i + (53 - half_animation_points_length)]
+                                    .Duration = new TimeSpan(0, 0, 0, 0, (int)Spectrum_time * 2);
+
+                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                List_storyboard[half_animation_points_length - i + (53 - half_animation_points_length)]
+                                    .Children[0] = home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                        List_doubleAnimation[half_animation_points_length - i + (53 - half_animation_points_length)];
+                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                List_storyboard[half_animation_points_length - i + (53 - half_animation_points_length)]
+                                    .Begin();
+                        }
+                        else
+                        {
+                            linearDoubleKeyFrame_1.Value = home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                audioSpectrogram.animation_points[i - half_animation_points_length + (53 - half_animation_points_length)];
+                            if (linearDoubleKeyFrame_1.Value < -0.5)
+                                linearDoubleKeyFrame_1.Value = -0.48;
+
+                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                            List_doubleAnimation[
+                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
+                                ].KeyFrames.Add(linearDoubleKeyFrame_1);
+                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                List_doubleAnimation[
+                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
+                                ].KeyFrames.Add(linearDoubleKeyFrame_2);
+
+                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                List_doubleAnimation[
+                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
+                                ].Duration = new TimeSpan(0, 0, 0, 0, (int)Spectrum_time * 2);
+                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                List_storyboard[
+                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
+                                ].Children[0] = home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                    List_doubleAnimation[
+                                        i - half_animation_points_length + 53 + (53 - half_animation_points_length)
+                                    ];
+                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
+                                List_storyboard[
+                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
+                                ].Begin();
+                        }*/
+
+                        //保留此次动画的Value值
+                        Spectrum_Value = (float)(linearDoubleKeyFrame_1.Value);
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #endregion
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //位于播放器界面时，解除动画绑定  对高度属性的占用 -->设置height将有效，否则无效
+            if (home_Media_UserControl.panel_Media_Navigation_Normal.Visibility == Visibility.Hidden)
+                musicPlayer_Song_Playback.BeginAnimation(UserControl.HeightProperty, null);
+
+            musicPlayer_Song_Playback.Width = this.ActualWidth;
+            musicPlayer_Song_Playback.Height = this.ActualHeight - 40;
+        }
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            
+        }
     }
 }

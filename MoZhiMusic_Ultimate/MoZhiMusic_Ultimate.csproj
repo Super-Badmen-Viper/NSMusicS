@@ -88,6 +88,13 @@
     <None Remove="Views\Home_Page\Home_Topbar_Panel\UI_Image\皮肤 %281%29.png" />
     <None Remove="Views\Home_Page\Home_Topbar_Panel\UI_Image\皮肤.png" />
     <None Remove="Views\Home_Page\Home_Topbar_Panel\UI_Image\管理.png" />
+    <None Remove="Views\MusicPlayer_Page\UI_Image\下-01 %281%29.png" />
+    <None Remove="Views\MusicPlayer_Page\UI_Image\下-01.png" />
+    <None Remove="Views\MusicPlayer_Page\UI_Image\初学者.jpg" />
+    <None Remove="Views\MusicPlayer_Page\UI_Image\唱片3.png" />
+    <None Remove="Views\MusicPlayer_Page\UI_Image\唱片3_黑胶.png" />
+    <None Remove="Views\MusicPlayer_Page\UI_Image\唱片撞针.png" />
+    <None Remove="Views\MusicPlayer_Page\UI_Image\唱片机_底座.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -122,8 +129,6 @@
     <Folder Include="Models\AI_MoZhiYun_Info\AI_music_notation_Info\" />
     <Folder Include="Models\AI_MoZhiYun_Info\AI_Synchronized_audio_lyrics_extraction_Info\" />
     <Folder Include="Models\AI_MoZhiYun_Info\AI_MoZhi_singing_bar_Info\" />
-    <Folder Include="Models\Audio_Spectrogram_Info\Extracting_Audio_Spectrum_Info\" />
-    <Folder Include="Models\Audio_Spectrogram_Info\Processing_Audio_Spectrum_Info\" />
     <Folder Include="Models\Song_Mrc_Info\" />
     <Folder Include="Models\Song_Audio_Info\" />
     <Folder Include="Models\Song_List_Info\" />
@@ -153,7 +158,6 @@
     <Folder Include="ViewModels\Init_UserData_Info\Init_Account_Information_Info\Init_SongList_Info\" />
     <Folder Include="ViewModels\Init_UserData_Info\Init_Profile_Info\" />
     <Folder Include="ViewModels\Init_Output_And_Log_Info\" />
-    <Folder Include="ViewModels\Init_Audio_Spectrogram_Info\" />
     <Folder Include="Views\AI_MoZhiYun_Page\AI_identify_songs_Page\" />
     <Folder Include="Views\AI_MoZhiYun_Page\AI_Guessing_Your_Favorite_Page\" />
     <Folder Include="Views\AI_MoZhiYun_Page\AI_singing_Page\" />
@@ -164,7 +168,6 @@
     <Folder Include="Views\Floating_Control_Page\Floating_MV_Playback_Window_Panel\" />
     <Folder Include="Views\Floating_Control_Page\Floating_Desktop_Wallpaper_Animation\" />
     <Folder Include="Views\Floating_Control_Page\Floating_Current_Song_Playlist_Panel\" />
-    <Folder Include="Views\MusicPlayer_Page\UI_Image\" />
     <Folder Include="Views\MVPlayer_Page\" />
     <Folder Include="Views\Online_Music_Page\Online_Music_Square_Panel\" />
     <Folder Include="Views\Online_Music_Page\Online_Video_MV_Panel\" />
@@ -176,6 +179,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="VisioForge.DotNet.Core" Version="15.5.81" />
   </ItemGroup>
 
@@ -259,6 +266,13 @@
     <Resource Include="Views\Home_Page\Home_Topbar_Panel\UI_Image\皮肤 (1).png" />
     <Resource Include="Views\Home_Page\Home_Topbar_Panel\UI_Image\皮肤.png" />
     <Resource Include="Views\Home_Page\Home_Topbar_Panel\UI_Image\管理.png" />
+    <Resource Include="Views\MusicPlayer_Page\UI_Image\下-01 (1).png" />
+    <Resource Include="Views\MusicPlayer_Page\UI_Image\下-01.png" />
+    <Resource Include="Views\MusicPlayer_Page\UI_Image\初学者.jpg" />
+    <Resource Include="Views\MusicPlayer_Page\UI_Image\唱片3.png" />
+    <Resource Include="Views\MusicPlayer_Page\UI_Image\唱片3_黑胶.png" />
+    <Resource Include="Views\MusicPlayer_Page\UI_Image\唱片撞针.png" />
+    <Resource Include="Views\MusicPlayer_Page\UI_Image\唱片机_底座.png" />
   </ItemGroup>
 
   <ItemGroup>

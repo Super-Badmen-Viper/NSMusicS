@@ -18,7 +18,7 @@
                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                >
             <TextBlock.Background>
-                <ImageBrush ImageSource="/MoZhiMusic_Ultimate;component/Views/Home_Page/Home_Sidebar_Panel/UI_Image/推荐 (1).png"/>
+                <ImageBrush ImageSource="/MoZhiMusic_Ultimate;component/Views/Home_Page/Home_Sidebar_Panel/UI_Image/推荐.png"/>
             </TextBlock.Background>
         </TextBlock>
         <TextBlock Margin="40,5,0,5" Text="推荐 " Foreground="#FFFFFF" FontSize="13.5" Padding="0,1,0,0" 

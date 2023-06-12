@@ -11,13 +11,6 @@
              UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
              >
     <Grid>
-        
-        <UserControls:Panel_Playing_Media_Audio_Spectrum_Line 
-            x:Name="panel_Playing_Media_Audio_Spectrum_Line"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-            VerticalAlignment="Top" 
-            Margin="0,-51,0,0"
-            />
         <UserControls:Panel_Media_Navigation_Normal 
             x:Name="panel_Media_Navigation_Normal"
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
@@ -26,28 +19,16 @@
         <UserControls:Panel_Media_Navigation_PlayMode 
             x:Name="panel_Media_Navigation_PlayMode"
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-            HorizontalAlignment="Left" VerticalAlignment="Top" Height="70"
+            HorizontalAlignment="Left" VerticalAlignment="Top" Height="70" Margin="20,0,0,0"
             Visibility="Hidden"
             />
+
         <UserControls:Panel_Player_Normal 
             x:Name="panel_Player_Normal"
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
             HorizontalAlignment="Center" VerticalAlignment="Top"
             />
-        <UserControls:Panel_Player_SongOrder 
-            x:Name="panel_Player_SongOrder"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-            HorizontalAlignment="Center" VerticalAlignment="Top" 
-            Margin="0,-135,243,0"
-            Visibility="Hidden"
-            />
-        <UserControls:Panel_Playing_MediaVoice 
-            x:Name="panel_Playing_MediaVoice"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-            HorizontalAlignment="Center" VerticalAlignment="Top" 
-            Margin="190,-214,0,0"
-            Visibility="Hidden"
-            />
+
         <UserControls:Panel_Play_Seting_Normal 
             x:Name="panel_Play_Seting_Normal"
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
@@ -62,10 +43,33 @@
             Visibility="Hidden" Margin="0,0,20,0"
             />
 
+        <UserControls:Panel_Playing_Media_Audio_Spectrum_Line 
+            x:Name="panel_Playing_Media_Audio_Spectrum_Line"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+            VerticalAlignment="Top" 
+            Margin="0,-51,0,0"
+            />
         <UserControls:Panel_MediaPlaying_Display_Process_Silder 
             x:Name="panel_MediaPlaying_Display_Process_Silder"
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
             VerticalAlignment="Top" Margin="0,-6,0,0"
             />
+
+        <UserControls:Panel_Player_SongOrder 
+            x:Name="panel_Player_SongOrder"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+            HorizontalAlignment="Center" VerticalAlignment="Top" 
+            Margin="0,-135,243,0"
+            Visibility="Hidden"
+            />
+        <UserControls:Panel_Playing_MediaVoice 
+            x:Name="panel_Playing_MediaVoice"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+            HorizontalAlignment="Center" VerticalAlignment="Top" 
+            Margin="190,-214,0,0"
+            Visibility="Hidden"
+            />
+        
+        
     </Grid>
 </UserControl>

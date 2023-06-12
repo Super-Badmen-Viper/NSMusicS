@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main"
              
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="690" MinWidth="1020" 
              Height="690" Width="1020" 
@@ -15,7 +16,6 @@
              >
     <Grid>
         <Grid x:Name="Grid_Animation">
-
             <Grid x:Name="Grid_Up_Singer_Photo" >
                 <Grid.Background>
                     <ImageBrush Stretch="UniformToFill"/>
@@ -474,8 +474,6 @@
     <UserControl.Background>
         <ImageBrush x:Name="TextBlock_Singer_Top_DoubleAnimationUsingKeyFrames" Stretch="UniformToFill"/>
     </UserControl.Background>
-
-
     <UserControl.Resources>
         <!-- ListView平滑滚动效果 -->
         <Style x:Key="ListBoxStyle1" TargetType="{x:Type ListBox}">

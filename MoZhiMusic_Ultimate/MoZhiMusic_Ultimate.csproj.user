@@ -13,6 +13,9 @@
     <Compile Update="Views\Home_Page\Home_Topbar_Panel\Home_TopApp_UserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\MusicPlayer_Page\MusicPlayer_Song_Playback.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\MusicPlayer_Page\UserControls\Panel_Playing_Media_Audio_Spectrum_Circle.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -91,6 +94,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Home_Page\Home_Topbar_Panel\UserControls\Panel_ButtonFrame_Search.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\MusicPlayer_Page\MusicPlayer_Song_Playback.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\MusicPlayer_Page\UserControls\Panel_Playing_Media_Audio_Spectrum_Circle.xaml">

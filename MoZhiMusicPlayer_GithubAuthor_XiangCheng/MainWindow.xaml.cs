@@ -3457,55 +3457,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
                         audioSpectrogram.StartStopBtn_Click();
         }
-
         public void Spectrum_Visualization_Play_Tick(object sender, EventArgs e)
         {
-            //使用双区间来判定同步当前音频文件时间信息所处歌词时间信息的位置
-            //0有时访问不到
-            if (ListBox_MRC_Song_MRC_Time != null)
-            {
-                if (MediaElement_Song.Position.TotalMilliseconds <= Start_Song_MRC_Time)
-                {
-                    for (int i = 0; i < ListBox_MRC_Song_MRC_Time.Length; i++)
-                    {
-                        if (ListBox_MRC_Song_MRC_Time[i] != 0)
-                        {
-                            Take_Spectrum_Visualization();
-                            break;
-                        }
-                    }
-                }
-                else if (MediaElement_Song.Position.TotalMilliseconds >= End_Song_MRC_Time)
-                {
-                    for (int i = ListBox_MRC_Song_MRC_Time.Length - 1; i >= 0; i--)
-                    {
-                        if (ListBox_MRC_Song_MRC_Time[i] != 0)
-                        {
-                            Take_Spectrum_Visualization();
-
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    for (int i = 7; i < ListBox_MRC_Song_MRC_Time.Length; i++)
-                    {
-                        if (ListBox_MRC_Song_MRC_Time[i] != 0)
-                        {
-                            if (MediaElement_Song.Position.TotalMilliseconds >= ListBox_MRC_Song_MRC_Time[i])
-                            {
-                                if (MediaElement_Song.Position.TotalMilliseconds < ListBox_MRC_Song_MRC_Time[i + 1])
-                                {
-                                    Take_Spectrum_Visualization();
-
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            Take_Spectrum_Visualization();
         }
 
         
@@ -3519,7 +3473,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 int half_animation_points_length = userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
                         audioSpectrogram.animation_points.Count;
 
-                if (half_animation_points_length == 53)
+                if (half_animation_points_length == 106)
                 {
                     for (int i = 0; i < userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
                                 List_storyboard.Count; i++)
@@ -3533,15 +3487,39 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         linearDoubleKeyFrame_1.KeyTime = new TimeSpan(0, 0, 0, 0,
                             (int)Spectrum_time);
 
-                        linearDoubleKeyFrame_2.Value = Spectrum_Value;//结束值设置为上次动画的位置
+                        //结束值设置为上次动画保存的位置
+                        linearDoubleKeyFrame_2.Value = Spectrum_Value;
                         linearDoubleKeyFrame_2.KeyTime = new TimeSpan(0, 0, 0, 0,
                             (int)Spectrum_time);
+
+                        linearDoubleKeyFrame_1.Value = userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                audioSpectrogram.animation_points[i];
+                        if (linearDoubleKeyFrame_1.Value < -0.5)
+                            linearDoubleKeyFrame_1.Value = -0.48;
+
+                        userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                            List_doubleAnimation[i]
+                                .KeyFrames.Add(linearDoubleKeyFrame_1);
+                        userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                            List_doubleAnimation[i]
+                                .KeyFrames.Add(linearDoubleKeyFrame_2);
+                        userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                            List_doubleAnimation[i]
+                                .Duration = new TimeSpan(0, 0, 0, 0, (int)Spectrum_time * 2);
+
+                        userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                            List_storyboard[i]
+                                .Children[0] = userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                    List_doubleAnimation[i];
+                        userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                            List_storyboard[i]
+                                .Begin();
 
                         /*假如只有26 而非  106
                          则左13，右13，
                          则左[53-13]->[53]  ，  右[54]->[54+13]   
                          */
-                        if (i < half_animation_points_length)
+                        /*if (i < half_animation_points_length)
                         {
                             linearDoubleKeyFrame_1.Value = userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
                                 audioSpectrogram.animation_points[i];
@@ -3549,29 +3527,22 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                 linearDoubleKeyFrame_1.Value = -0.48;
 
                             userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
-                            List_doubleAnimation[
-                                    half_animation_points_length - i + (53 - half_animation_points_length)
-                                ].KeyFrames.Add(linearDoubleKeyFrame_1);
+                                List_doubleAnimation[half_animation_points_length - i + (53 - half_animation_points_length)]
+                                    .KeyFrames.Add(linearDoubleKeyFrame_1);
                             userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
-                                List_doubleAnimation[
-                                    half_animation_points_length - i + (53 - half_animation_points_length)
-                                ].KeyFrames.Add(linearDoubleKeyFrame_2);
+                                List_doubleAnimation[half_animation_points_length - i + (53 - half_animation_points_length)]
+                                    .KeyFrames.Add(linearDoubleKeyFrame_2);
+                            userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                List_doubleAnimation[half_animation_points_length - i + (53 - half_animation_points_length)]
+                                    .Duration = new TimeSpan(0, 0, 0, 0, (int)Spectrum_time * 2);
 
                             userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
-                                List_doubleAnimation[
-                                    half_animation_points_length - i + (53 - half_animation_points_length)
-                                ].Duration = new TimeSpan(0, 0, 0, 0, (int)Spectrum_time * 2);
+                                List_storyboard[half_animation_points_length - i + (53 - half_animation_points_length)]
+                                    .Children[0] = userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                        List_doubleAnimation[half_animation_points_length - i + (53 - half_animation_points_length)];
                             userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
-                                List_storyboard[
-                                    half_animation_points_length - i + (53 - half_animation_points_length)
-                                ].Children[0] = userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
-                                    List_doubleAnimation[
-                                        half_animation_points_length - i + (53 - half_animation_points_length)
-                                    ];
-                            userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
-                                List_storyboard[
-                                    half_animation_points_length - i + (53 - half_animation_points_length)
-                                ].Begin();
+                                List_storyboard[half_animation_points_length - i + (53 - half_animation_points_length)]
+                                    .Begin();
                         }
                         else
                         {
@@ -3604,9 +3575,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                 List_storyboard[
                                     i - half_animation_points_length + 53 + (53 - half_animation_points_length)
                                 ].Begin();
-                        }
+                        }*/
 
-                        Spectrum_Value = (float)(linearDoubleKeyFrame_1.Value);//保留此次动画的Value值
+                        //保留此次动画的Value值
+                        Spectrum_Value = (float)(linearDoubleKeyFrame_1.Value);
                     }
                 }
             }

@@ -9,7 +9,10 @@
              d:DesignHeight="50" d:DesignWidth="1060">
     <Grid>
         <StackPanel x:Name="StackPanel_Test" Orientation="Horizontal" HorizontalAlignment="Center" Margin="-10,0,0,0">
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0"
+                    Visibility="Hidden"
+                    >
+                <!--第一个Canvas不稳定，故Hidden-->
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -37,7 +40,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -64,7 +67,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -91,7 +94,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -118,7 +121,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -145,7 +148,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -172,7 +175,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -199,7 +202,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -226,7 +229,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -253,7 +256,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -280,7 +283,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -307,7 +310,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -334,7 +337,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -361,7 +364,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -388,7 +391,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -415,7 +418,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -442,7 +445,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -469,7 +472,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -496,7 +499,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -523,7 +526,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -550,7 +553,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -577,7 +580,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -604,7 +607,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -631,7 +634,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -658,7 +661,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -685,7 +688,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -712,7 +715,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -739,7 +742,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -766,7 +769,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -793,7 +796,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -820,7 +823,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -847,7 +850,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -874,7 +877,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -901,7 +904,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -928,7 +931,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -955,7 +958,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -982,7 +985,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1009,7 +1012,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1036,7 +1039,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1063,7 +1066,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1090,7 +1093,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1117,7 +1120,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1144,7 +1147,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1171,7 +1174,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1198,7 +1201,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1225,7 +1228,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1252,7 +1255,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1279,7 +1282,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1306,7 +1309,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1333,7 +1336,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1360,7 +1363,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1387,7 +1390,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1414,7 +1417,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1441,7 +1444,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1468,7 +1471,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1495,7 +1498,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1522,7 +1525,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1549,7 +1552,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1576,7 +1579,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1603,7 +1606,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1630,7 +1633,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1657,7 +1660,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1684,7 +1687,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1711,7 +1714,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1738,7 +1741,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1765,7 +1768,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1792,7 +1795,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1819,7 +1822,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1846,7 +1849,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1873,7 +1876,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1900,7 +1903,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1927,7 +1930,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1954,7 +1957,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -1981,7 +1984,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2008,7 +2011,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2035,7 +2038,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2062,7 +2065,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2089,7 +2092,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2116,7 +2119,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2143,7 +2146,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2170,7 +2173,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2197,7 +2200,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2224,7 +2227,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2251,7 +2254,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2278,7 +2281,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2305,7 +2308,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2332,7 +2335,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2359,7 +2362,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2386,7 +2389,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2413,7 +2416,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2440,7 +2443,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2467,7 +2470,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2494,7 +2497,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2521,7 +2524,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2548,7 +2551,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2575,7 +2578,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2602,7 +2605,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2629,7 +2632,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2656,7 +2659,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2683,7 +2686,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2710,7 +2713,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2737,7 +2740,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2764,7 +2767,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2791,7 +2794,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2818,7 +2821,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
@@ -2845,7 +2848,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="4,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
                 <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
