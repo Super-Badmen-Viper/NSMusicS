@@ -98,6 +98,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="bin\debug\net6.0-windows\userdata\user_account_information\song_list_info\Song_List_Info_Auto.xml" />
+    <Content Include="bin\debug\net6.0-windows\userdata\user_account_information\song_list_info\Song_List_Info_Love.xml" />
+    <Content Include="bin\debug\net6.0-windows\userdata\user_account_information\song_list_info\Song_List_Info_More.xml" />
     <Content Include="bin\Debug\net6.0-windows\UserData\User_Account_Information\User_SongList.xml" />
     <Content Include="bin\Debug\net6.0-windows\UserData\User_Profile\User_App_Software_Settings.xml" />
   </ItemGroup>
@@ -131,7 +134,6 @@
     <Folder Include="Models\AI_MoZhiYun_Info\AI_MoZhi_singing_bar_Info\" />
     <Folder Include="Models\Song_Mrc_Info\" />
     <Folder Include="Models\Song_Audio_Info\" />
-    <Folder Include="Models\Song_List_Info\" />
     <Folder Include="Models\Singer_Image_Info\" />
     <Folder Include="Services\Web_Load\" />
     <Folder Include="Services\Web_Download\" />
@@ -155,7 +157,6 @@
     <Folder Include="ViewModels\Init_Services\Init_Web_Download_Info\" />
     <Folder Include="ViewModels\Init_Services\Init_Web_Load_Info\" />
     <Folder Include="ViewModels\Init_Services\Init_Web_Update_Info\" />
-    <Folder Include="ViewModels\Init_UserData_Info\Init_Account_Information_Info\Init_SongList_Info\" />
     <Folder Include="ViewModels\Init_UserData_Info\Init_Profile_Info\" />
     <Folder Include="ViewModels\Init_Output_And_Log_Info\" />
     <Folder Include="Views\AI_MoZhiYun_Page\AI_identify_songs_Page\" />
@@ -167,21 +168,26 @@
     <Folder Include="Views\Floating_Control_Page\Floating_Desktop_LyricsBar_Panel\" />
     <Folder Include="Views\Floating_Control_Page\Floating_MV_Playback_Window_Panel\" />
     <Folder Include="Views\Floating_Control_Page\Floating_Desktop_Wallpaper_Animation\" />
-    <Folder Include="Views\Floating_Control_Page\Floating_Current_Song_Playlist_Panel\" />
+    <Folder Include="Views\Floating_Control_Page\Floating_Current_Song_Song_Info_Panel\" />
     <Folder Include="Views\MVPlayer_Page\" />
     <Folder Include="Views\Online_Music_Page\Online_Music_Square_Panel\" />
     <Folder Include="Views\Online_Music_Page\Online_Video_MV_Panel\" />
     <Folder Include="Views\Online_Music_Page\Online_Yourradio_Personalized_Panel\" />
-    <Folder Include="Views\SongList_Page\SongList_My _Favorite_Panel\" />
-    <Folder Include="Views\SongList_Page\SongList_Local music_Panel\" />
-    <Folder Include="Views\SongList_Page\SongList_Recently _Listening_Panel\" />
+    <Folder Include="Views\SongList_Page\SongList_My_Favorite_Panel\" />
+    <Folder Include="Views\SongList_Page\SongList_Recently_Listening_Panel\" />
     <Folder Include="Views\SongList_Page\SongList_CustomLists_Panel\" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="bin\Debug\net6.0-windows\UserData\User_Account_Information\Song_List_Info\Song_List_Info_ALL.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AduSkin" Version="1.1.1.9" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="VisioForge.DotNet.Core" Version="15.5.81" />
   </ItemGroup>

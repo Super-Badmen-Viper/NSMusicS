@@ -115,7 +115,8 @@
                                 Stretch="UniformToFill"/>
                     </Border.Background>
                     <Border.Effect>
-                        <BlurEffect x:Name="Grid_SingerPhoto_Mode_Close_BackGround_BlurEffect" Radius="46"/>
+                        <!--Radius = 46-->
+                        <BlurEffect x:Name="Grid_SingerPhoto_Mode_Close_BackGround_BlurEffect" Radius="0"/>
                     </Border.Effect>
                 </Border>
 
@@ -141,7 +142,7 @@
                                ScrollViewer.VerticalScrollBarVisibility="Disabled" Stretch="Uniform" 
                                Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/唱片3_黑胶.png" 
                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                               RenderTransformOrigin="0.5,0.5" Width="300" Height="300" HorizontalAlignment="Center" MouseLeftButtonDown="Image_Song_MouseLeftButtonDown" VerticalAlignment="Top" Margin="0,23,0,0">
+                               RenderTransformOrigin="0.5,0.5" Width="300" Height="300" HorizontalAlignment="Center" MouseLeftButtonDown="Image_Song_MouseLeftButtonDown" VerticalAlignment="Top" Margin="0,25,0,0">
                                 <Image.Clip>
                                     <EllipseGeometry Center="150,150" RadiusX="150" RadiusY="150"/>
                                 </Image.Clip>
@@ -150,10 +151,11 @@
                                ScrollViewer.VerticalScrollBarVisibility="Disabled" Stretch="UniformToFill" 
                                Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/初学者.jpg" 
                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                               RenderTransformOrigin="0.5,0.5" Width="240" Height="240" 
-                               HorizontalAlignment="Center" MouseLeftButtonDown="Image_Song_MouseLeftButtonDown" VerticalAlignment="Top" Margin="0,-270,0,0">
+                               RenderTransformOrigin="0.5,0.5" Width="160" Height="160" 
+                               HorizontalAlignment="Center" MouseLeftButtonDown="Image_Song_MouseLeftButtonDown" VerticalAlignment="Top" 
+                               Margin="0,-230,0,0">
                                 <Image.Clip>
-                                    <EllipseGeometry Center="120,120" RadiusX="120" RadiusY="120"/>
+                                    <EllipseGeometry Center="80,80" RadiusX="80" RadiusY="80"/>
                                 </Image.Clip>
                             </Image>
                         </StackPanel>

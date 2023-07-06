@@ -46,8 +46,8 @@
         <UserControls:Panel_Playing_Media_Audio_Spectrum_Line 
             x:Name="panel_Playing_Media_Audio_Spectrum_Line"
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-            VerticalAlignment="Top" 
-            Margin="0,-51,0,0"
+            VerticalAlignment="Bottom" 
+            Margin="0,0,0,0"
             />
         <UserControls:Panel_MediaPlaying_Display_Process_Silder 
             x:Name="panel_MediaPlaying_Display_Process_Silder"

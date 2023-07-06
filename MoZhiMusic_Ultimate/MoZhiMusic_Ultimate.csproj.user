@@ -19,6 +19,9 @@
     <Compile Update="Views\MusicPlayer_Page\UserControls\Panel_Playing_Media_Audio_Spectrum_Circle.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\SongList_Page\SongList_Page_Local.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="MainWindow.xaml">
@@ -100,6 +103,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\MusicPlayer_Page\UserControls\Panel_Playing_Media_Audio_Spectrum_Circle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\SongList_Page\SongList_Page_Local.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

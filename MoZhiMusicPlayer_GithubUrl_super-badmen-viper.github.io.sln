@@ -5,13 +5,9 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoZhiMusicPlayer_GithubAuthor_XiangCheng", "MoZhiMusicPlayer_GithubAuthor_XiangCheng\MoZhiMusicPlayer_GithubAuthor_XiangCheng.csproj", "{DE9CE32C-9228-443F-90AE-3709337AFBE4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Local_ThisPC_song_search_ALL", "Local_ThisPC_song_search_ALL\Local_ThisPC_song_search_ALL.csproj", "{B4B2D831-5686-4920-8BCC-86BCBA013B71}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Local_ThisPC_song_search_YouSelect", "Local_ThisPC_song_search_YouSelect\Local_ThisPC_song_search_YouSelect.csproj", "{05E6EA1E-13A2-4305-BD14-59EDF45AFDA5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoZhiMusic_Ultimate", "MoZhiMusic_Ultimate\MoZhiMusic_Ultimate.csproj", "{783B423A-06CF-45DE-81A5-C08C877BB655}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoZhiMusic_Design", "MoZhiMusic_Design\MoZhiMusic_Design.csproj", "{1D967A98-5651-4237-A9F5-244041F11748}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoZhiMusic_Design", "MoZhiMusic_Design\MoZhiMusic_Design.csproj", "{1D967A98-5651-4237-A9F5-244041F11748}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,14 +19,6 @@ Global
 		{DE9CE32C-9228-443F-90AE-3709337AFBE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE9CE32C-9228-443F-90AE-3709337AFBE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE9CE32C-9228-443F-90AE-3709337AFBE4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B4B2D831-5686-4920-8BCC-86BCBA013B71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B4B2D831-5686-4920-8BCC-86BCBA013B71}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B4B2D831-5686-4920-8BCC-86BCBA013B71}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B4B2D831-5686-4920-8BCC-86BCBA013B71}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05E6EA1E-13A2-4305-BD14-59EDF45AFDA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05E6EA1E-13A2-4305-BD14-59EDF45AFDA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05E6EA1E-13A2-4305-BD14-59EDF45AFDA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05E6EA1E-13A2-4305-BD14-59EDF45AFDA5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{783B423A-06CF-45DE-81A5-C08C877BB655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{783B423A-06CF-45DE-81A5-C08C877BB655}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{783B423A-06CF-45DE-81A5-C08C877BB655}.Release|Any CPU.ActiveCfg = Release|Any CPU

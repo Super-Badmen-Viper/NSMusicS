@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SongList_Info;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl
 {
@@ -202,14 +201,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl
         #endregion
 
         #region 歌曲序号重置
-        /// <summary>
-        /// 歌曲序号重置
-        /// </summary>
-        /// <param name="list"></param>
-        public void Change_Listview_SongNo(List<ListView_Item_Bing> list)
-        {
-            
-        }
+        
 
         #endregion
     }

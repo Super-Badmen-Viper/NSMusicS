@@ -25,7 +25,6 @@ using NAudio.CoreAudioApi;
 using NAudio.Dsp;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
-using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SongList_Info;
 
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main.UserControls
@@ -235,12 +234,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
                     panelHeight - dftDataFilter((float)resultPaint[i] * curveMultiple)))
                 .ToArray();
 
+
             //参数调整,为0则不执行
             int size_1_SmoothData = 0;//预处理数据，第一次SmoothData平滑
-            int size_average = 20;//对animation_points超出的部分进行平均量增减(上下波动幅度)。
+            int size_average = 30;//对animation_points超出的部分进行平均量增减(上下波动幅度)。
             double size_Error_point = 0.5;//超出频谱动画范围，重新设置为？
-            int size_2_SmoothData = 2;//第二次SmoothData平滑
-
+            int size_2_SmoothData = 6;//第二次SmoothData平滑
 
             //显示频谱的动画个数
             int animation_points_Count = 106;

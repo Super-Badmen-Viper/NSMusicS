@@ -1,4 +1,6 @@
-﻿using MoZhiMusic_Ultimate.Views.Home_Page.Home_Buttombar_Panel;
+﻿using MoZhiMusic_Ultimate.Models.Song_List_Infos;
+using MoZhiMusic_Ultimate.Views.Home_Page.Home_Buttombar_Panel;
+using MoZhiMusic_Ultimate.Views.Home_Page.Home_Sidebar_Panel;
 using MoZhiMusic_Ultimate.Views.MusicPlayer_Page;
 using System;
 using System.Collections.Generic;
@@ -19,6 +21,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+
 
 namespace MoZhiMusic_Ultimate
 {
@@ -31,19 +35,63 @@ namespace MoZhiMusic_Ultimate
         {
             InitializeComponent();
 
+            Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory);
+
             Init_ALL_UI();
 
 
             MediaElement_Song.Source = new Uri(@"E:\\KuGou\\aespa - 怪火 (Illusion).mp3");
             MediaElement_Song.Play();
             MediaElement_Song.LoadedBehavior = MediaState.Play;
+
+
+            //加载歌单信息
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"UserData/User_Account_Information/Song_List_Info/Song_List_Info_ALL.xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"UserData/User_Account_Information/Song_List_Info/Song_List_Info_Love.xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"UserData/User_Account_Information/Song_List_Info/Song_List_Info_Auto.xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"UserData/User_Account_Information/Song_List_Info/Song_List_Info_More.xml"));
+            /*// 将歌单信息显示在界面上
+            foreach (var playlist in songList_Infos)
+            {
+                // 创建一个新的歌单项
+                var playlistItem = new TreeViewItem();
+                playlistItem.Header = playlist.Name;
+                playlistItem.Foreground = Brushes.White;
+
+                // 将歌曲信息添加到歌单项中
+                foreach (var song in playlist.Songs)
+                {
+                    var songItem = new TreeViewItem();
+                    songItem.Header = song.Song_Name;
+                    songItem.Foreground = Brushes.White;
+
+                    playlistItem.Items.Add(songItem);
+                }
+
+                // 将歌单项添加到侧边栏中
+                home_Page_Selection.TreeView_SongList_Info.Items.Add(playlistItem);
+            }*/
+
+
+            songList_Page_Local.Data_Grid_SongList.ItemsSource = songList_Infos[1][0].Songs;
+            songList_Infos_Current_Playlist = songList_Infos[1][0].Songs;
+
+            /*SongList_Info_Find songList_Info_Find = new SongList_Info_Find();
+            songList_Info_Find.*/
         }
+
+        public string Path_App;
+        //所有的歌单列表集合
+        private List<List<SongList_Info>> songList_Infos = new List<List<SongList_Info>>();
+        //当前的播放列表
+        private List<Song_Info> songList_Infos_Current_Playlist = new List<Song_Info>();
 
         #region UI Binding
         private void Init_ALL_UI()
         {
             Init_UI_Home_Page();
             Init_UI_MusicPlayer_Page();
+            Init_UI_SongList_Page();
 
             Init_Spectrum_Visualization();//初始化音频频谱
 
@@ -115,7 +163,6 @@ namespace MoZhiMusic_Ultimate
                 home_Media_UserControl.panel_Play_Seting_Normal.Visibility = Visibility.Hidden;
                 home_Media_UserControl.panel_Media_Navigation_PlayMode.Visibility = Visibility.Visible;
                 home_Media_UserControl.panel_Play_Seting_PlayMode.Visibility = Visibility.Visible;
-                home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.Visibility = Visibility.Visible;
 
                 musicPlayer_Song_Playback.ListView_Temp_MRC.Visibility = Visibility.Hidden;
                 //实例化一个DoubleAnimation类。
@@ -195,6 +242,9 @@ namespace MoZhiMusic_Ultimate
                     }*/
 
                     dispatcherTimer_Silder.Start();
+
+                    //开启频谱动画
+                    dispatcherTimer_Spectrum_Visualization.Start();
                 }
             }
         }
@@ -252,7 +302,6 @@ namespace MoZhiMusic_Ultimate
                 home_Media_UserControl.panel_Play_Seting_Normal.Visibility = Visibility.Visible;
                 home_Media_UserControl.panel_Media_Navigation_PlayMode.Visibility = Visibility.Hidden;
                 home_Media_UserControl.panel_Play_Seting_PlayMode.Visibility = Visibility.Hidden;
-                home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.Visibility = Visibility.Hidden;
 
                 musicPlayer_Song_Playback.ListView_Temp_MRC.Visibility = Visibility.Hidden;
                 //实例化一个DoubleAnimation类。
@@ -287,7 +336,24 @@ namespace MoZhiMusic_Ultimate
         #endregion
 
         #region SongList_Page Binding
+        private void Init_UI_SongList_Page()
+        {
+            songList_Page_Local.Data_Grid_SongList.MouseDoubleClick += Data_Grid_SongList_MouseDoubleClick;
+        }
 
+        private void Data_Grid_SongList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            //1.判定是哪一个歌单
+            //2.将songList_Infos_Current_Playlist设置为指定的歌单
+            //3.传入当前歌单的选中index
+            Play_Song(songList_Page_Local.Data_Grid_SongList.SelectedIndex);
+        }
+        private void Play_Song(int index)
+        {
+            MediaElement_Song.Source = new Uri(songList_Infos_Current_Playlist[index].Song_Url);
+            MediaElement_Song.Play();
+            MediaElement_Song.LoadedBehavior = MediaState.Play;
+        }
         #endregion
 
         #region Floating_Control_Page Binding
@@ -412,69 +478,7 @@ namespace MoZhiMusic_Ultimate
                         home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
                             List_storyboard[i]
                                 .Begin();
-
-                        /*假如只有26 而非  106
-                         则左13，右13，
-                         则左[53-13]->[53]  ，  右[54]->[54+13]   
-                         */
-                        /*if (i < half_animation_points_length)
-                        {
-                            linearDoubleKeyFrame_1.Value = home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
-                                audioSpectrogram.animation_points[i];
-                            if (linearDoubleKeyFrame_1.Value < -0.5)
-                                linearDoubleKeyFrame_1.Value = -0.48;
-
-                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
-                                List_doubleAnimation[half_animation_points_length - i + (53 - half_animation_points_length)]
-                                    .KeyFrames.Add(linearDoubleKeyFrame_1);
-                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
-                                List_doubleAnimation[half_animation_points_length - i + (53 - half_animation_points_length)]
-                                    .KeyFrames.Add(linearDoubleKeyFrame_2);
-                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
-                                List_doubleAnimation[half_animation_points_length - i + (53 - half_animation_points_length)]
-                                    .Duration = new TimeSpan(0, 0, 0, 0, (int)Spectrum_time * 2);
-
-                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
-                                List_storyboard[half_animation_points_length - i + (53 - half_animation_points_length)]
-                                    .Children[0] = home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
-                                        List_doubleAnimation[half_animation_points_length - i + (53 - half_animation_points_length)];
-                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
-                                List_storyboard[half_animation_points_length - i + (53 - half_animation_points_length)]
-                                    .Begin();
-                        }
-                        else
-                        {
-                            linearDoubleKeyFrame_1.Value = home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
-                                audioSpectrogram.animation_points[i - half_animation_points_length + (53 - half_animation_points_length)];
-                            if (linearDoubleKeyFrame_1.Value < -0.5)
-                                linearDoubleKeyFrame_1.Value = -0.48;
-
-                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
-                            List_doubleAnimation[
-                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
-                                ].KeyFrames.Add(linearDoubleKeyFrame_1);
-                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
-                                List_doubleAnimation[
-                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
-                                ].KeyFrames.Add(linearDoubleKeyFrame_2);
-
-                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
-                                List_doubleAnimation[
-                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
-                                ].Duration = new TimeSpan(0, 0, 0, 0, (int)Spectrum_time * 2);
-                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
-                                List_storyboard[
-                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
-                                ].Children[0] = home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
-                                    List_doubleAnimation[
-                                        i - half_animation_points_length + 53 + (53 - half_animation_points_length)
-                                    ];
-                            home_Media_UserControl.panel_Playing_Media_Audio_Spectrum_Line.
-                                List_storyboard[
-                                    i - half_animation_points_length + 53 + (53 - half_animation_points_length)
-                                ].Begin();
-                        }*/
-
+                 
                         //保留此次动画的Value值
                         Spectrum_Value = (float)(linearDoubleKeyFrame_1.Value);
                     }
@@ -485,6 +489,7 @@ namespace MoZhiMusic_Ultimate
         #endregion
 
         #endregion
+
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -497,7 +502,35 @@ namespace MoZhiMusic_Ultimate
         }
         private void Window_StateChanged(object sender, EventArgs e)
         {
+            if (WindowState == WindowState.Maximized)
+            {
+                // 在窗口最大化后执行某些操作
+                // ...
+            }
+        }
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
             
+        }
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            //保存歌单信息
+            var playlists = new List<SongList_Info>();
+            playlists = songList_Infos[0];
+            SongList_Info_Save.SaveSongList_Infos(Path_App + @"UserData/User_Account_Information/Song_List_Info/Song_List_Info_ALL.xml", playlists);
+            playlists = new List<SongList_Info>();
+            playlists = songList_Infos[1];
+            SongList_Info_Save.SaveSongList_Infos(Path_App + @"UserData/User_Account_Information/Song_List_Info/Song_List_Info_Love.xml", playlists);
+            playlists = new List<SongList_Info>();
+            playlists = songList_Infos[2];
+            SongList_Info_Save.SaveSongList_Infos(Path_App + @"UserData/User_Account_Information/Song_List_Info/Song_List_Info_Auto.xml", playlists);
+            playlists = new List<SongList_Info>();
+            playlists = songList_Infos[3];
+            SongList_Info_Save.SaveSongList_Infos(Path_App + @"UserData/User_Account_Information/Song_List_Info/Song_List_Info_More.xml", playlists);
+
+            //彻底关闭WPF
+            Application.Current.Shutdown(-1);
+            Environment.Exit(0);
         }
     }
 }

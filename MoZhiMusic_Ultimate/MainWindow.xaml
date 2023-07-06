@@ -8,12 +8,15 @@
         xmlns:Home_Sidebar_Panel="clr-namespace:MoZhiMusic_Ultimate.Views.Home_Page.Home_Sidebar_Panel" 
         xmlns:Home_Topbar_Panel="clr-namespace:MoZhiMusic_Ultimate.Views.Home_Page.Home_Topbar_Panel" 
         xmlns:MusicPlayer_Page="clr-namespace:MoZhiMusic_Ultimate.Views.MusicPlayer_Page" 
+        xmlns:SongList_Page="clr-namespace:MoZhiMusic_Ultimate.Views.SongList_Page" 
         x:Class="MoZhiMusic_Ultimate.MainWindow"
         mc:Ignorable="d"
         Title="MoZhiMusic4.0 墨智音乐" 
         Height="760" Width="1180" 
-        MinHeight="760" MinWidth="1180" SizeChanged="Window_SizeChanged"
+        MinHeight="760" MinWidth="1180" 
+        SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged" Closing="Window_Closing" Closed="Window_Closed" 
         >
+
     <Window.Background>
         <ImageBrush ImageSource="/MoZhiMusic_Ultimate;component/Views/0_UI_Image_Library/254-15111P92T4.jpg" Stretch="UniformToFill"/>
     </Window.Background>
@@ -28,13 +31,19 @@
         <Grid x:Name="Grid_Home_Sidebar_Panel" 
               HorizontalAlignment="Left"  VerticalAlignment="Top"
               Margin="0,0,0,70" Width="170" Height="675">
-            <Home_Sidebar_Panel:Home_Page_Selection HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Home_Sidebar_Panel:Home_Page_Selection 
+                x:Name="home_Page_Selection"
+                HorizontalAlignment="Left" VerticalAlignment="Top" />
         </Grid>
 
         <Grid x:Name="Gird_2" Margin="170,60,0,70">
-            
+
+            <SongList_Page:SongList_Page_Local
+                x:Name="songList_Page_Local"
+                />
+
         </Grid>
-        
+
         <MediaElement LoadedBehavior="Manual" UnloadedBehavior="Manual" 
                           x:Name="MediaElement_Song" 
                           Width="0" Height="0" 
@@ -46,7 +55,7 @@
             x:Name="musicPlayer_Song_Playback"
             VerticalAlignment="Bottom" Height="0"
             />
-        
+
         <Grid 
             x:Name="Grid_Home_Media_UserControl"
             VerticalAlignment="Bottom" 
@@ -58,6 +67,6 @@
                 />
         </Grid>
 
-        
+
     </Grid>
 </Window>

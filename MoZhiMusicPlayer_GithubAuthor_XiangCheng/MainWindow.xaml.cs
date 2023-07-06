@@ -9,8 +9,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_Init_Info.Init_SongList_Info;
-using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SongList_Info;
 
 using WinInterop = System.Windows.Interop;//最大化显示任务栏
 using System.Runtime.InteropServices;
@@ -28,7 +26,9 @@ using TextAlignment = System.Windows.TextAlignment;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main;
 using System.Windows.Controls.Primitives;
 using MaterialDesignThemes.Wpf.Transitions;
-using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SongList_Info.ViewModel;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos;
+using System.Threading.Tasks;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_Song_Finds;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 {
@@ -46,9 +46,69 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             Once_Animation();
 
             Init_Spectrum_Visualization();
+
+            Init_SongList_Info();
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = songList_Infos[1][0].Songs;
+            userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = songList_Infos[0][0].Songs;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = songList_Infos[2][0].Songs;
+            songList_Infos_Current_Playlist = songList_Infos[1][0].Songs;
+            this_Song_ListView = userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info;
+
+            windows_Song_Find.Back_Button.Click += Back_Button_Click;
+            windows_Song_Find_Temp.Back_Button.Click += Back_Button_Click;
         }
 
+        //所有的歌单列表集合
+        private List<List<Models.Song_List_Infos.SongList_Info>> songList_Infos;
+        //当前的播放ListView
+        private ListView this_Song_ListView = new ListView();
+        //当前的播放列表
+        private List<Song_Info> songList_Infos_Current_Playlist;
+        //当前正在播放的歌曲
+        private Song_Info this_Song_Info = new Song_Info();
         
+        //歌曲搜索
+        Windows_Song_Find_Float windows_Song_Find = new Windows_Song_Find_Float();
+        //防止数据源不对应
+        Windows_Song_Find_Float windows_Song_Find_Temp = new Windows_Song_Find_Float();
+
+
+        #region 歌单信息重加载
+        public void Init_SongList_Info()
+        {
+            //加载歌单信息
+            songList_Infos = SongList_Info.Retuen_This();
+            songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
+
+            //加载次序不能变
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml"));
+            SongList_Info_Reader.song_Infos_Love = songList_Infos[0][0].Songs;
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More.xml"));
+           
+            SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
+            SongList_Info.songList_Infos = songList_Infos;
+        }
+
+        private void Back_Button_Click(object sender, RoutedEventArgs e)
+        {
+            songList_Infos = null;
+            this_Song_ListView = null;
+            SongList_Info.songList_Infos = null;
+
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = null;
+            userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = null;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = null;
+            Init_SongList_Info();
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = songList_Infos[1][0].Songs;
+            userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = songList_Infos[0][0].Songs;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = songList_Infos[2][0].Songs;
+
+            windows_Song_Find = windows_Song_Find_Temp;
+        }
+
+        #endregion
 
         #region 初始化
         /// <summary>
@@ -64,20 +124,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
 
             //切换双击歌单歌曲播放事件
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.MouseDoubleClick += userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick;
-            userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.MouseDoubleClick += userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.MouseDoubleClick += userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick;
-            userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.MouseDoubleClick += userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick;
-
-            playlistViewModel = new PlaylistViewModel();//读取歌单信息，并存储
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL;
-            userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Love;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
-            userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
-            //设置当前播放列表
-            bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name = "listView_Item_Bing_ALL.listView_Temp_Info_End_ALL";
-            listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info;
-
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.MouseDoubleClick += userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick_ALL;
+            userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.MouseDoubleClick += userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick_Love;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.MouseDoubleClick += userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick_Auto;
+            
             musicPlayer_Main_UserControl.Panel_Image.Visibility = Visibility.Hidden;
             //高度绑定至动画，修改height就无法控制（启动时触发Window_SizeChanged事件导致height不为0不能隐藏）
             doubleAnimation = new DoubleAnimation();
@@ -88,61 +138,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             //this.MediaElement_Song.LoadedBehavior = MediaState.Manual;
 
-            //检查歌单保险触发是否正确
-            Init_MakeTrue_IniSystemInfo();
+            
         }
 
-        #endregion
-        #region 检查歌单保险触发是否正确
-        /// <summary>
-        /// 检查歌单保险触发是否正确
-        /// </summary>
-        public void Init_MakeTrue_IniSystemInfo()
-        {
-            //检查歌单保险触发是否正确
-            string temp = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource\SongListInfo_ini\SongList_MakeSure_Ini\SongList_MakeSure.ini";
-            FileStream FS_List_Save = new FileStream(temp, FileMode.Open);
-            StreamReader SR_List = new StreamReader(FS_List_Save);
-            string bool_make_true = SR_List.ReadLine();
-            SR_List.Close();
-            FS_List_Save.Close();
-            if (bool_make_true != null)
-            {
-                if (bool_make_true.Equals("已检索"))
-                {
-                    FS_List_Save = new FileStream(temp, FileMode.Create);
-                    StreamWriter SW_List = new StreamWriter(FS_List_Save);//无法静态
-                    SW_List.WriteLine("未检索");
-                    //清空缓冲区
-                    //关闭流
-                    SW_List.Flush();
-                    SW_List.Close();
-                    //FS_List.Flush();
-                    FS_List_Save.Close();
-                }
-            }
-            temp = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource\SongListInfo_ini\SongList_MakeSure_Ini\SongList_Find_Select_Song_MakeSure.ini";
-            FS_List_Save = new FileStream(temp, FileMode.Open);
-            SR_List = new StreamReader(FS_List_Save);
-            bool_make_true = SR_List.ReadLine();
-            SR_List.Close();
-            FS_List_Save.Close();
-            if (bool_make_true != null)
-            {
-                if (bool_make_true.Equals("已检索"))
-                {
-                    FS_List_Save = new FileStream(temp, FileMode.Create);
-                    StreamWriter SW_List = new StreamWriter(FS_List_Save);//无法静态
-                    SW_List.WriteLine("未检索");
-                    //清空缓冲区
-                    //关闭流
-                    SW_List.Flush();
-                    SW_List.Close();
-                    //FS_List.Flush();
-                    FS_List_Save.Close();
-                }
-            }
-        }
+       
 
         #endregion
 
@@ -159,13 +158,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             }
             catch { }
         }
-
-        PlaylistViewModel playlistViewModel;
-        Load_SongList_Info load_SongList_Info = new Load_SongList_Info();
-        Save_SongList_Info save_SongList_Info = new Save_SongList_Info();
-        public ListView_Item_Bing_ALL listView_Item_Bing_ALL = ListView_Item_Bing_ALL.Retuen_This();
-        public Bool_listView_Temp_Info_End_Clear bool_ListView_Temp_Info_End_Clear = Bool_listView_Temp_Info_End_Clear.Retuen_This();
-
+        
         public string Path_App;
 
 
@@ -181,8 +174,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_ButtonFrame_MusicLove.BoolMouseLeftDown = false; userControl_ButtonFrame_MusicLove.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
             userControl_ButtonFrame_ThisWindowsMusicAndDownload.BoolMouseLeftDown = false; userControl_ButtonFrame_ThisWindowsMusicAndDownload.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
             userControl_ButtonFrame_MusicRecentlyPlayed.BoolMouseLeftDown = false; userControl_ButtonFrame_MusicRecentlyPlayed.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
-            userControl_ButtonFrame_MusicTryListenList.BoolMouseLeftDown = false; userControl_ButtonFrame_MusicTryListenList.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
-
+            
             userControl_音乐馆.Visibility = Visibility.Hidden;
             userControl_视频.Visibility = Visibility.Hidden;
             userControl_电台.Visibility = Visibility.Hidden;
@@ -715,10 +707,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_Main_Home_Left_MyMusic_Recent_Play.Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
             userControl_Main_Home_Left_MyMusic_Recent_Play.brush_LoveNormal.ImageSource = new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心.png"));
             userControl_Main_Home_Left_MyMusic_Recent_Play.brush_LoveEnter.ImageSource = new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心 - 副本.png"));
-            userControl_Main_Home_Left_MyMusic_Try_Listen.Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
-            userControl_Main_Home_Left_MyMusic_Try_Listen.brush_LoveNormal.ImageSource = new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心.png"));
-            userControl_Main_Home_Left_MyMusic_Try_Listen.brush_LoveEnter.ImageSource = new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心 - 副本.png"));
-
+            
             //调整歌词列表的边距
             thickness_ListView_Temp_MRC_Margin = musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin;
 
@@ -726,12 +715,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.SourceUpdated += ListView_Download_SongList_Info_SourceUpdated;
             userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.SourceUpdated += ListView_Download_SongList_Info_SourceUpdated;
             userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.SourceUpdated += ListView_Download_SongList_Info_SourceUpdated;
-            userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.SourceUpdated += ListView_Download_SongList_Info_SourceUpdated;
             //设置添加手动导入歌曲文件按钮事件
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Button_Add_Select_Song.MouseLeftButtonDown += ThisWindowsMusicAndDownload_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown;
             userControl_Main_Home_Left_MyMusic_My_Love.Stack_Button_Add_Select_Song.MouseLeftButtonDown += My_Love_Button_Add_PC_Select_Song_MouseLeftButtonDown;
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_Add_Select_Song.MouseLeftButtonDown += Recent_Play_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown;
-            userControl_Main_Home_Left_MyMusic_Try_Listen.Stack_Button_Add_Select_Song.MouseLeftButtonDown += Try_Listen_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown;
             
             
             //设置歌单_更多操作置入按钮事件
@@ -747,26 +734,21 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_Find_Song_Info.MouseLeftButtonDown += Stack_Button_Find_Song_Info_MouseLeftButtonDown;
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_ThisPcSong_Find.MouseLeftButtonDown += Stack_Button_ThisPcSong_Find_MouseLeftButtonDown;
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_Update_Song_Better.MouseLeftButtonDown += Stack_Button_Update_Song_Better_MouseLeftButtonDown;
-            //userControl_Main_Home_Left_MyMusic_Try_Listen.Stack_Button_LotSelects_Take.MouseLeftButtonDown += Stack_Button_LotSelects_Take_MouseLeftButtonDown;
-            userControl_Main_Home_Left_MyMusic_Try_Listen.Stack_Button_Find_Song_Info.MouseLeftButtonDown += Stack_Button_Find_Song_Info_MouseLeftButtonDown;
-            userControl_Main_Home_Left_MyMusic_Try_Listen.Stack_Button_ThisPcSong_Find.MouseLeftButtonDown += Stack_Button_ThisPcSong_Find_MouseLeftButtonDown;
-            userControl_Main_Home_Left_MyMusic_Try_Listen.Stack_Button_Update_Song_Better.MouseLeftButtonDown += Stack_Button_Update_Song_Better_MouseLeftButtonDown;
-           
+            
+
             //设置添加本地所有歌曲文件按钮事件            
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += ThisWindowsMusicAndDownload_Stack_Button_Add_PC_ALL_Song_MouseLeftButtonDown;
             userControl_Main_Home_Left_MyMusic_My_Love.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += My_Love_Button_Add_PC_ALL_Song_MouseLeftButtonDown;
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += Recent_Play_Stack_Button_Add_PC_ALL_Song_MouseLeftButtonDown;
-            userControl_Main_Home_Left_MyMusic_Try_Listen.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += Try_Listen_Stack_Button_Add_PC_ALL_Song_MouseLeftButtonDown;
             //设置播放全部按钮
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Button_Play_ALL_Song.MouseLeftButtonDown += Paly_ALL_Song;
-            userControl_Main_Home_Left_MyMusic_My_Love.Button_Play_ALL_Song.MouseLeftButtonDown += Paly_ALL_Song;
+            //userControl_Main_Home_Left_MyMusic_My_Love.Button_Play_ALL_Song.MouseLeftButtonDown += Paly_ALL_Song;
             userControl_Main_Home_Left_MyMusic_Recent_Play.Button_Play_ALL_Song.MouseLeftButtonDown += Paly_ALL_Song;
-            userControl_Main_Home_Left_MyMusic_Try_Listen.Button_Play_ALL_Song.MouseLeftButtonDown += Paly_ALL_Song;
             /*//设置选中删除按钮
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Button_Delete_Select_ItemSong.MouseLeftButtonDown += Button_Delete_Click;
             userControl_Main_Home_Left_MyMusic_My_Love.Stack_Button_Delete_Select_ItemSong.MouseLeftButtonDown += Button_Delete_Click;
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_Delete_Select_ItemSong.MouseLeftButtonDown += Button_Delete_Click;
-            userControl_Main_Home_Left_MyMusic_Try_Listen.Stack_Button_Delete_Select_ItemSong.MouseLeftButtonDown += Button_Delete_Click;*/
+            */
         }
 
 
@@ -784,36 +766,27 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         #region MusicPlayer_Left控件进入
         private void UserControl_ButtonFrame_MusicLove_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love != null)
+            if (songList_Infos[0][0].Songs != null)
             {
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_TryListen_Clear = false;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_ALL_Clear = false;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_Auto_Clear = false;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_Love_Clear = false;
-
                 Clear_Windows_Left_ALL_UserControl_BackGround();
                 userControl_ButtonFrame_MusicLove.BoolMouseLeftDown = true;
                 userControl_ButtonFrame_MusicLove.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF1FD3AD"));
 
-                if (listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Count > 0)
+                if (songList_Infos[0][0].Songs.Count > 0)
                 {
                     userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = null;
                     //歌曲序号重构
-                    for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_Love.Count; i++)
+                    for (int i = 0; i < songList_Infos[0][0].Songs.Count; i++)
                     {
-                        listView_Item_Bing_ALL.listView_Temp_Info_End_Love.ElementAt(i).Song_No = i + 1;
+                        songList_Infos[0][0].Songs.ElementAt(i).Song_No = i + 1;
                     }
-                    userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Love;
+                    userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = songList_Infos[0][0].Songs;
 
                 }
 
-                listView_Item_Bing_ALL.listView_SongList.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Love;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_Love_Clear = true;
-                bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name = "listView_Item_Bing_ALL.listView_Temp_Info_End_Love";
                 userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
-                userControl_Main_Home_Left_MyMusic_Try_Listen.Visibility = Visibility.Hidden;
                 Grid_Animation_MouseLeftClick();/// 窗体进入动画
                 
             }
@@ -821,109 +794,57 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
         private void UserControl_ButtonFrame_ThisWindowsMusicAndDownload_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (listView_Item_Bing_ALL.listView_Temp_Info_End_ALL != null)
+            if (songList_Infos[1][0].Songs != null)
             {
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_TryListen_Clear = false;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_ALL_Clear = false;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_Auto_Clear = false;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_Love_Clear = false;
-
                 Clear_Windows_Left_ALL_UserControl_BackGround();
                 userControl_ButtonFrame_ThisWindowsMusicAndDownload.BoolMouseLeftDown = true;
                 userControl_ButtonFrame_ThisWindowsMusicAndDownload.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF1FD3AD"));
 
-                if (listView_Item_Bing_ALL.listView_Temp_Info_End_ALL.Count > 0)
+                if (songList_Infos[1][0].Songs.Count > 0)
                 {
                     userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = null;
                     //歌曲序号重构
-                    for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_ALL.Count; i++)
+                    for (int i = 0; i < songList_Infos[1][0].Songs.Count; i++)
                     {
-                        listView_Item_Bing_ALL.listView_Temp_Info_End_ALL.ElementAt(i).Song_No = i + 1;
+                        songList_Infos[1][0].Songs.ElementAt(i).Song_No = i + 1;
                     }
-                    userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL;
+                    userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = songList_Infos[1][0].Songs;
 
                 }
 
-                listView_Item_Bing_ALL.listView_SongList.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_ALL_Clear = true;
-                bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name = "listView_Item_Bing_ALL.listView_Temp_Info_End_ALL";
                 userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Try_Listen.Visibility = Visibility.Hidden;
                 Grid_Animation_MouseLeftClick();/// 窗体进入动画
             }
         }
         private void UserControl_ButtonFrame_MusicRecentlyPlayed_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (listView_Item_Bing_ALL.listView_Temp_Info_End_Auto != null)
+            if (songList_Infos[2][0].Songs != null)
             {
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_TryListen_Clear = false;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_ALL_Clear = false;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_Auto_Clear = false;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_Love_Clear = false;
-
                 Clear_Windows_Left_ALL_UserControl_BackGround();
                 userControl_ButtonFrame_MusicRecentlyPlayed.BoolMouseLeftDown = true;
                 userControl_ButtonFrame_MusicRecentlyPlayed.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF1FD3AD"));
 
-                if (listView_Item_Bing_ALL.listView_Temp_Info_End_Auto.Count > 0)
+                if (songList_Infos[2][0].Songs.Count > 0)
                 {
                     userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = null;
                     //歌曲序号重构
-                    for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_Auto.Count; i++)
+                    for (int i = 0; i < songList_Infos[2][0].Songs.Count; i++)
                     {
-                        listView_Item_Bing_ALL.listView_Temp_Info_End_Auto.ElementAt(i).Song_No = i + 1;
+                        songList_Infos[2][0].Songs.ElementAt(i).Song_No = i + 1;
                     }
-                    userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
+                    userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = songList_Infos[2][0].Songs;
 
                 }
 
-                listView_Item_Bing_ALL.listView_SongList.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_Auto_Clear = true;
-                bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name = "listView_Item_Bing_ALL.listView_Temp_Info_End_Auto";
                 userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
-                userControl_Main_Home_Left_MyMusic_Try_Listen.Visibility = Visibility.Hidden;
                 Grid_Animation_MouseLeftClick();/// 窗体进入动画
             }
         }
-        private void UserControl_ButtonFrame_MusicTryListenList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen != null)
-            {
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_TryListen_Clear = false;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_ALL_Clear = false;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_Auto_Clear = false;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_Love_Clear = false;
-
-                Clear_Windows_Left_ALL_UserControl_BackGround();
-                userControl_ButtonFrame_MusicTryListenList.BoolMouseLeftDown = true;
-                userControl_ButtonFrame_MusicTryListenList.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF1FD3AD"));
-
-                if (listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen.Count > 0)
-                {
-                    userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = null;
-                    //歌曲序号重构
-                    for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen.Count; i++)
-                    {
-                        listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen.ElementAt(i).Song_No = i + 1;
-                    }
-                    userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
-                }
-
-                listView_Item_Bing_ALL.listView_SongList.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
-                bool_ListView_Temp_Info_End_Clear.Bool_listView_Temp_Info_End_TryListen_Clear = true;
-                bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name = "listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen";
-                userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
-                userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
-                userControl_Main_Home_Left_MyMusic_Try_Listen.Visibility = Visibility.Visible;
-                Grid_Animation_MouseLeftClick();/// 窗体进入动画
-            }
-        }
-
+        
         #endregion
         #region MusicPlayer_Top控件按键操作       
         Thickness thickness_Grid_MusicPlayer_Main_UserControl_Normal = new Thickness();
@@ -938,9 +859,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// <param name="e"></param>
         public void Button_Border_Hover_BackGround_Click_OpenMainMusicPlayer(object sender, EventArgs e)
         {
-            blurEffect.Radius = 0;
-            musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Effect = blurEffect;
-
             try
             {
                 Bool_OpenMainMusicPlayer = true;
@@ -998,11 +916,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// <param name="e"></param>
         public void Button_Return_MainWindow_Click_CloseMainMusicPlayer(object sender, EventArgs e)
         {
-            //blurEffect.Radius数值超过0会造成动画UI卡顿
-            blurEffect.Radius = 0;
-            musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Effect = blurEffect;
-
-
             try
             {
                 Bool_OpenMainMusicPlayer = false;
@@ -1060,13 +973,40 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// <param name="e"></param>
         private void DoubleAnimation_Completed(object sender, EventArgs e)
         {
-            blurEffect.Radius = 46;
-            musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Effect = blurEffect;
-
             musicPlayer_Main_UserControl.ListView_Temp_MRC.Visibility = Visibility.Visible;
         }
 
-        
+        /// <summary>
+        /// 多线程 进出播放器界面 动画
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="duration"></param>
+        private async void AnimateHeight(double from, double to, TimeSpan duration)
+        {
+            // 创建一个 TaskCompletionSource 来等待动画完成
+            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+
+            // 创建一个 DoubleAnimation 对象
+            DoubleAnimation doubleAnimation = new DoubleAnimation();
+            doubleAnimation.From = from;
+            doubleAnimation.To = to;
+            doubleAnimation.Duration = new Duration(duration);
+            doubleAnimation.Completed += (s, e) =>
+            {
+                // 动画完成时，设置 TaskCompletionSource 的结果为 true
+                tcs.SetResult(true);
+            };
+
+            // 使用 await Task.Delay() 方法来实现延迟，以释放 UI 线程
+            await Task.Delay(1);
+
+            // 在 UI 线程中开始动画
+            musicPlayer_Main_UserControl.BeginAnimation(UserControl.HeightProperty, doubleAnimation);
+
+            // 等待动画完成
+            await tcs.Task;
+        }
 
         #endregion
         #region MusicPlayer_Buttom控件按键操作  
@@ -1389,7 +1329,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         }
 
         #endregion
+
         #region MusicPlayer
+       
 
         #region MediaElement_Song歌曲资源初始化加载
 
@@ -1556,7 +1498,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         #region 音乐播放
 
         public int WMP_Song_Order;//播放顺序 
-        public int WMP_Song_Play_Ids;//歌曲序号
+        public int WMP_Song_Play_Ids;//歌曲序号songList_Infos_Current_Playlist
         public int WMP_Song_Play_Ids_UP_DOWN;//上一首or下一首
         Random rd = new Random();
         /// <summary>
@@ -1569,7 +1511,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             {
                 if (WMP_Song_Play_Ids_UP_DOWN == 1)
                 {
-                    if (WMP_Song_Play_Ids != listView_Item_Bing_ALL.listView_SongList.Items.Count)
+                    if (WMP_Song_Play_Ids != songList_Infos_Current_Playlist.Count)
                         WMP_Song_Play_Ids++;
                     else
                         WMP_Song_Play_Ids = 1;
@@ -1579,7 +1521,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     if (WMP_Song_Play_Ids != 1)
                         WMP_Song_Play_Ids--;
                     else
-                        WMP_Song_Play_Ids = listView_Item_Bing_ALL.listView_SongList.Items.Count;
+                        WMP_Song_Play_Ids = songList_Infos_Current_Playlist.Count;
                 }
             }
             //单曲循环
@@ -1587,7 +1529,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             {
                 if (WMP_Song_Play_Ids_UP_DOWN == 1)
                 {
-                    if (WMP_Song_Play_Ids != listView_Item_Bing_ALL.listView_SongList.Items.Count)
+                    if (WMP_Song_Play_Ids != songList_Infos_Current_Playlist.Count)
                         WMP_Song_Play_Ids++;
                     else
                         WMP_Song_Play_Ids = 1;
@@ -1597,13 +1539,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     if (WMP_Song_Play_Ids != 1)
                         WMP_Song_Play_Ids--;
                     else
-                        WMP_Song_Play_Ids = listView_Item_Bing_ALL.listView_SongList.Items.Count;
+                        WMP_Song_Play_Ids = songList_Infos_Current_Playlist.Count;
                 }
             }
             //随机播放
             else if (WMP_Song_Order == 2)
             {
-                WMP_Song_Play_Ids = rd.Next(1, this.listView_Item_Bing_ALL.listView_SongList.Items.Count + 1);//(生成1~10之间的随机数，不包括10)
+                WMP_Song_Play_Ids = rd.Next(1, this.songList_Infos_Current_Playlist.Count + 1);//(生成1~10之间的随机数，不包括10)
             }
 
             //每次歌曲下标判定时，都启动专辑动画
@@ -1622,8 +1564,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
 
 
-
-        ListView_Item_Bing listView_Item_Bing_ThisPlaying_Song_Info = ListView_Item_Bing.Return_This_listView_Item_Bing();
         public int Select_DoubleClick_ListView = 0;
         /// <summary>
         /// 根据歌曲id的值，播放指定路径
@@ -1638,22 +1578,23 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 window_Hover_MRC_Panel.Text_Storyboard.Begin();
             }
 
+            //双击播放
             if (Select_DoubleClick_ListView == 1)
             {
-                WMP_Song_Play_Ids = listView_Item_Bing_ALL.listView_SongList.SelectedIndex + 1;
+                WMP_Song_Play_Ids = this_Song_ListView.SelectedIndex + 1;
                 Select_DoubleClick_ListView = 0;
             }
 
             try
             {
-                string path = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Song_Url;
+                string path = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Song_Url;
 
                 if (!File.Exists(path))
                     path = Path_App + path;
 
                 //指定播放路径
                 MediaElement_Song.Source = new Uri(path);
-                listView_Item_Bing_ThisPlaying_Song_Info.Song_Url = MediaElement_Song.Source.ToString();
+                this_Song_Info.Song_Url = MediaElement_Song.Source.ToString();
                 if (dispatcherTimer_Spectrum_Visualization != null)
                 {
                     //userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.Take_Spectrum_Visualization(Song_Url);
@@ -1661,11 +1602,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 }
 
                 //保存当前正在播放的歌曲信息
-                //Song_No = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Song_No;
-                listView_Item_Bing_ThisPlaying_Song_Info.Song_Name = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Song_Name.Trim();
-                listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Singer_Name;
-                //Song_Url = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Song_Url;
-                listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name = ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Album_Name;
+                this_Song_Info.Song_No = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Song_No;
+                this_Song_Info.Song_Name = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Song_Name.Trim();
+                this_Song_Info.Singer_Name = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Singer_Name;
+                this_Song_Info.Song_Url = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Song_Url;
+                this_Song_Info.Album_Name = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Album_Name;
 
                 //开始播放
                 MediaElement_Song.Play();
@@ -1678,15 +1619,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                 //歌曲逻辑
                 //Change_MediaElement_Song_Source();//打开歌词显示
-                //生成歌曲名
-                listView_Item_Bing_ThisPlaying_Song_Info.Song_MRC_Path = listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name + " - " + listView_Item_Bing_ThisPlaying_Song_Info.Song_Name;
                 //切换歌曲，歌手，专辑名
                 Change_TextBox_To_SingerSong_Name();
                 //选中播放的列
-                listView_Item_Bing_ALL.listView_SongList.SelectedIndex = WMP_Song_Play_Ids - 1;
+                //songList_Infos_Current_Playlist.se = WMP_Song_Play_Ids - 1;
 
                 //检测歌手数量，设置歌手动画循环方式
-                if (listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name.IndexOf("、") <= 0)//单歌手
+                if (this_Song_Info.Singer_Name.IndexOf("、") <= 0)//单歌手
                 {
                     Bool_Timer_Singer_Photo_1 = true;
                     Bool_Timer_Singer_Photo_1_lot = false;
@@ -1715,7 +1654,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             {
                 try
                 {
-                    string temp = Path_App + @"\" + ((ListView_Item_Bing)listView_Item_Bing_ALL.listView_SongList.Items[WMP_Song_Play_Ids - 1]).Song_Url;
+                    string temp = Path_App + @"\" + ((Song_Info)songList_Infos[1][0].Songs[WMP_Song_Play_Ids - 1]).Song_Url;
                     MessageBox.Show("此音乐文件路径不存在：\n" + temp);
                 }
                 catch { }
@@ -1731,14 +1670,14 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         public void Change_TextBox_To_SingerSong_Name()
         {
             //如果当前播放的歌曲信息不为空
-            if (listView_Item_Bing_ThisPlaying_Song_Info.Song_Name != null)
+            if (this_Song_Info.Song_Name != null)
             {
-                string Song_Name_Temp = listView_Item_Bing_ThisPlaying_Song_Info.Song_Name;
+                string Song_Name_Temp = this_Song_Info.Song_Name;
 
                 //设置歌手名
-                musicPlayer_Main_UserControl.TextBox_SingerName.Text = "歌手 :  " + listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name;
+                musicPlayer_Main_UserControl.TextBox_SingerName.Text = "歌手 :  " + this_Song_Info.Singer_Name;
                 musicPlayer_Main_UserControl.TextBox_SingerName.TextAlignment = TextAlignment.Center;
-                musicPlayer_Main_UserControl.TextBox_SingerName_Animation.Text = "歌手 :  " + listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name;
+                musicPlayer_Main_UserControl.TextBox_SingerName_Animation.Text = "歌手 :  " + this_Song_Info.Singer_Name;
                 musicPlayer_Main_UserControl.TextBox_SingerName_Animation.TextAlignment = TextAlignment.Center;
                 //设置歌曲名
                 musicPlayer_Main_UserControl.TextBox_SongName.Text = Song_Name_Temp/*.Substring(Song_Name_Temp_Last_Num + 3)*/.Trim();
@@ -1746,12 +1685,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 musicPlayer_Main_UserControl.TextBox_SongName_Animation.Text = Song_Name_Temp/*.Substring(Song_Name_Temp_Last_Num + 3)*/.Trim();
                 musicPlayer_Main_UserControl.TextBox_SongName_Animation.TextAlignment = TextAlignment.Center;
                 //设置专辑名
-                musicPlayer_Main_UserControl.TextBox_SongAlbumName.Text = "专辑 :  " + listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name;
+                musicPlayer_Main_UserControl.TextBox_SongAlbumName.Text = "专辑 :  " + this_Song_Info.Album_Name;
                 musicPlayer_Main_UserControl.TextBox_SongAlbumName.TextAlignment = TextAlignment.Center;
-                musicPlayer_Main_UserControl.TextBox_SongAlbumName_Animation.Text = "专辑 :  " + listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name;
+                musicPlayer_Main_UserControl.TextBox_SongAlbumName_Animation.Text = "专辑 :  " + this_Song_Info.Album_Name;
                 musicPlayer_Main_UserControl.TextBox_SongAlbumName_Animation.TextAlignment = TextAlignment.Center;
                 //设置歌曲全名
-                userControl_ButtonFrame_MusicPlayer.Song_Name.Text = listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name + " - " + listView_Item_Bing_ThisPlaying_Song_Info.Song_Name;
+                userControl_ButtonFrame_MusicPlayer.Song_Name.Text = this_Song_Info.Singer_Name + " - " + this_Song_Info.Song_Name;
             }
         }
 
@@ -1761,17 +1700,34 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick_ALL(object sender, MouseButtonEventArgs e)
         {
-            if(bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Love"))
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info;
-            else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_ALL"))
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info;
-            else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Auto"))
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info;
-            else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen"))
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info;
-
+            this_Song_ListView = userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info;
+            songList_Infos_Current_Playlist = songList_Infos[1][0].Songs;
+            Select_DoubleClick_ListView = 1;
+            Change_MediaElement_Source();
+        }
+        /// <summary>
+        /// 双击播放音乐
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick_Love(object sender, MouseButtonEventArgs e)
+        {
+            this_Song_ListView = userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info;
+            songList_Infos_Current_Playlist = songList_Infos[0][0].Songs;
+            Select_DoubleClick_ListView = 1;
+            Change_MediaElement_Source();
+        }
+        /// <summary>
+        /// 双击播放音乐
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick_Auto(object sender, MouseButtonEventArgs e)
+        {
+            this_Song_ListView = userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info;
+            songList_Infos_Current_Playlist = songList_Infos[2][0].Songs;
             Select_DoubleClick_ListView = 1;
             Change_MediaElement_Source();
         }
@@ -1803,11 +1759,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //创建获取 歌词数组信息输出类 
             dao_ListBox_Temp_MRC = new Dao_ListBox_Temp_MRC();
             //设置要分析的歌词文件（mrc）路径
-            string MRC_URL = Path_App + @"\Mrc\" + listView_Item_Bing_ThisPlaying_Song_Info.Song_MRC_Path + @".mrc";
+            string Song_MRC_Path = this_Song_Info.Singer_Name + " - " + this_Song_Info.Song_Name;
+            string MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".mrc";
             string CRC_URL = MRC_URL.Replace("Mrc", "Crc"); CRC_URL = CRC_URL.Replace("mrc", "crc");
 
             if (!File.Exists(MRC_URL))
-                MRC_URL = Path_App + @"\Mrc\" + listView_Item_Bing_ThisPlaying_Song_Info.Song_MRC_Path + @".krc"; CRC_URL = MRC_URL.Replace("Mrc", "Crc"); CRC_URL = CRC_URL.Replace("krc", "crc");
+                MRC_URL = Path_App + @"\Mrc\" + Song_MRC_Path + @".krc"; CRC_URL = MRC_URL.Replace("Mrc", "Crc"); CRC_URL = CRC_URL.Replace("krc", "crc");
 
             try
             {
@@ -2465,10 +2422,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         public void Change_Image_Song()
         {
             //如果读取到专辑名
-            if (listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name.Length > 0) //专辑模式
+            if (this_Song_Info.Album_Name.Length > 0) //专辑模式
             {
                 //生成专辑名所在路径
-                Song_Image_Url = Path_App + @"\Song_ALbum\" + listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name + @".jpg";
+                Song_Image_Url = Path_App + @"\Song_ALbum\" + this_Song_Info.Album_Name + @".jpg";
                 //如果专辑文件存在
                 if (File.Exists(Song_Image_Url))
                 {
@@ -2484,13 +2441,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 else
                 {
                     //如果当前歌曲名不为空
-                    if (listView_Item_Bing_ThisPlaying_Song_Info.Song_Name != null)
+                    if (this_Song_Info.Song_Name != null)
                     {
                         //专辑名为歌曲名
-                        listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name = listView_Item_Bing_ThisPlaying_Song_Info.Song_Name;
+                        this_Song_Info.Album_Name = this_Song_Info.Song_Name;
 
                         //生成专辑名所在路径
-                        Song_Image_Url = Path_App + @"\Song_ALbum\" + listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name + @".jpg";
+                        Song_Image_Url = Path_App + @"\Song_ALbum\" + this_Song_Info.Album_Name + @".jpg";
                         //如果歌曲图片文件存在
                         if (File.Exists(Song_Image_Url))
                         {
@@ -2506,7 +2463,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         else
                         {
                             //获取歌手名
-                            string Singer_Image_Name = listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name.Trim();
+                            string Singer_Image_Name = this_Song_Info.Singer_Name.Trim();
                             //生成专辑名所在路径
                             Song_Image_Url = Path_App + @"\Song_ALbum\" + Singer_Image_Name + @".jpg";
                             //如果歌曲图片存在
@@ -2542,9 +2499,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 musicPlayer_Main_UserControl.TextBox_SongAlbumName.TextAlignment = TextAlignment.Center;
 
                 //如果当前歌曲名不为空
-                if (listView_Item_Bing_ThisPlaying_Song_Info.Song_Name != null)
+                if (this_Song_Info.Song_Name != null)
                 {
-                    string Song_Name_Temp = listView_Item_Bing_ThisPlaying_Song_Info.Song_Name;
+                    string Song_Name_Temp = this_Song_Info.Song_Name;
                     int Song_Name_Temp_Last_Num = Song_Name_Temp.LastIndexOf("-");
                     if (Song_Name_Temp_Last_Num > 0)
                     {
@@ -2552,11 +2509,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     }
 
                     //专辑名为歌曲名
-                    listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name = Song_Name_Temp.Substring(Song_Name_Temp_Last_Num + 1).Trim();
+                    this_Song_Info.Album_Name = Song_Name_Temp.Substring(Song_Name_Temp_Last_Num + 1).Trim();
 
 
                     //生成专辑名所在路径
-                    Song_Image_Url = Path_App + @"\Song_ALbum\" + listView_Item_Bing_ThisPlaying_Song_Info.Song_Image_Name + @".jpg";
+                    Song_Image_Url = Path_App + @"\Song_ALbum\" + this_Song_Info.Album_Name + @".jpg";
                     //如果歌曲图片存在
                     if (File.Exists(Song_Image_Url))
                     {
@@ -2572,7 +2529,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     else
                     {
                         //获取歌手名
-                        string Singer_Image_Name = listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name.Trim();
+                        string Singer_Image_Name = this_Song_Info.Singer_Name.Trim();
                         //生成专辑名所在路径
                         Song_Image_Url = Path_App + @"\Song_ALbum\" + Singer_Image_Name + @".jpg";
                         //如果歌曲图片存在
@@ -2619,13 +2576,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         public void Change_Image_Singer_FrmMain_OnePhoto()
         {
             //如果歌手名不为空
-            if (listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name != null)
+            if (this_Song_Info.Singer_Name != null)
             {
                 //如果当前播放的歌曲信息不为空
-                if (listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name != null)
+                if (this_Song_Info.Singer_Name != null)
                 {      
                     //获取歌手名
-                    string Singer_Image_Name = listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name.Trim();
+                    string Singer_Image_Name = this_Song_Info.Singer_Name.Trim();
                     //生成歌手图片所在路径
                     Singer_Image_Url = Path_App + @"\Singer_Image\" + singer_photo[0] + @"\" + Singer_Image_Name + @".jpg";
                     //如果歌手图片存在
@@ -2675,10 +2632,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         public void Change_Image_Singer()
         {
             //如果歌手名不为空
-            if (listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name != null)
+            if (this_Song_Info.Singer_Name != null)
             {
                 //如果当前歌手不是上一位歌手
-                if (Singer_Name_Temp != listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name.Trim())
+                if (Singer_Name_Temp != this_Song_Info.Singer_Name.Trim())
                 {
                     //关闭多歌手模式
                     thread_timer_Singer_Photo_One = new Thread(new ThreadStart(() =>
@@ -2692,10 +2649,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     thread_timer_Singer_Photo_One.Start();
 
                     //如果当前播放的歌曲信息不为空
-                    if (listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name != null)
+                    if (this_Song_Info.Singer_Name != null)
                     {
                         //获取歌手名
-                        string Singer_Image_Name = listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name.Trim();
+                        string Singer_Image_Name = this_Song_Info.Singer_Name.Trim();
                         //生成歌手图片所在路径
                         Singer_Image_Url = Path_App + @"\Singer_Image\" + singer_photo[0] + @"\" + Singer_Image_Name + @".jpg";
                         //如果歌手图片存在
@@ -2849,7 +2806,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             for (int i = 0; i < singer_nums; i++)
                 if (temp[i] == null)
-                    temp[i] = listView_Item_Bing_ThisPlaying_Song_Info.Singer_Name.Trim();
+                    temp[i] = this_Song_Info.Singer_Name.Trim();
 
             List_Singer_Names = new string[singer_nums];
 
@@ -3597,17 +3554,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// <param name="e"></param>
         private void Paly_ALL_Song(object sender, MouseButtonEventArgs e)
         {
-            if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Love"))
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info;
-            else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_ALL"))
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info;
-            else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Auto"))
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info;
-            else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen"))
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info;
-
             //播放列表选定项设置为0
-            listView_Item_Bing_ALL.listView_SongList.SelectedIndex = 0;
+            songList_Infos[1][0].SelectedIndex = 0;
 
             Select_DoubleClick_ListView = 1;
             Change_MediaElement_Source();
@@ -3617,298 +3565,34 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         #region 手动添加音乐
         private void ThisWindowsMusicAndDownload_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            string SongList_Path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource\SongListInfo_ini\Local_ThisPC_song_search_YouSelect.exe";
-            System.Diagnostics.Process.Start(SongList_Path); //调用该命令，在程序启动时打开Excel程序
-
-            //创建定时器，每隔1秒读取ini配置，检查里面的数值是否被更改（被Local_ThisPC_song_search_ALL.exe更改则重启歌单数据源）
-            DispatcherTimer_Add_PC_Select_Song();           
+            windows_Song_Find = windows_Song_Find_Temp;
+            windows_Song_Find.Show();
         }
         private void My_Love_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            string SongList_Path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource\SongListInfo_ini\Local_ThisPC_song_search_YouSelect.exe";
-            System.Diagnostics.Process.Start(SongList_Path); //调用该命令，在程序启动时打开Excel程序
-            DispatcherTimer_Add_PC_Select_Song();
+            windows_Song_Find = windows_Song_Find_Temp;
+            windows_Song_Find.Show();
         }
         private void Recent_Play_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            string SongList_Path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource\SongListInfo_ini\Local_ThisPC_song_search_YouSelect.exe";
-            System.Diagnostics.Process.Start(SongList_Path); //调用该命令，在程序启动时打开Excel程序
-            DispatcherTimer_Add_PC_Select_Song();
+            windows_Song_Find = windows_Song_Find_Temp;
+            windows_Song_Find.Show();
         }
-        private void Try_Listen_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            string SongList_Path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource\SongListInfo_ini\Local_ThisPC_song_search_YouSelect.exe";
-            System.Diagnostics.Process.Start(SongList_Path); //调用该命令，在程序启动时打开Excel程序
-            DispatcherTimer_Add_PC_Select_Song();
-        }
-
-        DispatcherTimer dispatcher_Add_PC_Select_Song;
-        /// <summary>
-        /// 检测查找本地音乐是否完成
-        /// </summary>
-        private void DispatcherTimer_Add_PC_Select_Song()
-        {
-            MessageBox.Show("需要歌单操作的歌单，在歌曲完全导入之前，所有的歌单会保持冻结状态");
-            userControl_ButtonFrame_MusicLove.IsEnabled = false;
-            userControl_ButtonFrame_ThisWindowsMusicAndDownload.IsEnabled = false;
-            userControl_ButtonFrame_MusicRecentlyPlayed.IsEnabled = false;
-            userControl_ButtonFrame_MusicTryListenList.IsEnabled = false;
-            userControl_Main_Home_Left_MyMusic_My_Love.IsEnabled = false;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.IsEnabled = false;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.IsEnabled = false;
-            userControl_Main_Home_Left_MyMusic_Try_Listen.IsEnabled = false;
-
-            dispatcher_Add_PC_Select_Song = new DispatcherTimer();
-            dispatcher_Add_PC_Select_Song.Tick += DispatcherTimer_Add_PC_Select_Song_Tick;
-            dispatcher_Add_PC_Select_Song.Interval = new TimeSpan(0, 0, 0, 3);
-            dispatcher_Add_PC_Select_Song.Start();
-        }
-        private void DispatcherTimer_Add_PC_Select_Song_Tick(object sender, EventArgs e)
-        {
-            string temp = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource\SongListInfo_ini\SongList_MakeSure_Ini\SongList_Find_Select_Song_MakeSure.ini";
-            FileStream FS_List_Save = new FileStream(temp, FileMode.Open);
-            StreamReader SR_List = new StreamReader(FS_List_Save);
-            string bool_make_true = SR_List.ReadLine();
-            SR_List.Close();
-            FS_List_Save.Close();
-            if (bool_make_true != null)
-            {
-                if (bool_make_true.Equals("已检索"))
-                {
-                    dispatcher_Add_PC_Select_Song = null;
-
-                    FS_List_Save = new FileStream(temp, FileMode.Create);
-                    StreamWriter SW_List = new StreamWriter(FS_List_Save);//无法静态
-                    SW_List.WriteLine("未检索");
-                    //清空缓冲区
-                    //关闭流
-                    SW_List.Flush();
-                    SW_List.Close();
-                    //FS_List.Flush();
-                    FS_List_Save.Close();
-
-                    Hand_Add_listView_SongList_Source();
-                }
-                else if (bool_make_true.Equals("未完成"))
-                {
-                    dispatcher_Add_PC_Select_Song = null;
-
-                    FS_List_Save = new FileStream(temp, FileMode.Create);
-                    StreamWriter SW_List = new StreamWriter(FS_List_Save);//无法静态
-                    SW_List.WriteLine("未检索");
-                    //清空缓冲区
-                    //关闭流
-                    SW_List.Flush();
-                    SW_List.Close();
-                    //FS_List.Flush();
-                    FS_List_Save.Close();
-                }
-            }
-        }
-        /// <summary>
-        /// 重置歌单和播放列表的数据源
-        /// </summary>
-        private void Hand_Add_listView_SongList_Source()
-        {
-            playlistViewModel = new PlaylistViewModel();
-
-            if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Love"))
-            {              
-                Add_Select_Songs_To_listView_Item_Bing_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_Love);
-                userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = null;
-                userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Love;
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info;
-            }
-            else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_ALL"))
-            {
-                Add_Select_Songs_To_listView_Item_Bing_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_ALL);
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = null;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL;
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info;
-            }
-            else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Auto"))
-            {
-                Add_Select_Songs_To_listView_Item_Bing_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_Auto);
-                userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = null;
-                userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info;
-            }
-            else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen"))
-            {
-                Add_Select_Songs_To_listView_Item_Bing_ALL(listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen);
-                userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = null;
-                userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info;
-            }
-
-            userControl_ButtonFrame_MusicLove.IsEnabled = true;
-            userControl_ButtonFrame_ThisWindowsMusicAndDownload.IsEnabled = true;
-            userControl_ButtonFrame_MusicRecentlyPlayed.IsEnabled = true;
-            userControl_ButtonFrame_MusicTryListenList.IsEnabled = true;
-            userControl_Main_Home_Left_MyMusic_My_Love.IsEnabled = true;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.IsEnabled = true;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.IsEnabled = true;
-            userControl_Main_Home_Left_MyMusic_Try_Listen.IsEnabled = true;
-        }
-        /// <summary>
-        /// 添加选中歌曲至末尾
-        /// </summary>
-        /// <param name="listView_Temp_Info_End_Infos"></param>
-        private void Add_Select_Songs_To_listView_Item_Bing_ALL(List<ListView_Item_Bing> listView_Temp_Info_End_Infos)
-        {
-            int nums = listView_Temp_Info_End_Infos.Count;
-            if (nums == 0)
-                nums = 1;
-            bool Is_Love = false;
-            if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Love"))
-                Is_Love = true;
-            for (int i = 0; i < listView_Item_Bing_ALL.listView_Temp_Info_End_Temp.Count; i++)
-            {
-                listView_Item_Bing_ALL.listView_Temp_Info_End_Temp[i].Song_No = nums + i;
-                if (Is_Love == true)
-                {
-                    listView_Item_Bing_ALL.listView_Temp_Info_End_Temp[i].Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心 - 副本.png")));
-                    listView_Item_Bing_ALL.listView_Temp_Info_End_Temp[i].Song_Like = 1;
-                }
-
-                listView_Temp_Info_End_Infos.Add(listView_Item_Bing_ALL.listView_Temp_Info_End_Temp[i]);
-            }
-        }
-
         #endregion
         #region 查找本地音乐
 
         private void ThisWindowsMusicAndDownload_Stack_Button_Add_PC_ALL_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            string SongList_Path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource\SongListInfo_ini\Local_ThisPC_song_search_ALL.exe";
-            System.Diagnostics.Process.Start(SongList_Path); //调用该命令，在程序启动时打开Excel程序
-
-            //创建定时器，每隔1秒读取ini配置，检查里面的数值是否被更改（被Local_ThisPC_song_search_ALL.exe更改则重启歌单数据源）
-            DispatcherTimer_Add_PC_ALL_Song();
+            windows_Song_Find.Visibility = Visibility.Visible;
         }
         private void My_Love_Button_Add_PC_ALL_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            string SongList_Path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource\SongListInfo_ini\Local_ThisPC_song_search_ALL.exe";
-            System.Diagnostics.Process.Start(SongList_Path); //调用该命令，在程序启动时打开Excel程序
-            DispatcherTimer_Add_PC_ALL_Song();
+            windows_Song_Find.Visibility = Visibility.Visible;
         }
         private void Recent_Play_Stack_Button_Add_PC_ALL_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            string SongList_Path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource\SongListInfo_ini\Local_ThisPC_song_search_ALL.exe";
-            System.Diagnostics.Process.Start(SongList_Path); //调用该命令，在程序启动时打开Excel程序
-            DispatcherTimer_Add_PC_ALL_Song();
+            windows_Song_Find.Visibility = Visibility.Visible;
         }
-        private void Try_Listen_Stack_Button_Add_PC_ALL_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            string SongList_Path = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource\SongListInfo_ini\Local_ThisPC_song_search_ALL.exe";
-            System.Diagnostics.Process.Start(SongList_Path); //调用该命令，在程序启动时打开Excel程序
-            DispatcherTimer_Add_PC_ALL_Song();
-        }
-
-        DispatcherTimer dispatcher_Add_PC_ALL_Song;
-        /// <summary>
-        /// 检测查找本地音乐是否完成
-        /// </summary>
-        private void DispatcherTimer_Add_PC_ALL_Song()
-        {
-            MessageBox.Show("需要歌单操作的歌单，在歌曲完全导入之前，所有的歌单会保持冻结状态");
-            userControl_ButtonFrame_MusicLove.IsEnabled = false;
-            userControl_ButtonFrame_ThisWindowsMusicAndDownload.IsEnabled = false;
-            userControl_ButtonFrame_MusicRecentlyPlayed.IsEnabled = false;
-            userControl_ButtonFrame_MusicTryListenList.IsEnabled = false;
-            userControl_Main_Home_Left_MyMusic_My_Love.IsEnabled = false;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.IsEnabled = false;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.IsEnabled = false;
-            userControl_Main_Home_Left_MyMusic_Try_Listen.IsEnabled = false;
-
-            dispatcher_Add_PC_ALL_Song = new DispatcherTimer();
-            dispatcher_Add_PC_ALL_Song.Tick += DispatcherTimer_Add_PC_ALL_Song_Tick;
-            dispatcher_Add_PC_ALL_Song.Interval = new TimeSpan(0,0,0,3);
-            dispatcher_Add_PC_ALL_Song.Start();
-        }
-        private void DispatcherTimer_Add_PC_ALL_Song_Tick(object sender, EventArgs e)
-        {
-            string temp = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource\SongListInfo_ini\SongList_MakeSure_Ini\SongList_MakeSure.ini";
-            FileStream FS_List_Save = new FileStream(temp, FileMode.Open);
-            StreamReader SR_List = new StreamReader(FS_List_Save);
-            string bool_make_true = SR_List.ReadLine();
-            SR_List.Close();
-            FS_List_Save.Close();
-            if (bool_make_true != null)
-            {
-                if (bool_make_true.Equals("已检索"))
-                {
-                    dispatcher_Add_PC_ALL_Song = null;
-
-                    FS_List_Save = new FileStream(temp, FileMode.Create);
-                    StreamWriter SW_List = new StreamWriter(FS_List_Save);//无法静态
-                    SW_List.WriteLine("未检索");
-                    //清空缓冲区
-                    //关闭流
-                    SW_List.Flush();
-                    SW_List.Close();
-                    //FS_List.Flush();
-                    FS_List_Save.Close();
-
-                    Reset_listView_SongList_Source();
-                }
-                else if (bool_make_true.Equals("未完成"))
-                {
-                    dispatcher_Add_PC_ALL_Song = null;
-
-                    FS_List_Save = new FileStream(temp, FileMode.Create);
-                    StreamWriter SW_List = new StreamWriter(FS_List_Save);//无法静态
-                    SW_List.WriteLine("未检索");
-                    //清空缓冲区
-                    //关闭流
-                    SW_List.Flush();
-                    SW_List.Close();
-                    //FS_List.Flush();
-                    FS_List_Save.Close();
-                }
-            }
-        }
-        /// <summary>
-        /// 重置歌单和播放列表的数据源
-        /// </summary>
-        private void Reset_listView_SongList_Source()
-        {
-            playlistViewModel = new PlaylistViewModel();
-            if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Love"))
-            {
-                userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = null;
-                userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Love;
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info;
-            }
-            else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_ALL"))
-            {
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = null;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_ALL;
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info;
-            }
-            else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_Auto"))
-            {
-                userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = null;
-                userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_Auto;
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info;
-            }
-            else if (bool_ListView_Temp_Info_End_Clear.FrmMain_ListView_Temp_Info_ItemSource_Name.Equals("listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen"))
-            {
-                userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = null;
-                userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.ItemsSource = listView_Item_Bing_ALL.listView_Temp_Info_End_TryListen;
-                listView_Item_Bing_ALL.listView_SongList = userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info;
-            }
-            userControl_ButtonFrame_MusicLove.IsEnabled = true;
-            userControl_ButtonFrame_ThisWindowsMusicAndDownload.IsEnabled = true;
-            userControl_ButtonFrame_MusicRecentlyPlayed.IsEnabled = true;
-            userControl_ButtonFrame_MusicTryListenList.IsEnabled = true;
-            userControl_Main_Home_Left_MyMusic_My_Love.IsEnabled = true;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.IsEnabled = true;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.IsEnabled = true;
-            userControl_Main_Home_Left_MyMusic_Try_Listen.IsEnabled = true;
-            MessageBox.Show("导入成功");
-        }
-
         #endregion
         #region 批量操作
         
@@ -3948,8 +3632,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 = "歌曲" + userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.Items.Count.ToString();
             userControl_Main_Home_Left_MyMusic_Recent_Play.Recent_Song_Nums.Text
                 = "歌曲" + userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.Items.Count.ToString();
-            userControl_Main_Home_Left_MyMusic_Try_Listen.TryListen_Song_Nums.Text
-                = "试听歌曲" + userControl_Main_Home_Left_MyMusic_Try_Listen.ListView_Download_SongList_Info.Items.Count.ToString();
+            
         }
 
         #endregion
@@ -4209,8 +3892,21 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             if (Bool_Windows_Wallpaper == true)
                 SystemParametersInfo(20, 1, wallpaper_path, 1);
 
-            save_SongList_Info.Save_ALL_SongListInfo();
+            //保存歌单信息
+            var playlists = new List<SongList_Info>();
+            playlists = songList_Infos[0];
+            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);          
+            playlists = new List<SongList_Info>();
+            playlists = songList_Infos[1];
+            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml", playlists);
+            playlists = new List<SongList_Info>();
+            playlists = songList_Infos[2];
+            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml", playlists);
+            playlists = new List<SongList_Info>();
+            playlists = songList_Infos[3];
+            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More.xml", playlists);
 
+            
             Environment.Exit(-1);
         }
     }

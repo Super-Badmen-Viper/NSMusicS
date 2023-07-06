@@ -57,33 +57,12 @@
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                        Margin="0,75,91,0"
                        />
-            
+
             <StackPanel Margin="0,75,34,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="50" >
-            <TextBlock Text="更多" Width="28" Foreground="#7C7C7C" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <Image Width="14" Height="14" Margin="0,-15,5,0" Source="/ico_ui_library/下-01.png" 
+                <TextBlock Text="更多" Width="28" Foreground="#7C7C7C" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <Image Width="14" Height="14" Margin="0,-15,5,0" Source="/ico_ui_library/下-01.png" 
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Right" VerticalAlignment="Top" />
-        </StackPanel>
-            <StackPanel
-            x:Name="Button_Play_ALL_Song"
-            HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="40,122,0,0"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" MouseEnter="Button_Play_ALL_Song_MouseEnter" MouseLeave="Button_Play_ALL_Song_MouseLeave"      
-            >
-            <Border 
-                x:Name="Border_Play_ALL_Song"
-                HorizontalAlignment="Stretch" 
-                BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Background="#FF1EC79D" Height="32" 
-                 />
-            <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/播放全部.png" 
-               Stretch="Fill" Margin="20,-24,75,8"
-               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-               />
-            <TextBlock                
-                Text="播放全部" Margin="40,-24,0,8" 
-                   Foreground="White"
-                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                   />
-        </StackPanel>
+            </StackPanel>
             <StackPanel
             HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="161,122,0,0"
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
@@ -214,11 +193,7 @@
                                             <Button HorizontalAlignment="Left" Background="{Binding Song_MV_Image}"
                                                 Style="{StaticResource MyButton}" 
                                                 Tag="{Binding Song_Url}"
-                                                Click="MV_Play_ListView_Song_Click" 
-                                                Width="16" Height="16" Margin="8,6,0,0"
-                                                />
-                                            <Button HorizontalAlignment="Left" Background="{Binding Song_Agora_Image}"
-                                                Style="{StaticResource MyButton}" 
+                                                
                                                 Width="16" Height="16" Margin="8,6,0,0"
                                                 />
                                         </StackPanel>
@@ -244,28 +219,7 @@
         </Grid>
         <Grid x:Name="Grid_ListItem_CrudModel_2" Visibility="Hidden">
             <StackPanel
-                x:Name="Button_Play_ALL_Song_"
-                HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="40,14,0,0"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"     
-            >
-                <Border 
-                x:Name="Border_Play_ALL_Song_"
-                HorizontalAlignment="Stretch" 
-                BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Background="#FF1EC79D" Height="32" 
-                 />
-                <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/播放全部.png" 
-               Stretch="Fill" Margin="20,-24,75,8"
-               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-               />
-                <TextBlock                
-                Text="播放" Margin="40,-24,0,8" 
-                   Foreground="White"
-                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                   />
-            </StackPanel>
-            <StackPanel
-                HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="161,14,0,0"
+                HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="41,14,0,0"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                         
             >
@@ -284,27 +238,29 @@
                        />
             </StackPanel>
             <StackPanel
-                HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="280,14,0,0"
+                x:Name="Stack_Check_ALL"
+                HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="160,14,0,0"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                        
+                MouseLeftButtonDown="Stack_Check_ALL_MouseLeftButtonDown" 
+                    
             >
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                     Background="#FFE3E3E3" Height="32" 
                      />
-                <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/云.png" 
-                   Stretch="Fill" Margin="10,-29,0,10"
-                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Left" VerticalAlignment="Top" Width="26"
+                <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/圆圈、单选框.png" 
+                   Stretch="Fill" Margin="10,-24,0,10"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Left" VerticalAlignment="Top" Width="16"
                    />
-                <TextBlock Text="上传到微云" VerticalAlignment="Center" Margin="37,-46,6,0" 
+                <TextBlock Text="全选" VerticalAlignment="Center" Margin="37,-37,6,0" 
                        Foreground="Black"
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
                        />
             </StackPanel>
             <StackPanel
                 x:Name="Stack_Button_Delete_Select_ItemSong"
-                HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="400,14,0,0"
+                HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="280,14,0,0"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                 MouseLeftButtonDown="Button_Delete_Click" 
                         
