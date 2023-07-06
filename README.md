@@ -3,7 +3,6 @@
 - Based on dotNET_ C#_ WPF's Personal Open Source Music Client
 - Demo effect: B-site link:
 - - Latest version:[ https://www.bilibili.com/video/BV1rM411s7J9 ](https://www.bilibili.com/video/BV1Dc411g74T/?spm_id_from=333.999.0.0&vd_source=6e56ca0b155a60e6a6878e5775fdcc35)
-- - Old version: https://www.bilibili.com/video/BV1uG41137jY
 
 ## Function:
 - 1. Support for synchronized animation and progress of lyrics (compatible with lyrics files from other music software), lyrics synchronization algorithm
