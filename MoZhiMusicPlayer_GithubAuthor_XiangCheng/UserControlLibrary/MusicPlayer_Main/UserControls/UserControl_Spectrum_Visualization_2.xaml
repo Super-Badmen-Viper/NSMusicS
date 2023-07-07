@@ -9,10 +9,10 @@
     <Grid>
         
         <StackPanel x:Name="StackPanel_Test" Orientation="Horizontal" HorizontalAlignment="Center" Margin="-10,0,0,0">
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0"
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0"
                     Visibility="Hidden"
                     >
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -40,8 +40,8 @@
                 </Rectangle>
                 
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -67,8 +67,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -94,8 +94,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -121,8 +121,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -148,8 +148,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -175,8 +175,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -202,8 +202,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -229,8 +229,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -256,8 +256,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -283,8 +283,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -310,8 +310,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -337,8 +337,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -364,8 +364,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -391,8 +391,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -418,8 +418,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -445,8 +445,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -472,8 +472,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -499,8 +499,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -526,8 +526,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -553,8 +553,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -580,8 +580,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -607,8 +607,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -634,8 +634,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -661,8 +661,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -688,8 +688,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -715,8 +715,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -742,8 +742,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -769,8 +769,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -796,8 +796,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -823,8 +823,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -850,8 +850,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -877,8 +877,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -904,8 +904,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -931,8 +931,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -958,8 +958,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -985,8 +985,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1012,8 +1012,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1039,8 +1039,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1066,8 +1066,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1093,8 +1093,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1120,8 +1120,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1147,8 +1147,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1174,8 +1174,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1201,8 +1201,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1228,8 +1228,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1255,8 +1255,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1282,8 +1282,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1309,8 +1309,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1336,8 +1336,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1363,8 +1363,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1390,8 +1390,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1417,8 +1417,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1444,8 +1444,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1471,8 +1471,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1498,8 +1498,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1525,8 +1525,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1552,8 +1552,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1579,8 +1579,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1606,8 +1606,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1633,8 +1633,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1660,8 +1660,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1687,8 +1687,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1714,8 +1714,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1741,8 +1741,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1768,8 +1768,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1795,8 +1795,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1822,8 +1822,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1849,8 +1849,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1876,8 +1876,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1903,8 +1903,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -1930,8 +1930,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -1957,8 +1957,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -1984,8 +1984,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2011,8 +2011,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2038,8 +2038,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2065,8 +2065,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2092,8 +2092,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2119,8 +2119,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2146,8 +2146,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2173,8 +2173,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2200,8 +2200,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2227,8 +2227,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2254,8 +2254,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2281,8 +2281,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2308,8 +2308,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2335,8 +2335,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2362,8 +2362,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2389,8 +2389,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2416,8 +2416,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2443,8 +2443,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2470,8 +2470,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2497,8 +2497,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2524,8 +2524,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2551,8 +2551,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2578,8 +2578,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2605,8 +2605,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2632,8 +2632,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2659,8 +2659,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2686,8 +2686,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2713,8 +2713,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2740,8 +2740,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2767,8 +2767,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2794,8 +2794,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2821,8 +2821,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2848,8 +2848,8 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
+                <Rectangle Width="1" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>

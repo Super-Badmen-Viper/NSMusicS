@@ -22,7 +22,8 @@
                 </Grid.Background>
             </Grid>
             <Grid x:Name="Grid_down_Singer_Photo" >
-                <ItemsControl x:Name="ItemsControl_SingerImageCut" Grid.Row="1" ItemsSource="{Binding Singer_ImagerCut_Infos}">
+                <ItemsControl x:Name="ItemsControl_SingerImageCut" 
+                              Grid.Row="1" ItemsSource="{Binding Singer_ImagerCut_Infos}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Columns="2" Rows="2"/>
@@ -43,8 +44,6 @@
             </Grid>
 
             <Grid x:Name="Image_Singer_Buttom" Visibility="Hidden" Grid.RowSpan="2">
-
-
                 <Grid x:Name="Grid_BackGround_Black_Top" Height="170" VerticalAlignment="Top"
                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                       >

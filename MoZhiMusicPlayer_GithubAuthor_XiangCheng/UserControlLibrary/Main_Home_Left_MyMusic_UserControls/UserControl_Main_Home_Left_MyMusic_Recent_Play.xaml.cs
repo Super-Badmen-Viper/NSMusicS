@@ -27,29 +27,22 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         {
             InitializeComponent();
 
-            userControl_Main_Home_Left_MyMusic_Recent_Play = this;
-
             //刷新内存区域的引用
             songList_Infos = SongList_Info.Retuen_This();
+
+            Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
+            brush_LoveNormal = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心.png")));
+            brush_LoveEnter = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心 - 副本.png")));
         }
 
-        private static UserControl_Main_Home_Left_MyMusic_Recent_Play userControl_Main_Home_Left_MyMusic_Recent_Play;
-        public static UserControl_Main_Home_Left_MyMusic_Recent_Play Retuen_This()
-        {
-            userControl_Main_Home_Left_MyMusic_Recent_Play = Return_This_userControl_Main_Home_Left_MyMusic_Recent_Play();
-            return userControl_Main_Home_Left_MyMusic_Recent_Play;
-        }
-        public static UserControl_Main_Home_Left_MyMusic_Recent_Play Return_This_userControl_Main_Home_Left_MyMusic_Recent_Play()
-        {
-            if (userControl_Main_Home_Left_MyMusic_Recent_Play == null)
-                userControl_Main_Home_Left_MyMusic_Recent_Play = new UserControl_Main_Home_Left_MyMusic_Recent_Play();
-
-            return userControl_Main_Home_Left_MyMusic_Recent_Play;
-        }
-
+        
         public string Path_App;
         static List<List<Models.Song_List_Infos.SongList_Info>> songList_Infos;
         static List<Song_Info> songList_Infos_Current_Playlist;
+        //已选中的歌曲信息
+        public ArrayList Song_Info_Selects = new ArrayList();
+        public ImageBrush brush_LoveNormal = new ImageBrush();
+        public ImageBrush brush_LoveEnter = new ImageBrush();
 
         /// <summary>
         /// 初始化加载
@@ -86,8 +79,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         }
 
         #region 选中此音乐
-        //已选中的歌曲信息
-        public ArrayList Song_Info_Temp = new ArrayList();
+        
         /// <summary>
         /// 选中此音乐
         /// </summary>
@@ -99,19 +91,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
             if (ck_Selected.IsChecked == true)
             {
-                Song_Info_Temp.Add(this.ListView_Download_SongList_Info.Items[Convert.ToInt32(ck_Selected.Tag) - 1]);
+                Song_Info_Selects.Add(this.ListView_Download_SongList_Info.Items[Convert.ToInt32(ck_Selected.Tag) - 1]);
             }
             else if (ck_Selected.IsChecked == false)
             {
-                Song_Info_Temp.Remove(this.ListView_Download_SongList_Info.Items[Convert.ToInt32(ck_Selected.Tag) - 1]);
+                Song_Info_Selects.Remove(this.ListView_Download_SongList_Info.Items[Convert.ToInt32(ck_Selected.Tag) - 1]);
             }
         }
         #endregion
 
         #region 添加此歌曲到我的收藏
-        public ImageBrush brush_LoveNormal = new ImageBrush();
-        public ImageBrush brush_LoveEnter = new ImageBrush();
-        public ArrayList Song_Info_Love = new ArrayList();
+        
         /// <summary>
         /// 添加此歌曲到我的收藏
         /// </summary>
@@ -164,7 +154,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             songList_Infos = SongList_Info.Retuen_This();
             if (songList_Infos != null)
             {
-                if (songList_Infos[0][0] != null)
+                if (songList_Infos.Count != 0)
                 {
                     Song_Info temp = listView_Temp_Info_End.Find(delegate (Song_Info x) { return x.Song_No == Convert.ToInt32(ck_Selected.Tag); });
 
@@ -186,7 +176,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                         if (Simple_Song == false)
                         {
                             //原歌单图片设置为喜欢
-                            temp.Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心 - 副本.png")));
+                            temp.Song_Like_Image = brush_LoveEnter;
                             temp.Song_Like = 1;
                             songList_Infos[0][0].Songs.Add(temp);
                         }
@@ -206,7 +196,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             songList_Infos = SongList_Info.Retuen_This();
             if (songList_Infos != null)
             {
-                if (songList_Infos[0][0] != null)
+                if (songList_Infos.Count != 0)
                 {
                     Song_Info temp = listView_Temp_Info_End.Find(delegate (Song_Info x) { return x.Song_No == Convert.ToInt32(ck_Selected.Tag); });
                     string songurl = temp.Song_Url;
@@ -216,11 +206,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                         {
                             Song_Info temp_love = songList_Infos[0][0].Songs.Find(delegate (Song_Info x) { return x.Song_Url.Equals(songurl); });
 
-                            temp_love.Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心.png")));
+                            temp_love.Song_Like_Image = brush_LoveNormal;
                             temp_love.Song_Like = 0;
                             songList_Infos[0][0].Songs.Remove(temp_love);
 
-                            temp.Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心.png")));
+                            temp.Song_Like_Image = brush_LoveNormal;
                             temp.Song_Like = 0;
 
                             if (songList_Infos[0][0].Songs != null)
@@ -244,7 +234,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             songList_Infos = SongList_Info.Retuen_This();
             if (songList_Infos != null)
             {
-                if (songList_Infos[0][0] != null)
+                if (songList_Infos.Count != 0)
                 {
                     for (int i = 0; i < songList_Infos[0][0].Songs.Count; i++)
                     {
@@ -254,11 +244,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                             {
                                 ck_Selected.MinHeight = 1;
                                 ck_Selected.Background = brush_LoveEnter;
-
-                                Check_LoveSong_In_LoveSongList_Reset_SongList_Info();
                             }
                         }
                     }
+                    //所有的歌单 与我的收藏 相同的歌曲 设置为喜欢图像
+                    Check_LoveSong_In_LoveSongList_Reset_SongList_Info();
                 }
             }
         }
@@ -268,7 +258,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             songList_Infos = SongList_Info.Retuen_This();
             if (songList_Infos != null)
             {
-                if (songList_Infos[0][0] != null)
+                if (songList_Infos.Count != 0)
                 {
                     //从下标1开始，跳过我的收藏
                     for (int i = 1; i < songList_Infos.Count; i++)//所有的 歌曲列表 数量
@@ -303,22 +293,22 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             songList_Infos = SongList_Info.Retuen_This();
             if (songList_Infos != null)
             {
-                if (songList_Infos[0][0] != null)
+                if (songList_Infos.Count != 0)
                 {
-                    if (this.Song_Info_Temp.Count > 0)
+                    if (this.Song_Info_Selects.Count > 0)
                     {
                         //歌单歌曲排序
                         Sort_SongList();
 
                         int nums_select = 0;
-                        for (int i = 0; i < this.Song_Info_Temp.Count; i++)
+                        for (int i = 0; i < this.Song_Info_Selects.Count; i++)
                         {
                             //检测删除了多少列
                             nums_select++;
-                            Song_Info temp = songList_Infos[2][0].Songs.Find(delegate (Song_Info x) { return x.Song_Url.Equals(Convert.ToString(((Song_Info)Song_Info_Temp[i]).Song_Url)); });
+                            Song_Info temp = songList_Infos[2][0].Songs.Find(delegate (Song_Info x) { return x.Song_Url.Equals(Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url)); });
                             songList_Infos[2][0].Songs.Remove(temp);
                         }
-                        this.Song_Info_Temp.Clear();
+                        this.Song_Info_Selects.Clear();
 
                         if (nums_select > 0)
                         {
@@ -343,11 +333,14 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
         public void Sort_SongList()
         {
+            //同步歌曲曲目数量
+            Reset_ListView_Download_SongList_Info_ShowSongNums();
+
             //刷新内存区域的引用
             songList_Infos = SongList_Info.Retuen_This();
             if (songList_Infos != null)
             {
-                if (songList_Infos[0][0] != null)
+                if (songList_Infos.Count != 0)
                 {
                     songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
                     if (songList_Infos_Current_Playlist != null)
@@ -404,15 +397,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             songList_Infos = SongList_Info.Retuen_This();
             if (songList_Infos != null)
             {
-                if (songList_Infos[0][0] != null)
+                if (songList_Infos.Count != 0)
                 {
-                    Song_Info_Temp.Clear();
+                    Song_Info_Selects.Clear();
 
                     if (Check_ALL_Song == true)
                     {
                         for (int i = 0; i < songList_Infos[2][0].Songs.Count; i++)
                         {
-                            Song_Info_Temp.Add(songList_Infos[2][0].Songs[i]);
+                            Song_Info_Selects.Add(songList_Infos[2][0].Songs[i]);
                         }
 
                         foreach (var item in ListView_Download_SongList_Info.Items)
@@ -432,7 +425,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                     }
                     else
                     {
-                        Song_Info_Temp.Clear();
+                        Song_Info_Selects.Clear();
 
                         foreach (var item in ListView_Download_SongList_Info.Items)
                         {
@@ -473,6 +466,160 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             }
             return null;
         }
+
+        public int ComBox_Select;
+        /// <summary>
+        /// 将选中歌曲 添加到指定歌单
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {//刷新内存区域的引用
+            songList_Infos = SongList_Info.Retuen_This();
+            if (songList_Infos != null)
+            {
+                if (songList_Infos.Count != 0)
+                {
+                    if (Song_Info_Selects.Count > 0)
+                    {
+                        ComBox_Select = ComBox_Select_Add_SongList.SelectedIndex;
+                        if (ComBox_Select == 1)//本身若是我的收藏歌单，则屏蔽
+                        {
+                            if (songList_Infos[0][0] != null)
+                            {
+                                if (songList_Infos[0][0].Songs != null)
+                                {
+                                    for (int i = 0; i < Song_Info_Selects.Count; i++)
+                                    {
+                                        Song_Info temp = songList_Infos[0][0].Songs.Find(delegate (Song_Info x)
+                                        {
+                                            return x.Song_Url.Equals(
+                                                Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url)
+                                                );
+                                        });
+                                        if (temp == null)//如果没有重复的歌曲，则添加
+                                        {
+                                            ((Song_Info)Song_Info_Selects[i]).Song_Like = 1;
+                                            ((Song_Info)Song_Info_Selects[i]).Song_Like_Image = brush_LoveEnter;
+                                            songList_Infos[0][0].Songs.Add((Song_Info)Song_Info_Selects[i]);
+                                        }
+                                    }
+                                    //排序
+                                    songList_Infos[0][0].Songs = songList_Infos[0][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                                    //清空被选中的信息：后端
+                                    Song_Info_Selects.Clear();
+                                    //清空被选中的信息：UI
+                                    foreach (var item in ListView_Download_SongList_Info.Items)
+                                    {
+                                        ListViewItem listViewItem = ListView_Download_SongList_Info.ItemContainerGenerator.ContainerFromItem(item) as ListViewItem;
+                                        if (listViewItem != null)
+                                        {
+                                            CheckBox checkBox = FindVisualChild<CheckBox>(listViewItem);
+                                            if (checkBox != null)
+                                            {
+                                                checkBox.IsChecked = false;
+                                            }
+                                        }
+                                    }
+
+                                    //所有的歌单 与我的收藏 相同的歌曲 设置为喜欢图像：后端
+                                    Check_LoveSong_In_LoveSongList_Reset_SongList_Info();
+                                    //给此歌单的歌曲项UI 设置为喜欢图像：UI：此UI延迟显示，此代码块用以刷新
+                                    ListView_Download_SongList_Info.ItemsSource = null;
+                                    ListView_Download_SongList_Info.ItemsSource = songList_Infos[2][0].Songs;
+                                }
+                            }
+                        }
+                        else if (ComBox_Select == 2)
+                        {
+                            if (songList_Infos[1][0] != null)
+                            {
+                                if (songList_Infos[1][0].Songs != null)
+                                {
+                                    for (int i = 0; i < Song_Info_Selects.Count; i++)
+                                    {
+                                        Song_Info temp = songList_Infos[1][0].Songs.Find(delegate (Song_Info x)
+                                        {
+                                            return x.Song_Url.Equals(
+                                                Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url)
+                                                );
+                                        });
+                                        if (temp == null)//如果没有重复的歌曲，则添加
+                                        {
+                                            songList_Infos[1][0].Songs.Add((Song_Info)Song_Info_Selects[i]);
+                                        }
+                                    }
+                                    //排序
+                                    songList_Infos[1][0].Songs = songList_Infos[1][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                                    //清空被选中的信息：后端
+                                    Song_Info_Selects.Clear();
+                                    //清空被选中的信息：UI
+                                    foreach (var item in ListView_Download_SongList_Info.Items)
+                                    {
+                                        ListViewItem listViewItem = ListView_Download_SongList_Info.ItemContainerGenerator.ContainerFromItem(item) as ListViewItem;
+                                        if (listViewItem != null)
+                                        {
+                                            CheckBox checkBox = FindVisualChild<CheckBox>(listViewItem);
+                                            if (checkBox != null)
+                                            {
+                                                checkBox.IsChecked = false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (ComBox_Select == 3)
+                        {
+                            
+                        }
+                        else//自定义歌单
+                        {
+                            if (songList_Infos[ComBox_Select - 1][0] != null)
+                            {
+                                if (songList_Infos[ComBox_Select - 1][0].Songs != null)
+                                {
+                                    for (int i = 0; i < Song_Info_Selects.Count; i++)
+                                    {
+                                        Song_Info temp = songList_Infos[ComBox_Select - 1][0].Songs.Find(delegate (Song_Info x)
+                                        {
+                                            return x.Song_Url.Equals(
+                                                Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url)
+                                                );
+                                        });
+                                        if (temp == null)//如果没有重复的歌曲，则添加
+                                        {
+                                            songList_Infos[ComBox_Select - 1][0].Songs.Add((Song_Info)Song_Info_Selects[i]);
+                                        }
+                                    }
+                                    //排序
+                                    songList_Infos[ComBox_Select - 1][0].Songs = songList_Infos[ComBox_Select - 1][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                                    //清空被选中的信息：后端
+                                    Song_Info_Selects.Clear();
+                                    //清空被选中的信息：UI
+                                    foreach (var item in ListView_Download_SongList_Info.Items)
+                                    {
+                                        ListViewItem listViewItem = ListView_Download_SongList_Info.ItemContainerGenerator.ContainerFromItem(item) as ListViewItem;
+                                        if (listViewItem != null)
+                                        {
+                                            CheckBox checkBox = FindVisualChild<CheckBox>(listViewItem);
+                                            if (checkBox != null)
+                                            {
+                                                checkBox.IsChecked = false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            ComBox_Select_Add_SongList.SelectedIndex = 0;
+        }
+        
+
         #endregion
 
 
@@ -627,16 +774,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             Stack_Button_Add_PC_ALL_Song.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
         }
 
-        private void Button_Play_ALL_Song_MouseEnter(object sender, MouseEventArgs e)
-        {
-            Border_Play_ALL_Song.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF1EC79D"));
-        }
-
-        private void Button_Play_ALL_Song_MouseLeave(object sender, MouseEventArgs e)
-        {
-            Border_Play_ALL_Song.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF1FD1A5"));
-        }
-
         private void Stack_Button_LotSelects_Take_MouseEnter(object sender, MouseEventArgs e)
         {
             Stack_Button_LotSelects_Take.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
@@ -672,6 +809,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         {
             Stack_Button_Update_Song_Better.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
         }
+        private void Stack_Button_Synchronize_User_Music_Resources_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Stack_Button_Synchronize_User_Music_Resources.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+        }
+        private void Stack_Button_Synchronize_User_Music_Resources_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Stack_Button_Synchronize_User_Music_Resources.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
+        }
+
 
         private void Stack_Button_LotSelects_Take_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -689,6 +835,19 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             Grid_ListItem_CrudModel_1.Margin = new Thickness(0, 180, 0, 0);
             Grid_ListItem_CrudModel_2.Visibility = Visibility.Hidden;
             GridViewColumn_Check_ListView_Song.Width = 0;
+        }
+
+        private void ListView_Download_SongList_Info_SourceUpdated(object sender, DataTransferEventArgs e)
+        {
+            Reset_ListView_Download_SongList_Info_ShowSongNums();
+        }
+        /// <summary>
+        /// 同步当前歌单歌曲数量
+        /// </summary>
+        public void Reset_ListView_Download_SongList_Info_ShowSongNums()
+        {
+            Recent_Song_Nums.Text
+                = "歌曲：" + ListView_Download_SongList_Info.Items.Count.ToString();
         }
     }
 }

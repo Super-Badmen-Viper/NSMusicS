@@ -25,6 +25,13 @@
                 IsMoveToPointEnabled="True" Cursor="Hand" BorderBrush="{x:Null}" 
                 Visibility="Hidden"/>
 
+        <Grid>
+            <UserControls:UserControl_Spectrum_Visualization_2
+                x:Name="userControl_Spectrum_Visualization" 
+                VerticalAlignment="Top" Height="80" Margin="0,-51,0,0"
+                Visibility="Hidden"
+                />
+        </Grid>
 
 
         <Button x:Name="Button_Music_Order" 
@@ -405,14 +412,6 @@
                  Focusable="False" VerticalContentAlignment="Center" 
                  UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" Margin="0,0,21,0"/>
         </Grid>
-
-
-        <Grid>
-            <UserControls:UserControl_Spectrum_Visualization_2
-                x:Name="userControl_Spectrum_Visualization" 
-                VerticalAlignment="Top" Height="80" Margin="0,-51,0,0"
-                Visibility="Hidden"
-                />
-        </Grid>
+        
     </Grid>
 </UserControl>

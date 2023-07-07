@@ -29,6 +29,8 @@ using MaterialDesignThemes.Wpf.Transitions;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos;
 using System.Threading.Tasks;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_Song_Finds;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Left_MyMusic_UserControls;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Left_MyMusic_UserControls;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 {
@@ -47,15 +49,18 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             Init_Spectrum_Visualization();
 
+            //初始化歌单信息
             Init_SongList_Info();
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = songList_Infos[1][0].Songs;
             userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = songList_Infos[0][0].Songs;
             userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = songList_Infos[2][0].Songs;
             songList_Infos_Current_Playlist = songList_Infos[1][0].Songs;
             this_Song_ListView = userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info;
-
+            //---
             windows_Song_Find.Back_Button.Click += Back_Button_Click;
             windows_Song_Find_Temp.Back_Button.Click += Back_Button_Click;
+
+
         }
 
         //所有的歌单列表集合
@@ -66,7 +71,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         private List<Song_Info> songList_Infos_Current_Playlist;
         //当前正在播放的歌曲
         private Song_Info this_Song_Info = new Song_Info();
-        
+
+        //自定义歌单 用户控件 集合
+        private List<comboBoxItem_Name> comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores = new List<comboBoxItem_Name>();
+        private List<UserControl_Main_Home_Left_MyMusic_More> userControl_Main_Home_Left_MyMusic_Mores = UserControl_Main_Home_Left_MyMusic_Mores_Class.Retuen_This();
+        //选中歌曲添加到 ComboBoxItem集合
+        private List<comboBoxItem_Name> comboBoxItem_ComBox_Select_Add_SongList = new List<comboBoxItem_Name>();
+        public class comboBoxItem_Name
+        {
+           public string Name { get; set; }
+        }
+
         //歌曲搜索
         Windows_Song_Find_Float windows_Song_Find = new Windows_Song_Find_Float();
         //防止数据源不对应
@@ -79,18 +94,177 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //加载歌单信息
             songList_Infos = SongList_Info.Retuen_This();
             songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
-
             //加载次序不能变
             songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml"));
             SongList_Info_Reader.song_Infos_Love = songList_Infos[0][0].Songs;
             songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml"));
             songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml"));
-            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More.xml"));
-           
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (3).xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (4).xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (5).xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (6).xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (7).xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (8).xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (9).xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (10).xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (11).xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (12).xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (13).xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (14).xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (15).xml"));
+            songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (16).xml"));
+
             SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
             SongList_Info.songList_Infos = songList_Infos;
+
+            //加载自定义歌单列表 用户控件
+            UserControl_Main_Home_Left_MyMusic_Mores_Class.userControl_Main_Home_Left_MyMusic_Mores.Clear();//清空数据
+            userControl_Main_Home_Left_MyMusic_Mores = UserControl_Main_Home_Left_MyMusic_Mores_Class.Retuen_This();//重新赋值
+            for (int i = 3; i < 17; i++)
+            {
+                //先给歌曲排序，防止歌曲序号不对
+                for (int j = 0; j < songList_Infos[i][0].Songs.Count; j++)
+                {
+                    songList_Infos[i][0].Songs[j].Song_No = j + 1;
+                }
+
+                UserControl_Main_Home_Left_MyMusic_More temp = new UserControl_Main_Home_Left_MyMusic_More();
+                temp.this_SongList_Name.Text = "歌单页面：" + i;
+                temp.Name = "Song_List_Info_More_" + i;
+                //传入数据源
+                temp.this_SongList_Info_Set(songList_Infos[i][0].Songs);
+                //设置数据源
+                temp.ListView_Download_SongList_Info.ItemsSource = songList_Infos[i][0].Songs;
+                //双击播放事件
+                temp.ListView_Download_SongList_Info.MouseDoubleClick += ListView_Download_SongList_Info_MouseDoubleClick;
+                //启动本地歌曲查找
+                temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown += ThisWindowsMusicAndDownload_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown;
+                temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += ThisWindowsMusicAndDownload_Stack_Button_Add_PC_ALL_Song_MouseLeftButtonDown;
+
+                userControl_Main_Home_Left_MyMusic_Mores.Add(temp);
+            }
+            UserControl_Main_Home_Left_MyMusic_Mores_Class.userControl_Main_Home_Left_MyMusic_Mores = userControl_Main_Home_Left_MyMusic_Mores;//保存数据
+            //加载自定义歌单列表 启动 “用户控件”的按钮
+            comboBoxItem_Name comboBoxItem = new comboBoxItem_Name();
+            comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores = new List<comboBoxItem_Name>();
+            for (int i = 0; i < userControl_Main_Home_Left_MyMusic_Mores.Count; i++)
+            {
+                comboBoxItem = new comboBoxItem_Name();
+                comboBoxItem.Name = ("歌单按钮：" + (i + 3).ToString()).ToString();
+
+                comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores.Add(comboBoxItem);
+            }
+            ComBox_Select_SongList.ItemsSource = comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores;
+            userControl_Main_Home_Left_MyMusic_Mores_TabControl.ItemsSource = userControl_Main_Home_Left_MyMusic_Mores;
+
+            //加载歌曲选中 添加到指定歌单 ComBox_Select_Add_SongList数据源
+            comboBoxItem_ComBox_Select_Add_SongList = new List<comboBoxItem_Name>();
+            comboBoxItem = new comboBoxItem_Name(); 
+            comboBoxItem.Name = "请选择需要操作的歌曲列表";
+            comboBoxItem_ComBox_Select_Add_SongList.Add(comboBoxItem);
+            comboBoxItem = new comboBoxItem_Name(); 
+            comboBoxItem.Name = "我的收藏";
+            comboBoxItem_ComBox_Select_Add_SongList.Add(comboBoxItem);
+            comboBoxItem = new comboBoxItem_Name(); 
+            comboBoxItem.Name = "本地下载";
+            comboBoxItem_ComBox_Select_Add_SongList.Add(comboBoxItem);
+            comboBoxItem = new comboBoxItem_Name(); 
+            comboBoxItem.Name = "默认列表";
+            comboBoxItem_ComBox_Select_Add_SongList.Add(comboBoxItem);
+            for (int i = 0; i < comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores.Count; i++)
+            {
+                comboBoxItem = new comboBoxItem_Name(); 
+                comboBoxItem.Name = comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores[i].Name.ToString();
+                comboBoxItem_ComBox_Select_Add_SongList.Add(comboBoxItem);
+            }
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+            userControl_Main_Home_Left_MyMusic_My_Love.ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+            for (int i = 0; i < userControl_Main_Home_Left_MyMusic_Mores.Count; i++)
+            {
+                userControl_Main_Home_Left_MyMusic_Mores[i].ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+            }
+            windows_Song_Find.ComBox_Select_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+            windows_Song_Find_Temp.ComBox_Select_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
         }
 
+        
+        int ComBox_Select_SongList_SelectIndex;
+        /// <summary>
+        /// 选择自定义歌单
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ComBox_Select_SongList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComBox_Select_SongList_SelectIndex = ComBox_Select_SongList.SelectedIndex;
+
+            if (ComBox_Select_SongList_SelectIndex != -1)
+            {
+                userControl_Main_Home_Left_MyMusic_Mores_TabControl.SelectedIndex = ComBox_Select_SongList_SelectIndex;
+                userControl_Main_Home_Left_MyMusic_Mores_TabControl.Visibility = Visibility.Visible;
+
+                userControl_音乐馆.Visibility = Visibility.Hidden;
+                userControl_视频.Visibility = Visibility.Hidden;
+                userControl_电台.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                userControl_Main_Home_Left_MyMusic_Mores_TabControl.Visibility = Visibility.Hidden;
+            }
+
+            //同步歌曲曲目数量
+            for (int i = 0; i < userControl_Main_Home_Left_MyMusic_Mores.Count; i++)
+            {
+                userControl_Main_Home_Left_MyMusic_Mores
+                    [i]
+                    .Recent_Song_Nums.Text
+                    = "歌曲：" + userControl_Main_Home_Left_MyMusic_Mores
+                    [i]
+                    .ListView_Download_SongList_Info.Items.Count.ToString();
+                userControl_Main_Home_Left_MyMusic_Mores_TabControl.ItemsSource = null;
+                userControl_Main_Home_Left_MyMusic_Mores_TabControl.ItemsSource = userControl_Main_Home_Left_MyMusic_Mores;
+            }
+        }
+        /// <summary>
+        /// 自定义歌单选择 鼠标左键按下 重置为-1
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ComBox_Select_SongList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ComBox_Select_SongList.SelectedIndex = -1;     
+        }
+        /// <summary>
+        /// 播放自定义歌单
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListView_Download_SongList_Info_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            this_Song_ListView = 
+                userControl_Main_Home_Left_MyMusic_Mores
+                [ComBox_Select_SongList_SelectIndex]//不加3是因为此数组为TabControl内的控件，13个
+                .ListView_Download_SongList_Info;
+            songList_Infos_Current_Playlist = 
+                songList_Infos[ComBox_Select_SongList_SelectIndex + 3][0].Songs;//+3是因为此数组为所有的歌单，16个
+            Select_DoubleClick_ListView = 1;
+            Change_MediaElement_Source();
+
+            //同步歌曲曲目数量
+            userControl_Main_Home_Left_MyMusic_Mores
+                [ComBox_Select_SongList_SelectIndex]
+                .Recent_Song_Nums.Text
+                = "歌曲：" + userControl_Main_Home_Left_MyMusic_Mores
+                [ComBox_Select_SongList_SelectIndex]
+                .ListView_Download_SongList_Info.Items.Count.ToString();
+        }
+
+        /// <summary>
+        /// 本地搜索音乐 返回保存歌单信息
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Back_Button_Click(object sender, RoutedEventArgs e)
         {
             songList_Infos = null;
@@ -108,6 +282,26 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             windows_Song_Find = windows_Song_Find_Temp;
         }
 
+        #endregion
+        #region 歌曲信息保存
+        public void Save_SongListInfo()
+        {
+            var playlists = new List<SongList_Info>();
+            playlists = songList_Infos[0];
+            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
+            playlists = new List<SongList_Info>();
+            playlists = songList_Infos[1];
+            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml", playlists);
+            playlists = new List<SongList_Info>();
+            playlists = songList_Infos[2];
+            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml", playlists);
+            for (int i = 3; i < 17; i++)
+            {
+                playlists = new List<SongList_Info>();
+                playlists = songList_Infos[i];
+                SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (" + i + ").xml", playlists);
+            }
+        }
         #endregion
 
         #region 初始化
@@ -136,13 +330,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(2));
             musicPlayer_Main_UserControl.BeginAnimation(UserControl.HeightProperty, doubleAnimation);
 
-            //this.MediaElement_Song.LoadedBehavior = MediaState.Manual;
-
-            
         }
-
-       
-
         #endregion
 
         /// <summary>
@@ -224,9 +412,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         private void Grid_Animation_Completed_Frame_Show(object sender, EventArgs e)
         {
             Frame_Show.BeginAnimation(UserControl.WidthProperty, null);
-
-            //同步所有歌单的歌曲数量
-            Reset_ListView_Download_SongList_Info_ShowSongNums();
         }
 
 
@@ -711,44 +896,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //调整歌词列表的边距
             thickness_ListView_Temp_MRC_Margin = musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin;
 
-            //设置触发器，检测当前歌曲数量
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.SourceUpdated += ListView_Download_SongList_Info_SourceUpdated;
-            userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.SourceUpdated += ListView_Download_SongList_Info_SourceUpdated;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.SourceUpdated += ListView_Download_SongList_Info_SourceUpdated;
             //设置添加手动导入歌曲文件按钮事件
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Button_Add_Select_Song.MouseLeftButtonDown += ThisWindowsMusicAndDownload_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown;
             userControl_Main_Home_Left_MyMusic_My_Love.Stack_Button_Add_Select_Song.MouseLeftButtonDown += My_Love_Button_Add_PC_Select_Song_MouseLeftButtonDown;
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_Add_Select_Song.MouseLeftButtonDown += Recent_Play_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown;
-            
-            
-            //设置歌单_更多操作置入按钮事件
-            //userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Button_LotSelects_Take.MouseLeftButtonDown += Stack_Button_LotSelects_Take_MouseLeftButtonDown;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Button_Find_Song_Info.MouseLeftButtonDown += Stack_Button_Find_Song_Info_MouseLeftButtonDown;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Button_ThisPcSong_Find.MouseLeftButtonDown += Stack_Button_ThisPcSong_Find_MouseLeftButtonDown;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Button_Update_Song_Better.MouseLeftButtonDown += Stack_Button_Update_Song_Better_MouseLeftButtonDown;
-            //userControl_Main_Home_Left_MyMusic_My_Love.Stack_Button_LotSelects_Take.MouseLeftButtonDown += Stack_Button_LotSelects_Take_MouseLeftButtonDown;
-            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Button_Find_Song_Info.MouseLeftButtonDown += Stack_Button_Find_Song_Info_MouseLeftButtonDown;
-            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Button_ThisPcSong_Find.MouseLeftButtonDown += Stack_Button_ThisPcSong_Find_MouseLeftButtonDown;
-            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Button_Update_Song_Better.MouseLeftButtonDown += Stack_Button_Update_Song_Better_MouseLeftButtonDown;
-            //userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_LotSelects_Take.MouseLeftButtonDown += Stack_Button_LotSelects_Take_MouseLeftButtonDown;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_Find_Song_Info.MouseLeftButtonDown += Stack_Button_Find_Song_Info_MouseLeftButtonDown;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_ThisPcSong_Find.MouseLeftButtonDown += Stack_Button_ThisPcSong_Find_MouseLeftButtonDown;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_Update_Song_Better.MouseLeftButtonDown += Stack_Button_Update_Song_Better_MouseLeftButtonDown;
-            
 
             //设置添加本地所有歌曲文件按钮事件            
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += ThisWindowsMusicAndDownload_Stack_Button_Add_PC_ALL_Song_MouseLeftButtonDown;
             userControl_Main_Home_Left_MyMusic_My_Love.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += My_Love_Button_Add_PC_ALL_Song_MouseLeftButtonDown;
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += Recent_Play_Stack_Button_Add_PC_ALL_Song_MouseLeftButtonDown;
-            //设置播放全部按钮
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Button_Play_ALL_Song.MouseLeftButtonDown += Paly_ALL_Song;
-            //userControl_Main_Home_Left_MyMusic_My_Love.Button_Play_ALL_Song.MouseLeftButtonDown += Paly_ALL_Song;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Button_Play_ALL_Song.MouseLeftButtonDown += Paly_ALL_Song;
-            /*//设置选中删除按钮
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Button_Delete_Select_ItemSong.MouseLeftButtonDown += Button_Delete_Click;
-            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Button_Delete_Select_ItemSong.MouseLeftButtonDown += Button_Delete_Click;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_Delete_Select_ItemSong.MouseLeftButtonDown += Button_Delete_Click;
-            */
+
         }
 
 
@@ -784,11 +941,18 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                 }
 
+                userControl_Main_Home_Left_MyMusic_Mores_TabControl.SelectedIndex = -1;
+                userControl_Main_Home_Left_MyMusic_Mores_TabControl.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
                 Grid_Animation_MouseLeftClick();/// 窗体进入动画
-                
+
+                //同步歌曲曲目数量
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload
+                    .Recent_Song_Nums.Text
+                    = "歌曲：" + userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload
+                    .ListView_Download_SongList_Info.Items.Count.ToString();
             }
         }
 
@@ -812,10 +976,18 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                 }
 
+                userControl_Main_Home_Left_MyMusic_Mores_TabControl.SelectedIndex = -1;
+                userControl_Main_Home_Left_MyMusic_Mores_TabControl.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Visible;
                 Grid_Animation_MouseLeftClick();/// 窗体进入动画
+
+                //同步歌曲曲目数量
+                userControl_Main_Home_Left_MyMusic_My_Love
+                    .Recent_Song_Nums.Text
+                    = "歌曲：" + userControl_Main_Home_Left_MyMusic_My_Love
+                    .ListView_Download_SongList_Info.Items.Count.ToString();
             }
         }
         private void UserControl_ButtonFrame_MusicRecentlyPlayed_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -838,10 +1010,18 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                 }
 
+                userControl_Main_Home_Left_MyMusic_Mores_TabControl.SelectedIndex = -1;
+                userControl_Main_Home_Left_MyMusic_Mores_TabControl.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
                 Grid_Animation_MouseLeftClick();/// 窗体进入动画
+
+                //同步歌曲曲目数量
+                userControl_Main_Home_Left_MyMusic_Recent_Play
+                    .Recent_Song_Nums.Text
+                    = "歌曲：" + userControl_Main_Home_Left_MyMusic_Recent_Play
+                    .ListView_Download_SongList_Info.Items.Count.ToString();
             }
         }
         
@@ -1706,6 +1886,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             songList_Infos_Current_Playlist = songList_Infos[1][0].Songs;
             Select_DoubleClick_ListView = 1;
             Change_MediaElement_Source();
+
+            //同步歌曲曲目数量
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload
+                .Recent_Song_Nums.Text
+                = "歌曲：" + userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload
+                .ListView_Download_SongList_Info.Items.Count.ToString();
         }
         /// <summary>
         /// 双击播放音乐
@@ -1718,6 +1904,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             songList_Infos_Current_Playlist = songList_Infos[0][0].Songs;
             Select_DoubleClick_ListView = 1;
             Change_MediaElement_Source();
+
+            //同步歌曲曲目数量
+            userControl_Main_Home_Left_MyMusic_My_Love
+                .Recent_Song_Nums.Text
+                = "歌曲：" + userControl_Main_Home_Left_MyMusic_My_Love
+                .ListView_Download_SongList_Info.Items.Count.ToString();
         }
         /// <summary>
         /// 双击播放音乐
@@ -1730,6 +1922,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             songList_Infos_Current_Playlist = songList_Infos[2][0].Songs;
             Select_DoubleClick_ListView = 1;
             Change_MediaElement_Source();
+
+            //同步歌曲曲目数量
+            userControl_Main_Home_Left_MyMusic_Recent_Play
+                .Recent_Song_Nums.Text
+                = "歌曲：" + userControl_Main_Home_Left_MyMusic_Recent_Play
+                .ListView_Download_SongList_Info.Items.Count.ToString();
         }
 
 
@@ -1937,195 +2135,203 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                             {
                                 //查找并获取ListView选中项中的对象
                                 myContentPresenter = FindVisualChild<ContentPresenter>(myListBoxItem);
-                                myDataTemplate = myContentPresenter.ContentTemplate;
-                                myTextBlock_Storyboard = (Storyboard)myDataTemplate.FindName("Text_Storyboard", myContentPresenter);
-                                myTextBlock_TextBlock = (TextBlock)myDataTemplate.FindName("Text_TextBlock", myContentPresenter);
-                                myTextBlock_DoubleAnimationUsingKeyFrames = (DoubleAnimationUsingKeyFrames)myDataTemplate.FindName("Text_DoubleAnimationUsingKeyFrames", myContentPresenter);
-                                myTextBlock_DoubleAnimationUsingKeyFrames.Duration = new Duration(new TimeSpan(0, 0, 0, 0, temp));
-
-                                //初始动画位置，-0.5为左边的原点，长度为1
-                                double X = -0.5;
-
-                                //每个字符的物理长度
-                                ArrayList Values_temp = new ArrayList();
-                                //每个字符相加_>的总长度
-                                double Sum_Values_temp = 0;
-                                for (int i = 0; i < dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                    .Int_MoreByte_Nums; i++)
+                                if (myContentPresenter != null)
                                 {
-                                    double temp_double = Convert.ToDouble(MeasureString(dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                    .Array_Morebyte_Text[i].ToString()));
-                                    Sum_Values_temp += temp_double;//每个字符相加_>的总长度
-                                    Values_temp.Add(temp_double);//每个字符的物理长度
-                                }
-
-                                //状态，是否停顿
-                                bool null_time = false;
-                                //获取歌词字符统一间距的比率
-                                double ALL_Byte_Width = Math.Round(Convert.ToDouble(1.0 / Sum_Values_temp),6);
-                                //获取每个字符同步时动画所移动的距离
-                                ArrayList ALL_Byte_Values = new ArrayList();
-                                for (int i = 0; i < dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                    .Int_MoreByte_Nums; i++)
-                                {
-                                    int temp_BeginTime = Convert.ToInt16(
-                                        dao_ListBox_Temp_MRC.MRC_Line_Info
-                                            [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
-                                                - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                    .Array_Morebyte_BeginTime[i]);//此字符开始时间
-                                    int temp_Duration = Convert.ToInt16(
-                                        dao_ListBox_Temp_MRC.MRC_Line_Info
-                                            [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
-                                                - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                    .Array_Morebyte_Duration[i]);//此字符持续时间
-
-                                    if (null_time == true)
+                                    myDataTemplate = myContentPresenter.ContentTemplate;
+                                    if (myDataTemplate != null)
                                     {
-                                        ALL_Byte_Values.Add(0);
-                                        null_time = false;
-                                    }
+                                        myTextBlock_Storyboard = (Storyboard)myDataTemplate.FindName("Text_Storyboard", myContentPresenter);
+                                        myTextBlock_TextBlock = (TextBlock)myDataTemplate.FindName("Text_TextBlock", myContentPresenter);
+                                        myTextBlock_DoubleAnimationUsingKeyFrames = (DoubleAnimationUsingKeyFrames)myDataTemplate.FindName("Text_DoubleAnimationUsingKeyFrames", myContentPresenter);
+                                        myTextBlock_DoubleAnimationUsingKeyFrames.Duration = new Duration(new TimeSpan(0, 0, 0, 0, temp));
 
-                                    //判别动画是否有停顿
-                                    if (i != dao_ListBox_Temp_MRC.MRC_Line_Info
-                                        [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
-                                            - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                                .Int_MoreByte_Nums - 1//if  i != Array_Morebyte_BeginTime的最后一位（防止数组越界）
-                                        &&
-                                        temp_BeginTime + temp_Duration !=  //if  此动画的开始时间+持续时间 != 下一段动画的开始时间
-                                        Convert.ToInt16(dao_ListBox_Temp_MRC.MRC_Line_Info
-                                            [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
-                                                - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                                    .Array_Morebyte_BeginTime[i + 1]))//if 动画时间 中间有 空白时间（动画停顿）
-                                    {
-                                        null_time = true;
-                                    }
+                                        //初始动画位置，-0.5为左边的原点，长度为1
+                                        double X = -0.5;
 
-                                    //将字符相加_>的总长度缩小为1
-                                    //同时各字符的长度 按相对应的比率 缩小，使之相加为1
-                                    //得到了每个字符同步时动画所移动的距离
-                                    ALL_Byte_Values.Add(Convert.ToDouble(Values_temp[i]) * ALL_Byte_Width);
-                                }
+                                        //每个字符的物理长度
+                                        ArrayList Values_temp = new ArrayList();
+                                        //每个字符相加_>的总长度
+                                        double Sum_Values_temp = 0;
+                                        for (int i = 0; i < dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                            .Int_MoreByte_Nums; i++)
+                                        {
+                                            double temp_double = Convert.ToDouble(MeasureString(dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                            .Array_Morebyte_Text[i].ToString()));
+                                            Sum_Values_temp += temp_double;//每个字符相加_>的总长度
+                                            Values_temp.Add(temp_double);//每个字符的物理长度
+                                        }
 
-                                //                        
-                                ArrayList timeSpan_nums = new ArrayList();
-                              
-                                int temp_null_time = 0;
-                                for (int i = 0; 
-                                    i < dao_ListBox_Temp_MRC.MRC_Line_Info
-                                        [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex 
-                                            - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                                .Int_MoreByte_Nums; //歌词字符总数
-                                    i++)
-                                {
-                                    int temp_BeginTime = Convert.ToInt16(
-                                        dao_ListBox_Temp_MRC.MRC_Line_Info
-                                            [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex 
-                                                - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                    .Array_Morebyte_BeginTime[i]);//此字符开始时间
-                                    int temp_Duration = Convert.ToInt16(
-                                        dao_ListBox_Temp_MRC.MRC_Line_Info
-                                            [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex 
-                                                - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                    .Array_Morebyte_Duration[i]);//此字符持续时间                     
-
-                                    if (null_time == true)
-                                    {
-                                        timeSpan_nums.Add(":" + temp_null_time);// : 作为动画停顿标记
-                                        null_time = false;
-                                    }                
-                                    //判别动画是否有停顿
-                                    if (i != dao_ListBox_Temp_MRC.MRC_Line_Info
-                                        [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
-                                            - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                                .Int_MoreByte_Nums - 1//if  i != Array_Morebyte_BeginTime的最后一位（防止数组越界）
-                                        && 
-                                        temp_BeginTime + temp_Duration != //if  此动画的开始时间+持续时间 != 下一段动画的开始时间
-                                        Convert.ToInt16(dao_ListBox_Temp_MRC.MRC_Line_Info
-                                            [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
-                                                - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                                    .Array_Morebyte_BeginTime[i+1]))//if 动画时间 中间有 空白时间（动画停顿）
-                                    {
-                                        temp_null_time = //求出此停顿动画的序列时间，并插入至动画序列timeSpan_nums
-                                            Convert.ToInt16(
+                                        //状态，是否停顿
+                                        bool null_time = false;
+                                        //获取歌词字符统一间距的比率
+                                        double ALL_Byte_Width = Math.Round(Convert.ToDouble(1.0 / Sum_Values_temp), 6);
+                                        //获取每个字符同步时动画所移动的距离
+                                        ArrayList ALL_Byte_Values = new ArrayList();
+                                        for (int i = 0; i < dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                            .Int_MoreByte_Nums; i++)
+                                        {
+                                            int temp_BeginTime = Convert.ToInt16(
                                                 dao_ListBox_Temp_MRC.MRC_Line_Info
                                                     [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
                                                         - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                                    .Array_Morebyte_BeginTime[i + 1]
-                                                    )
-                                             - 
-                                            (temp_BeginTime + temp_Duration);//动画停顿的时间
+                                            .Array_Morebyte_BeginTime[i]);//此字符开始时间
+                                            int temp_Duration = Convert.ToInt16(
+                                                dao_ListBox_Temp_MRC.MRC_Line_Info
+                                                    [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                        - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                            .Array_Morebyte_Duration[i]);//此字符持续时间
 
-                                        null_time = true;
-                                    }
+                                            if (null_time == true)
+                                            {
+                                                ALL_Byte_Values.Add(0);
+                                                null_time = false;
+                                            }
 
-                                    timeSpan_nums.Add(temp_BeginTime + temp_Duration);//求字符总动画时间->毫秒数字
-                                }
-                                ArrayList temp_nums = new ArrayList();//字符动画，timeSpan的Duration秒数
-                                ArrayList line_nums = new ArrayList();//字符动画，timeSpan的Duration毫秒数
-                                for (int i = 0; i < timeSpan_nums.Count; i++)
-                                {
-                                    try
-                                    {
-                                        if (timeSpan_nums[i].ToString().IndexOf(":") < 0)
-                                        {
-                                            int temp_seconds = Convert.ToInt16(timeSpan_nums[i]) / 1000;
-                                            int temp_milliseconds = Convert.ToInt16(timeSpan_nums[i].ToString()
-                                                .Substring(timeSpan_nums[i].ToString().Trim().Length - 3, 3));
-                                            line_nums.Add(temp_seconds);//求动画秒数
-                                            temp_nums.Add(temp_milliseconds);//求动画毫秒数
+                                            //判别动画是否有停顿
+                                            if (i != dao_ListBox_Temp_MRC.MRC_Line_Info
+                                                [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                    - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                                        .Int_MoreByte_Nums - 1//if  i != Array_Morebyte_BeginTime的最后一位（防止数组越界）
+                                                &&
+                                                temp_BeginTime + temp_Duration !=  //if  此动画的开始时间+持续时间 != 下一段动画的开始时间
+                                                Convert.ToInt16(dao_ListBox_Temp_MRC.MRC_Line_Info
+                                                    [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                        - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                                            .Array_Morebyte_BeginTime[i + 1]))//if 动画时间 中间有 空白时间（动画停顿）
+                                            {
+                                                null_time = true;
+                                            }
+
+                                            //将字符相加_>的总长度缩小为1
+                                            //同时各字符的长度 按相对应的比率 缩小，使之相加为1
+                                            //得到了每个字符同步时动画所移动的距离
+                                            ALL_Byte_Values.Add(Convert.ToDouble(Values_temp[i]) * ALL_Byte_Width);
                                         }
-                                        else//此动画需要停顿
+
+                                        //                        
+                                        ArrayList timeSpan_nums = new ArrayList();
+
+                                        int temp_null_time = 0;
+                                        for (int i = 0;
+                                            i < dao_ListBox_Temp_MRC.MRC_Line_Info
+                                                [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                    - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                                        .Int_MoreByte_Nums; //歌词字符总数
+                                            i++)
                                         {
-                                            //i+1；将停顿动画时间 设置为下一个下标的 Begion时间
-                                            int temp_seconds = Convert.ToInt16(timeSpan_nums[i + 1]) / 1000;
-                                            int temp_milliseconds = Convert.ToInt16(timeSpan_nums[i + 1].ToString()
-                                                .Substring(timeSpan_nums[i + 1].ToString().Trim().Length - 3, 3));
-                                            line_nums.Add(temp_seconds);//求动画秒数
-                                            temp_nums.Add(temp_milliseconds);//求动画毫秒数
+                                            int temp_BeginTime = Convert.ToInt16(
+                                                dao_ListBox_Temp_MRC.MRC_Line_Info
+                                                    [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                        - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                            .Array_Morebyte_BeginTime[i]);//此字符开始时间
+                                            int temp_Duration = Convert.ToInt16(
+                                                dao_ListBox_Temp_MRC.MRC_Line_Info
+                                                    [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                        - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                            .Array_Morebyte_Duration[i]);//此字符持续时间                     
+
+                                            if (null_time == true)
+                                            {
+                                                timeSpan_nums.Add(":" + temp_null_time);// : 作为动画停顿标记
+                                                null_time = false;
+                                            }
+                                            //判别动画是否有停顿
+                                            if (i != dao_ListBox_Temp_MRC.MRC_Line_Info
+                                                [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                    - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                                        .Int_MoreByte_Nums - 1//if  i != Array_Morebyte_BeginTime的最后一位（防止数组越界）
+                                                &&
+                                                temp_BeginTime + temp_Duration != //if  此动画的开始时间+持续时间 != 下一段动画的开始时间
+                                                Convert.ToInt16(dao_ListBox_Temp_MRC.MRC_Line_Info
+                                                    [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                        - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                                            .Array_Morebyte_BeginTime[i + 1]))//if 动画时间 中间有 空白时间（动画停顿）
+                                            {
+                                                temp_null_time = //求出此停顿动画的序列时间，并插入至动画序列timeSpan_nums
+                                                    Convert.ToInt16(
+                                                        dao_ListBox_Temp_MRC.MRC_Line_Info
+                                                            [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
+                                                                - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
+                                                            .Array_Morebyte_BeginTime[i + 1]
+                                                            )
+                                                     -
+                                                    (temp_BeginTime + temp_Duration);//动画停顿的时间
+
+                                                null_time = true;
+                                            }
+
+                                            timeSpan_nums.Add(temp_BeginTime + temp_Duration);//求字符总动画时间->毫秒数字
                                         }
+                                        ArrayList temp_nums = new ArrayList();//字符动画，timeSpan的Duration秒数
+                                        ArrayList line_nums = new ArrayList();//字符动画，timeSpan的Duration毫秒数
+                                        for (int i = 0; i < timeSpan_nums.Count; i++)
+                                        {
+                                            try
+                                            {
+                                                if (timeSpan_nums[i].ToString().IndexOf(":") < 0)
+                                                {
+                                                    int temp_seconds = Convert.ToInt16(timeSpan_nums[i]) / 1000;
+                                                    int temp_milliseconds = Convert.ToInt16(timeSpan_nums[i].ToString()
+                                                        .Substring(timeSpan_nums[i].ToString().Trim().Length - 3, 3));
+                                                    line_nums.Add(temp_seconds);//求动画秒数
+                                                    temp_nums.Add(temp_milliseconds);//求动画毫秒数
+                                                }
+                                                else//此动画需要停顿
+                                                {
+                                                    //i+1；将停顿动画时间 设置为下一个下标的 Begion时间
+                                                    int temp_seconds = Convert.ToInt16(timeSpan_nums[i + 1]) / 1000;
+                                                    int temp_milliseconds = Convert.ToInt16(timeSpan_nums[i + 1].ToString()
+                                                        .Substring(timeSpan_nums[i + 1].ToString().Trim().Length - 3, 3));
+                                                    line_nums.Add(temp_seconds);//求动画秒数
+                                                    temp_nums.Add(temp_milliseconds);//求动画毫秒数
+                                                }
+                                            }
+                                            catch { }
+                                        }
+
+                                        myTextBlock_DoubleAnimationUsingKeyFrames.KeyFrames.Clear();
+                                        for (int i = 0; i < timeSpan_nums.Count; i++)
+                                        {
+                                            linearDoubleKeyFrame = new LinearDoubleKeyFrame();
+
+                                            if (timeSpan_nums[i].ToString().IndexOf(":") < 0)
+                                            {
+                                                //设置动画的X轴距离
+                                                X += Convert.ToDouble(ALL_Byte_Values[i].ToString());//固定的区间内，动画该持续的时间
+                                                                                                     //科学计数法转换，防止出现科学计数法
+                                                X = Convert.ToDouble(ChangeToDecimal(X.ToString()));
+
+                                                if (i != dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].Int_MoreByte_Nums - 1)
+                                                    linearDoubleKeyFrame.Value = X;
+                                                else
+                                                    linearDoubleKeyFrame.Value = 0.5;
+                                                //设置动画完成所需的时间
+                                                linearDoubleKeyFrame.KeyTime = new TimeSpan(0, 0, 0,
+                                                    Convert.ToInt16(line_nums[i]), Convert.ToInt16(temp_nums[i]));
+                                            }
+                                            else//此动画需要停顿
+                                            {
+                                                linearDoubleKeyFrame.Value = X;
+                                                //设置动画完成所需的时间
+                                                linearDoubleKeyFrame.KeyTime = new TimeSpan(0, 0, 0,
+                                                    Convert.ToInt16(line_nums[i]), Convert.ToInt16(temp_nums[i]));
+                                            }
+                                            //添加至DoubleAnimationUsingKeyFrames
+                                            myTextBlock_DoubleAnimationUsingKeyFrames.KeyFrames.Add(linearDoubleKeyFrame);
+                                        }
+
+                                        //开启动画                              
+                                        thread_myTextBlock_Storyboard = new Thread(new ThreadStart(() =>
+                                        {
+                                            Dispatcher.BeginInvoke(new Action(delegate ()
+                                            {
+                                                myTextBlock_Storyboard.Begin();
+                                            }));
+                                        }));
+                                        thread_myTextBlock_Storyboard.Priority = ThreadPriority.Highest;
+                                        thread_myTextBlock_Storyboard.Start();
                                     }
-                                    catch { }
                                 }
-
-                                myTextBlock_DoubleAnimationUsingKeyFrames.KeyFrames.Clear();
-                                for (int i = 0; i < timeSpan_nums.Count; i++)
-                                {
-                                    linearDoubleKeyFrame = new LinearDoubleKeyFrame();
-
-                                    if (timeSpan_nums[i].ToString().IndexOf(":") < 0)
-                                    {
-                                        //设置动画的X轴距离
-                                        X += Convert.ToDouble(ALL_Byte_Values[i].ToString());//固定的区间内，动画该持续的时间
-                                        //科学计数法转换，防止出现科学计数法
-                                        X = Convert.ToDouble(ChangeToDecimal(X.ToString()));
-
-                                        if (i != dao_ListBox_Temp_MRC.MRC_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].Int_MoreByte_Nums - 1)
-                                            linearDoubleKeyFrame.Value = X;
-                                        else
-                                            linearDoubleKeyFrame.Value = 0.5;
-                                        //设置动画完成所需的时间
-                                        linearDoubleKeyFrame.KeyTime = new TimeSpan(0, 0, 0,
-                                            Convert.ToInt16(line_nums[i]), Convert.ToInt16(temp_nums[i]));
-                                    }
-                                    else//此动画需要停顿
-                                    {
-                                        linearDoubleKeyFrame.Value = X;
-                                        //设置动画完成所需的时间
-                                        linearDoubleKeyFrame.KeyTime = new TimeSpan(0, 0, 0,
-                                            Convert.ToInt16(line_nums[i]), Convert.ToInt16(temp_nums[i]));
-                                    }
-                                    //添加至DoubleAnimationUsingKeyFrames
-                                    myTextBlock_DoubleAnimationUsingKeyFrames.KeyFrames.Add(linearDoubleKeyFrame);
-                                }
-
-                                //开启动画                              
-                                thread_myTextBlock_Storyboard = new Thread(new ThreadStart(() =>{
-                                    Dispatcher.BeginInvoke(new Action(delegate (){
-                                        myTextBlock_Storyboard.Begin();
-                                    }));
-                                }));
-                                thread_myTextBlock_Storyboard.Priority = ThreadPriority.Highest;
-                                thread_myTextBlock_Storyboard.Start();
                             }
 
 
@@ -3597,45 +3803,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         #region 批量操作
         
         #endregion
-        #region 匹配歌曲
-        private void Stack_Button_Find_Song_Info_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-        #endregion
-        #region 本地歌曲恢复助手
-        private void Stack_Button_ThisPcSong_Find_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-        #endregion
-        #region 音质升级
-        private void Stack_Button_Update_Song_Better_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-        #endregion
-        #region 显示当前歌曲数量
-
-        private void ListView_Download_SongList_Info_SourceUpdated(object sender, DataTransferEventArgs e)
-        {
-            Reset_ListView_Download_SongList_Info_ShowSongNums();
-        }
-        /// <summary>
-        /// 同步当前歌单歌曲数量
-        /// </summary>
-        public void Reset_ListView_Download_SongList_Info_ShowSongNums()
-        {
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Windows_Song_Nums.Text
-                = "本地歌曲" + userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.Items.Count.ToString();
-            userControl_Main_Home_Left_MyMusic_My_Love.Love_Song_Nums.Text
-                = "歌曲" + userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.Items.Count.ToString();
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Recent_Song_Nums.Text
-                = "歌曲" + userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.Items.Count.ToString();
-            
-        }
-
-        #endregion
 
 
         #region 获得指定元素的父元素
@@ -3893,21 +4060,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 SystemParametersInfo(20, 1, wallpaper_path, 1);
 
             //保存歌单信息
-            var playlists = new List<SongList_Info>();
-            playlists = songList_Infos[0];
-            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);          
-            playlists = new List<SongList_Info>();
-            playlists = songList_Infos[1];
-            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml", playlists);
-            playlists = new List<SongList_Info>();
-            playlists = songList_Infos[2];
-            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml", playlists);
-            playlists = new List<SongList_Info>();
-            playlists = songList_Infos[3];
-            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More.xml", playlists);
+            Save_SongListInfo();
 
-            
+
             Environment.Exit(-1);
         }
+
+        
     }
 }

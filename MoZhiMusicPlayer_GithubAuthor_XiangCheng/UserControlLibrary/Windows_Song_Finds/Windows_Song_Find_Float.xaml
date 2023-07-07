@@ -82,10 +82,18 @@
         <ComboBox 
             x:Name="ComBox_Select_SongList"
             Width="210" HorizontalAlignment="Right" VerticalAlignment="Top" SelectedIndex="0" Margin="0,24,0,0" SelectionChanged="ComBox_Select_SongList_Selected">
-            <ComboBoxItem Content="请选择需要导入的歌单列表"/>
-            <ComboBoxItem Content="我的收藏"/>
-            <ComboBoxItem Content="本地下载"/>
-            <ComboBoxItem Content="默认列表"/>
+            <ComboBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </ComboBox.ItemsPanel>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="2.5" Text="{Binding Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
         </ComboBox>
 
         <Button 
