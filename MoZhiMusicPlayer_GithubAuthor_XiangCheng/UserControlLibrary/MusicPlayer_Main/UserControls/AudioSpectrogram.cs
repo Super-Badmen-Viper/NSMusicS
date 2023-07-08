@@ -31,8 +31,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
 {
     /// <summary>
     /// 部分代码来源：comSlimeNullAudioTest.git  
-    /// 老夫想偷懒了[doge]，频谱提取暂时就先用别人的代码[doge]，改改又不是不能用[doge]
-    /// 这个参数真TM难调，在239行有4个参数，应该是算法还不够牛逼，不管了，先到这
     /// </summary>
     public class AudioSpectrogram
     {
@@ -238,7 +236,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             //参数调整,为0则不执行
             int size_1_SmoothData = 0;//预处理数据，第一次SmoothData平滑
             int size_average = 30;//对animation_points超出的部分进行平均量增减(上下波动幅度)。
-            double size_Error_point = 0.5;//超出频谱动画范围，重新设置为？
+            double size_Error_point = 1.0;//超出频谱动画范围，重新设置为？
             int size_2_SmoothData = 6;//第二次SmoothData平滑
 
             //显示频谱的动画个数

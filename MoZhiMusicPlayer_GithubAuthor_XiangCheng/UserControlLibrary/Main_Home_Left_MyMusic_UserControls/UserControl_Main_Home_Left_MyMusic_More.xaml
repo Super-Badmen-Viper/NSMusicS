@@ -16,7 +16,7 @@
                 x:Name="this_SongList_Name"
                 HorizontalAlignment="Left" Height="50" Text="用户自定义" TextWrapping="Wrap" 
                    VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
-                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"               
                    />
             <TextBlock 
             x:Name="Recent_Song_Nums"
@@ -211,7 +211,8 @@
             >
                 <ComboBox 
                     x:Name="ComBox_Select_Add_SongList"
-                    Style="{DynamicResource cmbstyle}" 
+                    Style="{DynamicResource cmbstyle}" SelectedIndex="0"
+                    IsEditable="False" Text="添加到"
                     SelectionChanged="ComboBox_SelectionChanged">
                     <ComboBox.ItemsPanel>
                         <ItemsPanelTemplate>

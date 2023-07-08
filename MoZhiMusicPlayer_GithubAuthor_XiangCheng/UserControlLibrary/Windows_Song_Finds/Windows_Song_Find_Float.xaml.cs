@@ -401,6 +401,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                 }
                 //排序
                 songList_Infos[0][0].Songs = songList_Infos[0][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                for (int i = 0; i < songList_Infos[0][0].Songs.Count; i++)
+                {
+                    songList_Infos[0][0].Songs[i].Song_No = i + 1;
+                }
+                
             }
             else if (ComBox_Select == 2)
             {
@@ -425,6 +430,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                 }
                 //排序
                 songList_Infos[1][0].Songs = songList_Infos[1][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                for (int i = 0; i < songList_Infos[1][0].Songs.Count; i++)
+                {
+                    songList_Infos[1][0].Songs[i].Song_No = i + 1;
+                }
             }
             else if (ComBox_Select == 3)
             {
@@ -449,30 +458,38 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                 }
                 //排序
                 songList_Infos[2][0].Songs = songList_Infos[2][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                for (int i = 0; i < songList_Infos[2][0].Songs.Count; i++)
+                {
+                    songList_Infos[2][0].Songs[i].Song_No = i + 1;
+                }
             }
             else//自定义歌单
             {
                 for (int i = 0; i < list_Song_Info.Count; i++)
                 {
-                    if (songList_Infos[ComBox_Select - 1][0].Songs.Count > 0)
+                    if (songList_Infos[ComBox_Select][0].Songs.Count > 0)
                     {
-                        for (int j = 0; j < songList_Infos[ComBox_Select - 1][0].Songs.Count; j++)
+                        for (int j = 0; j < songList_Infos[ComBox_Select][0].Songs.Count; j++)
                         {
                             //查重
-                            if (list_Song_Info[i].Song_Url.Equals(songList_Infos[ComBox_Select - 1][0].Songs[j].Song_Url))
+                            if (list_Song_Info[i].Song_Url.Equals(songList_Infos[ComBox_Select][0].Songs[j].Song_Url))
                                 break;
                             //无重复，则添加
-                            if (j == songList_Infos[ComBox_Select - 1][0].Songs.Count - 1)
-                                songList_Infos[ComBox_Select - 1][0].Songs.Add(list_Song_Info[i]);
+                            if (j == songList_Infos[ComBox_Select][0].Songs.Count - 1)
+                                songList_Infos[ComBox_Select][0].Songs.Add(list_Song_Info[i]);
                         }
                     }
                     else
                     {
-                        songList_Infos[ComBox_Select - 1][0].Songs.Add(list_Song_Info[i]);
+                        songList_Infos[ComBox_Select][0].Songs.Add(list_Song_Info[i]);
                     }
                 }
                 //排序
-                songList_Infos[ComBox_Select - 1][0].Songs = songList_Infos[ComBox_Select - 1][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                songList_Infos[ComBox_Select][0].Songs = songList_Infos[ComBox_Select][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                for (int i = 0; i < songList_Infos[ComBox_Select][0].Songs.Count; i++)
+                {
+                    songList_Infos[ComBox_Select][0].Songs[i].Song_No = i + 1;
+                }
             }
 
             //保存歌单信息

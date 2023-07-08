@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Left_MyMusic_UserControls.UserControl_Main_Home_Left_MyMusic_SongInfo_Edit"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Left_MyMusic_UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="443" d:DesignWidth="810"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+             Background="#F6F6F6"
+             >
+    <Grid>
+        <Grid HorizontalAlignment="Left" Width="200">
+            <Border BorderBrush="#7C7C7C" BorderThickness="0,0,1,0"/>
+
+            <TextBlock Text="歌单信息编辑" Width="185" 
+                       Padding="17,0,0,0" Foreground="Black" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       FontSize="26" FontWeight="Bold"/>
+
+            <TextBlock Text="选择需要修改的歌单" Width="160" Padding="17,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" 
+                           Margin="10,50,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <ComboBox 
+                    x:Name="ComBox_Select_SongList"
+                    Style="{DynamicResource cmbstyle_Button_SongInfo_Edit}" 
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                    Visibility="Visible" Width="160" Height="30" Margin="25,78,25,0" 
+                    VerticalAlignment="Top" HorizontalAlignment="Left" IsEditable="True"
+                    Text="创建的歌单" BorderBrush="{x:Null}" 
+                    IsSynchronizedWithCurrentItem="False"
+                    
+                    >
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel/>
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="2.5" Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock Text="重命名为：？" 
+                       Width="110" Padding="17,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" 
+                       Margin="10,120,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <TextBox 
+                x:Name="TextBox_Edit_Temp_SongList_Name"
+                Width="140" Height="30" Margin="25,148,25,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20"
+                />
+            <Button 
+                x:Name="Button_Edit_SongList_Name"
+                Width="48" Height="20" Margin="133,120,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="确定" 
+                
+                />
+
+        </Grid>
+        <Grid Margin="200,0,0,0" Width="212" HorizontalAlignment="Left" >
+            <Border BorderBrush="#7C7C7C" BorderThickness="0,0,1,0"/>
+            
+            <TextBlock Text="歌曲信息编辑" Width="200" 
+                       Padding="17,0,0,0" Foreground="Black" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       FontSize="26" FontWeight="Bold"/>
+        </Grid>
+        <Grid Margin="400,0,0,0">
+            <Border BorderBrush="#7C7C7C" BorderThickness="0,0,1,0"/>
+
+            <TextBlock Text="音乐资源导入" Width="200" 
+                       Padding="17,0,0,0" Foreground="Black" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       FontSize="26" FontWeight="Bold"/>
+
+            <TextBlock Text="导入（歌手写真，专辑图像，歌词）" Width="280" Padding="17,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" 
+                           Margin="10,50,0,0" HorizontalAlignment="Left" FontSize="16"/>
+
+        </Grid>
+    </Grid>
+</UserControl>

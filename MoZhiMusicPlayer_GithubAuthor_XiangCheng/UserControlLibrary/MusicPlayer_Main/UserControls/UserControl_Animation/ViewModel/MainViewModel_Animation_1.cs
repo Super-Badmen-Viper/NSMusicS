@@ -11,10 +11,6 @@ using TransitionEffect = MaterialDesignThemes.Wpf.Transitions.TransitionEffect;
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main.UserControls.UserControl_Animation.ViewModel
 {
     /// <summary>
-    /// 作者我不懂动画机制，手写实在不会，只能借助框架和类库的帮助了，嘿嘿
-    /// 这个动画机制解决了，那么可以利用这个库的功能来实现真正的字同步同步算法
-    /// 理论上可以达到和腾讯歌词同步算法同样的水准，哈哈【doge】
-    /// 老夫我正是卡在不懂动画机制不会手写才无法更进一步优化同步算法
     /// </summary>
     public class MainViewModel_Animation_1 : ViewModelBase
     {

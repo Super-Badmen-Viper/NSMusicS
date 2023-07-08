@@ -27,6 +27,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_I
         }
 
         List<ImageBrush> imageBrushs = new List<ImageBrush>();
+        public int numCutCells = 4;
+        public int numCutRows = 4;
 
         /// <summary>
         /// 1920*1080 按16:9倍率切分 -> 120*120,切分为144份，分布为16*9
@@ -42,9 +44,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_I
 
             return imageBrushs;
         }
-
-        public int numCutCells = 4;
-        public int numCutRows = 4;
 
         //开始图片切割
         private void btCut(string tbImagePath)

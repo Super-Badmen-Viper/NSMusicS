@@ -81,7 +81,8 @@
 
         <ComboBox 
             x:Name="ComBox_Select_SongList"
-            Width="210" HorizontalAlignment="Right" VerticalAlignment="Top" SelectedIndex="0" Margin="0,24,0,0" SelectionChanged="ComBox_Select_SongList_Selected">
+            Style="{DynamicResource cmbstyle}" SelectedIndex="0"
+            Width="210" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,24,0,0" SelectionChanged="ComBox_Select_SongList_Selected">
             <ComboBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel/>

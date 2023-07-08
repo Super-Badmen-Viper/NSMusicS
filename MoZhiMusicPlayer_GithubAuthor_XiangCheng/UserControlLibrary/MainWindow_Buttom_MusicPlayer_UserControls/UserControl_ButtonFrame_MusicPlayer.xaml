@@ -116,7 +116,7 @@
                 <Image Height="20" Margin="20,-40,0,0" Width="20" HorizontalAlignment="Left" 
                        Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/列表循环.png"/>
                 <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" 
-                           Width="70" Text="列表循环" FontSize="14"/>
+                           Width="70" Text="列表循环" FontSize="14" Cursor="Hand"/>
             </StackPanel>
         </StackPanel>
 

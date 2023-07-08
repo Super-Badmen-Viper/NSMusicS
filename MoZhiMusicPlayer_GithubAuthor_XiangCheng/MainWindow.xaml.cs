@@ -31,6 +31,7 @@ using System.Threading.Tasks;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_Song_Finds;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Left_MyMusic_UserControls;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Left_MyMusic_UserControls;
+using System.Collections.Concurrent;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 {
@@ -60,7 +61,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             windows_Song_Find.Back_Button.Click += Back_Button_Click;
             windows_Song_Find_Temp.Back_Button.Click += Back_Button_Click;
 
+            //
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Select_SongList.SelectionChanged += SongInfo_Edit_ComBox_Select_SongList_SelectionChanged;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Button_Edit_SongList_Name.Click += Button_Edit_SongList_Name_Click;
 
+            //动画参数设置
+            num_duration = 200;
+            num_Delay = 200;
+            singerImage_Cut.numCutCells = 4;
+            singerImage_Cut.numCutRows = 2;
         }
 
         //所有的歌单列表集合
@@ -72,15 +81,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         //当前正在播放的歌曲
         private Song_Info this_Song_Info = new Song_Info();
 
+        //自定义歌单 ComboBoxItem子项集合，通过SelectionChanged启动用户控件 集合
+        private List<ComboBoxItem_Name> comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores = UserControl_Main_Home_Left_MyMusic_Mores_Class.comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores;
         //自定义歌单 用户控件 集合
-        private List<comboBoxItem_Name> comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores = new List<comboBoxItem_Name>();
         private List<UserControl_Main_Home_Left_MyMusic_More> userControl_Main_Home_Left_MyMusic_Mores = UserControl_Main_Home_Left_MyMusic_Mores_Class.Retuen_This();
-        //选中歌曲添加到 ComboBoxItem集合
-        private List<comboBoxItem_Name> comboBoxItem_ComBox_Select_Add_SongList = new List<comboBoxItem_Name>();
-        public class comboBoxItem_Name
-        {
-           public string Name { get; set; }
-        }
+        //选中歌曲，添加到 ComboBoxItem子项集合
+        private List<ComboBoxItem_Name> comboBoxItem_ComBox_Select_Add_SongList = UserControl_Main_Home_Left_MyMusic_Mores_Class.comboBoxItem_ComBox_Select_Add_SongList;
 
         //歌曲搜索
         Windows_Song_Find_Float windows_Song_Find = new Windows_Song_Find_Float();
@@ -113,9 +119,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (14).xml"));
             songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (15).xml"));
             songList_Infos.Add(SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (16).xml"));
-
+            //
             SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
-            SongList_Info.songList_Infos = songList_Infos;
+            SongList_Info.songList_Infos = songList_Infos;       
+
 
             //加载自定义歌单列表 用户控件
             UserControl_Main_Home_Left_MyMusic_Mores_Class.userControl_Main_Home_Left_MyMusic_Mores.Clear();//清空数据
@@ -129,10 +136,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 }
 
                 UserControl_Main_Home_Left_MyMusic_More temp = new UserControl_Main_Home_Left_MyMusic_More();
-                temp.this_SongList_Name.Text = "歌单页面：" + i;
+                temp.this_SongList_Name.Text = songList_Infos[i][0].Name;
                 temp.Name = "Song_List_Info_More_" + i;
                 //传入数据源
-                temp.this_SongList_Info_Set(songList_Infos[i][0].Songs);
+                temp.this_SongList_Info_Set(songList_Infos[i][0].Songs, i);
                 //设置数据源
                 temp.ListView_Download_SongList_Info.ItemsSource = songList_Infos[i][0].Songs;
                 //双击播放事件
@@ -145,38 +152,38 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             }
             UserControl_Main_Home_Left_MyMusic_Mores_Class.userControl_Main_Home_Left_MyMusic_Mores = userControl_Main_Home_Left_MyMusic_Mores;//保存数据
             //加载自定义歌单列表 启动 “用户控件”的按钮
-            comboBoxItem_Name comboBoxItem = new comboBoxItem_Name();
-            comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores = new List<comboBoxItem_Name>();
+            ComboBoxItem_Name comboBoxItem = new ComboBoxItem_Name();
+            comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores.Clear();
             for (int i = 0; i < userControl_Main_Home_Left_MyMusic_Mores.Count; i++)
             {
-                comboBoxItem = new comboBoxItem_Name();
-                comboBoxItem.Name = ("歌单按钮：" + (i + 3).ToString()).ToString();
+                comboBoxItem = new ComboBoxItem_Name();
+                comboBoxItem.Name = songList_Infos[i + 3][0].Name;
 
                 comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores.Add(comboBoxItem);
             }
+            UserControl_Main_Home_Left_MyMusic_Mores_Class.comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores = comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores;
             ComBox_Select_SongList.ItemsSource = comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores;
             userControl_Main_Home_Left_MyMusic_Mores_TabControl.ItemsSource = userControl_Main_Home_Left_MyMusic_Mores;
 
             //加载歌曲选中 添加到指定歌单 ComBox_Select_Add_SongList数据源
-            comboBoxItem_ComBox_Select_Add_SongList = new List<comboBoxItem_Name>();
-            comboBoxItem = new comboBoxItem_Name(); 
-            comboBoxItem.Name = "请选择需要操作的歌曲列表";
-            comboBoxItem_ComBox_Select_Add_SongList.Add(comboBoxItem);
-            comboBoxItem = new comboBoxItem_Name(); 
+            comboBoxItem_ComBox_Select_Add_SongList.Clear();
+            comboBoxItem = new ComboBoxItem_Name(); 
             comboBoxItem.Name = "我的收藏";
             comboBoxItem_ComBox_Select_Add_SongList.Add(comboBoxItem);
-            comboBoxItem = new comboBoxItem_Name(); 
+            comboBoxItem = new ComboBoxItem_Name(); 
             comboBoxItem.Name = "本地下载";
             comboBoxItem_ComBox_Select_Add_SongList.Add(comboBoxItem);
-            comboBoxItem = new comboBoxItem_Name(); 
+            comboBoxItem = new ComboBoxItem_Name(); 
             comboBoxItem.Name = "默认列表";
             comboBoxItem_ComBox_Select_Add_SongList.Add(comboBoxItem);
             for (int i = 0; i < comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores.Count; i++)
             {
-                comboBoxItem = new comboBoxItem_Name(); 
+                comboBoxItem = new ComboBoxItem_Name(); 
                 comboBoxItem.Name = comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores[i].Name.ToString();
                 comboBoxItem_ComBox_Select_Add_SongList.Add(comboBoxItem);
             }
+            UserControl_Main_Home_Left_MyMusic_Mores_Class.comboBoxItem_ComBox_Select_Add_SongList = comboBoxItem_ComBox_Select_Add_SongList;
+            //绑定添加源
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
             userControl_Main_Home_Left_MyMusic_My_Love.ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
             userControl_Main_Home_Left_MyMusic_Recent_Play.ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
@@ -186,6 +193,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             }
             windows_Song_Find.ComBox_Select_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
             windows_Song_Find_Temp.ComBox_Select_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+
+
+
+
         }
 
         
@@ -198,15 +209,27 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         private void ComBox_Select_SongList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComBox_Select_SongList_SelectIndex = ComBox_Select_SongList.SelectedIndex;
+            //重新绑定数据源，之前为null，防止数据与UI渲染刷新冲突
+            userControl_Main_Home_Left_MyMusic_Mores_TabControl.ItemsSource = userControl_Main_Home_Left_MyMusic_Mores;
 
             if (ComBox_Select_SongList_SelectIndex != -1)
             {
                 userControl_Main_Home_Left_MyMusic_Mores_TabControl.SelectedIndex = ComBox_Select_SongList_SelectIndex;
                 userControl_Main_Home_Left_MyMusic_Mores_TabControl.Visibility = Visibility.Visible;
 
+                //隐藏，防止遮盖
                 userControl_音乐馆.Visibility = Visibility.Hidden;
                 userControl_视频.Visibility = Visibility.Hidden;
                 userControl_电台.Visibility = Visibility.Hidden;
+
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Hidden;
+
+                //应该统一将歌单控件设置为同一List<>，懒得优化了
+                //ListView_Download_SongList_Info.ItemsSource设置为null
+                //防止数据与UI渲染不同步崩溃
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = null;
+                userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = null;
+                userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = null;
             }
             else
             {
@@ -259,6 +282,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 [ComBox_Select_SongList_SelectIndex]
                 .ListView_Download_SongList_Info.Items.Count.ToString();
         }
+        
 
         /// <summary>
         /// 本地搜索音乐 返回保存歌单信息
@@ -302,6 +326,114 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (" + i + ").xml", playlists);
             }
         }
+        #endregion
+        #region 歌曲信息编辑
+        int SongInfo_Edit_SelectIndex;
+        /// <summary>
+        /// 选择歌单
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SongInfo_Edit_ComBox_Select_SongList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Select_SongList.SelectedIndex > -1)//0~13
+            {
+                SongInfo_Edit_SelectIndex = userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Select_SongList.SelectedIndex;
+
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Temp_SongList_Name.Text =
+                (userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Select_SongList.Items
+                [SongInfo_Edit_SelectIndex] as ComboBoxItem_Name).Name;
+            }
+        }
+        /// <summary>
+        /// 修改歌单 名称
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Edit_SongList_Name_Click(object sender, RoutedEventArgs e)
+        {
+            if (SongInfo_Edit_SelectIndex > -1)//0~13
+            {
+                //加载歌单信息：下标16
+                songList_Infos = SongList_Info.Retuen_This();
+                songList_Infos
+                    [SongInfo_Edit_SelectIndex + 3][0].Name =
+                    userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Temp_SongList_Name.Text;
+                //刷新指针数据
+                SongList_Info.songList_Infos = 
+                    songList_Infos;
+
+
+                //清空绑定
+                ComBox_Select_SongList.ItemsSource = null;
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Select_SongList.ItemsSource = null;
+                //自定义歌单子项，下标13：数据源设置：选择自定义歌单
+                comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores =
+                    UserControl_Main_Home_Left_MyMusic_Mores_Class.comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores;
+                comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores
+                    [SongInfo_Edit_SelectIndex].Name =
+                    userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Temp_SongList_Name.Text;
+                //刷新指针数据
+                UserControl_Main_Home_Left_MyMusic_Mores_Class.comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores = 
+                    comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores;
+                //重新绑定
+                ComBox_Select_SongList.ItemsSource = comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores;
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Select_SongList.ItemsSource = comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores;
+
+
+                //清空绑定
+                userControl_Main_Home_Left_MyMusic_Mores_TabControl.ItemsSource = null;
+                //自定义歌单子项，下标13：控件设置
+                userControl_Main_Home_Left_MyMusic_Mores =
+                    UserControl_Main_Home_Left_MyMusic_Mores_Class.Retuen_This();
+                userControl_Main_Home_Left_MyMusic_Mores
+                    [SongInfo_Edit_SelectIndex].
+                    this_SongList_Name.Text =
+                    userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Temp_SongList_Name.Text;
+                //刷新指针数据
+                UserControl_Main_Home_Left_MyMusic_Mores_Class.userControl_Main_Home_Left_MyMusic_Mores =
+                    userControl_Main_Home_Left_MyMusic_Mores;
+                //重新绑定
+                userControl_Main_Home_Left_MyMusic_Mores_TabControl.ItemsSource = userControl_Main_Home_Left_MyMusic_Mores;
+
+
+                //清空绑定
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ComBox_Select_Add_SongList.ItemsSource = null;
+                userControl_Main_Home_Left_MyMusic_My_Love.ComBox_Select_Add_SongList.ItemsSource = null;
+                userControl_Main_Home_Left_MyMusic_Recent_Play.ComBox_Select_Add_SongList.ItemsSource = null;
+                for (int i = 0; i < userControl_Main_Home_Left_MyMusic_Mores.Count; i++)
+                {
+                    userControl_Main_Home_Left_MyMusic_Mores[i].ComBox_Select_Add_SongList.ItemsSource = null;
+                }
+                windows_Song_Find.ComBox_Select_SongList.ItemsSource = null;
+                windows_Song_Find_Temp.ComBox_Select_SongList.ItemsSource = null;
+                //自定义歌单子项，下标16：数据源设置：添加到自定义歌单
+                comboBoxItem_ComBox_Select_Add_SongList =
+                    UserControl_Main_Home_Left_MyMusic_Mores_Class.comboBoxItem_ComBox_Select_Add_SongList;
+                comboBoxItem_ComBox_Select_Add_SongList
+                    [SongInfo_Edit_SelectIndex + 3].Name =
+                    userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Temp_SongList_Name.Text;
+                //刷新指针数据
+                UserControl_Main_Home_Left_MyMusic_Mores_Class.comboBoxItem_ComBox_Select_Add_SongList =
+                    comboBoxItem_ComBox_Select_Add_SongList;
+                //重新绑定
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+                userControl_Main_Home_Left_MyMusic_My_Love.ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+                userControl_Main_Home_Left_MyMusic_Recent_Play.ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+                for (int i = 0; i < userControl_Main_Home_Left_MyMusic_Mores.Count; i++)
+                {
+                    userControl_Main_Home_Left_MyMusic_Mores[i].ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+                }
+                windows_Song_Find.ComBox_Select_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+                windows_Song_Find_Temp.ComBox_Select_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+
+
+
+                //清空输入栏
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Temp_SongList_Name.Text = "";
+            }
+        }
+
         #endregion
 
         #region 初始化
@@ -417,6 +549,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
         private void UserControl_ButtonFrame_MusicSquare_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            ComBox_Select_SongList_SelectIndex = -1;
+            ComBox_Select_SongList.SelectedIndex = ComBox_Select_SongList_SelectIndex;
+
             Clear_Windows_Left_ALL_UserControl_BackGround();
             userControl_ButtonFrame_MusicSquare.BoolMouseLeftDown = true;
             userControl_ButtonFrame_MusicSquare.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF1FD3AD"));
@@ -427,6 +562,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
         private void UserControl_ButtonFrame_MusicVideo_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            ComBox_Select_SongList_SelectIndex = -1;
+            ComBox_Select_SongList.SelectedIndex = ComBox_Select_SongList_SelectIndex;
+
             Clear_Windows_Left_ALL_UserControl_BackGround();
             userControl_ButtonFrame_MusicVideo.BoolMouseLeftDown = true;
             userControl_ButtonFrame_MusicVideo.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF1FD3AD"));
@@ -437,6 +575,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
         private void UserControl_ButtonFrame_RadioStation_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            ComBox_Select_SongList_SelectIndex = -1;
+            ComBox_Select_SongList.SelectedIndex = ComBox_Select_SongList_SelectIndex;
+
             Clear_Windows_Left_ALL_UserControl_BackGround();
             userControl_ButtonFrame_RadioStation.BoolMouseLeftDown = true;
             userControl_ButtonFrame_RadioStation.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF1FD3AD"));
@@ -845,12 +986,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             timer_Singer_Photo_One_Lot = new DispatcherTimer();
             timer_Singer_Photo_One_Lot.Interval = TimeSpan.FromMilliseconds(7777);
             timer_Singer_Photo_One_Lot.Tick += Change_Singer_Photo_To_Grid_Back_Lot;
-            //动画参数设置
-            num_duration = 200;
-            num_Delay = 200;
-            singerImage_Cut.numCutCells = 2;
-            singerImage_Cut.numCutRows = 2;
-
+            
 
             //设置进入播放器界面，返回主界面事件
             userControl_ButtonFrame_MusicPlayer.Button_Singer_Image_Animation_To_WindowsDesktop.Visibility = Visibility.Hidden;
@@ -921,8 +1057,46 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         DoubleAnimation doubleAnimation;//窗体动画
         BlurEffect blurEffect = new BlurEffect();
         #region MusicPlayer_Left控件进入
+
+        /// <summary>
+        /// 歌曲信息编辑
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Edit_ALL_SongInfo_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
+
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Select_SongList.ItemsSource = null;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Select_SongList.ItemsSource = comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores;
+
+
+        }
+        /// <summary>
+        /// 同步音乐数据库
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Load_UserData_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("开发中");
+        }
+
         private void UserControl_ButtonFrame_MusicLove_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            ComBox_Select_SongList_SelectIndex = -1;
+            ComBox_Select_SongList.SelectedIndex = ComBox_Select_SongList_SelectIndex;
+
+            //此前ItemsSource为空，防止数据与UI不同步导致崩溃，现在重新绑定数据源
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = songList_Infos[1][0].Songs;
+            userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = songList_Infos[0][0].Songs;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = songList_Infos[2][0].Songs;
+            //防止数据与UI不同步导致崩溃，设置为null
+            userControl_Main_Home_Left_MyMusic_Mores_TabControl.ItemsSource = null;
+
             if (songList_Infos[0][0].Songs != null)
             {
                 Clear_Windows_Left_ALL_UserControl_BackGround();
@@ -940,12 +1114,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = songList_Infos[0][0].Songs;
 
                 }
-
-                userControl_Main_Home_Left_MyMusic_Mores_TabControl.SelectedIndex = -1;
-                userControl_Main_Home_Left_MyMusic_Mores_TabControl.Visibility = Visibility.Hidden;
+                
                 userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Hidden;
                 Grid_Animation_MouseLeftClick();/// 窗体进入动画
 
                 //同步歌曲曲目数量
@@ -958,6 +1131,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
         private void UserControl_ButtonFrame_ThisWindowsMusicAndDownload_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            ComBox_Select_SongList_SelectIndex = -1;
+            ComBox_Select_SongList.SelectedIndex = ComBox_Select_SongList_SelectIndex;
+
+            //此前ItemsSource为空，防止数据与UI不同步导致崩溃，现在重新绑定数据源
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = songList_Infos[1][0].Songs;
+            userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = songList_Infos[0][0].Songs;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = songList_Infos[2][0].Songs;
+            //防止数据与UI不同步导致崩溃，设置为null
+            userControl_Main_Home_Left_MyMusic_Mores_TabControl.ItemsSource = null;
+
             if (songList_Infos[1][0].Songs != null)
             {
                 Clear_Windows_Left_ALL_UserControl_BackGround();
@@ -976,11 +1159,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                 }
 
-                userControl_Main_Home_Left_MyMusic_Mores_TabControl.SelectedIndex = -1;
-                userControl_Main_Home_Left_MyMusic_Mores_TabControl.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Hidden;
                 Grid_Animation_MouseLeftClick();/// 窗体进入动画
 
                 //同步歌曲曲目数量
@@ -992,6 +1174,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         }
         private void UserControl_ButtonFrame_MusicRecentlyPlayed_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            ComBox_Select_SongList_SelectIndex = -1;
+            ComBox_Select_SongList.SelectedIndex = ComBox_Select_SongList_SelectIndex;
+
+            //此前ItemsSource为空，防止数据与UI不同步导致崩溃，现在重新绑定数据源
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = songList_Infos[1][0].Songs;
+            userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = songList_Infos[0][0].Songs;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = songList_Infos[2][0].Songs;
+            //防止数据与UI不同步导致崩溃，设置为null
+            userControl_Main_Home_Left_MyMusic_Mores_TabControl.ItemsSource = null;
+
             if (songList_Infos[2][0].Songs != null)
             {
                 Clear_Windows_Left_ALL_UserControl_BackGround();
@@ -1010,11 +1202,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                 }
 
-                userControl_Main_Home_Left_MyMusic_Mores_TabControl.SelectedIndex = -1;
-                userControl_Main_Home_Left_MyMusic_Mores_TabControl.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Hidden;
                 Grid_Animation_MouseLeftClick();/// 窗体进入动画
 
                 //同步歌曲曲目数量
@@ -3360,6 +3551,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         }
 
 
+
+
+        #endregion
+        #region 切换写真动画
+
         MainViewModel_Animation_1 MyVM;
         string imgPath;
         DispatcherTimer dispatcherTimer_SingerImageCut;
@@ -3372,30 +3568,28 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// <param name="imgPath"></param>
         private void BgSwitch(string imgPath)
         {
-            musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Visibility = Visibility.Visible;   
+            musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Visibility = Visibility.Visible;
             musicPlayer_Main_UserControl.DataContext = null;
 
             num_duration = 200;
             num_Delay = 100;
 
-            //会造成UI约0.4s的卡顿，需优化
-            List<ImageBrush> List_ImageBrush_SingerImageCut = singerImage_Cut.CutImage_ImageBrush(imgPath);
 
+            List<ImageBrush> List_ImageBrush_SingerImageCut = singerImage_Cut.CutImage_ImageBrush(imgPath);
+               
             musicPlayer_Main_UserControl.DataContext = new MainViewModel_Animation_1(
-                                    List_ImageBrush_SingerImageCut,
-                                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.ActualWidth / singerImage_Cut.numCutCells,
-                                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.ActualHeight / singerImage_Cut.numCutRows,
-                                    singerImage_Cut.numCutCells,
-                                    singerImage_Cut.numCutRows,
-                                    num_duration,
-                                    num_Delay
-                                    );
+                            List_ImageBrush_SingerImageCut,
+                            musicPlayer_Main_UserControl.Grid_down_Singer_Photo.ActualWidth / singerImage_Cut.numCutCells,
+                            musicPlayer_Main_UserControl.Grid_down_Singer_Photo.ActualHeight / singerImage_Cut.numCutRows,
+                            singerImage_Cut.numCutCells,
+                            singerImage_Cut.numCutRows,
+                            num_duration,
+                            num_Delay
+                            );
 
             MyVM = musicPlayer_Main_UserControl.DataContext as MainViewModel_Animation_1;
             if (MyVM != null && MyVM.RefCommand.CanExecute(null))
                 MyVM.RefCommand.Execute(null);
-            
-
 
             //初始化歌曲进度
             this.imgPath = imgPath;
@@ -3403,6 +3597,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             dispatcherTimer_SingerImageCut.Tick += DispatcherTimer_SingerImageCut_Tick;
             dispatcherTimer_SingerImageCut.Interval = TimeSpan.FromMilliseconds(10); // 间隔1秒
             dispatcherTimer_SingerImageCut.Start();
+
 
 
             //动画0：三层动画：耗性能
@@ -3420,8 +3615,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         }
         private void DispatcherTimer_SingerImageCut_Tick(object? sender, EventArgs e)
         {
-            if(MyVM != null)
-                if(MyVM.Num_Singer_ImagerCut_Infos == singerImage_Cut.numCutCells * singerImage_Cut.numCutRows)
+            if (MyVM != null)
+                if (MyVM.Num_Singer_ImagerCut_Infos == singerImage_Cut.numCutCells * singerImage_Cut.numCutRows)
                 {
                     ImageBrush test = new ImageBrush(new BitmapImage(new Uri(imgPath)));
                     test.Stretch = Stretch.UniformToFill;
@@ -3434,75 +3629,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     MyVM = null;
                     singerImage_Cut = null;
                     singerImage_Cut = SingerImage_Cut.Retuen_This();
-
-                    #region 图片切分组合，多参数轮播动画，已弃用，UniformGrid组合图片默认不在左上角，多参数轮播不够美观
-                    /*UniformGrid uniformGrid = (UniformGrid)musicPlayer_Main_UserControl.ItemsControl_SingerImageCut.ItemsPanel.LoadContent();
-                    if (num_SingerImageAnimation_no == 0)
-                    {
-                        singerImage_Cut.numCutCells = 2;
-                        singerImage_Cut.numCutRows = 1;
-
-                        uniformGrid.Columns = 2;
-                        uniformGrid.Rows = 1;
-                        musicPlayer_Main_UserControl.ItemsControl_SingerImageCut.ItemsPanel = new ItemsPanelTemplate(new FrameworkElementFactory(typeof(UniformGrid)));
-
-                        num_Delay = 200;
-
-                        num_SingerImageAnimation_no++;
-                    }
-                    else if (num_SingerImageAnimation_no == 1)
-                    {
-                        singerImage_Cut.numCutCells = 1;
-                        singerImage_Cut.numCutRows = 2;
-
-                        uniformGrid.Columns = 1;
-                        uniformGrid.Rows = 2;
-                        musicPlayer_Main_UserControl.ItemsControl_SingerImageCut.ItemsPanel = new ItemsPanelTemplate(new FrameworkElementFactory(typeof(UniformGrid)));
-
-                        num_Delay = 200;
-
-                        num_SingerImageAnimation_no++;
-                    }
-                    else if (num_SingerImageAnimation_no == 2)
-                    {
-                        singerImage_Cut.numCutCells = 2;
-                        singerImage_Cut.numCutRows = 2;
-
-                        uniformGrid.Columns = 2;
-                        uniformGrid.Rows = 2;
-                        musicPlayer_Main_UserControl.ItemsControl_SingerImageCut.ItemsPanel = new ItemsPanelTemplate(new FrameworkElementFactory(typeof(UniformGrid)));
-
-                        num_Delay = 100;
-
-                        num_SingerImageAnimation_no++;
-                    }
-                    else if (num_SingerImageAnimation_no == 3)
-                    {
-                        singerImage_Cut.numCutCells = 3;
-                        singerImage_Cut.numCutRows = 3;
-
-                        uniformGrid.Columns = 3;
-                        uniformGrid.Rows = 3;
-                        musicPlayer_Main_UserControl.ItemsControl_SingerImageCut.ItemsPanel = new ItemsPanelTemplate(new FrameworkElementFactory(typeof(UniformGrid)));
-
-                        num_Delay = 45;
-
-                        num_SingerImageAnimation_no++;
-                    }
-                    else
-                    {
-                        singerImage_Cut.numCutCells = 4;
-                        singerImage_Cut.numCutRows = 4;
-
-                        uniformGrid.Columns = 4;
-                        uniformGrid.Rows = 4;
-                        musicPlayer_Main_UserControl.ItemsControl_SingerImageCut.ItemsPanel = new ItemsPanelTemplate(new FrameworkElementFactory(typeof(UniformGrid)));
-
-                        num_Delay = 25;
-
-                        num_SingerImageAnimation_no = 0;
-                    }*/
-                    #endregion
                 }
         }
 
@@ -3550,7 +3676,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             da2.KeyFrames.Add(sd2);
             Storyboard.SetTargetName(da2, musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Name);
             Storyboard.SetTargetProperty(da2, new PropertyPath("(0).(1)", propertyChain));
-         
+
             bgstoryboard.Children.Add(da);
             bgstoryboard.Children.Add(oa);
             bgstoryboard.Children.Add(da2);
@@ -4065,7 +4191,5 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             Environment.Exit(-1);
         }
-
-        
     }
 }

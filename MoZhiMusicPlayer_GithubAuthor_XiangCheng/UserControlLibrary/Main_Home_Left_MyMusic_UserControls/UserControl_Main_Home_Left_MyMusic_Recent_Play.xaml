@@ -11,7 +11,7 @@
              >
     <Grid>
         <Grid x:Name="Grid_NormalModel_1">
-            <TextBlock HorizontalAlignment="Left" Height="50" Text="最近播放" TextWrapping="Wrap" 
+            <TextBlock HorizontalAlignment="Left" Height="50" Text="默认列表" TextWrapping="Wrap" 
                    VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
                    />

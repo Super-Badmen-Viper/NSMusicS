@@ -299,6 +299,22 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
         public void Sort_SongList()
         {
+            //刷新内存区域的引用
+            songList_Infos = SongList_Info.Retuen_This();
+            if (songList_Infos != null)
+            {
+                if (songList_Infos.Count != 0)
+                {
+                    for (int i = 0; i < songList_Infos.Count; i++)
+                    {
+                        for (int j = 0; j < songList_Infos[i][0].Songs.Count; j++)
+                        {
+                            songList_Infos[i][0].Songs[j].Song_No = j + 1;
+                        }
+                    }
+                }
+            }
+
             //同步歌曲曲目数量
             Reset_ListView_Download_SongList_Info_ShowSongNums();
 
@@ -522,11 +538,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                     if (Song_Info_Selects.Count > 0)
                     {
                         ComBox_Select = ComBox_Select_Add_SongList.SelectedIndex;
-                        if (ComBox_Select == 1)//本身若是我的收藏歌单，则屏蔽
+                        if (ComBox_Select == -1)
+                        {
+                            MessageBox.Show("ComBox_Select（下标）为-1，警告");
+                        }
+                        else if (ComBox_Select == 0)//本身若是我的收藏歌单，则屏蔽
                         {
 
                         }
-                        else if (ComBox_Select == 2)
+                        else if (ComBox_Select == 1)
                         {
                             if (songList_Infos[1][0] != null)
                             {
@@ -547,6 +567,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                     }
                                     //排序
                                     songList_Infos[1][0].Songs = songList_Infos[1][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                                    for (int i = 0; i < songList_Infos[1][0].Songs.Count; i++)
+                                    {
+                                        songList_Infos[1][0].Songs[i].Song_No = i + 1;
+                                    }
+                                    
+
                                     //清空被选中的信息：后端
                                     Song_Info_Selects.Clear();
                                     //清空被选中的信息：UI
@@ -565,7 +591,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                 }
                             }
                         }
-                        else if (ComBox_Select == 3)
+                        else if (ComBox_Select == 2)
                         {
                             if (songList_Infos[2][0] != null)
                             {
@@ -586,6 +612,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                     }
                                     //排序
                                     songList_Infos[2][0].Songs = songList_Infos[2][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                                    for (int i = 0; i < songList_Infos[2][0].Songs.Count; i++)
+                                    {
+                                        songList_Infos[2][0].Songs[i].Song_No = i + 1;
+                                    }
+                                    
+
                                     //清空被选中的信息：后端
                                     Song_Info_Selects.Clear();
                                     //清空被选中的信息：UI
@@ -606,39 +638,59 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                         }
                         else//自定义歌单
                         {
-                            if (songList_Infos[ComBox_Select - 1][0] != null)
+                            if (songList_Infos[ComBox_Select][0] != null)
                             {
-                                if (songList_Infos[ComBox_Select - 1][0].Songs != null)
+                                if (songList_Infos[ComBox_Select][0].Songs != null)
                                 {
-                                    for (int i = 0; i < Song_Info_Selects.Count; i++)
+                                    List<UserControl_Main_Home_Left_MyMusic_More> userControl_Main_Home_Left_MyMusic_Mores =
+                                        UserControl_Main_Home_Left_MyMusic_Mores_Class.Retuen_This();
+                                    if (userControl_Main_Home_Left_MyMusic_Mores[ComBox_Select - 3] != null)
                                     {
-                                        Song_Info temp = songList_Infos[ComBox_Select - 1][0].Songs.Find(delegate (Song_Info x)
+
+                                        userControl_Main_Home_Left_MyMusic_Mores[ComBox_Select - 3].
+                                            ListView_Download_SongList_Info.ItemsSource = null;
+
+                                        for (int i = 0; i < Song_Info_Selects.Count; i++)
                                         {
-                                            return x.Song_Url.Equals(
-                                                Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url)
-                                                );
-                                        });
-                                        if (temp == null)//如果没有重复的歌曲，则添加
-                                        {
-                                            songList_Infos[ComBox_Select - 1][0].Songs.Add((Song_Info)Song_Info_Selects[i]);
-                                        }
-                                    }
-                                    //排序
-                                    songList_Infos[ComBox_Select - 1][0].Songs = songList_Infos[ComBox_Select - 1][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
-                                    //清空被选中的信息：后端
-                                    Song_Info_Selects.Clear();
-                                    //清空被选中的信息：UI
-                                    foreach (var item in ListView_Download_SongList_Info.Items)
-                                    {
-                                        ListViewItem listViewItem = ListView_Download_SongList_Info.ItemContainerGenerator.ContainerFromItem(item) as ListViewItem;
-                                        if (listViewItem != null)
-                                        {
-                                            CheckBox checkBox = FindVisualChild<CheckBox>(listViewItem);
-                                            if (checkBox != null)
+                                            Song_Info temp = songList_Infos[ComBox_Select][0].Songs.Find(delegate (Song_Info x)
                                             {
-                                                checkBox.IsChecked = false;
+                                                return x.Song_Url.Equals(
+                                                    Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url)
+                                                    );
+                                            });
+                                            if (temp == null)//如果没有重复的歌曲，则添加
+                                            {
+                                                songList_Infos[ComBox_Select][0].Songs.Add((Song_Info)Song_Info_Selects[i]);
                                             }
                                         }
+                                        //排序
+                                        songList_Infos[ComBox_Select][0].Songs = songList_Infos[ComBox_Select][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                                        for (int i = 0; i < songList_Infos[ComBox_Select][0].Songs.Count; i++)
+                                        {
+                                            songList_Infos[ComBox_Select][0].Songs[i].Song_No = i + 1;
+                                        }
+
+
+
+                                        //清空被选中的信息：后端
+                                        Song_Info_Selects.Clear();
+                                        //清空被选中的信息：UI
+                                        foreach (var item in ListView_Download_SongList_Info.Items)
+                                        {
+                                            ListViewItem listViewItem = ListView_Download_SongList_Info.ItemContainerGenerator.ContainerFromItem(item) as ListViewItem;
+                                            if (listViewItem != null)
+                                            {
+                                                CheckBox checkBox = FindVisualChild<CheckBox>(listViewItem);
+                                                if (checkBox != null)
+                                                {
+                                                    checkBox.IsChecked = false;
+                                                }
+                                            }
+                                        }
+
+                                        userControl_Main_Home_Left_MyMusic_Mores[ComBox_Select - 3].
+                                            ListView_Download_SongList_Info.ItemsSource = songList_Infos[ComBox_Select][0].Songs;
+                                        //this_SongList_Info = songList_Infos[ComBox_Select][0].Songs;
                                     }
                                 }
                             }

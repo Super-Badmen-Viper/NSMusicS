@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static MoZhiMusicPlayer_GithubAuthor_XiangCheng.MainWindow;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
 {
@@ -22,5 +23,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
 
             return userControl_Main_Home_Left_MyMusic_Mores;
         }
+
+        public static List<ComboBoxItem_Name> comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores = new List<ComboBoxItem_Name>();
+        public static List<ComboBoxItem_Name> comboBoxItem_ComBox_Select_Add_SongList = new List<ComboBoxItem_Name>();
+
     }
 }
