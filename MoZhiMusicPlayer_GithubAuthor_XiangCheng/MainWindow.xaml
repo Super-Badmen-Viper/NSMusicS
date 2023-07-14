@@ -223,6 +223,12 @@
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
                     Visibility="Hidden"
                         />
+
+                <Main_Home_Left_MyMusic_UserControls:UserControl_Main_Home_Left_MyMusic_SongInfo_Synchronous
+                    x:Name="userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous"
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                    Visibility="Hidden"
+                        />
             </Grid>
             <Grid 
                 x:Name="Grid_Helper_UserControlLibrary"

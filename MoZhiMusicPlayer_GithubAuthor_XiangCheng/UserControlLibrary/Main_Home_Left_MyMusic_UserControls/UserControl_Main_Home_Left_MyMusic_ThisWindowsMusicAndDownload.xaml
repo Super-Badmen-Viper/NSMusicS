@@ -117,7 +117,7 @@
                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                 IsSynchronizedWithCurrentItem="True"
-                sort:GridViewSort.AutoSort="True" 
+                sort:GridViewSort.AutoSort="False" 
                 BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0"
                 Loaded="UserControl_Loaded" SourceUpdated="ListView_Download_SongList_Info_SourceUpdated"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"

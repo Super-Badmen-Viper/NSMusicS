@@ -651,18 +651,23 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
         {
             try
             {
-                Song_Lrc_StreamReader = new StreamReader(SongLrcPath, Encoding.UTF8);//完成后继续自动清理缓存
-
-                if (Song_Lrc_StreamReader.EndOfStream == false)//指示当前流位置是否在结尾
+                if (File.Exists(SongLrcPath) == true)
                 {
-                    while ((A_String_Read = Song_Lrc_StreamReader.ReadLine()) != null)
+                    Song_Lrc_StreamReader = new StreamReader(SongLrcPath, Encoding.UTF8);//完成后继续自动清理缓存
+
+                    if (Song_Lrc_StreamReader.EndOfStream == false)//指示当前流位置是否在结尾
                     {
-                        arrayList.Add(A_String_Read.Trim() + "\n");
+                        if (A_String_Read != null)
+                        {
+                            while ((A_String_Read = Song_Lrc_StreamReader.ReadLine()) != null)
+                            {
+                                arrayList.Add(A_String_Read.Trim() + "\n");
+                            }
+                        }
                     }
                 }
             }
             catch { }
-            Console.WriteLine();
 
             return arrayList;
         }

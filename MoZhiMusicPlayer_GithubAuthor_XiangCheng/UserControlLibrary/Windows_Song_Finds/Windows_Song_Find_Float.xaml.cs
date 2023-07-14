@@ -102,7 +102,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
         /// <param name="e"></param>
         public void OnFindALLSongClick(object sender, RoutedEventArgs e)
         {
-            if (ComBox_Select_SongList.SelectedIndex > 0)
+            if (ComBox_Select_SongList.SelectedIndex > -1)
             {
                 ListBox_Test.Items.Add("\n\n开始提取歌曲文件特征信息\n\n");
 
@@ -378,7 +378,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
             //刷新内存区域的引用
             List<List<Models.Song_List_Infos.SongList_Info>> songList_Infos = SongList_Info.Retuen_This();
 
-            if (ComBox_Select == 1)
+            if (ComBox_Select == 0)
             {
                 for (int i = 0; i < list_Song_Info.Count; i++)
                 {
@@ -407,7 +407,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                 }
                 
             }
-            else if (ComBox_Select == 2)
+            else if (ComBox_Select == 1)
             {
                 for (int i = 0; i < list_Song_Info.Count; i++)
                 {
@@ -435,7 +435,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                     songList_Infos[1][0].Songs[i].Song_No = i + 1;
                 }
             }
-            else if (ComBox_Select == 3)
+            else if (ComBox_Select == 2)
             {
                 for (int i = 0; i < list_Song_Info.Count; i++)
                 {

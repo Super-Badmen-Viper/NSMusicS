@@ -79,9 +79,10 @@
 
         </ListBox>
 
+        <TextBlock Text="添加到？" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,27,210,0"/>
         <ComboBox 
             x:Name="ComBox_Select_SongList"
-            Style="{DynamicResource cmbstyle}" SelectedIndex="0"
+            SelectedIndex="0"
             Width="210" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,24,0,0" SelectionChanged="ComBox_Select_SongList_Selected">
             <ComboBox.ItemsPanel>
                 <ItemsPanelTemplate>

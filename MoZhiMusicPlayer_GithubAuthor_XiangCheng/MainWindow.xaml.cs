@@ -32,6 +32,18 @@ using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_Song_F
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Left_MyMusic_UserControls;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Left_MyMusic_UserControls;
 using System.Collections.Concurrent;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Services;
+using System.Net;
+using System.Security.Policy;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Json_To_WebAPI;
+using Gst;
+using Shell32;
+using Uri = System.Uri;
+using Application = System.Windows.Application;
+using Task = System.Threading.Tasks.Task;
+using System.Text.RegularExpressions;
+using TagLib;
+using File = System.IO.File;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 {
@@ -61,16 +73,28 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             windows_Song_Find.Back_Button.Click += Back_Button_Click;
             windows_Song_Find_Temp.Back_Button.Click += Back_Button_Click;
 
-            //
-            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Select_SongList.SelectionChanged += SongInfo_Edit_ComBox_Select_SongList_SelectionChanged;
-            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Button_Edit_SongList_Name.Click += Button_Edit_SongList_Name_Click;
-
             //动画参数设置
             num_duration = 200;
             num_Delay = 200;
             singerImage_Cut.numCutCells = 4;
             singerImage_Cut.numCutRows = 2;
+
+            //初始化歌单信息编辑
+            Init_SongListInfo_Edit();
+
+            //
+            userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Button_Connectio_SqlServer.Click += Button_Connectio_SqlServer_Click;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Button_Connectio_MySql.Click += Button_Connectio_MySql_Click;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Button_Run_this_SQL.Click += Button_Run_this_SQL_Click;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Button_DownLoad_ALL_Music_Urls.Click += Button_DownLoad_ALL_Music_Urls_Click;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Button_Begin_Conn_API.Click += Button_Begin_Conn_API_Click;
+
+            //
+            
         }
+
+        
+
 
         //所有的歌单列表集合
         private List<List<Models.Song_List_Infos.SongList_Info>> songList_Infos;
@@ -223,6 +247,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_电台.Visibility = Visibility.Hidden;
 
                 userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Hidden;
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Singer_Name.Text = "";
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Song_Name.Text = "";
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Album_Name.Text = "";
+
+                userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Visibility = Visibility.Hidden;
 
                 //应该统一将歌单控件设置为同一List<>，懒得优化了
                 //ListView_Download_SongList_Info.ItemsSource设置为null
@@ -291,6 +320,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// <param name="e"></param>
         private void Back_Button_Click(object sender, RoutedEventArgs e)
         {
+            Reset_App_ItemsSource();
+        }
+        private void Reset_App_ItemsSource()
+        {
             songList_Infos = null;
             this_Song_ListView = null;
             SongList_Info.songList_Infos = null;
@@ -327,10 +360,59 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             }
         }
         #endregion
+
         #region 歌曲信息编辑
+
+        /// <summary>
+        /// 初始化 歌曲信息编辑
+        /// </summary>
+        private void Init_SongListInfo_Edit()
+        {
+            //歌单信息编辑 
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Select_SongList.SelectionChanged += SongInfo_Edit_ComBox_Select_SongList_SelectionChanged;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Button_Edit_SongList_Name.Click += Button_Edit_SongList_Name_Click;
+
+            //歌曲信息编辑
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Button_Search_Song_Name.Click += Button_Search_Song_Name_Click;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Button_Save_To_SongList.Click += Button_Save_To_SongList_Click;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Button_Save_To_File.Click += Button_Save_To_File_Click; ;
+
+            //音乐资源导入
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Singer_Image.Drop += ListBox_Singer_Image_Drop;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Album_Image.Drop += ListBox_Album_Image_Drop;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Mrc_Image.Drop += ListBox_Mrc_Image_Drop;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Crc_Image.Drop += ListBox_Crc_Image_Drop;
+        }
+
+        
+        /// <summary>
+        /// 歌曲信息编辑
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Edit_ALL_SongInfo_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Visibility = Visibility.Hidden;
+
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Select_SongList.ItemsSource = null;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Select_SongList.ItemsSource = comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores;
+
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.
+                                Edit_Singer_Name = "";
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.
+                                Edit_Song_Name = "";
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.
+                                Edit_Album_Name = "";
+        }
+
+        #region 歌单信息编辑 
         int SongInfo_Edit_SelectIndex;
         /// <summary>
-        /// 选择歌单
+        /// 选择歌单（并修改）
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -434,7 +516,574 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             }
         }
 
+
         #endregion
+
+        #region 歌曲信息编辑
+
+        /// <summary>
+        /// 查找并返回 所有相似的歌曲名
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void Button_Search_Song_Name_Click(object sender, RoutedEventArgs e)
+        {
+            songList_Infos = SongList_Info.Retuen_This();
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Show_Search_Song.Items.Clear();
+
+            //查找并保存（所有的歌单）
+            for (int i = 0; i < songList_Infos.Count; i++)
+            {
+                for (int j = 0; j < songList_Infos[i][0].Songs.Count; j++)
+                {
+                    if (songList_Infos[i][0].Songs[j].Song_Name.IndexOf(
+                        userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Search_Song_Name
+                        ) > -1  
+                        ||
+                        songList_Infos[i][0].Songs[j].Singer_Name.IndexOf(
+                        userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Search_Song_Name
+                        ) > -1
+                        )
+                    {
+                        userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Show_Search_Song.Items.Add(
+                            songList_Infos[i][0].Songs[j].Singer_Name + " - " + 
+                            songList_Infos[i][0].Songs[j].Song_Name + "_Url:" +
+                            songList_Infos[i][0].Songs[j].Song_Url
+                            );
+                    }
+                }
+            }
+            //去重
+            for (int i = 0; i < userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Show_Search_Song.Items.Count; i++)
+            {
+                for (int j = i + 1; j < userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Show_Search_Song.Items.Count; j++)
+                {
+                    if (userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Show_Search_Song.Items[i].Equals(
+                        userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Show_Search_Song.Items[j]
+                        ))
+                        userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Show_Search_Song.Items.Remove(
+                            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Show_Search_Song.Items[j]
+                            );
+                }
+            }
+
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Show_Search_Song.IsDropDownOpen = true;
+        }
+
+        /// <summary>
+        /// 仅保存至歌单
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Save_To_SongList_Click(object sender, RoutedEventArgs e)
+        {
+            if (userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Edit_Singer_Name.Length > 0 &&
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Edit_Song_Name.Length > 0 &&
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Edit_Album_Name.Length > 0
+                )
+            {
+                songList_Infos = SongList_Info.Retuen_This();
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Show_Search_Song.Items.Clear();
+
+                //保存（所有的歌单）
+                for (int i = 0; i < songList_Infos.Count; i++)
+                {
+                    for (int j = 0; j < songList_Infos[i][0].Songs.Count; j++)
+                    {
+                        if (songList_Infos[i][0].Songs[j].Song_Url.Equals(
+                            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Search_this_SongUrl
+                            ))
+                        {
+                            songList_Infos[i][0].Songs[j].Singer_Name = userControl_Main_Home_Left_MyMusic_SongInfo_Edit.
+                                    Edit_Singer_Name;
+                            songList_Infos[i][0].Songs[j].Song_Name = userControl_Main_Home_Left_MyMusic_SongInfo_Edit.
+                                    Edit_Song_Name;
+                            songList_Infos[i][0].Songs[j].Album_Name = userControl_Main_Home_Left_MyMusic_SongInfo_Edit.
+                                    Edit_Album_Name;
+                        }
+                    }
+                }
+                SongList_Info.songList_Infos = songList_Infos;
+                MessageBox.Show("保存成功");
+
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Singer_Name.Text = "";
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Song_Name.Text = "";
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Album_Name.Text = "";
+            }
+            else
+            {
+                MessageBox.Show("请填写完整的歌曲信息");
+            }
+        }
+        private void Button_Save_To_File_Click(object sender, RoutedEventArgs e)
+        {
+            if (userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Edit_Singer_Name.Length > 0 &&
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Edit_Song_Name.Length > 0 &&
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Edit_Album_Name.Length > 0
+                )
+            {
+                songList_Infos = SongList_Info.Retuen_This();
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Show_Search_Song.Items.Clear();
+                string url = "";
+                bool playing = false;
+                //保存（所有的歌单）
+                for (int i = 0; i < songList_Infos.Count; i++)
+                {
+                    for (int j = 0; j < songList_Infos[i][0].Songs.Count; j++)
+                    {
+                        if (songList_Infos[i][0].Songs[j].Song_Url.Equals(
+                            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Search_this_SongUrl
+                            ))
+                        {
+                            url = songList_Infos[i][0].Songs[j].Song_Url;
+                            if(MediaElement_Song.Source.LocalPath != null)
+                                if (MediaElement_Song.Source.LocalPath.Equals(url))
+                                {
+                                    playing = true;
+                                    break;
+                                }
+
+                            songList_Infos[i][0].Songs[j].Singer_Name = userControl_Main_Home_Left_MyMusic_SongInfo_Edit.
+                                Edit_Singer_Name;
+                            songList_Infos[i][0].Songs[j].Song_Name = userControl_Main_Home_Left_MyMusic_SongInfo_Edit.
+                                Edit_Song_Name;
+                            songList_Infos[i][0].Songs[j].Album_Name = userControl_Main_Home_Left_MyMusic_SongInfo_Edit.
+                                Edit_Album_Name;
+                        }
+                    }
+                }
+                if (playing == false)
+                {
+                    //保存（本地文件）
+                    string temp = url;
+                    string music_flie = url.Substring(url.LastIndexOf("."));//音频格式后缀保存
+
+
+                    var file = TagLib.File.Create(url);
+                    file.Tag.Album = userControl_Main_Home_Left_MyMusic_SongInfo_Edit.
+                                    Edit_Album_Name;
+                    file.Tag.Performers = new string[] { userControl_Main_Home_Left_MyMusic_SongInfo_Edit.
+                            Edit_Singer_Name};
+                    file.Tag.Title = userControl_Main_Home_Left_MyMusic_SongInfo_Edit.
+                                    Edit_Singer_Name + " - " + userControl_Main_Home_Left_MyMusic_SongInfo_Edit.
+                                    Edit_Song_Name;
+                    file.Save();
+                    file.Dispose();
+
+                    url = url.Substring(0, url.LastIndexOf(@"\") + 1) + file.Tag.Title + music_flie;
+
+                    // 修改文件名
+                    File.Move(temp, url);
+                    for (int i = 0; i < songList_Infos.Count; i++)
+                    {
+                        for (int j = 0; j < songList_Infos[i][0].Songs.Count; j++)
+                        {
+                            if (songList_Infos[i][0].Songs[j].Song_Url.Equals(temp))
+                            {
+                                songList_Infos[i][0].Songs[j].Song_Url = url;
+                            }
+                        }
+                    }
+
+                    SongList_Info.songList_Infos = songList_Infos;
+                    MessageBox.Show("保存成功");
+                }
+                else
+                {
+                    MessageBox.Show("请切换当前播放歌曲，已占用资源无法进行修改");
+                }
+
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Singer_Name.Text = "";
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Song_Name.Text = "";
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Album_Name.Text = "";
+            }
+            else
+            {
+                MessageBox.Show("请填写完整的歌曲信息");
+            }
+        }
+
+        #endregion
+
+        //private List<>
+        #region 音乐资源导入
+
+        private void ListBox_Singer_Image_Drop(object sender, DragEventArgs e)
+        {
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Singer_Image.Items.Clear();
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                foreach (string file in files)
+                {
+                    if (file.IndexOf("jpg") > -1)
+                    {
+                        if (File.Exists(file))
+                        {
+                            // 获取文件名和目标路径
+                            string fileName = Path.GetFileName(file);
+                            string destPath = "";
+                            for (int i = 0; i < singer_photo.Length; i++)
+                            {
+                                destPath = Path_App + @"/Singer_Image/" + singer_photo[i] + "/" + fileName;
+                                if (File.Exists(destPath) == false)
+                                {
+                                    // 复制文件
+                                    File.Copy(file, destPath, true);
+                                    userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Singer_Image.Items.Add("导入成功：" + fileName);
+                                    break;
+                                }
+                                else if (i == singer_photo.Length - 1)
+                                {
+                                    MessageBox.Show("文件存储量超过上限");
+                                    destPath = "";
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Singer_Image.Items.Add("导入失败：" + file);
+                    }
+                }
+            }
+        }
+        private void ListBox_Album_Image_Drop(object sender, DragEventArgs e)
+        {
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Album_Image.Items.Clear();
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                foreach (string file in files)
+                {
+                    if (file.IndexOf("jpg") > -1)
+                    {
+                        if (File.Exists(file))
+                        {
+                            // 获取文件名和目标路径
+                            string fileName = Path.GetFileName(file);
+                            string destPath = Path_App + @"/Song_ALbum/" + fileName;
+                            // 复制文件
+                            File.Copy(file, destPath, true);
+                            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Album_Image.Items.Add("导入成功：" + fileName);
+                        }
+                    }
+                    else
+                    {
+                        userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Album_Image.Items.Add("导入失败：" + file);
+                    }
+                }
+            }
+        }
+        private void ListBox_Mrc_Image_Drop(object sender, DragEventArgs e)
+        {
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Mrc_Image.Items.Clear();
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                foreach (string file in files)
+                {
+                    if (file.IndexOf("mrc") > -1)
+                    {
+                        if (File.Exists(file))
+                        {
+                            // 获取文件名和目标路径
+                            string fileName = Path.GetFileName(file);
+                            string destPath = Path_App + @"/Mrc/" + fileName;
+                            // 复制文件
+                            File.Copy(file, destPath, true);
+                            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Mrc_Image.Items.Add("导入成功：" + fileName);
+                        }
+                    }
+                    else
+                    {
+                        userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Mrc_Image.Items.Add("导入失败：" + file);
+                    }
+                }
+            }
+        }
+        private void ListBox_Crc_Image_Drop(object sender, DragEventArgs e)
+        {
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Crc_Image.Items.Clear();
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                foreach (string file in files)
+                {
+                    if (file.IndexOf("crc") > -1)
+                    {
+                        if (File.Exists(file))
+                        {
+                            // 获取文件名和目标路径
+                            string fileName = Path.GetFileName(file);
+                            string destPath = Path_App + @"/Crc/" + fileName;
+                            // 复制文件
+                            File.Copy(file, destPath, true);
+                            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Crc_Image.Items.Add("导入成功：" + fileName);
+                        }
+                    }
+                    else
+                    {
+                        userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ListBox_Crc_Image.Items.Add("导入失败：" + file);
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #endregion
+
+        List<String> MusicUrls_CompleteDownLoad = new List<string>();
+        #region 同步音乐数据库 数据库连接
+
+        List<string> musicUrls;
+        Services_Connection_SqlServer connection_SqlServer;
+        Services_Connection_MySql connection_MySql;
+        string savePath;
+
+        private void Button_Connectio_SqlServer_Click(object sender, RoutedEventArgs e)
+        {
+            if (userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Data_Source.Length > 0 &&
+                userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Database.Length > 0 &&
+                userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.User_Id.Length > 0 &&
+                userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Password.Length > 0)
+            {
+                string connectionString = 
+                    "Data Source="+ userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Data_Source+ 
+                    ";Initial Catalog="+ userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Database + 
+                    ";User ID="+ userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.User_Id+ 
+                    ";Password="+ userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Password;
+                connection_SqlServer = new Services_Connection_SqlServer(
+                    connectionString
+                    );
+            }
+            else
+            {
+                MessageBox.Show("请先输入以上的远程数据库连接字段");
+            }
+        }
+        private void Button_Connectio_MySql_Click(object sender, RoutedEventArgs e)
+        {
+            if (userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Data_Source.Length > 0 &&
+               userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Database.Length > 0 &&
+               userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.User_Id.Length > 0 &&
+               userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Password.Length > 0 &&
+               userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Port.Length > 0
+               )
+            {
+                string connectionString = "server=" + userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Data_Source +
+                           ";port=" + userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Port +
+                           ";uid=" + userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.User_Id +
+                           ";pwd=" + userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Password +
+                           ";database=" + userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Database + ";";
+
+                connection_MySql = new Services_Connection_MySql(
+                    connectionString
+                    );
+            }
+            else
+            {
+                MessageBox.Show("请先输入以上的远程数据库连接字段");
+            }
+        }
+        private void Button_Run_this_SQL_Click(object sender, RoutedEventArgs e)
+        {
+            if(musicUrls != null)
+                musicUrls.Clear();
+            userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.
+                            ListBox_Music_Urls_Show.Items.Clear();
+
+            if (userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Port.Length < 0)
+            {
+                musicUrls = connection_SqlServer.GetMusicUrls(
+                    userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Sql_String
+                    );
+            }
+            else
+            {
+                musicUrls = connection_MySql.GetMusicUrls(
+                    userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Sql_String
+                    );
+            }
+
+            foreach (string url in musicUrls)
+            {
+                userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.
+                            ListBox_Music_Urls_Show.Items.Add(url);
+            }
+        }
+        private void Button_DownLoad_ALL_Music_Urls_Click(object sender, RoutedEventArgs e)
+        {
+            userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.
+                            ListBox_Music_Urls_DownLoad_Results_Display.Items.Clear();
+
+            using (WebClient client = new WebClient())
+            {
+                foreach (string url in musicUrls)
+                {
+                    try
+                    {
+                        string filename = savePath + url.Substring(url.LastIndexOf("/") + 1);
+                        client.DownloadFile(url, filename);
+
+                        //添加到歌单。。。。。
+                        //
+                    }
+                    catch (Exception ex)
+                    {
+                        userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.
+                            ListBox_Music_Urls_DownLoad_Results_Display.Items.Add("下载出错：" + url);
+                    }
+                }
+            }
+        }
+
+        #endregion
+        #region 同步音乐数据库 API获取
+
+        private void Button_Begin_Conn_API_Click(object sender, RoutedEventArgs e)
+        {
+            MusicUrls_CompleteDownLoad.Clear();
+            songList_Infos[1][0].Songs.Clear();//存储在本地音乐
+
+            // 创建Services_Web_API对象
+            Services_Web_API api = new Services_Web_API();
+
+            // 获取music_url
+            List<MusicData> musicDataList = api.GetMusicData();
+
+            //显示music_url
+            userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.ListBox_Music_Urls_Show.Items.Clear();
+            foreach (MusicData musicData in musicDataList)
+            {
+                userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.ListBox_Music_Urls_Show.Items.Add("Music data received: " + musicData);
+            }
+
+            //下载music_url
+            userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.ListBox_Music_Urls_DownLoad_Results_Display.Items.Clear();
+            DownloadMusicAsync(savePath, musicDataList);
+        }
+
+        private void DownloadMusicAsync(string savePath, List<MusicData> musicDataList)
+        {
+            using (WebClient client = new WebClient())
+            {
+                foreach (MusicData musicData in musicDataList)
+                {
+                    string filename = savePath + musicData.music_url.Substring(musicData.music_url.LastIndexOf("/") + 1);
+
+                    try
+                    {
+                        client.DownloadFile(musicData.music_url, filename);
+
+                        userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.
+                            ListBox_Music_Urls_DownLoad_Results_Display.Items.Add("下载成功：" + musicData.music_url);
+
+                        MusicUrls_CompleteDownLoad.Add(filename);
+                    }
+                    catch (Exception ex)
+                    {
+                        userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.
+                            ListBox_Music_Urls_DownLoad_Results_Display.Items.Add("下载出错：" + musicData.music_url + "，错误信息：" + ex.Message);
+                    }
+                }
+            }
+
+            // 下载完成后的处理代码
+            Import_Downloaded_Music();
+        }
+
+        private void Import_Downloaded_Music()
+        {
+            if (MusicUrls_CompleteDownLoad.Count > 0)
+            {
+                ParseSongInfo(MusicUrls_CompleteDownLoad);
+            }
+        }
+
+        private void ParseSongInfo(List<string> allSongPath)
+        {
+            int songIdsTemp = 0;
+
+            foreach (string songPath in allSongPath)
+            {
+                int numsSongNameIndex = songPath.LastIndexOf(@"\") + 1;
+                string songNameTemp = songPath.Substring(numsSongNameIndex);
+                int songPathTempSongName = songNameTemp.LastIndexOf(".mp3");
+
+                Song_Info songInfo = new Song_Info();
+
+                if (songPathTempSongName <= 0)
+                {
+                    songPathTempSongName = songNameTemp.LastIndexOf(".flac");
+
+                    if (songPathTempSongName <= 0)
+                    {
+                        songPathTempSongName = songNameTemp.LastIndexOf(".wav");
+                    }
+                }
+
+                if (songPathTempSongName > 0 && numsSongNameIndex < songPathTempSongName)
+                {
+                    string singerNameTemp = songNameTemp;
+                    int num1 = singerNameTemp.LastIndexOf(" - ");
+
+                    if (num1 > 0)
+                    {
+                        singerNameTemp = singerNameTemp.Substring(0, num1).Trim(); 
+
+                        if (!string.IsNullOrEmpty(singerNameTemp))
+                        {
+                            songInfo.Singer_Name = singerNameTemp;
+                            songInfo.Song_Url = songPath;
+                            songInfo.Song_No = songIdsTemp++;
+
+                            string songNameTemp2 = songNameTemp.Substring(num1 + 3, songPathTempSongName - num1 - 3).Trim();
+                            songInfo.Song_Name = songNameTemp2;
+
+                            string albumTemp = GetAlbumName(songPath);
+                            songInfo.Album_Name = albumTemp;
+
+                            
+                        }
+                    }                   
+                }
+                else
+                {
+                    songInfo.Singer_Name = "未知" ;
+                    songInfo.Song_Url = songPath;
+                    songInfo.Song_No = songIdsTemp++;
+
+                    songInfo.Song_Name = songPath.Substring(songPath.LastIndexOf("/") + 1);
+
+                    songInfo.Album_Name = "未知";
+                }
+
+                songList_Infos[1][0].Songs.Add(songInfo);
+            }
+
+            //保存在Song_List_Info_ALL.xml中
+            Save_SongListInfo();
+
+            //重置数据源，重新读取xml
+            Reset_App_ItemsSource();
+        }
+        private string GetAlbumName(string songPath)
+        {
+            string albumTemp = string.Empty;
+            Shell shell = new Shell();
+            Folder dir = shell.NameSpace(Path.GetDirectoryName(songPath));
+            FolderItem item = dir.ParseName(Path.GetFileName(songPath));
+            albumTemp = dir.GetDetailsOf(item, 14);
+            return albumTemp;
+        }
+        #endregion
+
 
         #region 初始化
         /// <summary>
@@ -448,6 +1097,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //this.WindowStyle = WindowStyle.None;this.AllowsTransparency = true;
 
             Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
+            savePath = Path_App + @"/Music/";
 
             //切换双击歌单歌曲播放事件
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.MouseDoubleClick += userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick_ALL;
@@ -1058,23 +1708,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         BlurEffect blurEffect = new BlurEffect();
         #region MusicPlayer_Left控件进入
 
-        /// <summary>
-        /// 歌曲信息编辑
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Button_Edit_ALL_SongInfo_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
-
-            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Select_SongList.ItemsSource = null;
-            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.ComBox_Select_SongList.ItemsSource = comboBoxItem_userControl_Main_Home_Left_MyMusic_Mores;
-
-
-        }
+        
         /// <summary>
         /// 同步音乐数据库
         /// </summary>
@@ -1082,7 +1716,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// <param name="e"></param>
         private void Button_Load_UserData_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("开发中");
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Hidden;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Singer_Name.Text = "";
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Song_Name.Text = "";
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Album_Name.Text = "";
+
+            userControl_Main_Home_Left_MyMusic_My_Love.Visibility = Visibility.Hidden;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Visibility = Visibility.Visible;
         }
 
         private void UserControl_ButtonFrame_MusicLove_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -1119,6 +1761,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Hidden;
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Singer_Name.Text = "";
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Song_Name.Text = "";
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Album_Name.Text = "";
+
+                userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Visibility = Visibility.Hidden;
                 Grid_Animation_MouseLeftClick();/// 窗体进入动画
 
                 //同步歌曲曲目数量
@@ -1163,6 +1810,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Hidden;
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Singer_Name.Text = "";
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Song_Name.Text = "";
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Album_Name.Text = "";
+
+                userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Visibility = Visibility.Hidden;
                 Grid_Animation_MouseLeftClick();/// 窗体进入动画
 
                 //同步歌曲曲目数量
@@ -1206,6 +1858,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Hidden;
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Singer_Name.Text = "";
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Song_Name.Text = "";
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Album_Name.Text = "";
+
+                userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Visibility = Visibility.Hidden;
                 Grid_Animation_MouseLeftClick();/// 窗体进入动画
 
                 //同步歌曲曲目数量
@@ -2627,15 +3284,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             }
             return Math.Round(dData, 7);
         }
-
-        
-
-        void textbox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            TextBox box = (TextBox)sender;
-            e.Handled = box.Text.Length > 5;
-        }
-
         #endregion
 
         #region 歌词行同步

@@ -26,9 +26,37 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             InitializeComponent();
         }
 
-       
+        public string Search_Song_Name;
+        public string Search_this_SongUrl;
 
-        
+        public string Edit_Song_Name;
+        public string Edit_Singer_Name;
+        public string Edit_Album_Name;
+
+        private void TextBox_Search_Song_Name_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Search_Song_Name = TextBox_Search_Song_Name.Text;
+        }
+        private void ComBox_Show_Search_Song_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(ComBox_Show_Search_Song.SelectedIndex > -1)
+                Search_this_SongUrl = ComBox_Show_Search_Song.SelectedItem.ToString().Substring(
+                    ComBox_Show_Search_Song.SelectedItem.ToString().LastIndexOf("_Url:") + 5
+                    );      
+        }
+
+        private void TextBox_Edit_Song_Name_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Edit_Song_Name = TextBox_Edit_Song_Name.Text;
+        }
+        private void TextBox_Edit_Singer_Name_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Edit_Singer_Name = TextBox_Edit_Singer_Name.Text;
+        }
+        private void TextBox_Edit_Album_Name_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Edit_Album_Name = TextBox_Edit_Album_Name.Text;
+        }
 
         
     }

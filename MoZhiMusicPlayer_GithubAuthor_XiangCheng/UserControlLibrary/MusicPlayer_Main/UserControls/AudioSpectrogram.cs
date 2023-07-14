@@ -237,7 +237,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             int size_1_SmoothData = 0;//预处理数据，第一次SmoothData平滑
             int size_average = 30;//对animation_points超出的部分进行平均量增减(上下波动幅度)。
             double size_Error_point = 1.0;//超出频谱动画范围，重新设置为？
-            int size_2_SmoothData = 6;//第二次SmoothData平滑
+            int size_2_SmoothData = 8;//第二次SmoothData平滑
 
             //显示频谱的动画个数
             int animation_points_Count = 106;

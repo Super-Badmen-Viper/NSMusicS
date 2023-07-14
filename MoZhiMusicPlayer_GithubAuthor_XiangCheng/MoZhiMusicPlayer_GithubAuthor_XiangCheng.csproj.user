@@ -28,6 +28,9 @@
     <Compile Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_SongInfo_Edit.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Animation\UserControl_Animation_1.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -76,6 +79,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_SongInfo_Edit.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Animation\UserControl_Animation_1.xaml">
