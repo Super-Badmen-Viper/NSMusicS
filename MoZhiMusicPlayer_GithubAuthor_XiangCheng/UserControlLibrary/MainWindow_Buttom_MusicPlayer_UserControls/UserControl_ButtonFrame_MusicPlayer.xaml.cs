@@ -77,21 +77,23 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow
                 textBox.FontSize,
                 textBox.Foreground);
 
-            //formattedText.MaxTextWidth = textBox.ActualWidth;
-
-           /* bool isTrimmed = formattedText.Height > textBox.ActualHeight ||
-                             formattedText.Width > formattedText.MaxTextWidth;*/
            //如果歌曲名的长度大于Canvas的长度，则可以开启线性X轴动画，以便预览被遮盖的部分歌曲名
             bool isTrimmed = formattedText.Width > Canvas_Song_Name.Width;//固定长度
-            //小于则启动动画
 
             //设置文本字幕动画的滚动长度位置  为  文本总长度length
-            if(isTrimmed)
-                if (LinearDoubleKeyFrame_Song_Name_Text_Length != null)
-                {
-                    LinearDoubleKeyFrame_Song_Name_Text_Length.Value = (formattedText.Width * -1) + 150;//+100是因为得到的文本长度通常>真正的文本长度
-                    LinearDoubleKeyFrame_Song_Name_Text_Length_other.Value = LinearDoubleKeyFrame_Song_Name_Text_Length.Value;
-                }
+            if (isTrimmed)
+            {
+                if (StoryBorad_Song_Name != null)
+                    if (LinearDoubleKeyFrame_Song_Name_Text_Length != null)
+                    {
+                        LinearDoubleKeyFrame_Song_Name_Text_Length.Value = (formattedText.Width * -1) + 150;//+100是因为得到的文本长度通常>真正的文本长度
+                        LinearDoubleKeyFrame_Song_Name_Text_Length_other.Value = LinearDoubleKeyFrame_Song_Name_Text_Length.Value;
+                        StoryBorad_Song_Name.Resume();
+                    }
+            }
+            else
+                if (StoryBorad_Song_Name != null)
+                    StoryBorad_Song_Name.Pause();
 
             return isTrimmed;
         }

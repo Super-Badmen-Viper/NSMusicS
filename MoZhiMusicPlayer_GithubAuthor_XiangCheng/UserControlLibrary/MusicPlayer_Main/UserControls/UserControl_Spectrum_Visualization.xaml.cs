@@ -98,7 +98,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
 
                 rectangle.Effect = new DropShadowEffect
                 {
-                    Color = Colors.Black,
+                    Color = Colors.White,
                     BlurRadius = 4,
                     ShadowDepth = 1,
                     Opacity = 1,

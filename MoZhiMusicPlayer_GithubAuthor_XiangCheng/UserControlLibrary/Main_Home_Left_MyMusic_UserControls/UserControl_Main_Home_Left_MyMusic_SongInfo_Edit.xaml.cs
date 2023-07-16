@@ -26,12 +26,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             InitializeComponent();
         }
 
-        public string Search_Song_Name;
-        public string Search_this_SongUrl;
+        public string Search_Song_Name = "";
+        public string Search_this_SongUrl = "";
 
-        public string Edit_Song_Name;
-        public string Edit_Singer_Name;
-        public string Edit_Album_Name;
+        public string Edit_Song_Name = "";
+        public string Edit_Singer_Name = "";
+        public string Edit_Album_Name = "";
 
         private void TextBox_Search_Song_Name_TextChanged(object sender, TextChangedEventArgs e)
         {

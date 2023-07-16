@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="443" d:DesignWidth="810"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                Background="#F6F6F6" SizeChanged="UserControl_SizeChanged">
+                Background="#1E1E20" SizeChanged="UserControl_SizeChanged">
     <Grid>
         <ScrollViewer x:Name="ScrollViewer_1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Frame Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/Helper_UserControlLibrary/电台/UserControl_电台.xaml"  NavigationUIVisibility="Hidden" />

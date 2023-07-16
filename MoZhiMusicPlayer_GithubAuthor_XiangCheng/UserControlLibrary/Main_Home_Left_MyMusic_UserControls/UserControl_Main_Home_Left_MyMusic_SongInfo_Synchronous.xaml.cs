@@ -33,7 +33,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         public string connectionString = "";
         public string Sql_String = "";
 
-        public string Web_API;
+        public string Web_API = "";
 
 
         private void Button_Connectio_SqlServer_Click(object sender, RoutedEventArgs e)

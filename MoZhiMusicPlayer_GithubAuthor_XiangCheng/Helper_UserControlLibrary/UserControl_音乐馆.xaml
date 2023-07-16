@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="443" d:DesignWidth="810"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                Background="#F6F6F6" SizeChanged="UserControl_SizeChanged">
+                 SizeChanged="UserControl_SizeChanged">
     <Grid>
         <TextBlock HorizontalAlignment="Left" Height="50" Text="音乐馆" TextWrapping="Wrap" 
                    VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"

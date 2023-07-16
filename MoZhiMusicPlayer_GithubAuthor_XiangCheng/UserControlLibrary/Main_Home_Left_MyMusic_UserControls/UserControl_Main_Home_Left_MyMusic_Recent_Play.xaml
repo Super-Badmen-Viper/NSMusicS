@@ -7,14 +7,19 @@
              mc:Ignorable="d" 
              d:DesignHeight="443" d:DesignWidth="810"
              UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-             Background="#F6F6F6"
+             
              >
     <Grid>
         <Grid x:Name="Grid_NormalModel_1">
             <TextBlock HorizontalAlignment="Left" Height="50" Text="默认列表" TextWrapping="Wrap" 
                    VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                   />
+                   Foreground="White"   
+                   >
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </TextBlock.Effect>
+            </TextBlock>
             <TextBlock 
             x:Name="Recent_Song_Nums"
             Foreground="#1ECC94"
@@ -22,14 +27,23 @@
                    VerticalAlignment="Top" Margin="42,74,0,0" FontSize="14"
                    Block.TextAlignment="Center"
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                   />
+                   >
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </TextBlock.Effect>
+            </TextBlock>
             <TextBlock 
             x:Name="Recent_Video"
             HorizontalAlignment="Left" Height="20" Text="视频0" TextWrapping="Wrap" 
             VerticalAlignment="Top" Margin="150,74,0,0" FontSize="14"
             Block.TextAlignment="Center"
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                   />
+                 Foreground="White"   
+                >
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </TextBlock.Effect>
+            </TextBlock>
 
             <StackPanel
             HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="31,122,0,0"
@@ -46,7 +60,6 @@
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
                    />
                 <TextBlock Text="添加" VerticalAlignment="Center" Margin="49,-32,6,0" 
-                       Foreground="Black"
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
                        />
             </StackPanel>
@@ -85,7 +98,7 @@
 
 
         <Grid x:Name="Grid_ListItem_CrudModel_1" Margin="0,180,0,0">
-            <ListView x:Name="ListView_Download_SongList_Info" Foreground="Black"
+            <ListView x:Name="ListView_Download_SongList_Info" Foreground="White"
                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                 IsSynchronizedWithCurrentItem="True"
@@ -93,6 +106,7 @@
                 BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0"
                 Loaded="UserControl_Loaded" SourceUpdated="ListView_Download_SongList_Info_SourceUpdated"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                   >
 
                 <ListView.ItemContainerStyle>
@@ -107,7 +121,7 @@
 
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#FFEFEFEF"/>
+                                <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="BorderBrush" Value="Transparent"/>
                                 <Setter Property="BorderThickness" Value="0"/>
                             </Trigger>
@@ -115,7 +129,7 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="BorderBrush" Value="Transparent"/>
                                 <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Background" Value="#FFEFEFEF"/>
+                                <Setter Property="Background" Value="Transparent"/>
                             </Trigger>
                         </Style.Triggers>
 
@@ -173,7 +187,11 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Song_Name}" Margin="0,5,0,0"/>
+                                            <TextBlock Text="{Binding Song_Name}" Margin="0,5,0,0">
+                                                <TextBlock.Effect>
+                                                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                                                </TextBlock.Effect>
+                                            </TextBlock>
                                             <Button HorizontalAlignment="Left" Background="{Binding Song_MV_Image}"
                                                 Style="{StaticResource MyButton}" 
                                                 Width="16" Height="16" Margin="8,6,0,0"
@@ -182,18 +200,59 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding Singer_Name}" Header="歌手"
+                            <GridViewColumn 
+                                        Header="歌手"
                                         Width="160"
-                                        sort:GridViewSort.PropertyName="Singer_Name"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Album_Name}" Header="专辑"
+                                        sort:GridViewSort.PropertyName="Singer_Name">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Singer_Name}">
+                                            <TextBlock.Effect>
+                                                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                                            </TextBlock.Effect>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="专辑"
                                         Width="156"
-                                        sort:GridViewSort.PropertyName="Album_Name"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Song_Url}" Header="歌曲路径"
+                                        sort:GridViewSort.PropertyName="Album_Name">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Album_Name}">
+                                            <TextBlock.Effect>
+                                                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                                            </TextBlock.Effect>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="歌曲路径"
                                         Width="290"
-                                        sort:GridViewSort.PropertyName="Song_Url"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Song_No}" Header="歌曲序号"
+                                        sort:GridViewSort.PropertyName="Song_Url">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Song_Url}">
+                                            <TextBlock.Effect>
+                                                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                                            </TextBlock.Effect>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="歌曲序号"
                                         Width="60"
-                                        sort:GridViewSort.PropertyName="Song_No"/>
+                                        sort:GridViewSort.PropertyName="Song_No">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Song_No}">
+                                            <TextBlock.Effect>
+                                                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                                            </TextBlock.Effect>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView.Columns>
                     </GridView>
                 </ListView.View>
@@ -241,7 +300,6 @@
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Left" VerticalAlignment="Top" Width="16"
                    />
                 <TextBlock Text="全选" VerticalAlignment="Center" Margin="37,-37,6,0" 
-                       Foreground="Black"
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
                        />
             </StackPanel>
@@ -262,7 +320,6 @@
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Left" VerticalAlignment="Top" Width="18"
                    />
                 <TextBlock Text="删除" VerticalAlignment="Center" Margin="52,-36,6,0" 
-                       Foreground="Black"
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
                        />
             </StackPanel>
@@ -278,7 +335,6 @@
                     Background="#FFE3E3E3" Height="32" 
                      />
                 <TextBlock Text="退出批量操作" VerticalAlignment="Center" Margin="0,-32,0,0" 
-                       Foreground="Black"
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Center"
                        />
             </StackPanel>
