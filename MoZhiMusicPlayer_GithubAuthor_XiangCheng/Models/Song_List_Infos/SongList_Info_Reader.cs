@@ -14,7 +14,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
                 new Uri(@"Resource\\Button_Image_Ico\\爱心 - 副本.png", UriKind.Relative)));
         private static ImageBrush ImageBrush_LoveNormal
             = new ImageBrush(new BitmapImage(
-                new Uri(@"Resource\\Button_Image_Ico\\爱心.png", UriKind.Relative)));
+                new Uri(@"Resource\\Button_Image_Ico\\爱心 (1).png", UriKind.Relative)));
 
         public static List<Song_Info> song_Infos_Love { get; set; }
 

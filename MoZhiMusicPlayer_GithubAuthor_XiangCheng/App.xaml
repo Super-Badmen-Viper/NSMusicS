@@ -14,7 +14,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                        <Border Name="border" BorderThickness="0" BorderBrush="White" Background="{TemplateBinding Background}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
                         <ControlTemplate.Triggers>
@@ -22,6 +22,72 @@
                                 <Setter Property="Opacity" Value="1" />
                             </Trigger>
                         </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--滚动条样式，宽度缩小-->
+        <ControlTemplate x:Key="MyScrollBar" TargetType="{x:Type ScrollBar}">
+            <Track x:Name="PART_Track" Width="8" IsDirectionReversed="True" IsEnabled="{TemplateBinding IsMouseOver}">
+                <Track.Thumb>
+                    <Thumb>
+                        <Thumb.Style>
+                            <Style TargetType="{x:Type Thumb}">
+                                <Setter Property="OverridesDefaultStyle" Value="True"/>
+                                <Setter Property="IsTabStop" Value="False"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Thumb}">
+                                            <Grid>
+                                                <Border x:Name="thumb" BorderThickness="0" Background="Gray" Height="{TemplateBinding Height}" Width="8"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Thumb.Style>
+                    </Thumb>
+                </Track.Thumb>
+            </Track>
+        </ControlTemplate>
+        <Style x:Key="MyScrollViewer"
+            TargetType="{x:Type ScrollViewer}">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Column="1"
+                                BorderThickness="0,1,1,1">
+                                <Border.BorderBrush>
+                                    <SolidColorBrush Color="Black"/>
+                                </Border.BorderBrush>
+                                <ScrollContentPresenter CanContentScroll="{TemplateBinding CanContentScroll}" />
+                            </Border>
+                            <ScrollBar x:Name="PART_VerticalScrollBar"
+                                 Value="{TemplateBinding VerticalOffset}"
+                                 Maximum="{TemplateBinding ScrollableHeight}"
+                                 ViewportSize="{TemplateBinding ViewportHeight}"
+                                 Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                 Width="8"/>
+                            <ScrollBar x:Name="PART_HorizontalScrollBar"
+                                 Orientation="Horizontal"
+                                 Grid.Row="1"
+                                 Grid.Column="1"
+                                 Value="{TemplateBinding HorizontalOffset}"
+                                 Maximum="{TemplateBinding ScrollableWidth}"
+                                 ViewportSize="{TemplateBinding ViewportWidth}"
+                                 Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
+                        </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -150,16 +216,16 @@
         </Style>
         
         <!---->
-        <SolidColorBrush x:Key="TabItem.Static.Foreground" Color="Black" />
+        <SolidColorBrush x:Key="TabItem.Static.Foreground" Color="White" />
         <SolidColorBrush x:Key="TabItem.Selected.Foreground" Color="#1ECC94" />
         <Style x:Key="TabItemStyle1" TargetType="{x:Type TabItem}">
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Foreground" Value="White" />
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="Margin" Value="0,0,0,0" />
-            <Setter Property="Padding" Value="6,2,6,2" />
+            <Setter Property="Padding" Value="0,0,0,0" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TabItem}">
@@ -579,7 +645,7 @@
                                         Width="{Binding ElementName=grid,Path=ActualWidth}"
                                         Height="{Binding ElementName=grid, Path=ActualHeight}"
                                         
-                                        Content="歌曲信息编辑" VerticalAlignment="Center"
+                                        Content="音乐资源  编辑/导入" VerticalAlignment="Center"
                                         HorizontalAlignment="Left" Margin="5,0,0,0"
                                         BorderThickness="0"
                                         Foreground="{TemplateBinding Foreground}"
@@ -732,7 +798,7 @@
                                         Width="{Binding ElementName=grid,Path=ActualWidth}"
                                         Height="{Binding ElementName=grid, Path=ActualHeight}"
                                         
-                                        Content="同步音乐数据库" VerticalAlignment="Center"
+                                        Content="同步数据库  (开发中)" VerticalAlignment="Center"
                                         HorizontalAlignment="Left" Margin="5,0,0,0"
                                         BorderThickness="0"
                                         Foreground="{TemplateBinding Foreground}"

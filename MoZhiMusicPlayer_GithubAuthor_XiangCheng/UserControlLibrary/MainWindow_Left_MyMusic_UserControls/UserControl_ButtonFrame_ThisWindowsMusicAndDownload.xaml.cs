@@ -28,7 +28,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow
         private void UserControl_MouseEnter(object sender, MouseEventArgs e)
         {
             if (!BoolMouseLeftDown)
-                Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFDDDDDD"));
+                Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
         }
 
         private void UserControl_MouseLeave(object sender, MouseEventArgs e)

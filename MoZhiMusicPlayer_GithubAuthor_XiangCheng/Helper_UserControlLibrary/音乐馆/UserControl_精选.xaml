@@ -7,7 +7,7 @@
              x:Class="MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.音乐馆.UserControl_精选"
              mc:Ignorable="d" d:DesignWidth="810"
              UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-             Background="#F6F6F6" SizeChanged="UserControl_SizeChanged" VerticalAlignment="Top">
+             Background="#1E1E20" SizeChanged="UserControl_SizeChanged" VerticalAlignment="Top">
     <Grid Margin="38,38,38,38"
           x:Name="Grid_This_Background"
           UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 

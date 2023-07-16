@@ -40,8 +40,11 @@
                 BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Margin="0,27,145,27" Cursor="Hand" >
             <Button.Background>
-                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/顺序播放.png"/>
+                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/顺序播放 (1).png"/>
             </Button.Background>
+            <Button.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
         </Button>
         <Button x:Name="Button_Before" 
                 Style="{StaticResource MyButton}" Content="" 
@@ -51,8 +54,11 @@
                 RenderTransformOrigin="-5.75,0.5" 
                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="0,0,80,0">
             <Button.Background>
-                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/上一首.png"/>
+                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/上一首 (1).png"/>
             </Button.Background>
+            <Button.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
         </Button>
         <Button x:Name="Button_Play_Pause_Player" 
                 Style="{StaticResource MyButton}" Content="" 
@@ -63,6 +69,9 @@
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/24gf-playCircle.png"/>
             </Button.Background>
+            <Button.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
         </Button>
         <Button x:Name="Button_Next" 
                 Style="{StaticResource MyButton}" Content="" 
@@ -71,8 +80,11 @@
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="80,0,0,0">
             <Button.Background>
-                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/下一首.png"/>
+                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/下一首 (1).png"/>
             </Button.Background>
+            <Button.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
         </Button>
         <Button x:Name="Button_Music_Voice_Speed" 
                 Style="{StaticResource MyButton}" Content="" 
@@ -80,8 +92,11 @@
                 BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Cursor="Hand" >
             <Button.Background>
-                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/音量.png"/>
+                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/音量 (1).png"/>
             </Button.Background>
+            <Button.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
         </Button>
 
         <StackPanel x:Name="Stack_Panel_Order"
@@ -141,7 +156,7 @@
                 </Slider>
                 <TextBlock x:Name="Voice_Nums" TextWrapping="Wrap" Text="50%" 
                            RenderTransformOrigin="1.46,0.333" Height="20" 
-                           Foreground="Black" FontStyle="Normal" HorizontalAlignment="Stretch" 
+                           Foreground="White" FontStyle="Normal" HorizontalAlignment="Stretch" 
                            VerticalAlignment="Bottom" Margin="0,80,0,0"
                            TextBlock.TextAlignment="Center"
                            />
@@ -186,7 +201,7 @@
                 VerticalAlignment="Top" ClipToBounds="True" 
                     Height="20"  Margin="85,14,0,0" Width="161" HorizontalAlignment="Left">
                 <Canvas.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <EventTrigger RoutedEvent="FrameworkElement.MouseRightButtonDown">
                         <BeginStoryboard>
                             <Storyboard x:Name="StoryBorad_Song_Name">
                                 <DoubleAnimationUsingKeyFrames
@@ -216,19 +231,26 @@
                     </StackPanel.RenderTransform>
                     <TextBox 
                         x:Name="Song_Name"
-                        Text="MoZhi音乐，开源技术" TextWrapping="NoWrap" Width="531" FontSize="13"    
+                        Text="MoZhi音乐，开源技术" TextWrapping="NoWrap" FontSize="13"    
                         TextChanged="Song_Name_DataContextChanged" 
                         Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" 
-                        Focusable="False"
-                    />
+                        Focusable="False" Foreground="White"
+                    >
+                        <TextBox.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                        </TextBox.Effect>
+                    </TextBox>
                 </StackPanel>
             </Canvas>
             <Button x:Name="Button_MV" Style="{StaticResource MyButton}" 
                     Margin="253,15,0,0"
                     Width="16" Height="16" HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand">
                 <Button.Background>
-                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/视频播放.png"/>
+                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/视频播放 (1).png"/>
                 </Button.Background>
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </Button.Effect>
             </Button>
 
             <Button x:Name="Button_Love"
@@ -237,8 +259,11 @@
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
             >
                 <Button.Background>
-                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/爱心.png"/>
+                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/爱心 (1).png"/>
                 </Button.Background>
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </Button.Effect>
             </Button>
             <Button x:Name="Button_Download"
             Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
@@ -246,8 +271,11 @@
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
             >
                 <Button.Background>
-                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/保存到本地.png"/>
+                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/保存到本地 (1).png"/>
                 </Button.Background>
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </Button.Effect>
             </Button>
             <Button x:Name="Button_More"
             Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
@@ -255,8 +283,11 @@
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
             >
                 <Button.Background>
-                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/更多.png"/>
+                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/更多 (1).png"/>
                 </Button.Background>
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </Button.Effect>
             </Button>
         </Grid>
         <Grid x:Name="Grid_MusicPlayer_MainWindow_Right"

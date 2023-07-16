@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhiMusic_Ultimate.Views.Home_Page.Home_Sidebar_Panel"
-             xmlns:UserControls="clr-namespace:MoZhiMusic_Ultimate.Views.Home_Page.Home_Sidebar_Panel.UserControls" xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:UserControls="clr-namespace:MoZhiMusic_Ultimate.Views.Home_Page.Home_Sidebar_Panel.UserControls" 
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="674" MaxWidth="170">
     

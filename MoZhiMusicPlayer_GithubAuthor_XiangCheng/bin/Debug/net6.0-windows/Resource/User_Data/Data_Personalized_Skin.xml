@@ -1,0 +1,16 @@
+<PersonalizedSettings>
+  <Personalized_Skin>1</Personalized_Skin>
+  <Skins>
+    <Skin>
+      <Sidebar_Background>#FFFFFF</Sidebar_Background>
+      <Frame_Background>#000000</Frame_Background>
+    </Skin>
+    <Skin>
+      <Sidebar_Background>#FF0000</Sidebar_Background>
+      <Frame_Background>#00FF00</Frame_Background>
+    </Skin>
+  </Skins>
+  <ImageBrush_this_app_Background>
+    <ImageSource>C:\Users\Administrator\Desktop\壁纸\4eedc4b3b1f46b855f32028d0b125d3e.jpg</ImageSource>
+  </ImageBrush_this_app_Background>
+</PersonalizedSettings>
