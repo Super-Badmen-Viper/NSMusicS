@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_TOP_UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="77" d:DesignWidth="800" Background="#1E1E20">
+             d:DesignHeight="77" d:DesignWidth="800" Background="#F6F6F6">
     <Grid>
         <Button 
             
@@ -17,9 +17,6 @@
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/方向-向左.png"/>
             </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
         </Button>
 
         <Button 
@@ -32,9 +29,6 @@
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/方向-向右 (1).png"/>
             </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
         </Button>
 
         <local:UserControl_ButtonFrame_Search Height="33" Margin="105,22,511,22" MaxWidth="280"/>
@@ -58,7 +52,7 @@
                    />
 
         <Button 
-            x:Name="Button_Personalized_Skin"
+            
             Style="{StaticResource MyButton}"
                 HorizontalAlignment="Right" Height="14" Width="16" Margin="0,31,198,32"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
@@ -66,9 +60,6 @@
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/皮肤.png"/>
             </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
         </Button>
         <Button 
             
@@ -79,9 +70,6 @@
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/菜单.png"/>
             </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
         </Button>
         <Button 
             x:Name="Button_Streamlined"
@@ -93,9 +81,6 @@
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/Streamlined mode.png"/>
             </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
         </Button>
         <Button 
             x:Name="Button_Min"
@@ -107,9 +92,6 @@
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/最小化.png"/>
             </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
         </Button>
         <Button 
             x:Name="Button_Max"
@@ -121,9 +103,6 @@
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/最大化.png" Stretch="Uniform"/>
             </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
         </Button>
         <Button 
             x:Name="Button_Exit"
@@ -135,9 +114,6 @@
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/关闭.png"/>
             </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
         </Button>
 
 

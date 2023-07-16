@@ -7,17 +7,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="443" d:DesignWidth="810"
              UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-             
+             Background="#F6F6F6"
              >
     <Grid>
         <Grid HorizontalAlignment="Left" Width="200">
-            <Border BorderBrush="#8E8E8F" BorderThickness="0,0,1,0"/>
+            <Border BorderBrush="#7C7C7C" BorderThickness="0,0,1,0"/>
 
             <TextBlock Text="歌单信息编辑" Width="185" 
-                       Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       Padding="17,0,0,0" Foreground="Black" VerticalAlignment="Top" HorizontalAlignment="Left" 
                        FontSize="26" FontWeight="Bold"/>
 
-            <TextBlock Text="选择需要修改的歌单" Width="160" Padding="17,0,0,0" Foreground="#8E8E8F" VerticalAlignment="Top" 
+            <TextBlock Text="选择需要修改的歌单" Width="160" Padding="17,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" 
                            Margin="10,50,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <ComboBox 
                     x:Name="ComBox_Select_SongList"
@@ -43,7 +43,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <TextBlock Text="重命名为：？" 
-                       Width="110" Padding="17,0,0,0" Foreground="#8E8E8F" VerticalAlignment="Top" 
+                       Width="110" Padding="17,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" 
                        Margin="10,120,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <TextBox 
                 x:Name="TextBox_Edit_Temp_SongList_Name"
@@ -57,13 +57,13 @@
             
         </Grid>
         <Grid Margin="200,0,0,0" Width="212" HorizontalAlignment="Left" >
-            <Border BorderBrush="#8E8E8F" BorderThickness="0,0,1,0" Margin="0,25,0,-25"/>
+            <Border BorderBrush="#7C7C7C" BorderThickness="0,0,1,0" Margin="0,25,0,-25"/>
 
             <TextBlock Text="歌曲信息编辑" Width="200" 
-                       Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       Padding="17,0,0,0" Foreground="Black" VerticalAlignment="Top" HorizontalAlignment="Left" 
                        FontSize="26" FontWeight="Bold"/>
 
-            <TextBlock Text="输入歌手(曲)名" Width="160" Padding="17,0,0,0" Foreground="#8E8E8F" VerticalAlignment="Top" 
+            <TextBlock Text="输入歌手(曲)名" Width="160" Padding="17,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" 
                            Margin="10,50,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <TextBox x:Name="TextBox_Search_Song_Name" 
                      Width="160" Margin="0,73,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" 
@@ -74,7 +74,7 @@
                 
                 />
 
-            <TextBlock Text="请选择" Width="160" Padding="17,0,0,0" Foreground="#8E8E8F" VerticalAlignment="Top" 
+            <TextBlock Text="请选择" Width="160" Padding="17,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" 
                            Margin="10,100,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <ComboBox 
                     x:Name="ComBox_Show_Search_Song"
@@ -86,19 +86,19 @@
                     >
             </ComboBox>
 
-            <TextBlock Text="修改歌曲名" Width="160" Padding="17,0,0,0" Foreground="#8E8E8F" VerticalAlignment="Top" 
+            <TextBlock Text="修改歌曲名" Width="160" Padding="17,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" 
                            Margin="10,175,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <TextBox x:Name="TextBox_Edit_Song_Name" 
                      Width="160" Margin="0,195,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" 
                      FontSize="16" Height="22" TextChanged="TextBox_Edit_Song_Name_TextChanged" />
 
-            <TextBlock Text="修改歌手名" Width="160" Padding="17,0,0,0" Foreground="#8E8E8F" VerticalAlignment="Top" 
+            <TextBlock Text="修改歌手名" Width="160" Padding="17,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" 
                            Margin="10,225,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <TextBox x:Name="TextBox_Edit_Singer_Name" 
                      Width="160" Margin="0,245,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" 
                      FontSize="16" Height="22" TextChanged="TextBox_Edit_Singer_Name_TextChanged" />
 
-            <TextBlock Text="修改专辑名" Width="160" Padding="17,0,0,0" Foreground="#8E8E8F" VerticalAlignment="Top" 
+            <TextBlock Text="修改专辑名" Width="160" Padding="17,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" 
                            Margin="10,275,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <TextBox x:Name="TextBox_Edit_Album_Name" 
                      Width="160" Margin="0,295,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" 
@@ -119,32 +119,31 @@
 
         </Grid>
         <Grid Margin="400,0,0,0">
-            <Border BorderBrush="#8E8E8F" BorderThickness="0,0,1,0"/>
+            <Border BorderBrush="#7C7C7C" BorderThickness="0,0,1,0"/>
 
             <TextBlock Text="音乐资源导入" Width="200" 
-                       Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       Padding="17,0,0,0" Foreground="Black" VerticalAlignment="Top" HorizontalAlignment="Left" 
                        FontSize="26" FontWeight="Bold"/>
 
-            <TextBlock Text="导入 歌手写真（拖拽至空白，jpg格式，最多24张）" Width="400" Padding="17,0,0,0" 
-                       Foreground="#8E8E8F" VerticalAlignment="Top" 
+            <TextBlock Text="导入 歌手写真（文件拖拽至以下空白，仅支持JPG）" Width="400" Padding="17,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" 
                            Margin="10,50,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <ListBox x:Name="ListBox_Singer_Image" Height="60" VerticalAlignment="Top" Margin="25,70,25,0"
                      AllowDrop="True"
                      />
 
-            <TextBlock Text="导入 专辑图片（文件拖拽至以下空白，jpg格式）" Width="400" Padding="17,0,0,0" Foreground="#8E8E8F" VerticalAlignment="Top" 
+            <TextBlock Text="导入 专辑图片（文件拖拽至以下空白，仅支持JPG）" Width="400" Padding="17,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" 
                            Margin="10,140,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <ListBox x:Name="ListBox_Album_Image" Height="60" VerticalAlignment="Top" Margin="25,160,25,0"
                      AllowDrop="True"
                      />
 
-            <TextBlock Text="导入 歌词文件（文件拖拽至以下空白）" Width="400" Padding="17,0,0,0" Foreground="#8E8E8F" VerticalAlignment="Top" 
+            <TextBlock Text="导入 歌词文件（文件拖拽至以下空白）" Width="400" Padding="17,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" 
                            Margin="10,230,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <ListBox x:Name="ListBox_Mrc_Image" Height="60" VerticalAlignment="Top" Margin="25,250,25,0"
                      AllowDrop="True"
                      />
 
-            <TextBlock Text="导入 歌词翻译文件（文件拖拽至以下空白，crc格式）" Width="400" Padding="17,0,0,0" Foreground="#8E8E8F" VerticalAlignment="Top" 
+            <TextBlock Text="导入 歌词翻译文件（文件拖拽至以下空白）" Width="400" Padding="17,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" 
                            Margin="10,320,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <ListBox x:Name="ListBox_Crc_Image" Height="60" VerticalAlignment="Top" Margin="25,340,25,0"
                      AllowDrop="True"

@@ -8,17 +8,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="443" d:DesignWidth="810"
              UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-             >
+             Background="#F6F6F6">
     <Grid>
         <Grid Width="200" HorizontalAlignment="Left">
-            <Border BorderBrush="#8E8E8F" BorderThickness="0,0,1,0"/>
+            <Border BorderBrush="#7C7C7C" BorderThickness="0,0,1,0"/>
             <TextBlock Text="同步音乐数据库" Width="190" 
-                       Padding="0,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       Padding="0,0,0,0" Foreground="Black" VerticalAlignment="Top" HorizontalAlignment="Left" 
                        FontSize="26" FontWeight="Bold" Margin="5,0,0,0"/>
 
             <StackPanel Width="140" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Margin="20,50,0,0">
                 <TextBlock Text="Data Source = ?" 
-                           Width="140" Foreground="#8E8E8F" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16"/>
+                           Width="140" Foreground="#7C7C7C" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16"/>
                 <TextBox 
                     x:Name="TextBox_Connection_Data_Source"
                     Width="140" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" 
@@ -27,7 +27,7 @@
             </StackPanel>
             <StackPanel Width="140" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Margin="20,100,0,0">
                 <TextBlock Text="Initial Catalog(Database) = ?" 
-                           Width="140" Foreground="#8E8E8F" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16" TextWrapping="Wrap"/>
+                           Width="140" Foreground="#7C7C7C" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16" TextWrapping="Wrap"/>
                 <TextBox 
                     x:Name="TextBox_Connection_Initial_Catalog"
                     Width="140" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" 
@@ -36,7 +36,7 @@
             </StackPanel>
             <StackPanel Width="140" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Margin="20,180,0,0">
                 <TextBlock Text="User ID = ?" 
-                           Width="140" Foreground="#8E8E8F" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16"/>
+                           Width="140" Foreground="#7C7C7C" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16"/>
                 <TextBox 
                     x:Name="TextBox_Connection_User_ID"
                     Width="140" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" 
@@ -45,7 +45,7 @@
             </StackPanel>
             <StackPanel Width="140" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Margin="20,230,0,0">
                 <TextBlock Text="Password = ?" 
-                           Width="140" Foreground="#8E8E8F" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16"/>
+                           Width="140" Foreground="#7C7C7C" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16"/>
                 <TextBox 
                     x:Name="TextBox_Connection_Password"
                     Width="140" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" 
@@ -61,7 +61,7 @@
 
             <StackPanel Width="140" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Margin="20,340,0,0">
                 <TextBlock Text="Port = ?" 
-                           Width="140" Foreground="#8E8E8F" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16"/>
+                           Width="140" Foreground="#7C7C7C" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16"/>
                 <TextBox 
                     x:Name="TextBox_Connection_Port"
                     Width="140" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" 
@@ -79,12 +79,12 @@
         </Grid>
         <Grid Margin="200,0,0,0" >
             <TextBlock Text="获取并下载音频链接" Width="241" 
-                       Padding="0,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       Padding="0,0,0,0" Foreground="Black" VerticalAlignment="Top" HorizontalAlignment="Left" 
                        FontSize="26" FontWeight="Bold" Margin="5,0,0,0"/>
 
             <StackPanel Width="140" HorizontalAlignment="Right" VerticalAlignment="Top" Height="50" Margin="20,50,0,0">
                 <TextBlock Text="API接口" 
-                           Width="140" Foreground="#8E8E8F" HorizontalAlignment="Right" FontSize="16"/>
+                           Width="140" Foreground="#7C7C7C" HorizontalAlignment="Right" FontSize="16"/>
                 <TextBox 
                     x:Name="TextBox_Web_API"
                     Width="140" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="20"
@@ -101,7 +101,7 @@
 
             <StackPanel Width="400" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Margin="20,50,0,0">
                 <TextBlock Text="SQL语句编辑：默认为SELECT music_url FROM music" 
-                           Width="400" Foreground="#8E8E8F" HorizontalAlignment="Left" FontSize="16"/>
+                           Width="400" Foreground="#7C7C7C" HorizontalAlignment="Left" FontSize="16"/>
                 <TextBox 
                     x:Name="TextBox_Sql_Edit"
                     Width="400" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20"
@@ -116,7 +116,7 @@
                 />
 
             <TextBlock Text="获取到的music_url链接" Width="241" 
-                       Padding="0,0,0,0" Foreground="#8E8E8F" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       Padding="0,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" HorizontalAlignment="Left" 
                        FontSize="16" Margin="20,140,0,0"/>
             <ListBox
                 x:Name="ListBox_Music_Urls_Show"
@@ -195,7 +195,7 @@
                 />
 
             <TextBlock Text="music_url链接下载结果" Width="241" 
-                       Padding="0,0,0,0" Foreground="#8E8E8F" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       Padding="0,0,0,0" Foreground="#7C7C7C" VerticalAlignment="Top" HorizontalAlignment="Left" 
                        FontSize="16" Margin="20,310,0,0"/>
             <ListBox
                 x:Name="ListBox_Music_Urls_DownLoad_Results_Display"

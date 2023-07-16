@@ -11,6 +11,8 @@
              d:DesignHeight="690" MinWidth="1020" 
              Height="690" Width="1020" 
              UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+             
+             
              >
     <Grid>
         <Grid x:Name="Grid_Animation">
@@ -432,9 +434,6 @@
                     <Button.Background>
                         <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/下-01.png"/>
                     </Button.Background>
-                    <Button.Effect>
-                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                    </Button.Effect>
                 </Button>
 
                 <Button 
@@ -447,9 +446,6 @@
                     <Button.Background>
                         <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/最小化.png"/>
                     </Button.Background>
-                    <Button.Effect>
-                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                    </Button.Effect>
                 </Button>
                 <Button 
             x:Name="Button_Max"
@@ -461,9 +457,6 @@
                     <Button.Background>
                         <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/最大化.png" Stretch="Uniform"/>
                     </Button.Background>
-                    <Button.Effect>
-                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                    </Button.Effect>
                 </Button>
                 <Button 
             x:Name="Button_Exit"
@@ -475,9 +468,6 @@
                     <Button.Background>
                         <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/关闭.png"/>
                     </Button.Background>
-                    <Button.Effect>
-                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                    </Button.Effect>
                 </Button>
             </Grid>
         </Grid>

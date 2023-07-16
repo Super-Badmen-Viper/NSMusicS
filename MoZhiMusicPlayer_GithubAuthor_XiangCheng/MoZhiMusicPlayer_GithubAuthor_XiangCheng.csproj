@@ -666,8 +666,4 @@
     <Resource Include="Resource\Obsession.jpg" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="bin\Debug\net6.0-windows\Resource\User_Data\" />
-  </ItemGroup>
-
 </Project>

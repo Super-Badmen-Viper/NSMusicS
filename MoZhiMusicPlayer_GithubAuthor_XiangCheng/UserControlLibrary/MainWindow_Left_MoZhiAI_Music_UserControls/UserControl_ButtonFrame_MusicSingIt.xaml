@@ -18,18 +18,11 @@
                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                >
             <TextBlock.Background>
-                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/K歌 (1).png"/>
+                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/K歌.png"/>
             </TextBlock.Background>
-            <TextBlock.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </TextBlock.Effect>
         </TextBlock>
-        <TextBlock Margin="40,5,0,5" Text="K歌打分  （开发中）" Foreground="White" FontSize="13.5" Padding="0,1,0,0" 
+        <TextBlock Margin="40,5,0,5" Text="K歌打分  （开发中）" Foreground="#FF313131" FontSize="13.5" Padding="0,1,0,0" 
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                   >
-            <TextBlock.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </TextBlock.Effect>
-        </TextBlock>
+                   />
     </Grid>
 </UserControl>
