@@ -64,15 +64,15 @@
                             <MainWindow_Left_OnlineMusic_UserControls:UserControl_ButtonFrame_MusicSquare 
                                 x:Name="userControl_ButtonFrame_MusicSquare"
                                 Width="160" Height="30" Margin="0,16,0,0"
-                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" MouseLeftButtonDown="UserControl_ButtonFrame_MusicSquare_MouseLeftButtonDown" />
+                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  />
                             <MainWindow_Left_OnlineMusic_UserControls:UserControl_ButtonFrame_MusicVideo 
                                 x:Name="userControl_ButtonFrame_MusicVideo"
                                 Width="160" Height="30" Margin="0,11,0,0"
-                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" MouseLeftButtonDown="UserControl_ButtonFrame_MusicVideo_MouseLeftButtonDown" />
+                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" />
                             <MainWindow_Left_OnlineMusic_UserControls:UserControl_ButtonFrame_RadioStation
                                 x:Name="userControl_ButtonFrame_RadioStation"
                                 Width="160" Height="30" Margin="0,11,0,0"
-                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" MouseLeftButtonDown="UserControl_ButtonFrame_RadioStation_MouseLeftButtonDown" />
+                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" />
                         </StackPanel>
                         <StackPanel x:Name="StackPanel_MoZhiAI_Music" 
                                 Visibility="Visible" Width="210" Height="190" 
@@ -267,26 +267,6 @@
 
                 <Main_Home_TOP_UserControls:UserControl_Main_Home_TOP_Personalized_Skins 
                     x:Name="userControl_Main_Home_TOP_Personalized_Skins"
-                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                    Visibility="Hidden"
-                    />
-            </Grid>
-
-            <Grid 
-                x:Name="Grid_Helper_UserControlLibrary"
-                Margin="210,76.7,0,70"      
-                >
-                <Helper_UserControlLibrary:UserControl_音乐馆 
-                    x:Name="userControl_音乐馆" 
-                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                    Visibility="Hidden"/>
-                <Helper_UserControlLibrary:UserControl_视频
-                     x:Name="userControl_视频" 
-                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                    Visibility="Hidden"
-                    />
-                <Helper_UserControlLibrary:UserControl_电台
-                    x:Name="userControl_电台" 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
                     Visibility="Hidden"
                     />

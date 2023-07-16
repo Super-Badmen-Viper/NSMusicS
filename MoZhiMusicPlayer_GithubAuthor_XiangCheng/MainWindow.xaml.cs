@@ -244,11 +244,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores_TabControl.SelectedIndex = ComBox_Select_SongList_SelectIndex;
                 userControl_Main_Home_Left_MyMusic_Mores_TabControl.Visibility = Visibility.Visible;
 
-                //隐藏，防止遮盖
-                userControl_音乐馆.Visibility = Visibility.Hidden;
-                userControl_视频.Visibility = Visibility.Hidden;
-                userControl_电台.Visibility = Visibility.Hidden;
-
                 userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Hidden;
                 userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Singer_Name.Text = "";
                 userControl_Main_Home_Left_MyMusic_SongInfo_Edit.TextBox_Edit_Song_Name.Text = "";
@@ -1156,23 +1151,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// </summary>
         public void Clear_Windows_Left_ALL_UserControl_BackGround()
         {
-            userControl_ButtonFrame_MusicSquare.BoolMouseLeftDown = false; userControl_ButtonFrame_MusicSquare.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
-            userControl_ButtonFrame_MusicVideo.BoolMouseLeftDown = false; userControl_ButtonFrame_MusicVideo.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
-            userControl_ButtonFrame_RadioStation.BoolMouseLeftDown = false; userControl_ButtonFrame_RadioStation.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
             userControl_ButtonFrame_MusicLove.BoolMouseLeftDown = false; userControl_ButtonFrame_MusicLove.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
             userControl_ButtonFrame_ThisWindowsMusicAndDownload.BoolMouseLeftDown = false; userControl_ButtonFrame_ThisWindowsMusicAndDownload.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
             userControl_ButtonFrame_MusicRecentlyPlayed.BoolMouseLeftDown = false; userControl_ButtonFrame_MusicRecentlyPlayed.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
-            
-            userControl_音乐馆.Visibility = Visibility.Hidden;
-            userControl_视频.Visibility = Visibility.Hidden;
-            userControl_电台.Visibility = Visibility.Hidden;
         }
         /// <summary>
         /// 窗体进入动画
         /// </summary>
         public void Grid_Animation_MouseLeftClick()
         {
-            double temp = Grid_Helper_UserControlLibrary.ActualWidth;
+            double temp = Frame_Show.ActualWidth;
             //实例化一个DoubleAnimation类。
             doubleAnimation = new DoubleAnimation();
             //设置From属性。
@@ -1181,10 +1169,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             doubleAnimation.To = temp;
             //设置Duration属性。
             doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(80));
-            doubleAnimation.Completed += Grid_Animation_Completed_Grid_Helper_UserControlLibrary;
-            //为元素设置BeginAnimation方法。
-            Grid_Helper_UserControlLibrary.BeginAnimation(UserControl.WidthProperty, doubleAnimation);
-            Grid_Helper_UserControlLibrary.HorizontalAlignment = HorizontalAlignment.Stretch;
 
             temp = Frame_Show.ActualWidth;
             //实例化一个DoubleAnimation类。
@@ -1205,53 +1189,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Grid_Animation_Completed_Grid_Helper_UserControlLibrary(object sender, EventArgs e)
-        {
-            Grid_Helper_UserControlLibrary.BeginAnimation(UserControl.WidthProperty, null);
-        }
         private void Grid_Animation_Completed_Frame_Show(object sender, EventArgs e)
         {
             Frame_Show.BeginAnimation(UserControl.WidthProperty, null);
-        }
-
-
-        private void UserControl_ButtonFrame_MusicSquare_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ComBox_Select_SongList_SelectIndex = -1;
-            ComBox_Select_SongList.SelectedIndex = ComBox_Select_SongList_SelectIndex;
-
-            Clear_Windows_Left_ALL_UserControl_BackGround();
-            userControl_ButtonFrame_MusicSquare.BoolMouseLeftDown = true;
-            userControl_ButtonFrame_MusicSquare.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E1E20"));
-
-            userControl_音乐馆.Visibility = Visibility.Visible;
-            Grid_Animation_MouseLeftClick();/// 窗体进入动画
-        }
-
-        private void UserControl_ButtonFrame_MusicVideo_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ComBox_Select_SongList_SelectIndex = -1;
-            ComBox_Select_SongList.SelectedIndex = ComBox_Select_SongList_SelectIndex;
-
-            Clear_Windows_Left_ALL_UserControl_BackGround();
-            userControl_ButtonFrame_MusicVideo.BoolMouseLeftDown = true;
-            userControl_ButtonFrame_MusicVideo.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E1E20"));
-
-            userControl_视频.Visibility = Visibility.Visible;
-            Grid_Animation_MouseLeftClick();/// 窗体进入动画
-        }
-
-        private void UserControl_ButtonFrame_RadioStation_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ComBox_Select_SongList_SelectIndex = -1;
-            ComBox_Select_SongList.SelectedIndex = ComBox_Select_SongList_SelectIndex;
-
-            Clear_Windows_Left_ALL_UserControl_BackGround();
-            userControl_ButtonFrame_RadioStation.BoolMouseLeftDown = true;
-            userControl_ButtonFrame_RadioStation.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E1E20"));
-
-            userControl_电台.Visibility = Visibility.Visible;
-            Grid_Animation_MouseLeftClick();/// 窗体进入动画
         }
 
         #endregion
