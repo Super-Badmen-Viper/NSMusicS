@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:sort="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="443" d:DesignWidth="810"
              UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
@@ -199,6 +200,11 @@
                         <Setter Property="BorderBrush" Value="#00000000"/>
                         <Setter Property="BorderThickness" Value="0"/>
                         <Setter Property="Foreground" Value="#FF9F9F9F"/>
+                    </Style>
+                    <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">8</system:Double>
+                    <Style TargetType="ScrollBar">
+                        <Setter Property="Width" Value="8"/>
+                        <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
                     </Style>
                 </ListView.Resources>
                 <ListView.View>

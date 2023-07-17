@@ -3,6 +3,7 @@ using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos;
 using Shell32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -37,7 +38,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
         static string[] Finds_AllSong_End;
         static string[] Finds_AllSong;
 
-        public List<Song_Info> list_Song_Info = new List<Song_Info>();
+        public ObservableCollection<Song_Info> list_Song_Info = new ObservableCollection<Song_Info>();
         static Song_Info song_info = new Song_Info();
         static string Song_Path_Temp = "";//存储临时生成的导入的后缀为mp3文件名
         static string Singer_Name_Temp = "";//存储临时提取的歌手名
@@ -376,7 +377,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
         private void Save_SongListInfo()
         {
             //刷新内存区域的引用
-            List<List<Models.Song_List_Infos.SongList_Info>> songList_Infos = SongList_Info.Retuen_This();
+            ObservableCollection<ObservableCollection<Models.Song_List_Infos.SongList_Info>> songList_Infos = SongList_Info.Retuen_This();
 
             if (ComBox_Select == 0)
             {
@@ -400,7 +401,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                     }
                 }
                 //排序
-                songList_Infos[0][0].Songs = songList_Infos[0][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                //songList_Infos[0][0].Songs = songList_Infos[0][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
                 for (int i = 0; i < songList_Infos[0][0].Songs.Count; i++)
                 {
                     songList_Infos[0][0].Songs[i].Song_No = i + 1;
@@ -429,7 +430,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                     }
                 }
                 //排序
-                songList_Infos[1][0].Songs = songList_Infos[1][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                //songList_Infos[1][0].Songs = songList_Infos[1][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
                 for (int i = 0; i < songList_Infos[1][0].Songs.Count; i++)
                 {
                     songList_Infos[1][0].Songs[i].Song_No = i + 1;
@@ -457,7 +458,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                     }
                 }
                 //排序
-                songList_Infos[2][0].Songs = songList_Infos[2][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                //songList_Infos[2][0].Songs = songList_Infos[2][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
                 for (int i = 0; i < songList_Infos[2][0].Songs.Count; i++)
                 {
                     songList_Infos[2][0].Songs[i].Song_No = i + 1;
@@ -485,7 +486,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                     }
                 }
                 //排序
-                songList_Infos[ComBox_Select][0].Songs = songList_Infos[ComBox_Select][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                //songList_Infos[ComBox_Select][0].Songs = songList_Infos[ComBox_Select][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
                 for (int i = 0; i < songList_Infos[ComBox_Select][0].Songs.Count; i++)
                 {
                     songList_Infos[ComBox_Select][0].Songs[i].Song_No = i + 1;
@@ -494,18 +495,18 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
 
             //保存歌单信息
             string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
-            var playlists = new List<SongList_Info>();
+            var playlists = new ObservableCollection<SongList_Info>();
             playlists = songList_Infos[0];
             SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
-            playlists = new List<SongList_Info>();
+            playlists = new ObservableCollection<SongList_Info>();
             playlists = songList_Infos[1];
             SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml", playlists);
-            playlists = new List<SongList_Info>();
+            playlists = new ObservableCollection<SongList_Info>();
             playlists = songList_Infos[2];
             SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml", playlists);
             for (int i = 3; i < 17; i++)
             {
-                playlists = new List<SongList_Info>();
+                playlists = new ObservableCollection<SongList_Info>();
                 playlists = songList_Infos[i];
                 SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (" + i + ").xml", playlists);
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
 {
     public class SongList_Info_Current_Playlists
     {
-        public List<Song_Info> songList_Infos_Current_Playlist { get; set; }
+        public ObservableCollection<Song_Info> songList_Infos_Current_Playlist { get; set; }
 
         private static SongList_Info_Current_Playlists songList_Infos;
         public static SongList_Info_Current_Playlists Retuen_This()

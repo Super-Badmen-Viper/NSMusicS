@@ -1,7 +1,9 @@
-﻿using System;
+﻿using GLib;
+using System;
 using System.Collections;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
 {
@@ -478,8 +480,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
         /// 使用歌词字同步
         /// </summary>
         #region 歌词字同步
+        public MRC_Line_Info[] mrc_Line_Info;
 
-        public MRC_Line_Info[] MRC_Line_Info;
         public static string Song_MRC_Path;//歌词文件所在的路径
         public double Start_Song_MRC_Time;
         public double End_Song_MRC_Time;
@@ -518,8 +520,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
             }
             Console.WriteLine();
 
-
-            Init_MRC_Info();
+            if (arrayList_MRC_line.Count > 0)
+                if (arrayList_MRC_line[0].ToString().IndexOf("<") > -1)
+                {
+                    Init_MRC_Info();
+                }
+                else
+                {
+                    Init_Lrc_Info();
+                }
         }
         public bool isPureNum(string str)
         {
@@ -538,13 +547,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
             return true;                              //是，就返回true
         }
 
-
+        
         /// <summary>
         /// 初始化歌词行字节信息
         /// </summary>
         public void Init_MRC_Info()
         {
-            MRC_Line_Info = new MRC_Line_Info[arrayList_MRC_line.Count];
+            mrc_Line_Info = new MRC_Line_Info[arrayList_MRC_line.Count];
 
             string temp_head_start = "";
             string temp_head_duration = "";
@@ -558,75 +567,293 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                 temp_head_duration = temp_head_start;
                 temp_text = temp_head_start;
 
-                MRC_Line_Info[i] = new MRC_Line_Info();
+                mrc_Line_Info[i] = new MRC_Line_Info();
 
-                MRC_Line_Info[i].This_MRC_Line = i + 1;
-                MRC_Line_Info[i].This_MRC_Start_Time = Convert.ToInt32(temp_head_start.Substring(temp_head_start.IndexOf("[") + 1, temp_head_start.IndexOf(",") - temp_head_start.IndexOf("[") - 1));
-                MRC_Line_Info[i].This_MRC_Duration = Convert.ToInt32(temp_head_duration.Substring(temp_head_duration.IndexOf(",") + 1, temp_head_duration.IndexOf("]") - temp_head_duration.IndexOf(",") - 1));
+                mrc_Line_Info[i].This_MRC_Line = i + 1;
+                mrc_Line_Info[i].This_MRC_Start_Time = Convert.ToInt32(temp_head_start.Substring(temp_head_start.IndexOf("[") + 1, temp_head_start.IndexOf(",") - temp_head_start.IndexOf("[") - 1));
+                mrc_Line_Info[i].This_MRC_Duration = Convert.ToInt32(temp_head_duration.Substring(temp_head_duration.IndexOf(",") + 1, temp_head_duration.IndexOf("]") - temp_head_duration.IndexOf(",") - 1));
 
                 //<0,204,0>林<204,204,0>俊<408,203,0>杰 <611,203,0>- <814,203,0>Always <1017,254,0>Online
                 temp_text = temp_text.Substring(temp_text.IndexOf("]") + 1);
-                while (true)
+                if (temp_text.IndexOf("<") > -1)
                 {
-                    //添加歌词行单个字符动画开始时间
-                    if (temp_text.IndexOf(",") > temp_text.IndexOf("<"))
-                        MRC_Line_Info[i].Array_Morebyte_BeginTime.Add(temp_text.Substring(temp_text.IndexOf("<") + 1, temp_text.IndexOf(",") - temp_text.IndexOf("<") - 1));
-                    else
-                        MRC_Line_Info[i].Array_Morebyte_BeginTime.Add(temp_text.Substring(temp_text.IndexOf("<") + 1, temp_text.IndexOf(",") - temp_text.IndexOf("<") - 1));
+                    while (true)
+                    {
+                        //添加歌词行单个字符动画开始时间
+                        if (temp_text.IndexOf(",") > temp_text.IndexOf("<"))
+                            mrc_Line_Info[i].Array_Morebyte_BeginTime.Add(temp_text.Substring(temp_text.IndexOf("<") + 1, temp_text.IndexOf(",") - temp_text.IndexOf("<") - 1));
+                        else
+                            mrc_Line_Info[i].Array_Morebyte_BeginTime.Add(temp_text.Substring(temp_text.IndexOf("<") + 1, temp_text.IndexOf(",") - temp_text.IndexOf("<") - 1));
 
-                    //添加歌词行单个字符动画持续时间
-                    //204,0>林<204,204,0>俊<408,203,0>杰 <611,203,0>- <814,203,0>Always <1017,254,0>Online
-                    temp_text = temp_text.Substring(temp_text.IndexOf(",") + 1);
-                    MRC_Line_Info[i].Array_Morebyte_Duration.Add(temp_text.Substring(0, temp_text.IndexOf(",")));
+                        //添加歌词行单个字符动画持续时间
+                        //204,0>林<204,204,0>俊<408,203,0>杰 <611,203,0>- <814,203,0>Always <1017,254,0>Online
+                        temp_text = temp_text.Substring(temp_text.IndexOf(",") + 1);
+                        mrc_Line_Info[i].Array_Morebyte_Duration.Add(temp_text.Substring(0, temp_text.IndexOf(",")));
 
-                    //添加歌词字节
-                    //林<204,204,0>俊<408,203,0>杰 <611,203,0>- <814,203,0>Always <1017,254,0>Online
-                    temp_text = temp_text.Substring(temp_text.IndexOf(">") + 1);
-                    if (temp_text.IndexOf("<") > 0)
-                        MRC_Line_Info[i].Array_Morebyte_Text.Add(temp_text.Substring(0, temp_text.IndexOf("<")));
-                    else
-                        MRC_Line_Info[i].Array_Morebyte_Text.Add(temp_text);
+                        //添加歌词字节
+                        //林<204,204,0>俊<408,203,0>杰 <611,203,0>- <814,203,0>Always <1017,254,0>Online
+                        temp_text = temp_text.Substring(temp_text.IndexOf(">") + 1);
+                        if (temp_text.IndexOf("<") > 0)
+                            mrc_Line_Info[i].Array_Morebyte_Text.Add(temp_text.Substring(0, temp_text.IndexOf("<")));
+                        else
+                            mrc_Line_Info[i].Array_Morebyte_Text.Add(temp_text);
 
-                    //计算歌词字节数量
-                    MRC_Line_Info[i].Int_MoreByte_Nums++;
+                        //计算歌词字节数量
+                        mrc_Line_Info[i].Int_MoreByte_Nums++;
 
-                    //验证是否还存在字符
-                    if (temp_text.IndexOf("<") > 0)
-                        temp_text = temp_text.Substring(temp_text.IndexOf("<"));//去除已添加的歌词字节
-                    else
-                        break;
+                        //验证是否还存在字符
+                        if (temp_text.IndexOf("<") > 0)
+                            temp_text = temp_text.Substring(temp_text.IndexOf("<"));//去除已添加的歌词字节
+                        else
+                            break;
+                    }
                 }
             }
 
             int nums_This_MRC_Duration = 0;
-            for (int i = 0; i < MRC_Line_Info[MRC_Line_Info.Length - 1].Int_MoreByte_Nums; i++)
+            for (int i = 0; i < mrc_Line_Info[mrc_Line_Info.Length - 1].Int_MoreByte_Nums; i++)
             {
-                nums_This_MRC_Duration += Convert.ToInt32(MRC_Line_Info[MRC_Line_Info.Length - 1].Array_Morebyte_Duration[i]);
+                nums_This_MRC_Duration += Convert.ToInt32(mrc_Line_Info[mrc_Line_Info.Length - 1].Array_Morebyte_Duration[i]);
             }
-            MRC_Line_Info[MRC_Line_Info.Length - 1].This_MRC_Duration = nums_This_MRC_Duration;
+            mrc_Line_Info[mrc_Line_Info.Length - 1].This_MRC_Duration = nums_This_MRC_Duration;
             //未指定目标
 
             //This_MRC_Start_Time为0时定时器无法捕捉
-            for (int i = 0; i < MRC_Line_Info.Length; i++)
+            for (int i = 0; i < mrc_Line_Info.Length; i++)
             {
-                if (MRC_Line_Info[i].This_MRC_Start_Time == 0)
+                if (mrc_Line_Info[i].This_MRC_Start_Time == 0)
                 {
-                    MRC_Line_Info[i].This_MRC_Start_Time = 222;
+                    mrc_Line_Info[i].This_MRC_Start_Time = 222;
                 }
             }
 
-            //Duration重新设置为MRC_Line_Info[i].This_MRC_Duration
-            for (int i = 0; i < MRC_Line_Info.Length; i++)
+            //Duration重新设置为mrc_Line_Info[i].This_MRC_Duration
+            for (int i = 0; i < mrc_Line_Info.Length; i++)
             {
                 int Duration_Line = 
-                    Convert.ToInt32(MRC_Line_Info[i].Array_Morebyte_BeginTime[
-                        MRC_Line_Info[i].Array_Morebyte_BeginTime.Count - 1])
-                    + Convert.ToInt32(MRC_Line_Info[i].Array_Morebyte_Duration[
-                        MRC_Line_Info[i].Array_Morebyte_Duration.Count - 1]);
-                MRC_Line_Info[i].This_MRC_Duration = Duration_Line;
+                    Convert.ToInt32(mrc_Line_Info[i].Array_Morebyte_BeginTime[
+                        mrc_Line_Info[i].Array_Morebyte_BeginTime.Count - 1])
+                    + Convert.ToInt32(mrc_Line_Info[i].Array_Morebyte_Duration[
+                        mrc_Line_Info[i].Array_Morebyte_Duration.Count - 1]);
+                mrc_Line_Info[i].This_MRC_Duration = Duration_Line;
             }
         }
 
+        #endregion
+
+        #region LRC读取生成同步
+
+        /// <summary>
+        /// 返回ListBox所包含的歌词文本
+        /// </summary>
+        /// <returns>数据绑定,返回ListBox所包含的歌词文本</returns>
+        public Dao_ListBox_Temp_MRC_Bing[] Return_ListBox_Temp_LRC_Bing(string CRC_URL)
+        {
+            dao_ListBox_Temp_MRC_Bing = new Dao_ListBox_Temp_MRC_Bing[9999];
+
+            //去除歌词行中的空格，防止歌词动画分段显示
+            //Trim()，去除字符串前后的指定字符
+            //Replace()，
+            for (int i = 0; i < mrc_Line_Info.Length; i++)
+            {
+                if (mrc_Line_Info[i] != null)
+                {
+                    //检测到韩文，需要去除空格，不然TextBlock动画会分段显示
+                    if (System.Text.RegularExpressions.Regex.IsMatch(
+                        mrc_Line_Info[i].String_Lrc_Line.Replace(" ", "").ToString(), @"^[\uac00-\ud7ff]+$"))
+                    {
+                        //韩文
+                        mrc_Line_Info[i].String_Lrc_Line = mrc_Line_Info[i].String_Lrc_Line.Replace(" ", "");
+                    }
+                }
+            }
+
+            int count = 0;
+            for (int i = 0; i < mrc_Line_Info.Length; i++)
+            {
+                if (dao_ListBox_Temp_MRC_Bing[i] == null)
+                {
+                    if (mrc_Line_Info[i] != null)
+                    {
+                        Dao_ListBox_Temp_MRC_Bing temp = new Dao_ListBox_Temp_MRC_Bing();
+
+                        temp.Song_MRC_Line = mrc_Line_Info[i].String_Lrc_Line;
+
+                        dao_ListBox_Temp_MRC_Bing[i] = temp;
+
+                        count++;
+                    }
+                }
+            }
+
+            count += LRC_Text_Null_Nums * 2;//前后需要3，22行空行
+            Dao_ListBox_Temp_MRC_Bing[] Temp_MRC_Bing = new Dao_ListBox_Temp_MRC_Bing[count];
+
+            for (int i = 0; i < dao_ListBox_Temp_MRC_Bing.Length; i++)
+            {
+                if (dao_ListBox_Temp_MRC_Bing[i] != null)
+                {
+                    if (Temp_MRC_Bing[i] == null)
+                    {
+                        Temp_MRC_Bing[i] = dao_ListBox_Temp_MRC_Bing[i];
+                    }
+                }
+            }
+
+            if (CRC_URL != null)
+            {
+                ArrayList arrayList = Add_Chinese_To_Kera(CRC_URL);
+                //添加歌词翻译
+                for (int i = Temp_MRC_Bing.Length - 1; i >= 0; i--)
+                {
+                    if (arrayList.Count == 0)
+                        break;
+                    if (Temp_MRC_Bing[i] != null)
+                    {
+                        Dao_ListBox_Temp_MRC_Bing temp = new Dao_ListBox_Temp_MRC_Bing();
+                        temp = Temp_MRC_Bing[i];
+
+                        string singer_Mrc_To_Substring = arrayList[arrayList.Count - 1].ToString();
+
+                        temp.Song_MRC_Line += ("\n" + singer_Mrc_To_Substring);
+                        arrayList.RemoveAt(arrayList.Count - 1);
+
+                        Temp_MRC_Bing[i] = temp;
+                    }
+                }
+            }
+
+
+
+            //可解决当listViewItem为Null时，无法滚动至底部的问题
+            for (int i = 0; i < Temp_MRC_Bing.Length; i++)
+            {
+                if (Temp_MRC_Bing[i] == null)
+                {
+                    Dao_ListBox_Temp_MRC_Bing temp = new Dao_ListBox_Temp_MRC_Bing();
+
+                    temp.Song_MRC_Line = "       ";
+
+                    Temp_MRC_Bing[i] = temp;
+                }
+            }
+
+            return Temp_MRC_Bing;
+        }
+
+        /// <summary>
+        /// 返回ListBox所包含的歌词内容
+        /// </summary>
+        /// <returns>返回ListBox所包含的歌词内容</returns>
+        public string[] Return_ListBox_Temp_LRC_Text()
+        {
+            string[] temp_MRC = new string[mrc_Line_Info.Length];
+
+            int count = 0;
+            for (int i = 0; i < mrc_Line_Info.Length; i++)
+            {
+                if (mrc_Line_Info[i].String_Lrc_Line != null)
+                {
+                    if (mrc_Line_Info[i].String_Lrc_Line.Length > 0)
+                    {
+                        temp_MRC[i] = mrc_Line_Info[i].String_Lrc_Line;
+
+                        count++;
+                    }
+                }
+            }
+
+
+            count += 14;//前后需要3，3行空行
+            string[] Temp_MRC_Bing = new string[count];
+
+            for (int i = 0; i < temp_MRC.Length; i++)
+            {
+                if (temp_MRC[i] != null)
+                {
+                    if (Temp_MRC_Bing[i] == null)
+                    {
+                        Temp_MRC_Bing[i] = temp_MRC[i];
+                    }
+                }
+            }
+
+
+            //可解决当listViewItem为Null时，无法滚动至底部的问题
+            for (int i = 0; i < Temp_MRC_Bing.Length; i++)
+            {
+                if (Temp_MRC_Bing[i] == null)
+                {
+                    Temp_MRC_Bing[i] = "       ";
+                }
+            }
+
+
+            return Temp_MRC_Bing;
+        }
+        /// <summary>
+        /// 返回ListBox所包含的歌词时间
+        /// </summary>
+        /// <returns>返回ListBox所包含的歌词时间</returns>
+        public double[] Return_ListBox_Temp_LRC_Time()
+        {
+            double[] temp = new double[mrc_Line_Info.Length];
+
+            for (int i = 0; i < mrc_Line_Info.Length; i++)
+            {
+                if (mrc_Line_Info[i].This_MRC_Start_Time != null)
+                {
+                    if (temp[i] == 0)
+                    {
+                        temp[i] = Convert.ToDouble(mrc_Line_Info[i].This_MRC_Start_Time);
+                    }
+                }
+            }
+
+            return temp;
+        }
+        public void Init_Lrc_Info()
+        {
+            mrc_Line_Info = new MRC_Line_Info[arrayList_MRC_line.Count + 14];
+            for (int i = 0; i < LRC_Text_Null_Nums; i++)
+            {
+                mrc_Line_Info[i] = new MRC_Line_Info();
+                mrc_Line_Info[i].This_MRC_Line = i + 1;
+                mrc_Line_Info[i].String_Lrc_Line = "       ";
+            }
+
+            string temp_head_start = "";
+            string temp_head_duration = "";
+            string temp_text = "";
+
+            //初始化歌词行动画时间
+            for (int i = LRC_Text_Null_Nums; i < arrayList_MRC_line.Count; i++)
+            {
+                //[470,1271]<0,204,0>林<204,204,0>俊<408,203,0>杰 <611,203,0>- <814,203,0>Always <1017,254,0>Online
+                temp_head_start = arrayList_MRC_line[i - LRC_Text_Null_Nums].ToString();
+                temp_text = temp_head_start;
+
+                mrc_Line_Info[i] = new MRC_Line_Info();
+
+                mrc_Line_Info[i].This_MRC_Line = i + 1;
+
+                Match match = Regex.Match(temp_head_start, @"\[(\d{2}):(\d{2})\.(\d{3})\]");
+                if (match.Success)
+                {
+                    int minutes = int.Parse(match.Groups[1].Value);
+                    int seconds = int.Parse(match.Groups[2].Value);
+                    int milliseconds = int.Parse(match.Groups[3].Value);
+                    int timeInMilliseconds = (minutes * 60 + seconds) * 1000 + milliseconds;
+                    mrc_Line_Info[i].This_MRC_Start_Time = timeInMilliseconds;
+                }
+
+                //<0,204,0>林<204,204,0>俊<408,203,0>杰 <611,203,0>- <814,203,0>Always <1017,254,0>Online
+                temp_text = temp_text.Substring(temp_text.IndexOf("]") + 1);
+                mrc_Line_Info[i].String_Lrc_Line = temp_text;
+            }
+
+            mrc_Line_Info[0].This_MRC_Start_Time = 222;
+        }
         #endregion
 
 

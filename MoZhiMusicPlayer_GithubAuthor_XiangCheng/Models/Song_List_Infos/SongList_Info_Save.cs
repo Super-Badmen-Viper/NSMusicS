@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using System.Xml;
+using System.Collections.ObjectModel;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
 {
     public class SongList_Info_Save
     {
-        public static void SaveSongList_Infos(string filePath, List<SongList_Info> songList_Infos)
+        public static void SaveSongList_Infos(string filePath, ObservableCollection<SongList_Info> songList_Infos)
         {
             var doc = new XmlDocument();
             var declaration = doc.CreateXmlDeclaration("1.0", "utf-8", null);

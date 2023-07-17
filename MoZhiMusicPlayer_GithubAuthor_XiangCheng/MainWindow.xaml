@@ -26,18 +26,17 @@
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
         MouseLeftButtonDown="Window_MouseLeftButtonDown" 
         WindowStyle="None" AllowsTransparency="True"
-        CacheMode="BitmapCache"
         ResizeMode="CanResizeWithGrip" SizeChanged="Window_SizeChanged" Closed="Window_Closed"
         >
     <Window.Resources>
 
     </Window.Resources>
     <Grid>
-        <Grid x:Name="this_app_Background" CacheMode="BitmapCache">
+        <Grid x:Name="this_app_Background" >
             <!--#171718-->
         </Grid>
 
-        <Grid CacheMode="BitmapCache">
+        <Grid>
             <Grid x:Name="Frame_Manager_ButtonList" 
                   HorizontalAlignment="Left" VerticalAlignment="Top"
                   Width="210"

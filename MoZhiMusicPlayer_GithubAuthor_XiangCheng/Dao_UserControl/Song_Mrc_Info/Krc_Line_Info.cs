@@ -22,6 +22,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
         //当前 歌词行持续时间
         public int This_MRC_Duration;
 
+        public string String_Lrc_Line;
+
         //当前 歌词行所有字节的数量
         public int Int_MoreByte_Nums;
         //当前 歌词行所有字节的 字节内容

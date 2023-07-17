@@ -100,6 +100,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_I
                 }
             }
         }
+
         public static class BitmapSourceConvert
         {
             /// <summary>

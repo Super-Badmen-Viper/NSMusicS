@@ -3,6 +3,7 @@ using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -36,8 +37,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
 
         public string Path_App;
-        static List<List<Models.Song_List_Infos.SongList_Info>> songList_Infos;
-        static List<Song_Info> songList_Infos_Current_Playlist;
+        static ObservableCollection<ObservableCollection<Models.Song_List_Infos.SongList_Info>> songList_Infos;
+        static ObservableCollection<Song_Info> songList_Infos_Current_Playlist;
         //已选中的歌曲信息
         public ArrayList Song_Info_Selects = new ArrayList();
         public ImageBrush brush_LoveNormal = new ImageBrush();
@@ -122,7 +123,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         }
 
 
-        public void Select_Add_Or_Delete(Button ck_Selected_temp, List<Song_Info> listView_Temp_Info_End)
+        public void Select_Add_Or_Delete(Button ck_Selected_temp, ObservableCollection<Song_Info> listView_Temp_Info_End)
         {
             Button ck_Selected = ck_Selected_temp;
             //添加
@@ -147,7 +148,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         /// 添加
         /// </summary>
         /// <param name="listView_Temp_Info_End"></param>
-        public void Add_LoveSong_ToThisSongList(Button ck_Selected, List<Song_Info> listView_Temp_Info_End)
+        public void Add_LoveSong_ToThisSongList(Button ck_Selected, ObservableCollection<Song_Info> listView_Temp_Info_End)
         {
             //刷新内存区域的引用
             songList_Infos = SongList_Info.Retuen_This();
@@ -155,7 +156,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             {
                 if (songList_Infos.Count != 0)
                 {
-                    Song_Info temp = listView_Temp_Info_End.Find(delegate (Song_Info x) { return x.Song_No == Convert.ToInt32(ck_Selected.Tag); });
+                    Song_Info temp = FindSongInfoBySongNo(
+                        Convert.ToInt32(ck_Selected.Tag), 
+                        listView_Temp_Info_End);
 
                     if (songList_Infos[0][0].Songs.Contains(temp) == false)
                     {
@@ -189,7 +192,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         /// 移除
         /// </summary>
         /// <param name="listView_Temp_Info_End"></param>
-        public void Remove_LoveSong_ToThisSongList(Button ck_Selected, List<Song_Info> listView_Temp_Info_End)
+        public void Remove_LoveSong_ToThisSongList(Button ck_Selected, ObservableCollection<Song_Info> listView_Temp_Info_End)
         {
             //刷新内存区域的引用
             songList_Infos = SongList_Info.Retuen_This();
@@ -197,13 +200,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             {
                 if (songList_Infos.Count != 0)
                 {
-                    Song_Info temp = listView_Temp_Info_End.Find(delegate (Song_Info x) { return x.Song_No == Convert.ToInt32(ck_Selected.Tag); });
+                    Song_Info temp = FindSongInfoBySongNo(
+                        Convert.ToInt32(ck_Selected.Tag), 
+                        listView_Temp_Info_End);
                     string songurl = temp.Song_Url;
                     foreach (Song_Info _Item_Bing in songList_Infos[0][0].Songs)
                     {
                         if (_Item_Bing.Song_Url.Equals(songurl))
                         {
-                            Song_Info temp_love = songList_Infos[0][0].Songs.Find(delegate (Song_Info x) { return x.Song_Url.Equals(songurl); });
+                            Song_Info temp_love = FindSongInfoBySongUrl(
+                                songurl, songList_Infos[0][0].Songs);
 
                             temp_love.Song_Like_Image = brush_LoveNormal;
                             temp_love.Song_Like = 0;
@@ -227,7 +233,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         /// <summary>
         /// 检查是否在我的收藏
         /// </summary>
-        public void Check_LoveSong_In_LoveSongList(Button ck_Selected, List<Song_Info> listView_Temp_Info_End)
+        public void Check_LoveSong_In_LoveSongList(Button ck_Selected, ObservableCollection<Song_Info> listView_Temp_Info_End)
         {
             //刷新内存区域的引用
             songList_Infos = SongList_Info.Retuen_This();
@@ -304,7 +310,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                         {
                             //检测删除了多少列
                             nums_select++;
-                            Song_Info temp = songList_Infos[1][0].Songs.Find(delegate (Song_Info x) { return x.Song_Url.Equals(Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url)); });
+                            Song_Info temp = FindSongInfoBySongUrl(
+                                Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url), 
+                                songList_Infos[1][0].Songs);
                             songList_Infos[1][0].Songs.Remove(temp);
                         }
                         this.Song_Info_Selects.Clear();
@@ -360,7 +368,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                     songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
                     if (songList_Infos_Current_Playlist != null)
                     {
-                        List<Song_Info> temp = new List<Song_Info>();
+                        ObservableCollection<Song_Info> temp = new ObservableCollection<Song_Info>();
                         for (int i = 0; i < songList_Infos_Current_Playlist.Count; i++)
                         {
                             temp.Add((Song_Info)songList_Infos_Current_Playlist[i]);
@@ -512,12 +520,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                 {
                                     for (int i = 0; i < Song_Info_Selects.Count; i++)
                                     {
-                                        Song_Info temp = songList_Infos[0][0].Songs.Find(delegate (Song_Info x)
-                                        {
-                                            return x.Song_Url.Equals(
-                                                Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url)
-                                                );
-                                        });
+                                        Song_Info temp = FindSongInfoBySongUrl(
+                                            Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url), 
+                                            songList_Infos[0][0].Songs);
                                         if (temp == null)//如果没有重复的歌曲，则添加
                                         {
                                             ((Song_Info)Song_Info_Selects[i]).Song_Like = 1;
@@ -526,7 +531,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                         }
                                     }
                                     //排序
-                                    songList_Infos[0][0].Songs = songList_Infos[0][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                                    //songList_Infos[0][0].Songs = songList_Infos[0][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
                                     for (int i = 0; i < songList_Infos[0][0].Songs.Count; i++)
                                     {
                                         songList_Infos[0][0].Songs[i].Song_No = i + 1;
@@ -569,19 +574,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                 {
                                     for (int i = 0; i < Song_Info_Selects.Count; i++)
                                     {
-                                        Song_Info temp = songList_Infos[2][0].Songs.Find(delegate (Song_Info x)
-                                        {
-                                            return x.Song_Url.Equals(
-                                                Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url)
-                                                );
-                                        });
+                                        Song_Info temp = FindSongInfoBySongUrl(
+                                            Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url), 
+                                            songList_Infos[2][0].Songs);
                                         if (temp == null)//如果没有重复的歌曲，则添加
                                         {
                                             songList_Infos[2][0].Songs.Add((Song_Info)Song_Info_Selects[i]);
                                         }
                                     }
                                     //排序
-                                    songList_Infos[2][0].Songs = songList_Infos[2][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                                    //songList_Infos[2][0].Songs = songList_Infos[2][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
                                     for (int i = 0; i < songList_Infos[2][0].Songs.Count; i++)
                                     {
                                         songList_Infos[2][0].Songs[i].Song_No = i + 1;
@@ -622,19 +624,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
                                         for (int i = 0; i < Song_Info_Selects.Count; i++)
                                         {
-                                            Song_Info temp = songList_Infos[ComBox_Select][0].Songs.Find(delegate (Song_Info x)
-                                            {
-                                                return x.Song_Url.Equals(
-                                                    Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url)
-                                                    );
-                                            });
+                                            Song_Info temp = FindSongInfoBySongUrl(
+                                                Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url), 
+                                                songList_Infos[ComBox_Select][0].Songs);
                                             if (temp == null)//如果没有重复的歌曲，则添加
                                             {
                                                 songList_Infos[ComBox_Select][0].Songs.Add((Song_Info)Song_Info_Selects[i]);
                                             }
                                         }
                                         //排序
-                                        songList_Infos[ComBox_Select][0].Songs = songList_Infos[ComBox_Select][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
+                                        //songList_Infos[ComBox_Select][0].Songs = songList_Infos[ComBox_Select][0].Songs.OrderBy(s => s.Singer_Name + s.Song_Name).ToList();
                                         for (int i = 0; i < songList_Infos[ComBox_Select][0].Songs.Count; i++)
                                         {
                                             songList_Infos[ComBox_Select][0].Songs[i].Song_No = i + 1;
@@ -899,6 +898,32 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         {
             Recent_Song_Nums.Text
                 = "歌曲：" + ListView_Download_SongList_Info.Items.Count.ToString();
+        }
+
+
+        public Song_Info FindSongInfoBySongNo(int songNo, ObservableCollection<Song_Info> songInfoList)
+        {
+            foreach (Song_Info songInfo in songInfoList)
+            {
+                if (songInfo.Song_No == songNo)
+                {
+                    return songInfo;
+                }
+            }
+
+            return null;
+        }
+        public Song_Info FindSongInfoBySongUrl(string SongUrl, ObservableCollection<Song_Info> songInfoList)
+        {
+            foreach (Song_Info songInfo in songInfoList)
+            {
+                if (songInfo.Song_Url.Equals(SongUrl))
+                {
+                    return songInfo;
+                }
+            }
+
+            return null;
         }
     }
 }

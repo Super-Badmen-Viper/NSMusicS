@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
@@ -16,11 +17,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
             = new ImageBrush(new BitmapImage(
                 new Uri(@"Resource\\Button_Image_Ico\\爱心 (1).png", UriKind.Relative)));
 
-        public static List<Song_Info> song_Infos_Love { get; set; }
+        public static ObservableCollection<Song_Info> song_Infos_Love { get; set; }
 
-        public static List<SongList_Info> ReadSongList_Infos(string filePath)
+        public static ObservableCollection<SongList_Info> ReadSongList_Infos(string filePath)
         {
-            var playlists = new List<SongList_Info>();
+            var playlists = new ObservableCollection<SongList_Info>();
 
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
@@ -31,7 +32,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
                 var playlist = new SongList_Info();
                 playlist.ID = int.Parse(playlistNode.Attributes["ID"].Value);
                 playlist.Name = playlistNode.Attributes["Name"].Value;
-                playlist.Songs = new List<Song_Info>();
+                playlist.Songs = new ObservableCollection<Song_Info>();
 
                 XmlNodeList songNodes = playlistNode.SelectNodes("Song");
                 foreach (XmlNode songNode in songNodes)

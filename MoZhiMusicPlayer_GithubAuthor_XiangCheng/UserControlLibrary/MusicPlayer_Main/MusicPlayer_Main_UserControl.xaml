@@ -20,25 +20,31 @@
                 </Grid.Background>
             </Grid>
             <Grid x:Name="Grid_down_Singer_Photo" >
-                <ItemsControl x:Name="ItemsControl_SingerImageCut" 
-                              Grid.Row="1" ItemsSource="{Binding Singer_ImagerCut_Infos}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="4" Rows="2"/>
-                            <!--<WrapPanel/>-->
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <materialDesign:TransitioningContent OpeningEffect="{Binding Effact}">
-                                <Border Width="{Binding Width}" Height="{Binding Height}" Background="{Binding image_i}" Margin="0">
+                <Grid.Background>
+                    <ImageBrush Stretch="UniformToFill"/>
+                </Grid.Background>
+                <!--
+                    <ItemsControl x:Name="ItemsControl_SingerImageCut" 
+                                  Grid.Row="1" ItemsSource="{Binding Singer_ImagerCut_Infos}"
+                                  UseLayoutRounding="False" SnapsToDevicePixels="False" RenderOptions.BitmapScalingMode="LowQuality" 
+                                  >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="4" Rows="1"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <materialDesign:TransitioningContent OpeningEffect="{Binding Effact}">
+                                    <Border Width="{Binding Width}" Height="{Binding Height}" Background="{Binding image_i}" Margin="0">
                                     
-                                </Border>
-                            </materialDesign:TransitioningContent>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <Button x:Name="SingerImageCut_Animation_Begin_Button" Command="{Binding RefCommand}" Visibility="Hidden"/>
+                                    </Border>
+                                </materialDesign:TransitioningContent>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Button x:Name="SingerImageCut_Animation_Begin_Button" Command="{Binding RefCommand}" Visibility="Hidden"/>
+                -->
             </Grid>
 
             <Grid x:Name="Image_Singer_Buttom" Visibility="Hidden" Grid.RowSpan="2">
