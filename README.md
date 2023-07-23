@@ -7,7 +7,7 @@
 ## Pay Attention To：
 - MoZhi Music will use Electron to refactor and deploy to Windows/Linux/Mac
 - - The current WPF version will enter maintenance mode, and no new features will be updated except for bug fixes
-- In addition to the functions of normal music software, I will develop K songs and score singing functions for the Electron version
+- In addition to the functions of normal music software, I will develop K songs(karaoke) and score singing functions for the Electron version
 - - and deploy AI models to the server to achieve separation of algorithm layer and UI layer
 - The positioning of MoZhi Music is to provide the ultimate music experience for professional, family, and entertainment scenarios
 - - while also providing legitimate music copyrights for commercial activities, and never using any third-party APIs
