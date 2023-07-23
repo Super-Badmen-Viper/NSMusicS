@@ -6,7 +6,7 @@
 
 ## Pay Attention To：
 - MoZhi Music will use Electron+Vue3+Vite to refactor and deploy to Windows/Linux/Mac
-- - (Now Version) MZMusic：[https://github.com/Super-Badmen-Viper/MZMusic](https://github.com/Super-Badmen-Viper/MZMusic)
+- - (Now Version) MZMusic：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
 - - The current WPF version will enter maintenance mode, and no new features will be updated except for bug fixes
 - In addition to the functions of normal music software, I will develop K songs(karaoke) and score singing functions for the Electron version
 - - and deploy AI models to the server to achieve separation of algorithm layer and UI layer
@@ -20,7 +20,7 @@
 - 4. Basic music player functions (no need to explain, there must be some)
 - Note: Low performance or system version may affect runtime performance (with some impact). WIn11 is recommended, as Win11 has special optimizations [doge]
 
-## MoZhiYunStudio: Future feature updates（for (Now Version):[MZMusic](https://github.com/Super-Badmen-Viper/MZMusic)）
+## MoZhiYunStudio: Future feature updates（for (Now Version):[MZMusic](https://github.com/MZMusic/MZMusic)
 - 1. identify songs module based on sound fingerprint technology (also open source as a separate project model)
 - 2. Guessing Your Favorite Module Based on Big Data User Behavior Analysis
 - 3. AI singing module based on nlp, replacing the sound of the song with your own (also open source as a separate project model)
