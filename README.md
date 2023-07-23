@@ -5,7 +5,8 @@
 - - Latest version:[ https://www.bilibili.com/video/BV1rM411s7J9 ](https://www.bilibili.com/video/BV1Dc411g74T/?spm_id_from=333.999.0.0&vd_source=6e56ca0b155a60e6a6878e5775fdcc35)
 
 ## Pay Attention To：
-- MoZhi Music will use Electron to refactor and deploy to Windows/Linux/Mac：MZMusic[https://github.com/Super-Badmen-Viper/MZMusic](https://github.com/Super-Badmen-Viper/MZMusic)
+- MoZhi Music will use Electron to refactor and deploy to Windows/Linux/Mac
+- - (Now Version) MZMusic：[https://github.com/Super-Badmen-Viper/MZMusic](https://github.com/Super-Badmen-Viper/MZMusic)
 - - The current WPF version will enter maintenance mode, and no new features will be updated except for bug fixes
 - In addition to the functions of normal music software, I will develop K songs(karaoke) and score singing functions for the Electron version
 - - and deploy AI models to the server to achieve separation of algorithm layer and UI layer
