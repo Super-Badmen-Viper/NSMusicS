@@ -4,6 +4,15 @@
 - - 最新版：[https://www.bilibili.com/video/BV1rM411s7J9](https://www.bilibili.com/video/BV1Dc411g74T/?spm_id_from=333.999.0.0&vd_source=6e56ca0b155a60e6a6878e5775fdcc35)
 - - 旧版：https://www.bilibili.com/video/BV1uG41137jY
 
+## 注意：
+- 当前 WPF 版本将进入维护模式，除错误修复外，不会更新任何新功能
+- MoZhi Music将使用Electron+Vue3+Vite进行重构并部署到Windows/Linux/Mac
+- - （现在版本）[MZMusic](https://github.com/MZMusic/MZMusic)：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
+- 除了普通音乐软件的功能外，我将为Electron版开发K歌曲（卡拉OK）和配乐演唱功能
+- - 并将AI模型部署到服务器上，实现算法层和UI层的分离
+- 墨智音乐的定位是为专业、家庭、娱乐场景提供极致的音乐体验
+- - 同时还为商业活动提供合法的音乐版权，并且从不使用任何第三方API
+
 ## 功能：
   - 1.支持歌词字同步动画，同步歌词进度 （可兼容其它音乐软件的歌词文件）歌词字同步算法
   - 2.支持多歌手写真动画交叉轮播
@@ -11,7 +20,7 @@
   - 4.基本的音乐播放器功能（无需解释，该有的肯定有）
 - 注意：性能或系统版本较低，可能会影响运行时的性能(些许影响)，推荐WIn11，Win11有特别优化[doge]
 
-## MoZhiYunStudio(墨智云工作室)：未来的功能更新
+## MZMusic(MoZhi墨智音乐团队)：[MZMusic](https://github.com/MZMusic/MZMusic)：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
   - 1.基于声音指纹技术的听歌识曲模块（同时作为单独项目模型开源）
   - 2.基于大数据用户行为分析的猜你喜欢模块
   - 3.基于nlp的AI演唱模块，将歌曲的声音替换为你的声音（同时作为单独项目模型开源）
