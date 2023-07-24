@@ -5,7 +5,7 @@
 - - 旧版：https://www.bilibili.com/video/BV1uG41137jY
 
 ## 注意：
-- 当前 WPF 版本将进入维护模式，除错误修复外，不会更新任何新功能
+- 当前WPF版本将作为Electron版本的参考版
 - MoZhi Music将使用Electron+Vue3+Vite进行重构并部署到Windows/Linux/Mac
 - - （现在版本）[MZMusic](https://github.com/MZMusic/MZMusic)：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
 - 除了普通音乐软件的功能外，我将为Electron版开发K歌曲（卡拉OK）和配乐演唱功能
