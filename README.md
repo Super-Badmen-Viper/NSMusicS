@@ -6,9 +6,8 @@
 
 ## This application is based on DirectX's 3D processing, and if your hardware configuration is low, it may cause stuttering or flickering
 
-## Pay Attention To：
-- MoZhi Music will use Electron+Vue3+Vite to refactor and deploy to Windows/Linux/Mac
-- - (Now Version) [MZMusic](https://github.com/MZMusic/MZMusic)：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
+# [MZMusic](https://github.com/MZMusic/MZMusic) will use Electron+Vue3+Vite to refactor and deploy to Windows/Linux/Mac 
+# (Now Version) ：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
 - - The current WPF version will serve as a reference for the Electron version
 - In addition to the functions of normal music software, I will develop K songs(karaoke) and score singing functions for the Electron version
 - - and deploy AI models to the server to achieve separation of algorithm layer and UI layer
