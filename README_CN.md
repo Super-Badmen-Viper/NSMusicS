@@ -6,10 +6,8 @@
 
 ## 此应用程序基于DirectX的3D处理，如果您的硬件配置较低，可能会导致卡顿或闪退
 
-## 注意：
-- 当前WPF版本将作为Electron版本的参考版
-- MoZhi Music将使用Electron+Vue3+Vite进行重构并部署到Windows/Linux/Mac
-- - （现在版本）[MZMusic](https://github.com/MZMusic/MZMusic)：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
+# [MZMusic](https://github.com/MZMusic/MZMusic)将使用Electron+Vue3+Vite进行重构并部署到Windows/Linux/Mac 
+# （最新版本）[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic) 
 - 除了普通音乐软件的功能外，我将为Electron版开发K歌曲（卡拉OK）和配乐演唱功能
 - - 并将AI模型部署到服务器上，实现算法层和UI层的分离
 - 墨智音乐的定位是为专业、家庭、娱乐场景提供极致的音乐体验
