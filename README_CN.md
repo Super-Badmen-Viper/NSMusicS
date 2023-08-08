@@ -4,7 +4,7 @@
 - - 最新版：[https://www.bilibili.com/video/BV1rM411s7J9](https://www.bilibili.com/video/BV1Dc411g74T/?spm_id_from=333.999.0.0&vd_source=6e56ca0b155a60e6a6878e5775fdcc35)
 - - 旧版：https://www.bilibili.com/video/BV1uG41137jY
 
-## 此应用程序基于DirectX的3D处理，如果您的硬件配置较低，可能会导致卡顿或闪烁
+## 此应用程序基于DirectX的3D处理，如果您的硬件配置较低，可能会导致卡顿或闪退
 
 ## 注意：
 - 当前WPF版本将作为Electron版本的参考版
