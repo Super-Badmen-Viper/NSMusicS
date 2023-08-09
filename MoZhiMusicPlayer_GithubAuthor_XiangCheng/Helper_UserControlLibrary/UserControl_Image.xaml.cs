@@ -37,7 +37,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary
             //#A8343434
             StackPanel_Move_Black.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));//无色
 
-            Image_Play_This_SongList.Visibility = System.Windows.Visibility.Hidden;
+            Image_Play_This_SongList.Visibility = System.Windows.Visibility.Collapsed;
         }
         private void This_Xaml_BackGround_MouseMove(object sender, MouseEventArgs e)
         {

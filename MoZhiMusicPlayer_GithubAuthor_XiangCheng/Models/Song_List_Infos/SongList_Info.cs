@@ -27,10 +27,5 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
 
             return songList_Infos;
         }
-
-        public static implicit operator List<object>(SongList_Info v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

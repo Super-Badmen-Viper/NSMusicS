@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary"
              mc:Ignorable="d" 
              d:DesignHeight="443" d:DesignWidth="810"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                Background="#1E1E20" SizeChanged="UserControl_SizeChanged">
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                Background="#1F1F1F" SizeChanged="UserControl_SizeChanged">
     <Grid>
         <ScrollViewer x:Name="ScrollViewer_1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Frame Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/Helper_UserControlLibrary/电台/UserControl_电台.xaml"  NavigationUIVisibility="Hidden" />

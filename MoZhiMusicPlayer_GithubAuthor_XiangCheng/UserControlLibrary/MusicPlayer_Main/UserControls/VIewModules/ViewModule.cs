@@ -18,7 +18,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
 
         public int RefreshInterval { get; set; }
 
-
         public void OnPropertyChanged(string propName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         public event PropertyChangedEventHandler PropertyChanged;
         

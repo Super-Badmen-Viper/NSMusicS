@@ -7,12 +7,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="1060">
     <Grid>
-        
         <StackPanel x:Name="StackPanel_Test" Orientation="Horizontal" HorizontalAlignment="Center" Margin="-10,0,0,0">
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0"
-                    Visibility="Hidden"
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0"
+                    Visibility="Collapsed"
                     >
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -33,15 +32,14 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_1"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
-                            
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
                 
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -62,13 +60,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_2"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -89,13 +87,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_3"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -116,13 +114,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_4"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -143,13 +141,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_5"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -170,13 +168,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_6"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -197,13 +195,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_7"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -224,13 +222,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_8"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -251,13 +249,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_9"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -278,13 +276,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_10"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -305,13 +303,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_11"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -332,13 +330,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_12"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -359,13 +357,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_13"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -386,13 +384,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_14"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -413,13 +411,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_15"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -440,13 +438,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_16"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -467,13 +465,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_17"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -494,13 +492,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_18"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -521,13 +519,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_19"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -548,13 +546,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_20"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -575,13 +573,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_21"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -602,13 +600,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_22"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -629,13 +627,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_23"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -656,13 +654,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_24"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -683,13 +681,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_25"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -710,13 +708,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_26"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -737,13 +735,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_27"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -764,13 +762,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_28"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -791,13 +789,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_29"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -818,13 +816,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_30"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -845,13 +843,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_31"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -872,13 +870,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_32"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -899,13 +897,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_33"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -926,13 +924,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_34"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -953,13 +951,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_35"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -980,13 +978,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_36"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1007,13 +1005,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_37"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1034,13 +1032,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_38"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1061,13 +1059,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_39"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1088,13 +1086,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_40"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1115,13 +1113,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_41"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1142,13 +1140,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_42"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1169,13 +1167,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_43"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1196,13 +1194,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_44"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1223,13 +1221,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_45"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1250,13 +1248,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_46"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1277,13 +1275,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_47"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1304,13 +1302,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_48"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1331,13 +1329,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_49"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1358,13 +1356,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_50"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1385,13 +1383,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_51"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1412,13 +1410,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_52"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1439,13 +1437,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_53"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1466,13 +1464,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_54"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1493,13 +1491,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_55"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1520,13 +1518,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_56"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1547,13 +1545,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_57"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1574,13 +1572,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_58"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1601,13 +1599,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_59"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1628,13 +1626,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_60"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1655,13 +1653,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_61"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1682,13 +1680,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_62"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1709,13 +1707,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_63"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1736,13 +1734,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_64"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1763,13 +1761,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_65"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1790,13 +1788,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_66"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1817,13 +1815,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_67"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1844,13 +1842,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_68"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1871,13 +1869,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_69"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
 <TransformGroup>
 <RotateTransform Angle="180"/>
@@ -1898,13 +1896,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_70"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -1925,13 +1923,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_71"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -1952,13 +1950,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_72"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -1979,13 +1977,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_73"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2006,13 +2004,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_74"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2033,13 +2031,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_75"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2060,13 +2058,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_76"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2087,13 +2085,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_77"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2114,13 +2112,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_78"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2141,13 +2139,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_79"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2168,13 +2166,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_80"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2195,13 +2193,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_81"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2222,13 +2220,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_82"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2249,13 +2247,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_83"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2276,13 +2274,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_84"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2303,13 +2301,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_85"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2330,13 +2328,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_86"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2357,13 +2355,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_87"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2384,13 +2382,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_88"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2411,13 +2409,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_89"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2438,13 +2436,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_90"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2465,13 +2463,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_91"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2492,13 +2490,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_92"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2519,13 +2517,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_93"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2546,13 +2544,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_94"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2573,13 +2571,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_95"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2600,13 +2598,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_96"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2627,13 +2625,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_97"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2654,13 +2652,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_98"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2681,13 +2679,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_99"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2708,13 +2706,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_100"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2735,13 +2733,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_101"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2762,13 +2760,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_102"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2789,13 +2787,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_103"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2816,13 +2814,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_104"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2843,13 +2841,13 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_105"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
             </Canvas>
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="2,0,0,0">
-                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="50" Margin="3,0,0,0">
+                <Rectangle Width="2" Height="40" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <RotateTransform Angle="180"/>
@@ -2870,7 +2868,7 @@
                                 <TranslateTransform Y="-0.5" x:Name="Trans_106"/>
                             </LinearGradientBrush.RelativeTransform>
                             <GradientStop Color="Transparent" Offset="0.51"/>
-                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                            <GradientStop Color="#FFFFFF" Offset="0.49"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>

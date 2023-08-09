@@ -3,47 +3,61 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_TOP_UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="77" d:DesignWidth="800" Background="#1E1E20">
+             d:DesignHeight="77" d:DesignWidth="800" Background="#1F1F1F">
     <Grid>
-        <Button 
-            
-            Style="{StaticResource MyButton}"
-                HorizontalAlignment="Left" Height="18" Margin="37,0,0,0" 
-                VerticalAlignment="Stretch" Width="18"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                >
-            <Button.Background>
-                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/方向-向左.png"/>
-            </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
-        </Button>
-
-        <Button 
-            
-            Style="{StaticResource MyButton}"
-                HorizontalAlignment="Left" Height="18" Margin="72,0,0,0" 
-                VerticalAlignment="Stretch" Width="18"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                >
-            <Button.Background>
-                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/方向-向右 (1).png"/>
-            </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
-        </Button>
-
-        <local:UserControl_ButtonFrame_Search Height="33" Margin="105,22,511,22" MaxWidth="280"/>
-
-
+        
+        <Grid
+            x:Name="Gird_Load_API_Animation"
+            HorizontalAlignment="Left" Margin="105,60,0,-500" VerticalAlignment="Top" Width="350" Height="500"
+            Visibility="{Binding Show_API_HttpClient_Complete}"
+            >
+            <Canvas Width="100" Height="100">
+                <Canvas.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard>
+                            <Storyboard 
+                                
+                                RepeatBehavior="Forever" Storyboard.TargetName="arc">
+                                <DoubleAnimation Storyboard.TargetProperty="EndAngle" To="360" BeginTime="0:0:0" Duration="0:0:1">
+                                    <DoubleAnimation.EasingFunction>
+                                        <PowerEase EasingMode="EaseInOut" Power="3"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetProperty="StartAngle" To="360" BeginTime="0:0:1" Duration="0:0:1">
+                                    <DoubleAnimation.EasingFunction>
+                                        <PowerEase EasingMode="EaseInOut" Power="3"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Canvas.Triggers>
+                <ed:Arc Width="80"
+                    Height="80"
+                    StartAngle="0" 
+                    EndAngle="360"
+                    Stretch="None"
+                    ArcThickness="12"
+                    Fill="#FFFFE9C1">
+                </ed:Arc>
+                <ed:Arc Width="80"
+                   Height="80"
+                   Name="arc"
+                   StartAngle="0" 
+                   EndAngle="0"
+                   Stretch="None"
+                   ArcThickness="12"
+                   Fill="#fe5f55">
+                </ed:Arc>
+            </Canvas>
+        </Grid>
 
         <Image HorizontalAlignment="Right" Height="24" VerticalAlignment="Stretch" Width="24" 
                Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/初学者.jpg" Margin="0,0,423,0"
-               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                >
             <Image.Clip>
                 <EllipseGeometry RadiusX="12" RadiusY="12" Center="12,12"/>
@@ -54,14 +68,14 @@
                    Text="就是爱音乐" TextWrapping="Wrap" 
                    VerticalAlignment="Stretch" Width="65" 
                    Margin="0,0,347,0" Foreground="#FF7C7C7C"
-                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                    />
 
         <Button 
             x:Name="Button_Personalized_Skin"
             Style="{StaticResource MyButton}"
                 HorizontalAlignment="Right" Height="14" Width="16" Margin="0,31,198,32"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 >
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/皮肤.png"/>
@@ -74,7 +88,7 @@
             
             Style="{StaticResource MyButton}"
                 HorizontalAlignment="Right" Height="18" Width="18" Cursor="Hand" Margin="0,29,167,30"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 >
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/菜单.png"/>
@@ -88,7 +102,7 @@
             Style="{StaticResource MyButton}"
                 HorizontalAlignment="Right" Height="16" 
                 VerticalAlignment="Stretch" Width="16" Margin="0,0,123,0"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 >
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/Streamlined mode.png"/>
@@ -102,7 +116,7 @@
             Style="{StaticResource MyButton}"
                 HorizontalAlignment="Right" Height="20" 
                 VerticalAlignment="Stretch" Width="20" Cursor="Hand" Margin="0,0,90,0"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 >
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/最小化.png"/>
@@ -115,7 +129,7 @@
             x:Name="Button_Max"
             Style="{StaticResource MyButton}"
                 HorizontalAlignment="Right" Height="14" Width="14" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,31,65,32" Cursor="Hand" 
                 >
             <Button.Background>
@@ -130,7 +144,7 @@
             Style="{StaticResource MyButton}"
                 HorizontalAlignment="Right" Height="20" 
                 VerticalAlignment="Stretch" Width="20" Cursor="Hand" Margin="0,0,20,0"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 >
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/关闭.png"/>
@@ -139,7 +153,5 @@
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </Button.Effect>
         </Button>
-
-
     </Grid>
 </UserControl>

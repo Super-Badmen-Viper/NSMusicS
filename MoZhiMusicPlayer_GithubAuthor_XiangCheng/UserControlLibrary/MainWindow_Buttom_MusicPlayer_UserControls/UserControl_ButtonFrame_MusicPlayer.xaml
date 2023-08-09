@@ -6,30 +6,30 @@
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls"
              xmlns:UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main.UserControls" x:Class="MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls.UserControl_ButtonFrame_MusicPlayer"
              mc:Ignorable="d" 
-             d:DesignHeight="70" d:DesignWidth="810"
-             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+             d:DesignHeight="70" d:DesignWidth="910"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
              >
     <Grid>
         <Slider x:Name="Silder_Music_Width" Value="8" Background="#1C444444" 
                 Height="11" Margin="0,-4,0,0" 
                 VerticalAlignment="Top" HorizontalContentAlignment="Stretch" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Style="{DynamicResource SliderStyle1}" 
                 IsMoveToPointEnabled="True" Cursor="Hand"
                 Focusable="False" HorizontalAlignment="Stretch" />
         <Slider x:Name="Silder_Music_Temp_Width" 
                 Height="10" Margin="0,-4,0,0" 
                 VerticalAlignment="Top" HorizontalContentAlignment="Stretch" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 ScrollViewer.VerticalScrollBarVisibility="Disabled" Style="{DynamicResource SliderStyle2}" 
                 IsMoveToPointEnabled="True" Cursor="Hand" BorderBrush="{x:Null}" 
-                Visibility="Hidden"/>
+                Visibility="Collapsed"/>
 
         <Grid>
             <UserControls:UserControl_Spectrum_Visualization_2
                 x:Name="userControl_Spectrum_Visualization" 
                 VerticalAlignment="Top" Height="80" Margin="0,-51,0,0"
-                Visibility="Hidden"
+                Visibility="Collapsed"
                 />
         </Grid>
 
@@ -38,7 +38,7 @@
                 Style="{StaticResource MyButton}" Content="" 
                 HorizontalAlignment="Center" Height="16" Width="16" 
                 BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Margin="0,27,145,27" Cursor="Hand" >
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Margin="0,27,145,27" Cursor="Hand" >
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/顺序播放 (1).png"/>
             </Button.Background>
@@ -50,7 +50,7 @@
                 Style="{StaticResource MyButton}" Content="" 
                 Height="26" Width="28" 
                 BorderBrush="{x:Null}" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 RenderTransformOrigin="-5.75,0.5" 
                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="0,0,80,0">
             <Button.Background>
@@ -64,7 +64,7 @@
                 Style="{StaticResource MyButton}" Content="" 
                 Height="40" Width="40" 
                 BorderBrush="{x:Null}" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Stretch">
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/24gf-playCircle.png"/>
@@ -77,7 +77,7 @@
                 Style="{StaticResource MyButton}" Content="" 
                 Height="26" Width="28" 
                 BorderBrush="{x:Null}" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="80,0,0,0">
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/下一首 (1).png"/>
@@ -90,7 +90,7 @@
                 Style="{StaticResource MyButton}" Content="" 
                 HorizontalAlignment="Center" Height="20" Margin="146,0,0,0" VerticalAlignment="Stretch" Width="20" 
                 BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Cursor="Hand" >
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Cursor="Hand" >
             <Button.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/音量 (1).png"/>
             </Button.Background>
@@ -175,18 +175,19 @@
               >
             <Border x:Name="Border_Song_Image"
                 BorderThickness="0.1" CornerRadius="4.3,4.3,4.3,4.3" BorderBrush="#00000000" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Margin="40,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Stretch" 
                 Width="40" Height="40" 
                 MouseEnter="Border_Hover_BackGround_MouseEnter" 
                 >
                 <Border.Background>
-                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/Music_Album.png" Stretch="Uniform"/>
+                    <!--{Binding Album_Image}-->
+                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/Music_Album.png" Stretch="UniformToFill"/>
                 </Border.Background>
             </Border>
             <Border x:Name="Border_Hover_BackGround"
                 BorderThickness="0" CornerRadius="4.3,4.3,4.3,4.3" BorderBrush="#00000000" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Margin="40,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Stretch" 
                 Width="40" Height="40"
                 MouseLeave="Border_Hover_BackGround_MouseLeave">
@@ -231,7 +232,7 @@
                     </StackPanel.RenderTransform>
                     <TextBox 
                         x:Name="Song_Name"
-                        Text="MoZhi音乐，开源技术" TextWrapping="NoWrap" FontSize="13"    
+                        Text="{Binding Song_Name}" TextBlock.FontWeight="ExtraBlack" TextWrapping="NoWrap" FontSize="13"    
                         TextChanged="Song_Name_DataContextChanged" 
                         Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" 
                         Focusable="False" Foreground="White"
@@ -242,21 +243,12 @@
                     </TextBox>
                 </StackPanel>
             </Canvas>
-            <Button x:Name="Button_MV" Style="{StaticResource MyButton}" 
-                    Margin="253,15,0,0"
-                    Width="16" Height="16" HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand">
-                <Button.Background>
-                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/视频播放 (1).png"/>
-                </Button.Background>
-                <Button.Effect>
-                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                </Button.Effect>
-            </Button>
+
 
             <Button x:Name="Button_Love"
             Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
             Width="18" Height="18" Margin="92,38,0,0" VerticalAlignment="Top" BorderBrush="{x:Null}"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
             >
                 <Button.Background>
                     <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/爱心 (1).png"/>
@@ -268,7 +260,7 @@
             <Button x:Name="Button_Download"
             Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
             Width="18" Height="18" Margin="123,38,0,0" VerticalAlignment="Top" BorderBrush="{x:Null}"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
             >
                 <Button.Background>
                     <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/保存到本地 (1).png"/>
@@ -277,18 +269,28 @@
                     <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
                 </Button.Effect>
             </Button>
-            <Button x:Name="Button_More"
-            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
-            Width="18" Height="18" Margin="155,38,0,0" VerticalAlignment="Top" BorderBrush="{x:Null}"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-            >
+            <Button x:Name="Button_MV" Style="{StaticResource MyButton}" 
+                    Margin="154,37,0,0"
+                    Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand">
                 <Button.Background>
-                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/更多 (1).png"/>
+                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/视频播放 (1).png"/>
                 </Button.Background>
                 <Button.Effect>
                     <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
                 </Button.Effect>
             </Button>
+
+            <TextBox x:Name="TextBox_Song_Time_Temp" 
+                 HorizontalAlignment="Left" Height="26" 
+                 TextWrapping="Wrap" Width="115" 
+                 Background="{x:Null}" SelectionBrush="{x:Null}" BorderBrush="{x:Null}" 
+                 Foreground="White" HorizontalContentAlignment="Right" 
+                 FontSize="16" Text="00:00 / 00:00" BorderThickness="0" 
+                 Focusable="False" VerticalContentAlignment="Center" 
+                 UseLayoutRounding="True" SnapsToDevicePixels="True" Margin="180,34,0,10"
+                     Visibility="Collapsed"
+                     />
+
         </Grid>
         <Grid x:Name="Grid_MusicPlayer_MainWindow_Right"
               Visibility="Visible"
@@ -306,12 +308,12 @@
                 HorizontalAlignment="Right" Height="20" 
                 VerticalAlignment="Stretch" Width="20" 
                 BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,77,0" />
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,77,0" />
             <Button x:Name="Button_ListView_Selected" Style="{StaticResource MyButton}" 
                 Content="" HorizontalAlignment="Right" Height="15" 
                 VerticalAlignment="Stretch" Width="15" 
                 BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Cursor="Hand" Margin="0,0,56,0" >
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Cursor="Hand" Margin="0,0,56,0" >
                 <Button.Background>
                     <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/播放队列.png"/>
                 </Button.Background>
@@ -327,108 +329,82 @@
                  UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" Margin="0,0,21,0"/>
         </Grid>
 
-
-        <Grid 
-            x:Name="Grid_MusicPlayer_Main_Left"
-            Visibility="Hidden">
-            <Button x:Name="Button_Love_1"
-            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
-            Width="17" Height="17" Margin="0,0,0,0" VerticalAlignment="Center" BorderBrush="{x:Null}"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-            >
-                <Button.Background>
-                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/爱心 (1).png"/>
-                </Button.Background>
-            </Button>
-            <Button x:Name="Button_Download_1"
-            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
-            Width="17" Height="17" Margin="31,0,0,0" VerticalAlignment="Center" BorderBrush="{x:Null}"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-            >
-                <Button.Background>
-                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/保存到本地 (1).png"/>
-                </Button.Background>
-            </Button>
-            <Button x:Name="Button_More_1"
-            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
-            Width="17" Height="17" Margin="62,0,0,0" VerticalAlignment="Center" BorderBrush="{x:Null}"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-            >
-                <Button.Background>
-                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/更多 (1).png"/>
-                </Button.Background>
-            </Button>
-            <Button x:Name="Button_Talk"
-            Style="{StaticResource MyButton}" Content="" HorizontalAlignment="Left" 
-            Width="17" Height="17" Margin="94,0,0,0" VerticalAlignment="Center" BorderBrush="{x:Null}"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                >
-                <Button.Background>
-                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/评论 (1).png"/>
-                </Button.Background>
-            </Button>
-            <TextBox x:Name="TextBox_Song_Time_Left" 
-                 HorizontalAlignment="Left" Height="26" 
-                 TextWrapping="Wrap" Width="83" 
-                 Background="{x:Null}" SelectionBrush="{x:Null}" BorderBrush="{x:Null}" 
-                 Foreground="#FF7C7C7C" HorizontalContentAlignment="Right" 
-                 FontSize="12" Text="00:00 / 00:00" BorderThickness="0" 
-                 Focusable="False" VerticalContentAlignment="Center" 
-                 UseLayoutRounding="True" SnapsToDevicePixels="True" 
-                 Margin="129,22,0,22"/>
-        </Grid>
         <Grid x:Name="Grid_MusicPlayer_Main_Right"
-              Visibility="Hidden"
+              Visibility="Collapsed"
               >
             <StackPanel
+                HorizontalAlignment="Right" Margin="0,4,105,0" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" VerticalAlignment="Top" Width="185" >
+                <TextBlock Foreground="White" Text="以下选项占用GPU，可能造成卡顿" 
+                           FontSize="12">
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                    </TextBlock.Effect>
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel
                 x:Name="Button_Singer_Image_Animation_To_WindowsDesktop"
-                HorizontalAlignment="Right" Width="70" Margin="0,0,243,0" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Height="16" VerticalAlignment="Center" >
-                <TextBlock Height="15" Foreground="#FF7C7C7C" HorizontalAlignment="Left" Width="48" Text="桌面写真"/>
-                <Image x:Name="Button_Singer_Image_Animation_Image_To_WindowsDesktop" Source="/ico_ui_library/开关-关 (1).png" Width="20" Height="10" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,-14,0,0"/>
+                HorizontalAlignment="Right" Width="90" Margin="0,0,200,24" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Height="25" VerticalAlignment="Bottom" >
+                <TextBlock Height="18" Foreground="White" HorizontalAlignment="Left" Width="58" Text="桌面写真" Margin="0,4,0,0" FontSize="14">
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                    </TextBlock.Effect>
+                </TextBlock>
+                <Image x:Name="Button_Singer_Image_Animation_Image_To_WindowsDesktop" Source="/ico_ui_library/开关-关 (1).png" Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,-16,0,0"/>
+            </StackPanel>
+            <StackPanel
+                x:Name="Button_Mrc_Animation"
+                HorizontalAlignment="Right" Width="90" Margin="0,0,200,4" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Height="25" VerticalAlignment="Bottom" >
+                <TextBlock Height="18" Foreground="White" HorizontalAlignment="Left" Width="58" Text="歌词逐字" Margin="0,4,0,0" FontSize="14">
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                    </TextBlock.Effect>
+                </TextBlock>
+                <Image x:Name="Button_Mrc_Animation_Image" Source="/ico_ui_library/开关-关 (1).png" Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,-16,0,0"/>
             </StackPanel>
             <StackPanel
                 x:Name="Button_Singer_Image_Animation"
-                HorizontalAlignment="Right" Width="45" Margin="0,0,190,0" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Height="16" VerticalAlignment="Center" >
-                <TextBlock Height="15" Foreground="#FF7C7C7C" HorizontalAlignment="Left" Width="24" Text="写真"/>
-                <Image x:Name="Button_Singer_Image_Animation_Image" Source="/ico_ui_library/开关-关 (1).png" Width="20" Height="10" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,-14,0,0"/>
+                HorizontalAlignment="Right" Width="90" Margin="0,0,105,24" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Height="25" VerticalAlignment="Bottom" >
+                <TextBlock Height="17" Foreground="White" HorizontalAlignment="Left" Width="58" Text="写真动画" FontSize="14" Margin="0,4,0,0">
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                    </TextBlock.Effect>
+                </TextBlock>
+                <Image x:Name="Button_Singer_Image_Animation_Image" Source="/ico_ui_library/开关-关 (1).png" Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,-16,0,0"/>
+            </StackPanel>
+            <StackPanel
+                x:Name="Button_Song_AudioSpectrogram"
+                HorizontalAlignment="Right" Width="90" Margin="0,0,105,4" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Height="25" VerticalAlignment="Bottom" >
+                <TextBlock Height="17" Foreground="White" HorizontalAlignment="Left" Width="56" Text="频谱动画" FontSize="14" Margin="0,4,0,0">
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                    </TextBlock.Effect>
+                </TextBlock>
+                <Image x:Name="Button_Song_AudioSpectrogram_Image" Source="/ico_ui_library/开关-关 (1).png" Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,-16,0,0"/>
             </StackPanel>
 
-            <StackPanel x:Name="Button_Tone_Quality"
-                HorizontalAlignment="Right" Height="12" 
-                VerticalAlignment="Center" Width="32" 
-                RenderTransformOrigin="0.5,1" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Margin="0,0,144,0" >
-                <Border Height="12" BorderBrush="#FF7C7C7C" BorderThickness="0.6,0.6,0.6,0.6"
-                        CornerRadius="1,1,1,1" 
-                        />
-                <TextBlock Margin="4,-13.5,0,0" Height="8" Text="标准" Foreground="#FF7C7C7C" FontSize="6" Width="13" HorizontalAlignment="Left"/>
-                <Image Height="8" Margin="0,-13.5,4,0" Width="8" HorizontalAlignment="Right" Source="/ico_ui_library/上-02.png"/>
-            </StackPanel>
-            <StackPanel x:Name="Button_Sound_Effect"
-                HorizontalAlignment="Right" Height="12" 
-                VerticalAlignment="Center" Width="32" 
-                RenderTransformOrigin="0.5,1" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Margin="0,0,104,0" >
-                <Border Height="12" BorderBrush="#FF7C7C7C" BorderThickness="0.6,0.6,0.6,0.6"
-                        CornerRadius="1,1,1,1" 
-                        />
-                <TextBlock Margin="0,-13.5,0,0" Height="8" Text="音效 off" Foreground="#FF7C7C7C" FontSize="6" Width="22"/>
-            </StackPanel>
 
 
             <Button x:Name="Button_Desk_MRC_Right" Style="{StaticResource MyButton}" 
-                Content="词" Foreground="#FF7C7C7C" FontSize="15"
+                Content="词" Foreground="White" FontSize="15"
                 HorizontalAlignment="Right" Height="20" 
                 VerticalAlignment="Center" Width="20" 
                 BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,77,0" />
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,77,0" >
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </Button.Effect>
+            </Button>
             <Button x:Name="Button_ListView_Selected_Right" Style="{StaticResource MyButton}" 
                 Content="" HorizontalAlignment="Right" Height="15" 
                 VerticalAlignment="Stretch" Width="15" 
                 BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Cursor="Hand" Margin="0,0,56,0" >
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Cursor="Hand" Margin="0,0,56,0" >
                 <Button.Background>
                     <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/播放队列.png"/>
                 </Button.Background>
@@ -443,6 +419,6 @@
                  Focusable="False" VerticalContentAlignment="Center" 
                  UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" Margin="0,0,21,0"/>
         </Grid>
-        
+
     </Grid>
 </UserControl>

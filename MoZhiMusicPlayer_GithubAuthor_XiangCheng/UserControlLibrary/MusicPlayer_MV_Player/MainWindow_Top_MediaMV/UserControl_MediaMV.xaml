@@ -32,7 +32,7 @@
                     <Border x:Name="mask" 
                             CornerRadius="{Binding CornerRadius, ElementName=border}" 
                             Margin="100,20,100,20"
-                            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                             >
                         <Border.Background>
                             <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/Music_Album.png" 
@@ -50,7 +50,7 @@
                             x:Name="MediaMent_MV" 
                             Margin="4"
                             LoadedBehavior="Manual" UnloadedBehavior="Manual"
-                            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                         
                             >
                         </MediaElement>

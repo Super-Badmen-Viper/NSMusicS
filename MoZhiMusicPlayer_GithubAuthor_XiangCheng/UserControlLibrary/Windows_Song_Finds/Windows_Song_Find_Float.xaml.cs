@@ -59,8 +59,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
         {
             if (ComBox_Select_SongList.SelectedIndex > 0)
             {
-                Button_Select_Add.Visibility = Visibility.Hidden;
-                Button_FindALL_Add.Visibility = Visibility.Hidden;
+                Button_Select_Add.Visibility = Visibility.Collapsed;
+                Button_FindALL_Add.Visibility = Visibility.Collapsed;
 
                 // 显示选择文件对话框
                 Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
@@ -82,6 +82,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                     {
                         Save_SongListInfo();
 
+                        Button_Select_Add.Visibility = Visibility.Visible;
+                        Button_FindALL_Add.Visibility = Visibility.Visible;
+
                         System.Windows.MessageBox.Show("导入成功");
                     });
                 });
@@ -93,6 +96,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
             {
                 System.Windows.MessageBox.Show("请先选择需要导入的歌单");
             }
+
 
         }
 
@@ -107,8 +111,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
             {
                 ListBox_Test.Items.Add("\n\n开始提取歌曲文件特征信息\n\n");
 
-                Button_Select_Add.Visibility = Visibility.Hidden;
-                Button_FindALL_Add.Visibility = Visibility.Hidden;
+                Button_Select_Add.Visibility = Visibility.Collapsed;
+                Button_FindALL_Add.Visibility = Visibility.Collapsed;
 
                 // 创建一个后台线程来遍历歌曲文件并获取歌曲信息
                 Thread thread = new Thread(() =>
@@ -121,6 +125,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                     Dispatcher.Invoke(() =>
                     {
                         Save_SongListInfo();
+
+                        Button_Select_Add.Visibility = Visibility.Visible;
+                        Button_FindALL_Add.Visibility = Visibility.Visible;
 
                         System.Windows.MessageBox.Show("导入成功");
                     });
@@ -520,7 +527,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
             All_Song_Path = new string[9999];
             All_Info_Path = null;
 
-            this.Visibility = Visibility.Hidden;
+            this.Visibility = Visibility.Collapsed;
         }
 
         public int ComBox_Select;

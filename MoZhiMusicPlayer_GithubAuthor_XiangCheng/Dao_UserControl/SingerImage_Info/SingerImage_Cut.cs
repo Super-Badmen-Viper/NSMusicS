@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using Image = System.Drawing.Image;
 using System.Runtime.InteropServices;
+using System.Collections.ObjectModel;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_Info
 {
@@ -26,7 +27,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_I
             return singerImage_Cut;
         }
 
-        List<ImageBrush> imageBrushs = new List<ImageBrush>();
+        ObservableCollection<ImageBrush> imageBrushs = new ObservableCollection<ImageBrush>();
         public int numCutCells = 4;
         public int numCutRows = 4;
 
@@ -37,7 +38,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_I
         /// <param name="rows"></param>
         /// <param name="cols"></param>
         /// <returns></returns>
-        public List<ImageBrush> CutImage_ImageBrush(string tbImagePath)
+        public ObservableCollection<ImageBrush> CutImage_ImageBrush(string tbImagePath)
         {
             imageBrushs.Clear();
             btCut(tbImagePath);
@@ -53,7 +54,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_I
             {
                 using (Bitmap b = new Bitmap(fileImg.FullName))
                 {
-                    List<Rectangle> lstRect = CreateAvgCutRectangle(b.Width, b.Height, (int)numCutRows, (int)numCutCells);
+                    ObservableCollection<Rectangle> lstRect = CreateAvgCutRectangle(b.Width, b.Height, (int)numCutRows, (int)numCutCells);
                     for (int i = 0; i < lstRect.Count; i++)
                     {
                         CutImage(tbImagePath, lstRect[i].X, lstRect[i].Y, lstRect[i].Width, lstRect[i].Height,
@@ -139,9 +140,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_I
         /// <param name="cutRowsNum">要切割的行数</param>
         /// <param name="cutCellsNum">要切割的列数</param>
         /// <returns></returns>
-        private List<Rectangle> CreateAvgCutRectangle(int imgWidth, int imgHeight, int cutRowsNum, int cutCellsNum)
+        private ObservableCollection<Rectangle> CreateAvgCutRectangle(int imgWidth, int imgHeight, int cutRowsNum, int cutCellsNum)
         {
-            List<Rectangle> lstRect = new List<Rectangle>();
+            ObservableCollection<Rectangle> lstRect = new ObservableCollection<Rectangle>();
             int avgWidth = imgWidth / cutCellsNum;//每块的平均宽度
             int avgHeight = imgHeight / cutRowsNum;//每块的平均高度
             int offsetX = 0, offsetY = 0;

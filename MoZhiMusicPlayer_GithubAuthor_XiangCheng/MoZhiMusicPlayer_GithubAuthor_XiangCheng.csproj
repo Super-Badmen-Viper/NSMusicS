@@ -9,6 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="fonts\Barlow-Black.ttf" />
+    <None Remove="fonts\Barlow-Black.woff2" />
+    <None Remove="fonts\Barlow-Bold.ttf" />
+    <None Remove="fonts\Barlow-Bold.woff2" />
+    <None Remove="fonts\Barlow-ExtraBold.ttf" />
+    <None Remove="fonts\Barlow-ExtraBold.woff2" />
+    <None Remove="fonts\Barlow-Medium.ttf" />
+    <None Remove="fonts\Barlow-Medium.woff2" />
+    <None Remove="fonts\Barlow-Regular.ttf" />
+    <None Remove="fonts\Barlow-Regular.woff2" />
+    <None Remove="fonts\Barlow-SemiBold.ttf" />
+    <None Remove="fonts\Barlow-SemiBold.woff2" />
     <None Remove="ico_ui_library\0_官方歌单.jpg" />
     <None Remove="ico_ui_library\0_推荐有声电台.jpg" />
     <None Remove="ico_ui_library\0_推荐视频.jpg" />
@@ -339,6 +351,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="TagLibSharp" Version="2.3.0" />
+    <PackageReference Include="Unnoficial.Microsoft.Expression.Drawing" Version="1.0.0" />
     <PackageReference Include="VisioForge.DotNet.Core.TRIAL" Version="15.1.12" />
   </ItemGroup>
 
@@ -354,6 +367,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="fonts\Barlow-Black.ttf" />
+    <Resource Include="fonts\Barlow-Black.woff2" />
+    <Resource Include="fonts\Barlow-Bold.ttf" />
+    <Resource Include="fonts\Barlow-Bold.woff2" />
+    <Resource Include="fonts\Barlow-ExtraBold.ttf" />
+    <Resource Include="fonts\Barlow-ExtraBold.woff2" />
+    <Resource Include="fonts\Barlow-Medium.ttf" />
+    <Resource Include="fonts\Barlow-Medium.woff2" />
+    <Resource Include="fonts\Barlow-Regular.ttf" />
+    <Resource Include="fonts\Barlow-Regular.woff2" />
+    <Resource Include="fonts\Barlow-SemiBold.ttf" />
+    <Resource Include="fonts\Barlow-SemiBold.woff2" />
     <Resource Include="ico_ui_library\0_官方歌单.jpg" />
     <Resource Include="ico_ui_library\0_推荐有声电台.jpg" />
     <Resource Include="ico_ui_library\0_推荐视频.jpg" />

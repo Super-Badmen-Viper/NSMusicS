@@ -6,11 +6,11 @@
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.音乐馆"
              x:Class="MoZhiMusicPlayer_GithubAuthor_XiangCheng.Helper_UserControlLibrary.音乐馆.UserControl_精选"
              mc:Ignorable="d" d:DesignWidth="810"
-             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-             Background="#1E1E20" SizeChanged="UserControl_SizeChanged" VerticalAlignment="Top">
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+             Background="#1F1F1F" SizeChanged="UserControl_SizeChanged" VerticalAlignment="Top">
     <Grid Margin="38,38,38,38"
           x:Name="Grid_This_Background"
-          UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+          UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
           Height="1463" 
           MouseLeftButtonDown="Grid_This_Background_MouseLeftButtonDown" VerticalAlignment="Top" 
           >
@@ -18,7 +18,7 @@
         <Image 
             x:Name="Image_"
             Stretch="UniformToFill" Source="/ico_ui_library/1_精选.jpg"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
             >
 
         </Image>

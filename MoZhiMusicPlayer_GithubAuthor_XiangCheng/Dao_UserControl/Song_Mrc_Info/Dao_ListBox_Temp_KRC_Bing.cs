@@ -5,5 +5,6 @@
 
         public string Song_MRC_Line { get; set; }
 
+        public string Song_CRC_Line { get; set; }
     }
 }

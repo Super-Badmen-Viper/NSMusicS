@@ -22,6 +22,15 @@
     <Compile Update="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_More.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_Search_Album.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_Search_Singer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_Search_Song.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_More.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -29,6 +38,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Album.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Singer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Song.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControlLibrary\Main_Home_TOP_UserControls\UserControl_Main_Home_TOP_Personalized_Skins.xaml.cs">
@@ -78,6 +96,15 @@
     <Page Update="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_More.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_Search_Album.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_Search_Singer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_Search_Song.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_More.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -85,6 +112,15 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Album.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Singer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Song.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\Main_Home_TOP_UserControls\UserControl_Main_Home_TOP_Personalized_Skins.xaml">

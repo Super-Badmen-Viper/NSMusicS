@@ -23,7 +23,7 @@
         <Image x:Name="Image_Play_This_SongList" 
                Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/24gf-playCircle.png" 
                Stretch="Fill" Margin="25" 
-               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                MouseLeave="This_Image_BackGround_MouseLeave" MouseMove="This_Image_BackGround_MouseMove" Width="50" Height="50" ClipToBounds="True">
             <Image.Clip>
                 <EllipseGeometry RadiusX="25" RadiusY="25" Center="25,25"/>

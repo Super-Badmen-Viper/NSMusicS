@@ -5,7 +5,8 @@
              StartupUri="MainWindow.xaml">
     <!--调试则卡顿。。。。性能分析-->
     <Application.Resources>
-
+        <!--字体颜色-->
+        
 
         <!-- Button取消悬浮 -->
         <Style x:Key="MyButton" TargetType="Button">
@@ -40,7 +41,8 @@
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type Thumb}">
                                             <Grid>
-                                                <Border x:Name="thumb" BorderThickness="0" Background="Gray" Height="{TemplateBinding Height}" Width="8"/>
+                                                <Border x:Name="thumb" BorderThickness="0" 
+                                                        Background="White" Height="{TemplateBinding Height}" Width="8"/>
                                             </Grid>
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -152,7 +154,7 @@
         <Style x:Key="SliderStyle1" TargetType="{x:Type Slider}">
             <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
             <Setter Property="Background" Value="#BF444444" />
-            <Setter Property="Foreground" Value="#1ECC94" />
+            <Setter Property="Foreground" Value="#D7FFFE" />
             <Setter Property="Template" Value="{StaticResource SliderHorizontal}" />
         </Style>
         <Style x:Key="SliderStyle2" TargetType="{x:Type Slider}">
@@ -266,7 +268,7 @@
                                     <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="false" />
                                     <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top" />
                                 </MultiDataTrigger.Conditions>
-                                <Setter TargetName="underLine" Property="Visibility" Value="Collapsed" />
+                                <Setter TargetName="underLine" Property="Visibility" Value="Hidden" />
                                 <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="{StaticResource TabItem.Static.Foreground}" />
                             </MultiDataTrigger>
                             <MultiDataTrigger>

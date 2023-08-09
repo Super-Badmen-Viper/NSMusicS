@@ -40,7 +40,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         public void Init()
         {
             //隐藏控件
-            userControl_Media_ButtomSilderPanel.Visibility = Visibility.Hidden;
+            userControl_Media_ButtomSilderPanel.Visibility = Visibility.Collapsed;
 
             //所有重叠层绑定鼠标移入移出事件
             userControl_Media_ButtomSilderPanel.MouseEnter += Mouse_Over_Silder_Music_Width;
@@ -175,7 +175,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         /// <param name="e"></param>
         public void Mouse_Leave_Silder_Music_Width(object sender, MouseEventArgs e)
         {
-            userControl_Media_ButtomSilderPanel.Visibility = Visibility.Hidden;
+            userControl_Media_ButtomSilderPanel.Visibility = Visibility.Collapsed;
         }
         /// <summary>
         /// 鼠标移入silder_调整播放进度
@@ -198,7 +198,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         /// <param name="e"></param>
         public void Mouse_Leave_Silder_Music_Width_MV(object sender, MouseEventArgs e)
         {
-            userControl_Media_ButtomSilderPanel.Silder_Music_Temp_Width.Visibility = Visibility.Hidden;
+            userControl_Media_ButtomSilderPanel.Silder_Music_Temp_Width.Visibility = Visibility.Collapsed;
         }
         #endregion
 
@@ -295,7 +295,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
 
                     MediaMent_MV.Position = new TimeSpan(0, 0, 0, 0, (int)userControl_Media_ButtomSilderPanel.Silder_Music_Temp_Width.Value);
 
-                    userControl_Media_ButtomSilderPanel.Silder_Music_Temp_Width.Visibility = Visibility.Hidden;
+                    userControl_Media_ButtomSilderPanel.Silder_Music_Temp_Width.Visibility = Visibility.Collapsed;
 
                     dispatcherTimer_Silder.Start();
 

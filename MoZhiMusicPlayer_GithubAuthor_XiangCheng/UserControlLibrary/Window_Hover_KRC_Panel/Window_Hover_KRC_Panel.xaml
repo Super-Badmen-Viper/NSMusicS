@@ -8,7 +8,7 @@
         Title="Window1" 
         d:DesignHeight="146" 
         MinWidth="660" MinHeight="146"
-        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Background="#00FFFFFF" WindowStyle="None" AllowsTransparency = "True"
+        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Background="#00FFFFFF" WindowStyle="None" AllowsTransparency = "True"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         MouseLeftButtonDown="Window_MouseLeftButtonDown" Height="146" Foreground="{x:Null}"
         MouseLeave="Window_Desk_MRC1_MouseLeave" MouseMove="Window_Desk_MRC1_MouseMove"

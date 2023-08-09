@@ -64,8 +64,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             GridViewColumn_Check_ListView_Song.Width = 0;
             GridViewColumn_Love_Add_ListView_Song_Normal.Width = 30;
 
-            Stack_Panel_Add_Song.Visibility = Visibility.Hidden;
-            Stack_Panel_More_Takes.Visibility = Visibility.Hidden;
+            Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            Stack_Panel_More_Takes.Visibility = Visibility.Collapsed;
 
             ListView_Download_SongList_Info.MouseDoubleClick += ListView_Download_SongList_Info_MouseDoubleClick;
         }
@@ -895,7 +895,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         private void StackPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (Stack_Panel_Add_Song.Visibility == Visibility.Visible)
-                Stack_Panel_Add_Song.Visibility = Visibility.Hidden;
+                Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
             else
                 Stack_Panel_Add_Song.Visibility = Visibility.Visible;
         }
@@ -907,7 +907,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         private void StackPanel_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
         {
             if (Stack_Panel_More_Takes.Visibility == Visibility.Visible)
-                Stack_Panel_More_Takes.Visibility = Visibility.Hidden;
+                Stack_Panel_More_Takes.Visibility = Visibility.Collapsed;
             else
                 Stack_Panel_More_Takes.Visibility = Visibility.Visible;
 
@@ -984,8 +984,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
         private void Stack_Button_LotSelects_Take_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Grid_NormalModel_1.Visibility = Visibility.Hidden;
-            Grid_NormalModel_2.Visibility = Visibility.Hidden;
+            Grid_NormalModel_1.Visibility = Visibility.Collapsed;
+            Grid_NormalModel_2.Visibility = Visibility.Collapsed;
             Grid_ListItem_CrudModel_1.Margin = new Thickness(0, 90, 0, 0);
             Grid_ListItem_CrudModel_2.Visibility = Visibility.Visible;
             GridViewColumn_Check_ListView_Song.Width = 30;
@@ -996,7 +996,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             Grid_NormalModel_1.Visibility = Visibility.Visible;
             Grid_NormalModel_2.Visibility = Visibility.Visible;
             Grid_ListItem_CrudModel_1.Margin = new Thickness(0, 180, 0, 0);
-            Grid_ListItem_CrudModel_2.Visibility = Visibility.Hidden;
+            Grid_ListItem_CrudModel_2.Visibility = Visibility.Collapsed;
             GridViewColumn_Check_ListView_Song.Width = 0;
         }
 

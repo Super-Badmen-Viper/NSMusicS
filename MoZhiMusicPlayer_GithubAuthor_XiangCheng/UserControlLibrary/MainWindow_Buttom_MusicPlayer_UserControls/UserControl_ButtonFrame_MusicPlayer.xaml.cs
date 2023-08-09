@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Services.Services_For_API_GetResult;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -22,18 +23,24 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow
         {
             InitializeComponent();
 
-            Border_Hover_BackGround.Visibility = Visibility.Hidden;
-        }
+            Border_Hover_BackGround.Visibility = Visibility.Collapsed;
 
+            viewModule_Search_Song = ViewModule_Search_Song.Retuen_This();
+            this.DataContext = ViewModule_Search_Song.Retuen_This();
+        }
+        ViewModule_Search_Song viewModule_Search_Song;
+
+
+        public bool Bool_Player_Model;
         private void Border_Hover_BackGround_MouseEnter(object sender, MouseEventArgs e)
         {
-            Border_Hover_BackGround.Visibility = Visibility.Visible;
-            //Border_Song_Image.Opacity = 0.7;
+            if(!Bool_Player_Model)
+                Border_Hover_BackGround.Visibility = Visibility.Visible;
         }
 
         private void Border_Hover_BackGround_MouseLeave(object sender, MouseEventArgs e)
         {
-            Border_Hover_BackGround.Visibility = Visibility.Hidden;
+            Border_Hover_BackGround.Visibility = Visibility.Collapsed;
             //Border_Song_Image.Opacity = 1;
         }
 

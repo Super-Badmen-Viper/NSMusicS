@@ -8,7 +8,7 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="443" d:DesignWidth="810"
-             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
              
              >
     <Grid>
@@ -17,7 +17,7 @@
                 x:Name="this_SongList_Name"
                 HorizontalAlignment="Left" Height="50" Text="用户自定义" TextWrapping="Wrap" 
                    VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
-                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                    Foreground="White"               
                    >
                 <TextBlock.Effect>
@@ -30,7 +30,7 @@
                    HorizontalAlignment="Left" Height="20" Text="歌曲0" TextWrapping="Wrap" 
                    VerticalAlignment="Top" Margin="42,74,0,0" FontSize="14"
                    Block.TextAlignment="Center"
-                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                    >
                 <TextBlock.Effect>
                     <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
@@ -41,7 +41,7 @@
                 HorizontalAlignment="Left" Height="20" Text="视频0" TextWrapping="Wrap" 
                 VerticalAlignment="Top" Margin="150,74,0,0" FontSize="14"
                 Block.TextAlignment="Center"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                 Foreground="White"
                    >
                 <TextBlock.Effect>
@@ -51,36 +51,36 @@
 
             <StackPanel
             HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="31,122,0,0"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
             MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"          
             >
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
-                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                     Background="#FFE3E3E3" Height="32" 
                      />
                 <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/增加 - 副本.png" 
                    Stretch="Fill" Margin="35,-22,63,10"
-                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                    />
                 <TextBlock Text="添加" VerticalAlignment="Center" Margin="49,-32,6,0" 
-                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                        />
             </StackPanel>
             <StackPanel
             HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="32" Margin="273,122,0,0"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
             MouseLeftButtonDown="StackPanel_MouseLeftButtonDown_1"
             >
                 <Border HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" 
                 BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Background="#FFE3E3E3" Height="32" 
                  />
                 <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/更多.png" 
                Stretch="UniformToFill"
-               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" Margin="0,-32,0,0"
+               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Margin="0,-32,0,0"
                />
             </StackPanel>
             <StackPanel x:Name="Stack_Button_LotSelects_Take" Height="32" VerticalAlignment="Top" 
@@ -91,7 +91,7 @@
                 <Border HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" 
                 BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Background="#FFE3E3E3" Height="32" 
                  />
                 <Image Height="20" Margin="20,-31,0,0" Width="20" HorizontalAlignment="Left" 
@@ -104,7 +104,7 @@
         <Grid x:Name="Grid_ListItem_CrudModel_1" Margin="0,180,0,0">
             <ListView x:Name="ListView_Download_SongList_Info" Foreground="White"
                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 IsSynchronizedWithCurrentItem="True"
                 sort:GridViewSort.AutoSort="False" 
                 BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0"
@@ -147,7 +147,7 @@
                         <Setter Property="Padding" Value="9,0,0,0"/>
                         <Setter Property="BorderBrush" Value="#00000000"/>
                         <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Foreground" Value="#FF9F9F9F"/>
+                        <Setter Property="Foreground" Value="White"/>
                     </Style>
                     <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">8</system:Double>
                     <Style TargetType="ScrollBar">
@@ -268,10 +268,10 @@
             </ListView>
         </Grid>
 
-        <Grid x:Name="Grid_ListItem_CrudModel_2" Visibility="Hidden">
+        <Grid x:Name="Grid_ListItem_CrudModel_2" Visibility="Collapsed">
             <StackPanel
                 HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="41,14,0,0"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                   
             >
                 <ComboBox 
@@ -296,56 +296,56 @@
             <StackPanel
                 x:Name="Stack_Check_ALL"
                 HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="160,14,0,0"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 MouseLeftButtonDown="Stack_Check_ALL_MouseLeftButtonDown" 
                     
             >
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
-                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                     Background="#FFE3E3E3" Height="32" 
                      />
                 <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/圆圈、单选框.png" 
                    Stretch="Fill" Margin="10,-24,0,10"
-                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Left" VerticalAlignment="Top" Width="16"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="16"
                    />
                 <TextBlock Text="全选" VerticalAlignment="Center" Margin="37,-37,6,0" 
-                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                        />
             </StackPanel>
             <StackPanel
                 x:Name="Stack_Button_Delete_Select_ItemSong"
                 HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="280,14,0,0"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 MouseLeftButtonDown="Button_Delete_Click" 
                         
             >
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
-                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                     Background="#FFE3E3E3" Height="32" 
                      />
                 <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/删除.png" 
                    Stretch="Fill" Margin="30,-26,0,10"
-                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Left" VerticalAlignment="Top" Width="18"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="18"
                    />
                 <TextBlock Text="删除" VerticalAlignment="Center" Margin="52,-36,6,0" 
-                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                        />
             </StackPanel>
             <StackPanel
                 x:Name="Stack_Button_Exit_LotLItemCrud"
                 HorizontalAlignment="Right" Height="32" VerticalAlignment="Top" Width="110" Margin="0,14,30,0"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 MouseLeftButtonDown="Stack_Button_Exit_LotLItemCrud_MouseLeftButtonDown"                        
             >
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
-                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                     Background="#FFE3E3E3" Height="32" 
                      />
                 <TextBlock Text="退出批量操作" VerticalAlignment="Center" Margin="0,-32,0,0" 
-                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Center"
+                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalAlignment="Center"
                        />
             </StackPanel>
         </Grid>

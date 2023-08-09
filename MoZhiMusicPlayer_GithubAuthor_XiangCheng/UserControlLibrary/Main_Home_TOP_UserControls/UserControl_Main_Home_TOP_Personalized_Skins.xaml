@@ -5,15 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_TOP_UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="443" d:DesignWidth="810"
-             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
+             d:DesignHeight="643" d:DesignWidth="810"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
              >
     <Grid>
         <TextBlock 
                 x:Name="this_SongList_Name"
                 HorizontalAlignment="Left" Height="50" Text="个性皮肤" TextWrapping="Wrap" 
                 VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Foreground="White"               
                 >
             <TextBlock.Effect>
@@ -23,7 +23,7 @@
         <TextBlock 
                 HorizontalAlignment="Left" Height="29" Text="推荐" TextWrapping="Wrap" 
                 VerticalAlignment="Top" Width="54" FontSize="18" FontWeight="Bold" Margin="60,80,0,0"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Foreground="White"               
                 >
             <TextBlock.Effect>
@@ -31,35 +31,113 @@
             </TextBlock.Effect>
         </TextBlock>
 
-        <Border x:Name="Border_this_app_Background_0"
-                BorderThickness="0.1" CornerRadius="10" BorderBrush="#00000000" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+        <Border x:Name="Border_this_app_Background_1"
+                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Width="198" Height="108" Margin="60,120,0,0" Background="#F6F6F6" />
+                Width="198" Height="108" Margin="60,120,0,0" Background="#1F1F1F" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="60,230,0,0" Padding="10,0,0,0"
-                   Text="霜秋白" Foreground="White" FontSize="14" >
+                   Text="高级黑" Foreground="White" FontSize="14" >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>
         </TextBlock>
 
-        <Border x:Name="Border_this_app_Background_1"
-                BorderThickness="0.1" CornerRadius="10" BorderBrush="#00000000" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+        <Border x:Name="Border_this_app_Background_2"
+                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Width="198" Height="108" Margin="280,120,0,0" Background="#171718" />
+                Width="198" Height="108" Margin="280,120,0,0" Background="#1F1F1F" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="280,230,0,0" Padding="10,0,0,0"
-                   Text="玄武黑" Foreground="White" FontSize="14" >
+                   Text="高级白" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_3"
+                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="500,120,0,0" Background="#1F1F1F" />
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="500,230,0,0" Padding="10,0,0,0"
+                   Text="山岩" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_4"
+                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="280,260,0,0" Background="#1F1F1F" />
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="280,370,0,0" Padding="10,0,0,0"
+                   Text="永恒" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_5"
+                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="500,260,0,0" Background="#1F1F1F" />
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="500,370,0,0" Padding="10,0,0,0"
+                   Text="毒药" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_6"
+                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="60,400,0,0" Background="#1F1F1F" />
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="60,510,0,0" Padding="10,0,0,0"
+                   Text="盐山" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_7"
+                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="280,400,0,0" Background="#1F1F1F" />
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="280,510,0,0" Padding="10,0,0,0"
+                   Text="玻璃水" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_8"
+                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="500,400,0,0" Background="#1F1F1F" />
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="500,510,0,0" Padding="10,0,0,0"
+                   Text="完美白" Foreground="White" FontSize="14" >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>
         </TextBlock>
 
         <Border x:Name="Border_this_app_Background_User"
-                BorderThickness="0.1" CornerRadius="10" BorderBrush="#00000000" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Width="198" Height="108" Margin="60,260,0,0" >
             <Border.Background>

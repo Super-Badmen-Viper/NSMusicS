@@ -58,6 +58,22 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             Edit_Album_Name = TextBox_Edit_Album_Name.Text;
         }
 
-        
+
+        private void ListBox_Singer_Image_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+        private void ListBox_Album_Image_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+        private void ListBox_Mrc_Image_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+        private void ListBox_Crc_Image_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

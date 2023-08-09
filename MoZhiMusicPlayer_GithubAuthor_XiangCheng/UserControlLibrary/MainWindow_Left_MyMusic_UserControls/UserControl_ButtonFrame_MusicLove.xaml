@@ -6,26 +6,26 @@
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Left_MyMusic_UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="160"
-             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
              MouseEnter="UserControl_MouseEnter" MouseLeave="UserControl_MouseLeave"
              >
     <Grid>
         <Border x:Name="Border_Hover_BackGround"
                 BorderThickness="0.1" CornerRadius="4.3,4.3,4.3,4.3" BorderBrush="#00000000" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" />
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  />
 
         <TextBlock HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="20" Margin="13,5,0,0" 
-               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                >
             <TextBlock.Background>
-                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/爱心 (1).png"/>
+                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/爱心.png"/>
             </TextBlock.Background>
             <TextBlock.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                <DropShadowEffect Color="White" BlurRadius="1" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>
         </TextBlock>
         <TextBlock Margin="40,5,0,5" Text="我的收藏" Foreground="White" FontSize="13.5" Padding="0,1,0,0" 
-                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                    >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />

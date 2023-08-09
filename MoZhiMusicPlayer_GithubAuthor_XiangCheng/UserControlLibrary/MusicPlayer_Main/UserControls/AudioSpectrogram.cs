@@ -37,12 +37,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         public AudioSpectrogram() {
 
             InitializeCapture();
-
-            Timer timer = new Timer();
-            timer.Interval = 20;
-            timer.Tick += ProcessFrame;
-            timer.Tick += RenderPanel;
-            timer.Start();
         }
         private static AudioSpectrogram audioSpectrogram;
         public static AudioSpectrogram Retuen_This()
@@ -234,7 +228,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
 
 
             //参数调整,为0则不执行
-            int size_1_SmoothData = 0;//预处理数据，第一次SmoothData平滑
+            int size_1_SmoothData = 8;//预处理数据，第一次SmoothData平滑
             int size_average = 30;//对animation_points超出的部分进行平均量增减(上下波动幅度)。
             double size_Error_point = 1.0;//超出频谱动画范围，重新设置为？
             int size_2_SmoothData = 8;//第二次SmoothData平滑
@@ -462,23 +456,33 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             }
         }
 
+        Timer timer;
         /// <summary>
         /// 开始与暂停
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void StartStopBtn_Click()
+        public void StartBtn_Click()
         {
-            if (viewModule.IsRecording)
-            {
-                if (writer != null)
-                    writer.Close();
-                capture.StopRecording();
-            }
-            else
-                capture.StartRecording();
+            timer = new Timer();
+            timer.Interval = 20;
+            timer.Tick += ProcessFrame;
+            timer.Tick += RenderPanel;
+            timer.Start();
+
+            capture.StartRecording();
 
             viewModule.IsRecording ^= true;
+        }
+        public void StopBtn_Click()
+        {
+            if (writer != null)
+                writer.Close();
+            capture.StopRecording();
+
+            timer.Stop();
+
+            viewModule.IsRecording ^= false;
         }
     }
 }
