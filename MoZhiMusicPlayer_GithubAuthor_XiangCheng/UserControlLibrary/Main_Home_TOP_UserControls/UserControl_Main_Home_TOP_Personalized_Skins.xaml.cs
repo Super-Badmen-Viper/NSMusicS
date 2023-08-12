@@ -102,7 +102,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         // 山岩
         public LinearGradientBrush gradientBrush_3;
 
-        // 永恒
+        // 永恒天空
         public LinearGradientBrush gradientBrush_4;
 
         // 毒药

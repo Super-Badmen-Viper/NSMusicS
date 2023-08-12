@@ -24,6 +24,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
         public ImageBrush Song_Like_Image { get; set; }
         public ImageBrush Song_MV_Image { get; set; }
 
+        public bool Bool_Playing = false;
+
         private bool m_IsChecked;
         public bool IsChecked
         {

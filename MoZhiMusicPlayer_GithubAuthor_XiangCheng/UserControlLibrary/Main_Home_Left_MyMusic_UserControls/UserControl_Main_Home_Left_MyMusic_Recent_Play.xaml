@@ -108,6 +108,7 @@
                 Loaded="UserControl_Loaded" SourceUpdated="ListView_Download_SongList_Info_SourceUpdated"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                ItemsSource="{Binding UpdateSourceTrigger=PropertyChanged}"
                   >
 
                 <ListView.ItemContainerStyle>
@@ -188,7 +189,7 @@
 
                             <GridViewColumn
                                         Header="歌曲" 
-                                        Width="470"                                         
+                                        Width="360"                                         
                                         sort:GridViewSort.PropertyName="Song_Name" >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -233,6 +234,22 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
+
+                            <GridViewColumn Header="No."
+                                        Width="120"
+                                        sort:GridViewSort.PropertyName="Song_No"
+                                        >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Song_No}">
+                                            <TextBlock.Effect>
+                                                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                                            </TextBlock.Effect>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
                             <GridViewColumn Header="歌曲路径"
                                         Width="290"
                                         sort:GridViewSort.PropertyName="Song_Url">
@@ -246,26 +263,18 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="歌曲序号"
-                                        Width="60"
-                                        sort:GridViewSort.PropertyName="Song_No">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Song_No}">
-                                            <TextBlock.Effect>
-                                                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                                            </TextBlock.Effect>
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
                         </GridView.Columns>
                     </GridView>
                 </ListView.View>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel VirtualizationMode="Recycling" IsVirtualizing="True"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
             </ListView>
         </Grid>
 
-        <Grid x:Name="Grid_ListItem_CrudModel_2" Visibility="Collapsed">
+        <Grid x:Name="Grid_ListItem_CrudModel_2" Visibility="Visible">
             <StackPanel
                 HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="41,14,0,0"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
@@ -326,6 +335,25 @@
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="18"
                    />
                 <TextBlock Text="删除" VerticalAlignment="Center" Margin="52,-36,6,0" 
+                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                       />
+            </StackPanel>
+            <StackPanel
+                x:Name="Stack_Button_Add_Current_Playlist_Select_ItemSong"
+                HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="130" Margin="400,14,0,0"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                MouseLeftButtonDown="Button_Add_Current_Playlist_Select_ItemSong_Click" 
+            >
+                <Border HorizontalAlignment="Stretch" 
+                    BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                    Background="#FFE3E3E3" Height="32" 
+                     />
+                <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/复制-01.png" 
+                   Stretch="Fill" Margin="10,-26,0,10"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="18"
+                   />
+                <TextBlock Text="添加到播放列表" VerticalAlignment="Center" Margin="32,-36,6,0" 
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                        />
             </StackPanel>

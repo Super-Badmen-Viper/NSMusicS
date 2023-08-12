@@ -48,14 +48,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                 {
                     while ((A_String_Read = Song_Lrc_StreamReader.ReadLine()) != null)
                     {
-                        if (isPureNum(A_String_Read.ToString().Substring(1, 1).ToString()))
+                        if (!string.IsNullOrWhiteSpace(A_String_Read) && isPureNum(A_String_Read.Substring(1, 1)))
                         {
                             int nums_temp_1 = A_String_Read.IndexOf("]");
-                            //int nums_temp_2 = A_String_Read.IndexOf("[") + 1;
-                            if (A_String_Read.Length <= nums_temp_1)//过滤歌词内容为空的行
-                                continue;
-
-                            arrayList_MRC_line.Add(A_String_Read);
+                            if (A_String_Read.Length > nums_temp_1)
+                            {
+                                arrayList_MRC_line.Add(A_String_Read);
+                            }
                         }
                     }
                 }
@@ -71,10 +70,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                 {
                     Init_MRC_Info();
                 }
-                /*else
+                else
                 {
                     Init_Lrc_Info();
-                }*/
+                }
         }
         public bool isPureNum(string str)
         {
@@ -93,7 +92,104 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
             return true;                              //是，就返回true
         }
 
-        
+        public void Init_Lrc_Info()
+        {
+            mrc_Line_Info = new List<MRC_Line_Info>();
+            for (int i = 0; i < arrayList_MRC_line.Count; i++)
+            {
+                MRC_Line_Info temp = new MRC_Line_Info();
+                mrc_Line_Info.Add(temp);
+            }
+
+            mrc_A_line_Text = new List<string>();
+            mrc_A_line_Time = new List<double>();
+
+            string temp_head_start = "";
+            string temp_head_duration = "";
+            string temp_text = "";
+
+            //初始化歌词行动画时间
+            for (int i = 0; i < arrayList_MRC_line.Count; i++)
+            {
+                temp_head_start = arrayList_MRC_line[i].ToString();
+                temp_head_duration = temp_head_start;
+                temp_text = temp_head_start;
+
+                Match match = Regex.Match(temp_head_start, @"\[(\d{2}):(\d{2})\.(\d{3})\]");
+                if (match.Success)
+                {
+                    int minutes = int.Parse(match.Groups[1].Value);
+                    int seconds = int.Parse(match.Groups[2].Value);
+                    int milliseconds = int.Parse(match.Groups[3].Value);
+
+                    int totalMilliseconds = (minutes * 60 + seconds) * 1000 + milliseconds;
+
+                    mrc_Line_Info[i].This_MRC_Line = i + 1;
+                    mrc_Line_Info[i].This_MRC_Start_Time = totalMilliseconds;
+                    mrc_Line_Info[i].This_MRC_Duration = 0;
+                }
+
+                mrc_Line_Info[i].String_Lrc_Line = temp_head_start.Substring(temp_head_start.IndexOf("]") + 1);
+            }
+
+            //This_MRC_Start_Time为0时定时器无法捕捉
+            for (int i = 0; i < mrc_Line_Info.Count; i++)
+            {
+                if (mrc_Line_Info[i].This_MRC_Start_Time == 0)
+                {
+                    mrc_Line_Info[i].This_MRC_Start_Time = 222;
+                }
+            }
+
+            //设置其他的算法属性
+            //mrc_A_line_Text,mrc_A_line_Time,Start_Song_MRC_Time,mrc_A_line_Time
+            for (int i = 0; i < mrc_Line_Info.Count; i++)
+            {
+                mrc_A_line_Text.Add(mrc_Line_Info[i].String_Lrc_Line);
+                mrc_A_line_Time.Add(mrc_Line_Info[i].This_MRC_Start_Time);
+            }
+            Start_Song_MRC_Time = mrc_A_line_Time[0];
+            End_Song_MRC_Time = -1;//表示这是lrc
+
+            //将数组前后各扩容7个空位，更好的匹配UI显示歌词
+            List<string> temp_string = new List<string>();
+            for (int i = 0; i < mrc_A_line_Text.Count + 14; i++)
+            {
+                if (i < 7)
+                {
+                    temp_string.Add("       ");
+                }
+                else if (i < mrc_A_line_Text.Count + 7)
+                {
+                    temp_string.Add(mrc_A_line_Text[i - 7]);
+                }
+                else if (i < mrc_A_line_Text.Count + 14)
+                {
+                    temp_string.Add("       ");
+                }
+            }
+            mrc_A_line_Text = temp_string;
+
+            List<double> temp_double = new List<double>();
+            for (int i = 0; i < mrc_A_line_Time.Count + 14; i++)
+            {
+                if (i < 7)
+                {
+                    temp_double.Add(0);
+                }
+                else if (i < mrc_A_line_Time.Count + 7)
+                {
+                    temp_double.Add(mrc_A_line_Time[i - 7]);
+                }
+                else if (i < mrc_A_line_Time.Count + 14)
+                {
+                    temp_double.Add(0);
+                }
+            }
+            mrc_A_line_Time = temp_double;
+        }
+
+
         /// <summary>
         /// 初始化歌词行字节信息
         /// </summary>

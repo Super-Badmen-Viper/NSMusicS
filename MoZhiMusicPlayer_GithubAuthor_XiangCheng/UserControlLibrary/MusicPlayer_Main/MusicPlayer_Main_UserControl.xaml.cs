@@ -24,8 +24,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         {
             InitializeComponent();
 
-            TextBox_SongName.TextAlignment = TextAlignment.Center;
-            TextBox_SingerName.TextAlignment = TextAlignment.Center;
+            /*TextBox_SongName.TextAlignment = TextAlignment.Center;
+            TextBox_SingerName.TextAlignment = TextAlignment.Center;*/
             TextBox_SongAlbumName.TextAlignment = TextAlignment.Center;
 
             viewModule_Search_Song = ViewModule_Search_Song.Retuen_This();

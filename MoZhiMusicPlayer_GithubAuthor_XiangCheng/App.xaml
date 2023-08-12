@@ -154,7 +154,7 @@
         <Style x:Key="SliderStyle1" TargetType="{x:Type Slider}">
             <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
             <Setter Property="Background" Value="#BF444444" />
-            <Setter Property="Foreground" Value="#D7FFFE" />
+            <Setter Property="Foreground" Value="#1FD1A4" />
             <Setter Property="Template" Value="{StaticResource SliderHorizontal}" />
         </Style>
         <Style x:Key="SliderStyle2" TargetType="{x:Type Slider}">
@@ -332,7 +332,7 @@
                                         Width="{Binding ElementName=grid,Path=ActualWidth}"
                                         Height="{Binding ElementName=grid, Path=ActualHeight}"
                                         
-                                        Content="添加到" VerticalAlignment="Center"
+                                        Content="添加到歌单" VerticalAlignment="Center"
                                         HorizontalAlignment="Left" Margin="5,0,0,0"
                                         BorderThickness="0"
                                         Foreground="{TemplateBinding Foreground}"

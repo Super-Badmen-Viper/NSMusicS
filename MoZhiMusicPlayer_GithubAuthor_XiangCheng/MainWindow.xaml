@@ -6,7 +6,8 @@
         
         xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng"
         xmlns:MainWindow_Left_OnlineMusic_UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Left_OnlineMusic_UserControls" 
-        xmlns:MainWindow_Left_MyMusic_UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Left_MyMusic_UserControls" 
+        xmlns:MainWindow_Left_MyMusic_UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Left_MyMusic_UserControls"
+        xmlns:Main_Home_Right_MyMusic_UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Right_MyMusic_UserControls" 
         xmlns:MainWindow_Buttom_MusicPlayer_UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls" 
         xmlns:MainWindow_TOP_UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_TOP_UserControls"
         xmlns:Main_Home_TOP_UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_TOP_UserControls" 
@@ -306,7 +307,7 @@
                     Loaded="UserControl_ButtonFrame_TopPanel_Loaded"
                     />
             </Grid>
-            
+
             <MusicPlayer_Main:MusicPlayer_Main_UserControl 
                     x:Name="musicPlayer_Main_UserControl"
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
@@ -340,5 +341,10 @@
             </Grid>
         </Grid>
 
+        <Main_Home_Right_MyMusic_UserControls:UserControl_SongList_Infos_Current_Playlist
+                x:Name="userControl_SongList_Infos_Current_Playlist" HorizontalAlignment="Right"
+                Margin="0,70,0,120"
+                />
+        
     </Grid>
 </Window>
