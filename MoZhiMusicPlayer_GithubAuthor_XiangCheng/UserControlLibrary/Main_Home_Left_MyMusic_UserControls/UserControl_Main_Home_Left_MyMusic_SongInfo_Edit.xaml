@@ -129,7 +129,7 @@
                        Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center" 
                        FontSize="18" FontWeight="Bold" Margin="0,40,0,0"/>
 
-            <TextBlock Text="导入 歌手写真（jpg格式，最多24张）" Width="400" Padding="17,0,0,0" 
+            <TextBlock Text="导入 歌手写真（jpg格式，每一位歌手最多24张）" Width="400" Padding="17,0,0,0" 
                        Foreground="White" VerticalAlignment="Top" 
                            Margin="10,70,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <ListBox x:Name="ListBox_Singer_Image" Height="60" VerticalAlignment="Top" Margin="25,90,25,0"

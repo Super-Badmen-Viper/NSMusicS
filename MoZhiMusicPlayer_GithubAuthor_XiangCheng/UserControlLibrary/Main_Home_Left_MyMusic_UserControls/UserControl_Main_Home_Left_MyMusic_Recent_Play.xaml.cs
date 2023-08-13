@@ -304,30 +304,33 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                     }
 
                     songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
-                    for (int i = 0; i < songList_Infos_Current_Playlist.Count; i++)
+                    if (songList_Infos_Current_Playlist != null)
                     {
-                        for (int g = 0; g < songList_Infos[0][0].Songs.Count; g++)//我的收藏歌单 中含有的 歌曲数量
+                        for (int i = 0; i < songList_Infos_Current_Playlist.Count; i++)
                         {
-                            if (!songList_Infos_Current_Playlist[i].Song_Url.Equals(songList_Infos[0][0].Songs[g].Song_Url))
+                            for (int g = 0; g < songList_Infos[0][0].Songs.Count; g++)//我的收藏歌单 中含有的 歌曲数量
                             {
-                                songList_Infos_Current_Playlist[i].Song_Like = 0;
-                                songList_Infos_Current_Playlist[i].Song_Like_Image = brush_LoveNormal;
+                                if (!songList_Infos_Current_Playlist[i].Song_Url.Equals(songList_Infos[0][0].Songs[g].Song_Url))
+                                {
+                                    songList_Infos_Current_Playlist[i].Song_Like = 0;
+                                    songList_Infos_Current_Playlist[i].Song_Like_Image = brush_LoveNormal;
+                                }
                             }
                         }
-                    }
 
-                    for (int i = 0; i < songList_Infos_Current_Playlist.Count; i++)
-                    {
-                        for (int g = 0; g < songList_Infos[0][0].Songs.Count; g++)//我的收藏歌单 中含有的 歌曲数量
+                        for (int i = 0; i < songList_Infos_Current_Playlist.Count; i++)
                         {
-                            if (songList_Infos_Current_Playlist[i].Song_Url.Equals(songList_Infos[0][0].Songs[g].Song_Url))
+                            for (int g = 0; g < songList_Infos[0][0].Songs.Count; g++)//我的收藏歌单 中含有的 歌曲数量
                             {
-                                songList_Infos_Current_Playlist[i].Song_Like = 1;
-                                songList_Infos_Current_Playlist[i].Song_Like_Image = brush_LoveEnter;
+                                if (songList_Infos_Current_Playlist[i].Song_Url.Equals(songList_Infos[0][0].Songs[g].Song_Url))
+                                {
+                                    songList_Infos_Current_Playlist[i].Song_Like = 1;
+                                    songList_Infos_Current_Playlist[i].Song_Like_Image = brush_LoveEnter;
+                                }
                             }
                         }
+                        SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
                     }
-                    SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
 
                 }
             }
