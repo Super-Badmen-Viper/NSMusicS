@@ -12,7 +12,8 @@
     <Grid>
         <Border x:Name="Border_Hover_BackGround"
                 BorderThickness="0.1" CornerRadius="4.3,4.3,4.3,4.3" BorderBrush="#00000000" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Background="#343436"/>
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                Background="#80ADD8E6"/>
 
         <TextBlock HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="20" Margin="13,5,0,0" 
                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
