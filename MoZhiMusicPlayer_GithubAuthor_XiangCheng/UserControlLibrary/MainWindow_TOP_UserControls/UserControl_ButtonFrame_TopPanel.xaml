@@ -8,52 +8,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="77" d:DesignWidth="800" Background="#1F1F1F">
     <Grid>
-        
-        <Grid
-            x:Name="Gird_Load_API_Animation"
-            HorizontalAlignment="Left" Margin="105,60,0,-500" VerticalAlignment="Top" Width="350" Height="500"
-            Visibility="{Binding Show_API_HttpClient_Complete}"
-            >
-            <Canvas Width="100" Height="100">
-                <Canvas.Triggers>
-                    <EventTrigger RoutedEvent="Loaded">
-                        <BeginStoryboard>
-                            <Storyboard 
-                                
-                                RepeatBehavior="Forever" Storyboard.TargetName="arc">
-                                <DoubleAnimation Storyboard.TargetProperty="EndAngle" To="360" BeginTime="0:0:0" Duration="0:0:1">
-                                    <DoubleAnimation.EasingFunction>
-                                        <PowerEase EasingMode="EaseInOut" Power="3"/>
-                                    </DoubleAnimation.EasingFunction>
-                                </DoubleAnimation>
-                                <DoubleAnimation Storyboard.TargetProperty="StartAngle" To="360" BeginTime="0:0:1" Duration="0:0:1">
-                                    <DoubleAnimation.EasingFunction>
-                                        <PowerEase EasingMode="EaseInOut" Power="3"/>
-                                    </DoubleAnimation.EasingFunction>
-                                </DoubleAnimation>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </Canvas.Triggers>
-                <ed:Arc Width="80"
-                    Height="80"
-                    StartAngle="0" 
-                    EndAngle="360"
-                    Stretch="None"
-                    ArcThickness="12"
-                    Fill="#FFFFE9C1">
-                </ed:Arc>
-                <ed:Arc Width="80"
-                   Height="80"
-                   Name="arc"
-                   StartAngle="0" 
-                   EndAngle="0"
-                   Stretch="None"
-                   ArcThickness="12"
-                   Fill="#fe5f55">
-                </ed:Arc>
-            </Canvas>
-        </Grid>
 
         <Image HorizontalAlignment="Right" Height="24" VerticalAlignment="Stretch" Width="24" 
                Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/初学者.jpg" Margin="0,0,423,0"
@@ -81,7 +35,7 @@
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/皮肤.png"/>
             </Button.Background>
             <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                <DropShadowEffect Color="#CECECE" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </Button.Effect>
         </Button>
         <Button 
@@ -94,7 +48,7 @@
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/菜单.png"/>
             </Button.Background>
             <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                <DropShadowEffect Color="#CECECE" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </Button.Effect>
         </Button>
         <Button 
@@ -108,7 +62,7 @@
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/Streamlined mode.png"/>
             </Button.Background>
             <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                <DropShadowEffect Color="#CECECE" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </Button.Effect>
         </Button>
         <Button 
@@ -122,7 +76,7 @@
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/最小化.png"/>
             </Button.Background>
             <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                <DropShadowEffect Color="#CECECE" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </Button.Effect>
         </Button>
         <Button 
@@ -136,7 +90,7 @@
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/最大化.png" Stretch="Uniform"/>
             </Button.Background>
             <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                <DropShadowEffect Color="#CECECE" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </Button.Effect>
         </Button>
         <Button 
@@ -150,7 +104,7 @@
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/关闭.png"/>
             </Button.Background>
             <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                <DropShadowEffect Color="#CECECE" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </Button.Effect>
         </Button>
     </Grid>

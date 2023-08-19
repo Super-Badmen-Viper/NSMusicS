@@ -21,7 +21,7 @@
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/听歌识曲.png"/>
             </TextBlock.Background>
             <TextBlock.Effect>
-                <DropShadowEffect Color="White" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+                <DropShadowEffect Color="#CECECE" BlurRadius="1" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>
         </TextBlock>
         <TextBlock Margin="40,5,0,5" Text="听歌识曲 （开发中）" Foreground="White" FontSize="13.5" Padding="0,1,0,0" 

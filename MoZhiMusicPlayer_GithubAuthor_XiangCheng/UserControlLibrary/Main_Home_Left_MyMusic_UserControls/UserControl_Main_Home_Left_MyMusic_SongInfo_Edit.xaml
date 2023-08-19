@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Left_MyMusic_UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="443" d:DesignWidth="810"
+             d:DesignHeight="460" d:DesignWidth="810"
              UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
              
              >
@@ -132,28 +132,56 @@
             <TextBlock Text="导入 歌手写真（jpg格式，每一位歌手最多24张）" Width="400" Padding="17,0,0,0" 
                        Foreground="White" VerticalAlignment="Top" 
                            Margin="10,70,0,0" HorizontalAlignment="Left" FontSize="16"/>
-            <ListBox x:Name="ListBox_Singer_Image" Height="60" VerticalAlignment="Top" Margin="25,90,25,0"
+            <ListBox x:Name="ListBox_Singer_Image" Height="60" VerticalAlignment="Top" Margin="25,90,130,0"
                      AllowDrop="True" MouseDoubleClick="ListBox_Singer_Image_MouseDoubleClick"
                      
                      />
+            <Button 
+                x:Name="Button_Open_To_Singer_Resource"
+                Width="110" Height="60" Margin="270,90,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                Click="Button_Open_To_Singer_Resource_Click" 
+                >
+                <TextBlock Text="打开                    歌手写真文件夹（直接处理资源）" TextWrapping="Wrap" TextAlignment="Center"/>
+            </Button>
 
             <TextBlock Text="导入 专辑图片（jpg格式）" Width="400" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
                            Margin="10,160,0,0" HorizontalAlignment="Left" FontSize="16"/>
-            <ListBox x:Name="ListBox_Album_Image" Height="60" VerticalAlignment="Top" Margin="25,180,25,0"
+            <ListBox x:Name="ListBox_Album_Image" Height="60" VerticalAlignment="Top" Margin="25,180,130,0"
                      AllowDrop="True" MouseDoubleClick="ListBox_Album_Image_MouseDoubleClick"
                      />
+            <Button 
+                x:Name="Button_Open_To_Album_Resource"
+                Width="110" Height="60" Margin="270,180,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                Click="Button_Open_To_Album_Resource_Click" 
+                >
+                <TextBlock Text="打开                    专辑图片文件夹（直接处理资源）" TextWrapping="Wrap" TextAlignment="Center"/>
+            </Button>
 
             <TextBlock Text="导入 歌词文件（mrc，krc，lrc）" Width="400" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
                            Margin="10,250,0,0" HorizontalAlignment="Left" FontSize="16"/>
-            <ListBox x:Name="ListBox_Mrc_Image" Height="60" VerticalAlignment="Top" Margin="25,270,25,0"
+            <ListBox x:Name="ListBox_Mrc_Image" Height="60" VerticalAlignment="Top" Margin="25,270,130,0"
                      AllowDrop="True" MouseDoubleClick="ListBox_Mrc_Image_MouseDoubleClick"
                      />
+            <Button 
+                x:Name="Button_Open_To_Mrc_Resource"
+                Width="110" Height="60" Margin="270,270,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                Click="Button_Open_To_Mrc_Resource_Click" 
+                >
+                <TextBlock Text="打开                    同步歌词文件夹（直接处理资源）" TextWrapping="Wrap" TextAlignment="Center"/>
+            </Button>
 
             <TextBlock Text="导入 歌词翻译文件（crc格式）" Width="400" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
                            Margin="10,340,0,0" HorizontalAlignment="Left" FontSize="16"/>
-            <ListBox x:Name="ListBox_Crc_Image" Height="60" VerticalAlignment="Top" Margin="25,360,25,0"
+            <ListBox x:Name="ListBox_Crc_Image" Height="60" VerticalAlignment="Top" Margin="25,360,130,0"
                      AllowDrop="True" MouseDoubleClick="ListBox_Crc_Image_MouseDoubleClick"
                      />
+            <Button 
+                x:Name="Button_Open_To_Crc_Resource"
+                Width="110" Height="60" Margin="270,360,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                Click="Button_Open_To_Crc_Resource_Click" 
+                >
+                <TextBlock Text="打开                    歌词翻译文件夹（直接处理资源）" TextWrapping="Wrap" TextAlignment="Center"/>
+            </Button>
         </Grid>
     </Grid>
 </UserControl>

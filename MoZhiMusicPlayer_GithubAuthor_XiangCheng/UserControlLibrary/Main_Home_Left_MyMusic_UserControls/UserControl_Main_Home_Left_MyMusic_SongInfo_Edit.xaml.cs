@@ -1,7 +1,9 @@
 ﻿using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,7 +26,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         public UserControl_Main_Home_Left_MyMusic_SongInfo_Edit()
         {
             InitializeComponent();
+
+            Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
         }
+        public string Path_App;
 
         public string Search_Song_Name = "";
         public string Search_this_SongUrl = "";
@@ -61,19 +66,55 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
         private void ListBox_Singer_Image_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+           
         }
         private void ListBox_Album_Image_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            
         }
         private void ListBox_Mrc_Image_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            
         }
         private void ListBox_Crc_Image_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            
+        }
 
+
+        private void OpenFolderInExplorer(string folderPath)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("explorer.exe", folderPath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("无法打开文件夹：" + ex.Message);
+            }
+        }
+        private void Button_Open_To_Singer_Resource_Click(object sender, RoutedEventArgs e)
+        {
+            string folderPath = Path_App + @"\Singer_Image\"; // 替换为您想要打开的文件夹路径
+            OpenFolderInExplorer(folderPath);
+        }
+
+        private void Button_Open_To_Album_Resource_Click(object sender, RoutedEventArgs e)
+        {
+            string folderPath = Path_App + @"\Song_ALbum\"; // 替换为您想要打开的文件夹路径
+            OpenFolderInExplorer(folderPath);
+        }
+
+        private void Button_Open_To_Mrc_Resource_Click(object sender, RoutedEventArgs e)
+        {
+            string folderPath = Path_App + @"\Mrc\"; // 替换为您想要打开的文件夹路径
+            OpenFolderInExplorer(folderPath);
+        }
+
+        private void Button_Open_To_Crc_Resource_Click(object sender, RoutedEventArgs e)
+        {
+            string folderPath = Path_App + @"\Crc\"; // 替换为您想要打开的文件夹路径
+            OpenFolderInExplorer(folderPath);
         }
     }
 }

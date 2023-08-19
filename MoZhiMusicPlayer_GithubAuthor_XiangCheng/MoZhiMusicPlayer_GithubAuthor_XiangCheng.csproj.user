@@ -19,6 +19,12 @@
     <Compile Update="UserControlLibrary\MainWindow_Left_MoZhiAI_Music_UserControls\UserControl_ButtonFrame_MusicSingIt.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_Edit_SongInfo.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_Load_UserData.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_More.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -94,6 +100,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MainWindow_Left_MoZhiAI_Music_UserControls\UserControl_ButtonFrame_MusicSingIt.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_Edit_SongInfo.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_Load_UserData.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_More.xaml">

@@ -80,7 +80,7 @@
                     </Border.Background>
                 </Border>
 
-                <Border Background="#7F000000"/>
+                <Border Background="#4C000000"/>
 
                 <!--
                     <StackPanel
@@ -161,7 +161,7 @@
                     x:Name="ListView_Temp_MRC" Background="{x:Null}" BorderBrush="{x:Null}" 
                     Foreground="White"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                    Margin="140,100,0,90" Width="999" Height="490"
+                    Margin="140,100,0,90" Width="2000" Height="490"
                     BorderThickness="0" IsSynchronizedWithCurrentItem="False" Focusable="False" 
                     IsTextSearchEnabled="False" HorizontalContentAlignment="Left" 
                     VerticalContentAlignment="Stretch" HorizontalAlignment="Left"                
@@ -222,7 +222,7 @@
                     <ListView.View>
                         <GridView AllowsColumnReorder="True">
                             <!--ListviewItem的长度-->
-                            <GridViewColumn Width="999" x:Name="ListView_Temp_MRC_GridViewColumn">
+                            <GridViewColumn Width="2000" x:Name="ListView_Temp_MRC_GridViewColumn">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <VirtualizingStackPanel Orientation="Vertical">
@@ -239,7 +239,7 @@
                                                 <TextBlock.Triggers>
                                                     <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
                                                         <BeginStoryboard>
-                                                            <Storyboard x:Name="Text_Storyboard">
+                                                            <Storyboard x:Name="Text_Storyboard" Timeline.DesiredFrameRate="60">
                                                                 <DoubleAnimationUsingKeyFrames x:Name="Text_DoubleAnimationUsingKeyFrames"
                                                                 Duration="0:0:4"
                                                                 Storyboard.TargetName="Trans" Storyboard.TargetProperty="X"/>
@@ -511,7 +511,7 @@
                 <Canvas.Triggers>
                     <EventTrigger RoutedEvent="FrameworkElement.MouseRightButtonDown">
                         <BeginStoryboard>
-                            <Storyboard x:Name="StoryBorad_Singing_Mode">
+                            <Storyboard x:Name="StoryBorad_Singing_Mode" Timeline.DesiredFrameRate="30">
                                 <DoubleAnimationUsingKeyFrames
                                     x:Name="DoubleAnimationUsingKeyFrames_TextBlock_Song_Name"
                                     RepeatBehavior="Forever"

@@ -17,6 +17,7 @@ using Gst;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos;
 using Uri = System.Uri;
 using System.Collections.ObjectModel;
+using System.Windows.Threading;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
 {
@@ -155,7 +156,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         /// <param name="listView_Temp_Info_End"></param>
         public void Add_LoveSong_ToThisSongList(Button ck_Selected, ObservableCollection<Song_Info> listView_Temp_Info_End)
         {
-            //刷新内存区域的引用
+            /*//刷新内存区域的引用
             songList_Infos = SongList_Info.Retuen_This();
             if (songList_Infos != null)
             {
@@ -201,13 +202,28 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                             //原歌单图片设置为喜欢
                             temp.Song_Like_Image = brush_LoveEnter;
                             temp.Song_Like = 1;
-                            songList_Infos[0][0].Songs.Add(temp);
+                            temp.Song_No = songList_Infos[0][0].Songs.Count + 1;
+
+                            Song_Info song_Info = new Song_Info();
+                            song_Info.Song_Duration = temp.Song_Duration;
+                            song_Info.Song_Name = temp.Song_Name;
+                            song_Info.Singer_Name = temp.Singer_Name;
+                            song_Info.Song_Url = temp.Song_Url;
+                            song_Info.Song_No = temp.Song_No;
+                            song_Info.Song_Like = temp.Song_Like;
+                            song_Info.Song_Like_Image = temp.Song_Like_Image;
+                            song_Info.MV_Path = temp.MV_Path;
+                            song_Info.Song_MV_Image = temp.Song_Like_Image;
+                            song_Info.Album_Name = temp.Album_Name;
+                            song_Info.Bool_Playing = temp.Bool_Playing;
+
+                            songList_Infos[0][0].Songs.Add(song_Info);
                         }
                         else
                             MessageBox.Show("该歌曲已添加至我的收藏");
                     }
                 }
-            }
+            }*/
         }
         /// <summary>
         /// 移除
@@ -232,7 +248,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                             Song_Info temp_love = FindSongInfoBySongUrl(
                                 songurl, 
                                 songList_Infos[0][0].Songs);
-
                             temp_love.Song_Like_Image = brush_LoveNormal;
                             temp_love.Song_Like = 0;
                             songList_Infos[0][0].Songs.Remove(temp_love);
@@ -240,7 +255,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                             temp.Song_Like_Image = brush_LoveNormal;
                             temp.Song_Like = 0;
 
-                            Remove__Reset_SongList_Info(temp.Song_Url);
+                            /*Remove__Reset_SongList_Info(temp.Song_Url);*/
 
                             if (songList_Infos[0][0].Songs != null)
                             {
@@ -901,7 +916,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         private void Stack_Button_Add_Select_Song_MouseEnter(object sender, MouseEventArgs e)
         {
             //#A8343434
-            Stack_Button_Add_Select_Song.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+            Stack_Button_Add_Select_Song.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
         }
         private void Stack_Button_Add_Select_Song_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -911,7 +926,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         private void Stack_Button_Add_PC_ALL_Song_MouseEnter(object sender, MouseEventArgs e)
         {
             //#A8343434
-            Stack_Button_Add_PC_ALL_Song.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+            Stack_Button_Add_PC_ALL_Song.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
         }
         private void Stack_Button_Add_PC_ALL_Song_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -922,7 +937,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
         private void Stack_Button_LotSelects_Take_MouseEnter(object sender, MouseEventArgs e)
         {
-            Stack_Button_LotSelects_Take.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+            Stack_Button_LotSelects_Take.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
         }
         private void Stack_Button_LotSelects_Take_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -931,7 +946,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
         private void Stack_Button_Find_Song_Info_MouseEnter(object sender, MouseEventArgs e)
         {
-            Stack_Button_Find_Song_Info.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+            Stack_Button_Find_Song_Info.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
         }
         private void Stack_Button_Find_Song_Info_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -940,7 +955,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
         private void Stack_Button_ThisPcSong_Find_MouseEnter(object sender, MouseEventArgs e)
         {
-            Stack_Button_ThisPcSong_Find.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+            Stack_Button_ThisPcSong_Find.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
         }
         private void Stack_Button_ThisPcSong_Find_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -949,7 +964,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
         private void Stack_Button_Update_Song_Better_MouseEnter(object sender, MouseEventArgs e)
         {
-            Stack_Button_Update_Song_Better.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+            Stack_Button_Update_Song_Better.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
         }
         private void Stack_Button_Update_Song_Better_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -958,7 +973,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
         private void Stack_Button_Synchronize_User_Music_Resources_MouseEnter(object sender, MouseEventArgs e)
         {
-            Stack_Button_Synchronize_User_Music_Resources.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+            Stack_Button_Synchronize_User_Music_Resources.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
         }
         private void Stack_Button_Synchronize_User_Music_Resources_MouseLeave(object sender, MouseEventArgs e)
         {

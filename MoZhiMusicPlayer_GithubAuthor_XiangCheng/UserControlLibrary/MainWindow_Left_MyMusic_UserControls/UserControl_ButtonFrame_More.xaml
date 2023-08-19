@@ -21,7 +21,7 @@
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/播放队列.png"/>
             </TextBlock.Background>
             <TextBlock.Effect>
-                <DropShadowEffect Color="White" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+                <DropShadowEffect Color="#CECECE" BlurRadius="1" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>
         </TextBlock>
         <TextBlock 

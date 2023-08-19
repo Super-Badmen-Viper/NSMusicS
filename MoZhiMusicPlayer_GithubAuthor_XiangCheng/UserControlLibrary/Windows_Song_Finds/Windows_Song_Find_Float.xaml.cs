@@ -2,6 +2,7 @@
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos;
 using Shell32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -30,13 +31,20 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
         public Windows_Song_Find_Float()
         {
             InitializeComponent();
+
+            Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
+            brush_LoveNormal = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心 (1).png")));
+            brush_LoveEnter = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心 - 副本.png")));
         }
+        public string Path_App;
+        public ImageBrush brush_LoveNormal = new ImageBrush();
+        public ImageBrush brush_LoveEnter = new ImageBrush();
 
-        static string[] All_Info_Path;
-        static string[] All_Song_Path = new string[9999];
+        static ArrayList All_Info_Path = new ArrayList();
+        static ArrayList All_Song_Path = new ArrayList();
 
-        static string[] Finds_AllSong_End;
-        static string[] Finds_AllSong;
+        static ArrayList Finds_AllSong_End = new ArrayList();
+        static ArrayList Finds_AllSong = new ArrayList();
 
         public ObservableCollection<Song_Info> list_Song_Info = new ObservableCollection<Song_Info>();
         static Song_Info song_info = new Song_Info();
@@ -57,7 +65,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
         /// <param name="e"></param>
         private void OnSearchClick(object sender, RoutedEventArgs e)
         {
-            if (ComBox_Select_SongList.SelectedIndex > 0)
+            ListBox_Test.Items.Clear();
+
+            if (ComBox_Select_SongList.SelectedIndex > -1)
             {
                 Button_Select_Add.Visibility = Visibility.Collapsed;
                 Button_FindALL_Add.Visibility = Visibility.Collapsed;
@@ -68,7 +78,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                 dialog.Title = "请选择文件夹";
                 dialog.Filter = "(*.mp3,*.flac,*.wav)|*.mp3;*.flac;*.wav;";
                 dialog.ShowDialog();
-                All_Info_Path = dialog.FileNames;
+                for (int i = 0; i < dialog.FileNames.Length; i++)
+                {
+                    All_Info_Path.Add(dialog.FileNames[i]);
+                }
 
                 ListBox_Test.Items.Add("\n\n开始提取歌曲文件特征信息\n\n");
 
@@ -86,6 +99,20 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                         Button_FindALL_Add.Visibility = Visibility.Visible;
 
                         System.Windows.MessageBox.Show("导入成功");
+
+
+                        All_Info_Path = new ArrayList();
+                        All_Song_Path = new ArrayList();
+
+                        Finds_AllSong_End = new ArrayList();
+                        Finds_AllSong = new ArrayList();
+
+                        ListBox_Selects_SongList.Items.Clear();
+                        ListBox_Test.Items.Clear();
+
+                        Selects_SongList.Clear();
+
+                        Song_Ids_Temp = 0;
                     });
                 });
 
@@ -96,17 +123,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
             {
                 System.Windows.MessageBox.Show("请先选择需要导入的歌单");
             }
-
-
         }
 
         /// <summary>
-        /// 本地查找所有音乐文件
+        /// 手动扫描歌曲
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         public void OnFindALLSongClick(object sender, RoutedEventArgs e)
         {
+            ListBox_Test.Items.Clear();
+
             if (ComBox_Select_SongList.SelectedIndex > -1)
             {
                 ListBox_Test.Items.Add("\n\n开始提取歌曲文件特征信息\n\n");
@@ -114,10 +141,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                 Button_Select_Add.Visibility = Visibility.Collapsed;
                 Button_FindALL_Add.Visibility = Visibility.Collapsed;
 
+
                 // 创建一个后台线程来遍历歌曲文件并获取歌曲信息
                 Thread thread = new Thread(() =>
                 {
-                    Find_ALL_Song();//遍历磁盘
+                    /*Find_ALL_Song();//遍历磁盘*/
+                    foreach (string folderPath in Selects_SongList)
+                    {
+                        if (folderPath.Length > 0)
+                            SearchAudioFilesInFolder(folderPath);
+                    }
 
                     Return_Take_SongSrc_Info();
 
@@ -130,6 +163,21 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                         Button_FindALL_Add.Visibility = Visibility.Visible;
 
                         System.Windows.MessageBox.Show("导入成功");
+
+
+
+                        All_Info_Path = new ArrayList();
+                        All_Song_Path = new ArrayList();
+
+                        Finds_AllSong_End = new ArrayList();
+                        Finds_AllSong = new ArrayList();
+
+                        ListBox_Selects_SongList.Items.Clear();
+                        ListBox_Test.Items.Clear();
+
+                        Selects_SongList.Clear();
+
+                        Song_Ids_Temp = 0;
                     });
                 });
 
@@ -143,7 +191,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
         }
         public void Find_ALL_Song()
         {
-            Finds_AllSong = new string[9999];
+            Finds_AllSong = new ArrayList();
 
             //获取本地硬盘驱动器 
             string[] localDrives = Directory.GetLogicalDrives();
@@ -191,37 +239,26 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
 
 
 
-            All_Info_Path = new string[9999];
-            All_Song_Path = new string[9999];
-
-            Finds_AllSong_End = new string[9999];
+            All_Info_Path = new ArrayList();
+            All_Song_Path = new ArrayList();
 
             foreach (string song_url in Finds_AllSong)
             {
                 if (song_url != null)
                 {
-                    for (int i = 0; i < Finds_AllSong_End.Length; i++)
-                    {
-                        if (Finds_AllSong_End[i] == null)
-                        {
-                            Finds_AllSong_End[i] = song_url;
-                            break;
-                        }
-                    }
+                    All_Info_Path.Add(song_url);
                 }
             }
-
-            All_Info_Path = Finds_AllSong_End;
         }
         public void FindAllFiles(string fileDicPath)
         {
-            for (int i = 0; i < Finds_AllSong.Length; i++)
+            for (int i = 0; i < Finds_AllSong.Count; i++)
             {
                 if (Finds_AllSong[i] == null)
                 {
                     if (fileDicPath != null)
                     {
-                        Finds_AllSong[i] = fileDicPath;
+                        Finds_AllSong.Add(fileDicPath);
 
                         // 将搜索结果显示在 UI 界面中
                         Dispatcher.Invoke(() =>
@@ -238,26 +275,26 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
         }
         public static void Find_Like_AllFiles()//删除重复的歌曲
         {
-            for (int i = 0; i < Finds_AllSong.Length; i++)
+            for (int i = 0; i < Finds_AllSong.Count; i++)
             {
                 if (Finds_AllSong[i] != null)
                 {
-                    Nums_Song_Name_Index = Finds_AllSong[i].LastIndexOf(@"\");
+                    Nums_Song_Name_Index = Finds_AllSong[i].ToString().LastIndexOf(@"\");
                     Nums_Song_Name_Index = Nums_Song_Name_Index + 1;
 
-                    Song_Path_1 = Finds_AllSong[i];
+                    Song_Path_1 = Finds_AllSong[i].ToString();
                     Song_Path_1 = Song_Path_1.Substring(Nums_Song_Name_Index, Song_Path_1.Length - Nums_Song_Name_Index);
 
-                    for (int j = 0; j < Finds_AllSong.Length; j++)
+                    for (int j = 0; j < Finds_AllSong.Count; j++)
                     {
                         if (Finds_AllSong[j] != null)
                         {
                             if (i != j)
                             {
-                                Nums_Song_Name_Index = Finds_AllSong[j].LastIndexOf(@"\");
+                                Nums_Song_Name_Index = Finds_AllSong[j].ToString().LastIndexOf(@"\");
                                 Nums_Song_Name_Index = Nums_Song_Name_Index + 1;
 
-                                Song_Path_2 = Finds_AllSong[j];
+                                Song_Path_2 = (string)Finds_AllSong[j];
                                 Song_Path_2 = Song_Path_2.Substring(Nums_Song_Name_Index, Song_Path_2.Length - Nums_Song_Name_Index);
 
                                 if (Song_Path_1.Equals(Song_Path_2))
@@ -282,40 +319,33 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
 
         public void Return_Take_SongSrc_Info()
         {
-            foreach (String Song_Name in All_Info_Path)
+            foreach (object item in All_Info_Path)
             {
-                if (Song_Name != null)
+                if (item is string Song_Name)
                 {
                     Temp_Song_Name = Song_Name;
                     if (Temp_Song_Name.Substring(Temp_Song_Name.Length - 3, 3).Equals("mp3") || Temp_Song_Name.Substring(Temp_Song_Name.Length - 4, 4).Equals("flac"))//从指定的位置startIndex开始检索长度为length的子字符串
                     {
-                        for (int i = 0; i < All_Song_Path.Length; i++)
-                        {
-                            if (All_Song_Path[i] == null)
-                            {
-                                All_Song_Path[i] = Song_Name;
-                                break;
-                            }
-                        }
+                        All_Song_Path.Add(Song_Name);
                     }
                 }
             }
             string song_name_temp = "";
-            for (int i = 0; i < All_Song_Path.Length; i++)
+            for (int i = 0; i < All_Song_Path.Count; i++)
             {
                 if (All_Song_Path[i] != null)
                 {
                     if (All_Song_Path[i].ToString().Length > 0)
                     {
-                        Nums_Song_Name_Index = All_Song_Path[i].LastIndexOf(@"\");
+                        Nums_Song_Name_Index = All_Song_Path[i].ToString().LastIndexOf(@"\");
                         Nums_Song_Name_Index = Nums_Song_Name_Index + 1;
 
-                        Song_Src_Paths = All_Song_Path[i];
-                        Song_Path_Temp = All_Song_Path[i];
+                        Song_Src_Paths = All_Song_Path[i].ToString();
+                        Song_Path_Temp = All_Song_Path[i].ToString();
                         Song_Path_Temp = Song_Path_Temp.Substring(Nums_Song_Name_Index, Song_Path_Temp.Length - Nums_Song_Name_Index);
-                        String temp_song = All_Song_Path[i];
+                        String temp_song = All_Song_Path[i].ToString();
 
-                        Song_Path_Temp_SongName = All_Song_Path[i].LastIndexOf(" - ");
+                        Song_Path_Temp_SongName = All_Song_Path[i].ToString().LastIndexOf(" - ");
 
                         if (Song_Path_Temp_SongName > 0 && Nums_Song_Name_Index < Song_Path_Temp_SongName)
                         {
@@ -360,6 +390,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                                     song_info.Song_Url = Song_Src_Paths;
                                     song_info.Song_No = Song_Ids_Temp;
                                     Song_Ids_Temp++;
+
                                     list_Song_Info.Add(song_info);
 
                                     // 将搜索结果显示在 UI 界面中
@@ -524,8 +555,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
         {
             ListBox_Test.Items.Clear();
             list_Song_Info.Clear();
-            All_Song_Path = new string[9999];
-            All_Info_Path = null;
+            All_Song_Path = new ArrayList();
+            All_Info_Path = new ArrayList();
 
             this.Visibility = Visibility.Collapsed;
         }
@@ -534,6 +565,43 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
         private void ComBox_Select_SongList_Selected(object sender, SelectionChangedEventArgs e)
         {
             ComBox_Select = ComBox_Select_SongList.SelectedIndex;
+        }
+
+
+        public ArrayList Selects_SongList = new ArrayList();
+        /// <summary>
+        /// 添加要扫描的歌曲文件夹
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Add_SongList_Click(object sender, RoutedEventArgs e)
+        {
+            using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+            {
+                folderDialog.ShowDialog();
+
+                Selects_SongList.Add(folderDialog.SelectedPath);
+                ListBox_Selects_SongList.Items.Add(folderDialog.SelectedPath);               
+            }
+        }
+
+        private void SearchAudioFilesInFolder(string folderPath)
+        {
+            DirectoryInfo directory = new DirectoryInfo(folderPath);
+            FileInfo[] audioFiles = directory.GetFiles("*.*", SearchOption.AllDirectories)
+                .Where(file => IsAudioFile(file.Extension))
+                .ToArray();
+
+            foreach (FileInfo audioFile in audioFiles)
+            {
+                All_Info_Path.Add(audioFile.FullName);
+            }
+        }
+
+        static bool IsAudioFile(string extension)
+        {
+            string[] audioExtensions = { ".mp3", ".wav", ".flac" };
+            return audioExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase);
         }
     }
 }

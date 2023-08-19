@@ -271,6 +271,7 @@
     <None Remove="ico_ui_library\相机.png" />
     <None Remove="ico_ui_library\礼物 %281%29.png" />
     <None Remove="ico_ui_library\礼物.png" />
+    <None Remove="ico_ui_library\管理.png" />
     <None Remove="ico_ui_library\编辑-01 %281%29.png" />
     <None Remove="ico_ui_library\编辑-01.png" />
     <None Remove="ico_ui_library\缩小 %281%29.png" />
@@ -627,6 +628,7 @@
     <Resource Include="ico_ui_library\相机.png" />
     <Resource Include="ico_ui_library\礼物 (1).png" />
     <Resource Include="ico_ui_library\礼物.png" />
+    <Resource Include="ico_ui_library\管理.png" />
     <Resource Include="ico_ui_library\编辑-01 (1).png" />
     <Resource Include="ico_ui_library\编辑-01.png" />
     <Resource Include="ico_ui_library\缩小 (1).png" />

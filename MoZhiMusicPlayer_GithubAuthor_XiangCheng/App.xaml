@@ -6,7 +6,7 @@
     <!--调试则卡顿。。。。性能分析-->
     <Application.Resources>
         <!--字体颜色-->
-        
+
 
         <!-- Button取消悬浮 -->
         <Style x:Key="MyButton" TargetType="Button">
@@ -216,7 +216,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <!---->
         <SolidColorBrush x:Key="TabItem.Static.Foreground" Color="White" />
         <SolidColorBrush x:Key="TabItem.Selected.Foreground" Color="#1ECC94" />
@@ -326,7 +326,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid Grid.Column="0" x:Name="grid">
-                                    
+
                                     <!--Content="{TemplateBinding Text}"-->
                                     <ToggleButton
                                         Width="{Binding ElementName=grid,Path=ActualWidth}"
@@ -909,7 +909,7 @@
             </Setter>
         </Style>
 
-        
+
 
     </Application.Resources>
 </Application>

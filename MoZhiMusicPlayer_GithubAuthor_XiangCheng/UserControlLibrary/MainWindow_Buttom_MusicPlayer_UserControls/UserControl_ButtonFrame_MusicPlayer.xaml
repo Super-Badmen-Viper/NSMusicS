@@ -369,7 +369,7 @@
                         <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
                     </TextBlock.Effect>
                 </TextBlock>
-                <Image x:Name="Button_Mrc_Animation_Image" Source="/ico_ui_library/开关-关 (1).png" Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,-16,0,0">
+                <Image x:Name="Button_Mrc_Animation_Image" Source="/ico_ui_library/开关-开 (1).png" Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,-16,0,0">
                     <Image.Effect>
                         <DropShadowEffect Color="Black" BlurRadius="2" ShadowDepth="1" Opacity="1" />
                     </Image.Effect>

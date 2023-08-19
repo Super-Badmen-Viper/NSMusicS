@@ -204,6 +204,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                             //原歌单图片设置为喜欢
                             temp.Song_Like_Image = brush_LoveEnter;
                             temp.Song_Like = 1;
+                            temp.Song_No = songList_Infos[0][0].Songs.Count + 1;
+
                             songList_Infos[0][0].Songs.Add(temp);
                         }
                         else
@@ -246,8 +248,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                             temp_love.Song_Like = 0;
                             songList_Infos[0][0].Songs.Remove(temp_love);
 
-                            songList_Infos_Current_Playlist[temp.Song_No - 1].Song_Like_Image = brush_LoveNormal;
-                            songList_Infos_Current_Playlist[temp.Song_No - 1].Song_Like = 0;
+                            temp.Song_Like_Image = brush_LoveNormal;
+                            temp.Song_Like = 0;
+
                             ListView_Download_SongList_Info.ItemsSource = null;
                             ListView_Download_SongList_Info.ItemsSource = songList_Infos_Current_Playlist;
 

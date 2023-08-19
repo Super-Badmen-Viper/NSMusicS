@@ -30,7 +30,7 @@
             <Border HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" 
                 BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Background="#FFE3E3E3" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Background="White" 
                  />
 
             <Button x:Name="BtnSearch"
@@ -58,7 +58,7 @@
             <Border HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" 
                 BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Background="#FFE3E3E3" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Background="White" 
                  />
             <Button 
                 x:Name="Button_Page_Before"

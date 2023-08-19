@@ -54,7 +54,7 @@
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    Background="#FFE3E3E3" Height="32" 
+                    Background="White" Height="32" 
                      />
                 <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/增加 - 副本.png" 
                    Stretch="Fill" Margin="35,-22,63,10"
@@ -73,7 +73,7 @@
                 VerticalAlignment="Stretch" 
                 BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                Background="#FFE3E3E3" Height="32" 
+                Background="White" Height="32" 
                  />
                 <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/更多.png" 
                Stretch="UniformToFill"
@@ -89,7 +89,7 @@
                 VerticalAlignment="Stretch" 
                 BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                Background="#FFE3E3E3" Height="32" 
+                Background="White" Height="32" 
                  />
                 <Image Height="20" Margin="20,-31,0,0" Width="20" HorizontalAlignment="Left" 
                        Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/列表-01.png" VerticalAlignment="Stretch"/>
@@ -108,7 +108,6 @@
                 Loaded="UserControl_Loaded" SourceUpdated="ListView_Download_SongList_Info_SourceUpdated"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                ItemsSource="{Binding UpdateSourceTrigger=PropertyChanged}"
                   >
 
                 <ListView.ItemContainerStyle>
@@ -182,7 +181,11 @@
                                             Tag="{Binding Song_No}" MinHeight="{Binding Song_Like}"  
                                             Click="Love_ListView_Song_Click" 
                                             Style="{StaticResource MyButton}" 
-                                            Width="18" Height="18" FontSize="5"/>
+                                            Width="18" Height="18" FontSize="5">
+                                            <Button.Effect>
+                                                <DropShadowEffect Color="#CECECE" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                                            </Button.Effect>
+                                        </Button>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -308,7 +311,7 @@
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    Background="#FFE3E3E3" Height="32" 
+                    Background="White" Height="32" 
                      />
                 <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/圆圈、单选框.png" 
                    Stretch="Fill" Margin="10,-24,0,10"
@@ -328,7 +331,7 @@
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    Background="#FFE3E3E3" Height="32" 
+                    Background="White" Height="32" 
                      />
                 <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/删除.png" 
                    Stretch="Fill" Margin="30,-26,0,10"
@@ -347,7 +350,7 @@
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    Background="#FFE3E3E3" Height="32" 
+                    Background="White" Height="32" 
                      />
                 <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/复制-01.png" 
                    Stretch="Fill" Margin="10,-26,0,10"
@@ -366,7 +369,7 @@
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    Background="#FFE3E3E3" Height="32" 
+                    Background="White" Height="32" 
                      />
                 <TextBlock Text="退出批量操作" VerticalAlignment="Center" Margin="0,-32,0,0" 
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalAlignment="Center"
@@ -407,7 +410,7 @@
                 <StackPanel x:Name="Stack_Button_Add_PC_ALL_Song" Height="28" VerticalAlignment="Top" Margin="0,-35,0,0" MouseEnter="Stack_Button_Add_PC_ALL_Song_MouseEnter" MouseLeave="Stack_Button_Add_PC_ALL_Song_MouseLeave">
                     <Image Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
                            Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/24gl-repeatOnce2.png" VerticalAlignment="Stretch"/>
-                    <TextBlock HorizontalAlignment="Left" Text="查找本地音乐" Margin="35,-18,0,0"/>
+                    <TextBlock HorizontalAlignment="Left" Text="手动扫描本地音乐" Margin="35,-18,0,0"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel x:Name="Stack_Panel_More_Takes"

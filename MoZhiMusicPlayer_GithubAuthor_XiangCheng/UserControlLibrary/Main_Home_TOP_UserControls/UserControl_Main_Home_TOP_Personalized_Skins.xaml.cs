@@ -26,7 +26,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         {
             InitializeComponent();
 
-            gradientBrush_1 = new LinearGradientBrush(
+            /*gradientBrush_1 = new LinearGradientBrush(
                 Color.FromRgb(67, 67, 67), Colors.Black, new Point(0, 0), new Point(1, 0));
             gradientBrush_1.GradientStops.Add(new GradientStop(Colors.Black, 1.0));
 
@@ -58,7 +58,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             gradientBrush_5.StartPoint = new Point(0, 0); // 渐变的起始点
             gradientBrush_5.EndPoint = new Point(1, 0);   // 渐变的结束点
             gradientBrush_5.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#485563"), 0));
-            gradientBrush_5.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#29323c"), 1));
+            gradientBrush_5.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#29323c"), 1));*/
 
 
             gradientBrush_6 = new LinearGradientBrush();
@@ -83,17 +83,44 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
 
 
-            Border_this_app_Background_1.Background = gradientBrush_1;
-            Border_this_app_Background_2.Background = gradientBrush_2;
-            Border_this_app_Background_3.Background = gradientBrush_3;
-            Border_this_app_Background_4.Background = gradientBrush_4;
-            Border_this_app_Background_5.Background = gradientBrush_5;
+            /* Border_this_app_Background_1.Background = gradientBrush_1;
+             Border_this_app_Background_2.Background = gradientBrush_2;
+             Border_this_app_Background_3.Background = gradientBrush_3;
+             Border_this_app_Background_4.Background = gradientBrush_4;
+             Border_this_app_Background_5.Background = gradientBrush_5;*/
+
+            Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
+            ImageBrush imageBrush;
+
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/Red Velvet.jpg")));
+            imageBrush.Stretch = Stretch.UniformToFill;
+            Border_this_app_Background_1.Background = imageBrush;
+
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/T-ara.jpg")));
+            imageBrush.Stretch = Stretch.UniformToFill;
+            Border_this_app_Background_2.Background = imageBrush;
+
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/EXO.jpg")));
+            imageBrush.Stretch = Stretch.UniformToFill;
+            Border_this_app_Background_3.Background = imageBrush;
+
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/Twice.jpg")));
+            imageBrush.Stretch = Stretch.UniformToFill;
+            Border_this_app_Background_4.Background = imageBrush;
+
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/WINNER.jpg")));
+            imageBrush.Stretch = Stretch.UniformToFill;
+            Border_this_app_Background_5.Background = imageBrush;
+
             Border_this_app_Background_6.Background = gradientBrush_6;
             Border_this_app_Background_7.Background = gradientBrush_7;
             Border_this_app_Background_8.Background = gradientBrush_8;
         }
 
-        // 高级黑
+        string Path_App;
+
+
+       /* // 高级黑
         public LinearGradientBrush gradientBrush_1;
 
         // 高级白
@@ -106,7 +133,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         public LinearGradientBrush gradientBrush_4;
 
         // 毒药
-        public LinearGradientBrush gradientBrush_5;
+        public LinearGradientBrush gradientBrush_5;*/
 
         // 盐山 
         public LinearGradientBrush gradientBrush_6;

@@ -22,7 +22,6 @@
                   BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Foreground="White"
                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                   IsSynchronizedWithCurrentItem="True"
-                  ItemsSource="{Binding UpdateSourceTrigger=PropertyChanged}"
             >
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
@@ -88,7 +87,7 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn x:Name="GridViewColumn_Love_Add_ListView_Song_Normal" Width="0">
+                            <GridViewColumn x:Name="GridViewColumn_Love_Add_ListView_Song_Normal">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button x:Name="Love_ListView_Song" Background="{Binding Song_Like_Image}" 
@@ -225,7 +224,7 @@
         <TextBlock 
             x:Name="Button_Clear_This_Current_Playlist"
             HorizontalAlignment="Left" VerticalAlignment="Top" Height="16"
-            Margin="260,48,0,0" Width="16" 
+            Margin="290,48,0,0" Width="16" 
             >
             <TextBlock.Background>
                 <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/删除 (1).png"/>

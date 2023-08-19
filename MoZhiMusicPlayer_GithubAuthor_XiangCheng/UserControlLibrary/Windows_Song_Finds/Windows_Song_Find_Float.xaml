@@ -97,23 +97,54 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-
-        <Button 
-            x:Name="Button_Select_Add"
-            Content="手动添加音乐（打开文件夹）" HorizontalAlignment="Right" VerticalAlignment="Top"
-                Click="OnSearchClick" Height="90" Width="210" Margin="0,50,0,0"
-                />
-        <Button 
-            x:Name="Button_FindALL_Add"
-            Content="查找本地音乐 mp3,flac,wav" HorizontalAlignment="Right" VerticalAlignment="Top"
-                Click="OnFindALLSongClick" Height="90" Width="210" Margin="0,144,0,0"
-                />
-
         <Button 
             x:Name="Back_Button"
             Content="返回主界面" HorizontalAlignment="Right" VerticalAlignment="Top"
                 Click="Back_Windows_Click" Height="20" Width="210"
                 />
 
+
+        <TextBlock HorizontalAlignment="Right" Height="30" Text="手动添加歌曲文件" TextWrapping="Wrap" 
+                       VerticalAlignment="Top" Width="210" FontSize="22" FontWeight="Bold"
+                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                       Foreground="White" Margin="30,70,0,0"   
+                       >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+        <Button 
+            x:Name="Button_Select_Add"
+            Content="手动添加音乐（打开文件夹）" HorizontalAlignment="Right" VerticalAlignment="Top"
+                Click="OnSearchClick" Height="90" Width="210" Margin="0,100,0,0"
+                />
+
+
+        <Grid>
+            <TextBlock HorizontalAlignment="Right" Height="30" Text="手动扫描歌曲文件夹" TextWrapping="Wrap" 
+                       VerticalAlignment="Top" Width="210" FontSize="22" FontWeight="Bold"
+                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                       Foreground="White" Margin="30,269,0,0"   
+                       >
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button 
+                x:Name="Button_Add_SongList"
+                Content="添加文件夹" HorizontalAlignment="Right" VerticalAlignment="Top"
+                Height="20" Width="210" Margin="0,300,0,0" Click="Button_Add_SongList_Click"
+                    />
+            <ListBox 
+                x:Name="ListBox_Selects_SongList"
+                HorizontalAlignment="Right" VerticalAlignment="Top" Width="210" Height="140" Margin="0,325,0,0"/>
+            <Button 
+                x:Name="Button_FindALL_Add"
+                Content="开始扫描选中的歌曲文件夹" HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Click="OnFindALLSongClick" Height="90" Width="210" Margin="0,470,0,0"
+                    />
+
+
+        </Grid>
     </Grid>
 </Window>

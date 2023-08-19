@@ -183,6 +183,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                             //原歌单图片设置为喜欢
                             temp.Song_Like_Image = brush_LoveEnter;
                             temp.Song_Like = 1;
+                            temp.Song_No = songList_Infos[0][0].Songs.Count + 1;
+
                             songList_Infos[0][0].Songs.Add(temp);
                         }
                         else
@@ -824,7 +826,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         private void Stack_Button_Add_Select_Song_MouseEnter(object sender, MouseEventArgs e)
         {
             //#A8343434
-            Stack_Button_Add_Select_Song.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+            Stack_Button_Add_Select_Song.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
         }
         private void Stack_Button_Add_Select_Song_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -834,7 +836,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         private void Stack_Button_Add_PC_ALL_Song_MouseEnter(object sender, MouseEventArgs e)
         {
             //#A8343434
-            Stack_Button_Add_PC_ALL_Song.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+            Stack_Button_Add_PC_ALL_Song.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
         }
         private void Stack_Button_Add_PC_ALL_Song_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -844,7 +846,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
         private void Stack_Button_LotSelects_Take_MouseEnter(object sender, MouseEventArgs e)
         {
-            Stack_Button_LotSelects_Take.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+            Stack_Button_LotSelects_Take.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
         }
         private void Stack_Button_LotSelects_Take_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -853,7 +855,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
         private void Stack_Button_Find_Song_Info_MouseEnter(object sender, MouseEventArgs e)
         {
-            Stack_Button_Find_Song_Info.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+            Stack_Button_Find_Song_Info.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
         }
         private void Stack_Button_Find_Song_Info_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -862,7 +864,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
         private void Stack_Button_ThisPcSong_Find_MouseEnter(object sender, MouseEventArgs e)
         {
-            Stack_Button_ThisPcSong_Find.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+            Stack_Button_ThisPcSong_Find.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
         }
         private void Stack_Button_ThisPcSong_Find_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -871,7 +873,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
         private void Stack_Button_Update_Song_Better_MouseEnter(object sender, MouseEventArgs e)
         {
-            Stack_Button_Update_Song_Better.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+            Stack_Button_Update_Song_Better.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
         }
         private void Stack_Button_Update_Song_Better_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -879,7 +881,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         }
         private void Stack_Button_Synchronize_User_Music_Resources_MouseEnter(object sender, MouseEventArgs e)
         {
-            Stack_Button_Synchronize_User_Music_Resources.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE3E3E3"));
+            Stack_Button_Synchronize_User_Music_Resources.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("White"));
         }
         private void Stack_Button_Synchronize_User_Music_Resources_MouseLeave(object sender, MouseEventArgs e)
         {

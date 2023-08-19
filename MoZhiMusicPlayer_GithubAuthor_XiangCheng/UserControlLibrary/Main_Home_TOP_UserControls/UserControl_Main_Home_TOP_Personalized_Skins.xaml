@@ -38,7 +38,7 @@
                 Width="198" Height="108" Margin="60,120,0,0" Background="#1F1F1F" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="60,230,0,0" Padding="10,0,0,0"
-                   Text="高级黑" Foreground="White" FontSize="14" >
+                   Text="Red Velvet" Foreground="White" FontSize="14" >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>
@@ -51,7 +51,7 @@
                 Width="198" Height="108" Margin="280,120,0,0" Background="#1F1F1F" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="280,230,0,0" Padding="10,0,0,0"
-                   Text="高级白" Foreground="White" FontSize="14" >
+                   Text="T-ara" Foreground="White" FontSize="14" >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>
@@ -64,7 +64,7 @@
                 Width="198" Height="108" Margin="500,120,0,0" Background="#1F1F1F" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="500,230,0,0" Padding="10,0,0,0"
-                   Text="山岩" Foreground="White" FontSize="14" >
+                   Text="EXO" Foreground="White" FontSize="14" >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>
@@ -77,7 +77,7 @@
                 Width="198" Height="108" Margin="280,260,0,0" Background="#1F1F1F" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="280,370,0,0" Padding="10,0,0,0"
-                   Text="永恒" Foreground="White" FontSize="14" >
+                   Text="Twice" Foreground="White" FontSize="14" >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>
@@ -90,7 +90,7 @@
                 Width="198" Height="108" Margin="500,260,0,0" Background="#1F1F1F" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="500,370,0,0" Padding="10,0,0,0"
-                   Text="毒药" Foreground="White" FontSize="14" >
+                   Text="WINNER" Foreground="White" FontSize="14" >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>

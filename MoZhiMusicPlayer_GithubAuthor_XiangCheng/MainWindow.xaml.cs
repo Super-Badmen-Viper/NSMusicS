@@ -127,7 +127,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
         }
 
-        
+
+        #region 播放列表设置
 
         private void Button_Clear_This_Current_Playlist_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -176,7 +177,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores_TabControl.ItemsSource = userControl_Main_Home_Left_MyMusic_Mores;
         }
-
+        #endregion
 
         ViewModule_Search_Song viewModule_Search_Song;
 
@@ -1333,7 +1334,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             windows_Song_Find.Show();
         }
         #endregion
-        #region 查找本地音乐
+        #region 手动扫描本地音乐
 
         private void ThisWindowsMusicAndDownload_Stack_Button_Add_PC_ALL_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -1492,27 +1493,27 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 if (Data_Personalized_Skin.data_Personalized_Skins
                     .Personalized_Skin == 1)
                 {
-                    this.Background = userControl_Main_Home_TOP_Personalized_Skins.gradientBrush_1;
+                    this.Background = userControl_Main_Home_TOP_Personalized_Skins.Border_this_app_Background_1.Background;
                 }
                 else if (Data_Personalized_Skin.data_Personalized_Skins
                     .Personalized_Skin == 2)
                 {
-                    this.Background = userControl_Main_Home_TOP_Personalized_Skins.gradientBrush_2;
+                    this.Background = userControl_Main_Home_TOP_Personalized_Skins.Border_this_app_Background_2.Background;
                 }
                 else if (Data_Personalized_Skin.data_Personalized_Skins
                     .Personalized_Skin == 3)
                 {
-                    this.Background = userControl_Main_Home_TOP_Personalized_Skins.gradientBrush_3;
+                    this.Background = userControl_Main_Home_TOP_Personalized_Skins.Border_this_app_Background_3.Background;
                 }
                 else if (Data_Personalized_Skin.data_Personalized_Skins
                     .Personalized_Skin == 4)
                 {
-                    this.Background = userControl_Main_Home_TOP_Personalized_Skins.gradientBrush_4;
+                    this.Background = userControl_Main_Home_TOP_Personalized_Skins.Border_this_app_Background_4.Background;
                 }
                 else if (Data_Personalized_Skin.data_Personalized_Skins
                     .Personalized_Skin == 5)
                 {
-                    this.Background = userControl_Main_Home_TOP_Personalized_Skins.gradientBrush_5;
+                    this.Background = userControl_Main_Home_TOP_Personalized_Skins.Border_this_app_Background_5.Background;
                 }
                 else if (Data_Personalized_Skin.data_Personalized_Skins
                     .Personalized_Skin == 6)
@@ -1877,8 +1878,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             //Button_Play_Pause_Player绑定至Button_Play_Pause_Player_Click单击事件
             userControl_ButtonFrame_MusicPlayer.Button_Play_Pause_Player.Click += Button_Play_Pause_Player_Click;
+            window_Hover_MRC_Panel.Button_Play_Pause_Player.Click += Button_Play_Pause_Player_Click;
             userControl_ButtonFrame_MusicPlayer.Button_Before.Click += Button_Music_Up_Song;
+            window_Hover_MRC_Panel.Button_Before.Click += Button_Music_Up_Song;
             userControl_ButtonFrame_MusicPlayer.Button_Next.Click += Button_Music_Next_Song;
+            window_Hover_MRC_Panel.Button_Next.Click += Button_Music_Next_Song;
             userControl_ButtonFrame_MusicPlayer.Border_Hover_BackGround.MouseLeftButtonDown += Button_Border_Hover_BackGround_Click_OpenMainMusicPlayer;
 
             thickness_Grid_MusicPlayer_Main_UserControl_Normal.Left = 210;
@@ -1986,7 +1990,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
         #endregion
 
-        bool Bool_Mrc_Animation;//是否开启歌词逐字
+        bool Bool_Mrc_Animation = true;//是否开启歌词逐字
         bool Bool_Button_Play_Pause_Player;//播放状态
         bool Bool_OpenMainMusicPlayer;//是否打开播放器
         bool Bool_Button_Singer_Image_Animation;//歌手写真动画
@@ -2062,7 +2066,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             {
                 Clear_Windows_Left_ALL_UserControl_BackGround();
                 userControl_ButtonFrame_MusicLove.BoolMouseLeftDown = true;
-                userControl_ButtonFrame_MusicLove.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#343436"));
+                userControl_ButtonFrame_MusicLove.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#80ADD8E6"));
 
                 if (songList_Infos[0][0].Songs.Count > 0)
                 {
@@ -2113,7 +2117,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             {
                 Clear_Windows_Left_ALL_UserControl_BackGround();
                 userControl_ButtonFrame_ThisWindowsMusicAndDownload.BoolMouseLeftDown = true;
-                userControl_ButtonFrame_ThisWindowsMusicAndDownload.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#343436"));
+                userControl_ButtonFrame_ThisWindowsMusicAndDownload.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#80ADD8E6"));
 
                 if (songList_Infos[1][0].Songs.Count > 0)
                 {
@@ -2163,7 +2167,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             {
                 Clear_Windows_Left_ALL_UserControl_BackGround();
                 userControl_ButtonFrame_MusicRecentlyPlayed.BoolMouseLeftDown = true;
-                userControl_ButtonFrame_MusicRecentlyPlayed.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#343436"));
+                userControl_ButtonFrame_MusicRecentlyPlayed.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#80ADD8E6"));
 
                 if (songList_Infos[2][0].Songs.Count > 0)
                 {
@@ -2208,7 +2212,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// <exception cref="NotImplementedException"></exception>
         private void Border_this_app_Background_1_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this_app_Background.Background = userControl_Main_Home_TOP_Personalized_Skins.gradientBrush_1;
+            this_app_Background.Background = userControl_Main_Home_TOP_Personalized_Skins.Border_this_app_Background_1.Background;
 
             Data_Personalized_Skin.data_Personalized_Skins.Personalized_Skin = 1;
 
@@ -2219,7 +2223,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         }
         private void Border_this_app_Background_2_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this_app_Background.Background = userControl_Main_Home_TOP_Personalized_Skins.gradientBrush_2;
+            this_app_Background.Background = userControl_Main_Home_TOP_Personalized_Skins.Border_this_app_Background_2.Background;
 
             Data_Personalized_Skin.data_Personalized_Skins.Personalized_Skin = 2;
 
@@ -2230,7 +2234,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         }
         private void Border_this_app_Background_3_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this_app_Background.Background = userControl_Main_Home_TOP_Personalized_Skins.gradientBrush_3;
+            this_app_Background.Background = userControl_Main_Home_TOP_Personalized_Skins.Border_this_app_Background_3.Background;
 
             Data_Personalized_Skin.data_Personalized_Skins.Personalized_Skin = 3;
 
@@ -2241,7 +2245,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         }
         private void Border_this_app_Background_4_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this_app_Background.Background = userControl_Main_Home_TOP_Personalized_Skins.gradientBrush_4;
+            this_app_Background.Background = userControl_Main_Home_TOP_Personalized_Skins.Border_this_app_Background_4.Background;
 
             Data_Personalized_Skin.data_Personalized_Skins.Personalized_Skin = 4;
 
@@ -2252,7 +2256,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         }
         private void Border_this_app_Background_5_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this_app_Background.Background = userControl_Main_Home_TOP_Personalized_Skins.gradientBrush_5;
+            this_app_Background.Background = userControl_Main_Home_TOP_Personalized_Skins.Border_this_app_Background_5.Background;
 
             Data_Personalized_Skin.data_Personalized_Skins.Personalized_Skin = 5;
 
@@ -2368,7 +2372,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_ButtonFrame_MusicPlayer.Button_Before.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/上一首 (1).png")));
                 userControl_ButtonFrame_MusicPlayer.Button_Next.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/下一首 (1).png")));
                 userControl_ButtonFrame_MusicPlayer.Button_Music_Voice_Speed.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/音量 (1).png")));
-
+                window_Hover_MRC_Panel.Button_Before.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/上一首 (1).png")));
+                window_Hover_MRC_Panel.Button_Next.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/下一首 (1).png")));
 
                 musicPlayer_Main_UserControl.ListView_Temp_MRC.Visibility = Visibility.Collapsed;
                 musicPlayer_Main_UserControl.TextBox_SongName.Visibility = Visibility.Visible;
@@ -2389,7 +2394,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 Storyboard.SetTargetProperty(animation, new PropertyPath(Grid.HeightProperty));
                 storyboard.Completed += DoubleAnimation_Completed;
 
-                Timeline.SetDesiredFrameRate(storyboard, 100);
+                Timeline.SetDesiredFrameRate(storyboard, 60);
                 storyboard.Begin();
             }
             catch { }
@@ -2430,6 +2435,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_ButtonFrame_MusicPlayer.Button_Before.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/上一首 (1).png")));
                 userControl_ButtonFrame_MusicPlayer.Button_Next.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/下一首 (1).png")));
                 userControl_ButtonFrame_MusicPlayer.Button_Music_Voice_Speed.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/音量 (1).png")));
+                window_Hover_MRC_Panel.Button_Before.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/上一首 (1).png")));
+                window_Hover_MRC_Panel.Button_Next.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/下一首 (1).png")));
 
                 musicPlayer_Main_UserControl.ListView_Temp_MRC.Visibility = Visibility.Collapsed;
                 musicPlayer_Main_UserControl.TextBox_SongName.Visibility = Visibility.Collapsed;
@@ -2449,7 +2456,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 Storyboard.SetTarget(animation, musicPlayer_Main_UserControl);
                 Storyboard.SetTargetProperty(animation, new PropertyPath(Grid.HeightProperty));
                 storyboard.Completed += DoubleAnimation_Completed;
-                Timeline.SetDesiredFrameRate(storyboard, 100);
+                Timeline.SetDesiredFrameRate(storyboard, 60);
                 storyboard.Begin();
             }
             catch { }
@@ -2642,6 +2649,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             if (!Bool_Button_Play_Pause_Player)
             {
                 userControl_ButtonFrame_MusicPlayer.Button_Play_Pause_Player.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\暂停.png")));
+                window_Hover_MRC_Panel.Button_Play_Pause_Player.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\暂停.png")));
                 Bool_Button_Play_Pause_Player = true;
 
                 MediaElement_Song.Play();
@@ -2660,6 +2668,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             else
             {
                 userControl_ButtonFrame_MusicPlayer.Button_Play_Pause_Player.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\24gf-playCircle.png")));
+                window_Hover_MRC_Panel.Button_Play_Pause_Player.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\24gf-playCircle.png")));
                 Bool_Button_Play_Pause_Player = false;
 
                 MediaElement_Song.Pause();
@@ -2873,6 +2882,37 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width / 1.777777777;
                     musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height =
                         musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width / 1.777777777;
+                }
+
+                if (this.Height >= 500 && this.Height <= 600)
+                {
+                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 700 - num_epos_SingerImageAnimation;
+                    musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 700 - num_epos_SingerImageAnimation;
+
+                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width =
+                        musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height * 1.777777777;
+                    musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width =
+                        musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height * 1.777777777;
+                }
+                else if (this.Height >= 600 && this.Height <= 800)
+                {
+                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 900 - num_epos_SingerImageAnimation;
+                    musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = 900 - num_epos_SingerImageAnimation;
+
+                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width =
+                        musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height * 1.777777777;
+                    musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width =
+                        musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height * 1.777777777;
+                }
+                else
+                {
+                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = this.Height;
+                    musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height = this.Height;
+
+                    musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width =
+                        musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height * 1.777777777;
+                    musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Width =
+                        musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Height * 1.777777777;
                 }
 
                 // 在更新布局后清理任务
@@ -3287,6 +3327,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     MediaElement_Song.LoadedBehavior = MediaState.Play;
                     //设置播放
                     userControl_ButtonFrame_MusicPlayer.Button_Play_Pause_Player.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\暂停.png")));
+                    window_Hover_MRC_Panel.Button_Play_Pause_Player.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\暂停.png")));
 
                     //切换歌曲，歌手，专辑名
                     Change_TextBox_To_SingerSong_Name();
