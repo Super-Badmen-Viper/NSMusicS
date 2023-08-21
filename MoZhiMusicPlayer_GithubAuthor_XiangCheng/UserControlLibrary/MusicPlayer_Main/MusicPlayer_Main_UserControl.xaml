@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main"
+             xmlns:Main_UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_UserControls"
              
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -206,7 +207,7 @@
                                                 <!-- <Setter Property="Width" Value="500"/>
                                             开启超级特效：圆形楼梯循环动画：Value小于444时开启
                                             -->
-                                                <Setter Property="FontSize" Value="32"/>
+                                                <Setter Property="FontSize" Value="24"/><!--32-->
                                                 <Setter Property="Margin" Value="100,0,-100,0"/>
                                                 <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
                                                 <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
@@ -226,16 +227,22 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <VirtualizingStackPanel Orientation="Vertical">
+                                            <StackPanel 
+                                                x:Name="StackPanel_Lyic" 
+                                                Margin="0,-6,0,0"
+                                                Orientation="Horizontal"
+                                                IsEnabled="False">
+
+                                            </StackPanel>
                                             <TextBlock HorizontalAlignment="Stretch"
-                                                   TextWrapping="Wrap" TextAlignment="Left"
-                                                   LineStackingStrategy="BlockLineHeight" 
-                                                   LineHeight="33"
-                                                   x:Name="Text_TextBlock"
-                                                   Text="{Binding Song_MRC_Line}"
-                                                   FontWeight="ExtraBlack"
-                                                   IsHitTestVisible="False" Focusable="False" IsEnabled="False" 
-                                                   >
-                                                <!--编辑文字段落的行高，防止溢出 LineStackingStrategy="BlockLineHeight" LineHeight="20" -->
+                                                    TextWrapping="Wrap" TextAlignment="Left"
+                                                    LineStackingStrategy="BlockLineHeight" 
+                                                    LineHeight="33"
+                                                    x:Name="Text_TextBlock"
+                                                    Text="{Binding Song_MRC_Line}"
+                                                    FontWeight="ExtraBlack"
+                                                    IsHitTestVisible="False" Focusable="False" IsEnabled="False" 
+                                                    >
                                                 <TextBlock.Triggers>
                                                     <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
                                                         <BeginStoryboard>
@@ -258,6 +265,7 @@
                                                 </TextBlock.Foreground>
                                             </TextBlock>
                                             <TextBlock 
+                                                Margin="0,-8,0,0"
                                                 FontSize="18" FontWeight="ExtraBlack"
                                                 Text="{Binding Song_CRC_Line}"
                                                 >

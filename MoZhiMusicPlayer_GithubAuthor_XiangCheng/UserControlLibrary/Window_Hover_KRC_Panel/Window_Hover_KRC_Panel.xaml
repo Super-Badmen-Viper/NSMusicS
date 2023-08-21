@@ -18,12 +18,15 @@
         
 
         <Grid x:Name="Panel_Lyic_Show" VerticalAlignment="Bottom" Height="200">
-            <TextBlock x:Name="TextBlock_1"  HorizontalAlignment="Center" Text="墨智云生态" 
+            <StackPanel x:Name="StackPanel_Lyic"  HorizontalAlignment="Center" Orientation="Horizontal"
+                        Height="68" IsEnabled="False" VerticalAlignment="Bottom" Margin="0,0,0,80" >
+                
+            </StackPanel>
+            
+            <TextBlock x:Name="TextBlock_1"  HorizontalAlignment="Center" Text="墨智云生态" Visibility="Collapsed"
                         FontSize="36" Height="68" IsEnabled="False" FontWeight="Bold" VerticalAlignment="Bottom" Margin="0,0,0,80" >
                 <TextBlock.Triggers>
                     <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
-                        <!--占用属性，没有用处但是必须得有，不然报参数缺失-->
-                        <!--事件绑定，触发一次就重置执行一次-->
                         <BeginStoryboard>
                             <Storyboard x:Name="Text_Storyboard" Timeline.DesiredFrameRate="60">
                                 <DoubleAnimationUsingKeyFrames x:Name="Text_DoubleAnimation"
@@ -46,8 +49,9 @@
                     <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
                 </TextBlock.Effect>
             </TextBlock>
+            
             <TextBlock x:Name="TextBlock_2"   HorizontalAlignment="Center" Text="时代与科技的见证"
-                           FontSize="36" Height="68" IsEnabled="False" FontWeight="Bold" 
+                           FontSize="46" Height="68" IsEnabled="False" FontWeight="Bold" 
                            Foreground="#FFF99F00" VerticalAlignment="Bottom">
                 <TextBlock.Effect>
                     <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />

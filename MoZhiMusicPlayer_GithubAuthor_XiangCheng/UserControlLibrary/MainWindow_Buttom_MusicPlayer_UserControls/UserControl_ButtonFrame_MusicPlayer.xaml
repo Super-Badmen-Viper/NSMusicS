@@ -289,7 +289,11 @@
                  Focusable="False" VerticalContentAlignment="Center" 
                  UseLayoutRounding="True" SnapsToDevicePixels="True" Margin="180,34,0,10"
                      Visibility="Collapsed"
-                     />
+                     >
+                <TextBox.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </TextBox.Effect>
+            </TextBox>
 
         </Grid>
         <Grid x:Name="Grid_MusicPlayer_MainWindow_Right"
@@ -299,16 +303,24 @@
                  HorizontalAlignment="Right" Height="26" 
                  TextWrapping="Wrap" VerticalAlignment="Stretch" Width="115" 
                  Background="{x:Null}" SelectionBrush="{x:Null}" BorderBrush="{x:Null}" 
-                 Foreground="#FF7C7C7C" HorizontalContentAlignment="Right" 
+                 Foreground="White" HorizontalContentAlignment="Right" 
                  FontSize="12" Text="00:00 / 00:00" BorderThickness="0" 
                  Focusable="False" VerticalContentAlignment="Center" 
-                 UseLayoutRounding="True" SnapsToDevicePixels="True" Margin="0,0,98,0"/>
+                 UseLayoutRounding="True" SnapsToDevicePixels="True" Margin="0,0,98,0">
+                <TextBox.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </TextBox.Effect>
+            </TextBox>
             <Button x:Name="Button_Desk_MRC" Style="{StaticResource MyButton}" 
-                Content="词" Foreground="#FF7C7C7C" FontSize="15"
+                Content="词" Foreground="White" FontSize="15"
                 HorizontalAlignment="Right" Height="20" 
                 VerticalAlignment="Stretch" Width="20" 
                 BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,77,0" />
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,77,0" Cursor="Hand">
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </Button.Effect>
+            </Button>
             <Button x:Name="Button_ListView_Selected" Style="{StaticResource MyButton}" 
                 Content="" HorizontalAlignment="Right" Height="15" 
                 VerticalAlignment="Stretch" Width="15" 
@@ -317,6 +329,9 @@
                 <Button.Background>
                     <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/播放队列 (1).png"/>
                 </Button.Background>
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </Button.Effect>
             </Button>
             <TextBox x:Name="TextBox_SongList_NumLength" 
                  Text="999+"
@@ -328,7 +343,11 @@
                  FontSize="12" BorderThickness="0" 
                  Cursor="{x:Null}"
                  Focusable="False" VerticalContentAlignment="Center" 
-                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" Margin="0,0,21,0"/>
+                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" Margin="0,0,21,0">
+                <TextBox.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </TextBox.Effect>
+            </TextBox>
         </Grid>
 
         <Grid x:Name="Grid_MusicPlayer_Main_Right"
@@ -427,6 +446,9 @@
                 <Button.Background>
                     <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/播放队列 (1).png"/>
                 </Button.Background>
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </Button.Effect>
             </Button>
             <TextBox x:Name="TextBox_SongList_NumLength_Right" 
                  Text="999+"
@@ -438,7 +460,11 @@
                  Cursor="{x:Null}"
                  FontSize="12" BorderThickness="0" 
                  Focusable="False" VerticalContentAlignment="Center" 
-                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" Margin="0,0,21,0"/>
+                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5" Margin="0,0,21,0">
+                <TextBox.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </TextBox.Effect>
+            </TextBox>
         </Grid>
 
     </Grid>

@@ -408,7 +408,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                             mrc_A_line_Text[i].Replace(" ", "").ToString(), @"^[\uac00-\ud7ff]+$"))
                         {
                             //韩文
-                            mrc_A_line_Text[i] = mrc_A_line_Text[i].Replace(" ", "");
+                            //mrc_A_line_Text[i] = mrc_A_line_Text[i].Replace(" ", "");
                         }
                     }
                 }
