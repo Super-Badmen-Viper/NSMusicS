@@ -4096,7 +4096,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                             doubleAnimationUsingKeyFrames.KeyFrames.Clear();
                                             //
                                             LinearDoubleKeyFrame linearDoubleKeyFrame = new LinearDoubleKeyFrame();
-                                            linearDoubleKeyFrame.Value = 0.5;
+                                            linearDoubleKeyFrame.Value = 0.51;
                                             linearDoubleKeyFrame.KeyTime = new TimeSpan(0, 0, 0, 0, Convert.ToInt16(temp_Duration));
                                             doubleAnimationUsingKeyFrames.KeyFrames.Add(linearDoubleKeyFrame);
                                             //
@@ -4104,7 +4104,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                             if (temp_WaitTime != 0)
                                             {
                                                 LinearDoubleKeyFrame linearDoubleKeyFrame_Pause = new LinearDoubleKeyFrame();//用以实现停顿
-                                                linearDoubleKeyFrame_Pause.Value = 0.5;
+                                                linearDoubleKeyFrame_Pause.Value = 0.51;
                                                 linearDoubleKeyFrame_Pause.KeyTime = new TimeSpan(0, 0, 0, 0, Convert.ToInt16(
                                                     temp_WaitTime
                                                     ));
@@ -4121,13 +4121,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                                             //设置动画
                                             Storyboard storyboard_desk = (Storyboard)mrc_Byte_desk.TextBlock_1.FindName("Text_Storyboard");
-                                            storyboard_desk.Duration = new Duration(new TimeSpan(0, 0, 0, 0, temp_Duration));
+                                            storyboard_desk.Duration = new Duration(new TimeSpan(0, 0, 0, 0, temp_Duration + temp_WaitTime));
                                             //
                                             DoubleAnimationUsingKeyFrames doubleAnimationUsingKeyFrames_desk = (DoubleAnimationUsingKeyFrames)mrc_Byte_desk.TextBlock_1.FindName("Text_DoubleAnimation");
                                             doubleAnimationUsingKeyFrames_desk.KeyFrames.Clear();
                                             //
                                             LinearDoubleKeyFrame linearDoubleKeyFrame_desk = new LinearDoubleKeyFrame();
-                                            linearDoubleKeyFrame_desk.Value = 0.5;
+                                            linearDoubleKeyFrame_desk.Value = 0.51;
                                             linearDoubleKeyFrame_desk.KeyTime = new TimeSpan(0, 0, 0, 0, Convert.ToInt16(temp_Duration));
                                             doubleAnimationUsingKeyFrames_desk.KeyFrames.Add(linearDoubleKeyFrame_desk);
                                             //
@@ -4135,7 +4135,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                             if (temp_WaitTime != 0)
                                             {
                                                 LinearDoubleKeyFrame linearDoubleKeyFrame_Pause = new LinearDoubleKeyFrame();//用以实现停顿
-                                                linearDoubleKeyFrame_Pause.Value = 0.5;
+                                                linearDoubleKeyFrame_Pause.Value = 0.51;
                                                 linearDoubleKeyFrame_Pause.KeyTime = new TimeSpan(0, 0, 0, 0, Convert.ToInt16(
                                                     temp_WaitTime
                                                     ));
