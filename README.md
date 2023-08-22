@@ -69,6 +69,8 @@
 # Open source protocol: AGPL-3.0 license Reason:
 - You can extract and apply the functional modules to any activity (some MIT), but you cannot skin MoZhiMusicPlayer and almost take it away for commercial activities
 - If we discover a violation of our regulations, we will sue and recover all the profits generated, and apply them to charitable and open source activities expenses
+- If you want to transfer my (author's) algorithm and model to other open source/commercial projects, you must clearly indicate that the algorithm and model originated from (author's).
+- It is prohibited to impersonate the copyright of my algorithm model, plagiarize my code, and submit it to other projects in my personal name. You must specify the source of the algorithm model in order to use it or submit it to other projects (otherwise you will receive my lawyer's letter)
 
 # Related projects:
 - [comSlimeNullAudioTest. git]（ https://github.com/SlimeNull/AudioTest ）(I extracted and separated the real-time audio spectrum data extraction function of this project, modified some of the code, integrated the class, and applied it to the spectrum animation of MoZhiMusicPlayer as the spectrum data source)
