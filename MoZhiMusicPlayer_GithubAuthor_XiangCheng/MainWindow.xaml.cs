@@ -1337,16 +1337,19 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         private void ThisWindowsMusicAndDownload_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             windows_Song_Find = windows_Song_Find_Temp;
+            windows_Song_Find.ComBox_Select_SongList.SelectedIndex = 1;
             windows_Song_Find.Show();
         }
         private void My_Love_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             windows_Song_Find = windows_Song_Find_Temp;
+            windows_Song_Find.ComBox_Select_SongList.SelectedIndex = 0;
             windows_Song_Find.Show();
         }
         private void Recent_Play_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             windows_Song_Find = windows_Song_Find_Temp;
+            windows_Song_Find.ComBox_Select_SongList.SelectedIndex = 2;
             windows_Song_Find.Show();
         }
         #endregion
@@ -4054,29 +4057,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                                                     - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
                                                         .Array_Morebyte_Duration[i]);//此字符持续时间
 
-                                            # region 1111111
-                                            UserControl_Mrc_Byte mrc_Byte_ = new UserControl_Mrc_Byte();
-                                            //设置文本
-                                            mrc_Byte_.TextBlock_1.FontSize = 32;
-                                            mrc_Byte_.TextBlock_1.Text = dao_ListBox_Temp_MRC.mrc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].
-                                                Array_Morebyte_Text[i].ToString();
-                                            GradientStop gradientStop = (GradientStop)mrc_Byte_.TextBlock_1.FindName("GradientStop_Background");
-                                            gradientStop.Color = Colors.White;
-                                            mrc_Byte_.TextBlock_1.Effect = null;
-
-                                            //设置动画
-                                            Storyboard storyboard = (Storyboard)mrc_Byte_.TextBlock_1.FindName("Text_Storyboard");
-                                            storyboard.Duration = new Duration(new TimeSpan(0, 0, 0, 0, temp_Duration));
-                                            //
-                                            DoubleAnimationUsingKeyFrames doubleAnimationUsingKeyFrames = (DoubleAnimationUsingKeyFrames)mrc_Byte_.TextBlock_1.FindName("Text_DoubleAnimation");
-                                            doubleAnimationUsingKeyFrames.KeyFrames.Clear();
-                                            //
-                                            LinearDoubleKeyFrame linearDoubleKeyFrame = new LinearDoubleKeyFrame();
-                                            linearDoubleKeyFrame.Value = 0.5;
-                                            linearDoubleKeyFrame.KeyTime = new TimeSpan(0, 0, 0, 0, Convert.ToInt16(temp_Duration));
-                                            doubleAnimationUsingKeyFrames.KeyFrames.Add(linearDoubleKeyFrame);
-                                            //
-                                            //判别动画是否有停顿
+                                            int temp_WaitTime = 0;                  //判别动画是否有停顿
                                             if (i != dao_ListBox_Temp_MRC.mrc_Line_Info
                                                 [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
                                                     - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
@@ -4087,8 +4068,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                                                     - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
                                                                         .Array_Morebyte_BeginTime[i + 1]))
                                             {
-                                                int temp_null_time = //求出此停顿动画的序列时间，并插入至动画序列timeSpan_nums
-                                                                Convert.ToInt16(
+                                                temp_WaitTime = Convert.ToInt16(
                                                                     dao_ListBox_Temp_MRC.mrc_Line_Info
                                                                         [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
                                                                             - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
@@ -4096,11 +4076,37 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                                                         )
                                                                  -
                                                                 (temp_BeginTime + temp_Duration);//动画停顿的时间
+                                            }
 
+                                                #region 1111111
+                                                UserControl_Mrc_Byte mrc_Byte_ = new UserControl_Mrc_Byte();
+                                            //设置文本
+                                            mrc_Byte_.TextBlock_1.FontSize = 32;
+                                            mrc_Byte_.TextBlock_1.Text = dao_ListBox_Temp_MRC.mrc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].
+                                                Array_Morebyte_Text[i].ToString();
+                                            GradientStop gradientStop = (GradientStop)mrc_Byte_.TextBlock_1.FindName("GradientStop_Background");
+                                            gradientStop.Color = Colors.White;
+                                            mrc_Byte_.TextBlock_1.Effect = null;
+
+                                            //设置动画
+                                            Storyboard storyboard = (Storyboard)mrc_Byte_.TextBlock_1.FindName("Text_Storyboard");
+                                            storyboard.Duration = new Duration(new TimeSpan(0, 0, 0, 0, temp_Duration + temp_WaitTime));
+                                            //
+                                            DoubleAnimationUsingKeyFrames doubleAnimationUsingKeyFrames = (DoubleAnimationUsingKeyFrames)mrc_Byte_.TextBlock_1.FindName("Text_DoubleAnimation");
+                                            doubleAnimationUsingKeyFrames.KeyFrames.Clear();
+                                            //
+                                            LinearDoubleKeyFrame linearDoubleKeyFrame = new LinearDoubleKeyFrame();
+                                            linearDoubleKeyFrame.Value = 0.5;
+                                            linearDoubleKeyFrame.KeyTime = new TimeSpan(0, 0, 0, 0, Convert.ToInt16(temp_Duration));
+                                            doubleAnimationUsingKeyFrames.KeyFrames.Add(linearDoubleKeyFrame);
+                                            //
+                                            //判别动画是否有停顿
+                                            if (temp_WaitTime != 0)
+                                            {
                                                 LinearDoubleKeyFrame linearDoubleKeyFrame_Pause = new LinearDoubleKeyFrame();//用以实现停顿
                                                 linearDoubleKeyFrame_Pause.Value = 0.5;
                                                 linearDoubleKeyFrame_Pause.KeyTime = new TimeSpan(0, 0, 0, 0, Convert.ToInt16(
-                                                    temp_null_time
+                                                    temp_WaitTime
                                                     ));
 
                                                 doubleAnimationUsingKeyFrames.KeyFrames.Add(linearDoubleKeyFrame_Pause);
@@ -4126,30 +4132,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                             doubleAnimationUsingKeyFrames_desk.KeyFrames.Add(linearDoubleKeyFrame_desk);
                                             //
                                             //判别动画是否有停顿
-                                            if (i != dao_ListBox_Temp_MRC.mrc_Line_Info
-                                                [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
-                                                    - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                                        .Int_MoreByte_Nums - 1//if  i != Array_Morebyte_BeginTime的最后一位（防止数组越界）
-                                                && temp_BeginTime + temp_Duration != //if  此动画的开始时间+持续时间 != 下一段动画的开始时间
-                                                            Convert.ToInt16(dao_ListBox_Temp_MRC.mrc_Line_Info
-                                                                [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
-                                                                    - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                                                        .Array_Morebyte_BeginTime[i + 1]))
+                                            if (temp_WaitTime != 0)
                                             {
-                                                int temp_null_time = //求出此停顿动画的序列时间，并插入至动画序列timeSpan_nums
-                                                                Convert.ToInt16(
-                                                                    dao_ListBox_Temp_MRC.mrc_Line_Info
-                                                                        [musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex
-                                                                            - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums]
-                                                                        .Array_Morebyte_BeginTime[i + 1]
-                                                                        )
-                                                                 -
-                                                                (temp_BeginTime + temp_Duration);//动画停顿的时间
-
                                                 LinearDoubleKeyFrame linearDoubleKeyFrame_Pause = new LinearDoubleKeyFrame();//用以实现停顿
                                                 linearDoubleKeyFrame_Pause.Value = 0.5;
                                                 linearDoubleKeyFrame_Pause.KeyTime = new TimeSpan(0, 0, 0, 0, Convert.ToInt16(
-                                                    temp_null_time
+                                                    temp_WaitTime
                                                     ));
 
                                                 doubleAnimationUsingKeyFrames_desk.KeyFrames.Add(linearDoubleKeyFrame_Pause);
