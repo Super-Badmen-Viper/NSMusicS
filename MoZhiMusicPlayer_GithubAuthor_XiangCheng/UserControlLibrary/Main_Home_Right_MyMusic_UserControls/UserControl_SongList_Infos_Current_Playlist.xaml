@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Right_MyMusic_UserControls"
              mc:Ignorable="d" 
              Width="380" MinHeight="240">
@@ -90,11 +91,15 @@
                             <GridViewColumn x:Name="GridViewColumn_Love_Add_ListView_Song_Normal">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="Love_ListView_Song" Background="{Binding Song_Like_Image}" 
+                                        <Button x:Name="Love_ListView_Song" 
                                             Tag="{Binding Song_No}" MinHeight="{Binding Song_Like}"  
                                             Style="{StaticResource MyButton}" 
                                             Click="Love_ListView_Song_Click" 
-                                            Width="18" Height="18" FontSize="5"/>
+                                            Width="18" Height="18" FontSize="5">
+                                            <svgc:SvgViewbox 
+                                                x:Name="SvgViewbox_Love_ListView_Song"
+                                                Source="{Binding Song_Like_Image}"/>
+                                        </Button>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -204,13 +209,13 @@
         <TextBlock HorizontalAlignment="Left" Height="18" Text="正在播放" TextWrapping="Wrap" 
                        VerticalAlignment="Top" Width="210" 
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                       Foreground="#646466" Margin="126,22,0,0" FontSize="16"   
+                       Foreground="White" Margin="126,22,0,0" FontSize="16"   
                        >
         </TextBlock>
         <TextBlock HorizontalAlignment="Left" Height="16" Text="来源：" TextWrapping="Wrap" 
                        VerticalAlignment="Top" Width="36" 
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                       Foreground="#909091" Margin="30,48,0,0" FontSize="12"   
+                       Foreground="White" Margin="30,48,0,0" FontSize="12"   
                        >
         </TextBlock>
         <TextBlock 
@@ -218,7 +223,7 @@
             HorizontalAlignment="Left" Height="16" Text="本地音乐" TextWrapping="Wrap" 
                        VerticalAlignment="Top" Width="240" 
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                       Foreground="#909091" Margin="66,48,0,0" FontSize="12"   
+                       Foreground="White" Margin="66,48,0,0" FontSize="12"   
                        >
         </TextBlock>
         <TextBlock 

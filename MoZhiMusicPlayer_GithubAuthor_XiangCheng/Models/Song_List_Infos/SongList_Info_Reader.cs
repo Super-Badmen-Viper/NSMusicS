@@ -10,12 +10,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
     public class SongList_Info_Reader
     {
 
-        private static ImageBrush ImageBrush_LoveEnter
-            = new ImageBrush(new BitmapImage(
-                new Uri(@"Resource\\Button_Image_Ico\\爱心 - 副本.png", UriKind.Relative)));
-        private static ImageBrush ImageBrush_LoveNormal
-            = new ImageBrush(new BitmapImage(
-                new Uri(@"Resource\\Button_Image_Ico\\爱心 (1).png", UriKind.Relative)));
+        private static Uri ImageBrush_LoveEnter
+            = new Uri(@"Resource\\Button_Image_Svg\\已收藏.svg", UriKind.Relative);
+        private static Uri ImageBrush_LoveNormal
+            = new Uri(@"Resource\\Button_Image_Svg\\收藏.svg", UriKind.Relative);
 
         public static ObservableCollection<Song_Info> song_Infos_Love { get; set; }
 

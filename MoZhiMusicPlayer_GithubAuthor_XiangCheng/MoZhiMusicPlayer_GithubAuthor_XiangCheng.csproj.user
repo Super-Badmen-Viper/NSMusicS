@@ -37,6 +37,9 @@
     <Compile Update="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_Search_Song.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_TOP_UserControls\UserControl_ButtonFrame_App_Setting.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_More.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -74,6 +77,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization_3.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControl_TaskbarIcon.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControlLibrary\MusicPlayer_MV_Player\MainWindow_Top_MediaMV\UserControl_MediaMV.xaml.cs">
@@ -123,6 +129,9 @@
     <Page Update="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_Search_Song.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="UserControlLibrary\MainWindow_TOP_UserControls\UserControl_ButtonFrame_App_Setting.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_More.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -160,6 +169,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization_3.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControl_TaskbarIcon.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MusicPlayer_MV_Player\MainWindow_Top_MediaMV\UserControl_MediaMV.xaml">

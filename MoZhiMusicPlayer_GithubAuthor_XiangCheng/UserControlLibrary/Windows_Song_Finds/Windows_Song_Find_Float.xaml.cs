@@ -89,7 +89,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                 Thread thread = new Thread(() =>
                 {
                     Return_Take_SongSrc_Info();
-
+                     
                     // 将搜索结果显示在 UI 界面中
                     Dispatcher.Invoke(() =>
                     {
@@ -163,8 +163,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
                         Button_FindALL_Add.Visibility = Visibility.Visible;
 
                         System.Windows.MessageBox.Show("导入成功");
-
-
 
                         All_Info_Path = new ArrayList();
                         All_Song_Path = new ArrayList();
@@ -323,11 +321,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
             {
                 if (item is string Song_Name)
                 {
-                    Temp_Song_Name = Song_Name;
-                    if (Temp_Song_Name.Substring(Temp_Song_Name.Length - 3, 3).Equals("mp3") || Temp_Song_Name.Substring(Temp_Song_Name.Length - 4, 4).Equals("flac"))//从指定的位置startIndex开始检索长度为length的子字符串
-                    {
-                        All_Song_Path.Add(Song_Name);
-                    }
+                    All_Song_Path.Add(Song_Name);
                 }
             }
             string song_name_temp = "";
@@ -405,6 +399,28 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_So
 
                                 }
                             }
+                        }
+                        else
+                        {
+                            song_info = new Song_Info();
+
+                            song_info.Song_Name = Song_Path_Temp;//设置DisplayMember属性显示为"全部"
+                            song_info.Album_Name = "未知";
+                            song_info.Song_Url = Song_Src_Paths;
+                            song_info.Song_No = Song_Ids_Temp;
+                            Song_Ids_Temp++;
+
+                            list_Song_Info.Add(song_info);
+
+                            // 将搜索结果显示在 UI 界面中
+                            Dispatcher.Invoke(() =>
+                            {
+                                ListBox_Test.Items.Add(song_info.Singer_Name + "\t" + song_info.Song_Name + "\t" + song_info.Album_Name + "\t" + song_info.Song_No + "\n");
+
+                                ListBox_Test.SelectedIndex = ListBox_Test.Items.Count - 1;
+                                ListBox_Test.ScrollIntoView(ListBox_Test.SelectedItem);
+                            });
+
                         }
                     }
                 }

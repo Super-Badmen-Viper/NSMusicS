@@ -64,7 +64,7 @@
                 Width="198" Height="108" Margin="500,120,0,0" Background="#1F1F1F" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="500,230,0,0" Padding="10,0,0,0"
-                   Text="EXO" Foreground="White" FontSize="14" >
+                   Text="JEON SOMI" Foreground="White" FontSize="14" >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>
@@ -77,7 +77,7 @@
                 Width="198" Height="108" Margin="280,260,0,0" Background="#1F1F1F" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="280,370,0,0" Padding="10,0,0,0"
-                   Text="Twice" Foreground="White" FontSize="14" >
+                   Text="BLACKPINK" Foreground="White" FontSize="14" >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>
@@ -90,45 +90,45 @@
                 Width="198" Height="108" Margin="500,260,0,0" Background="#1F1F1F" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="500,370,0,0" Padding="10,0,0,0"
-                   Text="WINNER" Foreground="White" FontSize="14" >
+                   Text="EXO" Foreground="White" FontSize="14" >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>
         </TextBlock>
 
-        <Border x:Name="Border_this_app_Background_6"
+        <Border x:Name="Border_this_app_Background_6" Visibility="Collapsed"
                 BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Width="198" Height="108" Margin="60,400,0,0" Background="#1F1F1F" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                   Margin="60,510,0,0" Padding="10,0,0,0"
+                   Margin="60,510,0,0" Padding="10,0,0,0" Visibility="Collapsed"
                    Text="盐山" Foreground="White" FontSize="14" >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>
         </TextBlock>
 
-        <Border x:Name="Border_this_app_Background_7"
+        <Border x:Name="Border_this_app_Background_7" Visibility="Collapsed"
                 BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Width="198" Height="108" Margin="280,400,0,0" Background="#1F1F1F" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                   Margin="280,510,0,0" Padding="10,0,0,0"
+                   Margin="280,510,0,0" Padding="10,0,0,0" Visibility="Collapsed"
                    Text="玻璃水" Foreground="White" FontSize="14" >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>
         </TextBlock>
 
-        <Border x:Name="Border_this_app_Background_8"
+        <Border x:Name="Border_this_app_Background_8" Visibility="Collapsed"
                 BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Width="198" Height="108" Margin="500,400,0,0" Background="#1F1F1F" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                   Margin="500,510,0,0" Padding="10,0,0,0"
+                   Margin="500,510,0,0" Padding="10,0,0,0" Visibility="Collapsed"
                    Text="完美白" Foreground="White" FontSize="14" >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />

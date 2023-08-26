@@ -26,7 +26,7 @@
                         <TranslateTransform X="-0.5" x:Name="Trans"/>
                     </LinearGradientBrush.RelativeTransform>
                     <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                    <GradientStop x:Name="GradientStop_Background" Color="#FFF99F00" Offset="0.51"/>
+                    <GradientStop x:Name="GradientStop_Background" Color="White" Offset="0.51"/>
                 </LinearGradientBrush>
             </TextBlock.Foreground>
             <TextBlock.Effect>

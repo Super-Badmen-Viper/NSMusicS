@@ -27,21 +27,34 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow
 
             viewModule_Search_Song = ViewModule_Search_Song.Retuen_This();
             this.DataContext = ViewModule_Search_Song.Retuen_This();
+
+            string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
+            Hover_Album_Mouse_Enter_Open = new Uri(Path_App + @"\Button_Image_Svg\收缩上箭头.svg");
+            Hover_Album_Mouse_Enter_Close = new Uri(Path_App + @"\Button_Image_Svg\收缩下箭头.svg");
         }
         ViewModule_Search_Song viewModule_Search_Song;
+        public Uri Hover_Album_Mouse_Enter_Open;
+        public Uri Hover_Album_Mouse_Enter_Close;
 
 
         public bool Bool_Player_Model;
         private void Border_Hover_BackGround_MouseEnter(object sender, MouseEventArgs e)
         {
-            if(!Bool_Player_Model)
-                Border_Hover_BackGround.Visibility = Visibility.Visible;
+            if(Bool_Player_Model == true)
+            {
+                SvgViewbox_Border_Hover_BackGround.Source = Hover_Album_Mouse_Enter_Close;
+            }
+            else
+            {
+                SvgViewbox_Border_Hover_BackGround.Source = Hover_Album_Mouse_Enter_Open;
+            }
+            Border_Hover_BackGround.Visibility = Visibility.Visible;
         }
 
         private void Border_Hover_BackGround_MouseLeave(object sender, MouseEventArgs e)
         {
             Border_Hover_BackGround.Visibility = Visibility.Collapsed;
-            //Border_Song_Image.Opacity = 1;
+            SvgViewbox_Border_Hover_BackGround.Source = null;
         }
 
         bool Test_Length;

@@ -115,12 +115,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                 temp_head_duration = temp_head_start;
                 temp_text = temp_head_start;
 
-                Match match = Regex.Match(temp_head_start, @"\[(\d{2}):(\d{2})\.(\d{3})\]");
-                if (match.Success)
+                Match match_1 = Regex.Match(temp_head_start, @"\[(\d{2}):(\d{2})\.(\d{3})\]");
+                if (match_1.Success)
                 {
-                    int minutes = int.Parse(match.Groups[1].Value);
-                    int seconds = int.Parse(match.Groups[2].Value);
-                    int milliseconds = int.Parse(match.Groups[3].Value);
+                    int minutes = int.Parse(match_1.Groups[1].Value);
+                    int seconds = int.Parse(match_1.Groups[2].Value);
+                    int milliseconds = int.Parse(match_1.Groups[3].Value);
 
                     int totalMilliseconds = (minutes * 60 + seconds) * 1000 + milliseconds;
 
@@ -130,6 +130,56 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                 }
 
                 mrc_Line_Info[i].String_Lrc_Line = temp_head_start.Substring(temp_head_start.IndexOf("]") + 1);
+
+                string pattern = @"<([^,]+), ([^>]+)>([^<]+)";
+                MatchCollection matches = Regex.Matches(temp_head_start, pattern);
+                if (matches.Count > 0)
+                {
+                    mrc_Line_Info[i].Array_Morebyte_BeginTime = new ArrayList();
+                    mrc_Line_Info[i].Array_Morebyte_Duration = new ArrayList();
+                    mrc_Line_Info[i].Array_Morebyte_Text = new ArrayList();
+
+                    foreach (Match match in matches)
+                    {
+                        if (match.Groups.Count == 4)
+                        {
+                            string absoluteTime = match.Groups[1].Value;
+                            string duration = match.Groups[2].Value;
+                            string text = match.Groups[3].Value;
+
+                            mrc_Line_Info[i].Array_Morebyte_BeginTime.Add(absoluteTime);
+                            mrc_Line_Info[i].Array_Morebyte_Duration.Add(duration);
+                            mrc_Line_Info[i].Array_Morebyte_Text.Add(text);
+
+                            mrc_Line_Info[i].Int_MoreByte_Nums++;
+                        }
+                    }
+                }
+
+                string pattern_2 = @"\((\d+),(\d+)\)([^()]+)";
+                MatchCollection matches_2 = Regex.Matches(temp_head_start, pattern_2);
+                if (matches_2.Count > 0)
+                {
+                    mrc_Line_Info[i].Array_Morebyte_BeginTime = new ArrayList();
+                    mrc_Line_Info[i].Array_Morebyte_Duration = new ArrayList();
+                    mrc_Line_Info[i].Array_Morebyte_Text = new ArrayList();
+
+                    foreach (Match match in matches_2)
+                    {
+                        if (match.Groups.Count == 4)
+                        {
+                            string absoluteTime = match.Groups[1].Value;
+                            string duration = match.Groups[2].Value;
+                            string text = match.Groups[3].Value;
+
+                            mrc_Line_Info[i].Array_Morebyte_BeginTime.Add(absoluteTime);
+                            mrc_Line_Info[i].Array_Morebyte_Duration.Add(duration);
+                            mrc_Line_Info[i].Array_Morebyte_Text.Add(text);
+
+                            mrc_Line_Info[i].Int_MoreByte_Nums++;
+                        }
+                    }
+                }
             }
 
             //This_MRC_Start_Time为0时定时器无法捕捉
@@ -155,13 +205,33 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
             List<string> temp_string = new List<string>();
             for (int i = 0; i < mrc_A_line_Text.Count + 14; i++)
             {
-                if (i < 7)
+                if (i < 4)
                 {
                     temp_string.Add("       ");
+                }
+                else if (i == 4)
+                {
+                    temp_string.Add("歌词同步效果 由MZMusic独家歌词逐字算法 支持");
+                }
+                else if (i == 5)
+                {
+                    temp_string.Add("此应用(MZMusic)内置算法模型版权 受AGPL-3.0许可证保护");
+                }
+                else if (i == 6)
+                {
+                    temp_string.Add("未经本作者版权认可，禁止使用此应用内的算法及模型进行商用或开源，违者必究");
                 }
                 else if (i < mrc_A_line_Text.Count + 7)
                 {
                     temp_string.Add(mrc_A_line_Text[i - 7]);
+                }
+                else if (i == mrc_A_line_Text.Count + 11)
+                {
+                    temp_string.Add("此应用(MZMusic)内置算法模型版权 受AGPL-3.0许可证保护");
+                }
+                else if (i == mrc_A_line_Text.Count + 12)
+                {
+                    temp_string.Add("歌词同步效果 由MZMusic独家歌词逐字算法 支持");
                 }
                 else if (i < mrc_A_line_Text.Count + 14)
                 {
@@ -304,13 +374,33 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
             List<string> temp_string = new List<string>();
             for (int i = 0; i < mrc_A_line_Text.Count + 14; i++)
             {
-                if(i < 7)
+                if (i < 4)
                 {
                     temp_string.Add("       ");
                 }
-                else if(i < mrc_A_line_Text.Count + 7)
+                else if (i == 4)
+                {
+                    temp_string.Add("歌词同步效果 由MZMusic独家歌词逐字算法 支持");
+                }
+                else if (i == 5)
+                {
+                    temp_string.Add("此应用(MZMusic)内置算法模型版权 受AGPL-3.0许可证保护");
+                }
+                else if (i == 6)
+                {
+                    temp_string.Add("       ");
+                }
+                else if (i < mrc_A_line_Text.Count + 7)
                 {
                     temp_string.Add(mrc_A_line_Text[i - 7]);
+                }
+                else if (i == mrc_A_line_Text.Count + 11)
+                {
+                    temp_string.Add("此应用(MZMusic)内置算法模型版权 受AGPL-3.0许可证保护");
+                }
+                else if (i == mrc_A_line_Text.Count + 12)
+                {
+                    temp_string.Add("歌词同步效果 由MZMusic独家歌词逐字算法 支持");
                 }
                 else if (i < mrc_A_line_Text.Count + 14)
                 {

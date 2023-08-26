@@ -33,8 +33,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow
         {
             InitializeComponent();
 
-            Button_Streamlined.Visibility = Visibility.Collapsed;
-
             viewModule_Search_Song = ViewModule_Search_Song.Retuen_This();
             viewModule_Search_Song.Show_API_HttpClient_Complete = Visibility.Collapsed;
             this.DataContext = ViewModule_Search_Song.Retuen_This();

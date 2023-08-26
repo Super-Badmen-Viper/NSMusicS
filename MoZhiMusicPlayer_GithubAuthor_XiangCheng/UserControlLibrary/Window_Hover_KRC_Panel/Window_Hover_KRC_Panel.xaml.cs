@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_UserControls;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -114,6 +115,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
             fontsize++;
             TextBlock_1.FontSize = fontsize;
             TextBlock_2.FontSize = fontsize;
+
+            for (int i = 0; i < StackPanel_Lyic.Children.Count; i++)
+            {
+                UserControl_Mrc_Byte _Mrc_Byte = (UserControl_Mrc_Byte)StackPanel_Lyic.Children[i];
+                _Mrc_Byte.FontSize = fontsize;
+            }
         }
 
         private void Lyic_FontSize_Down_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -122,6 +129,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
             fontsize--;
             TextBlock_1.FontSize = fontsize;
             TextBlock_2.FontSize = fontsize;
+
+            for (int i = 0; i < StackPanel_Lyic.Children.Count; i++)
+            {
+                UserControl_Mrc_Byte _Mrc_Byte = (UserControl_Mrc_Byte)StackPanel_Lyic.Children[i];
+                _Mrc_Byte.FontSize = fontsize;
+            }
         }
 
         private void Lyic_FontColor_Set_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

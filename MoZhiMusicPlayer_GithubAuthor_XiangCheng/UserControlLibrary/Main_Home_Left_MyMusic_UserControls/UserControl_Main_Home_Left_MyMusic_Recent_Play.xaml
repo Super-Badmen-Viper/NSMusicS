@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:sort="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="443" d:DesignWidth="810"
@@ -13,92 +14,65 @@
     <Grid>
         <Grid x:Name="Grid_NormalModel_1">
             <TextBlock HorizontalAlignment="Left" Height="50" Text="默认列表" TextWrapping="Wrap" 
-                   VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
+                   VerticalAlignment="Top" Width="210" FontSize="32" Margin="41,10,0,0"
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                    Foreground="White"   
                    >
-                <TextBlock.Effect>
-                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                </TextBlock.Effect>
             </TextBlock>
             <TextBlock 
             x:Name="Recent_Song_Nums"
-            Foreground="#1ECC94"
+            Foreground="White"
                    HorizontalAlignment="Left" Height="20" Text="歌曲0" TextWrapping="Wrap" 
-                   VerticalAlignment="Top" Margin="42,74,0,0" FontSize="14"
+                   VerticalAlignment="Top" Margin="42,62,0,0" FontSize="14"
                    Block.TextAlignment="Center"
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                    >
-                <TextBlock.Effect>
-                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                </TextBlock.Effect>
-            </TextBlock>
-            <TextBlock 
-            x:Name="Recent_Video"
-            HorizontalAlignment="Left" Height="20" Text="视频0" TextWrapping="Wrap" 
-            VerticalAlignment="Top" Margin="150,74,0,0" FontSize="14"
-            Block.TextAlignment="Center"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                 Foreground="White"   
-                >
-                <TextBlock.Effect>
-                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                </TextBlock.Effect>
             </TextBlock>
 
             <StackPanel
-            HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="31,122,0,0"
+            HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="40,90,0,0"
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
             MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"          
             >
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    Background="White" Height="32" 
+                    Background="#44FFFFFF" Height="32" 
                      />
-                <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/增加 - 副本.png" 
-                   Stretch="Fill" Margin="35,-22,63,10"
+                <TextBlock Margin="30,-25,63,10"
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                   />
-                <TextBlock Text="添加" VerticalAlignment="Center" Margin="49,-32,6,0" 
+                   >
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/复制.svg"/>
+                </TextBlock>
+                <TextBlock Text="添加" VerticalAlignment="Center" Margin="54,-35,6,0" 
+                           Foreground="White"
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                        />
             </StackPanel>
-            <StackPanel
-            HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="32" Margin="273,122,0,0"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-            MouseLeftButtonDown="StackPanel_MouseLeftButtonDown_1"
-            >
-                <Border HorizontalAlignment="Stretch" 
-                VerticalAlignment="Stretch" 
-                BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                Background="White" Height="32" 
-                 />
-                <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/更多.png" 
-               Stretch="UniformToFill"
-               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Margin="0,-32,0,0"
-               />
-            </StackPanel>
-            <StackPanel x:Name="Stack_Button_LotSelects_Take" Height="32" VerticalAlignment="Top" 
-                        MouseEnter="Stack_Button_LotSelects_Take_MouseEnter" MouseLeave="Stack_Button_LotSelects_Take_MouseLeave" 
+            <StackPanel x:Name="Stack_Button_LotSelects_Take" Height="32" VerticalAlignment="Top"  
                         MouseLeftButtonDown="Stack_Button_LotSelects_Take_MouseLeftButtonDown" HorizontalAlignment="Left" 
-                        Margin="150,122,0,0" Width="110"                       
+                        Margin="160,90,0,0" Width="110"                      
                         >
                 <Border HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" 
                 BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                Background="White" Height="32" 
+                Background="#44FFFFFF" Height="32" 
                  />
-                <Image Height="20" Margin="20,-31,0,0" Width="20" HorizontalAlignment="Left" 
-                       Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/列表-01.png" VerticalAlignment="Stretch"/>
-                <TextBlock HorizontalAlignment="Left" Text="批量操作" Margin="44,-24,0,0"/>
+                <TextBlock Margin="20,-25,73,10"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                   >
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/批量操作.svg"/>
+                </TextBlock>
+                <TextBlock Text="批量操作" VerticalAlignment="Center" Margin="44,-35,6,0" 
+                           Foreground="White"
+                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                       />
             </StackPanel>
         </Grid>
 
 
-        <Grid x:Name="Grid_ListItem_CrudModel_1" Margin="0,180,0,0">
+        <Grid x:Name="Grid_ListItem_CrudModel_1" Margin="0,140,0,0">
             <ListView x:Name="ListView_Download_SongList_Info" Foreground="White"
                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
@@ -119,6 +93,8 @@
                         <Setter Property="BorderBrush" Value="Transparent"/>
 
                         <Setter Property="FontSize" Value="13"/>
+
+                        <Setter Property="Height" Value="40"/>
 
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
@@ -156,7 +132,7 @@
                     <GridView>
                         <GridView.Columns>
                             <!--设置行高-->
-                            <GridViewColumn Width="0">
+                            <GridViewColumn Width="10">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Image Height="50"/>
@@ -177,14 +153,14 @@
                             <GridViewColumn x:Name="GridViewColumn_Love_Add_ListView_Song_Normal">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="Love_ListView_Song" Background="{Binding Song_Like_Image}" 
+                                        <Button x:Name="Love_ListView_Song"
                                             Tag="{Binding Song_No}" MinHeight="{Binding Song_Like}"  
                                             Click="Love_ListView_Song_Click" 
                                             Style="{StaticResource MyButton}" 
                                             Width="18" Height="18" FontSize="5">
-                                            <Button.Effect>
-                                                <DropShadowEffect Color="#CECECE" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                                            </Button.Effect>
+                                            <svgc:SvgViewbox 
+                                                x:Name="SvgViewbox_Love_ListView_Song"
+                                                Source="{Binding Song_Like_Image}"/>
                                         </Button>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -197,10 +173,10 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Song_Name}" Margin="0,5,0,0">
-                                                <TextBlock.Effect>
-                                                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                                                </TextBlock.Effect>
+                                            <TextBlock Text="{Binding Song_Name}" 
+                                                       FontSize="14"
+                                                       Margin="0,5,0,0">
+                                                
                                             </TextBlock>
                                             <Button HorizontalAlignment="Left" Background="{Binding Song_MV_Image}"
                                                 Style="{StaticResource MyButton}" 
@@ -216,10 +192,8 @@
                                         sort:GridViewSort.PropertyName="Singer_Name">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Singer_Name}">
-                                            <TextBlock.Effect>
-                                                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                                            </TextBlock.Effect>
+                                        <TextBlock Text="{Binding Singer_Name}" FontSize="14">
+                                            
                                         </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -229,25 +203,21 @@
                                         sort:GridViewSort.PropertyName="Album_Name">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Album_Name}">
-                                            <TextBlock.Effect>
-                                                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                                            </TextBlock.Effect>
+                                        <TextBlock Text="{Binding Album_Name}" FontSize="14">
+                                            
                                         </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
                             <GridViewColumn Header="No."
-                                        Width="120"
+                                        Width="130"
                                         sort:GridViewSort.PropertyName="Song_No"
                                         >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Song_No}">
-                                            <TextBlock.Effect>
-                                                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                                            </TextBlock.Effect>
+                                        <TextBlock Text="{Binding Song_No}" FontSize="14">
+                                            
                                         </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -258,10 +228,8 @@
                                         sort:GridViewSort.PropertyName="Song_Url">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Song_Url}">
-                                            <TextBlock.Effect>
-                                                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                                            </TextBlock.Effect>
+                                        <TextBlock Text="{Binding Song_Url}" FontSize="14">
+                                            
                                         </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -285,7 +253,7 @@
             >
                 <ComboBox 
                     x:Name="ComBox_Select_Add_SongList"
-                    Style="{DynamicResource cmbstyle}" 
+                    Style="{DynamicResource cmbstyle}" SelectedIndex="-1"
                     SelectionChanged="ComboBox_SelectionChanged">
                     <ComboBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -311,13 +279,16 @@
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    Background="White" Height="32" 
+                    Background="#44FFFFFF" Height="32" 
                      />
-                <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/圆圈、单选框.png" 
-                   Stretch="Fill" Margin="10,-24,0,10"
+                <TextBlock Margin="25,-24,0,10"
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="16"
-                   />
-                <TextBlock Text="全选" VerticalAlignment="Center" Margin="37,-37,6,0" 
+                   >
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/复选框-全选.svg"/>
+                </TextBlock>
+                <TextBlock Text="全选" VerticalAlignment="Center" 
+                           Foreground="White"
+                           Margin="47,-35,6,0" 
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                        />
             </StackPanel>
@@ -331,13 +302,16 @@
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    Background="White" Height="32" 
+                    Background="#44FFFFFF" Height="32" 
                      />
-                <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/删除.png" 
-                   Stretch="Fill" Margin="30,-26,0,10"
-                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="18"
-                   />
-                <TextBlock Text="删除" VerticalAlignment="Center" Margin="52,-36,6,0" 
+                <TextBlock Margin="23,-25,2,15"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="16"
+                   >
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/删除.svg"/>
+                </TextBlock>
+                <TextBlock Text="删除" VerticalAlignment="Center" 
+                           Foreground="White"
+                           Margin="47,-45,6,0" 
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                        />
             </StackPanel>
@@ -350,13 +324,16 @@
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    Background="White" Height="32" 
+                    Background="#44FFFFFF" Height="32" 
                      />
-                <Image Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/复制-01.png" 
-                   Stretch="Fill" Margin="10,-26,0,10"
-                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="18"
-                   />
-                <TextBlock Text="添加到播放列表" VerticalAlignment="Center" Margin="32,-36,6,0" 
+                <TextBlock Margin="13,-24,12,16"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="16"
+                   >
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/复制.svg"/>
+                </TextBlock>
+                <TextBlock Text="添加到播放列表" VerticalAlignment="Center" 
+                           Foreground="White"
+                           Margin="33,-47,6,0" 
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                        />
             </StackPanel>
@@ -369,9 +346,11 @@
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    Background="White" Height="32" 
+                    Background="#44FFFFFF" Height="32" 
                      />
-                <TextBlock Text="退出批量操作" VerticalAlignment="Center" Margin="0,-32,0,0" 
+                <TextBlock Text="退出批量操作" VerticalAlignment="Center" 
+                           Foreground="White"
+                           Margin="0,-32,0,0" 
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  HorizontalAlignment="Center"
                        />
             </StackPanel>
@@ -379,79 +358,33 @@
 
         <Grid x:Name="Grid_NormalModel_2">
             <StackPanel x:Name="Stack_Panel_Add_Song"
-            Width="150" Height="100"  Margin="32,160,0,64" HorizontalAlignment="Left" VerticalAlignment="Top">
+                Width="150" Height="100"  Margin="100,125,0,64" HorizontalAlignment="Left" VerticalAlignment="Top">
 
-                <Grid Height="100">
+                <Grid Height="70">
                     <Rectangle                                        
                     RadiusX="5" RadiusY="5"
-                    Fill="White">
-                        <!--Fill="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"  -->
-                        <Rectangle.Effect>
-                            <DropShadowEffect BlurRadius="10" ShadowDepth="0"/>
-                        </Rectangle.Effect>
+                    Fill="#44000000">
                     </Rectangle>
                     <Border CornerRadius="5" >
                         <ContentPresenter />
                     </Border>
                 </Grid>
-                <StackPanel x:Name="Stack_Button_Synchronize_User_Music_Resources" Height="28" VerticalAlignment="Top" Margin="0,-92,0,0" 
-                            MouseEnter="Stack_Button_Synchronize_User_Music_Resources_MouseEnter" MouseLeave="Stack_Button_Synchronize_User_Music_Resources_MouseLeave" 
-                            >
-                    <Image Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
-                           Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/刷新.png" VerticalAlignment="Stretch"/>
-                    <TextBlock HorizontalAlignment="Left" Text="同步用户音乐数据库" Margin="35,-18,0,0"/>
-                </StackPanel>
                 <StackPanel x:Name="Stack_Button_Add_Select_Song" Height="28" VerticalAlignment="Top" Margin="0,-64,0,0" 
-                            MouseEnter="Stack_Button_Add_Select_Song_MouseEnter" MouseLeave="Stack_Button_Add_Select_Song_MouseLeave">
-                    <Image Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
-                           Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/24gl-repeatOnce2.png" VerticalAlignment="Stretch"/>
-                    <TextBlock HorizontalAlignment="Left" Text="手动添加歌曲" Margin="35,-18,0,0"/>
+                            >
+                    <TextBlock Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
+                           VerticalAlignment="Stretch">
+                            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/复制.svg"/>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Foreground="White"
+                               Text="添加本地歌曲" Margin="35,-18,0,0"/>
                 </StackPanel>
-                <StackPanel x:Name="Stack_Button_Add_PC_ALL_Song" Height="28" VerticalAlignment="Top" Margin="0,-35,0,0" MouseEnter="Stack_Button_Add_PC_ALL_Song_MouseEnter" MouseLeave="Stack_Button_Add_PC_ALL_Song_MouseLeave">
-                    <Image Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
-                           Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/24gl-repeatOnce2.png" VerticalAlignment="Stretch"/>
-                    <TextBlock HorizontalAlignment="Left" Text="手动扫描本地音乐" Margin="35,-18,0,0"/>
-                </StackPanel>
-            </StackPanel>
-            <StackPanel x:Name="Stack_Panel_More_Takes"
-            Width="150" Height="92"  Margin="277,160,0,64" HorizontalAlignment="Left" VerticalAlignment="Top">
-
-                <Grid Height="92">
-                    <Rectangle                                        
-                RadiusX="5" RadiusY="5"
-                Fill="White">
-                        <!--Fill="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"  -->
-                        <Rectangle.Effect>
-                            <DropShadowEffect BlurRadius="10" ShadowDepth="0"/>
-                        </Rectangle.Effect>
-                    </Rectangle>
-                    <Border CornerRadius="5" >
-                        <ContentPresenter />
-                    </Border>
-                </Grid>
-                <StackPanel x:Name="Stack_Button_Find_Song_Info" Height="28" VerticalAlignment="Top" Margin="0,-92,0,0" 
-                        MouseEnter="Stack_Button_Find_Song_Info_MouseEnter" MouseLeave="Stack_Button_Find_Song_Info_MouseLeave" 
-                        
-                        >
-                    <Image Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
-                       Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/匹配.png" VerticalAlignment="Stretch"/>
-                    <TextBlock HorizontalAlignment="Left" Text="匹配歌曲" Margin="35,-18,0,0"/>
-                </StackPanel>
-                <StackPanel x:Name="Stack_Button_ThisPcSong_Find" Height="28" VerticalAlignment="Top" Margin="0,-64,0,0" 
-                        MouseEnter="Stack_Button_ThisPcSong_Find_MouseEnter" MouseLeave="Stack_Button_ThisPcSong_Find_MouseLeave" 
-                        
-                        >
-                    <Image Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
-                       Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/云.png" VerticalAlignment="Stretch"/>
-                    <TextBlock HorizontalAlignment="Left" Text="本地歌曲恢复助手" Margin="35,-18,0,0"/>
-                </StackPanel>
-                <StackPanel x:Name="Stack_Button_Update_Song_Better" Height="28" VerticalAlignment="Top" Margin="0,-36,0,0" 
-                        MouseEnter="Stack_Button_Update_Song_Better_MouseEnter" MouseLeave="Stack_Button_Update_Song_Better_MouseLeave" 
-                        
-                        >
-                    <Image Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
-                       Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/升级.png" VerticalAlignment="Stretch"/>
-                    <TextBlock HorizontalAlignment="Left" Text="升级音质" Margin="35,-18,0,0"/>
+                <StackPanel x:Name="Stack_Button_Add_PC_ALL_Song" Height="28" VerticalAlignment="Top" Margin="0,-35,0,0">
+                    <TextBlock Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
+                           VerticalAlignment="Stretch">
+                            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/复制.svg"/>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Foreground="White"
+                               Text="添加本地歌曲文件夹" Margin="35,-18,0,0"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

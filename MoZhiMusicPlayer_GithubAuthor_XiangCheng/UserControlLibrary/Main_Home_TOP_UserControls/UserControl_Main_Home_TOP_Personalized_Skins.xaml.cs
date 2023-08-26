@@ -100,15 +100,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             imageBrush.Stretch = Stretch.UniformToFill;
             Border_this_app_Background_2.Background = imageBrush;
 
-            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/EXO.jpg")));
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/JEON SOMI.jpg")));
             imageBrush.Stretch = Stretch.UniformToFill;
             Border_this_app_Background_3.Background = imageBrush;
 
-            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/Twice.jpg")));
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/BLACKPINK.jpg")));
             imageBrush.Stretch = Stretch.UniformToFill;
             Border_this_app_Background_4.Background = imageBrush;
 
-            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/WINNER.jpg")));
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/EXO.jpg")));
             imageBrush.Stretch = Stretch.UniformToFill;
             Border_this_app_Background_5.Background = imageBrush;
 

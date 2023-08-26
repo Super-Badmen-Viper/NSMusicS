@@ -169,8 +169,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
             }
         }
 
-        private ImageBrush _song_Like_Image;
-        public ImageBrush Song_Like_Image
+        private Uri _song_Like_Image;
+        public Uri Song_Like_Image
         {
             get
             {
@@ -186,8 +186,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
             }
         }
 
-        private ImageBrush _song_MV_Image;
-        public ImageBrush Song_MV_Image
+        private Uri _song_MV_Image;
+        public Uri Song_MV_Image
         {
             get
             {

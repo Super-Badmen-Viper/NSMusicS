@@ -4,108 +4,77 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_TOP_UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="77" d:DesignWidth="800" Background="#1F1F1F">
     <Grid>
+        <Border 
+            Margin="60,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            BorderBrush="#6AD2FF" BorderThickness="0,0,0,2">
+            <TextBlock 
+                Text="音乐" Foreground="White"
+                FontSize="26" Margin="0,0,0,8"/>
+        </Border>
 
-        <Image HorizontalAlignment="Right" Height="24" VerticalAlignment="Stretch" Width="24" 
-               Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/初学者.jpg" Margin="0,0,423,0"
-               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-               >
-            <Image.Clip>
-                <EllipseGeometry RadiusX="12" RadiusY="12" Center="12,12"/>
-            </Image.Clip>
-        </Image>
-
-        <TextBlock HorizontalAlignment="Right" Height="14" 
-                   Text="就是爱音乐" TextWrapping="Wrap" 
-                   VerticalAlignment="Stretch" Width="65" 
-                   Margin="0,0,347,0" Foreground="#FF7C7C7C"
-                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                   />
+        <Border 
+            Margin="140,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            BorderBrush="{x:Null}" BorderThickness="0,0,0,2">
+            <TextBlock 
+                Text="广播" Foreground="#44FFFFFF"
+                FontSize="26" Margin="0,0,0,8"/>
+        </Border>
+        <Border 
+            Margin="220,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            BorderBrush="{x:Null}" BorderThickness="0,0,0,2">
+            <TextBlock 
+                Text="专业" Foreground="#44FFFFFF"
+                FontSize="26" Margin="0,0,0,8"/>
+        </Border>
 
         <Button 
             x:Name="Button_Personalized_Skin"
             Style="{StaticResource MyButton}"
-                HorizontalAlignment="Right" Height="14" Width="16" Margin="0,31,198,32"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Right" Height="20" Width="20" Margin="0,0,175,0"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" VerticalAlignment="Center"  
                 >
-            <Button.Background>
-                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/皮肤.png"/>
-            </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="#CECECE" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/皮肤.svg"/>
         </Button>
         <Button 
-            
+            x:Name="Button_App_Setting"
             Style="{StaticResource MyButton}"
-                HorizontalAlignment="Right" Height="18" Width="18" Cursor="Hand" Margin="0,29,167,30"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+            HorizontalAlignment="Right" Height="20" Width="20" Cursor="Hand" Margin="0,0,140,0"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" VerticalAlignment="Center"  
                 >
-            <Button.Background>
-                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/菜单.png"/>
-            </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="#CECECE" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
-        </Button>
-        <Button 
-            x:Name="Button_Streamlined"
-            Style="{StaticResource MyButton}"
-                HorizontalAlignment="Right" Height="16" 
-                VerticalAlignment="Stretch" Width="16" Margin="0,0,123,0"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                >
-            <Button.Background>
-                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/Streamlined mode.png"/>
-            </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="#CECECE" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/设置.svg"/>
         </Button>
         <Button 
             x:Name="Button_Min"
             Style="{StaticResource MyButton}"
-                HorizontalAlignment="Right" Height="20" 
-                VerticalAlignment="Stretch" Width="20" Cursor="Hand" Margin="0,0,90,0"
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Right" Height="16" 
+                VerticalAlignment="Stretch" Width="16" Cursor="" Margin="0,0,100,0"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            Background="#02FFFFFF"  
                 >
-            <Button.Background>
-                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/最小化.png"/>
-            </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="#CECECE" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/最小化.svg"/>
         </Button>
         <Button 
             x:Name="Button_Max"
             Style="{StaticResource MyButton}"
-                HorizontalAlignment="Right" Height="14" Width="14" 
+                HorizontalAlignment="Right" Height="16" Width="16" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,31,65,32" Cursor="Hand" 
+                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,65,0" Cursor="Hand" VerticalAlignment="Center" 
                 >
-            <Button.Background>
-                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/最大化.png" Stretch="Uniform"/>
-            </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="#CECECE" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/最大化.svg"/>
         </Button>
         <Button 
             x:Name="Button_Exit"
             Style="{StaticResource MyButton}"
-                HorizontalAlignment="Right" Height="20" 
-                VerticalAlignment="Stretch" Width="20" Cursor="Hand" Margin="0,0,20,0"
+                HorizontalAlignment="Right" Height="16" 
+                VerticalAlignment="Stretch" Width="16" Cursor="Hand" Margin="0,0,30,0"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 >
-            <Button.Background>
-                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/关闭.png"/>
-            </Button.Background>
-            <Button.Effect>
-                <DropShadowEffect Color="#CECECE" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/关闭.svg"/>
         </Button>
     </Grid>
 </UserControl>

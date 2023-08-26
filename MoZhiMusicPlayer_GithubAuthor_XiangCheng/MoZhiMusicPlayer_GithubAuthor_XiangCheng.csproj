@@ -311,6 +311,8 @@
     <None Remove="ico_ui_library\错误.png" />
     <None Remove="ico_ui_library\随机播放_32 %281%29.png" />
     <None Remove="ico_ui_library\随机播放_32.png" />
+    <None Remove="ico_ui_library\静音 %281%29.png" />
+    <None Remove="ico_ui_library\静音.png" />
     <None Remove="ico_ui_library\音乐 %281%29.png" />
     <None Remove="ico_ui_library\音乐.png" />
     <None Remove="ico_ui_library\音乐娱乐 %281%29.png" />
@@ -334,14 +336,144 @@
     <None Remove="Resource\EXO-K.jpg" />
     <None Remove="Resource\lotto.jpg" />
     <None Remove="Resource\Obsession.jpg" />
+    <None Remove="UI_0_Library\上.svg" />
+    <None Remove="UI_0_Library\上一首.svg" />
+    <None Remove="UI_0_Library\下02.svg" />
+    <None Remove="UI_0_Library\下一首.svg" />
+    <None Remove="UI_0_Library\下载.svg" />
+    <None Remove="UI_0_Library\专辑.svg" />
+    <None Remove="UI_0_Library\主页.svg" />
+    <None Remove="UI_0_Library\乐谱.svg" />
+    <None Remove="UI_0_Library\云上传.svg" />
+    <None Remove="UI_0_Library\任务查询.svg" />
+    <None Remove="UI_0_Library\公告.svg" />
+    <None Remove="UI_0_Library\关闭.svg" />
+    <None Remove="UI_0_Library\列表.svg" />
+    <None Remove="UI_0_Library\列表循环.svg" />
+    <None Remove="UI_0_Library\删除.svg" />
+    <None Remove="UI_0_Library\刷新.svg" />
+    <None Remove="UI_0_Library\单曲循环.svg" />
+    <None Remove="UI_0_Library\听歌识曲.svg" />
+    <None Remove="UI_0_Library\启动.svg" />
+    <None Remove="UI_0_Library\均衡器.svg" />
+    <None Remove="UI_0_Library\壁纸.svg" />
+    <None Remove="UI_0_Library\声音_实体.svg" />
+    <None Remove="UI_0_Library\复制.svg" />
+    <None Remove="UI_0_Library\复选框-全选.svg" />
+    <None Remove="UI_0_Library\多媒体.svg" />
+    <None Remove="UI_0_Library\定时.svg" />
+    <None Remove="UI_0_Library\左翻页.svg" />
+    <None Remove="UI_0_Library\已收藏.svg" />
+    <None Remove="UI_0_Library\开关-关.svg" />
+    <None Remove="UI_0_Library\开关-开.svg" />
+    <None Remove="UI_0_Library\批量操作.svg" />
+    <None Remove="UI_0_Library\提醒.svg" />
+    <None Remove="UI_0_Library\搜索01.svg" />
+    <None Remove="UI_0_Library\播放.svg" />
+    <None Remove="UI_0_Library\播放列表.svg" />
+    <None Remove="UI_0_Library\播放队列.svg" />
+    <None Remove="UI_0_Library\操作-刷新.svg" />
+    <None Remove="UI_0_Library\操作-排序-降序.svg" />
+    <None Remove="UI_0_Library\操作-编辑.svg" />
+    <None Remove="UI_0_Library\收缩上箭头.svg" />
+    <None Remove="UI_0_Library\收缩下箭头.svg" />
+    <None Remove="UI_0_Library\收藏.svg" />
+    <None Remove="UI_0_Library\时间01.svg" />
+    <None Remove="UI_0_Library\暂停.svg" />
+    <None Remove="UI_0_Library\最大化.svg" />
+    <None Remove="UI_0_Library\最小化.svg" />
+    <None Remove="UI_0_Library\服务器.svg" />
+    <None Remove="UI_0_Library\本地.svg" />
+    <None Remove="UI_0_Library\歌词.svg" />
+    <None Remove="UI_0_Library\歌词未点击.svg" />
+    <None Remove="UI_0_Library\添加的副本.svg" />
+    <None Remove="UI_0_Library\猜你喜欢.svg" />
+    <None Remove="UI_0_Library\皮肤.svg" />
+    <None Remove="UI_0_Library\符号-筛选.svg" />
+    <None Remove="UI_0_Library\设置.svg" />
+    <None Remove="UI_0_Library\语音.svg" />
+    <None Remove="UI_0_Library\软件更新.svg" />
+    <None Remove="UI_0_Library\返回.svg" />
+    <None Remove="UI_0_Library\锁.svg" />
+    <None Remove="UI_0_Library\随机播放.svg" />
+    <None Remove="UI_0_Library\静音.svg" />
+    <None Remove="UI_0_Library\音效.svg" />
+    <None Remove="UI_0_Library\音量.svg" />
+    <None Remove="UI_0_Library\音量01.svg" />
+    <None Remove="UI_0_Library\顺序播放.svg" />
+    <None Remove="UI_0_Library\麦克风.svg" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="墨智音乐.ico" />
+    <Resource Include="UI_0_Library\上.svg" />
+    <Resource Include="UI_0_Library\上一首.svg" />
+    <Resource Include="UI_0_Library\下02.svg" />
+    <Resource Include="UI_0_Library\下一首.svg" />
+    <Resource Include="UI_0_Library\下载.svg" />
+    <Resource Include="UI_0_Library\主页.svg" />
+    <Resource Include="UI_0_Library\乐谱.svg" />
+    <Resource Include="UI_0_Library\云上传.svg" />
+    <Resource Include="UI_0_Library\任务查询.svg" />
+    <Resource Include="UI_0_Library\公告.svg" />
+    <Resource Include="UI_0_Library\关闭.svg" />
+    <Resource Include="UI_0_Library\列表.svg" />
+    <Resource Include="UI_0_Library\列表循环.svg" />
+    <Resource Include="UI_0_Library\删除.svg" />
+    <Resource Include="UI_0_Library\刷新.svg" />
+    <Resource Include="UI_0_Library\单曲循环.svg" />
+    <Resource Include="UI_0_Library\听歌识曲.svg" />
+    <Resource Include="UI_0_Library\启动.svg" />
+    <Resource Include="UI_0_Library\均衡器.svg" />
+    <Resource Include="UI_0_Library\壁纸.svg" />
+    <Resource Include="UI_0_Library\声音_实体.svg" />
+    <Resource Include="UI_0_Library\复制.svg" />
+    <Resource Include="UI_0_Library\复选框-全选.svg" />
+    <Resource Include="UI_0_Library\多媒体.svg" />
+    <Resource Include="UI_0_Library\定时.svg" />
+    <Resource Include="UI_0_Library\左翻页.svg" />
+    <Resource Include="UI_0_Library\已收藏.svg" />
+    <Resource Include="UI_0_Library\开关-关.svg" />
+    <Resource Include="UI_0_Library\开关-开.svg" />
+    <Resource Include="UI_0_Library\批量操作.svg" />
+    <Resource Include="UI_0_Library\提醒.svg" />
+    <Resource Include="UI_0_Library\搜索01.svg" />
+    <Resource Include="UI_0_Library\播放.svg" />
+    <Resource Include="UI_0_Library\播放列表.svg" />
+    <Resource Include="UI_0_Library\播放队列.svg" />
+    <Resource Include="UI_0_Library\操作-刷新.svg" />
+    <Resource Include="UI_0_Library\操作-编辑.svg" />
+    <Resource Include="UI_0_Library\收缩上箭头.svg" />
+    <Resource Include="UI_0_Library\收缩下箭头.svg" />
+    <Resource Include="UI_0_Library\收藏.svg" />
+    <Resource Include="UI_0_Library\时间01.svg" />
+    <Resource Include="UI_0_Library\暂停.svg" />
+    <Resource Include="UI_0_Library\最大化.svg" />
+    <Resource Include="UI_0_Library\最小化.svg" />
+    <Resource Include="UI_0_Library\服务器.svg" />
+    <Resource Include="UI_0_Library\本地.svg" />
+    <Resource Include="UI_0_Library\歌词.svg" />
+    <Resource Include="UI_0_Library\歌词未点击.svg" />
+    <Resource Include="UI_0_Library\添加的副本.svg" />
+    <Resource Include="UI_0_Library\猜你喜欢.svg" />
+    <Resource Include="UI_0_Library\皮肤.svg" />
+    <Resource Include="UI_0_Library\符号-筛选.svg" />
+    <Resource Include="UI_0_Library\设置.svg" />
+    <Resource Include="UI_0_Library\语音.svg" />
+    <Resource Include="UI_0_Library\软件更新.svg" />
+    <Resource Include="UI_0_Library\返回.svg" />
+    <Resource Include="UI_0_Library\锁.svg" />
+    <Resource Include="UI_0_Library\随机播放.svg" />
+    <Resource Include="UI_0_Library\静音.svg" />
+    <Resource Include="UI_0_Library\音效.svg" />
+    <Resource Include="UI_0_Library\音量.svg" />
+    <Resource Include="UI_0_Library\顺序播放.svg" />
+    <Resource Include="UI_0_Library\麦克风.svg" />
+    <Resource Include="墨智音乐.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
     <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="12.2.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
@@ -350,6 +482,7 @@
     <PackageReference Include="MySql.Data" Version="8.0.33" />
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="SharpVectors.Wpf" Version="1.8.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="TagLibSharp" Version="2.3.0" />
     <PackageReference Include="Unnoficial.Microsoft.Expression.Drawing" Version="1.0.0" />
@@ -668,6 +801,8 @@
     <Resource Include="ico_ui_library\错误.png" />
     <Resource Include="ico_ui_library\随机播放_32 (1).png" />
     <Resource Include="ico_ui_library\随机播放_32.png" />
+    <Resource Include="ico_ui_library\静音 (1).png" />
+    <Resource Include="ico_ui_library\静音.png" />
     <Resource Include="ico_ui_library\音乐 (1).png" />
     <Resource Include="ico_ui_library\音乐.png" />
     <Resource Include="ico_ui_library\音乐娱乐 (1).png" />

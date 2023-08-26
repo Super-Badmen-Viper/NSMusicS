@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main"
              xmlns:Main_UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_UserControls"
-             
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
@@ -240,7 +240,6 @@
                                                     LineHeight="33"
                                                     x:Name="Text_TextBlock"
                                                     Text="{Binding Song_MRC_Line}"
-                                                    FontWeight="ExtraBlack"
                                                     IsHitTestVisible="False" Focusable="False" IsEnabled="False" 
                                                     >
                                                 <TextBlock.Triggers>
@@ -265,8 +264,8 @@
                                                 </TextBlock.Foreground>
                                             </TextBlock>
                                             <TextBlock 
-                                                Margin="0,-8,0,0"
-                                                FontSize="18" FontWeight="ExtraBlack"
+                                                Margin="0,-2,0,0"
+                                                FontSize="18"
                                                 Text="{Binding Song_CRC_Line}"
                                                 >
                                             </TextBlock>
@@ -279,7 +278,7 @@
                 </ListView>
                 <!-- 掩盖ListViewMRC,形成不同层次 -->
                 <TextBox x:Name="TextBox_ListViewMRC_Up" 
-                     Margin="140,100,0,90" Width="999" Height="490"
+                     Margin="140,100,0,90" Width="2000" Height="490"
                      TextWrapping="Wrap" Text="TextBox" BorderBrush="{x:Null}" Background="{x:Null}" SelectionBrush="{x:Null}" Foreground="{x:Null}" 
                      HorizontalAlignment="Left" UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5">
                     <TextBox.RenderTransform>
@@ -302,7 +301,7 @@
                     x:Name="ListView_Temp_MRC_Temp" Background="{x:Null}" BorderBrush="{x:Null}" 
                     Foreground="White" FontSize="20" FontWeight="ExtraBold"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                    Margin="140,100,0,90" Width="999" Height="490"
+                    Margin="140,100,0,90" Width="2000" Height="490"
                     BorderThickness="0" IsSynchronizedWithCurrentItem="False" Focusable="False" 
                     IsTextSearchEnabled="False" HorizontalContentAlignment="Left" 
                     VerticalContentAlignment="Stretch" HorizontalAlignment="Left"                
@@ -361,7 +360,7 @@
                     </ListView.Resources>
                     <ListView.View>
                         <GridView AllowsColumnReorder="True">
-                            <GridViewColumn Width="555" x:Name="ListView_Temp_MRC_Temp_GridViewColumn">
+                            <GridViewColumn Width="2000" x:Name="ListView_Temp_MRC_Temp_GridViewColumn">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock HorizontalAlignment="Stretch"
@@ -418,9 +417,6 @@
                             Margin="145,-630,0,0" 
                             Visibility="Collapsed"
                             >
-                    <TextBlock.Effect>
-                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                    </TextBlock.Effect>
                 </TextBlock>
                 <TextBlock x:Name="TextBox_SingerName"  
                             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
@@ -433,9 +429,6 @@
                             Margin="145,-566,0,0" 
                             Visibility="Collapsed"
                             >
-                    <TextBlock.Effect>
-                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                    </TextBlock.Effect>
                 </TextBlock>
                 <TextBlock x:Name="TextBox_SongAlbumName"   
                            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
@@ -447,19 +440,14 @@
                            Margin="145,-520,0,0"
                            Visibility="Collapsed"
                            >
-                    <TextBlock.Effect>
-                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                    </TextBlock.Effect>
                 </TextBlock>
 
                 <Button 
                 x:Name="Button_Return_MainWindow"
-                Style="{StaticResource MyButton}" Content=""  
+                Style="{StaticResource MyButton}" 
                 Width="18" Height="18" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,21,0,0"
                 >
-                    <Button.Background>
-                        <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/下-01.png"/>
-                    </Button.Background>
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/下02.svg"/>
                     <Button.Effect>
                         <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
                     </Button.Effect>
@@ -468,44 +456,29 @@
                 <Button 
             x:Name="Button_Min"
             Style="{StaticResource MyButton}"
-                HorizontalAlignment="Right" Height="20" 
-                VerticalAlignment="Top" Width="20" Cursor="Hand" Margin="0,13,80,0"
+                HorizontalAlignment="Right" Height="16" 
+                VerticalAlignment="Top" Width="16" Cursor="Hand" Margin="0,20,100,0"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 >
-                    <Button.Background>
-                        <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/最小化.png"/>
-                    </Button.Background>
-                    <Button.Effect>
-                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                    </Button.Effect>
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/最小化.svg"/>
                 </Button>
                 <Button 
             x:Name="Button_Max"
             Style="{StaticResource MyButton}"
-                HorizontalAlignment="Right" Height="14" Width="14" 
+                HorizontalAlignment="Right" Height="16" Width="16" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,16,53,0" Cursor="Hand" VerticalAlignment="Top" 
+                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,20,65,0" Cursor="Hand" VerticalAlignment="Top" 
                 >
-                    <Button.Background>
-                        <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/最大化.png" Stretch="Uniform"/>
-                    </Button.Background>
-                    <Button.Effect>
-                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                    </Button.Effect>
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/最大化.svg"/>
                 </Button>
                 <Button 
             x:Name="Button_Exit"
             Style="{StaticResource MyButton}"
-                HorizontalAlignment="Right" Height="20" 
-                VerticalAlignment="Top" Width="20" Cursor="Hand" Margin="0,13,22,0"
+                HorizontalAlignment="Right" Height="16" 
+                VerticalAlignment="Top" Width="16" Cursor="Hand" Margin="0,20,30,0"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 >
-                    <Button.Background>
-                        <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/关闭.png"/>
-                    </Button.Background>
-                    <Button.Effect>
-                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                    </Button.Effect>
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/关闭.svg"/>
                 </Button>
             </Grid>
         </Grid>
@@ -519,7 +492,7 @@
                 <Canvas.Triggers>
                     <EventTrigger RoutedEvent="FrameworkElement.MouseRightButtonDown">
                         <BeginStoryboard>
-                            <Storyboard x:Name="StoryBorad_Singing_Mode" Timeline.DesiredFrameRate="30">
+                            <Storyboard x:Name="StoryBorad_Singing_Mode" Timeline.DesiredFrameRate="60">
                                 <DoubleAnimationUsingKeyFrames
                                     x:Name="DoubleAnimationUsingKeyFrames_TextBlock_Song_Name"
                                     RepeatBehavior="Forever"

@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vsm="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
         xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Windows_Song_Finds"
-        mc:Ignorable="d" 
-             Height="710" Width="1040" 
-             MinHeight="710" MinWidth="1040">
+        mc:Ignorable="d"
+        WindowStyle="None" AllowsTransparency="True"
+        ResizeMode="CanResizeWithGrip" 
+        Height="710" Width="1040" 
+        MinHeight="710" MinWidth="1040">
     <Grid>
         <ListBox x:Name="ListBox_Test" 
                 
