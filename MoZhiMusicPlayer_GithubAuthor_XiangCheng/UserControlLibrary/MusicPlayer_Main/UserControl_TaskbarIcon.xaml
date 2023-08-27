@@ -119,12 +119,11 @@
                                 </Slider>
                             </StackPanel>
                             <StackPanel 
-                                x:Name="Open_Desktop_Lyic"
                                 Height="40" Margin="0,40,0,0"
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Top">
                                 <TextBlock 
-                                    Height="20" Width="20" Margin="14,0,0,0"
+                                    Height="20" Width="20" Margin="12,0,0,0"
                                     HorizontalAlignment="Left" VerticalAlignment="Center">
                                     <svgc:SvgViewbox 
                                         x:Name="SvgViewbox_Open_Desktop_Lyic"
@@ -170,8 +169,7 @@
                                     Foreground="#44FFFFFF" Text="锁定桌面歌词"
                                 />
                             </StackPanel>
-                            <StackPanel 
-                                x:Name="Close_ThisApp"
+                            <StackPanel  
                                 Height="40" Margin="0,160,0,0"
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Top">
@@ -183,6 +181,7 @@
                                         Source="pack://application:,,,/UI_0_Library/启动.svg" Cursor="Hand"/>
                                 </TextBlock>
                                 <TextBlock 
+                                    x:Name="Close_ThisApp"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     TextAlignment="Left" Margin="12,0,0,0"

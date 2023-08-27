@@ -57,7 +57,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
             Panel_Lyic_Show.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
 
             Panel_Player_Set.Visibility = Visibility.Collapsed;
-            //Panel_DeskLyic_Setting.Visibility = Visibility.Collapsed;
+            Panel_DeskLyic_Setting.Visibility = Visibility.Collapsed;
         }
 
         private void Panel_DeskLyic_Setting_MouseLeave(object sender, MouseEventArgs e)

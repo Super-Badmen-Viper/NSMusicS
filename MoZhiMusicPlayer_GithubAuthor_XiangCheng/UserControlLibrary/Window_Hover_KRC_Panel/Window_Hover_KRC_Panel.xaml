@@ -217,6 +217,20 @@
                     <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
                 </Button.Effect>
             </Button>
+
+            <Button x:Name="Button_Lyic_CLose" 
+                Style="{StaticResource MyButton}"
+                Height="26" Width="28" 
+                BorderBrush="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                    HorizontalAlignment="Center" VerticalAlignment="Bottom" 
+                    Margin="240,0,0,158" Click="Button_Lyic_Setting_Click" Cursor="Hand">
+                <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/启动.svg" Cursor="Hand"/>
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </Button.Effect>
+            </Button>
         </Grid>
         
         

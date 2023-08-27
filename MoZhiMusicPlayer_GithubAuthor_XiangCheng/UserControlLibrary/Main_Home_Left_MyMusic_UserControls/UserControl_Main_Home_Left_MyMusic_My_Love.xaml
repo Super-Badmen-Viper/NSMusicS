@@ -29,9 +29,10 @@
                    >
             </TextBlock>
             <StackPanel
-            HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="40,90,0,0"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-            MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"          
+                x:Name="Stack_Add_Song_Info"
+                HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="40,90,0,0"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"          
             >
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 

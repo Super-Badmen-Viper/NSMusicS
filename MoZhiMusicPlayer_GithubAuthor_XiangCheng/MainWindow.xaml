@@ -344,6 +344,7 @@
                 
                     />
 
+                <!--
                 <MediaElement LoadedBehavior="Manual" UnloadedBehavior="Manual" 
                           x:Name="MediaElement_Song" 
                           Width="0" Height="0" 
@@ -352,7 +353,7 @@
                           UseLayoutRounding="True" SnapsToDevicePixels="True" Volume="1"  
                           Source="{Binding MediaElement_Song_Url}" 
                           />
-
+                -->
             </Grid>
         </Grid>
 

@@ -67,6 +67,12 @@
     <Compile Update="UserControlLibrary\Main_UserControls\UserControl_Mrc_Byte.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControlLibrary\Main_UserControls\UserControl_Select_Folder_Of_SongAdd.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_UserControls\UserControl_VerticalRectangle.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Animation\UserControl_Animation_1.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -157,6 +163,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\Main_UserControls\UserControl_Mrc_Byte.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_UserControls\UserControl_Select_Folder_Of_SongAdd.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_UserControls\UserControl_VerticalRectangle.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Animation\UserControl_Animation_1.xaml">

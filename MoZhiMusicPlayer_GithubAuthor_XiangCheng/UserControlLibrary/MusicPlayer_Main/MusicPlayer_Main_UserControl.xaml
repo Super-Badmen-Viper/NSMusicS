@@ -11,7 +11,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="690" MinWidth="1020" 
              Height="690" Width="1020" 
-             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor"  
+             UseLayoutRounding="True" SnapsToDevicePixels="True"  
              >
     <Grid>
         <Grid x:Name="Grid_Animation">
@@ -178,7 +178,7 @@
                             <Setter Property="BorderThickness" Value="0"/>
                         </Style>
                         <!--ListViewItem的选中透明样式-->
-                        <Style  TargetType="{x:Type ListViewItem}">
+                        <Style TargetType="{x:Type ListViewItem}">
                             <!-- 边框大小 -->
                             <Setter Property="BorderThickness" Value="0"/>
                             <!-- 边框颜色 -->

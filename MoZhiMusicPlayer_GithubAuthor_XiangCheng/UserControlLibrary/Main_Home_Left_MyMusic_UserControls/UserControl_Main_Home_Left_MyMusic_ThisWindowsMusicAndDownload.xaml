@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:sort="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl"
+             xmlns:Main_UserControls ="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_UserControls"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
@@ -31,9 +32,10 @@
             </TextBlock>
 
             <StackPanel
-            HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="40,90,0,0"
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-            MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"          
+                x:Name="Stack_Add_Song_Info"
+                HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="40,90,0,0"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"          
             >
                 <Border HorizontalAlignment="Stretch" 
                     BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
@@ -358,9 +360,9 @@
 
         <Grid x:Name="Grid_NormalModel_2">
             <StackPanel x:Name="Stack_Panel_Add_Song"
-                Width="150" Height="100"  Margin="100,125,0,64" HorizontalAlignment="Left" VerticalAlignment="Top">
+                Width="150" Height="100"  Margin="100,125,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
 
-                <Grid Height="70">
+                <Grid Height="100">
                     <Rectangle                                        
                     RadiusX="5" RadiusY="5"
                     Fill="#44000000">
@@ -369,7 +371,7 @@
                         <ContentPresenter />
                     </Border>
                 </Grid>
-                <StackPanel x:Name="Stack_Button_Add_Select_Song" Height="28" VerticalAlignment="Top" Margin="0,-64,0,0" 
+                <StackPanel x:Name="Stack_Button_Add_Select_Song" Height="28" VerticalAlignment="Top" Margin="0,-94,0,0" 
                             >
                     <TextBlock Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
                            VerticalAlignment="Stretch">
@@ -378,15 +380,27 @@
                     <TextBlock HorizontalAlignment="Left" Foreground="White"
                                Text="添加本地歌曲" Margin="35,-18,0,0"/>
                 </StackPanel>
-                <StackPanel x:Name="Stack_Button_Add_PC_ALL_Song" Height="28" VerticalAlignment="Top" Margin="0,-35,0,0">
+                <StackPanel x:Name="Stack_Button_Add_PC_ALL_Song" Height="28" VerticalAlignment="Top" Margin="0,-65,0,0">
                     <TextBlock Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
                            VerticalAlignment="Stretch">
                             <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/复制.svg"/>
                     </TextBlock>
                     <TextBlock HorizontalAlignment="Left" Foreground="White"
-                               Text="添加本地歌曲文件夹" Margin="35,-18,0,0"/>
+                               Text="添加本地歌曲文件夹 " Margin="35,-18,0,0"/>
+                </StackPanel>
+                <StackPanel x:Name="Stack_Button_Add_PC_Select_Folder" Height="28" VerticalAlignment="Top" Margin="0,-35,0,0">
+                    <TextBlock Height="20" Margin="10,4,0,0" Width="20" HorizontalAlignment="Left" 
+                               VerticalAlignment="Stretch" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown" >
+                                <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/复制.svg"/>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Foreground="White"
+                                   Text="手动扫描歌曲 " Margin="35,-18,0,0" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown_1" />
                 </StackPanel>
             </StackPanel>
         </Grid>
+
+        <Main_UserControls:UserControl_Select_Folder_Of_SongAdd 
+            x:Name="userControl_Select_Folder_Of_SongAdd" Visibility="Collapsed"
+            HorizontalAlignment="Left" Margin="300,0,0,0"/>
     </Grid>
 </UserControl>

@@ -485,7 +485,6 @@
     <PackageReference Include="SharpVectors.Wpf" Version="1.8.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="TagLibSharp" Version="2.3.0" />
-    <PackageReference Include="Unnoficial.Microsoft.Expression.Drawing" Version="1.0.0" />
     <PackageReference Include="VisioForge.DotNet.Core.TRIAL" Version="15.1.12" />
   </ItemGroup>
 

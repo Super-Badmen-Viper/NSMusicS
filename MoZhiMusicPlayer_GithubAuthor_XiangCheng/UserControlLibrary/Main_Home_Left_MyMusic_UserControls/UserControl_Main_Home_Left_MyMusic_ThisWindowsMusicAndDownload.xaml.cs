@@ -1034,5 +1034,28 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             }
         }
         #endregion
+
+        private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if(userControl_Select_Folder_Of_SongAdd.Visibility == Visibility.Collapsed)
+            {
+                userControl_Select_Folder_Of_SongAdd.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                userControl_Select_Folder_Of_SongAdd.Visibility = Visibility.Collapsed;
+            }
+        }
+        private void TextBlock_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
+        {
+            if (userControl_Select_Folder_Of_SongAdd.Visibility == Visibility.Collapsed)
+            {
+                userControl_Select_Folder_Of_SongAdd.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                userControl_Select_Folder_Of_SongAdd.Visibility = Visibility.Collapsed;
+            }
+        }
     }
 }
