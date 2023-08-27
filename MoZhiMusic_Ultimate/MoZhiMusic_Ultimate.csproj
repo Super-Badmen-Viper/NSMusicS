@@ -184,12 +184,12 @@
 
   <ItemGroup>
     <PackageReference Include="AduSkin" Version="1.1.1.9" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
-    <PackageReference Include="NAudio" Version="2.1.0" />
-    <PackageReference Include="VisioForge.DotNet.Core" Version="15.5.81" />
+    <PackageReference Include="NAudio" Version="2.2.0" />
+    <PackageReference Include="VisioForge.DotNet.Core" Version="15.6.5" />
   </ItemGroup>
 
   <ItemGroup>
