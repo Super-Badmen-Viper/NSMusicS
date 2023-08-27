@@ -3952,18 +3952,18 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     viewModule_Search_Song.MediaElement_Song_Url = new Uri(path);
                     this_Song_Info.Song_Url = viewModule_Search_Song.MediaElement_Song_Url.ToString();
 
-                    mediaElement_Song.waveOutEvent.PlaybackStopped -= mediaElement_Song_MediaEnded;
-                    mediaElement_Song.Open(path);
-                    Load_mediaElement_Song_MediaOpened();
-                    //mediaElement_Song.MediaOpened += mediaElement_Song_MediaOpened;
-                    mediaElement_Song.waveOutEvent.PlaybackStopped += mediaElement_Song_MediaEnded;
-
                     //保存当前正在播放的歌曲信息
                     this_Song_Info.Song_No = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Song_No;
                     this_Song_Info.Song_Name = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Song_Name.Trim();
                     this_Song_Info.Singer_Name = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Singer_Name;
                     this_Song_Info.Song_Url = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Song_Url;
                     this_Song_Info.Album_Name = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Album_Name;
+
+                    mediaElement_Song.waveOutEvent.PlaybackStopped -= mediaElement_Song_MediaEnded;
+                    mediaElement_Song.Open(path);
+                    Load_mediaElement_Song_MediaOpened();
+                    //mediaElement_Song.MediaOpened += mediaElement_Song_MediaOpened;
+                    mediaElement_Song.waveOutEvent.PlaybackStopped += mediaElement_Song_MediaEnded;
 
                     //开始播放
                     //mediaElement_Song.Play();
