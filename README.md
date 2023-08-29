@@ -4,7 +4,7 @@
 - Demo effect: B-site link:
 - - Latest version:[ https://www.bilibili.com/video/BV1rM411s7J9 ](https://www.bilibili.com/video/BV1Dc411g74T/?spm_id_from=333.999.0.0&vd_source=6e56ca0b155a60e6a6878e5775fdcc35)
 
-# [MZMusic](https://github.com/MZMusic/MZMusic) will use Electron+Vue3+Vite to refactor and deploy to Linux/Mac/Web
+# [MZMusic](https://github.com/MZMusic/MZMusic) will use Electron+Vue3+React+Vite to refactor and deploy to Linux/Mac/Web
 # (Electron - Version) ：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
 - - The current WPF(Windows) version will serve as a reference for the Electron(Linux/Mac/Web) version
 - In addition to the functions of normal music software, I will develop K songs(karaoke) and score singing functions for the Electron version
