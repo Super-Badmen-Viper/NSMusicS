@@ -17,7 +17,6 @@
 - 2. Support cross rotation of multi singer photo animations
 - 3. Audio dynamic spectrum animation
 - 4. Basic music player functions (no need to explain, there must be some)
-- Note: Low performance or system version may affect runtime performance (with some impact). WIn11 is recommended, as Win11 has special optimizations [doge]
 
 ## MZMusic: Future feature updates（for (Now Version):[MZMusic](https://github.com/MZMusic/MZMusic)
 - 1. identify songs module based on sound fingerprint technology (also open source as a separate project model)
