@@ -4,7 +4,7 @@
 - - 最新版：[https://www.bilibili.com/video/BV1rM411s7J9](https://www.bilibili.com/video/BV1Dc411g74T/?spm_id_from=333.999.0.0&vd_source=6e56ca0b155a60e6a6878e5775fdcc35)
 - - 旧版：https://www.bilibili.com/video/BV1uG41137jY
 
-# [MZMusic](https://github.com/MZMusic/MZMusic)将使用Electron+Vue3+Vite进行重构并部署到Linux/Mac 
+# [MZMusic](https://github.com/MZMusic/MZMusic)将使用Electron+Vue3+React+Vite进行重构并部署到Linux/Mac 
 # （Electron 版本）[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic) 
 - 除了普通音乐软件的功能外，我将为Electron版开发K歌曲（卡拉OK）和配乐演唱功能
 - - 并将AI模型部署到服务器上，实现算法层和UI层的分离
