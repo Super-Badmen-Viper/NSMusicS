@@ -42,7 +42,7 @@
                                         <ControlTemplate TargetType="{x:Type Thumb}">
                                             <Grid>
                                                 <Border x:Name="thumb" BorderThickness="0" 
-                                                        Background="#4D4D4D" Height="{TemplateBinding Height}" 
+                                                        Background="White" Height="{TemplateBinding Height}" 
                                                         Width="8" CornerRadius="6"/>
                                             </Grid>
                                         </ControlTemplate>
@@ -72,7 +72,7 @@
                             <Border Grid.Column="1" CornerRadius="6"
                                 BorderThickness="0,1,1,1">
                                 <Border.BorderBrush>
-                                    <SolidColorBrush Color="Black"/>
+                                    <SolidColorBrush Color="White"/>
                                 </Border.BorderBrush>
                                 <ScrollContentPresenter CanContentScroll="{TemplateBinding CanContentScroll}" />
                             </Border>

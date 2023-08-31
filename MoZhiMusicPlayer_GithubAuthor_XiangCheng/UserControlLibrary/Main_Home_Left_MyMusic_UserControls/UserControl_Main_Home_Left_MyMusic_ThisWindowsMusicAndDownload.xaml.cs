@@ -982,7 +982,21 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                     songList_Infos_Current_Playlist);
                 if (temp == null)//如果没有重复的歌曲，则添加
                 {
-                    songList_Infos_Current_Playlist.Add((Song_Info)Song_Info_Selects[i]);
+                    Song_Info newSongInfo = new Song_Info();
+                    newSongInfo.Song_Name = ((Song_Info)Song_Info_Selects[i]).Song_Name;
+                    newSongInfo.Singer_Name = ((Song_Info)Song_Info_Selects[i]).Singer_Name;
+                    newSongInfo.Album_Name = ((Song_Info)Song_Info_Selects[i]).Album_Name;
+                    newSongInfo.Song_Url = ((Song_Info)Song_Info_Selects[i]).Song_Url;
+                    newSongInfo.Song_Duration = ((Song_Info)Song_Info_Selects[i]).Song_Duration;
+                    newSongInfo.Song_No = ((Song_Info)Song_Info_Selects[i]).Song_No;
+                    newSongInfo.Song_Like = ((Song_Info)Song_Info_Selects[i]).Song_Like;
+                    newSongInfo.MV_Path = ((Song_Info)Song_Info_Selects[i]).MV_Path;
+                    newSongInfo.IsChecked = ((Song_Info)Song_Info_Selects[i]).IsChecked;
+                    newSongInfo.Song_Like_Image = ((Song_Info)Song_Info_Selects[i]).Song_Like_Image;
+                    newSongInfo.Song_MV_Image = ((Song_Info)Song_Info_Selects[i]).Song_MV_Image;
+                    newSongInfo.Bool_Playing = ((Song_Info)Song_Info_Selects[i]).Bool_Playing;
+
+                    songList_Infos_Current_Playlist.Add(newSongInfo);
                 }
             }
             //排序

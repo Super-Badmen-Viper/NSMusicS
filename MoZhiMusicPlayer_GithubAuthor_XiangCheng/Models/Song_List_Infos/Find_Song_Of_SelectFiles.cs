@@ -41,8 +41,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
             {
                 await Task.Run(() =>
                 {
-                    MessageBox.Show("点击此框内的确认，然后请等待，且不要进行任何操作");
-
                     List<string> song_url = new List<string>(dialog.FileNames);
                     ObservableCollection<Song_Info> list_Song_Info = SongInfo_Take(song_url);
 
@@ -154,8 +152,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
             {
                 await Task.Run(() =>
                 {
-                    MessageBox.Show("点击此框内的确认，然后请等待，且不要进行任何操作");
-
                     // 使用 Task.Run 在后台线程执行耗时操作
                     List<string> songUrls = SearchAudioFilesInFolder(folderDialog.SelectedPath);
 
@@ -245,6 +241,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
                         Check_LoveSong_In_LoveSongList_Reset_SongList_Info();
                         #endregion
                     });
+
+                    tcs.SetResult(Select_List);
                 });
             }
 
@@ -262,8 +260,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
 
             await Task.Run(() =>
             {
-                MessageBox.Show("点击此框内的确认，然后请等待，且不要进行任何操作");
-
                 List<string> songUrls = new List<string>();
                 for (int i = 0; i < Selects_SongList.Count; i++)
                 {
@@ -361,6 +357,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
                     Check_LoveSong_In_LoveSongList_Reset_SongList_Info();
                     #endregion
                 });
+
+                tcs.SetResult(Select_List);
             });
 
             return await tcs.Task;

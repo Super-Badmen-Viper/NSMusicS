@@ -215,6 +215,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         double curveFrequencyEnd = 2500d;
         private void MusicLineVisualDraw()
         {
+            curveFrequencyEnd = 2500d;
+
             int hz2500index = (int)(curveFrequencyEnd / frequencyPerIndex);
             double[] resultPaint = DftData.Take(hz2500index).ToArray(); // 106  0~105     71  1~71    ->>>   
 
@@ -228,7 +230,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
 
 
             //参数调整,为0则不执行
-            int size_1_SmoothData = 8;//预处理数据，第一次SmoothData平滑
+            int size_1_SmoothData = 3;//预处理数据，第一次SmoothData平滑
             int size_average = 40;//对animation_points超出的部分进行平均量增减(上下波动幅度)。
             double size_Error_point = 0.95;//超出频谱动画范围，重新设置为？
             int size_2_SmoothData = 8;//第二次SmoothData平滑
@@ -245,7 +247,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
                 for (int j = points.Length / 4; j < points.Length / 4 + points.Length / 2; j++)
                 {
                     animation_points.Add(points[i].Y);
-                    animation_points[animation_points.Count - 1] = (float)(animation_points[animation_points.Count - 1] / 100 - 0.3);
+                    animation_points[animation_points.Count - 1] = (float)(animation_points[animation_points.Count - 1] / 100 - 0.2);
                     break;
                 }
             }
@@ -322,6 +324,14 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
                     animation_points[animation_points.Count - 1 - i] = animation_points[i];
             }
             #endregion
+
+            //w,b参数
+            //对animation_points进行SmoothData平滑
+            if (size_2_SmoothData != 0)
+                animation_points = SmoothData(animation_points, size_2_SmoothData);
+
+            for (int i = 0; i < (int)(animation_points_Count / 4); i++)
+                animation_points[animation_points.Count - 1 - i] = animation_points[i];
         }
 
         #region 数据浓缩平滑所使用的函数

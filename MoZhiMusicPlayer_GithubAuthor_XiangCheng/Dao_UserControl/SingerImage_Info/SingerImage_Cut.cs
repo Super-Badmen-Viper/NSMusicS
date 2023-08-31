@@ -8,6 +8,7 @@ using System.IO;
 using Image = System.Drawing.Image;
 using System.Runtime.InteropServices;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_Info
 {
@@ -38,13 +39,21 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_I
         /// <param name="rows"></param>
         /// <param name="cols"></param>
         /// <returns></returns>
-        public ObservableCollection<ImageBrush> CutImage_ImageBrush(string tbImagePath)
+        public async Task<ObservableCollection<ImageBrush>> CutImage_ImageBrush(string tbImagePath)
         {
-            imageBrushs.Clear();
-            btCut(tbImagePath);
+            var tcs = new TaskCompletionSource<ObservableCollection<ImageBrush>>();
 
-            return imageBrushs;
+            await Task.Run(() =>
+            {
+                imageBrushs = new ObservableCollection<ImageBrush>();
+                btCut(tbImagePath);
+
+                tcs.SetResult(imageBrushs); // 设置结果到 TaskCompletionSource
+            });
+
+            return await tcs.Task;
         }
+
 
         //开始图片切割
         private void btCut(string tbImagePath)
@@ -95,8 +104,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.SingerImage_I
                         //bitmap.Save(Path.Combine(SavePath, dstImagePath));
 
                         //在WPF中，Image控件不支持Bitmap类型，但支持ImageSource类型，因此需要进行类型转换
-                        ImageSource imageSource = BitmapSourceConvert.ToBitmapSource(bitmap);
-                        imageBrushs.Add(new ImageBrush(imageSource));
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            ImageSource imageSource = BitmapSourceConvert.ToBitmapSource(bitmap);
+                            imageBrushs.Add(new ImageBrush(imageSource));
+                        });
                     }
                 }
             }

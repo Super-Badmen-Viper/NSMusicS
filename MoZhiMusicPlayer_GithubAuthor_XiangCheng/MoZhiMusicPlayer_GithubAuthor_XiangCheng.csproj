@@ -336,6 +336,7 @@
     <None Remove="Resource\EXO-K.jpg" />
     <None Remove="Resource\lotto.jpg" />
     <None Remove="Resource\Obsession.jpg" />
+    <None Remove="UI_0_Library\5J音波,音频.svg" />
     <None Remove="UI_0_Library\上.svg" />
     <None Remove="UI_0_Library\上一首.svg" />
     <None Remove="UI_0_Library\下02.svg" />
@@ -364,8 +365,11 @@
     <None Remove="UI_0_Library\定时.svg" />
     <None Remove="UI_0_Library\左翻页.svg" />
     <None Remove="UI_0_Library\已收藏.svg" />
+    <None Remove="UI_0_Library\帮助.svg" />
     <None Remove="UI_0_Library\开关-关.svg" />
     <None Remove="UI_0_Library\开关-开.svg" />
+    <None Remove="UI_0_Library\手机.svg" />
+    <None Remove="UI_0_Library\手机播放_手机视频.svg" />
     <None Remove="UI_0_Library\批量操作.svg" />
     <None Remove="UI_0_Library\提醒.svg" />
     <None Remove="UI_0_Library\搜索01.svg" />
@@ -387,9 +391,12 @@
     <None Remove="UI_0_Library\歌词.svg" />
     <None Remove="UI_0_Library\歌词未点击.svg" />
     <None Remove="UI_0_Library\添加的副本.svg" />
+    <None Remove="UI_0_Library\热键.svg" />
     <None Remove="UI_0_Library\猜你喜欢.svg" />
     <None Remove="UI_0_Library\皮肤.svg" />
     <None Remove="UI_0_Library\符号-筛选.svg" />
+    <None Remove="UI_0_Library\菜单.svg" />
+    <None Remove="UI_0_Library\设备互传.svg" />
     <None Remove="UI_0_Library\设置.svg" />
     <None Remove="UI_0_Library\语音.svg" />
     <None Remove="UI_0_Library\软件更新.svg" />
@@ -398,6 +405,7 @@
     <None Remove="UI_0_Library\随机播放.svg" />
     <None Remove="UI_0_Library\静音.svg" />
     <None Remove="UI_0_Library\音效.svg" />
+    <None Remove="UI_0_Library\音波,音频.svg" />
     <None Remove="UI_0_Library\音量.svg" />
     <None Remove="UI_0_Library\音量01.svg" />
     <None Remove="UI_0_Library\顺序播放.svg" />
@@ -432,8 +440,11 @@
     <Resource Include="UI_0_Library\定时.svg" />
     <Resource Include="UI_0_Library\左翻页.svg" />
     <Resource Include="UI_0_Library\已收藏.svg" />
+    <Resource Include="UI_0_Library\帮助.svg" />
     <Resource Include="UI_0_Library\开关-关.svg" />
     <Resource Include="UI_0_Library\开关-开.svg" />
+    <Resource Include="UI_0_Library\手机.svg" />
+    <Resource Include="UI_0_Library\手机播放_手机视频.svg" />
     <Resource Include="UI_0_Library\批量操作.svg" />
     <Resource Include="UI_0_Library\提醒.svg" />
     <Resource Include="UI_0_Library\搜索01.svg" />
@@ -454,9 +465,12 @@
     <Resource Include="UI_0_Library\歌词.svg" />
     <Resource Include="UI_0_Library\歌词未点击.svg" />
     <Resource Include="UI_0_Library\添加的副本.svg" />
+    <Resource Include="UI_0_Library\热键.svg" />
     <Resource Include="UI_0_Library\猜你喜欢.svg" />
     <Resource Include="UI_0_Library\皮肤.svg" />
     <Resource Include="UI_0_Library\符号-筛选.svg" />
+    <Resource Include="UI_0_Library\菜单.svg" />
+    <Resource Include="UI_0_Library\设备互传.svg" />
     <Resource Include="UI_0_Library\设置.svg" />
     <Resource Include="UI_0_Library\语音.svg" />
     <Resource Include="UI_0_Library\软件更新.svg" />
@@ -465,6 +479,7 @@
     <Resource Include="UI_0_Library\随机播放.svg" />
     <Resource Include="UI_0_Library\静音.svg" />
     <Resource Include="UI_0_Library\音效.svg" />
+    <Resource Include="UI_0_Library\音波,音频.svg" />
     <Resource Include="UI_0_Library\音量.svg" />
     <Resource Include="UI_0_Library\顺序播放.svg" />
     <Resource Include="UI_0_Library\麦克风.svg" />

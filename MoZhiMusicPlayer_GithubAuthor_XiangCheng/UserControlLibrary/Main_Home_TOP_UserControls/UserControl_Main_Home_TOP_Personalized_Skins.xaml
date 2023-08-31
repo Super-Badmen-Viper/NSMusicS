@@ -32,10 +32,10 @@
         </TextBlock>
 
         <Border x:Name="Border_this_app_Background_1"
-                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                BorderThickness="1" CornerRadius="10" BorderBrush="White" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Width="198" Height="108" Margin="60,120,0,0" Background="#1F1F1F" />
+                Width="198" Height="108" Margin="60,120,0,0" Background="White" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="60,230,0,0" Padding="10,0,0,0"
                    Text="Red Velvet" Foreground="White" FontSize="14" >
@@ -45,10 +45,10 @@
         </TextBlock>
 
         <Border x:Name="Border_this_app_Background_2"
-                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                BorderThickness="1" CornerRadius="10" BorderBrush="White" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Width="198" Height="108" Margin="280,120,0,0" Background="#1F1F1F" />
+                Width="198" Height="108" Margin="280,120,0,0" Background="White" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="280,230,0,0" Padding="10,0,0,0"
                    Text="T-ara" Foreground="White" FontSize="14" >
@@ -58,10 +58,10 @@
         </TextBlock>
 
         <Border x:Name="Border_this_app_Background_3"
-                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                BorderThickness="1" CornerRadius="10" BorderBrush="White" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Width="198" Height="108" Margin="500,120,0,0" Background="#1F1F1F" />
+                Width="198" Height="108" Margin="500,120,0,0" Background="White" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="500,230,0,0" Padding="10,0,0,0"
                    Text="JEON SOMI" Foreground="White" FontSize="14" >
@@ -71,10 +71,10 @@
         </TextBlock>
 
         <Border x:Name="Border_this_app_Background_4"
-                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                BorderThickness="1" CornerRadius="10" BorderBrush="White" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Width="198" Height="108" Margin="280,260,0,0" Background="#1F1F1F" />
+                Width="198" Height="108" Margin="280,260,0,0" Background="White" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="280,370,0,0" Padding="10,0,0,0"
                    Text="BLACKPINK" Foreground="White" FontSize="14" >
@@ -84,10 +84,10 @@
         </TextBlock>
 
         <Border x:Name="Border_this_app_Background_5"
-                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                BorderThickness="1" CornerRadius="10" BorderBrush="White" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Width="198" Height="108" Margin="500,260,0,0" Background="#1F1F1F" />
+                Width="198" Height="108" Margin="500,260,0,0" Background="White" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="500,370,0,0" Padding="10,0,0,0"
                    Text="EXO" Foreground="White" FontSize="14" >
@@ -97,10 +97,10 @@
         </TextBlock>
 
         <Border x:Name="Border_this_app_Background_6" Visibility="Collapsed"
-                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                BorderThickness="1" CornerRadius="10" BorderBrush="White" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Width="198" Height="108" Margin="60,400,0,0" Background="#1F1F1F" />
+                Width="198" Height="108" Margin="60,400,0,0" Background="White" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="60,510,0,0" Padding="10,0,0,0" Visibility="Collapsed"
                    Text="盐山" Foreground="White" FontSize="14" >
@@ -110,10 +110,10 @@
         </TextBlock>
 
         <Border x:Name="Border_this_app_Background_7" Visibility="Collapsed"
-                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                BorderThickness="1" CornerRadius="10" BorderBrush="White" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Width="198" Height="108" Margin="280,400,0,0" Background="#1F1F1F" />
+                Width="198" Height="108" Margin="280,400,0,0" Background="White" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="280,510,0,0" Padding="10,0,0,0" Visibility="Collapsed"
                    Text="玻璃水" Foreground="White" FontSize="14" >
@@ -123,10 +123,10 @@
         </TextBlock>
 
         <Border x:Name="Border_this_app_Background_8" Visibility="Collapsed"
-                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                BorderThickness="1" CornerRadius="10" BorderBrush="White" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Width="198" Height="108" Margin="500,400,0,0" Background="#1F1F1F" />
+                Width="198" Height="108" Margin="500,400,0,0" Background="White" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="500,510,0,0" Padding="10,0,0,0" Visibility="Collapsed"
                    Text="完美白" Foreground="White" FontSize="14" >
@@ -136,7 +136,7 @@
         </TextBlock>
 
         <Border x:Name="Border_this_app_Background_User"
-                BorderThickness="1" CornerRadius="10" BorderBrush="#7F1F1F1F" 
+                BorderThickness="1" CornerRadius="10" BorderBrush="White" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Width="198" Height="108" Margin="60,260,0,0" >

@@ -30,7 +30,7 @@
                                 >
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <UniformGrid Columns="4" Rows="1"/>
+                            <UniformGrid x:Name="UniformGrid_SingerAnimation" Columns="4" Rows="1"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
@@ -229,7 +229,7 @@
                                         <VirtualizingStackPanel Orientation="Vertical">
                                             <StackPanel 
                                                 x:Name="StackPanel_Lyic" 
-                                                Margin="0,-6,0,0"
+                                                Margin="0,-8,0,0"
                                                 Orientation="Horizontal"
                                                 IsEnabled="False">
 
@@ -264,7 +264,7 @@
                                                 </TextBlock.Foreground>
                                             </TextBlock>
                                             <TextBlock 
-                                                Margin="0,-2,0,0"
+                                                Margin="0,-4,0,0"
                                                 FontSize="18"
                                                 Text="{Binding Song_CRC_Line}"
                                                 >

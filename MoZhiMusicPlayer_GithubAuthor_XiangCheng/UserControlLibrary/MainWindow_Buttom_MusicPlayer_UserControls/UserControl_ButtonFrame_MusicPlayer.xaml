@@ -37,7 +37,7 @@
         <Grid>
             <UserControls:UserControl_Spectrum_Visualization_2
                 x:Name="userControl_Spectrum_Visualization" 
-                VerticalAlignment="Top" Height="120" Margin="0,-51,0,0"
+                VerticalAlignment="Top" Height="120" Margin="0,-80,0,0"
                 Visibility="Collapsed"
                 
                 MouseEnter="Border_Hover_BackGround_MouseLeave"

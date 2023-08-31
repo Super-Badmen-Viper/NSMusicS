@@ -50,7 +50,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             {
                 SingerImage_Cut singerImage_Cut = SingerImage_Cut.Retuen_This();
 
-                ObservableCollection<ImageBrush> ObservableCollection_ImageBrush_SingerImageCut = singerImage_Cut.CutImage_ImageBrush(imgPath);
+                ObservableCollection<ImageBrush> ObservableCollection_ImageBrush_SingerImageCut = await singerImage_Cut.CutImage_ImageBrush(imgPath);
                 Singer_ImagerCut_Infos = new ObservableCollection<Singer_ImagerCut_Info>();
 
                 Num_Singer_ImagerCut_Infos = 0;

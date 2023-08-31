@@ -41,12 +41,12 @@
             <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/皮肤.svg"/>
         </Button>
         <Button 
-            x:Name="Button_App_Setting"
+            x:Name="Button_Menu_Setting"
             Style="{StaticResource MyButton}"
-            HorizontalAlignment="Right" Height="20" Width="20" Cursor="Hand" Margin="0,0,140,0"
+            HorizontalAlignment="Right" Height="16" Width="16" Cursor="Hand" Margin="0,0,140,0"
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" VerticalAlignment="Center"  
                 >
-            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/设置.svg"/>
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/菜单.svg"/>
         </Button>
         <Button 
             x:Name="Button_Min"
