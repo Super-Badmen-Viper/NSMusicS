@@ -4,11 +4,9 @@
 - Demo effect: B-site link:
 - - Latest version:[ https://www.bilibili.com/video/BV1rM411s7J9 ](https://www.bilibili.com/video/BV1Dc411g74T/?spm_id_from=333.999.0.0&vd_source=6e56ca0b155a60e6a6878e5775fdcc35)
 
-## This application is based on DirectX's 3D processing, and if your hardware configuration is low, it may cause stuttering or flickering
-
-# [MZMusic](https://github.com/MZMusic/MZMusic) will use Electron+Vue3+Vite to refactor and deploy to Windows/Linux/Mac 
-# (Now Version) ：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
-- - The current WPF version will serve as a reference for the Electron version
+# [MZMusic](https://github.com/MZMusic/MZMusic) will use Electron+Vue3+React+Vite to refactor and deploy to Linux/Mac/Web
+# (Electron - Version) ：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
+- - The current WPF(Windows) version will serve as a reference for the Electron(Linux/Mac/Web) version
 - In addition to the functions of normal music software, I will develop K songs(karaoke) and score singing functions for the Electron version
 - - and deploy AI models to the server to achieve separation of algorithm layer and UI layer
 - The positioning of MoZhi Music is to provide the ultimate music experience for professional, family, and entertainment scenarios
@@ -19,7 +17,6 @@
 - 2. Support cross rotation of multi singer photo animations
 - 3. Audio dynamic spectrum animation
 - 4. Basic music player functions (no need to explain, there must be some)
-- Note: Low performance or system version may affect runtime performance (with some impact). WIn11 is recommended, as Win11 has special optimizations [doge]
 
 ## MZMusic: Future feature updates（for (Now Version):[MZMusic](https://github.com/MZMusic/MZMusic)
 - 1. identify songs module based on sound fingerprint technology (also open source as a separate project model)
@@ -31,8 +28,8 @@
 
 # Interface preview:
   <img src="doc/Test (1).png" align="center" width="1200">
-  <img src="doc/Test (2).png" align="left" width="300">
-  <img src="doc/Test (3).png" align="right" width="300">
+  <img src="doc/Test (2).png" align="center" width="1200">
+  <img src="doc/Test (3).png" align="center" width="1200">
   <img align="center" width="400">
   
 ## MoZhiMusic 4th Edition Project Development Document/Plan: -》 MoZhiMusic_Ultimate
