@@ -16,6 +16,7 @@ using System.IO;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info;
 using System.Windows.Media.Animation;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hover_MRC_Panel;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hover_EQ_Panel;
 using System.Windows.Media.Effects;
 using System.Threading;
 using System.Collections;
@@ -142,18 +143,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 outDevices[i] = WaveOut.GetCapabilities(i);
             }
 
-
+            mediaElement_Song = MediaElement_Song.Retuen_This();
         }
 
-        #region 音频控件设置
-
-        MediaElement_Song mediaElement_Song = new MediaElement_Song();
+        MediaElement_Song mediaElement_Song;
 
         /// <summary>
         /// 音频输出设备 设备信息预览
         /// </summary>
         WaveOutCapabilities[] outDevices;
-        #endregion
 
 
         #region 播放列表设置
@@ -2495,7 +2493,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_ButtonFrame_MusicPlayer.Button_Desk_MRC_Right.Click += Button_Window_Hover_MRC_Panel;
             userControl_TaskbarIcon.TextBlock_Open_Desktop_Lyic.MouseLeftButtonDown += Button_Window_Hover_MRC_Panel;
             userControl_TaskbarIcon.SvgViewbox_Open_Desktop_Lyic.MouseLeftButtonDown += Button_Window_Hover_MRC_Panel;
+            userControl_TaskbarIcon.Button_Lock_Lyic.MouseLeftButtonDown += Button_Lock_Window_Hover_MRC_Panel;
+            userControl_TaskbarIcon.SvgViewbox_Button_Lock_Lyic.MouseLeftButtonDown += Button_Lock_Window_Hover_MRC_Panel;
             window_Hover_MRC_Panel.Button_Lyic_CLose.Click += Button_Window_Hover_MRC_Panel;
+            window_Hover_MRC_Panel.Button_Lock_Lyic.Click += Button_Lock_Lyic_Click;
             //隐藏播放顺序与音量设置按键
             userControl_ButtonFrame_MusicPlayer.Stack_Panel_Order.Visibility = Visibility.Collapsed;
             userControl_ButtonFrame_MusicPlayer.Stack_Panel_Voice.Visibility = Visibility.Collapsed;
@@ -2562,8 +2563,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             new SolidColorBrush((Color)ColorConverter.ConvertFromString("#60FFFFFF")).GradientStops.Add(new GradientStop(baseColor, 1));
             userControl_ButtonFrame_ThisWindowsMusicAndDownload.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#60FFFFFF"));*/
 
+            //绑定APP TOP菜单选项
             userControl_TaskbarIcon.Close_ThisApp.MouseLeftButtonDown += Window_Closed;
             userControl_TaskbarIcon.SvgViewbox_Close_ThisApp.MouseLeftButtonDown += Window_Closed;
+            userControl_ButtonFrame_App_Setting.Close_ThisApp.MouseLeftButtonDown += Window_Closed;
+            userControl_ButtonFrame_App_Setting.SvgViewbox_Close_ThisApp.MouseLeftButtonDown += Window_Closed;
+            //
+            userControl_ButtonFrame_App_Setting.Open_EQ.MouseLeftButtonDown += Button_Window_Hover_EQ_Panel;
+            userControl_ButtonFrame_App_Setting.SvgViewbox_Open_EQ.MouseLeftButtonDown += Button_Window_Hover_EQ_Panel;
+
         }
 
         
@@ -3070,7 +3078,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                 window_Hover_MRC_Panel.Bool_Open_MRC_Panel = true;
 
+                window_Hover_MRC_Panel.SvgViewbox_Button_Lock_Lyic.Source = window_Hover_MRC_Panel.brush_Lock_True;
+
                 userControl_TaskbarIcon.TextBlock_Open_Desktop_Lyic.Text = "关闭桌面歌词";
+                userControl_TaskbarIcon.SvgViewbox_Button_Lock_Lyic.Source = new Uri(@"Resource\\Button_Image_Svg\\锁定.svg", UriKind.Relative);
+                userControl_TaskbarIcon.Button_Lock_Lyic.Text = "锁定桌面歌词";
             }
             else
             {
@@ -3078,8 +3090,63 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                 window_Hover_MRC_Panel.Bool_Open_MRC_Panel = false;
 
+                window_Hover_MRC_Panel.SvgViewbox_Button_Lock_Lyic.Source = window_Hover_MRC_Panel.brush_Lock_False;
+
                 userControl_TaskbarIcon.TextBlock_Open_Desktop_Lyic.Text = "开启桌面歌词";
+                userControl_TaskbarIcon.SvgViewbox_Button_Lock_Lyic.Source = new Uri(@"Resource\\Button_Image_Svg\\解锁.svg", UriKind.Relative);
+                userControl_TaskbarIcon.Button_Lock_Lyic.Text = "解锁桌面歌词";
             }
+
+            window_Hover_MRC_Panel.Panel_Player_Set.Visibility = Visibility.Collapsed;
+            window_Hover_MRC_Panel.Panel_DeskLyic_Setting.Visibility = Visibility.Collapsed;
+            window_Hover_MRC_Panel.Topmost = true;
+        }
+        public void Button_Lock_Window_Hover_MRC_Panel(object sender, EventArgs e)
+        {
+            if (userControl_TaskbarIcon.Button_Lock_Lyic.Text.Equals("解锁桌面歌词"))
+            {
+                window_Hover_MRC_Panel.SvgViewbox_Button_Lock_Lyic.Source = window_Hover_MRC_Panel.brush_Lock_True;
+
+                userControl_TaskbarIcon.TextBlock_Open_Desktop_Lyic.Text = "关闭桌面歌词";
+                userControl_TaskbarIcon.SvgViewbox_Button_Lock_Lyic.Source = new Uri(@"Resource\\Button_Image_Svg\\锁定.svg", UriKind.Relative);
+                userControl_TaskbarIcon.Button_Lock_Lyic.Text = "锁定桌面歌词";
+            }
+            else
+            {
+                window_Hover_MRC_Panel.SvgViewbox_Button_Lock_Lyic.Source = window_Hover_MRC_Panel.brush_Lock_False;
+
+                userControl_TaskbarIcon.TextBlock_Open_Desktop_Lyic.Text = "开启桌面歌词";
+                userControl_TaskbarIcon.SvgViewbox_Button_Lock_Lyic.Source = new Uri(@"Resource\\Button_Image_Svg\\解锁.svg", UriKind.Relative);
+                userControl_TaskbarIcon.Button_Lock_Lyic.Text = "解锁桌面歌词";
+            }
+            window_Hover_MRC_Panel.Topmost = true;
+        }
+        private void Button_Lock_Lyic_Click(object sender, RoutedEventArgs e)
+        {
+            if (window_Hover_MRC_Panel.SvgViewbox_Button_Lock_Lyic.Source == window_Hover_MRC_Panel.brush_Lock_True)
+            {
+                window_Hover_MRC_Panel.SvgViewbox_Button_Lock_Lyic.Source = window_Hover_MRC_Panel.brush_Lock_False;
+
+                window_Hover_MRC_Panel.Panel_Lyic_Show.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
+
+                window_Hover_MRC_Panel.Panel_Player_Set.Visibility = Visibility.Collapsed;
+                window_Hover_MRC_Panel.Panel_DeskLyic_Setting.Visibility = Visibility.Collapsed;
+
+                window_Hover_MRC_Panel.Lyic_FontSize_Up.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
+
+                //
+                userControl_TaskbarIcon.SvgViewbox_Button_Lock_Lyic.Source = new Uri(@"Resource\\Button_Image_Svg\\解锁.svg", UriKind.Relative);
+                userControl_TaskbarIcon.Button_Lock_Lyic.Text = "解锁桌面歌词";
+            }
+            else
+            {
+                window_Hover_MRC_Panel.SvgViewbox_Button_Lock_Lyic.Source = window_Hover_MRC_Panel.brush_Lock_True;
+
+                //
+                userControl_TaskbarIcon.SvgViewbox_Button_Lock_Lyic.Source = new Uri(@"Resource\\Button_Image_Svg\\锁定.svg", UriKind.Relative);
+                userControl_TaskbarIcon.Button_Lock_Lyic.Text = "锁定桌面歌词";
+            }
+            window_Hover_MRC_Panel.Topmost = true;
         }
 
 
@@ -6143,7 +6210,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             dispatcherTimer_Spectrum_Visualization = new DispatcherTimer();
             dispatcherTimer_Spectrum_Visualization.Tick += Spectrum_Visualization_Play_Tick;
 
-            Spectrum_time = 100;
+            Spectrum_time = 75;
             dispatcherTimer_Spectrum_Visualization.Interval = new TimeSpan(0, 0, 0, 0, Spectrum_time * 2);
         }
         public void Spectrum_Visualization_Play_Tick(object sender, EventArgs e)
@@ -6212,6 +6279,21 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         }
 
 
+        #endregion
+
+        Window_Hover_EQ_Panel window_Hover_EQ_Panel = new Window_Hover_EQ_Panel();
+        #region EQ均衡器
+        public void Button_Window_Hover_EQ_Panel(object sender, EventArgs e)
+        {
+            if (window_Hover_EQ_Panel.Visibility == Visibility.Collapsed)
+            {
+                window_Hover_EQ_Panel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                window_Hover_EQ_Panel.Visibility = Visibility.Collapsed;
+            }
+        }
         #endregion
 
         #region 获得指定元素的父元素

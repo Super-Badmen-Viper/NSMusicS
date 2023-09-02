@@ -155,7 +155,7 @@
                     </StackPanel>
                 -->
 
-                <!--歌词列表（行同步）-->
+                <!--歌词列表-->
                 <ListView 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                     ItemsPanel="{DynamicResource ItemsPanelTemplate2}" 
@@ -177,14 +177,9 @@
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="BorderThickness" Value="0"/>
                         </Style>
-                        <!--ListViewItem的选中透明样式-->
                         <Style TargetType="{x:Type ListViewItem}">
-                            <!-- 边框大小 -->
                             <Setter Property="BorderThickness" Value="0"/>
-                            <!-- 边框颜色 -->
-                            <!-- text居中 -->
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            <!-- 行高 -->
                             <Setter Property="Height" Value="60"/>
                             <Setter Property="FontSize" Value="22"/>
                             <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
@@ -203,10 +198,6 @@
                                                 <Setter Property="Foreground" Value="White"/>
                                             </Trigger>
                                             <Trigger Property="IsSelected" Value="True">
-                                                <!-- 行高 -->
-                                                <!-- <Setter Property="Width" Value="500"/>
-                                            开启超级特效：圆形楼梯循环动画：Value小于444时开启
-                                            -->
                                                 <Setter Property="FontSize" Value="24"/><!--32-->
                                                 <Setter Property="Margin" Value="100,0,-100,0"/>
                                                 <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
@@ -222,7 +213,6 @@
                     </ListView.Resources>
                     <ListView.View>
                         <GridView AllowsColumnReorder="True">
-                            <!--ListviewItem的长度-->
                             <GridViewColumn Width="2000" x:Name="ListView_Temp_MRC_GridViewColumn">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -232,7 +222,6 @@
                                                 Margin="0,-8,0,0"
                                                 Orientation="Horizontal"
                                                 IsEnabled="False">
-
                                             </StackPanel>
                                             <TextBlock HorizontalAlignment="Stretch"
                                                     TextWrapping="Wrap" TextAlignment="Left"
@@ -315,18 +304,12 @@
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="BorderThickness" Value="0"/>
                         </Style>
-                        <!--ListViewItem的选中透明样式-->
                         <Style  TargetType="{x:Type ListViewItem}">
-                            <!-- 边框大小 -->
                             <Setter Property="BorderThickness" Value="0"/>
-                            <!-- 边框颜色 -->
-                            <!-- text居中 -->
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            <!-- 行高 -->
                             <Setter Property="Height" Value="55"/>
                             <Setter Property="FontSize" Value="20"/>
                             <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
-
                             <Setter Property="SnapsToDevicePixels" Value="True"/>
                             <Setter Property="Template">
                                 <Setter.Value>
@@ -341,10 +324,6 @@
                                                 <Setter Property="Foreground" Value="White"/>
                                             </Trigger>
                                             <Trigger Property="IsSelected" Value="True">
-                                                <!-- 行高 -->
-                                                <!-- <Setter Property="Width" Value="500"/>
-                                            开启超级特效：圆形楼梯循环动画：Value小于444时开启
-                                            -->
                                                 <Setter Property="FontSize" Value="30"/>
                                                 <Setter Property="Margin" Value="100,0,-100,0"/>
                                                 <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
@@ -383,15 +362,10 @@
 
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
-                            <!-- 边框大小 -->
                             <Setter Property="BorderThickness" Value="0"/>
-                            <!-- 边框颜色 -->
                             <Setter Property="BorderBrush" Value="Transparent"/>
-                            <!-- text居中 -->
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            <!-- 行高 -->
                             <Setter Property="Height" Value="40"/>
-
                             <Style.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter Property="Foreground" Value="#FF17EAA7"/>
@@ -454,8 +428,8 @@
                 </Button>
 
                 <Button 
-            x:Name="Button_Min"
-            Style="{StaticResource MyButton}"
+                x:Name="Button_Min"
+                Style="{StaticResource MyButton}"
                 HorizontalAlignment="Right" Height="16" 
                 VerticalAlignment="Top" Width="16" Cursor="Hand" Margin="0,20,100,0"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
@@ -463,8 +437,8 @@
                     <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/最小化.svg"/>
                 </Button>
                 <Button 
-            x:Name="Button_Max"
-            Style="{StaticResource MyButton}"
+                x:Name="Button_Max"
+                Style="{StaticResource MyButton}"
                 HorizontalAlignment="Right" Height="16" Width="16" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,20,65,0" Cursor="Hand" VerticalAlignment="Top" 
@@ -472,8 +446,8 @@
                     <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/最大化.svg"/>
                 </Button>
                 <Button 
-            x:Name="Button_Exit"
-            Style="{StaticResource MyButton}"
+                x:Name="Button_Exit"
+                Style="{StaticResource MyButton}"
                 HorizontalAlignment="Right" Height="16" 
                 VerticalAlignment="Top" Width="16" Cursor="Hand" Margin="0,20,30,0"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  

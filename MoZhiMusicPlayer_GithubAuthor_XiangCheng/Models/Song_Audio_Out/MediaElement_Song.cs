@@ -11,15 +11,24 @@ using WaveOutEvent = NAudio.Wave.WaveOutEvent;
 using WaveOut = NAudio.Wave.WaveOut;
 using WaveFormat = NAudio.Wave.WaveFormat;
 using ISampleProvider = NAudio.Wave.ISampleProvider;
+using NAudio.Extras;
+using NAudio.Wave;
+using VisioForge.Libs.ZXing;
+using Equalizer = NAudio.Extras.Equalizer;
+using ViewModelBase = MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Set.ViewModel.ViewModelBase;
+using CommunityToolkit.Mvvm.Input;
+using System.ComponentModel;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Services.Services_For_API_GetResult;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
 {
-    public class MediaElement_Song
+    public class MediaElement_Song : ViewModelBase
     {
         public WaveOutEvent waveOutEvent;
         private AudioFileReader audioFileReader;
 
-        private Equalizer equalizer; // EQ instance
+        private Equalizer equalizer;
+        private EqualizerBand[] bands;
 
         public event EventHandler MediaOpened; 
         public event EventHandler MediaEnded;
@@ -27,8 +36,35 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
         public MediaElement_Song()
         {
             waveOutEvent = new WaveOutEvent();
+
+            bands = new EqualizerBand[]
+            {
+                new EqualizerBand {Bandwidth = 0.8f, Frequency = 31, Gain = 0},
+                new EqualizerBand {Bandwidth = 0.8f, Frequency = 62, Gain = 0},
+                new EqualizerBand {Bandwidth = 0.8f, Frequency = 125, Gain = 0},
+                new EqualizerBand {Bandwidth = 0.8f, Frequency = 250, Gain = 0},
+                new EqualizerBand {Bandwidth = 0.8f, Frequency = 500, Gain = 0},
+                new EqualizerBand {Bandwidth = 0.8f, Frequency = 1000, Gain = 0},
+                new EqualizerBand {Bandwidth = 0.8f, Frequency = 2000, Gain = 0},
+                new EqualizerBand {Bandwidth = 0.8f, Frequency = 4000, Gain = 0},
+                new EqualizerBand {Bandwidth = 0.8f, Frequency = 8000, Gain = 0},
+                new EqualizerBand {Bandwidth = 0.8f, Frequency = 16000, Gain = 0},
+                new EqualizerBand {Bandwidth = 0.8f, Frequency = 20000, Gain = 0},
+            };
+            this.PropertyChanged += OnPropertyChanged;
         }
 
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            equalizer?.Update();
+        }
+
+        public RelayCommand RefCommand_Set_Equalizer { get; set; }
+
+        /// <summary>
+        /// 初始化播放
+        /// </summary>
+        /// <param name="audioFilePath"></param>
         public void Open(string audioFilePath)
         {
             if (audioFileReader != null)
@@ -37,13 +73,20 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
                 waveOutEvent.Dispose();
             }
 
-            //equalizer = new Equalizer(10, 44100);   // Initialize EQ（波段数(5,10,,20)，采样率）
-            //equalizer.Process((float)0.5,1);      //设置EQ 参数
-
             audioFileReader = new AudioFileReader(audioFilePath);
-            waveOutEvent = new WaveOutEvent();
-            waveOutEvent.Init(audioFileReader);
-            //waveOutEvent.Init(new EqualizerSampleProvider(audioFileReader, equalizer)); // Use custom SampleProvider
+
+            if (bands != null && bands.Length > 0)
+            {
+                equalizer = new Equalizer(audioFileReader, bands);
+                waveOutEvent = new WaveOutEvent();
+                waveOutEvent.Init(equalizer);
+            }
+            else
+            {
+                waveOutEvent = new WaveOutEvent();
+                waveOutEvent.Init(audioFileReader);
+            }
+
             OnMediaOpened();
         }
 
@@ -99,77 +142,204 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
             }
         }
 
+        public void SetEqualizerBand(EqualizerBand[] temp)
+        {
+            if(temp != null)
+                bands = temp;
+        }
+
         private void OnMediaOpened()
         {
             MediaOpened?.Invoke(this, EventArgs.Empty);
         }
-    }
 
-    public class Equalizer
-    {
-        /// <summary>
-        /// 存储多个 BiQuadFilter 实例
-        /// 每个实例对应一个均衡器的频段
-        /// </summary>
-        private readonly BiQuadFilter[] filters;
+
+
+
+        public float MinimumGain => -12;
+        public float MaximumGain => 12 ;
 
         /// <summary>
-        /// 初始化均衡器对象
+        /// 31
         /// </summary>
-        /// <param name="numBands">均衡器的频段数量</param>
-        /// <param name="sampleRate">音频的采样率</param>
-        public Equalizer(int numBands, int sampleRate)
+        public float Band1
         {
-            filters = new BiQuadFilter[numBands];
-            for (int i = 0; i < numBands; i++)
+            get => bands[0].Gain;
+            set
             {
-                //PeakingEQ 是 BiQuadFilter 类的一个静态方法
-                //      用于创建一个具有峰值增强或降低效果的均衡器滤波器
-                filters[i] = BiQuadFilter.PeakingEQ(
-                    sampleRate, 200 * (i + 1), (float)0.5, 0
-                    ); // You can adjust the parameters here
+                if (bands[0].Gain != value)
+                {
+                    bands[0].Gain = value;
+                    OnPropertyChanged("Band1");
+                }
+            }
+        }
+        /// <summary>
+        /// 62
+        /// </summary>
+        public float Band2
+        {
+            get => bands[1].Gain;
+            set
+            {
+                if (bands[1].Gain != value)
+                {
+                    bands[1].Gain = value;
+                    OnPropertyChanged("Band2");
+                }
+            }
+        }
+        /// <summary>
+        /// 125
+        /// </summary>
+        public float Band3
+        {
+            get => bands[2].Gain;
+            set
+            {
+                if (bands[2].Gain != value)
+                {
+                    bands[2].Gain = value;
+                    OnPropertyChanged("Band3");
+                }
+            }
+        }
+        /// <summary>
+        /// 250
+        /// </summary>
+        public float Band4
+        {
+            get => bands[3].Gain;
+            set
+            {
+                if (bands[3].Gain != value)
+                {
+                    bands[3].Gain = value;
+                    OnPropertyChanged("Band4");
+                }
+            }
+        }
+        /// <summary>
+        /// 500
+        /// </summary>
+        public float Band5
+        {
+            get => bands[4].Gain;
+            set
+            {
+                if (bands[4].Gain != value)
+                {
+                    bands[4].Gain = value;
+                    OnPropertyChanged("Band5");
+                }
+            }
+        }
+        /// <summary>
+        /// 1k
+        /// </summary>
+        public float Band6
+        {
+            get => bands[5].Gain;
+            set
+            {
+                if (bands[5].Gain != value)
+                {
+                    bands[5].Gain = value;
+                    OnPropertyChanged("Band6");
+                }
+            }
+        }
+        /// <summary>
+        /// 2k
+        /// </summary>
+        public float Band7
+        {
+            get => bands[6].Gain;
+            set
+            {
+                if (bands[6].Gain != value)
+                {
+                    bands[6].Gain = value;
+                    OnPropertyChanged("Band7");
+                }
+            }
+        }
+        /// <summary>
+        /// 4k
+        /// </summary>
+        public float Band8
+        {
+            get => bands[7].Gain;
+            set
+            {
+                if (bands[7].Gain != value)
+                {
+                    bands[7].Gain = value;
+                    OnPropertyChanged("Band7");
+                }
+            }
+        }
+        /// <summary>
+        /// 8k
+        /// </summary>
+        public float Band9
+        {
+            get => bands[8].Gain;
+            set
+            {
+                if (bands[8].Gain != value)
+                {
+                    bands[8].Gain = value;
+                    OnPropertyChanged("Band8");
+                }
+            }
+        }
+        /// <summary>
+        /// 16k
+        /// </summary>
+        public float Band10
+        {
+            get => bands[9].Gain;
+            set
+            {
+                if (bands[9].Gain != value)
+                {
+                    bands[9].Gain = value;
+                    OnPropertyChanged("Band9");
+                }
+            }
+        }
+        /// <summary>
+        /// 20k
+        /// </summary>
+        public float Band11
+        {
+            get => bands[10].Gain;
+            set
+            {
+                if (bands[10].Gain != value)
+                {
+                    bands[10].Gain = value;
+                    OnPropertyChanged("Band7");
+                }
             }
         }
 
-        /// <summary>
-        /// 处理输入的音频样本并进行均衡处理
-        /// </summary>
-        /// <param name="sample">音频样本</param>
-        /// <param name="band">频段索引</param>
-        /// <returns>
-        /// 接受一个音频样本 sample 和一个频段索引 band
-        /// 然后将样本传递给对应频段的 BiQuadFilter 实例进行处理
-        /// 返回处理后的样本
-        /// </returns>
-        public float Process(float sample, int band)
+
+
+
+
+        public static MediaElement_Song viewModule_MediaElement_Song { get; set; }
+        public static MediaElement_Song Retuen_This()
         {
-            return filters[band].Transform(sample);
+            viewModule_MediaElement_Song = Return_This_ViewModule_MediaElement_Song();
+            return viewModule_MediaElement_Song;
         }
-    }
-
-    public class EqualizerSampleProvider : ISampleProvider
-    {
-        private readonly ISampleProvider source;
-        private readonly Equalizer equalizer;
-
-        public WaveFormat WaveFormat => source.WaveFormat;
-
-        public EqualizerSampleProvider(ISampleProvider source, Equalizer equalizer)
+        private static MediaElement_Song Return_This_ViewModule_MediaElement_Song()
         {
-            this.source = source;
-            this.equalizer = equalizer;
-        }
-
-        public int Read(float[] buffer, int offset, int count)
-        {
-            int samplesRead = source.Read(buffer, offset, count);
-
-            for (int n = 0; n < samplesRead; n++)
-            {
-                buffer[offset + n] = equalizer.Process(buffer[offset + n], 0); // Apply EQ to first band
-            }
-
-            return samplesRead;
+            if (viewModule_MediaElement_Song == null)
+                viewModule_MediaElement_Song = new MediaElement_Song();
+            return viewModule_MediaElement_Song;
         }
     }
 }

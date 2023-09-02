@@ -165,13 +165,29 @@
         </Grid>
 
         <Grid x:Name="Panel_Player_Set">
+            <Button x:Name="Button_Lock_Lyic" 
+                Style="{StaticResource MyButton}"
+                Height="22" Width="22" 
+                BorderBrush="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                RenderTransformOrigin="-5.75,0.5" 
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Bottom" 
+                Margin="0,0,160,160">
+                <svgc:SvgViewbox 
+                    x:Name="SvgViewbox_Button_Lock_Lyic" 
+                    Source="pack://application:,,,/UI_0_Library/锁定.svg" Cursor="Hand"/>
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+                </Button.Effect>
+            </Button>
             <Button x:Name="Button_Before" 
                 Style="{StaticResource MyButton}"
                 Height="22" Width="22" 
                 BorderBrush="{x:Null}" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 RenderTransformOrigin="-5.75,0.5" 
-                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,80,160">
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Bottom" 
+                Margin="0,0,80,160">
                 <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/上一首.svg" Cursor="Hand"/>
                 <Button.Effect>
                     <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />

@@ -33,9 +33,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
 
             Panel_Player_Set.Visibility = Visibility.Collapsed;
             Panel_DeskLyic_Setting.Visibility = Visibility.Collapsed;
+
+            SvgViewbox_Button_Lock_Lyic.Source = brush_Lock_True;
         }
 
         public bool Bool_Open_MRC_Panel;
+
+        public Uri brush_Lock_True
+            = new Uri(@"Resource\\Button_Image_Svg\\锁定.svg", UriKind.Relative);
+        public Uri brush_Lock_False
+            = new Uri(@"Resource\\Button_Image_Svg\\解锁.svg", UriKind.Relative);
 
         /// <summary>
         /// 拖动窗口
@@ -46,18 +53,24 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
         {
             try
             {
-                this.DragMove();
+                if (SvgViewbox_Button_Lock_Lyic.Source == brush_Lock_True)
+                {
+                    this.DragMove();
+                }
             }
             catch { }
         }
 
         private void Window_Desk_MRC1_MouseLeave(object sender, MouseEventArgs e)
         {
-            //#A8343434
-            Panel_Lyic_Show.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
+            if (SvgViewbox_Button_Lock_Lyic.Source == brush_Lock_True)
+            {
+                //#A8343434
+                Panel_Lyic_Show.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00000000"));
 
-            Panel_Player_Set.Visibility = Visibility.Collapsed;
-            Panel_DeskLyic_Setting.Visibility = Visibility.Collapsed;
+                Panel_Player_Set.Visibility = Visibility.Collapsed;
+                Panel_DeskLyic_Setting.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void Panel_DeskLyic_Setting_MouseLeave(object sender, MouseEventArgs e)
@@ -66,16 +79,22 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
         }
         private void Window_Desk_MRC1_MouseMove(object sender, MouseEventArgs e)
         {
-            //#A8343434
-            Panel_Lyic_Show.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A8343434"));
+            if (SvgViewbox_Button_Lock_Lyic.Source == brush_Lock_True)
+            {
+                //#A8343434
+                Panel_Lyic_Show.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A8343434"));
 
-            Panel_Player_Set.Visibility = Visibility.Visible;
+                Panel_Player_Set.Visibility = Visibility.Visible;
+            }
         }
 
 
         private void Lyic_FontSize_Up_MouseMove(object sender, MouseEventArgs e)
         {
-            Lyic_FontSize_Up.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F3F3F3"));
+            if (SvgViewbox_Button_Lock_Lyic.Source == brush_Lock_True)
+            {
+                Lyic_FontSize_Up.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F3F3F3"));
+            }
         }
         private void Lyic_FontSize_Up_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -84,7 +103,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
 
         private void Lyic_FontSize_Down_MouseMove(object sender, MouseEventArgs e)
         {
-            Lyic_FontSize_Down.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F3F3F3"));
+            if (SvgViewbox_Button_Lock_Lyic.Source == brush_Lock_True)
+            {
+                Lyic_FontSize_Down.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F3F3F3"));
+            }
         }
         private void Lyic_FontSize_Down_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -93,7 +115,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
 
         private void Lyic_FontColor_Set_MouseMove(object sender, MouseEventArgs e)
         {
-            Lyic_FontColor_Set.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F3F3F3"));
+            if (SvgViewbox_Button_Lock_Lyic.Source == brush_Lock_True)
+            {
+                Lyic_FontColor_Set.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F3F3F3"));
+            }
         }
         private void Lyic_FontColor_Set_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -102,7 +127,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
 
         private void Lyic_LineNum_Set_MouseMove(object sender, MouseEventArgs e)
         {
-            Lyic_LineNum_Set.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F3F3F3"));
+            if (SvgViewbox_Button_Lock_Lyic.Source == brush_Lock_True)
+            {
+                Lyic_LineNum_Set.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F3F3F3"));
+            }
         }
         private void Lyic_LineNum_Set_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -169,7 +197,5 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
                 Panel_DeskLyic_Setting.Visibility = Visibility.Visible;
             }
         }
-
-        
     }
 }

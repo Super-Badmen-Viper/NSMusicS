@@ -160,13 +160,16 @@
                                 <TextBlock 
                                     Height="20" Width="20" Margin="14,0,0,0"
                                     HorizontalAlignment="Left" VerticalAlignment="Center">
-                                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/锁.svg" Cursor="Hand"/>
+                                    <svgc:SvgViewbox 
+                                        x:Name="SvgViewbox_Button_Lock_Lyic"
+                                        Source="pack://application:,,,/UI_0_Library/锁定.svg" Cursor="Hand"/>
                                 </TextBlock>
                                 <TextBlock 
+                                    x:Name="Button_Lock_Lyic"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     TextAlignment="Left" Margin="12,0,0,0"
-                                    Foreground="#44FFFFFF" Text="锁定桌面歌词"
+                                    Foreground="White" Text="锁定桌面歌词"
                                 />
                             </StackPanel>
                             <StackPanel  

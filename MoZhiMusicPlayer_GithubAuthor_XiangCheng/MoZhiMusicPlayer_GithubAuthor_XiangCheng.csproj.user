@@ -97,7 +97,13 @@
     <Compile Update="UserControlLibrary\MusicPlayer_MV_Player\MusicPlayer_MV_Player_UserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Set\UserControl_Equalization.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControlLibrary\Windows_Song_Finds\Windows_Song_Find_Float.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Window_Hover_EQ_Panel\Window_Hover_EQ_Panel.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -195,7 +201,13 @@
     <Page Update="UserControlLibrary\MusicPlayer_MV_Player\MusicPlayer_MV_Player_UserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Set\UserControl_Equalization.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="UserControlLibrary\Windows_Song_Finds\Windows_Song_Find_Float.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Window_Hover_EQ_Panel\Window_Hover_EQ_Panel.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
