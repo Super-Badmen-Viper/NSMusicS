@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Services.Services_For_API_GetResult;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         public UserControl_TaskbarIcon()
         {
             InitializeComponent();
+
+            viewModule_Search_Song = ViewModule_Search_Song.Retuen_This();
+            this.DataContext = ViewModule_Search_Song.Retuen_This();
         }
+        ViewModule_Search_Song viewModule_Search_Song;
     }
 }

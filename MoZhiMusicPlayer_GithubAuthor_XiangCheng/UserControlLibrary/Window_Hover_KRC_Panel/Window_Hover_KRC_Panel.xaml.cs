@@ -1,4 +1,5 @@
-﻿using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_UserControls;
+﻿using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Services.Services_For_API_GetResult;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_UserControls;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -35,7 +36,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
             Panel_DeskLyic_Setting.Visibility = Visibility.Collapsed;
 
             SvgViewbox_Button_Lock_Lyic.Source = brush_Lock_True;
+
+            viewModule_Search_Song = ViewModule_Search_Song.Retuen_This();
+            this.DataContext = ViewModule_Search_Song.Retuen_This();
         }
+        ViewModule_Search_Song viewModule_Search_Song;
 
         public bool Bool_Open_MRC_Panel;
 

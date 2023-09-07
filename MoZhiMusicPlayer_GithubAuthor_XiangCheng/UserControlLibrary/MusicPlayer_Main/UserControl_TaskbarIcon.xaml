@@ -33,7 +33,7 @@
             </tb:TaskbarIcon.TrayToolTip>
             <tb:TaskbarIcon.TrayPopup>
                 <Border
-                      Background="#66232325"
+                      Background="#99232325"
                       BorderBrush="Black"
                       BorderThickness="0"
                       CornerRadius="10"
@@ -63,7 +63,7 @@
                                 HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0">
                                 <svgc:SvgViewbox 
                                     x:Name="SvgViewbox_Button_Play_Pause_Player" 
-                                    Source="pack://application:,,,/UI_0_Library/播放.svg" Cursor="Hand"/>
+                                    Source="{Binding Button_Play_Pause_Player_Image}" Cursor="Hand"/>
                                 <Button.Effect>
                                     <DropShadowEffect Color="White" BlurRadius="1" ShadowDepth="1" Opacity="1" />
                                 </Button.Effect>
@@ -158,7 +158,7 @@
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Top">
                                 <TextBlock 
-                                    Height="20" Width="20" Margin="14,0,0,0"
+                                    Height="20" Width="20" Margin="16,0,0,0"
                                     HorizontalAlignment="Left" VerticalAlignment="Center">
                                     <svgc:SvgViewbox 
                                         x:Name="SvgViewbox_Button_Lock_Lyic"

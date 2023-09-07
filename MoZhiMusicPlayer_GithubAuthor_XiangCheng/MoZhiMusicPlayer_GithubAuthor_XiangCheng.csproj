@@ -395,7 +395,9 @@
     <None Remove="UI_0_Library\热键.svg" />
     <None Remove="UI_0_Library\猜你喜欢.svg" />
     <None Remove="UI_0_Library\皮肤.svg" />
+    <None Remove="UI_0_Library\窗口歌词.svg" />
     <None Remove="UI_0_Library\符号-筛选.svg" />
+    <None Remove="UI_0_Library\网络.svg" />
     <None Remove="UI_0_Library\菜单.svg" />
     <None Remove="UI_0_Library\解锁.svg" />
     <None Remove="UI_0_Library\设备互传.svg" />
@@ -474,7 +476,9 @@
     <Resource Include="UI_0_Library\热键.svg" />
     <Resource Include="UI_0_Library\猜你喜欢.svg" />
     <Resource Include="UI_0_Library\皮肤.svg" />
+    <Resource Include="UI_0_Library\窗口歌词.svg" />
     <Resource Include="UI_0_Library\符号-筛选.svg" />
+    <Resource Include="UI_0_Library\网络.svg" />
     <Resource Include="UI_0_Library\菜单.svg" />
     <Resource Include="UI_0_Library\解锁.svg" />
     <Resource Include="UI_0_Library\设备互传.svg" />

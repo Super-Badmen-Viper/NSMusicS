@@ -9,7 +9,7 @@
              >
     <Grid>
         <Border
-            Background="#55FFFFFF"
+            Background="#99232325"
             BorderThickness="0"
             CornerRadius="10"
             Width="210" Height="400" Margin="10">
@@ -155,13 +155,15 @@
                         Height="20" Width="20" Margin="14,0,0,0"
                         HorizontalAlignment="Left" VerticalAlignment="Center">
                         <svgc:SvgViewbox 
+                            x:Name="SvgViewbox_Open_App_Setting"
                             Source="pack://application:,,,/UI_0_Library/设置.svg" Cursor="Hand"/>
                         </TextBlock>
                     <TextBlock 
+                        x:Name="Open_App_Setting"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         TextAlignment="Left" Margin="12,0,0,0"
-                        Foreground="#44FFFFFF" Text="设置"
+                        Foreground="White" Text="设置"
                         />
                 </StackPanel>
                 <StackPanel 

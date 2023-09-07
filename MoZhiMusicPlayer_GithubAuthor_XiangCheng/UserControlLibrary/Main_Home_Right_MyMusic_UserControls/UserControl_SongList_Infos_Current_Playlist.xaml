@@ -11,7 +11,7 @@
     <Grid >
         <Border
             x:Name="this_Background"
-            Background="#66232325"
+            Background="#99232325"
             BorderThickness="0" CornerRadius="10"
             >
 

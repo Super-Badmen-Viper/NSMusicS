@@ -57,7 +57,7 @@
 
         </Grid>
         <Grid Margin="200,0,0,0" Width="212" HorizontalAlignment="Left" >
-            <Border BorderBrush="White" BorderThickness="0,0,1,0" Margin="0,25,0,-25"/>
+            <Border BorderBrush="White" BorderThickness="0,0,1,0" Margin="0,0,0,0"/>
 
             <TextBlock Text="歌曲信息编辑" Width="200" 
                        Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
@@ -119,8 +119,6 @@
 
         </Grid>
         <Grid Margin="400,0,0,0">
-            <Border BorderBrush="White" BorderThickness="0,0,1,0"/>
-
             <TextBlock Text="音乐资源导入" Width="200" 
                        Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
                        FontSize="26" FontWeight="Bold"/>

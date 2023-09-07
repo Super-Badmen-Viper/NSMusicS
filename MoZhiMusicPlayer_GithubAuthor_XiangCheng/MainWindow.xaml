@@ -293,6 +293,11 @@
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                     Visibility="Collapsed"
                     />
+                <Main_Home_TOP_UserControls:UserControl_Main_Home_TOP_App_Setting
+                    x:Name="userControl_Main_Home_TOP_App_Setting"
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                    Visibility="Collapsed"
+                    />
 
                 <Main_Home_Left_OnlineMusic_UserControls:UserControl_Main_Home_Left_OnlineMusic_Search_Song
                     x:Name="userControl_Main_Home_Left_OnlineMusic_Search_Song"
@@ -303,7 +308,7 @@
 
             <Grid x:Name="Frame_Top_WindowsControl" 
                   Margin="180,0,0,0" 
-                  UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" VerticalAlignment="Top" 
+                  UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                   >
                 <MainWindow_TOP_UserControls:UserControl_ButtonFrame_TopPanel 
                     x:Name="userControl_ButtonFrame_TopPanel"
@@ -312,6 +317,7 @@
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                     Loaded="UserControl_ButtonFrame_TopPanel_Loaded"
                     />
+                
                 <MainWindow_TOP_UserControls:UserControl_ButtonFrame_App_Setting 
                     x:Name="userControl_ButtonFrame_App_Setting"
                     HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,46,0,0"

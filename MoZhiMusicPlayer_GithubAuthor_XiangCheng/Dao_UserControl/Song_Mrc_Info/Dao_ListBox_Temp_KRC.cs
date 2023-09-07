@@ -21,6 +21,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
         public static string Song_MRC_Path;//歌词文件所在的路径
         public double Start_Song_MRC_Time;
         public double End_Song_MRC_Time;
+        public bool bool_lrc;
         //歌词信息类
         public ArrayList arrayList_MRC_line = new ArrayList();
 
@@ -66,13 +67,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
             Console.WriteLine();
 
             if (arrayList_MRC_line.Count > 0)
-                if (arrayList_MRC_line[0].ToString().IndexOf("<") > -1)
+                if (arrayList_MRC_line[arrayList_MRC_line.Count - 1].ToString().IndexOf("<") > -1)
                 {
                     Init_MRC_Info();
+
+                    bool_lrc = false;
                 }
                 else
                 {
                     Init_Lrc_Info();
+
+                    bool_lrc = true;
                 }
         }
         public bool isPureNum(string str)
@@ -90,6 +95,28 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                 }
             }
             return true;                              //是，就返回true
+        }
+
+        public void Init_SongEmbedded_Lyrics(ArrayList arrayList_MRC_line)
+        {
+            this.arrayList_MRC_line = arrayList_MRC_line;
+
+            if (arrayList_MRC_line != null)
+            {
+                if (arrayList_MRC_line.Count > 0)
+                    if (arrayList_MRC_line[arrayList_MRC_line.Count - 1].ToString().IndexOf("<") > -1)
+                    {
+                        Init_MRC_Info();
+
+                        bool_lrc = false;
+                    }
+                    else
+                    {
+                        Init_Lrc_Info();
+
+                        bool_lrc = true;
+                    }
+            }
         }
 
         public void Init_Lrc_Info()

@@ -33,6 +33,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
         public event EventHandler MediaOpened; 
         public event EventHandler MediaEnded;
 
+        public string audioFilePath;
+        public int deviceNumber;
+        public bool deviceNumber_change;
+
         public MediaElement_Song()
         {
             waveOutEvent = new WaveOutEvent();
@@ -75,19 +79,24 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
 
             audioFileReader = new AudioFileReader(audioFilePath);
 
+            waveOutEvent = new WaveOutEvent();
+            waveOutEvent.DeviceNumber = deviceNumber;
+            deviceNumber_change = false;
+
             if (bands != null && bands.Length > 0)
             {
                 equalizer = new Equalizer(audioFileReader, bands);
-                waveOutEvent = new WaveOutEvent();
+                
                 waveOutEvent.Init(equalizer);
             }
             else
             {
-                waveOutEvent = new WaveOutEvent();
                 waveOutEvent.Init(audioFileReader);
             }
 
             OnMediaOpened();
+
+            this.audioFilePath = audioFilePath;
         }
 
         public void Play()
@@ -105,9 +114,25 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
             waveOutEvent.Stop();
         }
 
+        public void Clear()
+        {
+            audioFileReader.Dispose();
+            waveOutEvent.Dispose();
+        }
+
         public TimeSpan CurrentTime
         {
-            get { return audioFileReader?.CurrentTime ?? TimeSpan.Zero; }
+            get
+            {
+                try
+                {
+                    return audioFileReader?.CurrentTime ?? TimeSpan.Zero;
+                }
+                catch
+                {
+                    return TimeSpan.Zero;
+                }
+            }
             set
             {
                 if (audioFileReader != null)
@@ -138,7 +163,27 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
         {
             if (WaveOut.DeviceCount > 0 && deviceNumber >= 0 && deviceNumber < WaveOut.DeviceCount)
             {
+                audioFileReader.Dispose();
+                waveOutEvent.Dispose();
+                audioFileReader = new AudioFileReader(audioFilePath);
+
+                waveOutEvent = new WaveOutEvent();
                 waveOutEvent.DeviceNumber = deviceNumber;
+                deviceNumber_change = true;
+
+                if (bands != null && bands.Length > 0)
+                {
+                    equalizer = new Equalizer(audioFileReader, bands);
+                    waveOutEvent.Init(equalizer);
+                }
+                else
+                {
+                    waveOutEvent.Init(audioFileReader);
+                }
+
+                OnMediaOpened();
+
+                this.deviceNumber = deviceNumber;
             }
         }
 
@@ -158,6 +203,27 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
 
         public float MinimumGain => -12;
         public float MaximumGain => 12 ;
+
+
+        /// <summary>
+        /// 31
+        /// </summary>
+        private float bandwidth;
+        public float Bandwidth
+        {
+            get => bands[0].Bandwidth;
+            set
+            {
+                if (bands[0].Bandwidth != value)
+                {
+                    for (int i = 0; i < bands.Length; i++)
+                    {
+                        bands[i].Bandwidth = value;
+                    }
+                    OnPropertyChanged("Bandwidth");
+                }
+            }
+        }
 
         /// <summary>
         /// 31

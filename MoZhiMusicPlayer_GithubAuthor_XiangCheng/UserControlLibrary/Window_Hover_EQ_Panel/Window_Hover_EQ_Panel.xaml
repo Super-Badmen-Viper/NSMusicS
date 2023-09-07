@@ -22,52 +22,52 @@
             HorizontalAlignment="Right" Height="30" Width="30"
             VerticalAlignment="Center" Margin="0,0,30,0"  
             >
-                <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/关闭_.svg"/>
+                <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/关闭_.svg" MouseLeftButtonDown="SvgViewbox_MouseLeftButtonDown"/>
             </TextBlock>
             <TextBlock 
-            Text="MoZhi墨智 EQ均衡器"
+            Text="MoZhi墨智 EQ均衡器(更新中)"
             HorizontalAlignment="Left" VerticalAlignment="Center"
             Margin="80,0,0,0" FontWeight="Bold" FontSize="26" Foreground="Black"
             />
         </Grid>
-        <Grid Width="200" HorizontalAlignment="Left" Margin="0,50,0,0" Background="White">
+        <Grid Width="100" HorizontalAlignment="Left" Margin="0,50,0,0" Background="White">
             <TextBlock 
-            HorizontalAlignment="Left" Height="60" Width="60"
-            VerticalAlignment="Top" Margin="70,70,0,0"  
+            HorizontalAlignment="Center" Height="30" Width="30"
+            VerticalAlignment="Top" Margin="0,70,0,0"  
             >
             <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/调节 设置均衡器.svg"/>
             </TextBlock>
             <TextBlock 
             Text="简易EQ"
-            HorizontalAlignment="Left" VerticalAlignment="Top"
-            Margin="60,130,0,0" FontWeight="Bold" FontSize="20" Foreground="Black"
+            HorizontalAlignment="Center" VerticalAlignment="Top"
+            Margin="0,100,0,0" FontWeight="Bold" FontSize="16" Foreground="Black"
             />
 
             <TextBlock 
-            HorizontalAlignment="Left" Height="60" Width="60"
-            VerticalAlignment="Top" Margin="70,200,0,0"  
+            HorizontalAlignment="Center" Height="60" Width="60"
+            VerticalAlignment="Top" Margin="0,200,0,0"  
             >
             <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/调节 设置均衡器.svg"/>
             </TextBlock>
             <TextBlock 
             Text="普通EQ"
-            HorizontalAlignment="Left" VerticalAlignment="Top"
-            Margin="60,260,0,0" FontWeight="Bold" FontSize="20" Foreground="#44000000"
+            HorizontalAlignment="Center" VerticalAlignment="Top"
+            Margin="0,260,0,0" FontWeight="Bold" FontSize="20" Foreground="#44000000"
             />
 
             <TextBlock 
-            HorizontalAlignment="Left" Height="60" Width="60"
-            VerticalAlignment="Top" Margin="70,330,0,0"  
+            HorizontalAlignment="Center" Height="60" Width="60"
+            VerticalAlignment="Top" Margin="0,330,0,0"  
             >
             <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/调节 设置均衡器.svg"/>
             </TextBlock>
             <TextBlock 
             Text="专业EQ"
-            HorizontalAlignment="Left" VerticalAlignment="Top"
-            Margin="60,390,0,0" FontWeight="Bold" FontSize="20" Foreground="#44000000"
+            HorizontalAlignment="Center" VerticalAlignment="Top"
+            Margin="0,390,0,0" FontWeight="Bold" FontSize="20" Foreground="#44000000"
             />
         </Grid>
-        <Grid Margin="200,50,0,0" Background="#F1F1F1">
+        <Grid Margin="100,50,0,0" Background="#F1F1F1">
             <Grid Margin="20,142,20,120" VerticalAlignment="Top">
                 <TextBox 
                     x:Name="Text_Model_1_Eq_Num31" Text="{Binding Band1, Mode=TwoWay}" MaxWidth="33"
@@ -130,29 +130,55 @@
                     Margin="442,0,0,0" FontSize="13" Foreground="Black"
                     />
             </Grid>
-            <StackPanel Orientation="Horizontal" Margin="20,160,20,160">
+            <Slider Orientation="Vertical" Margin="40,160,0,160" 
+                Minimum="0.1" Maximum="3" Value="{Binding Bandwidth, Mode=TwoWay}" 
+                x:Name="Slider_Model_1_Eq_Num_Bandwidth"
+            ></Slider>
+            <StackPanel Orientation="Horizontal" Margin="68,160,20,160">
                 <Slider Orientation="Vertical" Margin="26,0,0,0" 
-                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band1, Mode=TwoWay}"></Slider>
+                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band1, Mode=TwoWay}" 
+                        x:Name="Slider_Model_1_Eq_Num31"
+                        ></Slider>
                 <Slider Orientation="Vertical" Margin="26,0,0,0" 
-                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band2, Mode=TwoWay}"></Slider>
+                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band2, Mode=TwoWay}"
+                        x:Name="Slider_Model_1_Eq_Num62"
+                        ></Slider>
                 <Slider Orientation="Vertical" Margin="26,0,0,0" 
-                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band3, Mode=TwoWay}"></Slider>
+                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band3, Mode=TwoWay}"
+                        x:Name="Slider_Model_1_Eq_Num125"
+                        ></Slider>
                 <Slider Orientation="Vertical" Margin="26,0,0,0" 
-                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band4, Mode=TwoWay}"></Slider>
+                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band4, Mode=TwoWay}"
+                        x:Name="Slider_Model_1_Eq_Num250"
+                        ></Slider>
                 <Slider Orientation="Vertical" Margin="26,0,0,0" 
-                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band5, Mode=TwoWay}"></Slider>
+                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band5, Mode=TwoWay}"
+                        x:Name="Slider_Model_1_Eq_Num500"
+                        ></Slider>
                 <Slider Orientation="Vertical" Margin="26,0,0,0" 
-                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band6, Mode=TwoWay}"></Slider>
+                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band6, Mode=TwoWay}"
+                        x:Name="Slider_Model_1_Eq_Num1k"
+                        ></Slider>
                 <Slider Orientation="Vertical" Margin="26,0,0,0" 
-                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band7, Mode=TwoWay}"></Slider>
+                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band7, Mode=TwoWay}"
+                        x:Name="Slider_Model_1_Eq_Num2k"
+                        ></Slider>
                 <Slider Orientation="Vertical" Margin="26,0,0,0" 
-                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band8, Mode=TwoWay}"></Slider>
+                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band8, Mode=TwoWay}"
+                        x:Name="Slider_Model_1_Eq_Num4k"
+                        ></Slider>
                 <Slider Orientation="Vertical" Margin="26,0,0,0" 
-                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band9, Mode=TwoWay}"></Slider>
+                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band9, Mode=TwoWay}"
+                        x:Name="Slider_Model_1_Eq_Num8k"
+                        ></Slider>
                 <Slider Orientation="Vertical" Margin="26,0,0,0" 
-                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band10, Mode=TwoWay}"></Slider>
+                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band10, Mode=TwoWay}"
+                        x:Name="Slider_Model_1_Eq_Num16k"
+                        ></Slider>
                 <Slider Orientation="Vertical" Margin="26,0,0,0" 
-                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band11, Mode=TwoWay}"></Slider>
+                        Minimum="{Binding MinimumGain}" Maximum="{Binding MaximumGain}" Value="{Binding Band11, Mode=TwoWay}"
+                        x:Name="Slider_Model_1_Eq_Num20k"
+                        ></Slider>
             </StackPanel>
             <Grid Margin="20,360,20,120">
                 <TextBlock 

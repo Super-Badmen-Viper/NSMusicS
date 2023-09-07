@@ -422,9 +422,6 @@
                 Width="18" Height="18" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,21,0,0"
                 >
                     <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/下02.svg"/>
-                    <Button.Effect>
-                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                    </Button.Effect>
                 </Button>
 
                 <Button 

@@ -1,9 +1,11 @@
-﻿using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Services.Services_For_API_GetResult;
+﻿using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Services.Services_For_API_GetResult;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -11,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls
 {
@@ -31,11 +34,35 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow
             string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
             Hover_Album_Mouse_Enter_Open = new Uri(Path_App + @"\Button_Image_Svg\收缩上箭头.svg");
             Hover_Album_Mouse_Enter_Close = new Uri(Path_App + @"\Button_Image_Svg\收缩下箭头.svg");
+
+            mediaElement_Song = MediaElement_Song.Retuen_This();
         }
         ViewModule_Search_Song viewModule_Search_Song;
         public Uri Hover_Album_Mouse_Enter_Open;
         public Uri Hover_Album_Mouse_Enter_Close;
 
+        MediaElement_Song mediaElement_Song;
+        public DispatcherTimer dispatcherTimer_Silder = new DispatcherTimer();
+        public bool b_IsDrag_PlayerSlider;
+        public bool b_IsDrag_Lyic_ScrollIntoView;
+        private void Slider_ListPlayer_Timer_DragStarted(object sender, DragStartedEventArgs e)
+        {
+            if (viewModule_Search_Song.MediaElement_Song_Url == null) return; // 如果当前播放器没有资源就直接返回
+            b_IsDrag_PlayerSlider = true;
+
+            dispatcherTimer_Silder.Stop();
+        }
+        private void Slider_ListPlayer_Timer_DragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            if (viewModule_Search_Song.MediaElement_Song_Url == null) return;
+            b_IsDrag_PlayerSlider = false;
+
+            mediaElement_Song.CurrentTime =
+                    new TimeSpan(0, 0, 0, 0, (int)Silder_Music_Width.Value);
+            dispatcherTimer_Silder.Start();
+
+            b_IsDrag_Lyic_ScrollIntoView = true;
+        }
 
         public bool Bool_Player_Model;
         private void Border_Hover_BackGround_MouseEnter(object sender, MouseEventArgs e)

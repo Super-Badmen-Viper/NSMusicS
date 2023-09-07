@@ -90,7 +90,7 @@
                 Width="198" Height="108" Margin="500,260,0,0" Background="White" />
         <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
                    Margin="500,370,0,0" Padding="10,0,0,0"
-                   Text="EXO" Foreground="White" FontSize="14" >
+                   Text="TWICE" Foreground="White" FontSize="14" >
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
             </TextBlock.Effect>

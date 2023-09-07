@@ -23,7 +23,7 @@
                 
             </StackPanel>
             
-            <TextBlock x:Name="TextBlock_1"  HorizontalAlignment="Center" Text="墨智云生态" Visibility="Collapsed"
+            <TextBlock x:Name="TextBlock_1"  HorizontalAlignment="Center" Text="墨智云生态" Visibility="Visible"
                         FontSize="46" Height="68" IsEnabled="False" FontWeight="Bold" VerticalAlignment="Bottom" Margin="0,0,0,80" >
                 <TextBlock.Triggers>
                     <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
@@ -74,7 +74,7 @@
                                 <DoubleAnimation x:Name="Text_DoubleAnimation_slider_Up"
                                                 From="0.5" To="-0.5" Duration="0:0:4"
                                                 Storyboard.TargetName="Trans_slider_Up" Storyboard.TargetProperty="X"/>
-                            </Storyboard>
+                            </Storyboard> 
                         </BeginStoryboard>
                     </EventTrigger>
                 </TextBlock.Triggers>
@@ -83,7 +83,7 @@
                         <LinearGradientBrush.RelativeTransform>
                             <TranslateTransform X="-0.5" x:Name="Trans_slider_Up"/>
                         </LinearGradientBrush.RelativeTransform>
-                        <GradientStop Color="White" Offset="0.50"/>
+                        <GradientStop Color="#FF00FFA2" Offset="0.50"/>
                         <GradientStop Color="#00000000" Offset="0.50"/>
                     </LinearGradientBrush>
                 </TextBlock.Background>
@@ -112,7 +112,7 @@
                         <LinearGradientBrush.RelativeTransform>
                             <TranslateTransform X="-0.5" x:Name="Trans_slider_Down"/>
                         </LinearGradientBrush.RelativeTransform>
-                        <GradientStop Color="White" Offset="0.50"/>
+                        <GradientStop Color="#FF00FFA2" Offset="0.50"/>
                         <GradientStop Color="#00000000" Offset="0.50"/>
                     </LinearGradientBrush>
                 </TextBlock.Background>
@@ -202,7 +202,7 @@
                     HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,157">
                 <svgc:SvgViewbox 
                 x:Name="SvgViewbox_Button_Play_Pause_Player" 
-                Source="pack://application:,,,/UI_0_Library/播放.svg" Cursor="Hand"/>
+                Source="{Binding Button_Play_Pause_Player_Image}" Cursor="Hand"/>
                 <Button.Effect>
                     <DropShadowEffect Color="White" BlurRadius="1" ShadowDepth="1" Opacity="1" />
                 </Button.Effect>

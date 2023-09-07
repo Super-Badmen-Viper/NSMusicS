@@ -1,10 +1,12 @@
 ﻿using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos;
+using Shell32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -44,10 +46,49 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         }
         private void ComBox_Show_Search_Song_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(ComBox_Show_Search_Song.SelectedIndex > -1)
+            if (ComBox_Show_Search_Song.SelectedIndex > -1)
+            {
                 Search_this_SongUrl = ComBox_Show_Search_Song.SelectedItem.ToString().Substring(
                     ComBox_Show_Search_Song.SelectedItem.ToString().LastIndexOf("_Url:") + 5
-                    );      
+                    );
+
+                //TextBox_Edit_Song_Name.Text = Search_this_SongUrl.
+
+                Regex regex = new Regex(@"^(.*?)(?:\s+-\s+(.*))?\.(?:mp3|flac|wav)$");
+
+                if (!string.IsNullOrWhiteSpace(Search_this_SongUrl))
+                {
+                    string fileName = System.IO.Path.GetFileName(Search_this_SongUrl);
+                    Match match = regex.Match(fileName);
+                    Song_Info song_info = new Song_Info();
+                    ShellClass sh = new ShellClass();
+
+                    if (match.Success && match.Groups.Count >= 3)
+                    {
+                        string singerName = match.Groups[1].Value.Trim();
+                        string songName = match.Groups[2].Value.Trim();
+
+                        Folder Folderdir = sh.NameSpace(System.IO.Path.GetDirectoryName(Search_this_SongUrl));
+                        FolderItem FolderItemitem = Folderdir.ParseName(System.IO.Path.GetFileName(Search_this_SongUrl));
+                        string albumName = Folderdir.GetDetailsOf(FolderItemitem, 14);
+
+                        if (songName.Length > 0)
+                        {
+                            song_info.Singer_Name = singerName;
+                            song_info.Song_Name = songName;
+                            song_info.Album_Name = albumName;
+
+                            TextBox_Edit_Song_Name.Text = songName;
+                            TextBox_Edit_Singer_Name.Text = singerName;
+                            TextBox_Edit_Album_Name.Text = albumName;
+
+                            Edit_Song_Name = TextBox_Edit_Song_Name.Text;
+                            Edit_Singer_Name = TextBox_Edit_Singer_Name.Text;
+                            Edit_Album_Name = TextBox_Edit_Album_Name.Text;
+                        }
+                    }
+                }
+            }
         }
 
         private void TextBox_Edit_Song_Name_TextChanged(object sender, TextChangedEventArgs e)

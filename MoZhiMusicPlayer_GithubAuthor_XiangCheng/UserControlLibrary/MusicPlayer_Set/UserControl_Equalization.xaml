@@ -22,7 +22,7 @@
                     <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/关闭_.svg"/>
             </TextBlock>
             <TextBlock 
-                Text="MoZhi墨智 EQ均衡器"
+                Text="MoZhi墨智 EQ均衡器 （更新中）"
                 HorizontalAlignment="Left" VerticalAlignment="Center"
                 Margin="80,0,0,0" FontWeight="Bold" FontSize="26" Foreground="Black"
                 />

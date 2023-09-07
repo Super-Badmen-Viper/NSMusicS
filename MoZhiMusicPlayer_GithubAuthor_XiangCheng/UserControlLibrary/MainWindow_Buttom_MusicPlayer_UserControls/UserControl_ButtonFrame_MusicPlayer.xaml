@@ -20,17 +20,8 @@
                 Style="{DynamicResource SliderStyle1}" 
                 IsMoveToPointEnabled="True" Cursor="Hand"
                 Focusable="False" HorizontalAlignment="Stretch" 
-                
-                MouseEnter="Border_Hover_BackGround_MouseLeave"
-                />
-        <Slider x:Name="Silder_Music_Temp_Width" 
-                Height="10" Margin="0,-4,0,0" 
-                VerticalAlignment="Top" HorizontalContentAlignment="Stretch" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                ScrollViewer.VerticalScrollBarVisibility="Disabled" Style="{DynamicResource SliderStyle2}" 
-                IsMoveToPointEnabled="True" Cursor="Hand" BorderBrush="{x:Null}" 
-                Visibility="Collapsed"
-                
+                Thumb.DragStarted="Slider_ListPlayer_Timer_DragStarted"
+                Thumb.DragCompleted="Slider_ListPlayer_Timer_DragCompleted" 
                 MouseEnter="Border_Hover_BackGround_MouseLeave"
                 />
 
@@ -80,7 +71,7 @@
                 HorizontalAlignment="Center" VerticalAlignment="Stretch">
             <svgc:SvgViewbox 
                 x:Name="SvgViewbox_Button_Play_Pause_Player" 
-                Source="pack://application:,,,/UI_0_Library/播放.svg" Cursor="Hand"/>
+                Source="{Binding Button_Play_Pause_Player_Image}" Cursor="Hand"/>
         </Button>
         <Button x:Name="Button_Next" 
                 Style="{StaticResource MyButton}"
@@ -219,6 +210,18 @@
                  UseLayoutRounding="True" SnapsToDevicePixels="True" Margin="0,0,110,0">
                 
             </TextBox>
+            <StackPanel 
+                Height="40" Margin="0,0,196,0"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right" VerticalAlignment="Center">
+                <TextBlock 
+                    Height="20" Width="20" Margin="14,0,0,0"
+                    HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <svgc:SvgViewbox 
+                        x:Name="SvgViewbox_Open_EQ_Left"
+                        Source="pack://application:,,,/UI_0_Library/均衡器.svg" Cursor="Hand"/>
+                </TextBlock>
+            </StackPanel>
             <Button x:Name="Button_Desk_MRC" Style="{StaticResource MyButton}" 
                 Foreground="White" FontSize="15"
                 HorizontalAlignment="Right" Height="22" 
@@ -255,6 +258,20 @@
         <Grid x:Name="Grid_MusicPlayer_Main_Right"
               Visibility="Collapsed"
               >
+
+            <StackPanel 
+                Height="40" Margin="0,0,306,0"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right" VerticalAlignment="Center">
+                <TextBlock 
+                    Height="20" Width="20" Margin="14,0,0,0"
+                    HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <svgc:SvgViewbox 
+                        x:Name="SvgViewbox_Open_EQ_Right"
+                        Source="pack://application:,,,/UI_0_Library/均衡器.svg" Cursor="Hand"/>
+                </TextBlock>
+            </StackPanel>
+
             <StackPanel
                 HorizontalAlignment="Right" Margin="0,4,105,0" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" VerticalAlignment="Top" Width="185" >
@@ -306,7 +323,7 @@
                 HorizontalAlignment="Right" Width="90" Margin="0,0,105,24" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Height="25" VerticalAlignment="Bottom" >
-                <TextBlock Height="17" Foreground="White" HorizontalAlignment="Left" Width="58" Text="写真动画" FontSize="14" Margin="0,4,0,0">
+                <TextBlock Height="17" Foreground="White" HorizontalAlignment="Left" Width="58" Text="歌手写真" FontSize="14" Margin="0,4,0,0">
 
                 </TextBlock>
             </StackPanel>
@@ -380,7 +397,7 @@
             <Border x:Name="Song_Order_Panel"            
                 HorizontalAlignment="Stretch" 
                 BorderThickness="0.6" CornerRadius="4.3,4.3,4.3,4.3"
-                Margin="0,0,0,0" Background="#66232325" Height="160"
+                Margin="0,0,0,0" Background="#99232325" Height="160"
                 />
             <StackPanel x:Name="Stack_Button_Radom_Order" Height="40" Margin="0,-280,0,0">
                 <Border BorderThickness="0,0,0,0" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"/>
@@ -468,7 +485,7 @@
             Width="70" Height="240"  Margin="148,-250,0,64" HorizontalAlignment="Center">
             <Border x:Name="Song_VoIce_Panel" 
                 BorderThickness="0.6" CornerRadius="4.3,4.3,4.3,4.3"
-                Background="#66232325" Height="240"
+                Background="#99232325" Height="240"
                 />
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Height="200" Width="40" Margin="0,-240,0,0">
                 <Slider IsMoveToPointEnabled="True" Cursor="Hand" x:Name="Slider_Voice" 

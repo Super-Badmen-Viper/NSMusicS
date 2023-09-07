@@ -61,6 +61,9 @@
     <Compile Update="UserControlLibrary\Main_Home_Right_MyMusic_UserControls\UserControl_SongList_Infos_Current_Playlist.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_TOP_UserControls\UserControl_Main_Home_TOP_App_Setting.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControlLibrary\Main_Home_TOP_UserControls\UserControl_Main_Home_TOP_Personalized_Skins.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -163,6 +166,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\Main_Home_Right_MyMusic_UserControls\UserControl_SongList_Infos_Current_Playlist.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_TOP_UserControls\UserControl_Main_Home_TOP_App_Setting.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\Main_Home_TOP_UserControls\UserControl_Main_Home_TOP_Personalized_Skins.xaml">
