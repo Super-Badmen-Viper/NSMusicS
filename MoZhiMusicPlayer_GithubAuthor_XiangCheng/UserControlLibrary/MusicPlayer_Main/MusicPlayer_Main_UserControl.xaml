@@ -198,7 +198,8 @@
                                                 <Setter Property="Foreground" Value="White"/>
                                             </Trigger>
                                             <Trigger Property="IsSelected" Value="True">
-                                                <Setter Property="FontSize" Value="24"/><!--32-->
+                                                <Setter Property="FontSize" Value="32"/><!--32-->
+                                                <Setter Property="FontWeight" Value="Bold"/>
                                                 <Setter Property="Margin" Value="100,0,-100,0"/>
                                                 <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
                                                 <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
@@ -396,7 +397,7 @@
                             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                             Block.TextAlignment="Left" VerticalAlignment="Center"  
                             TextWrapping="Wrap" 
-                            Text="{Binding Singer_Name}" FontWeight="ExtraBold" TextAlignment="Justify" 
+                            FontWeight="ExtraBold" TextAlignment="Justify" 
                             TextOptions.TextFormattingMode="Display"  
                             FontSize="18" Foreground="White"  Focusable="False" 
                             HorizontalAlignment="Left" 
@@ -408,7 +409,7 @@
                            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                            Block.TextAlignment="Left" VerticalAlignment="Center"  
                            TextWrapping="Wrap" 
-                           Text="{Binding Album_Name}" FontWeight="ExtraBold" TextAlignment="Justify" TextOptions.TextFormattingMode="Display"  
+                           FontWeight="ExtraBold" TextAlignment="Justify" TextOptions.TextFormattingMode="Display"  
                            FontSize="18" Foreground="White"  Focusable="False" 
                            HorizontalAlignment="Left" 
                            Margin="145,-520,0,0"

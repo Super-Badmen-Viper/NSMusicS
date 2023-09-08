@@ -311,84 +311,98 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown +=
                         SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_3;
                     temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_3;
+                    temp.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_3;
                 }
                 else if (i == 4)
                 {
                     temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown +=
                         SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_4;
                     temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_4;
+                    temp.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_4;
                 }
                 else if (i == 5)
                 {
                     temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown +=
                         SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_5;
                     temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_5;
+                    temp.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_5;
                 }
                 else if (i == 6)
                 {
                     temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown +=
                         SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_6;
                     temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_6;
+                    temp.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_6;
                 }
                 else if (i == 7)
                 {
                     temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown +=
                         SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_7;
                     temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_7;
+                    temp.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_7;
                 }
                 else if (i == 8)
                 {
                     temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown +=
                         SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_8;
                     temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_8;
+                    temp.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_8;
                 }
                 else if (i == 9)
                 {
                     temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown +=
                         SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_9;
                     temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_9;
+                    temp.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_9;
                 }
                 else if (i == 10)
                 {
                     temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown +=
                         SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_10;
                     temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_10;
+                    temp.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_10;
                 }
                 else if (i == 11)
                 {
                     temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown +=
                         SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_11;
                     temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_11;
+                    temp.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_11;
                 }
                 else if (i == 12)
                 {
                     temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown +=
                         SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_12;
                     temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_12;
+                    temp.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_12;
                 }
                 else if (i == 13)
                 {
                     temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown +=
                         SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_13;
                     temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_13;
+                    temp.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_13;
                 }
                 else if (i == 14)
                 {
                     temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown +=
                         SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_14;
                     temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_14;
+                    temp.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_14;
                 }
                 else if (i == 15)
                 {
                     temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown +=
                         SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_15;
                     temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_15;
+                    temp.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_15;
                 }
                 else if (i == 16)
                 {
                     temp.Stack_Button_Add_Select_Song.MouseLeftButtonDown +=
                         SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_16;
                     temp.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_16;
+                    temp.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_16;
                 }
 
                 userControl_Main_Home_Left_MyMusic_Mores.Add(temp);
@@ -1485,11 +1499,594 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         }
 
         #endregion
-        #region 手动添加音乐
-        /// <summary>
-        /// 确认别的歌单是否存在我的收藏的歌曲
-        /// </summary>
+        #region 手动 拖动 添加音乐
+        private bool IsAudioFile(string filePath)
+        {
+            // 检查文件扩展名是否是支持的音频文件扩展名
+            string[] allowedExtensions = { ".mp3", ".flac", ".wav" };
+            return allowedExtensions.Contains(System.IO.Path.GetExtension(filePath).ToLower());
+        }
 
+        public async void Start_Drop_Song_Of_SelectFiles_ThisWindowsMusicAndDownload(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[1][0].Songs, 1 , audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_Love(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[0][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[0][0].Songs, 0, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_Rently(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[2][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[2][0].Songs, 2, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_3(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[3][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[3][0].Songs, 3, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_4(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[4][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[4][0].Songs, 4, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_5(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[5][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[5][0].Songs, 5, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_6(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[6][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[6][0].Songs, 6, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_7(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[7][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[7][0].Songs, 7, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_8(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[8][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[8][0].Songs, 8, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_9(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[9][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[9][0].Songs, 9, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_10(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[10][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[10][0].Songs, 10, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_11(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[11][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[11][0].Songs, 11, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_12(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[12][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[12][0].Songs, 12, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_13(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[13][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[13][0].Songs, 13, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_14(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[14][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[14][0].Songs, 14, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_15(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[15][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[15][0].Songs, 15, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_16(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[16][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[16][0].Songs, 16, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            }
+        }
+        #endregion
+        #region 手动添加音乐
         private async void ThisWindowsMusicAndDownload_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
@@ -2578,8 +3175,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             //设置添加手动导入歌曲文件按钮事件
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Button_Add_Select_Song.MouseLeftButtonDown += ThisWindowsMusicAndDownload_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_ThisWindowsMusicAndDownload;
             userControl_Main_Home_Left_MyMusic_My_Love.Stack_Button_Add_Select_Song.MouseLeftButtonDown += My_Love_Button_Add_PC_Select_Song_MouseLeftButtonDown;
+            userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_Love;
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_Add_Select_Song.MouseLeftButtonDown += Recent_Play_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.Drop += Start_Drop_Song_Of_SelectFiles_Rently;
 
             //设置添加本地所有歌曲文件按钮事件            
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += ThisWindowsMusicAndDownload_Stack_Button_Add_PC_SelectFolderBrowser_Song_MouseLeftButtonDown;
@@ -3045,7 +3645,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_ButtonFrame_MusicPlayer.Grid_MusicPlayer_Main_Right.Visibility = Visibility.Visible;
                 userControl_ButtonFrame_MusicPlayer.TextBox_Song_Time_Temp.Visibility = Visibility.Visible;
                 userControl_ButtonFrame_MusicPlayer.TextBox_Song_Album_Name.Visibility = Visibility.Collapsed;
-                userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.Visibility = Visibility.Visible;
 
                 musicPlayer_Main_UserControl.ListView_Temp_MRC.Visibility = Visibility.Collapsed;
                 musicPlayer_Main_UserControl.TextBox_SongName.Visibility = Visibility.Visible;
@@ -3107,7 +3706,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_ButtonFrame_MusicPlayer.Grid_MusicPlayer_Main_Right.Visibility = Visibility.Collapsed;
                 userControl_ButtonFrame_MusicPlayer.TextBox_Song_Time_Temp.Visibility = Visibility.Collapsed;
                 userControl_ButtonFrame_MusicPlayer.TextBox_Song_Album_Name.Visibility = Visibility.Visible;
-                userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.Visibility = Visibility.Collapsed;
 
                 musicPlayer_Main_UserControl.ListView_Temp_MRC.Visibility = Visibility.Collapsed;
                 musicPlayer_Main_UserControl.TextBox_SongName.Visibility = Visibility.Collapsed;
@@ -4188,7 +4786,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     userControl_TaskbarIcon.ThisWindow_Song_Name.Text = this_Song_Info.Singer_Name + " - " + this_Song_Info.Song_Name;
                     userControl_TaskbarIcon.ThisWindow_Song_Name_Right.Text = this_Song_Info.Singer_Name + " - " + this_Song_Info.Song_Name;
                     //
-                    userControl_ButtonFrame_MusicPlayer.TextBox_Song_Album_Name.Text = this_Song_Info.Album_Name;
+                    viewModule_Search_Song.Album_Name = this_Song_Info.Album_Name;
 
                     //检测歌手数量，设置歌手动画循环方式
                     if (this_Song_Info.Singer_Name.IndexOf("、") <= 0)//单歌手
@@ -4968,7 +5566,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                             UserControl_Mrc_Byte mrc_Byte_ = new UserControl_Mrc_Byte();
                                             //设置文本
                                             mrc_Byte_.TextBlock_1.FontSize = 34;
-                                            mrc_Byte_.TextBlock_1.FontWeight = FontWeights.ExtraBold;
+                                            mrc_Byte_.TextBlock_1.FontWeight = FontWeights.Bold;
                                             mrc_Byte_.TextBlock_1.Text = dao_ListBox_Temp_MRC.mrc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].
                                                 Array_Morebyte_Text[i].ToString();
                                             GradientStop gradientStop = (GradientStop)mrc_Byte_.TextBlock_1.FindName("GradientStop_Background");
@@ -6462,6 +7060,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         public void Init_Spectrum_Visualization()
         {
             dispatcherTimer_Spectrum_Visualization = new DispatcherTimer();
+            dispatcherTimer_Spectrum_Visualization.Tick += userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                audioSpectrogram.ProcessFrame;
+            dispatcherTimer_Spectrum_Visualization.Tick += userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
+                                audioSpectrogram.RenderPanel;
             dispatcherTimer_Spectrum_Visualization.Tick += Spectrum_Visualization_Play_Tick;
 
             Spectrum_time = 75;

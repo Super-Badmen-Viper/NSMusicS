@@ -201,7 +201,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         /// </summary>
         /// <param name="s"></param>
         /// <param name="args"></param>
-        private void RenderPanel(object s, EventArgs args)
+        public void RenderPanel(object s, EventArgs args)
         {
             if (DftData == null || DftData.Length == 0 || frequencyPerIndex == 0)
                 return;
@@ -402,7 +402,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         /// </summary>
         /// <param name="s"></param>
         /// <param name="args"></param>
-        private void ProcessFrame(object s, EventArgs args)
+        public void ProcessFrame(object s, EventArgs args)
         {
             if (Samples == null)
                 return;
@@ -466,7 +466,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             }
         }
 
-        Timer timer;
         /// <summary>
         /// 开始与暂停
         /// </summary>
@@ -474,12 +473,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
         /// <param name="e"></param>
         public void StartBtn_Click()
         {
-            timer = new Timer();
-            timer.Interval = 20;
-            timer.Tick += ProcessFrame;
-            timer.Tick += RenderPanel;
-            timer.Start();
-
             capture.StartRecording();
 
             viewModule.IsRecording ^= true;
@@ -489,8 +482,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             if (writer != null)
                 writer.Close();
             capture.StopRecording();
-
-            timer.Stop();
 
             viewModule.IsRecording ^= false;
         }

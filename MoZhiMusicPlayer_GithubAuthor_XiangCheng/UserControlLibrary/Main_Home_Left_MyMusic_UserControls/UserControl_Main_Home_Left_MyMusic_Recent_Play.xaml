@@ -83,6 +83,7 @@
                 Loaded="UserControl_Loaded" SourceUpdated="ListView_Download_SongList_Info_SourceUpdated"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                AllowDrop="True" 
                   >
 
                 <ListView.ItemContainerStyle>
@@ -179,10 +180,11 @@
                                                        Margin="0,5,0,0">
                                                 
                                             </TextBlock>
-                                            <Button HorizontalAlignment="Left" Background="{Binding Song_MV_Image}"
+                                            <!--Background="{Binding Song_MV_Image}"-->
+                                            <Button HorizontalAlignment="Left" 
                                                 Style="{StaticResource MyButton}" 
                                                 Width="16" Height="16" Margin="8,6,0,0"
-                                                />
+                                            />
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

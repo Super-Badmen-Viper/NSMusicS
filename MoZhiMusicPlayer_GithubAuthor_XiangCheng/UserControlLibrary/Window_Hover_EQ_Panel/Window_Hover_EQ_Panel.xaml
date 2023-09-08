@@ -44,7 +44,7 @@
             />
 
             <TextBlock 
-            HorizontalAlignment="Center" Height="60" Width="60"
+            HorizontalAlignment="Center" Height="30" Width="30"
             VerticalAlignment="Top" Margin="0,200,0,0"  
             >
             <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/调节 设置均衡器.svg"/>
@@ -52,11 +52,11 @@
             <TextBlock 
             Text="普通EQ"
             HorizontalAlignment="Center" VerticalAlignment="Top"
-            Margin="0,260,0,0" FontWeight="Bold" FontSize="20" Foreground="#44000000"
+            Margin="0,230,0,0" FontWeight="Bold" FontSize="16" Foreground="#44000000"
             />
 
             <TextBlock 
-            HorizontalAlignment="Center" Height="60" Width="60"
+            HorizontalAlignment="Center" Height="30" Width="30"
             VerticalAlignment="Top" Margin="0,330,0,0"  
             >
             <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/调节 设置均衡器.svg"/>
@@ -64,7 +64,7 @@
             <TextBlock 
             Text="专业EQ"
             HorizontalAlignment="Center" VerticalAlignment="Top"
-            Margin="0,390,0,0" FontWeight="Bold" FontSize="20" Foreground="#44000000"
+            Margin="0,360,0,0" FontWeight="Bold" FontSize="16" Foreground="#44000000"
             />
         </Grid>
         <Grid Margin="100,50,0,0" Background="#F1F1F1">
@@ -130,8 +130,8 @@
                     Margin="442,0,0,0" FontSize="13" Foreground="Black"
                     />
             </Grid>
-            <Slider Orientation="Vertical" Margin="40,160,0,160" 
-                Minimum="0.1" Maximum="3" Value="{Binding Bandwidth, Mode=TwoWay}" 
+            <Slider Orientation="Vertical" Margin="40,160,0,160" Visibility="Collapsed"
+                Minimum="0.3" Maximum="3" Value="{Binding Bandwidth, Mode=TwoWay}" 
                 x:Name="Slider_Model_1_Eq_Num_Bandwidth"
             ></Slider>
             <StackPanel Orientation="Horizontal" Margin="68,160,20,160">

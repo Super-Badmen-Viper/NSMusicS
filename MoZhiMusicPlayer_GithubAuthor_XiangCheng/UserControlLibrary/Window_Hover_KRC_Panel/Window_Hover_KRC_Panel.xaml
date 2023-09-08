@@ -83,7 +83,7 @@
                         <LinearGradientBrush.RelativeTransform>
                             <TranslateTransform X="-0.5" x:Name="Trans_slider_Up"/>
                         </LinearGradientBrush.RelativeTransform>
-                        <GradientStop Color="#FF00FFA2" Offset="0.50"/>
+                        <GradientStop Color="White" Offset="0.50"/>
                         <GradientStop Color="#00000000" Offset="0.50"/>
                     </LinearGradientBrush>
                 </TextBlock.Background>
@@ -112,7 +112,7 @@
                         <LinearGradientBrush.RelativeTransform>
                             <TranslateTransform X="-0.5" x:Name="Trans_slider_Down"/>
                         </LinearGradientBrush.RelativeTransform>
-                        <GradientStop Color="#FF00FFA2" Offset="0.50"/>
+                        <GradientStop Color="White" Offset="0.50"/>
                         <GradientStop Color="#00000000" Offset="0.50"/>
                     </LinearGradientBrush>
                 </TextBlock.Background>

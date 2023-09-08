@@ -53,6 +53,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Extract_Infos
 
         public static ArrayList Extract_Lyic_Of_This_SongUrl(string url)
         {
+            ArrayList arrayList;
             TagLib.File xxxx = TagLib.File.Create(url);
             if (xxxx.Tag.Lyrics != null)
             {
@@ -62,24 +63,28 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Extract_Infos
                     if (xxxx.Tag.Lyrics.IndexOf("\r\n") >= 0)
                     {
                         lines = xxxx.Tag.Lyrics.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                        arrayList = new ArrayList();
+                        foreach (string line in lines)
+                            arrayList.Add(line);
+
+                        for (int i = arrayList.Count - 1; i >= 0; i--)
+                        {
+                            string A_String_Read = arrayList[i].ToString();
+
+                            if (!A_String_Read.Contains("<"))
+                            {
+                                arrayList.RemoveAt(i);
+                            }
+                        }
                     }
                     else
                     {
                         lines = xxxx.Tag.Lyrics.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                    }
 
-                    ArrayList arrayList = new ArrayList();
-                    foreach (string line in lines)
-                        arrayList.Add(line);
-
-                    for (int i = arrayList.Count - 1; i >= 0; i--)
-                    {
-                        string A_String_Read = arrayList[i].ToString();
-
-                        if (!A_String_Read.Contains("<"))
-                        {
-                            arrayList.RemoveAt(i);
-                        }
+                        arrayList = new ArrayList();
+                        foreach (string line in lines)
+                            arrayList.Add(line);
                     }
 
                     return arrayList;

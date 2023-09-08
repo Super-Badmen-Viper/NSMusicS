@@ -172,12 +172,12 @@
                     </TextBox>
                 </StackPanel>
             </Canvas>
-            <TextBox x:Name="TextBox_Song_Album_Name" 
+            <TextBox x:Name="TextBox_Song_Album_Name" Text="{Binding Album_Name}"
                  HorizontalAlignment="Left" Height="40" 
                  TextWrapping="Wrap" Width="220" FontSize="12"
                  Background="{x:Null}" SelectionBrush="{x:Null}" BorderBrush="{x:Null}" 
                  Foreground="White" HorizontalContentAlignment="Right" 
-                 Text="MZ墨智音乐" BorderThickness="0" TextAlignment="Left"
+                 BorderThickness="0" TextAlignment="Left"
                  Focusable="False" VerticalContentAlignment="Center" 
                  UseLayoutRounding="True" SnapsToDevicePixels="True" Margin="86,24,0,0"
                  MouseEnter="Border_Hover_BackGround_MouseLeave"
