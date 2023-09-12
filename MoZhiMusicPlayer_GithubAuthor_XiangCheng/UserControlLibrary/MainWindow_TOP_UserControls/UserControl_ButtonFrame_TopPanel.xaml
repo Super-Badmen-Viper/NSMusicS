@@ -9,24 +9,39 @@
              mc:Ignorable="d" 
              d:DesignHeight="77" d:DesignWidth="800" Background="#1F1F1F">
     <Grid>
+        <TextBlock 
+            Text="模式选择：" Foreground="White" Visibility="Collapsed"
+            FontSize="26" Margin="20,8,0,0" VerticalAlignment="Center"/>
+        
         <Border 
+            x:Name="Model_1"
             Margin="60,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,2">
             <TextBlock 
-                Text="音乐" Foreground="White"
+                Text="单曲" Foreground="White"
                 FontSize="26" Margin="0,0,0,8"/>
         </Border>
 
         <Border 
+            x:Name="Model_2"
             Margin="140,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
-            BorderBrush="{x:Null}" BorderThickness="0,0,0,2">
+            BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
             <TextBlock 
-                Text="广播" Foreground="#44FFFFFF"
+                Text="专辑" Foreground="White"
                 FontSize="26" Margin="0,0,0,8"/>
         </Border>
         <Border 
+            x:Name="Model_3"
             Margin="220,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
-            BorderBrush="{x:Null}" BorderThickness="0,0,0,2">
+            BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
+            <TextBlock 
+                Text="编辑/导入" Foreground="White"
+                FontSize="26" Margin="0,0,0,8"/>
+        </Border>
+        <Border 
+            x:Name="Model_4"
+            Margin="360,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
             <TextBlock 
                 Text="专业" Foreground="#44FFFFFF"
                 FontSize="26" Margin="0,0,0,8"/>

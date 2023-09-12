@@ -73,7 +73,7 @@
         </Grid>
 
 
-        <Grid x:Name="Grid_ListItem_CrudModel_1" Margin="0,140,0,0">
+        <Grid x:Name="Grid_ListItem_CrudModel_1" Margin="30,140,0,10">
             <ListView x:Name="ListView_Download_SongList_Info" Foreground="White"
                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
@@ -214,7 +214,7 @@
                             </GridViewColumn>
 
                             <GridViewColumn Header="No."
-                                        Width="130"
+                                        Width="92"
                                         sort:GridViewSort.PropertyName="Song_No"
                                         >
                                 <GridViewColumn.CellTemplate>
@@ -227,7 +227,7 @@
                             </GridViewColumn>
 
                             <GridViewColumn Header="歌曲路径"
-                                        Width="290"
+                                        Width="0"
                                         sort:GridViewSort.PropertyName="Song_Url">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>

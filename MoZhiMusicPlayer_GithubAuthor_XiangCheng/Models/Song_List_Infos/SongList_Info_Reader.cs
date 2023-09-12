@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Shell32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
@@ -38,9 +40,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
                     var song = new Song_Info();
                     song.Song_Name = songNode.SelectSingleNode("Song_Name").InnerText;
                     song.Singer_Name = songNode.SelectSingleNode("Singer_Name").InnerText;
+
                     song.Album_Name = songNode.SelectSingleNode("Album_Name").InnerText;
+                    if (song.Album_Name.Length == 0)
+                        song.Album_Name = "未知专辑";
+
                     song.Song_Url = songNode.SelectSingleNode("Song_Url").InnerText;
-                    song.Song_Duration = songNode.SelectSingleNode("Song_Duration").InnerText;
+
+                    //song.Song_Duration = songNode.SelectSingleNode("Song_Duration").InnerText;
+                    song.Song_Duration = GetMediaDuration(song.Song_Url);
+
                     song.Song_No = Convert.ToInt16(songNode.SelectSingleNode("Song_No").InnerText);
                     song.Song_Like = Convert.ToInt16(songNode.SelectSingleNode("Song_Like").InnerText);
                     song.MV_Path = songNode.SelectSingleNode("MV_Path").InnerText;
@@ -69,8 +78,41 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
             return playlists;
         }
 
-        
 
 
+        public static string GetMediaDuration(string songPath)
+        {
+            try
+            {
+                string albumTemp = string.Empty;
+                ShellClass sh = new ShellClass();
+                Folder dir = sh.NameSpace(Path.GetDirectoryName(songPath));
+                FolderItem item = dir.ParseName(Path.GetFileName(songPath));
+                String durationStr = dir.GetDetailsOf(item, 27);    //获取时长字符串(00:00:01)
+                if (!durationStr.Equals(""))
+                {
+                    try
+                    {
+                        String[] durationArray = durationStr.Split(':');    //获取长度  iColumn:27
+                        int duration = 0;    //时长(毫秒)
+                        duration += int.Parse(durationArray[0]) * 60 * 60 * 1000;
+                        duration += int.Parse(durationArray[1]) * 60 * 1000;
+                        duration += int.Parse(durationArray[2]) * 1000;
+                    }
+                    catch (Exception ex)
+                    {
+                        //log
+                    }
+                }
+                durationStr = durationStr.Substring(3);
+
+                return durationStr;
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+        }
     }
 }

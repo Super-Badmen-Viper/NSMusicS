@@ -58,6 +58,15 @@
     <Compile Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Song.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\Assembly_Albums_And_Track.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\UserControl_Main_Model_2_View_Album.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\UserControl_Main_Model_2_View_Albums_And_Tracks.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControlLibrary\Main_Home_Right_MyMusic_UserControls\UserControl_SongList_Infos_Current_Playlist.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -163,6 +172,15 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Song.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\Assembly_Albums_And_Track.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\UserControl_Main_Model_2_View_Album.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\UserControl_Main_Model_2_View_Albums_And_Tracks.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\Main_Home_Right_MyMusic_UserControls\UserControl_SongList_Infos_Current_Playlist.xaml">

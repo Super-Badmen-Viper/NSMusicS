@@ -21,7 +21,7 @@
                >
             <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/本地.svg"/>
         </TextBlock>
-        <TextBlock Margin="40,5,0,5" Text="本地音乐" Foreground="White" FontSize="13.5" Padding="0,1,0,0" 
+        <TextBlock Margin="40,5,0,5" Text="我的音乐" Foreground="White" FontSize="13.5" Padding="0,1,0,0" 
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                    >
         </TextBlock>

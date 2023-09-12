@@ -8,6 +8,9 @@ using System.Linq;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using Brush = System.Windows.Media.Brush;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Extract_Infos
 {
@@ -22,14 +25,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Extract_Infos
         {
             Image image = null;
 
-            if (File.Exists(url))
+            if (url.IndexOf(".wav") < 0)
             {
-                TagLib.File xxxx = TagLib.File.Create(url);
-
-                if (xxxx.Tag.Pictures.Length >= 1)
+                if (File.Exists(url))
                 {
-                    byte[] bin = xxxx.Tag.Pictures[0].Data.Data;
-                    image = ReturnPhoto(bin);
+                    TagLib.File xxxx = TagLib.File.Create(url);
+
+                    if (xxxx.Tag.Pictures.Length >= 1)
+                    {
+                        byte[] bin = xxxx.Tag.Pictures[0].Data.Data;
+                        image = ReturnPhoto(bin);
+                    }
                 }
             }
 
@@ -51,6 +57,63 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Extract_Infos
             return null;
         }
 
+        /// <summary>
+        /// 设置歌曲文件内专辑图片
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public static void Set_AlbumImage_Of_This_SongUrl(string url, ImageSource imageSource)
+        {
+            if (url.IndexOf(".wav") < 0)
+            {
+                if (File.Exists(url))
+                {
+                    TagLib.File xxxx = TagLib.File.Create(url);
+
+                    Image image = null;
+                    if (imageSource is BitmapSource bitmapSource)
+                    {
+                        // 创建一个 MemoryStream 以保存 BitmapSource 数据
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            BitmapEncoder encoder = new PngBitmapEncoder(); // 选择适当的编码器
+                            encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+                            encoder.Save(memoryStream);
+
+                            // 从 MemoryStream 创建 System.Drawing.Image
+                            ImageConverter imageConverter = new ImageConverter();
+                            image = (Image)imageConverter.ConvertFrom(memoryStream.ToArray());
+                        }
+                    }
+                    byte[] bin = ImageToByteArray(image);
+
+                    // define picture
+                    TagLib.Id3v2.AttachedPictureFrame pic = new TagLib.Id3v2.AttachedPictureFrame();
+                    pic.TextEncoding = TagLib.StringType.Latin1;
+                    pic.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg;
+                    pic.Type = TagLib.PictureType.FrontCover;
+                    pic.Data = bin;
+
+                    // save picture to file
+                    xxxx.Tag.Pictures = new TagLib.IPicture[1] { pic };
+                    xxxx.Save(); 
+                }
+            }
+        }
+        public static byte[] ImageToByteArray(Image image)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                image.Save(ms, System.Drawing.Imaging.ImageFormat.Png); // 根据需要选择图像格式
+                return ms.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// 读取歌曲文件内 内嵌歌词（已转化为同步）
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         public static ArrayList Extract_Lyic_Of_This_SongUrl(string url)
         {
             ArrayList arrayList;
@@ -108,6 +171,32 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Extract_Infos
                 }
             }
             return true;                              //是，就返回true
+        }
+
+
+        /// <summary>
+        /// 读取歌曲文件内 内嵌歌词（未转化为同步数据）
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public static string Get_Lyic_Of_This_SongUrl(string url)
+        {
+            TagLib.File xxxx = TagLib.File.Create(url);
+            string lyic_Info = xxxx.Tag.Lyrics;
+            return lyic_Info;
+        }
+
+        /// <summary>
+        /// 设置歌曲文件内 内嵌歌词
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="lyic_Info"></param>
+        /// <returns></returns>
+        public static void Set_Lyic_Of_This_SongUrl(string url,string lyic_Info)
+        {
+            TagLib.File xxxx = TagLib.File.Create(url);
+            xxxx.Tag.Lyrics = lyic_Info;
+            xxxx.Save();
         }
     }
 }

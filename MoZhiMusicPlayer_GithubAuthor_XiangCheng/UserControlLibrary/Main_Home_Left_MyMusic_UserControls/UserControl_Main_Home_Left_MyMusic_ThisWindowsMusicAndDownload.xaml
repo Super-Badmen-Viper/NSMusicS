@@ -15,7 +15,7 @@
              >
     <Grid>
         <Grid x:Name="Grid_NormalModel_1">
-            <TextBlock HorizontalAlignment="Left" Height="50" Text="本地音乐" TextWrapping="Wrap" 
+            <TextBlock HorizontalAlignment="Left" Height="50" Text="我的音乐" TextWrapping="Wrap" 
                 VerticalAlignment="Top" Width="210" FontSize="32" Margin="41,10,0,0"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                 Foreground="White"
@@ -72,10 +72,50 @@
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                        />
             </StackPanel>
+            <StackPanel x:Name="Stack_Button_LotSelects_Sort" Height="32"
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Margin="280,90,0,0" Width="110"                      
+                >
+                <Border HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch" 
+                    BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                    Background="#44FFFFFF" Height="32" 
+                    />
+                <TextBlock Margin="20,-25,73,10"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                   >
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/批量操作.svg"/>
+                </TextBlock>
+                <TextBlock Text="排序" VerticalAlignment="Center" Margin="44,-35,6,0" 
+                    Foreground="White"
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                    />
+            </StackPanel>
+            <StackPanel x:Name="Stack_Button_LotSelects_View" Height="32" 
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Margin="400,90,0,0" Width="110"                      
+                >
+                <Border HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch" 
+                    BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                    Background="#44FFFFFF" Height="32" 
+                    />
+                <TextBlock Margin="20,-25,73,10"
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                    >
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/批量操作.svg"/>
+                </TextBlock>
+                <TextBlock Text="显示模式" VerticalAlignment="Center" Margin="44,-35,6,0" 
+                    Foreground="White"
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                />
+            </StackPanel>
         </Grid>
 
 
-        <Grid x:Name="Grid_ListItem_CrudModel_1" Margin="0,140,0,0">
+        <Grid x:Name="Grid_ListItem_CrudModel_1" Margin="30,140,10,0">
             <ListView x:Name="ListView_Download_SongList_Info" Foreground="White"
                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
@@ -98,7 +138,7 @@
 
                         <Setter Property="FontSize" Value="13"/>
 
-                        <Setter Property="Height" Value="40"/>
+                        <Setter x:Name="ListView_Download_SongList_Info_ListViewItem_Height" Property="Height" Value="40"/>
                         
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
@@ -216,7 +256,7 @@
                             </GridViewColumn>
 
                             <GridViewColumn Header="No."
-                                        Width="130"
+                                        Width="92"
                                         sort:GridViewSort.PropertyName="Song_No"
                                         >
                                 <GridViewColumn.CellTemplate>
@@ -229,7 +269,7 @@
                             </GridViewColumn>
 
                             <GridViewColumn Header="歌曲路径"
-                                        Width="290"
+                                        Width="0" 
                                         sort:GridViewSort.PropertyName="Song_Url">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>

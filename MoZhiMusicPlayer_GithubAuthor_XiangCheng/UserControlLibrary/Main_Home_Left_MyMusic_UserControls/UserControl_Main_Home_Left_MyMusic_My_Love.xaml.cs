@@ -657,7 +657,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                             newSongInfo.Album_Name = ((Song_Info)Song_Info_Selects[i]).Album_Name;
                                             newSongInfo.Song_Url = ((Song_Info)Song_Info_Selects[i]).Song_Url;
                                             newSongInfo.Song_Duration = ((Song_Info)Song_Info_Selects[i]).Song_Duration;
-                                            newSongInfo.Song_No = ((Song_Info)Song_Info_Selects[i]).Song_No;
+                                            newSongInfo.Song_No = songList_Infos[1][0].Songs.Count + 1 + i;
                                             newSongInfo.Song_Like = ((Song_Info)Song_Info_Selects[i]).Song_Like;
                                             newSongInfo.MV_Path = ((Song_Info)Song_Info_Selects[i]).MV_Path;
                                             newSongInfo.IsChecked = ((Song_Info)Song_Info_Selects[i]).IsChecked;
@@ -713,7 +713,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                             newSongInfo.Album_Name = ((Song_Info)Song_Info_Selects[i]).Album_Name;
                                             newSongInfo.Song_Url = ((Song_Info)Song_Info_Selects[i]).Song_Url;
                                             newSongInfo.Song_Duration = ((Song_Info)Song_Info_Selects[i]).Song_Duration;
-                                            newSongInfo.Song_No = ((Song_Info)Song_Info_Selects[i]).Song_No;
+                                            newSongInfo.Song_No = songList_Infos[2][0].Songs.Count + 1 + i;
                                             newSongInfo.Song_Like = ((Song_Info)Song_Info_Selects[i]).Song_Like;
                                             newSongInfo.MV_Path = ((Song_Info)Song_Info_Selects[i]).MV_Path;
                                             newSongInfo.IsChecked = ((Song_Info)Song_Info_Selects[i]).IsChecked;
@@ -777,7 +777,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                                 newSongInfo.Album_Name = ((Song_Info)Song_Info_Selects[i]).Album_Name;
                                                 newSongInfo.Song_Url = ((Song_Info)Song_Info_Selects[i]).Song_Url;
                                                 newSongInfo.Song_Duration = ((Song_Info)Song_Info_Selects[i]).Song_Duration;
-                                                newSongInfo.Song_No = ((Song_Info)Song_Info_Selects[i]).Song_No;
+                                                newSongInfo.Song_No = songList_Infos[ComBox_Select][0].Songs.Count + 1 + i;
                                                 newSongInfo.Song_Like = ((Song_Info)Song_Info_Selects[i]).Song_Like;
                                                 newSongInfo.MV_Path = ((Song_Info)Song_Info_Selects[i]).MV_Path;
                                                 newSongInfo.IsChecked = ((Song_Info)Song_Info_Selects[i]).IsChecked;

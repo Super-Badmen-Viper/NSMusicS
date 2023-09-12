@@ -9,6 +9,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
 {
     public class SongList_Info_Current_Playlists
     {
+        //添加次序 专辑模式
+        public int Album_To_Current_Playlist;
+
         public ObservableCollection<Song_Info> songList_Infos_Current_Playlist { get; set; }
 
         //是否重置播放列表（用于正在播放的歌曲，被移出songList_Infos_Current_Playlist）

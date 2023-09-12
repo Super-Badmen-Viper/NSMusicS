@@ -5,13 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Left_MyMusic_UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="460" d:DesignWidth="810"
+             d:DesignHeight="460" d:DesignWidth="1000"
              UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
              
              >
     <Grid>
         <Grid HorizontalAlignment="Left" Width="200">
-            <Border BorderBrush="White" BorderThickness="0,0,1,0"/>
+            <Border BorderBrush="White" BorderThickness="0,0,1,0" Margin="0,0,0,10"/>
 
             <TextBlock Text="歌单信息编辑" Width="185" 
                        Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
@@ -56,8 +56,8 @@
                 />
 
         </Grid>
-        <Grid Margin="200,0,0,0" Width="212" HorizontalAlignment="Left" >
-            <Border BorderBrush="White" BorderThickness="0,0,1,0" Margin="0,0,0,0"/>
+        <Grid Margin="636,0,0,0">
+            <Border BorderBrush="White" BorderThickness="1,0,0,0" Margin="0,0,0,10"/>
 
             <TextBlock Text="歌曲信息编辑" Width="200" 
                        Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
@@ -66,7 +66,7 @@
             <TextBlock Text="输入歌手(曲)名" Width="160" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
                            Margin="10,50,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <TextBox x:Name="TextBox_Search_Song_Name" 
-                     Width="160" Margin="0,73,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                     Width="160" Margin="26,73,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
                      FontSize="16" Height="22" TextChanged="TextBox_Search_Song_Name_TextChanged" />
             <Button 
                 x:Name="Button_Search_Song_Name"
@@ -79,8 +79,8 @@
             <ComboBox 
                     x:Name="ComBox_Show_Search_Song"
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    Visibility="Visible" Width="160" Height="22" Margin="0,120,0,0" 
-                    VerticalAlignment="Top" HorizontalAlignment="Center" IsEditable="True"
+                    Visibility="Visible" Width="160" Height="22" Margin="26,120,0,0" 
+                    VerticalAlignment="Top" HorizontalAlignment="Left" IsEditable="True"
                     BorderBrush="{x:Null}" 
                     IsSynchronizedWithCurrentItem="False" SelectionChanged="ComBox_Show_Search_Song_SelectionChanged"
                     >
@@ -89,36 +89,54 @@
             <TextBlock Text="修改歌曲名" Width="160" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
                            Margin="10,175,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <TextBox x:Name="TextBox_Edit_Song_Name" 
-                     Width="160" Margin="0,195,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                     Width="160" Margin="26,195,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
                      FontSize="16" Height="22" TextChanged="TextBox_Edit_Song_Name_TextChanged" />
 
             <TextBlock Text="修改歌手名" Width="160" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
                            Margin="10,225,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <TextBox x:Name="TextBox_Edit_Singer_Name" 
-                     Width="160" Margin="0,245,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                     Width="160" Margin="26,245,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
                      FontSize="16" Height="22" TextChanged="TextBox_Edit_Singer_Name_TextChanged" />
 
             <TextBlock Text="修改专辑名" Width="160" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
                            Margin="10,275,0,0" HorizontalAlignment="Left" FontSize="16"/>
             <TextBox x:Name="TextBox_Edit_Album_Name" 
-                     Width="160" Margin="0,295,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                     Width="160" Margin="26,295,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
                      FontSize="16" Height="22" TextChanged="TextBox_Edit_Album_Name_TextChanged" />
+
+            <TextBlock Text="设置内嵌封面" Width="160" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
+                           Margin="10,350,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <Border x:Name="Set_This_Song_AlbumImage" 
+                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Width="100" Height="100" Margin="28,372,0,0" Background="White" AllowDrop="True" 
+                    >
+
+            </Border>
+            <TextBlock Text="设置内嵌歌词" Width="160" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
+                       Margin="190,50,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <TextBox
+                x:Name="Set_This_Song_Lyic"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Margin="208,74,20,20"
+                >
+
+            </TextBox>
 
             <Button 
                 x:Name="Button_Save_To_SongList"
-                Width="140" Height="20" Margin="0,360,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                Width="140" Height="20" Margin="26,500,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Content="仅保存至歌单" 
                 
                 />
             <Button 
                 x:Name="Button_Save_To_File"
-                Width="140" Height="20" Margin="0,390,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                Width="140" Height="20" Margin="26,530,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Content="保存至歌单及文件属性" 
                 
                 />
 
         </Grid>
-        <Grid Margin="400,0,0,0">
+        <Grid Margin="200,0,0,0" Width="412" HorizontalAlignment="Left" >
             <TextBlock Text="音乐资源导入" Width="200" 
                        Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
                        FontSize="26" FontWeight="Bold"/>

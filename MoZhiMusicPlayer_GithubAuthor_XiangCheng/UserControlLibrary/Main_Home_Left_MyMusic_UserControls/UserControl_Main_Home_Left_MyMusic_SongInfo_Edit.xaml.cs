@@ -1,8 +1,11 @@
-﻿using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos;
+﻿using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Extract_Infos;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos;
 using Shell32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -85,6 +88,33 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                             Edit_Song_Name = TextBox_Edit_Song_Name.Text;
                             Edit_Singer_Name = TextBox_Edit_Singer_Name.Text;
                             Edit_Album_Name = TextBox_Edit_Album_Name.Text;
+
+                            //获取内嵌封面
+                            System.Drawing.Image image = Song_Extract_Info.Extract_AlbumImage_Of_This_SongUrl(Search_this_SongUrl);
+                            if (image != null)
+                            {
+                                BitmapImage bitmapImage = new BitmapImage();
+                                using (MemoryStream stream = new MemoryStream())
+                                {
+                                    image.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                                    stream.Position = 0;
+                                    bitmapImage.BeginInit();
+                                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                                    bitmapImage.StreamSource = stream;
+                                    bitmapImage.EndInit();
+                                }
+                                ImageBrush imageBrush = new ImageBrush();
+                                imageBrush.ImageSource = bitmapImage;
+                                imageBrush.Stretch = Stretch.UniformToFill;
+                                Set_This_Song_AlbumImage.Background = imageBrush;
+                            }
+                            else
+                            {
+                                Set_This_Song_AlbumImage.Background = new SolidColorBrush(Colors.White);
+                            }
+
+                            //获取内嵌歌词
+                            Set_This_Song_Lyic.Text = Song_Extract_Info.Get_Lyic_Of_This_SongUrl(Search_this_SongUrl);
                         }
                     }
                 }

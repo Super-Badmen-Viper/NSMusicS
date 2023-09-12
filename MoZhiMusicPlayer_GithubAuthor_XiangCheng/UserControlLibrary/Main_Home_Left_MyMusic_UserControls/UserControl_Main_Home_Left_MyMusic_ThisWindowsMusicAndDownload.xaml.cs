@@ -358,6 +358,58 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
         #region 批量操作
 
+        #region 歌曲排序
+        public int Sort_Num = 0;
+        public void Sort_Of_This_SongList_For_ListView()
+        {
+            //刷新内存区域的引用
+            songList_Infos = SongList_Info.Retuen_This();
+
+            List<Song_Info> song_Infos = new List<Song_Info>(songList_Infos[1][0].Songs);
+            songList_Infos[1][0].Songs.Clear();
+
+            List<Song_Info> sortedList = null;
+
+            //排序的方式
+            if (Sort_Num == 0)//默认
+            {
+                sortedList = song_Infos
+                .OrderBy(song => song.Singer_Name)
+                .ThenBy(song => song.Song_Name)
+                .ToList();
+            }
+            else if (Sort_Num == 1)//歌曲
+            {
+                sortedList = song_Infos
+                .OrderBy(song => song.Song_Name)
+                .ToList();
+            }
+            else if (Sort_Num == 2)//歌手
+            {
+                sortedList = song_Infos
+                .OrderBy(song => song.Singer_Name)
+                .ToList();
+            }
+            else if (Sort_Num == 3)//专辑
+            {
+                sortedList = song_Infos
+                .OrderBy(song => song.Album_Name)
+                .ToList();
+            }
+
+            for (int i = 0; i < sortedList.Count; i++)
+            {
+                Song_Info song_Info = sortedList[i];
+                songList_Infos[1][0].Songs.Add(song_Info);
+            }
+            for (int i = 0; i < songList_Infos[1][0].Songs.Count; i++)
+            {
+                songList_Infos[1][0].Songs[i].Song_No = i + 1;
+            }
+        }
+        #endregion
+
+        #region 删除选中项
         /// <summary>
         /// 删除选中项
         /// </summary>
@@ -405,7 +457,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
             Sort_SongList();
         }
+        #endregion
 
+        /// <summary>
+        /// 排序
+        /// </summary>
         public void Sort_SongList()
         {
             //刷新内存区域的引用
@@ -430,16 +486,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             //保存歌单信息
             Save_SongListInfo();
         }
-        /// <summary>
-        /// 添加歌曲
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Button_Add_Click(object sender, RoutedEventArgs e)
-        {
-            //歌单歌曲排序
-            Sort_SongList();
-        }
 
         /// <summary>
         /// 歌曲排序
@@ -452,6 +498,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             Sort_SongList();
         }
 
+        #region 全选 歌单列表 歌曲 + 选中添加至制定歌单
         bool Check_ALL_Song = false;
         /// <summary>
         /// 全选 歌单列表 歌曲
@@ -578,7 +625,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                             newSongInfo.Album_Name = ((Song_Info)Song_Info_Selects[i]).Album_Name;
                                             newSongInfo.Song_Url = ((Song_Info)Song_Info_Selects[i]).Song_Url;
                                             newSongInfo.Song_Duration = ((Song_Info)Song_Info_Selects[i]).Song_Duration;
-                                            newSongInfo.Song_No = ((Song_Info)Song_Info_Selects[i]).Song_No;
+                                            newSongInfo.Song_No = songList_Infos[0][0].Songs.Count + 1 + i;
                                             newSongInfo.Song_Like = ((Song_Info)Song_Info_Selects[i]).Song_Like;
                                             newSongInfo.MV_Path = ((Song_Info)Song_Info_Selects[i]).MV_Path;
                                             newSongInfo.IsChecked = ((Song_Info)Song_Info_Selects[i]).IsChecked;
@@ -644,7 +691,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                             newSongInfo.Album_Name = ((Song_Info)Song_Info_Selects[i]).Album_Name;
                                             newSongInfo.Song_Url = ((Song_Info)Song_Info_Selects[i]).Song_Url;
                                             newSongInfo.Song_Duration = ((Song_Info)Song_Info_Selects[i]).Song_Duration;
-                                            newSongInfo.Song_No = ((Song_Info)Song_Info_Selects[i]).Song_No;
+                                            newSongInfo.Song_No = songList_Infos[2][0].Songs.Count + 1 + i;
                                             newSongInfo.Song_Like = ((Song_Info)Song_Info_Selects[i]).Song_Like;
                                             newSongInfo.MV_Path = ((Song_Info)Song_Info_Selects[i]).MV_Path;
                                             newSongInfo.IsChecked = ((Song_Info)Song_Info_Selects[i]).IsChecked;
@@ -708,7 +755,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                                 newSongInfo.Album_Name = ((Song_Info)Song_Info_Selects[i]).Album_Name;
                                                 newSongInfo.Song_Url = ((Song_Info)Song_Info_Selects[i]).Song_Url;
                                                 newSongInfo.Song_Duration = ((Song_Info)Song_Info_Selects[i]).Song_Duration;
-                                                newSongInfo.Song_No = ((Song_Info)Song_Info_Selects[i]).Song_No;
+                                                newSongInfo.Song_No = songList_Infos[ComBox_Select][0].Songs.Count + 1 + i;
                                                 newSongInfo.Song_Like = ((Song_Info)Song_Info_Selects[i]).Song_Like;
                                                 newSongInfo.MV_Path = ((Song_Info)Song_Info_Selects[i]).MV_Path;
                                                 newSongInfo.IsChecked = ((Song_Info)Song_Info_Selects[i]).IsChecked;
@@ -759,7 +806,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             //保存歌单信息
             Save_SongListInfo();
         }
-       
+
+        #endregion
+
         #endregion
 
 

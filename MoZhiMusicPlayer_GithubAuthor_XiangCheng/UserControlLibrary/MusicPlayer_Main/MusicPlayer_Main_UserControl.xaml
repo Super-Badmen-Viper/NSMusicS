@@ -83,77 +83,13 @@
 
                 <Border Background="#4C000000"/>
 
-                <!--
-                    <StackPanel
-                        x:Name="Panel_Image" 
-                        Margin="130,-70,0,0" Width="350" Height="350" HorizontalAlignment="Left" VerticalAlignment="Stretch"
-                        IsEnabled="False"
-                        >
-                        <StackPanel 
-                            ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Height="350"
-                            >
-                            <StackPanel.Background>
-                                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/唱片机_底座.png" Stretch="UniformToFill"/>
-                            </StackPanel.Background>
-                            <StackPanel Height="350">
-                                <StackPanel.RenderTransform>
-                                    <RotateTransform x:Name="Image_Song_Rotate" CenterX="175" CenterY="175"/>
-                                </StackPanel.RenderTransform>
-                                <Image
-                                   ScrollViewer.VerticalScrollBarVisibility="Disabled" Stretch="Uniform" 
-                                   Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/唱片3_黑胶.png" 
-                                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                                   RenderTransformOrigin="0.5,0.5" Width="300" Height="300" HorizontalAlignment="Center" MouseLeftButtonDown="Image_Song_MouseLeftButtonDown" VerticalAlignment="Top" Margin="0,25,0,0">
-                                    <Image.Clip>
-                                        <EllipseGeometry Center="150,150" RadiusX="150" RadiusY="150"/>
-                                    </Image.Clip>
-                                </Image>
-
-                                <Image x:Name="Image_Song"
-                                   ScrollViewer.VerticalScrollBarVisibility="Disabled" Stretch="UniformToFill" 
-                                   Source="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/初学者.jpg" 
-                                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                                   RenderTransformOrigin="0.5,0.5" Width="160" Height="160" 
-                                   HorizontalAlignment="Center" MouseLeftButtonDown="Image_Song_MouseLeftButtonDown" VerticalAlignment="Top" 
-                                   Margin="0,-230,0,0">
-                                    <Image.Clip>
-                                        <EllipseGeometry Center="80,80" RadiusX="80" RadiusY="80"/>
-                                    </Image.Clip>
-                                </Image>
-                            </StackPanel>
-                        </StackPanel>
-                        <StackPanel 
-                            x:Name="StackPanel_Record_Striker"
-                            HorizontalAlignment="Right" Margin="0,-496,0,0" Width="76" Height="228"
-                                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  RenderTransformOrigin="0.5,0.5" 
-                                    IsEnabled="False"
-                                    >
-                            <StackPanel.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform/>
-                                    <RotateTransform x:Name="RotateTransform_BeginMusic_Jukebox" Angle="-20" CenterX="0" CenterY="-60"/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </StackPanel.RenderTransform>
-                            <StackPanel.Triggers>
-                                <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
-                                    <BeginStoryboard>
-                                        <Storyboard x:Name="BeginMusic_Jukebox">
-                                            <DoubleAnimationUsingKeyFrames
-                                                Duration="0:0:1" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </StackPanel.Triggers>
-                            <StackPanel.Background>
-                                <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/唱片撞针.png" Stretch="Uniform"/>
-                            </StackPanel.Background>
-                        </StackPanel>
-                    </StackPanel>
-                -->
+                <Border x:Name="Border_Album_Show" Visibility="Collapsed"
+                        Width="400" Height="400" Margin="100,0,0,0"
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        CornerRadius="20"
+                        Background="Beige" >
+                    
+                </Border>
 
                 <!--歌词列表-->
                 <ListView 
@@ -200,6 +136,7 @@
                                             <Trigger Property="IsSelected" Value="True">
                                                 <Setter Property="FontSize" Value="32"/><!--32-->
                                                 <Setter Property="FontWeight" Value="Bold"/>
+                                                <!--<Setter Property="Margin" Value="100,0,-100,0"/>-->
                                                 <Setter Property="Margin" Value="100,0,-100,0"/>
                                                 <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
                                                 <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
