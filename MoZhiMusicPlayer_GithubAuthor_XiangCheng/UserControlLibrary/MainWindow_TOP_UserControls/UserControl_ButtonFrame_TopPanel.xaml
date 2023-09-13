@@ -19,7 +19,7 @@
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,2">
             <TextBlock 
                 Text="单曲" Foreground="White"
-                FontSize="26" Margin="0,0,0,8"/>
+                FontSize="23" Margin="0,0,0,8"/>
         </Border>
 
         <Border 
@@ -28,7 +28,7 @@
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
             <TextBlock 
                 Text="专辑" Foreground="White"
-                FontSize="26" Margin="0,0,0,8"/>
+                FontSize="23" Margin="0,0,0,8"/>
         </Border>
         <Border 
             x:Name="Model_3"
@@ -36,7 +36,7 @@
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
             <TextBlock 
                 Text="编辑/导入" Foreground="White"
-                FontSize="26" Margin="0,0,0,8"/>
+                FontSize="23" Margin="0,0,0,8"/>
         </Border>
         <Border 
             x:Name="Model_4"
@@ -44,7 +44,7 @@
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
             <TextBlock 
                 Text="专业" Foreground="#44FFFFFF"
-                FontSize="26" Margin="0,0,0,8"/>
+                FontSize="23" Margin="0,0,0,8"/>
         </Border>
 
         <Button 

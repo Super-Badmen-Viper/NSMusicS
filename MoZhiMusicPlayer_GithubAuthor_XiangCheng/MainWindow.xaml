@@ -302,17 +302,44 @@
                     Foreground="#F6F6F6" HorizontalAlignment="Left" VerticalAlignment="Top"
                     Margin="1,80,0,0"
                 />
-                <TextBlock Text="来源：单曲模式 - 本地音乐" 
+                <TextBlock 
+                    x:Name="TextBlock_For_SelectSongList_To_AlbumModel_2"
+                    Text="歌单：" 
                     Width="200" Padding="17,0,0,0" 
                     Foreground="#F6F6F6" HorizontalAlignment="Left" VerticalAlignment="Top"
                     Margin="1,100,0,0"
                 />
+                <ComboBox 
+                    x:Name="ComBox_Select_SongList_For_Model_2"
+                    SelectedIndex="-1"
+                    Style="{DynamicResource cmbstyle_Select_SongList_For_AlbumView}" 
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                    Visibility="Visible" Width="140" Height="30" Margin="100,93,0,0"
+                    VerticalAlignment="Top" HorizontalAlignment="Left" IsEditable="True" 
+                    Text="创建的歌单"
+                    SelectionChanged="ComBox_Select_SongList_SelectionChanged" IsSynchronizedWithCurrentItem="False"
+                    MouseLeftButtonDown="ComBox_Select_SongList_MouseLeftButtonDown" 
+                    BorderBrush="White" BorderThickness="1,0,0,0"
+                    >
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel/>
+                        </ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="2.5" Text="{Binding Name}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
 
                 <TextBlock 
                     x:Name="Button_Reload_For_Album_Performer"
                     Width="16" Height="16"
                     Foreground="#F6F6F6" HorizontalAlignment="Left" VerticalAlignment="Top"
-                    Margin="200,100,0,0" MouseLeftButtonDown="Button_Reload_For_Album_Performer_MouseLeftButtonDown"
+                    Margin="220,100,0,0" MouseLeftButtonDown="Button_Reload_For_Album_Performer_MouseLeftButtonDown"
                     >
                     <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/操作-刷新.svg"/>
                 </TextBlock>

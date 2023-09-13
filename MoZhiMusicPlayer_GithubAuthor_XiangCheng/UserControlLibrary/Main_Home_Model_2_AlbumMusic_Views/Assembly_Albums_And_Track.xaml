@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views"
              mc:Ignorable="d" MinWidth="520"
-             MouseRightButtonDown="UserControl_MouseLeftButtonDown"
+             MouseLeftButtonDown="UserControl_MouseLeftButtonDown" MouseRightButtonDown="UserControl_MouseLeftButtonDown"
              Background="#10232325"
              >
     <Grid>
@@ -128,12 +128,11 @@
                        Content="插入到 播放列表 队尾" Click="Button_Add_This_Album_To_Current_Playlist_Buttom_Click"/>
 
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="添加到：" Foreground="White" Margin="0,4,0,0"/>
                 <ComboBox 
                     x:Name="ComBox_Select_Add_SongList"
-                    SelectedIndex="-1" 
+                    SelectedIndex="-1" Style="{DynamicResource cmbstyle}" 
                     SelectionChanged="ComboBox_SelectionChanged"
-                    IsEditable="False" Margin="0,0,0,0" Width="110"
+                    IsEditable="False" Margin="0,0,0,0" Width="160"
                 >
                     <ComboBox.ItemsPanel>
                         <ItemsPanelTemplate>

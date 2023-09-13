@@ -67,6 +67,7 @@ using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Of_AlbumList_Inf
 using VisioForge.Libs.ZXing.QrCode.Internal;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Of_Album_SongList_Infos;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views;
+using System.Reflection;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 {
@@ -244,6 +245,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         //当前正在播放的歌曲
         private Song_Info this_Song_Info = new Song_Info();
 
+        //
+        private ObservableCollection<Song_Info> Select_SongList;
         //专辑模式（本地音乐数据）
         private List<Song_Info> song_Infos;
         //当前专辑模式——歌手列表
@@ -470,10 +473,54 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[i].ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
             }
             windows_Song_Find.ComBox_Select_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+            //
+            ComBox_Select_SongList_For_Model_2.SelectionChanged -= ComBox_Select_SongList_For_Model_2_SelectionChanged;
+            ComBox_Select_SongList_For_Model_2.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+            ComBox_Select_SongList_For_Model_2.SelectionChanged += ComBox_Select_SongList_For_Model_2_SelectionChanged;
 
+            ComBox_Select_SongList_For_Model_2.SelectedIndex = 1;//默认本地音乐
+            TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[1][0].Name;
+            Select_SongList = songList_Infos[1][0].Songs;
             #endregion
 
-            Album_Performer_s= await Load_SingerInfo_For_PerformerShow();
+            //默认本地音乐
+            Album_Performer_s = await Load_SingerInfo_For_PerformerShow(songList_Infos[1][0].Songs);
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                //加载专辑模式数据
+                ListView_For_Album_Performer.ItemsSource = Album_Performer_s;
+                ListView_For_Album_Performer.MouseDoubleClick += ListView_For_Album_Performer_MouseDoubleClick;
+            });
+        }
+
+        private async void ComBox_Select_SongList_For_Model_2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //清空UI专辑列表
+            userControl_Main_Model_2_View_Albums_And_Tracks.VirtualizingStackPanel_For_ThisSinger_ALL_Album.Children.Clear();//UI
+
+            if (ComBox_Select_SongList_For_Model_2.SelectedIndex == 1)
+            {
+                Select_SongList = songList_Infos[1][0].Songs;
+                TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[1][0].Name;
+            }
+            else if(ComBox_Select_SongList_For_Model_2.SelectedIndex == 0)
+            {
+                Select_SongList = songList_Infos[0][0].Songs;
+                TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[0][0].Name;
+            }
+            else if(ComBox_Select_SongList_For_Model_2.SelectedIndex == 2)
+            {
+                Select_SongList = songList_Infos[2][0].Songs;
+                TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[2][0].Name;
+            }
+            else
+            {
+                Select_SongList = songList_Infos[ComBox_Select_SongList_For_Model_2.SelectedIndex][0].Songs;
+                TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[ComBox_Select_SongList_For_Model_2.SelectedIndex][0].Name;
+            }
+
+            Album_Performer_s = await Load_SingerInfo_For_PerformerShow(Select_SongList);
 
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -486,7 +533,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// <summary>
         ///  加载专辑模式数据
         /// </summary>
-        private async Task<ObservableCollection<Album_Performer_Infos>> Load_SingerInfo_For_PerformerShow()
+        private async Task<ObservableCollection<Album_Performer_Infos>> Load_SingerInfo_For_PerformerShow(ObservableCollection<Song_Info> SongList)
         {
             var tcs = new TaskCompletionSource<ObservableCollection<Album_Performer_Infos>>();
 
@@ -504,7 +551,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             #region 加载专辑模式数据
 
             //加载歌手-专辑选择列表：优先度：MoZhi专辑>内嵌专辑>Null
-            song_Infos = new List<Song_Info>(songList_Infos[1][0].Songs);
+            song_Infos = new List<Song_Info>(SongList);
             var uniqueSingerNames = song_Infos.Select(s => s.Singer_Name).Distinct();
             foreach (var singerName in uniqueSingerNames)
             {
@@ -1007,6 +1054,42 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             playlists[0].Name = "播放列表";
             playlists[0].Songs = songList_Infos_Current_Playlist;
             SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Current_Playlist.xml", playlists);
+
+            //保存自定义
+            if (window_Hover_EQ_Panel.ComBox_Select_Eq.SelectedIndex == 10)
+            {
+                EQ_Bands_For_Model_1 eQ_Bands_For_Model_1 = window_Hover_EQ_Panel.eQ_Bands_For_Model_1s[
+                    window_Hover_EQ_Panel.ComBox_Select_Eq.SelectedIndex];
+
+                // 定义 Slider 控件数组
+                Slider[] sliders = new Slider[]
+                {
+                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num31,
+                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num62,
+                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num125,
+                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num250,
+                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num500,
+                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num1k,
+                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num2k,
+                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num4k,
+                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num8k,
+                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num16k,
+                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num20k
+                };
+
+                // 定义 int[] 数组
+                float[] values = new float[11];
+
+                // 循环遍历 Slider 控件并将其值赋给数组
+                for (int i = 0; i < sliders.Length; i++)
+                {
+                    float value = (float)sliders[i].Value;
+
+                    // 将值赋给数组
+                    values[i] = value;
+                }
+                EQ_Bands_For_Model_1_Save.Save_Eq_Bands(Path_App + @"\User_Data\Data_Eq_Model_1.xml", values);
+            }
         }
         #endregion
 
@@ -3050,6 +3133,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
         private void UserControl_ButtonFrame_MusicLove_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            Frame_Show.Visibility = Visibility.Visible;
+
             ComBox_Select_SongList_SelectIndex = -1;
             ComBox_Select_SongList.SelectedIndex = ComBox_Select_SongList_SelectIndex;
 
@@ -3093,6 +3178,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
         private void UserControl_ButtonFrame_ThisWindowsMusicAndDownload_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            Frame_Show.Visibility = Visibility.Visible;
+
             ComBox_Select_SongList_SelectIndex = -1;
             ComBox_Select_SongList.SelectedIndex = ComBox_Select_SongList_SelectIndex;
 
@@ -3136,6 +3223,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         }
         private void UserControl_ButtonFrame_MusicRecentlyPlayed_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            Frame_Show.Visibility = Visibility.Visible;
+
             ComBox_Select_SongList_SelectIndex = -1;
             ComBox_Select_SongList.SelectedIndex = ComBox_Select_SongList_SelectIndex;
 
@@ -3189,6 +3278,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         /// <param name="e"></param>
         private void ComBox_Select_SongList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Frame_Show.Visibility = Visibility.Visible;
+
             ComBox_Select_SongList_SelectIndex = ComBox_Select_SongList.SelectedIndex;
             //重新绑定数据源，之前为null，防止数据与UI渲染刷新冲突
             userControl_Main_Home_Left_MyMusic_Mores_TabControl.ItemsSource = userControl_Main_Home_Left_MyMusic_Mores;
@@ -3289,6 +3380,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             {
                 userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Collapsed;
                 Frame_Show.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Visible;
                 userControl_Main_Model_2_View_Albums_And_Tracks.Visibility = Visibility.Visible;
             }
             else
@@ -3297,10 +3389,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     userControl_Main_Home_TOP_App_Setting.Margin = new Thickness(180, 77, 0, 70);
                 else if (Grid_Model_2.Visibility == Visibility.Visible)
                     userControl_Main_Home_TOP_App_Setting.Margin = new Thickness(286, 77, 0, 70);
+                else if (userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility == Visibility.Visible)
+                    userControl_Main_Home_TOP_App_Setting.Margin = new Thickness(0, 77, 0, 70);
 
                 userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Visible;
+
+                userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
                 Frame_Show.Visibility = Visibility.Collapsed;
                 userControl_Main_Model_2_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Collapsed;
             }
         }
         /// <summary>
@@ -3376,6 +3473,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             {
                 userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
                 Frame_Show.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Visible;
                 userControl_Main_Model_2_View_Albums_And_Tracks.Visibility = Visibility.Visible;
             }
             else
@@ -3384,12 +3482,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     userControl_Main_Home_TOP_Personalized_Skins.Margin = new Thickness(180, 77, 0, 70);
                 else if (Grid_Model_2.Visibility == Visibility.Visible)
                     userControl_Main_Home_TOP_Personalized_Skins.Margin = new Thickness(286, 77, 0, 70);
+                else if (userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility == Visibility.Visible)
+                    userControl_Main_Home_TOP_Personalized_Skins.Margin = new Thickness(0, 77, 0, 70);
 
                 userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Visible;
 
                 userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Collapsed;
                 Frame_Show.Visibility = Visibility.Collapsed;
                 userControl_Main_Model_2_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Collapsed;
             }
         }
         /// <summary>
@@ -4170,7 +4271,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //清空UI专辑列表
             userControl_Main_Model_2_View_Albums_And_Tracks.VirtualizingStackPanel_For_ThisSinger_ALL_Album.Children.Clear();//UI
             //加载专辑模式数据
-            ListView_For_Album_Performer.ItemsSource = await Load_SingerInfo_For_PerformerShow();
+            ListView_For_Album_Performer.ItemsSource = await Load_SingerInfo_For_PerformerShow(Select_SongList);
 
             ListView_For_Album_Performer.Visibility = Visibility.Visible;
         }
@@ -4183,7 +4284,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //清空UI专辑列表
             userControl_Main_Model_2_View_Albums_And_Tracks.VirtualizingStackPanel_For_ThisSinger_ALL_Album.Children.Clear();//UI
             //加载专辑模式数据
-            ListView_For_Album_Performer.ItemsSource = await Load_SingerInfo_For_PerformerShow();
+            ListView_For_Album_Performer.ItemsSource = await Load_SingerInfo_For_PerformerShow(Select_SongList);
 
             ListView_For_Album_Performer.Visibility = Visibility.Visible;
         }

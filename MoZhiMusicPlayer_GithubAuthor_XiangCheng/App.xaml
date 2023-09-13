@@ -158,12 +158,6 @@
             <Setter Property="Foreground" Value="#6AD2FF" />
             <Setter Property="Template" Value="{StaticResource SliderHorizontal}" />
         </Style>
-        <Style x:Key="SliderStyle2" TargetType="{x:Type Slider}">
-            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
-            <Setter Property="Background" Value="{x:Null}" />
-            <Setter Property="Foreground" Value="{x:Null}" />
-            <Setter Property="Template" Value="{StaticResource SliderHorizontal}" />
-        </Style>
 
 
         <!--窗体阴影-->
@@ -592,7 +586,7 @@
         </Style>
         <!---->
         <Style TargetType="{x:Type ComboBox}" x:Key="cmbstyle_SelectPlaying">
-            <Setter Property="Background" Value="#44FFFFFF"/>
+            <Setter Property="Background" Value="{x:Null}"/>
             <Setter Property="ItemContainerStyle">
                 <Setter.Value>
                     <!--ComBoxItem-->
@@ -624,67 +618,25 @@
                     <ControlTemplate TargetType="{x:Type ComboBox}">
                         <Border BorderThickness="0" CornerRadius="3" Width="Auto" Height="30" Background="{TemplateBinding Background}" >
                             <Grid >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="3*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid Grid.Column="0" x:Name="grid">
+                                <Grid x:Name="grid">
 
-                                    <!--Content="{TemplateBinding Text}"-->
-                                    <ToggleButton
-                                        Width="{Binding ElementName=grid,Path=ActualWidth}"
-                                        Height="{Binding ElementName=grid, Path=ActualHeight}"
-                                        
-                                        Content="自定义歌单" VerticalAlignment="Center"
-                                        HorizontalAlignment="Left" Margin="5,0,0,0"
-                                        BorderThickness="0"
-                                        Foreground="White"
-                                        Background="{TemplateBinding Background}"
-                                        IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" 
-                                        >
-                                        <ToggleButton.Style >
-                                            <Style TargetType="ToggleButton">
-                                                <Setter Property="Background" Value="#44FFFFFF"/>
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="ToggleButton">
-                                                            <Border   Background="{TemplateBinding Background}" BorderThickness="0"  >
-                                                                <TextBlock Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding Content}" 
-                                                                           Margin="8,0,0,0"  HorizontalAlignment="Left" VerticalAlignment="Center"
-                                                                           >
-                                                                </TextBlock>
-                                                            </Border>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="Background" Value="#44FFFFFF"/>
-                                                    </Trigger>
-                                                    <Trigger Property="IsMouseOver" Value="False">
-                                                        <Setter Property="Background" Value="#44FFFFFF"/>
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </ToggleButton.Style>
-
-                                    </ToggleButton>
-                                </Grid>
-
-                                <Grid Grid.Column="1" >
                                     <ToggleButton IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                                   Foreground="{TemplateBinding Foreground}"
-                                                  ClickMode="Press">
+                                                  ClickMode="Press" 
+                                                  Width="42" HorizontalAlignment="Left" 
+                                                  Margin="0,-4,0,0">
                                         <ToggleButton.Style>
                                             <Style TargetType="ToggleButton">
+                                                <Setter Property="Background" Value="{x:Null}"/>
                                                 <Setter Property="Template">
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="ToggleButton">
                                                             <Border Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}">
                                                                 <Grid>
-                                                                    <TextBlock Foreground="{TemplateBinding Foreground}" x:Name="arrow_tb" 
-                                                                               Text="▼" 
-                                                                               HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                                                                    <TextBlock 
+                                                                           x:Name="arrow_tb" 
+                                                                           Text="▼" Foreground="White" FontSize="16"
+                                                                           HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
                                                                         <TextBlock.RenderTransform>
                                                                             <TransformGroup>
                                                                                 <ScaleTransform/>
@@ -728,7 +680,349 @@
                                             </Style>
                                         </ToggleButton.Style>
                                     </ToggleButton>
+                                    <ToggleButton
+                                        Width="{Binding ElementName=grid,Path=ActualWidth}"
+                                        Height="{Binding ElementName=grid, Path=ActualHeight}"
+                                        
+                                        Content="自定义歌单" VerticalAlignment="Center"
+                                        HorizontalAlignment="Left" Margin="0,0,0,0"
+                                        BorderThickness="0"
+                                        Foreground="White"
+                                        Background="{TemplateBinding Background}"
+                                        IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" 
+                                        >
+                                        <ToggleButton.Style >
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ToggleButton">
+                                                            <Border  Background="{TemplateBinding Background}" BorderThickness="0"  >
+                                                                <TextBlock Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding Content}" 
+                                                                           Margin="39,0,0,0"  HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                                           FontSize="13"
+                                                                           >
+                                                                </TextBlock>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#44FFFFFF"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                        <Setter Property="Background" Value="#44FFFFFF"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ToggleButton.Style>
+
+                                    </ToggleButton>
                                 </Grid>
+
+                                
+                                <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" x:Name="Popup" Focusable="False" AllowsTransparency="True" PopupAnimation="Slide">
+                                    <Border CornerRadius="1" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{TemplateBinding ActualWidth}" x:Name="DropDown" SnapsToDevicePixels="True">
+                                        <ScrollViewer Margin="4,6,4,6" Style="{DynamicResource ScrollViewerStyle}" MaxHeight="{TemplateBinding MaxDropDownHeight}" SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
+                                            <!-- StackPanel 用于显示子级，方法是将 IsItemsHost 设置为 True -->
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Background="White"/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!---->
+        <Style TargetType="{x:Type ComboBox}" x:Key="cmbstyle_Select_SongList_For_AlbumView">
+            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <!--ComBoxItem-->
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="MinHeight" Value="22"></Setter>
+                        <Setter Property="MinWidth" Value="60"></Setter>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ComboBoxItem">
+                                    <Border Name="Back" Background="Transparent"  BorderThickness="0,0,0,0" BorderBrush="#81D779" >
+                                        <ContentPresenter  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0"></ContentPresenter>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Back" Property="Background" Value="LightGray"></Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsHighlighted" Value="True">
+                                            <Setter TargetName="Back" Property="Background" Value="LightGray"></Setter>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                        <Border BorderThickness="0" CornerRadius="10" 
+                                Width="80" Height="20" Background="#44FFFFFF"
+                                >
+                            <Grid >
+                                <Grid x:Name="grid">
+
+                                    <ToggleButton IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          ClickMode="Press" 
+                                          Width="42" HorizontalAlignment="Left" 
+                                          Margin="-10,0,0,0">
+                                        <ToggleButton.Style>
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Background" Value="{x:Null}"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ToggleButton">
+                                                            <Border>
+                                                                <Grid>
+                                                                    <TextBlock 
+                                                                   x:Name="arrow_tb" 
+                                                                   Text="▼" Foreground="White" FontSize="13"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                                                                        <TextBlock.RenderTransform>
+                                                                            <TransformGroup>
+                                                                                <ScaleTransform/>
+                                                                                <SkewTransform/>
+                                                                                <RotateTransform/>
+                                                                                <TranslateTransform/>
+                                                                            </TransformGroup>
+                                                                        </TextBlock.RenderTransform>
+                                                                    </TextBlock>
+                                                                </Grid>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsChecked" Value="True">
+
+                                                                </Trigger>
+                                                                <EventTrigger RoutedEvent="Checked">
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard >
+                                                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="arrow_tb" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+                                                                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                                                                                <EasingDoubleKeyFrame KeyTime="00:00:00.2000000" Value="180"/>
+                                                                            </DoubleAnimationUsingKeyFrames>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </EventTrigger>
+
+                                                                <EventTrigger RoutedEvent="Unchecked">
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard >
+                                                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="arrow_tb" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+                                                                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="180"/>
+                                                                                <EasingDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0"/>
+                                                                            </DoubleAnimationUsingKeyFrames>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </EventTrigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                    </ToggleButton>
+                                    <ToggleButton
+                                        Width="{Binding ElementName=grid,Path=ActualWidth}"
+                                        Height="{Binding ElementName=grid, Path=ActualHeight}"
+                                        Content="切换歌单" VerticalAlignment="Center"
+                                        HorizontalAlignment="Left" Margin="0,0,0,0"
+                                        BorderThickness="0"
+                                        Foreground="White"
+                                        IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" 
+                                        >
+                                        <ToggleButton.Style >
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ToggleButton">
+                                                            <Border BorderThickness="0"  >
+                                                                <TextBlock Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding Content}" 
+                                                                   Margin="20,0,0,0"  HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                                   FontSize="12"
+                                                                   >
+                                                                </TextBlock>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#44FFFFFF"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                        <Setter Property="Background" Value="#44FFFFFF"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ToggleButton.Style>
+
+                                    </ToggleButton>
+                                </Grid>
+
+
+                                <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" x:Name="Popup" Focusable="False" AllowsTransparency="True" PopupAnimation="Slide">
+                                    <Border CornerRadius="1" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{TemplateBinding ActualWidth}" x:Name="DropDown" SnapsToDevicePixels="True">
+                                        <ScrollViewer Margin="4,6,4,6" Style="{DynamicResource ScrollViewerStyle}" MaxHeight="{TemplateBinding MaxDropDownHeight}" SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
+                                            <!-- StackPanel 用于显示子级，方法是将 IsItemsHost 设置为 True -->
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Background="White"/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!---->
+        <Style TargetType="{x:Type ComboBox}" x:Key="cmbstyle_Select_Eq">
+            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <!--ComBoxItem-->
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="MinHeight" Value="22"></Setter>
+                        <Setter Property="MinWidth" Value="60"></Setter>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ComboBoxItem">
+                                    <Border Name="Back" Background="Transparent"  BorderThickness="0,0,0,0" BorderBrush="#81D779" >
+                                        <ContentPresenter  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0"></ContentPresenter>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Back" Property="Background" Value="LightGray"></Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsHighlighted" Value="True">
+                                            <Setter TargetName="Back" Property="Background" Value="LightGray"></Setter>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                        <Border BorderThickness="0" CornerRadius="10" 
+                        Width="120" Height="20" Background="#44FFFFFF"
+                        >
+                            <Grid >
+                                <Grid x:Name="grid">
+
+                                    <ToggleButton IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                  Foreground="{TemplateBinding Foreground}"
+                                  ClickMode="Press" 
+                                  Width="42" HorizontalAlignment="Left" 
+                                  Margin="-10,0,0,0">
+                                        <ToggleButton.Style>
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Background" Value="{x:Null}"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ToggleButton">
+                                                            <Border>
+                                                                <Grid>
+                                                                    <TextBlock 
+                                                           x:Name="arrow_tb" 
+                                                           Text="▼" Foreground="White" FontSize="13"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                                                                        <TextBlock.RenderTransform>
+                                                                            <TransformGroup>
+                                                                                <ScaleTransform/>
+                                                                                <SkewTransform/>
+                                                                                <RotateTransform/>
+                                                                                <TranslateTransform/>
+                                                                            </TransformGroup>
+                                                                        </TextBlock.RenderTransform>
+                                                                    </TextBlock>
+                                                                </Grid>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsChecked" Value="True">
+
+                                                                </Trigger>
+                                                                <EventTrigger RoutedEvent="Checked">
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard >
+                                                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="arrow_tb" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+                                                                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                                                                                <EasingDoubleKeyFrame KeyTime="00:00:00.2000000" Value="180"/>
+                                                                            </DoubleAnimationUsingKeyFrames>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </EventTrigger>
+
+                                                                <EventTrigger RoutedEvent="Unchecked">
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard >
+                                                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="arrow_tb" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+                                                                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="180"/>
+                                                                                <EasingDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0"/>
+                                                                            </DoubleAnimationUsingKeyFrames>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </EventTrigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                    </ToggleButton>
+                                    <ToggleButton
+                                        Width="{Binding ElementName=grid,Path=ActualWidth}"
+                                        Height="{Binding ElementName=grid, Path=ActualHeight}"
+                                        Content="选择音效                    " VerticalAlignment="Center"
+                                        HorizontalAlignment="Left" Margin="0,0,0,0"
+                                        BorderThickness="0" 
+                                        Foreground="White"
+                                        IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" 
+                                        >
+                                        <ToggleButton.Style >
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ToggleButton">
+                                                            <Border BorderThickness="0"  >
+                                                                <TextBlock Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding Content}" 
+                                                           Margin="20,0,0,0"  HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                           FontSize="12"
+                                                           >
+                                                                </TextBlock>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#44FFFFFF"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                        <Setter Property="Background" Value="#44FFFFFF"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ToggleButton.Style>
+
+                                    </ToggleButton>
+                                </Grid>
+
+
                                 <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" x:Name="Popup" Focusable="False" AllowsTransparency="True" PopupAnimation="Slide">
                                     <Border CornerRadius="1" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{TemplateBinding ActualWidth}" x:Name="DropDown" SnapsToDevicePixels="True">
                                         <ScrollViewer Margin="4,6,4,6" Style="{DynamicResource ScrollViewerStyle}" MaxHeight="{TemplateBinding MaxDropDownHeight}" SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True">

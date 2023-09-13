@@ -72,7 +72,7 @@
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                        />
             </StackPanel>
-            <StackPanel x:Name="Stack_Button_LotSelects_Sort" Height="32"
+            <StackPanel x:Name="Stack_Button_LotSelects_Sort" Height="32" Visibility="Collapsed"
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Margin="280,90,0,0" Width="110"                      
                 >
@@ -92,7 +92,7 @@
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                     />
             </StackPanel>
-            <StackPanel x:Name="Stack_Button_LotSelects_View" Height="32" 
+            <StackPanel x:Name="Stack_Button_LotSelects_View" Height="32" Visibility="Collapsed"
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Margin="400,90,0,0" Width="110"                      
                 >
