@@ -22,18 +22,22 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
 
         public static void Save_Eq_Bands(string filePath, float[] nums)
         {
-            string result = string.Join(",", nums);
-
-            Data_Eq_Model_1 dataToSave = new Data_Eq_Model_1
+            try
             {
-                Nums = result
-            };
+                string result = string.Join(",", nums);
 
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(Data_Eq_Model_1));
-                serializer.Serialize(fileStream, dataToSave);
+                Data_Eq_Model_1 dataToSave = new Data_Eq_Model_1
+                {
+                    Nums = result
+                };
+
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Data_Eq_Model_1));
+                    serializer.Serialize(fileStream, dataToSave);
+                }
             }
+            catch { }
         }
     }
 }

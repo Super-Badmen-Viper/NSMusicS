@@ -240,6 +240,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
                     tcs.SetResult(Select_List);
                 });
             }
+            else
+            {
+                tcs.SetResult(Select_List);
+            }
 
             return await tcs.Task;
         }
@@ -351,6 +355,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
 
                     tcs.SetResult(Select_List);
                 });
+            }
+            else
+            {
+                tcs.SetResult(Select_List);
             }
 
             return await tcs.Task;

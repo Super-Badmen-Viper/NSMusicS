@@ -202,25 +202,32 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
         /// <exception cref="NotImplementedException"></exception>
         private void ComBox_Select_Eq_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ComBox_Select_Eq.SelectedIndex > -1)
+            try
             {
-                EQ_Bands_For_Model_1 eQ_Bands_For_Model_1 = eQ_Bands_For_Model_1s[ComBox_Select_Eq.SelectedIndex];
+                if (ComBox_Select_Eq.SelectedIndex > -1)
+                {
+                    EQ_Bands_For_Model_1 eQ_Bands_For_Model_1 = eQ_Bands_For_Model_1s[ComBox_Select_Eq.SelectedIndex];
 
-                Slider_Model_1_Eq_Num31.Value = eQ_Bands_For_Model_1.Band1;
-                Slider_Model_1_Eq_Num62.Value = eQ_Bands_For_Model_1.Band2;
-                Slider_Model_1_Eq_Num125.Value = eQ_Bands_For_Model_1.Band3;
-                Slider_Model_1_Eq_Num250.Value = eQ_Bands_For_Model_1.Band4;
-                Slider_Model_1_Eq_Num500.Value = eQ_Bands_For_Model_1.Band5;
-                Slider_Model_1_Eq_Num1k.Value = eQ_Bands_For_Model_1.Band6;
-                Slider_Model_1_Eq_Num2k.Value = eQ_Bands_For_Model_1.Band7;
-                Slider_Model_1_Eq_Num4k.Value = eQ_Bands_For_Model_1.Band8;
-                Slider_Model_1_Eq_Num8k.Value = eQ_Bands_For_Model_1.Band9;
-                Slider_Model_1_Eq_Num16k.Value = eQ_Bands_For_Model_1.Band10;
-                Slider_Model_1_Eq_Num20k.Value = eQ_Bands_For_Model_1.Band11;
+                    Slider_Model_1_Eq_Num31.Value = eQ_Bands_For_Model_1.Band1;
+                    Slider_Model_1_Eq_Num62.Value = eQ_Bands_For_Model_1.Band2;
+                    Slider_Model_1_Eq_Num125.Value = eQ_Bands_For_Model_1.Band3;
+                    Slider_Model_1_Eq_Num250.Value = eQ_Bands_For_Model_1.Band4;
+                    Slider_Model_1_Eq_Num500.Value = eQ_Bands_For_Model_1.Band5;
+                    Slider_Model_1_Eq_Num1k.Value = eQ_Bands_For_Model_1.Band6;
+                    Slider_Model_1_Eq_Num2k.Value = eQ_Bands_For_Model_1.Band7;
+                    Slider_Model_1_Eq_Num4k.Value = eQ_Bands_For_Model_1.Band8;
+                    Slider_Model_1_Eq_Num8k.Value = eQ_Bands_For_Model_1.Band9;
+                    Slider_Model_1_Eq_Num16k.Value = eQ_Bands_For_Model_1.Band10;
+                    Slider_Model_1_Eq_Num20k.Value = eQ_Bands_For_Model_1.Band11;
 
-                TextBlock_Select_Eq.Text = eQ_Bands_For_Model_1.Eq_Name;
+                    TextBlock_Select_Eq.Text = eQ_Bands_For_Model_1.Eq_Name;
 
-                ComBox_Select_Eq.SelectedIndex = -1;
+                    ComBox_Select_Eq.SelectedIndex = -1;
+                }
+            }
+            catch
+            {
+
             }
         }
 
@@ -296,28 +303,30 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
         /// <param name="e"></param>
         private void SvgViewbox_Researt_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Slider_Model_1_Eq_Num31.Value = 0;
-            Slider_Model_1_Eq_Num62.Value = 0;
-            Slider_Model_1_Eq_Num125.Value = 0;
-            Slider_Model_1_Eq_Num250.Value = 0;
-            Slider_Model_1_Eq_Num500.Value = 0;
-            Slider_Model_1_Eq_Num1k.Value = 0;
-            Slider_Model_1_Eq_Num2k.Value = 0;
-            Slider_Model_1_Eq_Num4k.Value = 0;
-            Slider_Model_1_Eq_Num8k.Value = 0;
-            Slider_Model_1_Eq_Num16k.Value = 0;
-            Slider_Model_1_Eq_Num20k.Value = 0;
-
-            TextBlock_Select_Eq.Text = "无";
-
-            if (ComBox_Select_Eq.SelectedIndex == 10)
+            try
             {
-                EQ_Bands_For_Model_1 eQ_Bands_For_Model_1 = eQ_Bands_For_Model_1s[
-                    ComBox_Select_Eq.SelectedIndex];
+                Slider_Model_1_Eq_Num31.Value = 0;
+                Slider_Model_1_Eq_Num62.Value = 0;
+                Slider_Model_1_Eq_Num125.Value = 0;
+                Slider_Model_1_Eq_Num250.Value = 0;
+                Slider_Model_1_Eq_Num500.Value = 0;
+                Slider_Model_1_Eq_Num1k.Value = 0;
+                Slider_Model_1_Eq_Num2k.Value = 0;
+                Slider_Model_1_Eq_Num4k.Value = 0;
+                Slider_Model_1_Eq_Num8k.Value = 0;
+                Slider_Model_1_Eq_Num16k.Value = 0;
+                Slider_Model_1_Eq_Num20k.Value = 0;
 
-                // 定义 Slider 控件数组
-                Slider[] sliders = new Slider[]
+                TextBlock_Select_Eq.Text = "无";
+
+                if (ComBox_Select_Eq.SelectedIndex == 10)
                 {
+                    EQ_Bands_For_Model_1 eQ_Bands_For_Model_1 = eQ_Bands_For_Model_1s[
+                        ComBox_Select_Eq.SelectedIndex];
+
+                    // 定义 Slider 控件数组
+                    Slider[] sliders = new Slider[]
+                    {
                     Slider_Model_1_Eq_Num31,
                     Slider_Model_1_Eq_Num62,
                     Slider_Model_1_Eq_Num125,
@@ -329,35 +338,40 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
                     Slider_Model_1_Eq_Num8k,
                     Slider_Model_1_Eq_Num16k,
                     Slider_Model_1_Eq_Num20k
-                };
+                    };
 
-                // 定义 int[] 数组
-                float[] values = new float[11];
+                    // 定义 int[] 数组
+                    float[] values = new float[11];
 
-                // 循环遍历 Slider 控件并将其值赋给数组
-                for (int i = 0; i < sliders.Length; i++)
-                {
-                    float value = (float)sliders[i].Value;
+                    // 循环遍历 Slider 控件并将其值赋给数组
+                    for (int i = 0; i < sliders.Length; i++)
+                    {
+                        float value = (float)sliders[i].Value;
 
-                    // 将值赋给数组
-                    values[i] = value;
+                        // 将值赋给数组
+                        values[i] = value;
+                    }
+                    EQ_Bands_For_Model_1_Save.Save_Eq_Bands(Path_App + @"\User_Data\Data_Eq_Model_1.xml", values);
+
+                    float[] customPreset = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                    this.customPreset = customPreset;
+
+                    eQ_Bands_For_Model_1s[10].Band1 = 0;
+                    eQ_Bands_For_Model_1s[10].Band2 = 0;
+                    eQ_Bands_For_Model_1s[10].Band3 = 0;
+                    eQ_Bands_For_Model_1s[10].Band4 = 0;
+                    eQ_Bands_For_Model_1s[10].Band5 = 0;
+                    eQ_Bands_For_Model_1s[10].Band6 = 0;
+                    eQ_Bands_For_Model_1s[10].Band7 = 0;
+                    eQ_Bands_For_Model_1s[10].Band8 = 0;
+                    eQ_Bands_For_Model_1s[10].Band9 = 0;
+                    eQ_Bands_For_Model_1s[10].Band10 = 0;
+                    eQ_Bands_For_Model_1s[10].Band11 = 0;
                 }
-                EQ_Bands_For_Model_1_Save.Save_Eq_Bands(Path_App + @"\User_Data\Data_Eq_Model_1.xml", values);
+            }
+            catch
+            {
 
-                float[] customPreset = { 0,0,0,0,0,0,0,0,0,0,0};
-                this.customPreset = customPreset;
-
-                eQ_Bands_For_Model_1s[10].Band1 = 0;
-                eQ_Bands_For_Model_1s[10].Band2 = 0;
-                eQ_Bands_For_Model_1s[10].Band3 = 0;
-                eQ_Bands_For_Model_1s[10].Band4 = 0;
-                eQ_Bands_For_Model_1s[10].Band5 = 0;
-                eQ_Bands_For_Model_1s[10].Band6 = 0;
-                eQ_Bands_For_Model_1s[10].Band7 = 0;
-                eQ_Bands_For_Model_1s[10].Band8 = 0;
-                eQ_Bands_For_Model_1s[10].Band9 = 0;
-                eQ_Bands_For_Model_1s[10].Band10 = 0;
-                eQ_Bands_For_Model_1s[10].Band11 = 0;
             }
         }
 
@@ -368,7 +382,14 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Window_Hov
         /// <param name="e"></param>
         private void SvgViewbox_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.Visibility = Visibility.Collapsed;
+            try
+            {
+                this.Visibility = Visibility.Collapsed;
+            }
+            catch
+            {
+
+            }
         }
 
         

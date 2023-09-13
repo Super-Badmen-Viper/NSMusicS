@@ -21,18 +21,23 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
 
         public static float[] Read_Eq_Bands(string filePath)
         {
-            Data_Eq_Model_1 data;
-
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+            try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(Data_Eq_Model_1));
-                data = (Data_Eq_Model_1)serializer.Deserialize(fileStream);
+                Data_Eq_Model_1 data;
+
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Data_Eq_Model_1));
+                    data = (Data_Eq_Model_1)serializer.Deserialize(fileStream);
+                }
+
+                string[] parts = data.Nums.Split(',');
+                float[] numbers = Array.ConvertAll(parts, float.Parse);
+
+                return numbers;
             }
-
-            string[] parts = data.Nums.Split(',');
-            float[] numbers = Array.ConvertAll(parts, float.Parse);
-
-            return numbers;
+            catch { }
+            return null;
         }
     }
 }

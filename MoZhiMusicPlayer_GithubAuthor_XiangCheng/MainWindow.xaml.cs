@@ -1055,15 +1055,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             playlists[0].Songs = songList_Infos_Current_Playlist;
             SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Current_Playlist.xml", playlists);
 
-            //保存自定义
-            if (window_Hover_EQ_Panel.ComBox_Select_Eq.SelectedIndex == 10)
+            try
             {
-                EQ_Bands_For_Model_1 eQ_Bands_For_Model_1 = window_Hover_EQ_Panel.eQ_Bands_For_Model_1s[
-                    window_Hover_EQ_Panel.ComBox_Select_Eq.SelectedIndex];
-
-                // 定义 Slider 控件数组
-                Slider[] sliders = new Slider[]
+                //保存自定义
+                if (window_Hover_EQ_Panel.ComBox_Select_Eq.SelectedIndex == 10)
                 {
+                    EQ_Bands_For_Model_1 eQ_Bands_For_Model_1 = window_Hover_EQ_Panel.eQ_Bands_For_Model_1s[
+                        window_Hover_EQ_Panel.ComBox_Select_Eq.SelectedIndex];
+
+                    // 定义 Slider 控件数组
+                    Slider[] sliders = new Slider[]
+                    {
                     window_Hover_EQ_Panel.Slider_Model_1_Eq_Num31,
                     window_Hover_EQ_Panel.Slider_Model_1_Eq_Num62,
                     window_Hover_EQ_Panel.Slider_Model_1_Eq_Num125,
@@ -1075,21 +1077,23 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     window_Hover_EQ_Panel.Slider_Model_1_Eq_Num8k,
                     window_Hover_EQ_Panel.Slider_Model_1_Eq_Num16k,
                     window_Hover_EQ_Panel.Slider_Model_1_Eq_Num20k
-                };
+                    };
 
-                // 定义 int[] 数组
-                float[] values = new float[11];
+                    // 定义 int[] 数组
+                    float[] values = new float[11];
 
-                // 循环遍历 Slider 控件并将其值赋给数组
-                for (int i = 0; i < sliders.Length; i++)
-                {
-                    float value = (float)sliders[i].Value;
+                    // 循环遍历 Slider 控件并将其值赋给数组
+                    for (int i = 0; i < sliders.Length; i++)
+                    {
+                        float value = (float)sliders[i].Value;
 
-                    // 将值赋给数组
-                    values[i] = value;
+                        // 将值赋给数组
+                        values[i] = value;
+                    }
+                    EQ_Bands_For_Model_1_Save.Save_Eq_Bands(Path_App + @"\User_Data\Data_Eq_Model_1.xml", values);
                 }
-                EQ_Bands_For_Model_1_Save.Save_Eq_Bands(Path_App + @"\User_Data\Data_Eq_Model_1.xml", values);
             }
+            catch { }
         }
         #endregion
 
@@ -3380,7 +3384,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             {
                 userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Collapsed;
                 Frame_Show.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Visible;
+                if(Grid_Model_2.Visibility == Visibility.Collapsed && Grid_Model_1.Visibility == Visibility.Collapsed)
+                    userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Visible;
                 userControl_Main_Model_2_View_Albums_And_Tracks.Visibility = Visibility.Visible;
             }
             else
@@ -3473,7 +3478,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             {
                 userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
                 Frame_Show.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Visible;
+                if (Grid_Model_2.Visibility == Visibility.Collapsed && Grid_Model_1.Visibility == Visibility.Collapsed)
+                    userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Visible;
                 userControl_Main_Model_2_View_Albums_And_Tracks.Visibility = Visibility.Visible;
             }
             else
