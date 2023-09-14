@@ -52,6 +52,26 @@
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                        />
             </StackPanel>
+            <StackPanel
+     x:Name="Stack_Add_Song_Info_True" Visibility="Collapsed"
+     HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="40,90,0,0"
+     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"          
+ >
+                <Border HorizontalAlignment="Stretch" 
+         BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
+         UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+         Background="#44FFFFFF" Height="32" 
+         />
+                <TextBlock Margin="10,-25,83,10"
+         UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+         >
+         <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/复制.svg"/>
+                </TextBlock>
+                <TextBlock Text="正在导入中" VerticalAlignment="Center" Margin="34,-35,6,0" 
+                Foreground="White"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+     />
+            </StackPanel>
             <StackPanel x:Name="Stack_Button_LotSelects_Take" Height="32" VerticalAlignment="Top" 
                         MouseLeftButtonDown="Stack_Button_LotSelects_Take_MouseLeftButtonDown" HorizontalAlignment="Left" 
                         Margin="160,90,0,0" Width="110"                      

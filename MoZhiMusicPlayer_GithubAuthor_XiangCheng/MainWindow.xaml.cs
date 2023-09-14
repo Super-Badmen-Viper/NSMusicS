@@ -496,38 +496,43 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
         private async void ComBox_Select_SongList_For_Model_2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //清空UI专辑列表
-            userControl_Main_Model_2_View_Albums_And_Tracks.VirtualizingStackPanel_For_ThisSinger_ALL_Album.Children.Clear();//UI
+            if (ComBox_Select_SongList_For_Model_2.SelectedIndex > -1)
+            {
+                //清空UI专辑列表
+                userControl_Main_Model_2_View_Albums_And_Tracks.VirtualizingStackPanel_For_ThisSinger_ALL_Album.Children.Clear();//UI
 
-            if (ComBox_Select_SongList_For_Model_2.SelectedIndex == 1)
-            {
-                Select_SongList = songList_Infos[1][0].Songs;
-                TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[1][0].Name;
-            }
-            else if(ComBox_Select_SongList_For_Model_2.SelectedIndex == 0)
-            {
-                Select_SongList = songList_Infos[0][0].Songs;
-                TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[0][0].Name;
-            }
-            else if(ComBox_Select_SongList_For_Model_2.SelectedIndex == 2)
-            {
-                Select_SongList = songList_Infos[2][0].Songs;
-                TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[2][0].Name;
-            }
-            else
-            {
-                Select_SongList = songList_Infos[ComBox_Select_SongList_For_Model_2.SelectedIndex][0].Songs;
-                TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[ComBox_Select_SongList_For_Model_2.SelectedIndex][0].Name;
-            }
+                if (ComBox_Select_SongList_For_Model_2.SelectedIndex == 1)
+                {
+                    Select_SongList = songList_Infos[1][0].Songs;
+                    TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[1][0].Name;
+                }
+                else if (ComBox_Select_SongList_For_Model_2.SelectedIndex == 0)
+                {
+                    Select_SongList = songList_Infos[0][0].Songs;
+                    TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[0][0].Name;
+                }
+                else if (ComBox_Select_SongList_For_Model_2.SelectedIndex == 2)
+                {
+                    Select_SongList = songList_Infos[2][0].Songs;
+                    TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[2][0].Name;
+                }
+                else
+                {
+                    Select_SongList = songList_Infos[ComBox_Select_SongList_For_Model_2.SelectedIndex][0].Songs;
+                    TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[ComBox_Select_SongList_For_Model_2.SelectedIndex][0].Name;
+                }
 
-            Album_Performer_s = await Load_SingerInfo_For_PerformerShow(Select_SongList);
+                Album_Performer_s = await Load_SingerInfo_For_PerformerShow(Select_SongList);
 
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                //加载专辑模式数据
-                ListView_For_Album_Performer.ItemsSource = Album_Performer_s;
-                ListView_For_Album_Performer.MouseDoubleClick += ListView_For_Album_Performer_MouseDoubleClick;
-            });
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    //加载专辑模式数据
+                    ListView_For_Album_Performer.ItemsSource = Album_Performer_s;
+                    ListView_For_Album_Performer.MouseDoubleClick += ListView_For_Album_Performer_MouseDoubleClick;
+                });
+
+                ComBox_Select_SongList_For_Model_2.SelectedIndex = -1;
+            }
         }
 
         /// <summary>
@@ -1398,11 +1403,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[1][0].Songs, 1 , audioFiles);
 
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_Love(object sender, DragEventArgs e)
@@ -1430,13 +1437,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     }
                 }
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[0][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[0][0].Songs, 0, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_Rently(object sender, DragEventArgs e)
@@ -1464,13 +1473,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     }
                 }
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[2][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[2][0].Songs, 2, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_3(object sender, DragEventArgs e)
@@ -1497,14 +1508,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         audioFiles.Add(path);
                     }
                 }
+                Song_Find_SongList_SelectedIndex = 3;
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[3][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[3][0].Songs, 3, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_4(object sender, DragEventArgs e)
@@ -1531,14 +1545,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         audioFiles.Add(path);
                     }
                 }
+                Song_Find_SongList_SelectedIndex = 4;
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[4][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[4][0].Songs, 4, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_5(object sender, DragEventArgs e)
@@ -1565,14 +1582,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         audioFiles.Add(path);
                     }
                 }
+                Song_Find_SongList_SelectedIndex = 5;
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[5][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[5][0].Songs, 5, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_6(object sender, DragEventArgs e)
@@ -1599,14 +1619,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         audioFiles.Add(path);
                     }
                 }
+                Song_Find_SongList_SelectedIndex = 6;
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[6][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[6][0].Songs, 6, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_7(object sender, DragEventArgs e)
@@ -1633,14 +1656,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         audioFiles.Add(path);
                     }
                 }
+                Song_Find_SongList_SelectedIndex = 7;
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[7][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[7][0].Songs, 7, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_8(object sender, DragEventArgs e)
@@ -1667,14 +1693,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         audioFiles.Add(path);
                     }
                 }
+                Song_Find_SongList_SelectedIndex = 8;
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[8][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[8][0].Songs, 8, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_9(object sender, DragEventArgs e)
@@ -1701,14 +1730,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         audioFiles.Add(path);
                     }
                 }
+                Song_Find_SongList_SelectedIndex = 9;
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[9][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[9][0].Songs, 9, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_10(object sender, DragEventArgs e)
@@ -1735,14 +1767,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         audioFiles.Add(path);
                     }
                 }
+                Song_Find_SongList_SelectedIndex = 10;
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[10][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[10][0].Songs, 10, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_11(object sender, DragEventArgs e)
@@ -1769,14 +1804,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         audioFiles.Add(path);
                     }
                 }
+                Song_Find_SongList_SelectedIndex = 11;
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[11][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[11][0].Songs, 11, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_12(object sender, DragEventArgs e)
@@ -1803,14 +1841,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         audioFiles.Add(path);
                     }
                 }
+                Song_Find_SongList_SelectedIndex = 12;
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[12][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[12][0].Songs, 12, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_13(object sender, DragEventArgs e)
@@ -1837,14 +1878,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         audioFiles.Add(path);
                     }
                 }
+                Song_Find_SongList_SelectedIndex = 13;
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[13][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[13][0].Songs, 13, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_14(object sender, DragEventArgs e)
@@ -1871,14 +1915,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         audioFiles.Add(path);
                     }
                 }
+                Song_Find_SongList_SelectedIndex = 14;
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[14][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[14][0].Songs, 14, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_15(object sender, DragEventArgs e)
@@ -1905,14 +1952,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         audioFiles.Add(path);
                     }
                 }
+                Song_Find_SongList_SelectedIndex = 15;
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[15][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[15][0].Songs, 15, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         public async void Start_Drop_Song_Of_SelectFiles_16(object sender, DragEventArgs e)
@@ -1939,14 +1989,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         audioFiles.Add(path);
                     }
                 }
+                Song_Find_SongList_SelectedIndex = 16;
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
                 songList_Infos[16][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[16][0].Songs, 16, audioFiles);
 
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
             }
         }
         #endregion
@@ -1955,31 +2008,37 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         {
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[1][0].Songs, 1);
 
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void My_Love_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_My_Love.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[0][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[0][0].Songs, 0);
 
             userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void Recent_Play_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[2][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[2][0].Songs, 2);
 
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
 
         int Song_Find_SongList_SelectedIndex;
@@ -1990,11 +2049,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_4(object sender, MouseButtonEventArgs e)
         {
@@ -2002,11 +2063,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_5(object sender, MouseButtonEventArgs e)
         {
@@ -2014,11 +2077,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_6(object sender, MouseButtonEventArgs e)
         {
@@ -2026,11 +2091,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_7(object sender, MouseButtonEventArgs e)
         {
@@ -2038,11 +2105,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_8(object sender, MouseButtonEventArgs e)
         {
@@ -2050,11 +2119,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_9(object sender, MouseButtonEventArgs e)
         {
@@ -2062,11 +2133,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_10(object sender, MouseButtonEventArgs e)
         {
@@ -2074,11 +2147,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_11(object sender, MouseButtonEventArgs e)
         {
@@ -2086,11 +2161,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_12(object sender, MouseButtonEventArgs e)
         {
@@ -2098,11 +2175,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_13(object sender, MouseButtonEventArgs e)
         {
@@ -2110,11 +2189,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_14(object sender, MouseButtonEventArgs e)
         {
@@ -2122,11 +2203,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_15(object sender, MouseButtonEventArgs e)
         {
@@ -2134,11 +2217,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_16(object sender, MouseButtonEventArgs e)
         {
@@ -2146,11 +2231,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         #endregion
         #region 添加本地音乐文件夹
@@ -2158,31 +2245,37 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         {
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[1][0].Songs, 1);
 
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void MyLove_Stack_Button_Add_PC_SelectFolderBrowser_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_My_Love.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[0][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[0][0].Songs, 1);
 
             userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void Recent_Play_Stack_Button_Add_PC_SelectFolderBrowser_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[2][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[2][0].Songs, 1);
 
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
 
         private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_3(object sender, MouseButtonEventArgs e)
@@ -2191,11 +2284,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_4(object sender, MouseButtonEventArgs e)
         {
@@ -2203,11 +2298,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_5(object sender, MouseButtonEventArgs e)
         {
@@ -2215,11 +2312,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_6(object sender, MouseButtonEventArgs e)
         {
@@ -2227,11 +2326,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_7(object sender, MouseButtonEventArgs e)
         {
@@ -2239,11 +2340,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_8(object sender, MouseButtonEventArgs e)
         {
@@ -2251,11 +2354,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_9(object sender, MouseButtonEventArgs e)
         {
@@ -2263,11 +2368,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_10(object sender, MouseButtonEventArgs e)
         {
@@ -2275,11 +2382,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_11(object sender, MouseButtonEventArgs e)
         {
@@ -2287,11 +2396,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_12(object sender, MouseButtonEventArgs e)
         {
@@ -2299,11 +2410,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_13(object sender, MouseButtonEventArgs e)
         {
@@ -2311,11 +2424,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_14(object sender, MouseButtonEventArgs e)
         {
@@ -2323,11 +2438,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_15(object sender, MouseButtonEventArgs e)
         {
@@ -2335,11 +2452,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_16(object sender, MouseButtonEventArgs e)
         {
@@ -2347,11 +2466,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
             Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
             songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
 
             userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         #endregion
         #region 手动扫描歌曲
@@ -2380,6 +2501,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         {
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.userControl_Select_Folder_Of_SongAdd.Visibility = Visibility.Collapsed;
 
             ArrayList list = new ArrayList(Selects_SongList);
@@ -2390,6 +2512,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser_s(songList_Infos[1][0].Songs, 1, list);
 
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
         }
         #endregion
 
