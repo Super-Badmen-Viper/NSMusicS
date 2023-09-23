@@ -2,7 +2,7 @@
 # MoZhiMusicPlayer Description:
 - Based on dotNET_ C#_ WPF's Personal Open Source Music Client
 - Demo effect: B-site link:
-- - Latest version:[ https://www.bilibili.com/video/BV1rM411s7J9 ](https://www.bilibili.com/video/BV1Dc411g74T/?spm_id_from=333.999.0.0&vd_source=6e56ca0b155a60e6a6878e5775fdcc35)
+- - Latest version:[https://www.bilibili.com/video/BV1im4y1P7P8](https://www.bilibili.com/video/BV1im4y1P7P8)
 
 # [MZMusic](https://github.com/MZMusic/MZMusic) will use Electron+Vue3+React+Vite to refactor and deploy to Linux/Mac/Web
 # (Electron - Version) ：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
@@ -47,7 +47,7 @@
 
 # Quick to use:
 - Please use Visual Studio 2022 version for Git clone and pull, otherwise older versions of Visual Studio may not be able to generate
-- [Download](https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer1.0.4): https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MusicPlayer1.0.4
+- [Download](https://github.com/Super-Badmen-Viper/MoZhiMusicPlayer/releases/tag/MZMusic_Win_3.0)
 - My QQ learning group number is 228440692. Welcome to join the group. Give me a star first. There are projects I have organized in the group, which is easier to use out of the box than Github
 - Resource location: MoZhiMusicPlayer/MoZhiMusicPlayer_ GithubAuthor_ XiangCheng/bin/Debug/net6.0 windows/Resource/within (lyrics, artist photos, album images, etc. can be edited by oneself)
 - Download additional music resources (Baidu Netdisk resources):
