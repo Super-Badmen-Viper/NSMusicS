@@ -31,6 +31,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             InitializeComponent();
 
             StackPanel_This_Album_Info.Visibility = Visibility.Collapsed;
+            Model_Normal.Visibility = Visibility.Visible;
+            Model_View.Visibility = Visibility.Collapsed;
 
             viewModule_Search_Song = ViewModule_Search_Song.Retuen_This();
         }
@@ -42,6 +44,34 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         /// 标记此歌手
         /// </summary>
         public string Singer_Name;
+
+        private void Model_View_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            /*Model_Normal.Visibility = Visibility.Visible;
+            Model_View.Visibility = Visibility.Collapsed;*/
+        }
+        private void Model_View_MouseLeave(object sender, MouseEventArgs e)
+        {
+            /*Model_Normal.Visibility = Visibility.Collapsed;
+            Model_View.Visibility = Visibility.Visible;*/
+        }
+
+        private void UserControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (StackPanel_This_Album_Info.Visibility == Visibility.Visible)
+            {
+                StackPanel_This_Album_Info.Visibility = Visibility.Collapsed;
+                /*Model_Normal.Visibility = Visibility.Collapsed;
+                Model_View.Visibility = Visibility.Visible;*/
+            }
+            else
+                StackPanel_This_Album_Info.Visibility = Visibility.Visible;
+        }
+
+        private void StackPanel_This_Album_Info_MouseLeave(object sender, MouseEventArgs e)
+        {
+            StackPanel_This_Album_Info.Visibility = Visibility.Collapsed;
+        }
 
 
         private void ListView_For_This_Album_ALL_Song_MouseLeave(object sender, MouseEventArgs e)
@@ -371,19 +401,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
 
 
-        private void UserControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if(StackPanel_This_Album_Info.Visibility == Visibility.Visible)
-                StackPanel_This_Album_Info.Visibility = Visibility.Collapsed;
-            else
-                StackPanel_This_Album_Info.Visibility = Visibility.Visible;
-        }
-
-        private void StackPanel_This_Album_Info_MouseLeave(object sender, MouseEventArgs e)
-        {
-            StackPanel_This_Album_Info.Visibility = Visibility.Collapsed;
-        }
-
+        
         /// <summary>
         /// 播放此专辑
         /// </summary>
@@ -469,5 +487,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             //添加到播放列表 首部
             SongList_Info_Current_Playlists.Retuen_This().Album_To_Current_Playlist = 2;
         }
+
+        
     }
 }

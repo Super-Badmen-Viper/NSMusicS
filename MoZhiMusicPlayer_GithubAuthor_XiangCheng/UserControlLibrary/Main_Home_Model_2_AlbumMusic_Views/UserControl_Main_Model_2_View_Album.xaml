@@ -4,9 +4,28 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" >
     <Grid>
-            
+        <ScrollViewer 
+            x:Name="ScrollViewer_Albums"
+            HorizontalScrollBarVisibility="Disabled" 
+            >
+            <StackPanel
+                x:Name="VirtualizingStackPanel_For_ThisSinger_ALL_Album"
+                Orientation="Vertical"
+                >
+
+            </StackPanel>
+
+            <ScrollViewer.Resources>
+                <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</system:Double>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="Width" Value="6"/>
+                    <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
+                </Style>
+            </ScrollViewer.Resources>
+        </ScrollViewer>
     </Grid>
 </UserControl>

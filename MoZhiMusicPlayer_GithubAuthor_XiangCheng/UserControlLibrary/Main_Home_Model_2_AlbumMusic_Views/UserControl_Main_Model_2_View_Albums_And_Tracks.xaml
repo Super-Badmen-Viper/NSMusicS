@@ -12,12 +12,12 @@
             x:Name="ScrollViewer_Albums"
             HorizontalScrollBarVisibility="Disabled" 
             >
-            <StackPanel
+            <WrapPanel         
                 x:Name="VirtualizingStackPanel_For_ThisSinger_ALL_Album"
-                Orientation="Vertical"
+                Orientation="Horizontal"
                 >
 
-            </StackPanel>
+            </WrapPanel>
 
             <ScrollViewer.Resources>
                 <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</system:Double>

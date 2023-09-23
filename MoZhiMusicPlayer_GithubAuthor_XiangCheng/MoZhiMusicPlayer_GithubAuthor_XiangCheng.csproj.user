@@ -88,6 +88,9 @@
     <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Animation\UserControl_Animation_1.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_ListView_Lyic_Of_ViewModel_Select.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -95,6 +98,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization_3.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_View_1_AlbumView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_View_2_AlbumView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControl_TaskbarIcon.xaml.cs">
@@ -204,6 +213,9 @@
     <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Animation\UserControl_Animation_1.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_ListView_Lyic_Of_ViewModel_Select.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -211,6 +223,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization_3.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_View_1_AlbumView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_View_2_AlbumView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\UserControl_TaskbarIcon.xaml">

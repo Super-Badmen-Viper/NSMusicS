@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>墨智音乐.ico</ApplicationIcon>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -399,6 +400,10 @@
     <None Remove="UI_0_Library\符号-筛选.svg" />
     <None Remove="UI_0_Library\网络.svg" />
     <None Remove="UI_0_Library\菜单.svg" />
+    <None Remove="UI_0_Library\规范－单选－未选中.svg" />
+    <None Remove="UI_0_Library\规范－单选－选中.svg" />
+    <None Remove="UI_0_Library\规范－多选－未选中.svg" />
+    <None Remove="UI_0_Library\规范－多选－选中.svg" />
     <None Remove="UI_0_Library\解锁.svg" />
     <None Remove="UI_0_Library\设备互传.svg" />
     <None Remove="UI_0_Library\设置.svg" />
@@ -417,6 +422,11 @@
     <None Remove="UI_0_Library\音量01.svg" />
     <None Remove="UI_0_Library\顺序播放.svg" />
     <None Remove="UI_0_Library\麦克风.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Models\Song_Audio_Out\CSCore_Ffmpeg\FFmpeg\src\sources.txt" />
+    <Content Include="Models\Song_Audio_Out\CSCore_Ffmpeg\Interops\unused\Readme.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -480,6 +490,10 @@
     <Resource Include="UI_0_Library\符号-筛选.svg" />
     <Resource Include="UI_0_Library\网络.svg" />
     <Resource Include="UI_0_Library\菜单.svg" />
+    <Resource Include="UI_0_Library\规范－单选－未选中.svg" />
+    <Resource Include="UI_0_Library\规范－单选－选中.svg" />
+    <Resource Include="UI_0_Library\规范－多选－未选中.svg" />
+    <Resource Include="UI_0_Library\规范－多选－选中.svg" />
     <Resource Include="UI_0_Library\解锁.svg" />
     <Resource Include="UI_0_Library\设备互传.svg" />
     <Resource Include="UI_0_Library\设置.svg" />
@@ -502,6 +516,8 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+    <PackageReference Include="CSCore.Ffmpeg" Version="1.2.0-beta1" />
+    <PackageReference Include="FFmpeg.GPL" Version="20230827.1.0" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
     <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.2.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
@@ -859,6 +875,198 @@
 
   <ItemGroup>
     <Folder Include="bin\Debug\net6.0-windows\Resource\User_Data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\bin\windows\x64\avcodec-57.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\bin\windows\x64\avformat-57.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\bin\windows\x64\avutil-55.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\bin\windows\x64\swresample-2.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\bin\windows\x86\avcodec-57.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\bin\windows\x86\avformat-57.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\bin\windows\x86\avutil-55.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\bin\windows\x86\swresample-2.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\bzip2.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\fontconfig.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\freetype.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\frei0r.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\gme.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\gnutls.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\lame.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\libass.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\libbluray.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\libbs2b.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\libcaca.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\libgsm.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\libiconv.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\libilbc.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\libmfx.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\libmodplug.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\libtheora.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\libvorbis.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\libvpx.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\libwebp.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\opencore-amr.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\openjpeg.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\opus.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\rtmpdump.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\schroedinger.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\snappy.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\soxr.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\speex.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\twolame.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\vid.stab.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\vo-amrwbenc.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\wavpack.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\x264.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\x265.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\xavs.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\xvid.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\xz.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\zimg.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\licenses\zlib.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\src\sources.txt" />
   </ItemGroup>
 
 </Project>

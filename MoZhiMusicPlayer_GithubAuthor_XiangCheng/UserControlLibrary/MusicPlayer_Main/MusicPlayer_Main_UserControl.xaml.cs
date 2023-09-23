@@ -30,7 +30,21 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
 
             viewModule_Search_Song = ViewModule_Search_Song.Retuen_This();
             this.DataContext = ViewModule_Search_Song.Retuen_This();
+
+            Bool_Album_Storyboard = true;
+            Bool_Player_Model = 0;
         }
         ViewModule_Search_Song viewModule_Search_Song;
+
+        /// <summary>
+        /// 专辑CD控件
+        /// </summary>
+        public bool Bool_Album_Storyboard;
+        /// <summary>
+        /// 播放器样式
+        /// 0：有CD控件
+        /// 1：无CD控件，歌词靠左
+        /// </summary>
+        public int Bool_Player_Model;
     }
 }

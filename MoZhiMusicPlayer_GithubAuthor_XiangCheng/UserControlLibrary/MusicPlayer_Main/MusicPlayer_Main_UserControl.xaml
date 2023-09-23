@@ -5,8 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main"
              xmlns:Main_UserControls="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_UserControls"
+             xmlns:UserControls_PlayMode_View ="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main.UserControls_PlayMode_View"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="690" MinWidth="1020" 
@@ -14,7 +16,11 @@
              UseLayoutRounding="True" SnapsToDevicePixels="True"  
              >
     <Grid>
-        <Grid x:Name="Grid_Animation">
+        <Grid x:Name="Grid_Animation_Model_2">
+            
+        </Grid>
+
+        <Grid x:Name="Grid_Animation_Model_1">
             <Grid x:Name="Grid_Up_Singer_Photo" >
                 <Grid.Background>
                     <ImageBrush Stretch="UniformToFill"/>
@@ -44,6 +50,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </Grid>
+
 
             <Grid x:Name="Image_Singer_Buttom" Visibility="Collapsed" Grid.RowSpan="2">
                 <Grid x:Name="Grid_BackGround_Black_Top" Height="170" VerticalAlignment="Top"
@@ -87,18 +94,23 @@
                         Width="400" Height="400" Margin="100,0,0,0"
                         HorizontalAlignment="Left" VerticalAlignment="Center"
                         CornerRadius="20"
-                        Background="Beige" >
+                        Background="Beige">
                     
                 </Border>
 
-                <!--歌词列表-->
+                <UserControls_PlayMode_View:UserControl_PlayMode_View_1_AlbumView
+                    x:Name="userControl_PlayMode_View_1_AlbumView" Visibility="Collapsed"
+                    HorizontalAlignment="Left" VerticalAlignment="Center"
+                    Margin="140,-140,0,0"
+                    />
+
                 <ListView 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                     ItemsPanel="{DynamicResource ItemsPanelTemplate2}" 
                     x:Name="ListView_Temp_MRC" Background="{x:Null}" BorderBrush="{x:Null}" 
                     Foreground="White"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                    Margin="140,100,0,90" Width="2000" Height="490"
+                    Margin="640,80,0,110" Height="500" Width="400"
                     BorderThickness="0" IsSynchronizedWithCurrentItem="False" Focusable="False" 
                     IsTextSearchEnabled="False" HorizontalContentAlignment="Left" 
                     VerticalContentAlignment="Stretch" HorizontalAlignment="Left"                
@@ -127,7 +139,7 @@
                                         <Border x:Name="bd"  
                                             BorderThickness="0"  
                                             SnapsToDevicePixels="True">
-                                            <GridViewRowPresenter HorizontalAlignment="Center" Height="55" />
+                                            <GridViewRowPresenter HorizontalAlignment="Center" Height="80" />
                                         </Border>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsSelected" Value="False">
@@ -135,13 +147,12 @@
                                             </Trigger>
                                             <Trigger Property="IsSelected" Value="True">
                                                 <Setter Property="FontSize" Value="32"/><!--32-->
-                                                <Setter Property="FontWeight" Value="Bold"/>
                                                 <!--<Setter Property="Margin" Value="100,0,-100,0"/>-->
-                                                <Setter Property="Margin" Value="100,0,-100,0"/>
+                                                <Setter Property="Margin" Value="0,20,0,0"/>
                                                 <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
                                                 <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
                                                 <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-                                                <Setter x:Name="Select_Item_Height" Property="Height" Value="100"/>
+                                                <Setter x:Name="Select_Item_Height" Property="Height" Value="80"/>
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
@@ -151,23 +162,25 @@
                     </ListView.Resources>
                     <ListView.View>
                         <GridView AllowsColumnReorder="True">
-                            <GridViewColumn Width="2000" x:Name="ListView_Temp_MRC_GridViewColumn">
+                            <GridViewColumn x:Name="ListView_Temp_MRC_GridViewColumn" Width="400">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <VirtualizingStackPanel Orientation="Vertical">
-                                            <StackPanel 
+                                            <WrapPanel 
                                                 x:Name="StackPanel_Lyic" 
-                                                Margin="0,-8,0,0"
+                                                HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                Margin="0,0,0,0"
                                                 Orientation="Horizontal"
                                                 IsEnabled="False">
-                                            </StackPanel>
-                                            <TextBlock HorizontalAlignment="Stretch"
+                                            </WrapPanel>
+                                            <TextBlock HorizontalAlignment="Left"
                                                     TextWrapping="Wrap" TextAlignment="Left"
                                                     LineStackingStrategy="BlockLineHeight" 
                                                     LineHeight="33"
-                                                    x:Name="Text_TextBlock"
-                                                    Text="{Binding Song_MRC_Line}"
+                                                    x:Name="Text_TextBlock" 
+                                                    Text="{Binding Song_MRC_Line}" FontWeight="Bold"
                                                     IsHitTestVisible="False" Focusable="False" IsEnabled="False" 
+                                                    UseLayoutRounding="False" SnapsToDevicePixels="False" RenderOptions.BitmapScalingMode="HighQuality"
                                                     >
                                                 <TextBlock.Triggers>
                                                     <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
@@ -191,8 +204,8 @@
                                                 </TextBlock.Foreground>
                                             </TextBlock>
                                             <TextBlock 
-                                                Margin="0,-4,0,0"
-                                                FontSize="18"
+                                                Margin="0,-4,0,0" HorizontalAlignment="Left"
+                                                FontSize="18" FontFamily="Microsoft YaHei"
                                                 Text="{Binding Song_CRC_Line}"
                                                 >
                                             </TextBlock>
@@ -205,7 +218,7 @@
                 </ListView>
                 <!-- 掩盖ListViewMRC,形成不同层次 -->
                 <TextBox x:Name="TextBox_ListViewMRC_Up" 
-                     Margin="140,100,0,90" Width="2000" Height="490"
+                     Margin="640,80,0,110" Height="500" Width="400"
                      TextWrapping="Wrap" Text="TextBox" BorderBrush="{x:Null}" Background="{x:Null}" SelectionBrush="{x:Null}" Foreground="{x:Null}" 
                      HorizontalAlignment="Left" UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5">
                     <TextBox.RenderTransform>
@@ -228,7 +241,7 @@
                     x:Name="ListView_Temp_MRC_Temp" Background="{x:Null}" BorderBrush="{x:Null}" 
                     Foreground="White" FontSize="20" FontWeight="ExtraBold"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                    Margin="140,100,0,90" Width="2000" Height="490"
+                    Margin="640,80,0,110" Height="500" Width="2000"
                     BorderThickness="0" IsSynchronizedWithCurrentItem="False" Focusable="False" 
                     IsTextSearchEnabled="False" HorizontalContentAlignment="Left" 
                     VerticalContentAlignment="Stretch" HorizontalAlignment="Left"                
@@ -323,10 +336,10 @@
                             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                             Block.TextAlignment="Left" VerticalAlignment="Center"  
                             TextWrapping="Wrap" 
-                            Text="{Binding Song_Name}" FontWeight="ExtraBold" TextAlignment="Justify" TextOptions.TextFormattingMode="Display"  
+                            Text="{Binding Song_Name}" FontWeight="Normal" TextAlignment="Justify" TextOptions.TextFormattingMode="Display"  
                             FontSize="26" Foreground="White"  Focusable="False" 
                             HorizontalAlignment="Left" 
-                            Margin="145,-630,0,0" 
+                            Margin="145,-640,0,0" 
                             Visibility="Collapsed"
                             >
                 </TextBlock>
@@ -334,11 +347,11 @@
                             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                             Block.TextAlignment="Left" VerticalAlignment="Center"  
                             TextWrapping="Wrap" 
-                            FontWeight="ExtraBold" TextAlignment="Justify" 
+                            FontWeight="Normal" TextAlignment="Justify" 
                             TextOptions.TextFormattingMode="Display"  
-                            FontSize="18" Foreground="White"  Focusable="False" 
+                            FontSize="17" Foreground="White"  Focusable="False" 
                             HorizontalAlignment="Left" 
-                            Margin="145,-566,0,0" 
+                            Margin="145,-584,0,0" 
                             Visibility="Collapsed"
                             >
                 </TextBlock>
@@ -346,10 +359,10 @@
                            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                            Block.TextAlignment="Left" VerticalAlignment="Center"  
                            TextWrapping="Wrap" 
-                           FontWeight="ExtraBold" TextAlignment="Justify" TextOptions.TextFormattingMode="Display"  
-                           FontSize="18" Foreground="White"  Focusable="False" 
+                           FontWeight="Normal" TextAlignment="Justify" TextOptions.TextFormattingMode="Display"  
+                           FontSize="17" Foreground="White"  Focusable="False" 
                            HorizontalAlignment="Left" 
-                           Margin="145,-520,0,0"
+                           Margin="145,-540,0,0"
                            Visibility="Collapsed"
                            >
                 </TextBlock>

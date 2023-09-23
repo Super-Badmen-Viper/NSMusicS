@@ -195,7 +195,9 @@
                  MouseEnter="Border_Hover_BackGround_MouseLeave"
                      >
             </TextBox>
-
+            
+            
+            
         </Grid>
         <Grid x:Name="Grid_MusicPlayer_MainWindow_Right"
               Visibility="Visible"
@@ -260,6 +262,19 @@
               >
 
             <StackPanel 
+                Height="40" Margin="0,0,340,0"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right" VerticalAlignment="Center">
+                <TextBlock 
+                    Height="20" Width="20" Margin="14,0,0,0"
+                    HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <svgc:SvgViewbox 
+                        x:Name="SvgViewbox_Select_Player_View_Model"
+                        Source="pack://application:,,,/UI_0_Library/音波,音频.svg" Cursor="Hand"/>
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel 
                 Height="40" Margin="0,0,306,0"
                 Orientation="Horizontal"
                 HorizontalAlignment="Right" VerticalAlignment="Center">
@@ -283,7 +298,7 @@
 
             <StackPanel
                 x:Name="Button_Singer_Image_Animation_To_WindowsDesktop"
-                HorizontalAlignment="Right" Width="90" Margin="0,0,200,24" 
+                HorizontalAlignment="Right" Width="90" Margin="0,0,180,24" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Height="25" VerticalAlignment="Bottom" >
                 <TextBlock Height="18" Foreground="White" HorizontalAlignment="Left" Width="58" Text="桌面写真" Margin="0,4,0,0" FontSize="14">
@@ -293,34 +308,52 @@
                 </TextBlock>
             </StackPanel>
             <Button x:Name="Button_Singer_Image_Animation_Image_To_WindowsDesktop" 
-                        Margin="0,0,200,27"
+                        Margin="0,0,190,27"
                         Style="{StaticResource MyButton}" 
                         Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
                 <svgc:SvgViewbox 
                         x:Name="SvgViewbox_Button_Singer_Image_Animation_Image_To_WindowsDesktop" 
-                        Source="pack://application:,,,/UI_0_Library/开关-关.svg"/>
+                        Source="pack://application:,,,/UI_0_Library/规范－单选－未选中.svg"/>
             </Button>
             <StackPanel
-                x:Name="Button_Mrc_Animation"
-                HorizontalAlignment="Right" Width="90" Margin="0,0,200,4" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                Height="25" VerticalAlignment="Bottom" >
+    x:Name="Button_Mrc_Animation" Visibility="Collapsed"
+    HorizontalAlignment="Right" Width="90" Margin="0,0,180,4" 
+    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+    Height="25" VerticalAlignment="Bottom" >
                 <TextBlock Height="18" Foreground="White" HorizontalAlignment="Left" Width="58" Text="歌词逐字" Margin="0,4,0,0" FontSize="14">
 
                 </TextBlock>
             </StackPanel>
-            <Button x:Name="Button_Mrc_Animation_Image"
-                        Style="{StaticResource MyButton}" 
-                        BorderBrush="{x:Null}" 
-                        Margin="0,0,200,7" 
-                        Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+            <Button x:Name="Button_Mrc_Animation_Image" Visibility="Collapsed"
+            Style="{StaticResource MyButton}" 
+            BorderBrush="{x:Null}" 
+            Margin="0,0,190,7" 
+            Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
                 <svgc:SvgViewbox 
-                        x:Name="SvgViewbox_Button_Mrc_Animation_Image"
-                        Source="pack://application:,,,/UI_0_Library/开关-开.svg"/>
+            x:Name="SvgViewbox_Button_Mrc_Animation_Image"
+            Source="pack://application:,,,/UI_0_Library/规范－单选－选中.svg"/>
+            </Button>
+            <StackPanel
+    x:Name="Button_Close_CD"
+    HorizontalAlignment="Right" Width="90" Margin="0,0,180,4" 
+    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+    Height="25" VerticalAlignment="Bottom" >
+                <TextBlock x:Name="TextBlock_Button_Close_CD" Height="18" Foreground="White" HorizontalAlignment="Left" Width="58" Text="隐藏唱片" Margin="0,4,0,0" FontSize="14">
+
+                </TextBlock>
+            </StackPanel>
+            <Button x:Name="Button_Close_CD_Image"
+    Style="{StaticResource MyButton}" 
+    BorderBrush="{x:Null}" 
+    Margin="0,0,190,7" 
+    Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+                <svgc:SvgViewbox 
+        x:Name="SvgViewbox_Button_Close_CD_Image"
+        Source="pack://application:,,,/UI_0_Library/规范－单选－选中.svg"/>
             </Button>
             <StackPanel
                 x:Name="Button_Singer_Image_Animation"
-                HorizontalAlignment="Right" Width="90" Margin="0,0,105,24" 
+                HorizontalAlignment="Right" Width="90" Margin="0,0,95,24" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Height="25" VerticalAlignment="Bottom" >
                 <TextBlock Height="17" Foreground="White" HorizontalAlignment="Left" Width="58" Text="歌手写真" FontSize="14" Margin="0,4,0,0">
@@ -333,11 +366,11 @@
                         Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
                 <svgc:SvgViewbox 
                         x:Name="SvgViewbox_Button_Singer_Image_Animation_Image"
-                        Source="pack://application:,,,/UI_0_Library/开关-关.svg"/>
+                        Source="pack://application:,,,/UI_0_Library/规范－单选－未选中.svg"/>
             </Button>
             <StackPanel
                 x:Name="Button_Song_AudioSpectrogram"
-                HorizontalAlignment="Right" Width="90" Margin="0,0,105,4" 
+                HorizontalAlignment="Right" Width="90" Margin="0,0,95,4" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Height="25" VerticalAlignment="Bottom" >
                 <TextBlock Height="17" Foreground="White" HorizontalAlignment="Left" Width="56" Text="频谱动画" FontSize="14" Margin="0,4,0,0">
@@ -350,7 +383,7 @@
                         Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <svgc:SvgViewbox 
                         x:Name="SvgViewbox_Button_Song_AudioSpectrogram_Image" 
-                        Source="pack://application:,,,/UI_0_Library/开关-关.svg"/>
+                        Source="pack://application:,,,/UI_0_Library/规范－单选－未选中.svg"/>
             </Button>
 
 
@@ -518,6 +551,95 @@
                 <StackPanel.Effect>
                     <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
                 </StackPanel.Effect>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel x:Name="Stack_Panel_Select_Player_View" Visibility="Collapsed"
+            Width="120" Height="160"  Margin="360,-234,0,0" HorizontalAlignment="Center">
+            <Border x:Name="Song_View_Panel"            
+                HorizontalAlignment="Stretch" 
+                BorderThickness="0.6" CornerRadius="4.3,4.3,4.3,4.3"
+                Margin="0,0,0,0" Background="#99232325" Height="160"
+                />
+            <StackPanel x:Name="Stack_Button_View_Model_1" Height="40" Margin="0,-280,0,0">
+                <Border BorderThickness="0,0,0,0" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"/>
+                <Button 
+                    Style="{StaticResource MyButton}"
+                    Height="20" Margin="20,-40,0,0" Width="20" HorizontalAlignment="Left" 
+                >
+                    <svgc:SvgViewbox 
+                        x:Name="SvgViewbox_Stack_Button_View_Model_1"
+                        Source="pack://application:,,,/UI_0_Library/皮肤.svg"/>
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+                    </Button.Effect>
+                </Button>
+                <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" Width="70" 
+                   Text="经典样式1" FontSize="14" Foreground="White">
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+                    </TextBlock.Effect>
+                </TextBlock>
+            </StackPanel>
+            <StackPanel x:Name="Stack_Button_View_Model_2" Height="40" Margin="0,-200,0,0">
+                <Border BorderThickness="0,0,0,0" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"/>
+                <Button 
+            Style="{StaticResource MyButton}"
+            Height="20" Margin="20,-40,0,0" Width="20" HorizontalAlignment="Left" 
+               >
+                    <svgc:SvgViewbox 
+                x:Name="SvgViewbox_Stack_Button_View_Model_2"
+                Source="pack://application:,,,/UI_0_Library/皮肤.svg"/>
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+                    </Button.Effect>
+                </Button>
+                <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" 
+                   Width="70" Text="经典样式2" FontSize="14" Foreground="White">
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+                    </TextBlock.Effect>
+                </TextBlock>
+            </StackPanel>
+            <StackPanel x:Name="Stack_Button_View_Model_3" Height="40" Margin="0,-120,0,0">
+                <Border BorderThickness="0,0,0,0" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"/>
+                <Button 
+            Style="{StaticResource MyButton}"
+            Height="20" Margin="20,-40,0,0" Width="20" HorizontalAlignment="Left" 
+               >
+                    <svgc:SvgViewbox 
+                x:Name="SvgViewbox_Stack_Button_View_Model_3"
+                Source="pack://application:,,,/UI_0_Library/皮肤.svg"/>
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+                    </Button.Effect>
+                </Button>
+                <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" 
+                   Width="70" Text="炫胶唱片1" FontSize="14" Foreground="White">
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+                    </TextBlock.Effect>
+                </TextBlock>
+            </StackPanel>
+            <StackPanel x:Name="Stack_Button_View_Model_4" Height="40" Margin="0,-40,0,0">
+                <Border BorderThickness="0,0,0,0" Background="{x:Null}"  BorderBrush="#FFD8D8D8" Height="40"/>
+                <Button 
+            Style="{StaticResource MyButton}"
+            Height="20" Margin="20,-40,0,0" Width="20" HorizontalAlignment="Left" 
+               >
+                    <svgc:SvgViewbox 
+                x:Name="SvgViewbox_Stack_Button_View_Model_4"
+                Source="pack://application:,,,/UI_0_Library/皮肤.svg"/>
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+                    </Button.Effect>
+                </Button>
+                <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" 
+                   Width="70" Text="炫胶唱片2" FontSize="14" Cursor="Hand" Foreground="White">
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+                    </TextBlock.Effect>
+                </TextBlock>
             </StackPanel>
         </StackPanel>
     </Grid>
