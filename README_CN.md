@@ -69,7 +69,9 @@
 - 禁止伪造我的算法模型的版权，抄袭我的代码，并代表您（或团队）将其提交给其他项目。您必须清楚地指出算法模型的来源才能使用它或将其提交给另一个项目（否则您将收到我的律师函）
 
 # 相关项目：
-- [comSlimeNullAudioTest.git](https://github.com/SlimeNull/AudioTest)（我提取分离了此项目的实时音频频谱数据提取功能，修改部分代码后集成类，应用到了MoZhiMusicPlayer的频谱动画作为频谱数据源）
+- [NAudio](https://github.com/naudio/NAudio)
+- [cscore](https://github.com/filoe/cscore)
+- [comSlimeNullAudioTest. git](https://github.com/SlimeNull/AudioTest)
 
 # 赞助(微信/支付宝)：
   <img src="doc/Test (4).png" align="center" width="400">
