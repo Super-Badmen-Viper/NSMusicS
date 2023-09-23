@@ -70,7 +70,9 @@
 - It is prohibited to counterfeit the copyright of my algorithm model, plagiarize my code, and submit it to other projects on behalf of you (or the team). You must clearly indicate the source of the algorithm model in order to use it or submit it to another project (otherwise you will receive my lawyer's letter)
 
 # Related projects:
-- [comSlimeNullAudioTest. git]（ https://github.com/SlimeNull/AudioTest ）(I extracted and separated the real-time audio spectrum data extraction function of this project, modified some of the code, integrated the class, and applied it to the spectrum animation of MoZhiMusicPlayer as the spectrum data source)
+- [NAudio](https://github.com/naudio/NAudio)
+- [cscore](https://github.com/filoe/cscore)
+- [comSlimeNullAudioTest. git](https://github.com/SlimeNull/AudioTest)
 
 # Sponsorship (WeChat/Alipay):
   <img src="doc/Test (4).png" align="center" width="400">
