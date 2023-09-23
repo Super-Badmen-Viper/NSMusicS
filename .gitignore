@@ -143,3 +143,12 @@
 /MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/NAudio.Wasapi.dll
 /MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/NAudio.WinForms.dll
 /MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/NAudio.WinMM.dll
+/MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/FFmpeg/licenses
+/packages
+/MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/FFmpeg
+/MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/avcodec-57.dll
+/MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/avformat-57.dll
+/MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/avutil-55.dll
+/MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/CSCore.dll
+/MoZhiMusicPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/swresample-2.dll
+/MoZhiMusicPlayer_GithubAuthor_XiangCheng/Models/Song_Audio_Out/CSCore_Ffmpeg/FFmpeg
