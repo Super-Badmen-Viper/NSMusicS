@@ -8,8 +8,8 @@
         mc:Ignorable="d"
         WindowStyle="None" AllowsTransparency="True"
         ResizeMode="CanResizeWithGrip" 
-        Height="710" Width="1040" 
-        MinHeight="710" MinWidth="1040">
+        Height="710" Width="1140" 
+        MinHeight="710" MinWidth="1140">
     <Grid>
         <ListBox x:Name="ListBox_Test" 
                 

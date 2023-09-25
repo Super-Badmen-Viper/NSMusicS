@@ -131,7 +131,7 @@
                 x:Name="Canvas_Song_Name"
                 VerticalAlignment="Top" ClipToBounds="True" 
                 MouseEnter="Border_Hover_BackGround_MouseLeave"
-                Height="20"  Margin="85,14,0,0" Width="161" HorizontalAlignment="Left">
+                Height="20"  Margin="90,14,0,0" Width="161" HorizontalAlignment="Left">
                 <Canvas.Triggers>
                     <EventTrigger RoutedEvent="FrameworkElement.MouseRightButtonDown">
                         <BeginStoryboard>
@@ -179,10 +179,37 @@
                  Foreground="White" HorizontalContentAlignment="Right" 
                  BorderThickness="0" TextAlignment="Left"
                  Focusable="False" VerticalContentAlignment="Center" 
-                 UseLayoutRounding="True" SnapsToDevicePixels="True" Margin="86,24,0,0"
+                 UseLayoutRounding="True" SnapsToDevicePixels="True" Margin="91,24,0,0"
                  MouseEnter="Border_Hover_BackGround_MouseLeave"
                      >
             </TextBox>
+
+            <Button 
+                Click="Love_ListView_Song_Click" Visibility="Collapsed"
+                Style="{StaticResource MyButton}" 
+                Width="18" Height="18" FontSize="5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="272,0,0,0">
+                    <svgc:SvgViewbox 
+                        x:Name="SvgViewbox_Love_ListView_Song"
+                        Source="pack://application:,,,/UI_0_Library/收藏.svg"/>
+            </Button>
+            <Button 
+                Click="Love_ListView_Song_Click" Visibility="Collapsed"
+                Style="{StaticResource MyButton}" 
+                Width="18" Height="18" FontSize="5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="302,0,0,0">
+                            <svgc:SvgViewbox 
+                        x:Name="SvgViewbox_Add_ListView_Song"
+                        Source="pack://application:,,,/UI_0_Library/复制.svg"/>
+            </Button>
+            <Button 
+                Click="Love_ListView_Song_Click" Visibility="Collapsed"
+                Style="{StaticResource MyButton}" 
+                Width="18" Height="18" FontSize="5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="335,0,0,0">
+                            <svgc:SvgViewbox 
+                        x:Name="SvgViewbox_Download_ListView_Song"
+                        Source="pack://application:,,,/UI_0_Library/下载.svg"/>
+            </Button>
+
+
             <TextBox x:Name="TextBox_Song_Time_Temp" 
                  HorizontalAlignment="Left" Height="26" 
                  TextWrapping="Wrap" Width="115" 
@@ -190,7 +217,7 @@
                  Foreground="White" HorizontalContentAlignment="Right" 
                  FontSize="16" Text="00:00 / 00:00" BorderThickness="0" 
                  Focusable="False" VerticalContentAlignment="Center" 
-                 UseLayoutRounding="True" SnapsToDevicePixels="True" Margin="75,34,0,10"
+                 UseLayoutRounding="True" SnapsToDevicePixels="True" Margin="80,34,0,10"
                  Visibility="Collapsed"
                  MouseEnter="Border_Hover_BackGround_MouseLeave"
                      >
@@ -262,7 +289,7 @@
               >
 
             <StackPanel 
-                Height="40" Margin="0,0,340,0"
+                Height="40" Margin="0,0,340,0" Visibility="Collapsed"
                 Orientation="Horizontal"
                 HorizontalAlignment="Right" VerticalAlignment="Center">
                 <TextBlock 

@@ -32,11 +32,10 @@
                 </Grid.Background>
                 <ItemsControl x:Name="ItemsControl_SingerImageCut" 
                                 Grid.Row="1" ItemsSource="{Binding Singer_ImagerCut_Infos}"
-                                UseLayoutRounding="False" SnapsToDevicePixels="False" RenderOptions.BitmapScalingMode="HighQuality"  
                                 >
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <UniformGrid x:Name="UniformGrid_SingerAnimation" Columns="4" Rows="1"/>
+                            <UniformGrid x:Name="UniformGrid_SingerAnimation" Columns="4" Rows="4"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
@@ -106,11 +105,11 @@
 
                 <ListView 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                    ItemsPanel="{DynamicResource ItemsPanelTemplate2}" 
+                    ItemsPanel="{DynamicResource ItemsPanelTemplate2}"
                     x:Name="ListView_Temp_MRC" Background="{x:Null}" BorderBrush="{x:Null}" 
-                    Foreground="White"
+                    Foreground="White" 
                     ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                    Margin="640,80,0,110" Height="500" Width="400"
+                    Margin="640,80,0,120" Height="490" Width="600"
                     BorderThickness="0" IsSynchronizedWithCurrentItem="False" Focusable="False" 
                     IsTextSearchEnabled="False" HorizontalContentAlignment="Left" 
                     VerticalContentAlignment="Stretch" HorizontalAlignment="Left"                
@@ -155,6 +154,27 @@
                                                 <Setter x:Name="Select_Item_Height" Property="Height" Value="80"/>
                                             </Trigger>
                                         </ControlTemplate.Triggers>
+                                        <!--
+                                            <Border x:Name="bd"  
+                                                BorderThickness="0"  
+                                                SnapsToDevicePixels="True">
+                                                <GridViewRowPresenter HorizontalAlignment="Center" Height="100" />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="False">
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Setter Property="Height" Value="100"/>
+                                                </Trigger>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter Property="FontSize" Value="32"/>
+                                                    <Setter Property="Margin" Value="0,0,0,0"/>
+                                                    <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+                                                    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
+                                                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                                                    <Setter x:Name="Select_Item_Height" Property="Height" Value="100"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                            -->
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
@@ -176,12 +196,17 @@
                                             <TextBlock HorizontalAlignment="Left"
                                                     TextWrapping="Wrap" TextAlignment="Left"
                                                     LineStackingStrategy="BlockLineHeight" 
-                                                    LineHeight="33"
-                                                    x:Name="Text_TextBlock" 
-                                                    Text="{Binding Song_MRC_Line}" FontWeight="Bold"
+                                                    LineHeight="33" TextOptions.TextFormattingMode="Display"
+                                                    x:Name="Text_TextBlock"
+                                                    Text="{Binding Song_MRC_Line}" FontWeight="Bold" FontSize="20"
                                                     IsHitTestVisible="False" Focusable="False" IsEnabled="False" 
                                                     UseLayoutRounding="False" SnapsToDevicePixels="False" RenderOptions.BitmapScalingMode="HighQuality"
                                                     >
+                                                <!--
+                                                    <TextBlock.RenderTransform>
+                                                        <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
+                                                    </TextBlock.RenderTransform>
+                                                    -->
                                                 <TextBlock.Triggers>
                                                     <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
                                                         <BeginStoryboard>
@@ -204,8 +229,9 @@
                                                 </TextBlock.Foreground>
                                             </TextBlock>
                                             <TextBlock 
+                                                x:Name="Text_TextBlock_1" 
                                                 Margin="0,-4,0,0" HorizontalAlignment="Left"
-                                                FontSize="18" FontFamily="Microsoft YaHei"
+                                                FontSize="18" FontFamily="Microsoft YaHei" TextOptions.TextFormattingMode="Display"
                                                 Text="{Binding Song_CRC_Line}"
                                                 >
                                             </TextBlock>
@@ -315,19 +341,38 @@
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="BorderThickness" Value="0"/>
                             <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                             <Setter Property="Height" Value="40"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Foreground" Value="#FF17EAA7"/>
-                                    <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="BorderBrush" Value="Transparent"/>
-                                    <Setter Property="BorderThickness" Value="0"/>
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Panel.Background" Value="Transparent"/>
-                                </Trigger>
-                            </Style.Triggers>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                        <Border Name="Bd"
+                        Background="{TemplateBinding Background}">
+                                            <GridViewRowPresenter 
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                            Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="true">
+                                                <Setter Property="Background" Value="#20FFFFFF"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter TargetName="Bd" Property="BorderBrush" Value="#FFFFC400"/>
+                                                <Setter TargetName="Bd" Property="BorderThickness" Value="0,0,0,0"/>
+                                            </Trigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsMouseOver" Value="true" />
+                                                    <Condition Property="IsSelected" Value="false"/>
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Background" Value="#20FFFFFF"/>
+                                                <Setter Property="Foreground" Value="LightGray"/>
+                                                <Setter Property="BorderBrush" Value="#FFFFC400"/>
+                                                <Setter Property="BorderThickness" Value="0,0,0,0"/>
+                                            </MultiTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>
@@ -349,7 +394,7 @@
                             TextWrapping="Wrap" 
                             FontWeight="Normal" TextAlignment="Justify" 
                             TextOptions.TextFormattingMode="Display"  
-                            FontSize="17" Foreground="White"  Focusable="False" 
+                            FontSize="17" Foreground="#98FFFFFF"  Focusable="False" 
                             HorizontalAlignment="Left" 
                             Margin="145,-584,0,0" 
                             Visibility="Collapsed"
@@ -360,7 +405,7 @@
                            Block.TextAlignment="Left" VerticalAlignment="Center"  
                            TextWrapping="Wrap" 
                            FontWeight="Normal" TextAlignment="Justify" TextOptions.TextFormattingMode="Display"  
-                           FontSize="17" Foreground="White"  Focusable="False" 
+                           FontSize="17" Foreground="#70FFFFFF"  Focusable="False" 
                            HorizontalAlignment="Left" 
                            Margin="145,-540,0,0"
                            Visibility="Collapsed"

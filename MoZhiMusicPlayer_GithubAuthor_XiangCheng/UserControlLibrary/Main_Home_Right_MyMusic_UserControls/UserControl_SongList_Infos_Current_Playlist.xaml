@@ -26,28 +26,41 @@
             >
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
-
-                        <!-- 边框大小 -->
                         <Setter Property="BorderThickness" Value="0"/>
-                        <!-- 边框颜色 -->
                         <Setter Property="BorderBrush" Value="Transparent"/>
-
                         <Setter Property="FontSize" Value="13"/>
-
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                            </Trigger>
-
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                            </Trigger>
-                        </Style.Triggers>
-
+                        <Setter Property="Height" Value="40"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <Border Name="Bd"
+                        Background="{TemplateBinding Background}">
+                                        <GridViewRowPresenter 
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                            Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="true">
+                                            <Setter Property="Background" Value="#20FFFFFF"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="#FFFFC400"/>
+                                            <Setter TargetName="Bd" Property="BorderThickness" Value="0,0,0,0"/>
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsMouseOver" Value="true" />
+                                                <Condition Property="IsSelected" Value="false"/>
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="Background" Value="#20FFFFFF"/>
+                                            <Setter Property="Foreground" Value="LightGray"/>
+                                            <Setter Property="BorderBrush" Value="#FFFFC400"/>
+                                            <Setter Property="BorderThickness" Value="0,0,0,0"/>
+                                        </MultiTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.Resources>

@@ -6,7 +6,7 @@
     <!--调试则卡顿。。。。性能分析-->
     <Application.Resources>
         <!--字体颜色-->
-
+        <FontFamily x:Key="DefautFont">/MoZhiMusicPlayer_GithubAuthor_XiangCheng;Component/fonts/#XHei</FontFamily>
 
         <!-- Button取消悬浮 -->
         <Style x:Key="MyButton" TargetType="Button">
@@ -1186,7 +1186,21 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
+
+        <Style x:Key="ListViewWithShadowStyle" TargetType="ListView">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListView">
+                        <Grid>
+                            
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
 
     </Application.Resources>
 </Application>

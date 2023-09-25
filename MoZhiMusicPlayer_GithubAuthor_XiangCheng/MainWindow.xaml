@@ -26,8 +26,8 @@
         x:Class="MoZhiMusicPlayer_GithubAuthor_XiangCheng.MainWindow"
         
         mc:Ignorable="d"
-        Title="墨智音乐" Height="710" Width="1040" 
-        MinHeight="710" MinWidth="1040"
+        Title="墨智音乐" Height="710" Width="1140" 
+        MinHeight="710" MinWidth="1140"
         Background="{x:Null}"
         UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
@@ -67,7 +67,7 @@
             </TextBlock>
         </Grid>
 
-        <Grid x:Name="Grid_Model_1" Visibility="Visible">
+        <Grid x:Name="Grid_Model_1" Visibility="Collapsed">
             <Grid x:Name="Frame_Manager_ButtonList_Model_1" 
                   HorizontalAlignment="Left" VerticalAlignment="Top"
                   Width="180" 
@@ -291,24 +291,36 @@
                     />
             </Grid>
         </Grid>
-        <Grid x:Name="Grid_Model_2" Visibility="Collapsed">
+        <Grid x:Name="Grid_Model_2" Visibility="Visible">
             <Grid x:Name="Frame_Manager_ButtonList_Model_2" 
                   HorizontalAlignment="Left"
                   Width="286" 
                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 >
                 <TextBlock Text="专辑演唱者" 
-                    Width="200" Padding="17,0,0,0" 
+                    Width="100" Padding="17,0,0,0" 
                     Foreground="#F6F6F6" HorizontalAlignment="Left" VerticalAlignment="Top"
-                    Margin="1,80,0,0"
+                    Margin="1,76,0,0"
                 />
                 <TextBlock 
                     x:Name="TextBlock_For_SelectSongList_To_AlbumModel_2"
                     Text="歌单：" 
-                    Width="200" Padding="17,0,0,0" 
+                    Width="130" Padding="17,0,0,0" 
                     Foreground="#F6F6F6" HorizontalAlignment="Left" VerticalAlignment="Top"
                     Margin="1,100,0,0"
                 />
+                <Border
+                    x:Name="Button_Show_big2_Singer_List_Model_2" Visibility="Collapsed"
+                    Width="120" Height="20" Margin="90,73,0,0"
+                    VerticalAlignment="Top" HorizontalAlignment="Left"
+                    Background="#44FFFFFF" CornerRadius="10"
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                    >
+                    <TextBlock 
+                        Text="显示右侧歌手列表" Foreground="#FFFFFF"
+                        Margin="12,0,0,0" VerticalAlignment="Center"/>
+
+                </Border>
                 <ComboBox 
                     x:Name="ComBox_Select_SongList_For_Model_2"
                     SelectedIndex="-1"
@@ -352,22 +364,41 @@
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="BorderThickness" Value="0"/>
                             <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="FontSize" Value="13"/>
                             <Setter Property="Height" Value="55"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="BorderBrush" Value="Transparent"/>
-                                    <Setter Property="BorderThickness" Value="0"/>
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="BorderBrush" Value="Transparent"/>
-                                    <Setter Property="BorderThickness" Value="0"/>
-                                    <Setter Property="Background" Value="Transparent"/>
-                                </Trigger>
-                            </Style.Triggers>
+                            <Setter Property="FontSize" Value="13"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                        <Border Name="Bd"
+                                            Background="{TemplateBinding Background}">
+                                            <GridViewRowPresenter 
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                                Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="true">
+                                                <Setter Property="Background" Value="#20FFFFFF"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter TargetName="Bd" Property="BorderBrush" Value="#FFFFC400"/>
+                                                <Setter TargetName="Bd" Property="BorderThickness" Value="0,0,0,0"/>
+                                            </Trigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsMouseOver" Value="true" />
+                                                    <Condition Property="IsSelected" Value="false"/>
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Background" Value="#20FFFFFF"/>
+                                                <Setter Property="Foreground" Value="LightGray"/>
+                                                <Setter Property="BorderBrush" Value="#FFFFC400"/>
+                                                <Setter Property="BorderThickness" Value="0,0,0,0"/>
+                                            </MultiTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
                         </Style>
-                    </ListView.ItemContainerStyle>
+                    </ListView.ItemContainerStyle>  
                     <ListView.Resources>
                         <Style TargetType="{x:Type GridViewColumnHeader}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -497,12 +528,14 @@
         <MusicPlayer_Main:MusicPlayer_Main_UserControl 
             x:Name="musicPlayer_Main_UserControl"
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-            VerticalAlignment="Bottom" Height="0"
+            VerticalAlignment="Bottom"
             MouseLeftButtonDown="Grid_Operation_Panel_MouseLeftButtonDown" 
-        />
+        >
+            
+        </MusicPlayer_Main:MusicPlayer_Main_UserControl>
 
         <Grid x:Name="Frame_Buttom_MusicPlayerUserControl"
-              Margin="180,0,0,0"
+              Margin="0, 0, 0, 0"
               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  VerticalAlignment="Bottom"
             >
             <Border CornerRadius="20">

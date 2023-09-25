@@ -72,7 +72,7 @@
     HorizontalAlignment="Left" VerticalAlignment="Center"
     MinWidth="60" MinHeight="60"
     CornerRadius="180" Margin="110,0,0,0"
-    BorderBrush="#66FFFFFF" BorderThickness="3,2,0,0"
+    BorderBrush="#66FFFFFF" BorderThickness="0,2,0,0"
 >
 
             </Border>

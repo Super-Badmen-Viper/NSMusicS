@@ -144,5 +144,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow
 
             return isTrimmed;
         }
+
+        private void Love_ListView_Song_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

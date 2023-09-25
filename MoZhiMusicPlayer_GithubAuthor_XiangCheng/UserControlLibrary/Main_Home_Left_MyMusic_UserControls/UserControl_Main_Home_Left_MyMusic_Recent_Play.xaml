@@ -93,7 +93,7 @@
         </Grid>
 
 
-        <Grid x:Name="Grid_ListItem_CrudModel_1" Margin="30,140,0,10">
+        <Grid x:Name="Grid_ListItem_CrudModel_1" Margin="0,140,0,10">
             <ListView x:Name="ListView_Download_SongList_Info" Foreground="White"
                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
@@ -108,30 +108,41 @@
 
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
-
-                        <!-- 边框大小 -->
                         <Setter Property="BorderThickness" Value="0"/>
-                        <!-- 边框颜色 -->
                         <Setter Property="BorderBrush" Value="Transparent"/>
-
                         <Setter Property="FontSize" Value="13"/>
-
                         <Setter Property="Height" Value="40"/>
-
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                            </Trigger>
-
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                            </Trigger>
-                        </Style.Triggers>
-
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <Border Name="Bd"
+                        Background="{TemplateBinding Background}">
+                                        <GridViewRowPresenter 
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                            Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="true">
+                                            <Setter Property="Background" Value="#20FFFFFF"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="#FFFFC400"/>
+                                            <Setter TargetName="Bd" Property="BorderThickness" Value="0,0,0,0"/>
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsMouseOver" Value="true" />
+                                                <Condition Property="IsSelected" Value="false"/>
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="Background" Value="#20FFFFFF"/>
+                                            <Setter Property="Foreground" Value="LightGray"/>
+                                            <Setter Property="BorderBrush" Value="#FFFFC400"/>
+                                            <Setter Property="BorderThickness" Value="0,0,0,0"/>
+                                        </MultiTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.Resources>
@@ -171,8 +182,22 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
+                            
+                            <GridViewColumn Header="No."
+                                Width="76"
+                                sort:GridViewSort.PropertyName="Song_No">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Song_No}" FontSize="14">
 
-                            <GridViewColumn x:Name="GridViewColumn_Love_Add_ListView_Song_Normal">
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn 
+                                x:Name="GridViewColumn_Love_Add_ListView_Song_Normal"
+                                Width="31">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button x:Name="Love_ListView_Song"
@@ -211,7 +236,7 @@
                             </GridViewColumn>
                             <GridViewColumn 
                                         Header="歌手"
-                                        Width="160"
+                                        Width="220"
                                         sort:GridViewSort.PropertyName="Singer_Name">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -222,25 +247,12 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="专辑"
-                                        Width="156"
+                                        Width="220"
                                         sort:GridViewSort.PropertyName="Album_Name">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Album_Name}" FontSize="14">
-                                            
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
 
-                            <GridViewColumn Header="No."
-                                        Width="92"
-                                        sort:GridViewSort.PropertyName="Song_No"
-                                        >
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Song_No}" FontSize="14">
-                                            
                                         </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

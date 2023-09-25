@@ -220,7 +220,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlaye
             int hz2500index = (int)(curveFrequencyEnd / frequencyPerIndex);
             double[] resultPaint = DftData.Take(hz2500index).ToArray(); // 106  0~105     71  1~71    ->>>   
 
-            float dataRight = resultPaint.Length, panelRight = 1040, panelHeight = 100;
+            float dataRight = resultPaint.Length, panelRight = 1140, panelHeight = 100;
             dftDataFilter ??= (v) => v;
             PointF[] points = Enumerable.Range(0, resultPaint.Length).Select(i =>
                 new PointF(

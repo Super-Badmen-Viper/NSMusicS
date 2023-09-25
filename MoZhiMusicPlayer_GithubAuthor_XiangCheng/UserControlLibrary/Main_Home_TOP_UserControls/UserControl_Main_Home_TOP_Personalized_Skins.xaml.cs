@@ -58,7 +58,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             gradientBrush_5.StartPoint = new Point(0, 0); // 渐变的起始点
             gradientBrush_5.EndPoint = new Point(1, 0);   // 渐变的结束点
             gradientBrush_5.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#485563"), 0));
-            gradientBrush_5.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#29323c"), 1));*/
+            gradientBrush_5.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#29323c"), 1));
 
 
             gradientBrush_6 = new LinearGradientBrush();
@@ -77,7 +77,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             gradientBrush_8.StartPoint = new Point(0, 0); // 渐变的起始点
             gradientBrush_8.EndPoint = new Point(1, 0);   // 渐变的结束点
             gradientBrush_8.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#E3FDF5"), 0));
-            gradientBrush_8.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FFE6FA"), 1));
+            gradientBrush_8.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FFE6FA"), 1));*/
 
 
 
@@ -92,48 +92,61 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
             ImageBrush imageBrush;
 
-            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/Red Velvet.jpg")));
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/Color_炫彩渐变蓝01.jpg")));
             imageBrush.Stretch = Stretch.UniformToFill;
             Border_this_app_Background_1.Background = imageBrush;
 
-            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/T-ara.jpg")));
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/Color_ROG01.jpg")));
             imageBrush.Stretch = Stretch.UniformToFill;
             Border_this_app_Background_2.Background = imageBrush;
 
-            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/JEON SOMI.jpg")));
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/Color_Windows01.jpg")));
             imageBrush.Stretch = Stretch.UniformToFill;
             Border_this_app_Background_3.Background = imageBrush;
 
-            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/BLACKPINK.jpg")));
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/Color_赛博朋克Car01.jpg")));
             imageBrush.Stretch = Stretch.UniformToFill;
             Border_this_app_Background_4.Background = imageBrush;
 
-            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/TWICE.jpg")));
-            imageBrush.Stretch = Stretch.UniformToFill;
-            Border_this_app_Background_5.Background = imageBrush;
+            gradientBrush_5 = new LinearGradientBrush();
+            gradientBrush_5.StartPoint = new Point(0, 0); // 渐变的起始点
+            gradientBrush_5.EndPoint = new Point(1, 0);   // 渐变的结束点
+            gradientBrush_5.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#00000000"), 0));
+            gradientBrush_5.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#00000000"), 1));
 
-            Border_this_app_Background_6.Background = gradientBrush_6;
-            Border_this_app_Background_7.Background = gradientBrush_7;
-            Border_this_app_Background_8.Background = gradientBrush_8;
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/Color_风景01.jpg")));
+            imageBrush.Stretch = Stretch.UniformToFill;
+            Border_this_app_Background_6.Background = imageBrush;
+
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/Color_风景02.jpg")));
+            imageBrush.Stretch = Stretch.UniformToFill;
+            Border_this_app_Background_7.Background = imageBrush;
+
+            imageBrush = new ImageBrush(new BitmapImage(new Uri(Path_App + "/Button_Image_Ico/Color_风景03.jpg")));
+            imageBrush.Stretch = Stretch.UniformToFill;
+            Border_this_app_Background_8.Background = imageBrush;
         }
 
         string Path_App;
 
 
-       /* // 高级黑
-        public LinearGradientBrush gradientBrush_1;
+        /* // 高级黑
+         public LinearGradientBrush gradientBrush_1;
 
-        // 高级白
-        public LinearGradientBrush gradientBrush_2;
+         // 高级白
+         public LinearGradientBrush gradientBrush_2;
 
-        // 山岩
-        public LinearGradientBrush gradientBrush_3;
+         // 山岩
+         public LinearGradientBrush gradientBrush_3;
 
-        // 永恒天空
-        public LinearGradientBrush gradientBrush_4;
+         // 永恒天空
+         public LinearGradientBrush gradientBrush_4;
 
-        // 毒药
-        public LinearGradientBrush gradientBrush_5;*/
+         // 毒药
+         public LinearGradientBrush gradientBrush_5;*/
+
+        //透明
+        public LinearGradientBrush gradientBrush_5;
 
         // 盐山 
         public LinearGradientBrush gradientBrush_6;

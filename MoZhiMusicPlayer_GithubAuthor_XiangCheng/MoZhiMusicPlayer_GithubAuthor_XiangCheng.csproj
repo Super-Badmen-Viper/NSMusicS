@@ -10,18 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="fonts\Barlow-Black.ttf" />
-    <None Remove="fonts\Barlow-Black.woff2" />
-    <None Remove="fonts\Barlow-Bold.ttf" />
-    <None Remove="fonts\Barlow-Bold.woff2" />
-    <None Remove="fonts\Barlow-ExtraBold.ttf" />
-    <None Remove="fonts\Barlow-ExtraBold.woff2" />
-    <None Remove="fonts\Barlow-Medium.ttf" />
-    <None Remove="fonts\Barlow-Medium.woff2" />
-    <None Remove="fonts\Barlow-Regular.ttf" />
-    <None Remove="fonts\Barlow-Regular.woff2" />
-    <None Remove="fonts\Barlow-SemiBold.ttf" />
-    <None Remove="fonts\Barlow-SemiBold.woff2" />
+    <None Remove="fonts\XHei.Bold_1.2b.ttf" />
     <None Remove="ico_ui_library\0_官方歌单.jpg" />
     <None Remove="ico_ui_library\0_推荐有声电台.jpg" />
     <None Remove="ico_ui_library\0_推荐视频.jpg" />
@@ -430,6 +419,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="fonts\XHei.Bold_1.2b.ttf" />
     <Resource Include="UI_0_Library\上.svg" />
     <Resource Include="UI_0_Library\上一首.svg" />
     <Resource Include="UI_0_Library\下02.svg" />
@@ -517,7 +507,6 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
     <PackageReference Include="CSCore.Ffmpeg" Version="1.2.0-beta1" />
-    <PackageReference Include="FFmpeg.GPL" Version="20230827.1.0" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
     <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.2.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
@@ -546,18 +535,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="fonts\Barlow-Black.ttf" />
-    <Resource Include="fonts\Barlow-Black.woff2" />
-    <Resource Include="fonts\Barlow-Bold.ttf" />
-    <Resource Include="fonts\Barlow-Bold.woff2" />
-    <Resource Include="fonts\Barlow-ExtraBold.ttf" />
-    <Resource Include="fonts\Barlow-ExtraBold.woff2" />
-    <Resource Include="fonts\Barlow-Medium.ttf" />
-    <Resource Include="fonts\Barlow-Medium.woff2" />
-    <Resource Include="fonts\Barlow-Regular.ttf" />
-    <Resource Include="fonts\Barlow-Regular.woff2" />
-    <Resource Include="fonts\Barlow-SemiBold.ttf" />
-    <Resource Include="fonts\Barlow-SemiBold.woff2" />
     <Resource Include="ico_ui_library\0_官方歌单.jpg" />
     <Resource Include="ico_ui_library\0_推荐有声电台.jpg" />
     <Resource Include="ico_ui_library\0_推荐视频.jpg" />
