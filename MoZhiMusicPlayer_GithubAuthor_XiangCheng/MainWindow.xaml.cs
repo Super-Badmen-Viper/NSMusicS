@@ -37,7 +37,6 @@ using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Services;
 using System.Net;
 using System.Security.Policy;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Json_To_WebAPI;
-using Gst;
 using Shell32;
 using Uri = System.Uri;
 using Application = System.Windows.Application;
@@ -54,7 +53,6 @@ using System.Collections.ObjectModel;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Services.Services_For_API_GetResult;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MainWindow_Buttom_MusicPlayer_UserControls;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Right_MyMusic_UserControls;
-using Org.BouncyCastle.Utilities.Encoders;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_UserControls;
 using Hardcodet.Wpf.TaskbarNotification;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main.UserControls;
@@ -64,7 +62,6 @@ using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.APP_Setting;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Extract_Infos;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Of_AlbumList_Infos;
-using VisioForge.Libs.ZXing.QrCode.Internal;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Of_Album_SongList_Infos;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views;
 using System.Reflection;
@@ -1160,7 +1157,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         }
         private void Button_Connectio_MySql_Click(object sender, RoutedEventArgs e)
         {
-            if (userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Data_Source.Length > 0 &&
+            /*if (userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Data_Source.Length > 0 &&
                userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Database.Length > 0 &&
                userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.User_Id.Length > 0 &&
                userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Password.Length > 0 &&
@@ -1180,7 +1177,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             else
             {
                 MessageBox.Show("请先输入以上的远程数据库连接字段");
-            }
+            }*/
         }
         private void Button_Run_this_SQL_Click(object sender, RoutedEventArgs e)
         {
@@ -1197,9 +1194,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             }
             else
             {
-                musicUrls = connection_MySql.GetMusicUrls(
+                /*musicUrls = connection_MySql.GetMusicUrls(
                     userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Sql_String
-                    );
+                    );*/
             }
 
             foreach (string url in musicUrls)

@@ -53,9 +53,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
 
         public FFmpegAudioReader(string filename)
         {
-            ffmpegDecoder = new FfmpegDecoder(filename);
-
             lockObject = new object();//
+
+            ffmpegDecoder = new FfmpegDecoder(filename);
 
             if (null != ffmpegDecoder)
             {

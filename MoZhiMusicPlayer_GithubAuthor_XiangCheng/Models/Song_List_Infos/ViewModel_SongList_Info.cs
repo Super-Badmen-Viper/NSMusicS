@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using GalaSoft.MvvmLight;
-using Gst.Audio;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Servies_For_API_Info;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos;
 using Newtonsoft.Json;
@@ -18,7 +17,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using VisioForge.MediaFramework.DSP;
 using static MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Servies_For_API_Info.API_Song_Info;
 using static MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Servies_For_API_Info.API_Song_Info_Get_Url;
 

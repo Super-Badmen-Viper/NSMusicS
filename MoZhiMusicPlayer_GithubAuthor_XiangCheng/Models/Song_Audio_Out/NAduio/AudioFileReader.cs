@@ -57,7 +57,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out.NAduio
                 else // make MediaFoundationReader the default for MP3 going forwards
                     readerStream = new MediaFoundationReader(fileName);
             }
-            else if (fileName.EndsWith(".aiff", StringComparison.OrdinalIgnoreCase) || fileName.EndsWith(".aif", StringComparison.OrdinalIgnoreCase))
+            else if (fileName.EndsWith(".cc", StringComparison.OrdinalIgnoreCase) || fileName.EndsWith(".aif", StringComparison.OrdinalIgnoreCase))
             {
                 readerStream = new AiffFileReader(fileName);
             }

@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using MySql.Data.MySqlClient;
+//using MySql.Data.MySqlClient;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Services
 {
     public class Services_Connection_MySql
     {
-        private readonly string connectionString;
+        /*private readonly string connectionString;
         public MySqlConnection connection;
         private bool Bool_connection;
 
@@ -71,6 +71,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Services
             }
 
             return results;
-        }
+        }*/
     }
 }

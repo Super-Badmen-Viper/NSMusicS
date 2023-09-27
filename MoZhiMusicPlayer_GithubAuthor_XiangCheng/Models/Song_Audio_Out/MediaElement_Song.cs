@@ -5,15 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VisioForge.Libs.NAudio.Wave;
-using VisioForge.MediaFramework.DSP.Equalizer;
 using WaveOutEvent = NAudio.Wave.WaveOutEvent;
 using WaveOut = NAudio.Wave.WaveOut;
 using WaveFormat = NAudio.Wave.WaveFormat;
 using ISampleProvider = NAudio.Wave.ISampleProvider;
 using NAudio.Extras;
 using NAudio.Wave;
-using VisioForge.Libs.ZXing;
 using Equalizer = NAudio.Extras.Equalizer;
 using ViewModelBase = MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Set.ViewModel.ViewModelBase;
 using CommunityToolkit.Mvvm.Input;
@@ -83,10 +80,24 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
             {
                 audioFileReader = null;
                 //audioFileReader.Dispose();
+
                 waveOutEvent.Dispose();
             }
-
-            if (audioFilePath.IndexOf(".flac") >= 0)
+            
+            //选择编码器
+            if (audioFilePath.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase))
+            {
+                audioFileReader = new AudioFileReader(audioFilePath);
+            }
+            else if (audioFilePath.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
+            {
+                audioFileReader = new AudioFileReader(audioFilePath);
+            }
+            else if (audioFilePath.EndsWith(".aiff", StringComparison.OrdinalIgnoreCase))
+            {
+                audioFileReader = new AudioFileReader(audioFilePath);
+            }
+            else if (audioFilePath.EndsWith(".flac", StringComparison.OrdinalIgnoreCase))
             {
                 audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
                 SampleChannel sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
@@ -97,7 +108,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
             }
             else
             {
+                audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
+                SampleChannel sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
+                audioFileReader_FFmpeg.sampleChannel = sampleChannel;
+
                 audioFileReader = new AudioFileReader(audioFilePath);
+                audioFileReader.sampleChannel = sampleChannel;
             }
 
             waveOutEvent = new WaveOutEvent();
