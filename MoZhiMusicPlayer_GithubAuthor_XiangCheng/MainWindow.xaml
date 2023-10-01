@@ -42,7 +42,7 @@
         <MusicPlayer_Main:UserControl_TaskbarIcon
             x:Name="userControl_TaskbarIcon"
             />
-        
+
         <Grid x:Name="this_app_Background" >
             <!--#1F1F1F-->
         </Grid>
@@ -398,7 +398,7 @@
                                 </Setter.Value>
                             </Setter>
                         </Style>
-                    </ListView.ItemContainerStyle>  
+                    </ListView.ItemContainerStyle>
                     <ListView.Resources>
                         <Style TargetType="{x:Type GridViewColumnHeader}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -426,7 +426,7 @@
                                                     Background="{Binding Album_Performer_Image}"
                                                     Width="55" Height="55" CornerRadius="6"
                                                     >
-                                                
+
                                             </Border>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -440,7 +440,7 @@
                                                     x:Name="TextBlock_Album_Performer_Name"
                                                     Text="{Binding Album_Performer_Name}" Foreground="White"
                                                     >
-                                                    
+
                                                 </TextBlock>
                                                 <TextBlock
                                                     x:Name="TextBlock_Album_Performer_Of_AlbumNums"
@@ -485,7 +485,75 @@
             <Grid Margin="286,77,0,77" >
                 <UserControl_Main_Model_2_View_Albums_And_Tracks:UserControl_Main_Model_2_View_Albums_And_Tracks
                     x:Name="userControl_Main_Model_2_View_Albums_And_Tracks"
+                    Margin="-1,20,1,0"
                     />
+
+                <StackPanel x:Name="Stack_Button_LotSelects_Sort" Height="20" Visibility="Visible"
+                            HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" 
+                            Margin="710,0,0,0"
+                            MouseLeftButtonDown="Stack_Button_LotSelects_Sort_MouseLeftButtonDown"                      
+                    >
+                    <Border HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch" 
+                        BorderThickness="0" CornerRadius="10" BorderBrush="#00000000" 
+                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                        Background="#44FFFFFF" Height="20"
+                    />
+                    <TextBlock Margin="16,-15,0,0" Height="10" Width="10"
+                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                        >
+                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/批量操作.svg"/>
+                    </TextBlock>
+                    <TextBlock Text="排序" VerticalAlignment="Center" Margin="34,-20,6,0" 
+                        Foreground="White"
+                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                    />
+                </StackPanel>
+
+                <StackPanel x:Name="Stack_Panel_Sort_AlbumModel" Visibility="Visible" Width="135" Height="142" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="710,20,0,0" Background="#44000000">
+                    <StackPanel x:Name="Stack_Button_Sort_AlbumModel_AlbumName" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
+                        <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                            <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName"/>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Foreground="White" Text="专辑名" Margin="35,-14,0,0"/>
+                    </StackPanel>
+                    <StackPanel x:Name="Stack_Button_Sort_AlbumModel_AlbumName_Year" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
+                        <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                            <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName_Year"/>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Foreground="White" Text="专辑名/年份" Margin="35,-14,0,0"/>
+                    </StackPanel>
+                    <StackPanel x:Name="Stack_Button_Sort_AlbumModel_AlbumName_Genre" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
+                        <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                            <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName_Genre"/>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Foreground="White" Text="专辑名/流派" Margin="35,-14,0,0"/>
+                    </StackPanel>
+                    <StackPanel x:Name="Stack_Button_Sort_AlbumModel_AlbumName_Year_Genre" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
+                        <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                            <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName_Year_Genre"/>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Foreground="White" Text="专辑名/年份/流派" Margin="35,-14,0,0"/>
+                    </StackPanel>
+                    <StackPanel x:Name="Stack_Button_Sort_AlbumModel_Year" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
+                        <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                            <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_Year"/>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Foreground="White" Text="年份" Margin="35,-14,0,0"/>
+                    </StackPanel>
+                    <StackPanel x:Name="Stack_Button_Sort_AlbumModel_Year_Genre" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
+                        <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                            <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_Year_Genre"/>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Foreground="White" Text="年份/流派" Margin="35,-14,0,0"/>
+                    </StackPanel>
+                    <StackPanel x:Name="Stack_Button_Sort_AlbumModel_Genre" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
+                        <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                            <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_Genre"/>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Left" Foreground="White" Text="流派" Margin="35,-14,0,0"/>
+                    </StackPanel>
+                </StackPanel>
             </Grid>
         </Grid>
 
@@ -501,6 +569,11 @@
             />
         <Main_Home_TOP_UserControls:UserControl_Main_Home_TOP_App_Setting
             x:Name="userControl_Main_Home_TOP_App_Setting" Margin="286,76.7,0,70" 
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            Visibility="Collapsed"
+            />
+        <Main_Home_Left_MyMusic_UserControls:UserControl_Main_Home_Left_Web_Music
+            x:Name="userControl_Main_Home_Left_Web_Music" Margin="286,76.7,0,70" 
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
             Visibility="Collapsed"
             />
@@ -528,10 +601,10 @@
         <MusicPlayer_Main:MusicPlayer_Main_UserControl 
             x:Name="musicPlayer_Main_UserControl"
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-            VerticalAlignment="Bottom"
+            VerticalAlignment="Bottom" Height="0"
             MouseLeftButtonDown="Grid_Operation_Panel_MouseLeftButtonDown" 
         >
-            
+
         </MusicPlayer_Main:MusicPlayer_Main_UserControl>
 
         <Grid x:Name="Frame_Buttom_MusicPlayerUserControl"
@@ -568,6 +641,6 @@
                 Margin="0,70,0,120"
                 />
 
-        
+
     </Grid>
 </Window>

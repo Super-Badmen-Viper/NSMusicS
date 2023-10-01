@@ -89,6 +89,46 @@
                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                        />
             </StackPanel>
+            <StackPanel x:Name="Stack_Button_LotSelects_Sort" Height="32" Visibility="Visible"
+    HorizontalAlignment="Left" VerticalAlignment="Top" 
+    Margin="280,90,0,0" Width="110" MouseLeftButtonDown="Stack_Button_LotSelects_Sort_MouseLeftButtonDown"                      
+    >
+                <Border HorizontalAlignment="Stretch" 
+        VerticalAlignment="Stretch" 
+        BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
+        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+        Background="#44FFFFFF" Height="32" 
+        />
+                <TextBlock Margin="20,-25,73,10"
+       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+       >
+        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/批量操作.svg"/>
+                </TextBlock>
+                <TextBlock Text="排序" VerticalAlignment="Center" Margin="44,-35,6,0" 
+        Foreground="White"
+        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+        />
+            </StackPanel>
+            <StackPanel x:Name="Stack_Button_LotSelects_View" Height="32" Visibility="Collapsed"
+    HorizontalAlignment="Left" VerticalAlignment="Top" 
+    Margin="400,90,0,0" Width="110"                      
+    >
+                <Border HorizontalAlignment="Stretch" 
+        VerticalAlignment="Stretch" 
+        BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
+        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+        Background="#44FFFFFF" Height="32" 
+        />
+                <TextBlock Margin="20,-25,73,10"
+        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+        >
+        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/批量操作.svg"/>
+                </TextBlock>
+                <TextBlock Text="显示模式" VerticalAlignment="Center" Margin="44,-35,6,0" 
+        Foreground="White"
+        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+    />
+            </StackPanel>
         </Grid>
 
         <Grid x:Name="Grid_ListItem_CrudModel_1" Margin="0,140,0,10">
@@ -416,6 +456,39 @@
                     </TextBlock>
                     <TextBlock HorizontalAlignment="Left" Foreground="White"
                                Text="添加本地歌曲文件夹" Margin="35,-18,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="Grid_NormalModel_3">
+            <StackPanel x:Name="Stack_Panel_Sort_Song" Visibility="Visible" Width="150" Height="140"  Margin="330,125,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Grid Height="130">
+                    <Rectangle RadiusX="5" RadiusY="5" Fill="#44000000"/>
+                    <Border CornerRadius="5"/>
+                </Grid>
+                <StackPanel x:Name="Stack_Button_Sort_SingerName" Height="28" VerticalAlignment="Top" Margin="0,-124,0,0" MouseLeftButtonDown="Stack_Button_Sort_SingerName_MouseLeftButtonDown" Background="#10000000">
+                    <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                        <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_SingerName"/>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Foreground="White" Text="歌手名" Margin="35,-15,0,0"/>
+                </StackPanel>
+                <StackPanel x:Name="Stack_Button_Sort_SongName" Height="28" VerticalAlignment="Top" Margin="0,-95,0,0" MouseLeftButtonDown="Stack_Button_Sort_SongName_MouseLeftButtonDown" Background="#10000000">
+                    <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                        <svgc:SvgViewbox 
+                            x:Name="SvgViewbox_Stack_Button_Sort_SongName"/>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Foreground="White" Text="歌曲名 " Margin="35,-15,0,0"/>
+                </StackPanel>
+                <StackPanel x:Name="Stack_Button_Sort_AlbumName" Height="28" VerticalAlignment="Top" Margin="0,-65,0,0" MouseLeftButtonDown="Stack_Button_Sort_AlbumName_MouseLeftButtonDown" Background="#10000000">
+                    <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                        <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumName"/>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Foreground="White" Text="专辑名 " Margin="35,-15,0,0"/>
+                </StackPanel>
+                <StackPanel x:Name="Stack_Button_Sort_Duration" Height="28" VerticalAlignment="Top" Margin="0,-35,0,0" MouseLeftButtonDown="Stack_Button_Sort_Duration_MouseLeftButtonDown" Background="#10000000">
+                    <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                        <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_Duration"/>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Left" Foreground="White" Text="时长" Margin="35,-15,0,0"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

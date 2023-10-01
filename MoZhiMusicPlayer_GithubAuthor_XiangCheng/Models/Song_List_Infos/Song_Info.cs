@@ -221,11 +221,71 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         protected void RaisePropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+
+
+        /// <summary>
+        /// Web 音乐文件路径（普通）
+        /// </summary>
+        private string _song_Web_Url;
+        public string Song_Web_Url
+        {
+            get
+            {
+                return _song_Web_Url;
+            }
+            set
+            {
+                if (_song_Web_Url != value)
+                {
+                    _song_Web_Url = value;
+                    RaisePropertyChanged("Song_Web_Url");
+                }
+            }
+        }
+        /// <summary>
+        /// Web 专辑图片路径（普通）
+        /// </summary>
+        private Uri _song_Web_Album_Image;
+        public Uri Song_Web_Album_Image
+        {
+            get
+            {
+                return _song_Web_Album_Image;
+            }
+            set
+            {
+                if (_song_Web_Album_Image != value)
+                {
+                    _song_Web_Album_Image = value;
+                    RaisePropertyChanged("Song_Web_Album_Image");
+                }
+            }
+        }
+        /// <summary>
+        /// Web 歌词文本 路径（普通）
+        /// </summary>
+        private string _song_Web_Lyic;
+        public string Song_Web_Lyic
+        {
+            get
+            {
+                return _song_Web_Lyic;
+            }
+            set
+            {
+                if (_song_Web_Lyic != value)
+                {
+                    _song_Web_Lyic = value;
+                    RaisePropertyChanged("Song_Web_Lyic");
+                }
+            }
+        }
+
     }
 
 }

@@ -134,155 +134,176 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
             string temp_head_duration = "";
             string temp_text = "";
 
-            //初始化歌词行动画时间
-            for (int i = 0; i < arrayList_MRC_line.Count; i++)
+            try
             {
-                temp_head_start = arrayList_MRC_line[i].ToString();
-                temp_head_duration = temp_head_start;
-                temp_text = temp_head_start;
-
-                Match match_1 = Regex.Match(temp_head_start, @"\[(\d{2}):(\d{2})\.(\d{3})\]");
-                if (match_1.Success)
+                //初始化歌词行动画时间
+                for (int i = 0; i < arrayList_MRC_line.Count; i++)
                 {
-                    int minutes = int.Parse(match_1.Groups[1].Value);
-                    int seconds = int.Parse(match_1.Groups[2].Value);
-                    int milliseconds = int.Parse(match_1.Groups[3].Value);
+                    temp_head_start = arrayList_MRC_line[i].ToString();
+                    temp_head_duration = temp_head_start;
+                    temp_text = temp_head_start;
 
-                    int totalMilliseconds = (minutes * 60 + seconds) * 1000 + milliseconds;
-
-                    mrc_Line_Info[i].This_MRC_Line = i + 1;
-                    mrc_Line_Info[i].This_MRC_Start_Time = totalMilliseconds;
-                    mrc_Line_Info[i].This_MRC_Duration = 0;
-                }
-
-                mrc_Line_Info[i].String_Lrc_Line = temp_head_start.Substring(temp_head_start.IndexOf("]") + 1);
-
-                string pattern = @"<([^,]+), ([^>]+)>([^<]+)";
-                MatchCollection matches = Regex.Matches(temp_head_start, pattern);
-                if (matches.Count > 0)
-                {
-                    mrc_Line_Info[i].Array_Morebyte_BeginTime = new ArrayList();
-                    mrc_Line_Info[i].Array_Morebyte_Duration = new ArrayList();
-                    mrc_Line_Info[i].Array_Morebyte_Text = new ArrayList();
-
-                    foreach (Match match in matches)
+                    string[] regexPatterns = { @"\[(\d{2}):(\d{2})\.(\d{3})\]", @"\[(\d{2}):(\d{2})\.(\d{2})\]", @"\[(\d{2}):(\d{2})\.(\d{1})\]", @"\[(\d{2}):(\d{2})\.(\d{4})\]" };
+                    Match match_lrc = null;
+                    foreach (string patter in regexPatterns)
                     {
-                        if (match.Groups.Count == 4)
+                        match_lrc = Regex.Match(temp_head_start, patter);
+                        if (match_lrc.Success)
                         {
-                            string absoluteTime = match.Groups[1].Value;
-                            string duration = match.Groups[2].Value;
-                            string text = match.Groups[3].Value;
+                            break;
+                        }
+                    }
+                    if (match_lrc != null && match_lrc.Success)
+                    {
+                        int minutes = int.Parse(match_lrc.Groups[1].Value);
+                        int seconds = int.Parse(match_lrc.Groups[2].Value);
+                        int milliseconds = int.Parse(match_lrc.Groups[3].Value);
 
-                            mrc_Line_Info[i].Array_Morebyte_BeginTime.Add(absoluteTime);
-                            mrc_Line_Info[i].Array_Morebyte_Duration.Add(duration);
-                            mrc_Line_Info[i].Array_Morebyte_Text.Add(text);
+                        int totalMilliseconds = (minutes * 60 + seconds) * 1000 + milliseconds;
 
-                            mrc_Line_Info[i].Int_MoreByte_Nums++;
+                        mrc_Line_Info[i].This_MRC_Line = i + 1;
+                        mrc_Line_Info[i].This_MRC_Start_Time = totalMilliseconds;
+                        mrc_Line_Info[i].This_MRC_Duration = 0;
+                    }
+                    else
+                    {
+                        // 未匹配到任何时间戳格式
+                        // 在这里添加适当的错误处理或日志记录
+                    }
+
+
+                    mrc_Line_Info[i].String_Lrc_Line = temp_head_start.Substring(temp_head_start.IndexOf("]") + 1);
+
+                    string pattern = @"<([^,]+), ([^>]+)>([^<]+)";
+                    MatchCollection matches = Regex.Matches(temp_head_start, pattern);
+                    if (matches.Count > 0)
+                    {
+                        mrc_Line_Info[i].Array_Morebyte_BeginTime = new ArrayList();
+                        mrc_Line_Info[i].Array_Morebyte_Duration = new ArrayList();
+                        mrc_Line_Info[i].Array_Morebyte_Text = new ArrayList();
+
+                        foreach (Match match in matches)
+                        {
+                            if (match.Groups.Count == 4)
+                            {
+                                string absoluteTime = match.Groups[1].Value;
+                                string duration = match.Groups[2].Value;
+                                string text = match.Groups[3].Value;
+
+                                mrc_Line_Info[i].Array_Morebyte_BeginTime.Add(absoluteTime);
+                                mrc_Line_Info[i].Array_Morebyte_Duration.Add(duration);
+                                mrc_Line_Info[i].Array_Morebyte_Text.Add(text);
+
+                                mrc_Line_Info[i].Int_MoreByte_Nums++;
+                            }
+                        }
+                    }
+
+                    string pattern_2 = @"\((\d+),(\d+)\)([^()]+)";
+                    MatchCollection matches_2 = Regex.Matches(temp_head_start, pattern_2);
+                    if (matches_2.Count > 0)
+                    {
+                        mrc_Line_Info[i].Array_Morebyte_BeginTime = new ArrayList();
+                        mrc_Line_Info[i].Array_Morebyte_Duration = new ArrayList();
+                        mrc_Line_Info[i].Array_Morebyte_Text = new ArrayList();
+
+                        foreach (Match match in matches_2)
+                        {
+                            if (match.Groups.Count == 4)
+                            {
+                                string absoluteTime = match.Groups[1].Value;
+                                string duration = match.Groups[2].Value;
+                                string text = match.Groups[3].Value;
+
+                                mrc_Line_Info[i].Array_Morebyte_BeginTime.Add(absoluteTime);
+                                mrc_Line_Info[i].Array_Morebyte_Duration.Add(duration);
+                                mrc_Line_Info[i].Array_Morebyte_Text.Add(text);
+
+                                mrc_Line_Info[i].Int_MoreByte_Nums++;
+                            }
                         }
                     }
                 }
 
-                string pattern_2 = @"\((\d+),(\d+)\)([^()]+)";
-                MatchCollection matches_2 = Regex.Matches(temp_head_start, pattern_2);
-                if (matches_2.Count > 0)
+                //This_MRC_Start_Time为0时定时器无法捕捉
+                for (int i = 0; i < mrc_Line_Info.Count; i++)
                 {
-                    mrc_Line_Info[i].Array_Morebyte_BeginTime = new ArrayList();
-                    mrc_Line_Info[i].Array_Morebyte_Duration = new ArrayList();
-                    mrc_Line_Info[i].Array_Morebyte_Text = new ArrayList();
-
-                    foreach (Match match in matches_2)
+                    if (mrc_Line_Info[i].This_MRC_Start_Time == 0)
                     {
-                        if (match.Groups.Count == 4)
-                        {
-                            string absoluteTime = match.Groups[1].Value;
-                            string duration = match.Groups[2].Value;
-                            string text = match.Groups[3].Value;
-
-                            mrc_Line_Info[i].Array_Morebyte_BeginTime.Add(absoluteTime);
-                            mrc_Line_Info[i].Array_Morebyte_Duration.Add(duration);
-                            mrc_Line_Info[i].Array_Morebyte_Text.Add(text);
-
-                            mrc_Line_Info[i].Int_MoreByte_Nums++;
-                        }
+                        mrc_Line_Info[i].This_MRC_Start_Time = 222;
                     }
                 }
-            }
 
-            //This_MRC_Start_Time为0时定时器无法捕捉
-            for (int i = 0; i < mrc_Line_Info.Count; i++)
-            {
-                if (mrc_Line_Info[i].This_MRC_Start_Time == 0)
+                //设置其他的算法属性
+                //mrc_A_line_Text,mrc_A_line_Time,Start_Song_MRC_Time,mrc_A_line_Time
+                for (int i = 0; i < mrc_Line_Info.Count; i++)
                 {
-                    mrc_Line_Info[i].This_MRC_Start_Time = 222;
+                    mrc_A_line_Text.Add(mrc_Line_Info[i].String_Lrc_Line);
+                    mrc_A_line_Time.Add(mrc_Line_Info[i].This_MRC_Start_Time);
                 }
-            }
+                Start_Song_MRC_Time = mrc_A_line_Time[0];
+                End_Song_MRC_Time = -1;//表示这是lrc
 
-            //设置其他的算法属性
-            //mrc_A_line_Text,mrc_A_line_Time,Start_Song_MRC_Time,mrc_A_line_Time
-            for (int i = 0; i < mrc_Line_Info.Count; i++)
-            {
-                mrc_A_line_Text.Add(mrc_Line_Info[i].String_Lrc_Line);
-                mrc_A_line_Time.Add(mrc_Line_Info[i].This_MRC_Start_Time);
-            }
-            Start_Song_MRC_Time = mrc_A_line_Time[0];
-            End_Song_MRC_Time = -1;//表示这是lrc
+                //将数组前后各扩容7个空位，更好的匹配UI显示歌词
+                List<string> temp_string = new List<string>();
+                for (int i = 0; i < mrc_A_line_Text.Count + 14; i++)
+                {
+                    if (i < 4)
+                    {
+                        temp_string.Add("       ");
+                    }
+                    else if (i == 4)
+                    {
+                        temp_string.Add("歌词同步效果 由MZMusic独家歌词逐字算法 支持");
+                    }
+                    else if (i == 5)
+                    {
+                        temp_string.Add("此应用(MZMusic)内置算法模型版权 受AGPL-3.0许可证保护");
+                    }
+                    else if (i == 6)
+                    {
+                        temp_string.Add("未经本作者版权认可，禁止使用此应用内的算法及模型进行商用或开源，违者必究");
+                    }
+                    else if (i < mrc_A_line_Text.Count + 7)
+                    {
+                        temp_string.Add(mrc_A_line_Text[i - 7]);
+                    }
+                    else if (i == mrc_A_line_Text.Count + 11)
+                    {
+                        temp_string.Add("此应用(MZMusic)内置算法模型版权 受AGPL-3.0许可证保护");
+                    }
+                    else if (i == mrc_A_line_Text.Count + 12)
+                    {
+                        temp_string.Add("歌词同步效果 由MZMusic独家歌词逐字算法 支持");
+                    }
+                    else if (i < mrc_A_line_Text.Count + 14)
+                    {
+                        temp_string.Add("       ");
+                    }
+                }
+                mrc_A_line_Text = temp_string;
 
-            //将数组前后各扩容7个空位，更好的匹配UI显示歌词
-            List<string> temp_string = new List<string>();
-            for (int i = 0; i < mrc_A_line_Text.Count + 14; i++)
+                List<double> temp_double = new List<double>();
+                for (int i = 0; i < mrc_A_line_Time.Count + 14; i++)
+                {
+                    if (i < 7)
+                    {
+                        temp_double.Add(0);
+                    }
+                    else if (i < mrc_A_line_Time.Count + 7)
+                    {
+                        temp_double.Add(mrc_A_line_Time[i - 7]);
+                    }
+                    else if (i < mrc_A_line_Time.Count + 14)
+                    {
+                        temp_double.Add(0);
+                    }
+                }
+                mrc_A_line_Time = temp_double;
+            }catch (Exception ex)
             {
-                if (i < 4)
-                {
-                    temp_string.Add("       ");
-                }
-                else if (i == 4)
-                {
-                    temp_string.Add("歌词同步效果 由MZMusic独家歌词逐字算法 支持");
-                }
-                else if (i == 5)
-                {
-                    temp_string.Add("此应用(MZMusic)内置算法模型版权 受AGPL-3.0许可证保护");
-                }
-                else if (i == 6)
-                {
-                    temp_string.Add("未经本作者版权认可，禁止使用此应用内的算法及模型进行商用或开源，违者必究");
-                }
-                else if (i < mrc_A_line_Text.Count + 7)
-                {
-                    temp_string.Add(mrc_A_line_Text[i - 7]);
-                }
-                else if (i == mrc_A_line_Text.Count + 11)
-                {
-                    temp_string.Add("此应用(MZMusic)内置算法模型版权 受AGPL-3.0许可证保护");
-                }
-                else if (i == mrc_A_line_Text.Count + 12)
-                {
-                    temp_string.Add("歌词同步效果 由MZMusic独家歌词逐字算法 支持");
-                }
-                else if (i < mrc_A_line_Text.Count + 14)
-                {
-                    temp_string.Add("       ");
-                }
+                
             }
-            mrc_A_line_Text = temp_string;
-
-            List<double> temp_double = new List<double>();
-            for (int i = 0; i < mrc_A_line_Time.Count + 14; i++)
-            {
-                if (i < 7)
-                {
-                    temp_double.Add(0);
-                }
-                else if (i < mrc_A_line_Time.Count + 7)
-                {
-                    temp_double.Add(mrc_A_line_Time[i - 7]);
-                }
-                else if (i < mrc_A_line_Time.Count + 14)
-                {
-                    temp_double.Add(0);
-                }
-            }
-            mrc_A_line_Time = temp_double;
         }
 
 

@@ -30,6 +30,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
             Grid_ListItem_CrudModel_2.Visibility = Visibility.Collapsed;
 
+            Grid_NormalModel_2.Visibility = Visibility.Collapsed;
+            Grid_NormalModel_3.Visibility = Visibility.Collapsed;
+
             //刷新内存区域的引用
             songList_Infos = SongList_Info.Retuen_This();
 
@@ -1119,6 +1122,83 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
             {
                 userControl_Select_Folder_Of_SongAdd.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void Stack_Button_LotSelects_Sort_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Grid_NormalModel_3.Visibility == Visibility.Collapsed)
+                Grid_NormalModel_3.Visibility = Visibility.Visible;
+            else
+                Grid_NormalModel_3.Visibility = Visibility.Collapsed;
+
+        }
+
+        public Uri brush_Sort_Up
+            = new Uri(@"Resource\\Button_Image_Svg\\上箭头.svg", UriKind.Relative);
+        public Uri brush_Sort_Down
+            = new Uri(@"Resource\\Button_Image_Svg\\下箭头.svg", UriKind.Relative);
+        public SongList_Info_Sort songList_Info_Sort = new SongList_Info_Sort();
+
+        public void Clear_ALL_Stack_Button_Sort()
+        {
+            SvgViewbox_Stack_Button_Sort_SingerName.Source = null;
+            SvgViewbox_Stack_Button_Sort_SongName.Source = null;
+            SvgViewbox_Stack_Button_Sort_AlbumName.Source = null;
+            SvgViewbox_Stack_Button_Sort_Duration.Source = null;
+        }
+
+        private async void Stack_Button_Sort_SingerName_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Sort_Num = 0;
+
+            songList_Infos[1][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[1][0].Songs, 1, Sort_Num);
+            ListView_Download_SongList_Info.Items.Refresh();
+
+            Clear_ALL_Stack_Button_Sort();
+            if (songList_Info_Sort.Sort_SingerName_Up)
+                SvgViewbox_Stack_Button_Sort_SingerName.Source = brush_Sort_Up;
+            else
+                SvgViewbox_Stack_Button_Sort_SingerName.Source = brush_Sort_Down;
+
+        }
+        private async void Stack_Button_Sort_SongName_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Sort_Num = 1;
+
+            songList_Infos[1][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[1][0].Songs, 1, Sort_Num);
+            ListView_Download_SongList_Info.Items.Refresh();
+
+            Clear_ALL_Stack_Button_Sort();
+            if (songList_Info_Sort.Sort_SongName_Up)
+                SvgViewbox_Stack_Button_Sort_SongName.Source = brush_Sort_Up;
+            else
+                SvgViewbox_Stack_Button_Sort_SongName.Source = brush_Sort_Down;
+        }
+        private async void Stack_Button_Sort_AlbumName_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Sort_Num = 2;
+
+            songList_Infos[1][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[1][0].Songs, 1, Sort_Num);
+            ListView_Download_SongList_Info.Items.Refresh();
+
+            Clear_ALL_Stack_Button_Sort();
+            if (songList_Info_Sort.Sort_AlbumName_Up)
+                SvgViewbox_Stack_Button_Sort_AlbumName.Source = brush_Sort_Up;
+            else
+                SvgViewbox_Stack_Button_Sort_AlbumName.Source = brush_Sort_Down;
+        }
+        private async void Stack_Button_Sort_Duration_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Sort_Num = 3;
+
+            songList_Infos[1][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[1][0].Songs, 1, Sort_Num);
+            ListView_Download_SongList_Info.Items.Refresh();
+
+            Clear_ALL_Stack_Button_Sort();
+            if (songList_Info_Sort.Sort_Duration_Up)
+                SvgViewbox_Stack_Button_Sort_Duration.Source = brush_Sort_Up;
+            else
+                SvgViewbox_Stack_Button_Sort_Duration.Source = brush_Sort_Down;
         }
     }
 }

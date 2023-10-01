@@ -31,6 +31,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
         public WaveOutEvent waveOutEvent;
         private FFmpegAudioReader audioFileReader_FFmpeg; //CSCore - FFmpeg音频库 接口版本
         private AudioFileReader audioFileReader; //基于NAudio音频库 版本
+        private MediaFoundationReader audioFileReader_Web;
 
         private Equalizer equalizer;
         private EqualizerBand[] bands;
@@ -83,60 +84,92 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
 
                 waveOutEvent.Dispose();
             }
-            
-            //选择编码器
-            if (audioFilePath.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase))
-            {
-                audioFileReader = new AudioFileReader(audioFilePath);
-            }
-            else if (audioFilePath.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
-            {
-                audioFileReader = new AudioFileReader(audioFilePath);
-            }
-            else if (audioFilePath.EndsWith(".aiff", StringComparison.OrdinalIgnoreCase))
-            {
-                audioFileReader = new AudioFileReader(audioFilePath);
-            }
-            else if (audioFilePath.EndsWith(".flac", StringComparison.OrdinalIgnoreCase))
-            {
-                audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
-                SampleChannel sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
-                audioFileReader_FFmpeg.sampleChannel = sampleChannel;
 
-                audioFileReader = new AudioFileReader(audioFilePath);
-                audioFileReader.sampleChannel = sampleChannel;
-            }
-            else
-            {
-                audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
-                SampleChannel sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
-                audioFileReader_FFmpeg.sampleChannel = sampleChannel;
+            if (audioFilePath.IndexOf("http") < 0) {
 
-                audioFileReader = new AudioFileReader(audioFilePath);
-                audioFileReader.sampleChannel = sampleChannel;
-            }
+                //关闭Web流，null值作为bool
+                audioFileReader_Web = null;
 
-            waveOutEvent = new WaveOutEvent();
-            waveOutEvent.DeviceNumber = deviceNumber;
-            deviceNumber_change = false;
-
-            try
-            {
-                if (bands != null && bands.Length > 0)
+                //选择编码器
+                if (audioFilePath.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase))
                 {
-                    equalizer = new Equalizer(audioFileReader, bands);
+                    audioFileReader = new AudioFileReader(audioFilePath);
+                }
+                else if (audioFilePath.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
+                {
+                    audioFileReader = new AudioFileReader(audioFilePath);
+                }
+                else if (audioFilePath.EndsWith(".aiff", StringComparison.OrdinalIgnoreCase))
+                {
+                    audioFileReader = new AudioFileReader(audioFilePath);
+                }
+                else if (audioFilePath.EndsWith(".flac", StringComparison.OrdinalIgnoreCase))
+                {
+                    audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
+                    SampleChannel sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
+                    audioFileReader_FFmpeg.sampleChannel = sampleChannel;
 
-                    waveOutEvent.Init(equalizer);
+                    audioFileReader = new AudioFileReader(audioFilePath);
+                    audioFileReader.sampleChannel = sampleChannel;
                 }
                 else
+                {
+                    audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
+                    SampleChannel sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
+                    audioFileReader_FFmpeg.sampleChannel = sampleChannel;
+
+                    audioFileReader = new AudioFileReader(audioFilePath);
+                    audioFileReader.sampleChannel = sampleChannel;
+                }
+
+                //
+                waveOutEvent = new WaveOutEvent();
+                waveOutEvent.DeviceNumber = deviceNumber;
+                deviceNumber_change = false;
+
+                //
+                try
+                {
+                    if (bands != null && bands.Length > 0)
+                    {
+                        equalizer = new Equalizer(audioFileReader, bands);
+
+                        waveOutEvent.Init(equalizer);
+                    }
+                    else
+                    {
+                        waveOutEvent.Init(audioFileReader);
+                    }
+                }
+                catch
                 {
                     waveOutEvent.Init(audioFileReader);
                 }
             }
-            catch
+            else
             {
-                waveOutEvent.Init(audioFileReader);
+                try
+                {
+                    audioFileReader_Web = null;
+                    audioFileReader_Web = new MediaFoundationReader(audioFilePath);
+
+                    //
+                    if (waveOutEvent != null)
+                        waveOutEvent.Dispose();
+
+                    waveOutEvent = new WaveOutEvent();
+                    waveOutEvent.DeviceNumber = deviceNumber;
+                    deviceNumber_change = false;
+
+                    waveOutEvent.Init(audioFileReader_Web);
+                }
+                catch
+                {
+
+                }
             }
+
+            
 
             OnMediaOpened();
 
@@ -172,10 +205,17 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
                 {
                     if (audioFilePath != null)
                     {
-                        if (audioFilePath.IndexOf(".flac") >= 0)
-                            return audioFileReader_FFmpeg?.CurrentTime ?? TimeSpan.Zero;
+                        if (audioFileReader_Web == null)
+                        {
+                            if (audioFilePath.IndexOf(".flac") >= 0)
+                                return audioFileReader_FFmpeg?.CurrentTime ?? TimeSpan.Zero;
+                            else
+                                return audioFileReader?.CurrentTime ?? TimeSpan.Zero;
+                        }
                         else
-                            return audioFileReader?.CurrentTime ?? TimeSpan.Zero;
+                        {
+                            return audioFileReader_Web?.CurrentTime ?? TimeSpan.Zero;
+                        }
                     }else
                         return TimeSpan.Zero;
                 }
@@ -188,19 +228,26 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
             {
                 if (audioFilePath != null)
                 {
-                    if (audioFilePath.IndexOf(".flac") >= 0)
+                    if (audioFileReader_Web == null)
                     {
-                        if (audioFileReader_FFmpeg != null)
+                        if (audioFilePath.IndexOf(".flac") >= 0)
                         {
-                            SetCurrentTimeAsync(value);
+                            if (audioFileReader_FFmpeg != null)
+                            {
+                                SetCurrentTimeAsync(value);
+                            }
+                        }
+                        else
+                        {
+                            if (audioFileReader != null)
+                            {
+                                SetCurrentTimeAsync(value);
+                            }
                         }
                     }
                     else
                     {
-                        if (audioFileReader != null)
-                        {
-                            SetCurrentTimeAsync(value);
-                        }
+                        SetCurrentTimeAsync(value);
                     }
                 }
             }
@@ -211,25 +258,40 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
             {
                 if (audioFilePath != null)
                 {
-                    if (audioFilePath.IndexOf(".flac") >= 0)
+                    if (audioFileReader_Web == null)
                     {
-                        if (audioFileReader_FFmpeg != null)
+                        if (audioFilePath.IndexOf(".flac") >= 0)
                         {
-                            if (newTime.TotalMilliseconds != 0)
+                            if (audioFileReader_FFmpeg != null)
                             {
-                                audioFileReader_FFmpeg.CurrentTime = newTime;
+                                if (newTime.TotalMilliseconds != 0)
+                                {
+                                    audioFileReader_FFmpeg.CurrentTime = newTime;
 
-                                Thread.Sleep(500);
+                                    Thread.Sleep(500);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (audioFileReader != null)
+                            {
+                                if (newTime.TotalMilliseconds != 0)
+                                {
+                                    audioFileReader.CurrentTime = newTime;
+
+                                    Thread.Sleep(500);
+                                }
                             }
                         }
                     }
                     else
                     {
-                        if (audioFileReader != null)
+                        if (audioFileReader_Web != null)
                         {
                             if (newTime.TotalMilliseconds != 0)
                             {
-                                audioFileReader.CurrentTime = newTime;
+                                audioFileReader_Web.CurrentTime = newTime;
 
                                 Thread.Sleep(500);
                             }
@@ -242,7 +304,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
 
         public TimeSpan TotalTime
         {
-            get { return audioFileReader?.TotalTime ?? TimeSpan.Zero; }
+            get {
+                if (audioFileReader_Web == null)
+                {
+                    return audioFileReader?.TotalTime ?? TimeSpan.Zero;
+                }
+                else
+                {
+                    return audioFileReader_Web?.TotalTime ?? TimeSpan.Zero;
+                }
+            }
         }
 
         public float Volume

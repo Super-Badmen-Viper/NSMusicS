@@ -66,6 +66,7 @@ using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Of_Album_SongLis
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views;
 using System.Reflection;
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.MusicPlayer_Main.UserControls_PlayMode_View;
+using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Servies_For_API_Info;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 {
@@ -168,6 +169,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //
             Grid_Model_1.Visibility = Visibility.Visible;
             Grid_Model_2.Visibility = Visibility.Collapsed;
+            Stack_Panel_Sort_AlbumModel.Visibility = Visibility.Collapsed;
 
             //默认隐藏唱片控件
             Check_Button_Close_CD();
@@ -1373,1170 +1375,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         #endregion
 
 
-        #region 播放全部
-
-        /// <summary>
-        /// 播放全部
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Paly_ALL_Song(object sender, MouseButtonEventArgs e)
-        {
-            //播放列表选定项设置为0
-            songList_Infos[1][0].SelectedIndex = 0;
-
-            Select_DoubleClick_ListView = 1;
-            Change_MediaElement_Source();
-        }
-
-        #endregion
-        #region 手动 拖动 添加音乐
-        private bool IsAudioFile(string filePath)
-        {
-            // 检查文件扩展名是否是支持的音频文件扩展名
-            string[] allowedExtensions = { ".mp3", ".flac", ".wav" };
-            return allowedExtensions.Contains(System.IO.Path.GetExtension(filePath).ToLower());
-        }
-
-        public async void Start_Drop_Song_Of_SelectFiles_ThisWindowsMusicAndDownload(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[1][0].Songs, 1 , audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_Love(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-
-                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[0][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[0][0].Songs, 0, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_Rently(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-
-                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[2][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[2][0].Songs, 2, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_3(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-                Song_Find_SongList_SelectedIndex = 3;
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[3][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[3][0].Songs, 3, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_4(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-                Song_Find_SongList_SelectedIndex = 4;
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[4][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[4][0].Songs, 4, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_5(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-                Song_Find_SongList_SelectedIndex = 5;
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[5][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[5][0].Songs, 5, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_6(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-                Song_Find_SongList_SelectedIndex = 6;
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[6][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[6][0].Songs, 6, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_7(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-                Song_Find_SongList_SelectedIndex = 7;
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[7][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[7][0].Songs, 7, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_8(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-                Song_Find_SongList_SelectedIndex = 8;
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[8][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[8][0].Songs, 8, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_9(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-                Song_Find_SongList_SelectedIndex = 9;
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[9][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[9][0].Songs, 9, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_10(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-                Song_Find_SongList_SelectedIndex = 10;
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[10][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[10][0].Songs, 10, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_11(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-                Song_Find_SongList_SelectedIndex = 11;
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[11][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[11][0].Songs, 11, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_12(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-                Song_Find_SongList_SelectedIndex = 12;
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[12][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[12][0].Songs, 12, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_13(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-                Song_Find_SongList_SelectedIndex = 13;
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[13][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[13][0].Songs, 13, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_14(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-                Song_Find_SongList_SelectedIndex = 14;
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[14][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[14][0].Songs, 14, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_15(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-                Song_Find_SongList_SelectedIndex = 15;
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[15][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[15][0].Songs, 15, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        public async void Start_Drop_Song_Of_SelectFiles_16(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                List<string> audioFiles = new List<string>();
-                foreach (string path in dropPaths)
-                {
-                    if (System.IO.Directory.Exists(path))
-                    {
-                        // 如果拖放的是文件夹，使用异步方法获取文件路径
-                        await Task.Run(() =>
-                        {
-                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
-                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
-                        });
-                    }
-                    else if (IsAudioFile(path))
-                    {
-                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
-                        audioFiles.Add(path);
-                    }
-                }
-                Song_Find_SongList_SelectedIndex = 16;
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[16][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[16][0].Songs, 16, audioFiles);
-
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-            }
-        }
-        #endregion
-        #region 手动添加音乐
-        private async void ThisWindowsMusicAndDownload_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[1][0].Songs, 1);
-
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void My_Love_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[0][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[0][0].Songs, 0);
-
-            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void Recent_Play_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[2][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[2][0].Songs, 2);
-
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-
-        int Song_Find_SongList_SelectedIndex;
-
-        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_3(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 3;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_4(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 4;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_5(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 5;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_6(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 6;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_7(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 7;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_8(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 8;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_9(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 9;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_10(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 10;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_11(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 11;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_12(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 12;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_13(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 13;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_14(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 14;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_15(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 15;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_16(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 16;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        #endregion
-        #region 添加本地音乐文件夹
-        private async void ThisWindowsMusicAndDownload_Stack_Button_Add_PC_SelectFolderBrowser_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[1][0].Songs, 1);
-
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void MyLove_Stack_Button_Add_PC_SelectFolderBrowser_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[0][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[0][0].Songs, 1);
-
-            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void Recent_Play_Stack_Button_Add_PC_SelectFolderBrowser_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[2][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[2][0].Songs, 1);
-
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-
-        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_3(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 3;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_4(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 4;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_5(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 5;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_6(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 6;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_7(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 7;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_8(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 8;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_9(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 9;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_10(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 10;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_11(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 11;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_12(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 12;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_13(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 13;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_14(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 14;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_15(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 15;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_16(object sender, MouseButtonEventArgs e)
-        {
-            Song_Find_SongList_SelectedIndex = 16;
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
-
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        #endregion
-        #region 手动扫描歌曲
-        public ArrayList Selects_SongList = new ArrayList();
-        /// <summary>
-        /// 添加要扫描的歌曲文件夹
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void Button_Add_SongList_Click(object sender, RoutedEventArgs e)
-        {
-            using (System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                folderDialog.ShowDialog();
-
-                Selects_SongList.Add(folderDialog.SelectedPath);
-                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.userControl_Select_Folder_Of_SongAdd.ListBox_Select_Folder.Items.Add(folderDialog.SelectedPath);
-            }
-        }
-        /// <summary>
-        /// 手动扫描歌曲
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public async void Button_Add_SongList_Click_OnFindALLSongClick(object sender, RoutedEventArgs e)
-        {
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.userControl_Select_Folder_Of_SongAdd.Visibility = Visibility.Collapsed;
-
-            ArrayList list = new ArrayList(Selects_SongList);
-            Selects_SongList.Clear();
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.userControl_Select_Folder_Of_SongAdd.ListBox_Select_Folder.Items.Clear();
-
-            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-            songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser_s(songList_Infos[1][0].Songs, 1, list);
-
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
-            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
-        }
-        #endregion
+        
 
 
         #region UI Init加载
@@ -2659,12 +1498,18 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //模式切换设置
             userControl_ButtonFrame_TopPanel.Model_1.MouseLeftButtonDown += Switch_To_Single_Mode_Click;
             userControl_ButtonFrame_TopPanel.Model_2.MouseLeftButtonDown += Switch_To_Album_Mode_Click;
+            userControl_ButtonFrame_TopPanel.Model_4.MouseLeftButtonDown += Switch_To_Web_Model_4_MouseLeftButtonDown;//联网模式
 
             //App 设置
             userControl_ButtonFrame_TopPanel.Button_Menu_Setting.Click += Button_App_Menu_Setting_Click;
             userControl_ButtonFrame_App_Setting.Visibility = Visibility.Collapsed;
             userControl_ButtonFrame_App_Setting.Open_App_Setting.MouseLeftButtonDown += Open_App_Setting_MouseLeftButtonDown;
             userControl_ButtonFrame_App_Setting.SvgViewbox_Open_App_Setting.MouseLeftButtonDown += Open_App_Setting_MouseLeftButtonDown;
+
+            //联网 设置
+            userControl_Main_Home_Left_Web_Music.ListView_Download_SongList_Info.MouseDoubleClick += Web_Music_ListView_Download_SongList_Info_MouseDoubleClick;
+            userControl_Main_Home_Left_Web_Music.Button_Play_This_Song.Click += Web_Music_Button_Play_This_Song_Click;
+
 
             //皮肤设置
             userControl_ButtonFrame_TopPanel.Button_Personalized_Skin.Click += Button_Personalized_Skin_Click;
@@ -2736,9 +1581,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_ButtonFrame_TopPanel.Background = null;
             }
         }
-
-        
-
 
         
 
@@ -3298,6 +2140,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_OnlineMusic_Search_Song.Visibility = Visibility.Collapsed;
             userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_Web_Music.Visibility = Visibility.Collapsed;
         }
 
         #endregion
@@ -3697,6 +2540,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Visible;
 
                 userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_Web_Music.Visibility = Visibility.Collapsed;
+
                 Frame_Show.Visibility = Visibility.Collapsed;
                 userControl_Main_Model_2_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
                 userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Collapsed;
@@ -4632,6 +3477,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_ButtonFrame_TopPanel.Model_1.BorderThickness = new Thickness(0, 0, 0, 2);
             userControl_ButtonFrame_TopPanel.Model_2.BorderThickness = new Thickness(0, 0, 0, 0);
             userControl_ButtonFrame_TopPanel.Model_3.BorderThickness = new Thickness(0, 0, 0, 0);
+            userControl_ButtonFrame_TopPanel.Model_4.BorderThickness = new Thickness(0, 0, 0, 0);
+
             Grid_Model_1.Visibility = Visibility.Visible;
             Grid_Model_2.Visibility = Visibility.Collapsed;
             Frame_Buttom_MusicPlayerUserControl.Margin = thickness_Grid_MusicPlayer_Main_UserControl_Normal;
@@ -4639,6 +3486,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
             userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_Web_Music.Visibility = Visibility.Collapsed;
 
             Frame_Show.Visibility = Visibility.Visible;
         }
@@ -4656,6 +3504,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_ButtonFrame_TopPanel.Model_1.BorderThickness = new Thickness(0, 0, 0, 0);
             userControl_ButtonFrame_TopPanel.Model_2.BorderThickness = new Thickness(0, 0, 0, 2);
             userControl_ButtonFrame_TopPanel.Model_3.BorderThickness = new Thickness(0, 0, 0, 0);
+            userControl_ButtonFrame_TopPanel.Model_4.BorderThickness = new Thickness(0, 0, 0, 0);
+
             Grid_Model_1.Visibility = Visibility.Collapsed;
             Grid_Model_2.Visibility = Visibility.Visible;
             Frame_Buttom_MusicPlayerUserControl.Margin = new Thickness(286, 0, 0, 0);
@@ -4665,6 +3515,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
             userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_Web_Music.Visibility = Visibility.Collapsed;
         }
 
         /// <summary>
@@ -4747,6 +3598,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         {
             userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
             userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_Web_Music.Visibility = Visibility.Collapsed;
+
             userControl_Main_Model_2_View_Albums_And_Tracks.Visibility = Visibility.Visible;
             userControl_Main_Model_2_View_Albums_And_Tracks.VirtualizingStackPanel_For_ThisSinger_ALL_Album.Visibility
                 = Visibility.Visible;
@@ -5168,6 +4021,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_ButtonFrame_TopPanel.Model_1.BorderThickness = new Thickness(0, 0, 0, 0);
             userControl_ButtonFrame_TopPanel.Model_2.BorderThickness = new Thickness(0, 0, 0, 0);
             userControl_ButtonFrame_TopPanel.Model_3.BorderThickness = new Thickness(0, 0, 0, 2);
+            userControl_ButtonFrame_TopPanel.Model_4.BorderThickness = new Thickness(0, 0, 0, 0);
 
             Grid_Model_1.Visibility = Visibility.Collapsed;
             Grid_Model_2.Visibility = Visibility.Collapsed;
@@ -5175,6 +4029,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             userControl_Main_Model_2_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
             userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
             userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_Web_Music.Visibility = Visibility.Collapsed;
 
             userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
             userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Collapsed;
@@ -5862,11 +4717,1298 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
         #endregion
 
+        #region 联网模式
+        /// <summary>
+        /// 联网模式
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void Switch_To_Web_Model_4_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            userControl_ButtonFrame_TopPanel.Model_1.BorderThickness = new Thickness(0, 0, 0, 0);
+            userControl_ButtonFrame_TopPanel.Model_2.BorderThickness = new Thickness(0, 0, 0, 0);
+            userControl_ButtonFrame_TopPanel.Model_3.BorderThickness = new Thickness(0, 0, 0, 0);
+            userControl_ButtonFrame_TopPanel.Model_4.BorderThickness = new Thickness(0, 0, 0, 2);
+
+            Grid_Model_1.Visibility = Visibility.Collapsed;
+            Grid_Model_2.Visibility = Visibility.Visible;
+            Frame_Buttom_MusicPlayerUserControl.Margin = new Thickness(286, 0, 0, 0);
+
+            userControl_Main_Model_2_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
+
+            userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_Web_Music.Visibility = Visibility.Visible;
+        }
+
+        /// <summary>
+        /// 双击播放选中的web音乐
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void Web_Music_ListView_Download_SongList_Info_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Show_Search_Song Slect_Song_Info = (Show_Search_Song)userControl_Main_Home_Left_Web_Music.ListView_Download_SongList_Info.SelectedItem;
+            if (Slect_Song_Info != null)
+            {
+                if (userControl_Main_Home_Left_Web_Music.ListView_Download_SongList_Info.SelectedIndex > -1 &&
+                    userControl_Main_Home_Left_Web_Music.ListView_Download_SongList_Info.SelectedIndex < userControl_Main_Home_Left_Web_Music.viewModule_Search_Song_For_Cloud_Music.ShowSelect_Search_Songs.Count
+                    )
+                {
+                    Json_Search_Song.Song_id = Slect_Song_Info.Song_id;
+                    //
+                    Json_Search_Song.Song_Name = Slect_Song_Info.Song_Name;
+                    Json_Search_Song.Singer_Name = Slect_Song_Info.Singer_Name;
+                    Json_Search_Song.Album_Name = Slect_Song_Info.Album_Name;
+
+                    userControl_Main_Home_Left_Web_Music.Grid_Right_SongItem_Menu.Visibility = Visibility.Collapsed;
+
+                    //在线播放
+                    songList_Infos_Current_Playlist = await userControl_Main_Home_Left_Web_Music.viewModule_Search_Song_For_Cloud_Music.Play_Web_Music();
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        userControl_SongList_Infos_Current_Playlist.ListView_Download_SongList_Info.ItemsSource = songList_Infos_Current_Playlist;
+                        userControl_SongList_Infos_Current_Playlist.ListView_Download_SongList_Info.SelectedIndex =
+                            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload
+                            .ListView_Download_SongList_Info.SelectedIndex;
+
+                        Select_DoubleClick_ListView = 1;
+                        Change_MediaElement_Source();
+                    });
+                }
+            }
+        }
+        private async void Web_Music_Button_Play_This_Song_Click(object sender, RoutedEventArgs e)
+        {
+            Show_Search_Song Slect_Song_Info = (Show_Search_Song)userControl_Main_Home_Left_Web_Music.ListView_Download_SongList_Info.SelectedItem;
+            if (Slect_Song_Info != null)
+            {
+                if (userControl_Main_Home_Left_Web_Music.ListView_Download_SongList_Info.SelectedIndex > -1 &&
+                    userControl_Main_Home_Left_Web_Music.ListView_Download_SongList_Info.SelectedIndex < userControl_Main_Home_Left_Web_Music.viewModule_Search_Song_For_Cloud_Music.ShowSelect_Search_Songs.Count
+                    )
+                {
+                    Json_Search_Song.Song_id = Slect_Song_Info.Song_id;
+                    //
+                    Json_Search_Song.Song_Name = Slect_Song_Info.Song_Name;
+                    Json_Search_Song.Singer_Name = Slect_Song_Info.Singer_Name;
+                    Json_Search_Song.Album_Name = Slect_Song_Info.Album_Name;
+
+                    userControl_Main_Home_Left_Web_Music.Grid_Right_SongItem_Menu.Visibility = Visibility.Collapsed;
+
+                    //在线播放
+                    await Task.Run(() =>
+                    {
+                        userControl_Main_Home_Left_Web_Music.viewModule_Search_Song_For_Cloud_Music.RefCommand_Get_Song_Info_Url.Execute(null);
+                    });
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
+                        userControl_SongList_Infos_Current_Playlist.ListView_Download_SongList_Info.ItemsSource = songList_Infos_Current_Playlist;
+                        userControl_SongList_Infos_Current_Playlist.ListView_Download_SongList_Info.SelectedIndex =
+                            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload
+                            .ListView_Download_SongList_Info.SelectedIndex;
+
+                        Select_DoubleClick_ListView = 1;
+                        Change_MediaElement_Source();
+                    });
+                }
+            }
+        }
+        #endregion
+
         #region 专业模式
 
 
 
         #endregion
+
+
+        #region 歌单列表绑定事件
+
+        #region 播放全部
+
+        /// <summary>
+        /// 播放全部
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Paly_ALL_Song(object sender, MouseButtonEventArgs e)
+        {
+            //播放列表选定项设置为0
+            songList_Infos[1][0].SelectedIndex = 0;
+
+            Select_DoubleClick_ListView = 1;
+            Change_MediaElement_Source();
+        }
+
+        #endregion
+
+        #region 手动 拖动 添加音乐
+        private bool IsAudioFile(string filePath)
+        {
+            // 检查文件扩展名是否是支持的音频文件扩展名
+            string[] allowedExtensions = { ".mp3", ".flac", ".wav" };
+            return allowedExtensions.Contains(System.IO.Path.GetExtension(filePath).ToLower());
+        }
+
+        public async void Start_Drop_Song_Of_SelectFiles_ThisWindowsMusicAndDownload(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[1][0].Songs, 1, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_Love(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[0][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[0][0].Songs, 0, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_Rently(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+
+                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[2][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[2][0].Songs, 2, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_3(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+                Song_Find_SongList_SelectedIndex = 3;
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[3][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[3][0].Songs, 3, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_4(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+                Song_Find_SongList_SelectedIndex = 4;
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[4][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[4][0].Songs, 4, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_5(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+                Song_Find_SongList_SelectedIndex = 5;
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[5][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[5][0].Songs, 5, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_6(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+                Song_Find_SongList_SelectedIndex = 6;
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[6][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[6][0].Songs, 6, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_7(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+                Song_Find_SongList_SelectedIndex = 7;
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[7][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[7][0].Songs, 7, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_8(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+                Song_Find_SongList_SelectedIndex = 8;
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[8][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[8][0].Songs, 8, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_9(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+                Song_Find_SongList_SelectedIndex = 9;
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[9][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[9][0].Songs, 9, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_10(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+                Song_Find_SongList_SelectedIndex = 10;
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[10][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[10][0].Songs, 10, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_11(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+                Song_Find_SongList_SelectedIndex = 11;
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[11][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[11][0].Songs, 11, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_12(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+                Song_Find_SongList_SelectedIndex = 12;
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[12][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[12][0].Songs, 12, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_13(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+                Song_Find_SongList_SelectedIndex = 13;
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[13][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[13][0].Songs, 13, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_14(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+                Song_Find_SongList_SelectedIndex = 14;
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[14][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[14][0].Songs, 14, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_15(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+                Song_Find_SongList_SelectedIndex = 15;
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[15][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[15][0].Songs, 15, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        public async void Start_Drop_Song_Of_SelectFiles_16(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dropPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                List<string> audioFiles = new List<string>();
+                foreach (string path in dropPaths)
+                {
+                    if (System.IO.Directory.Exists(path))
+                    {
+                        // 如果拖放的是文件夹，使用异步方法获取文件路径
+                        await Task.Run(() =>
+                        {
+                            IEnumerable<string> folderFiles = System.IO.Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories);
+                            audioFiles.AddRange(folderFiles.Where(file => IsAudioFile(file)));
+                        });
+                    }
+                    else if (IsAudioFile(path))
+                    {
+                        // 如果拖放的是单个音频文件，直接添加到 audioFiles 列表中
+                        audioFiles.Add(path);
+                    }
+                }
+                Song_Find_SongList_SelectedIndex = 16;
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+                Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+                songList_Infos[16][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[16][0].Songs, 16, audioFiles);
+
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+                userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+            }
+        }
+        #endregion
+
+        #region 手动添加音乐
+        private async void ThisWindowsMusicAndDownload_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[1][0].Songs, 1);
+
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void My_Love_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[0][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[0][0].Songs, 0);
+
+            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void Recent_Play_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[2][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[2][0].Songs, 2);
+
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+
+        int Song_Find_SongList_SelectedIndex;
+
+        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_3(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 3;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_4(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 4;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_5(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 5;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_6(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 6;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_7(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 7;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_8(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 8;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_9(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 9;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_10(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 10;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_11(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 11;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_12(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 12;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_13(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 13;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_14(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 14;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_15(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 15;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_Select_Song_MouseLeftButtonDown_16(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 16;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFiles(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        #endregion
+
+        #region 添加本地音乐文件夹
+        private async void ThisWindowsMusicAndDownload_Stack_Button_Add_PC_SelectFolderBrowser_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[1][0].Songs, 1);
+
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void MyLove_Stack_Button_Add_PC_SelectFolderBrowser_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[0][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[0][0].Songs, 1);
+
+            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void Recent_Play_Stack_Button_Add_PC_SelectFolderBrowser_Song_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[2][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[2][0].Songs, 1);
+
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+
+        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_3(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 3;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_4(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 4;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_5(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 5;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_6(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 6;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_7(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 7;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_8(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 8;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_9(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 9;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_10(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 10;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_11(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 11;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_12(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 12;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_13(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 13;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_14(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 14;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_15(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 15;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        private async void SongListMore_Stack_Button_Add_PC_SelectFolderBrowser_MouseLeftButtonDown_16(object sender, MouseButtonEventArgs e)
+        {
+            Song_Find_SongList_SelectedIndex = 16;
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser(songList_Infos[Song_Find_SongList_SelectedIndex][0].Songs, Song_Find_SongList_SelectedIndex);
+
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        #endregion
+
+        #region 手动扫描歌曲
+        public ArrayList Selects_SongList = new ArrayList();
+        /// <summary>
+        /// 添加要扫描的歌曲文件夹
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void Button_Add_SongList_Click(object sender, RoutedEventArgs e)
+        {
+            using (System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                folderDialog.ShowDialog();
+
+                Selects_SongList.Add(folderDialog.SelectedPath);
+                userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.userControl_Select_Folder_Of_SongAdd.ListBox_Select_Folder.Items.Add(folderDialog.SelectedPath);
+            }
+        }
+        /// <summary>
+        /// 手动扫描歌曲
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public async void Button_Add_SongList_Click_OnFindALLSongClick(object sender, RoutedEventArgs e)
+        {
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Panel_Add_Song.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.userControl_Select_Folder_Of_SongAdd.Visibility = Visibility.Collapsed;
+
+            ArrayList list = new ArrayList(Selects_SongList);
+            Selects_SongList.Clear();
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.userControl_Select_Folder_Of_SongAdd.ListBox_Select_Folder.Items.Clear();
+
+            Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+            songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Find_Song_Of_SelectFolderBrowser_s(songList_Infos[1][0].Songs, 1, list);
+
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
+            userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
+        }
+        #endregion
+
+        #region 歌单歌曲排序
+
+        private async void ThisWindowsMusicAndDownload_Stack_Button_Sort_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            
+        }
+
+        #endregion
+
+        #endregion
+
 
         #region UI 窗体大小Changed响应
 
@@ -6105,8 +6247,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             {
                 TimeSpan durationTimeSpan = mediaElement_Song.TotalTime;
                 userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Maximum = durationTimeSpan.TotalMilliseconds;
-
-
 
                 //K歌模块
                 /*LinearDoubleKeyFrame linearDoubleKeyFrame_1 = new LinearDoubleKeyFrame();
@@ -6388,8 +6528,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                     string path = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Song_Url;
 
-                    if (!File.Exists(path))
-                        path = Path_App + path;
+                    if(path.IndexOf("http") < 0)
+                        if (!File.Exists(path))
+                            path = Path_App + path;
 
                     //指定播放路径
                     viewModule_Search_Song.MediaElement_Song_Url = new Uri(path);
@@ -6401,6 +6542,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     this_Song_Info.Singer_Name = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Singer_Name;
                     this_Song_Info.Song_Url = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Song_Url;
                     this_Song_Info.Album_Name = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Album_Name;
+                    this_Song_Info.Song_Web_Album_Image = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Song_Web_Album_Image;
+                    this_Song_Info.Song_Web_Lyic = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Song_Web_Lyic;
 
                     mediaElement_Song.waveOutEvent.PlaybackStopped -= mediaElement_Song_MediaEnded;
                     mediaElement_Song.Open(path);
@@ -7047,7 +7190,54 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 {
                     try
                     {
-                        ArrayList arrayList = Song_Extract_Info.Extract_Lyic_Of_This_SongUrl(this_Song_Info.Song_Url);
+                        ArrayList arrayList = null;
+                        //试图获取 内嵌歌词
+                        if(File.Exists(this_Song_Info.Song_Url))
+                            arrayList = Song_Extract_Info.Extract_Lyic_Of_This_SongUrl(this_Song_Info.Song_Url);
+
+                        //获取失败，则从web获取
+                        if (arrayList == null || arrayList.Count == 0)
+                        {
+                            //则读取Web流 专辑
+                            if (this_Song_Info.Song_Web_Lyic != null &&
+                                this_Song_Info.Song_Web_Lyic.ToString().Length > 0
+                                )
+                            {
+                                string[] lines;
+                                if (this_Song_Info.Song_Web_Lyic.IndexOf("\r\n") >= 0)
+                                {
+                                    lines = this_Song_Info.Song_Web_Lyic.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                                    arrayList = new ArrayList();
+                                    foreach (string line in lines)
+                                        arrayList.Add(line);
+
+                                    for (int i = arrayList.Count - 1; i >= 0; i--)
+                                    {
+                                        string A_String_Read = arrayList[i].ToString();
+
+                                        if (!A_String_Read.Contains("<"))
+                                        {
+                                            arrayList.RemoveAt(i);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    lines = this_Song_Info.Song_Web_Lyic.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                                    arrayList = new ArrayList();
+                                    foreach (string line in lines)
+                                        arrayList.Add(line);
+                                }
+                            }
+                        }
+                        if(arrayList != null)
+                            for (int i = 0; i < arrayList.Count; i++)
+                            {
+                                if (arrayList[i].ToString().Length <= 11)
+                                    arrayList.RemoveAt(i);
+                            }
 
                         //字同步  生成树状结构(优化)
                         dao_ListBox_Temp_MRC.Init_SongEmbedded_Lyrics(arrayList);
@@ -7067,14 +7257,20 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         //获取歌曲最后一句的时间（毫秒）
                         End_Song_MRC_Time = dao_ListBox_Temp_MRC.Return_End_Song_MRC_Time();
 
-                        if (dao_ListBox_Temp_MRC.bool_lrc == true)
+                        if (End_Song_MRC_Time == -1)
                         {
-                            //获取分析完成的在 Dao_ListBox_Temp_MRC 内存储的 歌曲最后一句的时间（毫秒）
-                            End_Song_MRC_Time = Convert.ToDouble(
-                                    dao_ListBox_Temp_MRC.mrc_Line_Info[
-                                        dao_ListBox_Temp_MRC.mrc_Line_Info.Count - 1].
-                                        This_MRC_Start_Time
-                                );
+                            for (int i = dao_ListBox_Temp_MRC.mrc_Line_Info.Count - 1; i >= 0; i--)
+                            {
+                                if (dao_ListBox_Temp_MRC.mrc_Line_Info[i].This_MRC_Start_Time > 222)
+                                {
+                                    //获取分析完成的在 Dao_ListBox_Temp_MRC 内存储的 歌曲最后一句的时间（毫秒）
+                                    End_Song_MRC_Time = Convert.ToDouble(
+                                            dao_ListBox_Temp_MRC.mrc_Line_Info[i].This_MRC_Start_Time
+                                        );
+
+                                    break;
+                                }
+                            }
 
                             window_Hover_MRC_Panel.TextBlock_1.Visibility = Visibility.Visible;
                             window_Hover_MRC_Panel.StackPanel_Lyic.Visibility = Visibility.Collapsed;
@@ -7457,8 +7653,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                             mrc_Byte_.TextBlock_1.FontWeight = FontWeights.Black;
                                             mrc_Byte_.TextBlock_1.Text = dao_ListBox_Temp_MRC.mrc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].
                                                 Array_Morebyte_Text[i].ToString();
-                                            GradientStop gradientStop = (GradientStop)mrc_Byte_.TextBlock_1.FindName("GradientStop_Background");
-                                            gradientStop.Color = Colors.White;
+                                            /*GradientStop gradientStop = (GradientStop)mrc_Byte_.TextBlock_1.FindName("GradientStop_Background");
+                                            gradientStop.Color = Colors.White;*/
                                             mrc_Byte_.TextBlock_1.Effect = null;
 
                                             //设置动画
@@ -7578,20 +7774,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                             thread_window_Hover_MRC_Panel_Text_Storyboard_slider_UpDown.Start();
                                         }
                                         catch { }
-
-
-                                        thread_ListView_Temp_MRC_ScrollIntoView = new Thread(new ThreadStart(() =>
-                                        {
-                                            Dispatcher.BeginInvoke(new Action(delegate ()
-                                            {
-                                                musicPlayer_Main_UserControl.ListView_Temp_MRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_MRC.Items[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex + MRC_Line_Nums]);//移动到指定行                   
-                                            }));
-                                        }));
-                                        thread_ListView_Temp_MRC_ScrollIntoView.Priority = ThreadPriority.Lowest;
-                                        thread_ListView_Temp_MRC_ScrollIntoView.Start();
-
-                                        
-                                        Foreable_Change_Hidden();
                                     }
                                     catch { }
                                 }
@@ -7601,6 +7783,20 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         {
 
                         }
+
+                        thread_ListView_Temp_MRC_ScrollIntoView = new Thread(new ThreadStart(() =>
+                        {
+                            Dispatcher.BeginInvoke(new Action(delegate ()
+                            {
+                                musicPlayer_Main_UserControl.ListView_Temp_MRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_MRC.Items[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex + MRC_Line_Nums]);//移动到指定行                   
+                            }));
+                        }));
+                        thread_ListView_Temp_MRC_ScrollIntoView.Priority = ThreadPriority.Lowest;
+                        thread_ListView_Temp_MRC_ScrollIntoView.Start();
+
+
+                        Foreable_Change_Hidden();
+
                     });
                 }
             }
@@ -7681,12 +7877,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         {
             int line_count = 0;
             string[] colors = new string[] { "50FFFFFF", "70FFFFFF", "98FFFFFF", "98FFFFFF", "70FFFFFF", "50FFFFFF", "50FFFFFF" };
-
+            ListBoxItem myListBoxItem = null;
             for (int i = musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - 3; i < musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex + 4; i++)
             {
                 if (i != musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex && i >= 0 && i < musicPlayer_Main_UserControl.ListView_Temp_MRC.Items.Count)
                 {
-                    ListBoxItem myListBoxItem = (ListBoxItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(i));
+                    myListBoxItem = (ListBoxItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(i));
 
                     if (myListBoxItem != null)
                     {
@@ -7713,6 +7909,26 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 }
             }
 
+            myListBoxItem = (ListBoxItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex));
+            if (myListBoxItem != null)
+            {
+                ContentPresenter myContentPresenter = FindVisualChild<ContentPresenter>(myListBoxItem);
+
+                if (myContentPresenter != null)
+                {
+                    DataTemplate myDataTemplate = myContentPresenter.ContentTemplate;
+
+                    if (myDataTemplate != null)
+                    {
+                        TextBlock myTextBlock_TextBlock = (TextBlock)myDataTemplate.FindName("Text_TextBlock", myContentPresenter);
+                        myTextBlock_TextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFFF"));
+
+                        //
+                        TextBlock myTextBlock_TextBlock_1 = (TextBlock)myDataTemplate.FindName("Text_TextBlock_1", myContentPresenter);
+                        myTextBlock_TextBlock_1.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFFF"));
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -7978,6 +8194,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     {
                         try
                         {
+                            //则读取 音频文件 内嵌封面
                             System.Drawing.Image image = Song_Extract_Info.Extract_AlbumImage_Of_This_SongUrl(this_Song_Info.Song_Url);
                             if (image != null)
                             {
@@ -8003,6 +8220,52 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                             }
                             else
                             {
+                                //则读取Web流 专辑
+                                if (this_Song_Info.Song_Web_Album_Image != null &&
+                                    this_Song_Info.Song_Web_Album_Image.ToString().Length > 0
+                                    )
+                                {
+                                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(new BitmapImage(this_Song_Info.Song_Web_Album_Image));
+                                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
+                                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                                    musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
+                                    musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
+
+                                    userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                                    Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                                }
+                                else
+                                {
+                                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(Image_墨智音乐);
+                                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
+                                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                                    musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
+                                    musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
+
+                                    //Panel_Image.Background = new ImageBrush(Image_唱片4);
+                                    userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = new ImageBrush(Image_墨智音乐);
+                                    Border_Now_Album_Image.Background = new ImageBrush(Image_墨智音乐);
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            //则读取Web流 专辑
+                            if (this_Song_Info.Song_Web_Album_Image != null &&
+                                this_Song_Info.Song_Web_Album_Image.ToString().Length > 0
+                                )
+                            {
+                                musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(new BitmapImage(this_Song_Info.Song_Web_Album_Image));
+                                musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
+                                musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
+                                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
+
+                                userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                                Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                            }
+                            else
+                            {
                                 musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(Image_墨智音乐);
                                 musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
                                 musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
@@ -8013,18 +8276,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                 userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = new ImageBrush(Image_墨智音乐);
                                 Border_Now_Album_Image.Background = new ImageBrush(Image_墨智音乐);
                             }
-                        }
-                        catch
-                        {
-                            musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(Image_墨智音乐);
-                            musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
-                            musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                            musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
-                            musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
-
-                            //Panel_Image.Background = new ImageBrush(Image_唱片4);
-                            userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = new ImageBrush(Image_墨智音乐);
-                            Border_Now_Album_Image.Background = new ImageBrush(Image_墨智音乐);
                         }
                     }
                 }
@@ -9203,6 +9454,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             Frame_Manager_ButtonList_ScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
         }
 
-        
+        private void Stack_Button_LotSelects_Sort_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Stack_Panel_Sort_AlbumModel.Visibility == Visibility.Collapsed)
+                Stack_Panel_Sort_AlbumModel.Visibility = Visibility.Visible;
+            else
+                Stack_Panel_Sort_AlbumModel.Visibility = Visibility.Collapsed;
+        }
     }
 }
