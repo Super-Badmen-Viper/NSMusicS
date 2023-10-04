@@ -30,6 +30,8 @@
   <img src="doc/Test (1).png" align="center" width="1200">
   <img src="doc/Test (2).png" align="center" width="1200">
   <img src="doc/Test (3).png" align="center" width="1200">
+  <img src="doc/Test (1_2).png" align="center" width="1200">
+  <img src="doc/Test (1_3).png" align="center" width="1200">
   <img align="center" width="400">
   
 ## MoZhiMusic 4th Edition Project Development Document/Plan: -》 MoZhiMusic_Ultimate
