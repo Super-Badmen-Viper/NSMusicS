@@ -335,7 +335,7 @@
                 </TextBlock>
             </StackPanel>
             <Button x:Name="Button_Singer_Image_Animation_Image_To_WindowsDesktop" 
-                        Margin="0,0,190,27"
+                        Margin="0,0,188,28"
                         Style="{StaticResource MyButton}" 
                         Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
                 <svgc:SvgViewbox 
@@ -372,7 +372,7 @@
             <Button x:Name="Button_Close_CD_Image"
     Style="{StaticResource MyButton}" 
     BorderBrush="{x:Null}" 
-    Margin="0,0,190,7" 
+    Margin="0,0,188,8" 
     Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
                 <svgc:SvgViewbox 
         x:Name="SvgViewbox_Button_Close_CD_Image"
@@ -389,7 +389,7 @@
             </StackPanel>
             <Button x:Name="Button_Singer_Image_Animation_Image"
                         Style="{StaticResource MyButton}" 
-                         Margin="0,0,105,27" 
+                         Margin="0,0,103,28" 
                         Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
                 <svgc:SvgViewbox 
                         x:Name="SvgViewbox_Button_Singer_Image_Animation_Image"
@@ -406,7 +406,7 @@
             </StackPanel>
             <Button x:Name="Button_Song_AudioSpectrogram_Image" 
                         Style="{StaticResource MyButton}" 
-                        Margin="0,0,105,7" 
+                        Margin="0,0,103,8" 
                         Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <svgc:SvgViewbox 
                         x:Name="SvgViewbox_Button_Song_AudioSpectrogram_Image" 

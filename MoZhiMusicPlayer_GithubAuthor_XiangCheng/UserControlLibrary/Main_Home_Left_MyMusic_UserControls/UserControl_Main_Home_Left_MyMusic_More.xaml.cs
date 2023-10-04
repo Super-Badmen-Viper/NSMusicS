@@ -31,7 +31,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
 
             Grid_ListItem_CrudModel_2.Visibility = Visibility.Collapsed;
 
-            Grid_NormalModel_2.Visibility = Visibility.Collapsed;
             Grid_NormalModel_3.Visibility = Visibility.Collapsed;
 
             //刷新内存区域的引用
@@ -1038,7 +1037,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         private void Stack_Button_LotSelects_Take_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Grid_NormalModel_1.Visibility = Visibility.Collapsed;
-            Grid_NormalModel_2.Visibility = Visibility.Collapsed;
             Grid_ListItem_CrudModel_1.Margin = new Thickness(0, 90, 0, 0);
             Grid_ListItem_CrudModel_2.Visibility = Visibility.Visible;
             GridViewColumn_Check_ListView_Song.Width = 30;
@@ -1047,7 +1045,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
         private void Stack_Button_Exit_LotLItemCrud_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Grid_NormalModel_1.Visibility = Visibility.Visible;
-            Grid_NormalModel_2.Visibility = Visibility.Visible;
             Grid_ListItem_CrudModel_1.Margin = new Thickness(0, 140, 0, 0);
             Grid_ListItem_CrudModel_2.Visibility = Visibility.Collapsed;
             GridViewColumn_Check_ListView_Song.Width = 0;

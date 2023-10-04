@@ -26,6 +26,121 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_List_Infos
     public class Find_Song_Of_SelectFiles
     {
         /// <summary>
+        /// 下载音乐 歌曲文件 添加
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public async Task<ObservableCollection<Song_Info>> Start_Set_Song_Of_DownLoad_Files(
+            ObservableCollection<Song_Info> Select_List, 
+            int SongList_ID,
+            string filename,
+            string album_name)
+        {
+            var tcs = new TaskCompletionSource<ObservableCollection<Song_Info>>();
+
+            await Task.Run(() =>
+            {
+                List<string> song_url = new List<string>();
+                song_url.Add(filename);
+                ObservableCollection<Song_Info> list_Song_Info = SongInfo_Take(song_url);
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    #region 数据处理
+                    //3.去重
+                    HashSet<string> uniqueSongUrls = new HashSet<string>();
+                    List<Song_Info> updatedSelectList = new List<Song_Info>();
+                    // 第一次遍历，将Select_List中的歌曲添加到新的updatedSelectList中，并同时记录已经添加的歌曲的URL
+                    foreach (var songInfo in Select_List)
+                    {
+                        updatedSelectList.Add(songInfo);
+                        uniqueSongUrls.Add(songInfo.Song_Url);
+                    }
+                    // 第二次遍历，将list_Song_Info中的歌曲添加到updatedSelectList中，但需要检查是否已经存在相同的URL
+                    foreach (var songInfo in list_Song_Info)
+                    {
+                        if (!uniqueSongUrls.Contains(songInfo.Song_Url))
+                        {
+                            updatedSelectList.Add(songInfo);
+                            uniqueSongUrls.Add(songInfo.Song_Url);
+                        }
+                    }
+                    //去重后重新添加
+                    Select_List.Clear();
+                    for (int i = 0; i < updatedSelectList.Count; i++)
+                    {
+                        Song_Info song_Info = (Song_Info)updatedSelectList[i];
+
+                        if (song_Info.Song_Url.Equals(filename))
+                            song_Info.Album_Name = album_name;
+                        
+                        Select_List.Add(song_Info);
+                    }
+
+
+                    //4.排序（默认 歌手名-歌曲名-专辑名排序）
+                    /* List<Song_Info> song_Infos = new List<Song_Info>(Select_List);
+                     Select_List.Clear();
+
+                     List<Song_Info> sortedList = song_Infos
+                         .OrderBy(song => song.Singer_Name)
+                         .ThenBy(song => song.Song_Name)
+                         .ToList();
+                     for (int i = 0; i < sortedList.Count; i++)
+                     {
+                         Song_Info song_Info = sortedList[i];
+                         Select_List.Add(song_Info);
+                     }
+                     for (int i = 0; i < Select_List.Count; i++)
+                     {
+                         Select_List[i].Song_No = i + 1;
+                     }*/
+
+                    //5.确认是否在我的收藏中
+                    if (SongList_ID != 0)
+                    {
+                        for (int i = 0; i < Select_List.Count; i++)
+                        {
+                            if (Select_List[i].Song_Like == 0)
+                            {
+                                Select_List[i].Song_Like_Image = ImageBrush_LoveNormal;//更改为SVG
+                            }
+                            else
+                            {
+                                Select_List[i].Song_Like = 1;
+                                Select_List[i].Song_Like_Image = ImageBrush_LoveEnter;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < Select_List.Count; i++)
+                        {
+                            Select_List[i].Song_Like = 1;
+                            Select_List[i].Song_Like_Image = ImageBrush_LoveEnter;
+                        }
+                    }
+                    for (int i = 0; i < Select_List.Count; i++)
+                    {
+                        if (Select_List[i].Song_Like_Image == ImageBrush_LoveEnter)
+                        {
+                            Select_List[i].Song_Like = 1;
+                        }
+                    }
+
+                    //6.确认其它歌单是否存在我的收藏中的歌曲
+                    Check_LoveSong_In_LoveSongList_Reset_SongList_Info();
+                    #endregion
+                });
+
+                tcs.SetResult(Select_List);
+            });
+
+
+            return await tcs.Task;
+        }
+
+        /// <summary>
         /// 手动 拖动 歌曲文件 添加
         /// </summary>
         /// <param name="sender"></param>

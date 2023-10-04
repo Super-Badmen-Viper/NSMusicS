@@ -16,7 +16,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
     /// </summary>
     public class FFmpegAudioReader : WaveStream, ISampleProvider
     {
-        private readonly object lockObject;//
         public SampleChannel sampleChannel; // sample provider that gives us most stuff we need
 
         private IWaveSource ffmpegDecoder;
@@ -53,8 +52,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
 
         public FFmpegAudioReader(string filename)
         {
-            lockObject = new object();//
-
             ffmpegDecoder = new FfmpegDecoder(filename);
 
             if (null != ffmpegDecoder)
@@ -105,10 +102,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
         /// <returns>Number of samples read</returns>
         public int Read(float[] buffer, int offset, int count)
         {
-            lock (lockObject)
-            {
-                return sampleChannel.Read(buffer, offset, count);
-            }
+            return sampleChannel.Read(buffer, offset, count);
         }
     }
 }

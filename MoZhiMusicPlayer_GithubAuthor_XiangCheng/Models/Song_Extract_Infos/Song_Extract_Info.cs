@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Brush = System.Windows.Media.Brush;
@@ -62,42 +63,51 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Extract_Infos
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static void Set_AlbumImage_Of_This_SongUrl(string url, ImageSource imageSource)
+        public static void Set_AlbumImage_Of_This_SongUrl(string url, ImageSource imageSource,string Album_Name)
         {
-            if (url.IndexOf(".wav") < 0)
+            try
             {
-                if (File.Exists(url))
+                if (url.IndexOf(".wav") < 0)
                 {
-                    TagLib.File xxxx = TagLib.File.Create(url);
-
-                    Image image = null;
-                    if (imageSource is BitmapSource bitmapSource)
+                    if (File.Exists(url))
                     {
-                        // 创建一个 MemoryStream 以保存 BitmapSource 数据
-                        using (MemoryStream memoryStream = new MemoryStream())
+                        TagLib.File xxxx = TagLib.File.Create(url);
+
+                        Image image = null;
+                        if (imageSource is BitmapSource bitmapSource)
                         {
-                            BitmapEncoder encoder = new PngBitmapEncoder(); // 选择适当的编码器
-                            encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-                            encoder.Save(memoryStream);
+                            // 创建一个 MemoryStream 以保存 BitmapSource 数据
+                            using (MemoryStream memoryStream = new MemoryStream())
+                            {
+                                BitmapEncoder encoder = new PngBitmapEncoder(); // 选择适当的编码器
+                                encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+                                encoder.Save(memoryStream);
 
-                            // 从 MemoryStream 创建 System.Drawing.Image
-                            ImageConverter imageConverter = new ImageConverter();
-                            image = (Image)imageConverter.ConvertFrom(memoryStream.ToArray());
+                                // 从 MemoryStream 创建 System.Drawing.Image
+                                ImageConverter imageConverter = new ImageConverter();
+                                image = (Image)imageConverter.ConvertFrom(memoryStream.ToArray());
+                            }
                         }
+                        byte[] bin = ImageToByteArray(image);
+
+                        // define picture
+                        TagLib.Id3v2.AttachedPictureFrame pic = new TagLib.Id3v2.AttachedPictureFrame();
+                        pic.TextEncoding = TagLib.StringType.Latin1;
+                        pic.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg;
+                        pic.Type = TagLib.PictureType.FrontCover;
+                        pic.Data = bin;
+
+                        // save picture to file
+                        xxxx.Tag.Pictures = new TagLib.IPicture[1] { pic };
+
+                        xxxx.Tag.Album = Album_Name;
+
+                        xxxx.Save();
                     }
-                    byte[] bin = ImageToByteArray(image);
-
-                    // define picture
-                    TagLib.Id3v2.AttachedPictureFrame pic = new TagLib.Id3v2.AttachedPictureFrame();
-                    pic.TextEncoding = TagLib.StringType.Latin1;
-                    pic.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg;
-                    pic.Type = TagLib.PictureType.FrontCover;
-                    pic.Data = bin;
-
-                    // save picture to file
-                    xxxx.Tag.Pictures = new TagLib.IPicture[1] { pic };
-                    xxxx.Save(); 
                 }
+            }catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message+"专辑嵌入失败");
             }
         }
         public static byte[] ImageToByteArray(Image image)
@@ -194,9 +204,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Extract_Infos
         /// <returns></returns>
         public static void Set_Lyic_Of_This_SongUrl(string url,string lyic_Info)
         {
-            TagLib.File xxxx = TagLib.File.Create(url);
-            xxxx.Tag.Lyrics = lyic_Info;
-            xxxx.Save();
+            try
+            {
+                TagLib.File xxxx = TagLib.File.Create(url);
+                xxxx.Tag.Lyrics = lyic_Info;
+                xxxx.Save();
+            }catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message+"歌词嵌入失败");
+            }
         }
     }
 }

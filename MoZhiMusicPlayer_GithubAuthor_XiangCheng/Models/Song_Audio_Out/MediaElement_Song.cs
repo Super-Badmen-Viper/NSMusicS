@@ -22,6 +22,8 @@ using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out.CSCore_Ffmp
 using MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out.NAduio;
 using AudioFileReader = MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out.NAduio.AudioFileReader;
 using NAudio.Wave.SampleProviders;
+using Newtonsoft.Json.Linq;
+using System.Windows.Controls;
 //using AudioFileReader = MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out.NAduio.AudioFileReader;
 
 namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
@@ -71,6 +73,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
 
         public RelayCommand RefCommand_Set_Equalizer { get; set; }
 
+        public bool play_;
         /// <summary>
         /// 初始化播放
         /// </summary>
@@ -78,98 +81,112 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
         public void Open(string audioFilePath)
         {
             if (audioFileReader != null)
-            {
-                audioFileReader = null;
-                //audioFileReader.Dispose();
+                audioFileReader.Dispose();
+            if (audioFileReader_FFmpeg != null)
+                audioFileReader_FFmpeg.Dispose();
+            if (audioFileReader_Web != null)
+                audioFileReader_Web.Dispose();
 
-                waveOutEvent.Dispose();
-            }
+            audioFileReader = null;
+            audioFileReader_FFmpeg = null;
+            audioFileReader_Web = null;
 
+            waveOutEvent.Dispose();
+            waveOutEvent = null;
+            waveOutEvent = new WaveOutEvent();
+
+            //选择编码器
             if (audioFilePath.IndexOf("http") < 0) {
 
-                //关闭Web流，null值作为bool
-                audioFileReader_Web = null;
-
-                //选择编码器
-                if (audioFilePath.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase))
-                {
-                    audioFileReader = new AudioFileReader(audioFilePath);
-                }
-                else if (audioFilePath.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
-                {
-                    audioFileReader = new AudioFileReader(audioFilePath);
-                }
-                else if (audioFilePath.EndsWith(".aiff", StringComparison.OrdinalIgnoreCase))
-                {
-                    audioFileReader = new AudioFileReader(audioFilePath);
-                }
-                else if (audioFilePath.EndsWith(".flac", StringComparison.OrdinalIgnoreCase))
-                {
-                    audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
-                    SampleChannel sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
-                    audioFileReader_FFmpeg.sampleChannel = sampleChannel;
-
-                    audioFileReader = new AudioFileReader(audioFilePath);
-                    audioFileReader.sampleChannel = sampleChannel;
-                }
-                else
-                {
-                    audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
-                    SampleChannel sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
-                    audioFileReader_FFmpeg.sampleChannel = sampleChannel;
-
-                    audioFileReader = new AudioFileReader(audioFilePath);
-                    audioFileReader.sampleChannel = sampleChannel;
-                }
-
-                //
-                waveOutEvent = new WaveOutEvent();
-                waveOutEvent.DeviceNumber = deviceNumber;
-                deviceNumber_change = false;
-
-                //
                 try
                 {
-                    if (bands != null && bands.Length > 0)
+                    //尝试使用Naudio 或者Naduio + cscore_FFmpeg混流(无损flac)
+                    if (audioFilePath.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase))
+                        audioFileReader = new AudioFileReader(audioFilePath);
+                    else if (audioFilePath.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
+                        audioFileReader = new AudioFileReader(audioFilePath);
+                    else if (audioFilePath.EndsWith(".aiff", StringComparison.OrdinalIgnoreCase))
+                        audioFileReader = new AudioFileReader(audioFilePath);
+                    else if (audioFilePath.EndsWith(".flac", StringComparison.OrdinalIgnoreCase))
                     {
-                        equalizer = new Equalizer(audioFileReader, bands);
+                        audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
+                        SampleChannel sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
+                        audioFileReader_FFmpeg.sampleChannel = sampleChannel;
 
-                        waveOutEvent.Init(equalizer);
+                        audioFileReader = new AudioFileReader(audioFilePath);
+                        audioFileReader.sampleChannel = sampleChannel;
                     }
                     else
                     {
+                        audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
+                        SampleChannel sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
+                        audioFileReader_FFmpeg.sampleChannel = sampleChannel;
+
+                        audioFileReader = new AudioFileReader(audioFilePath);
+                        audioFileReader.sampleChannel = sampleChannel;
+                    }
+                    
+                    //尝试 初始化输出 均衡器
+                    try
+                    {
+                        waveOutEvent.DeviceNumber = deviceNumber;
+                        deviceNumber_change = false;
+
+                        equalizer = new Equalizer(audioFileReader, bands);
+                        waveOutEvent.Init(equalizer);
+
+                        play_ = true;
+                    }
+                    catch//若不支持 Naudio均衡器，则默认 Naudio普通初始化输出
+                    {
                         waveOutEvent.Init(audioFileReader);
+
+                        play_ = true;
                     }
                 }
-                catch
+                catch//若不支持NAduio + cscore_FFmpeg混流 均衡器
                 {
-                    waveOutEvent.Init(audioFileReader);
+                    //仍 尝试 NAduio + cscore_FFmpeg混流 直接输出
+                    try
+                    {
+                        audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
+                        SampleChannel sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
+                        audioFileReader_FFmpeg.sampleChannel = sampleChannel;
+
+                        audioFileReader = new AudioFileReader(audioFilePath);
+                        audioFileReader.sampleChannel = sampleChannel;
+
+                        waveOutEvent.Init(audioFileReader);
+                    }
+                    catch//cscore_FFmpeg混流，直接输出
+                    {
+                        audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
+                        waveOutEvent.Init(audioFileReader_FFmpeg);
+                    }
                 }
             }
             else
             {
+                //尝试 使用web流 音频
                 try
                 {
-                    audioFileReader_Web = null;
-                    audioFileReader_Web = new MediaFoundationReader(audioFilePath);
-
-                    //
                     if (waveOutEvent != null)
                         waveOutEvent.Dispose();
 
-                    waveOutEvent = new WaveOutEvent();
+                    audioFileReader_Web = new MediaFoundationReader(audioFilePath);
+
                     waveOutEvent.DeviceNumber = deviceNumber;
                     deviceNumber_change = false;
 
                     waveOutEvent.Init(audioFileReader_Web);
+
+                    play_ = true;
                 }
                 catch
                 {
-
+                    play_ = false;
                 }
-            }
-
-            
+            }     
 
             OnMediaOpened();
 
@@ -178,17 +195,40 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
 
         public void Play()
         {
-            waveOutEvent.Play();
+            try
+            {
+                if (play_)
+                    waveOutEvent.Play();
+            }catch (Exception ex)
+            {
+                play_ = false;
+            }
         }
 
         public void Pause()
         {
-            waveOutEvent.Pause();
+            try
+            {
+                if (play_)
+                    waveOutEvent.Pause();
+            }
+            catch (Exception ex)
+            {
+                play_ = false;
+            }
         }
 
         public void Stop()
         {
-            waveOutEvent.Stop();
+            try
+            {
+                if (play_)
+                    waveOutEvent.Stop();
+            }
+            catch (Exception ex)
+            {
+                play_ = false;
+            }
         }
 
         public void Clear()
@@ -307,7 +347,22 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
             get {
                 if (audioFileReader_Web == null)
                 {
-                    return audioFileReader?.TotalTime ?? TimeSpan.Zero;
+                    if (audioFilePath.IndexOf(".flac") >= 0)
+                    {
+                        if (audioFileReader_FFmpeg != null)
+                        {
+                            return audioFileReader_FFmpeg?.TotalTime ?? TimeSpan.Zero;
+                        }
+                    }
+                    else
+                    {
+                        if (audioFileReader != null)
+                        {
+                            return audioFileReader?.TotalTime ?? TimeSpan.Zero;
+                        }
+                    }
+
+                    return TimeSpan.Zero;
                 }
                 else
                 {

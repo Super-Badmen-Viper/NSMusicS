@@ -43,15 +43,15 @@
             Margin="360,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
             <TextBlock 
-                Text="联网" Foreground="White"
+                Text="联网(已禁用)" Foreground="#44FFFFFF"
                 FontSize="23" Margin="0,0,0,8"/>
         </Border>
         <Border 
             x:Name="Model_5"
-            Margin="440,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            Margin="520,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
             <TextBlock 
-                Text="专业" Foreground="#44FFFFFF"
+                Text="专业(待开发)" Foreground="#44FFFFFF"
                 FontSize="23" Margin="0,0,0,8"/>
         </Border>
 

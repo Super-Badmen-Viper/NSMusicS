@@ -573,7 +573,7 @@
             Visibility="Collapsed"
             />
         <Main_Home_Left_MyMusic_UserControls:UserControl_Main_Home_Left_Web_Music
-            x:Name="userControl_Main_Home_Left_Web_Music" Margin="286,76.7,0,70" 
+            x:Name="userControl_Main_Home_Left_Web_Music" Margin="20,76.7,0,70" 
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
             Visibility="Collapsed"
             />

@@ -6,22 +6,27 @@
              xmlns:local="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_Left_MyMusic_UserControls"
              xmlns:sort="clr-namespace:MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="460" d:DesignWidth="1000"
-             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" >
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+             
+             >
     <Grid>
+        <Grid Background="#10000000" MouseLeftButtonDown="UserControl_MouseLeftButtonDown"/>
+
         <TextBlock 
             Text="API(服务器)地址：" Foreground="White"
             HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox 
             x:Name="TextBox_Web_API"
-            Width="400"
+            Width="400" TextChanged="TextBox_Web_API_TextChanged"
             HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,0,0,0"/>
 
         <Grid>
             <Border 
-                Width="500" Height="30" Margin="0,20,0,0" CornerRadius="10"
+                Width="501" Height="30" Margin="0,20,0,0" CornerRadius="10"
                 HorizontalAlignment="Left" VerticalAlignment="Top" Background="White">
                 <TextBox 
                     x:Name="TextBox_Serach"
@@ -33,12 +38,12 @@
                 Width="20" Height="20"
                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,25,0,0">
                 <Border.Background>
-                    <ImageBrush ImageSource="pack://application:,,,/ico_ui_library/搜索.png"/>
+                    <ImageBrush ImageSource="/MoZhiMusicPlayer_GithubAuthor_XiangCheng;component/ico_ui_library/搜索.png"/>
                 </Border.Background>
             </Border>
         </Grid>
 
-        <ListView x:Name="ListView_Download_SongList_Info" Foreground="White"
+        <ListView x:Name="ListView_Download_SongList_Info" Foreground="White" 
             HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
             IsSynchronizedWithCurrentItem="True"
@@ -47,7 +52,7 @@
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
             AllowDrop="True" Margin="0,55,0,0" 
-            MouseDoubleClick="ListView_Download_SongList_Info_MouseDoubleClick" MouseRightButtonDown="ListView_Download_SongList_Info_MouseRightButtonDown" 
+            MouseLeftButtonDown="UserControl_MouseLeftButtonDown"
         >
 
             <ListView.ItemContainerStyle>
@@ -131,7 +136,7 @@
 
                         <GridViewColumn
                             Header="歌曲" 
-                            Width="240">
+                            Width="260">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -182,13 +187,21 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Header="歌曲路径"
-                            Width="0">
+                        <GridViewColumn Header="操作"
+                            Width="160">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Song_Url}" FontSize="14">
-
-                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button 
+                                            x:Name="Button_Play" 
+                                            Content="播放" Foreground="White" Background="{x:Null}" BorderBrush="#99FFFFFF"
+                                            Click="Button_Play_This_Song_Click"/>
+                                        <Button 
+                                            x:Name="Button_DownLoad" Margin="10,0,0,0"
+                                            Content="下载" Foreground="White" Background="{x:Null}" BorderBrush="#99FFFFFF"
+                                            Click="Button_DownLoad_This_Song_Click"
+                                            />
+                                    </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -203,28 +216,183 @@
         </ListView>
 
         <Grid 
-            x:Name="Grid_Right_SongItem_Menu"
-            HorizontalAlignment="Left" VerticalAlignment="Top">
+            x:Name="Grid_DownLoad_Menu" Visibility="{Binding Show_API_HttpClient_ALL_BrLevel_Infos_Complete}"
+            HorizontalAlignment="Center" VerticalAlignment="Center">
             <Border 
-                Width="120" Height="80" CornerRadius="10"
-                Background="White" BorderBrush="#60000000" BorderThickness="1"
+                Width="540" Height="390" CornerRadius="10"
+                Background="White" BorderBrush="#60000000" BorderThickness="0"
                 HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <StackPanel
-                Width="120" Height="80" Orientation="Vertical"
-                HorizontalAlignment="Left" VerticalAlignment="Top"
-            >
-                <Button 
-                    x:Name="Button_Play_This_Song"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Top"
-                    Height="40" Content="播放" FontSize="18" Click="Button_Play_This_Song_Click"
-                    />
-                <Button 
-                    x:Name="Button_DownLoad_This_Song"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Top"
-                    Height="40" Content="下载" FontSize="18" Click="Button_DownLoad_This_Song_Click"
-                    />
+            <TextBlock x:Name="TextBlock_This_SongName" 
+                       Margin="24,30,0,0" 
+                       Text="罗志祥 - 精舞门" FontSize="20" FontWeight="Light"/>
 
-            </StackPanel>
+            <TextBlock Margin="24,80,0,0" 
+                       Text="选择：" FontSize="13" FontWeight="Light"/>
+            <WrapPanel x:Name="StackPanel_DownLoad_Show" Orientation="Horizontal"
+                       Width="400" Height="240" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,74,0,0"
+                       >
+                <RadioButton x:Name="RadioButton_BrLevel_standard" Checked="RadioButton_BrLevel_standard_Checked" 
+                             Content="标准" HorizontalAlignment="Left"
+                             Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
+                             />
+                <RadioButton x:Name="RadioButton_BrLevel_higher" Checked="RadioButton_BrLevel_higher_Checked" 
+                             Content="较高" HorizontalAlignment="Left"
+                             Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
+                             />
+                <RadioButton x:Name="RadioButton_BrLevel_exhigh" Checked="RadioButton_BrLevel_exhigh_Checked" 
+                             Content="极高" HorizontalAlignment="Left"
+                             Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
+                             />
+                <RadioButton x:Name="RadioButton_BrLevel_lossless" Checked="RadioButton_BrLevel_lossless_Checked" 
+                             Content="无损" HorizontalAlignment="Left"
+                             Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
+                             />
+                <RadioButton x:Name="RadioButton_BrLevel_hires" Checked="RadioButton_BrLevel_hires_Checked" 
+                             Content="Hi-Res" HorizontalAlignment="Left"
+                             Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
+                             />
+                <RadioButton x:Name="RadioButton_BrLevel_jyeffect" Checked="RadioButton_BrLevel_jyeffect_Checked" 
+                             Content="高清环绕声" HorizontalAlignment="Left"
+                             Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
+                             />
+                <RadioButton x:Name="RadioButton_BrLevel_sky" Checked="RadioButton_BrLevel_sky_Checked" 
+                             Content="沉浸环绕声" HorizontalAlignment="Left"
+                             Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
+                             />
+                <RadioButton x:Name="RadioButton_BrLevel_jymaster" Checked="RadioButton_BrLevel_jymaster_Checked" 
+                             Content="超清母带" HorizontalAlignment="Left"
+                             Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
+                             />
+                
+
+                <RadioButton x:Name="RadioButton_MV_DownLoad"
+                            Content="MV下载" HorizontalAlignment="Left"
+                            Width="400" Margin="0,31,0,0" Padding="3,0.5,0,0"
+                            />
+
+                <CheckBox x:Name="RadioButton_AlbumImage_SaveThisSOng"
+                            Content="专辑嵌入" HorizontalAlignment="Left"
+                            Width="400" Margin="0,24,0,0" Padding="3,0.5,0,0"
+                            />
+
+                <CheckBox x:Name="RadioButton_LyicText_SaveThisSOng"
+                            Content="歌词嵌入" HorizontalAlignment="Left"
+                            Width="400" Margin="0,24,0,0" Padding="3,0.5,0,0"
+                            />
+            </WrapPanel>
+
+            <TextBlock Margin="24,200,0,0" Width="60" HorizontalAlignment="Left"
+                       Text="MV 资源：" FontSize="13" FontWeight="Light"/>
+
+
+            <TextBlock Margin="24,240,0,0" Width="60" HorizontalAlignment="Left"
+                       Text="专辑嵌入：" FontSize="13" FontWeight="Light"/>
+
+            <TextBlock Margin="24,280,0,0" Width="60" HorizontalAlignment="Left"
+                       Text="歌词嵌入：" FontSize="13" FontWeight="Light"/>
+
+
+            <Border HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+                    Height="1" BorderThickness="1" BorderBrush="#30000000" Margin="2,0,2,70"
+                    />
+            <TextBlock Margin="24,0,0,27" VerticalAlignment="Bottom" Visibility="Collapsed"
+                    Text="下载到：" FontSize="13" FontWeight="Light"/>
+
+            <TextBlock Margin="0,0,150,27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="Collapsed"
+                    Text="更改目录" FontSize="13" FontWeight="Light" Foreground="#35C1FF"/>
+
+            <Border x:Name="Change_DownLoad_Song_SaveFile"
+                    Width="120" Height="40" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,16"
+                    Background="#35C1FF" CornerRadius="20"
+                    MouseLeftButtonDown="Change_DownLoad_Song_SaveFile_MouseLeftButtonDown"
+                    >
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Text="立即下载" FontSize="15" Foreground="White" FontWeight="Light"/>
+            </Border>
+
         </Grid>
+
+        <Grid Visibility="{Binding Show_API_HttpClient_Complete}">
+            <Grid.Triggers>
+                <EventTrigger RoutedEvent="Grid.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimationUsingKeyFrames BeginTime="0:0:0.1"  RepeatBehavior="Forever"   Storyboard.TargetProperty="Angle" Storyboard.TargetName="rt1" >
+                                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="360">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <ExponentialEase EasingMode="EaseInOut"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="0:0:0.2"   RepeatBehavior="Forever"   Storyboard.TargetProperty="Angle" Storyboard.TargetName="rt2" >
+                                <EasingDoubleKeyFrame Value="0"  KeyTime="0:0:0" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="360">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <ExponentialEase EasingMode="EaseInOut"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="0:0:0.3"   RepeatBehavior="Forever"   Storyboard.TargetProperty="Angle" Storyboard.TargetName="rt3" >
+                                <EasingDoubleKeyFrame Value="0"  KeyTime="0:0:0" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="360">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <ExponentialEase EasingMode="EaseInOut"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="0:0:0.4 "   RepeatBehavior="Forever"   Storyboard.TargetProperty="Angle" Storyboard.TargetName="rt4" >
+                                <EasingDoubleKeyFrame Value="0"  KeyTime="0:0:0" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="360">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <ExponentialEase EasingMode="EaseInOut"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="0:0:0.5"     RepeatBehavior="Forever"   Storyboard.TargetProperty="Angle" Storyboard.TargetName="rt5" >
+                                <EasingDoubleKeyFrame Value="0"  KeyTime="0:0:0" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="360">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <ExponentialEase EasingMode="EaseInOut"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Grid.Triggers>
+
+            <ContentControl    Height="150" Width="150" RenderTransformOrigin="0.5 ,0.5">
+                <ContentControl.RenderTransform>
+                    <RotateTransform  x:Name="rt1"/>
+                </ContentControl.RenderTransform>
+                <Ellipse Width="15" Height="15" Fill="White" VerticalAlignment="Bottom"/>
+            </ContentControl>
+            <ContentControl    Height="150" Width="150" RenderTransformOrigin="0.5 ,0.5">
+                <ContentControl.RenderTransform>
+                    <RotateTransform  x:Name="rt2"/>
+                </ContentControl.RenderTransform>
+                <Ellipse Width="15" Height="15" Fill="White" VerticalAlignment="Bottom"/>
+            </ContentControl>
+            <ContentControl    Height="150" Width="150" RenderTransformOrigin="0.5 ,0.5">
+                <ContentControl.RenderTransform>
+                    <RotateTransform  x:Name="rt3"/>
+                </ContentControl.RenderTransform>
+                <Ellipse Width="15" Height="15" Fill="White" VerticalAlignment="Bottom"/>
+            </ContentControl>
+            <ContentControl    Height="150" Width="150" RenderTransformOrigin="0.5 ,0.5">
+                <ContentControl.RenderTransform>
+                    <RotateTransform  x:Name="rt4"/>
+                </ContentControl.RenderTransform>
+                <Ellipse Width="15" Height="15" Fill="White" VerticalAlignment="Bottom"/>
+            </ContentControl>
+            <ContentControl    Height="150" Width="150" RenderTransformOrigin="0.5 ,0.5">
+                <ContentControl.RenderTransform>
+                    <RotateTransform  x:Name="rt5"/>
+                </ContentControl.RenderTransform>
+                <Ellipse Width="15" Height="15" Fill="White" VerticalAlignment="Bottom"/>
+            </ContentControl>
+        </Grid>
+
     </Grid>
 </UserControl>

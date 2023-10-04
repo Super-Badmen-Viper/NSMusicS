@@ -400,7 +400,7 @@
                             Visibility="Collapsed"
                             >
                 </TextBlock>
-                <TextBlock x:Name="TextBox_SongAlbumName"   
+                <TextBlock x:Name="TextBox_SongAlbumName" 
                            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                            Block.TextAlignment="Left" VerticalAlignment="Center"  
                            TextWrapping="Wrap" 
