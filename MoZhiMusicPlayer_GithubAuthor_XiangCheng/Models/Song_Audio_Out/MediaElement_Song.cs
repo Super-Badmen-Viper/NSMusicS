@@ -35,6 +35,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
         private AudioFileReader audioFileReader; //基于NAudio音频库 版本
         private MediaFoundationReader audioFileReader_Web;
 
+        private SampleChannel sampleChannel;
+
         private Equalizer equalizer;
         private EqualizerBand[] bands;
 
@@ -81,19 +83,36 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
         public void Open(string audioFilePath)
         {
             if (audioFileReader != null)
+            {
                 audioFileReader.Dispose();
+                audioFileReader = null;
+            }
             if (audioFileReader_FFmpeg != null)
+            {
                 audioFileReader_FFmpeg.Dispose();
+                audioFileReader_FFmpeg = null;
+            }
             if (audioFileReader_Web != null)
+            {
                 audioFileReader_Web.Dispose();
+                audioFileReader_Web = null;
+            }
 
-            audioFileReader = null;
-            audioFileReader_FFmpeg = null;
-            audioFileReader_Web = null;
+            if (sampleChannel != null)
+                sampleChannel = null;
 
-            waveOutEvent.Dispose();
-            waveOutEvent = null;
+            if (equalizer != null)
+                equalizer = null;
+
+            if (waveOutEvent != null)
+            {
+                waveOutEvent.Dispose();
+                waveOutEvent = null;
+            }
             waveOutEvent = new WaveOutEvent();
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
 
             //选择编码器
             if (audioFilePath.IndexOf("http") < 0) {
@@ -109,8 +128,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
                         audioFileReader = new AudioFileReader(audioFilePath);
                     else if (audioFilePath.EndsWith(".flac", StringComparison.OrdinalIgnoreCase))
                     {
+                        if (audioFileReader_FFmpeg != null)
+                            audioFileReader_FFmpeg.Dispose();
+                        if (audioFileReader != null)
+                            audioFileReader.Dispose();
+
                         audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
-                        SampleChannel sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
+                        sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
                         audioFileReader_FFmpeg.sampleChannel = sampleChannel;
 
                         audioFileReader = new AudioFileReader(audioFilePath);
@@ -118,8 +142,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
                     }
                     else
                     {
+                        if (audioFileReader_FFmpeg != null)
+                            audioFileReader_FFmpeg.Dispose();
+                        if (audioFileReader != null)
+                            audioFileReader.Dispose();
+
                         audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
-                        SampleChannel sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
+                        sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
                         audioFileReader_FFmpeg.sampleChannel = sampleChannel;
 
                         audioFileReader = new AudioFileReader(audioFilePath);
@@ -150,7 +179,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Audio_Out
                     try
                     {
                         audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
-                        SampleChannel sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
+                        sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
                         audioFileReader_FFmpeg.sampleChannel = sampleChannel;
 
                         audioFileReader = new AudioFileReader(audioFilePath);

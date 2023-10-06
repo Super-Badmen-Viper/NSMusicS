@@ -731,8 +731,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                                 bitmapImage.StreamSource = stream;
                                 bitmapImage.EndInit();
+
+                                // 冻结 BitmapImage 对象
+                                bitmapImage.Freeze();
                             }
                             imageBrush.ImageSource = bitmapImage;
+
 
                             break;
                         }
@@ -830,6 +834,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                                 bitmapImage.StreamSource = stream;
                                 bitmapImage.EndInit();
+
+                                // 冻结 BitmapImage 对象
+                                bitmapImage.Freeze();
                             }
                             imageBrush.ImageSource = bitmapImage;
                         }
@@ -3830,8 +3837,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                         bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                                         bitmapImage.StreamSource = stream;
                                         bitmapImage.EndInit();
+
+                                        // 冻结 BitmapImage 对象
+                                        bitmapImage.Freeze();
                                     }
                                     imageBrush.ImageSource = bitmapImage;
+
 
                                     break;
                                 }
@@ -4898,7 +4909,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[1][0].Songs, 1, audioFiles);
+                songList_Infos[1][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[1][0].Songs, 1, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -4934,7 +4946,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[0][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[0][0].Songs, 0, audioFiles);
+                songList_Infos[0][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[0][0].Songs, 0, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_My_Love.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -4970,7 +4983,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[2][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[2][0].Songs, 2, audioFiles);
+                songList_Infos[2][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[2][0].Songs, 2, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -5007,7 +5021,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[3][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[3][0].Songs, 3, audioFiles);
+                songList_Infos[3][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[3][0].Songs, 3, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -5044,7 +5059,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[4][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[4][0].Songs, 4, audioFiles);
+                songList_Infos[4][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[4][0].Songs, 4, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -5081,7 +5097,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[5][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[5][0].Songs, 5, audioFiles);
+                songList_Infos[5][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[5][0].Songs, 5, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -5118,7 +5135,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[6][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[6][0].Songs, 6, audioFiles);
+                songList_Infos[6][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[6][0].Songs, 6, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -5155,7 +5173,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[7][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[7][0].Songs, 7, audioFiles);
+                songList_Infos[7][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[7][0].Songs, 7, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -5192,7 +5211,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[8][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[8][0].Songs, 8, audioFiles);
+                songList_Infos[8][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[8][0].Songs, 8, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -5229,7 +5249,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[9][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[9][0].Songs, 9, audioFiles);
+                songList_Infos[9][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[9][0].Songs, 9, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -5266,7 +5287,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[10][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[10][0].Songs, 10, audioFiles);
+                songList_Infos[10][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[10][0].Songs, 10, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -5303,7 +5325,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[11][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[11][0].Songs, 11, audioFiles);
+                songList_Infos[11][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[11][0].Songs, 11, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -5340,7 +5363,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[12][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[12][0].Songs, 12, audioFiles);
+                songList_Infos[12][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[12][0].Songs, 12, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -5377,7 +5401,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[13][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[13][0].Songs, 13, audioFiles);
+                songList_Infos[13][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[13][0].Songs, 13, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -5414,7 +5439,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[14][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[14][0].Songs, 14, audioFiles);
+                songList_Infos[14][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[14][0].Songs, 14, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -5451,7 +5477,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[15][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[15][0].Songs, 15, audioFiles);
+                songList_Infos[15][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[15][0].Songs, 15, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -5488,7 +5515,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Visible;
 
                 Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
-                songList_Infos[16][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[16][0].Songs, 16, audioFiles);
+                songList_Infos[16][0].Songs = await find_Song_Of_SelectFiles.Start_Drop_Song_Of_SelectFiles(songList_Infos[16][0].Songs, 16, new List<string>(audioFiles));
+                audioFiles = null;
 
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info.Visibility = Visibility.Visible;
                 userControl_Main_Home_Left_MyMusic_Mores[Song_Find_SongList_SelectedIndex - 3].Stack_Add_Song_Info_True.Visibility = Visibility.Collapsed;
@@ -6258,8 +6286,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             if (mediaElement_Song.TotalTime != null)
             {
-                TimeSpan durationTimeSpan = mediaElement_Song.TotalTime;
-                userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Maximum = durationTimeSpan.TotalMilliseconds;
+                userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Maximum = mediaElement_Song.TotalTime.TotalMilliseconds;
 
                 //K歌模块
                 /*LinearDoubleKeyFrame linearDoubleKeyFrame_1 = new LinearDoubleKeyFrame();
@@ -6293,15 +6320,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //是否开启歌手写真轮播
             if (Bool_Button_Singer_Image_Animation)
             {
-                thread_timer_Singer_Photo_One = new Thread(new ThreadStart(() =>
-                {
-                    Dispatcher.BeginInvoke(new Action(delegate ()
-                    {
-                        timer_Singer_Photo_One.Stop();
-                        timer_Singer_Photo_One_Lot.Stop();
-                    }));
-                }));
-                thread_timer_Singer_Photo_One.Start();
+                timer_Singer_Photo_One.Stop();
+                timer_Singer_Photo_One_Lot.Stop();
 
                 Bool_Timer_Singer_Photo_1 = false;
                 Bool_Timer_Singer_Photo_1_lot = false;
@@ -6322,9 +6342,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
             dispatcherTimer_Silder.Start();
 
+            //歌词动画
             if (myTextBlock_Storyboard != null)
             {
-                myTextBlock_Storyboard.Resume();
+                myTextBlock_Storyboard.Begin();
                 //window_Hover_MRC_Panel.Text_Storyboard.Resume();
                 if (window_Hover_MRC_Panel.Text_Storyboard_slider_Up != null)
                 {
@@ -6337,6 +6358,15 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         storyboard_lyic_desk.Resume();
                 }
             }
+            //专辑旋转及滑动动画
+            musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Image_Song_Storyboard.Resume();
+            DoubleAnimationUsingKeyFrames doubleAnimationUsingKeyFrames = (DoubleAnimationUsingKeyFrames)musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Storyboard_Open_Album.Children[0];
+            doubleAnimationUsingKeyFrames.KeyFrames[0].Value = 0;
+            doubleAnimationUsingKeyFrames.KeyFrames[1].Value = 160;
+            musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Storyboard_Open_Album.Begin(
+                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Album_Buttom_Of_Circle,
+                false);
+            doubleAnimationUsingKeyFrames = null;
         }
 
         private void mediaElement_Song_MediaEnded(object sender, StoppedEventArgs e)
@@ -6690,6 +6720,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 }
                 catch { }
             }
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            //Thread.Sleep(300);
 
             loop:;
         }
@@ -7428,6 +7462,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         {
             try
             {
+                //释放此控件的内存，此控件大量使用会占用大量内存
+                myTextBlock_TextBlock = null;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+
                 if (DispatcherTimer_MRC.IsEnabled)
                 {
                     if (musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex != -1 && musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex < musicPlayer_Main_UserControl.ListView_Temp_MRC.Items.Count)
@@ -7655,6 +7694,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                                     myTextBlock_Storyboard = (Storyboard)myDataTemplate.FindName("Text_Storyboard", myContentPresenter);
                                                     myTextBlock_TextBlock = (TextBlock)myDataTemplate.FindName("Text_TextBlock", myContentPresenter);
                                                     myTextBlock_TextBlock.Visibility = Visibility.Collapsed;
+                                                    myTextBlock_TextBlock = null;
                                                     //
                                                     stackPanel_Byte_Lyic = (WrapPanel)myDataTemplate.FindName("StackPanel_Lyic", myContentPresenter);
                                                 }
@@ -7809,8 +7849,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                                         stackPanel_Byte_Lyic = (WrapPanel)myDataTemplate.FindName("StackPanel_Lyic", myContentPresenter);
                                                         myTextBlock_TextBlock = (TextBlock)myDataTemplate.FindName("Text_TextBlock", myContentPresenter);
                                                         myTextBlock_TextBlock.Visibility = Visibility.Visible;
+                                                        myTextBlock_TextBlock = null;
 
                                                         stackPanel_Byte_Lyic.Children.Clear();
+                                                        stackPanel_Byte_Lyic = null;
                                                     }
                                                 }
                                             }
@@ -7968,11 +8010,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                             {
                                 TextBlock myTextBlock_TextBlock = (TextBlock)myDataTemplate.FindName("Text_TextBlock", myContentPresenter);
                                 myTextBlock_TextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#" + colors[line_count]));
-
+                                myTextBlock_TextBlock = null;
                                 //
                                 TextBlock myTextBlock_TextBlock_1 = (TextBlock)myDataTemplate.FindName("Text_TextBlock_1", myContentPresenter);
                                 myTextBlock_TextBlock_1.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#" + colors[line_count]));
-
+                                myTextBlock_TextBlock_1 = null;                         
 
                                 line_count++;
                             }
@@ -7994,10 +8036,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     {
                         TextBlock myTextBlock_TextBlock = (TextBlock)myDataTemplate.FindName("Text_TextBlock", myContentPresenter);
                         myTextBlock_TextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFFF"));
-
+                        myTextBlock_TextBlock = null;
                         //
                         TextBlock myTextBlock_TextBlock_1 = (TextBlock)myDataTemplate.FindName("Text_TextBlock_1", myContentPresenter);
                         myTextBlock_TextBlock_1.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFFF"));
+                        myTextBlock_TextBlock_1 = null;
                     }
                 }
             }
@@ -8029,27 +8072,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             return null;       
         }
         /// <summary>
-        /// 获取字符宽度width
-        /// </summary>
-        TextBlock textBlock_Mrc_Byte_Width = new TextBlock();
-        private double MeasureString(string candidate)
-        {
-            var formattedText = new FormattedText(
-                candidate,
-                CultureInfo.CurrentCulture,
-                FlowDirection.LeftToRight,
-                new Typeface(this.textBlock_Mrc_Byte_Width.FontFamily, 
-                this.textBlock_Mrc_Byte_Width.FontStyle, 
-                this.textBlock_Mrc_Byte_Width.FontWeight, 
-                this.textBlock_Mrc_Byte_Width.FontStretch),
-                this.textBlock_Mrc_Byte_Width.FontSize,
-                Brushes.White,
-                new NumberSubstitution(),
-                1);
-            Size size = new Size(formattedText.Width, formattedText.Height);
-            return size.Width;
-        }
-        /// <summary>
         /// 数字科学计数法处理
         /// </summary>
         /// <param name="strData"></param>
@@ -8077,7 +8099,13 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //0有时访问不到
             if (ListBox_MRC_Song_MRC_Time != null && ListBox_MRC_Song_MRC_Time.Count > 0)
             {
-                if (mediaElement_Song.CurrentTime.TotalMilliseconds <= Start_Song_MRC_Time)
+
+                if (mediaElement_Song.CurrentTime.TotalMilliseconds <= Start_Song_MRC_Time && 
+                    musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex >= 5)
+                {
+                    //为空，防止flac读取时CurrentTime发生跳动，导致歌词栏异常滚动
+                }
+                else if (mediaElement_Song.CurrentTime.TotalMilliseconds <= Start_Song_MRC_Time)
                 {
                     for (int i = 4; i < ListBox_MRC_Song_MRC_Time.Count; i++)
                     {
@@ -8275,6 +8303,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                                     bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                                     bitmapImage.StreamSource = stream;
                                     bitmapImage.EndInit();
+
+                                    // 冻结 BitmapImage 对象
+                                    bitmapImage.Freeze();
                                 }
 
                                 musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.ImageSource = bitmapImage;
@@ -8285,6 +8316,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                                 userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                                 Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+
+                                image.Dispose();
                             }
                             else
                             {
@@ -8366,6 +8399,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                             bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                             bitmapImage.StreamSource = stream;
                             bitmapImage.EndInit();
+
+                            // 冻结 BitmapImage 对象
+                            bitmapImage.Freeze();
                         }
 
                         musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.ImageSource = bitmapImage;
@@ -8376,6 +8412,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
 
                         userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                         Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+
+                        image.Dispose();
                     }
                     else
                     {
@@ -8411,99 +8449,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
         string Singer_Name_Temp = "未知歌手";//记录当前歌手名
         int Singer_Name_Temp_Nums;//记录当前歌手图片动画状态
 
-        /*public void Change_Image_Singer_FrmMain_OnePhoto()
-        {
-            //如果歌手名不为空
-            if (this_Song_Info.Singer_Name != null)
-            {
-                //如果当前播放的歌曲信息不为空
-                if (this_Song_Info.Singer_Name != null)
-                {      
-                    //获取歌手名
-                    string Singer_Image_Name = this_Song_Info.Singer_Name.Trim();
-                    //生成歌手图片所在路径
-                    Singer_Image_Url = Path_App + @"\Singer_Image\" + singer_photo[0] + @"\" + Singer_Image_Name + @".jpg";
-                    //如果歌手图片存在
-                    if (File.Exists(Singer_Image_Url))
-                    {
-                        BgSwitch(Singer_Image_Url);
-                    }
-                    else
-                    {
-                        //多歌手
-                        if (Singer_Image_Name.IndexOf("、") > 0)
-                        {
-                            Singer_Image_Name = Singer_Image_Name.Substring(0, Singer_Image_Name.IndexOf("、"));
-
-                            Singer_Image_Url = Path_App + @"\Singer_Image\" + singer_photo[0] + @"\" + Singer_Image_Name + @".jpg";
-                            //如果歌手图片存在
-                            if (File.Exists(Singer_Image_Url))
-                            {
-                                BgSwitch(Singer_Image_Url);
-                            }
-                            else
-                            {
-                                Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\默认背景1 (1).jpg";
-
-                                List_Singer_Names = new string[0];
-                                List_Singer_Names[0] = "默认背景1 (1)";
-
-                                singer_times = 0;
-                                Singer_Image_Url = Path_App + @"\Singer_Image\" + singer_photo[0] + @"\" + List_Singer_Names[singer_times] + @".jpg";
-                                //如果歌手图片存在
-                                if (File.Exists(Singer_Image_Url))
-                                {
-                                    //1719,10
-                                    BgSwitch(Singer_Image_Url);
-
-                                    if (List_Singer_Names.Length - 1 == 0)
-                                        singer_times = 0;
-                                    else
-                                    {
-                                        singer_times = 1;
-                                        singer_photo_nums_More[0] = 1;
-                                    }
-
-                                    singer_photo_nums = 1;
-                                    Start_Singer_Photo_Change_Timer();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Singer_Image_Url = Path_App + @"\Singer_Image\歌手图片1\默认背景1 (1).jpg";
-
-                            List_Singer_Names = new string[0];
-                            List_Singer_Names[0] = "默认背景1 (1)";
-
-                            singer_times = 0;
-                            Singer_Image_Url = Path_App + @"\Singer_Image\" + singer_photo[0] + @"\" + List_Singer_Names[singer_times] + @".jpg";
-                            //如果歌手图片存在
-                            if (File.Exists(Singer_Image_Url))
-                            {
-                                //1719,10
-                                BgSwitch(Singer_Image_Url);
-
-                                if (List_Singer_Names.Length - 1 == 0)
-                                    singer_times = 0;
-                                else
-                                {
-                                    singer_times = 1;
-                                    singer_photo_nums_More[0] = 1;
-                                }
-
-                                singer_photo_nums = 1;
-                                Start_Singer_Photo_Change_Timer();
-                            }
-                        }
-                    }
-
-                    if (Bool_Windows_Wallpaper == true)
-                        Change_Windows_Background();//切换桌面写真
-                }
-            }
-        }*/
-
         /// <summary>
         /// 切换歌手背景图片
         /// </summary>
@@ -8516,15 +8461,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 if (Singer_Name_Temp != this_Song_Info.Singer_Name.Trim())
                 {
                     //关闭多歌手模式
-                    thread_timer_Singer_Photo_One = new Thread(new ThreadStart(() =>
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            timer_Singer_Photo_One.Stop();
-                            timer_Singer_Photo_One_Lot.Stop();
-                        }));
-                    }));
-                    thread_timer_Singer_Photo_One.Start();
+                    timer_Singer_Photo_One.Stop();
+                    timer_Singer_Photo_One_Lot.Stop();
 
                     //如果当前播放的歌曲信息不为空
                     if (this_Song_Info.Singer_Name != null)
@@ -8565,31 +8503,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 {
                     if (Singer_Name_Temp_Nums == 1)
                     {
-                        //MessageBox.Show("1");
-                        thread_timer_Singer_Photo_One = new Thread(new ThreadStart(() =>
-                        {
-                            Dispatcher.BeginInvoke(new Action(delegate ()
-                            {
-                                timer_Singer_Photo_One.Start();
-                                timer_Singer_Photo_One_Lot.Stop();
-                            }));
-                        }));
-                        thread_timer_Singer_Photo_One.Start();
+                        timer_Singer_Photo_One.Start();
+                        timer_Singer_Photo_One_Lot.Stop();
 
                         Bool_Timer_Singer_Photo_1 = true;
                         Bool_Timer_Singer_Photo_1_lot = false;
                     }
                     else if (Singer_Name_Temp_Nums == 2)
                     {
-                        //MessageBox.Show("2");
-                        thread_timer_Singer_Photo_One = new Thread(new ThreadStart(() =>
-                        {
-                            Dispatcher.BeginInvoke(new Action(delegate ()
-                            {
-                                timer_Singer_Photo_One.Stop();
-                                timer_Singer_Photo_One_Lot.Start();
-                            }));
-                        }));
+                        timer_Singer_Photo_One.Stop();
+                        timer_Singer_Photo_One_Lot.Start();
                         thread_timer_Singer_Photo_One.Start();
 
                         Bool_Timer_Singer_Photo_1 = false;
@@ -8755,15 +8678,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             //单个歌手
             if (singer_times == 0)
             {
-                thread_timer_Singer_Photo_One = new Thread(new ThreadStart(() =>
-                {
-                    Dispatcher.BeginInvoke(new Action(delegate ()
-                    {
-                        timer_Singer_Photo_One_Lot.Stop();
-                        timer_Singer_Photo_One.Start();
-                    }));
-                }));
-                thread_timer_Singer_Photo_One.Start();
+                timer_Singer_Photo_One_Lot.Stop();
+                timer_Singer_Photo_One.Start();
 
                 Bool_Timer_Singer_Photo_1 = true;//记录状态
                 Bool_Timer_Singer_Photo_1_lot = false;
@@ -8772,15 +8688,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
             }
             else
             {
-                thread_timer_Singer_Photo_One = new Thread(new ThreadStart(() =>
-                {
-                    Dispatcher.BeginInvoke(new Action(delegate ()
-                    {
-                        timer_Singer_Photo_One.Stop();
-                        timer_Singer_Photo_One_Lot.Start();
-                    }));
-                }));
-                thread_timer_Singer_Photo_One.Start();
+                timer_Singer_Photo_One.Stop();
+                timer_Singer_Photo_One_Lot.Start();
 
                 Bool_Timer_Singer_Photo_1 = false;//记录状态
                 Bool_Timer_Singer_Photo_1_lot = true;
@@ -8842,26 +8751,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                 }
                 else
                 {
-                    thread_timer_Singer_Photo_One = new Thread(new ThreadStart(() =>
-                    {
-                        Dispatcher.BeginInvoke(new Action(delegate ()
-                        {
-                            timer_Singer_Photo_One.Stop();
-                        }));
-                    }));
-                    thread_timer_Singer_Photo_One.Start();
+                    timer_Singer_Photo_One.Stop();
                 }
             }
             catch
             {
-                thread_timer_Singer_Photo_One = new Thread(new ThreadStart(() =>
-                {
-                    Dispatcher.BeginInvoke(new Action(delegate ()
-                    {
-                        timer_Singer_Photo_One.Stop();
-                    }));
-                }));
-                thread_timer_Singer_Photo_One.Start();
+                timer_Singer_Photo_One.Stop();
             }
         }
 
@@ -9053,18 +8948,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                         oa = bgstoryboard.Children.FirstOrDefault(c => c is ObjectAnimationUsingKeyFrames) as ObjectAnimationUsingKeyFrames;
                         oa.KeyFrames[0].Value = new BitmapImage(new Uri(imgPath));
 
-                        thread_timer_Singer_Photo_One_Lot = new Thread(new ThreadStart(() =>
-                        {
-                            Dispatcher.BeginInvoke(new Action(delegate ()
-                            {
-                                bgstoryboard.Begin(musicPlayer_Main_UserControl.Grid_down_Singer_Photo);
-                            }));
-                        }));
-                        thread_timer_Singer_Photo_One_Lot.Start();
+                        bgstoryboard.Begin(musicPlayer_Main_UserControl.Grid_down_Singer_Photo);
 
                         ImageBrush test = new ImageBrush(new BitmapImage(new Uri(imgPath)));
                         test.Stretch = Stretch.UniformToFill;
                         musicPlayer_Main_UserControl.Grid_Up_Singer_Photo.Background = test;
+                        test = null;
 
                         /*if (animation_select == 0)
                         {
@@ -9147,12 +9036,16 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng
                     musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Visibility = Visibility.Collapsed;
                     musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Background = test;
 
-                    if(dispatcherTimer_SingerImageCut != null)
+                    test = null;
+
+                    if (dispatcherTimer_SingerImageCut != null)
                         dispatcherTimer_SingerImageCut.Stop();
                     dispatcherTimer_SingerImageCut = null;
                     MyVM = null;
                     singerImage_Cut = null;
                     singerImage_Cut = SingerImage_Cut.Retuen_This();
+
+                    GC.Collect();
                 }
         }
 

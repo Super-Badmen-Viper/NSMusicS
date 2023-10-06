@@ -102,7 +102,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                     bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                                     bitmapImage.StreamSource = stream;
                                     bitmapImage.EndInit();
+
+                                    // 冻结 BitmapImage 对象
+                                    bitmapImage.Freeze();
                                 }
+
                                 ImageBrush imageBrush = new ImageBrush();
                                 imageBrush.ImageSource = bitmapImage;
                                 imageBrush.Stretch = Stretch.UniformToFill;

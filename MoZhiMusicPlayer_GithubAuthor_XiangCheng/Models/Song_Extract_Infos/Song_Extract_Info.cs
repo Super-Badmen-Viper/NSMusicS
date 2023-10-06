@@ -87,8 +87,11 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Models.Song_Extract_Infos
                                 ImageConverter imageConverter = new ImageConverter();
                                 image = (Image)imageConverter.ConvertFrom(memoryStream.ToArray());
                             }
+
                         }
                         byte[] bin = ImageToByteArray(image);
+                        //
+                        image = null;
 
                         // define picture
                         TagLib.Id3v2.AttachedPictureFrame pic = new TagLib.Id3v2.AttachedPictureFrame();

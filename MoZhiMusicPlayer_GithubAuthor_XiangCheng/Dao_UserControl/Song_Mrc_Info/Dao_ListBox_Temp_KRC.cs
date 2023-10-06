@@ -99,7 +99,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
         public void Init_SongEmbedded_Lyrics(ArrayList arrayList_MRC_line)
         {
             this.arrayList_MRC_line.Clear();
-            this.arrayList_MRC_line = arrayList_MRC_line;
+            this.arrayList_MRC_line = new ArrayList(arrayList_MRC_line);
 
             if (arrayList_MRC_line != null)
             {
@@ -122,6 +122,9 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                         bool_lrc = true;
                     }
             }
+            arrayList_MRC_line = null;
+
+            GC.Collect();
         }
 
         public void Init_Lrc_Info()
@@ -297,7 +300,8 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                         temp_string.Add("       ");
                     }
                 }
-                mrc_A_line_Text = temp_string;
+                mrc_A_line_Text = new List<string>(temp_string);
+                temp_string = null;
 
                 List<double> temp_double = new List<double>();
                 for (int i = 0; i < mrc_A_line_Time.Count + 14; i++)
@@ -315,8 +319,10 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
                         temp_double.Add(0);
                     }
                 }
-                mrc_A_line_Time = temp_double;
-            }catch (Exception ex)
+                mrc_A_line_Time = new List<double>(temp_double);
+                temp_double = null;
+            }
+            catch (Exception ex)
             {
                 
             }
@@ -750,15 +756,12 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
             return arrayList;
         }
 
-        List<Dao_ListBox_Temp_MRC_Bing> dao_ListBox_Temp_MRC_Bing;
         /// <summary>
         /// 过滤韩文以及添加翻译
         /// </summary>
         /// <returns>数据绑定,返回ListBox所包含的歌词文本</returns>
         public List<Dao_ListBox_Temp_MRC_Bing> Return_ListBox_Temp_MRC_Bing(string CRC_URL)
         {
-            dao_ListBox_Temp_MRC_Bing = new List<Dao_ListBox_Temp_MRC_Bing>();
-
             List<Dao_ListBox_Temp_MRC_Bing> Temp_MRC_Bing = new List<Dao_ListBox_Temp_MRC_Bing>();
             if (mrc_A_line_Text != null)
             {
@@ -825,8 +828,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
         /// <returns>返回ListBox所包含的歌词内容</returns>
         public List<string> Return_ListBox_Temp_MRC_Text()
         {
-            
-
             return mrc_A_line_Text;
         }
         /// <summary>
@@ -835,8 +836,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
         /// <returns>返回ListBox所包含的歌词时间</returns>
         public List<double> Return_ListBox_Temp_MRC_Time()
         {
-            
-
             return mrc_A_line_Time;
         }
         /// <summary>
@@ -845,8 +844,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
         /// <returns></returns>
         public double Return_Start_Song_MRC_Time()
         {
-            
-
             return Start_Song_MRC_Time;
         }
         /// <summary>
@@ -855,8 +852,6 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.Dao_UserControl.Song_Mrc_Info
         /// <returns></returns>
         public double Return_End_Song_MRC_Time()
         {
-            
-
             return End_Song_MRC_Time;
         }
 

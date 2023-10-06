@@ -84,6 +84,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                     int rowIndex = ListView_Download_SongList_Info.ItemContainerGenerator.IndexFromContainer(listViewItem);
                     ListView_Download_SongList_Info.SelectedIndex = rowIndex;
                 }
+                listViewItem = null;
             }
 
             MouseButtonEventArgs args = new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left);
@@ -213,6 +214,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                     int rowIndex = ListView_Download_SongList_Info.ItemContainerGenerator.IndexFromContainer(listViewItem);
                     ListView_Download_SongList_Info.SelectedIndex = rowIndex;
                 }
+                listViewItem = null;
             }
             //确立该Item项属性
             Show_Search_Song Slect_Song_Info = (Show_Search_Song)ListView_Download_SongList_Info.SelectedItem;

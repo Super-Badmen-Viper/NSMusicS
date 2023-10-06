@@ -538,6 +538,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                     checkBox.IsChecked = true;
                                 }
                             }
+                            listViewItem = null;
                         }
 
                         Check_ALL_Song = false;
@@ -557,6 +558,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                     checkBox.IsChecked = false;
                                 }
                             }
+                            listViewItem = null;
                         }
 
                         Check_ALL_Song = true;
@@ -660,6 +662,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                                 checkBox.IsChecked = false;
                                             }
                                         }
+                                        listViewItem = null;
                                     }
 
                                     //所有的歌单 与我的收藏 相同的歌曲 设置为喜欢图像：后端
@@ -726,6 +729,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                                 checkBox.IsChecked = false;
                                             }
                                         }
+                                        listViewItem = null;
                                     }
                                 }
                             }
@@ -790,6 +794,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                                                     checkBox.IsChecked = false;
                                                 }
                                             }
+                                            listViewItem = null;
                                         }
 
                                         userControl_Main_Home_Left_MyMusic_Mores[ComBox_Select - 3].
@@ -1070,6 +1075,7 @@ namespace MoZhiMusicPlayer_GithubAuthor_XiangCheng.UserControlLibrary.Main_Home_
                         checkBox.IsChecked = false;
                     }
                 }
+                listViewItem = null;
             }
 
             SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
