@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Song_Infos>
+  <Song_Info ID="-1" Name="播放列表">
+    <Song>
+      <Song_Name>爱错</Song_Name>
+      <Singer_Name>王力宏</Singer_Name>
+      <Album_Name>心中的日月</Album_Name>
+      <Song_Url>http://m801.music.126.net/20231008185519/140ea499bf4476621313614bfe4aaeb5/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/28482294926/4fdd/f37f/8aee/2f717f24b569530884efb0a998d30937.mp3</Song_Url>
+      <Song_Duration>
+      </Song_Duration>
+      <Song_No>0</Song_No>
+      <Song_Like>0</Song_Like>
+      <MV_Path>
+      </MV_Path>
+    </Song>
+  </Song_Info>
+</Song_Infos>

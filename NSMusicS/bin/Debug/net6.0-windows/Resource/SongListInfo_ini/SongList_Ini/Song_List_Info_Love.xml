@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Song_Infos>
+  <Song_Info ID="0" Name="我的收藏">
+    <Song>
+      <Song_Name>24个比利</Song_Name>
+      <Singer_Name>潘玮柏</Singer_Name>
+      <Album_Name>24个比利</Album_Name>
+      <Song_Url>E:\KuGou\潘玮柏 - 24个比利.mp3</Song_Url>
+      <Song_Duration>04:49</Song_Duration>
+      <Song_No>1</Song_No>
+      <Song_Like>1</Song_Like>
+      <MV_Path>
+      </MV_Path>
+    </Song>
+    <Song>
+      <Song_Name>你把我灌醉</Song_Name>
+      <Singer_Name>G.E.M.邓紫棋</Singer_Name>
+      <Album_Name>The Best of G.E.M. 2008 - 2012 (Deluxe Version)</Album_Name>
+      <Song_Url>C:\Users\17741\Music\G.E.M.邓紫棋 - 你把我灌醉.flac</Song_Url>
+      <Song_Duration>04:45</Song_Duration>
+      <Song_No>2</Song_No>
+      <Song_Like>1</Song_Like>
+      <MV_Path>
+      </MV_Path>
+    </Song>
+  </Song_Info>
+</Song_Infos>

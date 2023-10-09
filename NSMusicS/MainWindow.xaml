@@ -26,7 +26,7 @@
         x:Class="NSMusicS.MainWindow"
         
         mc:Ignorable="d"
-        Title="墨智音乐" Height="710" Width="1140" 
+        Title="九歌·乐灵" Height="710" Width="1140" 
         MinHeight="710" MinWidth="1140"
         Background="{x:Null}"
         UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
@@ -60,7 +60,7 @@
         <Grid x:Name="Grid_Logo" VerticalAlignment="Top" Height="70" HorizontalAlignment="Left" Width="180">
             <TextBlock Margin="20,33,20,0"  VerticalAlignment="Top" Height="28"
                FontWeight="Bold" FontSize="20" Foreground="White"
-               Text="MoZhi 墨智" TextAlignment="Center"
+               Text="九歌·乐灵" TextAlignment="Center"
                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                >
 
