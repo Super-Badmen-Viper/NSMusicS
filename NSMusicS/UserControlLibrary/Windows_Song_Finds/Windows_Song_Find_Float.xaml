@@ -1,0 +1,152 @@
+﻿<Window x:Class="NSMusicS.UserControlLibrary.Windows_Song_Finds.Windows_Song_Find_Float"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vsm="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+        xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Windows_Song_Finds"
+        mc:Ignorable="d"
+        WindowStyle="None" AllowsTransparency="True"
+        ResizeMode="CanResizeWithGrip" 
+        Height="710" Width="1140" 
+        MinHeight="710" MinWidth="1140">
+    <Grid>
+        <ListBox x:Name="ListBox_Test" 
+                
+                ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="3" />
+                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    <Setter Property="VerticalContentAlignment" Value="Top" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Grid Background="{TemplateBinding Background}">
+                                    <vsm:VisualStateManager.VisualStateGroups>
+                                        <vsm:VisualStateGroup x:Name="CommonStates">
+                                            <vsm:VisualState x:Name="Normal" />
+                                            <vsm:VisualState x:Name="MouseOver">
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="fillColor" Storyboard.TargetProperty="Opacity" Duration="0" To=".35"/>
+                                                </Storyboard>
+                                            </vsm:VisualState>
+                                            <vsm:VisualState x:Name="Disabled">
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="contentPresenter" Storyboard.TargetProperty="Opacity" Duration="0" To=".55" />
+                                                </Storyboard>
+                                            </vsm:VisualState>
+                                        </vsm:VisualStateGroup>
+                                        <vsm:VisualStateGroup x:Name="SelectionStates">
+                                            <vsm:VisualState x:Name="Unselected" />
+                                            <vsm:VisualState x:Name="Selected">
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="fillColor2" Storyboard.TargetProperty="Opacity" Duration="0" To=".75"/>
+                                                </Storyboard>
+                                            </vsm:VisualState>
+                                        </vsm:VisualStateGroup>
+                                        <vsm:VisualStateGroup x:Name="FocusStates">
+                                            <vsm:VisualState x:Name="Focused">
+                                                <Storyboard>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FocusVisualElement" Storyboard.TargetProperty="Visibility" Duration="0">
+                                                        <DiscreteObjectKeyFrame KeyTime="0">
+                                                            <DiscreteObjectKeyFrame.Value>
+                                                                <Visibility>Visible</Visibility>
+                                                            </DiscreteObjectKeyFrame.Value>
+                                                        </DiscreteObjectKeyFrame>
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </vsm:VisualState>
+                                            <vsm:VisualState x:Name="Unfocused"/>
+                                        </vsm:VisualStateGroup>
+                                    </vsm:VisualStateManager.VisualStateGroups>
+                                    <Rectangle x:Name="fillColor" Opacity="0" Fill="#FFBADDE9" IsHitTestVisible="False" RadiusX="1" RadiusY="1"/>
+                                    <Rectangle x:Name="fillColor2" Opacity="0" Fill="#FFBADDE9" IsHitTestVisible="False" RadiusX="1" RadiusY="1"/>
+                                    <ContentPresenter
+                                          x:Name="contentPresenter"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"/>
+                                    <Rectangle x:Name="FocusVisualElement" Stroke="#FF6DBDD1" StrokeThickness="1" Visibility="Collapsed" RadiusX="1" RadiusY="1" />
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+
+        </ListBox>
+
+        <TextBlock Text="添加到？" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,27,210,0"/>
+        <ComboBox 
+            x:Name="ComBox_Select_SongList"
+            SelectedIndex="0"
+            Width="210" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,24,0,0" SelectionChanged="ComBox_Select_SongList_Selected">
+            <ComboBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </ComboBox.ItemsPanel>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="2.5" Text="{Binding Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Button 
+            x:Name="Back_Button"
+            Content="返回主界面" HorizontalAlignment="Right" VerticalAlignment="Top"
+                Click="Back_Windows_Click" Height="20" Width="210"
+                />
+
+
+        <TextBlock HorizontalAlignment="Right" Height="30" Text="手动添加歌曲文件" TextWrapping="Wrap" 
+                       VerticalAlignment="Top" Width="210" FontSize="22" FontWeight="Bold"
+                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                       Foreground="White" Margin="30,70,0,0"   
+                       >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+        <Button 
+            x:Name="Button_Select_Add"
+            Content="手动添加音乐（打开文件夹）" HorizontalAlignment="Right" VerticalAlignment="Top"
+                Click="OnSearchClick" Height="90" Width="210" Margin="0,100,0,0"
+                />
+
+
+        <Grid>
+            <TextBlock HorizontalAlignment="Right" Height="30" Text="手动扫描歌曲文件夹" TextWrapping="Wrap" 
+                       VerticalAlignment="Top" Width="210" FontSize="22" FontWeight="Bold"
+                       UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                       Foreground="White" Margin="30,269,0,0"   
+                       >
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </TextBlock.Effect>
+            </TextBlock>
+            <Button 
+                x:Name="Button_Add_SongList"
+                Content="添加文件夹" HorizontalAlignment="Right" VerticalAlignment="Top"
+                Height="20" Width="210" Margin="0,300,0,0" Click="Button_Add_SongList_Click"
+                    />
+            <ListBox 
+                x:Name="ListBox_Selects_SongList"
+                HorizontalAlignment="Right" VerticalAlignment="Top" Width="210" Height="140" Margin="0,325,0,0"/>
+            <Button 
+                x:Name="Button_FindALL_Add"
+                Content="开始扫描选中的歌曲文件夹" HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Click="OnFindALLSongClick" Height="90" Width="210" Margin="0,470,0,0"
+                    />
+
+
+        </Grid>
+    </Grid>
+</Window>

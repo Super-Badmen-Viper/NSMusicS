@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.Main_UserControls.UserControl_Select_Folder_Of_SongAdd"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_UserControls"
+             mc:Ignorable="d" 
+             MinHeight="430"
+             >
+    <Grid>
+        <Border
+            Background="#90232325"
+            BorderBrush="Black"
+            BorderThickness="0"
+            CornerRadius="10"
+            Width="510" Margin="10">
+            <Grid>
+                <TextBlock 
+                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,10,0,0"
+                    Text="手动扫描添加" Foreground="White" FontWeight="Bold" FontSize="26"
+                    />
+                <Border 
+                    x:Name="Button_Add_Folder"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Margin="230,13,0,0"
+                    BorderBrush="White" BorderThickness="1" CornerRadius="14"
+                    >
+                    <TextBlock 
+                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,3,10,3"
+                    Text="添加文件夹" Foreground="White" FontSize="16"
+                    />
+                </Border>
+                <Button 
+                    x:Name="Button_This_CLose" 
+                    Style="{StaticResource MyButton}"
+                    Height="26" Width="28" 
+                    BorderBrush="{x:Null}" 
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                    HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Hand" 
+                    Margin="0,14,20,0" Click="Button_This_CLose_Click">
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/启动.svg" Cursor="Hand"/>
+                    <Button.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                    </Button.Effect>
+                </Button>
+
+                <Grid>
+                    <Border 
+                        Margin="20,50,20,70"
+                        BorderBrush="White" BorderThickness="2" CornerRadius="20">
+                        <ListBox
+                            x:Name="ListBox_Select_Folder"
+                            Margin="20" Foreground="White" FontSize="15"
+                            Background="{x:Null}" BorderThickness="0"
+                            >
+
+                        </ListBox>
+                    </Border>
+                </Grid>
+
+                <Grid Visibility="Collapsed">
+                    <TextBlock 
+                        HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,130"
+                        Text="扫描规则：" Foreground="White" FontWeight="Bold" FontSize="18"
+                        />
+                    <TextBlock 
+                        HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="30,0,0,100"
+                        Text="文件时长" Foreground="White" FontSize="15"
+                        />
+                    <TextBlock 
+                        HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="30,0,0,60"
+                        Text="文件类型" Foreground="White" FontSize="15"
+                        />
+                </Grid>
+
+                <Border 
+                    x:Name="Button_Start_Find"
+                    Background="#6AD2FF" BorderThickness="0" CornerRadius="16" Width="170" Height="40"
+                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20">
+                    <TextBlock 
+                        Text="开始扫描" Foreground="White" FontSize="17" 
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        />
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

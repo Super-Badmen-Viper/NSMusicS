@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="NSMusicS.Helper_UserControlLibrary.UserControl_音乐馆"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.Helper_UserControlLibrary"
+             mc:Ignorable="d" 
+             d:DesignHeight="443" d:DesignWidth="810"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                 SizeChanged="UserControl_SizeChanged">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Height="50" Text="音乐馆" TextWrapping="Wrap" 
+                   VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                   />
+
+        <TabControl 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                Background="{x:Null}" Margin="0,73,0,0" BorderBrush="{x:Null}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" BorderThickness="1,0,1,1" HorizontalAlignment="Stretch">
+            <TabItem Width="36" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TabItem Header="精选" Style="{DynamicResource TabItemStyle1}" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" IsSelected="True">
+                <ScrollViewer x:Name="ScrollViewer_1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <Frame Source="/NSMusicS;component/Helper_UserControlLibrary/音乐馆/UserControl_精选.xaml"  NavigationUIVisibility="Hidden" />
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Width="46" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TabItem Header="音乐电台" Style="{DynamicResource TabItemStyle1}" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+                <ScrollViewer x:Name="ScrollViewer_2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <Frame Source="/NSMusicS;component/Helper_UserControlLibrary/音乐馆/UserControl_有声电台.xaml" NavigationUIVisibility="Hidden" />
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Width="46" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TabItem Header="排行榜" Style="{DynamicResource TabItemStyle1}" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+                <ScrollViewer x:Name="ScrollViewer_3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <Frame Source="/NSMusicS;component/Helper_UserControlLibrary/音乐馆/UserControl_排行.xaml" NavigationUIVisibility="Hidden"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Width="46" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TabItem Header="歌手" Style="{DynamicResource TabItemStyle1}" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+                <ScrollViewer x:Name="ScrollViewer_4" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <Frame Source="/NSMusicS;component/Helper_UserControlLibrary/音乐馆/UserControl_歌手.xaml" NavigationUIVisibility="Hidden"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Width="46" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TabItem Header="分类歌单" Style="{DynamicResource TabItemStyle1}" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+                <ScrollViewer x:Name="ScrollViewer_5" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <Frame Source="/NSMusicS;component/Helper_UserControlLibrary/音乐馆/UserControl_分类歌单.xaml" NavigationUIVisibility="Hidden"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Width="46" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TabItem Header="数字专辑" Style="{DynamicResource TabItemStyle1}" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+                <ScrollViewer x:Name="ScrollViewer_6" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <Frame Source="/NSMusicS;component/Helper_UserControlLibrary/音乐馆/UserControl_数字专辑.xaml" NavigationUIVisibility="Hidden"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Width="46" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TabItem Header="手机独享" Style="{DynamicResource TabItemStyle1}" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+                <ScrollViewer x:Name="ScrollViewer_7" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <Frame Source="/NSMusicS;component/Helper_UserControlLibrary/音乐馆/UserControl_手机专享.xaml" NavigationUIVisibility="Hidden"/>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

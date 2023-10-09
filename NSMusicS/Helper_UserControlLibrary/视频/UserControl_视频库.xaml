@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="NSMusicS.Helper_UserControlLibrary.视频.UserControl_视频库"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.Helper_UserControlLibrary.视频"
+             mc:Ignorable="d" d:DesignWidth="810"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+             Background="#1F1F1F" SizeChanged="UserControl_SizeChanged" VerticalAlignment="Top">
+    <Grid Margin="38,38,38,38"
+          x:Name="Grid_This_Background"
+          UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+          Height="823"
+          MouseLeftButtonDown="Grid_This_Background_MouseLeftButtonDown" VerticalAlignment="Top" 
+          >
+
+        <Image 
+            x:Name="Image_"
+            Stretch="UniformToFill" Source="/ico_ui_library/1_视频库.jpg"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            >
+
+        </Image>
+    </Grid>
+</UserControl>

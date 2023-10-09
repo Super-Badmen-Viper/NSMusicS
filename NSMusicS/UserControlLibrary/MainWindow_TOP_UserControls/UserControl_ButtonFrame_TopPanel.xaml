@@ -1,0 +1,111 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.MainWindow_TOP_UserControls.UserControl_ButtonFrame_TopPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.MainWindow_TOP_UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="77" d:DesignWidth="800" Background="#1F1F1F">
+    <Grid>
+        <TextBlock 
+            Text="模式选择：" Foreground="White" Visibility="Collapsed"
+            FontSize="26" Margin="20,8,0,0" VerticalAlignment="Center"/>
+        
+        <Border 
+            x:Name="Model_1"
+            Margin="60,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            BorderBrush="#6AD2FF" BorderThickness="0,0,0,2">
+            <TextBlock 
+                Text="单曲" Foreground="White"
+                FontSize="23" Margin="0,0,0,8"/>
+        </Border>
+
+        <Border 
+            x:Name="Model_2"
+            Margin="140,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
+            <TextBlock 
+                Text="专辑" Foreground="White"
+                FontSize="23" Margin="0,0,0,8"/>
+        </Border>
+        <Border 
+            x:Name="Model_3"
+            Margin="220,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
+            <TextBlock 
+                Text="编辑/导入" Foreground="White"
+                FontSize="23" Margin="0,0,0,8"/>
+        </Border>
+        <Border 
+            x:Name="Model_4"
+            Margin="360,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
+            <TextBlock 
+                Text="API(已禁用)" Foreground="#44FFFFFF"
+                FontSize="23" Margin="0,0,0,8"/>
+        </Border>
+        <Border 
+            x:Name="Model_5"
+            Margin="520,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
+            <TextBlock 
+                Text="NAS" Foreground="#44FFFFFF"
+                FontSize="23" Margin="0,0,0,8"/>
+        </Border>
+        <Border 
+            x:Name="Model_6"
+            Margin="610,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
+            <TextBlock 
+                Text="专业" Foreground="#44FFFFFF"
+                FontSize="23" Margin="0,0,0,8"/>
+        </Border>
+
+        <Button 
+            x:Name="Button_Personalized_Skin"
+            Style="{StaticResource MyButton}"
+                HorizontalAlignment="Right" Height="20" Width="20" Margin="0,0,175,0"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" VerticalAlignment="Center"  
+                >
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/皮肤.svg"/>
+        </Button>
+        <Button 
+            x:Name="Button_Menu_Setting"
+            Style="{StaticResource MyButton}"
+            HorizontalAlignment="Right" Height="16" Width="16" Cursor="Hand" Margin="0,0,140,0"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" VerticalAlignment="Center"  
+                >
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/菜单.svg"/>
+        </Button>
+        <Button 
+            x:Name="Button_Min"
+            Style="{StaticResource MyButton}"
+                HorizontalAlignment="Right" Height="16" 
+                VerticalAlignment="Stretch" Width="16" Cursor="" Margin="0,0,100,0"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            Background="#02FFFFFF"  
+                >
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/最小化.svg"/>
+        </Button>
+        <Button 
+            x:Name="Button_Max"
+            Style="{StaticResource MyButton}"
+                HorizontalAlignment="Right" Height="16" Width="16" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,65,0" Cursor="Hand" VerticalAlignment="Center" 
+                >
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/最大化.svg"/>
+        </Button>
+        <Button 
+            x:Name="Button_Exit"
+            Style="{StaticResource MyButton}"
+                HorizontalAlignment="Right" Height="16" 
+                VerticalAlignment="Stretch" Width="16" Cursor="Hand" Margin="0,0,30,0"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                >
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/关闭.svg"/>
+        </Button>
+    </Grid>
+</UserControl>

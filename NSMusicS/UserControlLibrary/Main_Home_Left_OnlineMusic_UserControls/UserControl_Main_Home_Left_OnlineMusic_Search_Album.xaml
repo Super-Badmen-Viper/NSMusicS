@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.Main_Home_Left_OnlineMusic_UserControls.UserControl_Main_Home_Left_OnlineMusic_Search_Album"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_Left_OnlineMusic_UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="443" d:DesignWidth="810"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            >
+    <Grid>
+        <TextBlock 
+                x:Name="this_SongList_Name"
+                HorizontalAlignment="Left" Height="50" Text="专辑搜索" TextWrapping="Wrap" 
+                   VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                   Foreground="White"               
+                   >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+    </Grid>
+</UserControl>

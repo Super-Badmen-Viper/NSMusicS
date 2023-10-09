@@ -1,0 +1,85 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.MusicPlayer_MV_Player.MainWindow_Top_MediaMV.UserControl_Media.UserControl_Media_ButtomSilderPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_MV_Player.MainWindow_Top_MediaMV.UserControl_Media"
+             mc:Ignorable="d" 
+             Height="46" Width="680">
+    <Grid>
+        <Slider x:Name="Silder_Music_Width" Height="8" Margin="0,-2,0,-6" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" ScrollViewer.VerticalScrollBarVisibility="Disabled" Style="{DynamicResource SliderStyle1}" IsMoveToPointEnabled="True" Cursor="Hand" Background="#BF444444" Focusable="False" SnapsToDevicePixels="True" />
+        <Slider x:Name="Silder_Music_Temp_Width" Height="8" Margin="0,-2,0,-6" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" UseLayoutRounding="True" ScrollViewer.VerticalScrollBarVisibility="Disabled" Style="{DynamicResource SliderStyle2}" IsMoveToPointEnabled="True" Cursor="Hand"  Visibility="Collapsed" BorderBrush="{x:Null}"/>
+        <Button x:Name="Button_Before" 
+                Style="{StaticResource MyButton}" Content="" 
+                Height="26" Width="28" 
+                BorderBrush="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                RenderTransformOrigin="-5.75,0.5" 
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,80,6">
+            <Button.Background>
+                <ImageBrush ImageSource="/NSMusicS;component/ico_ui_library/上一首.png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="Button_Play_Pause_Player" 
+                Style="{StaticResource MyButton}" Content="" 
+                Height="30" Width="30" 
+                BorderBrush="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="25,0,0,4">
+            <Button.Background>
+                <ImageBrush ImageSource="/NSMusicS;component/ico_ui_library/24gf-playCircle.png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="Button_Next" 
+                Style="{StaticResource MyButton}" Content="" 
+                Height="26" Width="28" 
+                BorderBrush="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="53,0,0,6">
+            <Button.Background>
+                <ImageBrush ImageSource="/NSMusicS;component/ico_ui_library/下一首.png"/>
+            </Button.Background>
+        </Button>
+        <TextBox x:Name="TextBox_Song_Time" 
+                 HorizontalAlignment="Right" 
+                 Height="18" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="100" 
+                 Background="{x:Null}" SelectionBrush="{x:Null}" BorderBrush="{x:Null}" Foreground="White" 
+                 HorizontalContentAlignment="Right" Text="00:00/00:00" TextAlignment="Center"
+                 BorderThickness="0" Focusable="False" 
+                 SnapsToDevicePixels="True" UseLayoutRounding="True" Margin="0,0,100,10" FontSize="14"/>
+
+        <StackPanel Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="26" Width="70" Margin="90,0,0,6">
+
+            <Slider x:Name="Slider_Voice" 
+                    Style="{DynamicResource SliderStyle1}"
+                    IsMoveToPointEnabled="True" Cursor="Hand"  
+                    Height="10" Background="#BF656565" RenderTransformOrigin="0.5,0.5" Margin="22,8,0,0"/>
+            <TextBlock x:Name="Voice_Nums" Margin="3,-14,0,0" TextWrapping="Wrap" RenderTransformOrigin="1.46,0.333" Height="18" Foreground="White" HorizontalAlignment="Left" Width="16">
+                <TextBlock.Background>
+                    <ImageBrush ImageSource="/NSMusicS;component/ico_ui_library/音量.png" Stretch="UniformToFill"/>
+                </TextBlock.Background>
+            </TextBlock>
+        </StackPanel>
+
+        <Button x:Name="Button_Pull_APP" 
+                Style="{StaticResource MyButton}" Content="" 
+                Height="20" Width="20" 
+                BorderBrush="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,40,9">
+            <Button.Background>
+                <ImageBrush ImageSource="/NSMusicS;component/ico_ui_library/放大 (1).png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="Button_Max" 
+                Style="{StaticResource MyButton}" Content="" 
+                Height="24" Width="24" 
+                BorderBrush="{x:Null}" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,7">
+            <Button.Background>
+                <ImageBrush ImageSource="/NSMusicS;component/ico_ui_library/全屏-01 (1).png"/>
+            </Button.Background>
+        </Button>
+    </Grid>
+</UserControl>

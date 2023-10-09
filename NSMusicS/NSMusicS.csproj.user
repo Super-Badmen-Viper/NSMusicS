@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="UserControlLibrary\MainWindow_Left_MoZhiAI_Music_UserControls\UserControl_ButtonFrame_MusicGuessLove.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_Left_MoZhiAI_Music_UserControls\UserControl_ButtonFrame_MusicIdentify.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_Left_MoZhiAI_Music_UserControls\UserControl_ButtonFrame_MusicScoreDrawing_And_PlayMusic.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_Left_MoZhiAI_Music_UserControls\UserControl_ButtonFrame_MusicSingIt.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_Edit_SongInfo.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_Load_UserData.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_More.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_Search_Album.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_Search_Singer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_Search_Song.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MainWindow_TOP_UserControls\UserControl_ButtonFrame_App_Setting.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_More.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_SongInfo_Edit.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_NAS_Music.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_Web_Music.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Album.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Singer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Song.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\Assembly_Albums_And_Track.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\Assembly_Singer_Show.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\UserControl_Main_Model_2_View_Albums_And_Tracks.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Right_MyMusic_UserControls\UserControl_SongList_Infos_Current_Playlist.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_TOP_UserControls\UserControl_Main_Home_TOP_App_Setting.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_TOP_UserControls\UserControl_Main_Home_TOP_Personalized_Skins.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Web_Services\Views\UserControl_Password_Input_Box.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_Home_Web_Services\Views\UserControl_Text_Input_Box.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_UserControls\UserControl_Mrc_Byte.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_UserControls\UserControl_Select_Folder_Of_SongAdd.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Main_UserControls\UserControl_VerticalRectangle.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Animation\UserControl_Animation_1.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_ListView_Lyic_Of_ViewModel_Select.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization_2.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization_3.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_View_1_AlbumView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_View_2_AlbumView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControl_TaskbarIcon.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_MV_Player\MainWindow_Top_MediaMV\UserControl_MediaMV.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_MV_Player\MainWindow_Top_MediaMV\UserControl_Media\UserControl_Media_ButtomSilderPanel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_MV_Player\MusicPlayer_MV_Player_UserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Set\UserControl_Equalization.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Windows_Song_Finds\Windows_Song_Find_Float.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\Window_Hover_EQ_Panel\Window_Hover_EQ_Panel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_MoZhiAI_Music_UserControls\UserControl_ButtonFrame_MusicGuessLove.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_MoZhiAI_Music_UserControls\UserControl_ButtonFrame_MusicIdentify.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_MoZhiAI_Music_UserControls\UserControl_ButtonFrame_MusicScoreDrawing_And_PlayMusic.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_MoZhiAI_Music_UserControls\UserControl_ButtonFrame_MusicSingIt.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_Edit_SongInfo.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_Load_UserData.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_MyMusic_UserControls\UserControl_ButtonFrame_More.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_Search_Album.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_Search_Singer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_Left_OnlineMusic_UserControls\UserControl_ButtonFrame_Search_Song.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MainWindow_TOP_UserControls\UserControl_ButtonFrame_App_Setting.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_More.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_SongInfo_Edit.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_NAS_Music.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Left_MyMusic_UserControls\UserControl_Main_Home_Left_Web_Music.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Album.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Singer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Song.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\Assembly_Albums_And_Track.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\Assembly_Singer_Show.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\UserControl_Main_Model_2_View_Albums_And_Tracks.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Right_MyMusic_UserControls\UserControl_SongList_Infos_Current_Playlist.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_TOP_UserControls\UserControl_Main_Home_TOP_App_Setting.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_TOP_UserControls\UserControl_Main_Home_TOP_Personalized_Skins.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Web_Services\Views\UserControl_Password_Input_Box.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_Home_Web_Services\Views\UserControl_Text_Input_Box.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_UserControls\UserControl_Mrc_Byte.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_UserControls\UserControl_Select_Folder_Of_SongAdd.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Main_UserControls\UserControl_VerticalRectangle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Animation\UserControl_Animation_1.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_ListView_Lyic_Of_ViewModel_Select.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization_2.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization_3.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_View_1_AlbumView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_View_2_AlbumView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControl_TaskbarIcon.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_MV_Player\MainWindow_Top_MediaMV\UserControl_MediaMV.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_MV_Player\MainWindow_Top_MediaMV\UserControl_Media\UserControl_Media_ButtomSilderPanel.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_MV_Player\MusicPlayer_MV_Player_UserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Set\UserControl_Equalization.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Windows_Song_Finds\Windows_Song_Find_Float.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\Window_Hover_EQ_Panel\Window_Hover_EQ_Panel.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views.UserControl_Main_Model_2_View_Albums_And_Tracks"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             mc:Ignorable="d" 
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" >
+    <Grid>
+        <ScrollViewer 
+            x:Name="ScrollViewer_Albums"
+            HorizontalScrollBarVisibility="Disabled"
+            
+            >
+            <WrapPanel         
+                x:Name="VirtualizingStackPanel_For_ThisSinger_ALL_Album"
+                Orientation="Horizontal"
+                >
+
+            </WrapPanel>
+
+            <ScrollViewer.Resources>
+                <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</system:Double>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="Width" Value="6"/>
+                    <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
+                </Style>
+            </ScrollViewer.Resources>
+        </ScrollViewer>
+    </Grid>
+    <UserControl.Resources>
+        <!-- ListView平滑滚动效果 -->
+        <Style x:Key="ListBoxStyle1" TargetType="{x:Type ScrollViewer}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="1" SnapsToDevicePixels="true">
+                            <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                    <i:Interaction.Behaviors>
+                                        <i:FluidMoveBehavior Duration="00:00:03" />
+                                        <!--ListBoxItem/ListviewItem 未选中项的流动动画时间 ，设置为0-->
+                                    </i:Interaction.Behaviors>
+                                </ItemsPresenter>
+                            </ScrollViewer>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ScrollViewer x:Key="ItemsPanelTemplate2">
+            <StackPanel IsItemsHost="true">
+                <i:Interaction.Behaviors>
+                    <i:FluidMoveBehavior AppliesTo="Children"  Duration="00:00:00:00.2" />
+                </i:Interaction.Behaviors>
+            </StackPanel>
+        </ScrollViewer>
+        
+    </UserControl.Resources>
+</UserControl>

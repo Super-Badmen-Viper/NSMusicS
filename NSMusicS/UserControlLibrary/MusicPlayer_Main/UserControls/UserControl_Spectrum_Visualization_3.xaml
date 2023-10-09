@@ -1,0 +1,1932 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls.UserControl_Spectrum_Visualization_3"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="1060">
+    <Grid>
+        <StackPanel x:Name="StackPanel_Test" Orientation="Horizontal" HorizontalAlignment="Center" Margin="-10,0,0,0">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_1" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_1"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_2" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_2"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_3" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_3"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_4" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_4"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_5" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_5"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_6" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_6"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_7" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_7"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_8" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_8"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_9" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_9"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_10" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_10"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_11" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_11"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_12" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_12"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_13" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_13"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_14" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_14"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_15" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_15"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_16" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_16"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_17" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_17"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_18" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_18"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_19" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_19"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_20" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_20"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_21" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_21"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_22" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_22"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_23" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_23"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_24" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_24"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_25" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_25"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_26" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_26"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_27" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_27"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_28" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_28"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_29" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_29"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_30" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_30"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_31" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_31"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_32" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_32"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_33" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_33"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_34" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_34"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_35" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_35"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_36" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_36"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_37" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_37"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_38" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_38"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_39" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_39"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_40" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_40"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_41" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_41"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_42" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_42"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_43" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_43"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_44" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_44"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_45" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_45"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_46" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_46"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_47" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_47"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_48" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_48"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_49" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_49"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_50" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_50"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_51" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_51"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_52" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_52"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_53" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_53"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_54" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_54"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_55" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_55"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_56" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_56"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_57" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_57"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_58" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_58"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_59" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_59"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_60" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_60"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_61" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_61"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_62" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_62"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_63" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_63"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_64" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_64"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_65" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_65"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_66" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_66"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_67" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_67"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_68" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_68"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_69" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_69"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_70" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_70"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="100" Margin="5,0,0,0">
+                <Rectangle Width="2" Height="80" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_71" Storyboard.TargetProperty="Y"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Rectangle.Triggers>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TranslateTransform Y="-0.5" x:Name="Trans_71"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="Transparent" Offset="0.51"/>
+                            <GradientStop Color="#E500FFA2" Offset="0.49"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Canvas>
+        </StackPanel>
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,159 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.Main_Home_TOP_UserControls.UserControl_Main_Home_TOP_Personalized_Skins"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_TOP_UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="643" d:DesignWidth="810"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+             >
+    <Grid>
+        <TextBlock 
+                x:Name="this_SongList_Name"
+                HorizontalAlignment="Left" Height="50" Text="个性皮肤" TextWrapping="Wrap" 
+                VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                Foreground="White"               
+                >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+        <TextBlock 
+                HorizontalAlignment="Left" Height="29" Text="推荐" TextWrapping="Wrap" 
+                VerticalAlignment="Top" Width="54" FontSize="18" FontWeight="Bold" Margin="60,80,0,0"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                Foreground="White"               
+                >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_1"
+                BorderThickness="1" CornerRadius="10" BorderBrush="#60FFFFFF" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="60,120,0,0" Background="White" />
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="60,230,0,0" Padding="10,0,0,0"
+                   Text="炫彩渐变蓝" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_2"
+                BorderThickness="1" CornerRadius="10" BorderBrush="#60FFFFFF" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="280,120,0,0" Background="White" />
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="280,230,0,0" Padding="10,0,0,0"
+                   Text="ROG" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_3"
+                BorderThickness="1" CornerRadius="10" BorderBrush="#60FFFFFF" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="500,120,0,0" Background="White" />
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="500,230,0,0" Padding="10,0,0,0"
+                   Text="Windows" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_4"
+                BorderThickness="1" CornerRadius="10" BorderBrush="#60FFFFFF" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="280,260,0,0" Background="White" />
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="280,370,0,0" Padding="10,0,0,0"
+                   Text="赛博朋克Car" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_5"
+                BorderThickness="1" CornerRadius="10" BorderBrush="#60FFFFFF" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="500,260,0,0" Background="#30FFFFFF" />
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="500,370,0,0" Padding="10,0,0,0"
+                   Text="透明" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_6" 
+                BorderThickness="1" CornerRadius="10" BorderBrush="#60FFFFFF" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="60,400,0,0" Background="White" />
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="60,510,0,0" Padding="10,0,0,0" 
+                   Text="风景01" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_7" 
+                BorderThickness="1" CornerRadius="10" BorderBrush="#60FFFFFF" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="280,400,0,0" Background="White" />
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="280,510,0,0" Padding="10,0,0,0"
+                   Text="风景02" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_8" 
+                BorderThickness="1" CornerRadius="10" BorderBrush="#60FFFFFF" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="500,400,0,0" Background="White" />
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="500,510,0,0" Padding="10,0,0,0" 
+                   Text="风景03" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Border x:Name="Border_this_app_Background_User"
+                BorderThickness="1" CornerRadius="10" BorderBrush="#60FFFFFF" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="198" Height="108" Margin="60,260,0,0" >
+            <Border.Background>
+                <ImageBrush ImageSource="/NSMusicS;component/ico_ui_library/文件夹-02 (1).png" Stretch="Uniform"/>
+            </Border.Background>
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </Border.Effect>
+        </Border>
+        <TextBlock Width="198" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="60,370,0,0" Padding="10,0,0,0"
+                   Text="自定义" Foreground="White" FontSize="14" >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+    </Grid>
+</UserControl>

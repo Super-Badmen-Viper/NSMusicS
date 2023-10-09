@@ -1,0 +1,270 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls.UserControl_Main_Home_Left_MyMusic_SongInfo_Synchronous"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vsm="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="443" d:DesignWidth="810"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+             >
+    <Grid>
+        <Grid Width="200" HorizontalAlignment="Left">
+            <Border BorderBrush="White" BorderThickness="0,0,1,0"/>
+            <TextBlock Text="同步音乐数据库" Width="190" 
+                       Padding="0,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       FontSize="26" FontWeight="Bold" Margin="5,0,0,0"/>
+
+            <StackPanel Width="140" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Margin="20,50,0,0">
+                <TextBlock Text="Data Source = ?" 
+                           Width="140" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16"/>
+                <TextBox 
+                    x:Name="TextBox_Connection_Data_Source"
+                    Width="140" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" 
+                    TextChanged="TextBox_Connection_Data_Source_TextChanged"
+                    />
+            </StackPanel>
+            <StackPanel Width="140" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Margin="20,100,0,0">
+                <TextBlock Text="Initial Catalog(Database) = ?" 
+                           Width="140" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16" TextWrapping="Wrap"/>
+                <TextBox 
+                    x:Name="TextBox_Connection_Initial_Catalog"
+                    Width="140" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" 
+                    TextChanged="TextBox_Connection_Initial_Catalog_TextChanged"
+                    />
+            </StackPanel>
+            <StackPanel Width="140" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Margin="20,180,0,0">
+                <TextBlock Text="User ID = ?" 
+                           Width="140" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16"/>
+                <TextBox 
+                    x:Name="TextBox_Connection_User_ID"
+                    Width="140" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" 
+                    TextChanged="TextBox_Connection_User_ID_TextChanged"
+                    />
+            </StackPanel>
+            <StackPanel Width="140" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Margin="20,230,0,0">
+                <TextBlock Text="Password = ?" 
+                           Width="140" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16"/>
+                <TextBox 
+                    x:Name="TextBox_Connection_Password"
+                    Width="140" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" 
+                    TextChanged="TextBox_Connection_Password_TextChanged"
+                    />
+            </StackPanel>
+            <Button 
+                x:Name="Button_Connectio_SqlServer"
+                Width="140" Height="20" Margin="20,290,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Content="连接至SqlServer数据库" 
+                Click="Button_Connectio_SqlServer_Click" 
+                />
+
+            <StackPanel Width="140" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Margin="20,340,0,0">
+                <TextBlock Text="Port = ?" 
+                           Width="140" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="16"/>
+                <TextBox 
+                    x:Name="TextBox_Connection_Port"
+                    Width="140" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" 
+                    TextChanged="TextBox_Connection_Port_TextChanged"
+                    />
+            </StackPanel>
+
+            <Button 
+                x:Name="Button_Connectio_MySql"
+                Width="140" Height="20" Margin="20,400,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Content="连接至    MySql数据库" 
+                Click="Button_Connectio_MySql_Click" 
+                />
+
+        </Grid>
+        <Grid Margin="200,0,0,0" >
+            <TextBlock Text="获取并下载音频链接" Width="241" 
+                       Padding="0,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       FontSize="26" FontWeight="Bold" Margin="5,0,0,0"/>
+
+            <StackPanel Width="140" HorizontalAlignment="Right" VerticalAlignment="Top" Height="50" Margin="20,50,0,0">
+                <TextBlock Text="API接口" 
+                           Width="140" Foreground="White" HorizontalAlignment="Right" FontSize="16"/>
+                <TextBox 
+                    x:Name="TextBox_Web_API"
+                    Width="140" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="20"
+                    Text="API接口" 
+                    TextChanged="TextBox_Web_API_TextChanged"
+                    />
+            </StackPanel>
+            <Button 
+                x:Name="Button_Begin_Conn_API"
+                Width="140" Height="20" Margin="20,110,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                Content="开始同步" 
+                
+                />
+
+            <StackPanel Width="400" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Margin="20,50,0,0">
+                <TextBlock Text="SQL语句编辑：默认为SELECT music_url FROM music" 
+                           Width="400" Foreground="White" HorizontalAlignment="Left" FontSize="16"/>
+                <TextBox 
+                    x:Name="TextBox_Sql_Edit"
+                    Width="400" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20"
+                    Text="SELECT music_url FROM music" TextChanged="TextBox_Sql_Edit_TextChanged"
+                    />
+            </StackPanel>
+            <Button 
+                x:Name="Button_Run_this_SQL"
+                Width="140" Height="20" Margin="20,110,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Content="执行此SQL语句" 
+                
+                />
+
+            <TextBlock Text="获取到的music_url链接" Width="241" 
+                       Padding="0,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       FontSize="16" Margin="20,140,0,0"/>
+            <ListBox
+                x:Name="ListBox_Music_Urls_Show"
+                ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="20,160,20,160" Height="123" VerticalAlignment="Top">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="3" />
+                        <Setter Property="Height" Value="20"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                        <Setter Property="VerticalContentAlignment" Value="Top" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Grid Background="{TemplateBinding Background}">
+                                        <vsm:VisualStateManager.VisualStateGroups>
+                                            <vsm:VisualStateGroup x:Name="CommonStates">
+                                                <vsm:VisualState x:Name="Normal" />
+                                                <vsm:VisualState x:Name="MouseOver">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="fillColor" Storyboard.TargetProperty="Opacity" Duration="0" To=".35"/>
+                                                    </Storyboard>
+                                                </vsm:VisualState>
+                                                <vsm:VisualState x:Name="Disabled">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="contentPresenter" Storyboard.TargetProperty="Opacity" Duration="0" To=".55" />
+                                                    </Storyboard>
+                                                </vsm:VisualState>
+                                            </vsm:VisualStateGroup>
+                                            <vsm:VisualStateGroup x:Name="SelectionStates">
+                                                <vsm:VisualState x:Name="Unselected" />
+                                                <vsm:VisualState x:Name="Selected">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="fillColor2" Storyboard.TargetProperty="Opacity" Duration="0" To=".75"/>
+                                                    </Storyboard>
+                                                </vsm:VisualState>
+                                            </vsm:VisualStateGroup>
+                                            <vsm:VisualStateGroup x:Name="FocusStates">
+                                                <vsm:VisualState x:Name="Focused">
+                                                    <Storyboard>
+                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FocusVisualElement" Storyboard.TargetProperty="Visibility" Duration="0">
+                                                            <DiscreteObjectKeyFrame KeyTime="0">
+                                                                <DiscreteObjectKeyFrame.Value>
+                                                                    <Visibility>Visible</Visibility>
+                                                                </DiscreteObjectKeyFrame.Value>
+                                                            </DiscreteObjectKeyFrame>
+                                                        </ObjectAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </vsm:VisualState>
+                                                <vsm:VisualState x:Name="Unfocused"/>
+                                            </vsm:VisualStateGroup>
+                                        </vsm:VisualStateManager.VisualStateGroups>
+                                        <Rectangle x:Name="fillColor" Opacity="0" Fill="#FFBADDE9" IsHitTestVisible="False" RadiusX="1" RadiusY="1"/>
+                                        <Rectangle x:Name="fillColor2" Opacity="0" Fill="#FFBADDE9" IsHitTestVisible="False" RadiusX="1" RadiusY="1"/>
+                                        <ContentPresenter
+                                          x:Name="contentPresenter"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"/>
+                                        <Rectangle x:Name="FocusVisualElement" Stroke="#FF6DBDD1" StrokeThickness="1" Visibility="Collapsed" RadiusX="1" RadiusY="1" />
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+            
+            <Button 
+                x:Name="Button_DownLoad_ALL_Music_Urls"
+                Width="140" Height="20" Margin="20,280,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Content="全部下载" 
+                
+                />
+
+            <TextBlock Text="music_url链接下载结果" Width="241" 
+                       Padding="0,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       FontSize="16" Margin="20,310,0,0"/>
+            <ListBox
+                x:Name="ListBox_Music_Urls_DownLoad_Results_Display"
+                ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="20,330,20,0">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="3" />
+                        <Setter Property="Height" Value="20"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                        <Setter Property="VerticalContentAlignment" Value="Top" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Grid Background="{TemplateBinding Background}">
+                                        <vsm:VisualStateManager.VisualStateGroups>
+                                            <vsm:VisualStateGroup x:Name="CommonStates">
+                                                <vsm:VisualState x:Name="Normal" />
+                                                <vsm:VisualState x:Name="MouseOver">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="fillColor" Storyboard.TargetProperty="Opacity" Duration="0" To=".35"/>
+                                                    </Storyboard>
+                                                </vsm:VisualState>
+                                                <vsm:VisualState x:Name="Disabled">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="contentPresenter" Storyboard.TargetProperty="Opacity" Duration="0" To=".55" />
+                                                    </Storyboard>
+                                                </vsm:VisualState>
+                                            </vsm:VisualStateGroup>
+                                            <vsm:VisualStateGroup x:Name="SelectionStates">
+                                                <vsm:VisualState x:Name="Unselected" />
+                                                <vsm:VisualState x:Name="Selected">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="fillColor2" Storyboard.TargetProperty="Opacity" Duration="0" To=".75"/>
+                                                    </Storyboard>
+                                                </vsm:VisualState>
+                                            </vsm:VisualStateGroup>
+                                            <vsm:VisualStateGroup x:Name="FocusStates">
+                                                <vsm:VisualState x:Name="Focused">
+                                                    <Storyboard>
+                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FocusVisualElement" Storyboard.TargetProperty="Visibility" Duration="0">
+                                                            <DiscreteObjectKeyFrame KeyTime="0">
+                                                                <DiscreteObjectKeyFrame.Value>
+                                                                    <Visibility>Visible</Visibility>
+                                                                </DiscreteObjectKeyFrame.Value>
+                                                            </DiscreteObjectKeyFrame>
+                                                        </ObjectAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </vsm:VisualState>
+                                                <vsm:VisualState x:Name="Unfocused"/>
+                                            </vsm:VisualStateGroup>
+                                        </vsm:VisualStateManager.VisualStateGroups>
+                                        <Rectangle x:Name="fillColor" Opacity="0" Fill="#FFBADDE9" IsHitTestVisible="False" RadiusX="1" RadiusY="1"/>
+                                        <Rectangle x:Name="fillColor2" Opacity="0" Fill="#FFBADDE9" IsHitTestVisible="False" RadiusX="1" RadiusY="1"/>
+                                        <ContentPresenter
+                                          x:Name="contentPresenter"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"/>
+                                        <Rectangle x:Name="FocusVisualElement" Stroke="#FF6DBDD1" StrokeThickness="1" Visibility="Collapsed" RadiusX="1" RadiusY="1" />
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,191 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.MainWindow_TOP_UserControls.UserControl_ButtonFrame_App_Setting"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.MainWindow_TOP_UserControls"
+             mc:Ignorable="d" 
+             >
+    <Grid>
+        <Border
+            Background="#99232325"
+            BorderThickness="0"
+            CornerRadius="10"
+            Width="210" Height="400" Margin="10">
+            <Grid>
+                <StackPanel 
+                    Height="40" Margin="0,0,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <TextBlock 
+                        Height="20" Width="20" Margin="14,0,0,0"
+                        HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <svgc:SvgViewbox 
+                            x:Name="SvgViewbox_Open_EQ"
+                            Source="pack://application:,,,/UI_0_Library/均衡器.svg" Cursor="Hand"/>
+                    </TextBlock>
+                    <TextBlock 
+                        x:Name="Open_EQ"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        TextAlignment="Left" Margin="12,0,0,0"
+                        Foreground="White" Text="均衡器"
+                    />
+                </StackPanel>
+                <StackPanel 
+                    Height="40" Margin="0,40,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <TextBlock 
+                        Height="20" Width="20" Margin="14,0,0,0"
+                        HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <svgc:SvgViewbox 
+                            Source="pack://application:,,,/UI_0_Library/音效.svg" Cursor="Hand"/>
+                    </TextBlock>
+                    <TextBlock 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        TextAlignment="Left" Margin="12,0,0,0"
+                        Foreground="#44FFFFFF" Text="音效插件"
+                     />
+                </StackPanel>
+                <StackPanel 
+                    Height="40" Margin="0,80,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <TextBlock 
+                        Height="20" Width="20" Margin="14,0,0,0"
+                        HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <svgc:SvgViewbox 
+                            Source="pack://application:,,,/UI_0_Library/壁纸.svg" Cursor="Hand"/>
+                    </TextBlock>
+                    <TextBlock 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        TextAlignment="Left" Margin="12,0,0,0"
+                        Foreground="#44FFFFFF" Text="动态壁纸"
+                    />
+                </StackPanel>
+                <StackPanel 
+                    Height="40" Margin="0,160,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <TextBlock 
+                        Height="20" Width="20" Margin="14,0,0,0"
+                        HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/手机播放_手机视频.svg" Cursor="Hand"/>
+                    </TextBlock>
+                    <TextBlock 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        TextAlignment="Left" Margin="12,0,0,0"
+                        Foreground="#44FFFFFF" Text="手机播放"
+                     />
+                </StackPanel>
+                <StackPanel 
+                    Height="40" Margin="0,200,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <TextBlock 
+                        Height="20" Width="20" Margin="14,0,0,0"
+                        HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/设备互传.svg" Cursor="Hand"/>
+                    </TextBlock>
+                    <TextBlock 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        TextAlignment="Left" Margin="12,0,0,0"
+                        Foreground="#44FFFFFF" Text="设备互传"
+                    />
+                </StackPanel>
+                <StackPanel 
+                    Height="40" Margin="0,120,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <TextBlock 
+                        Height="20" Width="20" Margin="14,0,0,0"
+                        HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/定时.svg" Cursor="Hand"/>
+                    </TextBlock>
+                    <TextBlock 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        TextAlignment="Left" Margin="12,0,0,0"
+                        Foreground="#44FFFFFF" Text="定时设置"
+                    />
+                </StackPanel>
+                <StackPanel 
+                    Height="40" Margin="0,240,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <TextBlock 
+                        Height="20" Width="20" Margin="14,0,0,0"
+                        HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/软件更新.svg" Cursor="Hand"/>
+                    </TextBlock>
+                    <TextBlock 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        TextAlignment="Left" Margin="12,0,0,0"
+                        Foreground="#44FFFFFF" Text="检查更新"
+                     />
+                </StackPanel>
+                <StackPanel 
+                    Height="40" Margin="0,280,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <TextBlock 
+                        Height="20" Width="20" Margin="14,0,0,0"
+                        HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/帮助.svg" Cursor="Hand"/>
+                    </TextBlock>
+                    <TextBlock 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    TextAlignment="Left" Margin="12,0,0,0"
+                    Foreground="#44FFFFFF" Text="帮助与意见反馈"
+                />
+                </StackPanel>
+                <StackPanel 
+                    Height="40" Margin="0,320,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <TextBlock 
+                        Height="20" Width="20" Margin="14,0,0,0"
+                        HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <svgc:SvgViewbox 
+                            x:Name="SvgViewbox_Open_App_Setting"
+                            Source="pack://application:,,,/UI_0_Library/设置.svg" Cursor="Hand"/>
+                        </TextBlock>
+                    <TextBlock 
+                        x:Name="Open_App_Setting"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        TextAlignment="Left" Margin="12,0,0,0"
+                        Foreground="White" Text="设置"
+                        />
+                </StackPanel>
+                <StackPanel 
+                    Height="40" Margin="0,360,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <TextBlock 
+                        Height="20" Width="20" Margin="14,0,0,0"
+                        HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <svgc:SvgViewbox 
+                            x:Name="SvgViewbox_Close_ThisApp"
+                            Source="pack://application:,,,/UI_0_Library/启动.svg" Cursor="Hand"/>
+                    </TextBlock>
+                    <TextBlock 
+                        x:Name="Close_ThisApp"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        TextAlignment="Left" Margin="12,0,0,0"
+                        Foreground="White" Text="退出"
+                        />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

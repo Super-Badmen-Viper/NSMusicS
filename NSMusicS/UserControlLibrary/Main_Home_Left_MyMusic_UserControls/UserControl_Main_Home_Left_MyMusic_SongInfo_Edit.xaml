@@ -1,0 +1,203 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls.UserControl_Main_Home_Left_MyMusic_SongInfo_Edit"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="460" d:DesignWidth="1000"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+             
+             >
+    <Grid>
+        <Grid HorizontalAlignment="Left" Width="200">
+            <Border BorderBrush="White" BorderThickness="0,0,1,0" Margin="0,0,0,10"/>
+
+            <TextBlock Text="歌单信息编辑" Width="185" 
+                       Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       FontSize="26" FontWeight="Bold"/>
+
+            <TextBlock Text="选择需要修改的歌单" Width="160" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
+                           Margin="10,50,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <ComboBox 
+                    x:Name="ComBox_Select_SongList"
+                    Style="{DynamicResource cmbstyle_Button_SongInfo_Edit}" 
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                    Visibility="Visible" Width="160" Height="30" Margin="25,78,25,0" 
+                    VerticalAlignment="Top" HorizontalAlignment="Left" IsEditable="True"
+                    Text="创建的歌单" BorderBrush="{x:Null}" 
+                    IsSynchronizedWithCurrentItem="False"
+                    
+                    >
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel/>
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="2.5" Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock Text="重命名为：？" 
+                       Width="110" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
+                       Margin="10,120,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <TextBox 
+                x:Name="TextBox_Edit_Temp_SongList_Name"
+                Width="140" Height="30" Margin="25,148,25,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20"
+                />
+            <Button 
+                x:Name="Button_Edit_SongList_Name"
+                Width="48" Height="20" Margin="133,120,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="确定" 
+                
+                />
+
+        </Grid>
+        <Grid Margin="636,0,0,0">
+            <Border BorderBrush="White" BorderThickness="1,0,0,0" Margin="0,0,0,10"/>
+
+            <TextBlock Text="歌曲信息编辑" Width="200" 
+                       Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       FontSize="26" FontWeight="Bold"/>
+
+            <TextBlock Text="输入歌手(曲)名" Width="160" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
+                           Margin="10,50,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <TextBox x:Name="TextBox_Search_Song_Name" 
+                     Width="160" Margin="26,73,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                     FontSize="16" Height="22" TextChanged="TextBox_Search_Song_Name_TextChanged" />
+            <Button 
+                x:Name="Button_Search_Song_Name"
+                Width="48" Height="20" Margin="138,52,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="确定" 
+                
+                />
+
+            <TextBlock Text="请选择" Width="160" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
+                           Margin="10,100,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <ComboBox 
+                    x:Name="ComBox_Show_Search_Song"
+                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                    Visibility="Visible" Width="160" Height="22" Margin="26,120,0,0" 
+                    VerticalAlignment="Top" HorizontalAlignment="Left" IsEditable="True"
+                    BorderBrush="{x:Null}" 
+                    IsSynchronizedWithCurrentItem="False" SelectionChanged="ComBox_Show_Search_Song_SelectionChanged"
+                    >
+            </ComboBox>
+
+            <TextBlock Text="修改歌曲名" Width="160" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
+                           Margin="10,175,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <TextBox x:Name="TextBox_Edit_Song_Name" 
+                     Width="160" Margin="26,195,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                     FontSize="16" Height="22" TextChanged="TextBox_Edit_Song_Name_TextChanged" />
+
+            <TextBlock Text="修改歌手名" Width="160" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
+                           Margin="10,225,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <TextBox x:Name="TextBox_Edit_Singer_Name" 
+                     Width="160" Margin="26,245,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                     FontSize="16" Height="22" TextChanged="TextBox_Edit_Singer_Name_TextChanged" />
+
+            <TextBlock Text="修改专辑名" Width="160" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
+                           Margin="10,275,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <TextBox x:Name="TextBox_Edit_Album_Name" 
+                     Width="160" Margin="26,295,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                     FontSize="16" Height="22" TextChanged="TextBox_Edit_Album_Name_TextChanged" />
+
+            <TextBlock Text="设置内嵌封面" Width="160" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
+                           Margin="10,350,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <Border x:Name="Set_This_Song_AlbumImage" 
+                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Width="100" Height="100" Margin="28,372,0,0" Background="White" AllowDrop="True" 
+                    >
+
+            </Border>
+            <TextBlock Text="设置内嵌歌词" Width="160" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
+                       Margin="190,50,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <TextBox
+                x:Name="Set_This_Song_Lyic"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Margin="208,74,20,20"
+                >
+
+            </TextBox>
+
+            <Button 
+                x:Name="Button_Save_To_SongList"
+                Width="140" Height="20" Margin="26,500,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Content="仅保存至歌单" 
+                
+                />
+            <Button 
+                x:Name="Button_Save_To_File"
+                Width="140" Height="20" Margin="26,530,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Content="保存至歌单及文件属性" 
+                
+                />
+
+        </Grid>
+        <Grid Margin="200,0,0,0" Width="412" HorizontalAlignment="Left" >
+            <TextBlock Text="音乐资源导入" Width="200" 
+                       Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       FontSize="26" FontWeight="Bold"/>
+
+            <TextBlock Text="选中文件拖拽至以下空白 或者 双击空白" Width="409" 
+                       Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center" 
+                       FontSize="18" FontWeight="Bold" Margin="0,40,0,0"/>
+
+            <TextBlock Text="导入 歌手写真（jpg格式，每一位歌手最多24张）" Width="400" Padding="17,0,0,0" 
+                       Foreground="White" VerticalAlignment="Top" 
+                           Margin="10,70,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <ListBox x:Name="ListBox_Singer_Image" Height="60" VerticalAlignment="Top" Margin="25,90,130,0"
+                     AllowDrop="True" MouseDoubleClick="ListBox_Singer_Image_MouseDoubleClick"
+                     
+                     />
+            <Button 
+                x:Name="Button_Open_To_Singer_Resource"
+                Width="110" Height="60" Margin="270,90,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                Click="Button_Open_To_Singer_Resource_Click" 
+                >
+                <TextBlock Text="打开                    歌手写真文件夹（直接处理资源）" TextWrapping="Wrap" TextAlignment="Center"/>
+            </Button>
+
+            <TextBlock Text="导入 专辑图片（jpg格式）" Width="400" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
+                           Margin="10,160,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <ListBox x:Name="ListBox_Album_Image" Height="60" VerticalAlignment="Top" Margin="25,180,130,0"
+                     AllowDrop="True" MouseDoubleClick="ListBox_Album_Image_MouseDoubleClick"
+                     />
+            <Button 
+                x:Name="Button_Open_To_Album_Resource"
+                Width="110" Height="60" Margin="270,180,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                Click="Button_Open_To_Album_Resource_Click" 
+                >
+                <TextBlock Text="打开                    专辑图片文件夹（直接处理资源）" TextWrapping="Wrap" TextAlignment="Center"/>
+            </Button>
+
+            <TextBlock Text="导入 歌词文件（mrc，krc，lrc）" Width="400" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
+                           Margin="10,250,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <ListBox x:Name="ListBox_Mrc_Image" Height="60" VerticalAlignment="Top" Margin="25,270,130,0"
+                     AllowDrop="True" MouseDoubleClick="ListBox_Mrc_Image_MouseDoubleClick"
+                     />
+            <Button 
+                x:Name="Button_Open_To_Mrc_Resource"
+                Width="110" Height="60" Margin="270,270,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                Click="Button_Open_To_Mrc_Resource_Click" 
+                >
+                <TextBlock Text="打开                    同步歌词文件夹（直接处理资源）" TextWrapping="Wrap" TextAlignment="Center"/>
+            </Button>
+
+            <TextBlock Text="导入 歌词翻译文件（crc格式）" Width="400" Padding="17,0,0,0" Foreground="White" VerticalAlignment="Top" 
+                           Margin="10,340,0,0" HorizontalAlignment="Left" FontSize="16"/>
+            <ListBox x:Name="ListBox_Crc_Image" Height="60" VerticalAlignment="Top" Margin="25,360,130,0"
+                     AllowDrop="True" MouseDoubleClick="ListBox_Crc_Image_MouseDoubleClick"
+                     />
+            <Button 
+                x:Name="Button_Open_To_Crc_Resource"
+                Width="110" Height="60" Margin="270,360,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                Click="Button_Open_To_Crc_Resource_Click" 
+                >
+                <TextBlock Text="打开                    歌词翻译文件夹（直接处理资源）" TextWrapping="Wrap" TextAlignment="Center"/>
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

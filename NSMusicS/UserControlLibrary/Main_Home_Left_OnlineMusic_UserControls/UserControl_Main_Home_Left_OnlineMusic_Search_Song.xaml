@@ -1,0 +1,286 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.Main_Home_Left_OnlineMusic_UserControls.UserControl_Main_Home_Left_OnlineMusic_Search_Song"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_Left_OnlineMusic_UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="443" d:DesignWidth="810"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            >
+    <Grid>
+        <TextBlock 
+                x:Name="this_SongList_Name"
+                HorizontalAlignment="Left" Height="50" Text="歌曲搜索" TextWrapping="Wrap" 
+                   VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                   Foreground="White"               
+                   >
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <Grid 
+            x:Name="userControl_ButtonFrame_Search"
+            Margin="200,8,0,0" MaxWidth="280" HorizontalAlignment="Left" Width="280" Height="50" 
+            VerticalAlignment="Top">
+            <Border HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" 
+                BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Background="White" 
+                 />
+
+            <Button x:Name="BtnSearch"
+                HorizontalAlignment="Left" Width="20" Height="20" BorderBrush="{x:Null}" Margin="14,0,0,0"
+                Command="{Binding RefCommand_Search_Song}"
+                >
+                <Button.Background>
+                    <ImageBrush ImageSource="/NSMusicS;component/ico_ui_library/搜索.png"/>
+                </Button.Background>
+            </Button>
+
+            <!-- KeyDown="TbxInput_OnKeyDown" -->
+            <TextBox x:Name="TbxInput_Search" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" 
+                     Text="" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="-2,0,0,0" Padding="40,0,0,0" 
+                     TextChanged="TbxInput_TextChanged" FontSize="18">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding RefCommand_Search_Song}" />
+                </TextBox.InputBindings>
+            </TextBox>
+        </Grid>
+
+        <Grid 
+            Visibility="Collapsed"
+            HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Margin="500,8,0,0" Width="200">
+            <Border HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" 
+                BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Background="White" 
+                 />
+            <Button 
+                x:Name="Button_Page_Before"
+                
+                Style="{StaticResource MyButton}"
+                HorizontalAlignment="Left" Height="30" Width="30"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Margin="40,0,0,0" 
+                >
+                <Button.Background>
+                    <ImageBrush ImageSource="/NSMusicS;component/ico_ui_library/方向-向左.png"/>
+                </Button.Background>
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </Button.Effect>
+            </Button>
+            <TextBox x:Name="TbxInput_Page" Background="White" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" 
+                     Foreground="Black" 
+                     Text="0" TextChanged="TbxInput_Page_TextChanged"
+                     VerticalContentAlignment="Center" Margin="-2,0,0,0" 
+                     FontSize="24" Height="40" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Width="44">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding RefCommand_ShowPage}" />
+                </TextBox.InputBindings>
+            </TextBox>
+            <Button 
+                x:Name="Button_Page_Next"
+                
+                Style="{StaticResource MyButton}"
+                HorizontalAlignment="Right" Height="30" 
+                VerticalAlignment="Stretch" Width="30"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Margin="0,0,40,0" 
+                >
+                <Button.Background>
+                    <ImageBrush ImageSource="/NSMusicS;component/ico_ui_library/方向-向右.png"/>
+                </Button.Background>
+                <Button.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                </Button.Effect>
+            </Button>
+        </Grid>
+
+        <Grid x:Name="Grid_ListItem_CrudModel_1" Margin="0,70,0,0">
+            <ListView x:Name="ListView_Download_SongList_Info" Foreground="White"
+                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                IsSynchronizedWithCurrentItem="True"
+                BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0"
+                
+                ItemsSource="{Binding ShowSelect_Search_Songs}"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
+                SelectionChanged="ListView_Download_SongList_Info_SelectionChanged" 
+                
+                  >
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+
+                        <EventSetter Event="MouseDoubleClick" Handler="OnListViewItemDoubleClick" />
+
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.Resources>
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Setter Property="Background" Value="#00000000"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="Padding" Value="9,0,0,0"/>
+                        <Setter Property="BorderBrush" Value="#00000000"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Style>
+                    <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">8</system:Double>
+                    <Style TargetType="ScrollBar">
+                        <Setter Property="Width" Value="8"/>
+                        <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
+                    </Style>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView>
+                        <GridView.Columns>
+                            <!--设置行高-->
+                            <GridViewColumn Width="0">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Height="50"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                                <TextBlock/>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header=""
+                                        Width="30">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Song_No}">
+                                            <TextBlock.Effect>
+                                                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                                            </TextBlock.Effect>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn x:Name="GridViewColumn_Love_Add_ListView_Song_Normal" Width="30">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button x:Name="Love_ListView_Song" 
+                                                Background="{Binding Song_Like_Image}" 
+                                            Click="Love_ListView_Song_Click"
+                                            Style="{StaticResource MyButton}" 
+                                            Width="18" Height="18" FontSize="5"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn x:Name="GridViewColumn_Download_This_Song" Width="30">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button x:Name="Download_This_Song" 
+                                                Background="{Binding Song_DownLoad_Image}" 
+                                            Style="{StaticResource MyButton}" 
+                                            Width="18" Height="18" FontSize="5" Click="Download_This_Song_Click"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn
+                                        Header="歌曲" 
+                                        Width="400">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock 
+                                                Text="{Binding Song_Name}" 
+                                                Tag="{Binding Song_Name_id}"
+                                                Margin="0,5,0,0">
+                                                <TextBlock.Effect>
+                                                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                                                </TextBlock.Effect>
+                                            </TextBlock>
+                                            <Button HorizontalAlignment="Left" 
+                                                    Background="{Binding Song_MV_Image}"
+                                                Style="{StaticResource MyButton}" 
+                                                Width="16" Height="16" Margin="8,6,0,0"
+                                                />
+                                            <Button HorizontalAlignment="Left" 
+                                                    Background="{Binding Song_UpLoad_Tone_Quality}"
+                                                Style="{StaticResource MyButton}" 
+                                                Width="16" Height="16" Margin="8,6,0,0"
+                                                />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn 
+                                        Header="歌手"
+                                        Width="160">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Singer_Name}" 
+                                                   Tag="{Binding Singer_Name_id}"
+                                                   >
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Foreground" Value="#1ECC94"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                            <TextBlock.Effect>
+                                                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                                            </TextBlock.Effect>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="专辑"
+                                        Width="156">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Album_Name}"
+                                                   Tag="{Binding Album_Name_Id}"
+                                                   >
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Foreground" Value="#1ECC94"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                            <TextBlock.Effect>
+                                                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                                            </TextBlock.Effect>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+
+    </Grid>
+</UserControl>

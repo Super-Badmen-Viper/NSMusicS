@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.Main_Home_Web_Services.Views.UserControl_Text_Input_Box"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_Web_Services.Views"
+             mc:Ignorable="d" MinWidth="300" MaxWidth="300">
+    <Grid>
+        <Border x:Name="Button_Image"
+                Width="18" Height="18" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,5"
+                >
+            <svgc:SvgViewbox x:Name="SvgViewbox_Icon"/>
+        </Border>
+        <Border Height="1" Margin="0,0,0,1"
+                VerticalAlignment="Bottom" 
+                Background="#12B7F5"/>
+        <TextBox x:Name="Text_Box_Text" 
+                 BorderBrush="{x:Null}" BorderThickness="0" 
+                 Foreground="Black" FontSize="20" Text="858345983"
+                 Margin="30,0,0,2" Background="{x:Null}" SelectionBrush="{x:Null}">
+            
+        </TextBox>
+        <TextBlock 
+            x:Name="TextBock_Explain"
+            Text="账号" FontSize="16" Foreground="#20919090"
+                   VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,0,2" />
+    </Grid>
+</UserControl>

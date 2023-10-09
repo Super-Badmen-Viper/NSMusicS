@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="NSMusicS.Helper_UserControlLibrary.UserControl_视频"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.Helper_UserControlLibrary" xmlns:MusicPlayer_MV_Player="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_MV_Player"
+             mc:Ignorable="d" 
+             d:DesignHeight="443" d:DesignWidth="810"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+             Background="#1F1F1F" SizeChanged="UserControl_SizeChanged">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Height="50" Text="视频" TextWrapping="Wrap" 
+                   VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
+                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                   />
+
+        <TabControl 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+                Background="{x:Null}" Margin="0,73,0,0" BorderBrush="{x:Null}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" BorderThickness="1,0,1,1" HorizontalAlignment="Stretch">
+            <TabItem Width="36" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TabItem Header="推荐" Style="{DynamicResource TabItemStyle1}" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" IsSelected="True">
+                <ScrollViewer x:Name="ScrollViewer_1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <Frame Source="/NSMusicS;component/Helper_UserControlLibrary/视频/UserControl_推荐.xaml"  NavigationUIVisibility="Hidden" />
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Width="46" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TabItem Header="排行榜" Style="{DynamicResource TabItemStyle1}" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+                <ScrollViewer x:Name="ScrollViewer_2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <Frame Source="/NSMusicS;component/Helper_UserControlLibrary/视频/UserControl_排行榜.xaml" NavigationUIVisibility="Hidden" />
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Width="46" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TabItem Header="视频库" Style="{DynamicResource TabItemStyle1}" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+                <ScrollViewer x:Name="ScrollViewer_3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <Frame Source="/NSMusicS;component/Helper_UserControlLibrary/视频/UserControl_视频库.xaml" NavigationUIVisibility="Hidden"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Width="46" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TabItem Header="MV播放器" Style="{DynamicResource TabItemStyle1}" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+                <ScrollViewer x:Name="ScrollViewer_4" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" MinWidth="810">
+                    <MusicPlayer_MV_Player:MusicPlayer_MV_Player_UserControl 
+                        x:Name="musicPlayer_MV_Player_UserControl" 
+                        />
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>
