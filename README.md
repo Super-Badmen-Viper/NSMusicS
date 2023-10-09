@@ -38,7 +38,9 @@
   <img src="doc/NSMusicS 第4版 开发文档 规划 （更新中）.png" align="center" width="1200">
   
 # The R&D management dashboard for this project：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
-## If you want to join, please send an email to my QQmail: 1774148579@qq.com More than 5 people, I will launch an open source project management model, and the Mozi Cloud open source organization will officially begin its activities
+- If you want to join, please send an email to my QQmail: 1774148579@qq.com More than 5 people, I will launch an open source project management model, and the Mozi Cloud open source organization will officially begin its activities
+
+# The UI design draft for this project：Figma Design：[https://www.figma.com/file/da9bAO4UkJbsVIrNb6en1i/MZMusic-3.0?type=design&node-id=0%3A1&mode=design&t=W6akkDt3HPOzBIrI-1](https://www.figma.com/file/da9bAO4UkJbsVIrNb6en1i/MZMusic-3.0?type=design&node-id=0%3A1&mode=design&t=W6akkDt3HPOzBIrI-1)
 
 ### Note: This project is about to complete the personal official version 1.0 update. After the iteration of the version is completed, it will be copied to the open source community: NSMusicSYun (九歌·韵世云)
 ## The copyright and updates for this project will be divided into two branches (sharing the majority of the copyright with each other)
