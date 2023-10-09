@@ -16,9 +16,6 @@
 /.vs/MoZhiMusicPlayer_GithubUrl_super-badmen-viper.github.io/FileContentIndex
 /Local_ThisPC_song_search_ALL/bin/Debug/net6.0-windows
 /Local_ThisPC_song_search_YouSelect/bin/Debug/net6.0-windows
-/NSMusicS/bin/Debug/net6.0-windows/Resource/Mrc
-/NSMusicS/bin/Debug/net6.0-windows/Resource/Singer_Image
-/NSMusicS/bin/Debug/net6.0-windows/Resource/Song_ALbum
 /NSMusicS/Resource/EXO回归预告.mp4
 /NSMusicS/bin/Debug/net6.0-windows/Resource/MV/EXO-M - 上瘾 (Overdose).mp4
 /NSMusicS/bin/Debug/net6.0-windows/Resource/MV/EXO-K - 중독 (Overdose).mp4
@@ -95,7 +92,6 @@
 /MoZhiMusic_Ultimate/bin/Debug/net6.0-windows/GalaSoft.MvvmLight.dll
 /MoZhiMusic_Ultimate/bin/Debug/net6.0-windows/CommonServiceLocator.dll
 /MoZhiMusic_Ultimate/bin/Debug/net6.0-windows/AduSkin.dll
-/NSMusicS/bin/Debug/net6.0-windows/Resource/Music
 /NSMusicS/bin/Debug/net6.0-windows/TagLibSharp.dll
 /NSMusicS/bin/Debug/net6.0-windows/System.Text.Json.dll
 /NSMusicS/bin/Debug/net6.0-windows/System.Text.Encodings.Web.dll
@@ -125,9 +121,7 @@
 /MoZhi_GeneralUpdate.AspNetCore
 /NSMusicS/Models/Servies_For_API_Info
 /NSMusicS/Services/Services_For_API_GetResult
-/NSMusicS/bin/Debug/net6.0-windows/Resource/SongListInfo_ini/SongList_Ini/Song_List_Info_ALL.xml
 /NSMusicS/bin/Debug/net6.0-windows/Resource/G.E.M.邓紫棋 - 倒数.krc
-/NSMusicS/bin/Debug/net6.0-windows/Resource/SongListInfo_ini/SongList_Ini
 /NSMusicS/bin/Debug/net6.0-windows/Hardcodet.NotifyIcon.Wpf.dll
 /NSMusicS/bin/Debug/net6.0-windows/SharpVectors.Converters.Wpf.dll
 /NSMusicS/bin/Debug/net6.0-windows/SharpVectors.Core.dll
@@ -158,7 +152,6 @@
 /NSMusicS/bin/Debug/net6.0-windows/Microsoft.Expression.Prototyping.Interactivity.dll
 /NSMusicS/bin/Debug/net6.0-windows/Microsoft.Expression.Prototyping.SketchControls.dll
 /NSMusicS/bin/Debug/net6.0-windows/Microsoft.SDK.Expression.Blend.dll
-/NSMusicS/bin/Debug/net6.0-windows/Resource/MV
 /NSMusicS/bin/Debug/net6.0-windows/CommonServiceLocator.dll
 /NSMusicS/bin/Debug/net6.0-windows/GalaSoft.MvvmLight.dll
 /NSMusicS/bin/Debug/net6.0-windows/GalaSoft.MvvmLight.Extras.dll
@@ -178,3 +171,5 @@
 /NSMusicS/bin/Debug/net6.0-windows/RestSharp.dll
 /NSMusicS/bin/Debug/net6.0-windows/SMBLibrary.dll
 /NSMusicS/bin/Debug/net6.0-windows/System.Windows.Interactivity.dll
+/NSMusicS/bin/Debug/net6.0-windows/Resource/MV/AOA - 짧은 치마 (Miniskirt) Music Video Teaser Drama ver..mp4
+/NSMusicS/bin/Debug/net6.0-windows/Resource - 副本
