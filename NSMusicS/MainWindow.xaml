@@ -60,7 +60,7 @@
         <Grid x:Name="Grid_Logo" VerticalAlignment="Top" Height="70" HorizontalAlignment="Left" Width="180">
             <TextBlock Margin="20,33,20,0"  VerticalAlignment="Top" Height="28"
                FontWeight="Bold" FontSize="20" Foreground="White"
-               Text="九歌·乐灵" TextAlignment="Center"
+               Text="九歌·韵世" TextAlignment="Center"
                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                >
 

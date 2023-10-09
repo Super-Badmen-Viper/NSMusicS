@@ -416,26 +416,7 @@ namespace NSMusicS.Models.Song_Audio_Out
         {
             if (WaveOut.DeviceCount > 0 && deviceNumber >= 0 && deviceNumber < WaveOut.DeviceCount)
             {
-                audioFileReader.Dispose();
-                waveOutEvent.Dispose();
-                audioFileReader = new AudioFileReader(audioFilePath);
-                //audioFileReader = new AudioFileReader(audioFilePath);
-
-                waveOutEvent = new WaveOutEvent();
-                waveOutEvent.DeviceNumber = deviceNumber;
-                deviceNumber_change = true;
-
-                if (bands != null && bands.Length > 0)
-                {
-                    equalizer = new Equalizer((ISampleProvider)audioFileReader, bands);
-                    waveOutEvent.Init(equalizer);
-                }
-                else
-                {
-                    waveOutEvent.Init(audioFileReader);
-                }
-
-                OnMediaOpened();
+                Open(audioFilePath);
 
                 this.deviceNumber = deviceNumber;
             }
