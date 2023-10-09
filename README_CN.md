@@ -46,7 +46,7 @@
 
 # 快速使用：
   - 请使用Visual Studio 2022版本进行Git clone与pull，否则旧版本的Visual Studio可能会出现无法生成的情况
-  - [下载:](https://github.com/Super-Badmen-Viper/NSMusicSPlayer/releases/tag/MZMusic_Win_3.0)
+  - [下载:](https://github.com/Super-Badmen-Viper/NSMusicS/releases/tag/NSMusicS_Win_3.0)
   - 我的QQ学习群号：228440692，欢迎加群，先给个star吧，群里有我整理好的项目，比Github更加容易开箱即用
   - 资源所在位置：NSMusicSPlayer/NSMusicSPlayer_GithubAuthor_XiangCheng/bin/Debug/net6.0-windows/Resource/之内（歌词，歌手写真，专辑图片等，可自行编辑）
   - 音乐附加资源下载（百度网盘资源）： 

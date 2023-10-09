@@ -49,7 +49,7 @@
 
 # Quick to use:
 - Please use Visual Studio 2022 version for Git clone and pull, otherwise older versions of Visual Studio may not be able to generate
-- [Download](https://github.com/Super-Badmen-Viper/NSMusicS/releases/tag/MZMusic_Win_3.0)
+- [Download](https://github.com/Super-Badmen-Viper/NSMusicS/releases/tag/NSMusicS_Win_3.0)
 - My QQ learning group number is 228440692. Welcome to join the group. Give me a star first. There are projects I have organized in the group, which is easier to use out of the box than Github
 - Resource location: NSMusicS/NSMusicS_ GithubAuthor_ XiangCheng/bin/Debug/net6.0 windows/Resource/within (lyrics, artist photos, album images, etc. can be edited by oneself)
 - Download additional music resources (Baidu Netdisk resources):
