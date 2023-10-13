@@ -35,7 +35,9 @@
   <img src="doc/NSMusicS 第4版 开发文档 规划 （更新中）.png" align="center" width="1200">
   
 # 该项目的研发管理看板(仪表盘)：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
-## 如果你想加入，请发邮件到我的QQ邮箱：1774148579@qq.com，超过5个人，我将会开展开源项目管理模式，九歌·韵世云开源组织正式开始活动
+- 如果你想加入，请发邮件到我的QQ邮箱：1774148579@qq.com，超过5个人，我将会开展开源项目管理模式，九歌·韵世云开源组织正式开始活动
+
+# 该项目的UI设计稿：[https://www.figma.com/file/da9bAO4UkJbsVIrNb6en1i/MZMusic-3.0?type=design&node-id=0%3A1&mode=design&t=W6akkDt3HPOzBIrI-1](https://www.figma.com/file/da9bAO4UkJbsVIrNb6en1i/MZMusic-3.0?type=design&node-id=0%3A1&mode=design&t=W6akkDt3HPOzBIrI-1)
 
 ### 注意：此项目即将更新完个人正式版1.0版本，版本迭代完成后将复制至开源社区：NSMusicSYun(九歌·韵世云)
 ## 此项目的版权和更新将分为两个分支(彼此共享绝大部分的版权)
