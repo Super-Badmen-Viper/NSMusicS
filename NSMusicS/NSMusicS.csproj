@@ -852,6 +852,7 @@
 
   <ItemGroup>
     <Folder Include="bin\Debug\net6.0-windows\Resource\User_Data\" />
+    <Folder Include="Views_Panel\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -1044,6 +1045,12 @@
 
   <ItemGroup>
     <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\src\sources.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="UserControlLibrary\MusicPlayer_Set - 复制\UserControl_Equalization.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

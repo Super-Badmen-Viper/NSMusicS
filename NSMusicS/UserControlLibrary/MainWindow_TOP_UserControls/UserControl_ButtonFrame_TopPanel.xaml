@@ -7,7 +7,7 @@
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.MainWindow_TOP_UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="77" d:DesignWidth="800" Background="#1F1F1F">
+             d:DesignHeight="77" d:DesignWidth="800">
     <Grid>
         <TextBlock 
             Text="模式选择：" Foreground="White" Visibility="Collapsed"
@@ -43,12 +43,12 @@
             Margin="360,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
             <TextBlock 
-                Text="API(已禁用)" Foreground="#44FFFFFF"
+                Text="API" Foreground="#44FFFFFF"
                 FontSize="23" Margin="0,0,0,8"/>
         </Border>
         <Border 
             x:Name="Model_5"
-            Margin="520,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            Margin="430,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
             <TextBlock 
                 Text="NAS" Foreground="#44FFFFFF"
@@ -56,7 +56,7 @@
         </Border>
         <Border 
             x:Name="Model_6"
-            Margin="610,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            Margin="510,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
             <TextBlock 
                 Text="专业" Foreground="#44FFFFFF"

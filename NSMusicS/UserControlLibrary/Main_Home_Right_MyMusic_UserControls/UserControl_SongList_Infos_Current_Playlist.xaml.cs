@@ -447,6 +447,8 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
             }
 
             SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
+
+            ListView_Download_SongList_Info.Items.Refresh();
         }
 
 

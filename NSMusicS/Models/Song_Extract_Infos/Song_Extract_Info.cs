@@ -9,6 +9,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Brush = System.Windows.Media.Brush;
@@ -22,9 +23,10 @@ namespace NSMusicS.Models.Song_Extract_Infos
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static Image Extract_AlbumImage_Of_This_SongUrl(string url)
+        public static (MemoryStream, Image) Extract_AlbumImage_Of_This_SongUrl(string url)
         {
-            Image image = null;
+            ms = null;
+            image = null;
 
             if (url.IndexOf(".wav") < 0)
             {
@@ -35,27 +37,29 @@ namespace NSMusicS.Models.Song_Extract_Infos
                     if (xxxx.Tag.Pictures.Length >= 1)
                     {
                         byte[] bin = xxxx.Tag.Pictures[0].Data.Data;
-                        image = ReturnPhoto(bin);
+                        (ms,image) = ReturnPhoto(bin);
                     }
                 }
             }
 
-            return image;
+            return (ms, image);
         }
-        private static Image ReturnPhoto(byte[] streamByte)
+        static MemoryStream ms;
+        static Image image;
+        private static (MemoryStream, Image) ReturnPhoto(byte[] streamByte)
         {
             try
             {
-                System.IO.MemoryStream ms = new System.IO.MemoryStream(streamByte);
-                System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
+                ms = new MemoryStream(streamByte);
+                image = Image.FromStream(ms);
 
-                return img;
+                return (ms, image);
             }
             catch
             {
 
             }
-            return null;
+            return (null,null);
         }
 
         /// <summary>

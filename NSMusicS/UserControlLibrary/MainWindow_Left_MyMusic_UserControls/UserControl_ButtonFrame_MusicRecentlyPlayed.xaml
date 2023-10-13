@@ -20,7 +20,7 @@
                >
             <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/列表.svg"/>
         </TextBlock>
-        <TextBlock Margin="40,5,0,5" Text="默认列表" Foreground="White" FontSize="13.5" Padding="0,1,0,0" 
+        <TextBlock Margin="40,4,0,5" Text="默认列表" Foreground="White" FontSize="13.5" Padding="0,1,0,0" 
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                    >
         </TextBlock>

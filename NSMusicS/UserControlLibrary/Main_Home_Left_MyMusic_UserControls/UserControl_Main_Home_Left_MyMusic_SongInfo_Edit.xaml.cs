@@ -90,7 +90,10 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                             Edit_Album_Name = TextBox_Edit_Album_Name.Text;
 
                             //获取内嵌封面
-                            System.Drawing.Image image = Song_Extract_Info.Extract_AlbumImage_Of_This_SongUrl(Search_this_SongUrl);
+                            MemoryStream ms = null;
+                            System.Drawing.Image image = null;
+                            (ms, image) = Song_Extract_Info.Extract_AlbumImage_Of_This_SongUrl(Search_this_SongUrl);
+
                             if (image != null)
                             {
                                 BitmapImage bitmapImage = new BitmapImage();
@@ -115,6 +118,17 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                             else
                             {
                                 Set_This_Song_AlbumImage.Background = new SolidColorBrush(Colors.White);
+                            }
+
+                            if (ms != null)
+                            {
+                                ms.Dispose();
+                                ms = null;
+                            }
+                            if (image != null)
+                            {
+                                image.Dispose();
+                                image = null;
                             }
 
                             //获取内嵌歌词

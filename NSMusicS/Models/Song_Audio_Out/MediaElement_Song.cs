@@ -12,7 +12,7 @@ using ISampleProvider = NAudio.Wave.ISampleProvider;
 using NAudio.Extras;
 using NAudio.Wave;
 using Equalizer = NAudio.Extras.Equalizer;
-using ViewModelBase = NSMusicS.UserControlLibrary.MusicPlayer_Set.ViewModel.ViewModelBase;
+using ViewModelBase = NSMusicS.Models.Song_Audio_Out.EQ_ViewModel.ViewModelBase;
 using CommunityToolkit.Mvvm.Input;
 using System.ComponentModel;
 using NSMusicS.Services.Services_For_API_GetResult;
@@ -20,10 +20,10 @@ using System.Threading;
 using CSCore;
 using NSMusicS.Models.Song_Audio_Out.CSCore_Ffmpeg;
 using NSMusicS.Models.Song_Audio_Out.NAduio;
-using AudioFileReader = NSMusicS.Models.Song_Audio_Out.NAduio.AudioFileReader;
 using NAudio.Wave.SampleProviders;
 using Newtonsoft.Json.Linq;
 using System.Windows.Controls;
+using AudioFileReader = NSMusicS.Models.Song_Audio_Out.NAduio.AudioFileReader;
 //using AudioFileReader = NSMusicS.Models.Song_Audio_Out.NAduio.AudioFileReader;
 
 namespace NSMusicS.Models.Song_Audio_Out
@@ -31,9 +31,10 @@ namespace NSMusicS.Models.Song_Audio_Out
     public class MediaElement_Song : ViewModelBase
     {
         public WaveOutEvent waveOutEvent;
+
         private FFmpegAudioReader audioFileReader_FFmpeg; //CSCore - FFmpeg音频库 接口版本
         private AudioFileReader audioFileReader; //基于NAudio音频库 版本
-        private MediaFoundationReader audioFileReader_Web;
+        private MediaFoundationReader audioFileReader_Web;//web流
 
         private SampleChannel sampleChannel;
 
@@ -46,6 +47,8 @@ namespace NSMusicS.Models.Song_Audio_Out
         public string audioFilePath;
         public int deviceNumber;
         public bool deviceNumber_change;
+
+        #region plyaer
 
         public MediaElement_Song()
         {
@@ -111,6 +114,7 @@ namespace NSMusicS.Models.Song_Audio_Out
             }
             waveOutEvent = new WaveOutEvent();
 
+
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
@@ -128,11 +132,6 @@ namespace NSMusicS.Models.Song_Audio_Out
                         audioFileReader = new AudioFileReader(audioFilePath);
                     else if (audioFilePath.EndsWith(".flac", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (audioFileReader_FFmpeg != null)
-                            audioFileReader_FFmpeg.Dispose();
-                        if (audioFileReader != null)
-                            audioFileReader.Dispose();
-
                         audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
                         sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
                         audioFileReader_FFmpeg.sampleChannel = sampleChannel;
@@ -142,11 +141,6 @@ namespace NSMusicS.Models.Song_Audio_Out
                     }
                     else
                     {
-                        if (audioFileReader_FFmpeg != null)
-                            audioFileReader_FFmpeg.Dispose();
-                        if (audioFileReader != null)
-                            audioFileReader.Dispose();
-
                         audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
                         sampleChannel = new SampleChannel(audioFileReader_FFmpeg);
                         audioFileReader_FFmpeg.sampleChannel = sampleChannel;
@@ -199,9 +193,6 @@ namespace NSMusicS.Models.Song_Audio_Out
                 //尝试 使用web流 音频
                 try
                 {
-                    if (waveOutEvent != null)
-                        waveOutEvent.Dispose();
-
                     audioFileReader_Web = new MediaFoundationReader(audioFilePath);
 
                     waveOutEvent.DeviceNumber = deviceNumber;
@@ -264,6 +255,9 @@ namespace NSMusicS.Models.Song_Audio_Out
         {
             audioFileReader.Dispose();
             waveOutEvent.Dispose();
+
+            audioFileReader = null;
+            waveOutEvent = null;
         }
 
         public TimeSpan CurrentTime
@@ -433,7 +427,7 @@ namespace NSMusicS.Models.Song_Audio_Out
             MediaOpened?.Invoke(this, EventArgs.Empty);
         }
 
-
+        #endregion
 
 
         public float MinimumGain => -12;
@@ -441,7 +435,7 @@ namespace NSMusicS.Models.Song_Audio_Out
 
 
         /// <summary>
-        /// 31
+        /// 总体增益
         /// </summary>
         private float bandwidth;
         public float Bandwidth

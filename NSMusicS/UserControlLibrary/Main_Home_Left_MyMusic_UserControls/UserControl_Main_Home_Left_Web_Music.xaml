@@ -51,6 +51,7 @@
             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
             AllowDrop="True" Margin="0,55,0,0" 
             MouseLeftButtonDown="UserControl_MouseLeftButtonDown"
+            VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True"
         >
 
             <ListView.ItemContainerStyle>

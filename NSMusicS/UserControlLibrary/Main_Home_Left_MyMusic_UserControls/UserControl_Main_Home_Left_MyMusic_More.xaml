@@ -145,6 +145,7 @@
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                 AllowDrop="True" 
+                VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True"
                   >
 
                 <ListView.ItemContainerStyle>
@@ -165,10 +166,10 @@
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="true">
-                                            <Setter Property="Background" Value="#20FFFFFF"/>
+                                            <Setter Property="Background" Value="#10FFFFFF"/>
                                             <Setter Property="Foreground" Value="White"/>
-                                            <Setter TargetName="Bd" Property="BorderBrush" Value="#FFFFC400"/>
-                                            <Setter TargetName="Bd" Property="BorderThickness" Value="0,0,0,0"/>
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="#20FFFFFF"/>
+                                            <Setter TargetName="Bd" Property="BorderThickness" Value="0,0.5,0,0.5"/>
                                         </Trigger>
                                         <MultiTrigger>
                                             <MultiTrigger.Conditions>
@@ -177,8 +178,8 @@
                                             </MultiTrigger.Conditions>
                                             <Setter Property="Background" Value="#20FFFFFF"/>
                                             <Setter Property="Foreground" Value="LightGray"/>
-                                            <Setter Property="BorderBrush" Value="#FFFFC400"/>
-                                            <Setter Property="BorderThickness" Value="0,0,0,0"/>
+                                            <Setter Property="BorderBrush" Value="#20FFFFFF"/>
+                                            <Setter Property="BorderThickness" Value="0,0.5,0,0.5"/>
                                         </MultiTrigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -189,12 +190,25 @@
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="Visibility" Value="Visible"/>
-                        <Setter Property="Background" Value="#00000000"/>
+                        <Setter Property="Background" Value="{x:Null}"/>
                         <Setter Property="HorizontalContentAlignment" Value="Left"/>
                         <Setter Property="Padding" Value="9,0,0,0"/>
-                        <Setter Property="BorderBrush" Value="#00000000"/>
+                        <Setter Property="BorderBrush" Value="{x:Null}"/>
                         <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Foreground" Value="#95999B"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                    <Border BorderThickness="0,0,0,0" 
+                    BorderBrush="Black" Background="Transparent">
+                                        <TextBlock x:Name="ContentHeader" 
+                   Text="{TemplateBinding Content}" Padding="5,5,5,0" 
+                   Width="{TemplateBinding Width}" TextAlignment="Left" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="OverridesDefaultStyle" Value="True" />
                     </Style>
                     <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">8</system:Double>
                     <Style TargetType="ScrollBar">
@@ -228,7 +242,7 @@
                                 Width="76">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Song_No}" FontSize="14">
+                                        <TextBlock Text="{Binding Song_No}" FontSize="14" Foreground="#95999B">
 
                                         </TextBlock>
                                     </DataTemplate>

@@ -88,7 +88,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views
         private void ListView_For_This_Album_ALL_Song_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Album_SongList_Infos album_SongList_Infos = new Album_SongList_Infos();
-            album_SongList_Infos.Album_Image = (ImageBrush)Border_Now_Album_Image.Background;
+            album_SongList_Infos.Album_Image = (BitmapImage)((ImageBrush)Border_Now_Album_Image.Background).ImageSource;
             album_SongList_Infos.Album_Name = TextBlock_Album_Name.Text;
             album_SongList_Infos.album_SongList_Infos = (ObservableCollection<Assembly_Album_SongList_Item>)ListView_For_This_Album_ALL_Song.ItemsSource;
 
@@ -410,7 +410,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views
         private void Button_Play_This_Album_Click(object sender, RoutedEventArgs e)
         {
             Album_SongList_Infos album_SongList_Infos = new Album_SongList_Infos();
-            album_SongList_Infos.Album_Image = (ImageBrush)Border_Now_Album_Image.Background;
+            album_SongList_Infos.Album_Image = (BitmapImage)((ImageBrush)Border_Now_Album_Image.Background).ImageSource;
             album_SongList_Infos.Album_Name = TextBlock_Album_Name.Text;
             album_SongList_Infos.album_SongList_Infos = (ObservableCollection<Assembly_Album_SongList_Item>)ListView_For_This_Album_ALL_Song.ItemsSource;
 
@@ -441,7 +441,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views
         private void Button_Add_This_Album_To_Current_Playlist_Top_Click(object sender, RoutedEventArgs e)
         {
             Album_SongList_Infos album_SongList_Infos = new Album_SongList_Infos();
-            album_SongList_Infos.Album_Image = (ImageBrush)Border_Now_Album_Image.Background;
+            album_SongList_Infos.Album_Image = (BitmapImage)((ImageBrush)Border_Now_Album_Image.Background).ImageSource;
             album_SongList_Infos.Album_Name = TextBlock_Album_Name.Text;
             album_SongList_Infos.album_SongList_Infos = (ObservableCollection<Assembly_Album_SongList_Item>)ListView_For_This_Album_ALL_Song.ItemsSource;
 
@@ -468,7 +468,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views
         private void Button_Add_This_Album_To_Current_Playlist_Buttom_Click(object sender, RoutedEventArgs e)
         {
             Album_SongList_Infos album_SongList_Infos = new Album_SongList_Infos();
-            album_SongList_Infos.Album_Image = (ImageBrush)Border_Now_Album_Image.Background;
+            album_SongList_Infos.Album_Image = (BitmapImage)((ImageBrush)Border_Now_Album_Image.Background).ImageSource;
             album_SongList_Infos.Album_Name = TextBlock_Album_Name.Text;
             album_SongList_Infos.album_SongList_Infos = (ObservableCollection<Assembly_Album_SongList_Item>)ListView_For_This_Album_ALL_Song.ItemsSource;
 

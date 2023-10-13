@@ -435,6 +435,8 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
             //同步歌曲曲目数量
             Reset_ListView_Download_SongList_Info_ShowSongNums();
 
+            ListView_Download_SongList_Info.Items.Refresh();
+
             //保存歌单信息
             Save_SongListInfo();
         }
@@ -1156,7 +1158,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         {
             Sort_Num = 0;
 
-            songList_Infos[0][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[0][0].Songs, 0, Sort_Num);
+            songList_Infos[0][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[0][0].Songs, Sort_Num, true);
             ListView_Download_SongList_Info.Items.Refresh();
 
             Clear_ALL_Stack_Button_Sort();
@@ -1169,7 +1171,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         {
             Sort_Num = 1;
 
-            songList_Infos[0][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[0][0].Songs, 0, Sort_Num);
+            songList_Infos[0][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[0][0].Songs, Sort_Num, true);
             ListView_Download_SongList_Info.Items.Refresh();
 
             Clear_ALL_Stack_Button_Sort();
@@ -1182,7 +1184,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         {
             Sort_Num = 2;
 
-            songList_Infos[0][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[0][0].Songs, 0, Sort_Num);
+            songList_Infos[0][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[0][0].Songs, Sort_Num, true);
             ListView_Download_SongList_Info.Items.Refresh();
 
             Clear_ALL_Stack_Button_Sort();
@@ -1195,7 +1197,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         {
             Sort_Num = 3;
 
-            songList_Infos[0][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[0][0].Songs, 0, Sort_Num);
+            songList_Infos[0][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[0][0].Songs, Sort_Num, true);
             ListView_Download_SongList_Info.Items.Refresh();
 
             Clear_ALL_Stack_Button_Sort();

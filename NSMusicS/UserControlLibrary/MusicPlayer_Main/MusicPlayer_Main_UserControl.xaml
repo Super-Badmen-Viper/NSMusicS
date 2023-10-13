@@ -17,7 +17,7 @@
              >
     <Grid>
         <Grid x:Name="Grid_Animation_Model_2">
-            
+
         </Grid>
 
         <Grid x:Name="Grid_Animation_Model_1">
@@ -30,24 +30,26 @@
                 <Grid.Background>
                     <ImageBrush Stretch="UniformToFill"/>
                 </Grid.Background>
-                <ItemsControl x:Name="ItemsControl_SingerImageCut" 
-                                Grid.Row="1" ItemsSource="{Binding Singer_ImagerCut_Infos}"
-                                >
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid x:Name="UniformGrid_SingerAnimation" Columns="4" Rows="4"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <materialDesign:TransitioningContent OpeningEffect="{Binding Effact}">
-                                <Border Width="{Binding Width}" Height="{Binding Height}" Background="{Binding image_i}" Margin="0">
+                <!--
+                    <ItemsControl x:Name="ItemsControl_SingerImageCut" 
+                                  Grid.Row="1" ItemsSource="{Binding Singer_ImagerCut_Infos}"
+                                    >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid x:Name="UniformGrid_SingerAnimation" Columns="4" Rows="4"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <materialDesign:TransitioningContent OpeningEffect="{Binding Effact}">
+                                    <Border Width="{Binding Width}" Height="{Binding Height}" Background="{Binding image_i}" Margin="0">
 
-                                </Border>
-                            </materialDesign:TransitioningContent>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                    </Border>
+                                </materialDesign:TransitioningContent>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                -->
             </Grid>
 
 
@@ -73,7 +75,7 @@
                     </Grid.Background>
                 </Grid>
             </Grid>
-            
+
             <Grid x:Name="Grid_SingerPhoto_Mode_Close" Visibility="Visible" Grid.RowSpan="2">
                 <Border x:Name="Grid_SingerPhoto_Mode_Close_BackGround"
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  ScrollViewer.VerticalScrollBarVisibility="Disabled" 
@@ -94,7 +96,7 @@
                         HorizontalAlignment="Left" VerticalAlignment="Center"
                         CornerRadius="20"
                         Background="Beige">
-                    
+
                 </Border>
 
                 <UserControls_PlayMode_View:UserControl_PlayMode_View_1_AlbumView
@@ -115,7 +117,7 @@
                     VerticalContentAlignment="Stretch" HorizontalAlignment="Left"                
                     ClipToBounds="True"                  
                     TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Fixed" 
-                    ScrollViewer.CanContentScroll="True"                 
+                    VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True"       
                     >
                     <ListView.Resources>
                         <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -145,7 +147,8 @@
                                                 <Setter Property="Foreground" Value="White"/>
                                             </Trigger>
                                             <Trigger Property="IsSelected" Value="True">
-                                                <Setter Property="FontSize" Value="32"/><!--32-->
+                                                <Setter Property="FontSize" Value="32"/>
+                                                <!--32-->
                                                 <!--<Setter Property="Margin" Value="100,0,-100,0"/>-->
                                                 <Setter Property="Margin" Value="0,20,0,0"/>
                                                 <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
@@ -273,6 +276,7 @@
                     VerticalContentAlignment="Stretch" HorizontalAlignment="Left"                
                     ClipToBounds="True"
                     TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Fixed" Visibility="Collapsed"
+                    VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True"
                     >
                     <ListView.Resources>
                         <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -507,8 +511,8 @@
                             </LinearGradientBrush>
                         </Border.Background>
                     </Border>
-                    
-                    
+
+
                     <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
                         <Border.Background>
                             <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
@@ -1232,11 +1236,8 @@
                 </StackPanel>
             </Canvas>
         </Grid>
-        
+
     </Grid>
-    <UserControl.Background>
-        <ImageBrush x:Name="TextBlock_Singer_Top_DoubleAnimationUsingKeyFrames" Stretch="UniformToFill"/>
-    </UserControl.Background>
     <UserControl.Resources>
         <!-- ListView平滑滚动效果 -->
         <Style x:Key="ListBoxStyle1" TargetType="{x:Type ListBox}">

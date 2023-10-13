@@ -7,6 +7,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="MainWindow_NSMusicS.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControlLibrary\MainWindow_Left_MoZhiAI_Music_UserControls\UserControl_ButtonFrame_MusicGuessLove.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -97,6 +100,9 @@
     <Compile Update="UserControlLibrary\Main_UserControls\UserControl_VerticalRectangle.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_2_Album_UserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Animation\UserControl_Animation_1.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -130,9 +136,6 @@
     <Compile Update="UserControlLibrary\MusicPlayer_MV_Player\MusicPlayer_MV_Player_UserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControlLibrary\MusicPlayer_Set\UserControl_Equalization.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="UserControlLibrary\Windows_Song_Finds\Windows_Song_Find_Float.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -142,6 +145,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MainWindow_NSMusicS.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MainWindow_Left_MoZhiAI_Music_UserControls\UserControl_ButtonFrame_MusicGuessLove.xaml">
@@ -234,6 +240,9 @@
     <Page Update="UserControlLibrary\Main_UserControls\UserControl_VerticalRectangle.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_2_Album_UserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Animation\UserControl_Animation_1.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -267,7 +276,7 @@
     <Page Update="UserControlLibrary\MusicPlayer_MV_Player\MusicPlayer_MV_Player_UserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="UserControlLibrary\MusicPlayer_Set\UserControl_Equalization.xaml">
+    <Page Update="UserControlLibrary\MusicPlayer_Set - 复制\UserControl_Equalization.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\Windows_Song_Finds\Windows_Song_Find_Float.xaml">

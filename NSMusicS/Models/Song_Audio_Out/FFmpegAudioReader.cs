@@ -90,7 +90,10 @@ namespace NSMusicS.Models.Song_Audio_Out
         protected override void Dispose(bool disposing)
         {
             if (null != ffmpegDecoder)
+            {
                 ffmpegDecoder.Dispose();
+                ffmpegDecoder = null;
+            }
         }
 
         /// <summary>

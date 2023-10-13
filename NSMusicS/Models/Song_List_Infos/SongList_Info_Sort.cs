@@ -22,8 +22,8 @@ namespace NSMusicS.Models.Song_List_Infos
         public async Task<ObservableCollection<Song_Info>>
             Start_Sort_Song_Of_Select_List(
                 ObservableCollection<Song_Info> Select_List, 
-                int SongList_ID,
-                int Sort_Num
+                int Sort_Num,
+                bool Sort_Double
             )
         {
             var tcs = new TaskCompletionSource<ObservableCollection<Song_Info>>();
@@ -34,13 +34,13 @@ namespace NSMusicS.Models.Song_List_Infos
                 temp = new List<Song_Info>(Select_List);
 
                 if (Sort_Num == 0)
-                    temp = Sort_SingerName(temp);
+                    temp = Sort_SingerName(temp, Sort_Double);
                 else if (Sort_Num == 1)
-                    temp = Sort_SongName(temp);
+                    temp = Sort_SongName(temp, Sort_Double);
                 else if (Sort_Num == 2)
-                    temp = Sort_AlbumName(temp);
+                    temp = Sort_AlbumName(temp, Sort_Double);
                 else if (Sort_Num == 3)
-                    temp = Sort_Duration(temp);
+                    temp = Sort_Duration(temp, Sort_Double);
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -77,22 +77,29 @@ namespace NSMusicS.Models.Song_List_Infos
         /// 歌手名 排序
         /// </summary>
         /// <returns></returns>
-        public List<Song_Info> Sort_SingerName(List<Song_Info> song_Infos)
+        public List<Song_Info> Sort_SingerName(List<Song_Info> song_Infos, bool Sort_Double)
         {
             List<Song_Info> songs = new List<Song_Info>();
 
             var customComparer = new CustomComparer();
 
             List<Song_Info> sortedList = null;
-            if (!Sort_SingerName_Up)
+            if (Sort_Double == true)
             {
-                sortedList = song_Infos.OrderBy(song => song.Singer_Name, customComparer).ToList();
-                Sort_SingerName_Up = true;
+                if (!Sort_SingerName_Up)
+                {
+                    sortedList = song_Infos.OrderBy(song => song.Singer_Name, customComparer).ToList();
+                    Sort_SingerName_Up = true;
+                }
+                else
+                {
+                    sortedList = song_Infos.OrderByDescending(song => song.Singer_Name, customComparer).ToList();
+                    Sort_SingerName_Up = false;
+                }
             }
             else
             {
-                sortedList = song_Infos.OrderByDescending(song => song.Singer_Name, customComparer) .ToList();
-                Sort_SingerName_Up = false;
+                sortedList = song_Infos.OrderBy(song => song.Singer_Name, customComparer).ToList();
             }
 
             for (int i = 0; i < sortedList.Count; i++)
@@ -113,22 +120,29 @@ namespace NSMusicS.Models.Song_List_Infos
         /// 歌曲名 排序
         /// </summary>
         /// <returns></returns>
-        public List<Song_Info> Sort_SongName(List<Song_Info> song_Infos)
+        public List<Song_Info> Sort_SongName(List<Song_Info> song_Infos, bool Sort_Double)
         {
             List<Song_Info> songs = new List<Song_Info>();
 
             var customComparer = new CustomComparer();
 
             List<Song_Info> sortedList = null;
-            if (!Sort_SongName_Up)
+            if (Sort_Double == true)
             {
-                sortedList = song_Infos.OrderBy(song => song.Song_Name, customComparer).ToList();
-                Sort_SongName_Up = true;
+                if (!Sort_SongName_Up)
+                {
+                    sortedList = song_Infos.OrderBy(song => song.Song_Name, customComparer).ToList();
+                    Sort_SongName_Up = true;
+                }
+                else
+                {
+                    sortedList = song_Infos.OrderByDescending(song => song.Song_Name, customComparer).ToList();
+                    Sort_SongName_Up = false;
+                }
             }
             else
             {
-                sortedList = song_Infos.OrderByDescending(song => song.Song_Name, customComparer).ToList();
-                Sort_SongName_Up = false;
+                sortedList = song_Infos.OrderBy(song => song.Song_Name, customComparer).ToList();
             }
 
             for (int i = 0; i < sortedList.Count; i++)
@@ -149,22 +163,29 @@ namespace NSMusicS.Models.Song_List_Infos
         /// 专辑名 排序
         /// </summary>
         /// <returns></returns>
-        public List<Song_Info> Sort_AlbumName(List<Song_Info> song_Infos)
+        public List<Song_Info> Sort_AlbumName(List<Song_Info> song_Infos, bool Sort_Double)
         {
             List<Song_Info> songs = new List<Song_Info>();
 
             var customComparer = new CustomComparer();
 
             List<Song_Info> sortedList = null;
-            if (!Sort_AlbumName_Up)
+            if (Sort_Double == true)
             {
-                sortedList = song_Infos.OrderBy(song => song.Album_Name, customComparer).ToList();
-                Sort_AlbumName_Up = true;
+                if (!Sort_AlbumName_Up)
+                {
+                    sortedList = song_Infos.OrderBy(song => song.Album_Name, customComparer).ToList();
+                    Sort_AlbumName_Up = true;
+                }
+                else
+                {
+                    sortedList = song_Infos.OrderByDescending(song => song.Album_Name, customComparer).ToList();
+                    Sort_AlbumName_Up = false;
+                }
             }
             else
             {
-                sortedList = song_Infos.OrderByDescending(song => song.Album_Name, customComparer).ToList();
-                Sort_AlbumName_Up = false;
+                sortedList = song_Infos.OrderBy(song => song.Album_Name, customComparer).ToList();
             }
 
             for (int i = 0; i < sortedList.Count; i++)
@@ -185,22 +206,29 @@ namespace NSMusicS.Models.Song_List_Infos
         /// 音频持续时间 排序
         /// </summary>
         /// <returns></returns>
-        public List<Song_Info> Sort_Duration(List<Song_Info> song_Infos)
+        public List<Song_Info> Sort_Duration(List<Song_Info> song_Infos, bool Sort_Double)
         {
             List<Song_Info> songs = new List<Song_Info>();
 
             var customComparer = new CustomComparer();
 
             List<Song_Info> sortedList = null;
-            if (!Sort_Duration_Up)
+            if (Sort_Double == true)
             {
-                sortedList = song_Infos.OrderBy(song => song.Song_Duration, customComparer).ToList();
-                Sort_Duration_Up = true;
+                if (!Sort_Duration_Up)
+                {
+                    sortedList = song_Infos.OrderBy(song => song.Song_Duration, customComparer).ToList();
+                    Sort_Duration_Up = true;
+                }
+                else
+                {
+                    sortedList = song_Infos.OrderByDescending(song => song.Song_Duration, customComparer).ToList();
+                    Sort_Duration_Up = false;
+                }
             }
             else
             {
-                sortedList = song_Infos.OrderByDescending(song => song.Song_Duration, customComparer).ToList();
-                Sort_Duration_Up = false;
+                sortedList = song_Infos.OrderBy(song => song.Song_Duration, customComparer).ToList();
             }
 
             for (int i = 0; i < sortedList.Count; i++)

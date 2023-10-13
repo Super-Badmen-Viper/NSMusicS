@@ -13,6 +13,13 @@
              MouseLeave="Border_Hover_BackGround_MouseLeave"
              >
     <Grid>
+        <Slider Value="-1" Background="#40FFFFFF" 
+                Height="2" Margin="0,0,0,0" 
+                VerticalAlignment="Top" HorizontalContentAlignment="Stretch" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                IsMoveToPointEnabled="True" Cursor="Hand"
+                Focusable="False" HorizontalAlignment="Stretch" 
+        />
         <Slider x:Name="Silder_Music_Width" Value="8" Background="#1C444444" 
                 Height="11" Margin="0,-4,0,0" 
                 VerticalAlignment="Top" HorizontalContentAlignment="Stretch" 
@@ -25,6 +32,8 @@
                 MouseEnter="Border_Hover_BackGround_MouseLeave"
                 />
 
+        
+        
         <Grid>
             <UserControls:UserControl_Spectrum_Visualization_2
                 x:Name="userControl_Spectrum_Visualization" 

@@ -117,7 +117,7 @@ namespace NSMusicS.Models.Song_List_Infos
                 });
 
                 //排序（默认 歌手名）   
-                Select_List = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(Select_List, SongList_ID, 0);
+                Select_List = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(Select_List, 0, true);
 
                 tcs.SetResult(Select_List);
             });
@@ -207,7 +207,7 @@ namespace NSMusicS.Models.Song_List_Infos
                 });
 
                 //排序（默认 歌手名）   
-                Select_List = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(Select_List, SongList_ID, 0);
+                Select_List = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(Select_List, 0, true);
 
                 tcs.SetResult(Select_List);
             });
@@ -304,7 +304,7 @@ namespace NSMusicS.Models.Song_List_Infos
                     });
 
                     //排序（默认 歌手名）   
-                    Select_List = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(Select_List, SongList_ID, 0);
+                    Select_List = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(Select_List, 0, true);
 
                     tcs.SetResult(Select_List);
                 });
@@ -404,7 +404,7 @@ namespace NSMusicS.Models.Song_List_Infos
                     });
 
                     //排序（默认 歌手名）   
-                    Select_List = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(Select_List, SongList_ID, 0);
+                    Select_List = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(Select_List, 0, true);
 
                     tcs.SetResult(Select_List);
                 });
@@ -508,7 +508,7 @@ namespace NSMusicS.Models.Song_List_Infos
                 });
 
                 //排序（默认 歌手名）   
-                Select_List = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(Select_List, SongList_ID, 0);
+                Select_List = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(Select_List, 0, true);
 
                 tcs.SetResult(Select_List);
             });

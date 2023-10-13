@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        
         xmlns:local="clr-namespace:NSMusicS"
         xmlns:MainWindow_Left_OnlineMusic_UserControls="clr-namespace:NSMusicS.UserControlLibrary.MainWindow_Left_OnlineMusic_UserControls" 
         xmlns:MainWindow_Left_MyMusic_UserControls="clr-namespace:NSMusicS.UserControlLibrary.MainWindow_Left_MyMusic_UserControls"
@@ -15,19 +14,14 @@
         xmlns:Main_Home_Left_OnlineMusic_UserControls="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_Left_OnlineMusic_UserControls" 
         xmlns:MusicPlayer_Main="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main" 
         xmlns:MusicPlayer_MV_Player="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_MV_Player" 
-        xmlns:Helper_UserControlLibrary="clr-namespace:NSMusicS.Helper_UserControlLibrary" 
-        xmlns:MusicPlayer_Set="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Set" 
         xmlns:MainWindow_Left_MoZhiAI_Music_UserControls="clr-namespace:NSMusicS.UserControlLibrary.MainWindow_Left_MoZhiAI_Music_UserControls"
         xmlns:UserControl_Main_Model_2_View_Albums_And_Tracks="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views"
-        xmlns:tb="http://www.hardcodet.net/taskbar"
-        xmlns:Windows_Song_Finds="clr-namespace:NSMusicS.UserControlLibrary.Windows_Song_Finds"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         x:Class="NSMusicS.MainWindow"
-        
         mc:Ignorable="d"
-        Title="九歌·乐灵" Height="710" Width="1140" 
-        MinHeight="710" MinWidth="1140"
+        Title="九歌·韵世" Height="728" Width="1102" 
+        MinHeight="728" MinWidth="1102"
         Background="{x:Null}"
         UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
@@ -35,57 +29,42 @@
         WindowStyle="None" AllowsTransparency="True"
         ResizeMode="CanResizeWithGrip" SizeChanged="Window_SizeChanged" Closed="Window_Closed"
         >
-    <Window.Resources>
-
-    </Window.Resources>
     <Grid>
-        <MusicPlayer_Main:UserControl_TaskbarIcon
-            x:Name="userControl_TaskbarIcon"
-            />
+        <MusicPlayer_Main:UserControl_TaskbarIcon x:Name="userControl_TaskbarIcon"/>
 
-        <Grid x:Name="this_app_Background" >
+        <Grid>
             <!--#1F1F1F-->
-        </Grid>
-        <Border Background="#551E1E20"/>
+            <Border 
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                CornerRadius="10" x:Name="this_app_Background"/>
+            
+            <Border CornerRadius="10" Background="#551E1E20"/>
 
+            <Border Visibility="Visible" CornerRadius="10" BorderBrush="#40FFFFFF"  BorderThickness="0.5"/>
+        </Grid>
+        
         <!--用以关闭其它的控件，如音量，播放列表-->
         <Grid x:Name="Grid_Operation_Panel" 
-                  MouseLeftButtonDown="Grid_Operation_Panel_MouseLeftButtonDown" 
-                  Background="#02000000" 
-                  Margin="0,0,0,0"
-                  >
-
-        </Grid>
-
-        <Grid x:Name="Grid_Logo" VerticalAlignment="Top" Height="70" HorizontalAlignment="Left" Width="180">
-            <TextBlock Margin="20,33,20,0"  VerticalAlignment="Top" Height="28"
-               FontWeight="Bold" FontSize="20" Foreground="White"
-               Text="九歌·韵世" TextAlignment="Center"
-               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-               >
-
-            </TextBlock>
-        </Grid>
+              MouseLeftButtonDown="Grid_Operation_Panel_MouseLeftButtonDown" 
+              Background="#02000000" 
+              Margin="0,0,0,0"/>
 
         <Grid x:Name="Grid_Model_1" Visibility="Collapsed">
             <Grid x:Name="Frame_Manager_ButtonList_Model_1" 
                   HorizontalAlignment="Left" VerticalAlignment="Top"
-                  Width="180" 
+                  Width="180" Margin="0,0,0,70"
                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                   >
                 <ScrollViewer 
                     x:Name="Frame_Manager_ButtonList_ScrollViewer"
                     HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled"
                     >
-                    <!--
-                    MouseLeave="Frame_Manager_ButtonList_ScrollViewer_MouseLeave" MouseMove="Frame_Manager_ButtonList_ScrollViewer_MouseMove"-->
-
                     <Grid Height="1000">
                         <StackPanel x:Name="StackPanel_Online_Music" Visibility="Collapsed"
                                     Margin="0,670,0,0" VerticalAlignment="Top" Height="150" HorizontalAlignment="Center" Width="210">
                             <TextBlock Text="在线音乐  (需要用户API)" 
                                        Width="170" Padding="17,0,0,0" 
-                                       Foreground="#F6F6F6" Margin="31,0,0,0"
+                                       Foreground="#505353" Margin="31,0,0,0"
                                        >
 
                             </TextBlock>
@@ -110,10 +89,10 @@
                         </StackPanel>
                         <StackPanel x:Name="StackPanel_MoZhiAI_Music" 
                                 Visibility="Visible" Width="210" Height="190" 
-                                VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,450,0,80">
+                                VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,320,0,80">
                             <TextBlock Text="AI + 音乐" 
                                        Width="170" Padding="17,0,0,0" 
-                                       Foreground="#F6F6F6" Margin="31,0,0,0">
+                                       Foreground="#505353" Margin="31,0,0,0">
 
                             </TextBlock>
                             <MainWindow_Left_MoZhiAI_Music_UserControls:UserControl_ButtonFrame_MusicSingIt
@@ -140,7 +119,7 @@
                                     Margin="0,106,0,0" >
                             <TextBlock Text="我的音乐" 
                                        Width="140" Padding="17,0,0,0" 
-                                       Foreground="#F6F6F6"
+                                       Foreground="#505353"
                                        >
                             </TextBlock>
                             <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_MusicLove
@@ -185,13 +164,14 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <TextBlock Text="音乐资源" 
+                        
+                        <TextBlock Text="音乐资源" Visibility="Collapsed"
                                Width="140" Padding="17,0,0,0"  Margin="-2,315,0,0"
-                               Foreground="#F6F6F6" VerticalAlignment="Top">
+                               Foreground="#505353" VerticalAlignment="Top">
 
                         </TextBlock>
                         <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_Edit_SongInfo
-                            x:Name="Button_Edit_ALL_SongInfo" 
+                            x:Name="Button_Edit_ALL_SongInfo" Visibility="Collapsed"
                             Width="140" Height="30"
                             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                             
@@ -200,7 +180,7 @@
                     
                             />
                         <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_Load_UserData
-                            x:Name="Button_Load_UserData" 
+                            x:Name="Button_Load_UserData" Visibility="Collapsed"
                             Width="140" Height="30"
                             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                             VerticalAlignment="Top" HorizontalAlignment="Center" 
@@ -292,269 +272,18 @@
             </Grid>
         </Grid>
         <Grid x:Name="Grid_Model_2" Visibility="Visible">
-            <Grid x:Name="Frame_Manager_ButtonList_Model_2" 
-                  HorizontalAlignment="Left"
-                  Width="286" 
-                  UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                >
-                <TextBlock Text="专辑演唱者" 
-                    Width="100" Padding="17,0,0,0" 
-                    Foreground="#F6F6F6" HorizontalAlignment="Left" VerticalAlignment="Top"
-                    Margin="1,76,0,0"
+            <MusicPlayer_Main:MusicPlayer_Model_2_Album_UserControl
+                x:Name="musicPlayer_Model_2_Album_UserControl"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                 />
-                <TextBlock 
-                    x:Name="TextBlock_For_SelectSongList_To_AlbumModel_2"
-                    Text="歌单：" 
-                    Width="130" Padding="17,0,0,0" 
-                    Foreground="#F6F6F6" HorizontalAlignment="Left" VerticalAlignment="Top"
-                    Margin="1,100,0,0"
+        </Grid>
+
+        <Grid x:Name="Grid_Logo" VerticalAlignment="Top" Height="70" HorizontalAlignment="Left" Width="180">
+            <TextBlock Margin="20,33,20,0"  VerticalAlignment="Top" Height="28"
+               FontWeight="Bold" FontSize="20" Foreground="White"
+               Text="九歌·韵世" TextAlignment="Center"
+               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                 />
-                <Border
-                    x:Name="Button_Show_big2_Singer_List_Model_2" Visibility="Collapsed"
-                    Width="120" Height="20" Margin="90,73,0,0"
-                    VerticalAlignment="Top" HorizontalAlignment="Left"
-                    Background="#44FFFFFF" CornerRadius="10"
-                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    >
-                    <TextBlock 
-                        Text="显示右侧歌手列表" Foreground="#FFFFFF"
-                        Margin="12,0,0,0" VerticalAlignment="Center"/>
-
-                </Border>
-                <ComboBox 
-                    x:Name="ComBox_Select_SongList_For_Model_2"
-                    SelectedIndex="-1"
-                    Style="{DynamicResource cmbstyle_Select_SongList_For_AlbumView}" 
-                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    Visibility="Visible" Width="140" Height="30" Margin="100,93,0,0"
-                    VerticalAlignment="Top" HorizontalAlignment="Left" IsEditable="True" 
-                    Text="创建的歌单"
-                    SelectionChanged="ComBox_Select_SongList_SelectionChanged" IsSynchronizedWithCurrentItem="False"
-                    MouseLeftButtonDown="ComBox_Select_SongList_MouseLeftButtonDown" 
-                    BorderBrush="White" BorderThickness="1,0,0,0"
-                    >
-                    <ComboBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel/>
-                        </ItemsPanelTemplate>
-                    </ComboBox.ItemsPanel>
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Margin="2.5" Text="{Binding Name}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-
-                <TextBlock 
-                    x:Name="Button_Reload_For_Album_Performer"
-                    Width="16" Height="16"
-                    Foreground="#F6F6F6" HorizontalAlignment="Left" VerticalAlignment="Top"
-                    Margin="220,100,0,0" MouseLeftButtonDown="Button_Reload_For_Album_Performer_MouseLeftButtonDown"
-                    >
-                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/操作-刷新.svg"/>
-                </TextBlock>
-                <ListView 
-                    x:Name="ListView_For_Album_Performer"
-                    Margin="0,126,0,191" Width="260"
-                    Background="{x:Null}" BorderThickness="0,0,0,0" BorderBrush="White"
-                    >
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListViewItem}">
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="Height" Value="55"/>
-                            <Setter Property="FontSize" Value="13"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                        <Border Name="Bd"
-                                            Background="{TemplateBinding Background}">
-                                            <GridViewRowPresenter 
-                                                HorizontalAlignment="Stretch"
-                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                                Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsSelected" Value="true">
-                                                <Setter Property="Background" Value="#20FFFFFF"/>
-                                                <Setter Property="Foreground" Value="White"/>
-                                                <Setter TargetName="Bd" Property="BorderBrush" Value="#FFFFC400"/>
-                                                <Setter TargetName="Bd" Property="BorderThickness" Value="0,0,0,0"/>
-                                            </Trigger>
-                                            <MultiTrigger>
-                                                <MultiTrigger.Conditions>
-                                                    <Condition Property="IsMouseOver" Value="true" />
-                                                    <Condition Property="IsSelected" Value="false"/>
-                                                </MultiTrigger.Conditions>
-                                                <Setter Property="Background" Value="#20FFFFFF"/>
-                                                <Setter Property="Foreground" Value="LightGray"/>
-                                                <Setter Property="BorderBrush" Value="#FFFFC400"/>
-                                                <Setter Property="BorderThickness" Value="0,0,0,0"/>
-                                            </MultiTrigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.Resources>
-                        <Style TargetType="{x:Type GridViewColumnHeader}">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                            <Setter Property="Background" Value="#00000000"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                            <Setter Property="Padding" Value="9,0,0,0"/>
-                            <Setter Property="BorderBrush" Value="#00000000"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="Foreground" Value="White"/>
-                        </Style>
-                        <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">8</system:Double>
-                        <Style TargetType="ScrollBar">
-                            <Setter Property="Width" Value="8"/>
-                            <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
-                        </Style>
-                    </ListView.Resources>
-                    <ListView.View>
-                        <GridView>
-                            <GridView.Columns>
-                                <!--设置行高-->
-                                <GridViewColumn Width="70">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Border x:Name="ListView_For_Album_Performer_Image"
-                                                    Background="{Binding Album_Performer_Image}"
-                                                    Width="55" Height="55" CornerRadius="6"
-                                                    >
-
-                                            </Border>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                    <TextBlock/>
-                                </GridViewColumn>
-                                <GridViewColumn Width="150">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <VirtualizingStackPanel Orientation="Vertical">
-                                                <TextBlock 
-                                                    x:Name="TextBlock_Album_Performer_Name"
-                                                    Text="{Binding Album_Performer_Name}" Foreground="White"
-                                                    >
-
-                                                </TextBlock>
-                                                <TextBlock
-                                                    x:Name="TextBlock_Album_Performer_Of_AlbumNums"
-                                                    Text="{Binding Album_Performer_Of_AlbumNums}" Foreground="White"
-                                                    >
-
-                                                </TextBlock>
-                                            </VirtualizingStackPanel>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView.Columns>
-                        </GridView>
-                    </ListView.View>
-                    <ListView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel VirtualizationMode="Recycling" IsVirtualizing="True"/>
-                        </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
-                </ListView>
-                <Border 
-                    x:Name="Border_Now_Album_Image"
-                    Margin="10,0,0,10" Width="160" Height="160"
-                    CornerRadius="12" Background="Beige"
-                    HorizontalAlignment="Left" VerticalAlignment="Bottom">
-
-                </Border>
-                <TextBlock
-                    x:Name="TextBlock_Now_Album_Singer_Name"
-                    Text="{Binding Singer_Name}" Foreground="White" TextWrapping="Wrap" 
-                    HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Margin="180,0,0,100" Height="60"
-                    />
-                <TextBlock
-                    x:Name="TextBlock_Now_Album_Album_Name"
-                    Text="{Binding Album_Name}"  Foreground="White" TextWrapping="Wrap" 
-                    HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Margin="180,0,0,0" Height="100"
-                    />
-
-            </Grid>
-            <Grid Margin="286,77,0,77" >
-                <UserControl_Main_Model_2_View_Albums_And_Tracks:UserControl_Main_Model_2_View_Albums_And_Tracks
-                    x:Name="userControl_Main_Model_2_View_Albums_And_Tracks"
-                    Margin="-1,20,1,0"
-                    />
-
-                <StackPanel x:Name="Stack_Button_LotSelects_Sort" Height="20" Visibility="Visible"
-                            HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" 
-                            Margin="710,0,0,0"
-                            MouseLeftButtonDown="Stack_Button_LotSelects_Sort_MouseLeftButtonDown"                      
-                    >
-                    <Border HorizontalAlignment="Stretch" 
-                        VerticalAlignment="Stretch" 
-                        BorderThickness="0" CornerRadius="10" BorderBrush="#00000000" 
-                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                        Background="#44FFFFFF" Height="20"
-                    />
-                    <TextBlock Margin="16,-15,0,0" Height="10" Width="10"
-                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                        >
-                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/批量操作.svg"/>
-                    </TextBlock>
-                    <TextBlock Text="排序" VerticalAlignment="Center" Margin="34,-20,6,0" 
-                        Foreground="White"
-                        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                    />
-                </StackPanel>
-
-                <StackPanel x:Name="Stack_Panel_Sort_AlbumModel" Visibility="Visible" Width="135" Height="142" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="710,20,0,0" Background="#44000000">
-                    <StackPanel x:Name="Stack_Button_Sort_AlbumModel_AlbumName" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
-                        <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                            <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName"/>
-                        </TextBlock>
-                        <TextBlock HorizontalAlignment="Left" Foreground="White" Text="专辑名" Margin="35,-14,0,0"/>
-                    </StackPanel>
-                    <StackPanel x:Name="Stack_Button_Sort_AlbumModel_AlbumName_Year" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
-                        <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                            <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName_Year"/>
-                        </TextBlock>
-                        <TextBlock HorizontalAlignment="Left" Foreground="White" Text="专辑名/年份" Margin="35,-14,0,0"/>
-                    </StackPanel>
-                    <StackPanel x:Name="Stack_Button_Sort_AlbumModel_AlbumName_Genre" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
-                        <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                            <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName_Genre"/>
-                        </TextBlock>
-                        <TextBlock HorizontalAlignment="Left" Foreground="White" Text="专辑名/流派" Margin="35,-14,0,0"/>
-                    </StackPanel>
-                    <StackPanel x:Name="Stack_Button_Sort_AlbumModel_AlbumName_Year_Genre" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
-                        <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                            <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName_Year_Genre"/>
-                        </TextBlock>
-                        <TextBlock HorizontalAlignment="Left" Foreground="White" Text="专辑名/年份/流派" Margin="35,-14,0,0"/>
-                    </StackPanel>
-                    <StackPanel x:Name="Stack_Button_Sort_AlbumModel_Year" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
-                        <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                            <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_Year"/>
-                        </TextBlock>
-                        <TextBlock HorizontalAlignment="Left" Foreground="White" Text="年份" Margin="35,-14,0,0"/>
-                    </StackPanel>
-                    <StackPanel x:Name="Stack_Button_Sort_AlbumModel_Year_Genre" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
-                        <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                            <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_Year_Genre"/>
-                        </TextBlock>
-                        <TextBlock HorizontalAlignment="Left" Foreground="White" Text="年份/流派" Margin="35,-14,0,0"/>
-                    </StackPanel>
-                    <StackPanel x:Name="Stack_Button_Sort_AlbumModel_Genre" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
-                        <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                            <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_Genre"/>
-                        </TextBlock>
-                        <TextBlock HorizontalAlignment="Left" Foreground="White" Text="流派" Margin="35,-14,0,0"/>
-                    </StackPanel>
-                </StackPanel>
-            </Grid>
         </Grid>
 
         <Main_Home_Left_MyMusic_UserControls:UserControl_Main_Home_Left_MyMusic_SongInfo_Edit
@@ -591,7 +320,7 @@
             >
             <MainWindow_TOP_UserControls:UserControl_ButtonFrame_TopPanel 
                 x:Name="userControl_ButtonFrame_TopPanel"
-                Background="{x:Null}"
+                Background="{x:Null}" Height="77"
                 HorizontalAlignment="Stretch" VerticalAlignment="Top"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Loaded="UserControl_ButtonFrame_TopPanel_Loaded"
@@ -624,7 +353,7 @@
 
             <MainWindow_Buttom_MusicPlayer_UserControls:UserControl_ButtonFrame_MusicPlayer 
                 x:Name="userControl_ButtonFrame_MusicPlayer"
-                Height="70" 
+                Height="70"
                 HorizontalAlignment="Stretch" VerticalAlignment="Bottom" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Loaded="userControl_ButtonFrame_MusicPlayer_Loaded" 
@@ -646,6 +375,6 @@
                 Margin="0,70,0,120"
                 />
 
-
+        
     </Grid>
 </Window>
