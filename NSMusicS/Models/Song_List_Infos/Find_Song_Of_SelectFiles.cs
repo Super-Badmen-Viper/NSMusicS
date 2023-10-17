@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -13,6 +14,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Threading;
+using NSMusicS.Models.Song_Audio_Out.CSCore_Ffmpeg;
 using SharpVectors.Dom.Svg;
 using Shell32;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
@@ -545,6 +547,8 @@ namespace NSMusicS.Models.Song_List_Infos
         private static Uri ImageBrush_LoveNormal
             = new Uri(@"Resource\\Button_Image_Svg\\收藏.svg", UriKind.Relative);
 
+
+        public static ShellClass sh = new ShellClass();
         /// <summary>
         /// 提取歌曲文件信息
         /// </summary>
@@ -553,7 +557,6 @@ namespace NSMusicS.Models.Song_List_Infos
         public ObservableCollection<Song_Info> SongInfo_Take(List<string> FileNames)
         {
             ObservableCollection<Song_Info> list_Song_Info = new ObservableCollection<Song_Info>();
-            ShellClass sh = new ShellClass();
 
             int Song_Ids_Temp = 0;
             Regex regex = new Regex(@"^(.*?)(?:\s+-\s+(.*))?\.(?:mp3|flac|wav)$");
@@ -593,6 +596,9 @@ namespace NSMusicS.Models.Song_List_Infos
                         else
                             song_info.Album_Name = "0_未知专辑";
                     }
+
+                    singerName = null; songName = null; albumName = null;
+                    Folderdir = null; FolderItemitem = null;
                 }
                 else
                 {
@@ -606,12 +612,94 @@ namespace NSMusicS.Models.Song_List_Infos
                 song_info.Song_No = Song_Ids_Temp++;
 
                 list_Song_Info.Add(song_info);
+
+                match = null; song_info = null; fileName = null;
             }
+
+            regex = null; Song_Ids_Temp = 0;
 
             return list_Song_Info;
         }
+        public async Task<string> SongInfo_Take_One(List<string> FileNames,int SelectFind_Nums)
+        {
+            var tcs = new TaskCompletionSource<string>();
 
-        ObservableCollection<ObservableCollection<Models.Song_List_Infos.SongList_Info>> songList_Infos;
+            List<string> all_temp = new List<string>();
+
+            TagLib.File tagLib = null;
+
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    // 查找所有的temp项
+                    Folder Folderdir = null;FolderItem FolderItemitem = null;
+                    for (int i = 0; i < FileNames.Count; i++)
+                    {
+                        Folderdir = sh.NameSpace(Path.GetDirectoryName(FileNames[i]));
+                        FolderItemitem = Folderdir.ParseName(Path.GetFileName(FileNames[i]));
+                        all_temp.Add(Folderdir.GetDetailsOf(FolderItemitem, SelectFind_Nums));
+                    }            
+
+                    // 使用 LINQ 查询来计算每个字符串出现的次数，排除空值
+                    var query = from item in all_temp
+                                where item != null
+                                group item by item into g
+                                let count = g.Count()
+                                orderby count descending
+                                select new { Item = g.Key, Count = count };
+                    var mostRepeatedItem = query.FirstOrDefault();// 获取重复次数最多的项
+
+                    // 统一为其同步音乐属性
+                    if (all_temp.Count > 0) 
+                    {
+                        for (int i = 0; i < all_temp.Count; i++)
+                        {
+                            tagLib = TagLib.File.Create(all_temp[i]);
+
+                            if (SelectFind_Nums == 14)// 唱片集
+                            {
+                                if (tagLib.Tag.Album == null || tagLib.Tag.Album.Length == 0)
+                                {
+                                    tagLib.Tag.Album = all_temp[i];
+                                }
+                            }
+                            else if (SelectFind_Nums == 15)// 年份
+                            {
+                                if (tagLib.Tag.Year == null || tagLib.Tag.Year == 0)
+                                {
+                                    tagLib.Tag.Year = Convert.ToUInt16(all_temp[i]);
+                                }
+                            }
+                            else if (SelectFind_Nums == 16)// 流派
+                            {
+                                if (tagLib.Tag.Genres == null || tagLib.Tag.Genres.Length == 0)
+                                {
+                                    //tagLib.Tag.Genres = all_temp[i];
+                                }
+                            }
+
+                            tagLib.Save();
+                        }
+                    }
+
+                    Folderdir = null; FolderItemitem = null;
+                    all_temp = null; tagLib = null; query = null; mostRepeatedItem = null;
+
+                    tcs.SetResult(mostRepeatedItem.Item);
+                }
+                catch
+                {
+                    all_temp = null; tagLib = null;
+
+                    tcs.SetResult(null);
+                }
+            });
+
+            return await tcs.Task;
+        }
+
+        ObservableCollection<ObservableCollection<SongList_Info>> songList_Infos;
         ObservableCollection<Song_Info> songList_Infos_Current_Playlist;
         string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
 

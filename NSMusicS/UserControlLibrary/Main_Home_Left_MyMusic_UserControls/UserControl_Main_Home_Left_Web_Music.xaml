@@ -15,24 +15,32 @@
     <Grid>
         <Grid Background="#10000000" MouseLeftButtonDown="UserControl_MouseLeftButtonDown"/>
 
-        <TextBlock 
-            Text="API(服务器)地址：" Foreground="White"
-            HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox 
-            x:Name="TextBox_Web_API"
-            Width="400" TextChanged="TextBox_Web_API_TextChanged"
-            HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,0,0,0"/>
+        <Button 
+            x:Name="Button_Check_DownLoad_Panel" Click="Button_Check_DownLoad_Panel_Click"
+            Content="打开下载界面"
+            Width="90" Height="25"
+            HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,23,6,0"/>
 
         <Grid>
+            <TextBlock 
+                Text="API(服务器)地址：" Foreground="White"
+                HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TextBox 
+                x:Name="TextBox_Web_API"
+                Width="400" TextChanged="TextBox_Web_API_TextChanged"
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,0,0,0"/>
+
+
             <Border 
                 Width="501" Height="30" Margin="0,20,0,0" CornerRadius="10"
                 HorizontalAlignment="Left" VerticalAlignment="Top" Background="White">
                 <TextBox 
                     x:Name="TextBox_Serach"
-                    Text="" FontSize="20" Margin="40,0,0,0" KeyDown="TextBox_Serach_KeyDown"
-                    
-                    />
+                    Text="" FontSize="20" Margin="40,0,0,0" KeyDown="TextBox_Serach_KeyDown"/>
             </Border>
+            <TextBlock Margin="410,26,0,0" IsEnabled="False"
+                HorizontalAlignment="Left" VerticalAlignment="Top"
+                Text="默认歌曲搜索" FontSize="14" Foreground="#FFC6C6C6"/>
             <Border 
                 Width="20" Height="20"
                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,25,0,0">
@@ -40,183 +48,350 @@
                     <ImageBrush ImageSource="/NSMusicS;component/ico_ui_library/搜索.png"/>
                 </Border.Background>
             </Border>
+
+            <Button 
+                x:Name="Button_Search_Song" Content="歌曲搜索" Click="Button_Search_Song_Click"
+                Width="70" Height="25"
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="510,23,0,0"/>
+            <Button 
+                x:Name="Button_Search_Singer" Content="歌手搜索" Click="Button_Search_Singer_Click"
+                Width="70" Height="25"
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="590,23,0,0"/>
+            <Button 
+                x:Name="Button_Search_Album" Content="专辑搜索" Click="Button_Search_Album_Click"
+                Width="70" Height="25"
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="670,23,0,0"/>
+
         </Grid>
 
-        <ListView x:Name="ListView_Download_SongList_Info" Foreground="White" 
-            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
-            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-            IsSynchronizedWithCurrentItem="True"
-            BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0"
-            ScrollViewer.VerticalScrollBarVisibility="Auto"
-            ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-            AllowDrop="True" Margin="0,55,0,0" 
-            MouseLeftButtonDown="UserControl_MouseLeftButtonDown"
-            VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True"
-        >
+        <Grid x:Name="Grid_Show_Panel">
+            <ListView x:Name="ListView_Show_SongList_Info" Foreground="White" 
+                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                IsSynchronizedWithCurrentItem="True"
+                BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                AllowDrop="True" Margin="0,55,0,0" 
+                MouseLeftButtonDown="UserControl_MouseLeftButtonDown"
+                VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True"
+            >
 
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <Setter Property="FontSize" Value="13"/>
-                    <Setter Property="Height" Value="40"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                <Border Name="Bd"
-                            Background="{TemplateBinding Background}">
-                                    <GridViewRowPresenter 
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="true">
-                                        <Setter Property="Background" Value="#20FFFFFF"/>
-                                        <Setter Property="Foreground" Value="White"/>
-                                        <Setter TargetName="Bd" Property="BorderBrush" Value="#FFFFC400"/>
-                                        <Setter TargetName="Bd" Property="BorderThickness" Value="0,0,0,0"/>
-                                    </Trigger>
-                                    <MultiTrigger>
-                                        <MultiTrigger.Conditions>
-                                            <Condition Property="IsMouseOver" Value="true" />
-                                            <Condition Property="IsSelected" Value="false"/>
-                                        </MultiTrigger.Conditions>
-                                        <Setter Property="Background" Value="#20FFFFFF"/>
-                                        <Setter Property="Foreground" Value="LightGray"/>
-                                        <Setter Property="BorderBrush" Value="#FFFFC400"/>
-                                        <Setter Property="BorderThickness" Value="0,0,0,0"/>
-                                    </MultiTrigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.Resources>
-                <Style TargetType="{x:Type GridViewColumnHeader}">
-                    <Setter Property="Visibility" Value="Visible"/>
-                    <Setter Property="Background" Value="#00000000"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                    <Setter Property="Padding" Value="9,0,0,0"/>
-                    <Setter Property="BorderBrush" Value="#00000000"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="Foreground" Value="White"/>
-                </Style>
-                <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">8</system:Double>
-                <Style TargetType="ScrollBar">
-                    <Setter Property="Width" Value="8"/>
-                    <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
-                </Style>
-            </ListView.Resources>
-            <ListView.View>
-                <GridView>
-                    <GridView.Columns>
-                        <!--设置行高-->
-                        <GridViewColumn Width="10">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Image Height="50"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                            <TextBlock/>
-                        </GridViewColumn>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="Height" Value="40"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <Border Name="Bd"
+                                Background="{TemplateBinding Background}">
+                                        <GridViewRowPresenter 
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                    Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="true">
+                                            <Setter Property="Background" Value="#20FFFFFF"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="#FFFFC400"/>
+                                            <Setter TargetName="Bd" Property="BorderThickness" Value="0,0,0,0"/>
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsMouseOver" Value="true" />
+                                                <Condition Property="IsSelected" Value="false"/>
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="Background" Value="#20FFFFFF"/>
+                                            <Setter Property="Foreground" Value="LightGray"/>
+                                            <Setter Property="BorderBrush" Value="#FFFFC400"/>
+                                            <Setter Property="BorderThickness" Value="0,0,0,0"/>
+                                        </MultiTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.Resources>
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Setter Property="Background" Value="#00000000"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="Padding" Value="9,0,0,0"/>
+                        <Setter Property="BorderBrush" Value="#00000000"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Style>
+                    <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">8</system:Double>
+                    <Style TargetType="ScrollBar">
+                        <Setter Property="Width" Value="8"/>
+                        <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
+                    </Style>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView>
+                        <GridView.Columns>
+                            <!--设置行高-->
+                            <GridViewColumn Width="10">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Height="50"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                                <TextBlock/>
+                            </GridViewColumn>
 
-                        <GridViewColumn Header="No."
-                            Width="76">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Song_No}" FontSize="14">
-
-                                    </TextBlock>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-
-                        <GridViewColumn
-                            Header="歌曲" 
-                            Width="260">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Song_Name}" 
-                                           FontSize="14"
-                                           Margin="0,5,0,0">
+                            <GridViewColumn Header="No."
+                                Width="76">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Song_No}" FontSize="14">
 
                                         </TextBlock>
-                                        <!--Background="{Binding Song_MV_Image}"-->
-                                        <Button HorizontalAlignment="Left"
-                                    Style="{StaticResource MyButton}" 
-                                    Width="16" Height="16" Margin="8,6,0,0"
-                                    />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn 
-                            Header="歌手"
-                            Width="220">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Singer_Name}" FontSize="14">
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
 
-                                    </TextBlock>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="专辑"
-                            Width="220">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Album_Name}" FontSize="14">
+                            <GridViewColumn
+                                Header="标题" 
+                                Width="260">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Song_Name}" 
+                                               FontSize="14"
+                                               Margin="0,5,0,0">
 
-                                    </TextBlock>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                                            </TextBlock>
+                                            <!--Background="{Binding Song_MV_Image}"-->
+                                            <Button HorizontalAlignment="Left"
+                                        Style="{StaticResource MyButton}" 
+                                        Width="16" Height="16" Margin="8,6,0,0"
+                                        />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn 
+                                Header="歌手"
+                                Width="220">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Singer_Name}" FontSize="14">
 
-                        <GridViewColumn Header="时长"
-                            Width="120">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Song_Duration}" FontSize="14">
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="专辑"
+                                Width="220">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Album_Name}" FontSize="14">
 
-                                    </TextBlock>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
 
-                        <GridViewColumn Header="操作"
-                            Width="160">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Button 
-                                            x:Name="Button_Play" 
-                                            Content="播放" Foreground="White" Background="{x:Null}" BorderBrush="#99FFFFFF"
-                                            Click="Button_Play_This_Song_Click"/>
-                                        <Button 
-                                            x:Name="Button_DownLoad" Margin="10,0,0,0"
-                                            Content="下载" Foreground="White" Background="{x:Null}" BorderBrush="#99FFFFFF"
-                                            Click="Button_DownLoad_This_Song_Click"
-                                            />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView.Columns>
-                </GridView>
-            </ListView.View>
-            <ListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel VirtualizationMode="Recycling" IsVirtualizing="True"/>
-                </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
-        </ListView>
+                            <GridViewColumn Header="时长"
+                                Width="120">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Song_Duration}" FontSize="14">
 
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn 
+                                x:Name="GridViewColumn_SongTake"
+                                Header="操作"
+                                Width="160">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Visibility="{Binding Show_API_HttpClient_Bool_SongTake}">
+                                            <Button 
+                                                x:Name="Button_Play" 
+                                                Content="播放" Foreground="White" Background="{x:Null}" BorderBrush="#99FFFFFF"
+                                                Click="Button_Play_This_Song_Click"/>
+                                            <Button 
+                                                x:Name="Button_DownLoad" Margin="10,0,0,0"
+                                                Content="下载" Foreground="White" Background="{x:Null}" BorderBrush="#99FFFFFF"
+                                                Click="Button_DownLoad_This_Song_Click"
+                                                />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel VirtualizationMode="Recycling" IsVirtualizing="True"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+        </Grid>
+        <Grid x:Name="Grid_DownLoad_Panel">
+            <ListView x:Name="ListView_Grid_DownLoad_Panel" Visibility="Collapsed"
+                Foreground="White" 
+                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                IsSynchronizedWithCurrentItem="True"
+                BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                AllowDrop="True" Margin="0,55,0,0" 
+                VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True"
+                >
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="Height" Value="40"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <Border Name="Bd"
+                    Background="{TemplateBinding Background}">
+                                        <GridViewRowPresenter 
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                        Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="true">
+                                            <Setter Property="Background" Value="#20FFFFFF"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="#FFFFC400"/>
+                                            <Setter TargetName="Bd" Property="BorderThickness" Value="0,0,0,0"/>
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsMouseOver" Value="true" />
+                                                <Condition Property="IsSelected" Value="false"/>
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="Background" Value="#20FFFFFF"/>
+                                            <Setter Property="Foreground" Value="LightGray"/>
+                                            <Setter Property="BorderBrush" Value="#FFFFC400"/>
+                                            <Setter Property="BorderThickness" Value="0,0,0,0"/>
+                                        </MultiTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.Resources>
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Setter Property="Background" Value="#00000000"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="Padding" Value="9,0,0,0"/>
+                        <Setter Property="BorderBrush" Value="#00000000"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Style>
+                    <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">8</system:Double>
+                    <Style TargetType="ScrollBar">
+                        <Setter Property="Width" Value="8"/>
+                        <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
+                    </Style>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView>
+                        <GridView.Columns>
+                            <!--设置行高-->
+                            <GridViewColumn Width="10">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Height="50"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                                <TextBlock/>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="No."
+                    Width="76">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DownLoad_Song_No}" FontSize="14">
+
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn
+                    Header="标题" 
+                    Width="260">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding DownLoad_Song_Name}" 
+                                   FontSize="14"
+                                   Margin="0,5,0,0">
+
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn 
+                    Header="歌手"
+                    Width="220">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DownLoad_Singer_Name}" FontSize="14">
+
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="专辑"
+                    Width="220">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DownLoad_Album_Name}" FontSize="14">
+
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="大小"
+                    Width="120">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DownLoad_Song_Size}" FontSize="14">
+
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel VirtualizationMode="Recycling" IsVirtualizing="True"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+        </Grid>
+        
         <Grid 
-            x:Name="Grid_DownLoad_Menu" Visibility="{Binding Show_API_HttpClient_ALL_BrLevel_Infos_Complete}"
-            HorizontalAlignment="Center" VerticalAlignment="Center">
+            x:Name="Grid_Select_DownLoad" Visibility="{Binding Show_API_HttpClient_ALL_BrLevel_Infos_Complete}"
+            HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,40,0,0">
             <Border 
                 Width="540" Height="390" CornerRadius="10"
                 Background="White" BorderBrush="#60000000" BorderThickness="0"
@@ -230,35 +405,35 @@
             <WrapPanel x:Name="StackPanel_DownLoad_Show" Orientation="Horizontal"
                        Width="400" Height="240" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,74,0,0"
                        >
-                <RadioButton x:Name="RadioButton_BrLevel_standard" Checked="RadioButton_BrLevel_standard_Checked" 
+                <RadioButton x:Name="RadioButton_BrLevel_standard"
                              Content="标准" HorizontalAlignment="Left"
                              Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
                              />
-                <RadioButton x:Name="RadioButton_BrLevel_higher" Checked="RadioButton_BrLevel_higher_Checked" 
+                <RadioButton x:Name="RadioButton_BrLevel_higher"
                              Content="较高" HorizontalAlignment="Left"
                              Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
                              />
-                <RadioButton x:Name="RadioButton_BrLevel_exhigh" Checked="RadioButton_BrLevel_exhigh_Checked" 
+                <RadioButton x:Name="RadioButton_BrLevel_exhigh"
                              Content="极高" HorizontalAlignment="Left"
                              Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
                              />
-                <RadioButton x:Name="RadioButton_BrLevel_lossless" Checked="RadioButton_BrLevel_lossless_Checked" 
+                <RadioButton x:Name="RadioButton_BrLevel_lossless"
                              Content="无损" HorizontalAlignment="Left"
                              Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
                              />
-                <RadioButton x:Name="RadioButton_BrLevel_hires" Checked="RadioButton_BrLevel_hires_Checked" 
+                <RadioButton x:Name="RadioButton_BrLevel_hires"
                              Content="Hi-Res" HorizontalAlignment="Left"
                              Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
                              />
-                <RadioButton x:Name="RadioButton_BrLevel_jyeffect" Checked="RadioButton_BrLevel_jyeffect_Checked" 
+                <RadioButton x:Name="RadioButton_BrLevel_jyeffect"
                              Content="高清环绕声" HorizontalAlignment="Left"
                              Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
                              />
-                <RadioButton x:Name="RadioButton_BrLevel_sky" Checked="RadioButton_BrLevel_sky_Checked" 
+                <RadioButton x:Name="RadioButton_BrLevel_sky"
                              Content="沉浸环绕声" HorizontalAlignment="Left"
                              Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
                              />
-                <RadioButton x:Name="RadioButton_BrLevel_jymaster" Checked="RadioButton_BrLevel_jymaster_Checked" 
+                <RadioButton x:Name="RadioButton_BrLevel_jymaster"
                              Content="超清母带" HorizontalAlignment="Left"
                              Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
                              />

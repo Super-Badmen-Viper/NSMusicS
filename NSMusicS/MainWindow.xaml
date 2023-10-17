@@ -271,9 +271,12 @@
                     />
             </Grid>
         </Grid>
-        <Grid x:Name="Grid_Model_2" Visibility="Visible">
+        <Grid x:Name="Grid_Model_2" 
+              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+              Visibility="Visible">
             <MusicPlayer_Main:MusicPlayer_Model_2_Album_UserControl
                 x:Name="musicPlayer_Model_2_Album_UserControl"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                 />
         </Grid>

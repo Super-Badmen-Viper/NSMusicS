@@ -12,55 +12,84 @@
         <TextBlock 
             Text="模式选择：" Foreground="White" Visibility="Collapsed"
             FontSize="26" Margin="20,8,0,0" VerticalAlignment="Center"/>
-        
+
         <Border 
             x:Name="Model_1"
             Margin="60,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
-            BorderBrush="#6AD2FF" BorderThickness="0,0,0,2">
-            <TextBlock 
-                Text="单曲" Foreground="White"
-                FontSize="23" Margin="0,0,0,8"/>
+            BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
+            <StackPanel Orientation="Vertical">
+                <TextBlock 
+                    Text="单曲" Foreground="White"
+                    FontSize="23" Margin="0,0,0,8"/>
+                <Border 
+                    x:Name="Model_1_"
+                    Width="8" Height="8" BorderBrush="#6AD2FF" CornerRadius="10" BorderThickness="4"/>
+            </StackPanel>
         </Border>
-
         <Border 
             x:Name="Model_2"
             Margin="140,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
-            <TextBlock 
-                Text="专辑" Foreground="White"
-                FontSize="23" Margin="0,0,0,8"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock 
+                    Text="专辑" Foreground="White"
+                    FontSize="23" Margin="0,0,0,8"/>
+                <Border 
+                    x:Name="Model_2_"
+                    Width="8" Height="8" BorderBrush="#6AD2FF" CornerRadius="10" BorderThickness="0"/>
+            </StackPanel>
         </Border>
         <Border 
             x:Name="Model_3"
             Margin="220,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
-            <TextBlock 
-                Text="编辑/导入" Foreground="White"
-                FontSize="23" Margin="0,0,0,8"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock 
+                    Text="TAG" Foreground="White"
+                    FontSize="23" Margin="0,0,0,8"/>
+                <Border 
+                    x:Name="Model_3_"
+                    Width="8" Height="8" BorderBrush="#6AD2FF" CornerRadius="10" BorderThickness="0"/>
+            </StackPanel>
         </Border>
         <Border 
             x:Name="Model_4"
-            Margin="360,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            Margin="300,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
-            <TextBlock 
-                Text="API" Foreground="#44FFFFFF"
-                FontSize="23" Margin="0,0,0,8"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock 
+                    Text="API" Foreground="White"
+                    FontSize="23" Margin="0,0,0,8"/>
+                <Border 
+                    x:Name="Model_4_"
+                    Width="8" Height="8" BorderBrush="#6AD2FF" CornerRadius="10" BorderThickness="0"/>
+            </StackPanel>
         </Border>
         <Border 
             x:Name="Model_5"
-            Margin="430,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            Margin="370,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
-            <TextBlock 
-                Text="NAS" Foreground="#44FFFFFF"
-                FontSize="23" Margin="0,0,0,8"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock 
+                    Text="NAS" Foreground="#FF6A6A6A"
+                    FontSize="23" Margin="0,0,0,8"/>
+                <Border 
+                    x:Name="Model_5_"
+                    Width="8" Height="8" BorderBrush="#6AD2FF" CornerRadius="10" BorderThickness="0"/>
+            </StackPanel>
         </Border>
         <Border 
             x:Name="Model_6"
-            Margin="510,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
+            Margin="450,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" 
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
-            <TextBlock 
-                Text="专业" Foreground="#44FFFFFF"
-                FontSize="23" Margin="0,0,0,8"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock 
+                    Text="专业" Foreground="#FF6A6A6A"
+                    FontSize="23" Margin="0,0,0,8"/>
+                <Border 
+                    x:Name="Model_6_"
+                    Width="8" Height="8" BorderBrush="#6AD2FF" CornerRadius="10" BorderThickness="0"/>
+            </StackPanel>
         </Border>
 
         <Button 

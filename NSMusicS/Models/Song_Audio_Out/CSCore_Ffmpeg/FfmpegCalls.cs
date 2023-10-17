@@ -253,8 +253,15 @@ namespace NSMusicS.Models.Song_Audio_Out.CSCore_Ffmpeg
 
         internal static unsafe bool AvReadFrame(AvFormatContext formatContext, AVPacket* packet)
         {
-            int result = ffmpeg.av_read_frame((AVFormatContext*) formatContext.FormatPtr, packet);
-            return result >= 0;
+            try
+            {
+                int result = ffmpeg.av_read_frame((AVFormatContext*)formatContext.FormatPtr, packet);
+                return result >= 0;
+            }
+            catch (Exception e)//当文件在内存流中受保护（或者已损坏
+            {
+                return false;
+            }
         }
 
         internal static unsafe bool AvCodecDecodeAudio4(AVCodecContext* codecContext, AVFrame* frame, AVPacket* packet,

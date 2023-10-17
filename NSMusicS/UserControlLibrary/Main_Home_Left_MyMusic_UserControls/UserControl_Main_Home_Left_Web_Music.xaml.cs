@@ -34,7 +34,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
             this.DataContext = viewModule_Search_Song_For_Cloud_Music;
 
             //绑定搜索 数据源
-            ListView_Download_SongList_Info.ItemsSource = viewModule_Search_Song_For_Cloud_Music.ShowSelect_Search_Songs;
+            ListView_Show_SongList_Info.ItemsSource = viewModule_Search_Song_For_Cloud_Music.ShowSelect_Search_Songs;
 
             //绑定 音质信息 数据源 数据Change事件
             viewModule_Search_Song_For_Cloud_Music.Song_MaxBrLevel_Infos.CollectionChanged += Song_MaxBrLevel_Infos_CollectionChanged;
@@ -44,7 +44,15 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
             TextBox_Web_API.Text = "http://localhost:4000";
         }
 
+
         public ViewModule_Search_Song_For_Cloud_Music viewModule_Search_Song_For_Cloud_Music;
+        /// <summary>
+        /// 是否启用Show列表 点击事件
+        /// 0：歌曲
+        /// 1：歌手
+        /// 2：专辑
+        /// </summary>
+        public int ListView_Show_SongList_Info_Click_Mode;
 
         /// <summary>
         /// 搜索框Enter事件
@@ -52,6 +60,16 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void TextBox_Serach_KeyDown(object sender, KeyEventArgs e)
+        {
+            Begin_Search();
+
+            //显示操作面板
+            GridViewColumn_SongTake.Width = 160;
+
+            //
+            ListView_Show_SongList_Info_Click_Mode = 0;
+        }
+        public void Begin_Search()
         {
             if (TextBox_Web_API.Text.Length > 0 && TextBox_Serach.Text.Length > 0)
             {
@@ -75,24 +93,27 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         /// <param name="e"></param>
         private void Button_Play_This_Song_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
-            if (button != null)
+            if (ListView_Show_SongList_Info_Click_Mode == 0)
             {
-                ListViewItem listViewItem = FindVisualParent<ListViewItem>(button);
-                if (listViewItem != null)
+                Button button = sender as Button;
+                if (button != null)
                 {
-                    int rowIndex = ListView_Download_SongList_Info.ItemContainerGenerator.IndexFromContainer(listViewItem);
-                    ListView_Download_SongList_Info.SelectedIndex = rowIndex;
+                    ListViewItem listViewItem = FindVisualParent<ListViewItem>(button);
+                    if (listViewItem != null)
+                    {
+                        int rowIndex = ListView_Show_SongList_Info.ItemContainerGenerator.IndexFromContainer(listViewItem);
+                        ListView_Show_SongList_Info.SelectedIndex = rowIndex;
+                    }
+                    listViewItem = null;
                 }
-                listViewItem = null;
+
+                MouseButtonEventArgs args = new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left);
+                args.RoutedEvent = UIElement.MouseRightButtonDownEvent;
+                ListView_Show_SongList_Info.RaiseEvent(args);
+
+                //关闭下载面板
+                viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_ALL_BrLevel_Infos_Complete = Visibility.Collapsed;
             }
-
-            MouseButtonEventArgs args = new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left);
-            args.RoutedEvent = UIElement.MouseRightButtonDownEvent;
-            ListView_Download_SongList_Info.RaiseEvent(args);
-
-            //关闭下载面板
-            viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_ALL_BrLevel_Infos_Complete = Visibility.Collapsed;
         }
         private static T FindVisualParent<T>(DependencyObject obj) where T : DependencyObject
         {
@@ -185,6 +206,8 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                 {
                     cloud_Music_DownLoad.DownLoad_Song_For_Song_MV_Info(song_MV_Info);
                 }
+
+                song_MaxBrLevel_Info = null; song_MV_Info = null; cloud_Music_DownLoad = null;
             }
 
             //隐藏下载信息面板
@@ -211,17 +234,17 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                 ListViewItem listViewItem = FindVisualParent<ListViewItem>(button);
                 if (listViewItem != null)
                 {
-                    int rowIndex = ListView_Download_SongList_Info.ItemContainerGenerator.IndexFromContainer(listViewItem);
-                    ListView_Download_SongList_Info.SelectedIndex = rowIndex;
+                    int rowIndex = ListView_Show_SongList_Info.ItemContainerGenerator.IndexFromContainer(listViewItem);
+                    ListView_Show_SongList_Info.SelectedIndex = rowIndex;
                 }
                 listViewItem = null;
             }
             //确立该Item项属性
-            Show_Search_Song Slect_Song_Info = (Show_Search_Song)ListView_Download_SongList_Info.SelectedItem;
+            Show_Search_Song Slect_Song_Info = (Show_Search_Song)ListView_Show_SongList_Info.SelectedItem;
             if (Slect_Song_Info != null)
             {
-                if (ListView_Download_SongList_Info.SelectedIndex > -1 &&
-                    ListView_Download_SongList_Info.SelectedIndex < viewModule_Search_Song_For_Cloud_Music.ShowSelect_Search_Songs.Count
+                if (ListView_Show_SongList_Info.SelectedIndex > -1 &&
+                    ListView_Show_SongList_Info.SelectedIndex < viewModule_Search_Song_For_Cloud_Music.ShowSelect_Search_Songs.Count
                     )
                 {
                     Json_Search_Song.Song_id = Slect_Song_Info.Song_id;
@@ -354,42 +377,8 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         }
 
         /// <summary>
-        /// 音质选择
+        /// 选中初始化
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void RadioButton_BrLevel_standard_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void RadioButton_BrLevel_higher_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void RadioButton_BrLevel_exhigh_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void RadioButton_BrLevel_lossless_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void RadioButton_BrLevel_hires_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void RadioButton_BrLevel_jyeffect_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void RadioButton_BrLevel_sky_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void RadioButton_BrLevel_jymaster_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
         public void Clear_ALL_RadioButton_BrLevel_Check()
         {
             RadioButton_BrLevel_standard.IsChecked = false;
@@ -468,6 +457,89 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         private void UserControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_ALL_BrLevel_Infos_Complete = Visibility.Collapsed;
+        }
+
+        /// <summary>
+        /// 下载界面显示
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Check_DownLoad_Panel_Click(object sender, RoutedEventArgs e)
+        {
+            if (ListView_Grid_DownLoad_Panel.Visibility == Visibility.Visible)
+            {
+                ListView_Show_SongList_Info.Visibility = Visibility.Visible;
+                ListView_Grid_DownLoad_Panel.Visibility = Visibility.Collapsed;
+                Button_Check_DownLoad_Panel.Content = "打开下载界面";
+            }
+            else
+            {
+                ListView_Show_SongList_Info.Visibility = Visibility.Collapsed;
+                ListView_Grid_DownLoad_Panel.Visibility = Visibility.Visible;
+                Button_Check_DownLoad_Panel.Content = "关闭下载界面";
+            }
+        }
+
+
+        /// <summary>
+        /// 搜索歌曲
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Search_Song_Click(object sender, RoutedEventArgs e)
+        {
+            if (TextBox_Serach.Text.Length > 0 && TextBox_Serach.Text.ToString().IndexOf("&type=") < 0)
+            {
+                //TextBox_Serach.Text = TextBox_Serach.Text + "&type=1";
+                Begin_Search();
+                //TextBox_Serach.Text = TextBox_Serach.Text.ToString().Substring(0, TextBox_Serach.Text.ToString().IndexOf("&type="));
+            }
+
+            //显示操作面板
+            GridViewColumn_SongTake.Width = 160;
+
+            //
+            ListView_Show_SongList_Info_Click_Mode = 0;
+        }
+        /// <summary>
+        /// 搜索歌手
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Search_Singer_Click(object sender, RoutedEventArgs e)
+        {
+            if (TextBox_Serach.Text.Length > 0 && TextBox_Serach.Text.ToString().IndexOf("&type=") < 0)
+            {
+                TextBox_Serach.Text = TextBox_Serach.Text + "&type=100";
+                Begin_Search();
+                TextBox_Serach.Text = TextBox_Serach.Text.ToString().Substring(0, TextBox_Serach.Text.ToString().IndexOf("&type="));
+            }
+
+            //显示操作面板
+            GridViewColumn_SongTake.Width = 0;
+
+            //
+            ListView_Show_SongList_Info_Click_Mode = 1;
+        }
+        /// <summary>
+        /// 搜索专辑
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Search_Album_Click(object sender, RoutedEventArgs e)
+        {
+            if (TextBox_Serach.Text.Length > 0 && TextBox_Serach.Text.ToString().IndexOf("&type=") < 0)
+            {
+                TextBox_Serach.Text = TextBox_Serach.Text + "&type=10";
+                Begin_Search();
+                TextBox_Serach.Text = TextBox_Serach.Text.ToString().Substring(0, TextBox_Serach.Text.ToString().IndexOf("&type="));
+            }
+
+            //显示操作面板
+            GridViewColumn_SongTake.Width = 0;
+
+            //
+            ListView_Show_SongList_Info_Click_Mode = 2;
         }
 
         

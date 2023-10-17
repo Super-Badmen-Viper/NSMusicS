@@ -82,37 +82,44 @@ namespace NSMusicS.Models.Song_List_Infos
 
         public static string GetMediaDuration(string songPath)
         {
-            try
+            if (File.Exists(songPath))
             {
-                string albumTemp = string.Empty;
-                ShellClass sh = new ShellClass();
-                Folder dir = sh.NameSpace(Path.GetDirectoryName(songPath));
-                FolderItem item = dir.ParseName(Path.GetFileName(songPath));
-                String durationStr = dir.GetDetailsOf(item, 27);    //获取时长字符串(00:00:01)
-                if (!durationStr.Equals(""))
+
+
+                try
                 {
-                    try
+                    string albumTemp = string.Empty;
+                    ShellClass sh = new ShellClass();
+                    Folder dir = sh.NameSpace(Path.GetDirectoryName(songPath));
+                    FolderItem item = dir.ParseName(Path.GetFileName(songPath));
+                    String durationStr = dir.GetDetailsOf(item, 27);    //获取时长字符串(00:00:01)
+                    if (!durationStr.Equals(""))
                     {
-                        String[] durationArray = durationStr.Split(':');    //获取长度  iColumn:27
-                        int duration = 0;    //时长(毫秒)
-                        duration += int.Parse(durationArray[0]) * 60 * 60 * 1000;
-                        duration += int.Parse(durationArray[1]) * 60 * 1000;
-                        duration += int.Parse(durationArray[2]) * 1000;
+                        try
+                        {
+                            String[] durationArray = durationStr.Split(':');    //获取长度  iColumn:27
+                            int duration = 0;    //时长(毫秒)
+                            duration += int.Parse(durationArray[0]) * 60 * 60 * 1000;
+                            duration += int.Parse(durationArray[1]) * 60 * 1000;
+                            duration += int.Parse(durationArray[2]) * 1000;
+                        }
+                        catch (Exception ex)
+                        {
+                            //log
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        //log
-                    }
+                    durationStr = durationStr.Substring(3);
+
+                    return durationStr;
                 }
-                durationStr = durationStr.Substring(3);
+                catch (Exception ex)
+                {
 
-                return durationStr;
+                    return null;
+                }
             }
-            catch (Exception ex)
-            {
-
+            else
                 return null;
-            }
         }
     }
 }

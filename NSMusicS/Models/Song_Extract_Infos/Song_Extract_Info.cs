@@ -1,7 +1,9 @@
 ﻿using NSMusicS.Dao_UserControl.Song_Mrc_Info;
+using NSMusicS.Models.Song_List_Infos;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -23,10 +25,9 @@ namespace NSMusicS.Models.Song_Extract_Infos
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static (MemoryStream, Image) Extract_AlbumImage_Of_This_SongUrl(string url)
+        public static BitmapImage Extract_AlbumImage_Of_This_SongUrl(string url)
         {
-            ms = null;
-            image = null;
+            BitmapImage bitmapImage = new BitmapImage();
 
             if (url.IndexOf(".wav") < 0)
             {
@@ -36,30 +37,50 @@ namespace NSMusicS.Models.Song_Extract_Infos
 
                     if (xxxx.Tag.Pictures.Length >= 1)
                     {
-                        byte[] bin = xxxx.Tag.Pictures[0].Data.Data;
-                        (ms,image) = ReturnPhoto(bin);
+                        try
+                        {
+                            byte[] bin = xxxx.Tag.Pictures[0].Data.Data;
+                            using (MemoryStream stream = new MemoryStream(bin))
+                            {
+                                bitmapImage.BeginInit();
+                                bitmapImage.StreamSource = stream;
+                                bitmapImage.CacheOption = BitmapCacheOption.OnLoad; // Load the image immediately
+                                bitmapImage.EndInit();
+                                bitmapImage.Freeze();
+                            }
+
+                            return bitmapImage;
+                        }
+                        catch { }
                     }
                 }
             }
 
-            return (ms, image);
+            bitmapImage = null;
+
+            return null;
         }
-        static MemoryStream ms;
-        static Image image;
-        private static (MemoryStream, Image) ReturnPhoto(byte[] streamByte)
+        public static MemoryStream Extract_MemoryStream_AlbumImage_Of_This_SongUrl(string url)
         {
-            try
+            if (url.IndexOf(".wav") < 0)
             {
-                ms = new MemoryStream(streamByte);
-                image = Image.FromStream(ms);
+                if (File.Exists(url))
+                {
+                    TagLib.File xxxx = TagLib.File.Create(url);
 
-                return (ms, image);
-            }
-            catch
-            {
+                    if (xxxx.Tag.Pictures.Length >= 1)
+                    {
+                        try
+                        {
+                            byte[] bin = xxxx.Tag.Pictures[0].Data.Data;
 
+                            return new MemoryStream(bin);
+                        }catch { }
+                    }
+                }
             }
-            return (null,null);
+
+            return null;
         }
 
         /// <summary>
@@ -114,7 +135,7 @@ namespace NSMusicS.Models.Song_Extract_Infos
                 }
             }catch (Exception ex)
             {
-                MessageBox.Show(ex.Message+"专辑嵌入失败");
+                MessageBox.Show(ex.Message + "专辑封面嵌入失败：" + url);
             }
         }
         public static byte[] ImageToByteArray(Image image)

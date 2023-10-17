@@ -43,11 +43,18 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         public string Edit_Singer_Name = "";
         public string Edit_Album_Name = "";
 
+        Song_Info song_info = new Song_Info();
+        ShellClass sh = new ShellClass();
+        Regex regex;
+        Match match;
+        Folder Folderdir;
+        FolderItem FolderItemitem;
+
         private void TextBox_Search_Song_Name_TextChanged(object sender, TextChangedEventArgs e)
         {
             Search_Song_Name = TextBox_Search_Song_Name.Text;
         }
-        private void ComBox_Show_Search_Song_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ComBox_Show_Search_Song_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ComBox_Show_Search_Song.SelectedIndex > -1)
             {
@@ -57,24 +64,23 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
 
                 //TextBox_Edit_Song_Name.Text = Search_this_SongUrl.
 
-                Regex regex = new Regex(@"^(.*?)(?:\s+-\s+(.*))?\.(?:mp3|flac|wav)$");
+                regex = new Regex(@"^(.*?)(?:\s+-\s+(.*))?\.(?:mp3|flac|wav)$");
 
                 if (!string.IsNullOrWhiteSpace(Search_this_SongUrl))
                 {
                     string fileName = System.IO.Path.GetFileName(Search_this_SongUrl);
-                    Match match = regex.Match(fileName);
-                    Song_Info song_info = new Song_Info();
-                    ShellClass sh = new ShellClass();
+                    match = regex.Match(fileName);              
 
                     if (match.Success && match.Groups.Count >= 3)
                     {
                         string singerName = match.Groups[1].Value.Trim();
                         string songName = match.Groups[2].Value.Trim();
 
-                        Folder Folderdir = sh.NameSpace(System.IO.Path.GetDirectoryName(Search_this_SongUrl));
-                        FolderItem FolderItemitem = Folderdir.ParseName(System.IO.Path.GetFileName(Search_this_SongUrl));
+                        Folderdir = sh.NameSpace(System.IO.Path.GetDirectoryName(Search_this_SongUrl));
+                        FolderItemitem = Folderdir.ParseName(System.IO.Path.GetFileName(Search_this_SongUrl));
                         string albumName = Folderdir.GetDetailsOf(FolderItemitem, 14);
 
+                        song_info = new Song_Info();
                         if (songName.Length > 0)
                         {
                             song_info.Singer_Name = singerName;
@@ -89,46 +95,22 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                             Edit_Singer_Name = TextBox_Edit_Singer_Name.Text;
                             Edit_Album_Name = TextBox_Edit_Album_Name.Text;
 
-                            //获取内嵌封面
-                            MemoryStream ms = null;
-                            System.Drawing.Image image = null;
-                            (ms, image) = Song_Extract_Info.Extract_AlbumImage_Of_This_SongUrl(Search_this_SongUrl);
+                            //则读取 音频文件 内嵌封面
+                            BitmapImage bitmapImage = new BitmapImage();
+                            bitmapImage = Song_Extract_Info.Extract_AlbumImage_Of_This_SongUrl(Search_this_SongUrl);
 
-                            if (image != null)
+                            if (bitmapImage != null)
                             {
-                                BitmapImage bitmapImage = new BitmapImage();
-                                using (MemoryStream stream = new MemoryStream())
-                                {
-                                    image.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                                    stream.Position = 0;
-                                    bitmapImage.BeginInit();
-                                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                                    bitmapImage.StreamSource = stream;
-                                    bitmapImage.EndInit();
-
-                                    // 冻结 BitmapImage 对象
-                                    bitmapImage.Freeze();
-                                }
-
                                 ImageBrush imageBrush = new ImageBrush();
                                 imageBrush.ImageSource = bitmapImage;
                                 imageBrush.Stretch = Stretch.UniformToFill;
                                 Set_This_Song_AlbumImage.Background = imageBrush;
+                                imageBrush = null;
+                                bitmapImage = null;
                             }
                             else
                             {
                                 Set_This_Song_AlbumImage.Background = new SolidColorBrush(Colors.White);
-                            }
-
-                            if (ms != null)
-                            {
-                                ms.Dispose();
-                                ms = null;
-                            }
-                            if (image != null)
-                            {
-                                image.Dispose();
-                                image = null;
                             }
 
                             //获取内嵌歌词

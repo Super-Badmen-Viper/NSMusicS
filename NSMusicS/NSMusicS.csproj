@@ -318,6 +318,9 @@
     <None Remove="ico_ui_library\音量加-01.png" />
     <None Remove="ico_ui_library\顺序播放 %281%29.png" />
     <None Remove="ico_ui_library\顺序播放.png" />
+    <None Remove="images\animation_lntzrj2d.json" />
+    <None Remove="images\resource-lottielogo.json" />
+    <None Remove="images\xzRsTEB9aH.json" />
     <None Remove="Resource\EXO Lotto ALL.jpg" />
     <None Remove="Resource\EXO Obsession ALL.jpg" />
     <None Remove="Resource\EXO Obsession.jpg" />
@@ -325,6 +328,7 @@
     <None Remove="Resource\EXO-K 중독 %28Overdose%29.jpg" />
     <None Remove="Resource\EXO-K.jpg" />
     <None Remove="Resource\lotto.jpg" />
+    <None Remove="Resource\Music_Album.png" />
     <None Remove="Resource\Obsession.jpg" />
     <None Remove="UI_0_Library\5J音波,音频.svg" />
     <None Remove="UI_0_Library\上.svg" />
@@ -420,6 +424,9 @@
 
   <ItemGroup>
     <Resource Include="fonts\XHei.Bold_1.2b.ttf" />
+    <Resource Include="images\animation_lntzrj2d.json" />
+    <Resource Include="images\resource-lottielogo.json" />
+    <Resource Include="images\xzRsTEB9aH.json" />
     <Resource Include="UI_0_Library\上.svg" />
     <Resource Include="UI_0_Library\上一首.svg" />
     <Resource Include="UI_0_Library\下02.svg" />
@@ -508,6 +515,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
     <PackageReference Include="CSCore.Ffmpeg" Version="1.2.0-beta1" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
+    <PackageReference Include="LottieSharp" Version="2.3.0" />
     <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.2.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="Microsoft.SDK.Expression.Blend" Version="1.0.0" />
@@ -852,6 +860,7 @@
 
   <ItemGroup>
     <Folder Include="bin\Debug\net6.0-windows\Resource\User_Data\" />
+    <Folder Include="Resource\Lottie_Json\" />
     <Folder Include="Views_Panel\" />
   </ItemGroup>
 
@@ -1045,6 +1054,12 @@
 
   <ItemGroup>
     <None Remove="C:\Users\Administrator\.nuget\packages\cscore.ffmpeg\1.2.0-beta1\build\FFmpeg\src\sources.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resource\Music_Album.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

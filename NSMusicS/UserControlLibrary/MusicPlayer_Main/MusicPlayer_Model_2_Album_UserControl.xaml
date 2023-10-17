@@ -144,13 +144,19 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <VirtualizingStackPanel>
+                                            <Border 
+                                                Width="55" Height="55" Margin="0,0,0,0"
+                                                CornerRadius="6" 
+                                                Background="#30FFFFFF"/>
                                             <Border x:Name="ListView_For_Album_Performer_Image"
-                                                Width="55" Height="55" CornerRadius="6"
-                                            >
+                                                Width="55" Height="55" Margin="0,-55,0,0"
+                                                CornerRadius="6" 
+                                                >
                                                 <Border.Background>
                                                     <ImageBrush Stretch="UniformToFill" ImageSource="{Binding Album_Performer_Image}"/>
                                                 </Border.Background>
                                             </Border>
+                                            
                                         </VirtualizingStackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -186,10 +192,10 @@
                 </ListView.ItemsPanel>
             </ListView>
             <Border 
-        x:Name="Border_Now_Album_Image"
-        Margin="10,0,0,10" Width="160" Height="160"
-        CornerRadius="12" Background="Beige"
-        HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                x:Name="Border_Now_Album_Image"
+                Margin="10,0,0,10" Width="160" Height="160"
+                CornerRadius="12" Background="Beige"
+                HorizontalAlignment="Left" VerticalAlignment="Bottom">
 
             </Border>
             <TextBlock

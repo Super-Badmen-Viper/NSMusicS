@@ -9,42 +9,46 @@
              Background="#10232325"
              >
     <Grid>
-        <Grid x:Name="Model_View" MouseLeftButtonDown="Model_View_MouseLeftButtonDown">
-            <Border 
+        <VirtualizingStackPanel 
+            ScrollViewer.CanContentScroll="True" 
+            VirtualizingStackPanel.IsVirtualizing="True"
+            >
+            <Grid x:Name="Model_View" MouseLeftButtonDown="Model_View_MouseLeftButtonDown">
+                <Border 
                  x:Name="Border_Now_Album_Image_For_HiddenView"
                  Margin="10,5,10,60" Width="160" Height="160"
                  CornerRadius="12" Background="Beige"
                  HorizontalAlignment="Left" VerticalAlignment="Top"
                 >
 
-            </Border>
-            <TextBlock
+                </Border>
+                <TextBlock
                 x:Name="TextBlock_Album_Name_For_HiddenView"
                 Text="墨智云音乐" Foreground="White" FontSize="14" MaxWidth="120"
                 HorizontalAlignment="Center" VerticalAlignment="Top" 
                 Margin="0,170,0,0" TextTrimming="WordEllipsis"
                 >
 
-            </TextBlock>
-        </Grid>
-        <Grid x:Name="Model_Normal" Visibility="Collapsed" MouseLeave="Model_View_MouseLeave">
-            <Border 
+                </TextBlock>
+            </Grid>
+            <Grid x:Name="Model_Normal" Visibility="Collapsed" MouseLeave="Model_View_MouseLeave">
+                <Border 
              x:Name="Border_Now_Album_Image"
              Margin="10,20,0,30" Width="160" Height="160"
              CornerRadius="12" Background="Beige"
              HorizontalAlignment="Left" VerticalAlignment="Top"
             >
 
-            </Border>
-            <TextBlock
+                </Border>
+                <TextBlock
             x:Name="TextBlock_Album_Name"
             Text="墨智云音乐" Foreground="White" FontSize="24" FontWeight="Bold"
             HorizontalAlignment="Left" VerticalAlignment="Top" 
             Margin="210,20,0,0"
             >
 
-            </TextBlock>
-            <ListView 
+                </TextBlock>
+                <ListView 
             x:Name="ListView_For_This_Album_ALL_Song"
             Margin="210,60,0,0" 
             MouseLeave="ListView_For_This_Album_ALL_Song_MouseLeave"
@@ -52,144 +56,144 @@
             Background="{x:Null}" BorderThickness="0,0,0,0" BorderBrush="White" 
             ScrollViewer.CanContentScroll="True"
             >
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListViewItem}">
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="BorderBrush" Value="Transparent"/>
-                        <Setter Property="FontSize" Value="12"/>
-                        <Setter Property="Width" Value="500"/>
-                        <Setter Property="Height" Value="30"/>
-                        <Setter Property="HorizontalAlignment" Value="Left"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                    <Border Name="Bd"
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="FontSize" Value="12"/>
+                            <Setter Property="Width" Value="500"/>
+                            <Setter Property="Height" Value="30"/>
+                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                        <Border Name="Bd"
                         Background="{TemplateBinding Background}">
-                                        <GridViewRowPresenter 
+                                            <GridViewRowPresenter 
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
                             Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsSelected" Value="true">
-                                            <Setter Property="Background" Value="#20FFFFFF"/>
-                                            <Setter Property="Foreground" Value="White"/>
-                                            <Setter TargetName="Bd" Property="BorderBrush" Value="#FFFFC400"/>
-                                            <Setter TargetName="Bd" Property="BorderThickness" Value="0,0,0,0"/>
-                                        </Trigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsMouseOver" Value="true" />
-                                                <Condition Property="IsSelected" Value="false"/>
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Background" Value="#20FFFFFF"/>
-                                            <Setter Property="Foreground" Value="LightGray"/>
-                                            <Setter Property="BorderBrush" Value="#FFFFC400"/>
-                                            <Setter Property="BorderThickness" Value="0,0,0,0"/>
-                                        </MultiTrigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.Resources>
-                    <Style TargetType="{x:Type GridViewColumnHeader}">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Setter Property="Background" Value="#00000000"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                        <Setter Property="Padding" Value="9,0,0,0"/>
-                        <Setter Property="BorderBrush" Value="#00000000"/>
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Foreground" Value="White"/>
-                    </Style>
-                </ListView.Resources>
-                <ListView.View>
-                    <GridView>
-                        <GridView.Columns>
-                            <!--设置行高-->
-                            <GridViewColumn Width="450">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock 
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="true">
+                                                <Setter Property="Background" Value="#20FFFFFF"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter TargetName="Bd" Property="BorderBrush" Value="#FFFFC400"/>
+                                                <Setter TargetName="Bd" Property="BorderThickness" Value="0,0,0,0"/>
+                                            </Trigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsMouseOver" Value="true" />
+                                                    <Condition Property="IsSelected" Value="false"/>
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Background" Value="#20FFFFFF"/>
+                                                <Setter Property="Foreground" Value="LightGray"/>
+                                                <Setter Property="BorderBrush" Value="#FFFFC400"/>
+                                                <Setter Property="BorderThickness" Value="0,0,0,0"/>
+                                            </MultiTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.Resources>
+                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="Background" Value="#00000000"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            <Setter Property="Padding" Value="9,0,0,0"/>
+                            <Setter Property="BorderBrush" Value="#00000000"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView>
+                            <GridView.Columns>
+                                <!--设置行高-->
+                                <GridViewColumn Width="450">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock 
                                         x:Name="TextBlock_Song_Name"
                                         Text="{Binding Song_Name}" Foreground="White"
                                         >
 
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                                <TextBlock/>
-                            </GridViewColumn>
-                            <GridViewColumn Width="50">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                    <TextBlock/>
+                                </GridViewColumn>
+                                <GridViewColumn Width="50">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
                                         x:Name="TextBlock_Song_Duration"
                                         Text="{Binding Song_Duration}" Foreground="White"
                                         >
 
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView.Columns>
-                    </GridView>
-                </ListView.View>
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel VirtualizationMode="Recycling" IsVirtualizing="True"/>
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-            </ListView>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView.Columns>
+                        </GridView>
+                    </ListView.View>
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel VirtualizationMode="Recycling" IsVirtualizing="True"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
 
-            <StackPanel 
+                <StackPanel 
         x:Name="StackPanel_This_Album_Info" 
-        HorizontalAlignment="Left" VerticalAlignment="Center"
+        HorizontalAlignment="Left" VerticalAlignment="Top"
         Margin="10,20,0,0" Width="160" Height="160" Background="#99232325"
         Orientation="Vertical" MouseLeave="StackPanel_This_Album_Info_MouseLeave"
     >
-                <Button x:Name="Button_Play_This_Album" 
+                    <Button x:Name="Button_Play_This_Album" 
        HorizontalAlignment="Left" VerticalAlignment="Top"
        Margin="0" Padding="0,0,0,0" 
        Width="160"
        Content="播放此专辑" Click="Button_Play_This_Album_Click"/>
-                <Button x:Name="Button_Add_This_Album_To_Current_Playlist_Top" 
+                    <Button x:Name="Button_Add_This_Album_To_Current_Playlist_Top" 
        HorizontalAlignment="Left" VerticalAlignment="Top"
        Margin="0" Padding="0,0,0,0" 
        Width="160"
        Content="插入到 播放列表 队首" Click="Button_Add_This_Album_To_Current_Playlist_Top_Click"/>
-                <Button x:Name="Button_Add_This_Album_To_Current_Playlist_Buttom" 
+                    <Button x:Name="Button_Add_This_Album_To_Current_Playlist_Buttom" 
        HorizontalAlignment="Left" VerticalAlignment="Top"
        Margin="0" Padding="0,0,0,0" 
        Width="160"
        Content="插入到 播放列表 队尾" Click="Button_Add_This_Album_To_Current_Playlist_Buttom_Click"/>
 
-                <StackPanel Orientation="Horizontal">
-                    <ComboBox 
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox 
     x:Name="ComBox_Select_Add_SongList"
     SelectedIndex="-1" Style="{DynamicResource cmbstyle}" 
     SelectionChanged="ComboBox_SelectionChanged"
     IsEditable="False" Margin="0,0,0,0" Width="160"
 >
-                        <ComboBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel/>
-                            </ItemsPanelTemplate>
-                        </ComboBox.ItemsPanel>
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Margin="2.5" Text="{Binding Name}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                            <ComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel/>
+                                </ItemsPanelTemplate>
+                            </ComboBox.ItemsPanel>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Margin="2.5" Text="{Binding Name}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </Grid>
+            </Grid>
+        </VirtualizingStackPanel>
 
-        
 
     </Grid>
 </UserControl>

@@ -15,5 +15,8 @@ namespace NSMusicS.Models.Song_List_Of_Album_SongList_Infos
         public string Singer_Name { get; set; }
         public string Album_Name { get; set; }
         public ObservableCollection<Assembly_Album_SongList_Item> album_SongList_Infos { get; set; }
+
+        public string Album_Yaer { get; set; }
+        public string Album_Genre { get; set; }
     }
 }
