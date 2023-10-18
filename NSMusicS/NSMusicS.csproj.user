@@ -7,12 +7,6 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="MainWindow_Lottie_Load.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="MainWindow_NSMusicS.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="UserControlLibrary\MainWindow_Left_MoZhiAI_Music_UserControls\UserControl_ButtonFrame_MusicGuessLove.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -148,12 +142,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="MainWindow.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="MainWindow_Lottie_Load.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="MainWindow_NSMusicS.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MainWindow_Left_MoZhiAI_Music_UserControls\UserControl_ButtonFrame_MusicGuessLove.xaml">

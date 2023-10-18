@@ -31,7 +31,7 @@ namespace NSMusicS.Models.APP_Setting
             }
         }
 
-        private static string GetUid()
+        public static string GetUid()
         {
             var bytes = Encoding.UTF8.GetBytes(Assembly.GetExecutingAssembly().Location);
             using (var md5 = MD5.Create())

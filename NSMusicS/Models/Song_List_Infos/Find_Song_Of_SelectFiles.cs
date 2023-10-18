@@ -620,7 +620,7 @@ namespace NSMusicS.Models.Song_List_Infos
 
             return list_Song_Info;
         }
-        public async Task<string> SongInfo_Take_One(List<string> FileNames,int SelectFind_Nums)
+        public async Task<string> SongInfo_Take_One_async(List<string> FileNames,int SelectFind_Nums)
         {
             var tcs = new TaskCompletionSource<string>();
 
@@ -697,6 +697,61 @@ namespace NSMusicS.Models.Song_List_Infos
             });
 
             return await tcs.Task;
+        }
+        public string SongInfo_Take_One(List<string> FileNames, int SelectFind_Nums)
+        {
+            List<string> all_temp = new List<string>();
+
+            try
+            {
+                // 查找所有的temp项
+                Folder Folderdir = null; FolderItem FolderItemitem = null;
+                for (int i = 0; i < FileNames.Count; i++)
+                {
+                    if (!File.Exists(FileNames[i]))
+                    {
+                        FileNames[i] = Path_App + FileNames[i];
+                    }
+
+                    Folderdir = sh.NameSpace(Path.GetDirectoryName(FileNames[i]));
+                    FolderItemitem = Folderdir.ParseName(Path.GetFileName(FileNames[i]));
+                    all_temp.Add(Folderdir.GetDetailsOf(FolderItemitem, SelectFind_Nums));  
+                }
+
+                // 使用 LINQ 查询来计算每个字符串出现的次数，排除空值
+                // 获取重复次数最多的
+                var mostRepeatedItem = all_temp
+                    .Where(item => item != null)
+                    .GroupBy(item => item)
+                    .Select(group => new { Item = group.Key, Count = group.Count() })
+                    .OrderByDescending(result => result.Count)
+                    .FirstOrDefault();
+
+                Folderdir = null; FolderItemitem = null;
+
+                if (mostRepeatedItem != null && mostRepeatedItem.Item != null)
+                {
+                    string temp = mostRepeatedItem.Item;
+                    mostRepeatedItem = null;
+
+                    return temp;
+                }
+                else if (all_temp.Count > 0)
+                {
+                    string temp = all_temp[0];
+                    all_temp = null; mostRepeatedItem = null;
+
+                    return temp;
+                }
+                else
+                    return "";       
+            }
+            catch
+            {
+                all_temp = null; 
+            }
+
+            return "";
         }
 
         ObservableCollection<ObservableCollection<SongList_Info>> songList_Infos;

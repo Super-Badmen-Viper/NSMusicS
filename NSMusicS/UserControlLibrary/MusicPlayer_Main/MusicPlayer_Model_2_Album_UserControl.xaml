@@ -243,43 +243,43 @@
             <StackPanel x:Name="Stack_Panel_Sort_AlbumModel" Visibility="Visible" Width="135" Height="142" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="710,20,0,0" Background="#44000000">
                 <StackPanel x:Name="Stack_Button_Sort_AlbumModel_AlbumName" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
                     <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName"/>
+                        <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName"/>
                     </TextBlock>
                     <TextBlock HorizontalAlignment="Left" Foreground="White" Text="专辑名" Margin="35,-14,0,0"/>
                 </StackPanel>
                 <StackPanel x:Name="Stack_Button_Sort_AlbumModel_AlbumName_Year" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
                     <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName_Year"/>
+                        <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName_Year"/>
                     </TextBlock>
                     <TextBlock HorizontalAlignment="Left" Foreground="White" Text="专辑名/年份" Margin="35,-14,0,0"/>
                 </StackPanel>
                 <StackPanel x:Name="Stack_Button_Sort_AlbumModel_AlbumName_Genre" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
                     <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName_Genre"/>
+                        <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName_Genre"/>
                     </TextBlock>
                     <TextBlock HorizontalAlignment="Left" Foreground="White" Text="专辑名/流派" Margin="35,-14,0,0"/>
                 </StackPanel>
                 <StackPanel x:Name="Stack_Button_Sort_AlbumModel_AlbumName_Year_Genre" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
                     <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName_Year_Genre"/>
+                        <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_AlbumName_Year_Genre"/>
                     </TextBlock>
                     <TextBlock HorizontalAlignment="Left" Foreground="White" Text="专辑名/年份/流派" Margin="35,-14,0,0"/>
                 </StackPanel>
                 <StackPanel x:Name="Stack_Button_Sort_AlbumModel_Year" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
                     <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_Year"/>
+                        <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_Year"/>
                     </TextBlock>
                     <TextBlock HorizontalAlignment="Left" Foreground="White" Text="年份" Margin="35,-14,0,0"/>
                 </StackPanel>
                 <StackPanel x:Name="Stack_Button_Sort_AlbumModel_Year_Genre" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
                     <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_Year_Genre"/>
+                        <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_Year_Genre"/>
                     </TextBlock>
                     <TextBlock HorizontalAlignment="Left" Foreground="White" Text="年份/流派" Margin="35,-14,0,0"/>
                 </StackPanel>
                 <StackPanel x:Name="Stack_Button_Sort_AlbumModel_Genre" Height="20" VerticalAlignment="Top" Margin="0,0,0,0" Background="#10000000">
                     <TextBlock Height="12" Margin="14,4,0,0" Width="12" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_Genre"/>
+                        <svgc:SvgViewbox x:Name="SvgViewbox_Stack_Button_Sort_AlbumModel_Genre"/>
                     </TextBlock>
                     <TextBlock HorizontalAlignment="Left" Foreground="White" Text="流派" Margin="35,-14,0,0"/>
                 </StackPanel>

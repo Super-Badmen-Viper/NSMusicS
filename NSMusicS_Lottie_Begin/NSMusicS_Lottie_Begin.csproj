@@ -1,0 +1,117 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>墨智音乐.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="bin\Debug\net6.0-windows\NSMusicS\Resource\**" />
+    <EmbeddedResource Remove="bin\Debug\net6.0-windows\NSMusicS\Resource\**" />
+    <None Remove="bin\Debug\net6.0-windows\NSMusicS\Resource\**" />
+    <Page Remove="bin\Debug\net6.0-windows\NSMusicS\Resource\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="images\Background_Change_1.json" />
+    <None Remove="images\Load_SuperCircle.json" />
+    <None Remove="images\Load_Window.json" />
+    <None Remove="images\Robot and Music.json" />
+    <None Remove="墨智音乐.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin\Debug\net6.0-windows\NSMusicS\NSMusicS.deps.json" />
+    <Content Include="bin\Debug\net6.0-windows\NSMusicS\NSMusicS.runtimeconfig.json" />
+    <Content Include="bin\Debug\net6.0-windows\NSMusicS\Resource\Temp_System\Close.txt" />
+    <Content Include="bin\Debug\net6.0-windows\NSMusicS_Lottie_Begin.deps.json" />
+    <Content Include="bin\Debug\net6.0-windows\NSMusicS_Lottie_Begin.runtimeconfig.json" />
+    <Content Include="墨智音乐.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\net6.0-windows\LottieSharp.dll" />
+    <None Include="bin\Debug\net6.0-windows\Microsoft.Xaml.Behaviors.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\avcodec-57.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\avformat-57.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\avutil-55.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\CommonServiceLocator.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\CommunityToolkit.Mvvm.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\CSCore.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\GalaSoft.MvvmLight.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\GalaSoft.MvvmLight.Extras.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\GalaSoft.MvvmLight.Platform.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Hardcodet.NotifyIcon.Wpf.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Interop.Shell32.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Magick.NET-Q16-AnyCPU.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Magick.NET.Core.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\MaterialDesignColors.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\MaterialDesignThemes.Wpf.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Microsoft.CodeAnalysis.CSharp.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Microsoft.CodeAnalysis.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Microsoft.Expression.Controls.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Microsoft.Expression.Drawing.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Microsoft.Expression.Effects.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Microsoft.Expression.Interactions.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Microsoft.Expression.Prototyping.Interactivity.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Microsoft.Expression.Prototyping.SketchControls.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Microsoft.SDK.Expression.Blend.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Microsoft.Xaml.Behaviors.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\NAudio.Asio.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\NAudio.Core.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\NAudio.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\NAudio.Extras.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\NAudio.Midi.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\NAudio.Wasapi.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\NAudio.WinForms.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\NAudio.WinMM.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\Newtonsoft.Json.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\NSMusicS.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\NSMusicS.exe" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\NSMusicS.pdb" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\RestSharp.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\SharpVectors.Converters.Wpf.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\SharpVectors.Core.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\SharpVectors.Css.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\SharpVectors.Dom.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\SharpVectors.Model.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\SharpVectors.Rendering.Wpf.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\SharpVectors.Runtime.Wpf.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\SMBLibrary.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\swresample-2.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\System.Data.SqlClient.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\System.Text.Encodings.Web.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\System.Text.Json.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\System.Windows.Interactivity.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS\TagLibSharp.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS_Lottie_Begin.dll" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS_Lottie_Begin.exe" />
+    <None Include="bin\Debug\net6.0-windows\NSMusicS_Lottie_Begin.pdb" />
+    <None Include="bin\Debug\net6.0-windows\runtimes\osx\native\libSkiaSharp.dylib" />
+    <None Include="bin\Debug\net6.0-windows\runtimes\win-arm64\native\libSkiaSharp.dll" />
+    <None Include="bin\Debug\net6.0-windows\runtimes\win-x64\native\libSkiaSharp.dll" />
+    <None Include="bin\Debug\net6.0-windows\runtimes\win-x86\native\libSkiaSharp.dll" />
+    <None Include="bin\Debug\net6.0-windows\SkiaSharp.dll" />
+    <None Include="bin\Debug\net6.0-windows\SkiaSharp.SceneGraph.dll" />
+    <None Include="bin\Debug\net6.0-windows\SkiaSharp.Skottie.dll" />
+    <None Include="bin\Debug\net6.0-windows\SkiaSharp.Views.Desktop.Common.dll" />
+    <None Include="bin\Debug\net6.0-windows\SkiaSharp.Views.WPF.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LottieSharp" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\Background_Change_1.json" />
+    <Resource Include="images\Load_SuperCircle.json" />
+    <Resource Include="images\Load_Window.json" />
+    <Resource Include="images\Robot and Music.json" />
+    <Resource Include="墨智音乐.ico" />
+  </ItemGroup>
+
+</Project>
