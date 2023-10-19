@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NSMusicS.Services.Services_For_API_GetResult;
+using NSMusicS.UserControlLibrary.MusicPlayer_Main;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,14 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views
         public UserControl_Main_Model_2_View_Albums_And_Tracks()
         {
             InitializeComponent();
+
+            viewModule_Search_Song = ViewModule_Search_Song.Retuen_This();
+
+            Loading_LottieAnimationView.IsPlaying = false;
         }
+        ViewModule_Search_Song viewModule_Search_Song;
+
+
+
     }
 }

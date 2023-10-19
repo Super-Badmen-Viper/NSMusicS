@@ -20,7 +20,7 @@
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         x:Class="NSMusicS.MainWindow"
         mc:Ignorable="d"
-        Title="九歌·韵世" Height="728" Width="1102" 
+        Title="九歌" Height="728" Width="1102" 
         MinHeight="728" MinWidth="1102"
         Background="{x:Null}"
         UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
@@ -28,7 +28,7 @@
         MouseLeftButtonDown="Window_MouseLeftButtonDown" 
         WindowStyle="None" AllowsTransparency="True"
         ResizeMode="CanResizeWithGrip" SizeChanged="Window_SizeChanged" Closed="Window_Closed"
-        ContentRendered="window_contentRendered"
+        ContentRendered="window_contentRendered" 
         >
     <Grid>
         <MusicPlayer_Main:UserControl_TaskbarIcon x:Name="userControl_TaskbarIcon"/>
@@ -282,10 +282,34 @@
                 />
         </Grid>
 
-        <Grid x:Name="Grid_Logo" VerticalAlignment="Top" Height="70" HorizontalAlignment="Left" Width="180">
-            <TextBlock Margin="20,33,20,0"  VerticalAlignment="Top" Height="28"
-               FontWeight="Bold" FontSize="20" Foreground="White"
-               Text="九歌·韵世" TextAlignment="Center"
+        <Grid x:Name="Grid_Logo" VerticalAlignment="Top" Height="90" HorizontalAlignment="Left" Width="200">
+            <TextBlock Margin="30,30,20,0"  VerticalAlignment="Top" Height="28"
+               FontWeight="Bold" FontSize="20"
+               Text="九歌·NSMusicS" TextAlignment="Left"
+               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+             >
+                <TextBlock.Foreground>
+                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,.5">
+                        <GradientStop Offset="0" Color="#65b849" />
+                        <GradientStop Offset=".166" Color="#65b849" />
+                        <GradientStop Offset=".166" Color="#f7b423" />
+                        <GradientStop Offset=".3333" Color="#f7b423" />
+                        <GradientStop Offset="0.3333" Color="#f58122" />
+                        <GradientStop Offset="0.5" Color="#f58122" />
+                        <GradientStop Offset="0.5" Color=" #f8f8f8" />
+                        <GradientStop Offset="0.5" Color=" #f8f8f8" />
+                        <GradientStop Offset="0.50" Color="#de3a3c" />
+                        <GradientStop Offset="0.666" Color="#de3a3c" />
+                        <GradientStop Offset="0.666" Color="#943f96" />
+                        <GradientStop Offset="0.8633" Color="#943f96" />
+                        <GradientStop Offset="0.8633" Color="#009fd9" />
+                        <GradientStop Offset="01" Color="#009fd9" />
+                    </LinearGradientBrush>
+                </TextBlock.Foreground>
+            </TextBlock>
+            <TextBlock Margin="30,54,20,0"  VerticalAlignment="Top" Height="28"
+               FontWeight="Bold" FontSize="14" Foreground="White"
+               Text="拥抱开源·音乐世界" TextAlignment="Left"
                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                 />
         </Grid>

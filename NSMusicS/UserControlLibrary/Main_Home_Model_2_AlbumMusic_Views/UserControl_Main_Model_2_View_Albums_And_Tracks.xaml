@@ -5,9 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:lottie="clr-namespace:LottieSharp.WPF;assembly=LottieSharp"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
              mc:Ignorable="d" 
-             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" >
+             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality">
     <Grid>
         <ScrollViewer 
             x:Name="ScrollViewer_Albums"
@@ -32,6 +33,16 @@
                 </Style>
             </ScrollViewer.Resources>
         </ScrollViewer>
+
+        <lottie:LottieAnimationView
+            x:Name="Loading_LottieAnimationView" Visibility="Collapsed"
+            Width="300"
+            Height="300"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            AutoPlay="True"
+            ResourcePath="pack://application:,,,/Resource/Lottie_Json/Loading_Dots_Color_1.json"
+            RepeatCount="-1" />
     </Grid>
     <UserControl.Resources>
         <!-- ListView平滑滚动效果 -->

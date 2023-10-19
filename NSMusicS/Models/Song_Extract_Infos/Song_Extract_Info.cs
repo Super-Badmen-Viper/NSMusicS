@@ -60,6 +60,48 @@ namespace NSMusicS.Models.Song_Extract_Infos
 
             return null;
         }
+        public async static Task<BitmapImage> Extract_AlbumImage_Of_This_SongUrl_async(string url)
+        {
+            var tcs = new TaskCompletionSource<BitmapImage>();
+
+            await Task.Run(async () =>
+            {
+                BitmapImage bitmapImage = new BitmapImage();
+
+                if (url.IndexOf(".wav") < 0)
+                {
+                    if (File.Exists(url))
+                    {
+                    
+                            TagLib.File xxxx = TagLib.File.Create(url);
+
+                            if (xxxx.Tag.Pictures.Length >= 1)
+                            {
+                                try
+                                {
+                                    byte[] bin = xxxx.Tag.Pictures[0].Data.Data;
+                                    using (MemoryStream stream = new MemoryStream(bin))
+                                    {
+                                        bitmapImage.BeginInit();
+                                        bitmapImage.StreamSource = stream;
+                                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad; // Load the image immediately
+                                        bitmapImage.EndInit();
+                                        bitmapImage.Freeze();
+                                    }
+
+                                    tcs.SetResult(bitmapImage);
+                                }
+                                catch { }
+                            }
+                    
+                    }
+                }
+
+                bitmapImage = null;
+            });
+
+            return await tcs.Task;
+        }
         public static MemoryStream Extract_MemoryStream_AlbumImage_Of_This_SongUrl(string url)
         {
             if (url.IndexOf(".wav") < 0)

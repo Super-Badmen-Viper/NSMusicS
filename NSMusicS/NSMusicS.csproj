@@ -324,6 +324,8 @@
     <None Remove="Resource\EXO Obsession_2.jpg" />
     <None Remove="Resource\EXO-K 중독 %28Overdose%29.jpg" />
     <None Remove="Resource\EXO-K.jpg" />
+    <None Remove="Resource\Lottie_Json\Loading_Dots_Color_1.json" />
+    <None Remove="Resource\Lottie_Json\Loading_Lot_Color_For_Circle.json" />
     <None Remove="Resource\lotto.jpg" />
     <None Remove="Resource\Music_Album.png" />
     <None Remove="Resource\Obsession.jpg" />
@@ -421,6 +423,8 @@
 
   <ItemGroup>
     <Resource Include="fonts\XHei.Bold_1.2b.ttf" />
+    <Resource Include="Resource\Lottie_Json\Loading_Dots_Color_1.json" />
+    <Resource Include="Resource\Lottie_Json\Loading_Lot_Color_For_Circle.json" />
     <Resource Include="UI_0_Library\上.svg" />
     <Resource Include="UI_0_Library\上一首.svg" />
     <Resource Include="UI_0_Library\下02.svg" />
@@ -509,7 +513,8 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
     <PackageReference Include="CSCore.Ffmpeg" Version="1.2.0-beta1" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
-    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.2.0" />
+    <PackageReference Include="LottieSharp" Version="2.3.0" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.3.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="Microsoft.SDK.Expression.Blend" Version="1.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
@@ -853,7 +858,6 @@
 
   <ItemGroup>
     <Folder Include="bin\Debug\net6.0-windows\Resource\User_Data\" />
-    <Folder Include="Resource\Lottie_Json\" />
     <Folder Include="Views_Panel\" />
   </ItemGroup>
 
