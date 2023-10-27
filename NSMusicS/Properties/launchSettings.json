@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "NineSongMusicS": {
+      "commandName": "Project"
+    },
+    "配置文件 1": {
+      "commandName": "Executable",
+      "executablePath": "E:\\墨智音乐_开发平台\\NSMusicS\\NineSongMusicS\\bin\\Debug\\net6.0-windows\\NSMusicS.exe"
+    }
+  }
+}

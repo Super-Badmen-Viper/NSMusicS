@@ -5,13 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views"
              mc:Ignorable="d"
-             MouseLeftButtonDown="UserControl_MouseLeftButtonDown" MouseRightButtonDown="UserControl_MouseLeftButtonDown"
-             Background="#10232325"
              >
     <Grid>
         <VirtualizingStackPanel 
-            ScrollViewer.CanContentScroll="True" 
-            VirtualizingStackPanel.IsVirtualizing="True"
+             VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True" VirtualizingStackPanel.VirtualizationMode="Recycling"
             >
             <Grid x:Name="Model_Normal" Visibility="Visible" MouseLeave="Model_View_MouseLeave">
                 <Border 
@@ -19,6 +16,7 @@
                      Margin="10,20,0,30" Width="160" Height="160"
                      CornerRadius="12" Background="Beige"
                      HorizontalAlignment="Left" VerticalAlignment="Top"
+                     MouseLeftButtonDown="UserControl_MouseLeftButtonDown" MouseRightButtonDown="UserControl_MouseLeftButtonDown"
                     >
 
                 </Border>
@@ -27,6 +25,7 @@
                     Text="墨智云音乐" Foreground="White" FontSize="24" FontWeight="Bold"
                     HorizontalAlignment="Left" VerticalAlignment="Top" 
                     Margin="210,20,0,0"
+                    MouseLeftButtonDown="UserControl_MouseLeftButtonDown" MouseRightButtonDown="UserControl_MouseLeftButtonDown"
                     >
 
                 </TextBlock>

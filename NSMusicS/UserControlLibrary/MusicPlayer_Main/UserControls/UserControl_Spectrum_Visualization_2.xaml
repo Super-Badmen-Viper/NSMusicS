@@ -18,7 +18,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_1" Storyboard.TargetProperty="Y"/>
@@ -36,7 +36,7 @@
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                
+
             </Canvas>
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
@@ -46,7 +46,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_2" Storyboard.TargetProperty="Y"/>
@@ -73,7 +73,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_3" Storyboard.TargetProperty="Y"/>
@@ -95,12 +95,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_4" Storyboard.TargetProperty="Y"/>
@@ -122,12 +122,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_5" Storyboard.TargetProperty="Y"/>
@@ -149,12 +149,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_6" Storyboard.TargetProperty="Y"/>
@@ -176,12 +176,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_7" Storyboard.TargetProperty="Y"/>
@@ -203,12 +203,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_8" Storyboard.TargetProperty="Y"/>
@@ -230,12 +230,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_9" Storyboard.TargetProperty="Y"/>
@@ -257,12 +257,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_10" Storyboard.TargetProperty="Y"/>
@@ -284,12 +284,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_11" Storyboard.TargetProperty="Y"/>
@@ -311,12 +311,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_12" Storyboard.TargetProperty="Y"/>
@@ -338,12 +338,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_13" Storyboard.TargetProperty="Y"/>
@@ -365,12 +365,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_14" Storyboard.TargetProperty="Y"/>
@@ -392,12 +392,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_15" Storyboard.TargetProperty="Y"/>
@@ -419,12 +419,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_16" Storyboard.TargetProperty="Y"/>
@@ -446,12 +446,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_17" Storyboard.TargetProperty="Y"/>
@@ -473,12 +473,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_18" Storyboard.TargetProperty="Y"/>
@@ -500,12 +500,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_19" Storyboard.TargetProperty="Y"/>
@@ -527,12 +527,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_20" Storyboard.TargetProperty="Y"/>
@@ -554,12 +554,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_21" Storyboard.TargetProperty="Y"/>
@@ -581,12 +581,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_22" Storyboard.TargetProperty="Y"/>
@@ -608,12 +608,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_23" Storyboard.TargetProperty="Y"/>
@@ -635,12 +635,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_24" Storyboard.TargetProperty="Y"/>
@@ -662,12 +662,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_25" Storyboard.TargetProperty="Y"/>
@@ -689,12 +689,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_26" Storyboard.TargetProperty="Y"/>
@@ -716,12 +716,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_27" Storyboard.TargetProperty="Y"/>
@@ -743,12 +743,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_28" Storyboard.TargetProperty="Y"/>
@@ -770,12 +770,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_29" Storyboard.TargetProperty="Y"/>
@@ -797,12 +797,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_30" Storyboard.TargetProperty="Y"/>
@@ -824,12 +824,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_31" Storyboard.TargetProperty="Y"/>
@@ -851,12 +851,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_32" Storyboard.TargetProperty="Y"/>
@@ -878,12 +878,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_33" Storyboard.TargetProperty="Y"/>
@@ -905,12 +905,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_34" Storyboard.TargetProperty="Y"/>
@@ -932,12 +932,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_35" Storyboard.TargetProperty="Y"/>
@@ -959,12 +959,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_36" Storyboard.TargetProperty="Y"/>
@@ -986,12 +986,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_37" Storyboard.TargetProperty="Y"/>
@@ -1013,12 +1013,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_38" Storyboard.TargetProperty="Y"/>
@@ -1040,12 +1040,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_39" Storyboard.TargetProperty="Y"/>
@@ -1067,12 +1067,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_40" Storyboard.TargetProperty="Y"/>
@@ -1094,12 +1094,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_41" Storyboard.TargetProperty="Y"/>
@@ -1121,12 +1121,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_42" Storyboard.TargetProperty="Y"/>
@@ -1148,12 +1148,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_43" Storyboard.TargetProperty="Y"/>
@@ -1175,12 +1175,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_44" Storyboard.TargetProperty="Y"/>
@@ -1202,12 +1202,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_45" Storyboard.TargetProperty="Y"/>
@@ -1229,12 +1229,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_46" Storyboard.TargetProperty="Y"/>
@@ -1256,12 +1256,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_47" Storyboard.TargetProperty="Y"/>
@@ -1283,12 +1283,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_48" Storyboard.TargetProperty="Y"/>
@@ -1310,12 +1310,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_49" Storyboard.TargetProperty="Y"/>
@@ -1337,12 +1337,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_50" Storyboard.TargetProperty="Y"/>
@@ -1364,12 +1364,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_51" Storyboard.TargetProperty="Y"/>
@@ -1391,12 +1391,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_52" Storyboard.TargetProperty="Y"/>
@@ -1418,12 +1418,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_53" Storyboard.TargetProperty="Y"/>
@@ -1445,12 +1445,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_54" Storyboard.TargetProperty="Y"/>
@@ -1472,12 +1472,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_55" Storyboard.TargetProperty="Y"/>
@@ -1499,12 +1499,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_56" Storyboard.TargetProperty="Y"/>
@@ -1526,12 +1526,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_57" Storyboard.TargetProperty="Y"/>
@@ -1553,12 +1553,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_58" Storyboard.TargetProperty="Y"/>
@@ -1580,12 +1580,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_59" Storyboard.TargetProperty="Y"/>
@@ -1607,12 +1607,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_60" Storyboard.TargetProperty="Y"/>
@@ -1634,12 +1634,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_61" Storyboard.TargetProperty="Y"/>
@@ -1661,12 +1661,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_62" Storyboard.TargetProperty="Y"/>
@@ -1688,12 +1688,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_63" Storyboard.TargetProperty="Y"/>
@@ -1715,12 +1715,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_64" Storyboard.TargetProperty="Y"/>
@@ -1742,12 +1742,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_65" Storyboard.TargetProperty="Y"/>
@@ -1769,12 +1769,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_66" Storyboard.TargetProperty="Y"/>
@@ -1796,12 +1796,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_67" Storyboard.TargetProperty="Y"/>
@@ -1823,12 +1823,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_68" Storyboard.TargetProperty="Y"/>
@@ -1850,12 +1850,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_69" Storyboard.TargetProperty="Y"/>
@@ -1877,12 +1877,12 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Width="2" Height="80" Margin="5,0,0,0">
                 <Rectangle Width="2" Height="70" Margin="0,10" RenderTransformOrigin="0.5,0.5" RadiusX="10" RadiusY="10">
                     <Rectangle.RenderTransform>
-<TransformGroup>
-<RotateTransform Angle="180"/>
-</TransformGroup>
-</Rectangle.RenderTransform>
-<Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_70" Storyboard.TargetProperty="Y"/>
@@ -1909,7 +1909,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_71" Storyboard.TargetProperty="Y"/>
@@ -1936,7 +1936,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_72" Storyboard.TargetProperty="Y"/>
@@ -1963,7 +1963,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_73" Storyboard.TargetProperty="Y"/>
@@ -1990,7 +1990,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_74" Storyboard.TargetProperty="Y"/>
@@ -2017,7 +2017,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_75" Storyboard.TargetProperty="Y"/>
@@ -2044,7 +2044,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_76" Storyboard.TargetProperty="Y"/>
@@ -2071,7 +2071,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_77" Storyboard.TargetProperty="Y"/>
@@ -2098,7 +2098,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_78" Storyboard.TargetProperty="Y"/>
@@ -2125,7 +2125,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_79" Storyboard.TargetProperty="Y"/>
@@ -2152,7 +2152,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_80" Storyboard.TargetProperty="Y"/>
@@ -2179,7 +2179,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_81" Storyboard.TargetProperty="Y"/>
@@ -2206,7 +2206,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_82" Storyboard.TargetProperty="Y"/>
@@ -2233,7 +2233,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_83" Storyboard.TargetProperty="Y"/>
@@ -2260,7 +2260,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_84" Storyboard.TargetProperty="Y"/>
@@ -2287,7 +2287,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_85" Storyboard.TargetProperty="Y"/>
@@ -2314,7 +2314,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_86" Storyboard.TargetProperty="Y"/>
@@ -2341,7 +2341,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_87" Storyboard.TargetProperty="Y"/>
@@ -2368,7 +2368,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_88" Storyboard.TargetProperty="Y"/>
@@ -2395,7 +2395,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_89" Storyboard.TargetProperty="Y"/>
@@ -2422,7 +2422,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_90" Storyboard.TargetProperty="Y"/>
@@ -2449,7 +2449,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_91" Storyboard.TargetProperty="Y"/>
@@ -2476,7 +2476,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_92" Storyboard.TargetProperty="Y"/>
@@ -2503,7 +2503,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_93" Storyboard.TargetProperty="Y"/>
@@ -2530,7 +2530,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_94" Storyboard.TargetProperty="Y"/>
@@ -2557,7 +2557,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_95" Storyboard.TargetProperty="Y"/>
@@ -2584,7 +2584,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_96" Storyboard.TargetProperty="Y"/>
@@ -2611,7 +2611,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_97" Storyboard.TargetProperty="Y"/>
@@ -2638,7 +2638,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_98" Storyboard.TargetProperty="Y"/>
@@ -2665,7 +2665,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_99" Storyboard.TargetProperty="Y"/>
@@ -2692,7 +2692,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_100" Storyboard.TargetProperty="Y"/>
@@ -2719,7 +2719,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_101" Storyboard.TargetProperty="Y"/>
@@ -2746,7 +2746,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_102" Storyboard.TargetProperty="Y"/>
@@ -2773,7 +2773,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_103" Storyboard.TargetProperty="Y"/>
@@ -2800,7 +2800,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_104" Storyboard.TargetProperty="Y"/>
@@ -2827,7 +2827,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_105" Storyboard.TargetProperty="Y"/>
@@ -2854,7 +2854,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                     <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                        <EventTrigger RoutedEvent="Grid.Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
                                     <DoubleAnimationUsingKeyFrames Duration="0:0:0.5"  Storyboard.TargetName="Trans_106" Storyboard.TargetProperty="Y"/>
@@ -2875,6 +2875,6 @@
             </Canvas>
 
         </StackPanel>
-        
+
     </Grid>
 </UserControl>

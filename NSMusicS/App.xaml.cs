@@ -24,7 +24,7 @@ namespace NSMusicS
                 {
                     //写入信息，标识此应用已关闭
                     System.IO.File.WriteAllText(
-                        System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource" + @"/Temp_System/Close.txt", 
+                        System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource" + @"/Temp_System/Close.txt",
                         "close");
                 }
             };

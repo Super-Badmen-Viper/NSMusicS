@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:UserControl_Main_Model_2_View_Albums_And_Tracks="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views"
              Height="728" Width="1102" 
@@ -70,15 +71,18 @@
                 Width="16" Height="16"
                 Foreground="#F6F6F6" HorizontalAlignment="Left" VerticalAlignment="Top"
                 Margin="220,100,0,0" 
-        >
-        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/操作-刷新.svg"/>
+                >
+                <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/操作-刷新.svg"/>
             </TextBlock>
+
+            <!--ItemsPanel="{DynamicResource ItemsPanelTemplate2}"-->
             <ListView 
                 x:Name="ListView_For_Album_Performer"
                 Margin="0,126,0,191" Width="260"
                 Background="{x:Null}" BorderThickness="0,0,0,0" BorderBrush="White"
                 VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True" VirtualizingStackPanel.VirtualizationMode="Recycling"
                 ScrollViewer.ScrollChanged="ListView_For_Album_Performer_ScrollChanged"
+                PreviewMouseWheel="ListView_For_Album_Performer_PreviewMouseWheel"
                 >
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
@@ -156,7 +160,7 @@
                                                     <ImageBrush Stretch="UniformToFill" ImageSource="{Binding Album_Performer_Image}"/>
                                                 </Border.Background>
                                             </Border>
-                                            
+
                                         </VirtualizingStackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -185,11 +189,6 @@
                         </GridView.Columns>
                     </GridView>
                 </ListView.View>
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel VirtualizationMode="Recycling" IsVirtualizing="True"/>
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
             </ListView>
             <Border 
                 x:Name="Border_Now_Album_Image"
@@ -286,4 +285,50 @@
             </StackPanel>
         </Grid>
     </Grid>
+
+    <UserControl.Resources>
+
+        <!-- ListView平滑滚动效果 -->
+        <Style x:Key="ListBoxStyle1" TargetType="{x:Type ListView}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListView}">
+                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="1" SnapsToDevicePixels="true">
+                            <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                    <i:Interaction.Behaviors>
+                                        <i:FluidMoveBehavior Duration="00:00:03" />
+                                        <!--ListBoxItem/ListviewItem 未选中项的流动动画时间 ，设置为0-->
+                                    </i:Interaction.Behaviors>
+                                </ItemsPresenter>
+                            </ScrollViewer>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ItemsPanelTemplate x:Key="ItemsPanelTemplate2">
+            <StackPanel IsItemsHost="true">
+                <i:Interaction.Behaviors>
+                    <i:FluidMoveBehavior AppliesTo="Children"  Duration="00:00:00:00.3" />
+                </i:Interaction.Behaviors>
+            </StackPanel>
+        </ItemsPanelTemplate>
+
+    </UserControl.Resources>
 </UserControl>

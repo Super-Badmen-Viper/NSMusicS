@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls"
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls" xmlns:lottie="clr-namespace:LottieSharp.WPF;assembly=LottieSharp"
              mc:Ignorable="d" 
              Width="380" MinHeight="240">
     <Grid >
@@ -83,7 +83,7 @@
                     <GridView>
                         <GridView.Columns>
                             <!--设置行高-->
-                            <GridViewColumn Width="25">
+                            <GridViewColumn Width="10">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Image Height="50"/>
@@ -97,6 +97,26 @@
                                     <DataTemplate>
                                         <CheckBox x:Name="Check_ListView_Song" Tag="{Binding Song_No}" 
                                               />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="30">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <lottie:LottieAnimationView
+                                            x:Name="Loading_LottieAnimationView" 
+                                            Visibility="{Binding Visibility_Playing}" 
+                                            IsVisibleChanged="Loading_LottieAnimationView_IsVisibleChanged"
+                                            Width="30"
+                                            Height="20"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            AutoPlay="True"
+                                            ResourcePath="pack://application:,,,/Resource/Lottie_Json/Playing_Icon_1.json"
+                                            RepeatCount="-1">
+
+                                        </lottie:LottieAnimationView>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -119,7 +139,7 @@
 
                             <GridViewColumn
                                         Header="歌曲"     
-                                        Width="150"
+                                        Width="140"
                                         >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -135,7 +155,7 @@
                             </GridViewColumn>
                             <GridViewColumn 
                                         Header="歌手"
-                                        Width="80"
+                                        Width="75"
                                         >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>

@@ -1,5 +1,5 @@
 ﻿using NSMusicS.Services.Services_For_NAS;
-using SMBLibrary.SMB1;
+//using SMBLibrary.SMB1;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,18 +28,18 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         {
             InitializeComponent();
 
-            userControl_Text_Input_Account.SvgViewbox_Icon.Source = brush_Account;
+           /* userControl_Text_Input_Account.SvgViewbox_Icon.Source = brush_Account;
             userControl_Text_Input_PassWord.SvgViewbox_Icon.Source = brush_PassWord;
-            userControl_Text_Input_IP_Address.SvgViewbox_Icon.Source = brush_IP_Adress;
+            userControl_Text_Input_IP_Address.SvgViewbox_Icon.Source = brush_IP_Adress;*/
 
             userControl_Text_Input_Account.TextBock_Explain.Text = "账号";
             userControl_Text_Input_PassWord.TextBock_Explain.Text = "密码";
             userControl_Text_Input_IP_Address.TextBock_Explain.Text = "IP地址";
 
-            Button_Login_Nas.MouseLeftButtonDown += Button_Login_Nas_MouseLeftButtonDown;
+            //Button_Login_Nas.MouseLeftButtonDown += Button_Login_Nas_MouseLeftButtonDown;
         }
 
-        public Uri brush_Account
+        /*public Uri brush_Account
             = new Uri(@"Resource\\Button_Image_Svg\\账号.svg", UriKind.Relative);
         public Uri brush_PassWord
             = new Uri(@"Resource\\Button_Image_Svg\\密码.svg", UriKind.Relative);
@@ -122,7 +122,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                 Grid_Nas_User_Login.Visibility = Visibility.Visible;
 
 
-        }
+        }*/
 
         
 

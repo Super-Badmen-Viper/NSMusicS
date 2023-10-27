@@ -1,17 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace NSMusicS.Models.Song_List_Infos
 {
-    public class SongList_Info
+    public class SongList_Info : INotifyPropertyChanged
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public ObservableCollection<Song_Info> Songs { get; set; }
+
+        private ObservableCollection<Song_Info> songs { get; set; }
+        public ObservableCollection<Song_Info> Songs
+        {
+            get
+            {
+                return songs;
+            }
+            set
+            {
+                if (songs != value)
+                {
+                    songs = value;
+                    OnPropertyChanged("Songs");
+                }
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected internal virtual void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public int SelectedIndex { get; set; }
 
         public static ObservableCollection<ObservableCollection<Models.Song_List_Infos.SongList_Info>> songList_Infos { get; set; }

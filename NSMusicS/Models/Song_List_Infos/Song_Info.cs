@@ -6,13 +6,25 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace NSMusicS.Models.Song_List_Infos
 {
-    public class Song_Info
+    public class Song_Info : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected internal virtual void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        protected void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         private string _song_Name;
         public string Song_Name
         {
@@ -219,11 +231,21 @@ namespace NSMusicS.Models.Song_List_Infos
                 }
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void RaisePropertyChanged(string propertyName)
+        private Visibility _visibility_Playing = Visibility.Collapsed;
+        public Visibility Visibility_Playing
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get
+            {
+                return _visibility_Playing;
+            }
+            set
+            {
+                if (_visibility_Playing != value)
+                {
+                    _visibility_Playing = value;
+                    RaisePropertyChanged("Visibility_Playing");
+                }
+            }
         }
 
 

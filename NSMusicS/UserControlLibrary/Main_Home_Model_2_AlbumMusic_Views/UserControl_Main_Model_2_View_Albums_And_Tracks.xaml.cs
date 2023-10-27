@@ -27,12 +27,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views
             InitializeComponent();
 
             viewModule_Search_Song = ViewModule_Search_Song.Retuen_This();
-
-            Loading_LottieAnimationView.IsPlaying = false;
         }
         ViewModule_Search_Song viewModule_Search_Song;
-
-
-
     }
 }

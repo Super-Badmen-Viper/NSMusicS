@@ -720,7 +720,7 @@
                                     </ToggleButton>
                                 </Grid>
 
-                                
+
                                 <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" x:Name="Popup" Focusable="False" AllowsTransparency="True" PopupAnimation="Slide">
                                     <Border CornerRadius="1" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{TemplateBinding ActualWidth}" x:Name="DropDown" SnapsToDevicePixels="True">
                                         <ScrollViewer Margin="4,6,4,6" Style="{DynamicResource ScrollViewerStyle}" MaxHeight="{TemplateBinding MaxDropDownHeight}" SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True">

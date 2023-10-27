@@ -117,7 +117,11 @@ namespace NSMusicS.Models.Song_Audio_Out.NAduio
         {
             lock (lockObject)
             {
-                return sampleChannel.Read(buffer, offset, count);
+                try
+                {
+                    return sampleChannel.Read(buffer, offset, count);
+                }
+                catch { return 0; }
             }
         }
 

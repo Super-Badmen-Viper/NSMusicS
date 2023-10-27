@@ -17,10 +17,11 @@
         xmlns:MainWindow_Left_MoZhiAI_Music_UserControls="clr-namespace:NSMusicS.UserControlLibrary.MainWindow_Left_MoZhiAI_Music_UserControls"
         xmlns:UserControl_Main_Model_2_View_Albums_And_Tracks="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:lottie="clr-namespace:LottieSharp.WPF;assembly=LottieSharp"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         x:Class="NSMusicS.MainWindow"
         mc:Ignorable="d"
-        Title="九歌" Height="728" Width="1102" 
+        Title="九歌 · NSMusicS" Height="728" Width="1102" 
         MinHeight="728" MinWidth="1102"
         Background="{x:Null}"
         UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
@@ -283,7 +284,7 @@
         </Grid>
 
         <Grid x:Name="Grid_Logo" VerticalAlignment="Top" Height="90" HorizontalAlignment="Left" Width="200">
-            <TextBlock Margin="30,30,20,0"  VerticalAlignment="Top" Height="28"
+            <TextBlock Margin="30,24,20,0"  VerticalAlignment="Top" Height="28"
                FontWeight="Bold" FontSize="20"
                Text="九歌·NSMusicS" TextAlignment="Left"
                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
@@ -307,7 +308,7 @@
                     </LinearGradientBrush>
                 </TextBlock.Foreground>
             </TextBlock>
-            <TextBlock Margin="30,54,20,0"  VerticalAlignment="Top" Height="28"
+            <TextBlock Margin="30,50,20,0"  VerticalAlignment="Top" Height="28"
                FontWeight="Bold" FontSize="14" Foreground="White"
                Text="拥抱开源·音乐世界" TextAlignment="Left"
                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
@@ -403,6 +404,15 @@
                 Margin="0,70,0,120"
                 />
 
-        
+        <lottie:LottieAnimationView
+            x:Name="Loading_LottieAnimationView" 
+            Visibility="{Binding Show_API_HttpClient_Complete}" IsVisibleChanged="Loading_LottieAnimationView_IsVisibleChanged"
+            Width="300"
+            Height="300"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            AutoPlay="True"
+            ResourcePath="pack://application:,,,/Resource/Lottie_Json/Loading_Dots_Color_1.json"
+            RepeatCount="-1" />
     </Grid>
 </Window>

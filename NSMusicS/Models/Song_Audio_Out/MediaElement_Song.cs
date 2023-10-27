@@ -24,6 +24,7 @@ using NAudio.Wave.SampleProviders;
 using Newtonsoft.Json.Linq;
 using System.Windows.Controls;
 using AudioFileReader = NSMusicS.Models.Song_Audio_Out.NAduio.AudioFileReader;
+using NAudio.CoreAudioApi;
 //using AudioFileReader = NSMusicS.Models.Song_Audio_Out.NAduio.AudioFileReader;
 
 namespace NSMusicS.Models.Song_Audio_Out
@@ -46,6 +47,7 @@ namespace NSMusicS.Models.Song_Audio_Out
 
         public string audioFilePath;
         public int deviceNumber;
+        public string deviceName;
         public bool deviceNumber_change;
 
         #region plyaer
@@ -69,6 +71,25 @@ namespace NSMusicS.Models.Song_Audio_Out
                 new EqualizerBand {Bandwidth = 0.8f, Frequency = 20000, Gain = 0},
             };
             this.PropertyChanged += OnPropertyChanged;
+
+            //获取系统的音频输出源
+            using (var enumerator = new MMDeviceEnumerator())
+            {
+                //var outputDevice = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Console);
+                var devices = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
+                for (int i = 0; i < devices.Count; i++)
+                {
+                    using (MMDevice device = devices[i])
+                    {
+                        if (device.State == DeviceState.Active && device.ID == enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Console).ID)
+                        {
+                            deviceNumber = devices.Count - 1 - i;
+                            deviceName = device.FriendlyName;
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)

@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:lottie="clr-namespace:LottieSharp.WPF;assembly=LottieSharp"
              mc:Ignorable="d" 
              d:DesignHeight="443" d:DesignWidth="810"
              UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
@@ -234,7 +234,27 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            
+
+                            <GridViewColumn Width="30">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <lottie:LottieAnimationView
+                                            x:Name="Loading_LottieAnimationView" 
+                                            Visibility="{Binding Visibility_Playing}" 
+                                            IsVisibleChanged="Loading_LottieAnimationView_IsVisibleChanged"
+                                            Width="30"
+                                            Height="20"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            AutoPlay="True"
+                                            ResourcePath="pack://application:,,,/Resource/Lottie_Json/Playing_Icon_1.json"
+                                            RepeatCount="-1">
+
+                                        </lottie:LottieAnimationView>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
                             <GridViewColumn Header="No."
                                 Width="76">
                                 <GridViewColumn.CellTemplate>
@@ -296,7 +316,7 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="专辑"
-                                        Width="220">
+                                        Width="190">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Album_Name}" FontSize="14">

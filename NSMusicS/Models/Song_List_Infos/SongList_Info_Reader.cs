@@ -54,6 +54,8 @@ namespace NSMusicS.Models.Song_List_Infos
                     song.Song_Like = Convert.ToInt16(songNode.SelectSingleNode("Song_Like").InnerText);
                     song.MV_Path = songNode.SelectSingleNode("MV_Path").InnerText;
 
+                    song.Visibility_Playing = System.Windows.Visibility.Collapsed;
+
                     if (song.Song_Like == 1)
                         song.Song_Like_Image = ImageBrush_LoveEnter;
                     else

@@ -32,79 +32,18 @@
                 MouseEnter="Border_Hover_BackGround_MouseLeave"
                 />
 
-        
-        
-        <Grid>
-            <UserControls:UserControl_Spectrum_Visualization_2
-                x:Name="userControl_Spectrum_Visualization" 
-                VerticalAlignment="Top" Height="120" Margin="0,-80,0,0"
-                Visibility="Collapsed"
+
+        <!--
+            <Grid>
+                <UserControls:UserControl_Spectrum_Visualization_2
+                    x:Name="userControl_Spectrum_Visualization" 
+                    VerticalAlignment="Top" Height="120" Margin="0,-80,0,0"
+                    Visibility="Collapsed"
                 
-                MouseEnter="Border_Hover_BackGround_MouseLeave"
-                />
-        </Grid>
-
-
-        <Button x:Name="Button_Music_Order" 
-                Style="{StaticResource MyButton}"
-                HorizontalAlignment="Center" Height="18" Width="18"
-                BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                Margin="0,0,165,0" Cursor="Hand" >
-            <svgc:SvgViewbox 
-                x:Name="SvgViewbox_Button_Music_Order" 
-                Source="pack://application:,,,/UI_0_Library/顺序播放.svg" Cursor="Hand"/>
-            <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
-        </Button>
-        <Button x:Name="Button_Before" 
-                Style="{StaticResource MyButton}"
-                Height="22" Width="22" 
-                BorderBrush="{x:Null}" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                RenderTransformOrigin="-5.75,0.5" 
-                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" 
-                VerticalAlignment="Stretch" Margin="0,0,90,0">
-            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/上一首.svg" Cursor="Hand"/>
-            <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
-        </Button>
-        <Button x:Name="Button_Play_Pause_Player" 
-                Style="{StaticResource MyButton}"
-                Height="30" Width="30" 
-                BorderBrush="{x:Null}" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
-                HorizontalAlignment="Center" VerticalAlignment="Stretch">
-            <svgc:SvgViewbox 
-                x:Name="SvgViewbox_Button_Play_Pause_Player" 
-                Source="{Binding Button_Play_Pause_Player_Image}" Cursor="Hand"/>
-        </Button>
-        <Button x:Name="Button_Next" 
-                Style="{StaticResource MyButton}"
-                Height="22" Width="22" 
-                BorderBrush="{x:Null}" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
-                HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="85,0,0,0">
-            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/下一首.svg" Cursor="Hand"/>
-            <Button.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
-        </Button>
-        <Button x:Name="Button_Music_Voice_Speed" 
-                Style="{StaticResource MyButton}"
-                HorizontalAlignment="Center" Height="20" Width="20" Margin="166,0,0,0" VerticalAlignment="Stretch" 
-                BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Cursor="Hand" >
-            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/音量.svg" Cursor="Hand"/>
-            <Button.Effect>
-                <DropShadowEffect Color="White" BlurRadius="1" ShadowDepth="1" Opacity="1" />
-            </Button.Effect>
-        </Button>
-
+                    MouseEnter="Border_Hover_BackGround_MouseLeave"
+                    />
+            </Grid>
+        -->
 
         <Grid x:Name="Grid_MusicPlayer_MainWindow_Left"
               Visibility="Visible"
@@ -333,22 +272,22 @@
             </StackPanel>
 
             <StackPanel
-                x:Name="Button_Singer_Image_Animation_To_WindowsDesktop"
+                x:Name="Button_Album_Animation"
                 HorizontalAlignment="Right" Width="90" Margin="0,0,180,24" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Height="25" VerticalAlignment="Bottom" >
-                <TextBlock Height="18" Foreground="White" HorizontalAlignment="Left" Width="58" Text="桌面写真" Margin="0,4,0,0" FontSize="14">
+                <TextBlock Height="18" Foreground="White" HorizontalAlignment="Left" Width="58" Text="唱片模式" Margin="0,4,0,0" FontSize="14">
                     <TextBlock.Effect>
                         <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
                     </TextBlock.Effect>
                 </TextBlock>
             </StackPanel>
-            <Button x:Name="Button_Singer_Image_Animation_Image_To_WindowsDesktop" 
+            <Button x:Name="Button_Album_Animation_Image" 
                         Margin="0,0,188,28"
                         Style="{StaticResource MyButton}" 
                         Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
                 <svgc:SvgViewbox 
-                        x:Name="SvgViewbox_Button_Singer_Image_Animation_Image_To_WindowsDesktop" 
+                        x:Name="SvgViewbox_Button_Album_Animation_Image" 
                         Source="pack://application:,,,/UI_0_Library/规范－单选－未选中.svg"/>
             </Button>
             <StackPanel
@@ -370,11 +309,13 @@
             Source="pack://application:,,,/UI_0_Library/规范－单选－选中.svg"/>
             </Button>
             <StackPanel
-    x:Name="Button_Close_CD"
-    HorizontalAlignment="Right" Width="90" Margin="0,0,180,4" 
-    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-    Height="25" VerticalAlignment="Bottom" >
-                <TextBlock x:Name="TextBlock_Button_Close_CD" Height="18" Foreground="White" HorizontalAlignment="Left" Width="58" Text="隐藏唱片" Margin="0,4,0,0" FontSize="14">
+                x:Name="Button_Close_CD"
+                HorizontalAlignment="Right" Width="90" Margin="0,0,180,4" 
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                Height="25" VerticalAlignment="Bottom" >
+                <TextBlock x:Name="TextBlock_Button_Close_CD" 
+                           Width="58" Text="隐藏唱片" Margin="0,4,0,0" FontSize="14"
+                           Height="18" Foreground="White" HorizontalAlignment="Left" >
 
                 </TextBlock>
             </StackPanel>
@@ -392,7 +333,7 @@
                 HorizontalAlignment="Right" Width="90" Margin="0,0,95,24" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Height="25" VerticalAlignment="Bottom" >
-                <TextBlock Height="17" Foreground="White" HorizontalAlignment="Left" Width="58" Text="歌手写真" FontSize="14" Margin="0,4,0,0">
+                <TextBlock Height="17" Foreground="White" HorizontalAlignment="Left" Width="58" Text="写真模式" FontSize="14" Margin="0,4,0,0">
 
                 </TextBlock>
             </StackPanel>
@@ -409,7 +350,7 @@
                 HorizontalAlignment="Right" Width="90" Margin="0,0,95,4" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Height="25" VerticalAlignment="Bottom" >
-                <TextBlock Height="17" Foreground="White" HorizontalAlignment="Left" Width="56" Text="频谱动画" FontSize="14" Margin="0,4,0,0">
+                <TextBlock Height="17" Foreground="White" HorizontalAlignment="Left" Width="56" Text="频谱模式" FontSize="14" Margin="0,4,0,0">
 
                 </TextBlock>
             </StackPanel>
@@ -678,5 +619,66 @@
                 </TextBlock>
             </StackPanel>
         </StackPanel>
+
+
+        <Button x:Name="Button_Music_Order" 
+        Style="{StaticResource MyButton}"
+        HorizontalAlignment="Center" Height="18" Width="18"
+        BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
+        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+        Margin="0,0,165,0" Cursor="Hand" >
+            <svgc:SvgViewbox 
+        x:Name="SvgViewbox_Button_Music_Order" 
+        Source="pack://application:,,,/UI_0_Library/顺序播放.svg" Cursor="Hand"/>
+            <Button.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
+        </Button>
+        <Button x:Name="Button_Before" 
+        Style="{StaticResource MyButton}"
+        Height="22" Width="22" 
+        BorderBrush="{x:Null}" 
+        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+        RenderTransformOrigin="-5.75,0.5" 
+        HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" 
+        VerticalAlignment="Stretch" Margin="0,0,90,0">
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/上一首.svg" Cursor="Hand"/>
+            <Button.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
+        </Button>
+        <Button x:Name="Button_Play_Pause_Player" 
+        Style="{StaticResource MyButton}"
+        Height="30" Width="30" 
+        BorderBrush="{x:Null}" 
+        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+        HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+        HorizontalAlignment="Center" VerticalAlignment="Stretch">
+            <svgc:SvgViewbox 
+        x:Name="SvgViewbox_Button_Play_Pause_Player" 
+        Source="{Binding Button_Play_Pause_Player_Image}" Cursor="Hand"/>
+        </Button>
+        <Button x:Name="Button_Next" 
+        Style="{StaticResource MyButton}"
+        Height="22" Width="22" 
+        BorderBrush="{x:Null}" 
+        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+        HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+        HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="85,0,0,0">
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/下一首.svg" Cursor="Hand"/>
+            <Button.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
+        </Button>
+        <Button x:Name="Button_Music_Voice_Speed" 
+        Style="{StaticResource MyButton}"
+        HorizontalAlignment="Center" Height="20" Width="20" Margin="166,0,0,0" VerticalAlignment="Stretch" 
+        BorderBrush="{x:Null}" RenderTransformOrigin="0.5,1" Foreground="{x:Null}" 
+        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Cursor="Hand" >
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/音量.svg" Cursor="Hand"/>
+            <Button.Effect>
+                <DropShadowEffect Color="White" BlurRadius="1" ShadowDepth="1" Opacity="1" />
+            </Button.Effect>
+        </Button>
     </Grid>
 </UserControl>

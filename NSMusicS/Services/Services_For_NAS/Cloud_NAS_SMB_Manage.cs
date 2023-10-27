@@ -1,4 +1,4 @@
-﻿using SMBLibrary.SMB1;
+﻿//using SMBLibrary.SMB1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace NSMusicS.Services.Services_For_NAS
 {
     public class Cloud_NAS_SMB_Manage
     {
-        #region SMBLibrary
+        /*#region SMBLibrary
 
         private static Cloud_NAS_SMB_GetSet cloud_NAS_SMB_GetSet = new Cloud_NAS_SMB_GetSet();
 
@@ -61,7 +61,7 @@ namespace NSMusicS.Services.Services_For_NAS
             return null;
         }
 
-        #endregion
+        #endregion*/
 
 
     }

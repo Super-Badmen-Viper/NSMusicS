@@ -27,31 +27,33 @@ namespace NSMusicS.Models.Song_Extract_Infos
         /// <returns></returns>
         public static BitmapImage Extract_AlbumImage_Of_This_SongUrl(string url)
         {
-            BitmapImage bitmapImage = new BitmapImage();
+            BitmapImage bitmapImage = null;
 
             if (url.IndexOf(".wav") < 0)
             {
                 if (File.Exists(url))
                 {
-                    TagLib.File xxxx = TagLib.File.Create(url);
-
-                    if (xxxx.Tag.Pictures.Length >= 1)
+                    using (TagLib.File xxxx = TagLib.File.Create(url))
                     {
-                        try
+                        if (xxxx.Tag.Pictures.Length >= 1)
                         {
-                            byte[] bin = xxxx.Tag.Pictures[0].Data.Data;
-                            using (MemoryStream stream = new MemoryStream(bin))
+                            try
                             {
-                                bitmapImage.BeginInit();
-                                bitmapImage.StreamSource = stream;
-                                bitmapImage.CacheOption = BitmapCacheOption.OnLoad; // Load the image immediately
-                                bitmapImage.EndInit();
-                                bitmapImage.Freeze();
-                            }
+                                using (MemoryStream stream = new MemoryStream(
+                                    xxxx.Tag.Pictures[0].Data.Data))
+                                {
+                                    bitmapImage = new BitmapImage();
+                                    bitmapImage.BeginInit();
+                                    bitmapImage.StreamSource = stream;
+                                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad; // Load the image immediately
+                                    bitmapImage.EndInit();
+                                    bitmapImage.Freeze();
+                                }
 
-                            return bitmapImage;
+                                return bitmapImage;
+                            }
+                            catch { }
                         }
-                        catch { }
                     }
                 }
             }
@@ -66,22 +68,23 @@ namespace NSMusicS.Models.Song_Extract_Infos
 
             await Task.Run(async () =>
             {
-                BitmapImage bitmapImage = new BitmapImage();
+                BitmapImage bitmapImage = null;
 
                 if (url.IndexOf(".wav") < 0)
                 {
                     if (File.Exists(url))
                     {
-                    
-                            TagLib.File xxxx = TagLib.File.Create(url);
-
+                        using (TagLib.File xxxx = TagLib.File.Create(url))
+                        {
                             if (xxxx.Tag.Pictures.Length >= 1)
                             {
                                 try
                                 {
-                                    byte[] bin = xxxx.Tag.Pictures[0].Data.Data;
-                                    using (MemoryStream stream = new MemoryStream(bin))
+                                    using (MemoryStream stream = new MemoryStream(
+                                        xxxx.Tag.Pictures[0].Data.Data
+                                        ))
                                     {
+                                        bitmapImage = new BitmapImage();
                                         bitmapImage.BeginInit();
                                         bitmapImage.StreamSource = stream;
                                         bitmapImage.CacheOption = BitmapCacheOption.OnLoad; // Load the image immediately
@@ -93,11 +96,10 @@ namespace NSMusicS.Models.Song_Extract_Infos
                                 }
                                 catch { }
                             }
-                    
+                            xxxx.Dispose();
+                        }
                     }
                 }
-
-                bitmapImage = null;
             });
 
             return await tcs.Task;
@@ -108,16 +110,19 @@ namespace NSMusicS.Models.Song_Extract_Infos
             {
                 if (File.Exists(url))
                 {
-                    TagLib.File xxxx = TagLib.File.Create(url);
-
-                    if (xxxx.Tag.Pictures.Length >= 1)
+                    using (TagLib.File xxxx = TagLib.File.Create(url))
                     {
-                        try
+                        if (xxxx.Tag.Pictures.Length >= 1)
                         {
-                            byte[] bin = xxxx.Tag.Pictures[0].Data.Data;
+                            try
+                            {
+                                byte[] bin = xxxx.Tag.Pictures[0].Data.Data;
+                                xxxx.Dispose();
 
-                            return new MemoryStream(bin);
-                        }catch { }
+                                return new MemoryStream(bin);
+                            }
+                            catch { }
+                        }
                     }
                 }
             }
@@ -138,41 +143,40 @@ namespace NSMusicS.Models.Song_Extract_Infos
                 {
                     if (File.Exists(url))
                     {
-                        TagLib.File xxxx = TagLib.File.Create(url);
-
-                        Image image = null;
-                        if (imageSource is BitmapSource bitmapSource)
+                        using (TagLib.File xxxx = TagLib.File.Create(url))
                         {
-                            // 创建一个 MemoryStream 以保存 BitmapSource 数据
-                            using (MemoryStream memoryStream = new MemoryStream())
+                            Image image = null;
+                            if (imageSource is BitmapSource bitmapSource)
                             {
-                                BitmapEncoder encoder = new PngBitmapEncoder(); // 选择适当的编码器
-                                encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-                                encoder.Save(memoryStream);
+                                // 创建一个 MemoryStream 以保存 BitmapSource 数据
+                                using (MemoryStream memoryStream = new MemoryStream())
+                                {
+                                    BitmapEncoder encoder = new PngBitmapEncoder(); // 选择适当的编码器
+                                    encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+                                    encoder.Save(memoryStream);
 
-                                // 从 MemoryStream 创建 System.Drawing.Image
-                                ImageConverter imageConverter = new ImageConverter();
-                                image = (Image)imageConverter.ConvertFrom(memoryStream.ToArray());
+                                    // 从 MemoryStream 创建 System.Drawing.Image
+                                    ImageConverter imageConverter = new ImageConverter();
+                                    image = (Image)imageConverter.ConvertFrom(memoryStream.ToArray());
+                                }
+
                             }
+                            byte[] bin = ImageToByteArray(image);
+                            //
+                            image = null;
 
+                            // define picture
+                            TagLib.Id3v2.AttachedPictureFrame pic = new TagLib.Id3v2.AttachedPictureFrame();
+                            pic.TextEncoding = TagLib.StringType.Latin1;
+                            pic.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg;
+                            pic.Type = TagLib.PictureType.FrontCover;
+                            pic.Data = bin;
+
+                            // save picture to file
+                            xxxx.Tag.Pictures = new TagLib.IPicture[1] { pic };
+                            xxxx.Tag.Album = Album_Name;
+                            xxxx.Save();
                         }
-                        byte[] bin = ImageToByteArray(image);
-                        //
-                        image = null;
-
-                        // define picture
-                        TagLib.Id3v2.AttachedPictureFrame pic = new TagLib.Id3v2.AttachedPictureFrame();
-                        pic.TextEncoding = TagLib.StringType.Latin1;
-                        pic.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg;
-                        pic.Type = TagLib.PictureType.FrontCover;
-                        pic.Data = bin;
-
-                        // save picture to file
-                        xxxx.Tag.Pictures = new TagLib.IPicture[1] { pic };
-
-                        xxxx.Tag.Album = Album_Name;
-
-                        xxxx.Save();
                     }
                 }
             }catch (Exception ex)
@@ -196,45 +200,45 @@ namespace NSMusicS.Models.Song_Extract_Infos
         /// <returns></returns>
         public static ArrayList Extract_Lyic_Of_This_SongUrl(string url)
         {
-            ArrayList arrayList;
-            TagLib.File xxxx = TagLib.File.Create(url);
-            if (xxxx.Tag.Lyrics != null)
+            ArrayList arrayList = null;
+            using (TagLib.File xxxx = TagLib.File.Create(url))
             {
-                if (xxxx.Tag.Lyrics.Length > 0)
+                if (xxxx.Tag.Lyrics != null)
                 {
-                    string[] lines;
-                    if (xxxx.Tag.Lyrics.IndexOf("\r\n") >= 0)
+                    if (xxxx.Tag.Lyrics.Length > 0)
                     {
-                        lines = xxxx.Tag.Lyrics.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-                        arrayList = new ArrayList();
-                        foreach (string line in lines)
-                            arrayList.Add(line);
-
-                        for (int i = arrayList.Count - 1; i >= 0; i--)
+                        string[] lines;
+                        if (xxxx.Tag.Lyrics.IndexOf("\r\n") >= 0)
                         {
-                            string A_String_Read = arrayList[i].ToString();
+                            lines = xxxx.Tag.Lyrics.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-                            if (!A_String_Read.Contains("<"))
+                            arrayList = new ArrayList();
+                            foreach (string line in lines)
+                                arrayList.Add(line);
+
+                            for (int i = arrayList.Count - 1; i >= 0; i--)
                             {
-                                arrayList.RemoveAt(i);
+                                string A_String_Read = arrayList[i].ToString();
+
+                                if (!A_String_Read.Contains("<"))
+                                {
+                                    arrayList.RemoveAt(i);
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        lines = xxxx.Tag.Lyrics.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                        else
+                        {
+                            lines = xxxx.Tag.Lyrics.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-                        arrayList = new ArrayList();
-                        foreach (string line in lines)
-                            arrayList.Add(line);
+                            arrayList = new ArrayList();
+                            foreach (string line in lines)
+                                arrayList.Add(line);
+                        }
                     }
-
-                    return arrayList;
                 }
             }
 
-            return null;
+            return arrayList;
         }
         public static bool isPureNum(string str)
         {
@@ -261,8 +265,11 @@ namespace NSMusicS.Models.Song_Extract_Infos
         /// <returns></returns>
         public static string Get_Lyic_Of_This_SongUrl(string url)
         {
-            TagLib.File xxxx = TagLib.File.Create(url);
-            string lyic_Info = xxxx.Tag.Lyrics;
+            string lyic_Info = "";
+            using (TagLib.File xxxx = TagLib.File.Create(url))
+            {
+                lyic_Info = xxxx.Tag.Lyrics;
+            }
             return lyic_Info;
         }
 
@@ -276,9 +283,11 @@ namespace NSMusicS.Models.Song_Extract_Infos
         {
             try
             {
-                TagLib.File xxxx = TagLib.File.Create(url);
-                xxxx.Tag.Lyrics = lyic_Info;
-                xxxx.Save();
+                using (TagLib.File xxxx = TagLib.File.Create(url))
+                {
+                    xxxx.Tag.Lyrics = lyic_Info;
+                    xxxx.Save();
+                }
             }catch (Exception ex)
             {
                 MessageBox.Show(ex.Message+"歌词嵌入失败");

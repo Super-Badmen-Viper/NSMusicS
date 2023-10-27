@@ -47,6 +47,7 @@ namespace NSMusicS.Models.Song_List_Infos
                 List<string> song_url = new List<string>();
                 song_url.Add(filename);
                 ObservableCollection<Song_Info> list_Song_Info = SongInfo_Take(song_url);
+                song_url.Clear(); song_url = null;
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -80,6 +81,8 @@ namespace NSMusicS.Models.Song_List_Infos
                         
                         Select_List.Add(song_Info);
                     }
+                    updatedSelectList.Clear(); updatedSelectList = null;
+                    uniqueSongUrls.Clear(); uniqueSongUrls = null;
 
                     //5.确认是否在我的收藏中
                     if (SongList_ID != 0)
@@ -139,8 +142,7 @@ namespace NSMusicS.Models.Song_List_Infos
 
             await Task.Run(async () =>
             {
-                List<string> song_url = audioFiles;
-                ObservableCollection<Song_Info> list_Song_Info = SongInfo_Take(song_url);
+                ObservableCollection<Song_Info> list_Song_Info = SongInfo_Take(audioFiles);
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -163,6 +165,8 @@ namespace NSMusicS.Models.Song_List_Infos
                             uniqueSongUrls.Add(songInfo.Song_Url);
                         }
                     }
+                    list_Song_Info.Clear(); list_Song_Info = null;
+
                     //去重后重新添加
                     Select_List.Clear();
                     for (int i = 0; i < updatedSelectList.Count; i++)
@@ -170,6 +174,10 @@ namespace NSMusicS.Models.Song_List_Infos
                         Song_Info song_Info = (Song_Info)updatedSelectList[i];
                         Select_List.Add(song_Info);
                     }
+
+                    uniqueSongUrls.Clear(); uniqueSongUrls = null;
+                    updatedSelectList.Clear(); updatedSelectList = null;
+
 
                     //5.确认是否在我的收藏中
                     if (SongList_ID != 0)
@@ -238,6 +246,7 @@ namespace NSMusicS.Models.Song_List_Infos
                 {
                     List<string> song_url = new List<string>(dialog.FileNames);
                     ObservableCollection<Song_Info> list_Song_Info = SongInfo_Take(song_url);
+                    song_url.Clear(); song_url = null;
 
                     Application.Current.Dispatcher.Invoke(() =>
                     {
@@ -267,6 +276,9 @@ namespace NSMusicS.Models.Song_List_Infos
                             Song_Info song_Info = (Song_Info)updatedSelectList[i];
                             Select_List.Add(song_Info);
                         }
+
+                        uniqueSongUrls.Clear(); uniqueSongUrls = null;
+                        updatedSelectList.Clear(); updatedSelectList = null;
 
                         //5.确认是否在我的收藏中
                         if (SongList_ID != 0)
@@ -336,8 +348,8 @@ namespace NSMusicS.Models.Song_List_Infos
                 {
                     // 使用 Task.Run 在后台线程执行耗时操作
                     List<string> songUrls = SearchAudioFilesInFolder(folderDialog.SelectedPath);
-
                     ObservableCollection<Song_Info> list_Song_Info = SongInfo_Take(songUrls);
+                    songUrls.Clear(); songUrls = null;
 
                     Application.Current.Dispatcher.Invoke(() =>
                     {
@@ -367,6 +379,9 @@ namespace NSMusicS.Models.Song_List_Infos
                             Song_Info song_Info = (Song_Info)updatedSelectList[i];
                             Select_List.Add(song_Info);
                         }
+
+                        uniqueSongUrls.Clear(); uniqueSongUrls = null;
+                        updatedSelectList.Clear(); updatedSelectList = null;
 
                         //5.确认是否在我的收藏中
                         if (SongList_ID != 0)
@@ -439,9 +454,11 @@ namespace NSMusicS.Models.Song_List_Infos
                     {
                         songUrls.Add(songUrls_temp[k].ToString());
                     }
+                    songUrls_temp.Clear(); songUrls_temp = null;
                 }           
 
                 ObservableCollection<Song_Info> list_Song_Info = SongInfo_Take(songUrls);
+                songUrls.Clear();songUrls = null;
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -471,6 +488,9 @@ namespace NSMusicS.Models.Song_List_Infos
                         Song_Info song_Info = (Song_Info)updatedSelectList[i];
                         Select_List.Add(song_Info);
                     }
+
+                    uniqueSongUrls.Clear(); uniqueSongUrls = null;
+                    updatedSelectList.Clear(); updatedSelectList = null;
 
                     //5.确认是否在我的收藏中
                     if (SongList_ID != 0)

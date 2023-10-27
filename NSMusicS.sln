@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Blend for Visual Studio Version 17
+# Visual Studio Version 17
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS", "NSMusicS\NSMusicS.csproj", "{F0C8541B-0F4F-45FD-BA34-FCA0BCB79F76}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_Lottie_Begin", "NSMusicS_Lottie_Begin\NSMusicS_Lottie_Begin.csproj", "{19D03D86-0909-4788-A31A-2976A68D73B3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_Sound_Plugin", "NSMusicS_Sound_Plugin\NSMusicS_Sound_Plugin.csproj", "{8202D41F-7CED-46B3-AB26-F0125CDD6673}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS", "NSMusicS\NSMusicS.csproj", "{6FFC37EA-2D44-47F1-ADF2-9C1CEFC5CD1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F0C8541B-0F4F-45FD-BA34-FCA0BCB79F76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F0C8541B-0F4F-45FD-BA34-FCA0BCB79F76}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F0C8541B-0F4F-45FD-BA34-FCA0BCB79F76}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F0C8541B-0F4F-45FD-BA34-FCA0BCB79F76}.Release|Any CPU.Build.0 = Release|Any CPU
 		{19D03D86-0909-4788-A31A-2976A68D73B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{19D03D86-0909-4788-A31A-2976A68D73B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19D03D86-0909-4788-A31A-2976A68D73B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19D03D86-0909-4788-A31A-2976A68D73B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8202D41F-7CED-46B3-AB26-F0125CDD6673}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8202D41F-7CED-46B3-AB26-F0125CDD6673}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8202D41F-7CED-46B3-AB26-F0125CDD6673}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8202D41F-7CED-46B3-AB26-F0125CDD6673}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FFC37EA-2D44-47F1-ADF2-9C1CEFC5CD1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FFC37EA-2D44-47F1-ADF2-9C1CEFC5CD1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FFC37EA-2D44-47F1-ADF2-9C1CEFC5CD1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FFC37EA-2D44-47F1-ADF2-9C1CEFC5CD1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

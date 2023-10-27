@@ -1,0 +1,15 @@
+﻿<Window x:Class="NSMusicS_Sound_Plugin.NSMusicS_Equalizer_Speciality"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NSMusicS_Sound_Plugin"
+        xmlns:UserControls="clr-namespace:NSMusicS_Sound_Plugin.Views.VIews_NSMusicS_Equalizer_Speciality.UserControl_Graphic_Panel.UserControls"
+        mc:Ignorable="d"
+        Title="九歌 · NSMusicS · 专业级EQ均衡器" Height="450" Width="800" Background="White">
+    <Grid>
+        <UserControls:Panel_Reference_Gridlines
+            x:Name="panel_Reference_Gridlines"
+            />
+    </Grid>
+</Window>

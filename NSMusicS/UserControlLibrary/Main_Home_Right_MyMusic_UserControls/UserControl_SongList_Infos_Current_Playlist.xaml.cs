@@ -1,4 +1,5 @@
 ﻿
+using LottieSharp.WPF;
 using Microsoft.Win32;
 using NSMusicS.Models.Song_List_Infos;
 using SharpVectors.Converters;
@@ -91,7 +92,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
             Sort_SongList();
         }
 
-        #region 选中此音乐
+        #region 选中此音乐/正在播放
 
         /// <summary>
         /// 选中此音乐
@@ -112,6 +113,27 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
             else if (ck_Selected.IsChecked == false)
             {
                 Song_Info_Selects.Remove(this.ListView_Download_SongList_Info.Items[Convert.ToInt32(ck_Selected.Tag) - 1]);
+            }
+        }
+
+        /// <summary>
+        /// 正在播放
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Loading_LottieAnimationView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            LottieAnimationView temp = sender as LottieAnimationView;
+            if (temp != null)
+            {
+                if (temp.Visibility == Visibility.Visible)
+                {
+                    temp.PlayAnimation();
+                }
+                else
+                {
+                    temp.StopAnimation();
+                }
             }
         }
         #endregion
@@ -448,7 +470,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
 
             SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
 
-            ListView_Download_SongList_Info.Items.Refresh();
+            //ListView_Download_SongList_Info.Items.Refresh();
         }
 
 

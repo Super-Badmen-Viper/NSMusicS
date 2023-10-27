@@ -58,7 +58,7 @@
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
             <StackPanel Orientation="Vertical">
                 <TextBlock 
-                    Text="API" Foreground="White"
+                    Text="API" Foreground="#44FFFFFF"
                     FontSize="23" Margin="0,0,0,8"/>
                 <Border 
                     x:Name="Model_4_"
@@ -71,7 +71,7 @@
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
             <StackPanel Orientation="Vertical">
                 <TextBlock 
-                    Text="NAS" Foreground="#FF6A6A6A"
+                    Text="NAS" Foreground="#44FFFFFF"
                     FontSize="23" Margin="0,0,0,8"/>
                 <Border 
                     x:Name="Model_5_"
@@ -84,7 +84,7 @@
             BorderBrush="#6AD2FF" BorderThickness="0,0,0,0">
             <StackPanel Orientation="Vertical">
                 <TextBlock 
-                    Text="专业" Foreground="#FF6A6A6A"
+                    Text="专业" Foreground="#44FFFFFF"
                     FontSize="23" Margin="0,0,0,8"/>
                 <Border 
                     x:Name="Model_6_"

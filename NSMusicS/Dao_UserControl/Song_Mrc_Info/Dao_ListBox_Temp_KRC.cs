@@ -281,7 +281,7 @@ namespace NSMusicS.Dao_UserControl.Song_Mrc_Info
                     }
                     else if (i == 6)
                     {
-                        temp_string.Add("未经本作者版权认可，禁止使用此应用内的算法及模型进行商用或开源，违者必究");
+                        temp_string.Add("未经本作者版权认可，禁止使用此应用内的算法及模型进行商用，违者必究");
                     }
                     else if (i < mrc_A_line_Text.Count + 7)
                     {
@@ -382,45 +382,48 @@ namespace NSMusicS.Dao_UserControl.Song_Mrc_Info
                     mrc_Line_Info[i].This_MRC_Start_Time = Convert.ToInt32(temp_head_start.Substring(temp_head_start.IndexOf("[") + 1, temp_head_start.IndexOf(",") - temp_head_start.IndexOf("[") - 1));
                     mrc_Line_Info[i].This_MRC_Duration = Convert.ToInt32(temp_head_duration.Substring(temp_head_duration.IndexOf(",") + 1, temp_head_duration.IndexOf("]") - temp_head_duration.IndexOf(",") - 1));
 
+                    //"[4050,3297](0,655)DANCE(0,762)DANCE(0,1) (0,761)DANCE(0,1) (0,1116)DANCE"
                     //转化 1为2
                     //1：[256178,7756](0, 705)谁(0, 306)令(0, 965)我(0, 456)一(0, 1269)直(0, 458)空(0, 3597)等
                     //2：[31937,1668]<0,253,0>深<253,253,0>夜<506,203,0>不<709,252,0>想<961,707,0>睡
-                    string pattern = @"\((\d+),(\d+)\)(.)";
-                    StringBuilder output = new StringBuilder(temp_text.Substring(0, temp_text.IndexOf("(")));
-                    int currentIndex = 0;
-                    foreach (Match match in Regex.Matches(temp_text, pattern))
-                    {
-                        int startTime = int.Parse(match.Groups[1].Value) + currentIndex;
-                        int duration = int.Parse(match.Groups[2].Value);
-                        string text = match.Groups[3].Value;
+                    temp_text = temp_text.Replace("(0,1) ", "");
+                    string pattern = @"\((\d+),\s*(\d+)\)([^\(\)]+)"; // 匹配括号内的数字和文字
+                    int currentStart = 0;
+                    temp_text = Regex.Replace(temp_text, pattern, match => {
+                        int start = int.Parse(match.Groups[1].Value);
+                        int length = int.Parse(match.Groups[2].Value);
+                        string content = match.Groups[3].Value;
 
-                        output.Append($"({startTime},{duration}){text}");
-                        currentIndex = startTime + duration;
-                    }
-                    temp_text = output.ToString();
+                        // 构建替换后的字符串
+                        string replacement = $"<{currentStart},{length},0>{content}";
+
+                        currentStart = currentStart + length;
+
+                        return replacement;
+                    });
 
                     //
                     temp_text = temp_text.Substring(temp_text.IndexOf("]") + 1);
-                    if (temp_text.IndexOf("(") > -1)
+                    if (temp_text.IndexOf("<") > -1)
                     {
                         while (true)
                         {
                             //添加歌词行单个字符动画开始时间
-                            if (temp_text.IndexOf(",") > temp_text.IndexOf("("))
-                                mrc_Line_Info[i].Array_Morebyte_BeginTime.Add(temp_text.Substring(temp_text.IndexOf("(") + 1, temp_text.IndexOf(",") - temp_text.IndexOf("(") - 1));
+                            if (temp_text.IndexOf(",") > temp_text.IndexOf("<"))
+                                mrc_Line_Info[i].Array_Morebyte_BeginTime.Add(temp_text.Substring(temp_text.IndexOf("<") + 1, temp_text.IndexOf(",") - temp_text.IndexOf("<") - 1));
                             else
-                                mrc_Line_Info[i].Array_Morebyte_BeginTime.Add(temp_text.Substring(temp_text.IndexOf("(") + 1, temp_text.IndexOf(",") - temp_text.IndexOf("(") - 1));
+                                mrc_Line_Info[i].Array_Morebyte_BeginTime.Add(temp_text.Substring(temp_text.IndexOf("<") + 1, temp_text.IndexOf(",") - temp_text.IndexOf("<") - 1));
 
                             //添加歌词行单个字符动画持续时间
                             //204,0>林<204,204,0>俊<408,203,0>杰 <611,203,0>- <814,203,0>Always <1017,254,0>Online
                             temp_text = temp_text.Substring(temp_text.IndexOf(",") + 1);
-                            mrc_Line_Info[i].Array_Morebyte_Duration.Add(temp_text.Substring(0, temp_text.IndexOf(")")));
+                            mrc_Line_Info[i].Array_Morebyte_Duration.Add(temp_text.Substring(0, temp_text.IndexOf(",")));
 
                             //添加歌词字节
                             //林<204,204,0>俊<408,203,0>杰 <611,203,0>- <814,203,0>Always <1017,254,0>Online
                             temp_text = temp_text.Substring(temp_text.IndexOf(">") + 1);
-                            if (temp_text.IndexOf(")") > 0)
-                                mrc_Line_Info[i].Array_Morebyte_Text.Add(temp_text.Substring(temp_text.IndexOf(")") + 1,1));
+                            if (temp_text.IndexOf("<") > 0)
+                                mrc_Line_Info[i].Array_Morebyte_Text.Add(temp_text.Substring(0, temp_text.IndexOf("<")));
                             else
                                 mrc_Line_Info[i].Array_Morebyte_Text.Add(temp_text);
 
@@ -428,8 +431,8 @@ namespace NSMusicS.Dao_UserControl.Song_Mrc_Info
                             mrc_Line_Info[i].Int_MoreByte_Nums++;
 
                             //验证是否还存在字符
-                            if (temp_text.IndexOf("(") > 0)
-                                temp_text = temp_text.Substring(temp_text.IndexOf("("));//去除已添加的歌词字节
+                            if (temp_text.IndexOf("<") > 0)
+                                temp_text = temp_text.Substring(temp_text.IndexOf("<"));//去除已添加的歌词字节
                             else
                                 break;
                         }
@@ -441,105 +444,109 @@ namespace NSMusicS.Dao_UserControl.Song_Mrc_Info
 
             }
 
-            int nums_This_MRC_Duration = 0;
-            for (int i = 0; i < mrc_Line_Info[mrc_Line_Info.Count - 1].Int_MoreByte_Nums; i++)
+            try
             {
-                nums_This_MRC_Duration += Convert.ToInt32(mrc_Line_Info[mrc_Line_Info.Count - 1].Array_Morebyte_Duration[i]);
-            }
-            mrc_Line_Info[mrc_Line_Info.Count - 1].This_MRC_Duration = nums_This_MRC_Duration;
-            //未指定目标
+                int nums_This_MRC_Duration = 0;
+                for (int i = 0; i < mrc_Line_Info[mrc_Line_Info.Count - 1].Int_MoreByte_Nums; i++)
+                {
+                    nums_This_MRC_Duration += Convert.ToInt32(mrc_Line_Info[mrc_Line_Info.Count - 1].Array_Morebyte_Duration[i]);
+                }
+                mrc_Line_Info[mrc_Line_Info.Count - 1].This_MRC_Duration = nums_This_MRC_Duration;
+                //未指定目标
 
-            //This_MRC_Start_Time为0时定时器无法捕捉
-            for (int i = 0; i < mrc_Line_Info.Count; i++)
-            {
-                if (mrc_Line_Info[i].This_MRC_Start_Time == 0)
+                //This_MRC_Start_Time为0时定时器无法捕捉
+                for (int i = 0; i < mrc_Line_Info.Count; i++)
                 {
-                    mrc_Line_Info[i].This_MRC_Start_Time = 222;
+                    if (mrc_Line_Info[i].This_MRC_Start_Time == 0)
+                    {
+                        mrc_Line_Info[i].This_MRC_Start_Time = 222;
+                    }
                 }
-            }
 
-            //Duration重新设置为mrc_Line_Info[i].This_MRC_Duration
-            for (int i = 0; i < mrc_Line_Info.Count; i++)
-            {
-                int Duration_Line =
-                    Convert.ToInt32(mrc_Line_Info[i].Array_Morebyte_BeginTime[
-                        mrc_Line_Info[i].Array_Morebyte_BeginTime.Count - 1])
-                    + Convert.ToInt32(mrc_Line_Info[i].Array_Morebyte_Duration[
-                        mrc_Line_Info[i].Array_Morebyte_Duration.Count - 1]);
-                mrc_Line_Info[i].This_MRC_Duration = Duration_Line;
-            }
+                //Duration重新设置为mrc_Line_Info[i].This_MRC_Duration
+                for (int i = 0; i < mrc_Line_Info.Count; i++)
+                {
+                    int Duration_Line =
+                        Convert.ToInt32(mrc_Line_Info[i].Array_Morebyte_BeginTime[
+                            mrc_Line_Info[i].Array_Morebyte_BeginTime.Count - 1])
+                        + Convert.ToInt32(mrc_Line_Info[i].Array_Morebyte_Duration[
+                            mrc_Line_Info[i].Array_Morebyte_Duration.Count - 1]);
+                    mrc_Line_Info[i].This_MRC_Duration = Duration_Line;
+                }
 
-            //设置其他的算法属性
-            //mrc_A_line_Text,mrc_A_line_Time,Start_Song_MRC_Time,mrc_A_line_Time
-            for (int i = 0; i < mrc_Line_Info.Count; i++)
-            {
-                string temp = "";
-                for (int j = 0; j < mrc_Line_Info[i].Array_Morebyte_Text.Count; j++)
+                //设置其他的算法属性
+                //mrc_A_line_Text,mrc_A_line_Time,Start_Song_MRC_Time,mrc_A_line_Time
+                for (int i = 0; i < mrc_Line_Info.Count; i++)
                 {
-                    temp += mrc_Line_Info[i].Array_Morebyte_Text[j];
+                    string temp = "";
+                    for (int j = 0; j < mrc_Line_Info[i].Array_Morebyte_Text.Count; j++)
+                    {
+                        temp += mrc_Line_Info[i].Array_Morebyte_Text[j];
+                    }
+                    mrc_A_line_Text.Add(temp);
+                    mrc_A_line_Time.Add(mrc_Line_Info[i].This_MRC_Start_Time);
                 }
-                mrc_A_line_Text.Add(temp);
-                mrc_A_line_Time.Add(mrc_Line_Info[i].This_MRC_Start_Time);
-            }
-            Start_Song_MRC_Time = mrc_A_line_Time[0];
-            End_Song_MRC_Time = mrc_Line_Info[mrc_Line_Info.Count - 1].This_MRC_Start_Time;
+                Start_Song_MRC_Time = mrc_A_line_Time[0];
+                End_Song_MRC_Time = mrc_Line_Info[mrc_Line_Info.Count - 1].This_MRC_Start_Time;
 
-            //将数组前后各扩容7个空位，更好的匹配UI显示歌词
-            List<string> temp_string = new List<string>();
-            for (int i = 0; i < mrc_A_line_Text.Count + 14; i++)
-            {
-                if (i < 4)
+                //将数组前后各扩容7个空位，更好的匹配UI显示歌词
+                List<string> temp_string = new List<string>();
+                for (int i = 0; i < mrc_A_line_Text.Count + 14; i++)
                 {
-                    temp_string.Add("       ");
+                    if (i < 4)
+                    {
+                        temp_string.Add("       ");
+                    }
+                    else if (i == 4)
+                    {
+                        temp_string.Add("歌词同步效果 由MZMusic独家歌词逐字算法 支持");
+                    }
+                    else if (i == 5)
+                    {
+                        temp_string.Add("此应用(MZMusic)内置算法模型版权 受AGPL-3.0许可证保护");
+                    }
+                    else if (i == 6)
+                    {
+                        temp_string.Add("       ");
+                    }
+                    else if (i < mrc_A_line_Text.Count + 7)
+                    {
+                        temp_string.Add(mrc_A_line_Text[i - 7]);
+                    }
+                    else if (i == mrc_A_line_Text.Count + 11)
+                    {
+                        temp_string.Add("此应用(MZMusic)内置算法模型版权 受AGPL-3.0许可证保护");
+                    }
+                    else if (i == mrc_A_line_Text.Count + 12)
+                    {
+                        temp_string.Add("歌词同步效果 由MZMusic独家歌词逐字算法 支持");
+                    }
+                    else if (i < mrc_A_line_Text.Count + 14)
+                    {
+                        temp_string.Add("       ");
+                    }
                 }
-                else if (i == 4)
-                {
-                    temp_string.Add("歌词同步效果 由MZMusic独家歌词逐字算法 支持");
-                }
-                else if (i == 5)
-                {
-                    temp_string.Add("此应用(MZMusic)内置算法模型版权 受AGPL-3.0许可证保护");
-                }
-                else if (i == 6)
-                {
-                    temp_string.Add("       ");
-                }
-                else if (i < mrc_A_line_Text.Count + 7)
-                {
-                    temp_string.Add(mrc_A_line_Text[i - 7]);
-                }
-                else if (i == mrc_A_line_Text.Count + 11)
-                {
-                    temp_string.Add("此应用(MZMusic)内置算法模型版权 受AGPL-3.0许可证保护");
-                }
-                else if (i == mrc_A_line_Text.Count + 12)
-                {
-                    temp_string.Add("歌词同步效果 由MZMusic独家歌词逐字算法 支持");
-                }
-                else if (i < mrc_A_line_Text.Count + 14)
-                {
-                    temp_string.Add("       ");
-                }
-            }
-            mrc_A_line_Text = temp_string;
+                mrc_A_line_Text = temp_string;
 
-            List<double> temp_double = new List<double>();
-            for (int i = 0; i < mrc_A_line_Time.Count + 14; i++)
-            {
-                if (i < 7)
+                List<double> temp_double = new List<double>();
+                for (int i = 0; i < mrc_A_line_Time.Count + 14; i++)
                 {
-                    temp_double.Add(0);
+                    if (i < 7)
+                    {
+                        temp_double.Add(0);
+                    }
+                    else if (i < mrc_A_line_Time.Count + 7)
+                    {
+                        temp_double.Add(mrc_A_line_Time[i - 7]);
+                    }
+                    else if (i < mrc_A_line_Time.Count + 14)
+                    {
+                        temp_double.Add(0);
+                    }
                 }
-                else if (i < mrc_A_line_Time.Count + 7)
-                {
-                    temp_double.Add(mrc_A_line_Time[i - 7]);
-                }
-                else if (i < mrc_A_line_Time.Count + 14)
-                {
-                    temp_double.Add(0);
-                }
+                mrc_A_line_Time = temp_double;
             }
-           mrc_A_line_Time = temp_double;
+            catch { }
         }
 
         /// <summary>

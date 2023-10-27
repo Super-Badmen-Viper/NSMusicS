@@ -6,11 +6,11 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using SMBLibrary;
-using SMBLibrary.Client;
-using SMBLibrary.Server;
+//using SMBLibrary;
+//using SMBLibrary.Client;
+//using SMBLibrary.Server;
 using System.IO;
-using SMBLibrary.SMB1;
+//using SMBLibrary.SMB1;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Windows;
 
@@ -21,7 +21,7 @@ namespace NSMusicS.Services.Services_For_NAS
     /// </summary>
     public class Cloud_NAS_SMB_GetSet
     {
-        #region SMBLibrary
+       /* #region SMBLibrary
 
         #region 连接/存储 对象
         /// <summary>
@@ -291,7 +291,7 @@ namespace NSMusicS.Services.Services_For_NAS
 
 
 
-        #endregion
+        #endregion*/
 
 
     }

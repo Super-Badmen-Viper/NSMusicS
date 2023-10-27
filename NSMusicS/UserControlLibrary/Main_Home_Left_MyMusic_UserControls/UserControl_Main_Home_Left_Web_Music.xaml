@@ -388,7 +388,7 @@
                 </ListView.ItemsPanel>
             </ListView>
         </Grid>
-        
+
         <Grid 
             x:Name="Grid_Select_DownLoad" Visibility="{Binding Show_API_HttpClient_ALL_BrLevel_Infos_Complete}"
             HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,40,0,0">
@@ -437,7 +437,7 @@
                              Content="超清母带" HorizontalAlignment="Left"
                              Width="200" Margin="0,8,0,0" Padding="3,0.5,0,0"
                              />
-                
+
 
                 <RadioButton x:Name="RadioButton_MV_DownLoad"
                             Content="MV下载" HorizontalAlignment="Left"
@@ -484,88 +484,6 @@
                     Text="立即下载" FontSize="15" Foreground="White" FontWeight="Light"/>
             </Border>
 
-        </Grid>
-
-        <Grid Visibility="{Binding Show_API_HttpClient_Complete}">
-            <Grid.Triggers>
-                <EventTrigger RoutedEvent="Grid.Loaded">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimationUsingKeyFrames BeginTime="0:0:0.1"  RepeatBehavior="Forever"   Storyboard.TargetProperty="Angle" Storyboard.TargetName="rt1" >
-                                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="360">
-                                    <EasingDoubleKeyFrame.EasingFunction>
-                                        <ExponentialEase EasingMode="EaseInOut"/>
-                                    </EasingDoubleKeyFrame.EasingFunction>
-                                </EasingDoubleKeyFrame>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames BeginTime="0:0:0.2"   RepeatBehavior="Forever"   Storyboard.TargetProperty="Angle" Storyboard.TargetName="rt2" >
-                                <EasingDoubleKeyFrame Value="0"  KeyTime="0:0:0" />
-                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="360">
-                                    <EasingDoubleKeyFrame.EasingFunction>
-                                        <ExponentialEase EasingMode="EaseInOut"/>
-                                    </EasingDoubleKeyFrame.EasingFunction>
-                                </EasingDoubleKeyFrame>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames BeginTime="0:0:0.3"   RepeatBehavior="Forever"   Storyboard.TargetProperty="Angle" Storyboard.TargetName="rt3" >
-                                <EasingDoubleKeyFrame Value="0"  KeyTime="0:0:0" />
-                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="360">
-                                    <EasingDoubleKeyFrame.EasingFunction>
-                                        <ExponentialEase EasingMode="EaseInOut"/>
-                                    </EasingDoubleKeyFrame.EasingFunction>
-                                </EasingDoubleKeyFrame>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames BeginTime="0:0:0.4 "   RepeatBehavior="Forever"   Storyboard.TargetProperty="Angle" Storyboard.TargetName="rt4" >
-                                <EasingDoubleKeyFrame Value="0"  KeyTime="0:0:0" />
-                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="360">
-                                    <EasingDoubleKeyFrame.EasingFunction>
-                                        <ExponentialEase EasingMode="EaseInOut"/>
-                                    </EasingDoubleKeyFrame.EasingFunction>
-                                </EasingDoubleKeyFrame>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames BeginTime="0:0:0.5"     RepeatBehavior="Forever"   Storyboard.TargetProperty="Angle" Storyboard.TargetName="rt5" >
-                                <EasingDoubleKeyFrame Value="0"  KeyTime="0:0:0" />
-                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="360">
-                                    <EasingDoubleKeyFrame.EasingFunction>
-                                        <ExponentialEase EasingMode="EaseInOut"/>
-                                    </EasingDoubleKeyFrame.EasingFunction>
-                                </EasingDoubleKeyFrame>
-                            </DoubleAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Grid.Triggers>
-
-            <ContentControl    Height="150" Width="150" RenderTransformOrigin="0.5 ,0.5">
-                <ContentControl.RenderTransform>
-                    <RotateTransform  x:Name="rt1"/>
-                </ContentControl.RenderTransform>
-                <Ellipse Width="15" Height="15" Fill="White" VerticalAlignment="Bottom"/>
-            </ContentControl>
-            <ContentControl    Height="150" Width="150" RenderTransformOrigin="0.5 ,0.5">
-                <ContentControl.RenderTransform>
-                    <RotateTransform  x:Name="rt2"/>
-                </ContentControl.RenderTransform>
-                <Ellipse Width="15" Height="15" Fill="White" VerticalAlignment="Bottom"/>
-            </ContentControl>
-            <ContentControl    Height="150" Width="150" RenderTransformOrigin="0.5 ,0.5">
-                <ContentControl.RenderTransform>
-                    <RotateTransform  x:Name="rt3"/>
-                </ContentControl.RenderTransform>
-                <Ellipse Width="15" Height="15" Fill="White" VerticalAlignment="Bottom"/>
-            </ContentControl>
-            <ContentControl    Height="150" Width="150" RenderTransformOrigin="0.5 ,0.5">
-                <ContentControl.RenderTransform>
-                    <RotateTransform  x:Name="rt4"/>
-                </ContentControl.RenderTransform>
-                <Ellipse Width="15" Height="15" Fill="White" VerticalAlignment="Bottom"/>
-            </ContentControl>
-            <ContentControl    Height="150" Width="150" RenderTransformOrigin="0.5 ,0.5">
-                <ContentControl.RenderTransform>
-                    <RotateTransform  x:Name="rt5"/>
-                </ContentControl.RenderTransform>
-                <Ellipse Width="15" Height="15" Fill="White" VerticalAlignment="Bottom"/>
-            </ContentControl>
         </Grid>
 
     </Grid>
