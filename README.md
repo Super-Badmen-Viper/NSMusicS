@@ -27,6 +27,7 @@
 - 6. Implement functions such as NSMusicS singing bar scoring and evaluation, similar to the national karaoke (Tencent's national karaoke technology sharing video on Machine Heart has been canceled, so we will independently develop it)
 
 # Interface preview:
+  <img src="https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/50f3e446-45fa-4c1a-8578-17447462f053" align="center" width="1200">
   <img src="doc/Test (1).png" align="center" width="1200">
   <img src="doc/Test (2).png" align="center" width="1200">
   <img src="doc/Test (3).png" align="center" width="1200">
