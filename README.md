@@ -76,7 +76,8 @@
 # Related projects:
 - [NAudio](https://github.com/naudio/NAudio)
 - [cscore](https://github.com/filoe/cscore)
-- [comSlimeNullAudioTest. git](https://github.com/SlimeNull/AudioTest)
+- [LottieSharp](https://github.com/quicoli/LottieSharp)
+- [AudioTest](https://github.com/SlimeNull/AudioTest)
 
 # Sponsorship (WeChat/Alipay):
   <img src="doc/Test (4).png" align="center" width="400">

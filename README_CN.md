@@ -73,7 +73,8 @@
 # 相关项目：
 - [NAudio](https://github.com/naudio/NAudio)
 - [cscore](https://github.com/filoe/cscore)
-- [comSlimeNullAudioTest. git](https://github.com/SlimeNull/AudioTest)
+- [LottieSharp](https://github.com/quicoli/LottieSharp)
+- [AudioTest](https://github.com/SlimeNull/AudioTest)
 
 # 赞助(微信/支付宝)：
   <img src="doc/Test (4).png" align="center" width="400">
