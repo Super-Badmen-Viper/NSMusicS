@@ -1,8 +1,7 @@
 # NSMusicSPlayer说明：
 - 基于dotNET_C#_WPF的个人开源音乐客户端  
 - 演示效果：B站链接：
-- - 最新版：[https://www.bilibili.com/video/BV1rM411s7J9](https://www.bilibili.com/video/BV1Dc411g74T/?spm_id_from=333.999.0.0&vd_source=6e56ca0b155a60e6a6878e5775fdcc35)
-- - 旧版：https://www.bilibili.com/video/BV1uG41137jY
+- - Latest version:[https://www.bilibili.com/video/BV1im4y1P7P8](https://www.bilibili.com/video/BV1im4y1P7P8)
 
 # [MZMusic](https://github.com/MZMusic/MZMusic)将使用Electron+Vue3+React+Vite进行重构并部署到Linux/Mac 
 # （Electron 版本）[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic) 
