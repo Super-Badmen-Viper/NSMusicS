@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>墨智音乐.ico</ApplicationIcon>
+    <AssemblyVersion>3.0.0.3</AssemblyVersion>
+    <FileVersion>3.0.0.3</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

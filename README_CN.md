@@ -26,7 +26,7 @@
   - 6.实现NSMusicS唱吧打分评测等功能，类似全民K歌(腾讯在机器之心上的全民K歌技术分享视频已取消，所以我们将自主研发)
 
 # 界面预览：
-  <img src="https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/50f3e446-45fa-4c1a-8578-17447462f053" align="center" width="1200">
+  <img src="https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/5e040577-6693-4a94-b90d-8c46fcb59cd3" align="center" width="1200">
   <img src="doc/Test (1).png" align="center" width="1200">
   <img src="doc/Test (2).png" align="center" width="1200">
   <img src="doc/Test (3).png" align="center" width="1200">
