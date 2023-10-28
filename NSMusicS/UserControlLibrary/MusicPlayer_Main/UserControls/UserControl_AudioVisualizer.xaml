@@ -9,8 +9,9 @@
              Height="450" Width="800">
     <UserControl.Background>
         <LinearGradientBrush>
-            <GradientStop Color="#434343" Offset="0"/>
-            <GradientStop Color="#000000" Offset="1"/>
+            <GradientStop Color="#000000" Offset="0"/>
+            <GradientStop Color="#90000000" Offset="0.9"/>
+            <GradientStop Color="#90434343" Offset="1"/>
         </LinearGradientBrush>
     </UserControl.Background>
     <Grid>

@@ -60,7 +60,7 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls
         /// </summary>
         /// <param name="wave_data_size"></param>
         /// <param name="DeviceNumber"></param>
-        public void Reset_Visualizer(int wave_data_size,int DeviceNumber)
+        public void Reset_Visualizer(int wave_data_size, MMDevice defaultOutputDevice)
         {
             //释放内存
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
@@ -70,32 +70,30 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            using (MMDeviceEnumerator enumerator = new MMDeviceEnumerator())
+            // 设置录制的音频输出源
+            if (capture != null)
             {
-                using (MMDevice outputDevice = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active)[DeviceNumber])
-                {
-                    // 设置录制的音频输出源
-                    if (capture != null)
-                    {
-                        capture.Dispose();
-                        capture = null;
-                    }
-                    visualizer = null;
-
-                    capture = new WasapiLoopbackCapture(outputDevice); // 捕获电脑发出的声音
-                    capture.ShareMode = AudioClientShareMode.Shared;// 使用独占模式
-
-                    visualizer = new Visualizer(wave_data_size); // 新建一个可视化器, 并使用 256 个采样进行傅里叶变换
-
-                    capture.WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(8192, 1); // 指定捕获的格式, 单声道, 32位深度, IeeeFloat 编码, 8192采样率
-                    capture.DataAvailable += Capture_DataAvailable; // 订阅事件
-
-                    capture.StartRecording();
-
-                    drawingTimer = null;
-                    dataTimer = new Timer(DataTimer_Tick,null, 30, 30);
-                }
+                capture.Dispose();
+                capture = null;
             }
+            visualizer = null;
+
+
+
+            capture = new WasapiLoopbackCapture(defaultOutputDevice); // 捕获电脑发出的声音
+            capture.ShareMode = AudioClientShareMode.Shared;// 使用独占模式
+
+            visualizer = new Visualizer(wave_data_size); // 新建一个可视化器, 并使用 256 个采样进行傅里叶变换
+
+            capture.WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(8192, 1); // 指定捕获的格式, 单声道, 32位深度, IeeeFloat 编码, 8192采样率
+            capture.DataAvailable += Capture_DataAvailable; // 订阅事件
+
+            capture.StartRecording();
+
+            drawingTimer = null;
+            dataTimer = new Timer(DataTimer_Tick, null, 30, 30);
+
+
 
             allColors.Clear();
             //Color.FromArgb(255, allColors[i].R, allColors[i].G, allColors[i].B);

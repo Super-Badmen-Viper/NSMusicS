@@ -57,6 +57,7 @@ using ListView = System.Windows.Controls.ListView;
 using Window = System.Windows.Window;
 using NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls;
 using NSMusicS.UserControlLibrary.MusicPlayer_Main;
+using NAudio.CoreAudioApi;
 
 #endregion
 
@@ -143,15 +144,20 @@ namespace NSMusicS
             userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Button_Begin_Conn_API.Click += Button_Begin_Conn_API_Click;
 
             //
-            outDevices = new WaveOutCapabilities[WaveOut.DeviceCount];
-            ComboBoxItem_Name comboBoxItem = new ComboBoxItem_Name();
             WaveoutDevices = new List<ComboBoxItem_Name>();
-            for (int i = 0; i < WaveOut.DeviceCount; i++)
+            using (var enumerator = new MMDeviceEnumerator())
             {
-                outDevices[i] = WaveOut.GetCapabilities(i);
-                comboBoxItem = new ComboBoxItem_Name();
-                comboBoxItem.Name = outDevices[i].ProductName;
-                WaveoutDevices.Add(comboBoxItem);
+                var devices = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
+                for (int j = 0; j < devices.Count; j++)
+                {
+                    using (MMDevice device = devices[j])
+                    {
+                        ComboBoxItem_Name comboBoxItem = new ComboBoxItem_Name();
+                        comboBoxItem.Name = device.DeviceFriendlyName;
+                        comboBoxItem.device = device;
+                        WaveoutDevices.Add(comboBoxItem);
+                    }
+                }
             }
             userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.ItemsSource = WaveoutDevices;
             userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectedIndex = 0;
@@ -160,10 +166,21 @@ namespace NSMusicS
             userControl_Main_Home_TOP_App_Setting.Button_Resert_WaveOut.Click += Button_Resert_WaveOut_Click;
             //
             userControl_Main_Home_TOP_App_Setting.Button_Open_EQ.MouseLeftButtonDown += Button_Window_Hover_EQ_Panel;
-
+            //
             //
             mediaElement_Song = MediaElement_Song.Retuen_This();
-
+            Init_DeviceChanged();
+            //
+            for (int i = 0; i < WaveoutDevices.Count; i++)
+            {
+                if (WaveoutDevices[i].device.DeviceFriendlyName.Equals(mediaElement_Song.defaultOutputDevice.DeviceFriendlyName))
+                {
+                    userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectionChanged -= ComBox_Select_WaveOut_SelectionChanged;
+                    userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectedIndex = i;
+                    userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectionChanged += ComBox_Select_WaveOut_SelectionChanged;
+                    break;
+                }
+            }
             //
             musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\Music_Album.png")));
             musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\Music_Album.png")));
@@ -762,8 +779,8 @@ namespace NSMusicS
             DispatcherTimer_MRC.Interval = TimeSpan.FromMilliseconds(50); // 间隔1秒
 
             //播放器缓冲流绑定
-            //mediaElement_Song.waveOutEvent.PlaybackStopped += mediaElement_Song_MediaOpened;
-            //mediaElement_Song.waveOutEvent.PlaybackStopped += mediaElement_Song_MediaEnded;
+            //mediaElement_Song.wasapiOut.PlaybackStopped += mediaElement_Song_MediaOpened;
+            //mediaElement_Song.wasapiOut.PlaybackStopped += mediaElement_Song_MediaEnded;
 
 
 
@@ -1328,7 +1345,9 @@ namespace NSMusicS
         {
             if (userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectedIndex >= 0)
             {
-                mediaElement_Song.SetOutputDevice(userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectedIndex);
+                mediaElement_Song.SetOutputDevice(
+                    WaveoutDevices[userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectedIndex].device
+                    );
 
                 //播放
                 viewModule_Search_Song.Button_Play_Pause_Player_Image = new Uri(Path_App + @"\Button_Image_Svg\暂停.svg");
@@ -1372,16 +1391,24 @@ namespace NSMusicS
         }
         private void Button_Resert_WaveOut_Click(object sender, RoutedEventArgs e)
         {
-            outDevices = null;
-            outDevices = new WaveOutCapabilities[WaveOut.DeviceCount];
-            ComboBoxItem_Name comboBoxItem = new ComboBoxItem_Name();
+            Resert_WaveOut();
+        }
+        private void Resert_WaveOut()
+        {
             WaveoutDevices = new List<ComboBoxItem_Name>();
-            for (int i = 0; i < WaveOut.DeviceCount; i++)
+            using (var enumerator = new MMDeviceEnumerator())
             {
-                outDevices[i] = WaveOut.GetCapabilities(i);
-                comboBoxItem = new ComboBoxItem_Name();
-                comboBoxItem.Name = outDevices[i].ProductName;
-                WaveoutDevices.Add(comboBoxItem);
+                var devices = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
+                for (int j = 0; j < devices.Count; j++)
+                {
+                    using (MMDevice device = devices[j])
+                    {
+                        ComboBoxItem_Name comboBoxItem = new ComboBoxItem_Name();
+                        comboBoxItem.Name = device.DeviceFriendlyName;
+                        comboBoxItem.device = device;
+                        WaveoutDevices.Add(comboBoxItem);
+                    }
+                }
             }
             userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.ItemsSource = WaveoutDevices;
             userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectedIndex = 0;
@@ -1390,6 +1417,58 @@ namespace NSMusicS
             userControl_Main_Home_TOP_App_Setting.Button_Resert_WaveOut.Click += Button_Resert_WaveOut_Click;
             //
             userControl_Main_Home_TOP_App_Setting.Button_Open_EQ.MouseLeftButtonDown += Button_Window_Hover_EQ_Panel;
+        }
+        private MMDeviceEnumerator deviceEnumerator;
+        DispatcherTimer dispatcherTimer;
+        private void Init_DeviceChanged()
+        {
+            //检测系统的音频输出源是否变更
+            deviceEnumerator = new MMDeviceEnumerator();
+            //
+            dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += DispatcherTimer_Tick_Of_DeviceChanged;
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
+            dispatcherTimer.Start();
+        }
+        private void DispatcherTimer_Tick_Of_DeviceChanged(object? sender, EventArgs e)
+        {
+            if (mediaElement_Song.defaultOutputDevice != null)
+            {
+                var newDefaultOutputDevice = deviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Console);
+                if (mediaElement_Song.defaultOutputDevice.ID != newDefaultOutputDevice.ID)
+                {
+                    //设置播放源
+                    mediaElement_Song.SetOutputDevice(newDefaultOutputDevice);
+                    //设置频谱源
+                    if (musicPlayer_Main_UserControl.userControl_AudioVisualizer.Visibility == Visibility.Visible)
+                    {
+                        //先关闭，再打开 频谱模式
+                        Close_Song_AudioSpectrogram();
+                        if (Bool_Button_Singer_Image_Animation)
+                        {
+                            Open_Singer_Image_Animation();
+                        }
+                        ///////////////////////////////////
+                        Open_Song_AudioSpectrogram();
+                        //关闭其他模式
+                        Close_Song_Album_Play();
+                        Close_Button_Album_Play_CD_Show();
+                        Close_Singer_Image_Animation();
+                    }
+                    //同步设置
+                    Resert_WaveOut();
+                    for (int i = 0; i < WaveoutDevices.Count; i++)
+                    {
+                        if (WaveoutDevices[i].device.DeviceFriendlyName.Equals(newDefaultOutputDevice.DeviceFriendlyName))
+                        {
+                            userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectionChanged -= ComBox_Select_WaveOut_SelectionChanged;
+                            userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectedIndex = i;
+                            userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectionChanged += ComBox_Select_WaveOut_SelectionChanged;
+                            break;
+                        }
+                    }
+                }
+            }
         }
         #endregion
 
@@ -2101,39 +2180,12 @@ namespace NSMusicS
                     Open_Singer_Image_Animation();
                 }
             }
-            /*if (userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
-                            audioSpectrogram.viewModule.IsRecording == false)
-            {
-                dispatcherTimer_Spectrum_Visualization.Start();
-
-                userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
-                            audioSpectrogram.StartBtn_Click();
-
-                userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.Visibility = Visibility.Visible;
-                userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Song_AudioSpectrogram_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－选中.svg");
-
-                userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
-                            audioSpectrogram.viewModule.IsRecording = true;
-            }
-            else
-            {
-                dispatcherTimer_Spectrum_Visualization.Stop();
-
-                userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
-                            audioSpectrogram.StopBtn_Click();
-
-                userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.Visibility = Visibility.Collapsed;
-                userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Song_AudioSpectrogram_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－未选中.svg");
-
-                userControl_ButtonFrame_MusicPlayer.userControl_Spectrum_Visualization.
-                            audioSpectrogram.viewModule.IsRecording = false;
-            }*/
         }
         private void Open_Song_AudioSpectrogram()
         {
             musicPlayer_Main_UserControl.userControl_AudioVisualizer.Visibility = Visibility.Visible;
 
-            musicPlayer_Main_UserControl.userControl_AudioVisualizer.Reset_Visualizer(256, WaveOut.DeviceCount - 1 - mediaElement_Song.deviceNumber);
+            musicPlayer_Main_UserControl.userControl_AudioVisualizer.Reset_Visualizer(256, mediaElement_Song.defaultOutputDevice);
 
             musicPlayer_Main_UserControl.userControl_AudioVisualizer.Image_Song_Storyboard.Begin();
 
@@ -6693,8 +6745,8 @@ namespace NSMusicS
             else
             {
                 mediaElement_Song.deviceNumber_change = false;
-                mediaElement_Song.waveOutEvent.PlaybackStopped -= mediaElement_Song_MediaEnded;
-                mediaElement_Song.waveOutEvent.PlaybackStopped += mediaElement_Song_MediaEnded;
+                mediaElement_Song.wasapiOut.PlaybackStopped -= mediaElement_Song_MediaEnded;
+                mediaElement_Song.wasapiOut.PlaybackStopped += mediaElement_Song_MediaEnded;
             }
         }
 
@@ -6911,22 +6963,28 @@ namespace NSMusicS
                             this_Song_Info.Song_Web_Album_Image = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Song_Web_Album_Image;
                             this_Song_Info.Song_Web_Lyic = songList_Infos_Current_Playlist[WMP_Song_Play_Ids - 1].Song_Web_Lyic;
 
-                            try
+                            if (path_ != null && path_.Length > 0)
                             {
-                                if(mediaElement_Song.waveOutEvent != null)
-                                    mediaElement_Song.waveOutEvent.PlaybackStopped -= mediaElement_Song_MediaEnded;
+                                try
+                                {
+                                    if (mediaElement_Song.wasapiOut != null)
+                                        mediaElement_Song.wasapiOut.PlaybackStopped -= mediaElement_Song_MediaEnded;
 
-                                mediaElement_Song.Open(path_);
-                                Load_mediaElement_Song_MediaOpened();
-                                //mediaElement_Song.MediaOpened += mediaElement_Song_MediaOpened;
-                                mediaElement_Song.waveOutEvent.PlaybackStopped += mediaElement_Song_MediaEnded;
+                                    mediaElement_Song.Open(path_);
+                                    Load_mediaElement_Song_MediaOpened();
+                                    //mediaElement_Song.MediaOpened += mediaElement_Song_MediaOpened;
+                                    mediaElement_Song.wasapiOut.PlaybackStopped += mediaElement_Song_MediaEnded;
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show(ex.Message + "歌曲播放失败：\n" + path_ + "\n请自行检查此歌曲文件");
+
+                                    goto loop;
+                                }
                             }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show(ex.Message + "歌曲播放失败：\n" + path_ + "\n请自行检查此歌曲文件");
-
+                            else
                                 goto loop;
-                            }
+
                             //开始播放
                             //mediaElement_Song.Play();
                             //设置播放器播放状态为play

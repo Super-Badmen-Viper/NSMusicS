@@ -25,13 +25,24 @@ using Newtonsoft.Json.Linq;
 using System.Windows.Controls;
 using AudioFileReader = NSMusicS.Models.Song_Audio_Out.NAduio.AudioFileReader;
 using NAudio.CoreAudioApi;
+using System.Windows.Threading;
+using CSCore.CoreAudioAPI;
+using MMDeviceEnumerator = NAudio.CoreAudioApi.MMDeviceEnumerator;
+using MMDevice = NAudio.CoreAudioApi.MMDevice;
+using DeviceState = NAudio.CoreAudioApi.DeviceState;
+using DataFlow = NAudio.CoreAudioApi.DataFlow;
+using Role = NAudio.CoreAudioApi.Role;
+using CSCore.SoundOut;
+using NSMusicS.Models.Song_List_Infos;
+using WasapiOut = NAudio.Wave.WasapiOut;
+using AudioClientShareMode = NAudio.CoreAudioApi.AudioClientShareMode;
 //using AudioFileReader = NSMusicS.Models.Song_Audio_Out.NAduio.AudioFileReader;
 
 namespace NSMusicS.Models.Song_Audio_Out
 {
     public class MediaElement_Song : ViewModelBase
     {
-        public WaveOutEvent waveOutEvent;
+        public WasapiOut wasapiOut;
 
         private FFmpegAudioReader audioFileReader_FFmpeg; //CSCore - FFmpeg音频库 接口版本
         private AudioFileReader audioFileReader; //基于NAudio音频库 版本
@@ -46,16 +57,13 @@ namespace NSMusicS.Models.Song_Audio_Out
         public event EventHandler MediaEnded;
 
         public string audioFilePath;
-        public int deviceNumber;
         public string deviceName;
+        public MMDevice defaultOutputDevice;
         public bool deviceNumber_change;
 
         #region plyaer
-
         public MediaElement_Song()
         {
-            waveOutEvent = new WaveOutEvent();
-
             bands = new EqualizerBand[]
             {
                 new EqualizerBand {Bandwidth = 0.8f, Frequency = 31, Gain = 0},
@@ -72,26 +80,34 @@ namespace NSMusicS.Models.Song_Audio_Out
             };
             this.PropertyChanged += OnPropertyChanged;
 
-            //获取系统的音频输出源
+            //获取并设置系统的当前音频输出源
+            UpdateOutputDeviceInformation();
+
+            wasapiOut = new WasapiOut(defaultOutputDevice, AudioClientShareMode.Shared, true, 100);
+        }
+        public void UpdateOutputDeviceInformation()
+        {
             using (var enumerator = new MMDeviceEnumerator())
             {
-                //var outputDevice = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Console);
                 var devices = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
                 for (int i = 0; i < devices.Count; i++)
                 {
                     using (MMDevice device = devices[i])
                     {
+                        //保持 对声音输出通道的独占 ， 只接受在设置手动触发
                         if (device.State == DeviceState.Active && device.ID == enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Console).ID)
                         {
-                            deviceNumber = devices.Count - 1 - i;
                             deviceName = device.FriendlyName;
+                            defaultOutputDevice = devices[devices.Count - 1];
+
+                            SetOutputDevice(device);
+
                             break;
                         }
                     }
                 }
             }
         }
-
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
             equalizer?.Update();
@@ -128,12 +144,12 @@ namespace NSMusicS.Models.Song_Audio_Out
             if (equalizer != null)
                 equalizer = null;
 
-            if (waveOutEvent != null)
+            if (wasapiOut != null)
             {
-                waveOutEvent.Dispose();
-                waveOutEvent = null;
+                wasapiOut.Dispose();
+                wasapiOut = null;
             }
-            waveOutEvent = new WaveOutEvent();
+            wasapiOut = new WasapiOut(defaultOutputDevice, AudioClientShareMode.Shared, true, 100);
 
 
             GC.Collect();
@@ -173,17 +189,18 @@ namespace NSMusicS.Models.Song_Audio_Out
                     //尝试 初始化输出 均衡器
                     try
                     {
-                        waveOutEvent.DeviceNumber = deviceNumber;
+                        wasapiOut = new WasapiOut(defaultOutputDevice, AudioClientShareMode.Shared, true, 100);
+
                         deviceNumber_change = false;
 
                         equalizer = new Equalizer(audioFileReader, bands);
-                        waveOutEvent.Init(equalizer);
+                        wasapiOut.Init(equalizer);
 
                         play_ = true;
                     }
                     catch//若不支持 Naudio均衡器，则默认 Naudio普通初始化输出
                     {
-                        waveOutEvent.Init(audioFileReader);
+                        wasapiOut.Init(audioFileReader);
 
                         play_ = true;
                     }
@@ -200,12 +217,12 @@ namespace NSMusicS.Models.Song_Audio_Out
                         audioFileReader = new AudioFileReader(audioFilePath);
                         audioFileReader.sampleChannel = sampleChannel;
 
-                        waveOutEvent.Init(audioFileReader);
+                        wasapiOut.Init(audioFileReader);
                     }
                     catch//cscore_FFmpeg混流，直接输出
                     {
                         audioFileReader_FFmpeg = new FFmpegAudioReader(audioFilePath);
-                        waveOutEvent.Init(audioFileReader_FFmpeg);
+                        wasapiOut.Init(audioFileReader_FFmpeg);
                     }
                 }
             }
@@ -216,10 +233,9 @@ namespace NSMusicS.Models.Song_Audio_Out
                 {
                     audioFileReader_Web = new MediaFoundationReader(audioFilePath);
 
-                    waveOutEvent.DeviceNumber = deviceNumber;
                     deviceNumber_change = false;
 
-                    waveOutEvent.Init(audioFileReader_Web);
+                    wasapiOut.Init(audioFileReader_Web);
 
                     play_ = true;
                 }
@@ -239,7 +255,7 @@ namespace NSMusicS.Models.Song_Audio_Out
             try
             {
                 if (play_)
-                    waveOutEvent.Play();
+                    wasapiOut.Play();
             }catch (Exception ex)
             {
                 play_ = false;
@@ -251,7 +267,7 @@ namespace NSMusicS.Models.Song_Audio_Out
             try
             {
                 if (play_)
-                    waveOutEvent.Pause();
+                    wasapiOut.Pause();
             }
             catch (Exception ex)
             {
@@ -264,7 +280,7 @@ namespace NSMusicS.Models.Song_Audio_Out
             try
             {
                 if (play_)
-                    waveOutEvent.Stop();
+                    wasapiOut.Stop();
             }
             catch (Exception ex)
             {
@@ -275,10 +291,10 @@ namespace NSMusicS.Models.Song_Audio_Out
         public void Clear()
         {
             audioFileReader.Dispose();
-            waveOutEvent.Dispose();
+            wasapiOut.Dispose();
 
             audioFileReader = null;
-            waveOutEvent = null;
+            wasapiOut = null;
         }
 
         public TimeSpan CurrentTime
@@ -417,23 +433,24 @@ namespace NSMusicS.Models.Song_Audio_Out
 
         public float Volume
         {
-            get { return waveOutEvent?.Volume ?? 1.0f; }
+            get { return wasapiOut?.Volume ?? 1.0f; }
             set
             {
-                if (waveOutEvent != null)
+                if (wasapiOut != null)
                 {
-                    waveOutEvent.Volume = value;
+                    wasapiOut.Volume = value;
                 }
             }
         }
 
-        public void SetOutputDevice(int deviceNumber)
+        public void SetOutputDevice(MMDevice device)
         {
-            if (WaveOut.DeviceCount > 0 && deviceNumber >= 0 && deviceNumber < WaveOut.DeviceCount)
+            this.deviceName = device.DeviceFriendlyName;
+            defaultOutputDevice = device;
+
+            if (audioFilePath != null)
             {
                 Open(audioFilePath);
-
-                this.deviceNumber = deviceNumber;
             }
         }
 
@@ -450,6 +467,8 @@ namespace NSMusicS.Models.Song_Audio_Out
 
         #endregion
 
+
+        #region EQ
 
         public float MinimumGain => -12;
         public float MaximumGain => 12 ;
@@ -641,6 +660,7 @@ namespace NSMusicS.Models.Song_Audio_Out
             }
         }
 
+        #endregion
 
 
 
