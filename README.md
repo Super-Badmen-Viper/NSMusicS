@@ -74,11 +74,11 @@
 - If you want to transfer my (author) algorithm and model to other open source/commercial projects, you must clearly indicate that the algorithm and model originated from (author).
 - It is prohibited to counterfeit the copyright of my algorithm model, plagiarize my code, and submit it to other projects on behalf of you (or the team). You must clearly indicate the source of the algorithm model in order to use it or submit it to another project (otherwise you will receive my lawyer's letter)
 
-# Related projects:
+# Related projects:(Thanks)
 - [NAudio](https://github.com/naudio/NAudio)
 - [cscore](https://github.com/filoe/cscore)
 - [LottieSharp](https://github.com/quicoli/LottieSharp)
-- [AudioTest](https://github.com/SlimeNull/AudioTest)
+- [AudioVisualizer](https://github.com/SlimeNull/AudioVisualizer)
 
 # Sponsorship (WeChat/Alipay):
   <img src="doc/Test (4).png" align="center" width="400">
