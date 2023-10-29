@@ -123,6 +123,11 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls
             capture.Dispose();
             capture = null;
 
+            if (spectrumData != null)
+                spectrumData.Clear();
+            if (pathGeometries != null)
+                pathGeometries.Clear();
+
             dataTimer = null;
             drawingTimer = null;
 

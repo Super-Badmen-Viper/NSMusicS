@@ -9,6 +9,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_Sound_Plugin", "NS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS", "NSMusicS\NSMusicS.csproj", "{6FFC37EA-2D44-47F1-ADF2-9C1CEFC5CD1C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_For_Avalonia", "NSMusicS_For_Avalonia\NSMusicS_For_Avalonia.csproj", "{1313A3D7-E400-46E2-9B43-06CEBC434070}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_For_Avalonia.Android", "NSMusicS_For_Avalonia.Android\NSMusicS_For_Avalonia.Android.csproj", "{55A19625-7381-4B55-B280-074602D8457F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_For_Avalonia.Desktop", "NSMusicS_For_Avalonia.Desktop\NSMusicS_For_Avalonia.Desktop.csproj", "{0A2BCD60-373C-46FC-AC24-22EA3D1CDC0F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_For_Avalonia.iOS", "NSMusicS_For_Avalonia.iOS\NSMusicS_For_Avalonia.iOS.csproj", "{97A695F2-98AB-4ACE-A4EC-67111A0D76BA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_For_Avalonia.Browser", "NSMusicS_For_Avalonia.Browser\NSMusicS_For_Avalonia.Browser.csproj", "{405BD9C0-8A5A-4652-BD87-3B9F1072E850}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_For_MAUI", "NSMusicS_For_MAUI\NSMusicS_For_MAUI.csproj", "{49B7FE66-B257-4FFA-A6ED-2BF368F7F859}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSMusicS_For_Blazor", "NSMusicS_For_Blazor\NSMusicS_For_Blazor.csproj", "{E6113F59-CD88-4EED-B82A-92642B5FF30E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +41,36 @@ Global
 		{6FFC37EA-2D44-47F1-ADF2-9C1CEFC5CD1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FFC37EA-2D44-47F1-ADF2-9C1CEFC5CD1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FFC37EA-2D44-47F1-ADF2-9C1CEFC5CD1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1313A3D7-E400-46E2-9B43-06CEBC434070}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1313A3D7-E400-46E2-9B43-06CEBC434070}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1313A3D7-E400-46E2-9B43-06CEBC434070}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1313A3D7-E400-46E2-9B43-06CEBC434070}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55A19625-7381-4B55-B280-074602D8457F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55A19625-7381-4B55-B280-074602D8457F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55A19625-7381-4B55-B280-074602D8457F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55A19625-7381-4B55-B280-074602D8457F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A2BCD60-373C-46FC-AC24-22EA3D1CDC0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A2BCD60-373C-46FC-AC24-22EA3D1CDC0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A2BCD60-373C-46FC-AC24-22EA3D1CDC0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A2BCD60-373C-46FC-AC24-22EA3D1CDC0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97A695F2-98AB-4ACE-A4EC-67111A0D76BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97A695F2-98AB-4ACE-A4EC-67111A0D76BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97A695F2-98AB-4ACE-A4EC-67111A0D76BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97A695F2-98AB-4ACE-A4EC-67111A0D76BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{405BD9C0-8A5A-4652-BD87-3B9F1072E850}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{405BD9C0-8A5A-4652-BD87-3B9F1072E850}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{405BD9C0-8A5A-4652-BD87-3B9F1072E850}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{405BD9C0-8A5A-4652-BD87-3B9F1072E850}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49B7FE66-B257-4FFA-A6ED-2BF368F7F859}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49B7FE66-B257-4FFA-A6ED-2BF368F7F859}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49B7FE66-B257-4FFA-A6ED-2BF368F7F859}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{49B7FE66-B257-4FFA-A6ED-2BF368F7F859}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49B7FE66-B257-4FFA-A6ED-2BF368F7F859}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49B7FE66-B257-4FFA-A6ED-2BF368F7F859}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{E6113F59-CD88-4EED-B82A-92642B5FF30E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6113F59-CD88-4EED-B82A-92642B5FF30E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6113F59-CD88-4EED-B82A-92642B5FF30E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6113F59-CD88-4EED-B82A-92642B5FF30E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

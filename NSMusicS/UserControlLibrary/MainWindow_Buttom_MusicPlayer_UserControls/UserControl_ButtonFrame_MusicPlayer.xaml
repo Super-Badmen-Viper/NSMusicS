@@ -288,7 +288,7 @@
                         Width="30" Height="16" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
                 <svgc:SvgViewbox 
                         x:Name="SvgViewbox_Button_Album_Animation_Image" 
-                        Source="pack://application:,,,/UI_0_Library/规范－单选－未选中.svg"/>
+                        Source="pack://application:,,,/UI_0_Library/规范－单选－选中.svg"/>
             </Button>
             <StackPanel
     x:Name="Button_Mrc_Animation" Visibility="Collapsed"

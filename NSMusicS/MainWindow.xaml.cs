@@ -126,10 +126,6 @@ namespace NSMusicS
             userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.MouseDoubleClick += userControl_ButtonFrame_MusicPlayer_ListView_Download_SongList_Info_MouseDoubleClick_Auto;
             userControl_SongList_Infos_Current_Playlist.ListView_Download_SongList_Info.MouseDoubleClick += userControl_SongList_Infos_Current_Playlist_ListView_Download_SongList_Info_MouseDoubleClick_Current_Playlist;
 
-            userControl_SongList_Infos_Current_Playlist.Button_Clear_This_Current_Playlist.MouseLeftButtonDown += Button_Clear_This_Current_Playlist_MouseLeftButtonDown;
-            userControl_SongList_Infos_Current_Playlist.ListView_Download_SongList_Info.MouseLeave += userControl_SongList_Infos_Current_Playlist_ListView_Download_SongList_Info_MouseLeave;
-            userControl_SongList_Infos_Current_Playlist.ListView_Download_SongList_Info.MouseEnter += userControl_SongList_Infos_Current_Playlist_ListView_Download_SongList_Info_MouseEnter;
-
             userControl_ButtonFrame_MusicPlayer.Button_ListView_Selected.Click += userControl_ButtonFrame_MusicPlayer_Button_ListView_Selected_Click;
             userControl_ButtonFrame_MusicPlayer.Button_ListView_Selected_Right.Click += userControl_ButtonFrame_MusicPlayer_Button_ListView_Selected_Click;
             userControl_ButtonFrame_MusicPlayer.TextBox_SongList_NumLength.MouseLeftButtonDown += userControl_ButtonFrame_MusicPlayer_Button_ListView_Selected_Click;
@@ -215,6 +211,11 @@ namespace NSMusicS
             Close_Button_Album_Play_CD_Show();
             Close_Singer_Image_Animation();*/
 
+            DispatcherTimer dispatcherTimer_memory = new DispatcherTimer();
+            dispatcherTimer_memory.Tick += DispatcherTimer_memory_Tick;
+            dispatcherTimer_memory.Interval = new TimeSpan(0,0,0,30);
+            dispatcherTimer_memory.Start();
+
             #endregion
 
             GC.Collect();
@@ -226,6 +227,15 @@ namespace NSMusicS
         }
         [DllImport("kernel32.dll")]
         private static extern bool SetProcessWorkingSetSize(IntPtr proc, int min, int max);
+        private void DispatcherTimer_memory_Tick(object? sender, EventArgs e)
+        {
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+            }
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
 
 
         #region UI Init Load
@@ -1079,8 +1089,6 @@ namespace NSMusicS
 
         private void UserControl_ButtonFrame_ThisWindowsMusicAndDownload_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Reset_Current_Playlist();
-
             Frame_Show.Visibility = Visibility.Visible;
 
             ComBox_Select_SongList_SelectIndex = -1;
@@ -1194,9 +1202,7 @@ namespace NSMusicS
             ComBox_Select_SongList_SelectIndex = ComBox_Select_SongList.SelectedIndex;
             //重新绑定数据源，之前为null，防止数据与UI渲染刷新冲突
             userControl_Main_Home_Left_MyMusic_Mores_TabControl.ItemsSource = userControl_Main_Home_Left_MyMusic_Mores;
-            //重置歌单信息
-            Reset_Current_Playlist();
-
+            
             if (ComBox_Select_SongList_SelectIndex != -1)
             {
                 userControl_Main_Home_Left_MyMusic_Mores_TabControl.SelectedIndex = ComBox_Select_SongList_SelectIndex;
@@ -4076,11 +4082,6 @@ namespace NSMusicS
         #endregion
 
         #region Reset SongPlayList
-
-        private void Button_Clear_This_Current_Playlist_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            
-        }
         /// <summary>
         /// 打开（正在)播放列表
         /// </summary>
@@ -4111,22 +4112,7 @@ namespace NSMusicS
                             ]
                         );
                 }
-
-                //Reset_Current_Playlist();
             }
-        }
-        private void userControl_SongList_Infos_Current_Playlist_ListView_Download_SongList_Info_MouseEnter(object sender, MouseEventArgs e)
-        {
-            
-        }
-        private void userControl_SongList_Infos_Current_Playlist_ListView_Download_SongList_Info_MouseLeave(object sender, MouseEventArgs e)
-        {
-            
-        }
-        public void Reset_Current_Playlist()
-        {
-            /*songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
-            userControl_SongList_Infos_Current_Playlist.ListView_Download_SongList_Info.Items.Refresh();*/
         }
         #endregion
 
@@ -7075,8 +7061,6 @@ namespace NSMusicS
                                     }
                                 }
                             }
-                            //刷新歌单
-                            Reset_Current_Playlist();
 
                             //移动到指定行  WMP_Song_Play_Ids - 1
                             if (userControl_SongList_Infos_Current_Playlist.ListView_Download_SongList_Info.Items.Count > 0)
@@ -8572,7 +8556,15 @@ namespace NSMusicS
             }
             else
             {
-                DispatcherTimer_MRC.Stop();
+                //DispatcherTimer_MRC.Stop();
+
+                //释放此控件的内存，此控件大量使用会占用大量内存
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                {
+                    SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+                }
             }
         }
 
