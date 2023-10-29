@@ -2,7 +2,7 @@
 # NSMusicS Description:
 - Based on dotNET_ C#_ WPF's Personal Open Source Music Client
 - Demo effect: B-site link:
-- - Latest version:[https://www.bilibili.com/video/BV1im4y1P7P8](https://www.bilibili.com/video/BV1im4y1P7P8)
+- - Latest version:[https://www.bilibili.com/video/BV1kN4y1k7Pm](https://www.bilibili.com/video/BV1kN4y1k7Pm)
 
 # [MZMusic](https://github.com/MZMusic/MZMusic) will use Electron+Vue3+React+Vite to refactor and deploy to Linux/Mac/Web
 # (Electron - Version) ：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
