@@ -1,24 +1,22 @@
 ## NSMusicS 跳转 [中文REANME_CN.md](https://github.com/Super-Badmen-Viper/NSMusicS/blob/main/README_CN.md)
-# NSMusicS Description:
-- Based on dotNET_ C#_ WPF's Personal Open Source Music Client
-- Demo effect: B-site link:
-- - Latest version:[https://www.bilibili.com/video/BV1kN4y1k7Pm](https://www.bilibili.com/video/BV1kN4y1k7Pm)
 
-# [MZMusic](https://github.com/MZMusic/MZMusic) will use Electron+Vue3+React+Vite to refactor and deploy to Linux/Mac/Web
-# (Electron - Version) ：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
-- - The current WPF(Windows) version will serve as a reference for the Electron(Linux/Mac/Web) version
-- In addition to the functions of normal music software, I will develop K songs(karaoke) and score singing functions for the Electron version
-- - and deploy AI models to the server to achieve separation of algorithm layer and UI layer
-- The positioning of NSMusicS Music is to provide the ultimate music experience for professional, family, and entertainment scenarios
-- - while also providing legitimate music copyrights for commercial activities, and never using any third-party APIs
+# Version：
+- ## NSMusicS Description:
+- - Based on dotNET_ C#_ WPF's Personal Open Source Music Client
+- - Demo effect: B-site link:
+- - - Latest version:[https://www.bilibili.com/video/BV1kN4y1k7Pm](https://www.bilibili.com/video/BV1kN4y1k7Pm)
+- - will use Flutter to refactor and deploy to Linux/Mac/web/Android/IOS
 
-## Function:
+- ## [MZMusic : Community hosting](https://github.com/MZMusic/MZMusic) will use Electron+Vue3+React+Vite to refactor and deploy to Linux/Mac/Web
+- - (Electron - Version) ：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
+
+# Function:
 - 1. Support for synchronized animation and progress of lyrics (compatible with lyrics files from other music software), lyrics synchronization algorithm
 - 2. Support cross rotation of multi singer photo animations
 - 3. Audio dynamic spectrum animation
 - 4. Basic music player functions (no need to explain, there must be some)
 
-## MZMusic: Future feature updates（for (Now Version):[MZMusic](https://github.com/MZMusic/MZMusic)
+## NSMusicS: Future feature updates（for (Now Version):[MZMusic](https://github.com/MZMusic/MZMusic)
 - 1. identify songs module based on sound fingerprint technology (also open source as a separate project model)
 - 2. Guessing Your Favorite Module Based on Big Data User Behavior Analysis
 - 3. AI singing module based on nlp, replacing the sound of the song with your own (also open source as a separate project model)
@@ -27,13 +25,20 @@
 - 6. Implement functions such as NSMusicS singing bar scoring and evaluation, similar to the national karaoke (Tencent's national karaoke technology sharing video on Machine Heart has been canceled, so we will independently develop it)
 
 # Interface preview:
-  <img src="https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/5e040577-6693-4a94-b90d-8c46fcb59cd3" align="center" width="1200">
-  <img src="doc/Test (1).png" align="center" width="1200">
-  <img src="doc/Test (2).png" align="center" width="1200">
-  <img src="doc/Test (3).png" align="center" width="1200">
-  <img src="doc/Test (1_2).png" align="center" width="1200">
-  <img src="doc/Test (1_3).png" align="center" width="1200">
-  <img align="center" width="400">
+  <table>
+    <tr>
+      <td><img src="https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/5e040577-6693-4a94-b90d-8c46fcb59cd3" width="594"></td>
+      <td><img src="doc/Test (1).png" width="594"></td>
+    </tr>
+    <tr>
+      <td><img src="doc/Test (2).png" width="594"></td>
+      <td><img src="doc/Test (3).png" width="594"></td>
+    </tr>
+    <tr>
+      <td><img src="doc/Test (1_2).png" width="594"></td>
+      <td><img src="doc/Test (1_3).png" width="594"></td>
+    </tr>
+  </table>
   
 ## NSMusicS 4th Edition Project Development Document/Plan: -》 NSMusicS_Ultimate
   <img src="doc/NSMusicS 第4版 开发文档 规划 （更新中）.png" align="center" width="1200">

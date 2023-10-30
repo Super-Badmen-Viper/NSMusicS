@@ -1,14 +1,12 @@
-# NSMusicSPlayer说明：
-- 基于dotNET_C#_WPF的个人开源音乐客户端  
-- 演示效果：B站链接：
-- - Latest version:[https://www.bilibili.com/video/BV1kN4y1k7Pm](https://www.bilibili.com/video/BV1kN4y1k7Pm)
+# Version：
+- # NSMusicSPlayer说明：
+- - 基于dotNET_C#_WPF的个人开源音乐客户端  
+- - 演示效果：B站链接：
+- - - Latest version:[https://www.bilibili.com/video/BV1kN4y1k7Pm](https://www.bilibili.com/video/BV1kN4y1k7Pm)
+- - 将使用 Flutter 进行重构并部署到(Linux + Docker)/Mac/web/Android/IOS/Win
 
-# [MZMusic](https://github.com/MZMusic/MZMusic)将使用Electron+Vue3+React+Vite进行重构并部署到Linux/Mac 
-# （Electron 版本）[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic) 
-- 除了普通音乐软件的功能外，我将为Electron版开发K歌曲（卡拉OK）和配乐演唱功能
-- - 并将AI模型部署到服务器上，实现算法层和UI层的分离
-- 九歌·韵世音乐的定位是为专业、家庭、娱乐场景提供极致的音乐体验
-- - 同时还为商业活动提供合法的音乐版权，并且从不使用任何第三方API
+- # [MZMusic](https://github.com/MZMusic/MZMusic)将使用Electron+Vue3+React+Vite进行重构并部署到Linux/Mac 
+- -（Electron 版本）[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic) 
 
 ## 功能：
   - 1.支持歌词字同步动画，同步歌词进度 （可兼容其它音乐软件的歌词文件）歌词字同步算法
@@ -25,13 +23,20 @@
   - 6.实现NSMusicS唱吧打分评测等功能，类似全民K歌(腾讯在机器之心上的全民K歌技术分享视频已取消，所以我们将自主研发)
 
 # 界面预览：
-  <img src="https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/5e040577-6693-4a94-b90d-8c46fcb59cd3" align="center" width="1200">
-  <img src="doc/Test (1).png" align="center" width="1200">
-  <img src="doc/Test (2).png" align="center" width="1200">
-  <img src="doc/Test (3).png" align="center" width="1200">
-  <img src="doc/Test (1_2).png" align="center" width="1200">
-  <img src="doc/Test (1_3).png" align="center" width="1200">
-  <img align="center" width="400">
+  <table>
+    <tr>
+      <td><img src="https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/5e040577-6693-4a94-b90d-8c46fcb59cd3" width="594"></td>
+      <td><img src="doc/Test (1).png" width="594"></td>
+    </tr>
+    <tr>
+      <td><img src="doc/Test (2).png" width="594"></td>
+      <td><img src="doc/Test (3).png" width="594"></td>
+    </tr>
+    <tr>
+      <td><img src="doc/Test (1_2).png" width="594"></td>
+      <td><img src="doc/Test (1_3).png" width="594"></td>
+    </tr>
+  </table>
   
 # NSMusicS第4版项目 开发文档/规划：-》 NSMusicS_Ultimate
   <img src="doc/NSMusicS 第4版 开发文档 规划 （更新中）.png" align="center" width="1200">

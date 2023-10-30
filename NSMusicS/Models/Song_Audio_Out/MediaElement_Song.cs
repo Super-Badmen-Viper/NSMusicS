@@ -94,7 +94,6 @@ namespace NSMusicS.Models.Song_Audio_Out
                 {
                     using (MMDevice device = devices[i])
                     {
-                        //保持 对声音输出通道的独占 ， 只接受在设置手动触发
                         if (device.State == DeviceState.Active && device.ID == enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Console).ID)
                         {
                             deviceName = device.FriendlyName;
@@ -467,7 +466,6 @@ namespace NSMusicS.Models.Song_Audio_Out
 
         #endregion
 
-
         #region EQ
 
         public float MinimumGain => -12;
@@ -661,9 +659,6 @@ namespace NSMusicS.Models.Song_Audio_Out
         }
 
         #endregion
-
-
-
 
         public static MediaElement_Song viewModule_MediaElement_Song { get; set; }
         public static MediaElement_Song Retuen_This()
