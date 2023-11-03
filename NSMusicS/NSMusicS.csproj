@@ -6,8 +6,15 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <ApplicationIcon>墨智音乐.ico</ApplicationIcon>
+    <ApplicationIcon>NSMusicS.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views_Panel\**" />
+    <EmbeddedResource Remove="Views_Panel\**" />
+    <None Remove="Views_Panel\**" />
+    <Page Remove="Views_Panel\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="ico_ui_library\0_官方歌单.jpg" />
@@ -315,6 +322,7 @@
     <None Remove="ico_ui_library\音量加-01.png" />
     <None Remove="ico_ui_library\顺序播放 %281%29.png" />
     <None Remove="ico_ui_library\顺序播放.png" />
+    <None Remove="NSMusicS_Small.ico" />
     <None Remove="Resource\EXO Lotto ALL.jpg" />
     <None Remove="Resource\EXO Obsession ALL.jpg" />
     <None Remove="Resource\EXO Obsession.jpg" />
@@ -1167,6 +1175,7 @@
     <Content Include="bin\Debug\net6.0-windows\Resource\Temp_System\Close.txt" />
     <Content Include="bin\Debug\net6.0-windows\Resource\User_Data\Data_Eq_Model_1.xml" />
     <Content Include="bin\Debug\net6.0-windows\Resource\User_Data\Data_Personalized_Skin.xml" />
+    <Content Include="NSMusicS.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -4909,7 +4918,6 @@
     <Folder Include="bin\Debug\net6.0-windows\runtimes\win7-x86\native\" />
     <Folder Include="bin\Debug\net6.0-windows\runtimes\win\lib\netcoreapp2.1\" />
     <Folder Include="bin\Release\net6.0-windows\" />
-    <Folder Include="Views_Panel\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -5245,6 +5253,7 @@
     <Resource Include="ico_ui_library\音量加-01.png" />
     <Resource Include="ico_ui_library\顺序播放 (1).png" />
     <Resource Include="ico_ui_library\顺序播放.png" />
+    <Resource Include="NSMusicS_Small.ico" />
     <Resource Include="Resource\EXO Lotto ALL.jpg" />
     <Resource Include="Resource\EXO Obsession ALL.jpg" />
     <Resource Include="Resource\EXO Obsession.jpg" />

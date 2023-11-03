@@ -5,9 +5,9 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>墨智音乐.ico</ApplicationIcon>
-    <AssemblyVersion>3.0.0.3</AssemblyVersion>
-    <FileVersion>3.0.0.3</FileVersion>
+    <ApplicationIcon>NSMusicS.ico</ApplicationIcon>
+    <AssemblyVersion>3.0.0.4</AssemblyVersion>
+    <FileVersion>3.0.0.4</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,7 +31,7 @@
     <Content Include="bin\Debug\net6.0-windows\NSMusicS\Resource\Temp_System\Close.txt" />
     <Content Include="bin\Debug\net6.0-windows\NSMusicS_Lottie_Begin.deps.json" />
     <Content Include="bin\Debug\net6.0-windows\NSMusicS_Lottie_Begin.runtimeconfig.json" />
-    <Content Include="墨智音乐.ico" />
+    <Content Include="NSMusicS.ico" />
   </ItemGroup>
 
   <ItemGroup>
