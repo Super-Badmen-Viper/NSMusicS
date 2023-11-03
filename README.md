@@ -1,5 +1,20 @@
 ## NSMusicS 跳转 [中文REANME_CN.md](https://github.com/Super-Badmen-Viper/NSMusicS/blob/main/README_CN.md)
 
+# Explain
+
+- ## Nine Song Music World(NSMusicS) Description:
+- - Based on dotNET_ C#_ WPF's Personal Open Source Music Client
+- - Demo effect: B-site link:
+- - - Latest version:[https://www.bilibili.com/video/BV1kN4y1k7Pm](https://www.bilibili.com/video/BV1kN4y1k7Pm)
+- - will use Flutter to refactor and deploy to Linux/Mac/web/Android/IOS
+  - [NSMusicS-Flutter Version of Figma UI ：](https://www.figma.com/file/bmE00Wr1JKk5j3CbxrMgHe/Flutter%E5%A4%9A%E5%B9%B3%E5%8F%B0%E7%89%88%E6%9C%AC%EF%BC%9A(Linux%2BDoccker)%2FWeb%2FWin%2FMacOS%2FIOS%2FAndroid?type=design&node-id=0%3A1&mode=design&t=VZZrp7eZH17RZzio-1)
+
+# Function:
+- 1. Support for synchronized animation and progress of lyrics (compatible with lyrics files from other music software), lyrics synchronization algorithm
+- 2. Support cross rotation of multi singer photo animations
+- 3. Audio dynamic spectrum animation
+- 4. Basic music player functions (no need to explain, there must be some)
+
 # Version：
 
 | Project   | Development status | Technology Framework     | Author/Copyright Owner | Operating systems         | LICENSE          |  Software positioning |
@@ -30,21 +45,6 @@
  - ## MZMusic
     - ## unknown
 
-# Explain
-
-- ## Nine Song Music World(NSMusicS) Description:
-- - Based on dotNET_ C#_ WPF's Personal Open Source Music Client
-- - Demo effect: B-site link:
-- - - Latest version:[https://www.bilibili.com/video/BV1kN4y1k7Pm](https://www.bilibili.com/video/BV1kN4y1k7Pm)
-- - will use Flutter to refactor and deploy to Linux/Mac/web/Android/IOS
-  - [NSMusicS-Flutter Version of Figma UI ：](https://www.figma.com/file/bmE00Wr1JKk5j3CbxrMgHe/Flutter%E5%A4%9A%E5%B9%B3%E5%8F%B0%E7%89%88%E6%9C%AC%EF%BC%9A(Linux%2BDoccker)%2FWeb%2FWin%2FMacOS%2FIOS%2FAndroid?type=design&node-id=0%3A1&mode=design&t=VZZrp7eZH17RZzio-1)
-
-# Function:
-- 1. Support for synchronized animation and progress of lyrics (compatible with lyrics files from other music software), lyrics synchronization algorithm
-- 2. Support cross rotation of multi singer photo animations
-- 3. Audio dynamic spectrum animation
-- 4. Basic music player functions (no need to explain, there must be some)
-
 # Interface preview:
   <table>
     <tr>
@@ -66,13 +66,6 @@
   
 # The R&D management dashboard for this project：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
 - If you want to join, please send an email to my QQmail: 1774148579@qq.com More than 5 people, I will launch an open source project management model, and the Mozi Cloud open source organization will officially begin its activities
-
-# The UI design draft for this project：Figma Design：[https://www.figma.com/file/da9bAO4UkJbsVIrNb6en1i/MZMusic-3.0?type=design&node-id=0%3A1&mode=design&t=W6akkDt3HPOzBIrI-1](https://www.figma.com/file/da9bAO4UkJbsVIrNb6en1i/MZMusic-3.0?type=design&node-id=0%3A1&mode=design&t=W6akkDt3HPOzBIrI-1)
-
-### Note: This project is about to complete the personal official version 1.0 update. After the iteration of the version is completed, it will be copied to the open source community: NSMusicSYun (九歌·韵世云)
-## The copyright and updates for this project will be divided into two branches (sharing the majority of the copyright with each other)
-- - 1. [NSMusicSYunOpenSourceCommunity](https://github.com/NSMusicSYunOpenSourceCommunity) (九歌·韵世云开源社区): NSMusicS Community Edition（Jointly owned by administrators (if the submitted code exceeds a certain contribution level and is approved as an administrator)）
-- - 2. [NSMusicSYunStudio](https://github.com/SnakeBigBossDemo) (九歌·韵世云工作室): NSMusicS Ultimate (Except for paid music copyrights, all other copyrights are open source and belong to Cheng Xiang (main author))
 
 ## Participated in open source co construction, QQ group communication group number: 610551734: NSMusicSYunOpenSourceCommunity
 

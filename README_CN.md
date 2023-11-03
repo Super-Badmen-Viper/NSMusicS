@@ -1,3 +1,19 @@
+# 说明
+
+- # Nine Song Music World(NSMusicS)说明：
+- - 基于dotNET_C#_WPF的个人开源音乐客户端  
+- - 演示效果：B站链接：
+- - - Latest version:[https://www.bilibili.com/video/BV1kN4y1k7Pm](https://www.bilibili.com/video/BV1kN4y1k7Pm)
+- - 将使用 Flutter 进行重构并部署到(Linux + Docker)/Mac/web/Android/IOS/Win
+  - [NSMusicS-Flutter版本的Figma UI设计稿 ：](https://www.figma.com/file/bmE00Wr1JKk5j3CbxrMgHe/Flutter%E5%A4%9A%E5%B9%B3%E5%8F%B0%E7%89%88%E6%9C%AC%EF%BC%9A(Linux%2BDoccker)%2FWeb%2FWin%2FMacOS%2FIOS%2FAndroid?type=design&node-id=0%3A1&mode=design&t=VZZrp7eZH17RZzio-1)
+
+
+## 功能：
+  - 1.支持歌词字同步动画，同步歌词进度 （可兼容其它音乐软件的歌词文件）歌词字同步算法
+  - 2.支持多歌手写真动画交叉轮播
+  - 3.音频动态频谱动画
+  - 4.基本的音乐播放器功能（无需解释，该有的肯定有）
+
 # 版本：
 
 | 项目 | 开发状态 | 技术框架 | 作者/版权所有者 | 操作系统 | 许可证 | 软件定位 |
@@ -30,20 +46,6 @@
  - ## MZMusic
     - ## unknown
 
-# 说明
-
-- # Nine Song Music World(NSMusicS)说明：
-- - 基于dotNET_C#_WPF的个人开源音乐客户端  
-- - 演示效果：B站链接：
-- - - Latest version:[https://www.bilibili.com/video/BV1kN4y1k7Pm](https://www.bilibili.com/video/BV1kN4y1k7Pm)
-- - 将使用 Flutter 进行重构并部署到(Linux + Docker)/Mac/web/Android/IOS/Win
-
-## 功能：
-  - 1.支持歌词字同步动画，同步歌词进度 （可兼容其它音乐软件的歌词文件）歌词字同步算法
-  - 2.支持多歌手写真动画交叉轮播
-  - 3.音频动态频谱动画
-  - 4.基本的音乐播放器功能（无需解释，该有的肯定有）
-
 # 界面预览：
   <table>
     <tr>
@@ -65,13 +67,6 @@
   
 # 该项目的研发管理看板(仪表盘)：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
 - 如果你想加入，请发邮件到我的QQ邮箱：1774148579@qq.com，超过5个人，我将会开展开源项目管理模式，九歌·韵世云开源组织正式开始活动
-
-# 该项目的UI设计稿：[https://www.figma.com/file/da9bAO4UkJbsVIrNb6en1i/MZMusic-3.0?type=design&node-id=0%3A1&mode=design&t=W6akkDt3HPOzBIrI-1](https://www.figma.com/file/da9bAO4UkJbsVIrNb6en1i/MZMusic-3.0?type=design&node-id=0%3A1&mode=design&t=W6akkDt3HPOzBIrI-1)
-
-### 注意：此项目即将更新完个人正式版1.0版本，版本迭代完成后将复制至开源社区：NSMusicSYun(九歌·韵世云)
-## 此项目的版权和更新将分为两个分支(彼此共享绝大部分的版权)
-- - 1.[NSMusicSYunOpenSourceCommunity](https://github.com/NSMusicSYunOpenSourceCommunity) (九歌·韵世云开源社区)：NSMusicS Community Edition（开源的音乐版权，免费，开源共建，版权为社区内各管理员共同拥有，贡献度超过规定数量即可升为管理员）
-- - 2.[NSMusicSYunStudio](https://github.com/SnakeBigBossDemo) (九歌·韵世云工作室)：NSMusicS Ultimate（收费的音乐版权，部分开源，版权为 程翔(第一作者) 拥有）
 
 ## 参与开源共建，QQ群交流群号：610551734：-》 NSMusicSYunOpenSourceCommunity(九歌·韵世云开源社区)
 
