@@ -6,6 +6,7 @@
 - - Demo effect: B-site link:
 - - - Latest version:[https://www.bilibili.com/video/BV1kN4y1k7Pm](https://www.bilibili.com/video/BV1kN4y1k7Pm)
 - - will use Flutter to refactor and deploy to Linux/Mac/web/Android/IOS
+  - [NSMusicS-Flutter Version of Figma UI ：](https://www.figma.com/file/bmE00Wr1JKk5j3CbxrMgHe/Flutter%E5%A4%9A%E5%B9%B3%E5%8F%B0%E7%89%88%E6%9C%AC%EF%BC%9A(Linux%2BDoccker)%2FWeb%2FWin%2FMacOS%2FIOS%2FAndroid?type=design&node-id=0%3A1&mode=design&t=VZZrp7eZH17RZzio-1)
 
 - ## [MZMusic : Community hosting](https://github.com/MZMusic/MZMusic) will use Electron+Vue3+React+Vite to refactor and deploy to Linux/Mac/Web
 - - (Electron - Version) ：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
