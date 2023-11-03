@@ -1,26 +1,48 @@
-# Version：
-- # NSMusicSPlayer说明：
+# 版本：
+
+| 项目 | 开发状态 | 技术框架 | 作者/版权所有者 | 操作系统 | 许可证 | 软件定位 |
+| :----- | ----: | ----: | ----: | :----: | :----: | :----: |
+| [NSMusicS](https://github.com/Super-Badmen-Viper/NSMusicS) |<font color="#00dd00">(已完成): 更新中</font>| .NET WPF C# | Xiang Cheng | (Windows10++) | A-GPL 3.0 | 开源 + 商业 |
+| [NSMusicS_For_Flutter](https://github.com/Super-Badmen-Viper/NSMusicS/tree/main/NSMusicS_For_Flutter/nsmusics_for_flutter) |<font color=Yellow>(开发中)</font><font color="#00dd00">: 更新中</font> | Flutter Dart | Xiang Cheng | (Windows10++, Linux(ubuntu+, 群晖Nas+Docker), MacOS, Android11++, IOS) | A-GPL 3.0 | 开源 + 商业 |
+| [MZMusic](https://github.com/MZMusic/MZMusic) |<font color=Red>未开始</font> | Electron+Vue3 | MZMusic Team | (Windows, Linux, MacOS...) | Apache License 2.0 | 开源 |
+
+# 开发企划
+ - ## NSMusicS 
+    - 1.(Windows) (专业级)音乐播放器++
+    - 2.NAS上数千万首歌曲级别的音乐库管理
+    - 3.音乐和娱乐场景
+      1. 基于声音指纹技术的听歌识曲模块（同时作为单独项目模型开源）
+      2. 基于大数据用户行为分析的猜你喜欢模块
+      3. 基于nlp的AI演唱模块，将歌曲的声音替换为你的声音（同时作为单独项目模型开源）
+      4. 基于nlp的AI乐谱绘制模块（同时作为单独项目模型开源）
+      5. 基于nlp的AI提取音频歌词同步信息
+      6. 实现NSMusicS唱吧打分评测等功能
+    - 4.Windows音乐IDE，类似于Adobe Audition
+
+ - ## NSMusicS For Flutter
+    - Flutter版本将是一个纯粹的音乐播放器
+    - Flutter支持全平台的使用，(Windows10++, Linux(ubuntu+, 群晖Nas+Docker), MacOS, Android11++, IOS) 
+    - 与NSMusicS相同，如上所述
+      - 但是，它没有：
+        1. 类似于Adobe Audition的Windows音乐IDE
+    
+
+ - ## MZMusic
+    - ## unknown
+
+# 说明
+
+- # Nine Song Music World(NSMusicS)说明：
 - - 基于dotNET_C#_WPF的个人开源音乐客户端  
 - - 演示效果：B站链接：
 - - - Latest version:[https://www.bilibili.com/video/BV1kN4y1k7Pm](https://www.bilibili.com/video/BV1kN4y1k7Pm)
 - - 将使用 Flutter 进行重构并部署到(Linux + Docker)/Mac/web/Android/IOS/Win
-
-- # [MZMusic](https://github.com/MZMusic/MZMusic)将使用Electron+Vue3+React+Vite进行重构并部署到Linux/Mac 
-- -（Electron 版本）[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic) 
 
 ## 功能：
   - 1.支持歌词字同步动画，同步歌词进度 （可兼容其它音乐软件的歌词文件）歌词字同步算法
   - 2.支持多歌手写真动画交叉轮播
   - 3.音频动态频谱动画
   - 4.基本的音乐播放器功能（无需解释，该有的肯定有）
-
-## MZMusic(NSMusicS九歌·韵世音乐团队)：[MZMusic](https://github.com/MZMusic/MZMusic)：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
-  - 1.基于声音指纹技术的听歌识曲模块（同时作为单独项目模型开源）
-  - 2.基于大数据用户行为分析的猜你喜欢模块
-  - 3.基于nlp的AI演唱模块，将歌曲的声音替换为你的声音（同时作为单独项目模型开源）
-  - 4.基于nlp的AI乐谱绘制模块（同时作为单独项目模型开源）
-  - 5.基于nlp的AI提取音频歌词同步信息(打破Krc,Qrc等版权壁垒)
-  - 6.实现NSMusicS唱吧打分评测等功能，类似全民K歌(腾讯在机器之心上的全民K歌技术分享视频已取消，所以我们将自主研发)
 
 # 界面预览：
   <table>

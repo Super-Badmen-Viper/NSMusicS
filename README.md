@@ -1,29 +1,49 @@
 ## NSMusicS 跳转 [中文REANME_CN.md](https://github.com/Super-Badmen-Viper/NSMusicS/blob/main/README_CN.md)
 
 # Version：
-- ## NSMusicS Description:
+
+| Project   | Development status | Technology Framework     | Author/Copyright Owner | Operating systems         | LICENSE          |  Software positioning |
+| :-----    | ----:              | ----:                    | ----:             | :----:                    | :----:                    | :----:                    |
+| [NSMusicS](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">(complete): updateing</font>| .NET WPF C#           | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++)             | A-GPL 3.0 | Open source + Commercial | 
+| [NSMusicS_For_Flutter](https://github.com/Super-Badmen-Viper/NSMusicS/tree/main/NSMusicS_For_Flutter/nsmusics_for_flutter)   |<font color=Yellow>(under development)</font><font color="#00dd00">: updateing</font>    | Flutter Dart          | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++,Linux(ubuntu+,群晖Nas+Docker),MacOS,Android11++,IOS) | A-GPL 3.0 | Open source + Commercial | 
+| [MZMusic](https://github.com/MZMusic/MZMusic)   |<font color=Red>Not started</font>             | Electron+Vue3         | [MZMusic Team](https://github.com/MZMusic)  | (win,linux,macos...)      | Apache License 2.0 | Open source | 
+
+# Development Plan
+ - ## NSMusicS
+    - 1.(Windows) (Professional) MusicPlayer++
+    - 2.Tens of Millions-song Level of Music Library Management on NAS
+    - 3.Music and Entertainment Scenes(Recording karaoke and scoring.......)
+    - 4.<font color="#40A688">Windows Music IDE, Similar to Adobe Audition</font> 
+      1. identify songs module based on sound fingerprint technology (also open source as a separate project model)
+      2. Guessing Your Favorite Module Based on Big Data User Behavior Analysis
+      3. AI singing module based on nlp, replacing the sound of the song with your own (also open source as a separate project model)
+      4. AI music notation module based on nlp (also open source as a separate project model)
+      5. AI extraction of audio lyrics synchronization information based on nlp (breaking copyright barriers such as Krc and Qrc)
+      6. Implement functions such as NSMusicS singing bar scoring and evaluation
+
+ - ## NSMusicS For Flutter
+    - The Flutter version will serve as a dedicated music player.
+    - Flutter supports cross-platform usage on various operating systems, including Windows 10++, Linux (Ubuntu+, Synology NAS+Docker), MacOS, Android 11++, and iOS.
+    - It shares the same features as NSMusicS, as described above.
+      - However, it does not include a Windows music IDE similar to Adobe Audition.
+
+ - ## MZMusic
+    - ## unknown
+
+# Explain
+
+- ## Nine Song Music World(NSMusicS) Description:
 - - Based on dotNET_ C#_ WPF's Personal Open Source Music Client
 - - Demo effect: B-site link:
 - - - Latest version:[https://www.bilibili.com/video/BV1kN4y1k7Pm](https://www.bilibili.com/video/BV1kN4y1k7Pm)
 - - will use Flutter to refactor and deploy to Linux/Mac/web/Android/IOS
   - [NSMusicS-Flutter Version of Figma UI ：](https://www.figma.com/file/bmE00Wr1JKk5j3CbxrMgHe/Flutter%E5%A4%9A%E5%B9%B3%E5%8F%B0%E7%89%88%E6%9C%AC%EF%BC%9A(Linux%2BDoccker)%2FWeb%2FWin%2FMacOS%2FIOS%2FAndroid?type=design&node-id=0%3A1&mode=design&t=VZZrp7eZH17RZzio-1)
 
-- ## [MZMusic : Community hosting](https://github.com/MZMusic/MZMusic) will use Electron+Vue3+React+Vite to refactor and deploy to Linux/Mac/Web
-- - (Electron - Version) ：[https://github.com/MZMusic/MZMusic](https://github.com/MZMusic/MZMusic)
-
 # Function:
 - 1. Support for synchronized animation and progress of lyrics (compatible with lyrics files from other music software), lyrics synchronization algorithm
 - 2. Support cross rotation of multi singer photo animations
 - 3. Audio dynamic spectrum animation
 - 4. Basic music player functions (no need to explain, there must be some)
-
-## NSMusicS: Future feature updates（for (Now Version):[MZMusic](https://github.com/MZMusic/MZMusic)
-- 1. identify songs module based on sound fingerprint technology (also open source as a separate project model)
-- 2. Guessing Your Favorite Module Based on Big Data User Behavior Analysis
-- 3. AI singing module based on nlp, replacing the sound of the song with your own (also open source as a separate project model)
-- 4. AI music notation module based on nlp (also open source as a separate project model)
-- 5. AI extraction of audio lyrics synchronization information based on nlp (breaking copyright barriers such as Krc and Qrc)
-- 6. Implement functions such as NSMusicS singing bar scoring and evaluation, similar to the national karaoke (Tencent's national karaoke technology sharing video on Machine Heart has been canceled, so we will independently develop it)
 
 # Interface preview:
   <table>
