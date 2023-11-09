@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_Sound_Plugin", "NS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS", "NSMusicS\NSMusicS.csproj", "{6FFC37EA-2D44-47F1-ADF2-9C1CEFC5CD1C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSMusicS_For_Flutter", "NSMusicS_For_Flutter\NSMusicS_For_Flutter.csproj", "{63741F87-B95A-4EB4-8D8D-0FA0BCA61CE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{6FFC37EA-2D44-47F1-ADF2-9C1CEFC5CD1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FFC37EA-2D44-47F1-ADF2-9C1CEFC5CD1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FFC37EA-2D44-47F1-ADF2-9C1CEFC5CD1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63741F87-B95A-4EB4-8D8D-0FA0BCA61CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63741F87-B95A-4EB4-8D8D-0FA0BCA61CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63741F87-B95A-4EB4-8D8D-0FA0BCA61CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63741F87-B95A-4EB4-8D8D-0FA0BCA61CE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,8 +1,12 @@
 ///自定义窗体设置///来自https://pub.dev/packages/bitsdojo_window
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
-import '../App_System_Theme/App_System_Theme_Of_Colors.dart';
+
+import '../../Resource_Library/App_System_Theme/App_System_Theme_Of_Colors.dart';
 import 'App_Left_Grid_For_Top_Grid_Of_LOGO/App_Left_Grid_For_Top_Grid_Of_LOGO.dart';
+import 'App_Left_Grid_Of_Model_1/App_Left_Grid_Of_Model_1_1_My_Music.dart';
+import 'App_Left_Grid_Of_Model_1/App_Left_Grid_Of_Model_1_2_AI_Music.dart';
+import 'App_Left_Grid_Of_Model_1/App_Left_Grid_Of_Model_1_3_Love_Album.dart';
 
 
 ///App-Grid-左
@@ -21,36 +25,14 @@ class App_Left_Grid extends StatelessWidget {
                   App_Left_Grid_For_Top_Grid_Of_LOGO(
 
                   ),//LOGO区域
+                  App_Left_Grid_Of_Model_1_1_My_Music(
 
-                  ///窗体拖动功能：Positioned.fill置于底部表示最顶部
-                  /*Positioned.fill(///用于不同平面的嵌套的Positioned，fill表示铺满父容器
-                      child: Column(
-                        children: [
-                          //WindowTitleBarBox(child: MoveWindow()),//添加标题栏拖动
-                          //Expanded(child: Container()),//强制子组件填充可用空间
-                          Expanded(child: MoveWindow()),//强制子组件填充可用空间
-                        ],
-                      )
-                  )*/
-                  Container(
-                      margin: EdgeInsets.only(top: 77.142),
-                      child: Container(
-                        height: 200,
-                        color: Colors.black,
-                      )
                   ),
-                  Container(
-                      margin: EdgeInsets.only(top: 277.142),
-                      child: Container(
-                        height: 200,
-                        color: Colors.blueGrey,
-                      )
+                  App_Left_Grid_Of_Model_1_2_AI_Music(
+
                   ),
-                  Container(
-                      margin: EdgeInsets.only(top: 477.142),
-                      child: Container(
-                        color: Colors.orange,
-                      )
+                  App_Left_Grid_Of_Model_1_3_Love_Album(
+
                   )
 
 

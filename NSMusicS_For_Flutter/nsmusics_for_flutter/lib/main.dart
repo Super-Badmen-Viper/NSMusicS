@@ -8,9 +8,9 @@ main.cpp
 */
 
 import 'package:flutter/material.dart';
+import 'Resource_Library/App_System_Theme/App_System_Theme_Of_Colors.dart';
 import 'Views/App_Left_Grid/App_Left_Grid.dart';
 import 'Views/App_Right_Grid/App_Right_Grid.dart';
-import 'Views/App_System_Theme/App_System_Theme_Of_Colors.dart';
 
 
 ///主方法入口
@@ -45,15 +45,24 @@ class MyApp extends StatelessWidget {
             width: 1,
             child: Stack(
               children: [
+
+                ///主内容
                 Container(
+                  width: double.infinity, // 设置宽度为屏幕宽度
                   child: Row(/// children的内容将Row水平排列
-                    children: const [App_Left_Grid(), App_Right_Grid()],
+                    children: const [
+                      App_Left_Grid(),
+                      App_Right_Grid(),
+                    ],
                     /// App_Left_Grid() 和 App_Right_Grid() 这两个子部件将水平排列在一行上，它们之间没有间隔。
                   ),
                 ),
+
+                ///窗体拖动功能：Positioned.fill置于底部表示最顶部
                 Positioned.fill(
-                    child: MoveWindow()
+                  child: MoveWindow()
                 )
+
               ],
             ),
           ),
