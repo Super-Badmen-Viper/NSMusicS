@@ -322,6 +322,7 @@
     <None Remove="ico_ui_library\音量加-01.png" />
     <None Remove="ico_ui_library\顺序播放 %281%29.png" />
     <None Remove="ico_ui_library\顺序播放.png" />
+    <None Remove="NSMusicS.png" />
     <None Remove="NSMusicS_Small.ico" />
     <None Remove="Resource\EXO Lotto ALL.jpg" />
     <None Remove="Resource\EXO Obsession ALL.jpg" />
@@ -5253,6 +5254,7 @@
     <Resource Include="ico_ui_library\音量加-01.png" />
     <Resource Include="ico_ui_library\顺序播放 (1).png" />
     <Resource Include="ico_ui_library\顺序播放.png" />
+    <Resource Include="NSMusicS.png" />
     <Resource Include="NSMusicS_Small.ico" />
     <Resource Include="Resource\EXO Lotto ALL.jpg" />
     <Resource Include="Resource\EXO Obsession ALL.jpg" />

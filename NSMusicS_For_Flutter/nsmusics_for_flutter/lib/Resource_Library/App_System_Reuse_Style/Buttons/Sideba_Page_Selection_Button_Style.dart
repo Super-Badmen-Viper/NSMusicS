@@ -48,7 +48,7 @@ class _Sideba_Page_Selection_Button_Style extends State<Sideba_Page_Selection_Bu
             ),
             ///小图标
             Container(
-              margin: EdgeInsets.only(left: 6,top: 6),
+              margin: EdgeInsets.only(left: 8,top: 6),
               width: 20,height: 20,
               decoration: BoxDecoration(//圆角属性
                 //color: font_color,

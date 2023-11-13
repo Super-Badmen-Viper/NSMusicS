@@ -39,12 +39,12 @@
             <Border 
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                 CornerRadius="10" x:Name="this_app_Background"/>
-            
+
             <Border CornerRadius="10" Background="#551E1E20"/>
 
             <Border Visibility="Visible" CornerRadius="10" BorderBrush="#40FFFFFF"  BorderThickness="0.5"/>
         </Grid>
-        
+
         <!--用以关闭其它的控件，如音量，播放列表-->
         <Grid x:Name="Grid_Operation_Panel" 
               MouseLeftButtonDown="Grid_Operation_Panel_MouseLeftButtonDown" 
@@ -166,7 +166,7 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        
+
                         <TextBlock Text="音乐资源" Visibility="Collapsed"
                                Width="140" Padding="17,0,0,0"  Margin="-2,315,0,0"
                                Foreground="#505353" VerticalAlignment="Top">
@@ -284,7 +284,9 @@
         </Grid>
 
         <Grid x:Name="Grid_Logo" VerticalAlignment="Top" Height="90" HorizontalAlignment="Left" Width="200">
-            <TextBlock Margin="30,24,20,0"  VerticalAlignment="Top" Height="28"
+            <Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="26" Height="26" Margin="5,28,0,0" 
+                   Source="/NSMusicS;component/NSMusicS.png"/>
+            <TextBlock Margin="50,24,0,0"  VerticalAlignment="Top" Height="28"
                FontWeight="Bold" FontSize="20"
                Text="九歌·NSMusicS" TextAlignment="Left"
                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
@@ -308,7 +310,7 @@
                     </LinearGradientBrush>
                 </TextBlock.Foreground>
             </TextBlock>
-            <TextBlock Margin="30,50,20,0"  VerticalAlignment="Top" Height="28"
+            <TextBlock Margin="50,50,0,0"  VerticalAlignment="Top" Height="28"
                FontWeight="Bold" FontSize="14" Foreground="White"
                Text="拥抱开源·音乐世界" TextAlignment="Left"
                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 

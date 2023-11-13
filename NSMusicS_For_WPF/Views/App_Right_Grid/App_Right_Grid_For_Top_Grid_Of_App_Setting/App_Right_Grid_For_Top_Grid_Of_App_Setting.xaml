@@ -1,0 +1,133 @@
+﻿<UserControl x:Class="NSMusicS_For_WPF.Views.App_Right_Grid.App_Right_Grid_For_Top_Grid_Of_App_Setting.App_Right_Grid_For_Top_Grid_Of_App_Setting"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS_For_WPF.Views.App_Right_Grid.App_Right_Grid_For_Top_Grid_Of_App_Setting"
+             xmlns:Button="clr-namespace:NSMusicS_For_WPF.VIewModels.Button"
+             mc:Ignorable="d" 
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             d:DesignHeight="70" d:DesignWidth="900">
+    <Grid>
+        <StackPanel Orientation="Horizontal" Width="300" HorizontalAlignment="Left">
+            <Button:UserControl_Top_Bar_Button_1_Model_Single 
+                x:Name="userControl_Top_Bar_Button_1_Model_Single"
+                Margin="40,0,0,0"
+                HorizontalAlignment="Left" VerticalAlignment="Center" 
+                />
+            <Button:UserControl_Top_Bar_Button_2_Model_Album
+                x:Name="userControl_Top_Bar_Button_2_Model_Album"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Left" VerticalAlignment="Center" 
+                />
+            <Button:UserControl_Top_Bar_Button_3_Model_Music_library
+                x:Name="userControl_Top_Bar_Button_3_Model_Music_library"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Left" VerticalAlignment="Center" 
+                />
+            <Button:UserControl_Top_Bar_Button_4_Model_NAS
+                x:Name="userControl_Top_Bar_Button_4_Model_NAS"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Left" VerticalAlignment="Center" 
+                />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Width="450" HorizontalAlignment="Right">
+            <Border
+                x:Name="Search_Music_Border"
+                Width="200" Height="30"
+                Background="#FFFFFF" CornerRadius="10"
+                >
+                <StackPanel Orientation="Horizontal">
+                    <Border 
+                        HorizontalAlignment="Right" VerticalAlignment="Center" 
+                        Width="22" Height="22" Margin="6,0,0,0">
+                        <svgc:SvgViewbox 
+                            Width="18" Height="18"
+                            x:Name="SvgViewbox_Button_Search" Cursor="Hand"/>
+                    </Border>
+                    <TextBlock 
+                        
+                        Text="林俊杰 - 冻结" Foreground="#A4A9B4" FontSize="16"
+                        VerticalAlignment="Center" Margin="6,0,0,0"
+                        />
+                </StackPanel>
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="6" Opacity="0.25" ShadowDepth="0" Direction="0"/>
+                </Border.Effect>
+            </Border>
+
+            <Border 
+                x:Name="Button_Setting"
+                CornerRadius="4" Background="#FFFFFF"
+                HorizontalAlignment="Right" VerticalAlignment="Center" 
+                Width="22" Height="22" Margin="30,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="6" Opacity="0.25" ShadowDepth="0" Direction="0"/>
+                </Border.Effect>
+                <svgc:SvgViewbox 
+                    Width="20" Height="20"
+                    x:Name="SvgViewbox_Button_Setting" Cursor="Hand"/>
+            </Border>
+            <Border 
+                x:Name="Button_Skin"
+                CornerRadius="4" Background="#FFFFFF"
+                HorizontalAlignment="Right" VerticalAlignment="Center" 
+                Width="22" Height="22" Margin="10,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="6" Opacity="0.25" ShadowDepth="0" Direction="0"/>
+                </Border.Effect>
+                <svgc:SvgViewbox 
+                Width="22" Height="22"
+                x:Name="SvgViewbox_Button_Skin" Cursor="Hand"/>
+            </Border>
+            <Border 
+                x:Name="Button_Min"
+                CornerRadius="4" Background="#FFFFFF"
+                HorizontalAlignment="Right" VerticalAlignment="Center" 
+                Width="22" Height="22" Margin="10,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="6" Opacity="0.25" ShadowDepth="0" Direction="0"/>
+                </Border.Effect>
+                <svgc:SvgViewbox 
+                    Width="18" Height="18"
+                    x:Name="SvgViewbox_Button_Min" Cursor="Hand"/>
+            </Border>
+            <Border 
+                x:Name="Button_Max"
+                CornerRadius="4" Background="#FFFFFF"
+                HorizontalAlignment="Right" VerticalAlignment="Center" 
+                Width="22" Height="22" Margin="10,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="6" Opacity="0.25" ShadowDepth="0" Direction="0"/>
+                </Border.Effect>
+                <svgc:SvgViewbox 
+                    Width="18" Height="18"
+                    x:Name="SvgViewbox_Button_Max" Cursor="Hand"/>
+            </Border>
+            <Border 
+                x:Name="Button_Close"
+                CornerRadius="4" Background="#FFFFFF"
+                HorizontalAlignment="Right" VerticalAlignment="Center" 
+                Width="22" Height="22" Margin="10,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="6" Opacity="0.25" ShadowDepth="0" Direction="0"/>
+                </Border.Effect>
+                <svgc:SvgViewbox 
+                    Width="16" Height="16"
+                    x:Name="SvgViewbox_Button_Close" Cursor="Hand"/>
+            </Border>
+            <Border 
+                x:Name="Button_Exit"
+                CornerRadius="4" Background="#FFFFFF"
+                HorizontalAlignment="Right" VerticalAlignment="Center" 
+                Width="22" Height="22" Margin="10,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="6" Opacity="0.25" ShadowDepth="0" Direction="0"/>
+                </Border.Effect>
+                <svgc:SvgViewbox 
+                Width="18" Height="18"
+                x:Name="SvgViewbox_Button_Exit" Cursor="Hand"/>
+            </Border>
+        </StackPanel>
+    </Grid>
+</UserControl>

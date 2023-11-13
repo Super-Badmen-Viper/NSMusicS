@@ -23,8 +23,18 @@ final SvgPicture SVG_Min = new SvgPicture.asset("Resource_UI_Ico/1x/最小化.sv
 final SvgPicture SVG_Max = new SvgPicture.asset("Resource_UI_Ico/1x/最大化.svg",color: Color(0xFF7B8290),);
 final SvgPicture SVG_Close = new SvgPicture.asset("Resource_UI_Ico/1x/关闭.svg",color: Color(0xFF7B8290),);
 final SvgPicture SVG_Search = new SvgPicture.asset("Resource_UI_Ico/1x/搜索01.svg",color: Color(0xFF7B8290),);
+final SvgPicture SVG_Help = new SvgPicture.asset("Resource_UI_Ico/1x/帮助.svg",color: Color(0xFF777D8D),);
 
 ///Bar_Left
+final SvgPicture SVG_Love_Music = new SvgPicture.asset("Resource_UI_Ico/1x/收藏.svg",color: Color(0xFF646B7C),);///0xFF646B7C
 final SvgPicture SVG_Local_Music = new SvgPicture.asset("Resource_UI_Ico/1x/本地.svg",color: Color(0xFF646B7C),);
 final SvgPicture SVG_Auto_List = new SvgPicture.asset("Resource_UI_Ico/1x/列表.svg",color: Color(0xFF646B7C),);
 final SvgPicture SVG_Custom_List = new SvgPicture.asset("Resource_UI_Ico/1x/播放队列.svg",color: Color(0xFF646B7C),);
+final SvgPicture SVG_Love_Music_Enter = new SvgPicture.asset("Resource_UI_Ico/1x/收藏.svg",color: Color(0xFFFFFFFF),);///0xFF646B7C
+final SvgPicture SVG_Local_Music_Enter = new SvgPicture.asset("Resource_UI_Ico/1x/本地.svg",color: Color(0xFFFFFFFF),);
+final SvgPicture SVG_Auto_List_Enter = new SvgPicture.asset("Resource_UI_Ico/1x/列表.svg",color: Color(0xFFFFFFFF),);
+final SvgPicture SVG_Custom_List_Enter = new SvgPicture.asset("Resource_UI_Ico/1x/播放队列.svg",color: Color(0xFFFFFFFF),);
+
+///Song Manager
+final SvgPicture SVG_Song_Copy = new SvgPicture.asset("Resource_UI_Ico/1x/复制.svg",color: Color(0xFF8C919F),);
+final SvgPicture SVG_Song_Delete = new SvgPicture.asset("Resource_UI_Ico/1x/删除.svg",color: Color(0xFF8C919F),);
