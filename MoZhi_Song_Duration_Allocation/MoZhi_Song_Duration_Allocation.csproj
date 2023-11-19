@@ -1,0 +1,73 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resource\aespa - Spicy ALL.jpg" />
+    <None Remove="Resource\EXO Lotto ALL.jpg" />
+    <None Remove="Resource\EXO Obsession ALL.jpg" />
+    <None Remove="Resource\EXO-K 중독 %28Overdose%29.jpg" />
+    <None Remove="Resource\EXO-K.jpg" />
+    <None Remove="Resource\lotto.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin\Debug\net6.0-windows\Resource\Singer_Head\BAEKHYUN边伯贤.jpg" />
+    <Content Include="bin\Debug\net6.0-windows\Resource\Singer_Head\CHANYEOL朴灿烈.jpg" />
+    <Content Include="bin\Debug\net6.0-windows\Resource\Singer_Head\CHEN金钟大.jpg" />
+    <Content Include="bin\Debug\net6.0-windows\Resource\Singer_Head\D.O都敬秀.jpg" />
+    <Content Include="bin\Debug\net6.0-windows\Resource\Singer_Head\KAI金钟仁.jpg" />
+    <Content Include="bin\Debug\net6.0-windows\Resource\Singer_Head\LAY张艺兴.jpg" />
+    <Content Include="bin\Debug\net6.0-windows\Resource\Singer_Head\SEHUN吴世勋.jpg" />
+    <Content Include="bin\Debug\net6.0-windows\Resource\Singer_Head\SUHO金俊勉.jpg" />
+    <Content Include="bin\Debug\net6.0-windows\Resource\Singer_Head\XIUMIN金珉锡.jpg" />
+    <Content Include="bin\Debug\net6.0-windows\Resource\Singer_Head\内永枝利GISELLE.jpg" />
+    <Content Include="bin\Debug\net6.0-windows\Resource\Singer_Head\宁艺卓NINGNING.jpg" />
+    <Content Include="bin\Debug\net6.0-windows\Resource\Singer_Head\柳智敏KARINA.jpg" />
+    <Content Include="bin\Debug\net6.0-windows\Resource\Singer_Head\金旼炡WINTER.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="bin\Debug\net6.0-windows\Resource\MV\" />
+    <Folder Include="Dao_Init_Info\" />
+    <Folder Include="Dao_UserControl\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin\Debug\net6.0-windows\Resource\Crc\aespa - Spicy.crc" />
+    <None Include="bin\Debug\net6.0-windows\Resource\Crc\EXO - LOTTO %28Chinese Ver.%29.crc" />
+    <None Include="bin\Debug\net6.0-windows\Resource\Crc\EXO - Obsession.crc" />
+    <None Include="bin\Debug\net6.0-windows\Resource\Crc\EXO-K - 중독 %28Overdose%29.crc" />
+    <None Include="bin\Debug\net6.0-windows\Resource\Krc\aespa - Spicy.krc" />
+    <None Include="bin\Debug\net6.0-windows\Resource\Krc\EXO - Don%27t fight the feeling.krc" />
+    <None Include="bin\Debug\net6.0-windows\Resource\Krc\EXO - LOTTO %28Chinese Ver.%29.krc" />
+    <None Include="bin\Debug\net6.0-windows\Resource\Krc\EXO - Obsession.krc" />
+    <None Include="bin\Debug\net6.0-windows\Resource\Krc\EXO-K - 중독 %28Overdose%29.krc" />
+    <None Include="bin\Debug\net6.0-windows\Resource\Krc\EXO-M - 上瘾 %28Overdose%29.krc" />
+    <None Include="bin\debug\net6.0-windows\resource\mv\null.ini" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LibVLCSharp.WPF" Version="3.8.2" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.20" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resource\aespa - Spicy ALL.jpg" />
+    <Resource Include="Resource\EXO Lotto ALL.jpg" />
+    <Resource Include="Resource\EXO Obsession ALL.jpg" />
+    <Resource Include="Resource\EXO Obsession.jpg" />
+    <Resource Include="Resource\EXO Obsession_2.jpg" />
+    <Resource Include="Resource\EXO-K 중독 (Overdose).jpg" />
+    <Resource Include="Resource\EXO-K.jpg" />
+    <Resource Include="Resource\lotto.jpg" />
+    <Resource Include="Resource\Obsession.jpg" />
+  </ItemGroup>
+
+</Project>

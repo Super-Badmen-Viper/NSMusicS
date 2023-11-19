@@ -1,7 +1,4 @@
-﻿#pragma warning disable CS0649
-#pragma warning disable IDE1006
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;

@@ -76,8 +76,8 @@ namespace NSMusicS
             ProcessManager.GetProcessLock();
 
             //禁用
-            userControl_ButtonFrame_TopPanel.Model_4.IsEnabled = false;
-            userControl_ButtonFrame_TopPanel.Model_5.IsEnabled = false;
+            userControl_ButtonFrame_TopPanel.Model_4.IsEnabled = true;
+            userControl_ButtonFrame_TopPanel.Model_5.IsEnabled = true;
             musicPlayer_Model_2_Album_UserControl.Stack_Button_LotSelects_Sort.Visibility = Visibility.Collapsed;
 
             #region 初始化
@@ -8709,6 +8709,8 @@ namespace NSMusicS
                             {
                                 bitmapImage = Song_Extract_Info.Extract_AlbumImage_Of_This_SongUrl(this_Song_Info.Song_Url);
                             }
+                            else
+                                bitmapImage = null;
 
                             if (bitmapImage != null)
                             {
@@ -8833,13 +8835,13 @@ namespace NSMusicS
                     }
                 }
 
-                if (bitmapImage != null)
+                /*if (bitmapImage != null)
                     bitmapImage.Freeze();
                 bitmapImage = null;
 
                 if (Image_墨智音乐 != null)
                     Image_墨智音乐.Freeze();
-                Image_墨智音乐 = null;
+                Image_墨智音乐 = null;*/
             }
             catch
             {

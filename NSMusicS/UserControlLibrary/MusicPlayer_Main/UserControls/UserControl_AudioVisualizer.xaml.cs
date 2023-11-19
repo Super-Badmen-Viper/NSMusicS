@@ -574,7 +574,7 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls
                                     Math.Min(drawingPanel.ActualHeight / 10, 100)
                                 );
                                 
-                                DrawCircleGradientStrips(
+                              DrawCircleGradientStrips(
                                     circle_1, allColors[colorIndex % allColors.Count], allColors[(colorIndex + 200) % allColors.Count],
                                     spectrumData, spectrumData.Count,//频谱数据
                                     drawingPanel.ActualWidth / 2, drawingPanel.ActualHeight / 2,//圆环位置
