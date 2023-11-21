@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:MoZhi_Song_Duration_Allocation.UserControlLibrary.MainWindow_Top_MediaMV"
              xmlns:UserControl_Media_ButtomSilderPanel="clr-namespace:MoZhi_Song_Duration_Allocation.UserControlLibrary.MainWindow_Top_MediaMV.UserControl_Media_ButtomSilderPanel" 
              x:Class="MoZhi_Song_Duration_Allocation.UserControlLibrary.MainWindow_Top_MediaMV.UserControl_MediaMV"
-             mc:Ignorable="d" Height="600" Width="1000">
+             mc:Ignorable="d">
     <Grid>
         <Border 
             x:Name="border" 
@@ -16,7 +16,7 @@
                         UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
                         >
                     <Border.Background>
-                        <ImageBrush ImageSource="/MoZhi_Song_Duration_Allocation;component/Resource/aespa - Spicy ALL.jpg" Stretch="UniformToFill" AlignmentY="Center" TileMode="None" ViewboxUnits="RelativeToBoundingBox" ViewportUnits="RelativeToBoundingBox" AlignmentX="Center">
+                        <ImageBrush ImageSource="/MoZhi_Song_Duration_Allocation;component/Resource/EXO Obsession_2.jpg" Stretch="UniformToFill" AlignmentY="Center" TileMode="None" ViewboxUnits="RelativeToBoundingBox" ViewportUnits="RelativeToBoundingBox" AlignmentX="Center">
 
                         </ImageBrush>
                     </Border.Background>

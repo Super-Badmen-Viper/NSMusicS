@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
-namespace MoZhi_Song_Duration_Allocation.Dao_UserControl.Song_Mrc_Info
+namespace NSMusicS.Dao_UserControl.Song_Mrc_Info
 {
     /// <summary>
     /// 歌词行信息及歌词字符信息
@@ -21,6 +21,8 @@ namespace MoZhi_Song_Duration_Allocation.Dao_UserControl.Song_Mrc_Info
         public int This_MRC_Start_Time;
         //当前 歌词行持续时间
         public int This_MRC_Duration;
+
+        public string String_Lrc_Line;
 
         //当前 歌词行所有字节的数量
         public int Int_MoreByte_Nums;

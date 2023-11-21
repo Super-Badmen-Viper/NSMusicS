@@ -35,7 +35,6 @@
   <ItemGroup>
     <Folder Include="bin\Debug\net6.0-windows\Resource\MV\" />
     <Folder Include="Dao_Init_Info\" />
-    <Folder Include="Dao_UserControl\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,7 +53,7 @@
 
   <ItemGroup>
     <PackageReference Include="LibVLCSharp.WPF" Version="3.8.2" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
     <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.20" />
   </ItemGroup>
 

@@ -8,7 +8,7 @@
         xmlns:MainWindow_Buttom_ListviewKrc_Panel="clr-namespace:MoZhi_Song_Duration_Allocation.UserControlLibrary.MainWindow_Buttom_ListviewKrc_Panel" 
         xmlns:vlc="clr-namespace:LibVLCSharp.WPF;assembly=LibVLCSharp.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1098"
+        Title="MainWindow" Height="900" Width="1300"
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
         MouseLeftButtonDown="Window_MouseLeftButtonDown" 
         WindowStyle="None" AllowsTransparency="True"
@@ -18,7 +18,7 @@
     <Grid>
         <Border CornerRadius="20" Visibility="Visible">
             <Border.Background>
-                <ImageBrush ImageSource="/MoZhi_Song_Duration_Allocation;component/Resource/aespa - Spicy ALL.jpg" Stretch="UniformToFill"/>
+                <ImageBrush ImageSource="/MoZhi_Song_Duration_Allocation;component/Resource/EXO Obsession_2.jpg" Stretch="UniformToFill"/>
             </Border.Background>
         </Border>
 
@@ -31,55 +31,23 @@
         -->
         <MainWindow_Top_MediaMV:UserControl_MediaMV
             x:Name="userControl_MediaMV"
-            HorizontalAlignment="Center" VerticalAlignment="Center" Width="1000" Height="600"
+            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+            Margin="66"
             />
 
 
         <MainWindow_Buttom_ListviewKrc_Panel:UserControl_ListviewKrc_Panel 
             x:Name="userControl_ListviewKrc_Panel" 
-            HorizontalAlignment="Right" 
-            Width="438" Height="320" Margin="0,0,88,0"/>
-
-        
-
+            HorizontalAlignment="Left" 
+            Width="438" Height="500" Margin="200,0,0,0"/>
         <MainWindow_Buttom_SingerKrcSinging_Panel:UserControl_SingerKrcSinging_Panel 
             x:Name="userControl_SingerKrcSinging_Panel" 
             Width="200" Height="600"
-            Margin="88,0,0,0" 
-            VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            Margin="0,0,330,0" 
+            VerticalAlignment="Center" HorizontalAlignment="Right"/>
 
         <MainWindow_Right_SongAlbum:UserControl_Panel_SongAlbum 
             x:Name="userControl_Panel_SongAlbum" Visibility="Collapsed"
-            HorizontalAlignment="Right" VerticalAlignment="Top"/>
-
-        <TextBlock x:Name="TextBlock_Mrc_Line"
-            TextWrapping="Wrap" TextAlignment="Center" FontWeight="Bold"
-            LineStackingStrategy="BlockLineHeight"
-            Text="墨智音乐" FontSize="16"  Height="60" VerticalAlignment="Bottom" 
-            Margin="0,0,0,40">
-            <TextBlock.Triggers>
-                <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
-                    <BeginStoryboard>
-                        <Storyboard x:Name="Text_Storyboard">
-                            <DoubleAnimationUsingKeyFrames x:Name="Text_DoubleAnimation"
-                                    Duration="0:0:7"
-                                    Storyboard.TargetName="Trans" Storyboard.TargetProperty="X"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </TextBlock.Triggers>
-            <TextBlock.Foreground>
-                <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                    <LinearGradientBrush.RelativeTransform>
-                        <TranslateTransform X="-0.5" x:Name="Trans"/>
-                    </LinearGradientBrush.RelativeTransform>
-                    <GradientStop Color="White" Offset="0.50"/>
-                    <GradientStop Color="#FFA2A2A2" Offset="0.50"/>
-                </LinearGradientBrush>
-            </TextBlock.Foreground>
-            <TextBlock.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-            </TextBlock.Effect>
-        </TextBlock>
+            HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
     </Grid>
 </Window>

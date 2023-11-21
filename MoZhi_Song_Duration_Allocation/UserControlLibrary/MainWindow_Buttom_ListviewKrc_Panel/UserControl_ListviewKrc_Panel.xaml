@@ -12,65 +12,49 @@
     <Grid>
         <!--歌词列表（行同步）-->
         <ListView 
-                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                    ItemsPanel="{DynamicResource ItemsPanelTemplate2}" 
-                    x:Name="ListView_Temp_MRC" Background="{x:Null}" BorderBrush="{x:Null}" 
-                    Foreground="White" FontSize="13" FontWeight="Medium"
-                    ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                    MinHeight="310" 
-                    BorderThickness="0" IsSynchronizedWithCurrentItem="False" Focusable="False" 
-                    IsTextSearchEnabled="False" HorizontalContentAlignment="Right" 
-                    HorizontalAlignment="Right" VerticalContentAlignment="Stretch"                
-                    ClipToBounds="True"                  
-                    TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Fixed" ScrollViewer.CanContentScroll="True"                 
-                    >
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            ItemsPanel="{DynamicResource ItemsPanelTemplate2}"
+            x:Name="ListView_Temp_MRC" Background="{x:Null}" BorderBrush="{x:Null}" 
+            Foreground="White" 
+            ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            BorderThickness="0" IsSynchronizedWithCurrentItem="False" Focusable="False" 
+            IsTextSearchEnabled="False" HorizontalContentAlignment="Left" 
+            VerticalContentAlignment="Stretch"                
+            ClipToBounds="True"                  
+            TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Fixed" 
+            VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True"       
+            >
             <ListView.Resources>
                 <Style TargetType="{x:Type GridViewColumnHeader}">
-                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Setter Property="Visibility" Value="Hidden"/>
                 </Style>
                 <Style TargetType="{x:Type Border}">
-                    <Setter Property="BorderBrush" Value="Transparent"/>
                     <Setter Property="BorderThickness" Value="0"/>
                 </Style>
-                <!--ListViewItem的选中透明样式-->
-                <Style  TargetType="{x:Type ListViewItem}">
-                    <!-- 边框大小 -->
+                <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="BorderThickness" Value="0"/>
-                    <!-- 边框颜色 -->
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <!-- text居中 -->
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    <!-- 行高 -->
-                    <Setter Property="Height" Value="99"/>
-
+                    <Setter Property="FontSize" Value="22"/>
                     <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
-
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListViewItem}">
                                 <Border x:Name="bd"  
-                                            BorderThickness="0"  
-                                            SnapsToDevicePixels="True">
-                                    <GridViewRowPresenter HorizontalAlignment="Center" Height="99" />
+                                    BorderThickness="0"
+                                    SnapsToDevicePixels="True">
+                                    <GridViewRowPresenter HorizontalAlignment="Center" Height="160" />
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="False">
                                         <Setter Property="Foreground" Value="White"/>
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <!-- 行高 -->
-                                        <!-- <Setter Property="Width" Value="500"
-                                            />
-                                            开启超级特效：圆形楼梯循环动画：Value小于444时开启
-                                            -->
-                                        <Setter Property="FontSize" Value="16"/>
+                                        <Setter Property="FontSize" Value="32"/>
+                                        <Setter Property="Margin" Value="0,0,0,0"/>
                                         <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
                                         <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
                                         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-                                        <Setter Property="FontWeight" Value="Bold"/>
-                                        <Setter Property="Margin" Value="0,16,0,16"/>
-                                        
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -80,135 +64,136 @@
             </ListView.Resources>
             <ListView.View>
                 <GridView AllowsColumnReorder="True">
-                    <!--ListviewItem的长度-->
-                    <GridViewColumn x:Name="ListView_Temp_MRC_GridViewColumn">
+                    <GridViewColumn x:Name="ListView_Temp_MRC_GridViewColumn" Width="320">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock HorizontalAlignment="Stretch"
-                                               TextAlignment="Right"
-                                               LineStackingStrategy="BlockLineHeight" LineHeight="25"
-                                               Padding="0,0,0,0"
-                                               x:Name="Text_TextBlock"
-                                               Text="{Binding Song_MRC_Line}"
-                                               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-                                               >
-                                            <!--编辑文字段落的行高，防止溢出 LineStackingStrategy="BlockLineHeight" LineHeight="20" -->
-                                    <TextBlock.Triggers>
-                                        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
-                                            <!--占用属性，没有用处但是必须得有，不然报参数缺失-->
-                                            <!--事件绑定，触发一次就重置执行一次-->
-                                            <BeginStoryboard>
-                                                <Storyboard x:Name="Text_Storyboard">
-                                                    <DoubleAnimationUsingKeyFrames x:Name="Text_DoubleAnimationUsingKeyFrames"
-                                                            Duration="0:0:4"
-                                                            Storyboard.TargetName="Trans" Storyboard.TargetProperty="X"/>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                    </TextBlock.Triggers>
-                                    <TextBlock.Foreground>
-                                        <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                            <LinearGradientBrush.RelativeTransform>
-                                                <TranslateTransform X="-0.5" x:Name="Trans"/>
-                                            </LinearGradientBrush.RelativeTransform>
-                                            <GradientStop Color="White" Offset="0.50"/>
-                                            <GradientStop Color="#FFA2A2A2" Offset="0.50"/>
-                                        </LinearGradientBrush>
-                                    </TextBlock.Foreground>
-                                    <TextBlock.Effect>
-                                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                                    </TextBlock.Effect>
-                                </TextBlock>
+                                <Border CornerRadius="20" Height="140" Width="300">
+                                    <StackPanel 
+                                        Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                        <Grid Margin="10,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                                            <Border 
+                                                x:Name="Border_Singer_Image_Current_Play"
+                                                Visibility="{Binding Singer_Head_Image_Show}"
+                                                HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                Width="66" Height="66" CornerRadius="44"
+                                                Margin="0" Background="Transparent"
+                                                BorderBrush="#B71110" BorderThickness="2" 
+                                                Opacity="1.0">
+                                                <Border.Effect>
+                                                    <DropShadowEffect ShadowDepth="0"
+                                                      Color="#FFFFFF"
+                                                      Opacity="1"
+                                                      BlurRadius="5"/>
+                                                </Border.Effect>
+                                            </Border>
+                                            <Border 
+                                                x:Name="Border_Singer_Image"
+                                                BorderThickness="1" CornerRadius="60" Padding="1" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                Margin="3,0,0,0" Width="60" Height="60"        
+                                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" RenderTransformOrigin="0.5,0.5" 
+                                                    >
+                                                <Border.Background>
+                                                    <ImageBrush x:Name="Singer_Image" 
+                                                        ImageSource="{Binding Singer_Head_Image}" 
+                                                        Stretch="UniformToFill"
+                                                        />
+                                                </Border.Background>
+
+                                                <Border.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform x:Name="Border_Singer_Image_" ScaleX="1.1" ScaleY="1.1"/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </Border.RenderTransform>
+                                                <Border.Triggers>
+                                                    <EventTrigger RoutedEvent="Grid.Loaded">
+                                                        <BeginStoryboard>
+                                                            <Storyboard x:Name="storyboard">
+                                                                <DoubleAnimation 
+                                                                    Storyboard.TargetName="Border_Singer_Image_"
+                                                                    Storyboard.TargetProperty="ScaleX"
+                                                                    Duration="0:0:0:1" From="0.8" To="1"
+                                                                    AutoReverse="True" RepeatBehavior="Forever">
+
+                                                                </DoubleAnimation>
+                                                                <DoubleAnimation 
+                                                                     Storyboard.TargetName="Border_Singer_Image_"
+                                                                     Storyboard.TargetProperty="ScaleY"
+                                                                     Duration="0:0:0:1" From="0.8" To="1"
+                                                                     AutoReverse="True" RepeatBehavior="Forever">
+
+                                                                </DoubleAnimation>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                </Border.Triggers>
+                                            </Border>
+                                        </Grid>
+                                        <VirtualizingStackPanel 
+                                            Margin="20,20,0,0"
+                                            Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                            <WrapPanel 
+                                                x:Name="StackPanel_Lyic" 
+                                                HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                Margin="0,0,0,0" Width="200"
+                                                Orientation="Horizontal"
+                                                IsEnabled="False">
+                                            </WrapPanel>
+                                            <TextBlock 
+                                                Margin="0,-8,0,0" 
+                                                HorizontalAlignment="Left"
+                                                TextWrapping="Wrap" TextAlignment="Left"
+                                                LineStackingStrategy="BlockLineHeight" 
+                                                LineHeight="33" TextOptions.TextFormattingMode="Display"
+                                                x:Name="Text_TextBlock"
+                                                Text="{Binding Song_MRC_Line}" FontWeight="Bold" FontSize="16"
+                                                IsHitTestVisible="False" Focusable="False" IsEnabled="False" 
+                                                UseLayoutRounding="False" SnapsToDevicePixels="False" RenderOptions.BitmapScalingMode="HighQuality"
+                                            >
+                                                <TextBlock.Triggers>
+                                                    <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
+                                                        <BeginStoryboard>
+                                                            <Storyboard x:Name="Text_Storyboard" Timeline.DesiredFrameRate="60">
+                                                                <DoubleAnimationUsingKeyFrames x:Name="Text_DoubleAnimationUsingKeyFrames"
+                                                                    Duration="0:0:4"
+                                                                    Storyboard.TargetName="Trans" Storyboard.TargetProperty="X"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                </TextBlock.Triggers>
+                                                <TextBlock.Foreground>
+                                                    <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                                        <LinearGradientBrush.RelativeTransform>
+                                                            <TranslateTransform X="-0.5" x:Name="Trans"/>
+                                                        </LinearGradientBrush.RelativeTransform>
+                                                        <GradientStop Color="#B71110" Offset="0.49"/>
+                                                        <GradientStop Color="White" Offset="0.51"/>
+                                                    </LinearGradientBrush>
+                                                </TextBlock.Foreground>
+                                                <TextBlock.Effect>
+                                                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                                                </TextBlock.Effect>
+                                            </TextBlock>
+                                            <TextBlock 
+                                                x:Name="Text_TextBlock_1" Width="200"
+                                                Margin="0,4,0,0" HorizontalAlignment="Left"
+                                                TextWrapping="Wrap" FontSize="16"
+                                                Text="{Binding Song_CRC_Line}"
+                                                >
+                                                <TextBlock.Effect>
+                                                    <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
+                                                </TextBlock.Effect>
+                                            </TextBlock>
+                                        </VirtualizingStackPanel>
+                                    </StackPanel>
+                                </Border>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
-        </ListView>
-        <!-- 掩盖ListViewMRC,形成不同层次 -->
-        <TextBox x:Name="TextBox_ListViewMRC_Up" MinHeight="310"
-                     TextWrapping="Wrap" Text="TextBox" BorderBrush="{x:Null}" Background="{x:Null}" SelectionBrush="{x:Null}" Foreground="{x:Null}" UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5">
-            <TextBox.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleY="0.187"/>
-                    <RotateTransform/>
-                    <TranslateTransform Y="-1.517"/>
-                </TransformGroup>
-            </TextBox.RenderTransform>
-            <TextBox.Style>
-                <Style TargetType="{x:Type TextBox}">
-                    <!-- 边框大小 -->
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <!-- 边框颜色 -->
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                </Style>
-            </TextBox.Style>
-        </TextBox>
-        <ListView 
-                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"
-                    x:Name="ListView_Temp_MRC_Temp" Background="{x:Null}" BorderBrush="{x:Null}" 
-                    Foreground="White" FontSize="16" FontWeight="Medium"
-                    ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                    BorderThickness="0" IsSynchronizedWithCurrentItem="False" Focusable="False" 
-                    IsTextSearchEnabled="False" HorizontalContentAlignment="Center" 
-                    VerticalContentAlignment="Stretch"                
-                    ClipToBounds="True"
-                    TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Fixed" Visibility="Hidden"
-                    >
-            <ListView.Resources>
-                <Style TargetType="{x:Type GridViewColumnHeader}">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                </Style>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                </Style>
-            </ListView.Resources>
-            <ListView.View>
-                <GridView AllowsColumnReorder="True">
-                    <GridViewColumn Width="555" x:Name="ListView_Temp_MRC_Temp_GridViewColumn">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Song_MRC_Line}" HorizontalAlignment="Center"
-                                               TextWrapping="Wrap" TextAlignment="Center" 
-                                               LineStackingStrategy="BlockLineHeight" LineHeight="22"
-                                               Padding="0,0,0,0"
-                                               >
-                                    <TextBlock.Effect>
-                                        <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
-                                    </TextBlock.Effect>
-                                </TextBlock>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <!-- 边框大小 -->
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <!-- 边框颜色 -->
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <!-- text居中 -->
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    <!-- 行高 -->
-                    <Setter Property="Height" Value="40"/>
-
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Foreground" Value="#FF17EAA7"/>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Panel.Background" Value="Transparent"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ListView.ItemContainerStyle>
         </ListView>
     </Grid>
     <UserControl.Resources>

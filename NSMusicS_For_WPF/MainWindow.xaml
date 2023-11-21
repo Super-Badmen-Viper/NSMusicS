@@ -18,7 +18,7 @@
             <Grid>
                 <Grid x:Name="App_Left_Grid" 
                       Width="200" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                    <Border CornerRadius="10,0,0,10" Background="#F0F3F6">
+                    <Border CornerRadius="10,0,0,10">
                         <Grid>
                             <Grid Width="200" Height="70" HorizontalAlignment="Left" VerticalAlignment="Top">
                                 <App_Left_Grid_For_Top_Grid_Of_LOGO:UserControl_App_Left_Grid_For_Top_Grid_Of_LOGO
@@ -50,7 +50,7 @@
                     <!--设置-->
                     <Grid x:Name="App_Right_Grid_For_Top"
                           HorizontalAlignment="Stretch" VerticalAlignment="Top"
-                          Margin="180,0,0,0" Height="70"
+                          Margin="200,0,0,0" Height="70"
                           >
                         <Border CornerRadius="0,10,0,30" Background="#F7F9FC">
                             <Border.Effect>
@@ -66,7 +66,7 @@
                     <!--播放器-->
                     <Grid x:Name="App_Right_Grid_For_Buttom_Grid_Of_App_MusicPlayer"
                         HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
-                        Margin="180,0,0,0" Height="77"
+                        Margin="200,0,0,0" Height="77"
                         >
                         <Border CornerRadius="30,0,10,0" Background="#F7F9FC">
                             <Border.Effect>
@@ -83,7 +83,7 @@
                     <!--当前 播放列表-->
                     <Grid x:Name="App_Right_Grid_For_Right_Current_SongList"
                           HorizontalAlignment="Right" VerticalAlignment="Center"
-                          Width="380" Height="540" Margin="0,0,0,7"
+                          Width="380" Height="460" Margin="0,0,0,7"
                           >
                         <Border CornerRadius="10,0,0,10" Background="#F7F9FC">
                             <Border.Effect>

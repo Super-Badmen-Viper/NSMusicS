@@ -5,29 +5,37 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MoZhi_Song_Duration_Allocation.UserControlLibrary.MainWindow_Buttom_SingerKrcSinging_Panel.UserControl_ListviewItem_SingerKrc"
              mc:Ignorable="d" 
-             Height="66" Width="260">
+             Height="66" Width="256">
     <Grid>
         <Border 
             x:Name="Border_Singer_Image_Current_Play" Visibility="Collapsed"
-            HorizontalAlignment="Left"
+            HorizontalAlignment="Right"
             Width="66" Height="66" CornerRadius="44"
             Margin="0" Background="Transparent"
-            BorderBrush="#00A9FF" BorderThickness="2" 
+            BorderBrush="#B71110" BorderThickness="2" 
             Opacity="1.0">
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="0"
-                          Color="#00A9FF"
+                          Color="#FFFFFF"
                           Opacity="1"
                           BlurRadius="5"/>
             </Border.Effect>
         </Border>
         <Border 
             x:Name="Border_Singer_Image"
-            BorderThickness="1" CornerRadius="60" Padding="1" HorizontalAlignment="Left" 
-            Margin="3,0,0,0" Width="60" Height="60"        
+            BorderThickness="1" CornerRadius="60" Padding="1" HorizontalAlignment="Right" 
+            Margin="0,0,3,0" Width="60" Height="60"        
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" RenderTransformOrigin="0.5,0.5" 
                 >
-           <Border.RenderTransform>
+            <Border.Background>
+                <ImageBrush x:Name="Singer_Image" 
+                ImageSource="/MoZhi_Song_Duration_Allocation;component/Resource/EXO-K 중독 (Overdose).jpg" 
+                Stretch="UniformToFill"
+                x:FieldModifier="public"
+                />
+            </Border.Background>
+
+            <Border.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform x:Name="Border_Singer_Image_" ScaleX="1.1" ScaleY="1.1"/>
                     <SkewTransform/>
@@ -35,14 +43,6 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </Border.RenderTransform>
-            <Border.Background>
-                <ImageBrush x:Name="Singer_Image" 
-                            ImageSource="/MoZhi_Song_Duration_Allocation;component/Resource/EXO-K 중독 (Overdose).jpg" 
-                            Stretch="UniformToFill"
-                            x:FieldModifier="public"
-                            />
-            </Border.Background>
-
             <Border.Triggers>
                 <EventTrigger RoutedEvent="Grid.Loaded">
                     <BeginStoryboard>
@@ -70,29 +70,33 @@
         </Border>
 
 
-        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="20,0,0,0">
+        <StackPanel 
+            Margin="0,0,40,0"
+            Orientation="Vertical" VerticalAlignment="Center" >
             <TextBlock x:Name="textBlock_SingerName" x:FieldModifier="public"
                        TextAlignment="Left"
                        HorizontalAlignment="Stretch" 
                        VerticalAlignment="Center"
                        Text="SEHUN吴世勋" FontSize="16" Foreground="White" FontWeight="Bold"
-                       Padding="3,0,0,0" Margin="50,0,0,0" Cursor="">
+                       Padding="3,0,0,0" Margin="0,0,0,0" Cursor="">
                 <TextBlock.Effect>
                     <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
                 </TextBlock.Effect>
             </TextBlock>
-            <Border BorderThickness="1" CornerRadius="15" Padding="1"  x:FieldModifier="public"
+            <Border 
+                Margin="0,4,40,0"
+                BorderThickness="1" CornerRadius="15" Padding="1"  x:FieldModifier="public"
                 x:Name="TextBlock_Slider_Singing_Time" 
                 FlowDirection="LeftToRight" 
                 Cursor="Hand"
-                Height="4" HorizontalAlignment="Stretch" Margin="50,4,0,0"
+                Height="4" HorizontalAlignment="Stretch" 
                 >
                 <Border.Triggers>
                     <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
                         <BeginStoryboard>
                             <Storyboard x:Name="Text_Storyboard_slider_Up">
                                 <DoubleAnimation x:Name="Text_DoubleAnimation_slider_Up"
-                                From="-0.5" To="0.5" Duration="0:1:00"
+                                From="-0.5" To="0.5" Duration="0:1:40"
                                 Storyboard.TargetName="Trans_slider_Up" Storyboard.TargetProperty="X"/>
                             </Storyboard>
                         </BeginStoryboard>
@@ -110,7 +114,9 @@
             </Border>
         </StackPanel>
 
-        <TextBlock x:Name="textBlock_Time" x:FieldModifier="public"
+        <TextBlock 
+            Margin="0,0,60,0"
+            x:Name="textBlock_Time" x:FieldModifier="public"
                HorizontalAlignment="Right" Width="40" 
                VerticalAlignment="Center"
                FontSize="12" Foreground="White" FontWeight="Bold"

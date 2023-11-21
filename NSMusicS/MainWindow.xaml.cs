@@ -775,6 +775,7 @@ namespace NSMusicS
             userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Value = 0;
 
             //加载歌曲进度条
+            userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.PreviewMouseLeftButtonUp += Silder_Music_Width_MouseLeftButtonDown;
             userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.ValueChanged += Slider_ListPlayer_Timer_ValueChanged;
 
             //初始化歌曲进度
@@ -968,6 +969,8 @@ namespace NSMusicS
         }
 
         
+
+
 
 
 
@@ -6740,7 +6743,6 @@ namespace NSMusicS
 
         #region 时间轴sidler
         DispatcherTimer dispatcherTimer_Silder;    // 用于时间轴  
-        public double TimeLine_Nums;
         TimeSpan test1;
         TimeSpan test2;
 
@@ -6756,11 +6758,6 @@ namespace NSMusicS
             {
                 dispatcherTimer_Silder.Stop();
 
-                if (ListBox_MRC_Song_MRC_Time != null)
-                {
-                    musicPlayer_Main_UserControl.ListView_Temp_MRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_MRC.Items[0]);//先滚动至第一行歌词
-                }
-
                 // 更新文本
                 test1 = new TimeSpan(0, 0, 0, 0, (int)userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Value);
                 userControl_ButtonFrame_MusicPlayer.TextBox_Song_Time.Text = test1.ToString(@"mm\:ss") + @" \ " + test2.ToString(@"mm\:ss");
@@ -6775,21 +6772,8 @@ namespace NSMusicS
 
                 if (mediaElement_Song.CurrentTime.TotalMilliseconds > 0)
                 {
-                    if (ListBox_MRC_Song_MRC_Time != null)
-                    {
-                        //如果选中的  跳转的播放进度  在  当前播放进度  之前
-                        if (userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Value < mediaElement_Song.CurrentTime.TotalMilliseconds)
-                        {
-                            musicPlayer_Main_UserControl.ListView_Temp_MRC.ScrollIntoView(musicPlayer_Main_UserControl.ListView_Temp_MRC.Items[0]);//先滚动至第一行歌词
-                        }
-                        //歌词时间匹配方法  会自动跳转至指定选中歌词行
-                    }
-
                     // 更新音频播放进度
-                    //mediaElement_Song.CurrentTime =
-                    //new TimeSpan(0, 0, 0, 0, (int)userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Value);
                     await mediaElement_Song.SetCurrentTimeAsync(new TimeSpan(0, 0, 0, 0, (int)userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Value));
-
 
                     dispatcherTimer_Silder.Start();
 
@@ -6815,22 +6799,22 @@ namespace NSMusicS
                 }
             }
         }
-
-
+        private void Silder_Music_Width_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (ListBox_MRC_Song_MRC_Time != null)
+            {
+                musicPlayer_Main_UserControl.ListView_Temp_MRC.ScrollIntoView(
+                    musicPlayer_Main_UserControl.ListView_Temp_MRC.Items[0]
+                );//移动到指定行
+            }
+        }
         private void DispatcherTimer_Silder_Tick(object sender, EventArgs e)
         {
-            test1 = mediaElement_Song.CurrentTime;
-
-            // 时间轴slider滑动值随播放内容位置变化
             userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Value = mediaElement_Song.CurrentTime.TotalMilliseconds;
 
-            TimeLine_Nums = userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Value;
-
+            test1 = mediaElement_Song.CurrentTime;
             userControl_ButtonFrame_MusicPlayer.TextBox_Song_Time.Text = test1.ToString(@"mm\:ss") + @" \ " + test2.ToString(@"mm\:ss");
             userControl_ButtonFrame_MusicPlayer.TextBox_Song_Time_Temp.Text = test1.ToString(@"mm\:ss") + @" \ " + test2.ToString(@"mm\:ss");
-
-            //userControl_ButtonFrame_MusicPlayer.Silder_Music_Temp_Width.Value = userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Value;
-
         }
         #endregion
 
@@ -8128,7 +8112,7 @@ namespace NSMusicS
                                             #region 1111111
                                             UserControl_Mrc_Byte mrc_Byte_ = new UserControl_Mrc_Byte();
                                             //设置文本
-                                            mrc_Byte_.TextBlock_1.FontSize = 24;//34
+                                            mrc_Byte_.TextBlock_1.FontSize = 22;//34
                                             mrc_Byte_.TextBlock_1.FontWeight = FontWeights.Black;
                                             mrc_Byte_.TextBlock_1.Text = dao_ListBox_Temp_MRC.mrc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].
                                                 Array_Morebyte_Text[i].ToString();
@@ -8634,8 +8618,6 @@ namespace NSMusicS
                     }
                     //歌词时间匹配方法  会自动跳转至指定选中歌词行
 
-                    //跳转至指定Value的进度
-                    //ts_Song = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(ListBox_MRC_Song_MRC_Time[line_num]));
                     mediaElement_Song.CurrentTime = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(ListBox_MRC_Song_MRC_Time[line_num]));
 
                     //关闭歌词选择进度面板

@@ -109,14 +109,15 @@ namespace MoZhi_Song_Duration_Allocation.UserControlLibrary.MainWindow_Buttom_Si
             //检测歌手数量
             Singer_Name = new ArrayList
             {
-                "柳智敏KARINA","金旼炡WINTER","宁艺卓NINGNING","内永枝利GISELLE","@全体成员"
+                /*"柳智敏KARINA","金旼炡WINTER","宁艺卓NINGNING","内永枝利GISELLE","aespa ALL"*/
 
-                /*"KAI金钟仁",
+                "KAI金钟仁",
                 "BAEKHYUN边伯贤",
                 "CHANYEOL朴灿烈",
                 "SUHO金俊勉",
                 "SEHUN吴世勋",
-                "CHEN金钟大",*/
+                "CHEN金钟大",
+                "EXO全体"
 
                 /*"KAI金钟仁",
                 "BAEKHYUN边伯贤",

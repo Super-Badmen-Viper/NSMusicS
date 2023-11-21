@@ -9,14 +9,14 @@
              d:DesignHeight="77.142" d:DesignWidth="190">
     <Grid>
         <Border 
-            Width="25" Height="25"
-            HorizontalAlignment="Left" Margin="16,0,0,0"
+            Width="25" Height="25" CornerRadius="20"
+            HorizontalAlignment="Left" Margin="26,0,0,0"
             >
             <Border.Background>
                 <ImageBrush ImageSource="/NSMusicS_For_WPF;component/Resources/NSMusicS.png" Stretch="UniformToFill"/>
             </Border.Background>
         </Border>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="56,10,0,0">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="66,10,0,0">
             <TextBlock 
                 Text="NSMusicS • "
                 HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="15"/>

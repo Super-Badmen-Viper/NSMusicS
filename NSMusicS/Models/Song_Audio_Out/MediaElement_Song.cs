@@ -296,6 +296,7 @@ namespace NSMusicS.Models.Song_Audio_Out
             wasapiOut = null;
         }
 
+        private TimeSpan Error_TimeSpan = new TimeSpan();
         public TimeSpan CurrentTime
         {
             get
@@ -307,20 +308,30 @@ namespace NSMusicS.Models.Song_Audio_Out
                         if (audioFileReader_Web == null)
                         {
                             if (audioFilePath.IndexOf(".flac") >= 0)
-                                return audioFileReader_FFmpeg?.CurrentTime ?? TimeSpan.Zero;
+                            {
+                                Error_TimeSpan = audioFileReader_FFmpeg.CurrentTime;
+                                return audioFileReader_FFmpeg.CurrentTime;
+                            }
                             else
-                                return audioFileReader?.CurrentTime ?? TimeSpan.Zero;
+                            {
+                                Error_TimeSpan = audioFileReader.CurrentTime;
+                                return audioFileReader.CurrentTime;
+                            }
                         }
                         else
                         {
-                            return audioFileReader_Web?.CurrentTime ?? TimeSpan.Zero;
+                            Error_TimeSpan = audioFileReader_Web.CurrentTime;
+                            return audioFileReader_Web.CurrentTime;
                         }
-                    }else
+                    }
+                    else
+                    {
                         return TimeSpan.Zero;
+                    }
                 }
                 catch
                 {
-                    return TimeSpan.Zero;
+                    return GetLastNonExceptionValue();
                 }
             }
             set
@@ -333,6 +344,7 @@ namespace NSMusicS.Models.Song_Audio_Out
                         {
                             if (audioFileReader_FFmpeg != null)
                             {
+                                Error_TimeSpan = value;
                                 SetCurrentTimeAsync(value);
                             }
                         }
@@ -340,16 +352,22 @@ namespace NSMusicS.Models.Song_Audio_Out
                         {
                             if (audioFileReader != null)
                             {
+                                Error_TimeSpan = value;
                                 SetCurrentTimeAsync(value);
                             }
                         }
                     }
                     else
                     {
+                        Error_TimeSpan = value;
                         SetCurrentTimeAsync(value);
                     }
                 }
             }
+        }
+        private TimeSpan GetLastNonExceptionValue()
+        {
+            return Error_TimeSpan;
         }
         public async Task SetCurrentTimeAsync(TimeSpan newTime)
         {

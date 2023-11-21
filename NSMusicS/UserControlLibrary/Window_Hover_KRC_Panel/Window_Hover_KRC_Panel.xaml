@@ -24,7 +24,7 @@
             </StackPanel>
             
             <TextBlock x:Name="TextBlock_1"  HorizontalAlignment="Center" Text="墨智云生态" Visibility="Visible"
-                        FontSize="46" Height="68" IsEnabled="False" FontWeight="Bold" VerticalAlignment="Bottom" Margin="0,0,0,80" >
+                        FontSize="36" Height="68" IsEnabled="False" FontWeight="Bold" VerticalAlignment="Bottom" Margin="0,0,0,80" >
                 <TextBlock.Triggers>
                     <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
                         <BeginStoryboard>
@@ -51,7 +51,7 @@
             </TextBlock>
             
             <TextBlock x:Name="TextBlock_2"   HorizontalAlignment="Center" Text="MZMusic 极致音乐体验"
-                           FontSize="46" Height="68" IsEnabled="False" FontWeight="Bold" 
+                           FontSize="36" Height="68" IsEnabled="False" FontWeight="Bold" 
                            Foreground="White" VerticalAlignment="Bottom">
                 <TextBlock.Effect>
                     <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />

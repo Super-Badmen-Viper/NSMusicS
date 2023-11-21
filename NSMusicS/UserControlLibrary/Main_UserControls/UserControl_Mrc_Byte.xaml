@@ -8,7 +8,7 @@
     <Grid>
         <!--歌词逐字算法 Plus ,此用户控件为 歌词单字符 容器，自带动画绑定，无需生成-->
         <TextBlock x:Name="TextBlock_1"  HorizontalAlignment="Center" Text="f" 
-                   FontSize="46" IsEnabled="False" VerticalAlignment="Bottom" FontWeight="Black"
+                   FontSize="36" IsEnabled="False" VerticalAlignment="Bottom" FontWeight="Black"
                    UseLayoutRounding="False" SnapsToDevicePixels="False" RenderOptions.BitmapScalingMode="HighQuality"
                    >
             <TextBlock.Triggers>
