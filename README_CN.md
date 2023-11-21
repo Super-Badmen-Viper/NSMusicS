@@ -1,5 +1,7 @@
 # 说明
 
+## [这是NSMusicS的博客](http://124.223.62.181/):http://124.223.62.181/
+
 - # Nine Song Music World(NSMusicS)说明：
 - - 基于dotNET_C#_WPF的个人开源音乐客户端  
 - - 演示效果：B站链接：

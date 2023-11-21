@@ -1,5 +1,5 @@
 ## NSMusicS 跳转 [中文REANME_CN.md](https://github.com/Super-Badmen-Viper/NSMusicS/blob/main/README_CN.md)
-
+## [This is the blog for NSMusicS](http://124.223.62.181/):http://124.223.62.181/
 # Explain
 
 - ## Nine Song Music World(NSMusicS) Description:
