@@ -13,7 +13,7 @@
     <Grid>
         <Grid x:Name="Grid_NormalModel_1">
             <TextBlock HorizontalAlignment="Left" Height="50" Text="默认列表" TextWrapping="Wrap" 
-                   VerticalAlignment="Top" Width="210" FontSize="32" Margin="41,10,0,0"
+                   VerticalAlignment="Top" Width="210" FontSize="24" Margin="41,10,0,0"
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                    Foreground="White"   
                    >
@@ -22,7 +22,7 @@
             x:Name="Recent_Song_Nums"
             Foreground="White"
                    HorizontalAlignment="Left" Height="20" Text="歌曲0" TextWrapping="Wrap" 
-                   VerticalAlignment="Top" Margin="42,62,0,0" FontSize="14"
+                   VerticalAlignment="Top" Margin="42,56,0,0" FontSize="14"
                    Block.TextAlignment="Center"
                    UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                    >
@@ -50,10 +50,9 @@
                        />
             </StackPanel>
             <StackPanel
-     x:Name="Stack_Add_Song_Info_True" Visibility="Collapsed"
-     HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="40,90,0,0"
-     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"          
- >
+                 x:Name="Stack_Add_Song_Info_True" Visibility="Collapsed"
+                 HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="110" Margin="40,90,0,0"
+                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" >
                 <Border HorizontalAlignment="Stretch" 
          BorderThickness="0" CornerRadius="18,18,18,18" BorderBrush="#00000000" 
          UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
@@ -192,7 +191,7 @@
                         <Setter Property="Padding" Value="9,0,0,0"/>
                         <Setter Property="BorderBrush" Value="{x:Null}"/>
                         <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Foreground" Value="#95999B"/>
+                        <Setter Property="Foreground" Value="White"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
@@ -259,7 +258,7 @@
                                 Width="76">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Song_No}" FontSize="14" Foreground="#95999B">
+                                        <TextBlock Text="{Binding Song_No}" FontSize="14" Foreground="White">
 
                                         </TextBlock>
                                     </DataTemplate>

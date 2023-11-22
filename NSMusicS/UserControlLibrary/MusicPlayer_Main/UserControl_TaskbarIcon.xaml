@@ -14,7 +14,7 @@
             ToolTipText="MZMusic"
             
             PopupActivation="LeftOrRightClick"
-            IconSource="/NSMusicS;component/NSMusicS_Small.ico">
+            IconSource="/NSMusicS;component/NSMusicS_256.ico">
             <tb:TaskbarIcon.TrayToolTip>
                 <Border 
                     Background="White"
@@ -51,9 +51,6 @@
                                 RenderTransformOrigin="-5.75,0.5" 
                                 HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20,17,120,0">
                                 <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/上一首.svg" Cursor="Hand"/>
-                                <Button.Effect>
-                                    <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
-                                </Button.Effect>
                             </Button>
                             <Button x:Name="Button_Play_Pause_Player" 
                                 Style="{StaticResource MyButton}"
@@ -64,9 +61,6 @@
                                 <svgc:SvgViewbox 
                                     x:Name="SvgViewbox_Button_Play_Pause_Player" 
                                     Source="{Binding Button_Play_Pause_Player_Image}" Cursor="Hand"/>
-                                <Button.Effect>
-                                    <DropShadowEffect Color="White" BlurRadius="1" ShadowDepth="1" Opacity="1" />
-                                </Button.Effect>
                             </Button>
                             <Button x:Name="Button_Next" 
                                 Style="{StaticResource MyButton}"
@@ -75,9 +69,6 @@
                                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                                 HorizontalAlignment="Center" VerticalAlignment="Top" Margin="118,17,20,0">
                                 <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/下一首.svg" Cursor="Hand"/>
-                                <Button.Effect>
-                                    <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
-                                </Button.Effect>
                             </Button>
 
                             <TextBlock 
@@ -93,7 +84,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 TextAlignment="Left"
-                                Foreground="White" Text="MZMusic"
+                                Foreground="White" Text="NSMusicS"
                                 Margin="10,70,10,0"
                             />
 

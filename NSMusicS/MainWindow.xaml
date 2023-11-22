@@ -51,7 +51,7 @@
               Background="#02000000" 
               Margin="0,0,0,0"/>
 
-        <Grid x:Name="Grid_Model_1" Visibility="Collapsed">
+        <Grid x:Name="Grid_Model_1" Visibility="Visible">
             <Grid x:Name="Frame_Manager_ButtonList_Model_1" 
                   HorizontalAlignment="Left" VerticalAlignment="Top"
                   Width="180" Margin="0,0,0,70"
@@ -66,7 +66,7 @@
                                     Margin="0,670,0,0" VerticalAlignment="Top" Height="150" HorizontalAlignment="Center" Width="210">
                             <TextBlock Text="在线音乐  (需要用户API)" 
                                        Width="170" Padding="17,0,0,0" 
-                                       Foreground="#505353" Margin="31,0,0,0"
+                                       Foreground="White" Margin="31,0,0,0"
                                        >
 
                             </TextBlock>
@@ -94,7 +94,7 @@
                                 VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,320,0,80">
                             <TextBlock Text="AI + 音乐" 
                                        Width="170" Padding="17,0,0,0" 
-                                       Foreground="#505353" Margin="31,0,0,0">
+                                       Foreground="White" Margin="31,0,0,0">
 
                             </TextBlock>
                             <MainWindow_Left_MoZhiAI_Music_UserControls:UserControl_ButtonFrame_MusicSingIt
@@ -117,59 +117,72 @@
                             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                             />
                         </StackPanel>
-                        <StackPanel x:Name="StackPanel_My_Music_Model_1" Width="210" Height="150" HorizontalAlignment="Center" VerticalAlignment="Top" 
+
+                        <Grid>
+                            <Grid>
+                                <Border Background="White" CornerRadius="0,16,16,0"
+                                        Width="16" Height="200" 
+                                        HorizontalAlignment="Left" VerticalAlignment="Top"
+                                        Margin="0,96,0,0"/>
+                            </Grid>
+                            <StackPanel x:Name="StackPanel_My_Music_Model_1" 
+                                    Width="210" Height="200" 
+                                    HorizontalAlignment="Center" VerticalAlignment="Top" 
+                                    Orientation="Vertical"
                                     Margin="0,106,0,0" >
-                            <TextBlock Text="我的音乐" 
+                                <TextBlock Text="我的音乐" 
                                        Width="140" Padding="17,0,0,0" 
-                                       Foreground="#505353"
+                                       Foreground="White"
                                        >
-                            </TextBlock>
-                            <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_MusicLove
+                                </TextBlock>
+                                <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_MusicLove
                                 x:Name="userControl_ButtonFrame_MusicLove"
                                 Width="140" Height="30" Margin="0,16,0,0"
                                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                                 MouseLeftButtonDown="UserControl_ButtonFrame_MusicLove_MouseLeftButtonDown" />
-                            <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_ThisWindowsMusicAndDownload 
+                                <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_ThisWindowsMusicAndDownload 
                                 x:Name="userControl_ButtonFrame_ThisWindowsMusicAndDownload"
                                 Width="140" Height="30" Margin="0,10,0,0"
                                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                                 MouseLeftButtonDown="UserControl_ButtonFrame_ThisWindowsMusicAndDownload_MouseLeftButtonDown" />
-                            <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_MusicRecentlyPlayed 
+                                <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_MusicRecentlyPlayed 
                                 x:Name="userControl_ButtonFrame_MusicRecentlyPlayed"
                                 Width="140" Height="30" Margin="0,10,0,0"
                                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                                 MouseLeftButtonDown="UserControl_ButtonFrame_MusicRecentlyPlayed_MouseLeftButtonDown" 
                                 />
-                        </StackPanel>
 
-                        <ComboBox 
-                            x:Name="ComBox_Select_SongList"
-                            SelectedIndex="-1"
-                            Style="{DynamicResource cmbstyle_SelectPlaying}" 
-                            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                            Visibility="Visible" Width="140" Height="30" Margin="0,255,0,0" 
-                            VerticalAlignment="Top" HorizontalAlignment="Center" IsEditable="True" 
-                            Text="创建的歌单" BorderBrush="{x:Null}" 
-                            SelectionChanged="ComBox_Select_SongList_SelectionChanged" IsSynchronizedWithCurrentItem="False"
-                            MouseLeftButtonDown="ComBox_Select_SongList_MouseLeftButtonDown"
-                            >
-                            <ComboBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <VirtualizingStackPanel/>
-                                </ItemsPanelTemplate>
-                            </ComboBox.ItemsPanel>
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="2.5" Text="{Binding Name}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                                <ComboBox 
+                                x:Name="ComBox_Select_SongList"
+                                SelectedIndex="-1"
+                                Style="{DynamicResource cmbstyle_SelectPlaying}" 
+                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                                Visibility="Visible" 
+                                Width="140" Height="30" Margin="0,6,0,0" 
+                                VerticalAlignment="Top" HorizontalAlignment="Center" IsEditable="True" 
+                                Text="创建的歌单" BorderBrush="{x:Null}" 
+                                SelectionChanged="ComBox_Select_SongList_SelectionChanged" IsSynchronizedWithCurrentItem="False"
+                                MouseLeftButtonDown="ComBox_Select_SongList_MouseLeftButtonDown">
+                                    <ComboBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel/>
+                                        </ItemsPanelTemplate>
+                                    </ComboBox.ItemsPanel>
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Margin="2.5" Text="{Binding Name}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+
 
                         <TextBlock Text="音乐资源" Visibility="Collapsed"
                                Width="140" Padding="17,0,0,0"  Margin="-2,315,0,0"
-                               Foreground="#505353" VerticalAlignment="Top">
+                               Foreground="White" VerticalAlignment="Top">
 
                         </TextBlock>
                         <MainWindow_Left_MyMusic_UserControls:UserControl_ButtonFrame_Edit_SongInfo
@@ -273,9 +286,8 @@
                     />
             </Grid>
         </Grid>
-        <Grid x:Name="Grid_Model_2" 
-              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-              Visibility="Visible">
+        <Grid x:Name="Grid_Model_2" Visibility="Collapsed"
+              HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <MusicPlayer_Main:MusicPlayer_Model_2_Album_UserControl
                 x:Name="musicPlayer_Model_2_Album_UserControl"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
@@ -284,11 +296,17 @@
         </Grid>
 
         <Grid x:Name="Grid_Logo" VerticalAlignment="Top" Height="90" HorizontalAlignment="Left" Width="200">
-            <Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="26" Height="26" Margin="5,28,0,0" 
-                   Source="/NSMusicS;component/NSMusicS.png"/>
-            <TextBlock Margin="50,24,0,0"  VerticalAlignment="Top" Height="28"
-               FontWeight="Bold" FontSize="20"
-               Text="九歌·NSMusicS" TextAlignment="Left"
+            <Border 
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="36" Height="36" Margin="30,28,0,0" >
+                <Border.Background>
+                    <ImageBrush ImageSource="/NSMusicS;component/NSMusicS.png" Stretch="UniformToFill"/>
+                </Border.Background>
+            </Border>
+            <TextBlock 
+               Margin="46,27,0,0" VerticalAlignment="Top" Width="90"
+               FontSize="16" TextWrapping="Wrap"
+               Text="九歌NSMusicS" TextAlignment="Left"
                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
              >
                 <TextBlock.Foreground>
@@ -310,10 +328,12 @@
                     </LinearGradientBrush>
                 </TextBlock.Foreground>
             </TextBlock>
-            <TextBlock Margin="50,50,0,0"  VerticalAlignment="Top" Height="28"
-               FontWeight="Bold" FontSize="14" Foreground="White"
-               Text="拥抱开源·音乐世界" TextAlignment="Left"
-               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            <TextBlock 
+                Visibility="Collapsed"
+                Margin="50,50,0,0"  VerticalAlignment="Top" Height="28"
+                FontWeight="Bold" FontSize="12" Foreground="White"
+                Text="拥抱开源·音乐世界" TextAlignment="Left"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                 />
         </Grid>
 

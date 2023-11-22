@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="NSMusicS_For_WPF.VIewModels.Button.UserControl_Top_Bar_Button_2_Model_Album"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS_For_WPF.VIewModels.Button"
+             mc:Ignorable="d" 
+             Width="50" Height="50" MinWidth="50" MinHeight="50">
+    <Grid>
+        <Border x:Name="BackGround_Button" CornerRadius="10">
+            <Grid>
+                <TextBlock 
+                    x:Name="Text_Button"
+                    Text="专辑" Foreground="#ADADAD"
+                    TextAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,0" FontSize="20"/>
+                <Border 
+                    x:Name="Check_Selected"
+                    Background="#35C1FF" CornerRadius="20" Width="10" Height="10" VerticalAlignment="Bottom" 
+                    Margin="0,0,0,-2"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

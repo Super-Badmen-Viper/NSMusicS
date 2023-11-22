@@ -7,6 +7,7 @@
         xmlns:App_Left_Grid_For_Top_Grid_Of_LOGO ="clr-namespace:NSMusicS_For_WPF.Views.App_Left_Grid.App_Left_Grid_For_Top_Grid_Of_LOGO"
         xmlns:App_Left_Grid_Of_Model_1="clr-namespace:NSMusicS_For_WPF.Views.App_Left_Grid.App_Left_Grid_Of_Model_1"
         xmlns:App_Right_Grid_For_Top="clr-namespace:NSMusicS_For_WPF.Views.App_Right_Grid.App_Right_Grid_For_Top_Grid_Of_App_Setting"
+        xmlns:App_Right_Grid_For_Buttom_Grid_Of_App_MusicPlayer="clr-namespace:NSMusicS_For_WPF.Views.App_Right_Grid.App_Right_Grid_For_Buttom_Grid_Of_App_MusicPlayer"
         mc:Ignorable="d"
         Title="九歌 · NSMusicS" Height="700" Width="1080"  MinHeight="700" MinWidth="1080"
         UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
@@ -16,9 +17,9 @@
     <Grid>
         <Border CornerRadius="10" Background="#F7F9FC">
             <Grid>
-                <Grid x:Name="App_Left_Grid" 
+                <Grid x:Name="App_Left_Grid"
                       Width="200" HorizontalAlignment="Left" VerticalAlignment="Stretch">
-                    <Border CornerRadius="10,0,0,10">
+                    <Border CornerRadius="10,0,0,10" Background="#F0F3F6">
                         <Grid>
                             <Grid Width="200" Height="70" HorizontalAlignment="Left" VerticalAlignment="Top">
                                 <App_Left_Grid_For_Top_Grid_Of_LOGO:UserControl_App_Left_Grid_For_Top_Grid_Of_LOGO
@@ -54,7 +55,7 @@
                           >
                         <Border CornerRadius="0,10,0,30" Background="#F7F9FC">
                             <Border.Effect>
-                                <DropShadowEffect Color="#000000" BlurRadius="10" Opacity="0.25" ShadowDepth="0" Direction="0"/>
+                                <DropShadowEffect Color="#000000" BlurRadius="20" Opacity="0.25" ShadowDepth="0" Direction="0"/>
                             </Border.Effect>
                             <Grid>
                                 <App_Right_Grid_For_Top:App_Right_Grid_For_Top_Grid_Of_App_Setting
@@ -70,10 +71,12 @@
                         >
                         <Border CornerRadius="30,0,10,0" Background="#F7F9FC">
                             <Border.Effect>
-                                <DropShadowEffect Color="#000000" BlurRadius="10" Opacity="0.25" ShadowDepth="0" Direction="0"/>
+                                <DropShadowEffect Color="#000000" BlurRadius="20" Opacity="0.25" ShadowDepth="0" Direction="0"/>
                             </Border.Effect>
                             <Grid>
-
+                                <App_Right_Grid_For_Buttom_Grid_Of_App_MusicPlayer:App_Right_Grid_For_Buttom_Grid_Of_App_MusicPlayer
+                                    x:Name="app_Right_Grid_For_Buttom_Grid_Of_App_MusicPlayer"
+                                    />
                             </Grid>
                         </Border>
                         
@@ -81,11 +84,11 @@
                         
                     </Grid>
                     <!--当前 播放列表-->
-                    <Grid x:Name="App_Right_Grid_For_Right_Current_SongList"
+                    <Grid x:Name="App_Right_Grid_For_Right_Current_SongList" Visibility="Collapsed"
                           HorizontalAlignment="Right" VerticalAlignment="Center"
                           Width="380" Height="460" Margin="0,0,0,7"
                           >
-                        <Border CornerRadius="10,0,0,10" Background="#F7F9FC">
+                        <Border CornerRadius="10,0,0,10" Background="#99232325">
                             <Border.Effect>
                                 <DropShadowEffect Color="#000000" BlurRadius="10" Opacity="0.25" ShadowDepth="0" Direction="0"/>
                             </Border.Effect>

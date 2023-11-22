@@ -203,11 +203,6 @@
                                                     IsHitTestVisible="False" Focusable="False" IsEnabled="False" 
                                                     UseLayoutRounding="False" SnapsToDevicePixels="False" RenderOptions.BitmapScalingMode="HighQuality"
                                                     >
-                                                <!--
-                                                    <TextBlock.RenderTransform>
-                                                        <ScaleTransform ScaleX="0.5" ScaleY="0.5" />
-                                                    </TextBlock.RenderTransform>
-                                                    -->
                                                 <TextBlock.Triggers>
                                                     <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
                                                         <BeginStoryboard>
@@ -244,25 +239,19 @@
                     </ListView.View>
                 </ListView>
                 <!-- 掩盖ListViewMRC,形成不同层次 -->
-                <TextBox x:Name="TextBox_ListViewMRC_Up" 
+                <Border x:Name="TextBox_ListViewMRC_Up" 
                      Margin="640,80,0,110" Height="500" Width="400"
-                     TextWrapping="Wrap" Text="TextBox" BorderBrush="{x:Null}" Background="{x:Null}" SelectionBrush="{x:Null}" Foreground="{x:Null}" 
+                     BorderBrush="{x:Null}"  Background="#02FFFFFF" BorderThickness="0"
                      HorizontalAlignment="Left" UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5">
-                    <TextBox.RenderTransform>
+                    <Border.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
                             <SkewTransform AngleY="0.187"/>
                             <RotateTransform/>
                             <TranslateTransform Y="-1.517"/>
                         </TransformGroup>
-                    </TextBox.RenderTransform>
-                    <TextBox.Style>
-                        <Style TargetType="{x:Type TextBox}">
-                            <!-- 边框大小 -->
-                            <Setter Property="BorderThickness" Value="0"/>
-                        </Style>
-                    </TextBox.Style>
-                </TextBox>
+                    </Border.RenderTransform>
+                </Border>
                 <ListView 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                     x:Name="ListView_Temp_MRC_Temp" Background="{x:Null}" BorderBrush="{x:Null}" 
@@ -419,33 +408,30 @@
                     <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/下02.svg"/>
                 </Button>
 
-                <Button 
-                x:Name="Button_Min"
-                Style="{StaticResource MyButton}"
-                HorizontalAlignment="Right" Height="16" 
+                <Border 
+                x:Name="Button_Min" BorderThickness="0"
+                HorizontalAlignment="Right" Height="16" Background="#02FFFFFF"
                 VerticalAlignment="Top" Width="16" Cursor="Hand" Margin="0,31,100,0"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 >
                     <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/最小化.svg"/>
-                </Button>
-                <Button 
-                x:Name="Button_Max"
-                Style="{StaticResource MyButton}"
-                HorizontalAlignment="Right" Height="16" Width="16" 
+                </Border>
+                <Border 
+                x:Name="Button_Max" BorderThickness="0"
+                HorizontalAlignment="Right" Height="16" Width="16" Background="#02FFFFFF"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,31,65,0" Cursor="Hand" VerticalAlignment="Top" 
+                Margin="0,31,65,0" Cursor="Hand" VerticalAlignment="Top" 
                 >
                     <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/最大化.svg"/>
-                </Button>
-                <Button 
-                x:Name="Button_Exit"
-                Style="{StaticResource MyButton}"
-                HorizontalAlignment="Right" Height="16" 
+                </Border>
+                <Border 
+                x:Name="Button_Exit" BorderThickness="0"
+                HorizontalAlignment="Right" Height="16" Background="#02FFFFFF"
                 VerticalAlignment="Top" Width="16" Cursor="Hand" Margin="0,31,30,0"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 >
                     <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/关闭.svg"/>
-                </Button>
+                </Border>
             </Grid>
         </Grid>
 

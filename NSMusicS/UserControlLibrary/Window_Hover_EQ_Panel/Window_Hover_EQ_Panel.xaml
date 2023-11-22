@@ -9,152 +9,140 @@
         Title="Window_Hover_EQ_Panel" MouseLeftButtonDown="Window_MouseLeftButtonDown"
         WindowStyle="None" AllowsTransparency = "True"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-        Height="460" Width="1000">
+        Height="460" Width="1000" Background="{x:Null}">
     <Grid>
-        <Grid VerticalAlignment="Top" Height="50" Background="#171718">
+        <Grid VerticalAlignment="Top" Height="50" >
+            <Border Background="#171718" CornerRadius="20,0,0,0"/>
+
             <TextBlock 
-            HorizontalAlignment="Right" Height="20" Width="20"
-            VerticalAlignment="Center" Margin="0,0,20,0"  
-            >
+                HorizontalAlignment="Right" Height="20" Width="20"
+                VerticalAlignment="Center" Margin="0,0,20,0" >
                 <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/关闭.svg" MouseLeftButtonDown="SvgViewbox_MouseLeftButtonDown"/>
             </TextBlock>
+            
             <TextBlock 
-            Text="MoZhi Equalizer"
-            HorizontalAlignment="Center" VerticalAlignment="Center"
-            Margin="80,0,0,0" FontWeight="Bold" FontSize="26" Foreground="#9C9C9C"
+                Text="MoZhi Equalizer"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Margin="80,0,0,0" FontWeight="Bold" FontSize="26" Foreground="#9C9C9C"
             />
         </Grid>
-        <Grid Width="100" HorizontalAlignment="Left" Margin="0,23,0,0" Background="#171718">
+        <Grid Width="100" HorizontalAlignment="Left" Margin="0,23,0,0">
+            <Border Background="#171718" CornerRadius="0,0,0,20"/>
+            
             <TextBlock 
-            HorizontalAlignment="Center" Height="30" Width="30"
-            VerticalAlignment="Top" Margin="0,70,0,0"  
-            >
-            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/均衡器.svg"/>
+                HorizontalAlignment="Center" Height="30" Width="30"
+                VerticalAlignment="Top" Margin="0,70,0,0" >
+                <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/均衡器.svg"/>
             </TextBlock>
             <TextBlock 
-            Text="简易EQ"
-            HorizontalAlignment="Center" VerticalAlignment="Top"
-            Margin="0,100,0,0" FontWeight="Bold" FontSize="16" Foreground="#DEDEDE"
-            />
+                Text="简易EQ"
+                HorizontalAlignment="Center" VerticalAlignment="Top"
+                Margin="0,100,0,0" FontWeight="Bold" FontSize="16" Foreground="#DEDEDE"/>
 
             <TextBlock 
-            HorizontalAlignment="Center" Height="30" Width="30"
-            VerticalAlignment="Top" Margin="0,200,0,0"  
-            >
-            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/均衡器.svg"/>
+                HorizontalAlignment="Center" Height="30" Width="30"
+                VerticalAlignment="Top" Margin="0,200,0,0" >
+                <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/均衡器.svg"/>
             </TextBlock>
             <TextBlock 
-            Text="普通EQ"
-            HorizontalAlignment="Center" VerticalAlignment="Top"
-            Margin="0,230,0,0" FontWeight="Bold" FontSize="16" Foreground="#44DEDEDE"
-            />
+                Text="普通EQ"
+                HorizontalAlignment="Center" VerticalAlignment="Top"
+                Margin="0,230,0,0" FontWeight="Bold" FontSize="16" Foreground="#44DEDEDE"/>
 
             <TextBlock 
-            HorizontalAlignment="Center" Height="30" Width="30"
-            VerticalAlignment="Top" Margin="0,330,0,0"  
-            >
-            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/均衡器.svg"/>
+                HorizontalAlignment="Center" Height="30" Width="30"
+                VerticalAlignment="Top" Margin="0,330,0,0" >
+                <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/均衡器.svg"/>
             </TextBlock>
             <TextBlock 
-            Text="专业EQ"
-            HorizontalAlignment="Center" VerticalAlignment="Top"
-            Margin="0,360,0,0" FontWeight="Bold" FontSize="16" Foreground="#44DEDEDE"
-            />
+                Text="专业EQ"
+                HorizontalAlignment="Center" VerticalAlignment="Top"
+                Margin="0,360,0,0" FontWeight="Bold" FontSize="16" Foreground="#44DEDEDE"/>
         </Grid>
-        <Grid Margin="100,50,0,0" Background="#1E1E20">
+        <Grid Margin="100,50,0,0">
+            <Border Background="#1E1E20" CornerRadius="0,0,20,0"/>
             <Grid Margin="96,82,20,120" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Collapsed">
                 <TextBox 
                     x:Name="Text_Model_1_Eq_Num31" Text="{Binding Band1, Mode=TwoWay}" MaxWidth="33"
-    HorizontalAlignment="Center" VerticalAlignment="Top"
-    Margin="0,0,442,0" FontSize="13" Foreground="Black"
-    />
+                    HorizontalAlignment="Center" VerticalAlignment="Top"
+                    Margin="0,0,442,0" FontSize="13" Foreground="Black"/>
                 <TextBox 
-    x:Name="Text_Model_1_Eq_Num62"
+                    x:Name="Text_Model_1_Eq_Num62"
                     Text="{Binding Band2, Mode=TwoWay}" MaxWidth="33"
-    HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="13" Foreground="Black" Margin="0,0,352,0"
-    />
+                    HorizontalAlignment="Center" VerticalAlignment="Top" 
+                    FontSize="13" Foreground="Black" Margin="0,0,352,0"/>
                 <TextBox 
-    x:Name="Text_Model_1_Eq_Num125"
+                    x:Name="Text_Model_1_Eq_Num125"
                     Text="{Binding Band3, Mode=TwoWay}" MaxWidth="33"
-    HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="13" Foreground="Black" Margin="0,0,264,0"
-    />
+                    HorizontalAlignment="Center" VerticalAlignment="Top" 
+                    FontSize="13" Foreground="Black" Margin="0,0,264,0"/>
                 <TextBox 
-    x:Name="Text_Model_1_Eq_Num250"
+                    x:Name="Text_Model_1_Eq_Num250"
                     Text="{Binding Band4, Mode=TwoWay}" MaxWidth="33"
-    HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="13" Foreground="Black" Margin="0,0,178,0"
-    />
+                    HorizontalAlignment="Center" VerticalAlignment="Top" 
+                    FontSize="13" Foreground="Black" Margin="0,0,178,0"/>
                 <TextBox 
-    x:Name="Text_Model_1_Eq_Num500"
+                    x:Name="Text_Model_1_Eq_Num500"
                     Text="{Binding Band5, Mode=TwoWay}" MaxWidth="33"
-    HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="13" Foreground="Black" Margin="0,0,88,0"
-    />
+                    HorizontalAlignment="Center" VerticalAlignment="Top" 
+                    FontSize="13" Foreground="Black" Margin="0,0,88,0"/>
                 <TextBox 
-    x:Name="Text_Model_1_Eq_Num1k"
+                    x:Name="Text_Model_1_Eq_Num1k"
                     Text="{Binding Band6, Mode=TwoWay}" MaxWidth="33"
-    HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="13" Foreground="Black"
-    />
+                    HorizontalAlignment="Center" VerticalAlignment="Top" 
+                    FontSize="13" Foreground="Black" />
                 <TextBox 
-    x:Name="Text_Model_1_Eq_Num2k"
+                    x:Name="Text_Model_1_Eq_Num2k"
                     Text="{Binding Band7, Mode=TwoWay}" MaxWidth="33"
-    HorizontalAlignment="Center" VerticalAlignment="Top"
-    Margin="88,0,0,0" FontSize="13" Foreground="Black"
-    />
+                    HorizontalAlignment="Center" VerticalAlignment="Top"
+                    Margin="88,0,0,0" FontSize="13" Foreground="Black"/>
                 <TextBox 
-    x:Name="Text_Model_1_Eq_Num4k"
+                    x:Name="Text_Model_1_Eq_Num4k"
                     Text="{Binding Band8, Mode=TwoWay}" MaxWidth="33"
-    HorizontalAlignment="Center" VerticalAlignment="Top"
-    Margin="178,0,0,0" FontSize="13" Foreground="Black"
-    />
+                    HorizontalAlignment="Center" VerticalAlignment="Top"
+                    Margin="178,0,0,0" FontSize="13" Foreground="Black"/>
                 <TextBox 
-    x:Name="Text_Model_1_Eq_Num8k"
+                    x:Name="Text_Model_1_Eq_Num8k"
                     Text="{Binding Band9, Mode=TwoWay}" MaxWidth="33"
-    HorizontalAlignment="Center" VerticalAlignment="Top"
-    Margin="264,0,0,0" FontSize="13" Foreground="Black"
-    />
+                    HorizontalAlignment="Center" VerticalAlignment="Top"
+                    Margin="264,0,0,0" FontSize="13" Foreground="Black"/>
                 <TextBox 
                     x:Name="Text_Model_1_Eq_Num16k"
                     Text="{Binding Band10, Mode=TwoWay}" MaxWidth="33"
                     HorizontalAlignment="Center" VerticalAlignment="Top"
-                    Margin="352,0,0,0" FontSize="13" Foreground="Black"
-                    />
+                    Margin="352,0,0,0" FontSize="13" Foreground="Black"/>
                 <TextBox 
                     x:Name="Text_Model_1_Eq_Num20k"
                     Text="{Binding Band11, Mode=TwoWay}" MaxWidth="33"
                     HorizontalAlignment="Center" VerticalAlignment="Top"
-                    Margin="442,0,0,0" FontSize="13" Foreground="Black"
-                    />
+                    Margin="442,0,0,0" FontSize="13" Foreground="Black" />
             </Grid>
 
             <TextBlock 
                 Text="+12dB" Foreground="#DEDEDE" FontSize="18"
                 HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="36,70,0,0"
-                />
+                Margin="36,70,0,0"/>
             <TextBlock 
                 Text="0dB" Foreground="#DEDEDE" FontSize="18"
                 HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="60,190,0,0"
-                />
+                Margin="60,190,0,0"/>
             <TextBlock 
                 Text="-12dB" Foreground="#DEDEDE" FontSize="18"
                 HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="44,314,0,0"
-                />
+                Margin="44,314,0,0"/>
 
             <TextBlock 
                 Text="重置均衡器：" Foreground="#DEDEDE" FontSize="18"
                 HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="36,20,0,0"
-                />
+                Margin="36,20,0,0"/>
             <TextBlock 
                 Height="20" Width="20"
                 HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="146,22,0,0"
-                >
-                    <svgc:SvgViewbox 
-                        x:Name="SvgViewbox_Researt"
-                        MouseLeftButtonDown="SvgViewbox_Researt_MouseLeftButtonDown"
-                        Source="pack://application:,,,/UI_0_Library/刷新.svg"/>
+                Margin="146,22,0,0">
+                <svgc:SvgViewbox 
+                    x:Name="SvgViewbox_Researt"
+                    MouseLeftButtonDown="SvgViewbox_Researt_MouseLeftButtonDown"
+                    Source="pack://application:,,,/UI_0_Library/刷新.svg"/>
             </TextBlock>
 
             <ComboBox 
@@ -271,54 +259,49 @@
                 Margin="14,0,0,0"
                 >
                 <TextBlock 
-                Text="31"
-                HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Foreground="#DEDEDE" Margin="14,0,0,0"
-                />
+                    Text="31"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" 
+                    FontSize="20" Foreground="#DEDEDE" Margin="14,0,0,0"/>
                 <TextBlock 
-                Text="62"
-                HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Foreground="#DEDEDE" Margin="74,0,0,0"
-                />
+                    Text="62"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" 
+                    FontSize="20" Foreground="#DEDEDE" Margin="74,0,0,0"/>
                 <TextBlock 
-                Text="125"
-                HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Foreground="#DEDEDE" Margin="128,0,0,0"
-                />
+                    Text="125"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" 
+                    FontSize="20" Foreground="#DEDEDE" Margin="128,0,0,0"/>
                 <TextBlock 
-                Text="250"
-                HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Foreground="#DEDEDE" Margin="190,0,0,0"
-                />
+                    Text="250"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" 
+                    FontSize="20" Foreground="#DEDEDE" Margin="190,0,0,0"/>
                 <TextBlock 
-                Text="500"
-                HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Foreground="#DEDEDE" Margin="252,0,0,0"
-                />
+                    Text="500"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" 
+                    FontSize="20" Foreground="#DEDEDE" Margin="252,0,0,0"/>
                 <TextBlock 
-                Text="1k"
-                HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Foreground="#DEDEDE" Margin="322,0,0,0"
-                />
+                    Text="1k"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" 
+                    FontSize="20" Foreground="#DEDEDE" Margin="322,0,0,0"/>
                 <TextBlock 
-                Text="2k"
-                HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="382,0,0,0" FontSize="20" Foreground="#DEDEDE"
-                />
+                    Text="2k"
+                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Margin="382,0,0,0" FontSize="20" Foreground="#DEDEDE"/>
                 <TextBlock 
-                Text="4k"
-                HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="442,0,0,0" FontSize="20" Foreground="#DEDEDE"
-                />
+                    Text="4k"
+                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Margin="442,0,0,0" FontSize="20" Foreground="#DEDEDE"/>
                 <TextBlock 
-                Text="8k"
-                HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="504,0,0,0" FontSize="20" Foreground="#DEDEDE"
-                />
+                    Text="8k"
+                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Margin="504,0,0,0" FontSize="20" Foreground="#DEDEDE"/>
                 <TextBlock 
-                Text="16k"
-                HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="556,0,0,0" FontSize="20" Foreground="#DEDEDE"
-                />
+                    Text="16k"
+                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Margin="556,0,0,0" FontSize="20" Foreground="#DEDEDE"/>
                 <TextBlock 
-                Text="20k"
-                HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="620,0,0,0" FontSize="20" Foreground="#DEDEDE"
-                />
+                    Text="20k"
+                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Margin="620,0,0,0" FontSize="20" Foreground="#DEDEDE"/>
             </Grid>
         </Grid>
     </Grid>

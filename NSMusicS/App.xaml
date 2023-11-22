@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:NSMusicS"
              StartupUri="MainWindow.xaml">
-    <!--调试则卡顿。。。。性能分析-->
     <Application.Resources>
         <!--字体颜色-->
         <FontFamily x:Key="DefautFont">/NSMusicS;Component/fonts/#XHei</FontFamily>
@@ -127,14 +126,14 @@
             <Grid Background="Transparent" SnapsToDevicePixels="True">
                 <Border
                     x:Name="TrackBackground"
-                    Height="2.0"
+                    Height="3.0"
                     VerticalAlignment="center"
                     Background="{TemplateBinding Background}" />
 
                 <Track x:Name="PART_Track">
                     <Track.DecreaseRepeatButton>
                         <RepeatButton
-                            Height="2.0"
+                            Height="3.0"
                             Background="{TemplateBinding Foreground}"
                             Style="{StaticResource RepeatButtonTransparent}" />
                     </Track.DecreaseRepeatButton>

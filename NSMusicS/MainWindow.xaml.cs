@@ -58,6 +58,7 @@ using Window = System.Windows.Window;
 using NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls;
 using NSMusicS.UserControlLibrary.MusicPlayer_Main;
 using NAudio.CoreAudioApi;
+using NSMusicS.UserControlLibrary.MainWindow_TOP_UserControls;
 
 #endregion
 
@@ -76,8 +77,9 @@ namespace NSMusicS
             ProcessManager.GetProcessLock();
 
             //禁用
-            userControl_ButtonFrame_TopPanel.Model_4.IsEnabled = true;
-            userControl_ButtonFrame_TopPanel.Model_5.IsEnabled = true;
+            userControl_ButtonFrame_TopPanel.Model_3.IsEnabled = false;
+            userControl_ButtonFrame_TopPanel.Model_4.IsEnabled = false;
+            userControl_ButtonFrame_TopPanel.Model_5.IsEnabled = false;
             musicPlayer_Model_2_Album_UserControl.Stack_Button_LotSelects_Sort.Visibility = Visibility.Collapsed;
 
             #region 初始化
@@ -344,22 +346,17 @@ namespace NSMusicS
         /// <param name="e"></param>
         private void UserControl_ButtonFrame_TopPanel_Loaded(object sender, RoutedEventArgs e)
         {
-            brush_Max.ImageSource = new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\Max.png"));
-            brush_MaxNormal.ImageSource = new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\MaxNormal.png"));
-
-
             //最大化显示任务栏
             this.SourceInitialized += new EventHandler(win_SourceInitialized);
 
             //最大化，最小化，退出
-            userControl_ButtonFrame_TopPanel.Button_Exit.Click += Button_Exit_Click;
-            userControl_ButtonFrame_TopPanel.Button_Max.Click += Button_Max_Click;
-            userControl_ButtonFrame_TopPanel.Button_Min.Click += Button_Min_Click;
-            musicPlayer_Main_UserControl.Button_Exit.Click += Button_Exit_Click;
-            musicPlayer_Main_UserControl.Button_Max.Click += Button_Max_Click;
-            musicPlayer_Main_UserControl.Button_Min.Click += Button_Min_Click;
-            //
-            userControl_ButtonFrame_TopPanel.Button_Max.Background = brush_MaxNormal;
+            userControl_ButtonFrame_TopPanel.Button_Exit.MouseLeftButtonDown += Button_Exit_Click;
+            userControl_ButtonFrame_TopPanel.Button_Max.MouseLeftButtonDown += Button_Max_Click;
+            userControl_ButtonFrame_TopPanel.Button_Min.MouseLeftButtonDown += Button_Min_Click;
+            userControl_ButtonFrame_TopPanel.Button_Close.MouseLeftButtonDown += Button_Min_Click;
+            musicPlayer_Main_UserControl.Button_Exit.MouseLeftButtonDown += Button_Exit_Click;
+            musicPlayer_Main_UserControl.Button_Max.MouseLeftButtonDown += Button_Max_Click;
+            musicPlayer_Main_UserControl.Button_Min.MouseLeftButtonDown += Button_Min_Click;
 
             //模式切换设置
             userControl_ButtonFrame_TopPanel.Model_1.MouseLeftButtonDown += Switch_To_Single_Mode_Click;
@@ -368,7 +365,7 @@ namespace NSMusicS
             userControl_ButtonFrame_TopPanel.Model_5.MouseLeftButtonDown += Switch_To_NAS_Model_5_MouseLeftButtonDown;
 
             //App 设置
-            userControl_ButtonFrame_TopPanel.Button_Menu_Setting.Click += Button_App_Menu_Setting_Click;
+            userControl_ButtonFrame_TopPanel.Button_Setting.MouseLeftButtonDown += Button_App_Menu_Setting_Click;
             userControl_ButtonFrame_App_Setting.Visibility = Visibility.Collapsed;
             userControl_ButtonFrame_App_Setting.Open_App_Setting.MouseLeftButtonDown += Open_App_Setting_MouseLeftButtonDown;
             userControl_ButtonFrame_App_Setting.SvgViewbox_Open_App_Setting.MouseLeftButtonDown += Open_App_Setting_MouseLeftButtonDown;
@@ -378,7 +375,7 @@ namespace NSMusicS
             userControl_Main_Home_Left_Web_Music.ListView_Show_SongList_Info.MouseRightButtonDown += Web_Music_ListView_Download_SongList_Info_MouseDoubleClick;
 
             //皮肤设置
-            userControl_ButtonFrame_TopPanel.Button_Personalized_Skin.Click += Button_Personalized_Skin_Click;
+            userControl_ButtonFrame_TopPanel.Button_Skin.MouseLeftButtonDown += Button_Skin_Click;
             userControl_Main_Home_TOP_Personalized_Skins.Border_this_app_Background_1.MouseLeftButtonDown += Border_this_app_Background_1_MouseLeftButtonDown;
             userControl_Main_Home_TOP_Personalized_Skins.Border_this_app_Background_2.MouseLeftButtonDown += Border_this_app_Background_2_MouseLeftButtonDown;
             userControl_Main_Home_TOP_Personalized_Skins.Border_this_app_Background_3.MouseLeftButtonDown += Border_this_app_Background_3_MouseLeftButtonDown;
@@ -449,9 +446,6 @@ namespace NSMusicS
         }
 
 
-
-        ImageBrush brush_Max = new ImageBrush();//最大化
-        ImageBrush brush_MaxNormal = new ImageBrush();//正常窗口
         private Rect _restoreLocation;
 
         /// <summary>
@@ -705,6 +699,8 @@ namespace NSMusicS
             }
         }
         #endregion
+
+        bool State_Windows_Normal = true;
         /// <summary>
         /// 窗口最大化
         /// </summary>
@@ -714,7 +710,7 @@ namespace NSMusicS
         {
             try
             {
-                if (userControl_ButtonFrame_TopPanel.Button_Max.Background == brush_MaxNormal)//最大化按钮
+                if (State_Windows_Normal == true)//最大化按钮
                 {
                     this.WindowState = System.Windows.WindowState.Maximized;
 
@@ -725,8 +721,8 @@ namespace NSMusicS
                     musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 1080 * nums;
 
                     new Shell_TrayWndHelper().Hide();
-                    
-                    userControl_ButtonFrame_TopPanel.Button_Max.Background = brush_Max;
+
+                    State_Windows_Normal = false;
                 }
                 else//最小化按钮
                 {
@@ -737,7 +733,7 @@ namespace NSMusicS
 
                     new Shell_TrayWndHelper().Show();
 
-                    userControl_ButtonFrame_TopPanel.Button_Max.Background = brush_MaxNormal;
+                    State_Windows_Normal = true;
                 }
 
             }
@@ -850,8 +846,6 @@ namespace NSMusicS
             singer_photo[23] = "歌手图片24";
 
             //设置进入播放器界面，返回主界面事件
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Mrc_Animation_Image.MouseLeftButtonDown += Button_Mrc_Animation_MouseLeftButtonDown;
-            //
             userControl_ButtonFrame_MusicPlayer.Button_Close_CD.MouseLeftButtonDown += Button_Close_CD_MouseLeftButtonDown;
             userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Close_CD_Image.MouseLeftButtonDown += Button_Close_CD_MouseLeftButtonDown;
             //
@@ -1488,7 +1482,7 @@ namespace NSMusicS
         /// <param name="sender"></param>
         /// <param name="e"></param>
         /// <exception cref="NotImplementedException"></exception>
-        private void Button_Personalized_Skin_Click(object sender, RoutedEventArgs e)
+        private void Button_Skin_Click(object sender, RoutedEventArgs e)
         {
             if (userControl_Main_Home_TOP_Personalized_Skins.Visibility == Visibility.Visible)
             {
@@ -2012,29 +2006,6 @@ namespace NSMusicS
                 userControl_TaskbarIcon.Button_Lock_Lyic.Text = "锁定桌面歌词";
             }
             window_Hover_MRC_Panel.Topmost = true;
-        }
-
-
-        /// <summary>
-        /// 开启逐字动画
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        private void Button_Mrc_Animation_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (Bool_Mrc_Animation == false)
-            {
-                userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Mrc_Animation_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－选中.svg");
-
-                Bool_Mrc_Animation = true;
-            }
-            else
-            {
-                userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Mrc_Animation_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－未选中.svg");
-
-                Bool_Mrc_Animation = false;
-            }
         }
 
         /// <summary>
@@ -4737,12 +4708,6 @@ namespace NSMusicS
         }
         public void Switch_Model_1()
         {
-            userControl_ButtonFrame_TopPanel.Model_1_.BorderThickness = new Thickness(4);
-            userControl_ButtonFrame_TopPanel.Model_2_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_3_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_4_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_5_.BorderThickness = new Thickness(0);
-
             Grid_Model_1.Visibility = Visibility.Visible;
             Grid_Model_2.Visibility = Visibility.Collapsed;
             Frame_Buttom_MusicPlayerUserControl.Margin = thickness_Grid_MusicPlayer_Main_UserControl_Normal;
@@ -4796,12 +4761,6 @@ namespace NSMusicS
         }
         public void Switch_Model_2()
         {
-            userControl_ButtonFrame_TopPanel.Model_1_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_2_.BorderThickness = new Thickness(4);
-            userControl_ButtonFrame_TopPanel.Model_3_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_4_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_5_.BorderThickness = new Thickness(0);
-
             viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
             Grid_Model_1.Visibility = Visibility.Collapsed;
             Grid_Model_2.Visibility = Visibility.Visible;
@@ -5658,12 +5617,6 @@ namespace NSMusicS
         }
         public void Switch_Model_3()
         {
-            userControl_ButtonFrame_TopPanel.Model_1_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_2_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_3_.BorderThickness = new Thickness(4);
-            userControl_ButtonFrame_TopPanel.Model_4_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_5_.BorderThickness = new Thickness(0);
-
             Grid_Model_1.Visibility = Visibility.Collapsed;
             Grid_Model_2.Visibility = Visibility.Collapsed;
             Frame_Buttom_MusicPlayerUserControl.Margin = new Thickness(0);
@@ -6412,12 +6365,6 @@ namespace NSMusicS
         }
         public void Switch_Model_4()
         {
-            userControl_ButtonFrame_TopPanel.Model_1_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_2_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_3_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_4_.BorderThickness = new Thickness(4);
-            userControl_ButtonFrame_TopPanel.Model_5_.BorderThickness = new Thickness(0);
-
             Grid_Model_1.Visibility = Visibility.Collapsed;
             Grid_Model_2.Visibility = Visibility.Collapsed;
             Frame_Buttom_MusicPlayerUserControl.Margin = new Thickness(8, 0, 0, 0);
@@ -6551,12 +6498,6 @@ namespace NSMusicS
         }
         public void Switch_Model_5()
         {
-            userControl_ButtonFrame_TopPanel.Model_1_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_2_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_3_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_4_.BorderThickness = new Thickness(0);
-            userControl_ButtonFrame_TopPanel.Model_5_.BorderThickness = new Thickness(4);
-
             Grid_Model_1.Visibility = Visibility.Collapsed;
             Grid_Model_2.Visibility = Visibility.Collapsed;
             Frame_Buttom_MusicPlayerUserControl.Margin = new Thickness(8, 0, 0, 0);
@@ -7297,27 +7238,30 @@ namespace NSMusicS
                     for (int k = 0; k < viewModule_Search_Song.All_Performer_ALL_AlbumCurrent_Playlist.ALL_Performers[i].Albums[j].album_SongList_Infos.Count; k++)
                     {
                         Song_Info newSongInfo = new Song_Info();
-                        newSongInfo.Song_Name = viewModule_Search_Song.All_Performer_ALL_AlbumCurrent_Playlist.ALL_Performers[i].Albums[j].album_SongList_Infos[k].Song_Name;
-                        newSongInfo.Singer_Name = viewModule_Search_Song.All_Performer_ALL_AlbumCurrent_Playlist.ALL_Performers[i].Singer_Name;
-                        newSongInfo.Album_Name = viewModule_Search_Song.All_Performer_ALL_AlbumCurrent_Playlist.ALL_Performers[i].Albums[j].album_SongList_Infos[k].Album_Name;
-                        newSongInfo.Song_Url = viewModule_Search_Song.All_Performer_ALL_AlbumCurrent_Playlist.ALL_Performers[i].Albums[j].album_SongList_Infos[k].Song_Url;
-                        newSongInfo.Song_Duration = viewModule_Search_Song.All_Performer_ALL_AlbumCurrent_Playlist.ALL_Performers[i].Albums[j].album_SongList_Infos[k].Song_Duration;
-                        newSongInfo.Song_No = k + 1;
-                        newSongInfo.Song_Like = 0;
-                        newSongInfo.MV_Path = null;
-                        newSongInfo.IsChecked = false;
-                        newSongInfo.Song_Like_Image = brush_LoveNormal;
-                        newSongInfo.Song_MV_Image = null;
-                        newSongInfo.Bool_Playing = false;
-
-                        //检查是否在我的收藏
-                        for (int r = 0; r < songList_Infos[0][0].Songs.Count; r++)
+                        if (viewModule_Search_Song.All_Performer_ALL_AlbumCurrent_Playlist.ALL_Performers[i].Albums[j].album_SongList_Infos[k] != null)
                         {
-                            if(newSongInfo.Song_Url.Equals(songList_Infos[0][0].Songs[r].Song_Url))
-                                newSongInfo.Song_Like_Image = brush_LoveEnter;
-                        }
+                            newSongInfo.Song_Name = viewModule_Search_Song.All_Performer_ALL_AlbumCurrent_Playlist.ALL_Performers[i].Albums[j].album_SongList_Infos[k].Song_Name;
+                            newSongInfo.Singer_Name = viewModule_Search_Song.All_Performer_ALL_AlbumCurrent_Playlist.ALL_Performers[i].Singer_Name;
+                            newSongInfo.Album_Name = viewModule_Search_Song.All_Performer_ALL_AlbumCurrent_Playlist.ALL_Performers[i].Albums[j].album_SongList_Infos[k].Album_Name;
+                            newSongInfo.Song_Url = viewModule_Search_Song.All_Performer_ALL_AlbumCurrent_Playlist.ALL_Performers[i].Albums[j].album_SongList_Infos[k].Song_Url;
+                            newSongInfo.Song_Duration = viewModule_Search_Song.All_Performer_ALL_AlbumCurrent_Playlist.ALL_Performers[i].Albums[j].album_SongList_Infos[k].Song_Duration;
+                            newSongInfo.Song_No = k + 1;
+                            newSongInfo.Song_Like = 0;
+                            newSongInfo.MV_Path = null;
+                            newSongInfo.IsChecked = false;
+                            newSongInfo.Song_Like_Image = brush_LoveNormal;
+                            newSongInfo.Song_MV_Image = null;
+                            newSongInfo.Bool_Playing = false;
 
-                        Current_Playlist.Add(newSongInfo);
+                            //检查是否在我的收藏
+                            for (int r = 0; r < songList_Infos[0][0].Songs.Count; r++)
+                            {
+                                if (newSongInfo.Song_Url.Equals(songList_Infos[0][0].Songs[r].Song_Url))
+                                    newSongInfo.Song_Like_Image = brush_LoveEnter;
+                            }
+
+                            Current_Playlist.Add(newSongInfo);
+                        }
                     }
                 }
             }
