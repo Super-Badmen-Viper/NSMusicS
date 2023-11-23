@@ -452,9 +452,7 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+*.mp4
+/NSMusicS/bin/Debug/net6.0-windows/Resource/SongListInfo_ini/SongList_Ini/Song_List_Info_ALL.xml
 /NSMusicS/Models/Song_Audio_Out/CSCore_Ffmpeg/FFmpeg/src
-/NSMusicS/Models/Servies_For_API_Info
 /NSMusicS/Services/Services_For_API_GetResult
-/NSMusicS_For_Flutter/MyApplication
-/MoZhi_Song_Duration_Allocation/Resource/EXO回归预告.mp4
-/NSMusicS/UserControlLibrary/Main_Home_Left_MyMusic_UserControls/UserControl_Main_Home_Left_Web_Music.xaml.cs
