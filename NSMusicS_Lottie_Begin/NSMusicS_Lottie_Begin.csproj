@@ -5,9 +5,9 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>NSMusicS.ico</ApplicationIcon>
-    <AssemblyVersion>3.0.0.4</AssemblyVersion>
-    <FileVersion>3.0.0.4</FileVersion>
+    <ApplicationIcon>NSMusicS_1920.ico</ApplicationIcon>
+    <AssemblyVersion>3.0.0.5</AssemblyVersion>
+    <FileVersion>3.0.0.5</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,7 +31,7 @@
     <Content Include="bin\Debug\net6.0-windows\NSMusicS\Resource\Temp_System\Close.txt" />
     <Content Include="bin\Debug\net6.0-windows\NSMusicS_Lottie_Begin.deps.json" />
     <Content Include="bin\Debug\net6.0-windows\NSMusicS_Lottie_Begin.runtimeconfig.json" />
-    <Content Include="NSMusicS.ico" />
+    <Content Include="NSMusicS_1920.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -105,6 +105,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autoupdater.NET.Official" Version="1.8.4" />
     <PackageReference Include="LottieSharp" Version="2.3.0" />
   </ItemGroup>
 
