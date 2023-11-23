@@ -304,11 +304,11 @@
                 </Border.Background>
             </Border>
             <TextBlock 
-               Margin="46,27,0,0" VerticalAlignment="Top" Width="90"
-               FontSize="16" TextWrapping="Wrap"
-               Text="九歌NSMusicS" TextAlignment="Left"
-               UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-             >
+                Margin="74,27,0,0" 
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="90" FontSize="16" 
+                Text="NSMusicS" TextAlignment="Left" FontWeight="Bold"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality">
                 <TextBlock.Foreground>
                     <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,.5">
                         <GradientStop Offset="0" Color="#65b849" />
@@ -329,10 +329,9 @@
                 </TextBlock.Foreground>
             </TextBlock>
             <TextBlock 
-                Visibility="Collapsed"
-                Margin="50,50,0,0"  VerticalAlignment="Top" Height="28"
+                Margin="74,50,0,0"  VerticalAlignment="Top" Height="28"
                 FontWeight="Bold" FontSize="12" Foreground="White"
-                Text="拥抱开源·音乐世界" TextAlignment="Left"
+                Text="九歌 · 音乐世界" TextAlignment="Left"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                 />
         </Grid>

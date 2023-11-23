@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.Main_Home_TOP_UserControls.UserControls_App_Setting.UserControl_Set_4_Player_Lyic"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_TOP_UserControls.UserControls_App_Setting"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="600">
+    <Grid Margin="10,0,0,0">
+        <TextBlock 
+            HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,14,0,0"
+            Text="播放歌词：" Foreground="White" FontSize="22" FontWeight="Bold"/>
+        <Border 
+            HorizontalAlignment="Left" VerticalAlignment="Top" 
+            Height="30" Margin="0,60,0,0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock 
+                    Text="歌词跳跃动画" 
+                    Foreground="#44FFFFFF" FontSize="14" 
+                    HorizontalAlignment="Left" VerticalAlignment="Center" 
+                    Margin="8,0,0,0" />
+                
+            </StackPanel>
+        </Border>
+        <Border 
+            HorizontalAlignment="Left" VerticalAlignment="Top" 
+            Width="260" Height="30" Margin="0,100,0,0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock 
+                    Text="桌面歌词覆盖任务栏" 
+                    Foreground="#44FFFFFF" FontSize="14" 
+                    HorizontalAlignment="Left" VerticalAlignment="Center" 
+                    Margin="8,0,0,0" />
+
+            </StackPanel>
+        </Border>
+
+        <Border BorderBrush="#44FFFFFF" BorderThickness="0,0,0,1" VerticalAlignment="Top" Margin="0,480,200,0"/>
+    </Grid>
+</UserControl>

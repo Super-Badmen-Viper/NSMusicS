@@ -1,0 +1,126 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.Main_Home_TOP_UserControls.UserControls_App_Setting.UserControl_Set_6_Audio"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_TOP_UserControls.UserControls_App_Setting"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="600">
+    <Grid Margin="10,0,0,0">
+        <TextBlock 
+        HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,14,0,0"
+        Text="设备设置：" Foreground="White" FontSize="22" FontWeight="Bold"
+        />
+        <Border 
+        HorizontalAlignment="Left" VerticalAlignment="Top" 
+        Height="30" Margin="0,60,0,0"
+        BorderThickness="0" CornerRadius="10"
+        >
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center"
+                Text="音频输出" Foreground="White" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
+            />
+                <ComboBox 
+                x:Name="ComBox_Select_WaveOut" Width="160"
+                SelectedIndex="0"
+                IsEditable="False" Margin="10,0,0,0"
+                >
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel/>
+                        </ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="2.5" Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button 
+                x:Name="Button_Resert_WaveOut"
+                Margin="10,0,0,0" Padding="10,0,10,0" 
+                Content="重置" 
+                />
+            </StackPanel>
+        </Border>
+        <Border 
+        HorizontalAlignment="Left" VerticalAlignment="Top" 
+        Width="260" Height="30" Margin="0,100,0,0"
+        BorderThickness="0" CornerRadius="10"
+        >
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center"
+                Text="视频渲染" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
+                />
+                <ComboBox 
+                x:Name="ComBox_Select_Video_EleMentOut" Visibility="Collapsed"
+                Width="160"
+                SelectedIndex="0"
+                IsEditable="False" Margin="10,0,0,0"
+                >
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel/>
+                        </ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="2.5" Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+        </Border>
+        <Border 
+        HorizontalAlignment="Left" VerticalAlignment="Top" 
+        Width="260" Height="30" Margin="0,140,0,0"
+        BorderThickness="0" CornerRadius="10"
+        >
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center"
+                Text="硬件加速" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
+                />
+                <ComboBox 
+                x:Name="ComBox_Select_Hardware_Acceleration" Visibility="Collapsed"
+                Width="160"
+                SelectedIndex="0"
+                IsEditable="False" Margin="10,0,0,0"
+                >
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel/>
+                        </ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="2.5" Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+        </Border>
+
+        <Border BorderBrush="#44FFFFFF" BorderThickness="0,0,0,1" VerticalAlignment="Top" Margin="0,180,200,0"/>
+
+        <TextBlock 
+        HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,194,0,0"
+        Text="音效设置：" Foreground="White" FontSize="22" FontWeight="Bold"
+        />
+        <Border 
+        x:Name="Button_Open_EQ"
+        Width="60" Height="30"
+        HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,240,0,0"
+        BorderThickness="1" BorderBrush="White" CornerRadius="10"
+            >
+            <TextBlock 
+            HorizontalAlignment="Center" VerticalAlignment="Center"
+            Text="均衡器" Foreground="White" FontSize="14" />
+        </Border>
+    </Grid>
+</UserControl>

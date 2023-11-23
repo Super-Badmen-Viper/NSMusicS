@@ -157,13 +157,13 @@ namespace NSMusicS
                     }
                 }
             }
-            userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.ItemsSource = WaveoutDevices;
-            userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectedIndex = 0;
-            userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectionChanged += ComBox_Select_WaveOut_SelectionChanged;
+            userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.ItemsSource = WaveoutDevices;
+            userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.SelectedIndex = 0;
+            userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.SelectionChanged += ComBox_Select_WaveOut_SelectionChanged;
             //
-            userControl_Main_Home_TOP_App_Setting.Button_Resert_WaveOut.Click += Button_Resert_WaveOut_Click;
+            userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.Button_Resert_WaveOut.Click += Button_Resert_WaveOut_Click;
             //
-            userControl_Main_Home_TOP_App_Setting.Button_Open_EQ.MouseLeftButtonDown += Button_Window_Hover_EQ_Panel;
+            userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.Button_Open_EQ.MouseLeftButtonDown += Button_Window_Hover_EQ_Panel;
             //
             //
             mediaElement_Song = MediaElement_Song.Retuen_This();
@@ -173,9 +173,9 @@ namespace NSMusicS
             {
                 if (WaveoutDevices[i].device.DeviceFriendlyName.Equals(mediaElement_Song.defaultOutputDevice.DeviceFriendlyName))
                 {
-                    userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectionChanged -= ComBox_Select_WaveOut_SelectionChanged;
-                    userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectedIndex = i;
-                    userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectionChanged += ComBox_Select_WaveOut_SelectionChanged;
+                    userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.SelectionChanged -= ComBox_Select_WaveOut_SelectionChanged;
+                    userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.SelectedIndex = i;
+                    userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.SelectionChanged += ComBox_Select_WaveOut_SelectionChanged;
                     break;
                 }
             }
@@ -207,11 +207,6 @@ namespace NSMusicS
             musicPlayer_Main_UserControl.Bool_Player_Model = 1;//切换为1
             Check_Button_Close_CD();//此方法切换为0：0:唱片控件开启
             musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Visibility = Visibility.Collapsed;
-            //
-            /*Open_Song_AudioSpectrogram();
-            Close_Song_Album_Play();
-            Close_Button_Album_Play_CD_Show();
-            Close_Singer_Image_Animation();*/
 
             DispatcherTimer dispatcherTimer_memory = new DispatcherTimer();
             dispatcherTimer_memory.Tick += DispatcherTimer_memory_Tick;
@@ -264,16 +259,11 @@ namespace NSMusicS
             viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
 
             double temp = Frame_Show.ActualWidth;
-            //实例化一个DoubleAnimation类。
             doubleAnimation = new DoubleAnimation();
-            //设置From属性。
             doubleAnimation.From = temp;
-            //设置To属性。
             doubleAnimation.To = temp;
-            //设置Duration属性。
             doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(300));
             doubleAnimation.Completed += Grid_Animation_Completed_Frame_Show;
-            //为元素设置BeginAnimation方法。
             Frame_Show.BeginAnimation(UserControl.WidthProperty, doubleAnimation);
             Frame_Show.HorizontalAlignment = HorizontalAlignment.Stretch;
         }
@@ -785,12 +775,6 @@ namespace NSMusicS
             DispatcherTimer_MRC.Tick += new EventHandler(Media_Song_MRC_Play_Tick); // 超过计时器间隔时发生，时间轴向前走1秒       
             DispatcherTimer_MRC.Interval = TimeSpan.FromMilliseconds(50); // 间隔1秒
 
-            //播放器缓冲流绑定
-            //mediaElement_Song.wasapiOut.PlaybackStopped += mediaElement_Song_MediaOpened;
-            //mediaElement_Song.wasapiOut.PlaybackStopped += mediaElement_Song_MediaEnded;
-
-
-
             //Button_Play_Pause_Player绑定至Button_Play_Pause_Player_Click单击事件
             userControl_ButtonFrame_MusicPlayer.Button_Play_Pause_Player.Click += Button_Play_Pause_Player_Click;
             window_Hover_MRC_Panel.Button_Play_Pause_Player.Click += Button_Play_Pause_Player_Click;
@@ -846,14 +830,14 @@ namespace NSMusicS
             singer_photo[23] = "歌手图片24";
 
             //设置进入播放器界面，返回主界面事件
-            userControl_ButtonFrame_MusicPlayer.Button_Close_CD.MouseLeftButtonDown += Button_Close_CD_MouseLeftButtonDown;
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Close_CD_Image.MouseLeftButtonDown += Button_Close_CD_MouseLeftButtonDown;
+            musicPlayer_Main_UserControl.Button_Close_CD.MouseLeftButtonDown += Button_Close_CD_MouseLeftButtonDown;
+            musicPlayer_Main_UserControl.SvgViewbox_Button_Close_CD_Image.MouseLeftButtonDown += Button_Close_CD_MouseLeftButtonDown;
             //
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Song_AudioSpectrogram_Image.MouseLeftButtonDown += Button_Song_AudioSpectrogram_MouseLeftButtonDown;
+            musicPlayer_Main_UserControl.SvgViewbox_Button_Song_AudioSpectrogram_Image.MouseLeftButtonDown += Button_Song_AudioSpectrogram_MouseLeftButtonDown;
             //
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Singer_Image_Animation_Image.MouseLeftButtonDown += Button_Singer_Image_Animation_Click;
+            musicPlayer_Main_UserControl.SvgViewbox_Button_Singer_Image_Animation_Image.MouseLeftButtonDown += Button_Singer_Image_Animation_Click;
             //
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Album_Animation_Image.MouseLeftButtonDown += SvgViewbox_Button_Album_Animation_Image_MouseLeftButtonDown; ;
+            musicPlayer_Main_UserControl.SvgViewbox_Button_Album_Animation_Image.MouseLeftButtonDown += SvgViewbox_Button_Album_Animation_Image_MouseLeftButtonDown; ;
             //
             userControl_ButtonFrame_MusicPlayer.Button_Desk_MRC.Click += Button_Window_Hover_MRC_Panel;
             userControl_ButtonFrame_MusicPlayer.Button_Desk_MRC_Right.Click += Button_Window_Hover_MRC_Panel;
@@ -877,16 +861,6 @@ namespace NSMusicS
             userControl_ButtonFrame_MusicPlayer.SvgViewbox_Stack_Button_Normal_Order.MouseLeftButtonDown += Stack_Button_Normal_Click;
             userControl_ButtonFrame_MusicPlayer.SvgViewbox_Stack_Button_OnlyOne_Order.MouseLeftButtonDown += Stack_Button_OnlyOne_Click;
             userControl_ButtonFrame_MusicPlayer.SvgViewbox_Stack_Button_List_Order.MouseLeftButtonDown += Stack_Button_List_Click;
-            //设置播放视图模式按键
-            /*userControl_ButtonFrame_MusicPlayer.Stack_Button_View_Model_1.MouseLeftButtonDown += Stack_Button_View_Model_1_MouseLeftButtonDown;
-            userControl_ButtonFrame_MusicPlayer.Stack_Button_View_Model_2.MouseLeftButtonDown += Stack_Button_View_Model_2_MouseLeftButtonDown;
-            userControl_ButtonFrame_MusicPlayer.Stack_Button_View_Model_3.MouseLeftButtonDown += Stack_Button_View_Model_3_MouseLeftButtonDown;
-            userControl_ButtonFrame_MusicPlayer.Stack_Button_View_Model_4.MouseLeftButtonDown += Stack_Button_View_Model_4_MouseLeftButtonDown;
-            //
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Stack_Button_View_Model_1.MouseLeftButtonDown += Stack_Button_View_Model_1_MouseLeftButtonDown;
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Stack_Button_View_Model_2.MouseLeftButtonDown += Stack_Button_View_Model_2_MouseLeftButtonDown;
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Stack_Button_View_Model_3.MouseLeftButtonDown += Stack_Button_View_Model_3_MouseLeftButtonDown;
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Stack_Button_View_Model_4.MouseLeftButtonDown += Stack_Button_View_Model_4_MouseLeftButtonDown;*/
             //设置音量按键
             userControl_ButtonFrame_MusicPlayer.Button_Music_Voice_Speed.Click += Button_WMP_Song_Voice_Click;
             userControl_ButtonFrame_MusicPlayer.Slider_Voice.Maximum = 1;
@@ -930,18 +904,6 @@ namespace NSMusicS
             userControl_Main_Home_Left_MyMusic_My_Love.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += MyLove_Stack_Button_Add_PC_SelectFolderBrowser_Song_MouseLeftButtonDown;
             userControl_Main_Home_Left_MyMusic_Recent_Play.Stack_Button_Add_PC_ALL_Song.MouseLeftButtonDown += Recent_Play_Stack_Button_Add_PC_SelectFolderBrowser_Song_MouseLeftButtonDown;
 
-            /*// 定义颜色和透明度
-            Color baseColor = Color.FromRgb(240, 240, 240); // F0F0F0
-            Color highlightColor = Color.FromRgb(255, 255, 255); // FFFFFF
-            Color shadowColor = Color.FromRgb(0, 0, 0); // 000000
-            // 创建线性渐变刷
-            new SolidColorBrush((Color)ColorConverter.ConvertFromString("#60FFFFFF")) = new LinearGradientBrush();
-            new SolidColorBrush((Color)ColorConverter.ConvertFromString("#60FFFFFF")).StartPoint = new Point(0, 0);
-            new SolidColorBrush((Color)ColorConverter.ConvertFromString("#60FFFFFF")).EndPoint = new Point(1, 0);
-            new SolidColorBrush((Color)ColorConverter.ConvertFromString("#60FFFFFF")).GradientStops.Add(new GradientStop(highlightColor, 0));
-            new SolidColorBrush((Color)ColorConverter.ConvertFromString("#60FFFFFF")).GradientStops.Add(new GradientStop(baseColor, 1));
-            userControl_ButtonFrame_ThisWindowsMusicAndDownload.Border_Hover_BackGround.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#60FFFFFF"));*/
-
             //绑定APP TOP菜单选项
             userControl_TaskbarIcon.Close_ThisApp.MouseLeftButtonDown += Window_Closed;
             userControl_TaskbarIcon.SvgViewbox_Close_ThisApp.MouseLeftButtonDown += Window_Closed;
@@ -959,14 +921,9 @@ namespace NSMusicS
             //切换歌手显示界面
             musicPlayer_Model_2_Album_UserControl.Button_Show_big2_Singer_List_Model_2.MouseLeftButtonDown += Button_Show_big2_Singer_List_Model_2_MouseLeftButtonDown;
 
-
+            //
+            musicPlayer_Main_UserControl.PLay_Mode_Selected_Model.MouseLeftButtonDown += PLay_Mode_Select_Model_Panel_MouseLeftButtonDown;
         }
-
-        
-
-
-
-
 
 
         #endregion
@@ -1346,10 +1303,10 @@ namespace NSMusicS
         /// <param name="e"></param>
         private void ComBox_Select_WaveOut_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectedIndex >= 0)
+            if (userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.SelectedIndex >= 0)
             {
                 mediaElement_Song.SetOutputDevice(
-                    WaveoutDevices[userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectedIndex].device
+                    WaveoutDevices[userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.SelectedIndex].device
                     );
 
                 //播放
@@ -1413,13 +1370,13 @@ namespace NSMusicS
                     }
                 }
             }
-            userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.ItemsSource = WaveoutDevices;
-            userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectedIndex = 0;
-            userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectionChanged += ComBox_Select_WaveOut_SelectionChanged;
+            userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.ItemsSource = WaveoutDevices;
+            userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.SelectedIndex = 0;
+            userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.SelectionChanged += ComBox_Select_WaveOut_SelectionChanged;
             //
-            userControl_Main_Home_TOP_App_Setting.Button_Resert_WaveOut.Click += Button_Resert_WaveOut_Click;
+            userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.Button_Resert_WaveOut.Click += Button_Resert_WaveOut_Click;
             //
-            userControl_Main_Home_TOP_App_Setting.Button_Open_EQ.MouseLeftButtonDown += Button_Window_Hover_EQ_Panel;
+            userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.Button_Open_EQ.MouseLeftButtonDown += Button_Window_Hover_EQ_Panel;
         }
         private MMDeviceEnumerator deviceEnumerator;
         DispatcherTimer dispatcherTimer;
@@ -1464,9 +1421,9 @@ namespace NSMusicS
                     {
                         if (WaveoutDevices[i].device.DeviceFriendlyName.Equals(newDefaultOutputDevice.DeviceFriendlyName))
                         {
-                            userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectionChanged -= ComBox_Select_WaveOut_SelectionChanged;
-                            userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectedIndex = i;
-                            userControl_Main_Home_TOP_App_Setting.ComBox_Select_WaveOut.SelectionChanged += ComBox_Select_WaveOut_SelectionChanged;
+                            userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.SelectionChanged -= ComBox_Select_WaveOut_SelectionChanged;
+                            userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.SelectedIndex = i;
+                            userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.SelectionChanged += ComBox_Select_WaveOut_SelectionChanged;
                             break;
                         }
                     }
@@ -2009,6 +1966,27 @@ namespace NSMusicS
         }
 
         /// <summary>
+        /// 弹出选择播放模式
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PLay_Mode_Select_Model_Panel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            PLay_Mode_Select_Model_Check();
+        }
+        private void PLay_Mode_Select_Model_Check()
+        {
+            if (musicPlayer_Main_UserControl.PLay_Mode_Select_Model_Panel.Visibility == Visibility.Collapsed)
+            {
+                musicPlayer_Main_UserControl.PLay_Mode_Select_Model_Panel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                musicPlayer_Main_UserControl.PLay_Mode_Select_Model_Panel.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        /// <summary>
         /// 唱片模式
         /// </summary>
         /// <param name="sender"></param>
@@ -2016,7 +1994,7 @@ namespace NSMusicS
         /// <exception cref="NotImplementedException"></exception>
         private void SvgViewbox_Button_Album_Animation_Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (userControl_ButtonFrame_MusicPlayer.Button_Close_CD.Visibility == Visibility.Visible)
+            if (musicPlayer_Main_UserControl.Button_Close_CD.Visibility == Visibility.Visible)
             {
                 Close_Song_Album_Play();
 
@@ -2045,21 +2023,29 @@ namespace NSMusicS
                 //关闭其他模式
                 Close_Singer_Image_Animation();
                 Close_Song_AudioSpectrogram();
+
+                musicPlayer_Main_UserControl.PLay_Mode_Selected_Model_Text.Text = "唱片模式";
             }
+
+            musicPlayer_Main_UserControl.PLay_Mode_Select_Model_Panel.Visibility = Visibility.Collapsed;
         }
         private void Open_Song_Album_Play()
         {
-            userControl_ButtonFrame_MusicPlayer.Button_Close_CD.Visibility = Visibility.Visible;
-            userControl_ButtonFrame_MusicPlayer.Button_Close_CD_Image.Visibility = Visibility.Visible;
+            musicPlayer_Main_UserControl.Button_Close_CD.Visibility = Visibility.Visible;
+            musicPlayer_Main_UserControl.Button_Close_CD_Image.Visibility = Visibility.Visible;
 
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Album_Animation_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－选中.svg");
+            musicPlayer_Main_UserControl.SvgViewbox_Button_Album_Animation_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－选中.svg");
+
+            Open_Button_Album_Play_CD_Show();
         }
         private void Close_Song_Album_Play()
         {
-            userControl_ButtonFrame_MusicPlayer.Button_Close_CD.Visibility = Visibility.Collapsed;
-            userControl_ButtonFrame_MusicPlayer.Button_Close_CD_Image.Visibility = Visibility.Collapsed;
+            musicPlayer_Main_UserControl.Button_Close_CD.Visibility = Visibility.Collapsed;
+            musicPlayer_Main_UserControl.Button_Close_CD_Image.Visibility = Visibility.Collapsed;
 
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Album_Animation_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－未选中.svg");
+            musicPlayer_Main_UserControl.SvgViewbox_Button_Album_Animation_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－未选中.svg");
+
+            Close_Button_Album_Play_CD_Show();
         }
         /// <summary>
         /// 唱片模式切换
@@ -2072,6 +2058,8 @@ namespace NSMusicS
             Check_Button_Close_CD();
 
             Size_Changed();
+
+            musicPlayer_Main_UserControl.PLay_Mode_Select_Model_Panel.Visibility = Visibility.Collapsed;
         }
         private void Check_Button_Close_CD()
         {
@@ -2105,8 +2093,8 @@ namespace NSMusicS
 
             musicPlayer_Main_UserControl.Bool_Player_Model = 0;
 
-            userControl_ButtonFrame_MusicPlayer.TextBlock_Button_Close_CD.Text = "隐藏唱片";
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Close_CD_Image.Source = new Uri(@"Resource\\Button_Image_Svg\\规范－单选－选中.svg", UriKind.Relative);
+            musicPlayer_Main_UserControl.TextBlock_Button_Close_CD.Text = "隐藏唱片";
+            musicPlayer_Main_UserControl.SvgViewbox_Button_Close_CD_Image.Source = new Uri(@"Resource\\Button_Image_Svg\\规范－单选－选中.svg", UriKind.Relative);
         }
         private void Close_Button_Album_Play_CD_Show()
         {
@@ -2129,8 +2117,8 @@ namespace NSMusicS
 
             musicPlayer_Main_UserControl.Bool_Player_Model = 1;
 
-            userControl_ButtonFrame_MusicPlayer.TextBlock_Button_Close_CD.Text = "显示唱片";
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Close_CD_Image.Source = new Uri(@"Resource\\Button_Image_Svg\\规范－单选－未选中.svg", UriKind.Relative);
+            musicPlayer_Main_UserControl.TextBlock_Button_Close_CD.Text = "显示唱片";
+            musicPlayer_Main_UserControl.SvgViewbox_Button_Close_CD_Image.Source = new Uri(@"Resource\\Button_Image_Svg\\规范－单选－未选中.svg", UriKind.Relative);
         }
 
         /// <summary>
@@ -2150,6 +2138,8 @@ namespace NSMusicS
                 Close_Button_Album_Play_CD_Show();
 
                 Close_Singer_Image_Animation();
+
+                musicPlayer_Main_UserControl.PLay_Mode_Selected_Model_Text.Text = "频谱模式";
             }
             else
             {
@@ -2160,6 +2150,8 @@ namespace NSMusicS
                     Open_Singer_Image_Animation();
                 }
             }
+
+            musicPlayer_Main_UserControl.PLay_Mode_Select_Model_Panel.Visibility = Visibility.Collapsed;
         }
         private void Open_Song_AudioSpectrogram()
         {
@@ -2169,8 +2161,14 @@ namespace NSMusicS
 
             musicPlayer_Main_UserControl.userControl_AudioVisualizer.Image_Song_Storyboard.Begin();
 
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Song_AudioSpectrogram_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－选中.svg");
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Singer_Image_Animation_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－未选中.svg");
+            musicPlayer_Main_UserControl.SvgViewbox_Button_Song_AudioSpectrogram_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－选中.svg");
+            musicPlayer_Main_UserControl.SvgViewbox_Button_Singer_Image_Animation_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－未选中.svg");
+
+            doubleAnimation = new DoubleAnimation();
+            doubleAnimation.From = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Opacity;
+            doubleAnimation.To = 0;
+            doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(200));
+            musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.BeginAnimation(UserControl.OpacityProperty, doubleAnimation);
         }
         private void Close_Song_AudioSpectrogram()
         {
@@ -2208,7 +2206,7 @@ namespace NSMusicS
                 catch { }
             }
 
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Song_AudioSpectrogram_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－未选中.svg");
+            musicPlayer_Main_UserControl.SvgViewbox_Button_Song_AudioSpectrogram_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－未选中.svg");
         }
 
         /// <summary>
@@ -2240,6 +2238,8 @@ namespace NSMusicS
                 musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Visibility = Visibility.Collapsed;
 
                 musicPlayer_Main_UserControl.Bool_Album_Storyboard = false;
+
+                musicPlayer_Main_UserControl.PLay_Mode_Selected_Model_Text.Text = "写真模式";
             }
             else
             {
@@ -2247,30 +2247,27 @@ namespace NSMusicS
 
                 //默认打开唱片模式
                 Open_Song_Album_Play();
+
+                musicPlayer_Main_UserControl.PLay_Mode_Selected_Model_Text.Text = "唱片模式";
             }
 
             Size_Changed();
+
+            musicPlayer_Main_UserControl.PLay_Mode_Select_Model_Panel.Visibility = Visibility.Collapsed;
         }
         public void Open_Singer_Image_Animation()
         {
             Change_Image_Singer();//切换歌手图片
 
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Singer_Image_Animation_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－选中.svg");
+            musicPlayer_Main_UserControl.SvgViewbox_Button_Singer_Image_Animation_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－选中.svg");
             Bool_Button_Singer_Image_Animation = true;
 
             musicPlayer_Main_UserControl.Image_Singer_Buttom.Visibility = Visibility.Visible;
-            //musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close.Visibility = Visibility.Collapsed;
 
-
-            //实例化一个DoubleAnimation类。
             doubleAnimation = new DoubleAnimation();
-            //设置From属性。
             doubleAnimation.From = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Opacity;
-            //设置To属性。
             doubleAnimation.To = 0;
-            //设置Duration属性。
             doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(200));
-            //为元素设置BeginAnimation方法。
             musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.BeginAnimation(UserControl.OpacityProperty, doubleAnimation);
         }
         private void Close_Singer_Image_Animation()
@@ -2281,7 +2278,7 @@ namespace NSMusicS
             Bool_Timer_Singer_Photo_1 = false;
             Bool_Timer_Singer_Photo_1_lot = false;
 
-            userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Singer_Image_Animation_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－未选中.svg");
+            musicPlayer_Main_UserControl.SvgViewbox_Button_Singer_Image_Animation_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－未选中.svg");
             Bool_Button_Singer_Image_Animation = false;
 
             musicPlayer_Main_UserControl.Image_Singer_Buttom.Visibility = Visibility.Visible;
@@ -2313,26 +2310,12 @@ namespace NSMusicS
                 musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Visibility = Visibility.Collapsed;
             }
 
-
             musicPlayer_Main_UserControl.Bool_Album_Storyboard = true;
 
-            //关闭桌面写真
-            //userControl_ButtonFrame_MusicPlayer.Button_Album_Animation.Visibility = Visibility.Collapsed;
-            //userControl_ButtonFrame_MusicPlayer.Button_Album_Animation_Image.Visibility = Visibility.Collapsed;
-            //SystemParametersInfo(20, 1, wallpaper_path, 1);
-            //Bool_Windows_Wallpaper = false;
-            //userControl_ButtonFrame_MusicPlayer.SvgViewbox_Button_Album_Animation_Image.Source = new Uri(Path_App + "/Button_Image_Svg/规范－单选－未选中.svg");
-
-
-            //实例化一个DoubleAnimation类。
             doubleAnimation = new DoubleAnimation();
-            //设置From属性。
             doubleAnimation.From = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Opacity;
-            //设置To属性。
             doubleAnimation.To = 1;
-            //设置Duration属性。
             doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(200));
-            //为元素设置BeginAnimation方法。
             musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.BeginAnimation(UserControl.OpacityProperty, doubleAnimation);
         }
 
@@ -7046,13 +7029,13 @@ namespace NSMusicS
                 string Song_Name_Temp = this_Song_Info.Song_Name;
 
                 //设置歌手名
-                musicPlayer_Main_UserControl.TextBox_SingerName.Text = "歌手 :  " + this_Song_Info.Singer_Name;
+                musicPlayer_Main_UserControl.TextBox_SingerName.Text = this_Song_Info.Singer_Name;
                 musicPlayer_Main_UserControl.TextBox_SingerName.TextAlignment = TextAlignment.Left;
                 //设置歌曲名
                 musicPlayer_Main_UserControl.TextBox_SongName.Text = Song_Name_Temp/*.Substring(Song_Name_Temp_Last_Num + 3)*/.Trim();
                 musicPlayer_Main_UserControl.TextBox_SongName.TextAlignment = TextAlignment.Left;
                 //设置专辑名
-                musicPlayer_Main_UserControl.TextBox_SongAlbumName.Text = "专辑 :  " + this_Song_Info.Album_Name;
+                musicPlayer_Main_UserControl.TextBox_SongAlbumName.Text = this_Song_Info.Album_Name;
                 musicPlayer_Main_UserControl.TextBox_SongAlbumName.TextAlignment = TextAlignment.Left;
                 //设置歌曲全名
                 userControl_ButtonFrame_MusicPlayer.Song_Name.Text = this_Song_Info.Singer_Name + " - " + this_Song_Info.Song_Name;
@@ -7739,6 +7722,10 @@ namespace NSMusicS
         #endregion
 
         Window_Hover_MRC_Panel window_Hover_MRC_Panel;
+        Color color_Desktop_Lyic_Color = (Color)ColorConverter.ConvertFromString("#FF00FFA2");
+        int font_size_Desktop_Lyic = 22;
+        Color color_Window_Lyic_Color = (Color)ColorConverter.ConvertFromString("#FF00FFA2");
+        int font_size_Window_Lyic = 36;
         #region 歌词行同步动画
         DispatcherTimer DispatcherTimer_MRC;
         TimeSpan MRC_Span;
@@ -8056,13 +8043,14 @@ namespace NSMusicS
                                             #region 1111111
                                             UserControl_Mrc_Byte mrc_Byte_ = new UserControl_Mrc_Byte();
                                             //设置文本
-                                            mrc_Byte_.TextBlock_1.FontSize = 22;//34
+                                            mrc_Byte_.TextBlock_1.FontSize = font_size_Desktop_Lyic;//34
                                             mrc_Byte_.TextBlock_1.FontWeight = FontWeights.Black;
                                             mrc_Byte_.TextBlock_1.Text = dao_ListBox_Temp_MRC.mrc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].
                                                 Array_Morebyte_Text[i].ToString();
                                             /*GradientStop gradientStop = (GradientStop)mrc_Byte_.TextBlock_1.FindName("GradientStop_Background");
                                             gradientStop.Color = Colors.White;*/
                                             mrc_Byte_.TextBlock_1.Effect = null;
+                                            mrc_Byte_.GradientStop_Lyic_Color.Color = color_Desktop_Lyic_Color;
 
                                             //设置动画
                                             Storyboard storyboard = (Storyboard)mrc_Byte_.TextBlock_1.FindName("Text_Storyboard");
@@ -8095,6 +8083,8 @@ namespace NSMusicS
                                             mrc_Byte_desk.TextBlock_1.FontSize = window_Hover_MRC_Panel.TextBlock_1.FontSize;
                                             mrc_Byte_desk.TextBlock_1.Text = dao_ListBox_Temp_MRC.mrc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].
                                                 Array_Morebyte_Text[i].ToString();
+                                            mrc_Byte_desk.FontSize = font_size_Window_Lyic;
+                                            mrc_Byte_desk.GradientStop_Lyic_Color.Color = color_Window_Lyic_Color;
 
                                             //设置动画
                                             Storyboard storyboard_desk = (Storyboard)mrc_Byte_desk.TextBlock_1.FindName("Text_Storyboard");
@@ -8133,6 +8123,8 @@ namespace NSMusicS
                                         {
                                             if (stackPanel_Byte_Lyic != null)
                                             {
+                                                window_Hover_MRC_Panel.TextBlock_2.FontSize = font_size_Window_Lyic;
+
                                                 BindAnimationCompleted(stackPanel_Byte_Lyic.Children);
 
                                                 BindAnimationCompleted_Desk(window_Hover_MRC_Panel.StackPanel_Lyic.Children);

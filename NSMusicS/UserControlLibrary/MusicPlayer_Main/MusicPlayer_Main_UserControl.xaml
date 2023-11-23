@@ -432,6 +432,112 @@
                 >
                     <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/关闭.svg"/>
                 </Border>
+
+                <Border 
+                    x:Name="PLay_Mode_Select_Model_Panel" Visibility="Collapsed"
+                    CornerRadius="10" Background="#19FFFFFF" BorderBrush="#33FFFFFF" BorderThickness="1"
+                    Width="120" Height="116" Margin="0,60,156,0"
+                    HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal" Margin="1,1,0,0">
+                            <Border
+                                x:Name="Button_Album_Animation"
+                                HorizontalAlignment="Left" CornerRadius="8"
+                                BorderBrush="#33FFFFFF" BorderThickness="1"
+                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                                Width="90" Height="27" VerticalAlignment="Center" >
+                                <TextBlock Height="17" Width="56" 
+                                    Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                    Text="唱片模式" FontSize="13" FontWeight="Bold" />
+                            </Border>
+                            <Button x:Name="Button_Album_Animation_Image"
+                                Style="{StaticResource MyButton}" 
+                                Width="30" Height="16" HorizontalAlignment="Left" VerticalAlignment="Center" >
+                                <svgc:SvgViewbox  x:Name="SvgViewbox_Button_Album_Animation_Image" 
+                                    Source="pack://application:,,,/UI_0_Library/规范－单选－选中.svg"/>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="1,1,0,0">
+                            <Border
+                                x:Name="Button_Close_CD"
+                                HorizontalAlignment="Left" CornerRadius="8"
+                                BorderBrush="#33FFFFFF" BorderThickness="1"
+                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                                Width="90" Height="27" VerticalAlignment="Center" >
+                                <TextBlock Height="17" Width="56" 
+                                    x:Name="TextBlock_Button_Close_CD"
+                                    Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                    Text="隐藏唱片" FontSize="13" FontWeight="Bold" />
+                            </Border>
+                            <Button x:Name="Button_Close_CD_Image"
+                                Style="{StaticResource MyButton}" 
+                                BorderBrush="{x:Null}" 
+                                Width="30" Height="16" HorizontalAlignment="Left" VerticalAlignment="Center" >
+                                <svgc:SvgViewbox 
+                                    x:Name="SvgViewbox_Button_Close_CD_Image"
+                                    Source="pack://application:,,,/UI_0_Library/规范－单选－未选中.svg"/>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="1,1,0,0">
+                            <Border
+                                x:Name="Button_Singer_Image_Animation"
+                                HorizontalAlignment="Left" CornerRadius="8"
+                                BorderBrush="#33FFFFFF" BorderThickness="1"
+                                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                                Width="90" Height="27" VerticalAlignment="Center" >
+                                <TextBlock Height="17" Width="56" 
+                                    Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                    Text="写真模式" FontSize="13" FontWeight="Bold" />
+                            </Border>
+                            <Button x:Name="Button_Singer_Image_Animation_Image"
+                                Style="{StaticResource MyButton}" 
+                                Margin="0,0,0,0" 
+                                Width="30" Height="16" HorizontalAlignment="Left" VerticalAlignment="Center" >
+                                <svgc:SvgViewbox 
+                                    x:Name="SvgViewbox_Button_Singer_Image_Animation_Image"
+                                    Source="pack://application:,,,/UI_0_Library/规范－单选－未选中.svg"/>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="1,1,0,0">
+                            <Border
+                                 x:Name="Button_Song_AudioSpectrogram"
+                                 HorizontalAlignment="Left" CornerRadius="8"
+                                 BorderBrush="#33FFFFFF" BorderThickness="1"
+                                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                                 Width="90" Height="27" VerticalAlignment="Center">
+                                <TextBlock Height="17" Width="56" 
+                           Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                           Text="频谱模式" FontSize="13" FontWeight="Bold" />
+                            </Border>
+                            <Button x:Name="Button_Song_AudioSpectrogram_Image" 
+                                 Style="{StaticResource MyButton}" 
+                                 Width="30" Height="16" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                <svgc:SvgViewbox 
+                                     x:Name="SvgViewbox_Button_Song_AudioSpectrogram_Image" 
+                                     Source="pack://application:,,,/UI_0_Library/规范－单选－未选中.svg"/>
+                            </Button>
+
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Border 
+                    x:Name="PLay_Mode_Selected_Model"
+                    Width="120" Height="36" Margin="0,21,156,0" 
+                    Background="#19FFFFFF" BorderBrush="#33FFFFFF" BorderThickness="1" CornerRadius="10"
+                    HorizontalAlignment="Right" VerticalAlignment="Top" >
+                    <StackPanel Orientation="Horizontal">
+                        <Border 
+                            Width="16" Height="16" Margin="16,-2,0,0"
+                            HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/下02.svg" Cursor=""/>
+                        </Border>
+                        <TextBlock 
+                        x:Name="PLay_Mode_Selected_Model_Text"
+                        Text="唱片模式" Margin="8,0,0,0" 
+                        FontSize="13" Foreground="#FFFFFF" FontWeight="Bold"
+                        VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Border>
             </Grid>
         </Grid>
 

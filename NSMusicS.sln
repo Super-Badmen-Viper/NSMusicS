@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Blend for Visual Studio Version 17
+# Visual Studio Version 17
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_Lottie_Begin", "NSMusicS_Lottie_Begin\NSMusicS_Lottie_Begin.csproj", "{19D03D86-0909-4788-A31A-2976A68D73B3}"

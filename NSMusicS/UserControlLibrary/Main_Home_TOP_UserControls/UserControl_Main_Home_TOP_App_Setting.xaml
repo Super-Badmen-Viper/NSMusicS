@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:UserControls_App_Setting="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_TOP_UserControls.UserControls_App_Setting"
              xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.Main_Home_TOP_UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="643" d:DesignWidth="810"
@@ -12,24 +13,21 @@
     <Grid>
         <Grid HorizontalAlignment="Left" Width="182">
             <TextBlock 
-        HorizontalAlignment="Left" Height="50" Text="设置" TextWrapping="Wrap" 
-        VerticalAlignment="Top" Width="210" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
-        UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-        Foreground="White"               
-        >
+                HorizontalAlignment="Left" Height="50" Text="设置" TextWrapping="Wrap" 
+                VerticalAlignment="Top" FontSize="32" FontWeight="Bold" Margin="41,10,0,0"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+                Foreground="White">
                 <TextBlock.Effect>
                     <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
                 </TextBlock.Effect>
             </TextBlock>
 
             <Border 
-
+                
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Width="130" Height="30" Margin="40,60,0,0"
-                BorderThickness="1" BorderBrush="White" CornerRadius="10"
-                >
+                BorderThickness="1" BorderBrush="White" CornerRadius="10">
                 <StackPanel Orientation="Horizontal">
-                    
                     <TextBlock VerticalAlignment="Center"
                         Text="搜索设置项" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
                         />
@@ -43,250 +41,142 @@
             </Border>
 
             <Border 
-            
-            HorizontalAlignment="Left" VerticalAlignment="Top" 
-            Width="160" Height="30" Margin="40,100,0,0"
-            BorderThickness="0" CornerRadius="10"
-            >
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock 
-                    HorizontalAlignment="Left" VerticalAlignment="Center"
-                    Width="18" Height="18" Margin="2,0,0,0"
-                    >
-                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/设置.svg"/>
-                    </TextBlock>
-                    <TextBlock VerticalAlignment="Center"
-                    Text="常规设置" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
-                />
-                </StackPanel>
-            </Border>
-            <Border 
-    
-            HorizontalAlignment="Left" VerticalAlignment="Top" 
-            Width="160" Height="30" Margin="40,140,0,0"
-            BorderThickness="0" CornerRadius="10"
-            >
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock 
-            HorizontalAlignment="Left" VerticalAlignment="Center"
-            Width="18" Height="18" Margin="2,0,0,0"
-            >
-            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/下载.svg"/>
-                    </TextBlock>
-                    <TextBlock VerticalAlignment="Center"
-            Text="下载与缓存" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
-        />
-                </StackPanel>
-            </Border>
-            <Border 
-    
-    HorizontalAlignment="Left" VerticalAlignment="Top" 
-    Width="160" Height="30" Margin="40,180,0,0"
-    BorderThickness="0" CornerRadius="10"
-    >
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock 
-            HorizontalAlignment="Left" VerticalAlignment="Center"
-            Width="18" Height="18" Margin="2,0,0,0"
-            >
-            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/热键.svg"/>
-                    </TextBlock>
-                    <TextBlock VerticalAlignment="Center"
-            Text="热键设置" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
-        />
-                </StackPanel>
-            </Border>
-            <Border 
-    
-    HorizontalAlignment="Left" VerticalAlignment="Top" 
-    Width="160" Height="30" Margin="40,220,0,0"
-    BorderThickness="0" CornerRadius="10"
-    >
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock 
-            HorizontalAlignment="Left" VerticalAlignment="Center"
-            Width="18" Height="18" Margin="2,0,0,0"
-            >
-            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/窗口歌词.svg"/>
-                    </TextBlock>
-                    <TextBlock VerticalAlignment="Center"
-            Text="桌面歌词" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
-        />
-                </StackPanel>
-            </Border>
-            <Border 
-    
-    HorizontalAlignment="Left" VerticalAlignment="Top" 
-    Width="160" Height="30" Margin="40,260,0,0"
-    BorderThickness="0" CornerRadius="10"
-    >
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock 
-            HorizontalAlignment="Left" VerticalAlignment="Center"
-            Width="18" Height="18" Margin="2,0,0,0"
-            >
-            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/窗口歌词.svg"/>
-                    </TextBlock>
-                    <TextBlock VerticalAlignment="Center"
-            Text="窗口歌词" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
-        />
-                </StackPanel>
-            </Border>
-            <Border 
-    
-    HorizontalAlignment="Left" VerticalAlignment="Top" 
-    Width="160" Height="30" Margin="40,300,0,0"
-    BorderThickness="0" CornerRadius="10"
-    >
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock 
-            HorizontalAlignment="Left" VerticalAlignment="Center"
-            Width="18" Height="18" Margin="2,0,0,0"
-            >
-            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/音波,音频.svg"/>
-                    </TextBlock>
-                    <TextBlock VerticalAlignment="Center"
-            Text="音频设置" Foreground="White" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
-        />
-                </StackPanel>
-            </Border>
-            <Border 
-    
+                x:Name="Select_Set_Panel_For_Set_1_Normal_Set"
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Width="160" Height="30" Margin="40,340,0,0"
+                Width="120" Height="30" Margin="40,100,0,0"
                 BorderThickness="0" CornerRadius="10"
-                >
+                MouseLeftButtonDown="Select_Set_Panel_For_Set_1_Normal_Set_MouseLeftButtonDown">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock 
-            HorizontalAlignment="Left" VerticalAlignment="Center"
-            Width="18" Height="18" Margin="2,0,0,0"
-            >
-            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/网络.svg"/>
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Width="18" Height="18" Margin="2,0,0,0">
+                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/设置.svg"/>
                     </TextBlock>
                     <TextBlock VerticalAlignment="Center"
-            Text="网络设置" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
-        />
+                        Text="常规设置" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"/>
+                </StackPanel>
+            </Border>
+            <Border 
+                x:Name="Select_Set_Panel_For_Set_2_Download_And_Caching"
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="120" Height="30" Margin="40,140,0,0"
+                BorderThickness="0" CornerRadius="10"
+                MouseLeftButtonDown="Select_Set_Panel_For_Set_2_Download_And_Caching_MouseLeftButtonDown">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock 
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Width="18" Height="18" Margin="2,0,0,0">
+                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/下载.svg"/>
+                    </TextBlock>
+                    <TextBlock VerticalAlignment="Center"
+                        Text="下载与缓存" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"/>
+                </StackPanel>
+            </Border>
+            <Border 
+                x:Name="Select_Set_Panel_For_Set_3_Hot_Keys"
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="120" Height="30" Margin="40,180,0,0"
+                BorderThickness="0" CornerRadius="10"
+                MouseLeftButtonDown="Select_Set_Panel_For_Set_3_Hot_Keys_MouseLeftButtonDown">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock 
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Width="18" Height="18" Margin="2,0,0,0">
+                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/热键.svg"/>
+                    </TextBlock>
+                    <TextBlock VerticalAlignment="Center"
+                        Text="热键设置" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"/>
+                </StackPanel>
+            </Border>
+            <Border 
+                x:Name="Select_Set_Panel_For_Set_4_Player_Lyic"
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="120" Height="30" Margin="40,220,0,0"
+                BorderThickness="0" CornerRadius="10" 
+                MouseLeftButtonDown="Select_Set_Panel_For_Set_4_Player_Lyic_MouseLeftButtonDown">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock 
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Width="18" Height="18" Margin="2,0,0,0">
+                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/窗口歌词.svg"/>
+                    </TextBlock>
+                    <TextBlock VerticalAlignment="Center"
+                        Text="播放歌词" Foreground="White" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"/>
+                </StackPanel>
+            </Border>
+            <Border 
+                x:Name="Select_Set_Panel_For_Set_5_Window_Lyic"
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="120" Height="30" Margin="40,260,0,0"
+                BorderThickness="0" CornerRadius="10"
+                MouseLeftButtonDown="Select_Set_Panel_For_Set_5_Window_Lyic_MouseLeftButtonDown">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock 
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Width="18" Height="18" Margin="2,0,0,0">
+                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/窗口歌词.svg"/>
+                    </TextBlock>
+                    <TextBlock VerticalAlignment="Center"
+                        Text="桌面歌词" Foreground="White" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"/>
+                </StackPanel>
+            </Border>
+            <Border 
+                x:Name="Select_Set_Panel_For_Set_6_Audio"
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="120" Height="30" Margin="40,300,0,0"
+                BorderThickness="0" CornerRadius="10"
+                MouseLeftButtonDown="Select_Set_Panel_For_Set_6_Audio_MouseLeftButtonDown">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock 
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Width="18" Height="18" Margin="2,0,0,0">
+                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/音波,音频.svg"/>
+                    </TextBlock>
+                    <TextBlock VerticalAlignment="Center"
+                        Text="音频设置" Foreground="White" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"/>
+                </StackPanel>
+            </Border>
+            <Border 
+                x:Name="Select_Set_Panel_For_Set_7_Web"
+                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="120" Height="30" Margin="40,340,0,0"
+                BorderThickness="0" CornerRadius="10"
+                MouseLeftButtonDown="Select_Set_Panel_For_Set_7_Web_MouseLeftButtonDown">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock 
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Width="18" Height="18" Margin="2,0,0,0">
+                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/网络.svg"/>
+                    </TextBlock>
+                    <TextBlock VerticalAlignment="Center"
+                        Text="网络设置" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"/>
                 </StackPanel>
             </Border>
         </Grid>
         <Grid Margin="182,0,0,0">
             <Border BorderBrush="#44FFFFFF" BorderThickness="1,0,0,0" Margin="0,20,0,20"/>
             <Grid Margin="10,0,0,0">
-                <TextBlock 
-                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,14,0,0"
-                    Text="设备设置：" Foreground="White" FontSize="22" FontWeight="Bold"
+                <UserControls_App_Setting:UserControl_Set_1_Normal_Set
+                    x:Name="userControl_Set_1_Normal_Set" Visibility="Collapsed"
                     />
-                <Border 
-                    HorizontalAlignment="Left" VerticalAlignment="Top" 
-                    Height="30" Margin="0,60,0,0"
-                    BorderThickness="0" CornerRadius="10"
-                    >
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center"
-                            Text="音频输出" Foreground="White" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
-                        />
-                        <ComboBox 
-                            x:Name="ComBox_Select_WaveOut" Width="160"
-                            SelectedIndex="0"
-                            IsEditable="False" Margin="10,0,0,0"
-                            >
-                            <ComboBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <VirtualizingStackPanel/>
-                                </ItemsPanelTemplate>
-                            </ComboBox.ItemsPanel>
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="2.5" Text="{Binding Name}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <Button 
-                            x:Name="Button_Resert_WaveOut"
-                            Margin="10,0,0,0" Padding="10,0,10,0" Content="重置"
-                            />
-                        <TextBlock VerticalAlignment="Center"
-                            Text="请勿在使用MZMusic时，通过其它方式更换系统播放设备" Foreground="White" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
-                            />
-                    </StackPanel>
-                </Border>
-                <Border 
-                    HorizontalAlignment="Left" VerticalAlignment="Top" 
-                    Width="260" Height="30" Margin="0,100,0,0"
-                    BorderThickness="0" CornerRadius="10"
-                    >
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center"
-                            Text="视频渲染" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
-                            />
-                        <ComboBox 
-                            x:Name="ComBox_Select_Video_EleMentOut" Width="160"
-                            SelectedIndex="0"
-                            IsEditable="False" Margin="10,0,0,0"
-                            >
-                            <ComboBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <VirtualizingStackPanel/>
-                                </ItemsPanelTemplate>
-                            </ComboBox.ItemsPanel>
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="2.5" Text="{Binding Name}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </StackPanel>
-                </Border>
-                <Border 
-                    HorizontalAlignment="Left" VerticalAlignment="Top" 
-                    Width="260" Height="30" Margin="0,140,0,0"
-                    BorderThickness="0" CornerRadius="10"
-                    >
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center"
-                            Text="硬件加速" Foreground="#44FFFFFF" FontSize="14" HorizontalAlignment="Left" Margin="8,0,0,0"
-                            />
-                        <ComboBox 
-                            x:Name="ComBox_Select_Hardware_Acceleration" Width="160"
-                            SelectedIndex="0"
-                            IsEditable="False" Margin="10,0,0,0"
-                            >
-                            <ComboBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <VirtualizingStackPanel/>
-                                </ItemsPanelTemplate>
-                            </ComboBox.ItemsPanel>
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Margin="2.5" Text="{Binding Name}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </StackPanel>
-                </Border>
-
-                <Border BorderBrush="#44FFFFFF" BorderThickness="0,0,0,1" VerticalAlignment="Top" Margin="0,180,200,0"/>
-                
-                <TextBlock 
-                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,194,0,0"
-                    Text="音效设置：" Foreground="White" FontSize="22" FontWeight="Bold"
+                <UserControls_App_Setting:UserControl_Set_2_Download_And_Caching
+                    x:Name="userControl_Set_2_Download_And_Caching" Visibility="Collapsed"
                     />
-                <Border 
-                    x:Name="Button_Open_EQ"
-                    Width="60" Height="30"
-                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,240,0,0"
-                    BorderThickness="1" BorderBrush="White" CornerRadius="10"
-                        >
-                    <TextBlock 
-                        HorizontalAlignment="Center" VerticalAlignment="Center"
-                        Text="均衡器" Foreground="White" FontSize="14" />
-                </Border>
+                <UserControls_App_Setting:UserControl_Set_3_Hot_Keys
+                    x:Name="userControl_Set_3_Hot_Keys" Visibility="Collapsed"
+                    />
+                <UserControls_App_Setting:UserControl_Set_4_Player_Lyic
+                    x:Name="userControl_Set_4_Player_Lyic" Visibility="Collapsed"
+                    />
+                <UserControls_App_Setting:UserControl_Set_5_Window_Lyic
+                    x:Name="userControl_Set_5_Window_Lyic" Visibility="Collapsed"
+                    />
+                <UserControls_App_Setting:UserControl_Set_6_Audio
+                    x:Name="userControl_Set_6_Audio"
+                    />
+                <UserControls_App_Setting:UserControl_Set_7_Web
+                    x:Name="userControl_Set_7_Web" Visibility="Collapsed"
+                    />
             </Grid>
         </Grid>
     </Grid>
