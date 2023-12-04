@@ -77,7 +77,7 @@ namespace NSMusicS
             ProcessManager.GetProcessLock();
 
             //禁用
-            userControl_ButtonFrame_TopPanel.Model_3.IsEnabled = false;
+            userControl_ButtonFrame_TopPanel.Model_3.IsEnabled = true;
             userControl_ButtonFrame_TopPanel.Model_4.IsEnabled = false;
             userControl_ButtonFrame_TopPanel.Model_5.IsEnabled = false;
             musicPlayer_Model_2_Album_UserControl.Stack_Button_LotSelects_Sort.Visibility = Visibility.Collapsed;
@@ -212,6 +212,9 @@ namespace NSMusicS
             dispatcherTimer_memory.Tick += DispatcherTimer_memory_Tick;
             dispatcherTimer_memory.Interval = new TimeSpan(0,0,0,30);
             dispatcherTimer_memory.Start();
+
+            //加载一次界面大小适配
+            Size_Changed();
 
             #endregion
 
@@ -351,7 +354,7 @@ namespace NSMusicS
             //模式切换设置
             userControl_ButtonFrame_TopPanel.Model_1.MouseLeftButtonDown += Switch_To_Single_Mode_Click;
             userControl_ButtonFrame_TopPanel.Model_2.MouseLeftButtonDown += Switch_To_Album_Mode_Click;
-            userControl_ButtonFrame_TopPanel.Model_4.MouseLeftButtonDown += Switch_To_Web_Model_4_MouseLeftButtonDown;//联网模式
+            userControl_ButtonFrame_TopPanel.Model_3.MouseLeftButtonDown += Switch_To_Web_Model_4_MouseLeftButtonDown;//联网模式
             userControl_ButtonFrame_TopPanel.Model_5.MouseLeftButtonDown += Switch_To_NAS_Model_5_MouseLeftButtonDown;
 
             //App 设置
@@ -916,7 +919,7 @@ namespace NSMusicS
             userControl_ButtonFrame_MusicPlayer.SvgViewbox_Open_EQ_Right.MouseLeftButtonDown += Button_Window_Hover_EQ_Panel;
             //
 
-            userControl_ButtonFrame_TopPanel.Model_3.MouseLeftButtonDown += Button_Edit_ALL_SongInfo_MouseLeftButtonDown;
+            userControl_ButtonFrame_TopPanel.Model_4.MouseLeftButtonDown += Button_Edit_ALL_SongInfo_MouseLeftButtonDown;
 
             //切换歌手显示界面
             musicPlayer_Model_2_Album_UserControl.Button_Show_big2_Singer_List_Model_2.MouseLeftButtonDown += Button_Show_big2_Singer_List_Model_2_MouseLeftButtonDown;
@@ -1651,7 +1654,7 @@ namespace NSMusicS
                 userControl_ButtonFrame_MusicPlayer.TextBox_Song_Time_Temp.Visibility = Visibility.Visible;
                 userControl_ButtonFrame_MusicPlayer.TextBox_Song_Album_Name.Visibility = Visibility.Collapsed;
 
-                if (musicPlayer_Main_UserControl.Bool_Player_Model == 0 && musicPlayer_Main_UserControl.Bool_Album_Storyboard == true)
+                if (musicPlayer_Main_UserControl.Bool_Player_Model == 0 /*&& musicPlayer_Main_UserControl.Bool_Album_Storyboard == true*/)
                 {
                     musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin = new Thickness(640 + (this.Width - 1140) / 2, 55, 0, 145);
                     musicPlayer_Main_UserControl.TextBox_ListViewMRC_Up.Margin = new Thickness(640 + (this.Width - 1140) / 2, 55, 0, 145);
@@ -1704,7 +1707,7 @@ namespace NSMusicS
                     musicPlayer_Main_UserControl.TextBox_ListViewMRC_Up.Width = this.Width / 1020 * 600;
                     //musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.Width = this.Width / 1020 * 800;
                 }
-                if (musicPlayer_Main_UserControl.Bool_Player_Model == 0 && musicPlayer_Main_UserControl.Bool_Album_Storyboard == true)
+                if (musicPlayer_Main_UserControl.Bool_Player_Model == 0 /*&& musicPlayer_Main_UserControl.Bool_Album_Storyboard == true*/)
                 {
                     musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin = new Thickness(640 + (this.Width - 1140) / 2, 55, 0, 145);
                     musicPlayer_Main_UserControl.TextBox_ListViewMRC_Up.Margin = new Thickness(640 + (this.Width - 1140) / 2, 55, 0, 145);
@@ -1806,7 +1809,7 @@ namespace NSMusicS
                     musicPlayer_Main_UserControl.TextBox_ListViewMRC_Up.Width = this.Width / 1020 * 600;
                     //musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.Width = this.Width / 1020 * 800;
                 }
-                if (musicPlayer_Main_UserControl.Bool_Player_Model == 0 && musicPlayer_Main_UserControl.Bool_Album_Storyboard == true)
+                if (musicPlayer_Main_UserControl.Bool_Player_Model == 0 /*&& musicPlayer_Main_UserControl.Bool_Album_Storyboard == true*/)
                 {
                     musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin = new Thickness(640 + (this.Width - 1140) / 2, 55, 0, 145);
                     musicPlayer_Main_UserControl.TextBox_ListViewMRC_Up.Margin = new Thickness(640 + (this.Width - 1140) / 2, 55, 0, 145);
@@ -3835,7 +3838,7 @@ namespace NSMusicS
                     //musicPlayer_Main_UserControl.ListView_Temp_MRC_Temp.Width = this.Width / 1020 * 800;
                 }
 
-                if (musicPlayer_Main_UserControl.Bool_Player_Model == 0 && musicPlayer_Main_UserControl.Bool_Album_Storyboard == true)
+                if (musicPlayer_Main_UserControl.Bool_Player_Model == 0 /*&& musicPlayer_Main_UserControl.Bool_Album_Storyboard == true*/)
                 {
                     musicPlayer_Main_UserControl.ListView_Temp_MRC.Margin = new Thickness(640 + (this.Width - 1140) / 2, 55, 0, 145);
                     musicPlayer_Main_UserControl.TextBox_ListViewMRC_Up.Margin = new Thickness(640 + (this.Width - 1140) / 2, 55, 0, 145);

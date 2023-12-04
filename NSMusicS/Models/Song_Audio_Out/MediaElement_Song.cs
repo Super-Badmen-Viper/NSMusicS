@@ -156,7 +156,6 @@ namespace NSMusicS.Models.Song_Audio_Out
 
             //选择编码器
             if (audioFilePath.IndexOf("http") < 0) {
-
                 try
                 {
                     //尝试使用Naudio 或者Naduio + cscore_FFmpeg混流(无损flac)

@@ -1,0 +1,23 @@
+{
+  "name": "nsmusics_for_server_nodejs",
+  "version": "1.0.0",
+  "description": "九歌_个人音乐资源映射_服务器端(开源版)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Super-Badmen-Viper/NSMusicS.git"
+  },
+  "author": "Xiang Cheng",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Super-Badmen-Viper/NSMusicS/issues"
+  },
+  "homepage": "https://github.com/Super-Badmen-Viper/NSMusicS#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1"
+  }
+}

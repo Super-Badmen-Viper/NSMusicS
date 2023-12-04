@@ -21,10 +21,15 @@
 | 项目 | 开发状态 | 技术框架 | 作者/版权所有者 | 操作系统 | 许可证 | 软件定位 |
 | :----- | ----: | ----: | ----: | :----: | :----: | :----: |
 | [NSMusicS](https://github.com/Super-Badmen-Viper/NSMusicS) |<font color="#00dd00">(已完成): 更新中</font>| .NET WPF C# | Xiang Cheng | (Windows10++) | A-GPL 3.0 | 开源 + 商业 |
+| [NSMusicS_For_Knowledge_Graph](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">更新中</font>|  NebulaGraph / Neo4j / Spark | Xiang Cheng   | (Windows10++/Linux)  | A-GPL 3.0 | Open source + Commercial | 
 | [NSMusicS_For_Flutter](https://github.com/Super-Badmen-Viper/NSMusicS/tree/main/NSMusicS_For_Flutter/nsmusics_for_flutter) |<font color=Yellow>(开发中)</font><font color="#00dd00">: 更新中</font> | Flutter Dart | Xiang Cheng | (Windows10++, Linux(ubuntu+, 群晖Nas+Docker), MacOS, Android11++, IOS) | A-GPL 3.0 | 开源 + 商业 |
 | [MZMusic](https://github.com/MZMusic/MZMusic) |<font color=Red>未开始</font> | Electron+Vue3 | MZMusic Team | (Windows, Linux, MacOS...) | Apache License 2.0 | 开源 |
 
+
 # 开发企划
+
+ - ## 在完成以下任何规划和开发后，除NSMusicS（WPF）外，已完成的项目将分离为独立的开源项目
+
  - ## NSMusicS 
     - 1.(Windows) (专业级)音乐播放器++
     - 2.NAS上数千万首歌曲级别的音乐库管理
@@ -37,6 +42,9 @@
       6. 实现NSMusicS唱吧打分评测等功能
     - 4.Windows音乐IDE，类似于Adobe Audition
 
+ - ## NSMusicS_For_Knowledge_Graph
+    - 1.知识图谱+机器学习 -> 九歌
+
  - ## NSMusicS For Flutter
     - Flutter版本将是一个纯粹的音乐播放器
     - Flutter支持全平台的使用，(Windows10++, Linux(ubuntu+, 群晖Nas+Docker), MacOS, Android11++, IOS) 
@@ -44,9 +52,9 @@
       - 但是，它没有：
         1. 类似于Adobe Audition的Windows音乐IDE
     
-
  - ## MZMusic
     - ## unknown
+
 
 # 界面预览：
   <table>

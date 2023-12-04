@@ -20,10 +20,14 @@
 | Project   | Development status | Technology Framework     | Author/Copyright Owner | Operating systems         | LICENSE          |  Software positioning |
 | :-----    | ----:              | ----:                    | ----:             | :----:                    | :----:                    | :----:                    |
 | [NSMusicS](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">(complete): updateing</font>| .NET WPF C#           | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++)             | A-GPL 3.0 | Open source + Commercial | 
+| [NSMusicS_For_Knowledge_Graph](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">(complete): updateing</font>|  NebulaGraph / Neo4j / Spark       | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++/Linux)             | A-GPL 3.0 | Open source + Commercial | 
 | [NSMusicS_For_Flutter](https://github.com/Super-Badmen-Viper/NSMusicS/tree/main/NSMusicS_For_Flutter/nsmusics_for_flutter)   |<font color=Yellow>(under development)</font><font color="#00dd00">: updateing</font>    | Flutter Dart          | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++,Linux(ubuntu+,群晖Nas+Docker),MacOS,Android11++,IOS) | A-GPL 3.0 | Open source + Commercial | 
 | [MZMusic](https://github.com/MZMusic/MZMusic)   |<font color=Red>Not started</font>             | Electron+Vue3         | [MZMusic Team](https://github.com/MZMusic)  | (win,linux,macos...)      | Apache License 2.0 | Open source | 
+ 
 
 # Development Plan
+ - ## After the completion of any of the following planning and development, except for NSMusicS (WPF), the completed projects will be separated into independent open source projects
+
  - ## NSMusicS
     - 1.(Windows) (Professional) MusicPlayer++
     - 2.Tens of Millions-song Level of Music Library Management on NAS
@@ -35,6 +39,8 @@
       4. AI music notation module based on nlp (also open source as a separate project model)
       5. AI extraction of audio lyrics synchronization information based on nlp (breaking copyright barriers such as Krc and Qrc)
       6. Implement functions such as NSMusicS singing bar scoring and evaluation
+ - ## NSMusicS_For_Knowledge_Graph
+    - 1.Knowledge Graph+Machine Learning In NSMusicS
 
  - ## NSMusicS For Flutter
     - The Flutter version will serve as a dedicated music player.
