@@ -35,12 +35,10 @@ namespace NSMusicS_For_Knowledge_Graph
             Init_Find_CloudMusicInfo_In_KG();
 
             Init_Run_Cypher_In_Neo4jAsync();
-
-            Console.WriteLine();
         }
 
-        private string web_url = "";//输入neteasecloudmusicapi网易云API地址
-        ViewModule_Search_Singer_ALL_Info vs_singer_info;
+        private string web_url = "";//输入neteasecloudmusicapi网易云API地址 music.liyp.cc/api
+        ViewModule_Search_Singer_ALL_Info vs_singer_info; 
         public async Task Init_Run_Cypher_In_Neo4jAsync()
         {
             int num_s = 0;
@@ -107,12 +105,10 @@ namespace NSMusicS_For_Knowledge_Graph
 
             /// 6.生成Cypher语句，写入到txt中
             Create_Cypher_To_Neo4j_Line();
-
-            MessageBox.Show("爬取API数据并生成Cypher成功，已写入运行路径：output.txt");
         }
         public void Find_1_For_Singer_Basic_Info()
         {
-            string apiUrl = web_url + "/top/artists?offset=0&limit=2";// 5个歌手
+            string apiUrl = web_url + "/top/artists?offset=0&limit=1";// 5个歌手
             using (HttpClient client = new HttpClient())
             {
                 using (HttpResponseMessage response = client.GetAsync(apiUrl).Result)
@@ -279,7 +275,6 @@ namespace NSMusicS_For_Knowledge_Graph
                                     JObject record_0 = (JObject)recordsArray[0];
                                     recordsArray.Clear();
                                     recordsArray.Add(record_0);
-
                                     if (recordsArray != null && recordsArray.Count > 0)
                                     {
                                         foreach (JObject record in recordsArray)
@@ -304,16 +299,14 @@ namespace NSMusicS_For_Knowledge_Graph
                                             else
                                             {
                                                 /// 检查专辑id是否重复，去重
-                                                for (int p = 0; p < vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums.Count; p++)
-                                                {
-                                                    /// 若该专辑id 不在热歌列表内，则不添加
-                                                    if (vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums[p].al_id.Equals(ms.al_id))
-                                                        break;
+                                                var result = from album in vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums
+                                                             where album.al_id == ms.al_id
+                                                             select album;
 
-                                                    if (p == vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums.Count - 1)
-                                                    {
-                                                        vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums.Add(ms);
-                                                    }
+                                                // Check if the result contains any items
+                                                if (!result.Any())
+                                                {
+                                                    vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums.Add(ms);
                                                 }
                                             }
                                         }
@@ -408,7 +401,7 @@ namespace NSMusicS_For_Knowledge_Graph
 
                     lines.Add("MERGE (p" + p + ":hotSongs_" + this_ar_id + ")"
                         +" MERGE (p" +(p + 1) + ":Song_"+ id + " {id: '"+ id + "', name: '"+ name + "', dt: '"+ dt + "', mv: '"+ mv + "'})"
-                        +" CREATE (p" + p + ")-[:该歌手所有热歌中包括]->(p" +(p + 1) + ")");
+                        +" MERGE (p" + p + ")-[:该歌手所有热歌中包括]->(p" +(p + 1) + ")");
                     p += 2;
 
                     /// 2.添加该热歌的专辑，并将此专辑与热歌 绑定 指向关系
@@ -419,15 +412,17 @@ namespace NSMusicS_For_Knowledge_Graph
                     foreach (var album in result)
                     {
                         /// alia先空着,  写入\"防止 Cypher出现识别''错误
-                        lines.Add("Create (:al_"+ al_id + " {id:'"+ al_id + "',name:\"" + album.al_name+ "\",alia:['null'],picUrl:'" + album.al_picUrl + "'})"
-                        +" MERGE (p" + p + ":al_"+ this_ar_id + ")"
+                        lines.Add(" MERGE (p" + p + ":al_"+ al_id + " {id:'"+ al_id + "'}) SET p" + p + ".name = \"" + album.al_name + "\",p" + p + ".alia = ['null'],p" + p + ".picUrl = '" + album.al_picUrl + "'");
+                        p += 2;
+
+                        lines.Add(" MERGE (p" + p + ":al_"+ this_ar_id + ")"
                         +" MERGE (p" + (p + 1) + ": al_"+ al_id + ")"
-                        +" CREATE(p" + p + ") - [:该歌手所有专辑中包括]->(p" + (p + 1) + ")");
+                        + " MERGE(p" + p + ") - [:该歌手所有专辑中包括]->(p" + (p + 1) + ")");
                         p += 2;
 
                         lines.Add("MERGE (p" + p + ":al_"+ al_id + ")"
                         +" MERGE (p" + (p + 1) + ":Song_"+ id + ")"
-                        +" CREATE (p" + p + ")-[:该专辑包括此歌曲]->(p" + (p + 1) + ")");
+                        + " MERGE (p" + p + ")-[:该专辑包括此歌曲]->(p" + (p + 1) + ")");
                         p += 2;
 
                         break;/// 只读取一个
@@ -444,12 +439,12 @@ namespace NSMusicS_For_Knowledge_Graph
                         lines.Add("CREATE (:mv_" + mv_id + " {id:'" + mv_id + "',name:'"+ _mv.mv_name + "',cover:'"+ _mv.mv_cover+ "',url:'null',size:'null'})"
                         +" MERGE (p" + p + ":mvs_" + this_ar_id + ")"
                         +" MERGE (p" + (p + 1) + ":mv_" + mv_id + ")"
-                        +" CREATE (p" + p + ")-[:该歌手所有MV中包括此MV]->(p" + (p + 1) + ")");
+                        + " MERGE (p" + p + ")-[:该歌手所有MV中包括此MV]->(p" + (p + 1) + ")");
                         p += 2;
 
                         lines.Add("MERGE (p" + p + ":Song_"+ id + ")"
                         +" MERGE (p" +(p + 1) +":mv_"+ mv_id + ")"
-                        +" CREATE (p" + p + ")-[:该歌曲的MV]->(p" + (p + 1) + ")");
+                        + " MERGE (p" + p + ")-[:该歌曲的MV]->(p" + (p + 1) + ")");
                         p += 2;
                     }
 
@@ -466,7 +461,7 @@ namespace NSMusicS_For_Knowledge_Graph
                     lines.Add("CREATE (:briefDesc_" + this_ar_id + "_txt { "+ briefDesc_ti + ":\"" + briefDesc_txt + "\" })"
                     +" MERGE (y" + p + ":briefDesc_" + this_ar_id + "_txt)"
                     +" MERGE (y" + (p + 1) + ":briefDesc_" + this_ar_id + ")"
-                    +" CREATE (y" + (p + 1) + ")-[:该歌手详情中包括此信息]->(y" + p + ")");
+                    + " MERGE (y" + (p + 1) + ")-[:该歌手详情中包括此信息]->(y" + p + ")");
                     p += 2;
                     /// 该歌手的详细信息
                     for (int d = 0; d < vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details.Count; d++)
@@ -480,7 +475,7 @@ namespace NSMusicS_For_Knowledge_Graph
                         lines.Add("CREATE (:introduction_" + this_ar_id + "_txt_" + d + " { " + ti + " :\"" + txt + "\" })"
                         +" MERGE (y" + p + ":introduction_" + this_ar_id + "_txt_" + d + ")"
                         +" MERGE (y" + (p + 1) + ":briefDesc_" + this_ar_id + ")"
-                        +" CREATE (y" + (p + 1) + ")-[:该歌手详情中包括此信息]->(y" + p + ")");
+                        + " MERGE (y" + (p + 1) + ")-[:该歌手详情中包括此信息]->(y" + p + ")");
                         p += 2;
                     }
                 }
@@ -489,28 +484,28 @@ namespace NSMusicS_For_Knowledge_Graph
                 lines.Add("CREATE (:Singer_" + this_ar_id + " {id:'" + this_ar_id + "',name:'" + this_ar_name + "',picUrl:'" + this_ar_picUrl + "',img1v1Url:'" + this_ar_img1v1Url + "',albumSize:'" + this_ar_albumSize + "',alias:['null','null'],musicSize:'" + this_ar_musicSize + "',mvSize:'" + this_ar_mvSize + "'})"
                 + " MERGE (s" + p + ":Singer_" + this_ar_id + ")"
                 + " MERGE (s" + (p + 1) + ":hotSongs_" + this_ar_id + ")"
-                + " CREATE (s" + p + ")-[:该歌手信息包括]->(s" + (p + 1) + ")");
+                + " MERGE (s" + p + ")-[:该歌手信息包括]->(s" + (p + 1) + ")");
                 p += 2;
 
                 lines.Add("MERGE (s" + p + ":Singer_"+this_ar_id+")"
                 +" MERGE (s" + (p + 1) + ":al_"+this_ar_id+")"
-                +" CREATE (s" + p + ")-[:该歌手信息包括]->(s" + (p + 1) + ")");
+                + " MERGE (s" + p + ")-[:该歌手信息包括]->(s" + (p + 1) + ")");
                 p += 2;
 
                 lines.Add("MERGE (s" + p + ":Singer_"+this_ar_id+")"
                 +" MERGE (s" + (p + 1) + ":mvs_"+this_ar_id+")"
-                +" CREATE (s" + p + ")-[:该歌手信息包括]->(s" + (p + 1) + ")");
+                + " MERGE (s" + p + ")-[:该歌手信息包括]->(s" + (p + 1) + ")");
                 p += 2;
 
                 lines.Add("MERGE (s" + p + ":Singer_"+this_ar_id+")"
                 +" MERGE (s" + (p + 1) + ":briefDesc_"+this_ar_id+")"
-                +" CREATE (s" + p + ")-[:该歌手信息包括]->(s" + (p + 1) + ")");
+                + " MERGE (s" + p + ")-[:该歌手信息包括]->(s" + (p + 1) + ")");
                 p += 2;
 
                 /// 将此歌手连接至热门歌手
                 lines.Add("MERGE (L" + p + ":hotSongs_Singer)"
                 +" MERGE (L" + (p + 1) + ":Singer_" + this_ar_id + ")"
-                +" CREATE (L" + p + ")-[:热门歌手包括]->(L" + (p + 1) + ")");
+                + " MERGE (L" + p + ")-[:热门歌手包括]->(L" + (p + 1) + ")");
                 p += 2;
             }
 
