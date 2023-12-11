@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using static System.Net.Mime.MediaTypeNames;
 using Neo4j.Driver;
 using System;
+using Application = System.Windows.Application;
 
 namespace NSMusicS_For_Knowledge_Graph
 {
@@ -30,12 +31,17 @@ namespace NSMusicS_For_Knowledge_Graph
             InitializeComponent();
 
             vs_singer_info = ViewModule_Search_Singer_ALL_Info.Retuen_This();
-            this.Content = vs_singer_info;
-
-            Init_Find_CloudMusicInfo_In_KG();
-
-            Init_Run_Cypher_In_Neo4jAsync();
+            this.DataContext = vs_singer_info;
         }
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ListBox_Show.Items.Clear();
+
+            await Init_Find_CloudMusicInfo_In_KG();
+
+            await Init_Run_Cypher_In_Neo4jAsync();
+        }
+
 
         private string web_url = "";//输入neteasecloudmusicapi网易云API地址 music.liyp.cc/api
         ViewModule_Search_Singer_ALL_Info vs_singer_info; 
@@ -53,6 +59,14 @@ namespace NSMusicS_For_Knowledge_Graph
                 while ((line = sr.ReadLine()) != null)
                 {
                     await ExcuteQueryAsync(line, num_s);
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var newItem = line;
+                        ListBox_Show.Items.Add(newItem);
+                        ListBox_Show.ScrollIntoView(newItem);
+                    });
+
                     num_s++;
                 }
             }
@@ -89,34 +103,34 @@ namespace NSMusicS_For_Knowledge_Graph
 
 
 
-        public void Init_Find_CloudMusicInfo_In_KG()
+        public async Task Init_Find_CloudMusicInfo_In_KG()
         {
             /// 1.获取    所有的热门歌手的基本信息
-            Find_1_For_Singer_Basic_Info();
+            await Find_1_For_Singer_Basic_Info();
             /// 2.补全    所有的热门歌手的详情信息
-            Find_2_For_Singer_Details_Info();
+            await Find_2_For_Singer_Details_Info();
             /// 3.获取    所有的热门歌手的 各自所有的热歌（根据热歌）
-            Find_3_For_Singer_HotSongs();
+            await Find_3_For_Singer_HotSongs();
             /// 4.获取    所有的热门歌手的 各自所有的专辑（根据热歌找到专辑id，进而找到该专辑所有歌曲）
             /// 不找该专辑所有歌曲，仅匹配当前热歌专辑信息
-            Find_4_For_Singer_ALL_Album();
+            await Find_4_For_Singer_ALL_Album();
             /// 5.获取    所有的热门歌手的 各自所有的热歌 对应的MV信息
-            Find_5_For_Singer_ALL_MV();
+            await Find_5_For_Singer_ALL_MV();
 
             /// 6.生成Cypher语句，写入到txt中
             Create_Cypher_To_Neo4j_Line();
         }
-        public void Find_1_For_Singer_Basic_Info()
+        public async Task Find_1_For_Singer_Basic_Info()
         {
-            string apiUrl = web_url + "/top/artists?offset=0&limit=1";// 5个歌手
+            string apiUrl = web_url + "/top/artists?offset=0&limit=5";// 5个歌手
             using (HttpClient client = new HttpClient())
             {
-                using (HttpResponseMessage response = client.GetAsync(apiUrl).Result)
+                using (HttpResponseMessage response = await client.GetAsync(apiUrl))
                 {
                     if (response.IsSuccessStatusCode)
                     {
                         response.EnsureSuccessStatusCode();
-                        string json = response.Content.ReadAsStringAsync().Result;
+                        string json = await response.Content.ReadAsStringAsync();
                         JArray recordsArray = (JArray)JObject.Parse(json)["artists"];
                         if (recordsArray != null && recordsArray.Count > 0)
                         {
@@ -135,6 +149,13 @@ namespace NSMusicS_For_Knowledge_Graph
                                 };
 
                                 vs_singer_info.musicData_Singer_Infos.Add(ms);
+
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    var newItem = ms.ToString() + "：" + record["id"] + record["name"];
+                                    ListBox_Show.Items.Add(newItem);
+                                    ListBox_Show.ScrollIntoView(newItem);
+                                });
                             }
                         }
                         recordsArray.Clear();
@@ -143,7 +164,7 @@ namespace NSMusicS_For_Knowledge_Graph
                 }
             }
         }
-        public void Find_2_For_Singer_Details_Info()
+        public async Task Find_2_For_Singer_Details_Info()
         {
             for (int i = 0; i < vs_singer_info.musicData_Singer_Infos.Count; i++)
             {
@@ -151,12 +172,12 @@ namespace NSMusicS_For_Knowledge_Graph
                 string apiUrl = web_url + "/artist/desc?id=" + temp.ar_id.ToString();
                 using (HttpClient client = new HttpClient())
                 {
-                    using (HttpResponseMessage response = client.GetAsync(apiUrl).Result)
+                    using (HttpResponseMessage response = await client.GetAsync(apiUrl))
                     {
                         if (response.IsSuccessStatusCode)
                         {
                             response.EnsureSuccessStatusCode();
-                            string json = response.Content.ReadAsStringAsync().Result;
+                            string json = await response.Content.ReadAsStringAsync();
 
                             JObject root = JObject.Parse(json); 
                             JToken dataToken;
@@ -173,6 +194,13 @@ namespace NSMusicS_For_Knowledge_Graph
                                     vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details = new List<MusicData_Singer_Details>();
                                 }
                                 vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details.Add(ms);
+
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    var newItem = ms.ToString() + "：" + "歌手简介";
+                                    ListBox_Show.Items.Add(newItem);
+                                    ListBox_Show.ScrollIntoView(newItem);
+                                });
                             }
                             
 
@@ -192,6 +220,13 @@ namespace NSMusicS_For_Knowledge_Graph
                                         vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details = new List<MusicData_Singer_Details>();
                                     }
                                     vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details.Add(ms);
+
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        var newItem = ms.ToString() + "：" + record["ti"];
+                                        ListBox_Show.Items.Add(newItem);
+                                        ListBox_Show.ScrollIntoView(newItem);
+                                    });
                                 }
                             }
                             recordsArray.Clear();
@@ -203,20 +238,20 @@ namespace NSMusicS_For_Knowledge_Graph
 
             
         }
-        public void Find_3_For_Singer_HotSongs()
+        public async Task Find_3_For_Singer_HotSongs()
         {
             for (int i = 0; i < vs_singer_info.musicData_Singer_Infos.Count; i++)
             {
                 MusicData_Singer_Info temp = vs_singer_info.musicData_Singer_Infos[i];
-                string apiUrl = web_url + "/artists/songs?id=" + temp.ar_id.ToString();//默认50首
+                string apiUrl = web_url + "/artists/songs?id=" + temp.ar_id.ToString() + "&limit=100";//默认100首
                 using (HttpClient client = new HttpClient())
                 {
-                    using (HttpResponseMessage response = client.GetAsync(apiUrl).Result)
+                    using (HttpResponseMessage response = await client.GetAsync(apiUrl))
                     {
                         if (response.IsSuccessStatusCode)
                         {
                             response.EnsureSuccessStatusCode();
-                            string json = response.Content.ReadAsStringAsync().Result;
+                            string json = await response.Content.ReadAsStringAsync();
                             JArray recordsArray = (JArray)JObject.Parse(json)["hotSongs"];
                             if (recordsArray != null && recordsArray.Count > 0)
                             {
@@ -242,6 +277,13 @@ namespace NSMusicS_For_Knowledge_Graph
                                         vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_HotSongs = new List<MusicData_Singer_HotSongs>();
                                     }
                                     vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_HotSongs.Add(ms);
+
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        var newItem = ms.ToString() + "：" + record["id"] + record["name"];
+                                        ListBox_Show.Items.Add(newItem);
+                                        ListBox_Show.ScrollIntoView(newItem);
+                                    });
                                 }
                             }
                             recordsArray.Clear();
@@ -251,7 +293,7 @@ namespace NSMusicS_For_Knowledge_Graph
                 }
             }
         }
-        public void Find_4_For_Singer_ALL_Album()
+        public async Task Find_4_For_Singer_ALL_Album()
         {
             for (int i = 0; i < vs_singer_info.musicData_Singer_Infos.Count; i++)
             {
@@ -261,12 +303,12 @@ namespace NSMusicS_For_Knowledge_Graph
                     string apiUrl = web_url + "/album?id=" + temp.musicData_Singer_HotSongs[k].al_id.ToString();
                     using (HttpClient client = new HttpClient())
                     {
-                        using (HttpResponseMessage response = client.GetAsync(apiUrl).Result)
+                        using (HttpResponseMessage response = await client.GetAsync(apiUrl))
                         {
                             if (response.IsSuccessStatusCode)
                             {
                                 response.EnsureSuccessStatusCode();
-                                string json = response.Content.ReadAsStringAsync().Result;
+                                string json = await response.Content.ReadAsStringAsync();
                                 JArray recordsArray = (JArray)JObject.Parse(json)["songs"];
 
                                 if (recordsArray != null && recordsArray.Count > 0)
@@ -295,6 +337,13 @@ namespace NSMusicS_For_Knowledge_Graph
                                             {
                                                 vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums = new List<MusicData_Singer_ALL_Album>();
                                                 vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums.Add(ms);
+
+                                                Application.Current.Dispatcher.Invoke(() =>
+                                                {
+                                                    var newItem = ms.ToString() + "：" + record["al"]["id"] + record["al"]["name"];
+                                                    ListBox_Show.Items.Add(newItem);
+                                                    ListBox_Show.ScrollIntoView(newItem);
+                                                });
                                             }
                                             else
                                             {
@@ -307,6 +356,13 @@ namespace NSMusicS_For_Knowledge_Graph
                                                 if (!result.Any())
                                                 {
                                                     vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums.Add(ms);
+
+                                                    Application.Current.Dispatcher.Invoke(() =>
+                                                    {
+                                                        var newItem = ms.ToString() + "：" + record["al"]["id"] + record["al"]["name"];
+                                                        ListBox_Show.Items.Add(newItem);
+                                                        ListBox_Show.ScrollIntoView(newItem);
+                                                    });
                                                 }
                                             }
                                         }
@@ -320,7 +376,7 @@ namespace NSMusicS_For_Knowledge_Graph
                 }
             }
         }
-        public void Find_5_For_Singer_ALL_MV()
+        public async Task Find_5_For_Singer_ALL_MV()
         {
             for (int i = 0; i < vs_singer_info.musicData_Singer_Infos.Count; i++)
             {
@@ -330,12 +386,12 @@ namespace NSMusicS_For_Knowledge_Graph
                     string apiUrl = web_url + "/mv/detail?mvid=" + temp.musicData_Singer_HotSongs[k].mv.ToString();
                     using (HttpClient client = new HttpClient())
                     {
-                        using (HttpResponseMessage response = client.GetAsync(apiUrl).Result)
+                        using (HttpResponseMessage response = await client.GetAsync(apiUrl))
                         {
                             if (response.IsSuccessStatusCode)
                             {
                                 response.EnsureSuccessStatusCode();
-                                string json = response.Content.ReadAsStringAsync().Result;
+                                string json = await response.Content.ReadAsStringAsync();
 
                                 JObject root = JObject.Parse(json);
                                 JToken dataToken;
@@ -360,6 +416,13 @@ namespace NSMusicS_For_Knowledge_Graph
                                         vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_MVs = new List<MusicData_Singer_ALL_MV>();
                                     }
                                     vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_MVs.Add(ms);
+
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        var newItem = ms.ToString() + "：" + dataObject["id"] + dataObject["name"];
+                                        ListBox_Show.Items.Add(newItem);
+                                        ListBox_Show.ScrollIntoView(newItem);
+                                    });
                                 }
                             }
                         }
@@ -367,6 +430,7 @@ namespace NSMusicS_For_Knowledge_Graph
                 }
             }
         }
+
         public void Create_Cypher_To_Neo4j_Line()
         {
             List<string> lines = new List<string>();
@@ -517,5 +581,7 @@ namespace NSMusicS_For_Knowledge_Graph
                 }
             }
         }
+
+        
     }
 }
