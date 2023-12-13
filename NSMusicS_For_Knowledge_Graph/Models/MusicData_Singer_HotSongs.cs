@@ -12,6 +12,7 @@ namespace NSMusicS_For_Knowledge_Graph.Models
         public string name { get; set; }
         public int dt { get; set; }
         public int mv { get; set; }
+        public string url { get; set; }
 
         public int al_id { get; set; }
         public string al_name { get; set; }

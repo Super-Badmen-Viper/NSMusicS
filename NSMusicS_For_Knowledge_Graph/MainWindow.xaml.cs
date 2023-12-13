@@ -15,9 +15,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static System.Net.Mime.MediaTypeNames;
-using Neo4j.Driver;
 using System;
 using Application = System.Windows.Application;
+using System.Collections.ObjectModel;
 
 namespace NSMusicS_For_Knowledge_Graph
 {
@@ -40,13 +40,31 @@ namespace NSMusicS_For_Knowledge_Graph
             await Init_Find_CloudMusicInfo_In_KG();
 
             await Init_Run_Cypher_In_Neo4jAsync();
+
+            using (StreamWriter writer = new StreamWriter("out_error.txt"))
+            {
+                foreach (string line in Error_Info)
+                {
+                    writer.WriteLine(line);
+                }
+            }
+
+            this.Close();
         }
 
+        public List<string> Error_Info = new List<string>();
 
-        private string web_url = "";//输入neteasecloudmusicapi网易云API地址 music.liyp.cc/api
+        private string web_url = "";//输入neteasecloudmusicapi网易云API地址 
         ViewModule_Search_Singer_ALL_Info vs_singer_info; 
         public async Task Init_Run_Cypher_In_Neo4jAsync()
         {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var newItem = "正在将txt中的Cypher语句，逐行提交至Neo4j执行。。。";
+                ListBox_Show.Items.Add(newItem);
+                ListBox_Show.ScrollIntoView(newItem);
+            });
+
             int num_s = 0;
 
             List<string> list = new List<string>();
@@ -58,14 +76,15 @@ namespace NSMusicS_For_Knowledge_Graph
                 string line;
                 while ((line = sr.ReadLine()) != null)
                 {
-                    await ExcuteQueryAsync(line, num_s);
-
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        var newItem = line;
+                        var newItem = "：" + (num_s + 1) + "：" + line;
                         ListBox_Show.Items.Add(newItem);
                         ListBox_Show.ScrollIntoView(newItem);
                     });
+
+
+                    await ExcuteQueryAsync(line, num_s);
 
                     num_s++;
                 }
@@ -92,7 +111,7 @@ namespace NSMusicS_For_Knowledge_Graph
             }
             catch (Exception ex)
             {
-                MessageBox.Show("第"+ num_s+"行："+ Cql);
+                Error_Info.Add("第"+ num_s+"行："+ Cql);
             }
             finally
             {
@@ -102,27 +121,82 @@ namespace NSMusicS_For_Knowledge_Graph
         }
 
 
+        public int singer_nums = 200;
+        public int song_nums = 200;
 
         public async Task Init_Find_CloudMusicInfo_In_KG()
         {
             /// 1.获取    所有的热门歌手的基本信息
             await Find_1_For_Singer_Basic_Info();
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var newItem = "所有歌手基本信息提取完成";
+                ListBox_Show.Items.Add(newItem);
+                ListBox_Show.ScrollIntoView(newItem);
+            });
+
             /// 2.补全    所有的热门歌手的详情信息
             await Find_2_For_Singer_Details_Info();
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var newItem = "所有歌手详情提取完成";
+                ListBox_Show.Items.Add(newItem);
+                ListBox_Show.ScrollIntoView(newItem);
+            });
+
             /// 3.获取    所有的热门歌手的 各自所有的热歌（根据热歌）
             await Find_3_For_Singer_HotSongs();
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var newItem = "所有歌手热歌提取完成";
+                ListBox_Show.Items.Add(newItem);
+                ListBox_Show.ScrollIntoView(newItem);
+            });
+
             /// 4.获取    所有的热门歌手的 各自所有的专辑（根据热歌找到专辑id，进而找到该专辑所有歌曲）
             /// 不找该专辑所有歌曲，仅匹配当前热歌专辑信息
             await Find_4_For_Singer_ALL_Album();
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var newItem = "所有歌手专辑提取完成";
+                ListBox_Show.Items.Add(newItem);
+                ListBox_Show.ScrollIntoView(newItem);
+            });
+
             /// 5.获取    所有的热门歌手的 各自所有的热歌 对应的MV信息
             await Find_5_For_Singer_ALL_MV();
 
-            /// 6.生成Cypher语句，写入到txt中
-            Create_Cypher_To_Neo4j_Line();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var newItem = "所有歌手MV提取完成";
+                ListBox_Show.Items.Add(newItem);
+                ListBox_Show.ScrollIntoView(newItem);
+            });
+
+
+
+            try
+            {
+                /// 6.生成Cypher语句，写入到txt中
+                MERGE_Cypher_To_Neo4j_Line();
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var newItem = "生成Cypher语句，写入到txt完成";
+                    ListBox_Show.Items.Add(newItem);
+                    ListBox_Show.ScrollIntoView(newItem);
+                });
+            }
+            catch { }
         }
+
         public async Task Find_1_For_Singer_Basic_Info()
         {
-            string apiUrl = web_url + "/top/artists?offset=0&limit=5";// 5个歌手
+            string apiUrl = web_url + "/top/artists?limit="+ singer_nums;// ：/toplist/artist
             using (HttpClient client = new HttpClient())
             {
                 using (HttpResponseMessage response = await client.GetAsync(apiUrl))
@@ -145,14 +219,19 @@ namespace NSMusicS_For_Knowledge_Graph
                                     ar_alias = (JArray)record["alias"],
                                     ar_musicSize = (int)record["musicSize"],
                                     ar_albumSize = (int)record["albumSize"],
-                                    //mvSize = (int)record["mvSize"]
                                 };
+                                if (ms.ar_name != null)
+                                    ms.ar_name = ms.ar_name.Replace("\"","");
+                                if (ms.ar_picUrl != null)
+                                    ms.ar_picUrl = ms.ar_picUrl.Replace("\"", "");
+                                if (ms.ar_img1v1Url != null)
+                                    ms.ar_img1v1Url = ms.ar_img1v1Url.Replace("\"", "");
 
                                 vs_singer_info.musicData_Singer_Infos.Add(ms);
 
                                 Application.Current.Dispatcher.Invoke(() =>
                                 {
-                                    var newItem = ms.ToString() + "：" + record["id"] + record["name"];
+                                    var newItem = "获取歌手基本信息" + "：" + record["id"] + "：" + record["name"];
                                     ListBox_Show.Items.Add(newItem);
                                     ListBox_Show.ScrollIntoView(newItem);
                                 });
@@ -168,6 +247,13 @@ namespace NSMusicS_For_Knowledge_Graph
         {
             for (int i = 0; i < vs_singer_info.musicData_Singer_Infos.Count; i++)
             {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var newItem = "获取歌手详情中。。。。" + "："+ (i+1) +"/"+ vs_singer_info.musicData_Singer_Infos.Count + "：" + vs_singer_info.musicData_Singer_Infos[i].ar_name;
+                    ListBox_Show.Items.Add(newItem);
+                    ListBox_Show.ScrollIntoView(newItem);
+                });
+
                 MusicData_Singer_Info temp = vs_singer_info.musicData_Singer_Infos[i];
                 string apiUrl = web_url + "/artist/desc?id=" + temp.ar_id.ToString();
                 using (HttpClient client = new HttpClient())
@@ -186,21 +272,18 @@ namespace NSMusicS_For_Knowledge_Graph
                                 MusicData_Singer_Details ms = new MusicData_Singer_Details
                                 {
                                     ti = "歌手简介",
-                                    txt = dataToken.ToString(),
+                                    txt = "歌手简介：" + dataToken.ToString(),
                                 };
+                                if (ms.ti != null)
+                                    ms.ti = ms.ti.Replace("\"", "");
+                                if (ms.txt != null)
+                                    ms.txt = ms.txt.Replace("\"", "");
 
                                 if (vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details == null)
                                 {
                                     vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details = new List<MusicData_Singer_Details>();
                                 }
                                 vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details.Add(ms);
-
-                                Application.Current.Dispatcher.Invoke(() =>
-                                {
-                                    var newItem = ms.ToString() + "：" + "歌手简介";
-                                    ListBox_Show.Items.Add(newItem);
-                                    ListBox_Show.ScrollIntoView(newItem);
-                                });
                             }
                             
 
@@ -211,22 +294,19 @@ namespace NSMusicS_For_Knowledge_Graph
                                 {
                                     MusicData_Singer_Details ms = new MusicData_Singer_Details
                                     {
-                                        ti = (string)record["ti"],
-                                        txt = (string)record["txt"],
+                                        ti = RetainChineseString((string)record["ti"]),
+                                        txt = (string)record["ti"] + "：" + (string)record["txt"],
                                     };
+                                    if (ms.ti != null)
+                                        ms.ti = ms.ti.Replace("\"", "");
+                                    if (ms.txt != null)
+                                        ms.txt = ms.txt.Replace("\"", "");
 
                                     if (vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details == null)
                                     {
                                         vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details = new List<MusicData_Singer_Details>();
                                     }
                                     vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details.Add(ms);
-
-                                    Application.Current.Dispatcher.Invoke(() =>
-                                    {
-                                        var newItem = ms.ToString() + "：" + record["ti"];
-                                        ListBox_Show.Items.Add(newItem);
-                                        ListBox_Show.ScrollIntoView(newItem);
-                                    });
                                 }
                             }
                             recordsArray.Clear();
@@ -235,15 +315,52 @@ namespace NSMusicS_For_Knowledge_Graph
                     }
                 }
             }
-
-            
         }
+        private string RetainChineseString(string? str)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                return string.Empty;
+            }
+
+            StringBuilder chineseString = new StringBuilder();
+            foreach (char c in str)
+            {
+                if (IsChinese(c))
+                {
+                    chineseString.Append(c);
+                }
+            }
+
+            return chineseString.ToString();
+        }
+        private bool IsChinese(char c)
+        {
+            return (c >= 0x4E00 && c <= 0x9FA5) || // 基本汉字
+                   (c >= 0x9FA6 && c <= 0x9FEF) || // 扩展A
+                   (c >= 0x3400 && c <= 0x4DBF) || // 扩展B
+                   (c >= 0x20000 && c <= 0x2A6DF) || // 扩展C
+                   (c >= 0x2A700 && c <= 0x2B73F) || // 扩展D
+                   (c >= 0x2B740 && c <= 0x2B81F) || // 扩展E
+                   (c >= 0x2B820 && c <= 0x2CEAF) || // 扩展F
+                   (c >= 0xF900 && c <= 0xFAFF) || // 兼容汉字
+                   (c >= 0x2F800 && c <= 0x2FA1F); // 兼容表意文字
+        }
+
+
         public async Task Find_3_For_Singer_HotSongs()
         {
             for (int i = 0; i < vs_singer_info.musicData_Singer_Infos.Count; i++)
             {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var newItem = "获取歌手热歌中。。。。" + "：" + (i + 1) + "/" + vs_singer_info.musicData_Singer_Infos.Count + "：" + vs_singer_info.musicData_Singer_Infos[i].ar_name;
+                    ListBox_Show.Items.Add(newItem);
+                    ListBox_Show.ScrollIntoView(newItem);
+                });
+
                 MusicData_Singer_Info temp = vs_singer_info.musicData_Singer_Infos[i];
-                string apiUrl = web_url + "/artists/songs?id=" + temp.ar_id.ToString() + "&limit=100";//默认100首
+                string apiUrl = web_url + "/artists/songs?id=" + temp.ar_id.ToString() + "&limit="+ song_nums;//默认100首
                 using (HttpClient client = new HttpClient())
                 {
                     using (HttpResponseMessage response = await client.GetAsync(apiUrl))
@@ -270,20 +387,19 @@ namespace NSMusicS_For_Knowledge_Graph
                                         ar_id = (int)record["ar"][0]["id"],
                                         ar_name = (string)record["ar"][0]["name"],
                                     };
-
+                                    ms = await Get_Song_Url(ms.id, ms);
+                                    if (ms.name != null)
+                                        ms.name = ms.name.Replace("\"", "");
+                                    if (ms.al_name != null)
+                                        ms.al_name = ms.al_name.Replace("\"", "");
+                                    if (ms.ar_name != null)
+                                        ms.ar_name = ms.ar_name.Replace("\"", "");
 
                                     if (vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_HotSongs == null)
                                     {
                                         vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_HotSongs = new List<MusicData_Singer_HotSongs>();
                                     }
                                     vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_HotSongs.Add(ms);
-
-                                    Application.Current.Dispatcher.Invoke(() =>
-                                    {
-                                        var newItem = ms.ToString() + "：" + record["id"] + record["name"];
-                                        ListBox_Show.Items.Add(newItem);
-                                        ListBox_Show.ScrollIntoView(newItem);
-                                    });
                                 }
                             }
                             recordsArray.Clear();
@@ -293,10 +409,52 @@ namespace NSMusicS_For_Knowledge_Graph
                 }
             }
         }
+        public async Task<MusicData_Singer_HotSongs> Get_Song_Url(int song_id, MusicData_Singer_HotSongs ms)
+        {
+            var tcs = new TaskCompletionSource<MusicData_Singer_HotSongs>();
+
+            string apiUrl = web_url + "/song/url?id=" + song_id;
+            using (HttpClient client = new HttpClient())
+            {
+                using (HttpResponseMessage response = await client.GetAsync(apiUrl))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        response.EnsureSuccessStatusCode();
+                        string json = await response.Content.ReadAsStringAsync();
+                        JArray recordsArray = (JArray)JObject.Parse(json)["data"];
+                        if (recordsArray != null && recordsArray.Count > 0)
+                        {
+                            foreach (JObject record in recordsArray)
+                            {
+                                ms.url = (string)record["url"];
+
+                                if (ms.url != null)
+                                    ms.url = ms.url.Replace("\"", "");
+
+                                tcs.SetResult(ms);
+                            }
+                        }
+                        recordsArray.Clear();
+                        recordsArray = null;
+                    }
+                }
+            }
+
+            return await tcs.Task;
+        }
+
         public async Task Find_4_For_Singer_ALL_Album()
         {
             for (int i = 0; i < vs_singer_info.musicData_Singer_Infos.Count; i++)
             {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var newItem = "获取歌手所有专辑中。。。" + "：" + (i + 1) + "/" + vs_singer_info.musicData_Singer_Infos.Count + "：" + vs_singer_info.musicData_Singer_Infos[i].ar_name;
+                    ListBox_Show.Items.Add(newItem);
+                    ListBox_Show.ScrollIntoView(newItem);
+                });
+
                 MusicData_Singer_Info temp = vs_singer_info.musicData_Singer_Infos[i];
                 for (int k = 0; k < temp.musicData_Singer_HotSongs.Count; k++)
                 {
@@ -331,19 +489,18 @@ namespace NSMusicS_For_Knowledge_Graph
                                                 ar_id = (int)record["ar"][0]["id"],
                                                 ar_name = (string)record["ar"][0]["name"],
                                             };
+                                            if (ms.al_name != null)
+                                                ms.al_name = ms.al_name.Replace("\"", "");
+                                            if (ms.al_picUrl != null)
+                                                ms.al_picUrl = ms.al_picUrl.Replace("\"", "");
+                                            if (ms.ar_name != null)
+                                                ms.ar_name = ms.ar_name.Replace("\"", "");
 
 
                                             if (vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums == null)
                                             {
                                                 vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums = new List<MusicData_Singer_ALL_Album>();
                                                 vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums.Add(ms);
-
-                                                Application.Current.Dispatcher.Invoke(() =>
-                                                {
-                                                    var newItem = ms.ToString() + "：" + record["al"]["id"] + record["al"]["name"];
-                                                    ListBox_Show.Items.Add(newItem);
-                                                    ListBox_Show.ScrollIntoView(newItem);
-                                                });
                                             }
                                             else
                                             {
@@ -352,17 +509,9 @@ namespace NSMusicS_For_Knowledge_Graph
                                                              where album.al_id == ms.al_id
                                                              select album;
 
-                                                // Check if the result contains any items
                                                 if (!result.Any())
                                                 {
                                                     vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums.Add(ms);
-
-                                                    Application.Current.Dispatcher.Invoke(() =>
-                                                    {
-                                                        var newItem = ms.ToString() + "：" + record["al"]["id"] + record["al"]["name"];
-                                                        ListBox_Show.Items.Add(newItem);
-                                                        ListBox_Show.ScrollIntoView(newItem);
-                                                    });
                                                 }
                                             }
                                         }
@@ -380,49 +529,58 @@ namespace NSMusicS_For_Knowledge_Graph
         {
             for (int i = 0; i < vs_singer_info.musicData_Singer_Infos.Count; i++)
             {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var newItem = "获取歌手所有MV中" + "：" + (i + 1) + "/" + vs_singer_info.musicData_Singer_Infos.Count + "：" + vs_singer_info.musicData_Singer_Infos[i].ar_name;
+                    ListBox_Show.Items.Add(newItem);
+                    ListBox_Show.ScrollIntoView(newItem);
+                });
+
                 MusicData_Singer_Info temp = vs_singer_info.musicData_Singer_Infos[i];
                 for (int k = 0; k < temp.musicData_Singer_HotSongs.Count; k++)
                 {
-                    string apiUrl = web_url + "/mv/detail?mvid=" + temp.musicData_Singer_HotSongs[k].mv.ToString();
-                    using (HttpClient client = new HttpClient())
+                    if (temp.musicData_Singer_HotSongs[k].mv != 0)
                     {
-                        using (HttpResponseMessage response = await client.GetAsync(apiUrl))
+                        string apiUrl = web_url + "/mv/detail?mvid=" + temp.musicData_Singer_HotSongs[k].mv.ToString();
+                        using (HttpClient client = new HttpClient())
                         {
-                            if (response.IsSuccessStatusCode)
+                            using (HttpResponseMessage response = await client.GetAsync(apiUrl))
                             {
-                                response.EnsureSuccessStatusCode();
-                                string json = await response.Content.ReadAsStringAsync();
-
-                                JObject root = JObject.Parse(json);
-                                JToken dataToken;
-                                if (root.TryGetValue("data", out dataToken))
+                                if (response.IsSuccessStatusCode)
                                 {
-                                    JObject dataObject = (JObject)dataToken;
+                                    response.EnsureSuccessStatusCode();
+                                    string json = await response.Content.ReadAsStringAsync();
 
-                                    MusicData_Singer_ALL_MV ms = new MusicData_Singer_ALL_MV
+                                    JObject root = JObject.Parse(json);
+                                    JToken dataToken;
+                                    if (root.TryGetValue("data", out dataToken))
                                     {
-                                        mv_id = (int)dataObject["id"],
-                                        mv_name = (string)dataObject["name"],
-                                        mv_cover = (string)dataObject["cover"],
-                                        //mv_url = (int)dataObject["ar"][0]["id"],
-                                        mv_brs = (JArray)dataObject["brs"],
+                                        JObject dataObject = (JObject)dataToken;
 
-                                        ar_id = (int)dataObject["artists"][0]["id"],
-                                        ar_name = (string)dataObject["artists"][0]["name"],
-                                    };
+                                        MusicData_Singer_ALL_MV ms = new MusicData_Singer_ALL_MV
+                                        {
+                                            mv_id = (int)dataObject["id"],
+                                            mv_name = (string)dataObject["name"],
+                                            mv_cover = (string)dataObject["cover"],
+                                            mv_brs = (JArray)dataObject["brs"],
 
-                                    if (vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_MVs == null)
-                                    {
-                                        vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_MVs = new List<MusicData_Singer_ALL_MV>();
+                                            ar_id = (int)dataObject["artists"][0]["id"],
+                                            ar_name = (string)dataObject["artists"][0]["name"],
+                                        };
+                                        ms = await Get_MV_Url((int)dataObject["id"], ms);
+                                        if (ms.mv_name != null)
+                                            ms.mv_name = ms.mv_name.Replace("\"", "");
+                                        if (ms.mv_cover != null)
+                                            ms.mv_cover = ms.mv_cover.Replace("\"", "");
+                                        if (ms.ar_name != null)
+                                            ms.ar_name = ms.ar_name.Replace("\"", "");
+
+                                        if (vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_MVs == null)
+                                        {
+                                            vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_MVs = new List<MusicData_Singer_ALL_MV>();
+                                        }
+                                        vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_MVs.Add(ms);
                                     }
-                                    vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_MVs.Add(ms);
-
-                                    Application.Current.Dispatcher.Invoke(() =>
-                                    {
-                                        var newItem = ms.ToString() + "：" + dataObject["id"] + dataObject["name"];
-                                        ListBox_Show.Items.Add(newItem);
-                                        ListBox_Show.ScrollIntoView(newItem);
-                                    });
                                 }
                             }
                         }
@@ -430,13 +588,58 @@ namespace NSMusicS_For_Knowledge_Graph
                 }
             }
         }
+        public async Task<MusicData_Singer_ALL_MV> Get_MV_Url(int mv_id, MusicData_Singer_ALL_MV ms)
+        {
+            var tcs = new TaskCompletionSource<MusicData_Singer_ALL_MV>();
 
-        public void Create_Cypher_To_Neo4j_Line()
+            string br = "";
+            string size = "";
+            if (ms.mv_brs != null && ms.mv_brs.Count > 0)
+            {
+                foreach (JObject record in ms.mv_brs)
+                {
+                    br = (string)record["br"];
+                    size = (string)record["size"];
+                }
+            }
+
+            string apiUrl = web_url + "/mv/url?id=" + mv_id + "&r=" + br;
+            using (HttpClient client = new HttpClient())
+            {
+                using (HttpResponseMessage response = await client.GetAsync(apiUrl))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        response.EnsureSuccessStatusCode();
+                        string json = await response.Content.ReadAsStringAsync();
+
+                        JObject root = JObject.Parse(json);
+                        JToken dataToken;
+                        if (root.TryGetValue("data", out dataToken))
+                        {
+                            ms.mv_url = (string)dataToken["url"];
+                            ms.mv_size = size;
+
+                            if (ms.mv_url != null)
+                                ms.mv_url = ms.mv_url.Replace("\"", "");
+
+                            tcs.SetResult(ms);
+                        }
+                    }
+                }
+            }
+
+            return await tcs.Task;
+        }
+
+
+
+        public void MERGE_Cypher_To_Neo4j_Line()
         {
             List<string> lines = new List<string>();
             int p = 1;
             /// 创建初始节点
-            lines.Add("CREATE (:hotSongs_Singer {name:'热门歌手'})");
+            lines.Add("MERGE (:hotSongs_Singer {name:\"热门歌手\"})");
             for (int i = 0; i < vs_singer_info.musicData_Singer_Infos.Count; i++)
             {
                 int this_ar_id= vs_singer_info.musicData_Singer_Infos[i].ar_id;
@@ -449,10 +652,10 @@ namespace NSMusicS_For_Knowledge_Graph
                 int this_ar_mvSize = vs_singer_info.musicData_Singer_Infos[i].ar_mvSize;
 
                 /// 创建该歌手的初始分类节点
-                lines.Add("CREATE (:hotSongs_" + this_ar_id + " {name:'热歌'})");
-                lines.Add("CREATE (:al_" + this_ar_id + " {name:'专辑'})");
-                lines.Add("CREATE (:briefDesc_" + this_ar_id + "{name:'歌手详情'})");
-                lines.Add("CREATE (:mvs_" + this_ar_id + "{name:'MV'})");
+                lines.Add("MERGE (:hotSongs_" + this_ar_id + " {name:\"热歌\"})");
+                lines.Add("MERGE (:al_" + this_ar_id + " {name:\"专辑\"})");
+                lines.Add("MERGE (:briefDesc_" + this_ar_id + "{name:\"歌手详情\"})");
+                lines.Add("MERGE (:mvs_" + this_ar_id + "{name:\"MV\"})");
 
                 /// 开始创建该歌手的热歌，专辑，MV信息
                 for (int k = 0; k < vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_HotSongs.Count; k++)
@@ -462,90 +665,101 @@ namespace NSMusicS_For_Knowledge_Graph
                     string name = vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_HotSongs[k].name;
                     int dt = vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_HotSongs[k].dt;
                     int mv = vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_HotSongs[k].mv;
+                    string url = vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_HotSongs[k].url;
 
                     lines.Add("MERGE (p" + p + ":hotSongs_" + this_ar_id + ")"
-                        +" MERGE (p" +(p + 1) + ":Song_"+ id + " {id: '"+ id + "', name: '"+ name + "', dt: '"+ dt + "', mv: '"+ mv + "'})"
-                        +" MERGE (p" + p + ")-[:该歌手所有热歌中包括]->(p" +(p + 1) + ")");
+                        +" MERGE (p" +(p + 1) + ":Song_"+ id + " {id: \""+ id + "\", name: \""+ name + "\", dt: \""+ dt + "\", mv: \""+ mv + "\", url: \""+ url + "\"})"
+                        + " MERGE (p" + p + ")-[:该歌手所有热歌中包括]->(p" +(p + 1) + ")");
                     p += 2;
 
                     /// 2.添加该热歌的专辑，并将此专辑与热歌 绑定 指向关系
                     int al_id = vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_HotSongs[k].al_id;
-                    var result = from album in vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums
-                                 where album.al_id == al_id
-                                 select album;
-                    foreach (var album in result)
+                    try
                     {
-                        /// alia先空着,  写入\"防止 Cypher出现识别''错误
-                        lines.Add(" MERGE (p" + p + ":al_"+ al_id + " {id:'"+ al_id + "'}) SET p" + p + ".name = \"" + album.al_name + "\",p" + p + ".alia = ['null'],p" + p + ".picUrl = '" + album.al_picUrl + "'");
-                        p += 2;
+                        var result = from album in vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_Albums
+                                     where album.al_id == al_id
+                                     select album;
+                        if (result != null)
+                        {
+                            foreach (var album in result)
+                            {
+                                /// alia先空着,  写入\"防止 Cypher出现识别\"\"错误
+                                lines.Add(" MERGE (p" + p + ":al_" + al_id + " {id:\"" + al_id + "\"}) SET p" + p + ".name = \"" + album.al_name + "\",p" + p + ".alia = [\"null\"],p" + p + ".picUrl = \"" + album.al_picUrl + "\"");
+                                p += 2;
 
-                        lines.Add(" MERGE (p" + p + ":al_"+ this_ar_id + ")"
-                        +" MERGE (p" + (p + 1) + ": al_"+ al_id + ")"
-                        + " MERGE(p" + p + ") - [:该歌手所有专辑中包括]->(p" + (p + 1) + ")");
-                        p += 2;
+                                lines.Add(" MERGE (p" + p + ":al_" + this_ar_id + ")"
+                                + " MERGE (p" + (p + 1) + ": al_" + al_id + ")"
+                                + " MERGE(p" + p + ") - [:该歌手所有专辑中包括]->(p" + (p + 1) + ")");
+                                p += 2;
 
-                        lines.Add("MERGE (p" + p + ":al_"+ al_id + ")"
-                        +" MERGE (p" + (p + 1) + ":Song_"+ id + ")"
-                        + " MERGE (p" + p + ")-[:该专辑包括此歌曲]->(p" + (p + 1) + ")");
-                        p += 2;
+                                lines.Add("MERGE (p" + p + ":al_" + al_id + ")"
+                                + " MERGE (p" + (p + 1) + ":Song_" + id + ")"
+                                + " MERGE (p" + p + ")-[:该专辑包括此歌曲]->(p" + (p + 1) + ")");
+                                p += 2;
 
-                        break;/// 只读取一个
+                                break;/// 只读取一个
+                            }
+                        }
+                        result = null;
                     }
+                    catch { }
 
                     /// 3.添加该歌曲的MV
                     int mv_id = vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_HotSongs[k].mv;
-                    var result_mv = from mv_ in vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_MVs
-                             where mv_.mv_id == mv_id
-                             select mv_;
-                    foreach (var _mv in result_mv)
+                    if (mv_id != 0)
                     {
-                        /// url和size先空着
-                        lines.Add("CREATE (:mv_" + mv_id + " {id:'" + mv_id + "',name:'"+ _mv.mv_name + "',cover:'"+ _mv.mv_cover+ "',url:'null',size:'null'})"
-                        +" MERGE (p" + p + ":mvs_" + this_ar_id + ")"
-                        +" MERGE (p" + (p + 1) + ":mv_" + mv_id + ")"
-                        + " MERGE (p" + p + ")-[:该歌手所有MV中包括此MV]->(p" + (p + 1) + ")");
-                        p += 2;
+                        try
+                        {
+                            var result_mv = from mv_ in vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_ALL_MVs
+                                            where mv_.mv_id == mv_id
+                                            select mv_;
+                            if (result_mv != null)
+                            {
+                                foreach (var _mv in result_mv)
+                                {
+                                    lines.Add("MERGE (:mv_" + mv_id + " {id:\"" + mv_id + "\",name:\"" + _mv.mv_name + "\",cover:\"" + _mv.mv_cover + "\",url:\""+ _mv .mv_url+ "\",size:\""+ _mv.mv_size+ "\"})"
+                                    + " MERGE (p" + p + ":mvs_" + this_ar_id + ")"
+                                    + " MERGE (p" + (p + 1) + ":mv_" + mv_id + ")"
+                                    + " MERGE (p" + p + ")-[:该歌手所有MV中包括此MV]->(p" + (p + 1) + ")");
+                                    p += 2;
 
-                        lines.Add("MERGE (p" + p + ":Song_"+ id + ")"
-                        +" MERGE (p" +(p + 1) +":mv_"+ mv_id + ")"
-                        + " MERGE (p" + p + ")-[:该歌曲的MV]->(p" + (p + 1) + ")");
-                        p += 2;
+                                    lines.Add("MERGE (p" + p + ":Song_" + id + ")"
+                                    + " MERGE (p" + (p + 1) + ":mv_" + mv_id + ")"
+                                    + " MERGE (p" + p + ")-[:该歌曲的MV]->(p" + (p + 1) + ")");
+                                    p += 2;
+                                }
+                            }
+                            result_mv = null;
+                        }
+                        catch { }
                     }
-
                 }
 
                 /// 然后创建该歌手的简介信息
                 if (vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details != null && vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details.Count > 0)
                 {
-                    string briefDesc_ti = vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details[0].ti;
-                    string briefDesc_txt = vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details[0].txt;
-                    briefDesc_txt = briefDesc_txt.Replace("\n", "");
-                    briefDesc_txt = briefDesc_txt.Replace("\t", "");
-                    briefDesc_txt = briefDesc_txt.Replace("\"", "");
-                    lines.Add("CREATE (:briefDesc_" + this_ar_id + "_txt { "+ briefDesc_ti + ":\"" + briefDesc_txt + "\" })"
-                    +" MERGE (y" + p + ":briefDesc_" + this_ar_id + "_txt)"
-                    +" MERGE (y" + (p + 1) + ":briefDesc_" + this_ar_id + ")"
-                    + " MERGE (y" + (p + 1) + ")-[:该歌手详情中包括此信息]->(y" + p + ")");
-                    p += 2;
                     /// 该歌手的详细信息
                     for (int d = 0; d < vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details.Count; d++)
                     {
                         string ti = vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details[d].ti;
                         string txt = vs_singer_info.musicData_Singer_Infos[i].musicData_Singer_Details[d].txt;
-                        txt = txt.Replace("\n", "");
-                        txt = txt.Replace("\t", "");
-                        txt = txt.Replace("\"", "");
+                        if (txt != null)
+                        {
+                            txt = txt.Replace("\n", "");
+                            txt = txt.Replace("\t", "");
+                            txt = txt.Replace("\"", "");
+                        }
 
-                        lines.Add("CREATE (:introduction_" + this_ar_id + "_txt_" + d + " { " + ti + " :\"" + txt + "\" })"
-                        +" MERGE (y" + p + ":introduction_" + this_ar_id + "_txt_" + d + ")"
-                        +" MERGE (y" + (p + 1) + ":briefDesc_" + this_ar_id + ")"
+                        lines.Add("MERGE (:introduction_" + this_ar_id + "_txt_" + d + " { name :\"" + txt + "\" })"
+                        + " MERGE (y" + p + ":introduction_" + this_ar_id + "_txt_" + d + ")"
+                        + " MERGE (y" + (p + 1) + ":briefDesc_" + this_ar_id + ")"
                         + " MERGE (y" + (p + 1) + ")-[:该歌手详情中包括此信息]->(y" + p + ")");
                         p += 2;
                     }
                 }
 
                 /// 最后创建该歌手的本身节点，并连接以上节点
-                lines.Add("CREATE (:Singer_" + this_ar_id + " {id:'" + this_ar_id + "',name:'" + this_ar_name + "',picUrl:'" + this_ar_picUrl + "',img1v1Url:'" + this_ar_img1v1Url + "',albumSize:'" + this_ar_albumSize + "',alias:['null','null'],musicSize:'" + this_ar_musicSize + "',mvSize:'" + this_ar_mvSize + "'})"
+                lines.Add("MERGE (:Singer_" + this_ar_id + " {id:\"" + this_ar_id + "\",name:\"" + this_ar_name + "\",picUrl:\"" + this_ar_picUrl + "\",img1v1Url:\"" + this_ar_img1v1Url + "\",albumSize:\"" + this_ar_albumSize + "\",alias:[\"null\",\"null\"],musicSize:\"" + this_ar_musicSize + "\",mvSize:\"" + this_ar_mvSize + "\"})"
                 + " MERGE (s" + p + ":Singer_" + this_ar_id + ")"
                 + " MERGE (s" + (p + 1) + ":hotSongs_" + this_ar_id + ")"
                 + " MERGE (s" + p + ")-[:该歌手信息包括]->(s" + (p + 1) + ")");

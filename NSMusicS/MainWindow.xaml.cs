@@ -107,8 +107,6 @@ namespace NSMusicS
 
             Init_Animation();
 
-            //Init_Spectrum_Visualization();
-
             //初始化歌单信息
             Init_SongList_InfoAsync();
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = songList_Infos[1][0].Songs;
@@ -132,7 +130,6 @@ namespace NSMusicS
             userControl_ButtonFrame_MusicPlayer.Button_ListView_Selected_Right.Click += userControl_ButtonFrame_MusicPlayer_Button_ListView_Selected_Click;
             userControl_ButtonFrame_MusicPlayer.TextBox_SongList_NumLength.MouseLeftButtonDown += userControl_ButtonFrame_MusicPlayer_Button_ListView_Selected_Click;
             userControl_ButtonFrame_MusicPlayer.TextBox_SongList_NumLength_Right.MouseLeftButtonDown += userControl_ButtonFrame_MusicPlayer_Button_ListView_Selected_Click;
-
 
             //
             userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Button_Connectio_SqlServer.Click += Button_Connectio_SqlServer_Click;

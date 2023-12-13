@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <ListBox x:Name="ListBox_Show"/>
+        <ListBox x:Name="ListBox_Show" Background="Black" Foreground="White"/>
         <Button 
             HorizontalAlignment="Right" VerticalAlignment="Top"
             Content="开始生成：网易云->Neo4j"
