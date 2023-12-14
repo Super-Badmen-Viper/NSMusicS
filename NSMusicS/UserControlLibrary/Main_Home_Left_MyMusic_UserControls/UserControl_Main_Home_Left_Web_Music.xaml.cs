@@ -41,7 +41,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
             //绑定 MV信息   数据源 数据Change事件
             viewModule_Search_Song_For_Cloud_Music.Song_MV_Infos.CollectionChanged += Song_MV_Infos_CollectionChanged;
 
-            TextBox_Web_API.Text = "http://124.223.62.181:3000";
+            TextBox_Web_API.Text = "";
         }
 
 
