@@ -1,16 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Song_Infos>
-  <Song_Info ID="-1" Name="播放列表">
-    <Song>
-      <Song_Name>Blue (蓝色)</Song_Name>
-      <Singer_Name>BIGBANG</Singer_Name>
-      <Album_Name>BIGBANG SPECIAL EDITION 'STILL ALIVE'</Album_Name>
-      <Song_Url>E:\0_Music\BIGBANG - Blue (蓝色).mp3</Song_Url>
-      <Song_Duration>03:53</Song_Duration>
-      <Song_No>1</Song_No>
-      <Song_Like>0</Song_Like>
-      <MV_Path>
-      </MV_Path>
-    </Song>
-  </Song_Info>
+	<Song_Info ID="-1" Name="播放列表" />
 </Song_Infos>

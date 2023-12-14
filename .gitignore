@@ -453,6 +453,5 @@ $RECYCLE.BIN/
 !.vscode/launch.json
 !.vscode/extensions.json
 *.mp4
-/NSMusicS/bin/Debug/net6.0-windows/Resource/SongListInfo_ini/SongList_Ini/Song_List_Info_ALL.xml
+/NSMusicS/bin/Debug/net6.0-windows/Resource/SongListInfo_ini/SongList_Ini
 /NSMusicS/Models/Song_Audio_Out/CSCore_Ffmpeg/FFmpeg/src
-/NSMusicS/Services/Services_For_API_GetResult

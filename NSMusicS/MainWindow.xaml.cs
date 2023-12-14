@@ -82,40 +82,100 @@ namespace NSMusicS
             userControl_ButtonFrame_TopPanel.Model_5.IsEnabled = false;
             musicPlayer_Model_2_Album_UserControl.Stack_Button_LotSelects_Sort.Visibility = Visibility.Collapsed;
 
-            #region 初始化
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+            }
+
+            #region Init
             //
             Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
             savePath = Path_App + @"/Music/";
-
-            // 删除临时数据（数据残余）
-            Delete_Clear_App_Temp();
-
             //
             viewModule_Search_Song = ViewModule_Search_Song.Retuen_This();
             this.DataContext = viewModule_Search_Song;
             //
             viewModule_Search_Song_For_Cloud_Music = ViewModule_Search_Song_For_Cloud_Music.Retuen_This();
             Loading_LottieAnimationView.DataContext = viewModule_Search_Song_For_Cloud_Music;
-
-
+            //
             window_Hover_MRC_Panel = new Window_Hover_MRC_Panel();
             window_Hover_EQ_Panel = new Window_Hover_EQ_Panel();
+            //
+            mediaElement_Song = MediaElement_Song.Retuen_This();
 
-            init();
+            //显示位置在屏幕中心
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
+            //
+            //高度绑定至动画，修改height就无法控制（启动时触发Window_SizeChanged事件导致height不为0不能隐藏）
+            doubleAnimation = new DoubleAnimation();
+            doubleAnimation.From = musicPlayer_Main_UserControl.ActualHeight;
+            doubleAnimation.To = 0;
+            doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(2));
+            musicPlayer_Main_UserControl.BeginAnimation(UserControl.HeightProperty, doubleAnimation);
+
+            //
             Once_Animation();
-
             Init_Animation();
 
+            //
+            userControl_SongList_Infos_Current_Playlist.Visibility = Visibility.Collapsed;
+            #endregion
+
+            /// 异步加载初始化数据
+            init();
+        }
+        [DllImport("kernel32.dll")]
+        private static extern bool SetProcessWorkingSetSize(IntPtr proc, int min, int max);
+        private void DispatcherTimer_memory_Tick(object? sender, EventArgs e)
+        {
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+            }
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+        /// <summary>
+        /// Loading Complete
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void window_contentRendered(object sender, EventArgs e)
+        {
+            using (var fileStream = new FileStream(Path_App + @"/Temp_System/Close.txt",
+                FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+            using (var writer = new StreamWriter(fileStream))
+            {
+                // 写入 1:进程标识:进程名称
+                //writer.Write("1:" + ProcessManager.GetUid() + ":" + Process.GetCurrentProcess().ProcessName);
+                writer.Write("open");
+            }
+
+            
+        }
+
+
+        #region UI Init Load
+
+        private async Task init()
+        {
+            // 删除临时数据（数据残余）
+            Delete_Clear_App_Temp();
+
+            #region SongList Init Set
+
             //初始化歌单信息
-            Init_SongList_InfoAsync();
+            await Init_SongList_InfoAsync();
             userControl_Main_Home_Left_MyMusic_ThisWindowsMusicAndDownload.ListView_Download_SongList_Info.ItemsSource = songList_Infos[1][0].Songs;
             userControl_Main_Home_Left_MyMusic_My_Love.ListView_Download_SongList_Info.ItemsSource = songList_Infos[0][0].Songs;
             userControl_Main_Home_Left_MyMusic_Recent_Play.ListView_Download_SongList_Info.ItemsSource = songList_Infos[2][0].Songs;
-
             userControl_SongList_Infos_Current_Playlist.ListView_Download_SongList_Info.ItemsSource = songList_Infos_Current_Playlist;
 
-            userControl_SongList_Infos_Current_Playlist.Visibility = Visibility.Collapsed;
+            userControl_ButtonFrame_MusicPlayer.TextBox_SongList_NumLength.Text = songList_Infos_Current_Playlist.Count.ToString();
+            userControl_ButtonFrame_MusicPlayer.TextBox_SongList_NumLength_Right.Text = songList_Infos_Current_Playlist.Count.ToString();
 
             //初始化歌单信息编辑
             Init_SongListInfo_Edit();
@@ -138,7 +198,10 @@ namespace NSMusicS
             userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Button_DownLoad_ALL_Music_Urls.Click += Button_DownLoad_ALL_Music_Urls_Click;
             userControl_Main_Home_Left_MyMusic_SongInfo_Synchronous.Button_Begin_Conn_API.Click += Button_Begin_Conn_API_Click;
 
-            //
+            #endregion
+
+            #region Audio Init Set
+
             WaveoutDevices = new List<ComboBoxItem_Name>();
             using (var enumerator = new MMDeviceEnumerator())
             {
@@ -162,8 +225,8 @@ namespace NSMusicS
             //
             userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.Button_Open_EQ.MouseLeftButtonDown += Button_Window_Hover_EQ_Panel;
             //
+
             //
-            mediaElement_Song = MediaElement_Song.Retuen_This();
             Init_DeviceChanged();
             //
             for (int i = 0; i < WaveoutDevices.Count; i++)
@@ -176,6 +239,9 @@ namespace NSMusicS
                     break;
                 }
             }
+            #endregion
+
+            #region Model Init
             //
             musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\Music_Album.png")));
             musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\Music_Album.png")));
@@ -184,12 +250,10 @@ namespace NSMusicS
             Grid_Model_1.Visibility = Visibility.Visible;
             Grid_Model_2.Visibility = Visibility.Collapsed;
             musicPlayer_Model_2_Album_UserControl.Stack_Panel_Sort_AlbumModel.Visibility = Visibility.Collapsed;
-
+            //
             viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
-            #endregion
 
-            #region Model Init
-
+            //
             musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged += ComBox_Select_SongList_SelectionChanged;
             musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.MouseLeftButtonDown += ComBox_Select_SongList_MouseLeftButtonDown;
             musicPlayer_Model_2_Album_UserControl.Button_Reload_For_Album_Performer.MouseLeftButtonDown += Button_Reload_For_Album_Performer_MouseLeftButtonDown;
@@ -198,7 +262,7 @@ namespace NSMusicS
 
             #endregion
 
-            #region 默认加载项
+            #region Auto Model Set
             //开启频谱模式
             //默认显示唱片控件
             musicPlayer_Main_UserControl.Bool_Player_Model = 1;//切换为1
@@ -207,35 +271,15 @@ namespace NSMusicS
 
             DispatcherTimer dispatcherTimer_memory = new DispatcherTimer();
             dispatcherTimer_memory.Tick += DispatcherTimer_memory_Tick;
-            dispatcherTimer_memory.Interval = new TimeSpan(0,0,0,30);
+            dispatcherTimer_memory.Interval = new TimeSpan(0, 0, 0, 30);
             dispatcherTimer_memory.Start();
 
             //加载一次界面大小适配
             Size_Changed();
 
             #endregion
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
-            }
+            
         }
-        [DllImport("kernel32.dll")]
-        private static extern bool SetProcessWorkingSetSize(IntPtr proc, int min, int max);
-        private void DispatcherTimer_memory_Tick(object? sender, EventArgs e)
-        {
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
-            }
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-        }
-
-
-        #region UI Init Load
 
         #region 页面切换
         /// <summary>
@@ -279,28 +323,6 @@ namespace NSMusicS
             Frame_Show.BeginAnimation(UserControl.WidthProperty, null);
         }
 
-        #endregion
-
-        #region App 初始化
-        /// <summary>
-        /// 初始化事件
-        /// </summary>
-        private void init()
-        {
-            //显示位置在屏幕中心
-            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            //去除窗体边框
-            //this.WindowStyle = WindowStyle.None;this.AllowsTransparency = true;
-
-
-            //高度绑定至动画，修改height就无法控制（启动时触发Window_SizeChanged事件导致height不为0不能隐藏）
-            doubleAnimation = new DoubleAnimation();
-            doubleAnimation.From = musicPlayer_Main_UserControl.ActualHeight;
-            doubleAnimation.To = 0;
-            doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(2));
-            musicPlayer_Main_UserControl.BeginAnimation(UserControl.HeightProperty, doubleAnimation);
-
-        }
         #endregion
 
         #region UI动画初始化
@@ -4124,9 +4146,79 @@ namespace NSMusicS
 
 
         #region 歌单信息重加载
-        public void Init_SongList_InfoAsync()
+        private async Task LoadSongListsAsync()
         {
-            #region 加载歌单信息
+            // 异步加载其他资源
+            var tasks = new List<Task>();
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (3).xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (4).xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (5).xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (6).xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (7).xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (8).xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (9).xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (10).xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (11).xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (12).xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (13).xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (14).xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (15).xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (16).xml")));
+            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_Current_Playlist.xml")));
+            // 其他加载任务...
+
+            // 等待所有任务完成
+            await Task.WhenAll(tasks);
+        }
+        private void LoadSongList(string path)
+        {
+            var songList = SongList_Info_Reader.ReadSongList_Infos(Path_App + path);
+            if (path.Contains("Song_List_Info_Current_Playlist"))
+            {
+                lock (songList_Infos_Current_Playlist)
+                {
+                    songList_Infos_Current_Playlist = songList[0].Songs;
+                }
+            }
+            else
+            {
+                lock (songList_Infos)
+                {
+                    songList_Infos.Add(songList);
+                }
+            }
+        }
+        public async Task Init_SongList_InfoAsync()
+        {
+            ///
+            Frame_Top_WindowsControl.IsEnabled = false;
+            Frame_Manager_ButtonList_Model_1.IsEnabled = false;
+            viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
+            ///
+            songList_Infos = SongList_Info.Retuen_This();
+            SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = new ObservableCollection<Song_Info>();
+            songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
+            ///
+            await LoadSongListsAsync();
+            var temp_song = songList_Infos.OrderBy(item => item[0].ID).ToList();
+            songList_Infos.Clear();
+            foreach (var item in temp_song)
+            {
+                songList_Infos.Add(item);
+            }
+            ///
+            SongList_Info.songList_Infos = songList_Infos;
+            SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
+            ///
+            Frame_Top_WindowsControl.IsEnabled = true;
+            Frame_Manager_ButtonList_Model_1.IsEnabled = true;
+            viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
+            
+
+            /*#region 加载歌单信息
             songList_Infos = SongList_Info.Retuen_This();
             songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
             //加载次序不能变
@@ -4155,12 +4247,7 @@ namespace NSMusicS
             //保存播放列表
             songList_Infos_Current_Playlist = SongList_Info_Reader.ReadSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Current_Playlist.xml")[0].Songs;
             SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
-            userControl_ButtonFrame_MusicPlayer.TextBox_SongList_NumLength.Text = songList_Infos_Current_Playlist.Count.ToString();
-            userControl_ButtonFrame_MusicPlayer.TextBox_SongList_NumLength_Right.Text = songList_Infos_Current_Playlist.Count.ToString();
-
-
-
-            #endregion
+            #endregion*/
 
             #region 加载自定义歌单列表 用户控件
             UserControl_Main_Home_Left_MyMusic_Mores_Class.userControl_Main_Home_Left_MyMusic_Mores.Clear();//清空数据
@@ -9687,7 +9774,8 @@ namespace NSMusicS
         {
             try
             {
-                this.DragMove();
+                if (Mouse.LeftButton == MouseButtonState.Pressed)
+                    this.DragMove();
             }
             catch { }
         }
@@ -9760,22 +9848,6 @@ namespace NSMusicS
 
             Environment.Exit(-1);
         }
-        private void window_contentRendered(object sender, EventArgs e)
-        {
-            //ProcessManager.GetUid():应用线程标识
-            //File.WriteAllText(Path_App + @"/Temp/Close.txt", "1:"+ ProcessManager.GetUid());
-
-            using (var fileStream = new FileStream(Path_App + @"/Temp_System/Close.txt",
-                FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
-            using (var writer = new StreamWriter(fileStream))
-            {
-                // 写入 1:进程标识:进程名称
-                //writer.Write("1:" + ProcessManager.GetUid() + ":" + Process.GetCurrentProcess().ProcessName);
-                writer.Write("open");
-            }
-        }
-        
-
         #endregion
 
         #region Sevices

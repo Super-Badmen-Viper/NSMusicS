@@ -29,8 +29,7 @@
         MouseLeftButtonDown="Window_MouseLeftButtonDown" 
         WindowStyle="None" AllowsTransparency="True"
         ResizeMode="CanResizeWithGrip" SizeChanged="Window_SizeChanged" Closed="Window_Closed"
-        ContentRendered="window_contentRendered" 
-        >
+        ContentRendered="window_contentRendered">
     <Grid>
         <MusicPlayer_Main:UserControl_TaskbarIcon x:Name="userControl_TaskbarIcon"/>
 
