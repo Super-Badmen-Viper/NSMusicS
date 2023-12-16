@@ -1,6 +1,8 @@
 ﻿using LottieSharp.WPF;
 using Microsoft.Win32;
 using NSMusicS.Models.Song_List_Infos;
+using NSMusicS.Models.Song_List_Infos.Convert_Song_Info;
+using NSMusicS.Models.Song_List_Infos.Product;
 using SharpVectors.Converters;
 using System;
 using System.Collections;
@@ -8,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -80,7 +83,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         private void Button_SongList_Select_Click(object sender, RoutedEventArgs e)
         {
             //歌单歌曲排序
-            Sort_SongList();
+            Sort_SongListAsync();
         }
 
         #region 选中此音乐/播放此音乐
@@ -139,13 +142,13 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
             songList_Infos = SongList_Info.Retuen_This();
 
             //歌单歌曲排序
-            Sort_SongList();
+            Sort_SongListAsync();
 
             Button ck_Selected_temp = sender as Button;
 
             Select_Add_Or_Delete(ck_Selected_temp, songList_Infos[1][0].Songs);
 
-            Sort_SongList();
+            Sort_SongListAsync();
         }
 
 
@@ -449,7 +452,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                     if (this.Song_Info_Selects.Count > 0)
                     {
                         //歌单歌曲排序
-                        Sort_SongList();
+                        Sort_SongListAsync();
 
                         int nums_select = 0;
                         for (int i = 0; i < this.Song_Info_Selects.Count; i++)
@@ -478,14 +481,14 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                 }
             }
 
-            Sort_SongList();
+            Sort_SongListAsync();
         }
         #endregion
 
         /// <summary>
         /// 排序
         /// </summary>
-        public void Sort_SongList()
+        public async Task Sort_SongListAsync()
         {
             //刷新内存区域的引用
             songList_Infos = SongList_Info.Retuen_This();
@@ -509,7 +512,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
             //ListView_Download_SongList_Info.Items.Refresh();
 
             //保存歌单信息
-            Save_SongListInfo();
+            Save_SongListInfoAsync();
         }
 
         /// <summary>
@@ -520,7 +523,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         private void Button_Sort_Click(object sender, RoutedEventArgs e)
         {
             //歌单歌曲排序
-            Sort_SongList();
+            Sort_SongListAsync();
         }
 
         #region 全选 歌单列表 歌曲 + 选中添加至制定歌单
@@ -834,7 +837,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
             ComBox_Select_Add_SongList.SelectedIndex = -1;
 
             //保存歌单信息
-            Save_SongListInfo();
+            Save_SongListInfoAsync();
         }
 
         #endregion
@@ -1105,25 +1108,67 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         }
 
         #region 歌曲信息保存
-        public void Save_SongListInfo()
+        Convert_Song_List_Infos convert_Song_Info = new Convert_Song_List_Infos();
+        public async Task Save_SongListInfoAsync()
         {
+            /// 清空内部数据
+            var allCategories = convert_Song_Info.dbContext.Category_SongList_Infos.ToList();
+            convert_Song_Info.dbContext.Category_SongList_Infos.RemoveRange(allCategories);
+            var allProducts = convert_Song_Info.dbContext.Product_Song_Infos.ToList();
+            convert_Song_Info.dbContext.Product_Song_Infos.RemoveRange(allProducts);
+            convert_Song_Info.dbContext.SaveChanges();
+
             songList_Infos = SongList_Info.Retuen_This();
 
             var playlists = new ObservableCollection<SongList_Info>();
             playlists = songList_Infos[0];
-            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
+            /// SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
+            await convert_Song_Info.Save_SongList_To_DatabaseAsync(
+                Create_Product_Song_Infos(playlists[0].Songs),
+                0, "我的收藏");
+
             playlists = new ObservableCollection<SongList_Info>();
             playlists = songList_Infos[1];
-            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml", playlists);
+            /// SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml", playlists);
+            await convert_Song_Info.Save_SongList_To_DatabaseAsync(
+                Create_Product_Song_Infos(playlists[0].Songs),
+                1, "本地音乐");
+
             playlists = new ObservableCollection<SongList_Info>();
             playlists = songList_Infos[2];
-            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml", playlists);
+            /// SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml", playlists);
+            await convert_Song_Info.Save_SongList_To_DatabaseAsync(
+                Create_Product_Song_Infos(playlists[0].Songs),
+                2, "默认列表");
+
             for (int i = 3; i < 17; i++)
             {
                 playlists = new ObservableCollection<SongList_Info>();
                 playlists = songList_Infos[i];
-                SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (" + i + ").xml", playlists);
+                /// SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (" + i + ").xml", playlists);
+                await convert_Song_Info.Save_SongList_To_DatabaseAsync(
+                    Create_Product_Song_Infos(playlists[0].Songs),
+                    3, "歌单" + i);
             }
+        }
+        public ObservableCollection<Product_Song_Info> Create_Product_Song_Infos(ObservableCollection<Song_Info> temp)
+        {
+            ObservableCollection<Product_Song_Info> songs = new ObservableCollection<Product_Song_Info>();
+            foreach (var item in temp)
+            {
+                Product_Song_Info _Song_Info = new Product_Song_Info();
+                _Song_Info.Song_No = item.Song_No;
+                _Song_Info.Song_Name = item.Song_Name;
+                _Song_Info.Singer_Name = item.Singer_Name;
+                _Song_Info.Song_Url = item.Song_Url;
+                _Song_Info.Song_Duration = item.Song_Duration;
+                _Song_Info.Song_Like = item.Song_Like;
+                _Song_Info.Album_Name = item.Album_Name;
+                _Song_Info.MV_Path = item.MV_Path;
+
+                songs.Add(_Song_Info);
+            }
+            return songs;
         }
         #endregion
 

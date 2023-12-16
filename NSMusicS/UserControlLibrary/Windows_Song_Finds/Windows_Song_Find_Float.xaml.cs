@@ -1,5 +1,7 @@
 ﻿using Microsoft.Win32;
 using NSMusicS.Models.Song_List_Infos;
+using NSMusicS.Models.Song_List_Infos.Convert_Song_Info;
+using NSMusicS.Models.Song_List_Infos.Product;
 using Shell32;
 using System;
 using System.Collections;
@@ -428,7 +430,7 @@ namespace NSMusicS.UserControlLibrary.Windows_Song_Finds
 
         }
 
-        private void Save_SongListInfo()
+        private async void Save_SongListInfo()
         {
             //刷新内存区域的引用
             ObservableCollection<ObservableCollection<Models.Song_List_Infos.SongList_Info>> songList_Infos = SongList_Info.Retuen_This();
@@ -548,23 +550,7 @@ namespace NSMusicS.UserControlLibrary.Windows_Song_Finds
             }
 
             //保存歌单信息
-            string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
-            var playlists = new ObservableCollection<SongList_Info>();
-            playlists = songList_Infos[0];
-            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
-            playlists = new ObservableCollection<SongList_Info>();
-            playlists = songList_Infos[1];
-            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml", playlists);
-            playlists = new ObservableCollection<SongList_Info>();
-            playlists = songList_Infos[2];
-            SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml", playlists);
-            for (int i = 3; i < 17; i++)
-            {
-                playlists = new ObservableCollection<SongList_Info>();
-                playlists = songList_Infos[i];
-                SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (" + i + ").xml", playlists);
-            }
-            SongList_Info.songList_Infos = songList_Infos;
+            Save_SongListInfoAsync();
         }
 
         private void Back_Windows_Click(object sender, RoutedEventArgs e)
@@ -618,6 +604,74 @@ namespace NSMusicS.UserControlLibrary.Windows_Song_Finds
         {
             string[] audioExtensions = { ".mp3", ".wav", ".flac" };
             return audioExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase);
+        }
+
+
+        /// <summary>
+        /// 保存歌单信息
+        /// </summary>
+        ObservableCollection<ObservableCollection<Models.Song_List_Infos.SongList_Info>> songList_Infos;
+        Convert_Song_List_Infos convert_Song_Info = new Convert_Song_List_Infos();
+        public async Task Save_SongListInfoAsync()
+        {
+            /// 清空内部数据
+            var allCategories = convert_Song_Info.dbContext.Category_SongList_Infos.ToList();
+            convert_Song_Info.dbContext.Category_SongList_Infos.RemoveRange(allCategories);
+            var allProducts = convert_Song_Info.dbContext.Product_Song_Infos.ToList();
+            convert_Song_Info.dbContext.Product_Song_Infos.RemoveRange(allProducts);
+            convert_Song_Info.dbContext.SaveChanges();
+
+            songList_Infos = SongList_Info.Retuen_This();
+
+            var playlists = new ObservableCollection<SongList_Info>();
+            playlists = songList_Infos[0];
+            /// SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
+            await convert_Song_Info.Save_SongList_To_DatabaseAsync(
+                Create_Product_Song_Infos(playlists[0].Songs),
+                0, "我的收藏");
+
+            playlists = new ObservableCollection<SongList_Info>();
+            playlists = songList_Infos[1];
+            /// SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml", playlists);
+            await convert_Song_Info.Save_SongList_To_DatabaseAsync(
+                Create_Product_Song_Infos(playlists[0].Songs),
+                1, "本地音乐");
+
+            playlists = new ObservableCollection<SongList_Info>();
+            playlists = songList_Infos[2];
+            /// SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml", playlists);
+            await convert_Song_Info.Save_SongList_To_DatabaseAsync(
+                Create_Product_Song_Infos(playlists[0].Songs),
+                2, "默认列表");
+
+            for (int i = 3; i < 17; i++)
+            {
+                playlists = new ObservableCollection<SongList_Info>();
+                playlists = songList_Infos[i];
+                /// SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (" + i + ").xml", playlists);
+                await convert_Song_Info.Save_SongList_To_DatabaseAsync(
+                    Create_Product_Song_Infos(playlists[0].Songs),
+                    3, "歌单" + i);
+            }
+        }
+        public ObservableCollection<Product_Song_Info> Create_Product_Song_Infos(ObservableCollection<Song_Info> temp)
+        {
+            ObservableCollection<Product_Song_Info> songs = new ObservableCollection<Product_Song_Info>();
+            foreach (var item in temp)
+            {
+                Product_Song_Info _Song_Info = new Product_Song_Info();
+                _Song_Info.Song_No = item.Song_No;
+                _Song_Info.Song_Name = item.Song_Name;
+                _Song_Info.Singer_Name = item.Singer_Name;
+                _Song_Info.Song_Url = item.Song_Url;
+                _Song_Info.Song_Duration = item.Song_Duration;
+                _Song_Info.Song_Like = item.Song_Like;
+                _Song_Info.Album_Name = item.Album_Name;
+                _Song_Info.MV_Path = item.MV_Path;
+
+                songs.Add(_Song_Info);
+            }
+            return songs;
         }
     }
 }

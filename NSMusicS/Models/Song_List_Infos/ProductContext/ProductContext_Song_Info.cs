@@ -1,0 +1,54 @@
+﻿using Microsoft.EntityFrameworkCore;
+using NSMusicS.Models.Song_List_Infos.Category;
+using NSMusicS.Models.Song_List_Infos.Product;
+using SkiaSharp;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace NSMusicS.Models.Song_List_Infos.ProductContext
+{
+    public class ProductContext_Song_Info : DbContext
+    {
+        /// <summary>
+        /// 歌单数据DB（Category_SongList_ID 一一对应）
+        /// </summary>
+        public DbSet<Category_SongList_Info> Category_SongList_Infos { get; set; }
+        /// <summary>
+        /// 歌曲数据DB（Category_SongList_ID 一一对应）
+        /// </summary>
+        public DbSet<Product_Song_Info> Product_Song_Infos { get; set; }
+
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite(
+                "Data Source=ProductContext_Song_Info.db");
+            optionsBuilder.UseLazyLoadingProxies();
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Category_SongList_ID 作为 Category_SongList_Info表的主键
+            modelBuilder.Entity<Category_SongList_Info>()
+                .HasKey(si => si.Category_SongList_ID);
+
+            // Song_No 作为 Product_Song_Info表的主键
+            modelBuilder.Entity<Product_Song_Info>()
+                .HasKey(si => si.Song_Url);
+
+            // 告诉 EF Core 使用 Category_SongList_ID 作为外键关联到 Category_SongList_Info 表的主键
+            modelBuilder.Entity<Product_Song_Info>()
+                .HasOne(psi => psi.category_SongList_Info)
+                .WithMany(csi => csi.Product_Song_Infos)
+                .HasForeignKey(psi => psi.Category_SongList_ID);
+
+            base.OnModelCreating(modelBuilder);
+        }
+
+
+    }
+}

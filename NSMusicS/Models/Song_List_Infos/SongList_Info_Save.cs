@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using System.Xml;
 using System.Collections.ObjectModel;
+using static NSMusicS.Models.Servies_For_API_Info.API_Song_Info;
+using System.Text.Json;
+using System.IO;
 
 namespace NSMusicS.Models.Song_List_Infos
 {
     public class SongList_Info_Save
     {
-        public static void SaveSongList_Infos(string filePath, ObservableCollection<SongList_Info> songList_Infos)
+        public static void SaveSongList_Infos_To_XML(string filePath, ObservableCollection<SongList_Info> songList_Infos)
         {
             var doc = new XmlDocument();
             var declaration = doc.CreateXmlDeclaration("1.0", "utf-8", null);
@@ -74,5 +77,75 @@ namespace NSMusicS.Models.Song_List_Infos
 
             doc.Save(filePath);
         }
+
+        public static void SaveSongList_Infos_To_Json(string filePath, ObservableCollection<SongList_Info> songList_Infos)
+        {
+            filePath = filePath.Replace("xml","json");
+
+            var songInfos = new SongInfos();
+            songInfos.Song_Infos = new ObservableCollection<Song_Info>();
+
+            foreach (var songList_Info in songList_Infos)
+            {
+                var songInfo = new Song_Info();
+                songInfo.ID = songList_Info.ID;
+                songInfo.Name = songList_Info.Name;
+                songInfo.Songs = new ObservableCollection<Song>();
+
+                foreach (var song in songList_Info.Songs)
+                {
+                    var songElement = new Song();
+                    songElement.Song_Name = song.Song_Name;
+                    songElement.Singer_Name = song.Singer_Name;
+                    songElement.Album_Name = song.Album_Name;
+                    songElement.Song_Url = song.Song_Url;
+                    songElement.Song_Duration = song.Song_Duration;
+                    songElement.Song_No = song.Song_No;
+
+                    if (filePath.IndexOf("Love") > 0)
+                        songElement.Song_Like = 1;
+                    else
+                        songElement.Song_Like = 0;
+
+                    songElement.MV_Path = song.MV_Path;
+
+                    songInfo.Songs.Add(songElement);
+                }
+
+                songInfos.Song_Infos.Add(songInfo);
+            }
+
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+
+            var json = JsonSerializer.Serialize(songInfos, options);
+
+            File.WriteAllText(filePath, json);
+        }
+        public class SongInfos
+        {
+            public ObservableCollection<Song_Info> Song_Infos { get; set; }
+        }
+        public class Song_Info
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+            public ObservableCollection<Song> Songs { get; set; }
+        }
+        public class Song
+        {
+            public string Song_Name { get; set; }
+            public string Singer_Name { get; set; }
+            public string Album_Name { get; set; }
+            public string Song_Url { get; set; }
+            public string Song_Duration { get; set; }
+            public int Song_No { get; set; }
+            public int Song_Like { get; set; }
+            public string MV_Path { get; set; }
+        }
+
+
     }
 }
