@@ -21,6 +21,7 @@ using System.Windows.Media.Imaging;
 using static NSMusicS.Models.Servies_For_API_Info.API_Song_Info;
 using static NSMusicS.Models.Servies_For_API_Info.API_Song_Info_Get_Url;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using NSMusicS.Models.Song_List_Infos.SS_Convert;
 
 namespace NSMusicS.Services.Services_For_API_GetResult
 {
@@ -47,6 +48,8 @@ namespace NSMusicS.Services.Services_For_API_GetResult
         public ImageBrush Song_MV_Image { get; set; }
         public ImageBrush Song_DownLoad_Image { get; set; }
         public ImageBrush Song_UpLoad_Tone_Quality { get; set; }
+
+        Convert_Song_List_Infos convert_Song_Info = new Convert_Song_List_Infos();
 
         public ViewModule_Search_Song()
         {
@@ -263,6 +266,7 @@ namespace NSMusicS.Services.Services_For_API_GetResult
                 temp.Song_No = 0;
                 songList_Infos_Current_Playlist = new ObservableCollection<Song_Info>();
                 songList_Infos_Current_Playlist.Add(temp);
+                convert_Song_Info.Save_Song_To_DatabaseAsync(temp, -1, "播放列表");
                 SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist =
                     songList_Infos_Current_Playlist;
                 /*//同步信息到UI

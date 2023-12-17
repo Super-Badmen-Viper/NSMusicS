@@ -24,10 +24,16 @@ namespace NSMusicS.Models.Song_List_Infos.ProductContext
         public DbSet<Product_Song_Info> Product_Song_Infos { get; set; }
 
 
+        public ProductContext_Song_Info(string temp)
+        {
+            db_name = temp;
+        }
+
+        string db_name = "ProductContext_Song_Info";
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite(
-                "Data Source=ProductContext_Song_Info.db");
+                "Data Source=" + db_name + ".db");
             optionsBuilder.UseLazyLoadingProxies();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,7 +44,7 @@ namespace NSMusicS.Models.Song_List_Infos.ProductContext
 
             // Song_No 作为 Product_Song_Info表的主键
             modelBuilder.Entity<Product_Song_Info>()
-                .HasKey(si => si.Song_Url);
+                .HasKey(si => si.SongList_Name_AND_Song_Url);
 
             // 告诉 EF Core 使用 Category_SongList_ID 作为外键关联到 Category_SongList_Info 表的主键
             modelBuilder.Entity<Product_Song_Info>()

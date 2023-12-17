@@ -59,7 +59,7 @@ using NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls;
 using NSMusicS.UserControlLibrary.MusicPlayer_Main;
 using NAudio.CoreAudioApi;
 using NSMusicS.UserControlLibrary.MainWindow_TOP_UserControls;
-using NSMusicS.Models.Song_List_Infos.Convert_Song_Info;
+using NSMusicS.Models.Song_List_Infos.SS_Convert;
 using NSMusicS.Models.Song_List_Infos.Product;
 using NSMusicS.Models.Song_List_Infos.Category;
 using Microsoft.EntityFrameworkCore;
@@ -386,9 +386,10 @@ namespace NSMusicS
 
             //模式切换设置
             userControl_ButtonFrame_TopPanel.Model_1.MouseLeftButtonDown += Switch_To_Single_Mode_Click;
-            userControl_ButtonFrame_TopPanel.Model_2.MouseLeftButtonDown += Switch_To_Album_Mode_Click;
-            userControl_ButtonFrame_TopPanel.Model_3.MouseLeftButtonDown += Switch_To_Web_Model_4_MouseLeftButtonDown;//联网模式
-            userControl_ButtonFrame_TopPanel.Model_5.MouseLeftButtonDown += Switch_To_NAS_Model_5_MouseLeftButtonDown;
+            //userControl_ButtonFrame_TopPanel.Model_2.MouseLeftButtonDown += ;
+            userControl_ButtonFrame_TopPanel.Model_3.MouseLeftButtonDown += Switch_To_Album_Mode_Click;//联网模式
+            userControl_ButtonFrame_TopPanel.Model_5.MouseLeftButtonDown += Switch_To_Web_Model_4_MouseLeftButtonDown;
+            //Switch_To_NAS_Model_5_MouseLeftButtonDown
 
             //App 设置
             userControl_ButtonFrame_TopPanel.Button_Setting.MouseLeftButtonDown += Button_App_Menu_Setting_Click;
@@ -4158,6 +4159,9 @@ namespace NSMusicS
 
         public string Path_App;
 
+        Convert_Song_List_Infos convert_Song_Info = new Convert_Song_List_Infos();
+        Convert_Singer_List_Infos convert_Singer_List_Info = new Convert_Singer_List_Infos();
+
 
         #region 歌单信息重加载
         private async Task LoadSongListsAsync()
@@ -4217,7 +4221,7 @@ namespace NSMusicS
             LoadSongList(14,@"歌单14");
             LoadSongList(15,@"歌单15");
             LoadSongList(16,@"歌单16");
-            LoadSongList(-1,@"播放列表");
+            LoadSongList(17,@"播放列表");
             // 其他加载任务...
 
             // 等待所有任务完成
@@ -4255,12 +4259,6 @@ namespace NSMusicS
             songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
             ///
             await LoadSongListsAsync();
-            /*var temp_song = songList_Infos.OrderBy(item => item[0].ID).ToList();
-            songList_Infos.Clear();
-            foreach (var item in temp_song)
-            {
-                songList_Infos.Add(item);
-            }*/
             ///
             SongList_Info.songList_Infos = songList_Infos;
             SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
@@ -4269,7 +4267,6 @@ namespace NSMusicS
             Frame_Manager_ButtonList_Model_1.IsEnabled = true;
             viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
             
-
             /*#region 加载歌单信息
             songList_Infos = SongList_Info.Retuen_This();
             songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
@@ -4506,7 +4503,21 @@ namespace NSMusicS
             //默认本地音乐
             if (songList_Infos[1][0] != null && songList_Infos[1][0].Songs != null)
             {
+                /// 数据库中读取
+                Album_Performer_s = await convert_Singer_List_Info.Read_Singers_From_DatabaseAsync(1, @"本地音乐");
+
+                /*/// 本地歌单中生成
                 Album_Performer_s = await Load_SingerInfo_For_PerformerShow(songList_Infos[1][0].Songs);
+                //去重
+                var uniqueAlbumPerformers = Album_Performer_s
+                    .GroupBy(x => x.Album_Performer_Name)
+                    .Select(g => g.First())
+                    .ToList();
+                Album_Performer_s.Clear();
+                foreach (var albumPerformer in uniqueAlbumPerformers)
+                {
+                    Album_Performer_s.Add(albumPerformer);
+                }*/
 
                 if (Album_Performer_s != null && Album_Performer_s.Count > 0)
                 {
@@ -4738,23 +4749,21 @@ namespace NSMusicS
         #endregion
 
         #region 歌曲信息保存
-        Convert_Song_List_Infos convert_Song_Info = new Convert_Song_List_Infos();
-
         public async void Save_SongListInfo()
         {
-            /// 清空内部数据
-            var allCategories = convert_Song_Info.dbContext.Category_SongList_Infos.ToList();
-            convert_Song_Info.dbContext.Category_SongList_Infos.RemoveRange(allCategories);
-            var allProducts = convert_Song_Info.dbContext.Product_Song_Infos.ToList();
-            convert_Song_Info.dbContext.Product_Song_Infos.RemoveRange(allProducts);
-            convert_Song_Info.dbContext.SaveChanges();
+            /// 适用于单列表
+            var allCategories = await convert_Song_Info.doContext.Category_SongList_Infos.ToListAsync();
+            convert_Song_Info.doContext.Category_SongList_Infos.RemoveRange(allCategories);
+            var allProducts = await convert_Song_Info.doContext.Product_Song_Infos.ToListAsync();
+            convert_Song_Info.doContext.Product_Song_Infos.RemoveRange(allProducts);
+            await convert_Song_Info.doContext.SaveChangesAsync();
 
             var playlists = new ObservableCollection<SongList_Info>();
             playlists = songList_Infos[0];
             ///SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
             ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
             await convert_Song_Info.Save_SongList_To_DatabaseAsync(
-                Create_Product_Song_Infos(playlists[0].Songs),
+                convert_Song_Info.Create_Product_Song_Infos(playlists[0].Songs, "我的收藏"),
                 0, "我的收藏");
 
             ///
@@ -4762,15 +4771,15 @@ namespace NSMusicS
             playlists = songList_Infos[1];
             ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml", playlists);
             await convert_Song_Info.Save_SongList_To_DatabaseAsync(
-                Create_Product_Song_Infos(playlists[0].Songs), 
-                1,"本地音乐");
+                convert_Song_Info.Create_Product_Song_Infos(playlists[0].Songs, "本地音乐"),
+                1, "本地音乐");
 
             ///
             playlists = new ObservableCollection<SongList_Info>();
             playlists = songList_Infos[2];
             ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml", playlists);
             await convert_Song_Info.Save_SongList_To_DatabaseAsync(
-                Create_Product_Song_Infos(playlists[0].Songs),
+                convert_Song_Info.Create_Product_Song_Infos(playlists[0].Songs, "默认列表"),
                 2, "默认列表");
 
             ///
@@ -4780,8 +4789,8 @@ namespace NSMusicS
                 playlists = songList_Infos[i];
                 ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (" + i + ").xml", playlists);
                 await convert_Song_Info.Save_SongList_To_DatabaseAsync(
-                    Create_Product_Song_Infos(playlists[0].Songs),
-                    3, "歌单"+i);
+                    convert_Song_Info.Create_Product_Song_Infos(playlists[0].Songs, "歌单" + i),
+                    3, "歌单" + i);
             }
 
             ///
@@ -4794,7 +4803,7 @@ namespace NSMusicS
             playlists[0].Songs = songList_Infos_Current_Playlist;
             ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Current_Playlist.xml", playlists);
             await convert_Song_Info.Save_SongList_To_DatabaseAsync(
-                Create_Product_Song_Infos(playlists[0].Songs),
+                convert_Song_Info.Create_Product_Song_Infos(playlists[0].Songs, "播放列表"),
                 -1, "播放列表");
 
             ///
@@ -4809,17 +4818,17 @@ namespace NSMusicS
                     // 定义 Slider 控件数组
                     Slider[] sliders = new Slider[]
                     {
-                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num31,
-                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num62,
-                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num125,
-                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num250,
-                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num500,
-                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num1k,
-                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num2k,
-                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num4k,
-                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num8k,
-                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num16k,
-                    window_Hover_EQ_Panel.Slider_Model_1_Eq_Num20k
+                        window_Hover_EQ_Panel.Slider_Model_1_Eq_Num31,
+                        window_Hover_EQ_Panel.Slider_Model_1_Eq_Num62,
+                        window_Hover_EQ_Panel.Slider_Model_1_Eq_Num125,
+                        window_Hover_EQ_Panel.Slider_Model_1_Eq_Num250,
+                        window_Hover_EQ_Panel.Slider_Model_1_Eq_Num500,
+                        window_Hover_EQ_Panel.Slider_Model_1_Eq_Num1k,
+                        window_Hover_EQ_Panel.Slider_Model_1_Eq_Num2k,
+                        window_Hover_EQ_Panel.Slider_Model_1_Eq_Num4k,
+                        window_Hover_EQ_Panel.Slider_Model_1_Eq_Num8k,
+                        window_Hover_EQ_Panel.Slider_Model_1_Eq_Num16k,
+                        window_Hover_EQ_Panel.Slider_Model_1_Eq_Num20k
                     };
 
                     // 定义 int[] 数组
@@ -4837,25 +4846,9 @@ namespace NSMusicS
                 }
             }
             catch { }
-        }
-        public ObservableCollection<Product_Song_Info> Create_Product_Song_Infos(ObservableCollection<Song_Info> temp)
-        {
-            ObservableCollection<Product_Song_Info> songs = new ObservableCollection<Product_Song_Info>();
-            foreach (var item in temp)
-            {
-                Product_Song_Info _Song_Info = new Product_Song_Info();
-                _Song_Info.Song_No = item.Song_No;
-                _Song_Info.Song_Name = item.Song_Name;
-                _Song_Info.Singer_Name = item.Singer_Name;
-                _Song_Info.Song_Url = item.Song_Url;
-                _Song_Info.Song_Duration = item.Song_Duration;
-                _Song_Info.Song_Like = item.Song_Like;
-                _Song_Info.Album_Name = item.Album_Name;
-                _Song_Info.MV_Path = item.MV_Path;
 
-                songs.Add(_Song_Info);
-            }
-            return songs;
+            /// 保存至数据库
+            await convert_Singer_List_Info.Save_SingerList_To_DatabaseAsync(convert_Singer_List_Info.Category_SingerList_Infos(Album_Performer_s), 1, "本地音乐");
         }
         #endregion
 
@@ -5201,9 +5194,18 @@ namespace NSMusicS
             viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
 
             //为优化内存占用，将不再保留专辑数据
-            aLL_Performer_ALL_AlbumSongList.ALL_Performers.Clear();
-            aLL_Performer_ALL_AlbumSongList.ALL_Performers = null;
-            aLL_Performer_ALL_AlbumSongList.ALL_Performers = new ObservableCollection<This_Performer_ALL_AlbumSongList>();
+            if (aLL_Performer_ALL_AlbumSongList != null)
+            {
+                if (aLL_Performer_ALL_AlbumSongList.ALL_Performers != null)
+                    aLL_Performer_ALL_AlbumSongList.ALL_Performers.Clear();
+                else
+                    aLL_Performer_ALL_AlbumSongList.ALL_Performers = new ObservableCollection<This_Performer_ALL_AlbumSongList>();
+            }
+            else
+            {
+                aLL_Performer_ALL_AlbumSongList = new ALL_Performer_ALL_AlbumSongList();
+                aLL_Performer_ALL_AlbumSongList.ALL_Performers = new ObservableCollection<This_Performer_ALL_AlbumSongList>();
+            }
 
             /*for (int i = 0; i < List_Assembly_Albums_And_Tracks.Count; i++)
                 List_Assembly_Albums_And_Tracks[i] = null;
@@ -7602,11 +7604,13 @@ namespace NSMusicS
                 for (int i = 0; i < temp.Count; i++)
                 {
                     songList_Infos_Current_Playlist.Add(temp[i]);
+                    convert_Song_Info.Save_Song_To_DatabaseAsync(temp[i], -1, "播放列表");
                 }
                 //再添加 原 播放列表
                 for (int i = 0; i < _Infos.Count; i++)
                 {
                     songList_Infos_Current_Playlist.Add(_Infos[i]);
+                    convert_Song_Info.Save_Song_To_DatabaseAsync(_Infos[i], -1, "播放列表");
                 }
             }
             //插入到队尾
@@ -7621,6 +7625,7 @@ namespace NSMusicS
                 for (int i = 0; i < temp.Count; i++)
                 {
                     songList_Infos_Current_Playlist.Add(temp[i]);
+                    convert_Song_Info.Save_Song_To_DatabaseAsync(temp[i], -1, "播放列表");
                 }
             }
 

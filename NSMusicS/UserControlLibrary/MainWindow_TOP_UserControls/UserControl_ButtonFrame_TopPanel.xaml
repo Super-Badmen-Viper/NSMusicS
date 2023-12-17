@@ -26,7 +26,7 @@
                         Margin="20,0,0,0"
                         HorizontalAlignment="Left" VerticalAlignment="Center" 
                     />
-                    <Button:UserControl_Top_Bar_Button_3_Model_Music_library
+                    <Button:UserControl_Top_Bar_Button_3_Model_Singer_library
                         x:Name="Model_3"
                         Margin="20,0,0,0"
                         HorizontalAlignment="Left" VerticalAlignment="Center" 

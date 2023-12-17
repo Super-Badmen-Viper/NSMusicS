@@ -11,7 +11,7 @@
             <Grid>
                 <TextBlock 
                     x:Name="Text_Button"
-                    Text="单曲" Foreground="#333333"
+                    Text="乐曲" Foreground="#333333"
                     TextAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,0" FontSize="20"/>
                 <Border 
                     x:Name="Check_Selected"

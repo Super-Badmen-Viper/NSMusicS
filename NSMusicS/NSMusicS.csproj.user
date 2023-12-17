@@ -314,7 +314,7 @@
     <Page Update="VIewModels\Button\UserControl_Top_Bar_Button_2_Model_Album.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="VIewModels\Button\UserControl_Top_Bar_Button_3_Model_Music_library.xaml">
+    <Page Update="VIewModels\Button\UserControl_Top_Bar_Button_3_Model_Singer_library.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="VIewModels\Button\UserControl_Top_Bar_Button_4_Model_NAS.xaml">

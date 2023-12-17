@@ -15,6 +15,7 @@ namespace NSMusicS.Models.Song_List_Infos.Category
     {
         public int Category_SongList_ID { get; set; }
         public string Category_SongList_Name { get; set; }
+
         public virtual ICollection<Product_Song_Info> Product_Song_Infos
         {
             get; private set;
