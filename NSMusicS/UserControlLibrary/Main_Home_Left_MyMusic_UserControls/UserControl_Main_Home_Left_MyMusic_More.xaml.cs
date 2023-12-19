@@ -2,8 +2,6 @@
 using LottieSharp.WPF;
 using Microsoft.Win32;
 using NSMusicS.Models.Song_List_Infos;
-using NSMusicS.Models.Song_List_Infos.SS_Convert;
-using NSMusicS.Models.Song_List_Infos.Product;
 using SharpVectors.Converters;
 using System;
 using System.Collections;
@@ -22,6 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.EntityFrameworkCore;
+using NSMusicS.Models.APP_DB_SqlLite.SS_Convert;
 
 namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
 {

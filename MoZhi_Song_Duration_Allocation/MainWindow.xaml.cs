@@ -1,15 +1,11 @@
 ﻿using MoZhi_Song_Duration_Allocation.UserControlLibrary.MainWindow_Buttom_SingerKrcSinging_Panel.UserControl_ListviewItem_SingerKrc;
-using MoZhi_Song_Duration_Allocation.UserControlLibrary.MainWindow_Buttom_SingerKrcSinging_Panel;
-using MoZhi_Song_Duration_Allocation.UserControlLibrary.MainWindow_Buttom_SingerKrcSinging_Panel.UserControl_ListviewItem_SingerKrc;
-using MoZhi_Song_Duration_Allocation.UserControlLibrary.MainWindow_Top_MediaMV;
-using MoZhi_Song_Duration_Allocation.UserControlLibrary.MainWindow_Top_MediaMV.UserControl_Media_ButtomSilderPanel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
+using System.Linq; 
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -71,14 +67,41 @@ namespace MoZhi_Song_Duration_Allocation
         {
             Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
 
-            string temp = "EXO - Obsession";//aespa - Spicy  EXO - Obsession  EXO - LOTTO (Chinese Ver.)
+            string temp = "aespa - Spicy";//aespa - Spicy  EXO - Obsession  EXO - LOTTO (Chinese Ver.)
 
             //设置要分析的歌词文件（mrc）路径
             MRC_URL = Path_App + @"\Krc\"+ temp + ".krc";
             CRC_URL = Path_App + @"\Crc\" + temp + ".crc";
             userControl_MediaMV.MediaMent_MV.Source = new Uri(Path_App + @"\MV\" + temp + ".mp4");
             Is_Chinese = true;
-            temp_Song_ = 5000;// 5000,-1000:OB  0:Lotto  -200:Spicy
+            temp_Song_ = -200;// 5000,-1000:OB  0:Lotto  -200:Spicy
+
+            userControl_SingerKrcSinging_Panel.Singer_Name = new ArrayList
+            {
+                "柳智敏KARINA","金旼炡WINTER","宁艺卓NINGNING","内永枝利GISELLE","aespa ALL"
+
+                /*"KAI金钟仁",
+                "BAEKHYUN边伯贤",
+                "CHANYEOL朴灿烈",
+                "SUHO金俊勉",
+                "SEHUN吴世勋",
+                "CHEN金钟大",
+                "EXO全体"*/
+
+                /*"KAI金钟仁",
+                "BAEKHYUN边伯贤",
+                "CHANYEOL朴灿烈",
+                "SUHO金俊勉",
+                "SEHUN吴世勋",
+                "D.O都敬秀",
+                "CHEN金钟大",
+                "XIUMIN金珉锡",
+                "LAY张艺兴",*/
+                /*"TAO黄子韬",
+                "LUHAN鹿晗",
+                "KRIS吴亦凡"*/
+            };
+            userControl_SingerKrcSinging_Panel.Init();
 
             userControl_MediaMV.MediaMent_MV.Play();
             userControl_MediaMV.MediaMent_MV.LoadedBehavior = MediaState.Play;

@@ -19,10 +19,9 @@ using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using SharpVectors.Converters;
 using LottieSharp.WPF;
-using NSMusicS.Models.Song_List_Infos.SS_Convert;
-using NSMusicS.Models.Song_List_Infos.Product;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using NSMusicS.Models.APP_DB_SqlLite.SS_Convert;
 
 namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
 {
@@ -1100,7 +1099,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                     newSongInfo.Bool_Playing = ((Song_Info)Song_Info_Selects[i]).Bool_Playing;
 
                     songList_Infos_Current_Playlist.Add(newSongInfo);
-                    convert_Song_Info.Save_Song_To_DatabaseAsync(newSongInfo, -1, "播放列表");
+                    convert_Song_Info.Save_Song_To_DatabaseAsync(newSongInfo, 17, "播放列表");
                 }
             }
             //排序

@@ -15,8 +15,6 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Threading;
 using NSMusicS.Models.Song_Audio_Out.CSCore_Ffmpeg;
-using NSMusicS.Models.Song_List_Infos.SS_Convert;
-using NSMusicS.Models.Song_List_Infos.Product;
 using SharpVectors.Dom.Svg;
 using Shell32;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
@@ -25,6 +23,7 @@ using DataFormats = System.Windows.DataFormats;
 using DragEventArgs = System.Windows.DragEventArgs;
 using MessageBox = System.Windows.MessageBox;
 using Microsoft.EntityFrameworkCore;
+using NSMusicS.Models.APP_DB_SqlLite.SS_Convert;
 
 namespace NSMusicS.Models.Song_List_Infos
 {
@@ -946,7 +945,7 @@ namespace NSMusicS.Models.Song_List_Infos
             ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Current_Playlist.xml", playlists);
             await convert_Song_Info.Save_SongList_To_DatabaseAsync(
                 convert_Song_Info.Create_Product_Song_Infos(playlists[0].Songs, "播放列表"),
-                -1, "播放列表");*/
+                17, "播放列表");*/
         }
     }
 }

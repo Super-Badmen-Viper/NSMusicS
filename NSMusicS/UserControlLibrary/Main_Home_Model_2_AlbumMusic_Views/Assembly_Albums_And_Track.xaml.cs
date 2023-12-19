@@ -1,6 +1,4 @@
 ﻿using NSMusicS.Models.Song_List_Infos;
-using NSMusicS.Models.Song_List_Infos.SS_Convert;
-using NSMusicS.Models.Song_List_Infos.Product;
 using NSMusicS.Models.Song_List_Of_Album_SongList_Infos;
 using NSMusicS.Services.Services_For_API_GetResult;
 using NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls;
@@ -20,6 +18,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NSMusicS.Models.APP_DB_SqlLite.SS_Convert;
+using NSMusicS.Models.APP_DB_SqlLite.Product;
 
 namespace NSMusicS.UserControlLibrary.Main_Home_Model_2_AlbumMusic_Views
 {

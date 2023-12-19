@@ -31,8 +31,6 @@ namespace MoZhi_Song_Duration_Allocation.UserControlLibrary.MainWindow_Buttom_Si
             InitializeComponent();
 
             Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
-
-            Init();
         }
         public ObservableCollection<UserControl_ListviewItem_SingerKrc.UserControl_ListviewItem_SingerKrc> userControl_ListviewItem_SingerKrcs;
         public void Move_Top()
@@ -102,36 +100,9 @@ namespace MoZhi_Song_Duration_Allocation.UserControlLibrary.MainWindow_Buttom_Si
 
         string Path_App;
         public ArrayList Singer_Name;
-        private void Init()
+        public void Init()
         {
             UserControl_ListviewItem_SingerKrc.UserControl_ListviewItem_SingerKrc userControl_ListviewItem_SingerKrc = new UserControl_ListviewItem_SingerKrc.UserControl_ListviewItem_SingerKrc();
-
-            //检测歌手数量
-            Singer_Name = new ArrayList
-            {
-                /*"柳智敏KARINA","金旼炡WINTER","宁艺卓NINGNING","内永枝利GISELLE","aespa ALL"*/
-
-                "KAI金钟仁",
-                "BAEKHYUN边伯贤",
-                "CHANYEOL朴灿烈",
-                "SUHO金俊勉",
-                "SEHUN吴世勋",
-                "CHEN金钟大",
-                "EXO全体"
-
-                /*"KAI金钟仁",
-                "BAEKHYUN边伯贤",
-                "CHANYEOL朴灿烈",
-                "SUHO金俊勉",
-                "SEHUN吴世勋",
-                "D.O都敬秀",
-                "CHEN金钟大",
-                "XIUMIN金珉锡",
-                "LAY张艺兴",*/
-                /*"TAO黄子韬",
-                "LUHAN鹿晗",
-                "KRIS吴亦凡"*/
-            };
 
             userControl_ListviewItem_SingerKrcs = new ObservableCollection<UserControl_ListviewItem_SingerKrc.UserControl_ListviewItem_SingerKrc>();
 

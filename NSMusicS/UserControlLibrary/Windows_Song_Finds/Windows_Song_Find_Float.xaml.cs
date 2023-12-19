@@ -1,7 +1,4 @@
 ﻿using Microsoft.Win32;
-using NSMusicS.Models.Song_List_Infos;
-using NSMusicS.Models.Song_List_Infos.SS_Convert;
-using NSMusicS.Models.Song_List_Infos.Product;
 using Shell32;
 using System;
 using System.Collections;
@@ -22,6 +19,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NSMusicS.Models.APP_DB_SqlLite.SS_Convert;
+using NSMusicS.Models.APP_DB_SqlLite.Product;
+using NSMusicS.Models.Song_List_Infos;
 
 namespace NSMusicS.UserControlLibrary.Windows_Song_Finds
 {
