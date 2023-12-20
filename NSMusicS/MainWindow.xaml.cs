@@ -65,6 +65,7 @@ using NSMusicS.Models.APP_DB_SqlLite.Category;
 using Microsoft.EntityFrameworkCore;
 using SkiaSharp;
 using NSMusicS.Models.APP_DB_SqlLite.SS_Convert;
+using NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async;
 
 #endregion
 
@@ -4158,94 +4159,13 @@ namespace NSMusicS
 
         public string Path_App;
 
-        Convert_Song_List_Infos convert_Song_Info = new Convert_Song_List_Infos();
-        Convert_Singer_List_Infos convert_Singer_List_Info = new Convert_Singer_List_Infos();
+        /// <summary>
+        /// 数据库操作
+        /// </summary>
+        Update_Song_List_Infos update_Song_List_Infos = Update_Song_List_Infos.Retuen_This();
 
 
         #region 歌单信息重加载
-        private async Task LoadSongListsAsync()
-        {
-            // 异步加载其他资源
-            var tasks = new List<Task>();
-            /*tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (3).xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (4).xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (5).xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (6).xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (7).xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (8).xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (9).xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (10).xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (11).xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (12).xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (13).xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (14).xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (15).xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (16).xml")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"\SongListInfo_ini\SongList_Ini\Song_List_Info_Current_Playlist.xml")));*/
-            /*tasks.Add(Task.Run(async () => LoadSongList(@"本地音乐")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"我的收藏")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"默认列表")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"歌单3")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"歌单4")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"歌单5")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"歌单6")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"歌单7")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"歌单8")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"歌单9")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"歌单10")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"歌单11")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"歌单12")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"歌单13")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"歌单14")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"歌单15")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"歌单16")));
-            tasks.Add(Task.Run(async () => LoadSongList(@"播放列表")));*/
-            LoadSongList(0,@"我的收藏");
-            LoadSongList(1,@"本地音乐");
-            LoadSongList(2,@"默认列表");
-            LoadSongList(3,@"歌单3");
-            LoadSongList(4,@"歌单4");
-            LoadSongList(5,@"歌单5");
-            LoadSongList(6,@"歌单6");
-            LoadSongList(7,@"歌单7");
-            LoadSongList(8,@"歌单8");
-            LoadSongList(9,@"歌单9");
-            LoadSongList(10,@"歌单10");
-            LoadSongList(11,@"歌单11");
-            LoadSongList(12,@"歌单12");
-            LoadSongList(13,@"歌单13");
-            LoadSongList(14,@"歌单14");
-            LoadSongList(15,@"歌单15");
-            LoadSongList(16,@"歌单16");
-            LoadSongList(17,@"播放列表");
-            // 其他加载任务...
-
-            // 等待所有任务完成
-            await Task.WhenAll(tasks);
-        }
-        private async void LoadSongList(int num,string path)
-        {
-            // var songList = SongList_Info_Reader.ReadSongList_Infos(Path_App + path);
-            // var songList = SongList_Info_Reader.ReadSongList_Infos_To_Json(Path_App + path);
-            var songList = await convert_Song_Info.Read_Songs_From_DatabaseAsync(num,path);
-            if (path.Contains("播放列表"))
-            {
-                lock (songList_Infos_Current_Playlist)
-                {
-                    songList_Infos_Current_Playlist = songList[0].Songs;
-                }
-            }
-            else
-            {
-                lock (songList_Infos)
-                {
-                    songList_Infos.Add(songList);
-                }
-            }
-        }
         public async Task Init_SongList_InfoAsync()
         {
             ///
@@ -4257,7 +4177,7 @@ namespace NSMusicS
             SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = new ObservableCollection<Song_Info>();
             songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
             ///
-            await LoadSongListsAsync();
+            await update_Song_List_Infos.LoadSongListsAsync();
             ///
             SongList_Info.songList_Infos = songList_Infos;
             SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
@@ -4747,58 +4667,10 @@ namespace NSMusicS
         #region 歌曲信息保存
         public void Save_SongListInfo()
         {
-            /// 适用于单列表
-            var allCategories = convert_Song_Info.dbContext.Category_SongList_Infos.ToList();
-            convert_Song_Info.dbContext.Category_SongList_Infos.RemoveRange(allCategories);
-            var allProducts = convert_Song_Info.dbContext.Product_Song_Infos.ToList();
-            convert_Song_Info.dbContext.Product_Song_Infos.RemoveRange(allProducts);
-            convert_Song_Info.dbContext.SaveChanges();
-
-            ///
-            ///SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
-            ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
-            convert_Song_Info.Save_SongList_To_Database(
-                convert_Song_Info.Create_Product_Song_Infos(songList_Infos[0][0].Songs, "我的收藏"),
-                0, "我的收藏");
-
-            ///
-            ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml", playlists);
-            convert_Song_Info.Save_SongList_To_Database(
-                convert_Song_Info.Create_Product_Song_Infos(songList_Infos[1][0].Songs, "本地音乐"),
-                1, "本地音乐");
-
-            ///
-            ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml", playlists);
-            convert_Song_Info.Save_SongList_To_Database(
-                convert_Song_Info.Create_Product_Song_Infos(songList_Infos[2][0].Songs, "默认列表"),
-                2, "默认列表");
-
-            ///
-            for (int i = 3; i < 17; i++)
-            {
-                ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (" + i + ").xml", playlists);
-                convert_Song_Info.Save_SongList_To_Database(
-                    convert_Song_Info.Create_Product_Song_Infos(songList_Infos[i][0].Songs, "歌单" + i),
-                    3, "歌单" + i);
-            }
-
-            ///
-            //保存播放列表
-            var playlists = new ObservableCollection<SongList_Info>();
-            SongList_Info songList_ = new SongList_Info();
-            playlists.Add(songList_);
-            playlists[0].ID = 17;
-            playlists[0].Name = "播放列表";
-            playlists[0].Songs = songList_Infos_Current_Playlist;
-            ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Current_Playlist.xml", playlists);
-            convert_Song_Info.Save_SongList_To_Database(
-                convert_Song_Info.Create_Product_Song_Infos(playlists[0].Songs, "播放列表"),
-                17, "播放列表");
-
             ///
             try
             {
-                //保存自定义
+                /// 保存自定义
                 if (window_Hover_EQ_Panel.ComBox_Select_Eq.SelectedIndex == 10)
                 {
                     EQ_Bands_For_Model_1 eQ_Bands_For_Model_1 = window_Hover_EQ_Panel.eQ_Bands_For_Model_1s[
@@ -4850,27 +4722,6 @@ namespace NSMusicS
             {
                 Save_AlbumListInfo(i, "歌单" + i);
             }*/
-        }
-        public async Task Save_AlbumListInfo(int i,string list_name)
-        {
-            songList_Infos[i][0].ID = i;
-            songList_Infos[i][0].Name = list_name;
-            Album_Performer_s = await Load_SingerInfo_For_PerformerShow(songList_Infos[i][0].Songs);
-            //去重
-            var uniqueAlbumPerformers = Album_Performer_s
-                .GroupBy(x => x.Album_Performer_Name)
-                .Select(g => g.First())
-                .ToList();
-            Album_Performer_s.Clear();
-            foreach (var albumPerformer in uniqueAlbumPerformers)
-            {
-                Album_Performer_s.Add(albumPerformer);
-            }
-
-            /// 保存至数据库
-            await convert_Singer_List_Info.Save_SingerList_To_DatabaseAsync(
-                convert_Singer_List_Info.Category_SingerList_Infos(
-                    Album_Performer_s, list_name), i, list_name);
         }
 
         #endregion
@@ -7608,13 +7459,11 @@ namespace NSMusicS
                 for (int i = 0; i < temp.Count; i++)
                 {
                     songList_Infos_Current_Playlist.Add(temp[i]);
-                    convert_Song_Info.Save_Song_To_DatabaseAsync(temp[i], 17, "播放列表");
                 }
                 //再添加 原 播放列表
                 for (int i = 0; i < _Infos.Count; i++)
                 {
                     songList_Infos_Current_Playlist.Add(_Infos[i]);
-                    convert_Song_Info.Save_Song_To_DatabaseAsync(_Infos[i], 17, "播放列表");
                 }
             }
             //插入到队尾
@@ -7629,7 +7478,6 @@ namespace NSMusicS
                 for (int i = 0; i < temp.Count; i++)
                 {
                     songList_Infos_Current_Playlist.Add(temp[i]);
-                    convert_Song_Info.Save_Song_To_DatabaseAsync(temp[i], 17, "播放列表");
                 }
             }
 

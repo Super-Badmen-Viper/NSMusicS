@@ -1,6 +1,7 @@
 ﻿
 using LottieSharp.WPF;
 using Microsoft.Win32;
+using NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async;
 using NSMusicS.Models.Song_List_Infos;
 using SharpVectors.Converters;
 using System;
@@ -49,6 +50,8 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
         static ObservableCollection<Song_Info> songList_Infos_Current_Playlist;
         //已选中的歌曲信息
         public ArrayList Song_Info_Selects = new ArrayList();
+
+        Update_Song_List_Infos update_Song_List_Infos = Update_Song_List_Infos.Retuen_This();
 
         public Uri brush_LoveEnter
             = new Uri(@"Resource\\Button_Image_Svg\\已收藏.svg", UriKind.Relative);
@@ -244,6 +247,8 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
                             newSongInfo.Bool_Playing = temp.Bool_Playing;
 
                             songList_Infos[0][0].Songs.Add(newSongInfo);
+
+                            update_Song_List_Infos.DB_Select_Model(1, newSongInfo, 0);
                         }
                         else
                             MessageBox.Show("该歌曲已添加至我的收藏");
@@ -284,6 +289,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
                             temp_love.Song_Like_Image = brush_LoveNormal;
                             temp_love.Song_Like = 0;
                             songList_Infos[0][0].Songs.Remove(temp_love);
+                            update_Song_List_Infos.DB_Select_Model(2, temp_love, 0);
 
                             temp.Song_Like_Image = brush_LoveNormal;
                             temp.Song_Like = 0;
@@ -365,14 +371,17 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
                             {
                                 if (!songList_Infos[i][0].Songs[j].Song_Url.Equals(songList_Infos[0][0].Songs[g].Song_Url))
                                 {
-                                    songList_Infos[i][0].Songs[j].Song_Like = 0;
-                                    songList_Infos[i][0].Songs[j].Song_Like_Image = brush_LoveNormal;
+                                    if (songList_Infos[i][0].Songs[j].Song_Like != 0)
+                                    {
+                                        songList_Infos[i][0].Songs[j].Song_Like = 0;
+                                        songList_Infos[i][0].Songs[j].Song_Like_Image = brush_LoveNormal;
+
+                                        update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j], i);
+                                    }
                                 }
                             }
                         }
                     }
-
-                    //从下标1开始，跳过我的收藏
                     for (int i = 1; i < songList_Infos.Count; i++)//所有的 歌曲列表 数量
                     {
                         for (int j = 0; j < songList_Infos[i][0].Songs.Count; j++)//遍历到的 歌曲列表 中含有的 歌曲数量
@@ -381,13 +390,19 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
                             {
                                 if (songList_Infos[i][0].Songs[j].Song_Url.Equals(songList_Infos[0][0].Songs[g].Song_Url))
                                 {
-                                    songList_Infos[i][0].Songs[j].Song_Like = 1;
-                                    songList_Infos[i][0].Songs[j].Song_Like_Image = brush_LoveEnter;
+                                    if (songList_Infos[i][0].Songs[j].Song_Like != 1)
+                                    {
+                                        songList_Infos[i][0].Songs[j].Song_Like = 1;
+                                        songList_Infos[i][0].Songs[j].Song_Like_Image = brush_LoveEnter;
+
+                                        update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j], i);
+                                    }
                                 }
                             }
                         }
                     }
 
+                    songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
                     if (songList_Infos_Current_Playlist != null)
                     {
                         for (int i = 0; i < songList_Infos_Current_Playlist.Count; i++)
@@ -396,20 +411,29 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
                             {
                                 if (!songList_Infos_Current_Playlist[i].Song_Url.Equals(songList_Infos[0][0].Songs[g].Song_Url))
                                 {
-                                    songList_Infos_Current_Playlist[i].Song_Like = 0;
-                                    songList_Infos_Current_Playlist[i].Song_Like_Image = brush_LoveNormal;
+                                    if (songList_Infos_Current_Playlist[i].Song_Like != 0)
+                                    {
+                                        songList_Infos_Current_Playlist[i].Song_Like = 0;
+                                        songList_Infos_Current_Playlist[i].Song_Like_Image = brush_LoveNormal;
+
+                                        update_Song_List_Infos.DB_Select_Model(3, songList_Infos_Current_Playlist[i], 17);
+                                    }
                                 }
                             }
                         }
-
                         for (int i = 0; i < songList_Infos_Current_Playlist.Count; i++)
                         {
                             for (int g = 0; g < songList_Infos[0][0].Songs.Count; g++)//我的收藏歌单 中含有的 歌曲数量
                             {
                                 if (songList_Infos_Current_Playlist[i].Song_Url.Equals(songList_Infos[0][0].Songs[g].Song_Url))
                                 {
-                                    songList_Infos_Current_Playlist[i].Song_Like = 1;
-                                    songList_Infos_Current_Playlist[i].Song_Like_Image = brush_LoveEnter;
+                                    if (songList_Infos_Current_Playlist[i].Song_Like != 1)
+                                    {
+                                        songList_Infos_Current_Playlist[i].Song_Like = 1;
+                                        songList_Infos_Current_Playlist[i].Song_Like_Image = brush_LoveEnter;
+
+                                        update_Song_List_Infos.DB_Select_Model(3, songList_Infos_Current_Playlist[i], 17);
+                                    }
                                 }
                             }
                         }
@@ -469,8 +493,6 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
             }
 
             SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
-
-            //ListView_Download_SongList_Info.Items.Refresh();
         }
 
 

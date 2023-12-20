@@ -22,6 +22,7 @@ using static NSMusicS.Models.Servies_For_API_Info.API_Song_Info;
 using static NSMusicS.Models.Servies_For_API_Info.API_Song_Info_Get_Url;
 using static NSMusicS.Models.Servies_For_API_Info.Show_Search_Song;
 using NSMusicS.Models.APP_DB_SqlLite.SS_Convert;
+using NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async;
 
 namespace NSMusicS.Services.Services_For_API_GetResult
 {
@@ -42,7 +43,7 @@ namespace NSMusicS.Services.Services_For_API_GetResult
 
         public string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
 
-        Convert_Song_List_Infos convert_Song_Info = new Convert_Song_List_Infos();
+        Update_Song_List_Infos update_Song_List_Infos = Update_Song_List_Infos.Retuen_This();
 
         public ViewModule_Search_Song_For_Cloud_Music()
         {
@@ -332,7 +333,6 @@ namespace NSMusicS.Services.Services_For_API_GetResult
                         temp.Song_No = 0;
                         songList_Infos_Current_Playlist.Clear();
                         songList_Infos_Current_Playlist.Add(temp);
-                        convert_Song_Info.Save_Song_To_DatabaseAsync(temp, 17, "播放列表");
                         SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist =
                             songList_Infos_Current_Playlist;
                     });
@@ -594,7 +594,6 @@ namespace NSMusicS.Services.Services_For_API_GetResult
                         temp.Song_Web_Album_Image = new Uri(temp_image_url);
 
                         songList_Infos_Current_Playlist.Add(temp);
-                        convert_Song_Info.Save_Song_To_DatabaseAsync(temp, 17, "播放列表");
                         SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist =
                             songList_Infos_Current_Playlist;
                     });

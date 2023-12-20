@@ -22,6 +22,7 @@ using static NSMusicS.Models.Servies_For_API_Info.API_Song_Info;
 using static NSMusicS.Models.Servies_For_API_Info.API_Song_Info_Get_Url;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using NSMusicS.Models.APP_DB_SqlLite.SS_Convert;
+using NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async;
 
 namespace NSMusicS.Services.Services_For_API_GetResult
 {
@@ -49,7 +50,7 @@ namespace NSMusicS.Services.Services_For_API_GetResult
         public ImageBrush Song_DownLoad_Image { get; set; }
         public ImageBrush Song_UpLoad_Tone_Quality { get; set; }
 
-        Convert_Song_List_Infos convert_Song_Info = new Convert_Song_List_Infos();
+        Update_Song_List_Infos update_Song_List_Infos = Update_Song_List_Infos.Retuen_This();
 
         public ViewModule_Search_Song()
         {
@@ -68,7 +69,9 @@ namespace NSMusicS.Services.Services_For_API_GetResult
             ApiResponse_Get_Urls = new ApiResponse_Get_Url();
             //绑定的数据源属性
             ShowSelect_Search_Songs = new ObservableCollection<Show_Search_Song>();
+
             
+
             //搜索关键词，适合搜索
             RefCommand_Search_Song = new RelayCommand(async () =>
             {
@@ -266,7 +269,6 @@ namespace NSMusicS.Services.Services_For_API_GetResult
                 temp.Song_No = 0;
                 songList_Infos_Current_Playlist = new ObservableCollection<Song_Info>();
                 songList_Infos_Current_Playlist.Add(temp);
-                convert_Song_Info.Save_Song_To_DatabaseAsync(temp, 17, "播放列表");
                 SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist =
                     songList_Infos_Current_Playlist;
                 /*//同步信息到UI

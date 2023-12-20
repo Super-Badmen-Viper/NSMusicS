@@ -24,6 +24,7 @@ using DragEventArgs = System.Windows.DragEventArgs;
 using MessageBox = System.Windows.MessageBox;
 using Microsoft.EntityFrameworkCore;
 using NSMusicS.Models.APP_DB_SqlLite.SS_Convert;
+using NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async;
 
 namespace NSMusicS.Models.Song_List_Infos
 {
@@ -569,6 +570,8 @@ namespace NSMusicS.Models.Song_List_Infos
         private static Uri ImageBrush_LoveNormal
             = new Uri(@"Resource\\Button_Image_Svg\\收藏.svg", UriKind.Relative);
 
+        Update_Song_List_Infos update_Song_List_Infos = Update_Song_List_Infos.Retuen_This();
+
 
         public static ShellClass sh = new ShellClass();
         /// <summary>
@@ -884,68 +887,12 @@ namespace NSMusicS.Models.Song_List_Infos
             }
 
             //保存歌单信息
-            Save_SongListInfoAsync();
-        }
-        /// <summary>
-        /// 保存歌单信息
-        /// </summary>
-        Convert_Song_List_Infos convert_Song_Info = new Convert_Song_List_Infos();
-        public async Task Save_SongListInfoAsync()
-        {
-            /*/// 适用于单列表
-            var allCategories = await convert_Song_Info.doContext.Category_SongList_Infos.ToListAsync();
-            convert_Song_Info.doContext.Category_SongList_Infos.RemoveRange(allCategories);
-            var allProducts = await convert_Song_Info.doContext.Product_Song_Infos.ToListAsync();
-            convert_Song_Info.doContext.Product_Song_Infos.RemoveRange(allProducts);
-            await convert_Song_Info.doContext.SaveChangesAsync();
-
-            var playlists = new ObservableCollection<SongList_Info>();
-            playlists = songList_Infos[0];
-            ///SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
-            ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
-            await convert_Song_Info.Save_SongList_To_DatabaseAsync(
-                convert_Song_Info.Create_Product_Song_Infos(playlists[0].Songs, "我的收藏"),
-                0, "我的收藏");
-
-            ///
-            playlists = new ObservableCollection<SongList_Info>();
-            playlists = songList_Infos[1];
-            ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml", playlists);
-            await convert_Song_Info.Save_SongList_To_DatabaseAsync(
-                convert_Song_Info.Create_Product_Song_Infos(playlists[0].Songs, "我的收藏"),
-                1, "本地音乐");
-
-            ///
-            playlists = new ObservableCollection<SongList_Info>();
-            playlists = songList_Infos[2];
-            ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml", playlists);
-            await convert_Song_Info.Save_SongList_To_DatabaseAsync(
-                convert_Song_Info.Create_Product_Song_Infos(playlists[0].Songs, "默认列表"),
-                2, "默认列表");
-
-            ///
-            for (int i = 3; i < 17; i++)
+            await Task.Run(async () =>
             {
-                playlists = new ObservableCollection<SongList_Info>();
-                playlists = songList_Infos[i];
-                ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (" + i + ").xml", playlists);
-                await convert_Song_Info.Save_SongList_To_DatabaseAsync(
-                    convert_Song_Info.Create_Product_Song_Infos(playlists[0].Songs, "歌单" + i),
-                    3, "歌单" + i);
-            }
-
-            ///
-            //保存播放列表
-            playlists = new ObservableCollection<SongList_Info>();
-            SongList_Info songList_ = new SongList_Info();
-            playlists.Add(songList_);
-            playlists[0].ID = -1;
-            playlists[0].Name = "播放列表";
-            playlists[0].Songs = songList_Infos_Current_Playlist;
-            ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Current_Playlist.xml", playlists);
-            await convert_Song_Info.Save_SongList_To_DatabaseAsync(
-                convert_Song_Info.Create_Product_Song_Infos(playlists[0].Songs, "播放列表"),
-                17, "播放列表");*/
+                await update_Song_List_Infos.Save_SongListInfoAsync();
+            });
         }
+        
+
     }
 }
