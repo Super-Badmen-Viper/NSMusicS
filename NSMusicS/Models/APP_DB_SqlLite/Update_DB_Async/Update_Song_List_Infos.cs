@@ -327,7 +327,7 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
             convert_Song_Info = null;
         }
 
-        #region CRUD （SqlLite性能表现差：不如整体保存至数据库）
+        #region CRUD （SqlLite写入性能表现差：不如整体保存至数据库）
         /// <summary>
         /// 增加：单个内存库歌曲保存至数据库
         /// </summary>

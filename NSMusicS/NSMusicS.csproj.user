@@ -30,6 +30,21 @@
     <Compile Update="UserControlLibrary\Main_Home_TOP_UserControls\UserControls_App_Setting\UserControl_Set_7_Web.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_1_Song_UserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_2_Album_UserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\Assembly_Albums_And_Track.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\Assembly_Singer_Show.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\UserControl_Main_Model_3_Control_Albums_And_Tracks.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Helper_UserControlLibrary\UserControl_Image.xaml">
@@ -176,15 +191,6 @@
     <Page Update="UserControlLibrary\Main_Home_Left_OnlineMusic_UserControls\UserControl_Main_Home_Left_OnlineMusic_Search_Song.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\Assembly_Albums_And_Track.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\Assembly_Singer_Show.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="UserControlLibrary\Main_Home_Model_2_AlbumMusic_Views\UserControl_Main_Model_2_View_Albums_And_Tracks.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="UserControlLibrary\Main_Home_Right_MyMusic_UserControls\UserControl_SongList_Infos_Current_Playlist.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -230,10 +236,25 @@
     <Page Update="UserControlLibrary\Main_UserControls\UserControl_VerticalRectangle.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\Assembly_Albums_And_Track.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\Assembly_Singer_Show.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\UserControl_Main_Model_3_Control_Albums_And_Tracks.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Main_UserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_1_Song_UserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_2_Album_UserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_3_Singer_UserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Animation\UserControl_Animation_1.xaml">

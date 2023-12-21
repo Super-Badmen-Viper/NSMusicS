@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Albums.Assembly_Singer_Show"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Albums"
+             mc:Ignorable="d" 
+             Background="#10232325">
+    <Grid>
+        <Grid x:Name="Model_View">
+            <Border 
+                x:Name="Border_Now_Singer_Image_For_HiddenView"
+                Margin="10,5,10,60" Width="160" Height="160"
+                CornerRadius="12" Background="Beige"
+                HorizontalAlignment="Left" VerticalAlignment="Top"
+            >
+
+            </Border>
+            <TextBlock
+                 x:Name="TextBlock_Singer_Name_For_HiddenView"
+                 Text="墨智云音乐" Foreground="White" FontSize="14" MaxWidth="120"
+                 HorizontalAlignment="Center" VerticalAlignment="Top" 
+                 Margin="0,170,0,0" TextTrimming="WordEllipsis"
+            >
+
+            </TextBlock>
+        </Grid>
+    </Grid>
+</UserControl>
