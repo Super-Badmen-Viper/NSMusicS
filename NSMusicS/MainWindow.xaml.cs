@@ -89,16 +89,12 @@ namespace NSMusicS
             userControl_ButtonFrame_TopPanel.Model_5.IsEnabled = false;
             musicPlayer_Model_2_Album_UserControl.Stack_Button_LotSelects_Sort.Visibility = Visibility.Collapsed;
 
-
-
             GC.Collect();
             GC.WaitForPendingFinalizers();
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
                 SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
             }
-
-
 
             #region Init
             //
@@ -137,6 +133,16 @@ namespace NSMusicS
 
             /// 异步加载初始化数据
             init();
+
+            /// 因为SqlLite的数据持久层写入性能差，改为整体写入，10分钟一次
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += DispatcherTimer_Tick;
+            dispatcherTimer.Interval = new TimeSpan(0,10,0);
+            dispatcherTimer.Start();
+        }
+        private async void DispatcherTimer_Tick(object? sender, EventArgs e)
+        {
+            await update_Song_List_Infos.Save_SongListInfoAsync();
         }
         [DllImport("kernel32.dll")]
         private static extern bool SetProcessWorkingSetSize(IntPtr proc, int min, int max);
@@ -4665,8 +4671,13 @@ namespace NSMusicS
         #endregion
 
         #region 歌曲信息保存
-        public void Save_SongListInfo()
+        public async void Save_SongListInfo()
         {
+            mediaElement_Song.Stop();
+
+            /// 耗时操作
+            await update_Song_List_Infos.Save_SongListInfoAsync();
+
             ///
             try
             {

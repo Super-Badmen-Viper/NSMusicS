@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -12,8 +13,10 @@ namespace NSMusicS.Models.Song_List_Infos
 {
     public class SongList_Info_Sort
     {
+        Update_Song_List_Infos update_Song_List_Infos = Update_Song_List_Infos.Retuen_This();
+
         /// <summary>
-        /// 歌单歌曲 排序
+        /// 歌单歌曲 排序 (内存库)
         /// </summary>
         /// <param name="Select_List"></param>
         /// <param name="SongList_ID"></param>
@@ -53,6 +56,67 @@ namespace NSMusicS.Models.Song_List_Infos
                 });
 
                 tcs.SetResult(Select_List);
+            });
+
+            return await tcs.Task;
+        }
+
+        /// <summary>
+        /// 歌单歌曲 排序 (数据库)
+        /// </summary>
+        /// <param name="Select_List"></param>
+        /// <param name="Sort_Num"></param>
+        /// <param name="Sort_Double"></param>
+        /// <param name="category_SongList_ID"></param>
+        /// <returns></returns>
+        public async Task<ObservableCollection<Song_Info>>
+            Start_Sort_Song_Of_Select_List_For_DB(
+                ObservableCollection<Song_Info> Select_List,
+                int Sort_Num,
+                bool Sort_Double,
+                int category_SongList_ID
+            )
+        {
+            var tcs = new TaskCompletionSource<ObservableCollection<Song_Info>>();
+
+            await Task.Run(async () =>
+            {
+                List<Song_Info> temp = new List<Song_Info>();
+                temp = new List<Song_Info>(Select_List);
+
+                if (Sort_Num == 0)
+                {
+                    temp = Sort_SingerName(temp, Sort_Double);
+                }
+                else if (Sort_Num == 1)
+                { 
+                    temp = Sort_SongName(temp, Sort_Double);
+                }
+                else if (Sort_Num == 2) 
+                { 
+                    temp = Sort_AlbumName(temp, Sort_Double);
+                }
+                else if (Sort_Num == 3) 
+                { 
+                    temp = Sort_Duration(temp, Sort_Double);
+                }
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Select_List.Clear();
+                    for (int i = 0; i < temp.Count; i++)
+                    {
+                        Song_Info song_Info = temp[i];
+                        Select_List.Add(song_Info);
+                    }
+                });
+
+                tcs.SetResult(Select_List);
+
+                /// 不异步至数据库，等待应用程序结束时统一清零保存
+                /// 不await，以防影响调度内存库的操作
+                /// 懒同步，
+                /// update_Song_List_Infos.Sort_SongListInfoAsync(Sort_Num, Sort_Double, Sort_SingerName_Up, category_SongList_ID);
             });
 
             return await tcs.Task;

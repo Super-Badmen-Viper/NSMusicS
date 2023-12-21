@@ -47,10 +47,10 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
         {
             ///string path = @"Resource\SongListInfo_ini\";
             ///dbContext = new ProductContext_Song_Info(path + "ProductContext_Song_Infos");
-            dbContext = new ProductContext_Song_Info("ProductContext_Song_Infos");
+            /*dbContext = new ProductContext_Song_Info("ProductContext_Song_Infos");
             dbContext.Database.EnsureCreated();
             dbContext.Category_SongList_Infos.Load();
-            dbContext.Product_Song_Infos.Load();
+            dbContext.Product_Song_Infos.Load();*/
 
             /*ProductContext_Song_Info temp_0 = new ProductContext_Song_Info(path + "ProductContext_Song_Info_Love");
             temp_0.Database.EnsureCreated();
@@ -165,7 +165,7 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
         #region CRUD
 
         /// <summary>
-        /// 增加：单个内存库歌曲保存至数据库
+        /// 增加：单个内存库歌曲保存至数据库 (内存库 -增加-> 数据库)
         /// </summary>
         /// <param name="song"> 需要保存至数据库的song对象 </param>
         /// <param name="category_SongList_ID"></param>
@@ -225,10 +225,10 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                                 product_Song.Song_Name = song.Song_Name;
                                 product_Song.Singer_Name = song.Singer_Name;
                                 product_Song.Song_Url = song.Song_Url;
-                                ///product_Song.Song_Duration = song.Song_Duration;
+                                product_Song.Song_Duration = song.Song_Duration;
                                 product_Song.Song_Like = song.Song_Like;
                                 product_Song.Album_Name = song.Album_Name;
-                                ///product_Song.MV_Path = song.MV_Path;
+                                product_Song.MV_Path = song.MV_Path;
 
                                 dbContext.Product_Song_Infos.Add(product_Song);
                                 await dbContext.SaveChangesAsync();
@@ -240,7 +240,7 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
         }
 
         /// <summary>
-        /// 删除：根据单个内存库的映射，删除数据库的指定歌曲
+        /// 删除：根据单个内存库的映射，删除数据库的指定歌曲 (内存库 -删除-> 数据库)
         /// </summary>
         /// <param name="song"> 要删除的song对象 </param>
         /// <param name="category_SongList_ID"></param>
@@ -287,13 +287,13 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
         }
 
         /// <summary>
-        /// 更改：单个歌曲属性 Song_Info->Product_Song_Info
+        /// 更改：单个歌曲属性 (内存库 -更改-> 数据库)
         /// </summary>
         /// <param name="song"> 已更改的新song对象 </param>
         /// <param name="category_SongList_ID"></param>
         /// <param name="list_name"></param>
         /// <returns></returns>
-        public async Task Update_Song_To_DatabaseAsync(Song_Info song, int category_SongList_ID, string list_name)
+        public async Task Update_Song_To_DatabaseAsync_For_Song_Info(Song_Info song, int category_SongList_ID, string list_name)
         {
             if (song != null)
             {
@@ -333,10 +333,71 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                                     product_Song.Song_Name = song.Song_Name;
                                     product_Song.Singer_Name = song.Singer_Name;
                                     product_Song.Song_Url = song.Song_Url;
-                                    ///product_Song.Song_Duration = song.Song_Duration;
+                                    product_Song.Song_Duration = song.Song_Duration;
                                     product_Song.Song_Like = song.Song_Like;
                                     product_Song.Album_Name = song.Album_Name;
-                                    ///product_Song.MV_Path = song.MV_Path;
+                                    product_Song.MV_Path = song.MV_Path;
+
+                                    ///dbContext.Product_Song_Infos.Find(temp_name) = product_Song;
+                                    await dbContext.SaveChangesAsync();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// 更改：单个歌曲属性 (数据库 -更改-> 数据库)
+        /// </summary>
+        /// <param name="song"></param>
+        /// <param name="category_SongList_ID"></param>
+        /// <param name="list_name"></param>
+        /// <returns></returns>
+        public async Task Update_Song_To_DatabaseAsync_For_Product_Song_Info(Product_Song_Info song, int category_SongList_ID, string list_name)
+        {
+            if (song != null)
+            {
+                using (dbContext = new ProductContext_Song_Info("ProductContext_Song_Infos"))
+                {
+                    dbContext.Database.EnsureCreated();
+                    dbContext.Category_SongList_Infos.Load();
+                    dbContext.Product_Song_Infos.Load();
+
+                    Category_SongList_Info category_SongList_Info = new Category_SongList_Info();
+                    category_SongList_Info.Category_SongList_Name = list_name;
+
+                    var result_songlist = await dbContext.Category_SongList_Infos
+                                                .Where(temp => temp.Category_SongList_Name.Equals(category_SongList_Info.Category_SongList_Name))
+                                                .ToListAsync();
+
+                    if (result_songlist.Any())
+                    {
+                        category_SongList_Info = result_songlist.FirstOrDefault();
+
+                        if (dbContext.Category_SongList_Infos.Any())
+                        {
+                            var temp_name = list_name + ":" + song.Song_Url;
+                            var existingSong = await dbContext.Product_Song_Infos
+                                                        .Where(temp => temp.SongList_Name_AND_Song_Url.Equals(temp_name))
+                                                        .FirstOrDefaultAsync();
+                            if (existingSong != null && existingSong.Category_SongList_ID.Equals(category_SongList_Info.Category_SongList_ID))
+                            {
+                                Product_Song_Info product_Song = await dbContext.Product_Song_Infos.FindAsync(temp_name);
+                                if (product_Song != null)
+                                {
+                                    product_Song.Category_SongList_ID = category_SongList_Info.Category_SongList_ID;
+                                    product_Song.category_SongList_Info = category_SongList_Info;
+                                    product_Song.SongList_Name_AND_Song_Url = temp_name;
+
+                                    product_Song.Song_No = song.Song_No;
+                                    product_Song.Song_Name = song.Song_Name;
+                                    product_Song.Singer_Name = song.Singer_Name;
+                                    product_Song.Song_Url = song.Song_Url;
+                                    product_Song.Song_Duration = song.Song_Duration;
+                                    product_Song.Song_Like = song.Song_Like;
+                                    product_Song.Album_Name = song.Album_Name;
+                                    product_Song.MV_Path = song.MV_Path;
 
                                     ///dbContext.Product_Song_Infos.Find(temp_name) = product_Song;
                                     await dbContext.SaveChangesAsync();
@@ -348,8 +409,9 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
             }
         }
 
+
         /// <summary>
-        /// 查找：根据内存库查找数据库，返回单个数据库歌曲 Song_Info->Product_Song_Info
+        /// 查找：返回单个数据库歌曲 (内存库 -查找-> 数据库)
         /// </summary>
         /// <param name="song_Info"> 要从数据库中匹配的类似Song_Info对象 </param>
         /// <param name="category_SongList_ID"></param>
@@ -388,7 +450,7 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
             return null;
         }
         /// <summary>
-        /// 查找：根据数据库查找内存库，返回单个内存库歌曲 Product_Song_Info->Song_Info
+        /// 查找：返回单个内存库歌曲 (数据库 -查找-> 数据库)
         /// </summary>
         /// <param name="product_Song"></param>
         /// <param name="category_SongList_ID"></param>
@@ -422,10 +484,10 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                                 _Song_Info.Song_Name = item.Song_Name;
                                 _Song_Info.Singer_Name = item.Singer_Name;
                                 _Song_Info.Song_Url = item.Song_Url;
-                                ///_Song_Info.Song_Duration = item.Song_Duration;
+                                _Song_Info.Song_Duration = item.Song_Duration;
                                 _Song_Info.Song_Like = item.Song_Like;
                                 _Song_Info.Album_Name = item.Album_Name;
-                                ///_Song_Info.MV_Path = item.MV_Path;
+                                _Song_Info.MV_Path = item.MV_Path;
 
                                 _Song_Info.Visibility_Playing = Visibility.Collapsed;
 
@@ -458,7 +520,7 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
 
 
         /// <summary>
-        /// 从内置数据库中 读取整个歌单
+        /// 从 数据库 中读取整个歌单
         /// </summary>
         /// <param name="category_SongList_ID"></param>
         /// <param name="category_SongList_Name"></param>
@@ -496,10 +558,10 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                             _Song_Info.Song_Name = item.Song_Name;
                             _Song_Info.Singer_Name = item.Singer_Name;
                             _Song_Info.Song_Url = item.Song_Url;
-                            ///_Song_Info.Song_Duration = item.Song_Duration;
+                            _Song_Info.Song_Duration = item.Song_Duration;
                             _Song_Info.Song_Like = item.Song_Like;
                             _Song_Info.Album_Name = item.Album_Name;
-                            ///_Song_Info.MV_Path = item.MV_Path;
+                            _Song_Info.MV_Path = item.MV_Path;
 
                             _Song_Info.Visibility_Playing = Visibility.Collapsed;
 
@@ -538,14 +600,27 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                     playlists.Add(templist);
                 }
 
+                ObservableCollection<SongList_Info> temp = new ObservableCollection<SongList_Info>();
+                SongList_Info list_Info = new SongList_Info();
+                list_Info.ID = category_SongList_ID;
+                list_Info.Name = category_SongList_Name;
+                list_Info.Songs = new ObservableCollection<Song_Info>();
+                foreach (var item in playlists)
+                {
+                    foreach (var song in item.Songs)
+                    {
+                        list_Info.Songs.Add(song);
+                    }
+                }
+                temp.Add(list_Info);
 
-                return playlists;
+                return temp;
             }
         }
 
 
         /// <summary>
-        /// 保存整个歌单至 内置数据库
+        /// 保存整个歌单至 数据库（同步）
         /// </summary>
         /// <param name="songs"></param>
         /// <param name="category_SongList_ID"></param>
@@ -626,6 +701,13 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                 }
             }
         }
+        /// <summary>
+        /// 保存整个歌单至 数据库（异步）
+        /// </summary>
+        /// <param name="songs"></param>
+        /// <param name="category_SongList_ID"></param>
+        /// <param name="list_name"></param>
+        /// <returns></returns>
         public async Task Save_SongList_To_DatabaseAsync(ObservableCollection<Product_Song_Info> songs, int category_SongList_ID, string list_name)
         {
             using (dbContext = new ProductContext_Song_Info("ProductContext_Song_Infos"))
@@ -713,10 +795,10 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                     _Song_Info.Song_Name = item.Song_Name;
                     _Song_Info.Singer_Name = item.Singer_Name;
                     _Song_Info.Song_Url = item.Song_Url;
-                    ///_Song_Info.Song_Duration = item.Song_Duration;
+                    _Song_Info.Song_Duration = item.Song_Duration;
                     _Song_Info.Song_Like = item.Song_Like;
                     _Song_Info.Album_Name = item.Album_Name;
-                    ///_Song_Info.MV_Path = item.MV_Path;
+                    _Song_Info.MV_Path = item.MV_Path;
 
                     _Song_Info.SongList_Name_AND_Song_Url = list_name + ":" + item.Song_Url;
 
@@ -726,23 +808,5 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
             }
             return null;
         }
-
-
-        /// <summary>
-        /// 清除指定歌单数据 -> 数据库
-        /// </summary>
-        /// <param name="category_SongList_ID"></param>
-        /// <param name="list_name"></param>
-        /// <returns></returns>
-        /*public async Task Clear_SongList_To_DatabaseAsync(int category_SongList_ID, string list_name)
-        {
-            var allCategories = await dbContext.Category_SongList_Infos.ToListAsync();
-            dbContext.Category_SongList_Infos.RemoveRange(allCategories);
-
-            var allProducts = await dbContext.Product_Song_Infos.ToListAsync();
-            dbContext.Product_Song_Infos.RemoveRange(allProducts);
-
-            await dbContext.SaveChangesAsync();
-        }*/
     }
 }

@@ -23,9 +23,9 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Product
         public string Singer_Name { get; set; }
         public string Album_Name { get; set; }
         public string Song_Url { get; set; }
-        ///public string Song_Duration { get; set; }   
+        public string Song_Duration { get; set; }   
         public int Song_Like { get; set; }
-        ///public string MV_Path { get; set; }
+        public string MV_Path { get; set; }
 
         public string SongList_Name_AND_Song_Url { get; set; }
 

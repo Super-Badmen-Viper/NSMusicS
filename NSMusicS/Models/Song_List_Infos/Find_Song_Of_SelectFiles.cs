@@ -604,6 +604,7 @@ namespace NSMusicS.Models.Song_List_Infos
                     Folder Folderdir = sh.NameSpace(System.IO.Path.GetDirectoryName(songPath));
                     FolderItem FolderItemitem = Folderdir.ParseName(System.IO.Path.GetFileName(songPath));
                     string albumName = Folderdir.GetDetailsOf(FolderItemitem, 14);
+                    string song_Duration = Folderdir.GetDetailsOf(FolderItemitem, 27);
 
                     if (songName.Length > 0)
                     {
@@ -619,8 +620,13 @@ namespace NSMusicS.Models.Song_List_Infos
                         if(albumName.Length > 0)
                             song_info.Album_Name = albumName;
                         else
-                            song_info.Album_Name = "0_未知专辑";
+                            song_info.Album_Name = "0_未知专辑";                  
                     }
+                    if (song_Duration.Length > 0)
+                        song_info.Song_Duration = song_Duration;
+                    else
+                        song_info.Song_Duration = "00:00";
+
 
                     singerName = null; songName = null; albumName = null;
                     Folderdir = null; FolderItemitem = null;
@@ -635,6 +641,7 @@ namespace NSMusicS.Models.Song_List_Infos
                 song_info.Song_Like = 0;
                 song_info.Song_Url = songPath;
                 song_info.Song_No = Song_Ids_Temp++;
+                song_info.MV_Path = "none";
 
                 list_Song_Info.Add(song_info);
 

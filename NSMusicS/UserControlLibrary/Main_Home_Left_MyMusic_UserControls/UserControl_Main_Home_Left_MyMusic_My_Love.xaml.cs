@@ -185,7 +185,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         /// 添加
         /// </summary>
         /// <param name="listView_Temp_Info_End"></param>
-        public void Add_LoveSong_ToThisSongList(Button ck_Selected, ObservableCollection<Song_Info> listView_Temp_Info_End)
+        public async void Add_LoveSong_ToThisSongList(Button ck_Selected, ObservableCollection<Song_Info> listView_Temp_Info_End)
         {
             /*//刷新内存区域的引用
             songList_Infos = SongList_Info.Retuen_This();
@@ -260,7 +260,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         /// 移除
         /// </summary>
         /// <param name="listView_Temp_Info_End"></param>
-        public void Remove_LoveSong_ToThisSongList(Button ck_Selected, ObservableCollection<Song_Info> listView_Temp_Info_End)
+        public async void Remove_LoveSong_ToThisSongList(Button ck_Selected, ObservableCollection<Song_Info> listView_Temp_Info_End)
         {
             //刷新内存区域的引用
             songList_Infos = SongList_Info.Retuen_This();
@@ -282,7 +282,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                             temp_love.Song_Like_Image = brush_LoveNormal;
                             temp_love.Song_Like = 0;
                             songList_Infos[0][0].Songs.Remove(temp_love);
-                            update_Song_List_Infos.DB_Select_Model(2,temp_love,0);
+                            await update_Song_List_Infos.DB_Select_Model(2,temp_love,0);
 
                             temp.Song_Like_Image = brush_LoveNormal;
                             temp.Song_Like = 0;
@@ -301,7 +301,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
             }
         }
 
-        public void Check_LoveSong_In_LoveSongList_Reset_SongList_Info()
+        public async void Check_LoveSong_In_LoveSongList_Reset_SongList_Info()
         {
             //刷新内存区域的引用
             songList_Infos = SongList_Info.Retuen_This();
@@ -329,7 +329,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                                         songList_Infos[i][0].Songs[j].Song_Like = 0;
                                         songList_Infos[i][0].Songs[j].Song_Like_Image = brush_LoveNormal;
 
-                                        update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j], i);
+                                        await update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j], i);
                                     }
                                 }
                             }
@@ -348,7 +348,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                                         songList_Infos[i][0].Songs[j].Song_Like = 1;
                                         songList_Infos[i][0].Songs[j].Song_Like_Image = brush_LoveEnter;
 
-                                        update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j], i);
+                                        await update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j], i);
                                     }
                                 }
                             }
@@ -369,7 +369,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                                         songList_Infos_Current_Playlist[i].Song_Like = 0;
                                         songList_Infos_Current_Playlist[i].Song_Like_Image = brush_LoveNormal;
 
-                                        update_Song_List_Infos.DB_Select_Model(3, songList_Infos_Current_Playlist[i], 17);
+                                        await update_Song_List_Infos.DB_Select_Model(3, songList_Infos_Current_Playlist[i], 17);
                                     }
                                 }
                             }
@@ -385,7 +385,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                                         songList_Infos_Current_Playlist[i].Song_Like = 1;
                                         songList_Infos_Current_Playlist[i].Song_Like_Image = brush_LoveEnter;
 
-                                        update_Song_List_Infos.DB_Select_Model(3, songList_Infos_Current_Playlist[i], 17);
+                                        await update_Song_List_Infos.DB_Select_Model(3, songList_Infos_Current_Playlist[i], 17);
                                     }
                                 }
                             }
@@ -410,7 +410,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Button_Delete_Click(object sender, MouseButtonEventArgs e)
+        private async void Button_Delete_Click(object sender, MouseButtonEventArgs e)
         {
             //刷新内存区域的引用
             songList_Infos = SongList_Info.Retuen_This();
@@ -432,7 +432,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                                 Convert.ToString(((Song_Info)Song_Info_Selects[i]).Song_Url), 
                                 songList_Infos[0][0].Songs);
                             songList_Infos[0][0].Songs.Remove(temp);
-                            update_Song_List_Infos.DB_Select_Model(2,temp,0);
+                            await update_Song_List_Infos.DB_Select_Model(2,temp,0);
 
                             //其他歌单 移除喜欢
                             Remove__Reset_SongList_Info(temp.Song_Url);
@@ -507,7 +507,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         /// 移除 其他歌单的 喜欢按钮（单个移除）
         /// </summary>
         /// <param name="url"></param>
-        public void Remove__Reset_SongList_Info(string url)
+        public async void Remove__Reset_SongList_Info(string url)
         {
             songList_Infos = SongList_Info.Retuen_This();
             if (songList_Infos != null)
@@ -528,7 +528,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                                         songList_Infos[i][0].Songs[j].Song_Like = 0;
                                         songList_Infos[i][0].Songs[j].Song_Like_Image = brush_LoveNormal;
 
-                                        update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j], i);
+                                        await update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j], i);
                                     }
                                 }
                             }
@@ -540,7 +540,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         /// <summary>
         /// 整个移除
         /// </summary>
-        public void Remove__Reset_SongList_Info()
+        public async void Remove__Reset_SongList_Info()
         {
             songList_Infos = SongList_Info.Retuen_This();
             if (songList_Infos != null)
@@ -564,7 +564,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                                         songList_Infos[i][0].Songs[j].Song_Like = 0;
                                         songList_Infos[i][0].Songs[j].Song_Like_Image = brush_LoveNormal;
 
-                                        update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j],i);
+                                        await update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j],i);
                                     }
                                 }
                             }
@@ -582,7 +582,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                                     songList_Infos[i][0].Songs[j].Song_Like = 0;
                                     songList_Infos[i][0].Songs[j].Song_Like_Image = brush_LoveNormal;
 
-                                    update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j], i);
+                                    await update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j], i);
                                 }
                             }
                         }
@@ -680,7 +680,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //刷新内存区域的引用
             songList_Infos = SongList_Info.Retuen_This();
@@ -727,7 +727,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                                             newSongInfo.Bool_Playing = ((Song_Info)Song_Info_Selects[i]).Bool_Playing;
 
                                             songList_Infos[1][0].Songs.Add(newSongInfo);
-                                            update_Song_List_Infos.DB_Select_Model(1,newSongInfo,1);
+                                            await update_Song_List_Infos.DB_Select_Model(1,newSongInfo,1);
                                         }
                                     }
                                     //排序
@@ -785,7 +785,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                                             newSongInfo.Bool_Playing = ((Song_Info)Song_Info_Selects[i]).Bool_Playing;
 
                                             songList_Infos[2][0].Songs.Add(newSongInfo);
-                                            update_Song_List_Infos.DB_Select_Model(1, newSongInfo, 2);
+                                            await update_Song_List_Infos.DB_Select_Model(1, newSongInfo, 2);
                                         }
                                     }
                                     //排序
@@ -851,7 +851,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                                                 newSongInfo.Bool_Playing = ((Song_Info)Song_Info_Selects[i]).Bool_Playing;
 
                                                 songList_Infos[ComBox_Select][0].Songs.Add(newSongInfo);
-                                                update_Song_List_Infos.DB_Select_Model(1, newSongInfo, ComBox_Select);
+                                                await update_Song_List_Infos.DB_Select_Model(1, newSongInfo, ComBox_Select);
                                             }
                                         }
                                         //排序
@@ -1107,7 +1107,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Button_Add_Current_Playlist_Select_ItemSong_Click(object sender, MouseButtonEventArgs e)
+        private async void Button_Add_Current_Playlist_Select_ItemSong_Click(object sender, MouseButtonEventArgs e)
         {
             songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
 
@@ -1133,7 +1133,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
                     newSongInfo.Bool_Playing = ((Song_Info)Song_Info_Selects[i]).Bool_Playing;
 
                     songList_Infos_Current_Playlist.Add(newSongInfo);
-                    update_Song_List_Infos.DB_Select_Model(1, newSongInfo, 17);
+                    await update_Song_List_Infos.DB_Select_Model(1, newSongInfo, 17);
                 }
             }
             //排序
@@ -1193,7 +1193,9 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         {
             Sort_Num = 0;
 
-            songList_Infos[0][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[0][0].Songs, Sort_Num, true);
+            songList_Infos[0][0].Songs = 
+                await songList_Info_Sort.Start_Sort_Song_Of_Select_List_For_DB(
+                    songList_Infos[0][0].Songs, Sort_Num, true, 0);
             ListView_Download_SongList_Info.Items.Refresh();
 
             Clear_ALL_Stack_Button_Sort();
@@ -1206,7 +1208,9 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         {
             Sort_Num = 1;
 
-            songList_Infos[0][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[0][0].Songs, Sort_Num, true);
+            songList_Infos[0][0].Songs = 
+                await songList_Info_Sort.Start_Sort_Song_Of_Select_List_For_DB(
+                    songList_Infos[0][0].Songs, Sort_Num, true, 0);
             ListView_Download_SongList_Info.Items.Refresh();
 
             Clear_ALL_Stack_Button_Sort();
@@ -1219,7 +1223,9 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         {
             Sort_Num = 2;
 
-            songList_Infos[0][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[0][0].Songs, Sort_Num, true);
+            songList_Infos[0][0].Songs = 
+                await songList_Info_Sort.Start_Sort_Song_Of_Select_List_For_DB(
+                    songList_Infos[0][0].Songs, Sort_Num, true, 0);
             ListView_Download_SongList_Info.Items.Refresh();
 
             Clear_ALL_Stack_Button_Sort();
@@ -1232,7 +1238,9 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         {
             Sort_Num = 3;
 
-            songList_Infos[0][0].Songs = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(songList_Infos[0][0].Songs, Sort_Num, true);
+            songList_Infos[0][0].Songs = 
+                await songList_Info_Sort.Start_Sort_Song_Of_Select_List_For_DB(
+                    songList_Infos[0][0].Songs, Sort_Num, true, 0);
             ListView_Download_SongList_Info.Items.Refresh();
 
             Clear_ALL_Stack_Button_Sort();
