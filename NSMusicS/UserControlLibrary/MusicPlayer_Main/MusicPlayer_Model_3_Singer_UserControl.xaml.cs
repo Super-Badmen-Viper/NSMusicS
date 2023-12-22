@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Albums.ViewModel_Assembly_Album_Show;
+using NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Singers.ViewModel_Assembly_Singer_Show;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +25,13 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main
         public MusicPlayer_Model_3_Singer_UserControl()
         {
             InitializeComponent();
+
+            viewModel_Assembly_Singer_Class = ViewModel_Assembly_Singer_Class.Retuen_This();
+
+            this.DataContext = viewModel_Assembly_Singer_Class;
+            this.ItemsControl_AlbumList.ItemsSource = viewModel_Assembly_Singer_Class.Singer_Infos;
         }
+        ViewModel_Assembly_Singer_Class viewModel_Assembly_Singer_Class;
 
         public void ListView_For_Album_Performer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {

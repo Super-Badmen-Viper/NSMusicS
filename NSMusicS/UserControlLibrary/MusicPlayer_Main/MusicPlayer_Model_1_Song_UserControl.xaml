@@ -11,9 +11,6 @@
              xmlns:MusicPlayer_MV_Player="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_MV_Player" 
              xmlns:MainWindow_Left_MoZhiAI_Music_UserControls="clr-namespace:NSMusicS.UserControlLibrary.MainWindow_Left_MoZhiAI_Music_UserControls"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
-        
-             Height="728" Width="1102"
-             MinHeight="728" MinWidth="1102"
              mc:Ignorable="d">
     <Grid>
         <Grid x:Name="Frame_Manager_ButtonList_Model_1" 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Albums.ViewModel_Assembly_Album_Show;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,13 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main
         public MusicPlayer_Model_2_Album_UserControl()
         {
             InitializeComponent();
+
+            viewModel_Assembly_Album_Class = ViewModel_Assembly_Album_Class.Retuen_This();
+
+            this.DataContext = viewModel_Assembly_Album_Class;
+            this.ItemsControl_AlbumList.ItemsSource = viewModel_Assembly_Album_Class.Album_Infos;
         }
+
+        ViewModel_Assembly_Album_Class viewModel_Assembly_Album_Class;
     }
 }

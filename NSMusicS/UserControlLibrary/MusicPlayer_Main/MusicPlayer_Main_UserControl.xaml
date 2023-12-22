@@ -8,11 +8,8 @@
              xmlns:UserControls_PlayMode_View ="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls_PlayMode_View"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
-
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:UserControls="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="690" MinWidth="1020" 
-             Height="690" Width="1020" 
              UseLayoutRounding="True" SnapsToDevicePixels="True"  
              >
     <Grid>
@@ -30,26 +27,24 @@
                 <Grid.Background>
                     <ImageBrush Stretch="UniformToFill"/>
                 </Grid.Background>
-                <!--
-                    <ItemsControl x:Name="ItemsControl_SingerImageCut" 
-                                  Grid.Row="1" ItemsSource="{Binding Singer_ImagerCut_Infos}"
-                                    >
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid x:Name="UniformGrid_SingerAnimation" Columns="4" Rows="4"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <materialDesign:TransitioningContent OpeningEffect="{Binding Effact}">
-                                    <Border Width="{Binding Width}" Height="{Binding Height}" Background="{Binding image_i}" Margin="0">
+                <ItemsControl x:Name="ItemsControl_SingerImageCut" 
+                                Grid.Row="1" ItemsSource="{Binding Singer_ImagerCut_Infos}"
+                                >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid x:Name="UniformGrid_SingerAnimation" Columns="4" Rows="4"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <materialDesign:TransitioningContent OpeningEffect="{Binding Effact}">
+                                <Border Width="{Binding Width}" Height="{Binding Height}" Background="{Binding image_i}" Margin="0">
 
-                                    </Border>
-                                </materialDesign:TransitioningContent>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                -->
+                                </Border>
+                            </materialDesign:TransitioningContent>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </Grid>
 
 

@@ -5,32 +5,188 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
-             Height="728" Width="1102" 
-             MinHeight="728" MinWidth="1102"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:UserControls="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
              mc:Ignorable="d">
     <Grid>
-        
-        <Grid Margin="286,77,0,77" >
-            <ScrollViewer 
-                x:Name="ScrollViewer_Albums"
-                HorizontalScrollBarVisibility="Disabled">
-                <WrapPanel
-                    x:Name="WrapPanel_For_ThisSinger_ALL_Album"
-                    Orientation="Horizontal"
-                    VirtualizingStackPanel.IsVirtualizing="True" 
-                    ScrollViewer.CanContentScroll="True" 
-                    VirtualizingStackPanel.VirtualizationMode="Recycling">
-                    
-                </WrapPanel>
-                <ScrollViewer.Resources>
-                    <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</system:Double>
-                    <Style TargetType="ScrollBar">
-                        <Setter Property="Width" Value="6"/>
-                        <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
-                    </Style>
-                </ScrollViewer.Resources>
-            </ScrollViewer>
-        </Grid>
-        
+        <!--
+    <Grid Margin="40,77,0,77" >
+        <ScrollViewer 
+            x:Name="ScrollViewer_Albums"
+            HorizontalScrollBarVisibility="Disabled">
+            <WrapPanel
+                x:Name="WrapPanel_For_ThisSinger_ALL_Album"
+                Orientation="Horizontal"
+                VirtualizingStackPanel.IsVirtualizing="True" 
+                ScrollViewer.CanContentScroll="True" 
+                VirtualizingStackPanel.VirtualizationMode="Recycling">
+
+            </WrapPanel>
+
+            <ScrollViewer.Resources>
+                <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">6</system:Double>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="Width" Value="6"/>
+                    <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
+                </Style>
+            </ScrollViewer.Resources>
+        </ScrollViewer>
     </Grid>
+-->
+        <!--
+        <ListView 
+            x:Name="ListView_For_Performer_This_Album"
+            ItemsPanel="{DynamicResource ItemsPanelTemplate2}"
+            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+            Background="{x:Null}" BorderThickness="0,0,0,0" BorderBrush="{x:Null}"
+            VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <VirtualizingStackPanel>
+                                    <Border Name="Bd" Background="{TemplateBinding Background}">
+                                        <ContentPresenter/>
+                                    </Border>
+                                </VirtualizingStackPanel>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="true">
+                                        <Setter Property="Background" Value="#20FFFFFF"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter TargetName="Bd" Property="BorderBrush" Value="#FFFFC400"/>
+                                        <Setter TargetName="Bd" Property="BorderThickness" Value="0,0,0,0"/>
+                                    </Trigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsMouseOver" Value="true" />
+                                            <Condition Property="IsSelected" Value="false"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background" Value="#20FFFFFF"/>
+                                        <Setter Property="Foreground" Value="LightGray"/>
+                                        <Setter Property="BorderBrush" Value="#FFFFC400"/>
+                                        <Setter Property="BorderThickness" Value="0,0,0,0"/>
+                                    </MultiTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.Resources>
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Setter Property="Background" Value="#00000000"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    <Setter Property="Padding" Value="9,0,0,0"/>
+                    <Setter Property="BorderBrush" Value="#00000000"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+                <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">8</system:Double>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="Width" Value="8"/>
+                    <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
+                </Style>
+            </ListView.Resources>
+        </ListView>
+        -->
+        <ScrollViewer 
+            x:Name="ScrollViewer_Albums" Margin="50,77,0,77"
+            HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl 
+                x:Name="ItemsControl_AlbumList" 
+                Grid.Row="1" ItemsSource="{Binding Assembly_Album_Show_s}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel>
+
+                        </WrapPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <materialDesign:TransitioningContent OpeningEffect="{Binding Effact}">
+                            <VirtualizingStackPanel Orientation="Vertical">
+                                <Border 
+                                    Width="{Binding Width}" Height="{Binding Height}" 
+                                    Background="{Binding Album_Image}" 
+                                    Tag="{Binding Album_No}"
+                                    Margin="{Binding Margin}"
+                                    BorderBrush="{x:Null}" CornerRadius="12">
+
+                                </Border> 
+                                <TextBlock
+                                     Text="{Binding Album_Name}" Foreground="White" FontSize="14" MaxWidth="120"
+                                     HorizontalAlignment="Center" VerticalAlignment="Top" 
+                                     Margin="0,10,0,0" TextTrimming="WordEllipsis">
+
+                                </TextBlock>
+                                <TextBlock
+                                     Text="{Binding Album_Explain}" Foreground="White" FontSize="12" MaxWidth="120"
+                                     HorizontalAlignment="Center" VerticalAlignment="Top" 
+                                     Margin="0,3,0,13" TextTrimming="WordEllipsis">
+
+                                </TextBlock>
+                            </VirtualizingStackPanel>
+                        </materialDesign:TransitioningContent>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            
+            <ScrollViewer.Resources>
+                <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">10</system:Double>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="Width" Value="10"/>
+                    <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
+                </Style>
+            </ScrollViewer.Resources>
+        </ScrollViewer>
+    </Grid>
+    <UserControl.Resources>
+        <!-- ListView平滑滚动效果 -->
+        <Style x:Key="ListBoxStyle1" TargetType="{x:Type ListView}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListView}">
+                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="1" SnapsToDevicePixels="true">
+                            <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                    <i:Interaction.Behaviors>
+                                        <i:FluidMoveBehavior Duration="00:00:03" />
+                                        <!--ListBoxItem/ListviewItem 未选中项的流动动画时间 ，设置为0-->
+                                    </i:Interaction.Behaviors>
+                                </ItemsPresenter>
+                            </ScrollViewer>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ItemsPanelTemplate x:Key="ItemsPanelTemplate2">
+            <!--StackPanel-->
+            <WrapPanel IsItemsHost="true" Orientation="Horizontal">
+                <i:Interaction.Behaviors>
+                    <i:FluidMoveBehavior AppliesTo="Children"  Duration="00:00:00:00.2" />
+                </i:Interaction.Behaviors>
+            </WrapPanel>
+        </ItemsPanelTemplate>
+
+
+    </UserControl.Resources>
 </UserControl>

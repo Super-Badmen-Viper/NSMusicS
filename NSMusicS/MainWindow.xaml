@@ -34,14 +34,13 @@
         <MusicPlayer_Main:UserControl_TaskbarIcon x:Name="userControl_TaskbarIcon"/>
 
         <Grid>
-            <!--#1F1F1F-->
             <Border 
+                x:Name="this_app_Background"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                CornerRadius="10" x:Name="this_app_Background"/>
-
+                CornerRadius="10" />
             <Border CornerRadius="10" Background="#551E1E20"/>
-
-            <Border Visibility="Visible" CornerRadius="10" BorderBrush="#40FFFFFF"  BorderThickness="0.5"/>
+            <Border CornerRadius="10" BorderBrush="#40FFFFFF"
+                    BorderThickness="0.5" Visibility="Visible"/>
         </Grid>
 
         <!--用以关闭其它的控件，如音量，播放列表-->
@@ -56,8 +55,11 @@
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"/>
         </Grid>
-        <Grid x:Name="Grid_Model_2">
-            
+        <Grid x:Name="Grid_Model_2" Visibility="Collapsed">
+            <MusicPlayer_Main:MusicPlayer_Model_2_Album_UserControl
+                x:Name="musicPlayer_Model_2_Album_UserControl"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"/>
         </Grid>
         <Grid x:Name="Grid_Model_3" Visibility="Collapsed"
               HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -66,6 +68,9 @@
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
                 />
+        </Grid>
+        <Grid x:Name="Grid_Model_4" Visibility="Collapsed">
+            
         </Grid>
 
         <Grid x:Name="Grid_Logo" VerticalAlignment="Top" Height="90" HorizontalAlignment="Left" Width="200">
@@ -112,30 +117,23 @@
         <Main_Home_Left_MyMusic_UserControls:UserControl_Main_Home_Left_MyMusic_SongInfo_Edit
             x:Name="userControl_Main_Home_Left_MyMusic_SongInfo_Edit" Margin="0,77,0,70" 
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-            Visibility="Collapsed"
-            />
+            Visibility="Collapsed"/>
         <Main_Home_TOP_UserControls:UserControl_Main_Home_TOP_Personalized_Skins 
             x:Name="userControl_Main_Home_TOP_Personalized_Skins" Margin="286,76.7,0,70" 
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-            Visibility="Collapsed"
-            />
+            Visibility="Collapsed"/>
         <Main_Home_TOP_UserControls:UserControl_Main_Home_TOP_App_Setting
             x:Name="userControl_Main_Home_TOP_App_Setting" Margin="286,76.7,0,70" 
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-            Visibility="Collapsed"
-            />
+            Visibility="Collapsed"/>
         <Main_Home_Left_MyMusic_UserControls:UserControl_Main_Home_Left_Web_Music
             x:Name="userControl_Main_Home_Left_Web_Music" Margin="20,76.7,0,70" 
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-            Visibility="Collapsed"
-            />
+            Visibility="Collapsed"/>
         <Main_Home_Left_MyMusic_UserControls:UserControl_Main_Home_Left_NAS_Music
             x:Name="userControl_Main_Home_Left_NAS_Music" Margin="20,76.7,0,70" 
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
-            Visibility="Collapsed"
-            />
-
-
+            Visibility="Collapsed"/>
 
         <Grid x:Name="Frame_Top_WindowsControl" 
               Margin="180,0,0,0" 
@@ -146,28 +144,24 @@
                 Background="{x:Null}" Height="77"
                 HorizontalAlignment="Stretch" VerticalAlignment="Top"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                Loaded="UserControl_ButtonFrame_TopPanel_Loaded"
-            />
+                Loaded="UserControl_ButtonFrame_TopPanel_Loaded"/>
 
             <MainWindow_TOP_UserControls:UserControl_ButtonFrame_App_Setting 
                 x:Name="userControl_ButtonFrame_App_Setting"
-                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,46,0,0"
-            />
+                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,46,0,0"/>
         </Grid>
 
         <MusicPlayer_Main:MusicPlayer_Main_UserControl 
             x:Name="musicPlayer_Main_UserControl"
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
             VerticalAlignment="Bottom" Height="0"
-            MouseLeftButtonDown="Grid_Operation_Panel_MouseLeftButtonDown" 
-        >
+            MouseLeftButtonDown="Grid_Operation_Panel_MouseLeftButtonDown">
 
         </MusicPlayer_Main:MusicPlayer_Main_UserControl>
 
         <Grid x:Name="Frame_Buttom_MusicPlayerUserControl"
               Margin="0, 0, 0, 0"
-              UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  VerticalAlignment="Bottom"
-            >
+              UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  VerticalAlignment="Bottom">
             <Border CornerRadius="20">
                 <Border.Effect>
                     <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="1" />
@@ -179,8 +173,7 @@
                 Height="70"
                 HorizontalAlignment="Stretch" VerticalAlignment="Bottom" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                Loaded="userControl_ButtonFrame_MusicPlayer_Loaded" 
-                />
+                Loaded="userControl_ButtonFrame_MusicPlayer_Loaded"/>
 
             <!--
             <MediaElement LoadedBehavior="Manual" UnloadedBehavior="Manual" 
@@ -195,8 +188,7 @@
         </Grid>
         <Main_Home_Right_MyMusic_UserControls:UserControl_SongList_Infos_Current_Playlist
                 x:Name="userControl_SongList_Infos_Current_Playlist" HorizontalAlignment="Right"
-                Margin="0,70,0,120"
-                />
+                Margin="0,70,0,120"/>
 
         <lottie:LottieAnimationView
             x:Name="Loading_LottieAnimationView" 
@@ -207,6 +199,6 @@
             VerticalAlignment="Center"
             AutoPlay="True"
             ResourcePath="pack://application:,,,/Resource/Lottie_Json/Loading_Dots_Color_1.json"
-            RepeatCount="-1" />
+            RepeatCount="-1"/>
     </Grid>
 </Window>

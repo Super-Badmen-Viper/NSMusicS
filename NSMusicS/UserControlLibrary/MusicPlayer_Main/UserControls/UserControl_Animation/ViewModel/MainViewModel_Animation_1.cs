@@ -32,9 +32,9 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls.UserControl_
             double width, 
             double height,
             int numCutCells,
-        int numCutRows,
-        int duration,
-        int num_Delay)
+            int numCutRows,
+            int duration,
+            int num_Delay)
         {
             kinds = new List<TransitionEffectKind>
             {
