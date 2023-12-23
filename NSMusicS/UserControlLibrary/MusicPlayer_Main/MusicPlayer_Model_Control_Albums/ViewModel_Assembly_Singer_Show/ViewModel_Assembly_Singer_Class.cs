@@ -55,23 +55,39 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
                 Singer_Info_Class Singer_Info_Class = Singer_Info_Class.Retuen_This();
                 for (int i = 0; i < Singer_Info_Class.Singer_Image_Uris.Count; i++)
                 {
-                    Singer_Infos.Add(new Singer_Info()
+                    var existingSinger = Singer_Infos.FirstOrDefault(
+                            item => item.Singer_Name.Equals(Singer_Info_Class.Singer_Names[i])
+                            );
+                    if (existingSinger == null)
                     {
-                        Singer_No = i,
-                        Singer_Name = Singer_Info_Class.Singer_Names[i],
-                        Singer_Image = new ImageBrush(new BitmapImage(Singer_Info_Class.Singer_Image_Uris[i])),
-                        Singer_Explain = Singer_Info_Class.Singer_Explain[i],
-                        Width = 140,
-                        Height = 140,
-                        Margin = new Thickness(10, 2, 10, 2),
-                        Effact = new TransitionEffect()
+                        Singer_Infos.Add(new Singer_Info()
                         {
-                            Kind = kinds[2],//使用渐变效果,从左边滑入
-                            Duration = new TimeSpan(0, 0, 0, 0, 40)
-                        }
-                    });
-                    await Task.Delay(40);//单个平滑过渡
+                            Singer_No = i,
+                            Singer_Name = Singer_Info_Class.Singer_Names[i],
+                            Singer_Image = new ImageBrush(new BitmapImage(Singer_Info_Class.Singer_Image_Uris[i])),
+                            Singer_Explain = Singer_Info_Class.Singer_Explain[i],
+                            Width = 140,
+                            Height = 140,
+                            Margin = new Thickness(10, 2, 10, 2),
+                            Effact = new TransitionEffect()
+                            {
+                                Kind = kinds[new Random().Next(2, 6)],
+                                Duration = new TimeSpan(0, 0, 0, 0, 200)
+                            }
+                        });
+                    }
+                    await Task.Delay(1);//单个平滑过渡
                     Num_Singer_Infos++;
+
+                    if (i % 100 == 0)
+                    {
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                        if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                        {
+                            SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+                        }
+                    }
                 }
 
                 GC.Collect();

@@ -7,6 +7,7 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:UserControls="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:viewmodel_control="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Albums.ViewModel_Control"
              mc:Ignorable="d">
     <Grid>
         <!--
@@ -91,23 +92,32 @@
             </ListView.Resources>
         </ListView>
         -->
-        <ScrollViewer 
+        <viewmodel_control:ScrollViewerAnimation  
             x:Name="ScrollViewer_Albums" Margin="50,77,0,77"
             HorizontalScrollBarVisibility="Disabled">
             <ItemsControl 
                 x:Name="ItemsControl_AlbumList" 
-                Grid.Row="1" ItemsSource="{Binding Assembly_Album_Show_s}">
+                Background="{x:Null}" BorderThickness="0"
+                VirtualizingStackPanel.IsVirtualizing="True"
+                VirtualizingStackPanel.VirtualizationMode="Recycling"
+                Grid.Row="1" 
+                ItemsSource="{Binding Assembly_Album_Show_s}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel>
-
+                        <WrapPanel 
+                            VirtualizingStackPanel.IsVirtualizing="True"
+                            VirtualizingStackPanel.VirtualizationMode="Recycling">
+                             
                         </WrapPanel>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <materialDesign:TransitioningContent OpeningEffect="{Binding Effact}">
-                            <VirtualizingStackPanel Orientation="Vertical">
+                            <VirtualizingStackPanel 
+                                VirtualizingStackPanel.IsVirtualizing="True"
+                                VirtualizingStackPanel.VirtualizationMode="Recycling"
+                                Orientation="Vertical">
                                 <Border 
                                     Width="{Binding Width}" Height="{Binding Height}" 
                                     Background="{Binding Album_Image}" 
@@ -115,7 +125,7 @@
                                     Margin="{Binding Margin}"
                                     BorderBrush="{x:Null}" CornerRadius="12">
 
-                                </Border> 
+                                </Border>
                                 <TextBlock
                                      Text="{Binding Album_Name}" Foreground="White" FontSize="14" MaxWidth="120"
                                      HorizontalAlignment="Center" VerticalAlignment="Top" 
@@ -133,7 +143,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            
+
             <ScrollViewer.Resources>
                 <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">10</system:Double>
                 <Style TargetType="ScrollBar">
@@ -141,52 +151,6 @@
                     <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
                 </Style>
             </ScrollViewer.Resources>
-        </ScrollViewer>
+        </viewmodel_control:ScrollViewerAnimation>
     </Grid>
-    <UserControl.Resources>
-        <!-- ListView平滑滚动效果 -->
-        <Style x:Key="ListBoxStyle1" TargetType="{x:Type ListView}">
-            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ListView}">
-                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="1" SnapsToDevicePixels="true">
-                            <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}">
-                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                                    <i:Interaction.Behaviors>
-                                        <i:FluidMoveBehavior Duration="00:00:03" />
-                                        <!--ListBoxItem/ListviewItem 未选中项的流动动画时间 ，设置为0-->
-                                    </i:Interaction.Behaviors>
-                                </ItemsPresenter>
-                            </ScrollViewer>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-                            </Trigger>
-                            <Trigger Property="IsGrouping" Value="true">
-                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <ItemsPanelTemplate x:Key="ItemsPanelTemplate2">
-            <!--StackPanel-->
-            <WrapPanel IsItemsHost="true" Orientation="Horizontal">
-                <i:Interaction.Behaviors>
-                    <i:FluidMoveBehavior AppliesTo="Children"  Duration="00:00:00:00.2" />
-                </i:Interaction.Behaviors>
-            </WrapPanel>
-        </ItemsPanelTemplate>
-
-
-    </UserControl.Resources>
 </UserControl>

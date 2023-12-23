@@ -39,9 +39,6 @@
     <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\Assembly_Albums_And_Track.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\Assembly_Album_Show.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\Assembly_Singer_Show.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -240,9 +237,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\Assembly_Albums_And_Track.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\Assembly_Album_Show.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\Assembly_Singer_Show.xaml">

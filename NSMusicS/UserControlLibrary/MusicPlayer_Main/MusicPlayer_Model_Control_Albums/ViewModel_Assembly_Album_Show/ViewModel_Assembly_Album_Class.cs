@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 using NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Albums.ViewModel_Assembly_Album_Show;
 using System.Threading;
 using static NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Albums.ViewModel_Assembly_Album_Show.ViewModel_Assembly_Album_Class;
+using static NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Singers.ViewModel_Assembly_Singer_Show.ViewModel_Assembly_Singer_Class;
 
 namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Albums.ViewModel_Assembly_Album_Show
 {
@@ -59,26 +60,42 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
             /// 一次性全部刷新（一致性）
             RefCommand = new RelayCommand(async () =>
             {
-                Album_Info_Class album_Info_Class = Album_Info_Class.Retuen_This();
-                for (int i = 0; i < album_Info_Class.Album_Image_Uris.Count; i++)
+                Album_Info_Class Album_Info_Class = Album_Info_Class.Retuen_This();
+                for (int i = 0; i < Album_Info_Class.Album_Image_Uris.Count; i++)
                 {
-                    Album_Infos.Add(new Album_Info()
+                    var existingAlbum = Album_Infos.FirstOrDefault(
+                            item => item.Album_Name.Equals(Album_Info_Class.Album_Names[i])
+                            );
+                    if (existingAlbum == null)
                     {
-                        Album_No = i,
-                        Album_Name = album_Info_Class.Album_Names[i],
-                        Album_Image = new ImageBrush(new BitmapImage(album_Info_Class.Album_Image_Uris[i])),
-                        Album_Explain = album_Info_Class.Album_Explain[i],
-                        Width = 140,
-                        Height = 140,
-                        Margin = new Thickness(10, 2, 10, 2),
-                        Effact = new TransitionEffect()
+                        Album_Infos.Add(new Album_Info()
                         {
-                            Kind = kinds[2],//使用渐变效果,从左边滑入
-                            Duration = new TimeSpan(0, 0, 0, 0, 40)
-                        }
-                    });
-                    await Task.Delay(40);//单个平滑过渡
+                            Album_No = i,
+                            Album_Name = Album_Info_Class.Album_Names[i],
+                            Album_Image = new ImageBrush(new BitmapImage(Album_Info_Class.Album_Image_Uris[i])),
+                            Album_Explain = Album_Info_Class.Album_Explain[i],
+                            Width = 140,
+                            Height = 140,
+                            Margin = new Thickness(10, 2, 10, 2),
+                            Effact = new TransitionEffect()
+                            {
+                                Kind = kinds[new Random().Next(2, 6)],
+                                Duration = new TimeSpan(0, 0, 0, 0, 200)
+                            }
+                        });
+                    }
+                    await Task.Delay(1);//单个平滑过渡
                     Num_Album_Infos++;
+
+                    if (i % 100 == 0)
+                    {
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                        if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                        {
+                            SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+                        }
+                    }
                 }
 
                 GC.Collect();

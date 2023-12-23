@@ -144,8 +144,9 @@
                 Loaded="UserControl_Loaded" SourceUpdated="ListView_Download_SongList_Info_SourceUpdated"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                AllowDrop="True" 
-                VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True"
+                AllowDrop="True" ScrollViewer.CanContentScroll="True"
+                VirtualizingStackPanel.IsVirtualizing="True" 
+                VirtualizingStackPanel.VirtualizationMode="Recycling"
                   >
 
                 <ListView.ItemContainerStyle>
@@ -158,11 +159,11 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListViewItem}">
                                     <Border Name="Bd"
-                        Background="{TemplateBinding Background}">
+                                        Background="{TemplateBinding Background}">
                                         <GridViewRowPresenter 
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                            Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                            Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="true">

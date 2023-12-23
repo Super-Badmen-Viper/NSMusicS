@@ -258,7 +258,7 @@ namespace NSMusicS.Models.Song_Audio_Out.CSCore_Ffmpeg
                 int result = ffmpeg.av_read_frame((AVFormatContext*)formatContext.FormatPtr, packet);
                 return result >= 0;
             }
-            catch (Exception e)//当文件在内存流中受保护（或者已损坏
+            catch /*(Exception e)*///当文件在内存流中受保护或者已损坏 (不要使用九歌播放损坏的音频)
             {
                 return false;
             }

@@ -23,7 +23,8 @@
                   BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Foreground="White"
                   UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                   IsSynchronizedWithCurrentItem="True"
-            >
+                  VirtualizingStackPanel.IsVirtualizing="True" 
+                  VirtualizingStackPanel.VirtualizationMode="Recycling">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="BorderThickness" Value="0"/>
