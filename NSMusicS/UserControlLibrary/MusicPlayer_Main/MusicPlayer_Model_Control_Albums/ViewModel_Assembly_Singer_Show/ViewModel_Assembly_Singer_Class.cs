@@ -26,7 +26,6 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
             public string Singer_Name { get; set; }
             public string Singer_Explain { get; set; }
             public Uri Singer_Image_Uri { get; set; }
-            public ImageBrush Singer_Image { get; set; }
             public TransitionEffect Effact { get; set; }
 
             public double Width { get; set; }
@@ -60,12 +59,14 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
                             );
                     if (existingSinger == null)
                     {
-                        Singer_Infos.Add(new Singer_Info()
+                        var singerName = Singer_Info_Class.Singer_Names[i];
+                        var singerImageUri = Singer_Info_Class.Singer_Image_Uris[i];
+                        var singerExplain = Singer_Info_Class.Singer_Explain[i];
+                        var singerInfo = new Singer_Info()
                         {
                             Singer_No = i,
-                            Singer_Name = Singer_Info_Class.Singer_Names[i],
-                            Singer_Image = new ImageBrush(new BitmapImage(Singer_Info_Class.Singer_Image_Uris[i])),
-                            Singer_Explain = Singer_Info_Class.Singer_Explain[i],
+                            Singer_Name = singerName,
+                            Singer_Explain = singerExplain,
                             Width = 140,
                             Height = 140,
                             Margin = new Thickness(10, 2, 10, 2),
@@ -74,7 +75,12 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
                                 Kind = kinds[new Random().Next(2, 6)],
                                 Duration = new TimeSpan(0, 0, 0, 0, 200)
                             }
-                        });
+                        };
+
+                        if (singerImageUri != null)
+                            singerInfo.Singer_Image_Uri = singerImageUri;
+
+                        Singer_Infos.Add(singerInfo);
                     }
                     await Task.Delay(1);//单个平滑过渡
                     Num_Singer_Infos++;
@@ -100,29 +106,30 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
             /// 滚动条多次异步刷新（一致性）
             RefCommand_Async = new RelayCommand(async () =>
             {
-                Singer_Info_Class Singer_Info_Class = Singer_Info_Class.Retuen_This();
+                Singer_Info_Class singer_Info_Class = Singer_Info_Class.Retuen_This();
 
-                for (int i = Singer_Info_Class.Start_Index; i <= Singer_Info_Class.End_Index; i++)
+                for (int i = singer_Info_Class.Start_Index; i <= singer_Info_Class.End_Index; i++)
                 {
-                    if (i >= Singer_Info_Class.Singer_Names.Count || i >= Singer_Info_Class.Singer_Image_Uris.Count)
+                    if (i >= singer_Info_Class.Singer_Names.Count || i >= singer_Info_Class.Singer_Image_Uris.Count)
                         break;
 
-                    if (Singer_Info_Class.Singer_Names[i] != null)
+                    if (singer_Info_Class.Singer_Names[i] != null)
                     {
                         var existingSinger = Singer_Infos.FirstOrDefault(
-                            item => item.Singer_Name.Equals(Singer_Info_Class.Singer_Names[i])
+                            item => item.Singer_Name.Equals(singer_Info_Class.Singer_Names[i])
                             );
                         if (existingSinger == null)
                         {
                             lock (Singer_Infos)
                             {
-                                var SingerInfo = new Singer_Info()
+                                var singerName = singer_Info_Class.Singer_Names[i];
+                                var singerImageUri = singer_Info_Class.Singer_Image_Uris[i];
+                                var singerExplain = singer_Info_Class.Singer_Explain[i];
+                                var singerInfo = new Singer_Info()
                                 {
                                     Singer_No = i,
-                                    Singer_Name = Singer_Info_Class.Singer_Names[i],
-                                    Singer_Image_Uri = Singer_Info_Class.Singer_Image_Uris[i],
-                                    Singer_Image = new ImageBrush(new BitmapImage(Singer_Info_Class.Singer_Image_Uris[i])),
-                                    Singer_Explain = Singer_Info_Class.Singer_Explain[i],
+                                    Singer_Name = singerName,
+                                    Singer_Explain = singerExplain,
                                     Width = 140,
                                     Height = 140,
                                     Margin = new Thickness(10, 2, 10, 2),
@@ -132,8 +139,12 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
                                         Duration = new TimeSpan(0, 0, 0, 0, 200)
                                     }
                                 };
+
+                                if (singerImageUri != null)
+                                    singerInfo.Singer_Image_Uri = singerImageUri;
+
                                 // 添加到队列中
-                                AddToQueue(SingerInfo);
+                                AddToQueue(singerInfo);
                             }
                         }
                     }

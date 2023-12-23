@@ -21,6 +21,7 @@ using System.Windows.Shapes;
 using Microsoft.EntityFrameworkCore;
 using NSMusicS.Models.APP_DB_SqlLite.SS_Convert;
 using NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async;
+using System.IO;
 
 namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
 {
@@ -481,7 +482,6 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
         }
         #endregion
 
-        #region 删除选中项
         /// <summary>
         /// 删除选中项
         /// </summary>
@@ -531,7 +531,6 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
 
             Sort_SongListAsync();
         }
-        #endregion
 
         /// <summary>
         /// 排序

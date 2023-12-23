@@ -22,6 +22,9 @@ using NSMusicS.Models.APP_DB_SqlLite.ProductContext;
 using NSMusicS.Models.APP_DB_SqlLite.Category;
 using NSMusicS.Models.Song_List_Infos;
 using Song_Info = NSMusicS.Models.Song_List_Infos.Song_Info;
+using Z.EntityFramework.Extensions;
+using Microsoft.Data.Sqlite;
+using Dapper;
 
 namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
 {
@@ -488,6 +491,7 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                                 _Song_Info.Song_Like = item.Song_Like;
                                 _Song_Info.Album_Name = item.Album_Name;
                                 _Song_Info.MV_Path = item.MV_Path;
+                                _Song_Info.IsChecked = false;
 
                                 _Song_Info.Visibility_Playing = Visibility.Collapsed;
 
@@ -562,6 +566,7 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                             _Song_Info.Song_Like = item.Song_Like;
                             _Song_Info.Album_Name = item.Album_Name;
                             _Song_Info.MV_Path = item.MV_Path;
+                            _Song_Info.IsChecked = false;
 
                             _Song_Info.Visibility_Playing = Visibility.Collapsed;
 
@@ -617,90 +622,84 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                 return temp;
             }
         }
-
-
-        /// <summary>
-        /// 保存整个歌单至 数据库（同步）
-        /// </summary>
-        /// <param name="songs"></param>
-        /// <param name="category_SongList_ID"></param>
-        /// <param name="list_name"></param>
-        /// <returns></returns>
-        public void Save_SongList_To_Database(ObservableCollection<Product_Song_Info> songs, int category_SongList_ID, string list_name)
+        public async Task<ObservableCollection<SongList_Info>> Read_Songs_From_DatabaseAsync_Dapper(int category_SongList_ID, string category_SongList_Name)
         {
-            using (dbContext = new ProductContext_Song_Info("ProductContext_Song_Infos"))
+            using (var connection = new SqliteConnection("Data Source=ProductContext_Song_Infos.db"))
             {
-                dbContext.Database.EnsureCreated();
-                dbContext.Category_SongList_Infos.Load();
-                dbContext.Product_Song_Infos.Load();
+                connection.Open();
 
-                if (songs.Count > 0)
+                var playlists = new ObservableCollection<SongList_Info>();
+
+                var songlists = await connection.QueryAsync<Category_SongList_Info>("SELECT * FROM Category_SongList_Infos WHERE Category_SongList_Name = @Name", new { Name = category_SongList_Name });
+
+                foreach (var list in songlists)
                 {
-                    Category_SongList_Info category_SongList_Info = new Category_SongList_Info();
-                    category_SongList_Info.Category_SongList_Name = list_name;
-
-                    var result_songlist = dbContext.Category_SongList_Infos
-                                                .Where(temp => temp.Category_SongList_Name.Equals(category_SongList_Info.Category_SongList_Name))
-                                                .ToList();
-
-                    if (!result_songlist.Any())
+                    var playlist = new SongList_Info
                     {
-                        var lastCategory = dbContext.Category_SongList_Infos
-                                                      .OrderByDescending(c => c.Category_SongList_ID)
-                                                      .FirstOrDefault();
+                        ID = list.Category_SongList_ID,
+                        Name = list.Category_SongList_Name,
+                        Songs = new ObservableCollection<Song_Info>()
+                    };
 
-                        if (lastCategory != null)
-                            category_SongList_Info.Category_SongList_ID = lastCategory.Category_SongList_ID + 1;
+                    var songs = await connection.QueryAsync<Product_Song_Info>("SELECT * FROM Product_Song_Infos WHERE Category_SongList_ID = @ID", new { ID = list.Category_SongList_ID });
 
-                        dbContext.Category_SongList_Infos.Add(category_SongList_Info);
-
-                        /// 必须Save，否则无法存储到dbContext.Category_SongList_Infos
-                        dbContext.SaveChanges();
-                    }
-                    else
+                    foreach (var item in songs)
                     {
-                        category_SongList_Info = result_songlist.FirstOrDefault();
-                    }
-
-                    if (dbContext.Category_SongList_Infos.Any())
-                    {
-                        foreach (Product_Song_Info song in songs)
+                        var _Song_Info = new Song_Info
                         {
-                            if (song != null)
-                            {
-                                var existingSong = dbContext.Product_Song_Infos
-                                    .Where(temp => temp.SongList_Name_AND_Song_Url.Equals(song.SongList_Name_AND_Song_Url))
-                                    .FirstOrDefault();
-                                /*if (existingSong == null)
-                                {
-                                    song.Category_SongList_ID = category_SongList_Info.Category_SongList_ID;
-                                    song.category_SongList_Info = category_SongList_Info;
-                                    if (dbContext.Product_Song_Infos.Find(song.SongList_Name_AND_Song_Url) == null)
-                                    {
-                                        dbContext.Product_Song_Infos.Add(song);
-                                        /// 必须Save，否则无法存储到dbContext.Product_Song_Infos
-                                        dbContext.SaveChanges();
-                                    }
-                                }
-                                else */
-                                if (existingSong == null || !existingSong.Category_SongList_ID.Equals(category_SongList_Info.Category_SongList_ID))
-                                {
-                                    song.Category_SongList_ID = category_SongList_Info.Category_SongList_ID;
-                                    song.category_SongList_Info = category_SongList_Info;
-                                    if (dbContext.Product_Song_Infos.Find(song.SongList_Name_AND_Song_Url) == null)
-                                    {
-                                        dbContext.Product_Song_Infos.Add(song);
-                                        /// 必须Save，否则无法存储到dbContext.Product_Song_Infos
-                                        dbContext.SaveChanges();
-                                    }
-                                }
-                            }
+                            Song_No = item.Song_No,
+                            Song_Name = item.Song_Name,
+                            Singer_Name = item.Singer_Name,
+                            Song_Url = item.Song_Url,
+                            Song_Duration = item.Song_Duration,
+                            Song_Like = item.Song_Like,
+                            Album_Name = item.Album_Name,
+                            MV_Path = item.MV_Path,
+                            IsChecked = false,
+                            Visibility_Playing = Visibility.Collapsed,
+                            Song_Like_Image = item.Song_Like == 1 ? ImageBrush_LoveEnter : ImageBrush_LoveNormal,
+                            Song_MV_Image = null
+                        };
+
+                        if (song_Infos_Love != null && song_Infos_Love.Any(s => s.Song_Url.Equals(_Song_Info.Song_Url)))
+                        {
+                            _Song_Info.Song_Like = 1;
+                            _Song_Info.Song_Like_Image = ImageBrush_LoveEnter;
                         }
 
+                        playlist.Songs.Add(_Song_Info);
+                    }
+
+                    if (category_SongList_Name.Equals("我的收藏"))
+                    {
+                        song_Infos_Love = new ObservableCollection<Song_Info>(playlist.Songs);
+                    }
+
+                    playlists.Add(playlist);
+                }
+
+                var temp = new ObservableCollection<SongList_Info>();
+                var list_Info = new SongList_Info
+                {
+                    ID = category_SongList_ID,
+                    Name = category_SongList_Name,
+                    Songs = new ObservableCollection<Song_Info>()
+                };
+
+                foreach (var item in playlists)
+                {
+                    foreach (var song in item.Songs)
+                    {
+                        list_Info.Songs.Add(song);
                     }
                 }
+
+                temp.Add(list_Info);
+                return temp;
             }
         }
+
+
         /// <summary>
         /// 保存整个歌单至 数据库（异步）
         /// </summary>
@@ -715,6 +714,10 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                 dbContext.Database.EnsureCreated();
                 dbContext.Category_SongList_Infos.Load();
                 dbContext.Product_Song_Infos.Load();
+
+                List<Category_SongList_Info> songlistsToAdd = new List<Category_SongList_Info>();
+                List<Product_Song_Info> songsToAdd = new List<Product_Song_Info>();
+                List<Product_Song_Info> songsToRemove = new List<Product_Song_Info>();
 
                 if (songs.Count > 0)
                 {
@@ -734,13 +737,10 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                         if (lastCategory != null)
                             category_SongList_Info.Category_SongList_ID = lastCategory.Category_SongList_ID + 1;
 
-                        dbContext.Category_SongList_Infos.Add(category_SongList_Info);
-                        await dbContext.SaveChangesAsync();
+                        songlistsToAdd.Add(category_SongList_Info);
                     }
                     else
-                    {
                         category_SongList_Info = result_songlist.FirstOrDefault();
-                    }
 
                     if (dbContext.Category_SongList_Infos.Any())
                     {
@@ -757,8 +757,7 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                                     song.category_SongList_Info = category_SongList_Info;
                                     if (await dbContext.Product_Song_Infos.FindAsync(song.SongList_Name_AND_Song_Url) == null)
                                     {
-                                        dbContext.Product_Song_Infos.Add(song);
-                                        await dbContext.SaveChangesAsync();
+                                        songsToAdd.Add(song);
                                     }
                                 }
                                 else if (!existingAlbum.Category_SongList_ID.Equals(category_SongList_Info.Category_SongList_ID))
@@ -767,17 +766,119 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                                     song.category_SongList_Info = category_SongList_Info;
                                     if (await dbContext.Product_Song_Infos.FindAsync(song.SongList_Name_AND_Song_Url) == null)
                                     {
-                                        dbContext.Product_Song_Infos.Add(song);
-                                        await dbContext.SaveChangesAsync();
+                                        songsToAdd.Add(song);
                                     }
+                                }
+                                else
+                                {
+                                    ///songsToRemove.Add(song);
+                                    ///dbContext.Product_Song_Infos.Remove(song);
                                 }
                             }
                         }
-
                     }
+
+                    dbContext.Category_SongList_Infos.AddRange(songlistsToAdd);
+                    dbContext.Product_Song_Infos.AddRange(songsToAdd);
+                    dbContext.Product_Song_Infos.RemoveRange(songsToRemove);
+                    await dbContext.SaveChangesAsync();
                 }
             }
         }
+        public async Task Save_SongList_To_DatabaseAsync_Dapper(ObservableCollection<Product_Song_Info> songs, int category_SongList_ID, string list_name)
+        {
+            using (var connection = new SqliteConnection("Data Source=ProductContext_Song_Infos.db"))
+            {
+                connection.Open();
+
+                var transaction = connection.BeginTransaction();
+
+                try
+                {
+                    var category_SongList_Info = await connection.QueryFirstOrDefaultAsync<Category_SongList_Info>(
+                        "SELECT * FROM Category_SongList_Infos WHERE Category_SongList_Name = @Name",
+                        new { Name = list_name },
+                        transaction
+                    );
+
+                    if (category_SongList_Info == null)
+                    {
+                        await connection.ExecuteAsync(
+                            "INSERT INTO Category_SongList_Infos (Category_SongList_Name) VALUES (@Name)",
+                            new { Name = list_name },
+                            transaction
+                        );
+
+                        category_SongList_ID = await connection.ExecuteScalarAsync<int>(
+                            "SELECT last_insert_rowid()",
+                            null,
+                            transaction
+                        );
+                    }
+                    else
+                    {
+                        category_SongList_ID = category_SongList_Info.Category_SongList_ID;
+                    }
+
+                    foreach (var song in songs)
+                    {
+                        var existingSong = await connection.QueryFirstOrDefaultAsync<Product_Song_Info>(
+                            "SELECT * FROM Product_Song_Infos WHERE SongList_Name_AND_Song_Url = @SongList_Name_AND_Song_Url",
+                            new { SongList_Name_AND_Song_Url = song.SongList_Name_AND_Song_Url },
+                            transaction
+                        );
+
+                        if (existingSong == null)
+                        {
+                            await connection.ExecuteAsync(
+                                @"INSERT INTO Product_Song_Infos (Song_No, Song_Name, Singer_Name, Song_Url, 
+                                    Song_Duration, Song_Like, Album_Name, MV_Path, 
+                                    SongList_Name_AND_Song_Url,Category_SongList_ID)
+                                VALUES (@Song_No, @Song_Name, @Singer_Name, @Song_Url, 
+                                    @Song_Duration, @Song_Like, @Album_Name, @MV_Path, 
+                                    @SongList_Name_AND_Song_Url,@Category_SongList_ID)",
+                                new
+                                {
+                                    Song_No = song.Song_No,
+                                    Song_Name = song.Song_Name,
+                                    Singer_Name = song.Singer_Name,
+                                    Song_Url = song.Song_Url,
+                                    Song_Duration = song.Song_Duration,
+                                    Song_Like = song.Song_Like,
+                                    Album_Name = song.Album_Name,
+                                    MV_Path = song.MV_Path,
+                                    SongList_Name_AND_Song_Url = song.SongList_Name_AND_Song_Url,
+                                    Category_SongList_ID = category_SongList_ID
+                                },
+                                transaction
+                            );
+                        }
+                        else if (existingSong.Category_SongList_ID != category_SongList_ID)
+                        {
+                            await connection.ExecuteAsync(
+                                "UPDATE Product_Song_Infos SET Category_SongList_ID = @Category_SongList_ID WHERE SongList_Name_AND_Song_Url = @SongList_Name_AND_Song_Url",
+                                new { Category_SongList_ID = category_SongList_ID, SongList_Name_AND_Song_Url = song.SongList_Name_AND_Song_Url },
+                                transaction
+                            );
+                        }
+                        else
+                        {
+                            // Delete the song or perform other actions if necessary
+                        }
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+
+
         /// <summary>
         /// 数组转换  ObservableCollection<Song_Info>  ->  ObservableCollection<Product_Song_Info>
         /// </summary>

@@ -102,6 +102,16 @@
                 VirtualizingStackPanel.VirtualizationMode="Recycling"
                 Grid.Row="1" 
                 ItemsSource="{Binding Assembly_Album_Show_s}">
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Margin" Value="5" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel 
@@ -120,11 +130,12 @@
                                 Orientation="Vertical">
                                 <Border 
                                     Width="{Binding Width}" Height="{Binding Height}" 
-                                    Background="{Binding Album_Image}" 
                                     Tag="{Binding Album_No}"
                                     Margin="{Binding Margin}"
                                     BorderBrush="{x:Null}" CornerRadius="12">
-
+                                    <Border.Background>
+                                        <ImageBrush ImageSource="{Binding Album_Image_Uri}" Stretch="UniformToFill"/>
+                                    </Border.Background>
                                 </Border>
                                 <TextBlock
                                      Text="{Binding Album_Name}" Foreground="White" FontSize="14" MaxWidth="120"
@@ -138,6 +149,29 @@
                                      Margin="0,3,0,13" TextTrimming="WordEllipsis">
 
                                 </TextBlock>
+
+                                <VirtualizingStackPanel.Style>
+                                    <Style TargetType="VirtualizingStackPanel">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background">
+                                                    <Setter.Value>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                            <GradientStop Color="#7FFFFFFF" Offset="0" />
+                                                            <GradientStop Color="#00000000" Offset="1" />
+                                                            <LinearGradientBrush.RelativeTransform>
+                                                                <RotateTransform Angle="45" />
+                                                            </LinearGradientBrush.RelativeTransform>
+                                                        </LinearGradientBrush>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="False">
+                                                <Setter Property="Background" Value="{x:Null}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </VirtualizingStackPanel.Style>
                             </VirtualizingStackPanel>
                         </materialDesign:TransitioningContent>
                     </DataTemplate>

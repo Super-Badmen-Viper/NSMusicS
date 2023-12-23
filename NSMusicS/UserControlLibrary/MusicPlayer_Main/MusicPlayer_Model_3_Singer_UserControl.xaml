@@ -305,13 +305,14 @@
                                     >
                                     <Border 
                                         Width="{Binding Width}" Height="{Binding Height}" 
-                                        Background="{Binding Singer_Image}" 
                                         Tag="{Binding Singer_No}"
                                         Margin="{Binding Margin}"
                                         BorderBrush="{x:Null}" CornerRadius="12"
                                         UseLayoutRounding="False" SnapsToDevicePixels="False" RenderOptions.BitmapScalingMode="LowQuality" 
                                         >
-
+                                        <Border.Background>
+                                            <ImageBrush ImageSource="{Binding Singer_Image_Uri}" Stretch="UniformToFill"/>
+                                        </Border.Background>
                                     </Border>
                                     <TextBlock
                                          Text="{Binding Singer_Name}" Foreground="White" FontSize="14" MaxWidth="120"
@@ -325,6 +326,29 @@
                                          Margin="0,3,0,13" TextTrimming="WordEllipsis">
 
                                     </TextBlock>
+
+                                    <VirtualizingStackPanel.Style>
+                                        <Style TargetType="VirtualizingStackPanel">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                                <GradientStop Color="#7FFFFFFF" Offset="0" />
+                                                                <GradientStop Color="#00000000" Offset="1" />
+                                                                <LinearGradientBrush.RelativeTransform>
+                                                                    <RotateTransform Angle="45" />
+                                                                </LinearGradientBrush.RelativeTransform>
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="False">
+                                                    <Setter Property="Background" Value="{x:Null}" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </VirtualizingStackPanel.Style>
                                 </VirtualizingStackPanel>
                             </materialDesign:TransitioningContent>
                         </DataTemplate>

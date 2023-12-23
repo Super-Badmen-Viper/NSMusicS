@@ -22,6 +22,7 @@ using NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Alb
 using System.Threading;
 using static NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Albums.ViewModel_Assembly_Album_Show.ViewModel_Assembly_Album_Class;
 using static NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Singers.ViewModel_Assembly_Singer_Show.ViewModel_Assembly_Singer_Class;
+using NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Albums.ViewModel_Assembly_Singer_Show;
 
 namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Albums.ViewModel_Assembly_Album_Show
 {
@@ -33,7 +34,6 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
             public string Album_Name { get; set; }
             public string Album_Explain { get; set; }
             public Uri Album_Image_Uri { get; set; }
-            public ImageBrush Album_Image { get; set; }
             public TransitionEffect Effact { get; set; }
 
             public double Width { get; set; }
@@ -60,20 +60,22 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
             /// 一次性全部刷新（一致性）
             RefCommand = new RelayCommand(async () =>
             {
-                Album_Info_Class Album_Info_Class = Album_Info_Class.Retuen_This();
-                for (int i = 0; i < Album_Info_Class.Album_Image_Uris.Count; i++)
+                Album_Info_Class album_Info_Class = Album_Info_Class.Retuen_This();
+                for (int i = 0; i < album_Info_Class.Album_Image_Uris.Count; i++)
                 {
                     var existingAlbum = Album_Infos.FirstOrDefault(
-                            item => item.Album_Name.Equals(Album_Info_Class.Album_Names[i])
+                            item => item.Album_Name.Equals(album_Info_Class.Album_Names[i])
                             );
                     if (existingAlbum == null)
                     {
-                        Album_Infos.Add(new Album_Info()
+                        var albumName = album_Info_Class.Album_Names[i];
+                        var albumImageUri = album_Info_Class.Album_Image_Uris[i];
+                        var albumExplain = album_Info_Class.Album_Explain[i];
+                        var albumInfo = new Album_Info()
                         {
                             Album_No = i,
-                            Album_Name = Album_Info_Class.Album_Names[i],
-                            Album_Image = new ImageBrush(new BitmapImage(Album_Info_Class.Album_Image_Uris[i])),
-                            Album_Explain = Album_Info_Class.Album_Explain[i],
+                            Album_Name = albumName,
+                            Album_Explain = albumExplain,
                             Width = 140,
                             Height = 140,
                             Margin = new Thickness(10, 2, 10, 2),
@@ -82,7 +84,12 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
                                 Kind = kinds[new Random().Next(2, 6)],
                                 Duration = new TimeSpan(0, 0, 0, 0, 200)
                             }
-                        });
+                        };
+
+                        if (albumImageUri != null)
+                            albumInfo.Album_Image_Uri = albumImageUri;
+
+                        Album_Infos.Add(albumInfo);
                     }
                     await Task.Delay(1);//单个平滑过渡
                     Num_Album_Infos++;
@@ -124,13 +131,14 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
                         {
                             lock (Album_Infos)
                             {
+                                var albumName = album_Info_Class.Album_Names[i];
+                                var albumImageUri = album_Info_Class.Album_Image_Uris[i];
+                                var albumExplain = album_Info_Class.Album_Explain[i];
                                 var albumInfo = new Album_Info()
                                 {
                                     Album_No = i,
-                                    Album_Name = album_Info_Class.Album_Names[i],
-                                    Album_Image_Uri = album_Info_Class.Album_Image_Uris[i],
-                                    Album_Image = new ImageBrush(new BitmapImage(album_Info_Class.Album_Image_Uris[i])),
-                                    Album_Explain = album_Info_Class.Album_Explain[i],
+                                    Album_Name = albumName,
+                                    Album_Explain = albumExplain,
                                     Width = 140,
                                     Height = 140,
                                     Margin = new Thickness(10, 2, 10, 2),
@@ -140,6 +148,10 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
                                         Duration = new TimeSpan(0, 0, 0, 0, 200)
                                     }
                                 };
+
+                                if (albumImageUri != null)
+                                    albumInfo.Album_Image_Uri = albumImageUri;
+
                                 // 添加到队列中
                                 AddToQueue(albumInfo);
                             }

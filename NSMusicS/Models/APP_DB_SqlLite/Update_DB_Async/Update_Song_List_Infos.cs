@@ -58,6 +58,8 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
             return update_Song_List_Infos;
         }
 
+        string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
+
 
         /// <summary>
         /// 读取所有歌单信息（同步）（数据库 -> 内存库）
@@ -118,7 +120,7 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
             {
                 // var songList = SongList_Info_Reader.ReadSongList_Infos(Path_App + path);
                 // var songList = SongList_Info_Reader.ReadSongList_Infos_To_Json(Path_App + path);
-                var songList = await convert_Song_Info.Read_Songs_From_DatabaseAsync(num, path);
+                var songList = await convert_Song_Info.Read_Songs_From_DatabaseAsync_Dapper(num, path);
                 /// 先按Song_No排序，因为默认主键不是Song_No，而UI需要Song_No排序的效果
                 foreach (var song in songList)
                 {
@@ -285,46 +287,40 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
             /// 避免DbContext的线程问题：不同线程同时使用DbContext的同一实例
             Convert_Song_List_Infos convert_Song_Info = new Convert_Song_List_Infos();
 
-            /// 删除所有歌单信息
             using (convert_Song_Info.dbContext = new ProductContext.ProductContext_Song_Info("ProductContext_Song_Infos"))
             {
-                var allCategories = await convert_Song_Info.dbContext.Category_SongList_Infos.ToListAsync();
-                convert_Song_Info.dbContext.Category_SongList_Infos.RemoveRange(allCategories);
-                var allProducts = await convert_Song_Info.dbContext.Product_Song_Infos.ToListAsync();
-                convert_Song_Info.dbContext.Product_Song_Infos.RemoveRange(allProducts);
-                await convert_Song_Info.dbContext.SaveChangesAsync();
+                convert_Song_Info.dbContext.BulkDelete(convert_Song_Info.dbContext.Category_SongList_Infos);
+                convert_Song_Info.dbContext.BulkDelete(convert_Song_Info.dbContext.Product_Song_Infos);
+                convert_Song_Info.dbContext.SaveChanges();
+
+                ///
+                ///SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
+                SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", songList_Infos[0]);
+                await convert_Song_Info.Save_SongList_To_DatabaseAsync_Dapper(
+                    convert_Song_Info.Create_Product_Song_Infos(songList_Infos[0][0].Songs, "我的收藏"),
+                    0, "我的收藏");
+
+                ///
+                SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml", songList_Infos[1]);
+                await convert_Song_Info.Save_SongList_To_DatabaseAsync_Dapper(
+                    convert_Song_Info.Create_Product_Song_Infos(songList_Infos[1][0].Songs, "本地音乐"),
+                    1, "本地音乐");
+
+                ///
+                SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml", songList_Infos[2]);
+                await convert_Song_Info.Save_SongList_To_DatabaseAsync_Dapper(
+                    convert_Song_Info.Create_Product_Song_Infos(songList_Infos[2][0].Songs, "默认列表"),
+                    2, "默认列表");
+
+                ///
+                for (int i = 3; i < 17; i++)
+                {
+                    SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (" + i + ").xml", songList_Infos[i]);
+                    await convert_Song_Info.Save_SongList_To_DatabaseAsync_Dapper(
+                        convert_Song_Info.Create_Product_Song_Infos(songList_Infos[i][0].Songs, "歌单" + i),
+                        3, "歌单" + i);
+                }
             }
-
-            ///
-            ///SongList_Info_Save.SaveSongList_Infos(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
-            ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Love.xml", playlists);
-            await convert_Song_Info.Save_SongList_To_DatabaseAsync(
-                convert_Song_Info.Create_Product_Song_Infos(songList_Infos[0][0].Songs, "我的收藏"),
-                0, "我的收藏");
-
-            ///
-            ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_ALL.xml", playlists);
-            await convert_Song_Info.Save_SongList_To_DatabaseAsync(
-                convert_Song_Info.Create_Product_Song_Infos(songList_Infos[1][0].Songs, "本地音乐"),
-                1, "本地音乐");
-
-            ///
-            ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_Auto.xml", playlists);
-            await convert_Song_Info.Save_SongList_To_DatabaseAsync(
-                convert_Song_Info.Create_Product_Song_Infos(songList_Infos[2][0].Songs, "默认列表"),
-                2, "默认列表");
-
-            ///
-            for (int i = 3; i < 17; i++)
-            {
-                ///SongList_Info_Save.SaveSongList_Infos_To_Json(Path_App + @"\SongListInfo_ini\SongList_Ini\Song_List_Info_More_ (" + i + ").xml", playlists);
-                await convert_Song_Info.Save_SongList_To_DatabaseAsync(
-                    convert_Song_Info.Create_Product_Song_Infos(songList_Infos[i][0].Songs, "歌单" + i),
-                    3, "歌单" + i);
-            }
-
-            convert_Song_Info.dbContext.Dispose();
-            convert_Song_Info = null;
         }
 
         #region CRUD （SqlLite写入性能表现差：不如整体保存至数据库）

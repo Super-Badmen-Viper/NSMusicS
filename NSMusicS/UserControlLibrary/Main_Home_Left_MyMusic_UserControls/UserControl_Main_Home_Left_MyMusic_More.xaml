@@ -233,8 +233,11 @@
                             <GridViewColumn x:Name="GridViewColumn_Check_ListView_Song">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox x:Name="Check_ListView_Song" Tag="{Binding Song_No}" 
-                                              Click="Check_ListView_Song_Click"/>
+                                        <CheckBox 
+                                            x:Name="Check_ListView_Song" 
+                                            Tag="{Binding Song_No}" 
+                                            IsChecked="{Binding IsChecked}"
+                                            Click="Check_ListView_Song_Click"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

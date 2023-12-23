@@ -110,20 +110,24 @@ namespace NSMusicS.Models.Song_Extract_Infos
             {
                 if (File.Exists(url))
                 {
-                    using (TagLib.File xxxx = TagLib.File.Create(url))
+                    try
                     {
-                        if (xxxx.Tag.Pictures.Length >= 1)
+                        using (TagLib.File xxxx = TagLib.File.Create(url))
                         {
-                            try
+                            if (xxxx.Tag.Pictures.Length >= 1)
                             {
-                                byte[] bin = xxxx.Tag.Pictures[0].Data.Data;
-                                xxxx.Dispose();
+                                try
+                                {
+                                    byte[] bin = xxxx.Tag.Pictures[0].Data.Data;
+                                    xxxx.Dispose();
 
-                                return new MemoryStream(bin);
+                                    return new MemoryStream(bin);
+                                }
+                                catch { }
                             }
-                            catch { }
                         }
                     }
+                    catch { return null; }
                 }
             }
 
