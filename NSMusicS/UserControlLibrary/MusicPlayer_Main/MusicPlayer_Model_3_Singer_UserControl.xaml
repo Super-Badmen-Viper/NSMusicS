@@ -28,22 +28,24 @@
                     Foreground="#F6F6F6" HorizontalAlignment="Left" VerticalAlignment="Top"
                     Margin="1,100,0,0"/>
                 <Border
-                    x:Name="Button_Show_big2_Singer_List_Model_2" Visibility="Collapsed"
-                    Width="120" Height="20" Margin="90,73,0,0"
-                    VerticalAlignment="Top" HorizontalAlignment="Left"
+                    x:Name="Button_Show_Singer_List_Model_3"
+                    Width="100" Height="20" Margin="0,73,0,0"
+                    VerticalAlignment="Top" HorizontalAlignment="Right"
                     Background="#44FFFFFF" CornerRadius="10"
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  >
                     <TextBlock 
-                    Text="显示右侧歌手列表" Foreground="#FFFFFF"
-                    Margin="12,0,0,0" VerticalAlignment="Center"/>
+                        x:Name="Button_Show_Singer_List_Model_3_Text"
+                        Text="返回专辑列表" Foreground="#FFFFFF" 
+                        HorizontalAlignment="Right" VerticalAlignment="Center"
+                        Margin="0,0,12,0"/>
                 </Border>
                 <ComboBox 
                     x:Name="ComBox_Select_SongList_For_Model_2"
                     SelectedIndex="-1"
                     Style="{DynamicResource cmbstyle_Select_SongList_For_AlbumView}" 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    Visibility="Visible" Width="140" Height="30" Margin="100,93,0,0"
-                    VerticalAlignment="Top" HorizontalAlignment="Left" IsEditable="True" 
+                    Visibility="Visible" Width="140" Height="30" Margin="0,93,-30,0"
+                    VerticalAlignment="Top" HorizontalAlignment="Right" IsEditable="True" 
                     Text="创建的歌单"
                     IsSynchronizedWithCurrentItem="False"
                     BorderBrush="White" BorderThickness="1,0,0,0">
@@ -64,9 +66,9 @@
                 <TextBlock 
                     x:Name="Button_Reload_For_Album_Performer"
                     Width="16" Height="16"
-                    Foreground="#F6F6F6" HorizontalAlignment="Left" VerticalAlignment="Top"
-                    Margin="220,100,0,0" >
-                <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/操作-刷新.svg"/>
+                    Foreground="#F6F6F6" HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Margin="0,100,90,0" >
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/操作-刷新.svg"/>
                 </TextBlock>
 
                 <!--ItemsPanel="{DynamicResource ItemsPanelTemplate2}"-->
@@ -87,12 +89,19 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                        <VirtualizingStackPanel>
-                                            <Border Name="Bd" Background="{TemplateBinding Background}">
+                                        <VirtualizingStackPanel
+                                            VirtualizingStackPanel.IsVirtualizing="True"
+                                            VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                            <Border 
+                                                Name="Bd" Background="{TemplateBinding Background}"
+                                                VirtualizingStackPanel.IsVirtualizing="True"
+                                                VirtualizingStackPanel.VirtualizationMode="Recycling">
                                                 <GridViewRowPresenter 
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                            Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
+                                                    HorizontalAlignment="Stretch"
+                                                    VirtualizingStackPanel.IsVirtualizing="True"
+                                                    VirtualizingStackPanel.VirtualizationMode="Recycling"
+                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                                    Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
                                             </Border>
                                         </VirtualizingStackPanel>
                                         <ControlTemplate.Triggers>
@@ -141,19 +150,25 @@
                                 <GridViewColumn Width="70">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <VirtualizingStackPanel>
+                                            <VirtualizingStackPanel
+                                                VirtualizingStackPanel.IsVirtualizing="True"
+                                                VirtualizingStackPanel.VirtualizationMode="Recycling">
                                                 <Border 
-                                                Width="55" Height="55" Margin="0,0,0,0"
-                                                CornerRadius="6" 
-                                                Background="#30FFFFFF"/>
-                                                <Border x:Name="ListView_For_Album_Performer_Image"
-                                                Width="55" Height="55" Margin="0,-55,0,0"
-                                                CornerRadius="6">
+                                                    Width="55" Height="55" Margin="0,0,0,0"
+                                                    CornerRadius="6" 
+                                                    Background="#30FFFFFF"
+                                                    VirtualizingStackPanel.IsVirtualizing="True"
+                                                    VirtualizingStackPanel.VirtualizationMode="Recycling"/>
+                                                <Border 
+                                                    x:Name="ListView_For_Album_Performer_Image"
+                                                    Width="55" Height="55" Margin="0,-55,0,0"
+                                                    CornerRadius="6"
+                                                    VirtualizingStackPanel.IsVirtualizing="True"
+                                                    VirtualizingStackPanel.VirtualizationMode="Recycling">
                                                     <Border.Background>
                                                         <ImageBrush Stretch="UniformToFill" ImageSource="{Binding Album_Performer_Image}"/>
                                                     </Border.Background>
                                                 </Border>
-
                                             </VirtualizingStackPanel>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -162,16 +177,20 @@
                                 <GridViewColumn Width="150">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <VirtualizingStackPanel Orientation="Vertical">
+                                            <VirtualizingStackPanel Orientation="Vertical"
+                                                                    VirtualizingStackPanel.IsVirtualizing="True"
+                                                                    VirtualizingStackPanel.VirtualizationMode="Recycling">
                                                 <TextBlock 
-                                                x:Name="TextBlock_Album_Performer_Name"
-                                                Text="{Binding Album_Performer_Name}" Foreground="White">
-
+                                                    x:Name="TextBlock_Album_Performer_Name"
+                                                    Text="{Binding Album_Performer_Name}" Foreground="White"
+                                                    VirtualizingStackPanel.IsVirtualizing="True"
+                                                    VirtualizingStackPanel.VirtualizationMode="Recycling">
                                                 </TextBlock>
                                                 <TextBlock
-                                                x:Name="TextBlock_Album_Performer_Of_AlbumNums"
-                                                Text="{Binding Album_Performer_Of_AlbumNums}" Foreground="White">
-
+                                                    x:Name="TextBlock_Album_Performer_Of_AlbumNums"
+                                                    Text="{Binding Album_Performer_Of_AlbumNums}" Foreground="White"
+                                                    VirtualizingStackPanel.IsVirtualizing="True"
+                                                    VirtualizingStackPanel.VirtualizationMode="Recycling">
                                                 </TextBlock>
                                             </VirtualizingStackPanel>
                                         </DataTemplate>
@@ -202,7 +221,7 @@
 
 
             </Grid>
-            <Grid Margin="286,77,0,77" >
+            <Grid x:Name="Grid_Singer_Show_1_Right" Margin="286,77,0,77" >
                 <MusicPlayer_Model_Control_Albums:UserControl_Main_Model_3_Control_Albums_And_Tracks
                     x:Name="userControl_Main_Model_3_View_Albums_And_Tracks"
                     Margin="-1,20,1,0"/>

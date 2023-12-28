@@ -8,7 +8,8 @@
              >
     <Grid>
         <VirtualizingStackPanel 
-             VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True" VirtualizingStackPanel.VirtualizationMode="Recycling"
+            VirtualizingStackPanel.IsVirtualizing="True" 
+            ScrollViewer.CanContentScroll="True" VirtualizingStackPanel.VirtualizationMode="Recycling"
             >
             <Grid x:Name="Model_Normal" Visibility="Visible" MouseLeave="Model_View_MouseLeave">
                 <Border 
@@ -36,7 +37,8 @@
                     MouseDoubleClick="ListView_For_This_Album_ALL_Song_MouseDoubleClick"
                     Background="{x:Null}" BorderThickness="0,0,0,0" BorderBrush="White" 
                     ScrollViewer.CanContentScroll="True"
-                    >
+                    VirtualizingStackPanel.IsVirtualizing="True"  
+                    VirtualizingStackPanel.VirtualizationMode="Recycling">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="BorderThickness" Value="0"/>
@@ -48,12 +50,17 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                        <Border Name="Bd"
-                                            Background="{TemplateBinding Background}">
+                                        <Border 
+                                            Name="Bd"
+                                            Background="{TemplateBinding Background}"
+                                            VirtualizingStackPanel.IsVirtualizing="True"  
+                                            VirtualizingStackPanel.VirtualizationMode="Recycling">
                                             <GridViewRowPresenter 
                                                 HorizontalAlignment="Stretch"
                                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                                Width="Auto" Margin="0" Content="{TemplateBinding Content}"/>
+                                                Width="Auto" Margin="0" Content="{TemplateBinding Content}"
+                                                VirtualizingStackPanel.IsVirtualizing="True"  
+                                                VirtualizingStackPanel.VirtualizationMode="Recycling"/>
                                         </Border>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsSelected" Value="true">
@@ -97,9 +104,10 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock 
-                                        x:Name="TextBlock_Song_Name"
-                                        Text="{Binding Song_Name}" Foreground="White"
-                                        >
+                                                x:Name="TextBlock_Song_Name"
+                                                Text="{Binding Song_Name}" Foreground="White"
+                                                VirtualizingStackPanel.IsVirtualizing="True"  
+                                                VirtualizingStackPanel.VirtualizationMode="Recycling">
 
                                             </TextBlock>
                                         </DataTemplate>
@@ -110,9 +118,10 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock
-                                        x:Name="TextBlock_Song_Duration"
-                                        Text="{Binding Song_Duration}" Foreground="White"
-                                        >
+                                                x:Name="TextBlock_Song_Duration"
+                                                Text="{Binding Song_Duration}" Foreground="White"
+                                                VirtualizingStackPanel.IsVirtualizing="True"  
+                                                VirtualizingStackPanel.VirtualizationMode="Recycling">
 
                                             </TextBlock>
                                         </DataTemplate>
@@ -123,7 +132,9 @@
                     </ListView.View>
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <VirtualizingStackPanel VirtualizationMode="Recycling" IsVirtualizing="True"/>
+                            <VirtualizingStackPanel 
+                                VirtualizingStackPanel.IsVirtualizing="True"  
+                                VirtualizingStackPanel.VirtualizationMode="Recycling"/>
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
                 </ListView>
@@ -132,7 +143,9 @@
                     x:Name="StackPanel_This_Album_Info" 
                     HorizontalAlignment="Left" VerticalAlignment="Top"
                     Margin="10,20,0,0" Width="160" Height="160" Background="#99232325"
-                    Orientation="Vertical" MouseLeave="StackPanel_This_Album_Info_MouseLeave">
+                    Orientation="Vertical" MouseLeave="StackPanel_This_Album_Info_MouseLeave"
+                    VirtualizingStackPanel.IsVirtualizing="True"  
+                    VirtualizingStackPanel.VirtualizationMode="Recycling">
                     <Button x:Name="Button_Play_This_Album" 
                        HorizontalAlignment="Left" VerticalAlignment="Top"
                        Margin="0" Padding="0,0,0,0" 
@@ -155,7 +168,8 @@
                             SelectedIndex="-1" Style="{DynamicResource cmbstyle}" 
                             SelectionChanged="ComboBox_SelectionChanged"
                             IsEditable="False" Margin="0,0,0,0" Width="160"
->
+                            VirtualizingStackPanel.IsVirtualizing="True"  
+                            VirtualizingStackPanel.VirtualizationMode="Recycling">
                             <ComboBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <VirtualizingStackPanel/>
@@ -173,8 +187,6 @@
                 </StackPanel>
             </Grid>
         </VirtualizingStackPanel>
-
-
     </Grid>
 </UserControl>
 

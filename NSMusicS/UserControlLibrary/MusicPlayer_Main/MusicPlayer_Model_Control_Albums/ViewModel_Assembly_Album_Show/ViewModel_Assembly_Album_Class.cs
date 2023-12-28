@@ -28,18 +28,7 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
 {
     public class ViewModel_Assembly_Album_Class : ViewModelBase
     {
-        public class Album_Info
-        {
-            public int Album_No { get; set; }
-            public string Album_Name { get; set; }
-            public string Album_Explain { get; set; }
-            public Uri Album_Image_Uri { get; set; }
-            public TransitionEffect Effact { get; set; }
-
-            public double Width { get; set; }
-            public double Height { get; set; }
-            public Thickness Margin { get; set; }
-        }
+        
         public int Num_Album_Infos { get; set; }//检测是否已完成RelayCommand
 
         public ViewModel_Assembly_Album_Class()

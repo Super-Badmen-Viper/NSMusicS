@@ -39,8 +39,9 @@
             ItemsPanel="{DynamicResource ItemsPanelTemplate2}"
             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
             Background="{x:Null}" BorderThickness="0,0,0,0" BorderBrush="{x:Null}"
-            VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True" VirtualizingStackPanel.VirtualizationMode="Recycling"
-            >
+            ScrollViewer.CanContentScroll="True"
+            VirtualizingStackPanel.IsVirtualizing="True"  
+            VirtualizingStackPanel.VirtualizationMode="Recycling">
 
             <!--UI效果，无ListViewItem限制-->
             <ListView.ItemContainerStyle>
@@ -48,9 +49,16 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                <VirtualizingStackPanel>
-                                    <Border Name="Bd" Background="{TemplateBinding Background}">
-                                        <ContentPresenter/>
+                                <VirtualizingStackPanel
+                                    VirtualizingStackPanel.IsVirtualizing="True"  
+                                    VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                    <Border 
+                                        Name="Bd" Background="{TemplateBinding Background}"
+                                        VirtualizingStackPanel.IsVirtualizing="True"  
+                                        VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                        <ContentPresenter
+                                            VirtualizingStackPanel.IsVirtualizing="True"  
+                                            VirtualizingStackPanel.VirtualizationMode="Recycling"/>
                                     </Border>
                                 </VirtualizingStackPanel>
                                 <ControlTemplate.Triggers>

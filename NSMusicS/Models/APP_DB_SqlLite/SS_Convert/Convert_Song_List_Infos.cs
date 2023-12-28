@@ -900,43 +900,48 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                             new { SongList_Name_AND_Song_Url = song.SongList_Name_AND_Song_Url },
                             transaction
                         );
-
-                        if (existingSong == null)
+                        if (song != null)
                         {
-                            await connection.ExecuteAsync(
-                                @"INSERT INTO Product_Song_Infos (Song_No, Song_Name, Singer_Name, Song_Url, 
+                            if (song.MV_Path == null)
+                                song.MV_Path = "null";
+
+                            if (existingSong == null)
+                            {
+                                await connection.ExecuteAsync(
+                                    @"INSERT INTO Product_Song_Infos (Song_No, Song_Name, Singer_Name, Song_Url, 
                                     Song_Duration, Song_Like, Album_Name, MV_Path, 
                                     SongList_Name_AND_Song_Url,Category_SongList_ID)
                                 VALUES (@Song_No, @Song_Name, @Singer_Name, @Song_Url, 
                                     @Song_Duration, @Song_Like, @Album_Name, @MV_Path, 
                                     @SongList_Name_AND_Song_Url,@Category_SongList_ID)",
-                                new
-                                {
-                                    Song_No = song.Song_No,
-                                    Song_Name = song.Song_Name,
-                                    Singer_Name = song.Singer_Name,
-                                    Song_Url = song.Song_Url,
-                                    Song_Duration = song.Song_Duration,
-                                    Song_Like = song.Song_Like,
-                                    Album_Name = song.Album_Name,
-                                    MV_Path = song.MV_Path,
-                                    SongList_Name_AND_Song_Url = song.SongList_Name_AND_Song_Url,
-                                    Category_SongList_ID = category_SongList_ID
-                                },
-                                transaction
-                            );
-                        }
-                        else if (existingSong.Category_SongList_ID != category_SongList_ID)
-                        {
-                            await connection.ExecuteAsync(
-                                "UPDATE Product_Song_Infos SET Category_SongList_ID = @Category_SongList_ID WHERE SongList_Name_AND_Song_Url = @SongList_Name_AND_Song_Url",
-                                new { Category_SongList_ID = category_SongList_ID, SongList_Name_AND_Song_Url = song.SongList_Name_AND_Song_Url },
-                                transaction
-                            );
-                        }
-                        else
-                        {
-                            // Delete the song or perform other actions if necessary
+                                    new
+                                    {
+                                        Song_No = song.Song_No,
+                                        Song_Name = song.Song_Name,
+                                        Singer_Name = song.Singer_Name,
+                                        Song_Url = song.Song_Url,
+                                        Song_Duration = song.Song_Duration,
+                                        Song_Like = song.Song_Like,
+                                        Album_Name = song.Album_Name,
+                                        MV_Path = song.MV_Path,
+                                        SongList_Name_AND_Song_Url = song.SongList_Name_AND_Song_Url,
+                                        Category_SongList_ID = category_SongList_ID
+                                    },
+                                    transaction
+                                );
+                            }
+                            else if (existingSong.Category_SongList_ID != category_SongList_ID)
+                            {
+                                await connection.ExecuteAsync(
+                                    "UPDATE Product_Song_Infos SET Category_SongList_ID = @Category_SongList_ID WHERE SongList_Name_AND_Song_Url = @SongList_Name_AND_Song_Url",
+                                    new { Category_SongList_ID = category_SongList_ID, SongList_Name_AND_Song_Url = song.SongList_Name_AND_Song_Url },
+                                    transaction
+                                );
+                            }
+                            else
+                            {
+                                // Delete the song or perform other actions if necessary
+                            }
                         }
                     }
 
