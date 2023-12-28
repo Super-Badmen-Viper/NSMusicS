@@ -88,69 +88,8 @@ namespace NSMusicS
             //应用锁
             ProcessManager.GetProcessLock();
 
-            //禁用
-            userControl_ButtonFrame_TopPanel.Model_3.IsEnabled = true;
-            userControl_ButtonFrame_TopPanel.Model_4.IsEnabled = false;
-            userControl_ButtonFrame_TopPanel.Model_5.IsEnabled = false;
-            musicPlayer_Model_3_Singer_UserControl.Stack_Button_LotSelects_Sort.Visibility = Visibility.Collapsed;
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
-            }
-
-            #region Init
-            //
-            Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
-            savePath = Path_App + @"/Music/";
-            //
-            viewModule_Search_Song = ViewModule_Search_Song.Retuen_This();
-            this.DataContext = viewModule_Search_Song;
-            //
-            viewModule_Search_Song_For_Cloud_Music = ViewModule_Search_Song_For_Cloud_Music.Retuen_This();
-            Loading_LottieAnimationView.DataContext = viewModule_Search_Song_For_Cloud_Music;
-            //
-            window_Hover_MRC_Panel = new Window_Hover_MRC_Panel();
-            window_Hover_EQ_Panel = new Window_Hover_EQ_Panel();
-            //
-            mediaElement_Song = MediaElement_Song.Retuen_This();
-
-            //显示位置在屏幕中心
-            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
-            //
-            //高度绑定至动画，修改height就无法控制（启动时触发Window_SizeChanged事件导致height不为0不能隐藏）
-            doubleAnimation = new DoubleAnimation();
-            doubleAnimation.From = musicPlayer_Main_UserControl.ActualHeight;
-            doubleAnimation.To = 0;
-            doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(2));
-            musicPlayer_Main_UserControl.BeginAnimation(UserControl.HeightProperty, doubleAnimation);
-
-            //
-            Once_Animation();
-            Init_Animation();
-
-            //
-            userControl_SongList_Infos_Current_Playlist.Visibility = Visibility.Collapsed;
-            #endregion
-
             /// 异步加载初始化数据
-            init();
-
-            /// 因为SqlLite的数据持久层写入性能差，改为整体写入，10分钟一次
-            DispatcherTimer dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += DispatcherTimer_Tick;
-            dispatcherTimer.Interval = new TimeSpan(0,10,0);
-            dispatcherTimer.Start();
-
-            int minWorkerThreads, minIOThreads;
-            ThreadPool.GetMinThreads(out minWorkerThreads, out minIOThreads);
-            ThreadPool.SetMinThreads(minWorkerThreads, minIOThreads); // 设置最小工作线程数
-            int maxWorkerThreads, maxIOThreads;
-            ThreadPool.GetMaxThreads(out maxWorkerThreads, out maxIOThreads);
-            ThreadPool.SetMaxThreads(maxWorkerThreads * 2, maxIOThreads); // 设置最大工作线程数
+            This_App_InitLoad();
         }
         private async void DispatcherTimer_Tick(object? sender, EventArgs e)
         {
@@ -187,8 +126,54 @@ namespace NSMusicS
 
         #region UI Init Load
 
+        private async void This_App_InitLoad()
+        {
+            await init();
+        }
         private async Task init()
         {
+            #region Init
+            //
+            Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
+            savePath = Path_App + @"/Music/";
+            //
+            viewModule_Search_Song = ViewModule_Search_Song.Retuen_This();
+            this.DataContext = viewModule_Search_Song;
+            //
+            viewModule_Search_Song_For_Cloud_Music = ViewModule_Search_Song_For_Cloud_Music.Retuen_This();
+            Loading_LottieAnimationView.DataContext = viewModule_Search_Song_For_Cloud_Music;
+            //
+            window_Hover_MRC_Panel = new Window_Hover_MRC_Panel();
+            window_Hover_EQ_Panel = new Window_Hover_EQ_Panel();
+            //
+            mediaElement_Song = MediaElement_Song.Retuen_This();
+
+            //显示位置在屏幕中心
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+            //
+            //高度绑定至动画，修改height就无法控制（启动时触发Window_SizeChanged事件导致height不为0不能隐藏）
+            doubleAnimation = new DoubleAnimation();
+            doubleAnimation.From = musicPlayer_Main_UserControl.ActualHeight;
+            doubleAnimation.To = 0;
+            doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(2));
+            musicPlayer_Main_UserControl.BeginAnimation(UserControl.HeightProperty, doubleAnimation);
+
+            //
+            Once_Animation();
+            Init_Animation();
+
+            //
+            userControl_SongList_Infos_Current_Playlist.Visibility = Visibility.Collapsed;
+
+            //禁用
+            userControl_ButtonFrame_TopPanel.Model_3.IsEnabled = true;
+            userControl_ButtonFrame_TopPanel.Model_4.IsEnabled = false;
+            userControl_ButtonFrame_TopPanel.Model_5.IsEnabled = false;
+            musicPlayer_Model_3_Singer_UserControl.Stack_Button_LotSelects_Sort.Visibility = Visibility.Collapsed;
+
+            #endregion
+
             // 删除临时数据（数据残余）
             Delete_Clear_App_Temp();
 
@@ -310,7 +295,12 @@ namespace NSMusicS
             Size_Changed();
 
             #endregion
-            
+
+            /// 因为SqlLite的数据持久层写入性能差，改为整体写入，10分钟一次
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += DispatcherTimer_Tick;
+            dispatcherTimer.Interval = new TimeSpan(0, 10, 0);
+            dispatcherTimer.Start();
         }
 
         #region 页面切换
@@ -4562,12 +4552,12 @@ namespace NSMusicS
                 singer_Info_Class.Singer_Explain = new List<string>();
                 singer_Info_Class.Start_Index = 0;
                 singer_Info_Class.End_Index = 24;
-                /*Application.Current.Dispatcher.Invoke(() =>
+                Application.Current.Dispatcher.Invoke(() =>
                 {
                     ///
                     musicPlayer_Model_3_Singer_UserControl.ScrollViewer_Albums.ScrollToVerticalOffset(0);
                     musicPlayer_Model_3_Singer_UserControl.ScrollViewer_Albums.PreviewMouseWheel += ScrollViewer_Singer_PreviewMouseWheel;
-                });*/
+                });
 
                 // 加载歌手-专辑选择列表：优先度：MoZhi专辑>内嵌专辑>Null
                 ObservableCollection<Song_Info> song_Infos1 = new ObservableCollection<Song_Info>(SongList);
@@ -4894,9 +4884,9 @@ namespace NSMusicS
             userControl_Main_Home_Left_NAS_Music.Visibility = Visibility.Collapsed;
         }
 
-        #region 加载专辑照片墙-专辑照片墙 进入此专辑,切换专辑显示界面 专辑模式
+        #region 加载专辑照片墙
         /// <summary>
-        /// 加载歌手照片墙
+        /// 加载歌手照片墙-专辑照片墙 进入此专辑,切换专辑显示界面 专辑模式
         /// </summary>
         private async void Load_Assembly_Album_Show_s()
         {
@@ -4929,7 +4919,9 @@ namespace NSMusicS
             musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.PreviewMouseWheel += ScrollViewer_Albums_PreviewMouseWheel;
 
             ViewModel_Assembly_Album_Class viewModel_Assembly_Album_Class = ViewModel_Assembly_Album_Class.Retuen_This();
-            viewModel_Assembly_Album_Class.RefCommand.Execute(null);
+            // 启用同步整体加载
+            viewModel_Assembly_Album_Class.AddToQueue_Complete = true;
+            viewModel_Assembly_Album_Class.RefCommand_Async.Execute(null);
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -4938,42 +4930,49 @@ namespace NSMusicS
                 SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
             }
         }
+
+        /// <summary>
+        /// 专辑滚动栏滚动事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ScrollViewer_Albums_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            // 启用异步分页加载（数据异步添加，排序问题）
-            /*musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.ScrollToVerticalOffset(
+            musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.ScrollToVerticalOffset(
                 musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.VerticalOffset - e.Delta);
             e.Handled = true;
-            bool isAtBottom = musicPlayer_Model_2_Album_UserControl.
-                ScrollViewer_Albums.VerticalOffset >=
-                (musicPlayer_Model_2_Album_UserControl.
-                    ScrollViewer_Albums.ExtentHeight -
-                        musicPlayer_Model_2_Album_UserControl.
-                            ScrollViewer_Albums.ViewportHeight);
+
+            // 启用异步分页加载（数据异步添加，排序问题）
+            bool isAtBottom = musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.VerticalOffset + 360 >=
+                (musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.ExtentHeight -
+                        musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.ViewportHeight);
 
             if (isAtBottom)
             {
-                Album_Info_Class album_Info_Class = Album_Info_Class.Retuen_This();
-                if (album_Info_Class.Start_Index < album_Info_Class.Album_Image_Uris.Count)
+                ViewModel_Assembly_Album_Class viewModel_Assembly_Album_Class = ViewModel_Assembly_Album_Class.Retuen_This();
+                //等待之前的异步加载完成，再加载新的
+                if (viewModel_Assembly_Album_Class.AddToQueue_Complete == true)
                 {
-                    if (album_Info_Class.End_Index < album_Info_Class.Album_Image_Uris.Count)
+                    Album_Info_Class Album_Info_Class = Album_Info_Class.Retuen_This();
+                    if (Album_Info_Class.Start_Index < Album_Info_Class.Album_Image_Uris.Count)
                     {
-                        album_Info_Class.Start_Index = album_Info_Class.End_Index;
-                        album_Info_Class.End_Index = album_Info_Class.End_Index + 24;
+                        if (Album_Info_Class.End_Index < Album_Info_Class.Album_Image_Uris.Count)
+                        {
+                            Album_Info_Class.Start_Index = Album_Info_Class.End_Index;
+                            Album_Info_Class.End_Index = Album_Info_Class.End_Index + 24;
 
-                        ViewModel_Assembly_Album_Class viewModel_Assembly_Album_Class = ViewModel_Assembly_Album_Class.Retuen_This();
-                        viewModel_Assembly_Album_Class.RefCommand_Async.Execute(null);
-                    }
-                    else if (album_Info_Class.End_Index >= album_Info_Class.Album_Image_Uris.Count)
-                    {
-                        album_Info_Class.Start_Index = album_Info_Class.End_Index;
-                        album_Info_Class.End_Index = album_Info_Class.Album_Image_Uris.Count - 1;
+                            viewModel_Assembly_Album_Class.RefCommand_Async.Execute(null);
+                        }
+                        else if (Album_Info_Class.End_Index >= Album_Info_Class.Album_Image_Uris.Count)
+                        {
+                            Album_Info_Class.Start_Index = Album_Info_Class.End_Index;
+                            Album_Info_Class.End_Index = Album_Info_Class.Album_Image_Uris.Count - 1;
 
-                        ViewModel_Assembly_Album_Class viewModel_Assembly_Album_Class = ViewModel_Assembly_Album_Class.Retuen_This();
-                        viewModel_Assembly_Album_Class.RefCommand_Async.Execute(null);
+                            viewModel_Assembly_Album_Class.RefCommand_Async.Execute(null);
+                        }
                     }
                 }
-            }*/
+            }
         }
 
 
@@ -5778,15 +5777,16 @@ namespace NSMusicS
         }
         #endregion
 
-        #region 加载歌手照片墙-歌手照片墙 进入歌手,切换歌手显示界面 歌手_专辑模式
+        #region 加载歌手照片墙
         /// <summary>
-        /// 加载歌手照片墙 （弃用）
+        /// 加载歌手照片墙 歌手照片墙 进入歌手,切换歌手显示界面 歌手_专辑模式
         /// </summary>
         private async Task Load_Assembly_Singer_Show_s()
         {
             ViewModel_Assembly_Singer_Class viewModel_Assembly_Singer_Class = ViewModel_Assembly_Singer_Class.Retuen_This();
             // 启用同步整体加载
-            viewModel_Assembly_Singer_Class.RefCommand.Execute(null);
+            viewModel_Assembly_Singer_Class.AddToQueue_Complete = true;
+            viewModel_Assembly_Singer_Class.RefCommand_Async.Execute(null);
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -5808,36 +5808,36 @@ namespace NSMusicS
             e.Handled = true;
 
             // 启用异步分页加载（数据异步添加，排序问题）
-            /*bool isAtBottom = musicPlayer_Model_3_Singer_UserControl.
-                ScrollViewer_Albums.VerticalOffset >=
-                (musicPlayer_Model_3_Singer_UserControl.
-                    ScrollViewer_Albums.ExtentHeight -
-                        musicPlayer_Model_3_Singer_UserControl.
-                            ScrollViewer_Albums.ViewportHeight);
+            bool isAtBottom = musicPlayer_Model_3_Singer_UserControl.ScrollViewer_Albums.VerticalOffset + 360 >=
+                (musicPlayer_Model_3_Singer_UserControl.ScrollViewer_Albums.ExtentHeight -
+                        musicPlayer_Model_3_Singer_UserControl.ScrollViewer_Albums.ViewportHeight);
 
             if (isAtBottom)
             {
-                Singer_Info_Class singer_Info_Class = Singer_Info_Class.Retuen_This();
-                if (singer_Info_Class.Start_Index < singer_Info_Class.Singer_Image_Uris.Count)
+                ViewModel_Assembly_Singer_Class viewModel_Assembly_Singer_Class = ViewModel_Assembly_Singer_Class.Retuen_This();
+                //等待之前的异步加载完成，再加载新的
+                if (viewModel_Assembly_Singer_Class.AddToQueue_Complete == true)
                 {
-                    if (singer_Info_Class.End_Index < singer_Info_Class.Singer_Image_Uris.Count)
+                    Singer_Info_Class singer_Info_Class = Singer_Info_Class.Retuen_This();
+                    if (singer_Info_Class.Start_Index < singer_Info_Class.Singer_Image_Uris.Count)
                     {
-                        singer_Info_Class.Start_Index = singer_Info_Class.End_Index;
-                        singer_Info_Class.End_Index = singer_Info_Class.End_Index + 24;
+                        if (singer_Info_Class.End_Index < singer_Info_Class.Singer_Image_Uris.Count)
+                        {
+                            singer_Info_Class.Start_Index = singer_Info_Class.End_Index;
+                            singer_Info_Class.End_Index = singer_Info_Class.End_Index + 24;
 
-                        ViewModel_Assembly_Singer_Class viewModel_Assembly_Singer_Class = ViewModel_Assembly_Singer_Class.Retuen_This();
-                        viewModel_Assembly_Singer_Class.RefCommand_Async.Execute(null);
-                    }
-                    else if (singer_Info_Class.End_Index >= singer_Info_Class.Singer_Image_Uris.Count)
-                    {
-                        singer_Info_Class.Start_Index = singer_Info_Class.End_Index;
-                        singer_Info_Class.End_Index = singer_Info_Class.Singer_Image_Uris.Count - 1;
+                            viewModel_Assembly_Singer_Class.RefCommand_Async.Execute(null);
+                        }
+                        else if (singer_Info_Class.End_Index >= singer_Info_Class.Singer_Image_Uris.Count)
+                        {
+                            singer_Info_Class.Start_Index = singer_Info_Class.End_Index;
+                            singer_Info_Class.End_Index = singer_Info_Class.Singer_Image_Uris.Count - 1;
 
-                        ViewModel_Assembly_Singer_Class viewModel_Assembly_Singer_Class = ViewModel_Assembly_Singer_Class.Retuen_This();
-                        viewModel_Assembly_Singer_Class.RefCommand_Async.Execute(null);
+                            viewModel_Assembly_Singer_Class.RefCommand_Async.Execute(null);
+                        }
                     }
                 }
-            }*/
+            }
         }
         /// <summary>
         /// 歌手照片墙 进入歌手

@@ -273,9 +273,11 @@
         <Grid x:Name="Grid_Singer_Show_2" 
               Margin="286,77,0,77"
               >
-            <viewmodel_control:ScrollViewerAnimation 
+            <ScrollViewer 
                 x:Name="ScrollViewer_Albums"
-                UseLayoutRounding="False" SnapsToDevicePixels="False" RenderOptions.BitmapScalingMode="LowQuality" 
+                UseLayoutRounding="False" SnapsToDevicePixels="False" RenderOptions.BitmapScalingMode="LowQuality"
+                VirtualizingStackPanel.IsVirtualizing="True"
+                VirtualizingStackPanel.VirtualizationMode="Recycling"
                 HorizontalScrollBarVisibility="Disabled">
                 <ItemsControl 
                     x:Name="ItemsControl_AlbumList"
@@ -362,7 +364,7 @@
                         <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
                     </Style>
                 </ScrollViewer.Resources>
-            </viewmodel_control:ScrollViewerAnimation>
+            </ScrollViewer>
         </Grid>
 
     </Grid>

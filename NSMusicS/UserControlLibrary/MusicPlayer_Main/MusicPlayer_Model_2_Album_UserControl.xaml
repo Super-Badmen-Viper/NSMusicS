@@ -92,8 +92,10 @@
             </ListView.Resources>
         </ListView>
         -->
-        <viewmodel_control:ScrollViewerAnimation  
+        <ScrollViewer
             x:Name="ScrollViewer_Albums" Margin="50,77,0,77"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
             HorizontalScrollBarVisibility="Disabled">
             <ItemsControl 
                 x:Name="ItemsControl_AlbumList" 
@@ -185,6 +187,6 @@
                     <Setter Property="Template" Value="{DynamicResource MyScrollBar}"/>
                 </Style>
             </ScrollViewer.Resources>
-        </viewmodel_control:ScrollViewerAnimation>
+        </ScrollViewer>
     </Grid>
 </UserControl>

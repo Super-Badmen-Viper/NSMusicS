@@ -45,8 +45,12 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
                 TransitionEffectKind.SlideInFromRight,
                 TransitionEffectKind.SlideInFromBottom
             };
+
             Singer_Infos = new ObservableCollection<Singer_Info>();
+
             Num_Singer_Infos = 0;
+
+            AddToQueue_Complete = false;
 
             /// 一次性全部刷新（一致性）
             RefCommand = new RelayCommand(async () =>
@@ -106,55 +110,59 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
             /// 滚动条多次异步刷新（一致性）
             RefCommand_Async = new RelayCommand(async () =>
             {
-                Singer_Info_Class singer_Info_Class = Singer_Info_Class.Retuen_This();
-
-                for (int i = singer_Info_Class.Start_Index; i <= singer_Info_Class.End_Index; i++)
+                if (AddToQueue_Complete == true)
                 {
-                    if (i >= singer_Info_Class.Singer_Names.Count || i >= singer_Info_Class.Singer_Image_Uris.Count)
-                        break;
+                    Singer_Info_Class singer_Info_Class = Singer_Info_Class.Retuen_This();
 
-                    if (singer_Info_Class.Singer_Names[i] != null)
+                    for (int i = singer_Info_Class.Start_Index; i <= singer_Info_Class.End_Index; i++)
                     {
-                        var existingSinger = Singer_Infos.FirstOrDefault(
-                            item => item.Singer_Name.Equals(singer_Info_Class.Singer_Names[i])
-                            );
-                        if (existingSinger == null)
+                        if (i >= singer_Info_Class.Singer_Names.Count || i >= singer_Info_Class.Singer_Image_Uris.Count)
+                            break;
+
+                        if (singer_Info_Class.Singer_Names[i] != null)
                         {
-                            lock (Singer_Infos)
+                            var existingSinger = Singer_Infos.FirstOrDefault(
+                                item => item.Singer_Name.Equals(singer_Info_Class.Singer_Names[i])
+                                );
+                            if (existingSinger == null)
                             {
-                                var singerName = singer_Info_Class.Singer_Names[i];
-                                var singerImageUri = singer_Info_Class.Singer_Image_Uris[i];
-                                var singerExplain = singer_Info_Class.Singer_Explain[i];
-                                var singerInfo = new Singer_Info()
+                                AddToQueue_Complete = false;
+                                lock (Singer_Infos)
                                 {
-                                    Singer_No = i,
-                                    Singer_Name = singerName,
-                                    Singer_Explain = singerExplain,
-                                    Width = 140,
-                                    Height = 140,
-                                    Margin = new Thickness(10, 2, 10, 2),
-                                    Effact = new TransitionEffect()
+                                    var singerName = singer_Info_Class.Singer_Names[i];
+                                    var singerImageUri = singer_Info_Class.Singer_Image_Uris[i];
+                                    var singerExplain = singer_Info_Class.Singer_Explain[i];
+                                    var singerInfo = new Singer_Info()
                                     {
-                                        Kind = kinds[new Random().Next(2, 6)],
-                                        Duration = new TimeSpan(0, 0, 0, 0, 200)
-                                    }
-                                };
+                                        Singer_No = i,
+                                        Singer_Name = singerName,
+                                        Singer_Explain = singerExplain,
+                                        Width = 140,
+                                        Height = 140,
+                                        Margin = new Thickness(10, 2, 10, 2),
+                                        Effact = new TransitionEffect()
+                                        {
+                                            Kind = kinds[new Random().Next(2, 6)],
+                                            Duration = new TimeSpan(0, 0, 0, 0, 200)
+                                        }
+                                    };
 
-                                if (singerImageUri != null)
-                                    singerInfo.Singer_Image_Uri = singerImageUri;
+                                    if (singerImageUri != null)
+                                        singerInfo.Singer_Image_Uri = singerImageUri;
 
-                                // 添加到队列中
-                                AddToQueue(singerInfo);
+                                    // 添加到队列中
+                                    AddToQueue(singerInfo);
+                                }
                             }
                         }
                     }
-                }
 
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                {
-                    SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                    {
+                        SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+                    }
                 }
             });
         }
@@ -185,8 +193,9 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
             {
                 while (SingerInfoQueue.Count > 0)
                 {
-                    var SingerInfo = SingerInfoQueue.Dequeue();
+                    AddToQueue_Complete = false;
 
+                    var SingerInfo = SingerInfoQueue.Dequeue();
                     var existingSinger = Singer_Infos.FirstOrDefault(
                         item => item.Singer_Name.Equals(SingerInfo.Singer_Name)
                         );
@@ -196,11 +205,20 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
                         await Task.Delay(40); // 单个平滑过渡
                     }
                 }
+                AddToQueue_Complete = true;
+                await Task.Delay(200);
             }
             finally
             {
                 semaphore.Release();
             }
+        }
+        //代表以上单次事件的数据异步一致性加载完成
+        private bool addToQueue_Complete;
+        public bool AddToQueue_Complete
+        {
+            get { return addToQueue_Complete; }
+            set { addToQueue_Complete = value; RaisePropertyChanged(); }
         }
 
 

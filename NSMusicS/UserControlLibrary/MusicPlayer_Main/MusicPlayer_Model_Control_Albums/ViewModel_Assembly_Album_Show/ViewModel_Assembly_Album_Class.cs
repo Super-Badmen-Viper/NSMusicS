@@ -55,7 +55,10 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
             };
 
             Album_Infos = new ObservableCollection<Album_Info>();
+
             Num_Album_Infos = 0;
+
+            AddToQueue_Complete = false;
 
             /// 一次性全部刷新（一致性）
             RefCommand = new RelayCommand(async () =>
@@ -115,55 +118,59 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
             /// 滚动条多次异步刷新（一致性）
             RefCommand_Async = new RelayCommand(async () =>
             {
-                Album_Info_Class album_Info_Class = Album_Info_Class.Retuen_This();
-
-                for (int i = album_Info_Class.Start_Index; i <= album_Info_Class.End_Index; i++)
+                if (AddToQueue_Complete == true)
                 {
-                    if (i >= album_Info_Class.Album_Names.Count || i >= album_Info_Class.Album_Image_Uris.Count)
-                        break;
+                    Album_Info_Class album_Info_Class = Album_Info_Class.Retuen_This();
 
-                    if (album_Info_Class.Album_Names[i] != null)
+                    for (int i = album_Info_Class.Start_Index; i <= album_Info_Class.End_Index; i++)
                     {
-                        var existingAlbum = Album_Infos.FirstOrDefault(
-                            item => item.Album_Name.Equals(album_Info_Class.Album_Names[i])
-                            );
-                        if (existingAlbum == null)
+                        if (i >= album_Info_Class.Album_Names.Count || i >= album_Info_Class.Album_Image_Uris.Count)
+                            break;
+
+                        if (album_Info_Class.Album_Names[i] != null)
                         {
-                            lock (Album_Infos)
+                            var existingAlbum = Album_Infos.FirstOrDefault(
+                                item => item.Album_Name.Equals(album_Info_Class.Album_Names[i])
+                                );
+                            if (existingAlbum == null)
                             {
-                                var albumName = album_Info_Class.Album_Names[i];
-                                var albumImageUri = album_Info_Class.Album_Image_Uris[i];
-                                var albumExplain = album_Info_Class.Album_Explain[i];
-                                var albumInfo = new Album_Info()
+                                AddToQueue_Complete = false;
+                                lock (Album_Infos)
                                 {
-                                    Album_No = i,
-                                    Album_Name = albumName,
-                                    Album_Explain = albumExplain,
-                                    Width = 140,
-                                    Height = 140,
-                                    Margin = new Thickness(10, 2, 10, 2),
-                                    Effact = new TransitionEffect()
+                                    var albumName = album_Info_Class.Album_Names[i];
+                                    var albumImageUri = album_Info_Class.Album_Image_Uris[i];
+                                    var albumExplain = album_Info_Class.Album_Explain[i];
+                                    var albumInfo = new Album_Info()
                                     {
-                                        Kind = kinds[new Random().Next(2, 6)],
-                                        Duration = new TimeSpan(0, 0, 0, 0, 200)
-                                    }
-                                };
+                                        Album_No = i,
+                                        Album_Name = albumName,
+                                        Album_Explain = albumExplain,
+                                        Width = 140,
+                                        Height = 140,
+                                        Margin = new Thickness(10, 2, 10, 2),
+                                        Effact = new TransitionEffect()
+                                        {
+                                            Kind = kinds[new Random().Next(2, 6)],
+                                            Duration = new TimeSpan(0, 0, 0, 0, 200)
+                                        }
+                                    };
 
-                                if (albumImageUri != null)
-                                    albumInfo.Album_Image_Uri = albumImageUri;
+                                    if (albumImageUri != null)
+                                        albumInfo.Album_Image_Uri = albumImageUri;
 
-                                // 添加到队列中
-                                AddToQueue(albumInfo);
+                                    // 添加到队列中
+                                    AddToQueue(albumInfo);
+                                }
                             }
                         }
                     }
-                }
 
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                {
-                    SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                    {
+                        SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+                    }
                 }
             });
         }
@@ -194,22 +201,32 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
             {
                 while (AlbumInfoQueue.Count > 0)
                 {
-                    var albumInfo = AlbumInfoQueue.Dequeue();
+                    AddToQueue_Complete = false;
 
+                    var AlbumInfo = AlbumInfoQueue.Dequeue();
                     var existingAlbum = Album_Infos.FirstOrDefault(
-                        item => item.Album_Name.Equals(albumInfo.Album_Name)
+                        item => item.Album_Name.Equals(AlbumInfo.Album_Name)
                         );
                     if (existingAlbum == null)
                     {
-                        Album_Infos.Add(albumInfo);
+                        Album_Infos.Add(AlbumInfo);
                         await Task.Delay(40); // 单个平滑过渡
                     }
                 }
+                AddToQueue_Complete = true;
+                await Task.Delay(200);
             }
             finally
             {
                 semaphore.Release();
             }
+        }
+        //代表以上单次事件的数据异步一致性加载完成
+        private bool addToQueue_Complete;
+        public bool AddToQueue_Complete
+        {
+            get { return addToQueue_Complete; }
+            set { addToQueue_Complete = value; RaisePropertyChanged(); }
         }
 
 

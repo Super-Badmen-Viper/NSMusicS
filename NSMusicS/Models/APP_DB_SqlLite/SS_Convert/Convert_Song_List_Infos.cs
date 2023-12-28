@@ -164,7 +164,6 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
             productContext_Song_Infos.Add(temp_17);*/
         }
 
-
         #region CRUD
 
         /// <summary>
@@ -521,8 +520,6 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
 
         #endregion
 
-
-
         /// <summary>
         /// 从 数据库 中读取整个歌单
         /// </summary>
@@ -622,7 +619,7 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
                 return temp;
             }
         }
-        public async Task<ObservableCollection<SongList_Info>> Read_Songs_From_DatabaseAsync_Dapper(int category_SongList_ID, string category_SongList_Name)
+        public async Task<ObservableCollection<SongList_Info>> Read_Songs_From_DatabaseAsync_Dapper_Normal(int category_SongList_ID, string category_SongList_Name)
         {
             using (var connection = new SqliteConnection("Data Source=ProductContext_Song_Infos.db"))
             {
@@ -677,6 +674,82 @@ namespace NSMusicS.Models.APP_DB_SqlLite.SS_Convert
 
                     playlists.Add(playlist);
                 }
+
+                var temp = new ObservableCollection<SongList_Info>();
+                var list_Info = new SongList_Info
+                {
+                    ID = category_SongList_ID,
+                    Name = category_SongList_Name,
+                    Songs = new ObservableCollection<Song_Info>()
+                };
+
+                foreach (var item in playlists)
+                {
+                    foreach (var song in item.Songs)
+                    {
+                        list_Info.Songs.Add(song);
+                    }
+                }
+
+                temp.Add(list_Info);
+                return temp;
+            }
+        }
+        public async Task<ObservableCollection<SongList_Info>> Read_Songs_From_DatabaseAsync_Dapper(int category_SongList_ID, string category_SongList_Name)
+        {
+            using (var connection = new SqliteConnection("Data Source=ProductContext_Song_Infos.db"))
+            {
+                connection.Open();
+
+                var songlists = await connection.QueryAsync<Category_SongList_Info>("SELECT * FROM Category_SongList_Infos WHERE Category_SongList_Name = @Name", new { Name = category_SongList_Name });
+
+                var playlistTasks = songlists.Select(async list =>
+                {
+                    var playlist = new SongList_Info
+                    {
+                        ID = list.Category_SongList_ID,
+                        Name = list.Category_SongList_Name,
+                        Songs = new ObservableCollection<Song_Info>()
+                    };
+
+                    var songs = await connection.QueryAsync<Product_Song_Info>("SELECT * FROM Product_Song_Infos WHERE Category_SongList_ID = @ID", new { ID = list.Category_SongList_ID });
+
+                    foreach (var item in songs)
+                    {
+                        var _Song_Info = new Song_Info
+                        {
+                            Song_No = item.Song_No,
+                            Song_Name = item.Song_Name,
+                            Singer_Name = item.Singer_Name,
+                            Song_Url = item.Song_Url,
+                            Song_Duration = item.Song_Duration,
+                            Song_Like = item.Song_Like,
+                            Album_Name = item.Album_Name,
+                            MV_Path = item.MV_Path,
+                            IsChecked = false,
+                            Visibility_Playing = Visibility.Collapsed,
+                            Song_Like_Image = item.Song_Like == 1 ? ImageBrush_LoveEnter : ImageBrush_LoveNormal,
+                            Song_MV_Image = null
+                        };
+
+                        if (song_Infos_Love != null && song_Infos_Love.Any(s => s.Song_Url.Equals(_Song_Info.Song_Url)))
+                        {
+                            _Song_Info.Song_Like = 1;
+                            _Song_Info.Song_Like_Image = ImageBrush_LoveEnter;
+                        }
+
+                        playlist.Songs.Add(_Song_Info);
+                    }
+
+                    if (category_SongList_Name.Equals("我的收藏"))
+                    {
+                        song_Infos_Love = new ObservableCollection<Song_Info>(playlist.Songs);
+                    }
+
+                    return playlist;
+                });
+
+                var playlists = await Task.WhenAll(playlistTasks);
 
                 var temp = new ObservableCollection<SongList_Info>();
                 var list_Info = new SongList_Info
