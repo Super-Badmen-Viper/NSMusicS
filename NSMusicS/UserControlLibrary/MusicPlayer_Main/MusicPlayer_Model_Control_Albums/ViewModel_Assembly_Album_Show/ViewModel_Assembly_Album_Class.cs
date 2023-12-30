@@ -28,7 +28,6 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
 {
     public class ViewModel_Assembly_Album_Class : ViewModelBase
     {
-        
         public int Num_Album_Infos { get; set; }//检测是否已完成RelayCommand
 
         public ViewModel_Assembly_Album_Class()

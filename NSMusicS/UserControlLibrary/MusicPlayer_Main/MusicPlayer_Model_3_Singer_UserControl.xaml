@@ -35,16 +35,15 @@
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  >
                     <TextBlock 
                         x:Name="Button_Show_Singer_List_Model_3_Text"
-                        Text="返回专辑列表" Foreground="#FFFFFF" 
-                        HorizontalAlignment="Right" VerticalAlignment="Center"
-                        Margin="0,0,12,0"/>
+                        Text="打开选中歌手" Foreground="#FFFFFF" 
+                        TextAlignment="Right" VerticalAlignment="Center" Margin="0,0,8,0"/>
                 </Border>
                 <ComboBox 
                     x:Name="ComBox_Select_SongList_For_Model_2"
                     SelectedIndex="-1"
                     Style="{DynamicResource cmbstyle_Select_SongList_For_AlbumView}" 
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                    Visibility="Visible" Width="140" Height="30" Margin="0,93,-30,0"
+                    Visibility="Visible" Height="30" Margin="0,93,0,0"
                     VerticalAlignment="Top" HorizontalAlignment="Right" IsEditable="True" 
                     Text="创建的歌单"
                     IsSynchronizedWithCurrentItem="False"
@@ -67,7 +66,7 @@
                     x:Name="Button_Reload_For_Album_Performer"
                     Width="16" Height="16"
                     Foreground="#F6F6F6" HorizontalAlignment="Right" VerticalAlignment="Top"
-                    Margin="0,100,90,0" >
+                    Margin="0,100,120,0" >
                     <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/操作-刷新.svg"/>
                 </TextBlock>
 
@@ -77,9 +76,7 @@
                     Margin="0,126,0,191" Width="260"
                     Background="{x:Null}" BorderThickness="0,0,0,0" BorderBrush="White"
                     VirtualizingStackPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True" 
-                    VirtualizingStackPanel.VirtualizationMode="Recycling"
-                    ScrollViewer.ScrollChanged="ListView_For_Album_Performer_ScrollChanged"
-                    PreviewMouseWheel="ListView_For_Album_Performer_PreviewMouseWheel">
+                    VirtualizingStackPanel.VirtualizationMode="Recycling">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="BorderThickness" Value="0"/>

@@ -241,7 +241,7 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls
                         pathGeometries.Add(pathGeometry);
                         g.Data = pathGeometries[pathGeometries.Count - 1];
                         if (!SpectrumData_Zero)
-                            g.StrokeThickness = 2;
+                            g.StrokeThickness = 1;
                         else
                             g.StrokeThickness = 0;
                         g.Stroke = null;
@@ -345,7 +345,6 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls
 
                         pathGeometries.Add(temp_pg);
                         g.Data = pathGeometries[pathGeometries.Count - 1];
-
 
                         double maxHeight = points.Max(v => v.Y);
                         g.Fill = new LinearGradientBrush(
@@ -574,18 +573,18 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls
                                     Math.Min(drawingPanel.ActualHeight / 10, 100)
                                 );
                                 
-                              DrawCircleGradientStrips(
+                                DrawCircleGradientStrips(
                                     circle_1, allColors[colorIndex % allColors.Count], allColors[(colorIndex + 200) % allColors.Count],
                                     spectrumData, spectrumData.Count,//频谱数据
                                     drawingPanel.ActualWidth / 2, drawingPanel.ActualHeight / 2,//圆环位置
-                                    136 + (Math.Min(drawingPanel.ActualHeight, drawingPanel.ActualHeight) / 6) * (spectrumData.Average() * 20),//大小
+                                    110,//大小
                                     1, rotation, drawingPanel.ActualHeight * (visualizer.waveDataSize / 40 /* 通道数 / 51.2 */)  //频谱高度 幅度
                                 );
                                 DrawCircleGradientStrips_Double(
                                     circle_3, allColors[colorIndex % allColors.Count], allColors[(colorIndex + 200) % allColors.Count],
                                     spectrumData, spectrumData.Count,//频谱数据
                                     drawingPanel.ActualWidth / 2, drawingPanel.ActualHeight / 2,//圆环位置
-                                    136 + (Math.Min(drawingPanel.ActualHeight, drawingPanel.ActualHeight) / 4) * (spectrumData.Average() * 160),//大小
+                                    136 + (Math.Min(drawingPanel.ActualHeight, drawingPanel.ActualHeight) / 6) * (spectrumData.Average() * 120),//大小
                                     2, -rotation, 1600  //频谱高度 幅度
                                     );
                             }

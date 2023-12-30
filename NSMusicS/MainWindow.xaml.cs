@@ -171,8 +171,8 @@ namespace NSMusicS
             userControl_ButtonFrame_TopPanel.Model_3.IsEnabled = true;
             userControl_ButtonFrame_TopPanel.Model_4.IsEnabled = false;
             userControl_ButtonFrame_TopPanel.Model_5.IsEnabled = false;
+            musicPlayer_Model_2_Album_UserControl.Stack_Button_LotSelects_Sort.Visibility = Visibility.Collapsed;
             musicPlayer_Model_3_Singer_UserControl.Stack_Button_LotSelects_Sort.Visibility = Visibility.Collapsed;
-
             #endregion
 
             // 删除临时数据（数据残余）
@@ -261,12 +261,15 @@ namespace NSMusicS
 
             #region Model Init
             //
+            musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\Music_Album.png")));
             musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\Music_Album.png")));
             musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\Music_Album.png")));
 
             //
             Grid_Model_1.Visibility = Visibility.Visible;
             Grid_Model_3.Visibility = Visibility.Collapsed;
+            musicPlayer_Model_2_Album_UserControl.Stack_Panel_Sort_AlbumModel.Visibility = Visibility.Collapsed;
+            musicPlayer_Model_2_Album_UserControl.Button_Show_Singer_List_Model_3.MouseLeftButtonDown += Button_Show_Album_List_Model_2_MouseLeftButtonDown;
             musicPlayer_Model_3_Singer_UserControl.Stack_Panel_Sort_AlbumModel.Visibility = Visibility.Collapsed;
             musicPlayer_Model_3_Singer_UserControl.Button_Show_Singer_List_Model_3.MouseLeftButtonDown += Button_Show_Singer_List_Model_3_MouseLeftButtonDown;
 
@@ -274,10 +277,15 @@ namespace NSMusicS
             viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
 
             //
+            musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged += ComBox_Select_SongList_SelectionChanged;
+            musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.MouseLeftButtonDown += ComBox_Select_SongList_MouseLeftButtonDown;
+            musicPlayer_Model_2_Album_UserControl.Button_Reload_For_Album_Performer.MouseLeftButtonDown += Button_Reload_For_Album_ALL_MouseLeftButtonDown;
+            musicPlayer_Model_2_Album_UserControl.Stack_Button_LotSelects_Sort.MouseLeftButtonDown += Stack_Button_LotSelects_Sort_MouseLeftButtonDown_For_Model_2;
+
             musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged += ComBox_Select_SongList_SelectionChanged;
             musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.MouseLeftButtonDown += ComBox_Select_SongList_MouseLeftButtonDown;
             musicPlayer_Model_3_Singer_UserControl.Button_Reload_For_Album_Performer.MouseLeftButtonDown += Button_Reload_For_Album_Performer_MouseLeftButtonDown;
-            musicPlayer_Model_3_Singer_UserControl.Stack_Button_LotSelects_Sort.MouseLeftButtonDown += Stack_Button_LotSelects_Sort_MouseLeftButtonDown;
+            musicPlayer_Model_3_Singer_UserControl.Stack_Button_LotSelects_Sort.MouseLeftButtonDown += Stack_Button_LotSelects_Sort_MouseLeftButtonDown_For_Model_3;
             //musicPlayer_Model_3_Singer_UserControl.ListView_For_Album_Performer.PreviewMouseWheel += ListView_For_Album_Performer_PreviewMouseWheel;
 
             #endregion
@@ -834,6 +842,7 @@ namespace NSMusicS
             window_Hover_MRC_Panel.Button_Next.Click += Button_Music_Next_Song;
             userControl_TaskbarIcon.Button_Next.Click += Button_Music_Next_Song;
             userControl_ButtonFrame_MusicPlayer.Border_Hover_BackGround.MouseLeftButtonDown += Button_Border_Hover_BackGround_Click_OpenMainMusicPlayer;
+            musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.MouseLeftButtonDown += Button_Border_Hover_BackGround_Click_OpenMainMusicPlayer;
             musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.MouseLeftButtonDown += Button_Border_Hover_BackGround_Click_OpenMainMusicPlayer;
 
             thickness_Grid_MusicPlayer_Main_UserControl_Normal.Left = 0;
@@ -1312,6 +1321,7 @@ namespace NSMusicS
                 musicPlayer_Model_1_Song_UserControl.Frame_Show.Visibility = Visibility.Visible;
                 if (Grid_Model_3.Visibility == Visibility.Collapsed && Grid_Model_1.Visibility == Visibility.Collapsed)
                     userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Visible;
+                musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Visible;
                 musicPlayer_Model_3_Singer_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Visible;
 
                 if (model_num == 1)
@@ -1348,6 +1358,7 @@ namespace NSMusicS
 
                 userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
                 musicPlayer_Model_1_Song_UserControl.Frame_Show.Visibility = Visibility.Collapsed;
+                musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
                 musicPlayer_Model_3_Singer_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
                 userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Collapsed;
                 userControl_Main_Home_Left_Web_Music.Visibility = Visibility.Collapsed;
@@ -1505,6 +1516,7 @@ namespace NSMusicS
                 musicPlayer_Model_1_Song_UserControl.Frame_Show.Visibility = Visibility.Visible;
                 if (Grid_Model_3.Visibility == Visibility.Collapsed && Grid_Model_1.Visibility == Visibility.Collapsed)
                     userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Visible;
+                musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Visible;
                 musicPlayer_Model_3_Singer_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Visible;
 
                 if (model_num == 1)
@@ -1542,6 +1554,7 @@ namespace NSMusicS
                 userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Collapsed;
 
                 musicPlayer_Model_1_Song_UserControl.Frame_Show.Visibility = Visibility.Collapsed;
+                musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
                 musicPlayer_Model_3_Singer_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
                 userControl_Main_Home_Left_MyMusic_SongInfo_Edit.Visibility = Visibility.Collapsed;
                 userControl_Main_Home_Left_Web_Music.Visibility = Visibility.Collapsed;
@@ -1830,6 +1843,8 @@ namespace NSMusicS
 
                 if (Grid_Model_1.Visibility == Visibility.Visible)
                     Frame_Buttom_MusicPlayerUserControl.Margin = thickness_Grid_MusicPlayer_Main_UserControl_Normal;
+                else if (Grid_Model_2.Visibility == Visibility.Visible)
+                    Frame_Buttom_MusicPlayerUserControl.Margin = new Thickness(286, 0, 0, 0);
                 else if (Grid_Model_3.Visibility == Visibility.Visible)
                     Frame_Buttom_MusicPlayerUserControl.Margin = new Thickness(286, 0, 0, 0);
 
@@ -3910,6 +3925,8 @@ namespace NSMusicS
                 /*musicPlayer_Main_UserControl.userControl_AudioVisualizer.circle_2.Width = this.Width + 300;
                 musicPlayer_Main_UserControl.userControl_AudioVisualizer.circle_3.Width = this.Width + 600;*/
 
+                musicPlayer_Model_2_Album_UserControl.Width = this.Width;
+                musicPlayer_Model_2_Album_UserControl.Height = this.Height;
                 musicPlayer_Model_3_Singer_UserControl.Width = this.Width;
                 musicPlayer_Model_3_Singer_UserControl.Height = this.Height;
 
@@ -4123,7 +4140,14 @@ namespace NSMusicS
         {
             musicPlayer_Model_1_Song_UserControl.Frame_Manager_ButtonList_ScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
         }
-        private void Stack_Button_LotSelects_Sort_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Stack_Button_LotSelects_Sort_MouseLeftButtonDown_For_Model_2(object sender, MouseButtonEventArgs e)
+        {
+            if (musicPlayer_Model_2_Album_UserControl.Stack_Panel_Sort_AlbumModel.Visibility == Visibility.Collapsed)
+                musicPlayer_Model_2_Album_UserControl.Stack_Panel_Sort_AlbumModel.Visibility = Visibility.Visible;
+            else
+                musicPlayer_Model_2_Album_UserControl.Stack_Panel_Sort_AlbumModel.Visibility = Visibility.Collapsed;
+        }
+        private void Stack_Button_LotSelects_Sort_MouseLeftButtonDown_For_Model_3(object sender, MouseButtonEventArgs e)
         {
             if (musicPlayer_Model_3_Singer_UserControl.Stack_Panel_Sort_AlbumModel.Visibility == Visibility.Collapsed)
                 musicPlayer_Model_3_Singer_UserControl.Stack_Panel_Sort_AlbumModel.Visibility = Visibility.Visible;
@@ -4194,11 +4218,6 @@ namespace NSMusicS
         //当前正在播放的歌曲
         private Song_Info this_Song_Info = new Song_Info();
 
-
-        //专辑模式 - 专辑海报墙
-        //private ObservableCollection<Assembly_Album_Show> Assembly_Album_Show_s = new ObservableCollection<Assembly_Album_Show>();
-
-
         //歌手_专辑模式（选中的歌单数据》用于重载专辑列表）
         private ObservableCollection<Song_Info> Select_SongList;
         //歌手_专辑模式（本地音乐数据）
@@ -4206,6 +4225,8 @@ namespace NSMusicS
 
         //临时图片
         private List<string> Album_Performer_s_Photo = new List<string>();
+        //当前专辑模式——专辑列表
+        private ObservableCollection<Album_Performer_Infos> Album_ALL_s = new ObservableCollection<Album_Performer_Infos>();
         //当前歌手_专辑模式——歌手列表
         private ObservableCollection<Album_Performer_Infos> Album_Performer_s = new ObservableCollection<Album_Performer_Infos>();
         //当前歌手_专辑模式——歌手列表(分页)
@@ -4426,6 +4447,10 @@ namespace NSMusicS
                 userControl_Main_Home_Left_MyMusic_Mores[i].ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
             }
             //
+            musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged -= ComBox_Select_SongList_For_Model_3_SelectionChanged;
+            musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+            musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged += ComBox_Select_SongList_For_Model_3_SelectionChanged;
+            //
             musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged -= ComBox_Select_SongList_For_Model_2_SelectionChanged;
             musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
             musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged += ComBox_Select_SongList_For_Model_2_SelectionChanged;
@@ -4434,6 +4459,14 @@ namespace NSMusicS
             #endregion
 
             //歌手_专辑模式重加载
+            if (Reset_Load_Album_Model_SingerAlbumList_)
+            {
+                Reset_Load_Album_Model_SingerAlbumList();
+
+                musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex = 1;//默认本地音乐
+                musicPlayer_Model_2_Album_UserControl.TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[1][0].Name;
+                Select_SongList = songList_Infos[1][0].Songs;
+            }
             if (Reset_Load_Singer_Model_SingerAlbumList_)
             {
                 Reset_Load_Singer_Model_SingerAlbumList();
@@ -4451,6 +4484,56 @@ namespace NSMusicS
             }
         }
 
+        /// <summary>
+        /// 专辑模式重加载
+        /// </summary>
+        public async void Reset_Load_Album_Model_SingerAlbumList()
+        {
+            viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
+
+            //默认本地音乐
+            if (songList_Infos[1][0] != null && songList_Infos[1][0].Songs != null)
+            {
+                /// 数据库中读取
+                /// Album_ALL_s = await convert_Singer_List_Info.Read_Singers_From_DatabaseAsync(1, @"本地音乐");
+                if (Album_ALL_s == null || Album_ALL_s.Count == 0)
+                {
+                    /// 本地歌单中生成
+                    Album_ALL_s = await Load_AlbumInfo_For_PerformerShow(songList_Infos[1][0].Songs);
+                    /*//去重
+                    var uniqueAlbumPerformers = Album_ALL_s
+                        .GroupBy(x => new { x.Album_Performer_Name, x.Album_Name })
+                        .Select(g => g.First())
+                        .ToList();
+
+                    Album_ALL_s.Clear();
+                    foreach (var albumPerformer in uniqueAlbumPerformers)
+                    {
+                        Album_ALL_s.Add(albumPerformer);
+                    }*/
+                }
+
+                if (Album_ALL_s != null && Album_ALL_s.Count > 0)
+                {
+                    musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.SelectedIndex = 0;
+
+                    /// 加载此歌手所有专辑数据
+                    Load_Performer_ALL_Album_For_Model_2();
+                }
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s;
+                    musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.MouseDoubleClick += ListView_For_Album_Performer_MouseDoubleClick_For_Model_2;
+                    musicPlayer_Model_2_Album_UserControl.ItemsControl_AlbumList.MouseDoubleClick += ItemsControl_For_Album_AlbumList_MouseDoubleClick_For_Model_2;
+
+                    /// 异步逐个过渡添加
+                    Load_Assembly_Album_Show_s();
+                });
+
+                viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
+            }
+        }
         /// <summary>
         /// 歌手_专辑模式重加载
         /// </summary>
@@ -4482,28 +4565,139 @@ namespace NSMusicS
                 if (Album_Performer_s != null && Album_Performer_s.Count > 0)
                 {
                     musicPlayer_Model_3_Singer_UserControl.ListView_For_Album_Performer.SelectedIndex = 0;
-                    Load_Performer_ALL_Album();
-                }
 
-                musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex = -1;
-                musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex = SelectedIndex_Of_ComBox_Select_SongList_For_Model_2;
+                    /// 加载此歌手所有专辑数据
+                    Load_Performer_ALL_Album_For_Model_3();
+                }
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    //加载歌手_专辑模式数据
-                    //Init_Album_Performer_s_Page_Info();
-                    //musicPlayer_Model_3_Singer_UserControl.ListView_For_Album_Performer.ItemsSource = Album_Performer_s_paging;
-
+  
                     musicPlayer_Model_3_Singer_UserControl.ListView_For_Album_Performer.ItemsSource = Album_Performer_s;
-                    musicPlayer_Model_3_Singer_UserControl.ListView_For_Album_Performer.MouseDoubleClick += ListView_For_Album_Performer_MouseDoubleClick;
-                    musicPlayer_Model_3_Singer_UserControl.ItemsControl_AlbumList.MouseDoubleClick += ItemsControl_For_Album_AlbumList_MouseDoubleClick;
+                    musicPlayer_Model_3_Singer_UserControl.ListView_For_Album_Performer.MouseDoubleClick += ListView_For_Album_Performer_MouseDoubleClick_For_Model_3;
+                    musicPlayer_Model_3_Singer_UserControl.ItemsControl_AlbumList.MouseDoubleClick += ItemsControl_For_Album_AlbumList_MouseDoubleClick_For_Model_3;
 
                     /// 异步逐个过渡添加
                     Load_Assembly_Singer_Show_s();
                 });
+
+                viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
             }
         }
 
+        /// <summary>
+        ///  加载专辑模式数据
+        /// </summary>
+        private async Task<ObservableCollection<Album_Performer_Infos>> Load_AlbumInfo_For_PerformerShow(
+            ObservableCollection<Song_Info> SongList)
+        {
+            var tcs = new TaskCompletionSource<ObservableCollection<Album_Performer_Infos>>();
+
+            await Task.Run(async () =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    //清空数据，重新获取
+                    if (Album_ALL_s != null)
+                        Album_ALL_s.Clear();
+                    else
+                        Album_ALL_s = Album_Performer_List_Infos.Retuen_This();
+                });
+
+                // 删除临时数据（数据残余）
+                Delete_Clear_App_Temp();
+
+                #region 加载歌手_专辑模式数据
+                // 加载歌手-专辑选择列表：优先度：MoZhi专辑>内嵌专辑>Null
+                ObservableCollection<Song_Info> song_Infos1 = new ObservableCollection<Song_Info>(SongList);
+                song_Infos1 = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(song_Infos1, 0, false);
+
+                song_Infos = new List<Song_Info>(song_Infos1);
+
+                var uniqueSingerNames = song_Infos.Select(s => s.Singer_Name).Distinct();
+                foreach (var singer in uniqueSingerNames)
+                {
+                    /// 获取每位歌手的信息
+                    var this_singer_infos = song_Infos.Where(s => s.Singer_Name == singer).ToList();
+                    /// 获取每位歌手的专辑名
+                    var this_album_names = this_singer_infos.Select(s => s.Album_Name).Distinct();
+                    foreach (var albumName in this_album_names)
+                    {
+                        viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
+
+                        var album = new Album_Performer_Infos();
+
+                        /// 找出相同歌手+专辑名的第一首歌曲的路径
+                        var uniqueSongUrls = this_singer_infos
+                            .Where(song => song.Album_Name.Equals(albumName))
+                            .Select(song => song.Song_Url)
+                            .Distinct();
+                        if (uniqueSongUrls.Any())
+                        {
+                            string songUrl = uniqueSongUrls.FirstOrDefault();
+                            if (!File.Exists(songUrl))
+                            {
+                                songUrl = Path_App + songUrl;
+                            }
+
+                            if (File.Exists(songUrl))
+                            {
+                                using (MemoryStream memoryStream = Song_Extract_Info.Extract_MemoryStream_AlbumImage_Of_This_SongUrl(songUrl))
+                                {
+                                    if (memoryStream != null)
+                                    {
+                                        // 获取系统的临时文件夹路径
+                                        string tempFolderPath = Path_App + @"\Temp";
+                                        // 创建唯一的文件名，例如使用 GUID
+                                        string uniqueFileName = $"{Guid.NewGuid()}.jpg";
+                                        // 组合临时文件路径和唯一文件名
+                                        string tempFilePath = Path.Combine(tempFolderPath, uniqueFileName);
+
+                                        using (FileStream fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                                        {
+                                            fileStream.Write(memoryStream.ToArray(), 0, memoryStream.ToArray().Length);
+                                        }
+                                        //File.WriteAllBytes(tempFilePath, imageBytes);
+
+                                        album.Album_Performer_Image = new Uri(tempFilePath);
+                                        //singer.Singer_Image_Uri = new Uri(tempFilePath);
+
+                                        Album_Performer_s_Photo.Add(tempFilePath);
+                                    }
+                                    else
+                                    {
+                                        album.Album_Performer_Image = null;
+                                    }
+
+                                    //演唱者
+                                    album.Album_Performer_Name = singer;
+                                    //专辑名
+                                    album.Album_Name = albumName;
+                                    //歌曲数量
+                                    int uniqueSongCount = this_singer_infos.Count(s => s.Album_Name.Equals(albumName));
+                                    album.Album_Performer_Of_AlbumNums = uniqueSongCount + " 首歌曲";
+
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        Album_ALL_s.Add(album);
+                                    });
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                //Clear
+                song_Infos1 = null;
+
+                #endregion
+
+                tcs.SetResult(Album_ALL_s);
+            });
+
+            return await tcs.Task;
+        }
         /// <summary>
         ///  加载歌手_专辑模式数据
         /// </summary>
@@ -4624,6 +4818,67 @@ namespace NSMusicS
             return await tcs.Task;
         }
 
+        int SelectedIndex_Of_ComBox_Select_SongList_For_Model_3;
+        /// <summary>
+        /// 专辑模式 切换歌单 重加载该歌单 所有专辑
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void ComBox_Select_SongList_For_Model_3_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex > -1)
+            {
+                viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
+
+                SelectedIndex_Of_ComBox_Select_SongList_For_Model_3 = musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex;
+
+                //清空UI专辑列表
+                musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.Items.Clear();//UI
+
+                if (musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex == 1)
+                {
+                    Select_SongList = songList_Infos[1][0].Songs;
+                    musicPlayer_Model_2_Album_UserControl.TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[1][0].Name;
+                }
+                else if (musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex == 0)
+                {
+                    Select_SongList = songList_Infos[0][0].Songs;
+                    musicPlayer_Model_2_Album_UserControl.TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[0][0].Name;
+                }
+                else if (musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex == 2)
+                {
+                    Select_SongList = songList_Infos[2][0].Songs;
+                    musicPlayer_Model_2_Album_UserControl.TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[2][0].Name;
+                }
+                else
+                {
+                    Select_SongList = songList_Infos[musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex][0].Songs;
+                    musicPlayer_Model_2_Album_UserControl.TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex][0].Name;
+                }
+
+                /// 数据库读取
+                /*Album_ALL_s = await convert_Singer_List_Info.Read_Singers_From_DatabaseAsync(
+                    musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.
+                        SelectedIndex, 
+                    songList_Infos[musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex][0].
+                        Name);*/
+                /// 内存生成读取
+                Album_ALL_s = await Load_AlbumInfo_For_PerformerShow(Select_SongList);
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s;
+                    musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.MouseDoubleClick += ListView_For_Album_Performer_MouseDoubleClick_For_Model_2;
+                    musicPlayer_Model_2_Album_UserControl.ItemsControl_AlbumList.MouseDoubleClick += ItemsControl_For_Album_AlbumList_MouseDoubleClick_For_Model_2;
+
+                    Load_Assembly_Singer_Show_s();
+                });
+
+                musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex = -1;
+
+                viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
+            }
+        }
         int SelectedIndex_Of_ComBox_Select_SongList_For_Model_2;
         /// <summary>
         /// 歌手_专辑模式 切换歌单 重加载该歌单 所有歌手
@@ -4674,8 +4929,8 @@ namespace NSMusicS
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     musicPlayer_Model_3_Singer_UserControl.ListView_For_Album_Performer.ItemsSource = Album_Performer_s;
-                    musicPlayer_Model_3_Singer_UserControl.ListView_For_Album_Performer.MouseDoubleClick += ListView_For_Album_Performer_MouseDoubleClick;
-                    musicPlayer_Model_3_Singer_UserControl.ItemsControl_AlbumList.MouseDoubleClick += ItemsControl_For_Album_AlbumList_MouseDoubleClick;
+                    musicPlayer_Model_3_Singer_UserControl.ListView_For_Album_Performer.MouseDoubleClick += ListView_For_Album_Performer_MouseDoubleClick_For_Model_3;
+                    musicPlayer_Model_3_Singer_UserControl.ItemsControl_AlbumList.MouseDoubleClick += ItemsControl_For_Album_AlbumList_MouseDoubleClick_For_Model_3;
 
                     Load_Assembly_Singer_Show_s();
                 });
@@ -4685,7 +4940,7 @@ namespace NSMusicS
                 viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
             }
         }
-        #endregion
+                #endregion
 
         #region （关闭前）歌曲信息保存
         public async void Save_SongListInfo()
@@ -4792,24 +5047,24 @@ namespace NSMusicS
 
         #endregion
 
-        public bool Reset_Load_Album_Model_AlbumList_ = false;
+        public bool Reset_Load_Album_Model_SingerAlbumList_ = false;
         #region 专辑模式
         public void Switch_To_Album_Mode_Click(object sender, EventArgs e)
         {
             // 只在第一次切换专辑模式时加载 专辑模式数据，不在初始化软件时加载，节省性能
-            if (Reset_Load_Album_Model_AlbumList_ == false)
+            if (Reset_Load_Album_Model_SingerAlbumList_ == false)
             {
                 viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
-                //Reset_Load_Singer_Model_SingerAlbumList();
-                Load_Assembly_Album_Show_s();
+                Reset_Load_Album_Model_SingerAlbumList();// 不加载歌手模式，WPF在使用同一资源时会产生文件锁导致文件被锁定
 
-                viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
-                //musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex = 1;//默认本地音乐
-                //musicPlayer_Model_3_Singer_UserControl.TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[1][0].Name;
+                /* SelectedIndex变化会导致重新加载，第一次加载仅加载一次即可
+                 * viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
+                musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex = 1;//默认本地音乐*/
+                musicPlayer_Model_2_Album_UserControl.TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[1][0].Name;
                 Select_SongList = songList_Infos[1][0].Songs;
 
                 viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
-                Reset_Load_Album_Model_AlbumList_ = true;
+                Reset_Load_Album_Model_SingerAlbumList_ = true;
             }
 
             model_num = 2;
@@ -4826,7 +5081,7 @@ namespace NSMusicS
             Grid_Model_1.Visibility = Visibility.Collapsed;
             Grid_Model_2.Visibility = Visibility.Visible;
             Grid_Model_3.Visibility = Visibility.Collapsed;
-            Frame_Buttom_MusicPlayerUserControl.Margin = new Thickness(0, 0, 0, 0);
+            Frame_Buttom_MusicPlayerUserControl.Margin = new Thickness(286, 0, 0, 0);
 
             musicPlayer_Model_3_Singer_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
 
@@ -4836,46 +5091,125 @@ namespace NSMusicS
             userControl_Main_Home_Left_Web_Music.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_NAS_Music.Visibility = Visibility.Collapsed;
         }
-
-        #region 加载专辑照片墙
-        /// <summary>
-        /// 加载歌手照片墙-专辑照片墙 进入此专辑,切换专辑显示界面 专辑模式
-        /// </summary>
-        private async void Load_Assembly_Album_Show_s()
+        public async void Convert_Model_3_DB_To_Model_2()
         {
-            Album_Info_Class album_Info_Class = Album_Info_Class.Retuen_This();
-            album_Info_Class.Album_Names = new List<string>();
-            album_Info_Class.Album_Image_Uris = new List<Uri>();
-            album_Info_Class.Album_Explain = new List<string>();
-            //
-            if (Album_Performer_s != null)
+            /// 加载Model_2数据
+            Album_ALL_s = await Load_AlbumInfo_For_PerformerShow(songList_Infos[1][0].Songs);
+            //去重
+            var uniqueAlbumPerformers = Album_ALL_s
+                .GroupBy(x => x.Album_Performer_Name)
+                .Select(g => g.First())
+                .ToList();
+            Album_ALL_s.Clear();
+            foreach (var albumPerformer in uniqueAlbumPerformers)
             {
-                if (Album_Performer_s.Count > 0)
-                {
-                    ObservableCollection<Album_Performer_Infos> temp = new ObservableCollection<Album_Performer_Infos>(
-                        Album_Performer_s);
-                    for (int i = 0; i < temp.Count; i++)
-                    {
-                        if (temp[i] != null)
-                        {
-                            album_Info_Class.Album_Names.Add(temp[i].Album_Performer_Name);
-                            album_Info_Class.Album_Image_Uris.Add(temp[i].Album_Performer_Image);
-                            album_Info_Class.Album_Explain.Add(temp[i].Album_Performer_Of_AlbumNums);
-                        }
-                    }
-                    temp = null;
-                }
+                Album_ALL_s.Add(albumPerformer);
             }
-            album_Info_Class.Start_Index = 0;
-            album_Info_Class.End_Index = 24;
-            musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.ScrollToVerticalOffset(0);
-            musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.PreviewMouseWheel += ScrollViewer_Albums_PreviewMouseWheel;
 
-            ViewModel_Assembly_Album_Class viewModel_Assembly_Album_Class = ViewModel_Assembly_Album_Class.Retuen_This();
-            // 启用同步整体加载
-            viewModel_Assembly_Album_Class.AddToQueue_Complete = true;
-            viewModel_Assembly_Album_Class.RefCommand_Async.Execute(null);
+            if (Album_ALL_s != null && Album_ALL_s.Count > 0)
+            {
+                musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.SelectedIndex = 0;
+            }
+            musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex = -1;
+            musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex = SelectedIndex_Of_ComBox_Select_SongList_For_Model_2;
 
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s;
+                musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.MouseDoubleClick += ListView_For_Album_Performer_MouseDoubleClick_For_Model_2;
+                musicPlayer_Model_2_Album_UserControl.ItemsControl_AlbumList.MouseDoubleClick += ItemsControl_For_Album_AlbumList_MouseDoubleClick_For_Model_2;
+                ///
+
+                Load_Assembly_Album_Show_s();
+            });
+
+            viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
+        }
+
+        /// <summary>
+        /// 打开右侧歌手列表
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void Button_Show_Album_List_Model_2_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (musicPlayer_Model_2_Album_UserControl.Grid_Singer_Show_2.Visibility == Visibility.Visible)
+            {
+                musicPlayer_Model_2_Album_UserControl.Grid_Singer_Show_2.Visibility = Visibility.Collapsed;
+                musicPlayer_Model_2_Album_UserControl.Button_Show_Singer_List_Model_3_Text.Text = "返回上级列表";
+
+                musicPlayer_Model_2_Album_UserControl.Grid_Singer_Show_1_Right.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                musicPlayer_Model_2_Album_UserControl.Grid_Singer_Show_2.Visibility = Visibility.Visible;
+                musicPlayer_Model_2_Album_UserControl.Button_Show_Singer_List_Model_3_Text.Text = "打开选中专辑"; 
+
+                musicPlayer_Model_2_Album_UserControl.Grid_Singer_Show_1_Right.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        /// <summary>
+        /// 重新加载专辑模式数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void Button_Reload_For_Album_ALL_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
+
+            musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.Visibility = Visibility.Collapsed;
+
+            musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = null;
+
+            //清空UI专辑列表
+            musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.Items.Clear();//UI
+            //加载歌手_专辑模式数据
+            Album_ALL_s = await Load_AlbumInfo_For_PerformerShow(Select_SongList);
+            //Init_Album_Performer_s_Page_Info();
+            //musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_Performer_s_paging;
+
+            musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s;
+            musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.Visibility = Visibility.Visible;
+            /// 异步逐个过渡添加
+            Load_Assembly_Singer_Show_s();
+
+            viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
+
+            //让CLR (Common Language Runtime) 强制回收内存
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+            }
+        }
+        private async void Button_Reload_For_Album_ALL_MouseLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
+
+
+            musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.Visibility = Visibility.Collapsed;
+
+            musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = null;
+
+            //清空UI专辑列表
+            musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.Items.Clear();//UI
+            //加载歌手_专辑模式数据
+            Album_ALL_s = await Load_AlbumInfo_For_PerformerShow(Select_SongList);
+            //Init_Album_Performer_s_Page_Info();
+            //musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_Performer_s_paging;
+
+            musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s;
+            musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.Visibility = Visibility.Visible;
+            /// 异步逐个过渡添加
+            Load_Assembly_Singer_Show_s();
+
+
+            viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
+
+            //让CLR (Common Language Runtime) 强制回收内存
             GC.Collect();
             GC.WaitForPendingFinalizers();
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
@@ -4885,11 +5219,613 @@ namespace NSMusicS
         }
 
         /// <summary>
-        /// 专辑滚动栏滚动事件
+        /// 滚动事件转移  防止鼠标悬浮至专辑歌曲列表 出现ScrollViewer无法滚动的问题
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ScrollViewer_Albums_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        private void ListView_For_This_Album_ALL_Song_PreviewMouseWheel_For_Model_2(object sender, MouseWheelEventArgs e)
+        {
+            var scrollViewer = GetScrollViewer(musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album);
+            if (scrollViewer != null)
+            {
+                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta / 120);
+                e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// 列表项 双击切换至 指定歌手 专辑合辑
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void ListView_For_Album_Performer_MouseDoubleClick_For_Model_2(object sender, MouseButtonEventArgs e)
+        {
+            Load_This_Album_For_Model_2();
+
+            ///
+            musicPlayer_Model_2_Album_UserControl.Grid_Singer_Show_2.Visibility = Visibility.Collapsed;
+            musicPlayer_Model_2_Album_UserControl.Button_Show_Singer_List_Model_3_Text.Text = "返回上级列表";
+
+            musicPlayer_Model_2_Album_UserControl.Grid_Singer_Show_1_Right.Visibility = Visibility.Visible;
+        }
+        /// <summary>
+        /// 自定义项 双击切换 指定歌手 专辑合辑
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void ItemsControl_For_Album_AlbumList_MouseDoubleClick_For_Model_2(object sender, MouseButtonEventArgs e)
+        {
+            Border currentItem = (DependencyObject)e.OriginalSource as Border;
+            if (currentItem != null)
+            {
+                Singer_Info singer_Info = currentItem.DataContext as Singer_Info;
+
+                var resultIndex = Album_ALL_s
+                    .Select((pair, index) => new { Item = pair, Index = index })
+                    .FirstOrDefault(pair => pair.Item.Album_Performer_Image != null &&
+                        pair.Item.Album_Performer_Name.Equals(singer_Info.Singer_Name) &&
+                        pair.Item.Album_Name.Equals(singer_Info.Album_Name)
+                        )?
+                    .Index ?? -1;
+
+                musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.SelectedIndex = resultIndex;
+
+                Load_This_Album_For_Model_2();
+
+                ///
+                musicPlayer_Model_2_Album_UserControl.Grid_Singer_Show_2.Visibility = Visibility.Collapsed;
+                musicPlayer_Model_2_Album_UserControl.Button_Show_Singer_List_Model_3_Text.Text = "返回上级列表";
+
+                musicPlayer_Model_2_Album_UserControl.Grid_Singer_Show_1_Right.Visibility = Visibility.Visible;
+            }
+        }
+
+        /// <summary>
+        /// 切换至 指定歌手 专辑合辑
+        /// </summary>
+        private async void Load_This_Album_For_Model_2()
+        {
+            try
+            {
+                // 加载此歌手所有专辑数据
+                await Load_Performer_ALL_Album_For_Model_2();
+
+                // 清除多线程模式下的重复数据，并启用将所有专辑数据添加至UI
+                SetUI_Of_Performer_ALL_AlbumInfo_For_Model_2();
+
+            }
+            catch { }
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+            }
+        }
+        /// <summary>
+        /// 清除多线程模式下的重复数据，并启用将所有专辑数据添加至UI
+        /// </summary>
+        private void SetUI_Of_Performer_ALL_AlbumInfo_For_Model_2()
+        {
+            // 将此歌手所有的专辑数据添加至UI
+            // 多线程模式下，会产生重复的数据，需求剔除
+            musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.
+                ItemsSource = null;
+            if (This_Singer_ALL_Album_Info != null && This_Singer_ALL_Album_Info.Albums != null)
+            {
+                if (This_Singer_ALL_Album_Info.Albums.Count > 0)
+                {
+                    ObservableCollection<Album_SongList_Infos> uniqueAlbums = new ObservableCollection<Album_SongList_Infos>();
+                    foreach (var album in This_Singer_ALL_Album_Info.Albums)
+                    {
+                        if (album != null)
+                        {
+                            bool exists = uniqueAlbums.Any(a => a.Album_Name == album.Album_Name);
+                            if (!exists)
+                            {
+                                uniqueAlbums.Add(album);
+                            }
+                        }
+                    }
+                    This_Singer_ALL_Album_Info.Albums = uniqueAlbums;
+
+                    musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.Items.Clear();
+                    Add_This_Singer_ALL_Albums_Of_Children_For_Model_2(This_Singer_ALL_Album_Info);
+
+                    This_Singer_ALL_Album_Info = null;
+                }
+            }
+            viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
+        }
+
+        /// <summary>
+        /// 加载此歌手所有专辑数据
+        /// </summary>
+        /// <returns></returns>
+        private async Task Load_Performer_ALL_Album_For_Model_2()
+        {
+            #region Init
+
+            viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
+
+            //为优化内存占用，将不再保留专辑数据
+            if (aLL_Performer_ALL_AlbumSongList != null)
+            {
+                if (aLL_Performer_ALL_AlbumSongList.ALL_Performers != null)
+                    aLL_Performer_ALL_AlbumSongList.ALL_Performers.Clear();
+                else
+                    aLL_Performer_ALL_AlbumSongList.ALL_Performers = new ObservableCollection<This_Performer_ALL_AlbumSongList>();
+            }
+            else
+            {
+                aLL_Performer_ALL_AlbumSongList = new ALL_Performer_ALL_AlbumSongList();
+                aLL_Performer_ALL_AlbumSongList.ALL_Performers = new ObservableCollection<This_Performer_ALL_AlbumSongList>();
+            }
+
+            musicPlayer_Model_2_Album_UserControl.
+                userControl_Main_Model_3_View_Albums_And_Tracks.
+                ListView_For_Performer_This_Album.Items.Clear();
+
+            //让CLR (Common Language Runtime) 强制回收内存
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+            }
+
+            userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Collapsed;
+            userControl_Main_Home_Left_Web_Music.Visibility = Visibility.Collapsed;
+
+            musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Visible;
+            musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.Visibility
+                = Visibility.Visible;
+
+            //设置专辑显示界面 垂直滚动位置为0
+            var scrollViewer = GetScrollViewer(musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks);
+            if (scrollViewer != null)
+            {
+                scrollViewer.ScrollToVerticalOffset(0);
+                scrollViewer = null;
+            }
+            //清空UI专辑列表
+            musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.Items.Clear();//UI
+
+            #endregion
+
+            //获取选中的歌手项
+            Album_Performer_Infos performer_Infos = (Album_Performer_Infos)musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.SelectedItem;
+
+            if (performer_Infos != null)
+            {
+                //获取此歌手的所有专辑(数据)
+                This_Singer_ALL_Album_Info = null;
+                if (aLL_Performer_ALL_AlbumSongList.ALL_Performers.Count != 0)
+                {
+                    for (int i = 0; i < aLL_Performer_ALL_AlbumSongList.ALL_Performers.Count; i++)
+                    {
+                        //如果此歌手 所有专辑数据 已加载在内存
+                        if (aLL_Performer_ALL_AlbumSongList.ALL_Performers[i].Singer_Name.Equals(performer_Infos.Album_Performer_Name))
+                        {
+                            //直接从内存中 拉取，优化性能
+                            This_Singer_ALL_Album_Info = aLL_Performer_ALL_AlbumSongList.ALL_Performers[i];
+                            break;
+                        }
+
+                        //如果此歌手 所有专辑 从未加载在内存
+                        if (i == aLL_Performer_ALL_AlbumSongList.ALL_Performers.Count - 1)
+                        {
+                            //重新生成此歌手的所有专辑(数据)，
+                            This_Singer_ALL_Album_Info = await Load_This_Singer_ALL_AlbumsAsync_For_Model_2(performer_Infos.Album_Performer_Name, performer_Infos.Album_Name);
+
+                            //并添加 加载在内存中
+                            aLL_Performer_ALL_AlbumSongList.ALL_Performers.Add(This_Singer_ALL_Album_Info);
+
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    //重新生成此歌手的所有专辑(数据)，
+                    This_Singer_ALL_Album_Info = await Load_This_Singer_ALL_AlbumsAsync_For_Model_2(performer_Infos.Album_Performer_Name, performer_Infos.Album_Name);
+
+                    //并添加 加载在内存中
+                    for (int i = 0; i < aLL_Performer_ALL_AlbumSongList.ALL_Performers.Count; i++)
+                    {
+                        if (aLL_Performer_ALL_AlbumSongList.ALL_Performers[i].Singer_Name.Equals(
+                            This_Singer_ALL_Album_Info.Singer_Name
+                            ))
+                            break;
+
+                        if (i == aLL_Performer_ALL_AlbumSongList.ALL_Performers.Count - 1)
+                        {
+                            aLL_Performer_ALL_AlbumSongList.ALL_Performers.Add(This_Singer_ALL_Album_Info);
+                        }
+                    }
+                }
+                loop:;
+
+                performer_Infos = null;
+            }
+        }
+        /// <summary>
+        /// 加载此专辑的后台数据
+        /// </summary>
+        /// <param name="This_Singer_Name"></param>
+        /// <returns></returns>
+        private async Task<This_Performer_ALL_AlbumSongList> Load_This_Singer_ALL_AlbumsAsync_For_Model_2(string This_Singer_Name, string This_Album_Name)
+        {
+            var tcs = new TaskCompletionSource<This_Performer_ALL_AlbumSongList>();
+
+            await Task.Run(async () =>
+            {
+                this_Performer_ALL_AlbumSongList = new This_Performer_ALL_AlbumSongList();
+                this_Performer_ALL_AlbumSongList.Albums = new ObservableCollection<Album_SongList_Infos>();
+                this_Performer_ALL_AlbumSongList.Singer_Name = This_Singer_Name;
+
+                //获取此歌手所有的歌曲信息（AlbumName，SongNames，SongDurations）不重复
+                var uniqueAlbumsAndSongs = song_Infos
+                .GroupBy(song => new { song.Singer_Name, song.Album_Name }) // 按 Singer_Name 和 Album_Name 分组
+                .Where(group => group.Key.Singer_Name.Equals(This_Singer_Name)) // 排除特定 Singer_Name 的分组
+                .Where(group => group.Key.Album_Name.Equals(This_Album_Name)) // 排除特定 Singer_Name 的分组
+                .Select(group => new
+                {
+                    SingerName = group.Key.Singer_Name,
+                    AlbumName = group.Key.Album_Name, // 获取 Album_Name 属性
+                    SongInfo = group.Select(song => new
+                    {
+                        SongName = song.Song_Name,
+                        SongDuration = song.Song_Duration,
+                        SongUrl = song.Song_Url
+                    }).Distinct() // 获取 Song_Name, Song_Duration 和 Song_Url 属性并去除重复
+                });
+
+                foreach (var albumAndSongs in uniqueAlbumsAndSongs)
+                {
+                    if (albumAndSongs != null)
+                    {
+                        //获取此专辑信息，并设置
+                        album_SongList_Infos = new Album_SongList_Infos();//数据
+                        album_SongList_Infos.Singer_Name = This_Singer_Name;
+
+                        //设置专辑图片
+                        for (int k = 0; k < song_Infos.Count; k++)
+                        {
+                            if (song_Infos[k].Album_Name.Equals(albumAndSongs.AlbumName)//专辑-歌手 匹配
+                                &&
+                                song_Infos[k].Singer_Name.Equals(albumAndSongs.SingerName)
+                                )
+                            {
+                                string imagePath = Path.Combine(Path_App, "Song_ALbum", song_Infos[k].Singer_Name + " - " + song_Infos[k].Album_Name + ".jpg");
+
+                                Uri album_image = null;
+
+                                if (File.Exists(imagePath))
+                                {
+                                    album_image = new Uri(imagePath);
+                                }
+                                else
+                                {
+                                    //获取指定 Singer_Name 和 Album_Name 列中的不重复 Song_Url
+                                    var uniqueSongUrls = song_Infos// 使用 LINQ 查询获取指定 Singer_Name 和 Album_Name 列中的不重复 Song_Url 属性值
+                                        .Where(song => song.Singer_Name == song_Infos[k].Singer_Name && song.Album_Name == song_Infos[k].Album_Name)
+                                        .Select(song => song.Song_Url)
+                                        .Distinct();
+
+                                    //（如没有获取到Song_ALbum文件夹内的专辑图片，就直到遍历到内嵌专辑封面，才结束）
+                                    for (int m = 0; m < uniqueSongUrls.Count(); m++)
+                                    {
+                                        var songUrl = uniqueSongUrls.ElementAt(m);
+                                        if (!File.Exists(songUrl))
+                                        {
+                                            songUrl = Path_App + songUrl;
+                                        }
+
+                                        using (MemoryStream memoryStream = Song_Extract_Info.Extract_MemoryStream_AlbumImage_Of_This_SongUrl(songUrl))
+                                        {
+                                            if (memoryStream != null)
+                                            {
+                                                byte[] imageBytes = memoryStream.ToArray();
+
+                                                // 获取系统的临时文件夹路径
+                                                string tempFolderPath = Path_App + @"\Temp";
+                                                // 创建唯一的文件名，例如使用 GUID
+                                                string uniqueFileName = $"{Guid.NewGuid()}.jpg";
+                                                // 组合临时文件路径和唯一文件名
+                                                string tempFilePath = Path.Combine(tempFolderPath, uniqueFileName);
+
+                                                using (FileStream fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                                                {
+                                                    fileStream.Write(imageBytes, 0, imageBytes.Length);
+                                                    imageBytes = null;
+                                                }
+
+                                                album_image = new Uri(tempFilePath);
+
+                                                break;
+                                            }
+                                        }
+
+                                        if (m == uniqueSongUrls.Count() - 1)
+                                        {
+                                            //优化内存
+                                            album_image = null;
+                                        }
+                                    }
+
+                                    if (album_SongList_Infos != null)
+                                    {
+                                        List<string> temp = new List<string>(uniqueSongUrls);
+
+                                        //年份
+                                        album_SongList_Infos.Album_Yaer = find_Song_Of_SelectFiles.SongInfo_Take_One(temp, 15);
+
+                                        //流派
+                                        album_SongList_Infos.Album_Genre = find_Song_Of_SelectFiles.SongInfo_Take_One(temp, 16);
+
+                                        temp = null;
+                                    }
+                                    uniqueSongUrls = null;
+                                }
+
+                                if (album_image != null)
+                                {
+                                    album_SongList_Infos.Album_Image = album_image;
+                                }
+
+                                //专辑名
+                                album_SongList_Infos.Album_Name = song_Infos[k].Album_Name;
+
+                                break;
+                            }
+                        }
+
+
+                        //设置专辑内所有的歌曲
+                        album_SongList_Infos.album_SongList_Infos = new ObservableCollection<Assembly_Album_SongList_Item>();
+                        // Create a ConcurrentDictionary to store unique items
+                        ConcurrentDictionary<Assembly_Album_SongList_Item, bool> uniqueItems = new ConcurrentDictionary<Assembly_Album_SongList_Item, bool>();
+
+                        for (int y = 0; y < albumAndSongs.SongInfo.Count(); y++)
+                        {
+                            Assembly_Album_SongList_Item songList_Item = new Assembly_Album_SongList_Item();
+                            songList_Item.Album_Name = albumAndSongs.AlbumName;
+                            songList_Item.Song_Name = albumAndSongs.SongInfo.ElementAt(y).SongName;
+                            songList_Item.Song_Url = albumAndSongs.SongInfo.ElementAt(y).SongUrl;
+
+                            if (albumAndSongs.SongInfo.Count() - 1 >= y)
+                                songList_Item.Song_Duration = albumAndSongs.SongInfo.ElementAt(y).SongDuration;
+
+                            // Check if the item is already in the ConcurrentDictionary
+                            if (uniqueItems.TryAdd(songList_Item, true))
+                            {
+                                // Add the item to the ObservableCollection
+                                album_SongList_Infos.album_SongList_Infos.Add(songList_Item);
+                            }
+                        }
+
+                        //一张专辑信息设置完毕
+                        this_Performer_ALL_AlbumSongList.Albums.Add(album_SongList_Infos);
+                    }
+                }
+
+                uniqueAlbumsAndSongs = null;
+
+                tcs.SetResult(this_Performer_ALL_AlbumSongList);
+
+            });
+
+            //添加至数组，防止二次加载
+            aLL_Performer_ALL_AlbumSongList.ALL_Performers.Add(this_Performer_ALL_AlbumSongList);
+
+            return await tcs.Task;
+        }
+        /// <summary>
+        /// 将此歌手所有的专辑数据，添加至UI展示
+        /// </summary>
+        /// <param name="This_Singer_ALL_Album_Info"></param>
+        private void Add_This_Singer_ALL_Albums_Of_Children_For_Model_2(This_Performer_ALL_AlbumSongList This_Singer_ALL_Album_Info)
+        {
+            //重新生成此歌手的所有专辑UI控件
+            for (int k = 0; k < This_Singer_ALL_Album_Info.Albums.Count; k++)
+            {
+                //获取专辑CD控件
+                Assembly_Albums_And_Track assembly_Albums_And_Tracks = new Assembly_Albums_And_Track();
+
+                if (This_Singer_ALL_Album_Info.Albums[k].Album_Image != null)
+                {
+                    ImageBrush imageBrush = new ImageBrush(new BitmapImage(This_Singer_ALL_Album_Info.Albums[k].Album_Image)); imageBrush.Stretch = Stretch.UniformToFill;
+                    try { imageBrush.Freeze(); } catch { }
+                    assembly_Albums_And_Tracks.Border_Now_Album_Image.Background = imageBrush; imageBrush = null;
+                }
+                else
+                    assembly_Albums_And_Tracks.Border_Now_Album_Image.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#30FFFFFF"));
+
+                assembly_Albums_And_Tracks.Singer_Name = This_Singer_ALL_Album_Info.Albums[k].Singer_Name;
+                assembly_Albums_And_Tracks.Uri_Album_Image = This_Singer_ALL_Album_Info.Albums[k].Album_Image;
+                assembly_Albums_And_Tracks.TextBlock_Album_Name.Text = This_Singer_ALL_Album_Info.Albums[k].Album_Name;
+
+                assembly_Albums_And_Tracks.ListView_For_This_Album_ALL_Song.ItemsSource = This_Singer_ALL_Album_Info.Albums[k].album_SongList_Infos;
+                assembly_Albums_And_Tracks.ListView_For_This_Album_ALL_Song.MouseDoubleClick += ListView_For_This_Album_ALL_Song_MouseDoubleClick;
+                assembly_Albums_And_Tracks.ListView_For_This_Album_ALL_Song.PreviewMouseWheel += ListView_For_This_Album_ALL_Song_PreviewMouseWheel;
+
+                //播放此专辑
+                assembly_Albums_And_Tracks.Button_Play_This_Album.Click += ListView_For_This_Album_ALL_Song_MouseClick;
+                //插入到歌单 首/尾
+                assembly_Albums_And_Tracks.Button_Add_This_Album_To_Current_Playlist_Top.Click += ListView_For_This_Album_ALL_Song_To_Current_Playlist_MouseClick;
+                assembly_Albums_And_Tracks.Button_Add_This_Album_To_Current_Playlist_Buttom.Click += ListView_For_This_Album_ALL_Song_To_Current_Playlist_MouseClick;
+                //添加到歌单
+                assembly_Albums_And_Tracks.ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+
+                //此专辑CD控件 显示到UI 界面上
+                musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.Items.Add(assembly_Albums_And_Tracks);
+
+                //此专辑CD控件 添加到内存中 
+                //List_Assembly_Albums_And_Tracks.Add(assembly_Albums_And_Tracks);
+            }
+
+        /*//获取此歌手的所有专辑(数据)
+        for (int i = 0; i < This_Singer_ALL_Album_Info.Albums.Count; i++)
+        {
+            //获取本地音乐 所有的 专辑UI控件
+            if (List_Assembly_Albums_And_Tracks.Count != 0)
+            {
+                for (int j = 0; j < List_Assembly_Albums_And_Tracks.Count; j++)
+                {
+                    //如果此歌手 专辑UI控件 已加载
+                    if (
+                        This_Singer_ALL_Album_Info.Albums[i].Album_Name.Equals(List_Assembly_Albums_And_Tracks[j].TextBlock_Album_Name.Text)
+                        &&
+                        This_Singer_ALL_Album_Info.Singer_Name.Equals(List_Assembly_Albums_And_Tracks[j].Singer_Name)
+                        )
+                    {
+                        //此专辑CD控件 显示到UI 界面上
+                        musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.Items.Add(List_Assembly_Albums_And_Tracks[j]);
+                        //退出遍历，获取下一个
+                        break;
+                    }
+
+                    //如果此歌手 专辑UI控件 从未加载
+                    if (j == List_Assembly_Albums_And_Tracks.Count - 1)
+                    {
+                        //重新生成此歌手的所有专辑UI控件
+                        for (int k = 0; k < This_Singer_ALL_Album_Info.Albums.Count; k++)
+                        {
+                            //获取专辑CD控件
+                            Assembly_Albums_And_Track assembly_Albums_And_Tracks = new Assembly_Albums_And_Track();
+
+                            if (This_Singer_ALL_Album_Info.Albums[k].Album_Image != null)
+                            {
+                                ImageBrush imageBrush = new ImageBrush(new BitmapImage(This_Singer_ALL_Album_Info.Albums[k].Album_Image)); imageBrush.Stretch = Stretch.UniformToFill; imageBrush.Freeze();
+                                assembly_Albums_And_Tracks.Border_Now_Album_Image.Background = imageBrush; imageBrush = null;
+                            }
+                            else
+                                assembly_Albums_And_Tracks.Border_Now_Album_Image.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#30FFFFFF"));
+
+                            assembly_Albums_And_Tracks.Singer_Name = This_Singer_ALL_Album_Info.Albums[k].Singer_Name;
+                            assembly_Albums_And_Tracks.TextBlock_Album_Name.Text = This_Singer_ALL_Album_Info.Albums[k].Album_Name;
+
+                            assembly_Albums_And_Tracks.ListView_For_This_Album_ALL_Song.ItemsSource = This_Singer_ALL_Album_Info.Albums[k].album_SongList_Infos;
+                            assembly_Albums_And_Tracks.ListView_For_This_Album_ALL_Song.MouseDoubleClick += ListView_For_This_Album_ALL_Song_MouseDoubleClick;
+                            assembly_Albums_And_Tracks.ListView_For_This_Album_ALL_Song.PreviewMouseWheel += ListView_For_This_Album_ALL_Song_PreviewMouseWheel;
+
+                            //播放此专辑
+                            assembly_Albums_And_Tracks.Button_Play_This_Album.Click += ListView_For_This_Album_ALL_Song_MouseClick;
+                            //插入到歌单 首/尾
+                            assembly_Albums_And_Tracks.Button_Add_This_Album_To_Current_Playlist_Top.Click += ListView_For_This_Album_ALL_Song_To_Current_Playlist_MouseClick;
+                            assembly_Albums_And_Tracks.Button_Add_This_Album_To_Current_Playlist_Buttom.Click += ListView_For_This_Album_ALL_Song_To_Current_Playlist_MouseClick;
+                            //添加到歌单
+                            assembly_Albums_And_Tracks.ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+
+                            //此专辑CD控件 显示到UI 界面上
+                            musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.Items.Add(assembly_Albums_And_Tracks);
+
+                            //此专辑CD控件 添加到内存中 
+                            List_Assembly_Albums_And_Tracks.Add(assembly_Albums_And_Tracks);
+
+                            assembly_Albums_And_Tracks = null;
+                        }
+
+                        // 退出两层循环
+                        goto loop;
+                    }
+                }
+            }
+            else
+            {
+                //重新生成此歌手的所有专辑UI控件
+                for (int k = 0; k < This_Singer_ALL_Album_Info.Albums.Count; k++)
+                {
+                    //获取专辑CD控件
+                    Assembly_Albums_And_Track assembly_Albums_And_Tracks = new Assembly_Albums_And_Track();
+
+                    if (This_Singer_ALL_Album_Info.Albums[k].Album_Image != null)
+                    {
+                        ImageBrush imageBrush = new ImageBrush(new BitmapImage(This_Singer_ALL_Album_Info.Albums[k].Album_Image)); imageBrush.Stretch = Stretch.UniformToFill;
+                        try { imageBrush.Freeze(); } catch { }
+                        assembly_Albums_And_Tracks.Border_Now_Album_Image.Background = imageBrush; imageBrush = null;
+                    }
+                    else
+                        assembly_Albums_And_Tracks.Border_Now_Album_Image.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#30FFFFFF"));
+
+                    assembly_Albums_And_Tracks.Singer_Name = This_Singer_ALL_Album_Info.Albums[k].Singer_Name;
+                    assembly_Albums_And_Tracks.Uri_Album_Image = This_Singer_ALL_Album_Info.Albums[k].Album_Image;
+                    assembly_Albums_And_Tracks.TextBlock_Album_Name.Text = This_Singer_ALL_Album_Info.Albums[k].Album_Name;
+
+                    assembly_Albums_And_Tracks.ListView_For_This_Album_ALL_Song.ItemsSource = This_Singer_ALL_Album_Info.Albums[k].album_SongList_Infos;
+                    assembly_Albums_And_Tracks.ListView_For_This_Album_ALL_Song.MouseDoubleClick += ListView_For_This_Album_ALL_Song_MouseDoubleClick;
+                    assembly_Albums_And_Tracks.ListView_For_This_Album_ALL_Song.PreviewMouseWheel += ListView_For_This_Album_ALL_Song_PreviewMouseWheel;
+
+                    //播放此专辑
+                    assembly_Albums_And_Tracks.Button_Play_This_Album.Click += ListView_For_This_Album_ALL_Song_MouseClick;
+                    //插入到歌单 首/尾
+                    assembly_Albums_And_Tracks.Button_Add_This_Album_To_Current_Playlist_Top.Click += ListView_For_This_Album_ALL_Song_To_Current_Playlist_MouseClick;
+                    assembly_Albums_And_Tracks.Button_Add_This_Album_To_Current_Playlist_Buttom.Click += ListView_For_This_Album_ALL_Song_To_Current_Playlist_MouseClick;
+                    //添加到歌单
+                    assembly_Albums_And_Tracks.ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
+
+                    //此专辑CD控件 显示到UI 界面上
+                    musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.Items.Add(assembly_Albums_And_Tracks);
+
+                    //此专辑CD控件 添加到内存中 
+                    List_Assembly_Albums_And_Tracks.Add(assembly_Albums_And_Tracks);
+                }
+
+                // 退出循环
+                goto loop;
+            }
+
+        }*/
+
+        loop:;
+        }
+
+        /// <summary>
+        /// 加载歌手照片墙 歌手照片墙 进入歌手,切换歌手显示界面 歌手_专辑模式
+        /// </summary>
+        private async Task Load_Assembly_Album_Show_s()
+        {
+            ViewModel_Assembly_Singer_ConvertTo_Album_Class viewModel_Assembly_Singer_Class = ViewModel_Assembly_Singer_ConvertTo_Album_Class.Retuen_This();
+            viewModel_Assembly_Singer_Class.Singer_Infos.Clear();
+            Singer_ConvertTo_Album_Info_Class singer_Info_Class = Singer_ConvertTo_Album_Info_Class.Retuen_This();
+            singer_Info_Class.Singer_Names = new List<string>();
+            singer_Info_Class.Album_Names = new List<string>();
+            singer_Info_Class.Singer_Image_Uris = new List<Uri>();
+            singer_Info_Class.Singer_Explain = new List<string>();
+            singer_Info_Class.Start_Index = 0;
+            singer_Info_Class.End_Index = 24;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.ScrollToVerticalOffset(0);
+                musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.PreviewMouseWheel += ScrollViewer_Album_PreviewMouseWheel;
+            });
+            foreach (var album in Album_ALL_s)
+            {
+                singer_Info_Class.Singer_Names.Add(album.Album_Performer_Name);
+                singer_Info_Class.Album_Names.Add(album.Album_Name);
+                singer_Info_Class.Singer_Image_Uris.Add(album.Album_Performer_Image);
+                singer_Info_Class.Singer_Explain.Add(album.Album_Performer_Of_AlbumNums);
+            }
+
+            viewModel_Assembly_Singer_Class.AddToQueue_Complete = true;
+            viewModel_Assembly_Singer_Class.RefCommand_Async.Execute(null);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+            }
+        }
+        /// <summary>
+        /// 歌手墙滚动栏滚动事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ScrollViewer_Album_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.ScrollToVerticalOffset(
                 musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.VerticalOffset - e.Delta);
@@ -4902,100 +5838,33 @@ namespace NSMusicS
 
             if (isAtBottom)
             {
-                ViewModel_Assembly_Album_Class viewModel_Assembly_Album_Class = ViewModel_Assembly_Album_Class.Retuen_This();
+                ViewModel_Assembly_Singer_ConvertTo_Album_Class viewModel_Assembly_Singer_Class = ViewModel_Assembly_Singer_ConvertTo_Album_Class.Retuen_This();
                 //等待之前的异步加载完成，再加载新的
-                if (viewModel_Assembly_Album_Class.AddToQueue_Complete == true)
+                if (viewModel_Assembly_Singer_Class.AddToQueue_Complete == true)
                 {
-                    Album_Info_Class Album_Info_Class = Album_Info_Class.Retuen_This();
-                    if (Album_Info_Class.Start_Index < Album_Info_Class.Album_Image_Uris.Count)
+                    Singer_ConvertTo_Album_Info_Class singer_Info_Class = Singer_ConvertTo_Album_Info_Class.Retuen_This();
+                    if (singer_Info_Class.Start_Index < singer_Info_Class.Singer_Image_Uris.Count)
                     {
-                        if (Album_Info_Class.End_Index < Album_Info_Class.Album_Image_Uris.Count)
+                        if (singer_Info_Class.End_Index < singer_Info_Class.Singer_Image_Uris.Count)
                         {
-                            Album_Info_Class.Start_Index = Album_Info_Class.End_Index;
-                            Album_Info_Class.End_Index = Album_Info_Class.End_Index + 24;
+                            singer_Info_Class.Start_Index = singer_Info_Class.End_Index;
+                            singer_Info_Class.End_Index = singer_Info_Class.End_Index + 24;
 
-                            viewModel_Assembly_Album_Class.RefCommand_Async.Execute(null);
+                            viewModel_Assembly_Singer_Class.RefCommand_Async.Execute(null);
                         }
-                        else if (Album_Info_Class.End_Index >= Album_Info_Class.Album_Image_Uris.Count)
+                        else if (singer_Info_Class.End_Index >= singer_Info_Class.Singer_Image_Uris.Count)
                         {
-                            Album_Info_Class.Start_Index = Album_Info_Class.End_Index;
-                            Album_Info_Class.End_Index = Album_Info_Class.Album_Image_Uris.Count - 1;
+                            singer_Info_Class.Start_Index = singer_Info_Class.End_Index;
+                            singer_Info_Class.End_Index = singer_Info_Class.Singer_Image_Uris.Count - 1;
 
-                            viewModel_Assembly_Album_Class.RefCommand_Async.Execute(null);
+                            viewModel_Assembly_Singer_Class.RefCommand_Async.Execute(null);
                         }
                     }
                 }
             }
         }
 
-
-
-        /// <summary>
-        /// 歌手照片墙 进入歌手
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Assembly_Album_Show_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            /*assembly_Singer_Show = sender as Assembly_Singer_Show;
-
-            for (int i = 0; i < Album_Performer_s.Count; i++)
-            {
-                if (assembly_Singer_Show.TextBlock_Singer_Name_For_HiddenView.Text.Equals(
-                    Album_Performer_s[i].Album_Performer_Name
-                    ))
-                {
-                    musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.SelectedIndex = i;
-                    break;
-                }
-            }
-            Load_Performer_ALL_Album();*/
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
-            }
-        }
-        /// <summary>
-        /// 切换歌手显示界面 歌手_专辑模式
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        private async void Button_Show_big2_Album_List_Model_2_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            /*musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.Items.Clear();
-
-            await Task.Run(() =>
-            {
-                if (Assembly_Album_Show_s != null)
-                {
-                    if (Assembly_Album_Show_s.Count > 0)
-                    {
-                        for (int i = 0; i < Assembly_Album_Show_s.Count; i++)
-                        {
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                *//*musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.Children.Add(Assembly_Album_Show_s[i]);*//*
-                            });
-                        }
-                    }
-                }
-            });*/
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
-            }
-        }
         #endregion
-
-        #endregion
-
         private This_Performer_ALL_AlbumSongList This_Singer_ALL_Album_Info;
         public bool Reset_Load_Singer_Model_SingerAlbumList_ = false;
         #region 歌手-专辑模式
@@ -5012,8 +5881,9 @@ namespace NSMusicS
                 viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
                 Reset_Load_Singer_Model_SingerAlbumList();
 
-                viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
-                musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex = 1;//默认本地音乐
+                /* SelectedIndex变化会导致重新加载，第一次加载仅加载一次即可
+                 * viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
+                musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex = 1;//默认本地音乐*/
                 musicPlayer_Model_3_Singer_UserControl.TextBlock_For_SelectSongList_To_AlbumModel_2.Text = "歌单：" + songList_Infos[1][0].Name;
                 Select_SongList = songList_Infos[1][0].Songs;
 
@@ -5057,14 +5927,14 @@ namespace NSMusicS
             if (musicPlayer_Model_3_Singer_UserControl.Grid_Singer_Show_2.Visibility == Visibility.Visible)
             {
                 musicPlayer_Model_3_Singer_UserControl.Grid_Singer_Show_2.Visibility = Visibility.Collapsed;
-                musicPlayer_Model_3_Singer_UserControl.Button_Show_Singer_List_Model_3_Text.Text = "返回歌手列表";
+                musicPlayer_Model_3_Singer_UserControl.Button_Show_Singer_List_Model_3_Text.Text = "返回上级列表";
 
                 musicPlayer_Model_3_Singer_UserControl.Grid_Singer_Show_1_Right.Visibility = Visibility.Visible;
             }
             else
             {
                 musicPlayer_Model_3_Singer_UserControl.Grid_Singer_Show_2.Visibility = Visibility.Visible;
-                musicPlayer_Model_3_Singer_UserControl.Button_Show_Singer_List_Model_3_Text.Text = "返回专辑列表";
+                musicPlayer_Model_3_Singer_UserControl.Button_Show_Singer_List_Model_3_Text.Text = "打开选中歌手"; 
 
                 musicPlayer_Model_3_Singer_UserControl.Grid_Singer_Show_1_Right.Visibility = Visibility.Collapsed;
             }
@@ -5260,13 +6130,13 @@ namespace NSMusicS
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void ListView_For_Album_Performer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private async void ListView_For_Album_Performer_MouseDoubleClick_For_Model_3(object sender, MouseButtonEventArgs e)
         {
             Load_This_Album_For_Model_3();
 
             ///
             musicPlayer_Model_3_Singer_UserControl.Grid_Singer_Show_2.Visibility = Visibility.Collapsed;
-            musicPlayer_Model_3_Singer_UserControl.Button_Show_Singer_List_Model_3_Text.Text = "返回歌手列表";
+            musicPlayer_Model_3_Singer_UserControl.Button_Show_Singer_List_Model_3_Text.Text = "返回上级列表";
 
             musicPlayer_Model_3_Singer_UserControl.Grid_Singer_Show_1_Right.Visibility = Visibility.Visible;
         }
@@ -5276,7 +6146,7 @@ namespace NSMusicS
         /// <param name="sender"></param>
         /// <param name="e"></param>
         /// <exception cref="NotImplementedException"></exception>
-        private void ItemsControl_For_Album_AlbumList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void ItemsControl_For_Album_AlbumList_MouseDoubleClick_For_Model_3(object sender, MouseButtonEventArgs e)
         {
             Border currentItem = (DependencyObject)e.OriginalSource as Border;
             if (currentItem != null)
@@ -5296,7 +6166,7 @@ namespace NSMusicS
 
                 ///
                 musicPlayer_Model_3_Singer_UserControl.Grid_Singer_Show_2.Visibility = Visibility.Collapsed;
-                musicPlayer_Model_3_Singer_UserControl.Button_Show_Singer_List_Model_3_Text.Text = "返回歌手列表";
+                musicPlayer_Model_3_Singer_UserControl.Button_Show_Singer_List_Model_3_Text.Text = "返回上级列表";
 
                 musicPlayer_Model_3_Singer_UserControl.Grid_Singer_Show_1_Right.Visibility = Visibility.Visible;
             }
@@ -5310,7 +6180,7 @@ namespace NSMusicS
             try
             {
                 // 加载此歌手所有专辑数据
-                await Load_Performer_ALL_Album();
+                await Load_Performer_ALL_Album_For_Model_3();
 
                 // 清除多线程模式下的重复数据，并启用将所有专辑数据添加至UI
                 SetUI_Of_Performer_ALL_AlbumInfo();
@@ -5364,7 +6234,7 @@ namespace NSMusicS
         /// 加载此歌手所有专辑数据
         /// </summary>
         /// <returns></returns>
-        private async Task Load_Performer_ALL_Album()
+        private async Task Load_Performer_ALL_Album_For_Model_3()
         {
             #region Init
 
@@ -5805,7 +6675,6 @@ namespace NSMusicS
         
         #endregion
 
-        #region 加载歌手照片墙
         /// <summary>
         /// 加载歌手照片墙 歌手照片墙 进入歌手,切换歌手显示界面 歌手_专辑模式
         /// </summary>
@@ -5841,7 +6710,6 @@ namespace NSMusicS
                 SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
             }
         }
-
         /// <summary>
         /// 歌手墙滚动栏滚动事件
         /// </summary>
@@ -5885,8 +6753,6 @@ namespace NSMusicS
                 }
             }
         }
-        
-        #endregion
 
         #endregion
 
@@ -5913,6 +6779,7 @@ namespace NSMusicS
             Grid_Model_2.Visibility = Visibility.Collapsed;
             Grid_Model_3.Visibility = Visibility.Collapsed;
             Frame_Buttom_MusicPlayerUserControl.Margin = new Thickness(0);
+            musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
             musicPlayer_Model_3_Singer_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
             userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
             userControl_Main_Home_TOP_App_Setting.Visibility = Visibility.Collapsed;
@@ -6663,6 +7530,7 @@ namespace NSMusicS
             Grid_Model_3.Visibility = Visibility.Collapsed;
             Frame_Buttom_MusicPlayerUserControl.Margin = new Thickness(8, 0, 0, 0);
 
+            musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
             musicPlayer_Model_3_Singer_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
 
             userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
@@ -6797,6 +7665,7 @@ namespace NSMusicS
             Grid_Model_3.Visibility = Visibility.Collapsed;
             Frame_Buttom_MusicPlayerUserControl.Margin = new Thickness(8, 0, 0, 0);
 
+            musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
             musicPlayer_Model_3_Singer_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.Visibility = Visibility.Collapsed;
 
             userControl_Main_Home_TOP_Personalized_Skins.Visibility = Visibility.Collapsed;
@@ -8884,6 +9753,7 @@ namespace NSMusicS
                     musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill.Freeze();
                     musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill.Freeze();
                     userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background.Freeze();
+                    musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background.Freeze();
                     musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background.Freeze();
                     musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background.Freeze();
                     musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = null;
@@ -8891,6 +9761,7 @@ namespace NSMusicS
                     musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = null;
                     musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = null;
                     userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = null;
+                    musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = null;
                     musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = null;
                     musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = null;
                     //
@@ -8909,6 +9780,7 @@ namespace NSMusicS
                         musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
 
                         userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                        musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                         musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                         musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                     }
@@ -8938,6 +9810,7 @@ namespace NSMusicS
                                 musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
 
                                 userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                                musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                                 musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                                 musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                             }
@@ -8955,6 +9828,7 @@ namespace NSMusicS
                                     musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
 
                                     userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                                    musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                                     musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                                     musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                                 }
@@ -8968,6 +9842,7 @@ namespace NSMusicS
 
                                     //Panel_Image.Background = new ImageBrush(Image_唱片4);
                                     userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = new ImageBrush(Image_墨智音乐);
+                                    musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = new ImageBrush(Image_墨智音乐);
                                     musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = new ImageBrush(Image_墨智音乐);
                                     musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = new ImageBrush(Image_墨智音乐);
                                 }
@@ -8987,6 +9862,7 @@ namespace NSMusicS
                                 musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
 
                                 userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                                musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                                 musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                                 musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                             }
@@ -9000,6 +9876,7 @@ namespace NSMusicS
 
                                 //Panel_Image.Background = new ImageBrush(Image_唱片4);
                                 userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = new ImageBrush(Image_墨智音乐);
+                                musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = new ImageBrush(Image_墨智音乐);
                                 musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = new ImageBrush(Image_墨智音乐);
                                 musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = new ImageBrush(Image_墨智音乐);
                             }
@@ -9033,6 +9910,7 @@ namespace NSMusicS
                         musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
 
                         userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                        musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                         musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                         musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
                     }
@@ -9046,6 +9924,7 @@ namespace NSMusicS
 
                         //Panel_Image.Background = new ImageBrush(Image_唱片4);
                         userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = new ImageBrush(Image_墨智音乐);
+                        musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = new ImageBrush(Image_墨智音乐);
                         musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = new ImageBrush(Image_墨智音乐);
                         musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = new ImageBrush(Image_墨智音乐);
                     }
@@ -9932,6 +10811,7 @@ namespace NSMusicS
                     catch (Exception ex)
                     {
                         Console.WriteLine($"An error occurred: {ex.Message}");
+                        break;
                     }
                 }
             }

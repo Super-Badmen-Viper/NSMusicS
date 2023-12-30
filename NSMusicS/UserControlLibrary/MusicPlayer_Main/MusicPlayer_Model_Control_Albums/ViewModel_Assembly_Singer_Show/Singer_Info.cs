@@ -16,6 +16,11 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
         public Uri Singer_Image_Uri { get; set; }
         public TransitionEffect Effact { get; set; }
 
+        /// <summary>
+        /// model_2
+        /// </summary>
+        public string Album_Name { get; set; }
+
         public double Width { get; set; }
         public double Height { get; set; }
         public Thickness Margin { get; set; }

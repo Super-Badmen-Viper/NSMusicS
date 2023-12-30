@@ -767,7 +767,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ComboBox}">
                         <Border BorderThickness="0" CornerRadius="10" 
-                                Width="80" Height="20" Background="#44FFFFFF"
+                                Width="100" Height="20" Background="#44FFFFFF"
                                 >
                             <Grid >
                                 <Grid x:Name="grid">
@@ -835,7 +835,7 @@
                                     <ToggleButton
                                         Width="{Binding ElementName=grid,Path=ActualWidth}"
                                         Height="{Binding ElementName=grid, Path=ActualHeight}"
-                                        Content="切换歌单" VerticalAlignment="Center"
+                                        Content="切换选中歌单" VerticalAlignment="Center"
                                         HorizontalAlignment="Left" Margin="0,0,0,0"
                                         BorderThickness="0"
                                         Foreground="White"
