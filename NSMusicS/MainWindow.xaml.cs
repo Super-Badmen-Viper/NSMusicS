@@ -9,7 +9,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-
 using WinInterop = System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.IO;
@@ -95,6 +94,7 @@ namespace NSMusicS
         private async void DispatcherTimer_Tick(object? sender, EventArgs e)
         {
             await update_Song_List_Infos.Save_SongListInfoAsync();
+            await update_album_List_Infos.Save_AlbumListInfoAsync();
         }
         [DllImport("kernel32.dll")]
         private static extern bool SetProcessWorkingSetSize(IntPtr proc, int min, int max);
@@ -4226,7 +4226,7 @@ namespace NSMusicS
         //临时图片
         private List<string> Album_Performer_s_Photo = new List<string>();
         //当前专辑模式——专辑列表
-        private ObservableCollection<Album_Performer_Infos> Album_ALL_s = new ObservableCollection<Album_Performer_Infos>();
+        private ObservableCollection<ObservableCollection<Album_Performer_List_Infos_For_Model_2>> Album_ALL_s = new ObservableCollection<ObservableCollection<Album_Performer_List_Infos_For_Model_2>>();
         //当前歌手_专辑模式——歌手列表
         private ObservableCollection<Album_Performer_Infos> Album_Performer_s = new ObservableCollection<Album_Performer_Infos>();
         //当前歌手_专辑模式——歌手列表(分页)
@@ -4256,6 +4256,7 @@ namespace NSMusicS
         /// 数据库操作
         /// </summary>
         Update_Song_List_Infos update_Song_List_Infos = Update_Song_List_Infos.Retuen_This();
+        Update_Album_List_Infos update_album_List_Infos = Update_Album_List_Infos.Retuen_This();
 
         #region 歌单信息重加载
         public async Task Init_SongList_InfoAsync()
@@ -4268,11 +4269,16 @@ namespace NSMusicS
             songList_Infos = SongList_Info.Retuen_This();
             SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = new ObservableCollection<Song_Info>();
             songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
+            Album_ALL_s = Album_Performer_List_Infos_For_Model_2.Retuen_This();
+            Album_Performer_s = Album_Performer_List_Infos_For_Model_3.Retuen_This();
             ///
             await update_Song_List_Infos.LoadSongListsAsync();
+            await update_album_List_Infos.LoadAlbumListsAsync();
             ///
             SongList_Info.songList_Infos = songList_Infos;
             SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
+            Album_Performer_List_Infos_For_Model_2.Album_Performer_s = Album_ALL_s;
+            Album_Performer_List_Infos_For_Model_3.Album_Performer_s = Album_Performer_s;
             ///
             Frame_Top_WindowsControl.IsEnabled = true;
             musicPlayer_Model_1_Song_UserControl.Frame_Manager_ButtonList_Model_1.IsEnabled = true;
@@ -4447,13 +4453,13 @@ namespace NSMusicS
                 userControl_Main_Home_Left_MyMusic_Mores[i].ComBox_Select_Add_SongList.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
             }
             //
-            musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged -= ComBox_Select_SongList_For_Model_3_SelectionChanged;
+            musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged -= ComBox_Select_SongList_For_Model_2_SelectionChanged;
             musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
-            musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged += ComBox_Select_SongList_For_Model_3_SelectionChanged;
+            musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged += ComBox_Select_SongList_For_Model_2_SelectionChanged;
             //
-            musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged -= ComBox_Select_SongList_For_Model_2_SelectionChanged;
+            musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged -= ComBox_Select_SongList_For_Model_3_SelectionChanged;
             musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.ItemsSource = comboBoxItem_ComBox_Select_Add_SongList;
-            musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged += ComBox_Select_SongList_For_Model_2_SelectionChanged;
+            musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.SelectionChanged += ComBox_Select_SongList_For_Model_3_SelectionChanged;
 
             SelectedIndex_Of_ComBox_Select_SongList_For_Model_2 = 1;
             #endregion
@@ -4485,22 +4491,42 @@ namespace NSMusicS
         }
 
         /// <summary>
-        /// 专辑模式重加载
+        /// 专辑模式重加载（本地音乐）
         /// </summary>
         public async void Reset_Load_Album_Model_SingerAlbumList()
         {
             viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
 
+            if (Album_ALL_s != null && Album_ALL_s.Count > 0)
+            {
+                musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.SelectedIndex = 0;
+
+                /// 加载此歌手所有专辑数据
+                Load_Performer_ALL_Album_For_Model_2();
+            }
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s[1][0].Albums;
+                musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.MouseDoubleClick += ListView_For_Album_Performer_MouseDoubleClick_For_Model_2;
+                musicPlayer_Model_2_Album_UserControl.ItemsControl_AlbumList.MouseDoubleClick += ItemsControl_For_Album_AlbumList_MouseDoubleClick_For_Model_2;
+
+                /// 异步逐个过渡添加
+                Load_Assembly_Album_Show_s();
+            });
+
+            viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
+
             //默认本地音乐
-            if (songList_Infos[1][0] != null && songList_Infos[1][0].Songs != null)
+            /*if (songList_Infos[1][0] != null && songList_Infos[1][0].Songs != null)
             {
                 /// 数据库中读取
                 /// Album_ALL_s = await convert_Singer_List_Info.Read_Singers_From_DatabaseAsync(1, @"本地音乐");
                 if (Album_ALL_s == null || Album_ALL_s.Count == 0)
                 {
                     /// 本地歌单中生成
-                    Album_ALL_s = await Load_AlbumInfo_For_PerformerShow(songList_Infos[1][0].Songs);
-                    /*//去重
+                    Album_ALL_s[1][0].Albums = await Load_AlbumInfo_For_PerformerShow(songList_Infos[1][0].Songs);
+                    //去重
                     var uniqueAlbumPerformers = Album_ALL_s
                         .GroupBy(x => new { x.Album_Performer_Name, x.Album_Name })
                         .Select(g => g.First())
@@ -4510,7 +4536,7 @@ namespace NSMusicS
                     foreach (var albumPerformer in uniqueAlbumPerformers)
                     {
                         Album_ALL_s.Add(albumPerformer);
-                    }*/
+                    }
                 }
 
                 if (Album_ALL_s != null && Album_ALL_s.Count > 0)
@@ -4523,7 +4549,7 @@ namespace NSMusicS
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s;
+                    musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s[1][0].Albums;
                     musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.MouseDoubleClick += ListView_For_Album_Performer_MouseDoubleClick_For_Model_2;
                     musicPlayer_Model_2_Album_UserControl.ItemsControl_AlbumList.MouseDoubleClick += ItemsControl_For_Album_AlbumList_MouseDoubleClick_For_Model_2;
 
@@ -4532,10 +4558,10 @@ namespace NSMusicS
                 });
 
                 viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
-            }
+            }*/
         }
         /// <summary>
-        /// 歌手_专辑模式重加载
+        /// 歌手_专辑模式重加载（本地音乐）
         /// </summary>
         public async void Reset_Load_Singer_Model_SingerAlbumList()
         {
@@ -4601,7 +4627,7 @@ namespace NSMusicS
                     if (Album_ALL_s != null)
                         Album_ALL_s.Clear();
                     else
-                        Album_ALL_s = Album_Performer_List_Infos.Retuen_This();
+                        Album_ALL_s = Album_Performer_List_Infos_For_Model_2.Retuen_This();
                 });
 
                 // 删除临时数据（数据残余）
@@ -4679,13 +4705,12 @@ namespace NSMusicS
 
                                     Application.Current.Dispatcher.Invoke(() =>
                                     {
-                                        Album_ALL_s.Add(album);
+                                        Album_ALL_s[1][0].Albums.Add(album);
                                     });
                                 }
                             }
                         }
                     }
-
                 }
 
                 //Clear
@@ -4693,7 +4718,7 @@ namespace NSMusicS
 
                 #endregion
 
-                tcs.SetResult(Album_ALL_s);
+                tcs.SetResult(Album_ALL_s[1][0].Albums);
             });
 
             return await tcs.Task;
@@ -4714,7 +4739,7 @@ namespace NSMusicS
                     if (Album_Performer_s != null)
                         Album_Performer_s.Clear();
                     else
-                        Album_Performer_s = Album_Performer_List_Infos.Retuen_This();
+                        Album_Performer_s = Album_Performer_List_Infos_For_Model_3.Retuen_This();
                 });
 
                 #region 加载歌手_专辑模式数据
@@ -4824,7 +4849,7 @@ namespace NSMusicS
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void ComBox_Select_SongList_For_Model_3_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ComBox_Select_SongList_For_Model_2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex > -1)
             {
@@ -4863,15 +4888,16 @@ namespace NSMusicS
                     songList_Infos[musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex][0].
                         Name);*/
                 /// 内存生成读取
-                Album_ALL_s = await Load_AlbumInfo_For_PerformerShow(Select_SongList);
+                Album_ALL_s[1][0].Albums = 
+                    await Load_AlbumInfo_For_PerformerShow(Select_SongList);
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s;
+                    musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s[1][0].Albums;
                     musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.MouseDoubleClick += ListView_For_Album_Performer_MouseDoubleClick_For_Model_2;
                     musicPlayer_Model_2_Album_UserControl.ItemsControl_AlbumList.MouseDoubleClick += ItemsControl_For_Album_AlbumList_MouseDoubleClick_For_Model_2;
 
-                    Load_Assembly_Singer_Show_s();
+                    Load_Assembly_Album_Show_s();
                 });
 
                 musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex = -1;
@@ -4885,7 +4911,7 @@ namespace NSMusicS
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void ComBox_Select_SongList_For_Model_2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ComBox_Select_SongList_For_Model_3_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (musicPlayer_Model_3_Singer_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex > -1)
             {
@@ -4940,7 +4966,7 @@ namespace NSMusicS
                 viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
             }
         }
-                #endregion
+        #endregion
 
         #region （关闭前）歌曲信息保存
         public async void Save_SongListInfo()
@@ -4948,7 +4974,10 @@ namespace NSMusicS
             mediaElement_Song.Stop();
 
             /// 耗时操作
+            Album_Performer_List_Infos_For_Model_2.Album_Performer_s = Album_ALL_s;
+            Album_Performer_List_Infos_For_Model_3.Album_Performer_s = Album_Performer_s;
             await update_Song_List_Infos.Save_SongListInfoAsync();
+            await update_album_List_Infos.Save_AlbumListInfoAsync();
 
             ///
             try
@@ -5091,40 +5120,6 @@ namespace NSMusicS
             userControl_Main_Home_Left_Web_Music.Visibility = Visibility.Collapsed;
             userControl_Main_Home_Left_NAS_Music.Visibility = Visibility.Collapsed;
         }
-        public async void Convert_Model_3_DB_To_Model_2()
-        {
-            /// 加载Model_2数据
-            Album_ALL_s = await Load_AlbumInfo_For_PerformerShow(songList_Infos[1][0].Songs);
-            //去重
-            var uniqueAlbumPerformers = Album_ALL_s
-                .GroupBy(x => x.Album_Performer_Name)
-                .Select(g => g.First())
-                .ToList();
-            Album_ALL_s.Clear();
-            foreach (var albumPerformer in uniqueAlbumPerformers)
-            {
-                Album_ALL_s.Add(albumPerformer);
-            }
-
-            if (Album_ALL_s != null && Album_ALL_s.Count > 0)
-            {
-                musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.SelectedIndex = 0;
-            }
-            musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex = -1;
-            musicPlayer_Model_2_Album_UserControl.ComBox_Select_SongList_For_Model_2.SelectedIndex = SelectedIndex_Of_ComBox_Select_SongList_For_Model_2;
-
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s;
-                musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.MouseDoubleClick += ListView_For_Album_Performer_MouseDoubleClick_For_Model_2;
-                musicPlayer_Model_2_Album_UserControl.ItemsControl_AlbumList.MouseDoubleClick += ItemsControl_For_Album_AlbumList_MouseDoubleClick_For_Model_2;
-                ///
-
-                Load_Assembly_Album_Show_s();
-            });
-
-            viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
-        }
 
         /// <summary>
         /// 打开右侧歌手列表
@@ -5160,20 +5155,23 @@ namespace NSMusicS
             viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
 
             musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.Visibility = Visibility.Collapsed;
-
             musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = null;
 
             //清空UI专辑列表
             musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.Items.Clear();//UI
             //加载歌手_专辑模式数据
-            Album_ALL_s = await Load_AlbumInfo_For_PerformerShow(Select_SongList);
+            Album_ALL_s[1][0].Albums =
+                    await Load_AlbumInfo_For_PerformerShow(Select_SongList);
             //Init_Album_Performer_s_Page_Info();
             //musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_Performer_s_paging;
 
-            musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s;
+            musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s[1][0].Albums;
             musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.Visibility = Visibility.Visible;
+
+
+
             /// 异步逐个过渡添加
-            Load_Assembly_Singer_Show_s();
+            Load_Assembly_Album_Show_s();
 
             viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
 
@@ -5197,14 +5195,15 @@ namespace NSMusicS
             //清空UI专辑列表
             musicPlayer_Model_2_Album_UserControl.userControl_Main_Model_3_View_Albums_And_Tracks.ListView_For_Performer_This_Album.Items.Clear();//UI
             //加载歌手_专辑模式数据
-            Album_ALL_s = await Load_AlbumInfo_For_PerformerShow(Select_SongList);
+            Album_ALL_s[1][0].Albums =
+                    await Load_AlbumInfo_For_PerformerShow(Select_SongList);
             //Init_Album_Performer_s_Page_Info();
             //musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_Performer_s_paging;
 
-            musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s;
+            musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.ItemsSource = Album_ALL_s[1][0].Albums;
             musicPlayer_Model_2_Album_UserControl.ListView_For_Album_Performer.Visibility = Visibility.Visible;
             /// 异步逐个过渡添加
-            Load_Assembly_Singer_Show_s();
+            Load_Assembly_Album_Show_s();
 
 
             viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
@@ -5261,7 +5260,7 @@ namespace NSMusicS
             {
                 Singer_Info singer_Info = currentItem.DataContext as Singer_Info;
 
-                var resultIndex = Album_ALL_s
+                var resultIndex = Album_ALL_s[1][0].Albums
                     .Select((pair, index) => new { Item = pair, Index = index })
                     .FirstOrDefault(pair => pair.Item.Album_Performer_Image != null &&
                         pair.Item.Album_Performer_Name.Equals(singer_Info.Singer_Name) &&
@@ -5802,7 +5801,7 @@ namespace NSMusicS
                 musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.ScrollToVerticalOffset(0);
                 musicPlayer_Model_2_Album_UserControl.ScrollViewer_Albums.PreviewMouseWheel += ScrollViewer_Album_PreviewMouseWheel;
             });
-            foreach (var album in Album_ALL_s)
+            foreach (var album in Album_ALL_s[1][0].Albums)
             {
                 singer_Info_Class.Singer_Names.Add(album.Album_Performer_Name);
                 singer_Info_Class.Album_Names.Add(album.Album_Name);
@@ -10793,11 +10792,11 @@ namespace NSMusicS
         }
 
         /// <summary>
-        /// 删除临时数据（数据残余）
+        /// 删除临时数据（数据残余）（禁用）
         /// </summary>
         public void Delete_Clear_App_Temp()
         {
-            //删除临时文件 数据
+            /*//删除临时文件 数据
             if (Directory.Exists(Path_App + @"\Temp"))
             {
                 string[] files = Directory.GetFiles(Path_App + @"\Temp");
@@ -10814,7 +10813,7 @@ namespace NSMusicS
                         break;
                     }
                 }
-            }
+            }*/
         }
 
         /// <summary>

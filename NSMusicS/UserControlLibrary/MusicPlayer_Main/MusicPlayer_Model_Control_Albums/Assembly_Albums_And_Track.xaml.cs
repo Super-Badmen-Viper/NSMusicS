@@ -20,6 +20,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using NSMusicS.Models.APP_DB_SqlLite.SS_Convert;
 using NSMusicS.Models.APP_DB_SqlLite.Product;
+using MaterialDesignThemes.Wpf.Transitions;
 
 namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Albums
 {

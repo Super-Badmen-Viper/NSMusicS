@@ -17,7 +17,7 @@
                 HorizontalAlignment="Left"
                 Width="286" 
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  >
-                <TextBlock Text="专辑演唱者" 
+                <TextBlock Text="歌手列表" 
                     Width="100" Padding="17,0,0,0" 
                     Foreground="#F6F6F6" HorizontalAlignment="Left" VerticalAlignment="Top"
                     Margin="1,76,0,0"/>

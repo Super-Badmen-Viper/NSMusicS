@@ -211,9 +211,6 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
             set { addToQueue_Complete = value; RaisePropertyChanged(); }
         }
 
-
-
-
         [DllImport("kernel32.dll")]
         private static extern bool SetProcessWorkingSetSize(IntPtr proc, int min, int max);
 
@@ -229,6 +226,5 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control
                 temp = new ViewModel_Assembly_Singer_ConvertTo_Album_Class();
             return temp;
         }
-
     }
 }

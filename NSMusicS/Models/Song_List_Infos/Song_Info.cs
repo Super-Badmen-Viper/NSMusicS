@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using MaterialDesignThemes.Wpf.Transitions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -307,7 +308,6 @@ namespace NSMusicS.Models.Song_List_Infos
                 }
             }
         }
-
     }
 
 }

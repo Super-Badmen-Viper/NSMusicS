@@ -100,7 +100,7 @@
                         <GridView>
                             <GridView.Columns>
                                 <!--设置行高-->
-                                <GridViewColumn Width="450">
+                                <GridViewColumn Width="420">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock 
@@ -114,7 +114,7 @@
                                     </GridViewColumn.CellTemplate>
                                     <TextBlock/>
                                 </GridViewColumn>
-                                <GridViewColumn Width="50">
+                                <GridViewColumn Width="80">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock

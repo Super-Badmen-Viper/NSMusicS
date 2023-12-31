@@ -118,6 +118,10 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
             Convert_Song_List_Infos convert_Song_Info = new Convert_Song_List_Infos();    
             using (convert_Song_Info.dbContext = new ProductContext_Song_Info("ProductContext_Song_Infos"))
             {
+                convert_Song_Info.dbContext.Database.EnsureCreated();
+                convert_Song_Info.dbContext.Category_SongList_Infos.Load();
+                convert_Song_Info.dbContext.Product_Song_Infos.Load();
+
                 // var songList = SongList_Info_Reader.ReadSongList_Infos(Path_App + path);
                 // var songList = SongList_Info_Reader.ReadSongList_Infos_To_Json(Path_App + path);
                 var songList = await convert_Song_Info.Read_Songs_From_DatabaseAsync_Dapper(num, path);
@@ -289,6 +293,10 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
 
             using (convert_Song_Info.dbContext = new ProductContext.ProductContext_Song_Info("ProductContext_Song_Infos"))
             {
+                convert_Song_Info.dbContext.Database.EnsureCreated();
+                convert_Song_Info.dbContext.Category_SongList_Infos.Load();
+                convert_Song_Info.dbContext.Product_Song_Infos.Load();
+
                 convert_Song_Info.dbContext.BulkDelete(convert_Song_Info.dbContext.Category_SongList_Infos);
                 convert_Song_Info.dbContext.BulkDelete(convert_Song_Info.dbContext.Product_Song_Infos);
                 convert_Song_Info.dbContext.SaveChanges();
