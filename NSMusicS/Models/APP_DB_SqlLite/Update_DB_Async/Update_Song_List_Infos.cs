@@ -3,11 +3,16 @@ using NSMusicS.Models.APP_DB_SqlLite.Category;
 using NSMusicS.Models.APP_DB_SqlLite.Product;
 using NSMusicS.Models.APP_DB_SqlLite.ProductContext;
 using NSMusicS.Models.APP_DB_SqlLite.SS_Convert;
+using NSMusicS.Models.Song_Extract_Infos;
 using NSMusicS.Models.Song_List_Infos;
+using NSMusicS.Models.Song_List_Of_Album_SongList_Infos;
+using NSMusicS.Models.Song_List_Of_AlbumList_Infos;
+using NSMusicS.Services.Services_For_API_GetResult;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,7 +64,7 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
         }
 
         string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
-
+       
 
         /// <summary>
         /// 读取所有歌单信息（同步）（数据库 -> 内存库）

@@ -25,6 +25,7 @@ using MessageBox = System.Windows.MessageBox;
 using Microsoft.EntityFrameworkCore;
 using NSMusicS.Models.APP_DB_SqlLite.SS_Convert;
 using NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async;
+using NSMusicS.Models.Song_List_Of_AlbumList_Infos;
 
 namespace NSMusicS.Models.Song_List_Infos
 {
@@ -342,7 +343,6 @@ namespace NSMusicS.Models.Song_List_Infos
         public async Task<ObservableCollection<Song_Info>> Start_Find_Song_Of_SelectFolderBrowser(ObservableCollection<Song_Info> Select_List, int SongList_ID)
         {
             var tcs = new TaskCompletionSource<ObservableCollection<Song_Info>>();
-
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
 
             if (folderDialog.ShowDialog() == DialogResult.OK)
@@ -433,7 +433,7 @@ namespace NSMusicS.Models.Song_List_Infos
             {
                 tcs.SetResult(Select_List);
             }
-
+             
             return await tcs.Task;
         }
         public async Task<ObservableCollection<Song_Info>> Start_Find_Song_Of_SelectFolderBrowser_s(
@@ -571,6 +571,21 @@ namespace NSMusicS.Models.Song_List_Infos
             = new Uri(@"Resource\\Button_Image_Svg\\收藏.svg", UriKind.Relative);
 
         Update_Song_List_Infos update_Song_List_Infos = Update_Song_List_Infos.Retuen_This();
+        Update_Album_List_Infos update_Album_List_Infos = Update_Album_List_Infos.Retuen_This();
+        Update_Singer_List_Infos update_Singer_List_Infos = Update_Singer_List_Infos.Retuen_This();
+
+        private ObservableCollection<ObservableCollection<SongList_Info>> songList_Infos;
+        private ObservableCollection<Song_Info> songList_Infos_Current_Playlist;
+        private string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
+
+        //当前专辑模式——专辑列表
+        private ObservableCollection<ObservableCollection<Album_Performer_List_Infos_For_Model_2>> Album_Model_2_DB_List_s = new ObservableCollection<ObservableCollection<Album_Performer_List_Infos_For_Model_2>>();
+        //当前歌手_专辑模式——歌手列表
+        private ObservableCollection<ObservableCollection<Album_Performer_List_Infos_For_Model_3>> Album_Model_3_DB_List_s = new ObservableCollection<ObservableCollection<Album_Performer_List_Infos_For_Model_3>>();
+        //当前专辑模式——专辑列表
+        private ObservableCollection<Album_Performer_Infos> Album_Model_2_List_s = new ObservableCollection<Album_Performer_Infos>();
+        //当前歌手_专辑模式——歌手列表
+        private ObservableCollection<Album_Performer_Infos> Album_Model_3_List_s = new ObservableCollection<Album_Performer_Infos>();
 
 
         public static ShellClass sh = new ShellClass();
@@ -785,10 +800,6 @@ namespace NSMusicS.Models.Song_List_Infos
 
             return "";
         }
-
-        ObservableCollection<ObservableCollection<SongList_Info>> songList_Infos;
-        ObservableCollection<Song_Info> songList_Infos_Current_Playlist;
-        string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
 
         /// <summary>
         /// 确认其它歌单是否存在我的收藏中的歌曲

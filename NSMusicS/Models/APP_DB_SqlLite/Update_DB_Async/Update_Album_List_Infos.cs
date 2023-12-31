@@ -3,13 +3,16 @@ using NSMusicS.Models.APP_DB_SqlLite.Category;
 using NSMusicS.Models.APP_DB_SqlLite.Product;
 using NSMusicS.Models.APP_DB_SqlLite.ProductContext;
 using NSMusicS.Models.APP_DB_SqlLite.SS_Convert;
+using NSMusicS.Models.Song_Extract_Infos;
 using NSMusicS.Models.Song_List_Infos;
 using NSMusicS.Models.Song_List_Of_AlbumList_Infos;
+using NSMusicS.Services.Services_For_API_GetResult;
 using SharpVectors.Dom.Svg;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +22,12 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
 {
     public class Update_Album_List_Infos
     {
-        private ObservableCollection<ObservableCollection<Album_Performer_List_Infos_For_Model_2>> Album_ALL_s { get; set; }
+        private ObservableCollection<ObservableCollection<SongList_Info>> songList_Infos { get; set; }
+        //当前专辑模式——专辑列表
+        private ObservableCollection<Album_Performer_Infos> Album_Model_2_List_s = new ObservableCollection<Album_Performer_Infos>();
+        //当前专辑模式——专辑列表
+        private ObservableCollection<ObservableCollection<Album_Performer_List_Infos_For_Model_2>> Album_Model_2_DB_List_s = new ObservableCollection<ObservableCollection<Album_Performer_List_Infos_For_Model_2>>();
+
 
         public static Update_Album_List_Infos This__ { get; set; }
         public static Update_Album_List_Infos Retuen_This()
@@ -36,6 +44,107 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
         }
 
         string Path_App = System.IO.Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + @"Resource";
+        SongList_Info_Sort songList_Info_Sort = new SongList_Info_Sort();
+        ViewModule_Search_Song_For_Cloud_Music viewModule_Search_Song_For_Cloud_Music = ViewModule_Search_Song_For_Cloud_Music.Retuen_This();
+
+        /// <summary>
+        /// 加载专辑模式数据（数据库加载）
+        /// </summary>
+        public async Task<ObservableCollection<Album_Performer_Infos>> Load_AlbumInfo_For_PerformerShow_DB(
+            ObservableCollection<Song_Info> SongList, int Album_Model_2_Of_List_Select_Index)
+        {
+            var tcs = new TaskCompletionSource<ObservableCollection<Album_Performer_Infos>>();
+
+            await Task.Run(async () =>
+            {
+                #region 加载歌手_专辑模式数据
+                // 加载歌手-专辑选择列表：优先度：MoZhi专辑>内嵌专辑>Null
+                ObservableCollection<Song_Info> song_Infos1 = new ObservableCollection<Song_Info>(SongList);
+                song_Infos1 = await songList_Info_Sort.Start_Sort_Song_Of_Select_List(song_Infos1, 0, false);
+
+                List<Song_Info> song_Infos = new List<Song_Info>(song_Infos1);
+
+                var uniqueSingerNames = song_Infos.Select(s => s.Singer_Name).Distinct();
+                foreach (var singer in uniqueSingerNames)
+                {
+                    /// 获取每位歌手的信息
+                    var this_singer_infos = song_Infos.Where(s => s.Singer_Name == singer).ToList();
+                    /// 获取每位歌手的专辑名
+                    var this_album_names = this_singer_infos.Select(s => s.Album_Name).Distinct();
+                    foreach (var albumName in this_album_names)
+                    {
+                        viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Visible;
+
+                        var album = new Album_Performer_Infos();
+
+                        /// 找出相同歌手+专辑名的第一首歌曲的路径
+                        var uniqueSongUrls = this_singer_infos
+                            .Where(song => song.Album_Name.Equals(albumName))
+                            .Select(song => song.Song_Url)
+                            .Distinct();
+                        if (uniqueSongUrls.Any())
+                        {
+                            string songUrl = uniqueSongUrls.FirstOrDefault();
+                            if (!File.Exists(songUrl))
+                            {
+                                songUrl = Path_App + songUrl;
+                            }
+
+                            if (File.Exists(songUrl))
+                            {
+                                using (MemoryStream memoryStream = Song_Extract_Info.Extract_MemoryStream_AlbumImage_Of_This_SongUrl(songUrl))
+                                {
+                                    if (memoryStream != null)
+                                    {
+                                        // 获取系统的临时文件夹路径
+                                        string tempFolderPath = Path_App + @"\Temp";
+                                        // 创建唯一的文件名，例如使用 GUID
+                                        string uniqueFileName = $"{Guid.NewGuid()}.jpg";
+                                        // 组合临时文件路径和唯一文件名
+                                        string tempFilePath = Path.Combine(tempFolderPath, uniqueFileName);
+
+                                        using (FileStream fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                                        {
+                                            fileStream.Write(memoryStream.ToArray(), 0, memoryStream.ToArray().Length);
+                                        }
+                                        //File.WriteAllBytes(tempFilePath, imageBytes);
+
+                                        album.Album_Performer_Image = new Uri(tempFilePath);
+                                        //singer.Singer_Image_Uri = new Uri(tempFilePath);
+                                    }
+                                    else
+                                    {
+                                        album.Album_Performer_Image = null;
+                                    }
+
+                                    //演唱者
+                                    album.Album_Performer_Name = singer;
+                                    //专辑名
+                                    album.Album_Name = albumName;
+                                    //歌曲数量
+                                    int uniqueSongCount = this_singer_infos.Count(s => s.Album_Name.Equals(albumName));
+                                    album.Album_Performer_Of_AlbumNums = uniqueSongCount + " 首歌曲";
+
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        Album_Model_2_DB_List_s[Album_Model_2_Of_List_Select_Index][0].Albums.Add(album);
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //Clear
+                song_Infos1 = null;
+
+                #endregion
+
+                tcs.SetResult(Album_Model_2_DB_List_s[Album_Model_2_Of_List_Select_Index][0].Albums);
+            });
+
+            return await tcs.Task;
+        }
 
         /// <summary>
         /// 读取所有歌单信息（同步）（数据库 -> 内存库）
@@ -63,7 +172,7 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
         }
         private async void LoadAlbumList_ALL(int num, string path)
         {
-            Album_ALL_s = Album_Performer_List_Infos_For_Model_2.Retuen_This();
+            Album_Model_2_DB_List_s = Album_Performer_List_Infos_For_Model_2.Retuen_This_DB_Lists();
 
             Convert_Album_List_Infos convert_Album_Info = new Convert_Album_List_Infos();
             using (convert_Album_Info.dbContext = new ProductContext_Album_Info("ProductContext_Album_Infos"))
@@ -79,9 +188,9 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
                     album.Albums = new ObservableCollection<Album_Performer_Infos>(
                         album.Albums.OrderBy(album => album.Album_No));
                 }
-                lock (Album_ALL_s)
+                lock (Album_Model_2_DB_List_s)
                 {
-                    Album_ALL_s.Add(albumList);
+                    Album_Model_2_DB_List_s.Add(albumList);
                 }
             }
         }
@@ -91,7 +200,8 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
         /// </summary>
         public async Task Save_AlbumListInfoAsync()
         {
-            Album_ALL_s = Album_Performer_List_Infos_For_Model_2.Retuen_This();
+            songList_Infos = SongList_Info.Retuen_This();
+            Album_Model_2_DB_List_s = Album_Performer_List_Infos_For_Model_2.Retuen_This_DB_Lists();
 
             /// 避免DbContext的线程问题：不同线程同时使用DbContext的同一实例
             Convert_Album_List_Infos convert_Album_Info = new Convert_Album_List_Infos();
@@ -107,21 +217,21 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
                 convert_Album_Info.dbContext.SaveChanges();
 
                 await convert_Album_Info.Save_AlbumList_To_DatabaseAsync_Dapper(
-                    convert_Album_Info.Create_Product_Album_Infos(Album_ALL_s[0][0].Albums, "我的收藏"),
+                    convert_Album_Info.Create_Product_Album_Infos(Album_Model_2_DB_List_s[0][0].Albums, "我的收藏"),
                     0, "我的收藏");
 
                 await convert_Album_Info.Save_AlbumList_To_DatabaseAsync_Dapper(
-                    convert_Album_Info.Create_Product_Album_Infos(Album_ALL_s[1][0].Albums, "本地音乐"),
+                    convert_Album_Info.Create_Product_Album_Infos(Album_Model_2_DB_List_s[1][0].Albums, "本地音乐"),
                     1, "本地音乐");
 
                 await convert_Album_Info.Save_AlbumList_To_DatabaseAsync_Dapper(
-                    convert_Album_Info.Create_Product_Album_Infos(Album_ALL_s[2][0].Albums, "默认列表"),
+                    convert_Album_Info.Create_Product_Album_Infos(Album_Model_2_DB_List_s[2][0].Albums, "默认列表"),
                     2, "默认列表");
 
                 for (int i = 3; i < 17; i++)
                 {
                     await convert_Album_Info.Save_AlbumList_To_DatabaseAsync_Dapper(
-                        convert_Album_Info.Create_Product_Album_Infos(Album_ALL_s[i][0].Albums, "歌单" + i),
+                        convert_Album_Info.Create_Product_Album_Infos(Album_Model_2_DB_List_s[i][0].Albums, "歌单" + i),
                         3, "歌单" + i);
                 }
             }
