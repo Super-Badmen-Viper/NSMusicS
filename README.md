@@ -52,11 +52,8 @@
     - ## unknown
 
 # Interface preview:
+  <img src="doc/Test (1).png" width="1000"> 
   <table>
-    <tr>
-      <td><img src="https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/5e040577-6693-4a94-b90d-8c46fcb59cd3" width="594"></td>
-      <td><img src="doc/Test (1).png" width="594"></td>
-    </tr>
     <tr>
       <td><img src="doc/Test (2).png" width="594"></td>
       <td><img src="doc/Test (3).png" width="594"></td>
