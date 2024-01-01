@@ -56,7 +56,7 @@
   <table>
     <tr>
       <td><img src="doc/Test (2).png" width="594"></td>
-      <td><img src="doc/Test (3).png" width="594"></td>
+      <td><img src="doc/Test (3).png" alt="Logo"  width="594"></td>
     </tr>
     <tr>
       <td><img src="doc/Test (1_2).png" width="594"></td>
