@@ -74,6 +74,9 @@
   
 # NSMusicS第4版项目 开发文档/规划：-》 NSMusicS_Ultimate
   <img src="doc/NSMusicS 第4版 开发文档 规划 （更新中）.png" align="center" width="1200">
+
+## NSMusicS 4th Edition Project Development Document/Plan: -》 NSMusicS_KSing_KTV(仿制腾讯全民K歌的K歌模块)
+  <img src="doc/NSMusicS九歌 - K歌模块 - 算法功能实现 - 架构导图【作者：Xiang Cheng】.png" align="center" width="1200">
   
 # 该项目的研发管理看板(仪表盘)：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
 - 如果你想加入，请发邮件到我的QQ邮箱：1774148579@qq.com，超过5个人，我将会开展开源项目管理模式，九歌·韵世云开源组织正式开始活动

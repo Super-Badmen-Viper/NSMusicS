@@ -52,11 +52,14 @@
     - ## unknown
 
 # Interface preview:
-  <img src="doc/Test (1).png" width="1000"> 
   <table>
     <tr>
+      <td><img src="https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/5e040577-6693-4a94-b90d-8c46fcb59cd3" width="594"></td>
+      <td><img src="doc/Test (1).png" width="594"></td>
+    </tr>
+    <tr>
       <td><img src="doc/Test (2).png" width="594"></td>
-      <td><img src="doc/Test (3).png" alt="Logo"  width="594"></td>
+      <td><img src="doc/Test (3).png" width="594"></td>
     </tr>
     <tr>
       <td><img src="doc/Test (1_2).png" width="594"></td>
@@ -66,6 +69,9 @@
   
 ## NSMusicS 4th Edition Project Development Document/Plan: -》 NSMusicS_Ultimate
   <img src="doc/NSMusicS 第4版 开发文档 规划 （更新中）.png" align="center" width="1200">
+
+## NSMusicS 4th Edition Project Development Document/Plan: -》 NSMusicS_KSing_KTV(仿制腾讯全民K歌的K歌模块)
+  <img src="doc/NSMusicS九歌 - K歌模块 - 算法功能实现 - 架构导图【作者：Xiang Cheng】.png" align="center" width="1200">
   
 # The R&D management dashboard for this project：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
 - If you want to join, please send an email to my QQmail: 1774148579@qq.com More than 5 people, I will launch an open source project management model, and the Mozi Cloud open source organization will officially begin its activities
