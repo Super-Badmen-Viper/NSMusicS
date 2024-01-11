@@ -73,17 +73,20 @@
                 </Grid>
             </Grid>
 
-            <Grid x:Name="Grid_SingerPhoto_Mode_Close" Visibility="Visible" Grid.RowSpan="2">
-                <Border x:Name="Grid_SingerPhoto_Mode_Close_BackGround"
+            <Grid x:Name="Grid_SongAlbum_BottomForPlayer" Visibility="Visible" Grid.RowSpan="2">
+                <Border x:Name="Grid_SongAlbum_BottomForPlayer_BackGround"
                     UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  ScrollViewer.VerticalScrollBarVisibility="Disabled" 
                     Visibility="Visible"
                     >
                     <Border.Background>
                         <!--{Binding Album_Image}-->
-                        <ImageBrush x:Name="Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush" 
+                        <ImageBrush x:Name="Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush" 
                                 ImageSource="/NSMusicS;component/ico_ui_library/Music_Album.png"
                                 Stretch="UniformToFill"/>
                     </Border.Background>
+                    <Border.Effect>
+                        <BlurEffect x:Name="Grid_SongAlbum_BottomForPlayer_BackGround_BlurEffect" Radius="160"></BlurEffect>
+                    </Border.Effect>
                 </Border>
 
                 <UserControls:UserControl_AudioVisualizer
@@ -126,7 +129,7 @@
                             <Setter Property="BorderThickness" Value="0"/>
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                             <Setter Property="Height" Value="60"/>
-                            <Setter Property="FontSize" Value="22"/>
+                            <Setter Property="FontSize" Value="18"/>
                             <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
 
                             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -143,9 +146,6 @@
                                                 <Setter Property="Foreground" Value="White"/>
                                             </Trigger>
                                             <Trigger Property="IsSelected" Value="True">
-                                                <Setter Property="FontSize" Value="32"/>
-                                                <!--32-->
-                                                <!--<Setter Property="Margin" Value="100,0,-100,0"/>-->
                                                 <Setter Property="Margin" Value="0,20,0,0"/>
                                                 <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
                                                 <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
@@ -153,27 +153,6 @@
                                                 <Setter x:Name="Select_Item_Height" Property="Height" Value="80"/>
                                             </Trigger>
                                         </ControlTemplate.Triggers>
-                                        <!--
-                                            <Border x:Name="bd"  
-                                                BorderThickness="0"  
-                                                SnapsToDevicePixels="True">
-                                                <GridViewRowPresenter HorizontalAlignment="Center" Height="100" />
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsSelected" Value="False">
-                                                    <Setter Property="Foreground" Value="White"/>
-                                                    <Setter Property="Height" Value="100"/>
-                                                </Trigger>
-                                                <Trigger Property="IsSelected" Value="True">
-                                                    <Setter Property="FontSize" Value="32"/>
-                                                    <Setter Property="Margin" Value="0,0,0,0"/>
-                                                    <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
-                                                    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
-                                                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-                                                    <Setter x:Name="Select_Item_Height" Property="Height" Value="100"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                            -->
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
@@ -202,7 +181,7 @@
                                                     LineStackingStrategy="BlockLineHeight" 
                                                     LineHeight="33" TextOptions.TextFormattingMode="Display"
                                                     x:Name="Text_TextBlock"
-                                                    Text="{Binding Song_MRC_Line}" FontWeight="Bold" FontSize="20"
+                                                    Text="{Binding Song_MRC_Line}" FontWeight="Bold" FontSize="18"
                                                     IsHitTestVisible="False" Focusable="False" IsEnabled="False" 
                                                     UseLayoutRounding="False" SnapsToDevicePixels="False" RenderOptions.BitmapScalingMode="HighQuality"
                                                     VirtualizingStackPanel.IsVirtualizing="True"
@@ -437,7 +416,7 @@
                 VerticalAlignment="Top" Width="16" Cursor="Hand" Margin="0,31,30,0"
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 >
-                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/关闭.svg"/>
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/启动.svg"/>
                 </Border>
 
                 <Border 
@@ -1340,10 +1319,15 @@
         <ItemsPanelTemplate x:Key="ItemsPanelTemplate2">
             <StackPanel IsItemsHost="true">
                 <i:Interaction.Behaviors>
-                    <i:FluidMoveBehavior AppliesTo="Children"  Duration="00:00:00:00.2" />
+                    <i:FluidMoveBehavior AppliesTo="Children" Duration="00:00:00:00.5">
+                        <i:FluidMoveBehavior.EaseY>
+                            <QuadraticEase EasingMode="EaseOut"/>
+                        </i:FluidMoveBehavior.EaseY>
+                    </i:FluidMoveBehavior>
                 </i:Interaction.Behaviors>
             </StackPanel>
         </ItemsPanelTemplate>
+
 
         <!--专辑封面旋转-->
         <Storyboard x:Name="Storyboard_Image_Song_Rotate" x:Key="Image_Song_Animation" RepeatBehavior="Forever">

@@ -11,13 +11,13 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls.VIewModules
     public class Visualizer
     {
         //private int _m;
-        private double[] _sampleData;
         private DateTime _lastTime;
         private SecondOrderDynamicsForArray _dynamics;
 
         /// <summary>
         /// 采样数据
         /// </summary>
+        private double[] _sampleData;
         public double[] SampleData => _sampleData;
 
         public Visualizer(int waveDataSize)
@@ -42,6 +42,10 @@ namespace NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls.VIewModules
             return (num & num - 1) == 0;
         }
 
+        /// <summary>
+        /// 将新的采样waveData 存储到 可视化器 中
+        /// </summary>
+        /// <param name="waveData"></param>
         public void PushSampleData(double[] waveData)
         {
             if (waveData.Length > _sampleData.Length)

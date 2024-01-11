@@ -1700,7 +1700,7 @@ namespace NSMusicS
         {
             try
             {
-                //musicPlayer_Main_UserControl.userControl_AudioVisualizer.Begin();
+                musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_BlurEffect.Radius = 0;
 
                 Bool_OpenMainMusicPlayer = true;
                 userControl_ButtonFrame_MusicPlayer.Bool_Player_Model = true;
@@ -1835,6 +1835,8 @@ namespace NSMusicS
         {
             try
             {
+                musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_BlurEffect.Radius = 0;
+
                 Bool_OpenMainMusicPlayer = false;
                 userControl_ButtonFrame_MusicPlayer.Bool_Player_Model = false;
 
@@ -1940,6 +1942,8 @@ namespace NSMusicS
             musicPlayer_Main_UserControl.Visibility = Visibility.Visible;
 
             Size_Changed();
+
+            musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_BlurEffect.Radius = 160;
         }
         private void DoubleAnimation_Of_musicPlayer_Main_UserControl_Close_Completed(object sender, EventArgs e)
         {
@@ -1947,6 +1951,8 @@ namespace NSMusicS
             musicPlayer_Main_UserControl.Visibility = Visibility.Collapsed;
 
             Size_Changed();
+
+            musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_BlurEffect.Radius = 160;
         }
 
         #endregion
@@ -2413,12 +2419,12 @@ namespace NSMusicS
             }
             doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(200));
             doubleAnimation.Completed += DoubleAnimation_Mode_Close_Opacity_Completed;
-            musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.BeginAnimation(UserControl.OpacityProperty, doubleAnimation);
+            musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.BeginAnimation(UserControl.OpacityProperty, doubleAnimation);
         }
         private void DoubleAnimation_Mode_Close_Opacity_Completed(object? sender, EventArgs e)
         {
-            musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.BeginAnimation(UserControl.OpacityProperty, null);
-            musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Opacity = Mode_Close_Opacity;
+            musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.BeginAnimation(UserControl.OpacityProperty, null);
+            musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Opacity = Mode_Close_Opacity;
         }
 
         /// <summary>
@@ -8774,7 +8780,7 @@ namespace NSMusicS
         int MRC_Line_Nums = 3;
         bool MRC_Sco = false;
 
-        ListBoxItem myListBoxItem;
+        ListViewItem myListBoxItem;
         ContentPresenter myContentPresenter;
         DataTemplate myDataTemplate;
         Storyboard myTextBlock_Storyboard;
@@ -8810,6 +8816,17 @@ namespace NSMusicS
                         SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
                     }
 
+                    try
+                    {
+                        myListBoxItem = (ListViewItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex));
+                        if (myListBoxItem != null)
+                            ApplyTransform(myListBoxItem);
+                        myListBoxItem = (ListViewItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - 1));
+                        if (myListBoxItem != null)
+                            ResetTransform(myListBoxItem);
+                    }
+                    catch { }
+
                     if (DispatcherTimer_MRC.IsEnabled)
                     {
                         if (musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex != -1 && musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex < musicPlayer_Main_UserControl.ListView_Temp_MRC.Items.Count)
@@ -8832,7 +8849,7 @@ namespace NSMusicS
                                             if (myTextBlock_Storyboard != null)
                                                 myTextBlock_Storyboard.Remove();//清空渐变过的歌词行颜色
                                             myListBoxItem =
-                                                (ListBoxItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex));
+                                                (ListViewItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex));
                                             if (myListBoxItem != null)
                                             {
                                                 //查找并获取ListView选中项中的对象
@@ -9183,7 +9200,7 @@ namespace NSMusicS
                                             if (Before_Byte_Lyic > -1)
                                             {
                                                 myListBoxItem =
-                                                    (ListBoxItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(Before_Byte_Lyic));
+                                                    (ListViewItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(Before_Byte_Lyic));
                                                 if (myListBoxItem != null)
                                                 {
                                                     //查找并获取ListView选中项中的对象
@@ -9332,7 +9349,7 @@ namespace NSMusicS
         private void Foreable_Change_Hidden()
         {
             int line_count = 0;
-            string[] colors = new string[] { "50FFFFFF", "70FFFFFF", "98FFFFFF", "98FFFFFF", "70FFFFFF", "50FFFFFF", "50FFFFFF" };
+            string[] colors = new string[] { "10FFFFFF", "40FFFFFF", "70FFFFFF", "70FFFFFF", "40FFFFFF", "10FFFFFF", "00FFFFFF" };
             ListBoxItem myListBoxItem = null;
             for (int i = musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - 3; i < musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex + 4; i++)
             {
@@ -9386,6 +9403,26 @@ namespace NSMusicS
                     }
                 }
             }
+        }
+
+        private void ApplyTransform(ListViewItem item)
+        {
+            var scaleTransform = new ScaleTransform();
+            item.RenderTransform = scaleTransform;
+
+            var animation = new DoubleAnimation(1.1, TimeSpan.FromMilliseconds(200)); // Adjust duration as needed
+            scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, animation);
+            scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, animation);
+        }
+
+        private void ResetTransform(ListViewItem item)
+        {
+            var scaleTransform = new ScaleTransform();
+            item.RenderTransform = scaleTransform;
+
+            var animation = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(200)); // Adjust duration as needed
+            scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, animation);
+            scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, animation);
         }
 
         /// <summary>
@@ -9626,16 +9663,16 @@ namespace NSMusicS
                 //如果读取到专辑名
                 if (this_Song_Info.Album_Name.Length > 0) //歌手_专辑模式
                 {
-                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Freeze();
-                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background.Freeze();
+                    musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush.Freeze();
+                    musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background.Freeze();
                     musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill.Freeze();
                     musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill.Freeze();
                     userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background.Freeze();
                     musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background.Freeze();
                     musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background.Freeze();
                     musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background.Freeze();
-                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = null;
-                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = null;
+                    musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush = null;
+                    musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background = null;
                     musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = null;
                     musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = null;
                     userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = null;
@@ -9643,7 +9680,7 @@ namespace NSMusicS
                     musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = null;
                     musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = null;
                     //
-                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush();
+                    musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush = new ImageBrush();
                     //
 
                     //生成专辑名所在路径
@@ -9651,16 +9688,16 @@ namespace NSMusicS
                     //如果专辑文件存在
                     if (File.Exists(Song_Image_Url))
                     {
-                        musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(new BitmapImage(new Uri(Song_Image_Url)));
-                        musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
-                        musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                        musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
-                        musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
+                        musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush = new ImageBrush(new BitmapImage(new Uri(Song_Image_Url)));
+                        musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
+                        musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                        musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
+                        musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
 
-                        userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                        musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                        musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                        musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                        userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                        musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                        musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                        musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
                     }
                     //如果专辑文件不存在
                     else
@@ -9680,17 +9717,17 @@ namespace NSMusicS
 
                             if (bitmapImage != null)
                             {
-                                musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.ImageSource = bitmapImage;
+                                musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush.ImageSource = bitmapImage;
 
-                                musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
-                                musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
-                                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
+                                musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
+                                musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
+                                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
 
-                                userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                                musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                                musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                                musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                                userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                                musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                                musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                                musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
                             }
                             else
                             {
@@ -9699,24 +9736,24 @@ namespace NSMusicS
                                     this_Song_Info.Song_Web_Album_Image.ToString().Length > 0
                                     )
                                 {
-                                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(new BitmapImage(this_Song_Info.Song_Web_Album_Image));
-                                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
-                                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                                    musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
-                                    musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
+                                    musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush = new ImageBrush(new BitmapImage(this_Song_Info.Song_Web_Album_Image));
+                                    musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
+                                    musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                                    musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
+                                    musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
 
-                                    userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                                    musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                                    musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                                    musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                                    userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                                    musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                                    musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                                    musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
                                 }
                                 else
                                 {
-                                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(Image_墨智音乐);
-                                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
-                                    musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                                    musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
-                                    musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
+                                    musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush = new ImageBrush(Image_墨智音乐);
+                                    musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
+                                    musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                                    musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
+                                    musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
 
                                     //Panel_Image.Background = new ImageBrush(Image_唱片4);
                                     userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = new ImageBrush(Image_墨智音乐);
@@ -9733,24 +9770,24 @@ namespace NSMusicS
                                 this_Song_Info.Song_Web_Album_Image.ToString().Length > 0
                                 )
                             {
-                                musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(new BitmapImage(this_Song_Info.Song_Web_Album_Image));
-                                musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
-                                musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
-                                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
+                                musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush = new ImageBrush(new BitmapImage(this_Song_Info.Song_Web_Album_Image));
+                                musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
+                                musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
+                                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
 
-                                userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                                musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                                musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                                musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                                userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                                musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                                musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                                musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
                             }
                             else
                             {
-                                musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(Image_墨智音乐);
-                                musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
-                                musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
-                                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
+                                musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush = new ImageBrush(Image_墨智音乐);
+                                musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
+                                musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
+                                musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
 
                                 //Panel_Image.Background = new ImageBrush(Image_唱片4);
                                 userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = new ImageBrush(Image_墨智音乐);
@@ -9780,25 +9817,25 @@ namespace NSMusicS
 
                     if (bitmapImage != null)
                     {
-                        musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.ImageSource = bitmapImage;
+                        musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush.ImageSource = bitmapImage;
 
-                        musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
-                        musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                        musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
-                        musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
+                        musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
+                        musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                        musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
+                        musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
 
-                        userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                        musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                        musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                        musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
+                        userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                        musicPlayer_Model_2_Album_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                        musicPlayer_Model_3_Singer_UserControl.Border_Now_Album_Image.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                        musicPlayer_Main_UserControl.userControl_AudioVisualizer.Album_Image_Border.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
                     }
                     else
                     {
-                        musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush = new ImageBrush(Image_墨智音乐);
-                        musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
-                        musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround_ImageBrush;
-                        musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
-                        musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SingerPhoto_Mode_Close_BackGround.Background;
+                        musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush = new ImageBrush(Image_墨智音乐);
+                        musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush.Stretch = Stretch.UniformToFill;
+                        musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround_ImageBrush;
+                        musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Circle.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
+                        musicPlayer_Main_UserControl.userControl_PlayMode_View_1_AlbumView.Border_Of_This_Album_Image_Of_Box.Fill = musicPlayer_Main_UserControl.Grid_SongAlbum_BottomForPlayer_BackGround.Background;
 
                         //Panel_Image.Background = new ImageBrush(Image_唱片4);
                         userControl_ButtonFrame_MusicPlayer.Border_Song_Image.Background = new ImageBrush(Image_墨智音乐);

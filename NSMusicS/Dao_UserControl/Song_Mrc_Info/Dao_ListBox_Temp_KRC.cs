@@ -50,6 +50,9 @@ namespace NSMusicS.Dao_UserControl.Song_Mrc_Info
                     {
                         if (!string.IsNullOrWhiteSpace(A_String_Read) && isPureNum(A_String_Read.Substring(1, 1)))
                         {
+                            if (A_String_Read.IndexOf("language:") > 0)
+                                continue;
+
                             int nums_temp_1 = A_String_Read.IndexOf("]");
                             if (A_String_Read.Length > nums_temp_1)
                             {
