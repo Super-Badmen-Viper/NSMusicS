@@ -71,6 +71,8 @@ using NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Alb
 using NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Singers.ViewModel_Assembly_Singer_Show;
 using static NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Control_Singers.ViewModel_Assembly_Singer_Show.ViewModel_Assembly_Singer_Class;
 using static NSMusicS.Models.Servies_For_API_Info.API_Song_Info;
+using Castle.Components.DictionaryAdapter.Xml;
+using System.Globalization;
 
 #endregion
 
@@ -388,7 +390,7 @@ namespace NSMusicS
         /// <param name="e"></param>
         private void UserControl_ButtonFrame_TopPanel_Loaded(object sender, RoutedEventArgs e)
         {
-            //最大化显示任务栏
+            //最大化时控制任务栏
             this.SourceInitialized += new EventHandler(win_SourceInitialized);
 
             //最大化，最小化，退出
@@ -763,7 +765,7 @@ namespace NSMusicS
                     musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1920 * nums;
                     musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 1080 * nums;
 
-                    new Shell_TrayWndHelper().Hide();
+                    //new Shell_TrayWndHelper().Show();//隐藏任务栏
 
                     State_Windows_Normal = false;
                 }
@@ -774,7 +776,7 @@ namespace NSMusicS
 
                     this.WindowState = System.Windows.WindowState.Normal;
 
-                    new Shell_TrayWndHelper().Show();
+                    //new Shell_TrayWndHelper().Show();
 
                     State_Windows_Normal = true;
                 }
@@ -1367,7 +1369,7 @@ namespace NSMusicS
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ComBox_Select_WaveOut_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ComBox_Select_WaveOut_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (userControl_Main_Home_TOP_App_Setting.userControl_Set_6_Audio.ComBox_Select_WaveOut.SelectedIndex >= 0)
             {
@@ -1390,11 +1392,6 @@ namespace NSMusicS
                     {
                         window_Hover_MRC_Panel.Text_Storyboard_slider_Up.Resume();
                         window_Hover_MRC_Panel.Text_Storyboard_slider_Down.Resume();
-
-                        if (storyboard_lyic != null)
-                            storyboard_lyic.Resume();
-                        if (storyboard_lyic_desk != null)
-                            storyboard_lyic_desk.Resume();
                     }
                 }
 
@@ -2432,7 +2429,7 @@ namespace NSMusicS
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Button_Play_Pause_Player_Click(object sender, RoutedEventArgs e)
+        private async void Button_Play_Pause_Player_Click(object sender, RoutedEventArgs e)
         {
             if (viewModule_Search_Song.MediaElement_Song_Url != null)
             {
@@ -2455,10 +2452,7 @@ namespace NSMusicS
                                 window_Hover_MRC_Panel.Text_Storyboard_slider_Up.Resume();
                                 window_Hover_MRC_Panel.Text_Storyboard_slider_Down.Resume();
 
-                                if (storyboard_lyic != null)
-                                    storyboard_lyic.Resume();
-                                if (storyboard_lyic_desk != null)
-                                    storyboard_lyic_desk.Resume();
+                                await ResumeStoryboardsAsync();
 
                                 musicPlayer_Main_UserControl.userControl_AudioVisualizer.sampleWave_1.Visibility = Visibility.Visible;
                                 musicPlayer_Main_UserControl.userControl_AudioVisualizer.sampleWave_2.Visibility = Visibility.Visible;
@@ -2497,10 +2491,7 @@ namespace NSMusicS
                                 window_Hover_MRC_Panel.Text_Storyboard_slider_Up.Pause();
                                 window_Hover_MRC_Panel.Text_Storyboard_slider_Down.Pause();
 
-                                if (storyboard_lyic != null)
-                                    storyboard_lyic.Pause();
-                                if (storyboard_lyic_desk != null)
-                                    storyboard_lyic_desk.Pause();
+                                await PauseStoryboardsAsync();
 
                                 musicPlayer_Main_UserControl.userControl_AudioVisualizer.sampleWave_1.Visibility = Visibility.Collapsed;
                                 musicPlayer_Main_UserControl.userControl_AudioVisualizer.sampleWave_2.Visibility = Visibility.Collapsed;
@@ -7590,7 +7581,7 @@ namespace NSMusicS
         {
             Load_mediaElement_Song_MediaOpened();
         }
-        public void Load_mediaElement_Song_MediaOpened()
+        public async void Load_mediaElement_Song_MediaOpened()
         {
             Bool_Button_Play_Pause_Player = true;
 
@@ -7661,11 +7652,6 @@ namespace NSMusicS
                 {
                     window_Hover_MRC_Panel.Text_Storyboard_slider_Up.Resume();
                     window_Hover_MRC_Panel.Text_Storyboard_slider_Down.Resume();
-
-                    if (storyboard_lyic != null)
-                        storyboard_lyic.Resume();
-                    if (storyboard_lyic_desk != null)
-                        storyboard_lyic_desk.Resume();
 
                     musicPlayer_Main_UserControl.userControl_AudioVisualizer.sampleWave_1.Visibility = Visibility.Visible;
                     musicPlayer_Main_UserControl.userControl_AudioVisualizer.sampleWave_2.Visibility = Visibility.Visible;
@@ -8791,10 +8777,13 @@ namespace NSMusicS
 
         WrapPanel stackPanel_Byte_Lyic;
         int Before_Byte_Lyic;
+        private bool storyboard_lyic_Set_Play = true;
+        private double sum_wid = 0;
+        private double canvas_byte_margin_left;
         Storyboard storyboard_lyic = new Storyboard();
         Storyboard storyboard_lyic_desk = new Storyboard();
-        private List<Storyboard> storyboardCollection = new List<Storyboard>(); // 存储当前正在播放的逐字动画（Plus升级版）
-        private List<Storyboard> storyboardCollection_Desk = new List<Storyboard>(); // 存储多个Storyboard的集合
+        private Dictionary<(Storyboard,int), bool> storyboardCollection_Of_Lyrics_Progress = new Dictionary<(Storyboard, int), bool>(); // 存储当前正在播放的逐字动画（Plus升级版）
+        private Dictionary<(Storyboard,int), bool> storyboardCollection_Of_Lyrics_Progress_Desk = new Dictionary<(Storyboard, int), bool>(); // 存储多个Storyboard的集合
         /// <summary>
         /// 当musicPlayer_Main_UserControl.ListView_Temp_MRC选中项发送改变时
         /// </summary>
@@ -8834,6 +8823,7 @@ namespace NSMusicS
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 MRC_Line_Nums = 3;
+                                canvas_byte_margin_left = 0;
 
                                 if (Bool_Mrc_Animation == true)
                                 {
@@ -9116,6 +9106,21 @@ namespace NSMusicS
                                                 //设置动画
                                                 Storyboard storyboard = (Storyboard)mrc_Byte_.TextBlock_1.FindName("Text_Storyboard");
                                                 storyboard.Duration = new Duration(new TimeSpan(0, 0, 0, 0, temp_Duration + temp_WaitTime));
+                                                int sto_1 = 0;
+                                                foreach (var item in storyboard.Children)
+                                                {
+                                                    if (sto_1 == 0)
+                                                    {
+                                                        sto_1 = 1;
+                                                    }
+                                                    else
+                                                    {
+                                                        TimeSpan originalDuration = storyboard.Duration.TimeSpan;
+                                                        TimeSpan newDuration = TimeSpan.FromTicks(originalDuration.Ticks);
+
+                                                        item.Duration = new Duration(newDuration);
+                                                    }
+                                                }
                                                 //
                                                 DoubleAnimationUsingKeyFrames doubleAnimationUsingKeyFrames = (DoubleAnimationUsingKeyFrames)mrc_Byte_.TextBlock_1.FindName("Text_DoubleAnimation");
                                                 doubleAnimationUsingKeyFrames.KeyFrames.Clear();
@@ -9150,6 +9155,21 @@ namespace NSMusicS
                                                 //设置动画
                                                 Storyboard storyboard_desk = (Storyboard)mrc_Byte_desk.TextBlock_1.FindName("Text_Storyboard");
                                                 storyboard_desk.Duration = new Duration(new TimeSpan(0, 0, 0, 0, temp_Duration + temp_WaitTime));
+                                                int sto_2 = 0;
+                                                foreach (var item in storyboard_desk.Children)
+                                                {
+                                                    if (sto_2 == 0)
+                                                    {
+                                                        sto_2 = 1;
+                                                    }
+                                                    else
+                                                    {
+                                                        TimeSpan originalDuration = storyboard_desk.Duration.TimeSpan;
+                                                        TimeSpan newDuration = TimeSpan.FromTicks(originalDuration.Ticks);
+
+                                                        item.Duration = new Duration(newDuration);
+                                                    }
+                                                }
                                                 //
                                                 DoubleAnimationUsingKeyFrames doubleAnimationUsingKeyFrames_desk = (DoubleAnimationUsingKeyFrames)mrc_Byte_desk.TextBlock_1.FindName("Text_DoubleAnimation");
                                                 doubleAnimationUsingKeyFrames_desk.KeyFrames.Clear();
@@ -9172,12 +9192,24 @@ namespace NSMusicS
                                                 }
                                                 #endregion
 
+                                                sum_wid = 0;
+
                                                 //userControl_Mrc_Bytes.Add(mrc_Byte);
                                                 mrc_Byte_.Margin = new Thickness(0);
                                                 mrc_Byte_desk.Margin = new Thickness(0, 0, -20, 0);
 
                                                 stackPanel_Byte_Lyic.Children.Add(mrc_Byte_);
                                                 window_Hover_MRC_Panel.StackPanel_Lyic.Children.Add(mrc_Byte_desk);
+                                                // stackPanel_Byte_Lyic为Canvas时
+                                                /*stackPanel_Byte_Lyic.Children[stackPanel_Byte_Lyic.Children.Count - 1].
+                                                    SetValue(Canvas.LeftProperty, canvas_byte_margin_left);
+                                                stackPanel_Byte_Lyic.Children[stackPanel_Byte_Lyic.Children.Count - 1].
+                                                    SetValue(
+                                                        Canvas.TopProperty,
+                                                        - mrc_Byte_._height / 2
+                                                    );
+                                                canvas_byte_margin_left += mrc_Byte_._width;*/
+
                                             }
                                             //启动动画
                                             try
@@ -9203,6 +9235,10 @@ namespace NSMusicS
                                                     (ListViewItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(Before_Byte_Lyic));
                                                 if (myListBoxItem != null)
                                                 {
+                                                    // 用于Canvas stackPanel_Byte_Lyic 注意：此代码会导致歌词行上下边距出现问题，歌词滚动换行将不在中间
+                                                    /*Thickness thickness = myListBoxItem.Margin;
+                                                    thickness.Left = 0;
+                                                    myListBoxItem.Margin = thickness;*/
                                                     //查找并获取ListView选中项中的对象
                                                     myContentPresenter = FindVisualChild<ContentPresenter>(myListBoxItem);
                                                     if (myContentPresenter != null)
@@ -9274,13 +9310,15 @@ namespace NSMusicS
             }
             catch { }
         }
-
         private object Obj { get; } = new object();
+        private object Obj_Desk { get; } = new object();
+        private int index_Current_Storyboard_lyic;
         private void BindAnimationCompleted(UIElementCollection controls)
         {
-            storyboardCollection.Clear();
+            storyboardCollection_Of_Lyrics_Progress.Clear();
             lock (Obj)
             {
+                int i = 0;
                 foreach (UIElement control in controls)
                 {
                     UserControl_Mrc_Byte userControl_Mrc_Byte = control as UserControl_Mrc_Byte;
@@ -9289,33 +9327,67 @@ namespace NSMusicS
                         Storyboard storyboard = (Storyboard)userControl_Mrc_Byte.TextBlock_1.FindName("Text_Storyboard");
                         if (storyboard != null)
                         {
-                            storyboardCollection.Add(storyboard);
+                            int currentStoryboardIndex = -1;
 
                             storyboard.Completed += (sender, e) =>
                             {
-                                // 当前动画播放完成后，处理下一个动画
-                                int nextIndex = storyboardCollection.IndexOf(storyboard) + 1;
-                                if (nextIndex < storyboardCollection.Count)
+                                if (storyboard_lyic_Set_Play == true)
                                 {
-                                    storyboard_lyic = storyboardCollection[nextIndex];
-                                    storyboardCollection[nextIndex].Begin();
+                                    // 在循环中查找当前 Storyboard 的索引
+                                    foreach (var entry in storyboardCollection_Of_Lyrics_Progress)
+                                    {
+                                        if (entry.Key.Item1 == storyboard)
+                                        {
+                                            currentStoryboardIndex = entry.Key.Item2;
+                                            break;
+                                        }
+                                    }
+
+                                    // 链接启动下一个动画
+                                    if (currentStoryboardIndex != -1 && currentStoryboardIndex + 1 < storyboardCollection_Of_Lyrics_Progress.Count)
+                                    {
+                                        int nextIndex = currentStoryboardIndex + 1;
+
+                                        // 使用 KeyValuePair 简化代码
+                                        var nextEntry = storyboardCollection_Of_Lyrics_Progress.FirstOrDefault(item => item.Key.Item2 == nextIndex);
+                                        if (nextEntry.Key.Item1 != null)
+                                        {
+                                            // 移除上一个标记
+                                            /*if (currentStoryboardIndex >= 0)
+                                                storyboardCollection_Of_Lyrics_Progress[(storyboard_lyic, currentStoryboardIndex)] = false;*/
+
+                                            storyboard_lyic = nextEntry.Key.Item1;
+                                            nextEntry.Key.Item1.Begin();
+
+                                            // 设置标记
+                                            /*storyboardCollection_Of_Lyrics_Progress[(storyboard_lyic, nextIndex)] = true;*/
+                                            index_Current_Storyboard_lyic = nextIndex;
+
+                                            // 滚动被遮盖的歌词部分
+                                            // Scroll_Canvas_For_Lyic(userControl_Mrc_Byte._width, storyboard_lyic.Duration.TimeSpan.TotalMilliseconds);
+                                        }
+                                    }
                                 }
                             };
+
+                            storyboardCollection_Of_Lyrics_Progress.Add((storyboard, i), false); i++;
                         }
                     }
                 }
 
-
                 UserControl_Mrc_Byte userControl_Mrc_Byte1 = (UserControl_Mrc_Byte)controls[0];
                 Storyboard storyboard1 = (Storyboard)userControl_Mrc_Byte1.TextBlock_1.FindName("Text_Storyboard");
+                storyboard_lyic = storyboard1;
+                index_Current_Storyboard_lyic = 0;
                 storyboard1.Begin();
             }
         }
         private void BindAnimationCompleted_Desk(UIElementCollection controls)
         {
-            storyboardCollection_Desk.Clear();
+            storyboardCollection_Of_Lyrics_Progress_Desk.Clear();
             lock (Obj)
             {
+                int i = 0;
                 foreach (UIElement control in controls)
                 {
                     UserControl_Mrc_Byte userControl_Mrc_Byte = control as UserControl_Mrc_Byte;
@@ -9324,28 +9396,200 @@ namespace NSMusicS
                         Storyboard storyboard = (Storyboard)userControl_Mrc_Byte.TextBlock_1.FindName("Text_Storyboard");
                         if (storyboard != null)
                         {
-                            storyboardCollection_Desk.Add(storyboard);
+                            int currentStoryboardIndex = -1;
 
                             storyboard.Completed += (sender, e) =>
                             {
-                                // 当前动画播放完成后，处理下一个动画
-                                int nextIndex = storyboardCollection_Desk.IndexOf(storyboard) + 1;
-                                if (nextIndex < storyboardCollection_Desk.Count)
+                                if (storyboard_lyic_Set_Play == true)
                                 {
-                                    storyboard_lyic_desk = storyboardCollection_Desk[nextIndex];
-                                    storyboardCollection_Desk[nextIndex].Begin();
+                                    // 在循环中查找当前 Storyboard 的索引
+                                    foreach (var entry in storyboardCollection_Of_Lyrics_Progress_Desk)
+                                    {
+                                        if (entry.Key.Item1 == storyboard)
+                                        {
+                                            currentStoryboardIndex = entry.Key.Item2;
+                                            break;
+                                        }
+                                    }
+
+                                    // 链接启动下一个动画
+                                    if (currentStoryboardIndex != -1 && currentStoryboardIndex + 1 < storyboardCollection_Of_Lyrics_Progress_Desk.Count)
+                                    {
+                                        int nextIndex = currentStoryboardIndex + 1;
+
+                                        // 使用 KeyValuePair 简化代码
+                                        var nextEntry = storyboardCollection_Of_Lyrics_Progress_Desk.FirstOrDefault(item => item.Key.Item2 == nextIndex);
+                                        if (nextEntry.Key.Item1 != null)
+                                        {
+                                            // 移除上一个标记
+                                            /*if (currentStoryboardIndex >= 0)
+                                                storyboardCollection_Of_Lyrics_Progress_Desk[(storyboard_lyic_desk, currentStoryboardIndex)] = false;*/
+
+                                            storyboard_lyic_desk = nextEntry.Key.Item1;
+                                            nextEntry.Key.Item1.Begin();
+
+                                            // 设置标记
+                                            /*storyboardCollection_Of_Lyrics_Progress_Desk[(storyboard_lyic_desk, nextIndex)] = true;*/
+                                            index_Current_Storyboard_lyic = nextIndex;
+
+                                            // 滚动被遮盖的歌词部分
+                                            // Scroll_Canvas_For_Lyic(userControl_Mrc_Byte._width, storyboard_lyic_desk.Duration.TimeSpan.TotalMilliseconds);
+                                        }
+                                    }
                                 }
                             };
+
+                            storyboardCollection_Of_Lyrics_Progress_Desk.Add((storyboard, i), false); i++;
                         }
                     }
                 }
 
                 UserControl_Mrc_Byte userControl_Mrc_Byte1 = (UserControl_Mrc_Byte)controls[0];
                 Storyboard storyboard1 = (Storyboard)userControl_Mrc_Byte1.TextBlock_1.FindName("Text_Storyboard");
+                storyboard_lyic_desk = storyboard1;
+                index_Current_Storyboard_lyic = 0;
                 storyboard1.Begin();
             }
         }
+        private async Task PauseStoryboardsAsync()
+        {
+            storyboard_lyic_Set_Play = false;
 
+            storyboard_lyic.Pause();
+            storyboard_lyic_desk.Pause();
+
+            /*foreach (var entry in storyboardCollection_Of_Lyrics_Progress.ToList())
+            {
+                var storyboard = entry.Key.Item1;
+
+                try
+                {
+                    if (!storyboard.GetIsPaused())
+                    {
+                        storyboard.Pause();
+                    }
+                }
+                catch { storyboard.Pause(); }
+            }
+            foreach (var entry in storyboardCollection_Of_Lyrics_Progress_Desk.ToList())
+            {
+                var storyboard = entry.Key.Item1;
+
+                try
+                {
+                    if (!storyboard.GetIsPaused())
+                    {
+                        storyboard.Pause();
+                    }
+                }
+                catch { storyboard.Pause(); }
+            }*/
+        }
+        private async Task ResumeStoryboardsAsync()
+        {
+            storyboard_lyic_Set_Play = true;
+
+            // 获取当前时间和总时间
+            if (storyboard_lyic != null)
+            {
+                TimeSpan currentTime = storyboard_lyic.GetCurrentTime();
+                TimeSpan totalDuration = storyboard_lyic.Duration.TimeSpan;
+                // 计算进度百分比
+                double progressPercentage = currentTime.TotalMilliseconds / totalDuration.TotalMilliseconds * 100;
+                if (progressPercentage < 90)
+                {
+                    storyboard_lyic.Resume();
+                    storyboard_lyic_desk.Resume();
+                }
+                else 
+                {
+                    // 若此storyboard_lyic无法触发complete，则直接启动下一个
+                    var nextEntry = storyboardCollection_Of_Lyrics_Progress.
+                            FirstOrDefault(item => item.Key.Item2 ==
+                                index_Current_Storyboard_lyic + 1);
+                    if (nextEntry.Key.Item1 != null)
+                        storyboard_lyic = nextEntry.Key.Item1;
+                    if (storyboard_lyic != null)
+                    {
+                        storyboard_lyic.Begin();
+                    }
+                    nextEntry = storyboardCollection_Of_Lyrics_Progress_Desk.
+                            FirstOrDefault(item => item.Key.Item2 ==
+                                index_Current_Storyboard_lyic + 1);
+                    if (nextEntry.Key.Item1 != null)
+                        storyboard_lyic_desk = nextEntry.Key.Item1;
+                    if (storyboard_lyic_desk != null)
+                    {
+                        storyboard_lyic_desk.Begin();
+                    }
+
+                    // 上色之前的
+                    /*if (stackPanel_Byte_Lyic != null)
+                    {
+                        for (int i = 0; i < index_Current_Storyboard_lyic + 1; i++)
+                        {
+                            if (i < stackPanel_Byte_Lyic.Children.Count)
+                            {
+                                UIElement control = stackPanel_Byte_Lyic.Children[i];
+                                {
+                                    UserControl_Mrc_Byte userControl_Mrc_Byte = control as UserControl_Mrc_Byte;
+                                    if (userControl_Mrc_Byte != null)
+                                    {
+                                        TranslateTransform trans = (TranslateTransform)userControl_Mrc_Byte.TextBlock_1.FindName("Trans");
+                                        if (trans != null)
+                                            trans.X = 0.5;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (storyboard_lyic_desk != null)
+                    {
+                        for (int i = 0; i < index_Current_Storyboard_lyic + 1; i++)
+                        {
+                            if (i < window_Hover_MRC_Panel.StackPanel_Lyic.Children.Count)
+                            {
+                                UIElement control = window_Hover_MRC_Panel.StackPanel_Lyic.Children[i];
+                                {
+                                    UserControl_Mrc_Byte userControl_Mrc_Byte = control as UserControl_Mrc_Byte;
+                                    if (userControl_Mrc_Byte != null)
+                                    {
+                                        TranslateTransform trans = (TranslateTransform)userControl_Mrc_Byte.TextBlock_1.FindName("Trans");
+                                        if (trans != null)
+                                            trans.X = 0.5;
+                                    }
+                                }
+                            }
+                        }
+                    }*/
+                }
+            }
+        }
+        ListViewItem listViewItem_Selected_lyic;
+        Thickness thickness_Selected_lyic;
+        bool marginAnimation_complete = true;
+        private void Scroll_Canvas_For_Lyic(double wid,double time)
+        {
+            try
+            {
+                listViewItem_Selected_lyic = (ListViewItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex));
+
+                if (listViewItem_Selected_lyic != null && canvas_byte_margin_left > 400)
+                {
+                    sum_wid += wid;
+
+                    if (sum_wid > 200)
+                    {
+                        sum_wid = 0;
+
+                        thickness_Selected_lyic = listViewItem_Selected_lyic.Margin;
+                        thickness_Selected_lyic.Left = thickness_Selected_lyic.Left - 240;
+                        listViewItem_Selected_lyic.Margin = thickness_Selected_lyic;
+                    }
+                }
+            }
+            catch { }
+        }
         private void Foreable_Change_Hidden()
         {
             int line_count = 0;
@@ -9404,17 +9648,17 @@ namespace NSMusicS
                 }
             }
         }
-
         private void ApplyTransform(ListViewItem item)
         {
             var scaleTransform = new ScaleTransform();
+            /*scaleTransform.ScaleX = 1.1;
+            scaleTransform.ScaleY = 1.1;*/
             item.RenderTransform = scaleTransform;
 
             var animation = new DoubleAnimation(1.1, TimeSpan.FromMilliseconds(200)); // Adjust duration as needed
             scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, animation);
             scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, animation);
         }
-
         private void ResetTransform(ListViewItem item)
         {
             var scaleTransform = new ScaleTransform();

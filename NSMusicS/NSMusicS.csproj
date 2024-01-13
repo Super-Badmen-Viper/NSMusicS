@@ -345,6 +345,9 @@
     <None Remove="Resource\Lottie_Json\Loading_Dots_Color_1.json" />
     <None Remove="Resource\Lottie_Json\Loading_Lot_Color_For_Circle.json" />
     <None Remove="Resource\Lottie_Json\Load_SuperCircle.json" />
+    <None Remove="Resource\Lottie_Json\Lyic_Scroll_Dice.json" />
+    <None Remove="Resource\Lottie_Json\Lyic_Scroll_Set.json" />
+    <None Remove="Resource\Lottie_Json\Lyic_Scroll_Star.json" />
     <None Remove="Resource\Lottie_Json\Playing_Icon_1.json" />
     <None Remove="Resource\lotto.jpg" />
     <None Remove="Resource\Music_Album.png" />
@@ -5630,6 +5633,9 @@
     <Resource Include="Resource\Lottie_Json\Loading_Dots_Color_1.json" />
     <Resource Include="Resource\Lottie_Json\Loading_Lot_Color_For_Circle.json" />
     <Resource Include="Resource\Lottie_Json\Load_SuperCircle.json" />
+    <Resource Include="Resource\Lottie_Json\Lyic_Scroll_Dice.json" />
+    <Resource Include="Resource\Lottie_Json\Lyic_Scroll_Set.json" />
+    <Resource Include="Resource\Lottie_Json\Lyic_Scroll_Star.json" />
     <Resource Include="Resource\Lottie_Json\Playing_Icon_1.json" />
     <Resource Include="Resource\lotto.jpg" />
     <Resource Include="Resource\Music_Album.png" />

@@ -8,6 +8,7 @@
              xmlns:UserControls_PlayMode_View ="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls_PlayMode_View"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:lottie="clr-namespace:LottieSharp.WPF;assembly=LottieSharp"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:UserControls="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls"
              mc:Ignorable="d" 
              UseLayoutRounding="True" SnapsToDevicePixels="True"  
@@ -85,7 +86,9 @@
                                 Stretch="UniformToFill"/>
                     </Border.Background>
                     <Border.Effect>
-                        <BlurEffect x:Name="Grid_SongAlbum_BottomForPlayer_BackGround_BlurEffect" Radius="160"></BlurEffect>
+                        <BlurEffect 
+                            x:Name="Grid_SongAlbum_BottomForPlayer_BackGround_BlurEffect" 
+                            Radius="160"></BlurEffect>
                     </Border.Effect>
                 </Border>
 
@@ -131,7 +134,6 @@
                             <Setter Property="Height" Value="60"/>
                             <Setter Property="FontSize" Value="18"/>
                             <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
-
                             <Setter Property="SnapsToDevicePixels" Value="True"/>
                             <Setter Property="Template">
                                 <Setter.Value>
@@ -147,6 +149,7 @@
                                             </Trigger>
                                             <Trigger Property="IsSelected" Value="True">
                                                 <Setter Property="Margin" Value="0,20,0,0"/>
+                                                <Setter Property="FontSize" Value="23"/>
                                                 <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
                                                 <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
                                                 <Setter Property="VerticalContentAlignment" Value="Stretch"/>
@@ -171,16 +174,32 @@
                                                 x:Name="StackPanel_Lyic" 
                                                 HorizontalAlignment="Left" VerticalAlignment="Center"
                                                 Margin="0,0,0,0"
-                                                Orientation="Horizontal"
                                                 VirtualizingStackPanel.IsVirtualizing="True"
                                                 VirtualizingStackPanel.VirtualizationMode="Recycling"
                                                 IsEnabled="False">
+                                                <!--
+                                                <Canvas.Children>
+                                                    
+                                                        <lottie:LottieAnimationView
+                                                            x:Name="Lottie_Lyic_Scorll_Star"
+                                                            Width="40"
+                                                            Height="40"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            AutoPlay="True"
+                                                            ResourcePath="pack://application:,,,/Resource/Lottie_Json/Lyic_Scroll_Set.json"
+                                                            RepeatCount="-1">
+
+                                                        </lottie:LottieAnimationView>
+                                                    
+                                                </Canvas.Children>
+                                                -->
                                             </WrapPanel>
                                             <TextBlock HorizontalAlignment="Left"
-                                                    TextWrapping="Wrap" TextAlignment="Left"
+                                                    TextAlignment="Left" TextWrapping="Wrap"
                                                     LineStackingStrategy="BlockLineHeight" 
                                                     LineHeight="33" TextOptions.TextFormattingMode="Display"
-                                                    x:Name="Text_TextBlock"
+                                                    x:Name="Text_TextBlock" Opacity="0.8"
                                                     Text="{Binding Song_MRC_Line}" FontWeight="Bold" FontSize="18"
                                                     IsHitTestVisible="False" Focusable="False" IsEnabled="False" 
                                                     UseLayoutRounding="False" SnapsToDevicePixels="False" RenderOptions.BitmapScalingMode="HighQuality"
@@ -1319,7 +1338,7 @@
         <ItemsPanelTemplate x:Key="ItemsPanelTemplate2">
             <StackPanel IsItemsHost="true">
                 <i:Interaction.Behaviors>
-                    <i:FluidMoveBehavior AppliesTo="Children" Duration="00:00:00:00.5">
+                    <i:FluidMoveBehavior AppliesTo="Children" Duration="00:00:00:00.2">
                         <i:FluidMoveBehavior.EaseY>
                             <QuadraticEase EasingMode="EaseOut"/>
                         </i:FluidMoveBehavior.EaseY>
