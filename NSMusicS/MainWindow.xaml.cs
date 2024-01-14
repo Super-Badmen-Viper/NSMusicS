@@ -73,6 +73,7 @@ using static NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_Model_Cont
 using static NSMusicS.Models.Servies_For_API_Info.API_Song_Info;
 using Castle.Components.DictionaryAdapter.Xml;
 using System.Globalization;
+using LottieSharp.WPF;
 
 #endregion
 
@@ -1016,19 +1017,19 @@ namespace NSMusicS
 
         #endregion
 
-        bool Bool_Mrc_Animation = true;//是否开启歌词逐字
-        bool Bool_Button_Play_Pause_Player;//播放状态
-        bool Bool_OpenMainMusicPlayer;//是否打开播放器
-        bool Bool_Button_Singer_Image_Animation;//歌手写真动画
-        bool Bool_Animation_Storyboard_BeginMusic_Jukebox_Playing;//是否已启动动画
+        private static bool Bool_Mrc_Animation = true;//是否开启歌词逐字
+        private static bool Bool_Button_Play_Pause_Player;//播放状态
+        private static bool Bool_OpenMainMusicPlayer;//是否打开播放器
+        private static bool Bool_Button_Singer_Image_Animation;//歌手写真动画
+        private static bool Bool_Animation_Storyboard_BeginMusic_Jukebox_Playing;//是否已启动动画
 
-        DoubleAnimation doubleAnimation;//窗体动画
+        private static DoubleAnimation doubleAnimation;//窗体动画
 
-        Assembly_Album_SongList_Item songList_Item;
-        Assembly_Singer_Show assembly_Singer_Show;
-        Album_SongList_Infos album_SongList_Infos;
-        This_Performer_ALL_AlbumSongList this_Performer_ALL_AlbumSongList;
-        Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
+        private static Assembly_Album_SongList_Item songList_Item;
+        private static Assembly_Singer_Show assembly_Singer_Show;
+        private static Album_SongList_Infos album_SongList_Infos;
+        private static This_Performer_ALL_AlbumSongList this_Performer_ALL_AlbumSongList;
+        private static Find_Song_Of_SelectFiles find_Song_Of_SelectFiles = new Find_Song_Of_SelectFiles();
 
 
         #region MusicPlayer_Left控件进入
@@ -4998,7 +4999,7 @@ namespace NSMusicS
         /// <summary>
         /// 当前所处模式
         /// </summary>
-        int model_num;
+        private static int model_num;
         #region 单曲模式
 
         public void Switch_To_Single_Mode_Click(object sender, EventArgs e)
@@ -8755,35 +8756,37 @@ namespace NSMusicS
 
         #endregion
 
-        Window_Hover_MRC_Panel window_Hover_MRC_Panel;
-        Color color_Desktop_Lyic_Color = (Color)ColorConverter.ConvertFromString("#FF00FFA2");
-        int font_size_Desktop_Lyic = 22;
-        Color color_Window_Lyic_Color = (Color)ColorConverter.ConvertFromString("#FF00FFA2");
-        int font_size_Window_Lyic = 36;
+        private static Window_Hover_MRC_Panel window_Hover_MRC_Panel;
+        private static Color color_Desktop_Lyic_Color = (Color)ColorConverter.ConvertFromString("#FF00FFA2");
+        private static int font_size_Desktop_Lyic = 22;
+        private static Color color_Window_Lyic_Color = (Color)ColorConverter.ConvertFromString("#FF00FFA2");
+        private static int font_size_Window_Lyic = 36;
         #region 歌词行同步动画
-        DispatcherTimer DispatcherTimer_MRC;
-        TimeSpan MRC_Span;
-        int MRC_Line_Nums = 3;
-        bool MRC_Sco = false;
+        private static DispatcherTimer DispatcherTimer_MRC;
+        private static TimeSpan MRC_Span;
+        private static int MRC_Line_Nums = 3;
+        private static bool MRC_Sco = false;
 
-        ListViewItem myListBoxItem;
-        ContentPresenter myContentPresenter;
-        DataTemplate myDataTemplate;
-        Storyboard myTextBlock_Storyboard;
-        DoubleAnimationUsingKeyFrames myTextBlock_DoubleAnimationUsingKeyFrames;
-        LinearDoubleKeyFrame linearDoubleKeyFrame;
-        TextBlock myTextBlock_TextBlock;
-        DoubleAnimationUsingKeyFrames window_Hover_MRC_PanelmyTextBlock_DoubleAnimationUsingKeyFrames;
+        private static ListViewItem myListBoxItem;
+        private static ContentPresenter myContentPresenter;
+        private static DataTemplate myDataTemplate;
+        private static Storyboard myTextBlock_Storyboard;
+        private static DoubleAnimationUsingKeyFrames myTextBlock_DoubleAnimationUsingKeyFrames;
+        private static LinearDoubleKeyFrame linearDoubleKeyFrame;
+        private static TextBlock myTextBlock_TextBlock;
+        private static TextBlock Text_TextBlock_Translate;
+        private static Border lottieAnimationView;
+        private static DoubleAnimationUsingKeyFrames window_Hover_MRC_PanelmyTextBlock_DoubleAnimationUsingKeyFrames;
 
-        WrapPanel stackPanel_Byte_Lyic;
-        int Before_Byte_Lyic;
-        private bool storyboard_lyic_Set_Play = true;
-        private double sum_wid = 0;
-        private double canvas_byte_margin_left;
-        Storyboard storyboard_lyic = new Storyboard();
-        Storyboard storyboard_lyic_desk = new Storyboard();
-        private Dictionary<(Storyboard,int), bool> storyboardCollection_Of_Lyrics_Progress = new Dictionary<(Storyboard, int), bool>(); // 存储当前正在播放的逐字动画（Plus升级版）
-        private Dictionary<(Storyboard,int), bool> storyboardCollection_Of_Lyrics_Progress_Desk = new Dictionary<(Storyboard, int), bool>(); // 存储多个Storyboard的集合
+        private static Canvas stackPanel_Byte_Lyic;
+        private static int Before_Byte_Lyic;
+        private static bool storyboard_lyic_Set_Play = true;
+        private static double sum_wid = 0;
+        private static double canvas_byte_margin_left;
+        private static Storyboard storyboard_lyic = new Storyboard();
+        private static Storyboard storyboard_lyic_desk = new Storyboard();
+        private static Dictionary<(Storyboard,int), bool> storyboardCollection_Of_Lyrics_Progress = new Dictionary<(Storyboard, int), bool>(); // 存储当前正在播放的逐字动画（Plus升级版）
+        private static Dictionary<(Storyboard,int), bool> storyboardCollection_Of_Lyrics_Progress_Desk = new Dictionary<(Storyboard, int), bool>(); // 存储多个Storyboard的集合
         /// <summary>
         /// 当musicPlayer_Main_UserControl.ListView_Temp_MRC选中项发送改变时
         /// </summary>
@@ -8820,10 +8823,12 @@ namespace NSMusicS
                     {
                         if (musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex != -1 && musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex < musicPlayer_Main_UserControl.ListView_Temp_MRC.Items.Count)
                         {
-                            Application.Current.Dispatcher.Invoke(() =>
+                            Application.Current.Dispatcher.Invoke(async () =>
                             {
                                 MRC_Line_Nums = 3;
                                 canvas_byte_margin_left = 0;
+                                sum_wid = 0;
+                                stackPanel_Byte_Lyic = null;
 
                                 if (Bool_Mrc_Animation == true)
                                 {
@@ -9045,15 +9050,25 @@ namespace NSMusicS
                                                         myTextBlock_TextBlock.Visibility = Visibility.Collapsed;
                                                         myTextBlock_TextBlock = null;
                                                         //
-                                                        stackPanel_Byte_Lyic = (WrapPanel)myDataTemplate.FindName("StackPanel_Lyic", myContentPresenter);
+                                                        stackPanel_Byte_Lyic = (Canvas)myDataTemplate.FindName("StackPanel_Lyic", myContentPresenter);
+
+                                                        Text_TextBlock_Translate = (TextBlock)myDataTemplate.FindName("Text_TextBlock_Translate", myContentPresenter);
+                                                        Text_TextBlock_Translate.Margin = new Thickness(0,12,0,0);
                                                     }
                                                 }
                                             }
+                                            // 设置歌词动画-物体滚动特效
+                                            /*lottieAnimationView = stackPanel_Byte_Lyic.Children[0] as Border;*/
 
                                             //歌词逐字算法 Plus最终版
                                             //
                                             stackPanel_Byte_Lyic.Children.Clear();
                                             window_Hover_MRC_Panel.StackPanel_Lyic.Children.Clear();
+                                            
+                                            // 添加歌词动画-物体滚动特效
+                                            /*stackPanel_Byte_Lyic.Children.Add(lottieAnimationView);
+                                            stackPanel_Byte_Lyic.Children[stackPanel_Byte_Lyic.Children.Count - 1].SetValue(Canvas.LeftProperty, 0);
+                                            stackPanel_Byte_Lyic.Children[stackPanel_Byte_Lyic.Children.Count - 1].SetValue(Canvas.TopProperty, 40 / 2);*/
                                             //
                                             List<UserControl_Mrc_Byte> userControl_Mrc_Bytes = new List<UserControl_Mrc_Byte>();
                                             for (int i = 0; i < dao_ListBox_Temp_MRC.mrc_Line_Info[musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - dao_ListBox_Temp_MRC.LRC_Text_Null_Nums].
@@ -9117,8 +9132,17 @@ namespace NSMusicS
                                                     {
                                                         TimeSpan originalDuration = storyboard.Duration.TimeSpan;
                                                         TimeSpan newDuration = TimeSpan.FromTicks(originalDuration.Ticks);
-
                                                         item.Duration = new Duration(newDuration);
+
+                                                        DoubleAnimationUsingKeyFrames _keyFrames = item as DoubleAnimationUsingKeyFrames;
+                                                        if (_keyFrames.KeyFrames.Count == 3)
+                                                        {
+                                                            _keyFrames.KeyFrames[1].KeyTime = new TimeSpan(0, 0, 0, 0, 
+                                                                Convert.ToInt16(item.Duration.TimeSpan.TotalMilliseconds / 2));
+                                                            _keyFrames.KeyFrames[1].Value = 0.8;
+                                                            _keyFrames.KeyFrames[2].KeyTime = new TimeSpan(0, 0, 0, 0, 
+                                                                Convert.ToInt16(item.Duration.TimeSpan.TotalMilliseconds));
+                                                        }
                                                     }
                                                 }
                                                 //
@@ -9201,15 +9225,31 @@ namespace NSMusicS
                                                 stackPanel_Byte_Lyic.Children.Add(mrc_Byte_);
                                                 window_Hover_MRC_Panel.StackPanel_Lyic.Children.Add(mrc_Byte_desk);
                                                 // stackPanel_Byte_Lyic为Canvas时
-                                                /*stackPanel_Byte_Lyic.Children[stackPanel_Byte_Lyic.Children.Count - 1].
+                                                stackPanel_Byte_Lyic.Children[stackPanel_Byte_Lyic.Children.Count - 1].
                                                     SetValue(Canvas.LeftProperty, canvas_byte_margin_left);
                                                 stackPanel_Byte_Lyic.Children[stackPanel_Byte_Lyic.Children.Count - 1].
                                                     SetValue(
                                                         Canvas.TopProperty,
-                                                        - mrc_Byte_._height / 2
+                                                        -mrc_Byte_._height / 2
                                                     );
-                                                canvas_byte_margin_left += mrc_Byte_._width;*/
+                                                /*ThicknessAnimation marginAnimation = new ThicknessAnimation();
+                                                marginAnimation.From = new Thickness(
+                                                    musicPlayer_Main_UserControl.ListView_Temp_MRC_GridViewColumn.Width + 50,
+                                                    -mrc_Byte_._height / 2,
+                                                    0, 0); // 起始 Margin
+                                                marginAnimation.To = new Thickness(
+                                                    canvas_byte_margin_left,
+                                                    -mrc_Byte_._height / 2,
+                                                    0, 0); // 终点 Margin
+                                                marginAnimation.Duration = TimeSpan.FromMilliseconds(100); // 动画持续时间
+                                                await Task.Delay(30);
+                                                stackPanel_Byte_Lyic.Children[stackPanel_Byte_Lyic.Children.Count - 1].BeginAnimation(FrameworkElement.MarginProperty, marginAnimation);*/
 
+                                                canvas_byte_margin_left += mrc_Byte_._width;
+
+                                                Thickness thickness = stackPanel_Byte_Lyic.Margin;
+                                                thickness.Left = 0;
+                                                stackPanel_Byte_Lyic.Margin = thickness;
                                             }
                                             //启动动画
                                             try
@@ -9235,10 +9275,6 @@ namespace NSMusicS
                                                     (ListViewItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(Before_Byte_Lyic));
                                                 if (myListBoxItem != null)
                                                 {
-                                                    // 用于Canvas stackPanel_Byte_Lyic 注意：此代码会导致歌词行上下边距出现问题，歌词滚动换行将不在中间
-                                                    /*Thickness thickness = myListBoxItem.Margin;
-                                                    thickness.Left = 0;
-                                                    myListBoxItem.Margin = thickness;*/
                                                     //查找并获取ListView选中项中的对象
                                                     myContentPresenter = FindVisualChild<ContentPresenter>(myListBoxItem);
                                                     if (myContentPresenter != null)
@@ -9246,13 +9282,15 @@ namespace NSMusicS
                                                         myDataTemplate = myContentPresenter.ContentTemplate;
                                                         if (myDataTemplate != null)
                                                         {
-                                                            stackPanel_Byte_Lyic = (WrapPanel)myDataTemplate.FindName("StackPanel_Lyic", myContentPresenter);
+                                                            Canvas stackPanel_Byte_Lyic = (Canvas)myDataTemplate.FindName("StackPanel_Lyic", myContentPresenter);
                                                             myTextBlock_TextBlock = (TextBlock)myDataTemplate.FindName("Text_TextBlock", myContentPresenter);
                                                             myTextBlock_TextBlock.Visibility = Visibility.Visible;
                                                             myTextBlock_TextBlock = null;
 
                                                             stackPanel_Byte_Lyic.Children.Clear();
-                                                            stackPanel_Byte_Lyic = null;
+
+                                                            TextBlock Text_TextBlock_Translate = (TextBlock)myDataTemplate.FindName("Text_TextBlock_Translate", myContentPresenter);
+                                                            Text_TextBlock_Translate.Margin = new Thickness(0, -4, 0, 0);
                                                         }
                                                     }
                                                 }
@@ -9310,9 +9348,9 @@ namespace NSMusicS
             }
             catch { }
         }
-        private object Obj { get; } = new object();
-        private object Obj_Desk { get; } = new object();
-        private int index_Current_Storyboard_lyic;
+        private static object Obj { get; } = new object();
+        private static object Obj_Desk { get; } = new object();
+        private static int index_Current_Storyboard_lyic;
         private void BindAnimationCompleted(UIElementCollection controls)
         {
             storyboardCollection_Of_Lyrics_Progress.Clear();
@@ -9363,8 +9401,8 @@ namespace NSMusicS
                                             /*storyboardCollection_Of_Lyrics_Progress[(storyboard_lyic, nextIndex)] = true;*/
                                             index_Current_Storyboard_lyic = nextIndex;
 
-                                            // 滚动被遮盖的歌词部分
-                                            // Scroll_Canvas_For_Lyic(userControl_Mrc_Byte._width, storyboard_lyic.Duration.TimeSpan.TotalMilliseconds);
+                                            // 用于Canvas 滚动被遮盖的歌词部分
+                                            Scroll_Canvas_For_Lyic(userControl_Mrc_Byte._width, storyboard_lyic.Duration.TimeSpan.TotalMilliseconds);
                                         }
                                     }
                                 }
@@ -9565,30 +9603,88 @@ namespace NSMusicS
                 }
             }
         }
-        ListViewItem listViewItem_Selected_lyic;
-        Thickness thickness_Selected_lyic;
-        bool marginAnimation_complete = true;
+        private static ListViewItem listViewItem_Selected_lyic;
+        private static Thickness thickness_Selected_lyic;
+        private static bool marginAnimation_complete = true;
         private void Scroll_Canvas_For_Lyic(double wid,double time)
         {
             try
             {
-                listViewItem_Selected_lyic = (ListViewItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex));
-
-                if (listViewItem_Selected_lyic != null && canvas_byte_margin_left > 400)
+                if (stackPanel_Byte_Lyic != null && 
+                    canvas_byte_margin_left > musicPlayer_Main_UserControl.ListView_Temp_MRC_GridViewColumn.Width - 50)
                 {
                     sum_wid += wid;
 
-                    if (sum_wid > 200)
+                    if (sum_wid > musicPlayer_Main_UserControl.ListView_Temp_MRC_GridViewColumn.Width / 2 - 50)
                     {
-                        sum_wid = 0;
+                        marginAnimation_complete = false;
 
-                        thickness_Selected_lyic = listViewItem_Selected_lyic.Margin;
-                        thickness_Selected_lyic.Left = thickness_Selected_lyic.Left - 240;
-                        listViewItem_Selected_lyic.Margin = thickness_Selected_lyic;
+                        ThicknessAnimation marginAnimation = new ThicknessAnimation();
+                        marginAnimation.From = stackPanel_Byte_Lyic.Margin;
+                        thickness_Selected_lyic = stackPanel_Byte_Lyic.Margin;
+                        thickness_Selected_lyic.Left -= wid;
+                        marginAnimation.To = thickness_Selected_lyic;
+                        marginAnimation.Duration = TimeSpan.FromMilliseconds(time);
+                        marginAnimation.Completed += MarginAnimation_stackPanel_Byte_Lyic_Completed;
+                        stackPanel_Byte_Lyic.BeginAnimation(FrameworkElement.MarginProperty, marginAnimation);
+
+                        if (marginAnimation_complete && 
+                            sum_wid > musicPlayer_Main_UserControl.ListView_Temp_MRC_GridViewColumn.Width)//如果大于2倍数
+                        {
+                            (var translate_wid, var translate_hei) = MeasureString(Text_TextBlock_Translate, Text_TextBlock_Translate.Text);
+                            if (translate_wid > musicPlayer_Main_UserControl.ListView_Temp_MRC_GridViewColumn.Width)
+                            {
+                                ThicknessAnimation marginAnimation_translate = new ThicknessAnimation();
+                                marginAnimation_translate.From = Text_TextBlock_Translate.Margin;
+                                thickness_Selected_lyic = Text_TextBlock_Translate.Margin;
+                                thickness_Selected_lyic.Left -= musicPlayer_Main_UserControl.ListView_Temp_MRC_GridViewColumn.Width;
+                                marginAnimation_translate.To = thickness_Selected_lyic;
+                                marginAnimation_translate.Duration = TimeSpan.FromMilliseconds(100);
+                                marginAnimation_translate.Completed += MarginAnimation_translate_Completed; ;
+                                Text_TextBlock_Translate.BeginAnimation(FrameworkElement.MarginProperty, marginAnimation);
+                            }
+                        }
                     }
                 }
+
+                /*if (lottieAnimationView != null)
+                {
+                    ThicknessAnimation marginAnimation = new ThicknessAnimation();
+                    marginAnimation.From = lottieAnimationView.Margin;
+                    thickness_Selected_lyic = lottieAnimationView.Margin;
+                    thickness_Selected_lyic.Left += wid;
+                    marginAnimation.To = thickness_Selected_lyic;
+                    marginAnimation.Duration = TimeSpan.FromMilliseconds(time);
+                    lottieAnimationView.BeginAnimation(FrameworkElement.MarginProperty, marginAnimation);
+                }*/
             }
             catch { }
+        }
+        private void MarginAnimation_stackPanel_Byte_Lyic_Completed(object? sender, EventArgs e)
+        {
+            //由于预先设置的FluidMoveBehavior，直接赋值会导致FluidMoveBehavior动画启动，与此动画重叠运行
+            //stackPanel_Byte_Lyic.Margin = thickness_Selected_lyic;
+        }
+        private void MarginAnimation_translate_Completed(object? sender, EventArgs e)
+        {
+            marginAnimation_complete = true;
+        }
+        private (double, double) MeasureString(TextBlock textBlock, string candidate)
+        {
+            var formattedText = new FormattedText(
+                candidate,
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch),
+                textBlock.FontSize,
+                Brushes.Black,
+                new NumberSubstitution(),
+                TextFormattingMode.Display,
+                1);
+
+            double wid_space = candidate.Count(char.IsWhiteSpace) * 4;
+
+            return (formattedText.Width + wid_space, formattedText.Height);
         }
         private void Foreable_Change_Hidden()
         {
@@ -9615,7 +9711,7 @@ namespace NSMusicS
                                 myTextBlock_TextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#" + colors[line_count]));
                                 myTextBlock_TextBlock = null;
                                 //
-                                TextBlock myTextBlock_TextBlock_1 = (TextBlock)myDataTemplate.FindName("Text_TextBlock_1", myContentPresenter);
+                                TextBlock myTextBlock_TextBlock_1 = (TextBlock)myDataTemplate.FindName("Text_TextBlock_Translate", myContentPresenter);
                                 myTextBlock_TextBlock_1.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#" + colors[line_count]));
                                 myTextBlock_TextBlock_1 = null;
 
@@ -9641,7 +9737,7 @@ namespace NSMusicS
                         myTextBlock_TextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFFF"));
                         myTextBlock_TextBlock = null;
                         //
-                        TextBlock myTextBlock_TextBlock_1 = (TextBlock)myDataTemplate.FindName("Text_TextBlock_1", myContentPresenter);
+                        TextBlock myTextBlock_TextBlock_1 = (TextBlock)myDataTemplate.FindName("Text_TextBlock_Translate", myContentPresenter);
                         myTextBlock_TextBlock_1.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFFF"));
                         myTextBlock_TextBlock_1 = null;
                     }
@@ -9668,7 +9764,6 @@ namespace NSMusicS
             scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, animation);
             scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, animation);
         }
-
         /// <summary>
         /// 查找元素
         /// </summary>
@@ -10105,7 +10200,7 @@ namespace NSMusicS
 
         #endregion
 
-        SingerImage_Cut singerImage_Cut = SingerImage_Cut.Retuen_This();
+        private static SingerImage_Cut singerImage_Cut = SingerImage_Cut.Retuen_This();
         #region   切换歌手图片背景
 
         public bool Bool_Button_Back_Click = true;
@@ -10113,9 +10208,9 @@ namespace NSMusicS
         public bool Bool_Timer_Singer_Photo_1_lot;
         public bool Bool_Timer_Image_Trans;
 
-        string Singer_Image_Url;
-        string Singer_Name_Temp = "未知歌手";//记录当前歌手名
-        int Singer_Name_Temp_Nums;//记录当前歌手图片动画状态
+        private static string Singer_Image_Url;
+        private static string Singer_Name_Temp = "未知歌手";//记录当前歌手名
+        private static int Singer_Name_Temp_Nums;//记录当前歌手图片动画状态
 
         /// <summary>
         /// 切换歌手背景图片
@@ -10584,12 +10679,12 @@ namespace NSMusicS
 
         #endregion
         #region 切换写真动画
-        MainViewModel_Animation_1 MyVM;
-        string imgPath;
-        DispatcherTimer dispatcherTimer_SingerImageCut;
-        int num_duration = 0;
-        int num_Delay = 0;
-        int animation_select = 0;
+        private static MainViewModel_Animation_1 MyVM;
+        private static string imgPath;
+        private static DispatcherTimer dispatcherTimer_SingerImageCut;
+        private static int num_duration = 0;
+        private static int num_Delay = 0;
+        private static int animation_select = 0;
         /// <summary>
         /// 对指定的图片路径进行动画处理
         /// </summary>
@@ -10800,7 +10895,7 @@ namespace NSMusicS
 
         #endregion
 
-        Window_Hover_EQ_Panel window_Hover_EQ_Panel;
+        private static Window_Hover_EQ_Panel window_Hover_EQ_Panel;
         #region EQ均衡器
         public void Button_Window_Hover_EQ_Panel(object sender, EventArgs e)
         {

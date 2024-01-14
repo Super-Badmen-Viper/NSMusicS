@@ -12,16 +12,21 @@
                    UseLayoutRounding="False" SnapsToDevicePixels="False" RenderOptions.BitmapScalingMode="HighQuality"
                    DataContextChanged="TextBlock_1_DataContextChanged"
                    >
+            <TextBlock.RenderTransform>
+                <ScaleTransform/>
+            </TextBlock.RenderTransform>
             <TextBlock.Triggers>
                 <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
                     <BeginStoryboard>
                         <Storyboard x:Name="Text_Storyboard" Timeline.DesiredFrameRate="60">
                             <!-- TranslateTransform.X 动画 -->
-                            <DoubleAnimationUsingKeyFrames x:Name="Text_DoubleAnimation"
-                                               Storyboard.TargetName="Trans"
-                                               Storyboard.TargetProperty="X"/>
+                            <DoubleAnimationUsingKeyFrames 
+                                x:Name="Text_DoubleAnimation"
+                                Storyboard.TargetName="Trans"
+                                Storyboard.TargetProperty="X">
+                            </DoubleAnimationUsingKeyFrames>
 
-                            <!-- 
+                            <!--
                             <DoubleAnimation Storyboard.TargetName="TextBlock_1" Storyboard.TargetProperty="Opacity">
                                 <DoubleAnimation.From>
                                     <System:Double>0.5</System:Double>
@@ -30,15 +35,17 @@
                                     <System:Double>1</System:Double>
                                 </DoubleAnimation.To>
                             </DoubleAnimation>
-
+                            -->
+                            
+                            <!-- ScaleTransform.ScaleY 动画 -->
                             <DoubleAnimationUsingKeyFrames 
-                                    Storyboard.TargetName="TextBlock_1" 
-                                    Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
-                                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1"/>
+                                Storyboard.TargetName="TextBlock_1" 
+                                Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.0" Value="1"/>
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0.5"/>
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
                             </DoubleAnimationUsingKeyFrames>
-                            -->
+
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>

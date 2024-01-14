@@ -170,33 +170,39 @@
                                             Orientation="Vertical"
                                             VirtualizingStackPanel.IsVirtualizing="True"
                                             VirtualizingStackPanel.VirtualizationMode="Recycling">
-                                            <WrapPanel 
+                                            <Canvas 
                                                 x:Name="StackPanel_Lyic" 
                                                 HorizontalAlignment="Left" VerticalAlignment="Center"
                                                 Margin="0,0,0,0"
                                                 VirtualizingStackPanel.IsVirtualizing="True"
                                                 VirtualizingStackPanel.VirtualizationMode="Recycling"
                                                 IsEnabled="False">
-                                                <!--
+ 
+                                            </Canvas>
+                                            <!--
+                                            <Canvas 
+                                                x:Name="StackPanel_Lyic_Scroll" 
+                                                HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                Height="40" Margin="0,-40,0,0"
+                                                VirtualizingStackPanel.IsVirtualizing="True"
+                                                VirtualizingStackPanel.VirtualizationMode="Recycling"
+                                                IsEnabled="False">
                                                 <Canvas.Children>
-                                                    
-                                                        <lottie:LottieAnimationView
-                                                            x:Name="Lottie_Lyic_Scorll_Star"
-                                                            Width="40"
-                                                            Height="40"
-                                                            HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center"
-                                                            AutoPlay="True"
-                                                            ResourcePath="pack://application:,,,/Resource/Lottie_Json/Lyic_Scroll_Set.json"
-                                                            RepeatCount="-1">
+                                                    <lottie:LottieAnimationView
+                                                        x:Name="Lottie_Lyic_Scorll_Star"
+                                                        Width="40" Height="40" 
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        AutoPlay="True"
+                                                        ResourcePath="pack://application:,,,/Resource/Lottie_Json/Lyic_Scroll_Set.json"
+                                                        RepeatCount="-1">
 
-                                                        </lottie:LottieAnimationView>
-                                                    
+                                                    </lottie:LottieAnimationView>
                                                 </Canvas.Children>
-                                                -->
-                                            </WrapPanel>
+                                            </Canvas>
+                                            -->
                                             <TextBlock HorizontalAlignment="Left"
-                                                    TextAlignment="Left" TextWrapping="Wrap"
+                                                    TextAlignment="Left"
                                                     LineStackingStrategy="BlockLineHeight" 
                                                     LineHeight="33" TextOptions.TextFormattingMode="Display"
                                                     x:Name="Text_TextBlock" Opacity="0.8"
@@ -227,7 +233,7 @@
                                                 </TextBlock.Foreground>
                                             </TextBlock>
                                             <TextBlock 
-                                                x:Name="Text_TextBlock_1" 
+                                                x:Name="Text_TextBlock_Translate"
                                                 Margin="0,-4,0,0" HorizontalAlignment="Left"
                                                 FontSize="18" FontFamily="Microsoft YaHei" TextOptions.TextFormattingMode="Display"
                                                 Text="{Binding Song_CRC_Line}"

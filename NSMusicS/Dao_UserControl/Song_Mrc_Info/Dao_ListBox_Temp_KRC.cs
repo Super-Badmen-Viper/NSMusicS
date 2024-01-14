@@ -747,21 +747,24 @@ namespace NSMusicS.Dao_UserControl.Song_Mrc_Info
         {
             try
             {
-                if (File.Exists(SongLrcPath) == true)
+                if (File.Exists(SongLrcPath))
                 {
-                    Song_Lrc_StreamReader = new StreamReader(SongLrcPath, Encoding.UTF8);//完成后继续自动清理缓存
+                    string[] lines = File.ReadAllLines(SongLrcPath, Encoding.UTF8);
 
-                    if (Song_Lrc_StreamReader.EndOfStream == false)//指示当前流位置是否在结尾
+                    for (int i = 1; i < lines.Length; i += 2)
                     {
-                        A_String_Read = "";
-                        while ((A_String_Read = Song_Lrc_StreamReader.ReadLine()) != null)
-                        {
-                            arrayList.Add(A_String_Read.Trim() + "\n");
-                        }
+                        string trimmedLine = lines[i].Trim();
+                        if (trimmedLine.Length != 0)
+                            arrayList.Add(trimmedLine + "\n");
+                        else
+                            arrayList.Add(trimmedLine);
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+            }
 
             return arrayList;
         }
@@ -806,24 +809,21 @@ namespace NSMusicS.Dao_UserControl.Song_Mrc_Info
                 if (CRC_URL != null)
                 {
                     ArrayList arrayList = Add_Chinese_To_Kera(CRC_URL);
-                    //添加歌词翻译
-                    for (int i = Temp_MRC_Bing.Count - 1 - 7; i >= 0; i--)
+                    // 添加歌词翻译
+                    for (int i = Temp_MRC_Bing.Count - 8; i >= 0 && arrayList.Count > 0; i--)
                     {
-                        if (arrayList.Count == 0)
-                            break;
                         if (Temp_MRC_Bing[i] != null)
                         {
-                            Dao_ListBox_Temp_MRC_Bing temp = new Dao_ListBox_Temp_MRC_Bing();
-                            temp = Temp_MRC_Bing[i];
+                            Dao_ListBox_Temp_MRC_Bing temp = Temp_MRC_Bing[i];
 
                             string singer_Mrc_To_Substring = arrayList[arrayList.Count - 1].ToString();
-
-                            temp.Song_CRC_Line += (singer_Mrc_To_Substring);
+                            temp.Song_CRC_Line += singer_Mrc_To_Substring;
                             arrayList.RemoveAt(arrayList.Count - 1);
 
                             Temp_MRC_Bing[i] = temp;
                         }
                     }
+
                 }
             }
 
