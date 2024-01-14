@@ -9196,16 +9196,27 @@ namespace NSMusicS
                                                             int sto_2 = 0;
                                                             foreach (var item in storyboard_desk.Children)
                                                             {
-                                                                if (sto_2 == 0)
+                                                                if (sto_1 == 0)
                                                                 {
-                                                                    sto_2 = 1;
+                                                                    sto_1 = 1;
                                                                 }
                                                                 else
                                                                 {
-                                                                    TimeSpan originalDuration = storyboard_desk.Duration.TimeSpan;
+                                                                    DoubleAnimationUsingKeyFrames _keyFrames = item as DoubleAnimationUsingKeyFrames;
+                                                                    _keyFrames.KeyFrames.Clear();
+                                                                    /*TimeSpan originalDuration = storyboard.Duration.TimeSpan;
                                                                     TimeSpan newDuration = TimeSpan.FromTicks(originalDuration.Ticks);
-
                                                                     item.Duration = new Duration(newDuration);
+
+                                                                    DoubleAnimationUsingKeyFrames _keyFrames = item as DoubleAnimationUsingKeyFrames;
+                                                                    if (_keyFrames.KeyFrames.Count == 3)
+                                                                    {
+                                                                        _keyFrames.KeyFrames[1].KeyTime = new TimeSpan(0, 0, 0, 0,
+                                                                            Convert.ToInt16(item.Duration.TimeSpan.TotalMilliseconds / 2));
+                                                                        _keyFrames.KeyFrames[1].Value = 0.8;
+                                                                        _keyFrames.KeyFrames[2].KeyTime = new TimeSpan(0, 0, 0, 0,
+                                                                            Convert.ToInt16(item.Duration.TimeSpan.TotalMilliseconds));
+                                                                    }*/
                                                                 }
                                                             }
                                                             //
