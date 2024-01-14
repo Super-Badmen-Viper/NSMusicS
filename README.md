@@ -52,18 +52,11 @@
     - ## unknown
 
 # Interface preview:
+  ![bandicam 2024-01-14 19-59-29-810~1](https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/3e6d1ca7-2a6b-440a-8e01-338c617a281d)
   <table>
-    <tr>
-      <td><img src="https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/5e040577-6693-4a94-b90d-8c46fcb59cd3" width="594"></td>
-      <td><img src="doc/Test (1).png" width="594"></td>
-    </tr>
     <tr>
       <td><img src="doc/Test (2).png" width="594"></td>
       <td><img src="doc/Test (3).png" width="594"></td>
-    </tr>
-    <tr>
-      <td><img src="doc/Test (1_2).png" width="594"></td>
-      <td><img src="doc/Test (1_3).png" width="594"></td>
     </tr>
   </table>
   
