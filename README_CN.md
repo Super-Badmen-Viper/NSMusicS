@@ -20,10 +20,12 @@
 
 | 项目 | 开发状态 | 技术框架 | 作者/版权所有者 | 操作系统 | 许可证 | 软件定位 |
 | :----- | ----: | ----: | ----: | :----: | :----: | :----: |
-| [NSMusicS](https://github.com/Super-Badmen-Viper/NSMusicS) |<font color="#00dd00">(已完成): 更新中</font>| .NET WPF C# | Xiang Cheng | (Windows10++) | A-GPL 3.0 | 开源 + 商业 |
-| [NSMusicS_For_Knowledge_Graph](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">更新中</font>|  NebulaGraph / Neo4j / Spark | Xiang Cheng   | (Windows10++/Linux)  | A-GPL 3.0 | Open source + Commercial | 
-| [NSMusicS_For_Flutter](https://github.com/Super-Badmen-Viper/NSMusicS/tree/main/NSMusicS_For_Flutter/nsmusics_for_flutter) |<font color=Yellow>(开发中)</font><font color="#00dd00">: 更新中</font> | Flutter Dart | Xiang Cheng | (Windows10++, Linux(ubuntu+, 群晖Nas+Docker), MacOS, Android11++, IOS) | A-GPL 3.0 | 开源 + 商业 |
-| [MZMusic](https://github.com/MZMusic/MZMusic) |<font color=Red>未开始</font> | Electron+Vue3 | MZMusic Team | (Windows, Linux, MacOS...) | Apache License 2.0 | 开源 |
+| [NSMusicS](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00"> 更新中 </font> | .NET6 WPF C#           | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++)             | A-GPL 3.0 | Open source + Commercial | 
+| [NSMusicS_For_Blazor](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00"> 即将开发 </font>             | .NET8 Blazor C# / ElectronNET       | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  | (Windows,Linux(ubuntu+,Docker),MacOS,Android11++,IOS) Based on the Chrome kernel    | A-GPL 3.0 | Open source + Commercial | 
+| [NSMusicS_For_PythonApp_Of_AudioProcessing](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">  即将开发  </font>             | pyhton / librosa / pytorch      | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  |    python    | Apache License 2.0 | Open source | 
+| [NSMusicS_For_Knowledge_Graph](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#FF0000">Not started</font>|  NebulaGraph / Neo4j / Spark       | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++/Linux)             | A-GPL 3.0 | Open source + Commercial | 
+| [NSMusicS_For_Flutter](https://github.com/Super-Badmen-Viper/NSMusicS/tree/main/NSMusicS_For_Flutter/nsmusics_for_flutter)   |<font color="#FF0000">Not started</font>    | Flutter Dart          | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++,Linux(ubuntu+,群晖Nas+Docker),MacOS,Android11++,IOS) | A-GPL 3.0 | Open source + Commercial | 
+| [MZMusic](https://github.com/MZMusic/MZMusic)   |<font color="#FF0000">Not started</font>             | Electron / Vue3         | [MZMusic Team](https://github.com/MZMusic)  | (win,linux,macos...)      | Apache License 2.0 | Open source | 
 
 
 # 开发企划
