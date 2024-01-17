@@ -303,7 +303,7 @@
                     </Button.Effect>
                 </Button>
                 <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" Width="70" 
-                           Text="随机播放" FontSize="14" Foreground="White">
+                           Text="随机播放" FontSize="14" Cursor="Hand" Foreground="White">
                     <TextBlock.Effect>
                         <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
                     </TextBlock.Effect>
@@ -323,7 +323,7 @@
                     </Button.Effect>
                 </Button>
                 <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" 
-                           Width="70" Text="顺序播放" FontSize="14" Foreground="White">
+                           Width="70" Text="顺序播放" FontSize="14" Cursor="Hand" Foreground="White">
                     <TextBlock.Effect>
                         <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
                     </TextBlock.Effect>
@@ -343,7 +343,7 @@
                     </Button.Effect>
                 </Button>
                 <TextBlock Margin="0,-40,0,0" Height="20" HorizontalAlignment="Right" 
-                           Width="70" Text="单曲循环" FontSize="14" Foreground="White">
+                           Width="70" Text="单曲循环" FontSize="14" Cursor="Hand" Foreground="White">
                     <TextBlock.Effect>
                         <DropShadowEffect Color="Black" BlurRadius="1" ShadowDepth="1" Opacity="1" />
                     </TextBlock.Effect>

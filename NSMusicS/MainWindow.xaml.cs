@@ -767,7 +767,7 @@ namespace NSMusicS
                     musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Width = 1920 * nums;
                     musicPlayer_Main_UserControl.Grid_down_Singer_Photo.Height = 1080 * nums;
 
-                    //new Shell_TrayWndHelper().Show();//隐藏任务栏
+                    new Shell_TrayWndHelper().Show();//隐藏任务栏
 
                     State_Windows_Normal = false;
                 }
@@ -778,7 +778,7 @@ namespace NSMusicS
 
                     this.WindowState = System.Windows.WindowState.Normal;
 
-                    //new Shell_TrayWndHelper().Show();
+                    new Shell_TrayWndHelper().Show();
 
                     State_Windows_Normal = true;
                 }
@@ -8812,12 +8812,22 @@ namespace NSMusicS
 
                     try
                     {
-                        myListBoxItem = (ListViewItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex));
-                        if (myListBoxItem != null)
-                            ApplyTransform(myListBoxItem);
-                        myListBoxItem = (ListViewItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - 1));
-                        if (myListBoxItem != null)
-                            ResetTransform(myListBoxItem);
+                        if (musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex >= 0 &&
+                            musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex < musicPlayer_Main_UserControl.ListView_Temp_MRC.Items.Count
+                        )
+                        {
+                            myListBoxItem = (ListViewItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex));
+                            if (myListBoxItem != null)
+                                ApplyTransform(myListBoxItem);
+                        }
+                        if (musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex + 1 >= 1 &&
+                            musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex + 1 < musicPlayer_Main_UserControl.ListView_Temp_MRC.Items.Count
+                        )
+                        {
+                            myListBoxItem = (ListViewItem)(musicPlayer_Main_UserControl.ListView_Temp_MRC.ItemContainerGenerator.ContainerFromIndex(musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex - 1));
+                            if (myListBoxItem != null)
+                                ResetTransform(myListBoxItem);
+                        }
                     }
                     catch { }
 
@@ -8831,6 +8841,9 @@ namespace NSMusicS
                                 canvas_byte_margin_left = 0;
                                 sum_wid = 0;
                                 stackPanel_Byte_Lyic = null;
+
+                                //刷新同步状态
+                                storyboard_lyic_Set_Play = true;
 
                                 if (Bool_Mrc_Animation == true)
                                 {

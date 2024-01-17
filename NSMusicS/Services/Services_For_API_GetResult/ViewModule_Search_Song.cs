@@ -56,10 +56,10 @@ namespace NSMusicS.Services.Services_For_API_GetResult
         {
             Button_Play_Pause_Player_Image = new Uri(Path_App + @"\Button_Image_Svg\播放.svg");
 
-            Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"/Button_Image_Ico/爱心 (1).png")));
-            Song_MV_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"/Button_Image_Ico/视频播放 (1).png")));
-            Song_DownLoad_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"/Button_Image_Ico/下载 (1).png")));
-            Song_UpLoad_Tone_Quality = new ImageBrush(new BitmapImage(new Uri(Path_App + @"/Button_Image_Ico/agora_超高清音质.png")));
+            Song_Like_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\爱心 (1).png")));
+            Song_MV_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\视频播放 (1).png")));
+            Song_DownLoad_Image = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\下载 (1).png")));
+            Song_UpLoad_Tone_Quality = new ImageBrush(new BitmapImage(new Uri(Path_App + @"\Button_Image_Ico\agora_超高清音质.png")));
 
             client = new HttpClient();
 
