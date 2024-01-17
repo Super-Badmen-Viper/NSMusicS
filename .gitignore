@@ -455,3 +455,4 @@ $RECYCLE.BIN/
 *.mp4
 /NSMusicS/bin/Debug/net6.0-windows/Resource/SongListInfo_ini/SongList_Ini
 /NSMusicS/Models/Song_Audio_Out/CSCore_Ffmpeg/FFmpeg/src
+/NSMusicS_For_PythonApp_Of_AudioProcessing_AlgorithmServices/0_result_exe
