@@ -9,18 +9,16 @@
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
              xmlns:lottie="clr-namespace:LottieSharp.WPF;assembly=LottieSharp"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:UserControls="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:UserControls="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls"
              mc:Ignorable="d" 
              UseLayoutRounding="True" SnapsToDevicePixels="True"  
              VirtualizingStackPanel.IsVirtualizing="True"
              VirtualizingStackPanel.VirtualizationMode="Recycling"
              >
     <Grid>
-        <Grid x:Name="Grid_Animation_Model_2">
-
-        </Grid>
-
-        <Grid x:Name="Grid_Animation_Model_1">
+        <!--播放器模块-->
+        <Grid x:Name="Grid_Animation_Model_1_Of_Player">
             <Grid x:Name="Grid_Up_Singer_Photo" >
                 <Grid.Background>
                     <ImageBrush Stretch="UniformToFill"/>
@@ -100,7 +98,7 @@
 
                 <Border Background="#4C000000"/>
 
-                <UserControls_PlayMode_View:UserControl_PlayMode_View_1_AlbumView
+                <UserControls_PlayMode_View:UserControl_PlayMode_1_View_1_AlbumView
                     x:Name="userControl_PlayMode_View_1_AlbumView" Visibility="Collapsed"
                     HorizontalAlignment="Left" VerticalAlignment="Center"
                     Margin="140,-140,0,0"
@@ -177,7 +175,7 @@
                                                 VirtualizingStackPanel.IsVirtualizing="True"
                                                 VirtualizingStackPanel.VirtualizationMode="Recycling"
                                                 IsEnabled="False">
- 
+
                                             </Canvas>
                                             <!--
                                             <Canvas 
@@ -517,8 +515,8 @@
                                  UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                                  Width="90" Height="27" VerticalAlignment="Center">
                                 <TextBlock Height="17" Width="56" 
-                           Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" 
-                           Text="频谱模式" FontSize="13" FontWeight="Bold" />
+                                    Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                    Text="频谱模式" FontSize="13" FontWeight="Bold" />
                             </Border>
                             <Button x:Name="Button_Song_AudioSpectrogram_Image" 
                                  Style="{StaticResource MyButton}" 
@@ -549,793 +547,47 @@
                         VerticalAlignment="Center" HorizontalAlignment="Left"/>
                     </StackPanel>
                 </Border>
+                <Border 
+                    x:Name="Button_End_The_KSing_Of_Stop_Recording"
+                    Width="100" Height="36" 
+                    Margin="0,21,302,0" Background="#19FFFFFF"
+                    BorderBrush="#33FFFFFF" BorderThickness="1" CornerRadius="10"
+                    HorizontalAlignment="Right" VerticalAlignment="Top" >
+                    
+                    <StackPanel Orientation="Horizontal">
+                        <Border 
+                            Width="12" Height="12" Margin="6,0,0,0"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="-90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
+                            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/下02.svg" Cursor=""/>
+                        </Border>
+                        <TextBlock
+                            Text="结束录制" Margin="4,0,0,0" 
+                            FontSize="14" Foreground="#FFFFFF" FontWeight="Bold"
+                            VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Border>
+                <UserControls_PlayMode_View:UserControl_PlayMode_4_View_1_KSing_Octave 
+                    x:Name="userControl_PlayMode_4_View_1_KSing_Octave"
+                    VerticalAlignment="Top" HorizontalAlignment="Left" 
+                    Margin="70,15,0,0"
+                    />
+                
             </Grid>
         </Grid>
 
         <!--K歌模块-->
-        <Grid Visibility="Collapsed">
-            <Canvas 
-                x:Name="Canvas_Song_Name"
-                VerticalAlignment="Center" ClipToBounds="True" 
-                    Height="490"  Margin="555,14,0,0" Width="400" HorizontalAlignment="Left" Background="White">
-                <Canvas.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.MouseRightButtonDown">
-                        <BeginStoryboard>
-                            <Storyboard x:Name="StoryBorad_Singing_Mode" Timeline.DesiredFrameRate="60">
-                                <DoubleAnimationUsingKeyFrames
-                                    x:Name="DoubleAnimationUsingKeyFrames_TextBlock_Song_Name"
-                                    RepeatBehavior="Forever"
-                                    Storyboard.TargetName="content1"
-                                    Storyboard.TargetProperty="RenderTransform.X"
-                                    >
-                                    <LinearDoubleKeyFrame Value="0" KeyTime="0:0:0" />
-                                    <LinearDoubleKeyFrame x:Name="LinearDoubleKeyFrame_Song_Name_Text_Length" 
-                                                          Value="-500" KeyTime="0:0:4" />
-                                    <LinearDoubleKeyFrame x:Name="LinearDoubleKeyFrame_Song_Name_Text_Length_other"
-                                                          Value="-500" KeyTime="0:0:5.2" />
-                                    <!-- 空余4s用来延迟动画效果（与QQ音乐界面更相似） -->
-                                </DoubleAnimationUsingKeyFrames>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </Canvas.Triggers>
-                <StackPanel x:Name="content1"
-                            VerticalAlignment="Center" HorizontalAlignment="Left" 
-                            Width="Auto" Height="490" Orientation="Horizontal">
-                    <StackPanel.RenderTransform>
-                        <TranslateTransform Y="0" />
-                    </StackPanel.RenderTransform>
-
-                    <Border 
-                        CornerRadius="6" 
-                        Focusable="False" 
-                        Height="10" Width="60" 
-                    >
-                        <Border.Triggers>
-                            <EventTrigger RoutedEvent="UIElement.MouseLeftButtonDown">
-                                <BeginStoryboard>
-                                    <Storyboard >
-                                        <DoubleAnimationUsingKeyFrames 
-                                            Duration="0:0:4"
-                                            Storyboard.TargetName="Trans" Storyboard.TargetProperty="X"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </Border.Triggers>
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" x:Name="Trans"/>
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,80,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="120" Margin="0,40,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="40" Margin="0,20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-                    <Border CornerRadius="6" Focusable="False" Height="10" Width="80" Margin="0,-20,0,0">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <TranslateTransform X="-0.5" />
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF00FFA2" Offset="0.49"/>
-                                <GradientStop Color="#FFFFBB00" Offset="0.51"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                </StackPanel>
-            </Canvas>
+        <Grid x:Name="Grid_Animation_Model_2_Of_KSing" Visibility="Visible">
+            <UserControls_PlayMode_View:UserControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel
+                x:Name="userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel"
+            />
         </Grid>
 
     </Grid>

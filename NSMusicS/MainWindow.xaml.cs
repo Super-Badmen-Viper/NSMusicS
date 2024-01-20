@@ -1,4 +1,4 @@
-﻿#region 引用
+﻿#region using
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,6 +75,8 @@ using Castle.Components.DictionaryAdapter.Xml;
 using System.Globalization;
 using LottieSharp.WPF;
 using System.Security.Cryptography;
+using SharpVectors.Converters;
+using NSMusicS.Models.Song_KSing_Out.Data_Read_Of_Speech_Denoising;
 
 #endregion
 
@@ -97,8 +99,12 @@ namespace NSMusicS
         }
         private async void DispatcherTimer_Tick(object? sender, EventArgs e)
         {
+            /// Save SongList To Sql
             await update_Song_List_Infos.Save_SongListInfoAsync();
             ///await update_album_List_Infos.Save_AlbumListInfoAsync();
+
+            /// 
+            Check_LoveSong_In_LoveSongList_Reset_SongList_Info();
         }
         [DllImport("kernel32.dll")]
         private static extern bool SetProcessWorkingSetSize(IntPtr proc, int min, int max);
@@ -399,7 +405,6 @@ namespace NSMusicS
             userControl_ButtonFrame_TopPanel.Button_Exit.MouseLeftButtonDown += Button_Exit_Click;
             userControl_ButtonFrame_TopPanel.Button_Max.MouseLeftButtonDown += Button_Max_Click;
             userControl_ButtonFrame_TopPanel.Button_Min.MouseLeftButtonDown += Button_Min_Click;
-            userControl_ButtonFrame_TopPanel.Button_Close.MouseLeftButtonDown += Button_Min_Click;
             musicPlayer_Main_UserControl.Button_Exit.MouseLeftButtonDown += Button_Exit_Click;
             musicPlayer_Main_UserControl.Button_Max.MouseLeftButtonDown += Button_Max_Click;
             musicPlayer_Main_UserControl.Button_Min.MouseLeftButtonDown += Button_Min_Click;
@@ -4936,6 +4941,57 @@ namespace NSMusicS
                 viewModule_Search_Song_For_Cloud_Music.Show_API_HttpClient_Complete = Visibility.Collapsed;
             }
         }
+
+        /// <summary>
+        /// 同步当前正在播放歌单数据状态
+        /// </summary>
+        /// <param name="ck_Selected"></param>
+        /// <param name="listView_Temp_Info_End"></param>
+        public async void Check_LoveSong_In_LoveSongList_Reset_SongList_Info()
+        {
+            songList_Infos = SongList_Info.Retuen_This();
+            songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
+
+            if (songList_Infos_Current_Playlist != null)
+            {
+                if (songList_Infos_Current_Playlist.Count != 0)
+                {
+                    for (int i = 0; i < songList_Infos_Current_Playlist.Count; i++)
+                    {
+                        for (int g = 0; g < songList_Infos[0][0].Songs.Count; g++)//我的收藏歌单 中含有的 歌曲数量
+                        {
+                            if (!songList_Infos_Current_Playlist[i].Song_Url.Equals(songList_Infos[0][0].Songs[g].Song_Url))
+                            {
+                                if (songList_Infos_Current_Playlist[i].Song_Like != 0)
+                                {
+                                    songList_Infos_Current_Playlist[i].Song_Like = 0;
+                                    songList_Infos_Current_Playlist[i].Song_Like_Image = brush_LoveNormal;
+
+                                    await update_Song_List_Infos.DB_Select_Model(3, songList_Infos_Current_Playlist[i], 17);
+                                }
+                            }
+                        }
+                    }
+                    for (int i = 0; i < songList_Infos_Current_Playlist.Count; i++)
+                    {
+                        for (int g = 0; g < songList_Infos[0][0].Songs.Count; g++)//我的收藏歌单 中含有的 歌曲数量
+                        {
+                            if (songList_Infos_Current_Playlist[i].Song_Url.Equals(songList_Infos[0][0].Songs[g].Song_Url))
+                            {
+                                if (songList_Infos_Current_Playlist[i].Song_Like != 1)
+                                {
+                                    songList_Infos_Current_Playlist[i].Song_Like = 1;
+                                    songList_Infos_Current_Playlist[i].Song_Like_Image = brush_LoveEnter;
+
+                                    await update_Song_List_Infos.DB_Select_Model(3, songList_Infos_Current_Playlist[i], 17);
+                                }
+                            }
+                        }
+                    }
+                    SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
+                }
+            }
+        }
         #endregion
 
         #region （关闭前）歌曲信息保存
@@ -7592,21 +7648,93 @@ namespace NSMusicS
                 userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Maximum = mediaElement_Song.TotalTime.TotalMilliseconds;
 
                 //K歌模块
-                /*LinearDoubleKeyFrame linearDoubleKeyFrame_1 = new LinearDoubleKeyFrame();
-                linearDoubleKeyFrame_1.Value = 0;
-                linearDoubleKeyFrame_1.KeyTime = new TimeSpan(0);
+                try
+                {
+                    musicPlayer_Main_UserControl.
+                                userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.
+                                    Canvas_KSing_Musical_Scale_Animation_Panel.
+                                        Children.Clear();
 
-                LinearDoubleKeyFrame linearDoubleKeyFrame_2 = new LinearDoubleKeyFrame();
-                linearDoubleKeyFrame_2.Value = - musicPlayer_Main_UserControl.content1.ActualWidth;
-                linearDoubleKeyFrame_2.KeyTime = durationTimeSpan;
+                    //加载CSV : Resource\KSing\Original_Song
+                    song_KSing_Pitch_Infos = Song_KSing_Pitch_Infos.Retuen_This();
+                    song_KSing_Pitch_Infos.csvDatas_Of_Pitch =
+                        Generate_CSV_Info_Of_Pitch.ReadCSVFile(
+                            Path_App + @"\KSing\Original_Song\" +
+                                this_Song_Info.Singer_Name + " - " + this_Song_Info.Song_Name + ".csv");
+                    if (song_KSing_Pitch_Infos.csvDatas_Of_Pitch != null)
+                    {
+                        musicPlayer_Main_UserControl.
+                            userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.
+                                Visibility = Visibility.Visible;
 
-                musicPlayer_Main_UserControl.DoubleAnimationUsingKeyFrames_TextBlock_Song_Name.KeyFrames.Clear();
-                musicPlayer_Main_UserControl.DoubleAnimationUsingKeyFrames_TextBlock_Song_Name.KeyFrames.Add(linearDoubleKeyFrame_1);
-                musicPlayer_Main_UserControl.DoubleAnimationUsingKeyFrames_TextBlock_Song_Name.KeyFrames.Add(linearDoubleKeyFrame_2);
-                musicPlayer_Main_UserControl.StoryBorad_Singing_Mode.Begin();*/
-
-
-
+                        //1.设置Canvas音阶面板的Width
+                        musicPlayer_Main_UserControl.
+                            userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.
+                                Canvas_KSing_Musical_Scale_Animation_Panel.
+                                    Width =
+                                        Constant_Of_Speecch_Denoising.constant_Background_Musical_Scale_bar_Width *
+                                        Constant_Of_Speecch_Denoising.This_Song_Total_Second;
+                        //2.提取csvDatas_Of_Pitch中的人声部分(下标范围)
+                        song_KSing_Pitch_Infos.vocal_Pitch_Ranges =
+                            Generate_CSV_Info_Of_Pitch.GetNonZeroPitchRanges(
+                                song_KSing_Pitch_Infos.csvDatas_Of_Pitch);
+                        //3.生成音阶条填充至Canvas音阶面板
+                        var userControl_Musical_Scale_bars = Generate_CSV_Info_Of_Pitch.Get_UserControl_Musical_Scale_bars_For_Canvas_KSing_Musical_Scale();
+                        foreach (var item in userControl_Musical_Scale_bars)
+                        {
+                            musicPlayer_Main_UserControl.
+                                userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.
+                                    Canvas_KSing_Musical_Scale_Animation_Panel.
+                                        Children.Add(item.Key);
+                            musicPlayer_Main_UserControl.
+                                userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.
+                                    Canvas_KSing_Musical_Scale_Animation_Panel.
+                                        Children[musicPlayer_Main_UserControl.
+                                                    userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.
+                                                        Canvas_KSing_Musical_Scale_Animation_Panel.
+                                                            Children.Count - 1].SetValue(
+                                Canvas.LeftProperty, item.Value.Item1
+                                );
+                            musicPlayer_Main_UserControl.
+                                userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.
+                                    Canvas_KSing_Musical_Scale_Animation_Panel.
+                                        Children[musicPlayer_Main_UserControl.
+                                                    userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.
+                                                        Canvas_KSing_Musical_Scale_Animation_Panel.
+                                                            Children.Count - 1].SetValue(
+                                Canvas.TopProperty, item.Value.Item2
+                                );
+                        }
+                    }
+                
+                    // 获取动画对象
+                    DoubleAnimationUsingKeyFrames animation =
+                        musicPlayer_Main_UserControl.
+                            userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.
+                                Canvas_KSing_Musical_Scale_Animation_Panel.
+                                    FindName("CanvasTranslateAnimation") as DoubleAnimationUsingKeyFrames;
+                    if (animation != null)
+                    {
+                        // 修改动画属性
+                        var keyFrame = animation.KeyFrames[1] as LinearDoubleKeyFrame;
+                        if (keyFrame != null)
+                        {
+                            keyFrame.Value =
+                                -musicPlayer_Main_UserControl.
+                                    userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.
+                                        Canvas_KSing_Musical_Scale_Animation_Panel.Width;// 设置新的值
+                            keyFrame.KeyTime = mediaElement_Song.TotalTime;
+                        }
+                        musicPlayer_Main_UserControl.
+                            userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.
+                                StoryBorad_Singing_Mode.Begin();
+                    }
+                }
+                catch {
+                    musicPlayer_Main_UserControl.
+                        userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.
+                            Visibility = Visibility.Collapsed;
+                }
 
             }
             else
@@ -7732,37 +7860,33 @@ namespace NSMusicS
             }
             else // 当通过点击更改滑块位置时
             {
-                // 如果更改的不足10秒，就不动
+                // 如果更改的不足10，就不动
                 if (Math.Abs(mediaElement_Song.CurrentTime.TotalMilliseconds
-                    - userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Value) < 10)
+                    - userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Value) < 100)
                     return;
 
-                if (mediaElement_Song.CurrentTime.TotalMilliseconds > 0)
+                if (mediaElement_Song.CurrentTime.TotalMilliseconds >= 0)
                 {
                     // 更新音频播放进度
                     await mediaElement_Song.SetCurrentTimeAsync(new TimeSpan(0, 0, 0, 0, (int)userControl_ButtonFrame_MusicPlayer.Silder_Music_Width.Value));
-
-                    dispatcherTimer_Silder.Start();
-
                     // K歌模块
                     // 跳转K歌进度
-                    /*if (musicPlayer_Main_UserControl.StoryBorad_Singing_Mode != null)
+                    if (musicPlayer_Main_UserControl.userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.StoryBorad_Singing_Mode != null)
                     {
-                        // 计算进度条的比值
-                        double targetProgress = mediaElement_Song.NaturalDuration.TimeSpan.TotalMilliseconds / userControl_ButtonFrame_MusicPlayer.Silder_Music_Temp_Width.Value;
-
                         // 获取K歌 总时间进度
-                        double temp = (musicPlayer_Main_UserControl.StoryBorad_Singing_Mode.Children[0] as DoubleAnimationUsingKeyFrames)
-                            .KeyFrames[1].KeyTime.TimeSpan.TotalMilliseconds;
+                        double totalSongTimeMilliseconds = mediaElement_Song.TotalTime.TotalMilliseconds;
+                        // 确保总时间大于零，避免除以零异常
+                        if (totalSongTimeMilliseconds > 0)
+                        {
+                            musicPlayer_Main_UserControl.userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.StoryBorad_Singing_Mode.
+                                Seek(
+                                    TimeSpan.FromMilliseconds(
+                                        mediaElement_Song.CurrentTime.TotalMilliseconds)
+                                );
+                        }
+                    }
 
-                        // 计算要跳转的时间点
-                        int nums = (int)(temp / targetProgress);
-
-                        // 使用 TimeFromMilliseconds 创建 TimeSpan 对象
-                        TimeSpan seekTime = TimeSpan.FromMilliseconds(nums);
-
-                        musicPlayer_Main_UserControl.StoryBorad_Singing_Mode.Seek(seekTime);
-                    }*/
+                    dispatcherTimer_Silder.Start();
                 }
             }
         }
@@ -8803,13 +8927,6 @@ namespace NSMusicS
                 {
                     //释放此控件的内存，此控件大量使用会占用大量内存
                     myTextBlock_TextBlock = null;
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                    if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                    {
-                        SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
-                    }
-
                     try
                     {
                         if (musicPlayer_Main_UserControl.ListView_Temp_MRC.SelectedIndex >= 0 &&
@@ -10034,6 +10151,22 @@ namespace NSMusicS
                     //歌词时间匹配方法  会自动跳转至指定选中歌词行
 
                     mediaElement_Song.CurrentTime = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(ListBox_MRC_Song_MRC_Time[line_num]));
+                    // K歌模块
+                    // 跳转K歌进度
+                    if (musicPlayer_Main_UserControl.userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.StoryBorad_Singing_Mode != null)
+                    {
+                        // 获取K歌 总时间进度
+                        double totalSongTimeMilliseconds = mediaElement_Song.TotalTime.TotalMilliseconds;
+                        // 确保总时间大于零，避免除以零异常
+                        if (totalSongTimeMilliseconds > 0)
+                        {
+                            musicPlayer_Main_UserControl.userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.StoryBorad_Singing_Mode.
+                                Seek(
+                                    TimeSpan.FromMilliseconds(
+                                        mediaElement_Song.CurrentTime.TotalMilliseconds)
+                                );
+                        }
+                    }
 
                     //关闭歌词选择进度面板
                     Show_Media_Siler();
@@ -10966,6 +11099,11 @@ namespace NSMusicS
                 window_Hover_EQ_Panel.Visibility = Visibility.Collapsed;
             }
         }
+        #endregion
+
+        #region K歌模块
+        private static Song_KSing_Pitch_Infos song_KSing_Pitch_Infos;
+
         #endregion
 
         #region 获得指定元素的父元素

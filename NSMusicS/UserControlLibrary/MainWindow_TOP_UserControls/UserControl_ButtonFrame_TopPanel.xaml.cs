@@ -42,7 +42,6 @@ namespace NSMusicS.UserControlLibrary.MainWindow_TOP_UserControls
             SvgViewbox_Button_Skin.Source = new Uri(@"Resources\\UI_SVG\\FFFFFF\\皮肤.svg", UriKind.Relative);
             SvgViewbox_Button_Min.Source = new Uri(@"Resources\\UI_SVG\\FFFFFF\\最小化.svg", UriKind.Relative);
             SvgViewbox_Button_Max.Source = new Uri(@"Resources\\UI_SVG\\FFFFFF\\最大化.svg", UriKind.Relative);
-            SvgViewbox_Button_Close.Source = new Uri(@"Resources\\UI_SVG\\FFFFFF\\关闭.svg", UriKind.Relative);
             SvgViewbox_Button_Exit.Source = new Uri(@"Resources\\UI_SVG\\FFFFFF\\启动.svg", UriKind.Relative);
 
             Model_1.MouseLeftButtonDown += Model_1_MouseLeftButtonDown;

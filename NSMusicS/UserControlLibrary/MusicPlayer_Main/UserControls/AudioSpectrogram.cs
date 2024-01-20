@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls.VIewModules;
+using NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls.VIewModules_AudioVisualizers;
 using NAudio.CoreAudioApi;
 using NAudio.Dsp;
 using NAudio.Wave;

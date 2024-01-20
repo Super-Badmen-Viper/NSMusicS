@@ -1,6 +1,6 @@
 ﻿using NAudio.CoreAudioApi;
 using NAudio.Wave;
-using NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls.VIewModules;
+using NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls.VIewModules_AudioVisualizers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

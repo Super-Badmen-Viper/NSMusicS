@@ -1,0 +1,102 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls_PlayMode_View.UserControl_PlayMode_4_View_1_KSing_Octave"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls_PlayMode_View"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             mc:Ignorable="d">
+    <Grid>
+        <!--满分  600*5 -> 3000-->
+        
+        <!--BackGound-->   
+        <Border 
+            Width="600" Height="36" 
+            Background="#19FFFFFF"
+            BorderBrush="#33FFFFFF" BorderThickness="1" CornerRadius="10"
+            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="4,0,0,0" >
+            <StackPanel Orientation="Horizontal">
+                <Border 
+                    Width="16" Height="16" Margin="16,0,0,0"
+                    HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                    <Border.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Border.RenderTransform>
+                    <svgc:SvgViewbox Source="/NSMusicS;component/UI_0_Library/下02.svg" Cursor=""/>
+                </Border>
+            </StackPanel>
+        </Border>
+        
+        <!--Slider KSing Score Value-->
+        <Border 
+            x:Name="Border_Slider_Of_KSing_Score"
+            Width="400" Height="36" BorderBrush="#33FFFFFF" BorderThickness="1" CornerRadius="10"
+            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="4,0,0,0" >
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterX="0.5" CenterY="0.5"/>
+                            <RotateTransform Angle="-90" CenterX="0.5" CenterY="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FB4949" />
+                    <GradientStop Color="#FF7878" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <!--KSing Level Marks-->
+        <Border 
+            BorderThickness="0"
+            HorizontalAlignment="Left" Height="36" Background="#02FFFFFF"
+            VerticalAlignment="Center" Width="36" Cursor="Hand"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            Margin="480,0,0,0"  >
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/KSing_Level (1).svg"/>
+        </Border>
+        <Border 
+            BorderThickness="0"
+            HorizontalAlignment="Left" Height="36" Background="#02FFFFFF"
+            VerticalAlignment="Center" Width="36" Cursor="Hand"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            Margin="510,0,0,0"  >
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/KSing_Level (2).svg"/>
+        </Border>
+        <Border 
+            BorderThickness="0"
+            HorizontalAlignment="Left" Height="36" Background="#02FFFFFF"
+            VerticalAlignment="Center" Width="36" Cursor="Hand"
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality" 
+            Margin="540,0,0,0"  >
+            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/KSing_Level (3).svg"/>
+        </Border>
+
+        <!--This Song Album Image-->
+        <Border 
+            Width="50" Height="50" CornerRadius="40"
+            BorderThickness="3" BorderBrush="White"
+            HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+            <Border.Background>
+                <ImageBrush 
+                    x:Name="ImageBrush_This_Song_Album"
+                    ImageSource="/NSMusicS;component/ico_ui_library/初学者.jpg" 
+                    Stretch="UniformToFill"/>
+            </Border.Background>
+        </Border>
+        
+        <!--Text KSing Score Value-->
+        <TextBlock
+            x:Name="TextBlock_KSing_Score_Text"
+            Text="2000" Margin="60,0,0,0" 
+            FontSize="18" Foreground="#FFFFFF" FontWeight="Bold"
+            VerticalAlignment="Center" HorizontalAlignment="Left"/>
+    </Grid>
+</UserControl>

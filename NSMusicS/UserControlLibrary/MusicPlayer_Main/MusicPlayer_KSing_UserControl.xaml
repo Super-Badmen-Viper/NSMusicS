@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="NSMusicS.UserControlLibrary.MusicPlayer_Main.MusicPlayer_KSing_UserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:UserControls_PlayMode_View ="clr-namespace:NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls_PlayMode_View"
+             mc:Ignorable="d" Width="1240" Height="690">
+    <Grid>
+        <Border 
+            x:Name="Button_End_The_KSing_Of_Stop_Recording"
+            Width="100" Height="36" 
+            Margin="0,21,302,0" Background="#19FFFFFF"
+            BorderBrush="#33FFFFFF" BorderThickness="1" CornerRadius="10"
+            HorizontalAlignment="Right" VerticalAlignment="Top" >
+            <StackPanel Orientation="Horizontal">
+                <Border 
+                    Width="12" Height="12" Margin="6,0,0,0"
+                    HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                    <Border.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Border.RenderTransform>
+                    <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/下02.svg" Cursor=""/>
+                </Border>
+                <TextBlock
+                    Text="结束录制" Margin="4,0,0,0" 
+                    FontSize="14" Foreground="#FFFFFF" FontWeight="Bold"
+                    VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            </StackPanel>
+        </Border>
+        <UserControls_PlayMode_View:UserControl_PlayMode_4_View_1_KSing_Octave 
+            x:Name="userControl_PlayMode_4_View_1_KSing_Octave"
+            VerticalAlignment="Top" HorizontalAlignment="Left" 
+            Margin="70,15,0,0"/>
+        
+        
+        
+    </Grid>
+    <UserControl.Resources>
+        <!-- ListView平滑滚动效果 -->
+        <ItemsPanelTemplate x:Key="ItemsPanelTemplate2">
+            <StackPanel IsItemsHost="true">
+                <i:Interaction.Behaviors>
+                    <i:FluidMoveBehavior AppliesTo="Children" Duration="00:00:00:00.2">
+                        <i:FluidMoveBehavior.EaseY>
+                            <QuadraticEase EasingMode="EaseOut"/>
+                        </i:FluidMoveBehavior.EaseY>
+                    </i:FluidMoveBehavior>
+                </i:Interaction.Behaviors>
+            </StackPanel>
+        </ItemsPanelTemplate>
+    </UserControl.Resources>
+</UserControl>

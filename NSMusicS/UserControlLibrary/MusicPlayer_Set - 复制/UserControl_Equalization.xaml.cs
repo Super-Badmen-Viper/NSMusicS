@@ -1,5 +1,5 @@
 ﻿using NSMusicS.Models.Song_Audio_Out;
-using NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls.VIewModules;
+using NSMusicS.UserControlLibrary.MusicPlayer_Main.UserControls.VIewModules_AudioVisualizers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -30,10 +30,16 @@
     <Compile Update="UserControlLibrary\Main_Home_TOP_UserControls\UserControls_App_Setting\UserControl_Set_7_Web.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_KSing_UserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_1_Song_UserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_2_Album_UserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_4_KSing_UserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\Assembly_Albums_And_Track.xaml.cs">
@@ -43,6 +49,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\UserControl_Main_Model_3_Control_Albums_And_Tracks.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_4_View_1_KSing_Octave.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_4_View_2_Childrens\UserControl_Musical_Scale_bar.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_4_View_2_Childrens\UserControl_Scale_bar_Subassembly_Schedule_Fill.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -236,6 +254,12 @@
     <Page Update="UserControlLibrary\Main_UserControls\UserControl_VerticalRectangle.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_KSing_UserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_4_KSing_UserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\MusicPlayer_Model_Control_Albums\Assembly_Albums_And_Track.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -263,22 +287,28 @@
     <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_AudioVisualizer.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_ListView_Lyic_Of_ViewModel_Select.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization_2.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls\UserControl_Spectrum_Visualization_3.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_View_1_AlbumView.xaml">
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_1_View_1_AlbumView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_View_2_AlbumView.xaml">
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_1_View_2_AlbumView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_4_View_1_KSing_Octave.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_4_View_2_Childrens\UserControl_Musical_Scale_bar.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_4_View_2_Childrens\UserControl_Scale_bar_Subassembly_Schedule_Fill.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControlLibrary\MusicPlayer_Main\UserControls_PlayMode_View\UserControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControlLibrary\MusicPlayer_Main\UserControl_TaskbarIcon.xaml">

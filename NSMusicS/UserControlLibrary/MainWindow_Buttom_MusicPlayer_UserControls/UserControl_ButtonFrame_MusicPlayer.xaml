@@ -17,17 +17,7 @@
                 UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
                 Focusable="False" HorizontalAlignment="Center" 
         />
-        <Slider x:Name="Silder_Music_Width" Value="8" Background="#1C444444" 
-                Height="12" Margin="0,49.5,0,0" Width="300"
-                VerticalAlignment="Top" HorizontalContentAlignment="Stretch" 
-                UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
-                Style="{DynamicResource SliderStyle1}" 
-                IsMoveToPointEnabled="True" Cursor="Hand"
-                Focusable="False" HorizontalAlignment="Center" 
-                Thumb.DragStarted="Slider_ListPlayer_Timer_DragStarted"
-                Thumb.DragCompleted="Slider_ListPlayer_Timer_DragCompleted" 
-                MouseEnter="Border_Hover_BackGround_MouseLeave"
-                />
+        
 
         <Grid x:Name="Grid_MusicPlayer_MainWindow_Left"
               Visibility="Visible"
@@ -283,7 +273,7 @@
 
 
         <StackPanel x:Name="Stack_Panel_Order"
-            Width="120" Height="160"  Margin="0,-234,148,0" HorizontalAlignment="Center">
+            Width="120" Height="160"  Margin="0,-234,168,0" HorizontalAlignment="Center">
             <Border x:Name="Song_Order_Panel"            
                 HorizontalAlignment="Stretch" 
                 BorderThickness="0.6" CornerRadius="4.3,4.3,4.3,4.3"
@@ -372,7 +362,7 @@
         </StackPanel>
 
         <StackPanel x:Name="Stack_Panel_Voice"
-            Width="70" Height="240"  Margin="148,-250,0,64" HorizontalAlignment="Center">
+            Width="70" Height="300"  Margin="168,-250,0,64" HorizontalAlignment="Center">
             <Border x:Name="Song_VoIce_Panel" 
                 BorderThickness="0.6" CornerRadius="4.3,4.3,4.3,4.3"
                 Background="#99232325" Height="240"
@@ -552,5 +542,17 @@
             UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  Cursor="Hand" >
             <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/音量.svg" Cursor="Hand"/>
         </Button>
+
+        <Slider x:Name="Silder_Music_Width" Value="8" Background="#1C444444" 
+            Height="12" Margin="0,49.5,0,0" Width="300"
+            VerticalAlignment="Top" HorizontalContentAlignment="Stretch" 
+            UseLayoutRounding="True" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"  
+            Style="{DynamicResource SliderStyle1}" 
+            IsMoveToPointEnabled="True" Cursor="Hand"
+            Focusable="False" HorizontalAlignment="Center" 
+            Thumb.DragStarted="Slider_ListPlayer_Timer_DragStarted"
+            Thumb.DragCompleted="Slider_ListPlayer_Timer_DragCompleted" 
+            MouseEnter="Border_Hover_BackGround_MouseLeave"
+        />
     </Grid>
 </UserControl>

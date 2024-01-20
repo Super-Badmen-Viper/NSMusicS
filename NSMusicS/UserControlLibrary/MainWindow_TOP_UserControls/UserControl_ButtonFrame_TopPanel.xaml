@@ -115,15 +115,6 @@
                     x:Name="SvgViewbox_Button_Max" Cursor="Hand"/>
                 </Border>
                 <Border 
-                x:Name="Button_Close"
-                CornerRadius="4" Background="#02FFFFFF"
-                HorizontalAlignment="Right" VerticalAlignment="Center" 
-                Width="22" Height="22" Margin="10,0,0,0">
-                    <svgc:SvgViewbox 
-                    Width="14" Height="14"
-                    x:Name="SvgViewbox_Button_Close" Cursor="Hand"/>
-                </Border>
-                <Border 
                 x:Name="Button_Exit"
                 CornerRadius="4" Background="#02FFFFFF"
                 HorizontalAlignment="Right" VerticalAlignment="Center" 

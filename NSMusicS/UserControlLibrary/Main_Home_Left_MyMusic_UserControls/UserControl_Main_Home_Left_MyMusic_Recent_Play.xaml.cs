@@ -994,6 +994,8 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
             Grid_ListItem_CrudModel_1.Margin = new Thickness(0, 90, 0, 0);
             Grid_ListItem_CrudModel_2.Visibility = Visibility.Visible;
             GridViewColumn_Check_ListView_Song.Width = 30;
+
+            Grid_NormalModel_3.Visibility = Visibility.Collapsed;
         }
 
         private void Stack_Button_Exit_LotLItemCrud_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -1002,6 +1004,8 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Left_MyMusic_UserControls
             Grid_ListItem_CrudModel_1.Margin = new Thickness(0, 140, 0, 0);
             Grid_ListItem_CrudModel_2.Visibility = Visibility.Collapsed;
             GridViewColumn_Check_ListView_Song.Width = 0;
+
+            Grid_NormalModel_3.Visibility = Visibility.Collapsed;
         }
 
         private void ListView_Download_SongList_Info_SourceUpdated(object sender, DataTransferEventArgs e)
