@@ -452,7 +452,8 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-*.mp4
-/NSMusicS/bin/Debug/net8.0-windows7.0/Resource/SongListInfo_ini/SongList_Ini
-/NSMusicS/Models/Song_Audio_Out/CSCore_Ffmpeg/FFmpeg/src
+/NSMusicS_For_PythonApp_Of_AudioProcessing_AlgorithmServices/0_result_exe/build
+/NSMusicS_For_PythonApp_Of_AudioProcessing_AlgorithmServices/0_result_exe/dist
 /NSMusicS_For_PythonApp_Of_AudioProcessing_AlgorithmServices/0_result_exe
+/NSMusicS/Models/Song_Audio_Out/CSCore_Ffmpeg/FFmpeg/src
+/MoZhi_Song_Duration_Allocation/Resource/EXO回归预告.mp4
