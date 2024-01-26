@@ -92,17 +92,24 @@
       </div>
       <div class="gird_Right">
         <div class="gird_Right_current_playlist_button_area">
+          <div>
 
+          </div>
+          <h5>999+</h5>
         </div>
         <div class="gird_Right_button_area">
           <div class="gird_Right_button_area_up">
-            <div></div>
-            <div></div>
-            <div></div>
+            <div id="button_this_mv"></div>
+            <div id="button_this_lysic"></div>
+            <div id="button_this_more_info"></div>
           </div>
           <div class="gird_Right_button_area_down">
-            <div></div>
-            <div></div>
+            <div id="button_audio_speed">
+              <h5>倍速</h5>
+            </div>
+            <div id="button_sound_effects">
+              <h5>音效</h5>
+            </div>
           </div>
         </div>
       </div>
@@ -119,7 +126,7 @@
   width: 100vw;
   height: 80px;
   z-index: 100;
-  background-color: black;
+  background-color: #FFFFFF;
 }
 
 .layout_distribution_3 {
@@ -139,7 +146,9 @@
 .gird_Left {
   width: 380px;
   height: 80px;
-  background-color: aliceblue;
+  
+  cursor: default;
+  user-select: none;
 }
 .gird_Left .button_open_player_view{
   width: 60px;height: 60px;
@@ -156,14 +165,13 @@
 .gird_Left .button_open_player_view .back_img{
   width: 60px;height: 60px;
   border-radius: 10px;
-  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.25);
   z-index: 0;
 }
 .gird_Left .bar_left_text_song_name{
-  width: 220px;
+  width: 280px;
   height: 56px;
   margin-top: 12px;margin-left: 14px;
-  background-color: aqua;
   float: left;text-align: left;
 }
 .gird_Left .bar_left_text_song_name :first-child{
@@ -171,12 +179,14 @@
   font-size: 16px;
   font-weight: 400;
   text-wrap: nowrap;
+  color: #595959;
 }
 .gird_Left .bar_left_text_song_name :last-child{
   margin-top: 2px;
   font-size: 14px;
   font-weight: 400;
   text-wrap: nowrap;
+  color: #595959;
 }
 
 .gird_Middle {
@@ -190,7 +200,7 @@
   align-items: center;
   width: 230px;
   margin: 0px auto;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 .gird_Middle .grid_Middle_button_area div{
   width: 34px; 
@@ -201,17 +211,22 @@
   height: 40px;
 }
 .gird_Middle :last-child{
-  margin-bottom: 4px;
+  height: 6px;
+  bottom: 4px;
+  
+  cursor: default;
+  user-select: none;
 }
 .gird_Middle #button_order{
   background-image: url(../src/assets/顺序播放.svg);
   background-size: 22px 22px;
   background-repeat: no-repeat;
   background-position: center;
+  margin-top: 1px;
 }
 .gird_Middle #button_previous_song{
   background-image: url(../src/assets/上一首.svg);
-  background-size: 36px 36px;
+  background-size: 22px 22px;
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -223,28 +238,28 @@
 }
 .gird_Middle #button_next_song{
   background-image: url(../src/assets/下一首.svg);
-  background-size: 36px 36px;
+  background-size: 22px 22px;
   background-repeat: no-repeat;
   background-position: center;
 }
 .gird_Middle #button_vioce{
-  background-image: url(../src/assets/歌词未点击.svg);
-  background-size: 26px 26px;
+  background-image: url(../src/assets/音量.svg);
+  background-size: 22px 22px;
   background-repeat: no-repeat;
   background-position: center;
-
-  margin-top: 2px;
+  margin-top: 8px;
 }
 
 .gird_Right {
   width: 380px;
   height: 80px;
-  background-color: aliceblue;
+  
+  cursor: default;
+  user-select: none;
 }
 .gird_Right .gird_Right_button_area{
   width: 100px;
   height: 80px;
-  background-color: aqua;
   float: right;
 }
 .gird_Right .gird_Right_button_area .gird_Right_button_area_up{
@@ -256,25 +271,108 @@
   align-items: center;
 }
 .gird_Right .gird_Right_button_area .gird_Right_button_area_up div{
-  width: 22px;height: 22px;
-  background-color: black;
+  width: 22px;
+  height: 22px;
+}
+.gird_Right .gird_Right_button_area .gird_Right_button_area_up #button_this_mv{
+  background-image: url(../src/assets/视频.svg);
+  background-size: 26px 26px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.gird_Right .gird_Right_button_area .gird_Right_button_area_up #button_this_lysic{
+  background-image: url(../src/assets/歌词.svg);
+  background-size: 22px 22px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.gird_Right .gird_Right_button_area .gird_Right_button_area_up #button_this_more_info{
+  background-image: url(../src/assets/更多.svg);
+  background-size: 22px 22px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .gird_Right .gird_Right_button_area .gird_Right_button_area_down{
   width: 100px;
   height: 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-top: 6px;
 }
 .gird_Right .gird_Right_button_area .gird_Right_button_area_down div{
-  width: 22px;height: 22px;
-  background-color: black;
+  
+}
+.gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_audio_speed{
+  float: left;
+  width: 40px;height: 22px;
+  border: 1px;
+  border-color: #D3DBEA;
+  border-style: solid;
+  border-radius: 6px;
+  color: #283248;
+}
+.gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_audio_speed :hover{
+  float: left;
+  width: 40px;height: 22px;
+  border: 1px;
+  border-color: #3DC3FF;
+  border-style: solid;
+  border-radius: 6px;
+  color: #3DC3FF;
+}
+.gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_audio_speed h5{
+  width: 36px;height: 24px;
+  font-size: 13px;
+  text-wrap: nowrap;
+}
+.gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_sound_effects{
+  float: right;
+  width: 40px;
+  width: 40px;height: 22px;
+  border: 1px;
+  border-color: #D3DBEA;
+  border-style: solid;
+  border-radius: 6px;
+  color: #283248;
+}
+.gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_sound_effects :hover{
+  float: right;
+  width: 40px;
+  width: 40px;height: 22px;
+  border: 1px;
+  border-color: #3DC3FF;
+  border-style: solid;
+  border-radius: 6px;
+  color: #3DC3FF;
+}
+.gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_sound_effects h5{
+  width: 36px;height: 24px;
+  font-size: 13px;
+  text-wrap: nowrap;
 }
 .gird_Right .gird_Right_current_playlist_button_area{
-  width: 80px;
-  height: 80px;
-  background-color: chartreuse;
+  width: 60px;
+  height: 60px;
   float: right;
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: #EEF7FF;
+  border-radius: 6px;
+}
+.gird_Right .gird_Right_current_playlist_button_area :hover{
+  color: #3DC3FF;
+}
+.gird_Right .gird_Right_current_playlist_button_area div{
+  width: 60px;
+  height: 20px;
+  background-image: url(../src/assets/播放队列.svg);
+  background-size: 22px 22px;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-top: 10px;
+  margin-bottom: 4px;
+}
+.gird_Right .gird_Right_current_playlist_button_area h5{
+  font-size: 14px;
 }
 
 </style>

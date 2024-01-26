@@ -164,10 +164,14 @@
 
     .view_music_player{
       width: 100vw;height: 100vh;
-      background-color: aquamarine;
       z-index: 10;
       position: absolute;bottom: 0;left: 0;
       transition: height 0.2s;
+
+      background-image: url(../src/assets/2024-01-26_203351.png);
+      background-size: 100vw 100vh;
+      background-repeat: no-repeat;
+      background-position: center;
     }
     .view_music_player-active {
       height: 100vh;
