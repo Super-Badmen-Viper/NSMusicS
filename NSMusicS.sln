@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoZhi_Song_Duration_Allocat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_For_Knowledge_Graph", "NSMusicS_For_Knowledge_Graph\NSMusicS_For_Knowledge_Graph.csproj", "{73C5149C-F2EE-420F-A39F-70A2ADFCFBB6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_For_Blazor_WebAssembly", "NSMusicS_For_Blazor_WebAssembly\NSMusicS_For_Blazor_WebAssembly.csproj", "{0686D82D-1FE1-4D28-99A1-7B4B9461309A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_Test_Class_Library_For_NET", "NSMusicS_Test_Class_Library_For_NET\NSMusicS_Test_Class_Library_For_NET.csproj", "{09799755-E52E-43FF-AD85-9F45744EFAD6}"
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Speech_Denoising", "NSMusicS_For_PythonApp_Of_AudioProcessing_AlgorithmServices\Speech_Denoising\Speech_Denoising.pyproj", "{E5202914-B87F-4043-8A2D-6BC5311DA880}"
@@ -57,10 +55,6 @@ Global
 		{73C5149C-F2EE-420F-A39F-70A2ADFCFBB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73C5149C-F2EE-420F-A39F-70A2ADFCFBB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73C5149C-F2EE-420F-A39F-70A2ADFCFBB6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0686D82D-1FE1-4D28-99A1-7B4B9461309A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0686D82D-1FE1-4D28-99A1-7B4B9461309A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0686D82D-1FE1-4D28-99A1-7B4B9461309A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0686D82D-1FE1-4D28-99A1-7B4B9461309A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{09799755-E52E-43FF-AD85-9F45744EFAD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{09799755-E52E-43FF-AD85-9F45744EFAD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09799755-E52E-43FF-AD85-9F45744EFAD6}.Release|Any CPU.ActiveCfg = Release|Any CPU

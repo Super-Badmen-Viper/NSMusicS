@@ -547,44 +547,44 @@
                         VerticalAlignment="Center" HorizontalAlignment="Left"/>
                     </StackPanel>
                 </Border>
-                <Border 
-                    x:Name="Button_End_The_KSing_Of_Stop_Recording"
-                    Width="100" Height="36" 
-                    Margin="0,21,302,0" Background="#19FFFFFF"
-                    BorderBrush="#33FFFFFF" BorderThickness="1" CornerRadius="10"
-                    HorizontalAlignment="Right" VerticalAlignment="Top" >
-                    
-                    <StackPanel Orientation="Horizontal">
-                        <Border 
-                            Width="12" Height="12" Margin="6,0,0,0"
-                            HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
-                            <Border.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform/>
-                                    <RotateTransform Angle="-90"/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </Border.RenderTransform>
-                            <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/下02.svg" Cursor=""/>
-                        </Border>
-                        <TextBlock
-                            Text="结束录制" Margin="4,0,0,0" 
-                            FontSize="14" Foreground="#FFFFFF" FontWeight="Bold"
-                            VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                    </StackPanel>
-                </Border>
-                <UserControls_PlayMode_View:UserControl_PlayMode_4_View_1_KSing_Octave 
-                    x:Name="userControl_PlayMode_4_View_1_KSing_Octave"
-                    VerticalAlignment="Top" HorizontalAlignment="Left" 
-                    Margin="70,15,0,0"
-                    />
+                
                 
             </Grid>
         </Grid>
 
         <!--K歌模块-->
-        <Grid x:Name="Grid_Animation_Model_2_Of_KSing" Visibility="Visible">
+        <Grid x:Name="Grid_Animation_Model_2_Of_KSing" Visibility="Collapsed">
+            <Border 
+                x:Name="Button_End_The_KSing_Of_Stop_Recording"
+                Width="100" Height="36" 
+                Margin="0,21,302,0" Background="#19FFFFFF"
+                BorderBrush="#33FFFFFF" BorderThickness="1" CornerRadius="10"
+                HorizontalAlignment="Right" VerticalAlignment="Top" >
+                <StackPanel Orientation="Horizontal">
+                    <Border 
+                        Width="12" Height="12" Margin="6,0,0,0"
+                        HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="-90"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
+                        <svgc:SvgViewbox Source="pack://application:,,,/UI_0_Library/下02.svg" Cursor=""/>
+                    </Border>
+                    <TextBlock
+                        Text="结束录制" Margin="4,0,0,0" 
+                        FontSize="14" Foreground="#FFFFFF" FontWeight="Bold"
+                        VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Border>
+            <UserControls_PlayMode_View:UserControl_PlayMode_4_View_1_KSing_Octave 
+                x:Name="userControl_PlayMode_4_View_1_KSing_Octave"
+                VerticalAlignment="Top" HorizontalAlignment="Left" 
+                Margin="70,15,0,0"/>
+
             <UserControls_PlayMode_View:UserControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel
                 x:Name="userControl_PlayMode_4_View_2_KSing_Musical_Scale_Animation_Panel"
             />

@@ -8397,7 +8397,6 @@ namespace NSMusicS
 
             if (Current_Playlist.Count > 0)
             {
-                userControl_SongList_Infos_Current_Playlist.ListView_Download_SongList_Info.ItemsSource = Current_Playlist;
                 ObservableCollection<Song_Info> temp = Current_Playlist;
                 songList_Infos_Current_Playlist = new ObservableCollection<Song_Info>(temp);
                 SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
@@ -8470,7 +8469,6 @@ namespace NSMusicS
                 }
             }
 
-            userControl_SongList_Infos_Current_Playlist.ListView_Download_SongList_Info.ItemsSource = Current_Playlist;
             ObservableCollection<Song_Info> temp = Current_Playlist;
             songList_Infos_Current_Playlist = new ObservableCollection<Song_Info>(temp);
             SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
@@ -9791,8 +9789,9 @@ namespace NSMusicS
         {
             try
             {
-                if (stackPanel_Byte_Lyic != null && 
-                    canvas_byte_margin_left > musicPlayer_Main_UserControl.ListView_Temp_MRC_GridViewColumn.Width - 50)
+                if (stackPanel_Byte_Lyic != null 
+                    && 
+                    canvas_byte_margin_left > musicPlayer_Main_UserControl.ListView_Temp_MRC_GridViewColumn.Width - 100)
                 {
                     sum_wid += wid;
 

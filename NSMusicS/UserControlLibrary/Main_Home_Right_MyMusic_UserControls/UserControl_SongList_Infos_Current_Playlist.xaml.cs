@@ -173,20 +173,18 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
             //添加
             if (SvgViewbox_Love_ListView_Song.Source.Equals(brush_LoveNormal))//初始为0，代表未添加至我的收藏
             {
-                ck_Selected.MinHeight = 1;
-                SvgViewbox_Love_ListView_Song.Source = brush_LoveEnter;
-
                 Add_LoveSong_ToThisSongList(ck_Selected);
             }
             else
             {
-                ck_Selected.MinHeight = 0;
-                SvgViewbox_Love_ListView_Song.Source = brush_LoveNormal;
-
                 Remove_LoveSong_ToThisSongList(ck_Selected);
             }
 
             Check_LoveSong_In_LoveSongList(ck_Selected);
+
+            SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist = songList_Infos_Current_Playlist;
+            ListView_Download_SongList_Info.ItemsSource = null;
+            ListView_Download_SongList_Info.ItemsSource = songList_Infos_Current_Playlist;
         }
         /// <summary>
         /// 添加
@@ -346,10 +344,8 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
             //歌单歌曲排序
             Sort_SongList();
         }
-        public void Check_LoveSong_In_LoveSongList_Reset_SongList_Info()
+        public async void Check_LoveSong_In_LoveSongList_Reset_SongList_Info()
         {
-            songList_Infos_Current_Playlist = SongList_Info_Current_Playlists.Retuen_This().songList_Infos_Current_Playlist;
-
             //刷新内存区域的引用
             songList_Infos = SongList_Info.Retuen_This();
 
@@ -376,7 +372,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
                                         songList_Infos[i][0].Songs[j].Song_Like = 0;
                                         songList_Infos[i][0].Songs[j].Song_Like_Image = brush_LoveNormal;
 
-                                        update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j], i);
+                                        await update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j], i);
                                     }
                                 }
                             }
@@ -395,7 +391,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
                                         songList_Infos[i][0].Songs[j].Song_Like = 1;
                                         songList_Infos[i][0].Songs[j].Song_Like_Image = brush_LoveEnter;
 
-                                        update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j], i);
+                                        await update_Song_List_Infos.DB_Select_Model(3, songList_Infos[i][0].Songs[j], i);
                                     }
                                 }
                             }
@@ -416,7 +412,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
                                         songList_Infos_Current_Playlist[i].Song_Like = 0;
                                         songList_Infos_Current_Playlist[i].Song_Like_Image = brush_LoveNormal;
 
-                                        update_Song_List_Infos.DB_Select_Model(3, songList_Infos_Current_Playlist[i], 17);
+                                        await update_Song_List_Infos.DB_Select_Model(3, songList_Infos_Current_Playlist[i], 17);
                                     }
                                 }
                             }
@@ -432,7 +428,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
                                         songList_Infos_Current_Playlist[i].Song_Like = 1;
                                         songList_Infos_Current_Playlist[i].Song_Like_Image = brush_LoveEnter;
 
-                                        update_Song_List_Infos.DB_Select_Model(3, songList_Infos_Current_Playlist[i], 17);
+                                        await update_Song_List_Infos.DB_Select_Model(3, songList_Infos_Current_Playlist[i], 17);
                                     }
                                 }
                             }
@@ -447,7 +443,7 @@ namespace NSMusicS.UserControlLibrary.Main_Home_Right_MyMusic_UserControls
             Sort_SongList();
         }
         #endregion
-        
+
 
         private void Delete_ListView_Song(object sender, RoutedEventArgs e)
         {
