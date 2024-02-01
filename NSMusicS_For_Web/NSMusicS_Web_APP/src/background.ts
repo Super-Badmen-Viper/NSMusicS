@@ -1,4 +1,5 @@
-import { app, BrowserWindow,webFrame } from 'electron'
+import { app, BrowserWindow,webFrame,dialog  } from 'electron'
+import { readFileSync } from 'fs';
 
 async function createWindow() {
     const win = await new BrowserWindow({
@@ -36,6 +37,11 @@ async function createWindow() {
         win.loadFile('index.html')
     }
 
+    // Open the DevTools.
+    win.webContents.openDevTools({
+        mode:'bottom'
+    });
+
     const electron = require('electron')
     const ipc = electron.ipcMain
     //登录窗口最小化
@@ -55,13 +61,32 @@ async function createWindow() {
     ipc.on('window-close', function () {
         win.close();
     })
-
+    
+    ipc.on('open-music-file', (event) => {
+        dialog.showOpenDialog({
+            properties: ['openFile', 'multiSelections'],
+            filters: [{ name: 'Music', extensions: ['mp3', 'flac'] }]
+        }).then((res) => {
+            // 拿到结果
+            const { canceled, filePaths } = res
+            if (!canceled && filePaths.length) {
+                event.sender.send('selected-file', filePaths)
+            }
+        }).catch(err => {
+            // 错误
+        })
+    });
+      
+    ipc.handle('readFile', async (event, filePath) => {
+        return  readFileSync(filePath);
+    });
+    
     // 注册事件监听
-    webFrame.executeJavaScript(`
-        document.addEventListener('mouseout', (event) => {
-        window.postMessage({ type: 'mouseout', x: event.clientX, y: event.clientY }, '*');
-        });
-    `);
+    // webFrame.executeJavaScript(`
+    //     document.addEventListener('mouseout', (event) => {
+    //     window.postMessage({ type: 'mouseout', x: event.clientX, y: event.clientY }, '*');
+    //     });
+    // `);
 }
 
 // 等待Electron应用就绪后创建BrowserWindow窗口
@@ -74,3 +99,5 @@ app.on('window-all-closed', () => {
       app.quit()
     }
   })
+
+  

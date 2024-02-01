@@ -3,32 +3,32 @@
   import Bar_Music_Player from '../src/components/Bar_Music_Player.vue'
 
   // System BrowserWindow Set
-  // const { ipcRenderer } = require('electron');
-  // function minimize() {
-  //   ipcRenderer.send('window-min');
-  // }
-  // function maximize() {
-  //   ipcRenderer.send('window-max');
-  // }
-  // function closeWindow() {
-  //   ipcRenderer.send('window-close');
-  // }
+  const { ipcRenderer } = require('electron');
   function minimize() {
-    Electron.ipcRenderer.send('window-min');
+    ipcRenderer.send('window-min');
   }
   function maximize() {
-    Electron.ipcRenderer.send('window-max');
+    ipcRenderer.send('window-max');
   }
   function closeWindow() {
-    Electron.ipcRenderer.send('window-close');
+    ipcRenderer.send('window-close');
   }
+  // function minimize() {
+  //   Electron.ipcRenderer.send('window-min');
+  // }
+  // function maximize() {
+  //   Electron.ipcRenderer.send('window-max');
+  // }
+  // function closeWindow() {
+  //   Electron.ipcRenderer.send('window-close');
+  // }
 
-  //open view musicplayer
+  // open view musicplayer
   import { ref,watch } from 'vue';
   const margin_top_value_view_music_player = ref(100);
-  const getMonster = (value:any) => margin_top_value_view_music_player.value = value
+  const get_send_onclick = (value:any) => margin_top_value_view_music_player.value = value
   const isVisible = ref(true);
-  // 监听 margin_top_value_view_music_player 的变化
+  // watch监听 margin_top_value_view_music_player 的变化
   watch(isVisible, (newValue) => {
     if (newValue) {
       setTimeout(() => {
@@ -37,41 +37,51 @@
     }
   });
 
+  // System Theme Color
+  const this_App_background_color = ref('#FFFFFF');
+
 </script>
 
 <template>
-  <div class="bar_select_view">
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+  <div class="this_App" :style="{ backgroundColor:this_App_background_color }">
+    <div class="bar_select_view">
+      <div class="wrapper">
+        <nav>
+          <RouterLink class="routerLink" to="/">我的收藏</RouterLink>
+          <RouterLink class="routerLink" to="/about">本地音乐</RouterLink>
+          <RouterLink class="routerLink" to="/">自定义歌单</RouterLink>
+          <RouterLink class="routerLink" to="/about">About</RouterLink>
+          <RouterLink class="routerLink" to="/">Home</RouterLink>
+          <RouterLink class="routerLink" to="/about">About</RouterLink>
+        </nav>
+      </div>
     </div>
+
+    <div class="bar_top_setapp">
+      <section  style="
+                -webkit-app-region: no-drag;
+                width: auto;/*设置为 auto 即为单分布，100vw 为多分布(左，中，右) */
+                position: absolute;right: 0;
+                text-align:center;
+                z-index: 99;
+                ">
+                <div type="button" class="win_close" @click="closeWindow"></div>
+                <div type="button" class="win_max" @click="maximize"></div>
+                <div type="button" class="win_min" @click="minimize"></div>
+      </section>
+    </div>
+
+    <RouterView class="view_show" />
+
+    <div class="view_music_player" 
+        v-if="isVisible"
+        :style="{ height: `calc(100vh - ${margin_top_value_view_music_player}vh)` }">
+    </div>
+
+  
+    <Bar_Music_Player 
+        @on-click="get_send_onclick" />
   </div>
-
-  <div class="bar_top_setapp">
-    <section  style="
-              -webkit-app-region: no-drag;
-              width: auto;/*设置为 auto 即为单分布，100vw 为多分布(左，中，右) */
-              position: absolute;right: 0;
-              text-align:center;
-              z-index: 99;
-              ">
-              <div type="button" class="win_close" @click="closeWindow"></div>
-              <div type="button" class="win_max" @click="maximize"></div>
-              <div type="button" class="win_min" @click="minimize"></div>
-    </section>
-  </div>
-
-  <RouterView class="view_show" />
-
-  <div class="view_music_player" 
-      v-if="isVisible"
-      :style="{ height: `calc(100vh - ${margin_top_value_view_music_player}vh)` }">
-  </div>
-
- 
-  <Bar_Music_Player @on-click="getMonster" />
 </template>
 
 <style scoped>
@@ -82,39 +92,28 @@
       left: 0;
       width: 100vw;
       height: 60px;
-      background-color:antiquewhite;
     }
     .bar_select_view .wrapper {
       display: flex;
       place-items: flex-start;
       flex-wrap: wrap;
     }
-
     .view_show {
       position: fixed;
       top: 60px;
       left: 0;
-
       width: 100vw;
       height: 100vh;
-
-      margin-left: 0px;
-      
-      background-color:paleturquoise;
+      margin-left: 0px;   
     }
-
     .bar_top_setapp{
       width: 60px;
       height: 60px;
-
       position: fixed;
       top: 0;
       right: 0;
-
-      background-color:#FF6A00;
       -webkit-app-region: drag;
     }
-
     nav {
       width: 100%;
       text-align: left;
@@ -137,18 +136,42 @@
 
 /*当min-width >= 512px*/
 @media screen and (min-width: 512px) {
+    .this_App{
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      top: 0;left: 0;
+    }
     .bar_select_view {
-      width: 200px;
+      width: 180px;
       height: 100vh;
       position: absolute;
       left: 0;top: 0;
-      background-color: aqua;
     }
     .bar_select_view .wrapper {
       display: flex;
       place-items: flex-wrap;
       padding-right: calc(var(--section-gap) / 2);
-      flex-wrap: wrap;   
+      flex-wrap: wrap;  
+      margin-top: 70px;
+      margin-left: 30px;
+    }
+    .bar_select_view .wrapper .routerLink{
+      width: 150px;
+      height: 36px;
+      text-align: left;
+      padding-top: 4px;
+      padding-left: 40px;
+      margin-top: 10px;
+      border-radius: 10px;
+
+      background-image: url('../src/assets/logo.svg');
+      background-repeat: no-repeat;
+      background-size: 20px;
+      background-position:10%;
+
+      cursor: default;
+      user-select: none;
     }
     .view_show {
       width: 100vw;
@@ -158,10 +181,7 @@
       left: 200px;
 
       position: fixed;
-
-      background-color: aquamarine;
     }
-
     .view_music_player{
       width: 100vw;height: 100vh;
       z-index: 10;
@@ -169,14 +189,13 @@
       transition: height 0.2s;
 
       background-image: url(../src/assets/2024-01-26_203351.png);
-      background-size: 100vw 100vh;
+      background-size: 100vw auto;
       background-repeat: no-repeat;
       background-position: center;
     }
     .view_music_player-active {
       height: 100vh;
     }
-
     .bar_top_setapp{
       width: 100vw;
       height: 60px;
@@ -187,10 +206,8 @@
       top: 0;
       left: 200px;
 
-      background-color: white;
       -webkit-app-region: drag;
     }
-
     .win_min {
       float: right;
       margin-top: 20px;
@@ -221,7 +238,6 @@
       opacity: 0.8;
       background: #FE5F58;
     }
-    
     nav {
       text-align: center;
       margin-left: -1rem;

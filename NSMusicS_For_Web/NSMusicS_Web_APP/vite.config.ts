@@ -14,17 +14,7 @@ export default defineConfig({
   base:'./', //默认绝对路径改为相对路径 否则打包白屏
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-      //'#': fileURLToPath(new URL('./electron', import.meta.url))
-    }
-  },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        // 两种方式都可以
-        additionalData: '@import "@/assets/scss/global.scss";'
-        // additionalData: '@use "@/assets/scss/global.scss" as *;'
-      }
+      '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   }
 })
