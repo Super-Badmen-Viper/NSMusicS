@@ -13,7 +13,17 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue')
-    }
+    },
+    {
+      path: '/View_Song_List_Love',
+      name: 'View_Song_List_Love',
+      component: () => import('../views/View_Song_List_Love.vue')
+    },
+    {
+      path: '/View_Song_List_ALL',
+      name: 'View_Song_List_ALL',
+      component: () => import('../views/View_Song_List_ALL.vue')
+    },
   ]
 })
 

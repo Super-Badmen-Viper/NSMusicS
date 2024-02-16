@@ -10,8 +10,8 @@
 
 <style>
     .this_View_Screen_Music_Player{
-        
-        
+        width: 100vw;height: 100vh;
+        background-color: #FEB732;
     }
     
 </style>

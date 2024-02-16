@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { Icon } from '@vicons/utils'
+
+  import { ref, watch } from 'vue';
 
   // send this SetInfo
   import { defineEmits } from 'vue';
@@ -39,73 +41,73 @@
 
   // binding
   const musicplayer_background_color = ref('#FFFFFF');
-  const text_bar_left_text_singer_name = ref('G.E.M 邓紫棋');
-  const text_bar_left_text_song_name = ref('你把我灌醉');
-  const text_bar_left_text_album_name = ref('The Best of G.E.M. 2008 - 2012 (Deluxe Version)');
-  const this_audio_file_path = ref('C:/Users/17741/Music/G.E.M.邓紫棋 - 你把我灌醉.mp3');
+  const this_audio_buffer_file = ref(null)
+  import { defineProps} from 'vue';
+  const props = defineProps([
+    'this_audio_file_path','this_audio_refresh',
+    'this_audio_singer_name','this_audio_song_name','this_audio_album_name']);
+  watch(() => props.this_audio_refresh, (newValue, oldValue) => {
+    if(newValue == true){
+      handleAudioFilePathChange();
+      emit('this_audio_refresh',false)
+    }
+  });
+  const handleAudioFilePathChange = async () => {
+    await Init_Audio_Player()
+  };
   const total_play_time = ref('04:42');
   const current_play_time = ref('01:36');
   const slider_singleValue = ref(60)
   const currentTime_added_value = ref(0)
-  const buffer_file = ref(null)
   const player_no_progress_jump = ref(true)
+  //
+  const slider_volume_value = ref(100)
+  const slider_volume_show = ref(true)
+  //
+  const slider_order_show = ref(true)
 
   // audio system
-  import { Audio_Players } from '../components/Bar_Music_Player_Vues/Audio_Players';
+  import { Audio_Players } from '../models/song_Audio_Out/Audio_Players';
   const { ipcRenderer } = require('electron');
   let player = new Audio_Players();
   const Init_Audio_Player = async () => {
     // ipcRenderer.send('open-music-file')
-    const buffer = await ipcRenderer.invoke('readFile', this_audio_file_path.value);
-    buffer_file.value = buffer;
+    const buffer = await ipcRenderer.invoke('readFile', props.this_audio_file_path);
+    this_audio_buffer_file.value = buffer;
+    currentTime_added_value.value = 0;
     player.releaseMemory(true);
     player.loadAudio(buffer,true).then(() => {
-      // 设置淡入效果，参数为淡入时间（秒）
-      //player.setFadein(2);
-      // 设置淡出效果，参数为淡出时间（秒）
-      //player.setFadeout(2);
-      // 设置当前播放进度，参数为播放进度的百分比（0 到 1）
-      //player.setCurrentTime(0.5);
-      // 获取当前音量，返回值范围：0 到 1
-      //const currentVolume = player.getVolume();
+      if(player.bufferSourceNode != null){
+        // 播放音频
+        player.setVolume(Number(slider_volume_value.value));
+        player.setFadein();
+        player.setFadeout();
+        player.audioContext.resume();
+        player.bufferSourceNode.addEventListener('ended', () => {
+          //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
+          if(player_no_progress_jump.value == true){
+            current_play_time.value = formatTime(player.getTotalTime());
+            currentTime_added_value.value = 0;
+            player.releaseMemory(true);
+            clearInterval(timer);
 
-      // 播放音频
-      player.setVolume(100);
-      player.setFadein();
-      player.setFadeout();
-      player.audioContext.resume();
-      player.bufferSourceNode.addEventListener('ended', () => {
-        //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
-        if(player_no_progress_jump.value == true){
-          current_play_time.value = formatTime(player.getTotalTime());
-          currentTime_added_value.value = 0;
-          player.releaseMemory(true);
-          clearInterval(timer);
+            player_no_progress_jump.value = false;
+          }
+        });
+        player.bufferSourceNode.start(player.audioContext.currentTime, player.startTime, player.audioDuration);
 
-          player_no_progress_jump.value = false;
-        }
-      });
-      player.bufferSourceNode.start(player.audioContext.currentTime, player.startTime, player.audioDuration);
-      
-      // 设置 EQ 均衡器，参数为 bass、mid、treble 的增益值
-      // player.setEqualizerGain(1000, 3); // 设置1000Hz频率的增益为3
-      // player.setEqualizerBandProperties(2000, {
-      //     type: 'highshelf', // 高音增强滤波器
-      //     gain: 6,
-      // });
-
-      player.isPlaying = true;
-      player_no_progress_jump.value = true;
-      timer = setInterval(synchronize_playback_time, 200);
-      total_play_time.value = formatTime(player.getTotalTime());
+        player.isPlaying = true;
+        player_no_progress_jump.value = true;
+        clearInterval(timer);
+        timer = setInterval(synchronize_playback_time, 200);
+        total_play_time.value = formatTime(player.getTotalTime());
+      }
     });
   };
 
- 
-
-  // player show value
+  // player slider formatTime area
   const set_slider_singleValue = () => {
-    if (isDragging == false) 
+    if ( player_range_duration_isDragging == false) 
       slider_singleValue.value = (player.getCurrentTime() + currentTime_added_value.value) / player.getTotalTime() * 100;
   };
   function formatTime(currentTime: number): string {
@@ -136,52 +138,78 @@
     get_current_play_time();
   }
   let timer: string | number | NodeJS.Timeout | undefined;
-  let isDragging = false;
-  const handleMouseDown = () => {
-    isDragging = true;
+  let player_range_duration_isDragging = false;
+  const player_range_duration_handleMouseDown = () => {
+     player_range_duration_isDragging = true;
   };
-  const handleMouseUp = () => {
-    isDragging = false;
+  const player_range_duration_handleMouseUp = () => {
+     player_range_duration_isDragging = false;
   };
-  const handleInput = () => {
-    
-    
-  };
-  const handleclick = async () => {
+  const player_range_duration_handleclick = async () => {
     player_no_progress_jump.value = false;
     player.releaseMemory(false);
-    player.loadAudio(buffer_file.value,false).then(() => {
-      player.setVolume(100);
-      player.setFadein();
-      player.setFadeout();
-      player.audioContext.resume();
-      player.bufferSourceNode.addEventListener('ended', () => {
-        //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
-        if(player_no_progress_jump.value == true){
-          current_play_time.value = formatTime(player.getTotalTime());
-          currentTime_added_value.value = 0;
-          player.releaseMemory(true);
-          clearInterval(timer);
+    player.loadAudio( this_audio_buffer_file.value,false).then(() => {
+      if(player.bufferSourceNode != null){
+        player.setVolume(Number(slider_volume_value.value));
+        player.setFadein();
+        player.setFadeout();
+        player.audioContext.resume();
+        player.bufferSourceNode.addEventListener('ended', () => {
+          //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
+          if(player_no_progress_jump.value == true){
+            current_play_time.value = formatTime(player.getTotalTime());
+            currentTime_added_value.value = 0;
+            player.releaseMemory(true);
+            clearInterval(timer);
 
-          player_no_progress_jump.value = false;
+            player_no_progress_jump.value = false;
+          }
+        });
+        player.isPlaying = true;
+        clearInterval(timer);
+        timer = setInterval(synchronize_playback_time, 200);
+        total_play_time.value = formatTime(player.getTotalTime());
+
+        // 注意，此时currentTime将从0开始，需要计算附加值
+        let el = <HTMLInputElement>document.getElementById('player_range_duration');
+        let newtime = (Number(el.value) / 100) * player.audioDuration;
+        if(Number(el.value) != 0 && Number(el.value) != 100){
+          player.bufferSourceNode.start(0,newtime);
+          currentTime_added_value.value = newtime;
         }
-      });
-      player.isPlaying = true;
-      timer = setInterval(synchronize_playback_time, 200);
-      total_play_time.value = formatTime(player.getTotalTime());
-
-      // 注意，此时currentTime将从0开始，需要计算附加值
-      let el = <HTMLInputElement>document.getElementById('range');
-      let newtime = (1 - Number(el.value) / 100) * player.audioDuration;
-      player.bufferSourceNode.start(0,newtime); 
-      currentTime_added_value.value = player.audioDuration - newtime
+        else{
+          player.bufferSourceNode.start(player.audioContext.currentTime, player.startTime, player.audioDuration);
+          currentTime_added_value.value = 0;
+        }
+      }
     });
-
-    
   }
-  const handleCustomEvent = () => {
-    get_current_play_time();
-  };
+
+  // player voice area
+  const backpanel_voice_click = () => {
+    if(slider_volume_show.value){
+      slider_volume_show.value = false;
+    }else{
+      slider_volume_show.value = true;
+    }
+  }
+  watch(
+    slider_volume_value,
+    (newValue, oldValue) => {
+      // 在这里处理监视到的变化
+      player.setVolume(newValue ? Number(slider_volume_value.value) : 0);
+    },
+    { immediate: true }
+  );
+
+  // player order area
+  const backpanel_order_click = () => {
+    if(slider_order_show.value){
+      slider_order_show.value = false;
+    }else{
+      slider_order_show.value = true;
+    }
+  }
 </script>
 
 <template>
@@ -200,37 +228,51 @@
               @mouseover="hover_back_img" @mouseout="leave_back_svg"/>
         </div>
         <div class="bar_left_text_song_info">
-          <h5 id="bar_singer_name">{{ text_bar_left_text_singer_name}}</h5>
-          <h5 id="bar_song_name">{{ text_bar_left_text_song_name }}</h5>
-          <h5 id="bar_album_name">{{ text_bar_left_text_album_name }}</h5>
+          <h5 id="bar_singer_name">{{ props.this_audio_singer_name }}</h5>
+          <h5 id="bar_song_name">{{ props.this_audio_song_name }}</h5>
+          <h5 id="bar_album_name">{{ props.this_audio_album_name }}</h5>
         </div>
       </div>
       <div class="gird_Middle">
         <div class="grid_Middle_button_area">
-          <div id="button_order">
+          <div id="button_order" @click="backpanel_order_click">
 
           </div>
           <div id="button_previous_song">
             
           </div>
-          <div id="button_play" :onClick="Init_Audio_Player">
-            
+          <div id="button_play" @click="Init_Audio_Player">
+            <Icon>
+
+            </Icon>
           </div>
           <div id="button_next_song">
             
           </div>
-          <div id="button_vioce">
+          <div id="button_vioce" @click="backpanel_voice_click" >
             
           </div>
         </div>
         <div>
-          <input id="range" type="range"
+          <input id="player_range_duration" type="range"
             style="width: 90%;bottom: 20;"
-            @mousedown="handleMouseDown"
-            @mouseup="handleMouseUp"
-            @input="handleInput"
-            @click="handleclick"
+            @mousedown="player_range_duration_handleMouseDown"
+            @mouseup="player_range_duration_handleMouseUp"
+            @click="player_range_duration_handleclick"
             :min="0" :max="100" :hideTip="true" v-model.value="slider_singleValue"/>
+        </div>
+        <div>
+          <div id="backpanel_voice" 
+            v-show="slider_volume_show">
+            <input id="player_range_voice" type="range"
+              style="height: 90%;bottom: 20;"
+              :min="0" :max="100" :hideTip="true" v-model.value="slider_volume_value"/>
+            <h4>{{ slider_volume_value }}%</h4>
+          </div>
+          <div id="backpanel_order" 
+            v-show="slider_order_show">
+            
+          </div>
         </div>
       </div>
       <div class="gird_Right">
@@ -436,8 +478,39 @@
   background-size: 22px 22px;
   background-repeat: no-repeat;
   background-position: center;
-  margin-top: 8px;
 }
+.gird_Middle #backpanel_order{
+  position: absolute;
+  top: -200px;
+  margin-left: 50px;
+  width: 100px;
+  height: 210px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  border: #283248 1px solid;
+}
+.gird_Middle #backpanel_voice{
+  position: absolute;
+  top: -200px;
+  margin-left: 270px;
+  width: 60px;
+  height: 210px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  border: #283248 1px solid;
+}
+.gird_Middle #backpanel_voice #player_range_voice{
+  height: 80px;
+  width: 160px;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  margin-left: -50px;
+}
+.gird_Middle #backpanel_voice h4{
+  color: #283248;
+  margin-top: -16px;
+}
+
 
 .gird_Right {
   width: 380px;

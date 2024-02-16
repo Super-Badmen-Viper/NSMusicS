@@ -75,18 +75,13 @@ async function createWindow() {
         }).catch(err => {
             // 错误
         })
-    });
-      
+    }); 
     ipc.handle('readFile', async (event, filePath) => {
-        return  readFileSync(filePath);
+        return readFileSync(filePath);
     });
     
-    // 注册事件监听
-    // webFrame.executeJavaScript(`
-    //     document.addEventListener('mouseout', (event) => {
-    //     window.postMessage({ type: 'mouseout', x: event.clientX, y: event.clientY }, '*');
-    //     });
-    // `);
+
+    
 }
 
 // 等待Electron应用就绪后创建BrowserWindow窗口
