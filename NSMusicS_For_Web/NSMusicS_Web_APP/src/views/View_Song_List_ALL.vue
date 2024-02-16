@@ -51,7 +51,6 @@ const fetchData = () => {
         return;
       }
       row.duration_txt = formatTime(row.duration);
-      row.selected = false
       data.value.push(row);
 
       if(num < page_Size.value){
@@ -121,6 +120,7 @@ function get_media_PageFiles(value: any) {
   <div>
     <Table_Song_List class="table" 
       :data="data" 
+      :data_temporary="data"
       @media_file_path="get_media_path" 
       @this_audio_singer_name="get_this_audio_singer_name"
       @this_audio_song_name="get_this_audio_song_name"

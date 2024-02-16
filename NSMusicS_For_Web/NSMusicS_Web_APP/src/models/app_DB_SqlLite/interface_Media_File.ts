@@ -1,7 +1,6 @@
 interface Media_File {
     favorite:boolean;
     duration_txt:string;
-    selected:boolean;
 
     id: string;
     path: string;

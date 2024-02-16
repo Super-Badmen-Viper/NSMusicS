@@ -10,6 +10,7 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
+    "@vicons/fluent": "^0.12.0",
     "@vicons/ionicons5": "^0.12.0",
     "@vicons/utils": "^0.1.4",
     "electron-store": "^8.1.0",
