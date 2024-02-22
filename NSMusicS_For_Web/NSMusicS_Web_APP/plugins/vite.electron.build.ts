@@ -7,10 +7,8 @@ import fs from 'fs'
 export const viteElectronBuild = (): Plugin => {
     return {
         name: 'vite-electron-build',
-
         // closeBundle是Vite的一个插件钩子函数，用于在Vite构建完成后执行一些自定义逻辑。
         closeBundle() {
-
             // 定义初始化Electron的函数
             const initElectron = () => {
                 // 使用esbuild编译TypeScript代码为JavaScript
@@ -38,15 +36,32 @@ export const viteElectronBuild = (): Plugin => {
             // 使用electron-builder打包Electron应用程序
             electronBuilder.build({
                 config: {
-                    appId: 'com.example.app',
-                    productName: 'vite-electron',
+                    appId: 'github.com.nsmusics.xiang.cheng',
+                    productName: 'NSMusicS',
                     directories: {
                         output: path.join(process.cwd(), "release"), //输出目录
                         app: path.join(process.cwd(), "dist"), //app目录
                     },
                     asar: true,
+                    win:{
+                        target:'nsis',
+                        icon: 'build/NSMusicS_256.ico'
+                    },
                     nsis: {
-                        oneClick: false, //取消一键安装
+                        oneClick: false,
+                        perMachine: true,
+                        allowElevation: true,
+                        allowToChangeInstallationDirectory: true,
+                        installerIcon: 'build/NSMusicS_256.ico',
+                        uninstallerIcon: 'build/NSMusicS_256.ico',
+                        installerHeaderIcon: 'build/NSMusicS_256.ico',
+                        createDesktopShortcut: true,
+                        createStartMenuShortcut: true,
+                        shortcutName: 'NSMusicS'
+                    },
+                    extraResources:{
+                        from:'./resources/',
+                        to:''
                     }
                 }
             })

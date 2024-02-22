@@ -12,7 +12,7 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({ template: { compilerOptions: { hoistStatic: false } } }),
     viteElectronDev(),
     viteElectronBuild(),
 
@@ -32,7 +32,6 @@ export default defineConfig({
     Components({
       resolvers: [NaiveUiResolver()]
     })
-
   ],
   base:'./', //默认绝对路径改为相对路径 否则打包白屏
   resolve: {

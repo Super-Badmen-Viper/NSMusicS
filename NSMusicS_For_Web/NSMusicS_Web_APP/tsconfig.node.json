@@ -13,7 +13,7 @@
     "composite": true,
     "noEmit": true,
     "module": "ESNext",
-    "moduleResolution": "Node",//Bundler
+    "moduleResolution": "Node",
     "types": ["naive-ui/volar"]
   }
 }

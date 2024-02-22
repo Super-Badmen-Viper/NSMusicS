@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick, h, reactive, computed, watch } from 'vue';
-import { useMessage,DropdownOption, type DataTableColumns, type DataTableInst, type DataTableRowKey, NIcon } from 'naive-ui';
+import { useMessage,DropdownOption, type DataTableColumns, type DataTableInst, type DataTableRowKey, NIcon, InputInst } from 'naive-ui';
 import { RowData, SortOrder } from 'naive-ui/es/data-table/src/interface';
 const emit = defineEmits();
 
@@ -72,8 +72,8 @@ const createColumns_select = (): DataTableColumns<RowData> => [
     width: '40px',
   }
 ];
-const { data } = defineProps<{ data: Media_File[]}>();
-const data_temporary = ref<Media_File[]>(data.slice());// data.slice() BUG Error: Because Init
+const props = defineProps(['data','collapsed','window_innerWidth']);
+const data_temporary = ref<Media_File[]>(props.data.slice());// data.slice() BUG Error: Because Init
 const dataTableInstRef = ref<DataTableInst | null>(null);
 const sortStatesRef = ref([])
 interface SortKeyMap {
@@ -164,10 +164,10 @@ function sortByColumnKeys(sortersArray: { columnKey: string; order: string }[] =
   }
 
   if(sortersArray.length === 0)
-    data_temporary.value = data.slice();
+    data_temporary.value = props.data.slice();
 
   if(bool_default)
-    data_temporary.value = data.slice();
+    data_temporary.value = props.data.slice();
 }
 //
 const checkedRowKeysRef = ref<DataTableRowKey[]>([]);
@@ -197,39 +197,61 @@ const click_bulk_operation = () => {
   }
 }
 //
-const options: DropdownOption[] = [
+const options_data_dropmenu: DropdownOption[] = [
   {
     label: '搜索此歌手',
-    key: 'search_this_singer'
+    key: 'search_this_singer',
+    icon () {
+      return h(NIcon, null, {
+        default: () => h(Search20Filled)
+      })
+    },
   },
   {
     label: '搜索此专辑',
-    key: 'search_this_album'
+    key: 'search_this_album',
+    icon () {
+      return h(NIcon, null, {
+        default: () => h(Search20Filled)
+      })
+    },
   },
   {
     label: '编辑歌曲信息',
-    key: 'edit'
+    key: 'edit',
+    icon () {
+      return h(NIcon, null, {
+        default: () => h(SaveEdit24Regular)
+      })
+    },
   },
   {
     label: '添加到歌单',
-    key: 'add'
+    key: 'add',
+    icon () {
+      return h(NIcon, null, {
+        default: () => h(AddCircle32Regular)
+      })
+    },
   },
   {
     label: () => h('span', { style: { color: 'red' } }, '删除'),
-    key: 'delete'
+    key: 'delete',
+    icon () {
+      return h(NIcon, null, {
+        default: () => h(Delete20Regular)
+      })
+    },
   }
 ]
-const handleSelect = (option: string) => {
+const handleSelect_data_dropmenu = (option: string) => {
   if (option === 'edit') {
-    console.log('编辑')
     emit('menu_edit_this_song',data_select_Index.value);
   } 
   else if (option === 'add') {
-    console.log('添加到')
     emit('menu_add_this_song',data_select_Index.value);// data.splice(data_select_Index.value,1)
   }
   else if (option === 'delete') {
-    console.log('删除')
     emit('menu_delete_this_song',data_select_Index.value);// data.splice(data_select_Index.value,1)
   }
   showDropdownRef.value = false;
@@ -391,23 +413,120 @@ const handleSelect_Sort = (key: string | number) => {
   const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
   sortByColumnKeys(sortersArray);
 }
+const options_Sort_key_Default_key = ref<string>()
+const options_Sort_key_Default = ref<SortItem[]>()
+//
+const bool_show_search_area = ref<boolean>(false)
+const show_search_area = () => {
+  if(bool_show_search_area.value === true)
+  {
+    bool_show_search_area.value = false
+    if(bool_input_search == true){
+      data_temporary.value = props.data.slice()
+      back_search_default()
+      bool_input_search = false
+    }
+  }
+  else
+  {
+    bool_show_search_area.value = true
+    options_Sort_key_Default.value = options_Sort_key.value.slice()
+    options_Sort_key.value.forEach(element => {//保存 sort key
+      if(element.state_Sort != state_Sort.Default)
+        options_Sort_key_Default_key.value = element.key
+    });
+  }
+  input_search_InstRef.value?.clear()
+}
+const input_search_InstRef = ref<InputInst>()
+const input_search_Value = ref<string>()
+let bool_input_search = false
+const click_search = () => {
+  if (input_search_Value.value){
+    const keyword = input_search_Value.value.toLowerCase();
+    data_temporary.value = props.data.filter((item: { title: string; artist: string; album: string; path: string; }) => {
+      return item.title.toLowerCase().includes(keyword) ||
+             item.artist.toLowerCase().includes(keyword) ||
+             item.album.toLowerCase().includes(keyword) ||
+             item.path.toLowerCase().includes(keyword);
+    });
+    bool_input_search = true
+
+    options_Sort_key.value.forEach(element => {
+      element.state_Sort = state_Sort.Default
+    });
+  }else{
+    data_temporary.value = props.data.slice()
+    bool_input_search = false
+    back_search_default()
+  }
+};
+const back_search_default = () => {
+  if(options_Sort_key_Default.value != null){
+    options_Sort_key.value = options_Sort_key_Default.value.slice()
+    options_Sort_key.value.forEach(element => {
+      if(element.key != options_Sort_key_Default_key.value){
+        handleSelect_Sort(element.key)
+      }
+    });
+    for(let i = 0;i < options_Sort_key.value.length;i++)
+    {
+      if(options_Sort_key.value[i].key === options_Sort_key_Default_key.value){   
+        handleSelect_Sort(options_Sort_key.value[i].key)
+      }
+    }
+  }
+}
+// 重新渲染列表 width
+const collapsed_width = ref<number>(980)
+watch(() => props.collapsed, (newValue, oldValue) => {
+  if (props.collapsed == true) {
+    collapsed_width.value = window.innerWidth - 110;
+  } else {
+    collapsed_width.value = window.innerWidth - 220;
+  }
+});
+let bool_watch = false;
+const timer = ref<NodeJS.Timeout | null>(null);//防止大量的重复渲染，造成界面假死
+const count = ref(0);
+const startTimer = () => {
+  timer.value = setInterval(() => {
+    bool_watch = true;
+  }, 1000);
+};
+onMounted(() => {
+  startTimer();
+});
+watch(() => props.window_innerWidth, (newValue, oldValue) => {
+  bool_watch = false;
+  if (props.collapsed == true) {
+    collapsed_width.value = props.window_innerWidth - 110;
+  } else {
+    collapsed_width.value = props.window_innerWidth - 220;
+  }
+  if (bool_watch) {
+    startTimer();
+  }
+});
 //
 onMounted(() => {
   columns.value = createColumns_normal()
-  // data_temporary.value = data.slice(); //BUG Error
-
-  // 默认排序
-  // let sortersArray: { columnKey: string; order: string }[] = [];
-  // let element: { columnKey: string; order: string } = {columnKey:'artist',order:'ascend'}
-  // sortersArray.push(element)
-  // sortByColumnKeys(sortersArray)
+  // data_temporary.value = data.slice(); //BUG Error\
 });
 let bool_init = false
-watch(data, () => {
-  if (data.length != 0 && bool_init === false) {
-    // 数据已经初始化完成，可以执行你想要的操作
-    data_temporary.value = data.slice()
+let bool_loading = true
+watch(props.data, () => {
+  if (props.data.length != 0 && bool_init === false) {
+    // 数据初始化完成操作
+    data_temporary.value = props.data.slice()
     bool_init = true
+    bool_loading = false
+
+    if (props.collapsed == true) {
+      collapsed_width.value = window.innerWidth - 110;
+    } else {
+      collapsed_width.value = window.innerWidth - 220;
+    }
   }
   // const data_temporary = ref<Media_File[]>(data.slice());// data.slice() BUG Error: Because Init
   // data_temporary.value = data.slice(); //BUG Error
@@ -415,7 +534,7 @@ watch(data, () => {
   // 使用 watch(data, () => { if (data.length != 0 && bool_init === false){。。。。。}
   // 实现类似WPF 控件的 Loaded 触发事件
 });
-//
+
 
 import {
   AddCircleOutline
@@ -428,7 +547,8 @@ import {
   PlayCircle20Filled,
   ArrowSort24Regular,TextSortAscending20Regular,TextSortDescending20Regular,
   Search20Filled,
-  Filter16Regular
+  Filter16Regular,
+  SaveEdit24Regular
 } from '@vicons/fluent'
 import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
 </script>
@@ -447,20 +567,38 @@ import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, Allow
         </n-button>
       </n-space>
       
-      <n-button tertiary circle>
-        <template #icon>
-          <n-icon :size="20"><Filter16Regular/></n-icon>
-        </template>
-      </n-button>
+      <n-dropdown 
+        trigger="click" :show-arrow="true" 
+        :options="options_Sort" @select="handleSelect_Sort">
+        <n-button tertiary circle>
+          <template #icon>
+            <n-icon :size="20"><Filter16Regular/></n-icon>
+          </template>
+        </n-button>
+      </n-dropdown>
 
-      <n-button tertiary circle>
+      <n-button tertiary circle @click="show_search_area">
         <template #icon>
           <n-icon :size="20"><Search20Filled/></n-icon>
         </template>
       </n-button>
+      <n-input-group 
+        v-if="bool_show_search_area"
+        :style="{ width: '200px' }">
+        <n-input 
+          :style="{ width: '160px' }" 
+          ref="input_search_InstRef" 
+          v-model:value="input_search_Value"
+          @keydown.enter="click_search"/>
+        <n-button type="primary" ghost @click="click_search">
+          <template #icon>
+            <n-icon :size="20"><Search20Filled/></n-icon>
+          </template>
+        </n-button>
+      </n-input-group>
 
       <n-dropdown 
-        trigger="hover" :show-arrow="true" 
+        trigger="click" :show-arrow="true" 
         :options="options_Sort" @select="handleSelect_Sort">
         <n-button tertiary circle>
           <template #icon>
@@ -469,16 +607,11 @@ import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, Allow
         </n-button>
       </n-dropdown>
 
-      <n-popover trigger="hover">
-        <template #trigger>
-          <n-button tertiary circle @click="click_bulk_operation">
-            <template #icon>
-              <n-icon :size="20"><MultiselectLtr20Filled/></n-icon>
-            </template>
-          </n-button>
+      <n-button tertiary circle @click="click_bulk_operation">
+        <template #icon>
+          <n-icon :size="20"><MultiselectLtr20Filled/></n-icon>
         </template>
-        <span>批量操作</span>
-      </n-popover>
+      </n-button>   
       
       <n-space v-if="!bool_start_play">
         <n-button tertiary circle @click="click_select_ALL_row">
@@ -504,7 +637,8 @@ import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, Allow
     <!-- :row-key唯一标识，防止数据混乱  -->
     <n-data-table
       class="table"
-      :columns="columns"
+      :style="{ width:collapsed_width + 'px'}"
+      :columns="columns" :loading="bool_loading"
       @update:sorter="handleUpdateSorter"
       :data="data_temporary"
       :bordered="false"
@@ -514,7 +648,7 @@ import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, Allow
       :row-key="(row: RowData) => row.id"
       @update:checked-row-keys="checkedRowhandleCheck"
       :checked-row-keys="checkedRowKeysRef"
-      @select="handleSelect"
+      @select="handleSelect_data_dropmenu"
       :row-props="rowProps"
 
       :pagination="paginationReactive"
@@ -527,16 +661,15 @@ import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, Allow
     trigger="manual"
     :x="xRef"
     :y="yRef"
-    :options="options"
+    :options="options_data_dropmenu"
     :show="showDropdownRef"
     :on-clickoutside="onClickoutside"
-    @select="handleSelect"
+    @select="handleSelect_data_dropmenu"
   />
 </template>
 
 <style>
 .table {
-  width: calc(100% - 220px);
-  height: calc(100vh - 240px);
+  height: calc(100vh - 200px);
 }
 </style>

@@ -9,8 +9,8 @@
   const emit = defineEmits();
 
   // open view musicplayer
-  const svg_shrink_up_arrow = ref<string>('../assets/shrink_up_arrow.svg');
-  const svg_shrink_down_arrow = ref<string>('../assets/shrink_down_arrow.svg');
+  const svg_shrink_up_arrow = ref<string>('../../resources/shrink_up_arrow.svg');
+  const svg_shrink_down_arrow = ref<string>('../../resources/shrink_down_arrow.svg');
   const back_display = ref('none');
   const back_filter_blurValue  = ref(0);
   function getAssetImage(firstImage: string) {
@@ -27,24 +27,24 @@
   const click_back_svg = () => {
     svg_shrink_up_arrow.value = 
     svg_shrink_up_arrow.value === 
-      '../assets/shrink_up_arrow.svg' ? svg_shrink_down_arrow.value : '../assets/shrink_up_arrow.svg';
+      '../../resources/shrink_up_arrow.svg' ? svg_shrink_down_arrow.value : '../../resources/shrink_up_arrow.svg';
 
     margin_top_value_view_music_player.value = 
       margin_top_value_view_music_player.value === 
         0 ? 670 : 0;
         emit('on-click',margin_top_value_view_music_player.value);
     
-    musicplayer_background_color.value =
-      musicplayer_background_color.value === 
-        '#FFFFFF'?'#FFFFFFE5':'#FFFFFF';
+    // musicplayer_background_color.value =
+    //   musicplayer_background_color.value === 
+    //     '#FFFFFF'?'#FFFFFFE5':'#FFFFFF';
   };
 
   // binding
-  const musicplayer_background_color = ref('#FFFFFF');
+  // const musicplayer_background_color = ref('#FFFFFF');
   const this_audio_buffer_file = ref(null)
   import { defineProps} from 'vue';
   const props = defineProps([
-    'this_audio_file_path','this_audio_refresh',
+    'this_audio_file_path','this_audio_file_medium_image_url','this_audio_refresh',
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name']);
   watch(() => props.this_audio_refresh, (newValue, oldValue) => {
     if(newValue == true){
@@ -62,9 +62,9 @@
   const player_no_progress_jump = ref(true)
   //
   const slider_volume_value = ref(100)
-  const slider_volume_show = ref(true)
+  const slider_volume_show = ref(false)
   //
-  const slider_order_show = ref(true)
+  const slider_order_show = ref(false)
 
   // audio system
   import { Audio_Players } from '../models/song_Audio_Out/Audio_Players';
@@ -210,11 +210,30 @@
       slider_order_show.value = true;
     }
   }
+
+  import {
+    Heart24Regular,
+    Video16Regular,
+    DesktopFlow24Regular,
+    MoreCircle32Regular,
+  } from '@vicons/fluent'
+  import {
+    QueueMusicRound
+  } from '@vicons/material' 
+  import {
+    ReorderFour,ReloadCircle,
+    Play,
+    PlaySkipBack,PlaySkipForward,
+    PlayBack,PlayForward,
+    VolumeMedium,VolumeOff
+  } from '@vicons/ionicons5' 
+  import {
+    Random
+  } from '@vicons/fa'
 </script>
 
 <template>
-  <div class="this_Bar_Music_Player"
-      :style="{ backgroundColor:musicplayer_background_color }">
+  <n-space class="this_Bar_Music_Player"><!--:style="{ backgroundColor:musicplayer_background_color }" -->
     <div class="layout_distribution_3">
       <div class="gird_Left">
         <div class="button_open_player_view">
@@ -223,39 +242,48 @@
               :style="{ display: back_display }"
               @click="click_back_svg" @mouseover="hover_back_img" @mouseout="leave_back_svg"/>
           <img class="back_img" 
-              src="../assets/00album.jpg" 
+              :src="getAssetImage(props.this_audio_file_medium_image_url)"
               :style="{ filter: 'blur(' + back_filter_blurValue + 'px)' }"
               @mouseover="hover_back_img" @mouseout="leave_back_svg"/>
         </div>
         <div class="bar_left_text_song_info">
-          <h5 id="bar_singer_name">{{ props.this_audio_singer_name }}</h5>
-          <h5 id="bar_song_name">{{ props.this_audio_song_name }}</h5>
-          <h5 id="bar_album_name">{{ props.this_audio_album_name }}</h5>
+          <n-ellipsis id="bar_singer_name">{{ props.this_audio_singer_name }}</n-ellipsis>
+          <n-ellipsis id="bar_song_name">{{ props.this_audio_song_name }}</n-ellipsis>
+          <n-ellipsis id="bar_album_name">{{ props.this_audio_album_name }}</n-ellipsis>
         </div>
       </div>
       <div class="gird_Middle">
-        <div class="grid_Middle_button_area">
-          <div id="button_order" @click="backpanel_order_click">
-
-          </div>
-          <div id="button_previous_song">
-            
-          </div>
-          <div id="button_play" @click="Init_Audio_Player">
-            <Icon>
-
-            </Icon>
-          </div>
-          <div id="button_next_song">
-            
-          </div>
-          <div id="button_vioce" @click="backpanel_voice_click" >
-            
-          </div>
-        </div>
+        <n-space class="grid_Middle_button_area" justify="center">
+          <n-button quaternary round size="small" @click="backpanel_order_click">
+            <template #icon>
+              <n-icon :size="26"><ReorderFour/></n-icon>
+            </template>
+          </n-button>
+          <n-button quaternary round size="small">
+            <template #icon>
+              <n-icon :size="26"><PlaySkipBack/></n-icon>
+            </template>
+          </n-button>
+          <n-button quaternary round size="medium" @click="Init_Audio_Player">
+            <template #icon>
+              <n-icon :size="36"><Play/></n-icon>
+            </template>
+          </n-button>
+          <n-button quaternary round size="small">
+            <template #icon>
+              <n-icon :size="26"><PlaySkipForward/></n-icon>
+            </template>
+          </n-button>
+          <n-button quaternary round size="small" @click="backpanel_voice_click">
+            <template #icon>
+              <n-icon :size="26"><VolumeMedium/></n-icon>
+            </template>
+          </n-button>
+        </n-space>
         <div>
-          <input id="player_range_duration" type="range"
-            style="width: 90%;bottom: 20;"
+          <input 
+            id="player_range_duration" type="range"
+            style="width: 90%;margin-top: 10px;"
             @mousedown="player_range_duration_handleMouseDown"
             @mouseup="player_range_duration_handleMouseUp"
             @click="player_range_duration_handleclick"
@@ -276,38 +304,53 @@
         </div>
       </div>
       <div class="gird_Right">
-        <div class="gird_Right_current_playlist_button_area">
-          <div>
-
-          </div>
-          <h5>999+</h5>
-        </div>
+        <n-button class="gird_Right_current_playlist_button_area" strong secondary>
+          <template #icon>
+            <n-icon :size="42"><QueueMusicRound/></n-icon>
+          </template>
+        </n-button>
         <div class="gird_Right_button_area">
           <div class="gird_Right_button_area_up">
-            <div id="button_this_AddLove"></div>
-            <div id="button_this_mv"></div>
-            <div id="button_this_lysic"></div>
-            <div id="button_this_more_info"></div>
+            <n-button size="tiny" text>
+              <template #icon>
+                <n-icon :size="22"><Heart24Regular/></n-icon>
+              </template>
+            </n-button>
+            <n-button size="tiny" text>
+              <template #icon>
+                <n-icon :size="22"><Video16Regular/></n-icon>
+              </template>
+            </n-button>
+            <n-button size="tiny" text>
+              <template #icon>
+                <n-icon :size="22"><DesktopFlow24Regular/></n-icon>
+              </template>
+            </n-button>
+            <n-button size="tiny" text>
+              <template #icon>
+                <n-icon :size="22"><MoreCircle32Regular/></n-icon>
+              </template>
+            </n-button>
           </div>
           <div class="gird_Right_button_area_down">
-            <div id="button_audio_speed">
-              <h5>倍速</h5>
-            </div>
-            <div id="button_sound_effects">
-              <h5>音效</h5>
-            </div>
+            <n-button size="tiny" secondary strong id="button_audio_speed">
+              <n-ellipsis>倍速</n-ellipsis>
+            </n-button>
+            <n-button size="tiny" secondary strong id="button_sound_effects">
+              <n-ellipsis>音效</n-ellipsis>
+            </n-button>
           </div>
         </div>
         <div class="gird_Right_audio_play_time_area">
           <div>
-            <span id="current_play_time">{{ current_play_time }}</span><br>
-            <span id="divider_play_time"> ------ </span><br>
-            <span id="total_play_time">{{ total_play_time }}</span>
+            <n-ellipsis id="current_play_time">{{ current_play_time }}</n-ellipsis><br>
+            <n-ellipsis id="divider_play_time"> ------ </n-ellipsis><br>
+            <n-ellipsis id="total_play_time">{{ total_play_time }}</n-ellipsis>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </n-space>
 </template>
 
 
@@ -357,7 +400,7 @@
 }
 .gird_Left .button_open_player_view .back_img{
   width: 60px;height: 60px;
-  border-radius: 10px;
+  border-radius: 6px;
   box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.25);
   z-index: 0;
 }
@@ -368,13 +411,10 @@
   float: left;text-align: left;
 }
 .gird_Left .bar_left_text_song_info #bar_singer_name{
-  width: 280px;
   font-size: 16px;
   font-weight: 500;
-  color: #595959;
-
   user-select: none;
-
+  max-width: 240px;
   /* 行数超出后显示省略号 */
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -389,8 +429,7 @@
 .gird_Left .bar_left_text_song_info #bar_song_name{
   font-size: 14px;
   font-weight: 500;
-  color: #8A909E;
-
+  max-width: 240px;
   /* 行数超出后显示省略号 */
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -405,8 +444,7 @@
 .gird_Left .bar_left_text_song_info #bar_album_name{
   font-size: 14px;
   font-weight: 500;
-  color: #595959;
-
+  max-width: 240px;
   /* 行数超出后显示省略号 */
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -427,62 +465,15 @@
 }
 .gird_Middle .grid_Middle_button_area{
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 230px;
+  width: 300px;
   margin: 0px auto;
   margin-top: 10px;
-}
-.gird_Middle .grid_Middle_button_area div{
-  width: 34px; 
-  height: 34px;
-}
-.gird_Middle .grid_Middle_button_area :nth-child(3){
-  width: 40px; 
-  height: 40px;
-}
-.gird_Middle :last-child{
-  height: 6px;
-  bottom: 4px;
-  
-  cursor: default;
-  user-select: none;
-}
-.gird_Middle #button_order{
-  background-image: url(../src/assets/顺序播放.svg);
-  background-size: 22px 22px;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin-top: 1px;
-}
-.gird_Middle #button_previous_song{
-  background-image: url(../src/assets/上一首.svg);
-  background-size: 22px 22px;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.gird_Middle #button_play{
-  background-image: url(../src/assets/播放.svg);
-  background-size: 36px 36px;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.gird_Middle #button_next_song{
-  background-image: url(../src/assets/下一首.svg);
-  background-size: 22px 22px;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.gird_Middle #button_vioce{
-  background-image: url(../src/assets/音量.svg);
-  background-size: 22px 22px;
-  background-repeat: no-repeat;
-  background-position: center;
 }
 .gird_Middle #backpanel_order{
   position: absolute;
   top: -200px;
-  margin-left: 50px;
+  margin-left: 30px;
   width: 100px;
   height: 210px;
   background-color: #FFFFFF;
@@ -492,7 +483,7 @@
 .gird_Middle #backpanel_voice{
   position: absolute;
   top: -200px;
-  margin-left: 270px;
+  margin-left: 290px;
   width: 60px;
   height: 210px;
   background-color: #FFFFFF;
@@ -531,18 +522,15 @@
 }
 .gird_Right .gird_Right_audio_play_time_area #current_play_time{
   font-size: 16px;
-  color: #595959;
   position: absolute;
   top: 10px;
 }
 .gird_Right .gird_Right_audio_play_time_area #divider_play_time{
   position: absolute;
   top: 28px;
-  color: #595959;
 }
 .gird_Right .gird_Right_audio_play_time_area #total_play_time{
   font-size: 16px;
-  color: #595959;
   position: absolute;
   bottom: 10px;
 }
@@ -559,90 +547,24 @@
   justify-content: space-between;
   align-items: center;
 }
-.gird_Right .gird_Right_button_area .gird_Right_button_area_up div{
-  width: 22px;
-  height: 22px;
-}
-.gird_Right .gird_Right_button_area .gird_Right_button_area_up #button_this_AddLove{
-  background-image: url(../src/assets/收藏.svg);
-  background-size: 22px 22px;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.gird_Right .gird_Right_button_area .gird_Right_button_area_up #button_this_mv{
-  background-image: url(../src/assets/视频.svg);
-  background-size: 26px 26px;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.gird_Right .gird_Right_button_area .gird_Right_button_area_up #button_this_lysic{
-  background-image: url(../src/assets/歌词.svg);
-  background-size: 22px 22px;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.gird_Right .gird_Right_button_area .gird_Right_button_area_up #button_this_more_info{
-  background-image: url(../src/assets/更多.svg);
-  background-size: 22px 22px;
-  background-repeat: no-repeat;
-  background-position: center;
-}
 .gird_Right .gird_Right_button_area .gird_Right_button_area_down{
   width: 110px;
   height: 30px;
   margin-top: 6px;
 }
-.gird_Right .gird_Right_button_area .gird_Right_button_area_down div{
-  
-}
 .gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_audio_speed{
-  float: left;
   width: 40px;height: 22px;
-  border: 1px;
-  border-color: #D3DBEA;
-  border-style: solid;
-  border-radius: 6px;
-  color: #283248;
 }
 .gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_audio_speed :hover{
-  float: left;
-  width: 40px;height: 22px;
-  border: 1px;
-  border-color: #3DC3FF;
-  border-style: solid;
-  border-radius: 6px;
   color: #3DC3FF;
 }
-.gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_audio_speed h5{
-  width: 36px;height: 24px;
-  font-size: 13px;
-  text-wrap: nowrap;
-}
 .gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_sound_effects{
-  float: left;
   width: 40px;
   width: 40px;height: 22px;
   margin-left: 10px;
-  border: 1px;
-  border-color: #D3DBEA;
-  border-style: solid;
-  border-radius: 6px;
-  color: #283248;
 }
 .gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_sound_effects :hover{
-  float: left;
-  width: 40px;
-  width: 40px;height: 22px;
-  border: 1px;
-  border-color: #3DC3FF;
-  border-style: solid;
-  border-radius: 6px;
   color: #3DC3FF;
-}
-.gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_sound_effects h5{
-  width: 36px;height: 24px;
-  font-size: 13px;
-  text-wrap: nowrap;
 }
 .gird_Right .gird_Right_current_playlist_button_area{
   width: 60px;
@@ -651,29 +573,10 @@
   margin-top: 10px;
   margin-left: 20px;
   margin-right: 20px;
-  background-color: #EEF7FF;
   border-radius: 10px;
 }
 .gird_Right .gird_Right_current_playlist_button_area :hover{
   color: #3DC3FF;
-}
-.gird_Right .gird_Right_current_playlist_button_area div{
-  width: 60px;
-  height: 60px;
-  background-image: url(../src/assets/播放队列.svg);
-  background-size: 22px 22px;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin-top: -8px;
-  position: fixed;
-  z-index: 0;
-}
-.gird_Right .gird_Right_current_playlist_button_area h5{
-  font-size: 14px;
-  color: #595959;
-  position: relative;
-  top: 35px;
-  z-index: 1;
 }
 
 </style>

@@ -38,7 +38,7 @@ function get_menu_delete_this_song(value: any) {
 
 const fetchData = () => {
   const path = require('path');
-  const sqlite3 = require('sqlite3').verbose();
+  const sqlite3 = require('better-sqlite3').verbose();
   const dbPath = path.resolve('../NSMusicS_Web_APP/src/resource/db_sqllite/navidrome.db');
   const tableName = 'media_file';
   let db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE);

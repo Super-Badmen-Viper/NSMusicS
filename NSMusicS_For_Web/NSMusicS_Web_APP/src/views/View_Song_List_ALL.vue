@@ -1,23 +1,15 @@
 <script setup lang="ts">
-import { ref, onMounted,defineEmits } from 'vue';
+import { ref, onMounted,defineEmits, onBeforeUnmount } from 'vue';
 import Table_Song_List from '../views/table/Table_Song_List_ALL.vue'
+import { ipcRenderer } from 'electron';
 
-const data = ref<Media_File[]>([]);
 const data_select_Index = ref<number>(-1)
 function get_data_select_Index(value: any) {
   data_select_Index.value = value
   emit('data_select_Index',data_select_Index.value)
 }
-const data_page = ref<Media_File[]>([]);
-function get_data_page(value: any) {
-  data_page.value = value
-  console.log('data_page：'+value)
-  emit('media_PageFiles',data_page)
-}
-const page_Size = ref<number>(10)
 function get_page_Size(value: number) {
-  page_Size.value = value
-  console.log('page_Size：'+value)
+  emit('page_Size',value)
 }
 
 const menu_edit_this_song = ref<Media_File>()
@@ -35,39 +27,15 @@ function get_menu_delete_this_song(value: any) {
   menu_delete_this_song.value = value
   console.log('添加到：data_select_Index：'+value)
 }
-
-const fetchData = () => {
-  const path = require('path');
-  const sqlite3 = require('sqlite3').verbose();
-  const dbPath = path.resolve('../NSMusicS_Web_APP/src/resource/db_sqllite/navidrome.db');
-  const tableName = 'media_file';
-  let db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE);
-  
-  let num = 0;
-  db.serialize(() => {
-    db.each(`SELECT * FROM ${tableName}`, (err: any, row: Media_File) => {
-      if (err) {
-        console.error(err.message);
-        return;
-      }
-      row.duration_txt = formatTime(row.duration);
-      data.value.push(row);
-
-      if(num < page_Size.value){
-        data_page.value.push(row);
-      }
-      num++;
-    });
-  });
-  db.close();
-};
-onMounted(() => {
-  fetchData();
-
-  emit('media_Files',data)
-  emit('media_PageFiles',data_page)
+onBeforeUnmount(() => {
+  cleanup();
 });
-
+const cleanup = () => {
+  data_select_Index.value = -1;
+  menu_edit_this_song.value = undefined;
+  menu_add_this_song.value = undefined;
+  menu_delete_this_song.value = undefined;
+};
 
 function formatTime(currentTime: number): string {
     const minutes = Math.floor(currentTime / 60);
@@ -91,10 +59,27 @@ function formatTime(currentTime: number): string {
 
 // import { useRouter } from "vue-router";
 // const router = useRouter();
-const emit = defineEmits();
+const emit = defineEmits([
+  'media_Files',
+  'media_file_path',
+  'media_file_medium_image_url',
+  'this_audio_singer_name',
+  'this_audio_song_name',
+  'this_audio_album_name',
+  'data_select_Index',
+  'page_song_index',
+  'page_num',
+  'page_Size',
+  'media_PageFiles',
+  'menu_edit_this_song',
+  'menu_add_this_song',
+  'menu_delete_this_song'
+]);
 function get_media_path(value: any) {
   emit('media_file_path',value)
-  // router.push({name:'我的喜欢'});
+}
+function get_media_file_medium_image_url(value: any) {
+  emit('media_file_medium_image_url',value)
 }
 function get_this_audio_singer_name(value: any) {
   emit('this_audio_singer_name',value)
@@ -114,19 +99,28 @@ function get_page_num(value: any) {
 function get_media_PageFiles(value: any) {
   emit('media_PageFiles',value)
 }
+
+const { 
+  collapsed,window_innerWidth,
+  media_Files 
+  } = defineProps<{
+    collapsed:Boolean,window_innerWidth:number,
+    media_Files:Media_File[]
+  }>();
 </script>
 
 <template>
-  <div>
-    <Table_Song_List class="table" 
-      :data="data" 
-      :data_temporary="data"
+  <div class="view_show">
+    <Table_Song_List
+      :data="media_Files"
+      :collapsed="collapsed"
+      :window_innerWidth="window_innerWidth"
       @media_file_path="get_media_path" 
+      @media_file_medium_image_url="get_media_file_medium_image_url"
       @this_audio_singer_name="get_this_audio_singer_name"
       @this_audio_song_name="get_this_audio_song_name"
       @this_audio_album_name="get_this_audio_album_name"
       @data_select_Index="get_data_select_Index"
-      @data_page="get_data_page" 
       @page_song_index="get_page_song_index"
       @page_num="get_page_num"
       @page_Size="get_page_Size"
@@ -138,5 +132,8 @@ function get_media_PageFiles(value: any) {
 </template>
 
 <style>
-
+.view_show {
+  width: 100vw;
+  height: calc(100vh - 200px);
+}
 </style>

@@ -1,26 +1,26 @@
-import { app, BrowserWindow,webFrame,dialog  } from 'electron'
+import { app, BrowserWindow,dialog  } from 'electron'
 import { readFileSync } from 'fs';
 
 async function createWindow() {
     const win = await new BrowserWindow({
-        width: 1000,
+        width: 1180,
+        height: 760,
         // minWidth: 300,//移动端
-        minWidth:1080,//PC端
-        minHeight: 720,
+        minWidth:1180,//PC端
+        minHeight: 760,
         frame:false,
         resizable: true,
 
         // 配置窗口的WebPreferences选项，用于控制渲染进程的行为
         webPreferences: {
             nodeIntegration: true, // 启用Node.js集成
-            contextIsolation: false, // 禁用上下文隔离
-            webSecurity: false, // 禁用web安全策略
+            contextIsolation: false, // 上下文隔离
+            webSecurity: false, // web安全策略：开启则不能访问本机路径的文件
         },
     })
     win.setMenu(null)
     // 设置窗口是否可以由用户手动最大化。
     win.setMaximizable(false)
-
     // 禁用水平滚动条
     win.webContents.on('did-finish-load', () => {
         win.webContents.insertCSS(`
@@ -29,14 +29,14 @@ async function createWindow() {
         }
         `)
     })
-
+    // 去除警告：Policy set or a policy with “unsafe-eval“ enabled. 
+    process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
     // 根据命令行参数加载URL或本地文件
     if (process.argv[2]) {
         win.loadURL(process.argv[2])
     } else {
         win.loadFile('index.html')
     }
-
     // Open the DevTools.
     win.webContents.openDevTools({
         mode:'bottom'
@@ -44,11 +44,9 @@ async function createWindow() {
 
     const electron = require('electron')
     const ipc = electron.ipcMain
-    //登录窗口最小化
     ipc.on('window-min', function () {
         win.minimize();
     })
-    //登录窗口最大化
     ipc.on('window-max', function () {
     if (win.isMaximized()) {
         win.restore();
@@ -79,6 +77,14 @@ async function createWindow() {
     ipc.handle('readFile', async (event, filePath) => {
         return readFileSync(filePath);
     });
+
+    const fs = require('fs');
+    ipc.handle('existsFile', async (event, filePath) => {
+        if (!fs.existsSync(filePath)) {
+            return false
+        }
+        return true
+    });
     
 
     
@@ -86,8 +92,14 @@ async function createWindow() {
 
 // 等待Electron应用就绪后创建BrowserWindow窗口
 app.whenReady().then(() => {
-    createWindow();
-    
+    createWindow(); 
+
+    const devInnerHeight: number = 1080.0; // 开发时的 InnerHeight
+    const devDevicePixelRatio: number = 1.0; // 开发时的 device pixel ratio
+    const devScaleFactor: number = 1.3; // 开发时的 ScaleFactor
+    const scaleFactor: number = require('electron').screen.getPrimaryDisplay().scaleFactor;
+    const zoomFactor: number = (window.innerHeight / devInnerHeight) * (window.devicePixelRatio / devDevicePixelRatio) * (devScaleFactor / scaleFactor);
+    require('electron').webFrame.setZoomFactor(zoomFactor);
 })
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
