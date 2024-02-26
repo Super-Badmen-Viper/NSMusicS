@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted,defineEmits, onBeforeUnmount } from 'vue';
+import { ref,defineEmits, onBeforeUnmount } from 'vue';
 import Table_Song_List from '../views/table/Table_Song_List_ALL.vue'
-import { ipcRenderer } from 'electron';
 
 const data_select_Index = ref<number>(-1)
 function get_data_select_Index(value: any) {
@@ -37,26 +36,6 @@ const cleanup = () => {
   menu_delete_this_song.value = undefined;
 };
 
-function formatTime(currentTime: number): string {
-    const minutes = Math.floor(currentTime / 60);
-    const seconds = currentTime % 60;
-
-    let formattedMinutes = String(minutes);
-    let formattedSeconds = String(seconds);
-
-    if(formattedMinutes.length == 1)
-      formattedMinutes = '0' + formattedMinutes;
-    formattedMinutes = formattedMinutes.replace('.','');
-    formattedMinutes = formattedMinutes.substring(0, 2);
-
-    formattedSeconds = formattedSeconds.substring(0,formattedSeconds.indexOf('.'));
-    if(formattedSeconds.length == 1)
-      formattedSeconds = '0' + formattedSeconds;
-    formattedSeconds = formattedSeconds.substring(0, 2);
-
-    return `${formattedMinutes}:${formattedSeconds}`;
-}
-
 // import { useRouter } from "vue-router";
 // const router = useRouter();
 const emit = defineEmits([
@@ -73,7 +52,10 @@ const emit = defineEmits([
   'media_PageFiles',
   'menu_edit_this_song',
   'menu_add_this_song',
-  'menu_delete_this_song'
+  'menu_delete_this_song',
+  'options_Sort_key',
+  'keyword',
+  'reset_data'
 ]);
 function get_media_path(value: any) {
   emit('media_file_path',value)
@@ -99,20 +81,32 @@ function get_page_num(value: any) {
 function get_media_PageFiles(value: any) {
   emit('media_PageFiles',value)
 }
+function get_options_Sort_key(value: any) {
+  emit('options_Sort_key',value)
+}
+function get_keyword(value: any) {
+  emit('keyword',value)
+}
+function get_reset_data(value: any) {
+  emit('reset_data',value)
+}
 
 const { 
   collapsed,window_innerWidth,
-  media_Files 
+  media_Files,media_Files_temporary,
+  options_Sort_key
   } = defineProps<{
     collapsed:Boolean,window_innerWidth:number,
-    media_Files:Media_File[]
+    media_Files:Media_File[],media_Files_temporary:Media_File[],
+    options_Sort_key:{ columnKey: string; order: string }[]
   }>();
 </script>
 
 <template>
   <div class="view_show">
     <Table_Song_List
-      :data="media_Files"
+      :data="media_Files" 
+      :data_temporary="media_Files_temporary"
       :collapsed="collapsed"
       :window_innerWidth="window_innerWidth"
       @media_file_path="get_media_path" 
@@ -127,7 +121,11 @@ const {
       @media_PageFiles="get_media_PageFiles"
       @menu_edit_this_song="get_menu_edit_this_song"
       @menu_add_this_song="get_menu_add_this_song"
-      @menu_delete_this_song="get_menu_delete_this_song"/>
+      @menu_delete_this_song="get_menu_delete_this_song"
+      :options_Sort_key="options_Sort_key"
+      @options_Sort_key="get_options_Sort_key"
+      @keyword="get_keyword"
+      @reset_data="get_reset_data"/>
   </div>
 </template>
 

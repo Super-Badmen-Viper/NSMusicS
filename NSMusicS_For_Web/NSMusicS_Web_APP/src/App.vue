@@ -175,11 +175,22 @@
   }
   //
   const media_Files = ref<Media_File[]>([]);
+  const media_Files_temporary = ref<Media_File[]>([]);// data.slice() BUG Error: Because Init
+  //
+  const options_Sort_key = ref<{ columnKey: string; order: string }[]>([]);
+  function get_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
+    if (value != null) {
+      options_Sort_key.value = value;
+      sortByColumnKeys(value);
+    }
+  }
+  //
   const page_Size = ref<number>(10)
   function get_page_Size(value: number) {
     page_Size.value = value
     console.log('page_Size：'+value)
   }
+  //
   function formatTime(currentTime: number): string {
     const minutes = Math.floor(currentTime / 60);
     const seconds = currentTime % 60;
@@ -199,8 +210,54 @@
 
     return `${formattedMinutes}:${formattedSeconds}`;
   }
-  const fetchData = () => {
-    media_Files.value = []
+  function sortByColumnKeys(sortersArray: { columnKey: string; order: string }[] = []) {
+    let sortedData = media_Files_temporary.value.slice(); // 克隆数组以避免直接修改原数组
+    let bool_default = false;
+    for (let i = 0; i < sortersArray.length; i++) {
+      sortedData = sortedData.sort((a, b) => {
+        const columnKey = sortersArray[i].columnKey;
+        const order = sortersArray[i].order;
+        const valueA = (a as any)[columnKey];
+        const valueB = (b as any)[columnKey];
+
+        if (valueA !== valueB) {
+          return order === 'ascend' ? (valueA < valueB ? -1 : 1) : (valueA > valueB ? -1 : 1);
+        }
+        return 0;
+      });
+    }
+    sortedData.forEach((item, index) => {
+      item.absoluteIndex = index + 1;
+    });
+    if (sortersArray.length === 0 || bool_default) {
+      sortedData = media_Files.value.slice(); // 恢复原始数据
+      sortedData.forEach((item, index) => {
+        item.absoluteIndex = index + 1;
+      });
+    }
+    media_Files_temporary.value = sortedData;
+  }
+  function get_keyword(value: any) {
+    media_Files_temporary.value = media_Files.value.filter((item: Media_File) => {
+      const { title, artist, album, path } = item;
+      const lowerValue = value.toLowerCase();
+      return title.toLowerCase().includes(lowerValue) ||
+        artist.toLowerCase().includes(lowerValue) ||
+        album.toLowerCase().includes(lowerValue) ||
+        path.toLowerCase().includes(lowerValue);
+    });
+    media_Files_temporary.value.forEach((item: Media_File, index: number) => {
+      item.absoluteIndex = index + 1;
+    });
+  }
+  function get_reset_data(value: any) {
+    media_Files_temporary.value = media_Files.value.slice();
+    media_Files_temporary.value.forEach((item: Media_File, index: number) => {
+      item.absoluteIndex = index + 1;
+    });
+  }
+  const fetchData = async () => {
+    media_Files.value = []; // 清空数组
     let path = require('path');
     let Database = require('better-sqlite3');
     let dbPath = path.resolve('resources/navidrome.db');
@@ -210,27 +267,30 @@
       let stmt_album = db.prepare(`SELECT * FROM album`);
       let rows = stmt_media_file.all();
       let imagefiles = stmt_album.all();
-      rows.forEach(async (row: Media_File) => {
+      for (let row of rows) {
         row.duration_txt = formatTime(row.duration);
         let medium_image_url = row.path.replace('mp3','jpg');
         if(imagefiles[0].image_files.indexOf(medium_image_url) > 0)
           row.medium_image_url = medium_image_url
 
         media_Files.value.push(row);
-      });
+      }
     } catch (err: any) {
       console.error(err.message);
     } finally {
       db.close();
     }
   };
-  onMounted(() => {
-    fetchData();
-
-    media_Files.value.forEach((item: { absoluteIndex: any }, index: number) => {
-      item.absoluteIndex = index + 1;
+  onMounted(async () => {
+    await fetchData().then(() => {
+      media_Files.value.forEach((item: { absoluteIndex: any }, index: number) => {
+        item.absoluteIndex = index + 1;
+      });
+      media_Files_temporary.value = media_Files.value.slice();
     });
   });
+
+  
   //
   import { darkTheme } from 'naive-ui'
   import type { GlobalTheme } from 'naive-ui'
@@ -271,22 +331,29 @@
               :options="menuOptions"/>
             </n-layout-sider>
             <n-layout embedded style="height: calc(100vh - 80px);">
-              <RouterView
-                class="view_show" 
-                :collapsed="collapsed"
-                :window_innerWidth="window_innerWidth"
-                @media_file_path="media_file_path"
-                @media_file_medium_image_url="get_media_file_medium_image_url"
-                @this_audio_singer_name="get_this_audio_singer_name"
-                @this_audio_song_name="get_this_audio_song_name"
-                @this_audio_album_name="get_this_audio_album_name"
-                @data_select_Index="get_data_select_Index"
-                @page_song_index="get_page_song_index"
-                @page_num="get_page_num"
-                @page_Size="get_page_Size"
-                :media_Files="media_Files">
-                
-              </RouterView>
+              <KeepAlive>
+                <RouterView
+                  class="view_show" 
+                  :collapsed="collapsed"
+                  :window_innerWidth="window_innerWidth"
+                  @media_file_path="media_file_path"
+                  @media_file_medium_image_url="get_media_file_medium_image_url"
+                  @this_audio_singer_name="get_this_audio_singer_name"
+                  @this_audio_song_name="get_this_audio_song_name"
+                  @this_audio_album_name="get_this_audio_album_name"
+                  @data_select_Index="get_data_select_Index"
+                  @page_song_index="get_page_song_index"
+                  @page_num="get_page_num"
+                  @page_Size="get_page_Size"
+                  :media_Files="media_Files"
+                  :media_Files_temporary="media_Files_temporary"
+                  :options_Sort_key="options_Sort_key"
+                  @options_Sort_key="get_options_Sort_key"
+                  @keyword="get_keyword"
+                  @reset_data="get_reset_data">
+                  
+                </RouterView>
+              </KeepAlive>
               <div class="bar_top_setapp">
                 <section  style="
                           -webkit-app-region: no-drag;

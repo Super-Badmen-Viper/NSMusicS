@@ -19,8 +19,8 @@ const router = createRouter({
       name: 'View_Album_List_ALL',
       component: () => import('../views/View_Album_List_ALL.vue'),
       meta: {
-        // 添加 meta 字段用于标记路由是否已经清理
-        cleanup: true
+        keepalive: true,
+        cleanup: false
       }
     },
     {
@@ -28,7 +28,8 @@ const router = createRouter({
       name: 'View_Song_List_ALL',
       component: () => import('../views/View_Song_List_ALL.vue'),
       meta: {
-        cleanup: true
+        keepalive: true,
+        cleanup: false
       }
     },
   ]

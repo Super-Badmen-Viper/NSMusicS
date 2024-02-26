@@ -71,14 +71,12 @@
   const { ipcRenderer } = require('electron');
   let player = new Audio_Players();
   const Init_Audio_Player = async () => {
-    // ipcRenderer.send('open-music-file')
     const buffer = await ipcRenderer.invoke('readFile', props.this_audio_file_path);
     this_audio_buffer_file.value = buffer;
     currentTime_added_value.value = 0;
     player.releaseMemory(true);
     player.loadAudio(buffer,true).then(() => {
       if(player.bufferSourceNode != null){
-        // 播放音频
         player.setVolume(Number(slider_volume_value.value));
         player.setFadein();
         player.setFadeout();
@@ -196,7 +194,6 @@
   watch(
     slider_volume_value,
     (newValue, oldValue) => {
-      // 在这里处理监视到的变化
       player.setVolume(newValue ? Number(slider_volume_value.value) : 0);
     },
     { immediate: true }
@@ -233,7 +230,7 @@
 </script>
 
 <template>
-  <n-space class="this_Bar_Music_Player"><!--:style="{ backgroundColor:musicplayer_background_color }" -->
+  <n-space class="this_Bar_Music_Player">
     <div class="layout_distribution_3">
       <div class="gird_Left">
         <div class="button_open_player_view">

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick, h, reactive, computed, watch, onBeforeUnmount } from 'vue';
-import { useMessage,DropdownOption, type DataTableColumns, type DataTableInst, type DataTableRowKey, NIcon, InputInst, NImage } from 'naive-ui';
-import { RowData, SortOrder } from 'naive-ui/es/data-table/src/interface';
+import { useMessage,DropdownOption, type DataTableColumns, type DataTableRowKey, NIcon, InputInst, NImage } from 'naive-ui';
+import { RowData } from 'naive-ui/es/data-table/src/interface';
 const emit = defineEmits([
   'media_file_path',
   'media_file_medium_image_url',
@@ -15,7 +15,10 @@ const emit = defineEmits([
   'media_PageFiles',
   'menu_edit_this_song',
   'menu_add_this_song',
-  'menu_delete_this_song'
+  'menu_delete_this_song',
+  'options_Sort_key',
+  'keyword',
+  'reset_data'
 ]);
 const columns = ref<DataTableColumns<RowData>>();
 const createColumns_normal = (): DataTableColumns<RowData> => [
@@ -207,102 +210,13 @@ const createColumns_select = (): DataTableColumns<RowData> => [
     width: '40px',
   }
 ];
-const props = defineProps(['data','collapsed','window_innerWidth']);
-const data_temporary = ref<Media_File[]>(props.data.slice());// data.slice() BUG Error: Because Init
-const sortStatesRef = ref([])
-// 弃用 handleUpdateSorter + sortBycolumnKey
-function handleUpdateSorter (sorters: ConcatArray<never>) {
-  sortStatesRef.value = [].concat(sorters)
-
-  // 此n-data-table组件 在清除列头时 排序状态会冻结（此组件无解除冻结的API，无隐藏列头的API）
-  // 以下为修复此组件排序功能的替代
-  // let the_same:number = 0
-  // const sorter = sorters[0];
-  // sortStatesRef.value = [].concat(sorter)
-  // const element = sortStatesRef.value[0] as { columnKey: string; order: string };
-  // if(columnKey == element.columnKey)
-  //   if(order == element.order)
-  //   {
-  //     the_same = 0
-  //     order_same_count++;
-  //     if(order_same_count === 2){
-  //       the_same = 1
-  //     }else if(order_same_count === 3){
-  //       the_same = 2
-  //       order_same_count = 0
-  //     }
-  //   }
-
-  // columnKey = element.columnKey
-  // order = element.order
-
-  // sortBycolumnKey(sorters,the_same)
-}
-// 弃用 handleUpdateSorter + sortBycolumnKey
-const sortBycolumnKey = (sorters: ConcatArray<never>,bool: number) => {
-  let sortersArray: { columnKey: string; order: string }[] = [];
-  for (let i = 0; i < sorters.length; i++) {
-    const sorter = sorters[i];
-    sortStatesRef.value = [].concat(sorter)
-    sortStatesRef.value.forEach((element: { columnKey: string; order: string }) => {
-      const columnKey = element.columnKey;
-      const order = element.order;
-      console.log('columnKey:', columnKey);
-      console.log('order:', order);
-
-      sortersArray.push(element)
-    });
-  }
-
-  if(bool === 0){
-    if(sortersArray[0].order === 'ascend')
-      sortersArray[0].order = 'descend'
-    else
-      sortersArray[0].order = 'ascend'
-  }else if(bool === 1){
-    sortersArray.splice(0, 1)
-  }
-  
-  sortByColumnKeys(sortersArray)
-};
-//
-function sortByColumnKeys(sortersArray: { columnKey: string; order: string }[] = []) {
-  let bool_default = false
-  for (let i = 0; i < sortersArray.length; i++) {
-    data_temporary.value = data_temporary.value.sort((a, b) => {
-      const columnKey = sortersArray[i].columnKey;
-      const order = sortersArray[i].order;
-      const valueA = (a as any)[columnKey];
-      const valueB = (b as any)[columnKey];
-
-      if (valueA !== valueB) {
-        if (order === 'ascend') {
-          return valueA < valueB ? -1 : 1;
-        } else if (order === 'descend') {
-          return valueA > valueB ? -1 : 1;
-        } else {
-          bool_default = true
-        }
-      }
-      return 0; // 如果所有排序条件都相同，则返回0
-    });
-  }
-  for(let i = 0;i < data_temporary.value.length;i++)
-      data_temporary.value[i].absoluteIndex = i+1
-
-  if(sortersArray.length === 0){
-    data_temporary.value = props.data.slice();
-    for(let i = 0;i < data_temporary.value.length;i++)
-      data_temporary.value[i].absoluteIndex = i+1
-  }
-
-  if(bool_default){
-    data_temporary.value = props.data.slice();
-    for(let i = 0;i < data_temporary.value.length;i++)
-      data_temporary.value[i].absoluteIndex = i+1
-  }
-}
-//
+const props = defineProps<{
+  data: Media_File[];
+  data_temporary: Media_File[];
+  collapsed: Boolean;
+  window_innerWidth: number;
+  options_Sort_key:{ columnKey: string; order: string }[];
+}>();
 const checkedRowKeysRef = ref<DataTableRowKey[]>([]);
 const data_select_Index = ref<number>(0)
 const checkedRowhandleCheck = (rowKeys: DataTableRowKey[]) => {
@@ -314,7 +228,7 @@ const click_select_ALL_row = () => {
   {
     checkedRowKeysRef.value.length = 0
   }else{
-    checkedRowKeysRef.value = data_temporary.value.map((row: { id: any; }) => row.id);
+    checkedRowKeysRef.value = props.data_temporary.map((row: { id: any; }) => row.id);
   }
   // 强制更新组件
   forceUpdate.value = !forceUpdate.value;
@@ -402,14 +316,16 @@ const bool_start_play = ref<boolean>(true)
 const forceUpdate = ref(false); // 创建一个响应式引用
 const click_play_this_medialist = () => {
   if(bool_start_play.value == true){
-    let media_file:Media_File = data_temporary.value[0]
-    message.info(media_file.artist + " - " + media_file.title);
-    emit('media_file_path', media_file.path)
-    emit('media_file_medium_image_url',media_file.medium_image_url)
-    emit('this_audio_singer_name',media_file.artist)
-    emit('this_audio_song_name',media_file.title)
-    emit('this_audio_album_name',media_file.album)
-    emit('data_select_Index', data_select_Index.value); 
+    if(props.data_temporary != null && props.data_temporary.length > 0){
+      let media_file:Media_File = props.data_temporary[0]
+      message.info(media_file.artist + " - " + media_file.title);
+      emit('media_file_path', media_file.path)
+      emit('media_file_medium_image_url',media_file.medium_image_url)
+      emit('this_audio_singer_name',media_file.artist)
+      emit('this_audio_song_name',media_file.title)
+      emit('this_audio_album_name',media_file.album)
+      emit('data_select_Index', data_select_Index.value); 
+    }
   }else{
     message.info('请退出 批量操作 模式');
   }
@@ -448,19 +364,6 @@ const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对�
   }
 });
 const current_page_num = ref<number>(1)
-// 已弃用
-const update_page = (page: number) => {//当前页数Update，提交当前页内数据
-  // props.data_page.value.length = 0;
-  // const startIndex = (page - 1) * page_Size.value;
-  // const endIndex = startIndex + page_Size.value;
-  // for (let index = startIndex; index < endIndex; index++) {
-  //   props.data_page.value.push(data_temporary.value[index]);
-  // }
-
-  // emit('media_PageFiles',props.data_page)
-
-  // current_page_num.value = page
-};
 const page_Size = ref(10)
 const update_page_size = (pageSize: number) => {//当前页内的数据范围：10,20,30
   page_Size.value = pageSize;
@@ -497,6 +400,15 @@ const options_Sort_key = ref<SortItem[]>([
   {label:'专辑名', key: 'album', state_Sort: state_Sort.Default }
 ]);
 const options_Sort = computed(() => {
+  if(props.options_Sort_key != null && props.options_Sort_key.length > 0){
+    options_Sort_key.value.forEach(element => {
+      if(element.key === props.options_Sort_key[0].columnKey)
+        if(props.options_Sort_key[0].order === state_Sort.Ascend)
+          element.state_Sort = state_Sort.Ascend
+        else if(props.options_Sort_key[0].order === state_Sort.Descend)
+          element.state_Sort = state_Sort.Descend
+    });
+  }
   return options_Sort_key.value.map(item => {
     let icon: DefineComponent<{}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, EmitsOptions, string, VNodeProps & AllowedComponentProps & ComponentCustomProps, Readonly<ExtractPropTypes<{}>>, {}, {}>;
     switch (item.state_Sort) {
@@ -549,9 +461,11 @@ const handleSelect_Sort = (key: string | number) => {
       _state_Sort_ = state_Sort.Ascend;
       break;
   }
+  // emit('options_Sort_key',options_Sort_key.value)
   // 更新排序参数数组并执行排序操作
   const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
-  sortByColumnKeys(sortersArray);
+  emit('options_Sort_key',sortersArray)
+  // sortByColumnKeys(sortersArray);
 }
 const options_Sort_key_Default_key = ref<string>()
 const options_Sort_key_Default = ref<SortItem[]>()
@@ -562,10 +476,7 @@ const show_search_area = () => {
   {
     bool_show_search_area.value = false
     if(bool_input_search == true){
-      data_temporary.value = props.data.slice()
-      for(let i = 0;i < data_temporary.value.length;i++)
-        data_temporary.value[i].absoluteIndex = i+1
-
+      emit('reset_data',true)
       back_search_default()
       bool_input_search = false
     }
@@ -587,25 +498,13 @@ let bool_input_search = false
 const click_search = () => {
   if (input_search_Value.value){
     const keyword = input_search_Value.value.toLowerCase();
-    data_temporary.value = props.data.filter((item: { title: string; artist: string; album: string; path: string; }) => {
-      return item.title.toLowerCase().includes(keyword) ||
-             item.artist.toLowerCase().includes(keyword) ||
-             item.album.toLowerCase().includes(keyword) ||
-             item.path.toLowerCase().includes(keyword);
-    });
-    for(let i = 0;i < data_temporary.value.length;i++)
-      data_temporary.value[i].absoluteIndex = i+1
-
+    emit('keyword',keyword)
     bool_input_search = true
-
     options_Sort_key.value.forEach(element => {
       element.state_Sort = state_Sort.Default
     });
   }else{
-    data_temporary.value = props.data.slice()
-    for(let i = 0;i < data_temporary.value.length;i++)
-      data_temporary.value[i].absoluteIndex = i+1
-
+    emit('reset_data',true)
     bool_input_search = false
     back_search_default()
   }
@@ -659,16 +558,16 @@ const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (new
 //
 onMounted(() => {
   columns.value = createColumns_normal()
-  // data_temporary.value = data.slice(); //BUG Error\
+  // props.data_temporary = data.slice(); //BUG Error\
 });
 let bool_init = false
 let bool_loading = false
-const stopWatching_Init = watch(props.data, () => {
+// 数据初始化完成操作
+/*const stopWatching_Init = watch(props.data, () => {
   if (props.data.length != 0 && bool_init === false) {
-    // 数据初始化完成操作
-    data_temporary.value = props.data.slice()
-    for(let i = 0;i < data_temporary.value.length;i++)
-      data_temporary.value[i].absoluteIndex = i+1
+    props.data_temporary = props.data.slice()
+    for(let i = 0;i < props.data_temporary.length;i++)
+      props.data_temporary[i].absoluteIndex = i+1
 
     bool_init = true
     bool_loading = false
@@ -679,19 +578,21 @@ const stopWatching_Init = watch(props.data, () => {
       collapsed_width.value = window.innerWidth - 220;
     }
   }
-  // const data_temporary = ref<Media_File[]>(data.slice());// data.slice() BUG Error: Because Init
-  // data_temporary.value = data.slice(); //BUG Error
+  // const props.data_temporary = ref<Media_File[]>(data.slice());// data.slice() BUG Error: Because Init
+  // props.data_temporary = data.slice(); //BUG Error
   // 会导致初始化data数据为空时被赋值，后续无法为其同步数据
   // 使用 watch(data, () => { if (data.length != 0 && bool_init === false){。。。。。}
   // 实现类似WPF 控件的 Loaded 触发事件
 });
+*/
+
 //
 onBeforeUnmount(() => {
   cleanup();
 });
 const cleanup = () => {
   columns.value = [];
-  data_temporary.value = [];
+  // props.data_temporary = [];
   data_select_Index.value = -1;
   page_Size.value = 10;
   
@@ -702,13 +603,10 @@ const cleanup = () => {
   
   stopWatching_collapsed_width()
   stopWatching_window_innerWidth()
-  stopWatching_Init()
+  // stopWatching_Init()
 };
 
 
-import {
-  AddCircleOutline
-} from '@vicons/ionicons5'
 import {
   AddCircle32Regular,
   MultiselectLtr20Filled,
@@ -810,14 +708,12 @@ import { RouterLink } from 'vue-router';
       class="table"
       :style="{ width:collapsed_width + 'px'}"
       :columns="columns" :loading="bool_loading" 
-      @update:sorter="handleUpdateSorter"
-      :data="data_temporary"
+      :data="props.data_temporary"
       :bordered="false"
       flex-height
       striped
       default-expand-all
       :on-update-page-size="update_page_size"
-      :on-update-page="update_page"
       :row-key="(row: RowData) => row.id"
       @update:checked-row-keys="checkedRowhandleCheck"
       @update-expanded-row-keys="checkedRowhandleCheck"
