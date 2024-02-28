@@ -77,7 +77,6 @@ async function createWindow() {
     ipc.handle('readFile', async (event, filePath) => {
         return readFileSync(filePath);
     });
-
     const fs = require('fs');
     ipc.handle('existsFile', async (event, filePath) => {
         if (!fs.existsSync(filePath)) {
@@ -85,9 +84,6 @@ async function createWindow() {
         }
         return true
     });
-    
-
-    
 }
 
 // 等待Electron应用就绪后创建BrowserWindow窗口

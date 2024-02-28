@@ -32,6 +32,15 @@ const router = createRouter({
         cleanup: false
       }
     },
+    {
+      path: '/View_Artist_List_ALL',
+      name: 'View_Artist_List_ALL',
+      component: () => import('../views/View_Artist_List_ALL.vue'),
+      meta: {
+        keepalive: true,
+        cleanup: false
+      }
+    },
   ]
 })
 

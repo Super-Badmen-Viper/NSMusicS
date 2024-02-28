@@ -47,6 +47,14 @@ export const viteElectronBuild = (): Plugin => {
                         target:'nsis',
                         icon: 'build/NSMusicS_256.ico'
                     },
+                    linux: {
+                        target: 'AppImage',
+                        icon: 'build/NSMusicS_256.ico'
+                    },
+                    mac: {
+                        target: 'dmg',
+                        icon: 'build/NSMusicS_256.ico'
+                    },
                     nsis: {
                         oneClick: false,
                         perMachine: true,

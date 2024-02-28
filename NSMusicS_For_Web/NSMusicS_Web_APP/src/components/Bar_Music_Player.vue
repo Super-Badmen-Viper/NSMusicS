@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Icon } from '@vicons/utils'
-
   import { ref, watch } from 'vue';
 
   // send this SetInfo
@@ -44,7 +42,8 @@
   const this_audio_buffer_file = ref(null)
   import { defineProps} from 'vue';
   const props = defineProps([
-    'this_audio_file_path','this_audio_file_medium_image_url','this_audio_refresh',
+    'this_audio_file_path','this_playList_num',
+    'this_audio_file_medium_image_url','this_audio_refresh',
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name']);
   watch(() => props.this_audio_refresh, (newValue, oldValue) => {
     if(newValue == true){
@@ -276,6 +275,22 @@
               <n-icon :size="26"><VolumeMedium/></n-icon>
             </template>
           </n-button>
+
+          <!-- <n-float-button quaternary round size="small" @click="backpanel_order_click">
+              <n-icon :size="26"><ReorderFour/></n-icon>
+          </n-float-button>
+          <n-float-button quaternary round size="small">
+              <n-icon :size="26"><PlaySkipBack/></n-icon>
+          </n-float-button>
+          <n-float-button quaternary round size="medium" @click="Init_Audio_Player">
+              <n-icon :size="36"><Play/></n-icon>
+          </n-float-button>
+          <n-float-button quaternary round size="small">
+              <n-icon :size="26"><PlaySkipForward/></n-icon>
+          </n-float-button>
+          <n-float-button quaternary round size="small" @click="backpanel_voice_click">
+              <n-icon :size="26"><VolumeMedium/></n-icon>
+          </n-float-button> -->
         </n-space>
         <div>
           <input 
@@ -301,11 +316,15 @@
         </div>
       </div>
       <div class="gird_Right">
-        <n-button class="gird_Right_current_playlist_button_area" strong secondary>
-          <template #icon>
-            <n-icon :size="42"><QueueMusicRound/></n-icon>
-          </template>
-        </n-button>
+        <n-space class="gird_Right_current_playlist_button_area">
+          <n-badge :value="props.this_playList_num" show-zero :max="9999" :offset="[-7, 3]">
+            <n-button strong secondary class="gird_Right_current_playlist_button_area_of_button">
+              <template #icon>
+                <n-icon :size="42"><QueueMusicRound/></n-icon>
+              </template>
+            </n-button>
+          </n-badge>
+        </n-space>
         <div class="gird_Right_button_area">
           <div class="gird_Right_button_area_up">
             <n-button size="tiny" text>
@@ -572,7 +591,12 @@
   margin-right: 20px;
   border-radius: 10px;
 }
-.gird_Right .gird_Right_current_playlist_button_area :hover{
+.gird_Right .gird_Right_current_playlist_button_area_of_button{
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+}
+.gird_Right .gird_Right_current_playlist_button_area_of_button :hover{
   color: #3DC3FF;
 }
 

@@ -2,6 +2,7 @@ interface Item_Album {
     absoluteIndex: number;
     title:string;
     album_title:string;
+    updated_time:string;
 
     id: string;
     name: string;

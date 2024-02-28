@@ -1,18 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted,defineEmits } from 'vue';
-import Table_Album_List_ALL from '../views/table/Table_Album_List_ALL.vue'
+import Table_Album_List_ALL from '../views/table/Table_Album_List_ALL_Lineblock.vue'
 
-const data = ref<Item_Album[]>([]);
 const data_select_Index = ref<number>(-1)
 function get_data_select_Index(value: any) {
   data_select_Index.value = value
   emit('data_select_Index',data_select_Index.value)
-}
-const data_page = ref<Item_Album[]>([]);
-function get_data_page(value: any) {
-  data_page.value = value
-  console.log('data_page：'+value)
-  emit('media_PageFiles',data_page)
 }
 const page_Size = ref<number>(10)
 function get_page_Size(value: number) {
@@ -36,70 +29,26 @@ function get_menu_delete_this_song(value: any) {
   console.log('添加到：data_select_Index：'+value)
 }
 
-const fetchData = () => {
-  const path = require('path');
-  const Database = require('better-sqlite3');
-  const dbPath = path.resolve('resources/navidrome.db');
-  console.log(dbPath)
-  const tableName = 'album';
-  const db = new Database(dbPath, { verbose: console.log }); 
-  let num = 0;
-  try {
-    const stmt = db.prepare(`SELECT * FROM ${tableName}`);
-    const rows = stmt.all();
-    rows.forEach((row: Item_Album) => {
-      row.medium_image_url = row.embed_art_path.replace('mp3','jpg');
-
-      // 使用正则表达式匹配文件名部分
-      let fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
-      // 提取文件名
-      let fileNameWithExtension: string | null = fileNameMatch ? fileNameMatch[0] : null;
-      // 使用正则表达式去除文件后缀
-      let fileNameWithoutExtension: string | null = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
-      // 使用正则表达式去除-及其之前的部分
-      const fileNameWithoutPrefix: string | null = fileNameWithoutExtension ? fileNameWithoutExtension.replace(/.*?-\s*/, '') : null;
-      if(fileNameWithoutPrefix != null)
-        row.title = fileNameWithoutPrefix;
-
-      row.album_title = row.title+"<br>"+row.artist
-
-      data.value.push(row);
-      if (num < page_Size.value) {
-          data_page.value.push(row);
-      }
-      num++;
-    });
-  } catch (err: any) {
-    console.error(err.message);
-  } finally {
-    db.close();
-  }
-};
-onMounted(() => {
-  fetchData();
-
-  emit('media_Files',data)
-  emit('media_PageFiles',data_page)
-});
-
 // import { useRouter } from "vue-router";
 // const router = useRouter();
 const emit = defineEmits([
   'media_Files',
-  'media_file_medium_image_url',
   'media_file_path',
+  'media_file_medium_image_url',
   'this_audio_singer_name',
   'this_audio_song_name',
   'this_audio_album_name',
   'data_select_Index',
-  'data_page',
   'page_song_index',
   'page_num',
   'page_Size',
   'media_PageFiles',
   'menu_edit_this_song',
   'menu_add_this_song',
-  'menu_delete_this_song'
+  'menu_delete_this_song',
+  'options_Sort_key',
+  'keyword',
+  'reset_data'
 ]);
 function get_media_path(value: any) {
   emit('media_file_path',value)
@@ -127,13 +76,20 @@ function get_media_PageFiles(value: any) {
   emit('media_PageFiles',value)
 }
 
-const { collapsed,window_innerWidth } = defineProps<{collapsed:Boolean,window_innerWidth:number}>();
+const { 
+  collapsed,
+  window_innerWidth,
+  Album_Files,Album_Files_temporary } = defineProps<{
+  collapsed:Boolean,
+  window_innerWidth:number,
+  Album_Files:Item_Album[],Album_Files_temporary:Item_Album[]}>();
 </script>
 
 <template>
   <div class="view_show">
     <Table_Album_List_ALL
-      :data="data"
+      :data="Album_Files" 
+      :data_temporary="Album_Files_temporary"
       :collapsed="collapsed"
       :window_innerWidth="window_innerWidth"
       @media_file_path="get_media_path" 
@@ -142,7 +98,6 @@ const { collapsed,window_innerWidth } = defineProps<{collapsed:Boolean,window_in
       @this_audio_song_name="get_this_audio_song_name"
       @this_audio_album_name="get_this_audio_album_name"
       @data_select_Index="get_data_select_Index"
-      @data_page="get_data_page" 
       @page_song_index="get_page_song_index"
       @page_num="get_page_num"
       @page_Size="get_page_Size"

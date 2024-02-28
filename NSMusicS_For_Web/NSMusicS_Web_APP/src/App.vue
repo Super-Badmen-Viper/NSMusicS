@@ -66,7 +66,7 @@
       key: 'go-songs-list',
       icon: renderIcon(MusicNoteRound)
     },
-    {label: () => h(RouterLink,{to: {name: 'home',}},{ default: () => '艺术家' }),key: 'go-Other',icon: renderIcon(UserAvatarFilledAlt)},
+    {label: () => h(RouterLink,{to: {name: 'View_Artist_List_ALL',}},{ default: () => '艺术家' }),key: 'go-artist-list',icon: renderIcon(UserAvatarFilledAlt)},
     {label: () => h(RouterLink,{to: {name: 'home',}},{ default: () => '流派' }),key: 'go-Other',icon: renderIcon(Flag16Regular)},
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
     {label: () => h(RouterLink,{to: {name: 'home',}},{ default: () => '猜你喜欢' }),key: 'go-Other',icon: renderIcon(DocumentHeart20Regular)},
@@ -128,6 +128,7 @@
     get_this_audio_refresh(true)
     console.log('this_audio_file_path：'+value)
   }
+  const this_playList_num= ref(0);
   const this_audio_file_medium_image_url = ref('');
   function get_media_file_medium_image_url(value: any) {
     this_audio_file_medium_image_url.value = value
@@ -176,6 +177,8 @@
   //
   const media_Files = ref<Media_File[]>([]);
   const media_Files_temporary = ref<Media_File[]>([]);// data.slice() BUG Error: Because Init
+  const Album_Files = ref<Item_Album[]>([]);
+  const Album_Files_temporary = ref<Item_Album[]>([]);
   //
   const options_Sort_key = ref<{ columnKey: string; order: string }[]>([]);
   function get_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
@@ -258,6 +261,7 @@
   }
   const fetchData = async () => {
     media_Files.value = []; // 清空数组
+    const moment = require('moment');
     let path = require('path');
     let Database = require('better-sqlite3');
     let dbPath = path.resolve('resources/navidrome.db');
@@ -275,6 +279,23 @@
 
         media_Files.value.push(row);
       }
+      rows = []
+
+      const stmt = db.prepare(`SELECT * FROM album`);
+      rows = stmt.all();
+      rows.forEach((row: Item_Album) => {
+        row.medium_image_url = row.embed_art_path.replace('mp3','jpg');
+        let fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
+        let fileNameWithExtension: string | null = fileNameMatch ? fileNameMatch[0] : null;
+        let fileNameWithoutExtension: string | null = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
+        const fileNameWithoutPrefix: string | null = fileNameWithoutExtension ? fileNameWithoutExtension.replace(/.*?-\s*/, '') : null;
+        if(fileNameWithoutPrefix != null)
+          row.title = fileNameWithoutPrefix;
+        row.album_title = row.title+"<br>"+row.artist
+        row.updated_time = row.updated_at ? moment(row.updated_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
+
+        Album_Files.value.push(row);
+      });
     } catch (err: any) {
       console.error(err.message);
     } finally {
@@ -287,6 +308,9 @@
         item.absoluteIndex = index + 1;
       });
       media_Files_temporary.value = media_Files.value.slice();
+      this_playList_num.value = media_Files_temporary.value.length;
+
+      Album_Files_temporary.value = Album_Files.value.slice(0,30);
     });
   });
 
@@ -331,29 +355,29 @@
               :options="menuOptions"/>
             </n-layout-sider>
             <n-layout embedded style="height: calc(100vh - 80px);">
-              <KeepAlive>
-                <RouterView
-                  class="view_show" 
-                  :collapsed="collapsed"
-                  :window_innerWidth="window_innerWidth"
-                  @media_file_path="media_file_path"
-                  @media_file_medium_image_url="get_media_file_medium_image_url"
-                  @this_audio_singer_name="get_this_audio_singer_name"
-                  @this_audio_song_name="get_this_audio_song_name"
-                  @this_audio_album_name="get_this_audio_album_name"
-                  @data_select_Index="get_data_select_Index"
-                  @page_song_index="get_page_song_index"
-                  @page_num="get_page_num"
-                  @page_Size="get_page_Size"
-                  :media_Files="media_Files"
-                  :media_Files_temporary="media_Files_temporary"
-                  :options_Sort_key="options_Sort_key"
-                  @options_Sort_key="get_options_Sort_key"
-                  @keyword="get_keyword"
-                  @reset_data="get_reset_data">
-                  
-                </RouterView>
-              </KeepAlive>
+              <RouterView
+                class="view_show" v-slot="{ Component }"
+                :collapsed="collapsed"
+                :window_innerWidth="window_innerWidth"
+                @media_file_path="media_file_path"
+                @media_file_medium_image_url="get_media_file_medium_image_url"
+                @this_audio_singer_name="get_this_audio_singer_name"
+                @this_audio_song_name="get_this_audio_song_name"
+                @this_audio_album_name="get_this_audio_album_name"
+                @data_select_Index="get_data_select_Index"
+                @page_song_index="get_page_song_index"
+                @page_num="get_page_num"
+                @page_Size="get_page_Size"
+                :media_Files="media_Files"
+                :media_Files_temporary="media_Files_temporary"
+                :options_Sort_key="options_Sort_key"
+                @options_Sort_key="get_options_Sort_key"
+                @keyword="get_keyword"
+                @reset_data="get_reset_data"
+                
+                :Album_Files="Album_Files"
+                :Album_Files_temporary="Album_Files_temporary">
+              </RouterView>
               <div class="bar_top_setapp">
                 <section  style="
                           -webkit-app-region: no-drag;
@@ -378,6 +402,7 @@
           bordered>
           <Bar_Music_Player 
             :this_audio_file_path="this_audio_file_path"
+            :this_playList_num="this_playList_num"
             :this_audio_file_medium_image_url="this_audio_file_medium_image_url"
             :this_audio_refresh="this_audio_refresh"
             @this_audio_refresh="get_this_audio_refresh"

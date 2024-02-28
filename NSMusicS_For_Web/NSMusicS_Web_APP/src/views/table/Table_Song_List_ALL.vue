@@ -46,27 +46,24 @@ const createColumns_normal = (): DataTableColumns<RowData> => [
   {
     title: 'Title',
     key: 'medium_image_url',
-    width: '96px',
+    width: '76px',
     ellipsis: {
-        tooltip: true
+      tooltip: true
     },
     render(row) {
-        return h(
+      return h(
         NImage,
         {
-            width:'60px',height:'60px',
-            size: 'small',
-            objectFit:'cover',
-            lazy:true,
-            style: {
-              margin: '0px',
-              padding: '0px',
-              borderRadius:'6px'
-            },
-            src: row.medium_image_url,
-            fallbackSrc:'../../../resources/00album.jpg'
+          height: '50px',
+          objectFit: 'cover',
+          lazy: true,
+          style: {
+            borderRadius: '6px',
+          },
+          src: row.medium_image_url,
         },
-        { default: () => '' })
+        { default: () => '' }
+      );
     }
   },
   {
@@ -220,7 +217,7 @@ const props = defineProps<{
 const checkedRowKeysRef = ref<DataTableRowKey[]>([]);
 const data_select_Index = ref<number>(0)
 const checkedRowhandleCheck = (rowKeys: DataTableRowKey[]) => {
-  checkedRowKeysRef.value = rowKeys;
+  checkedRowKeysRef.value = rowKeys; 
   click_count = 0
 };
 const click_select_ALL_row = () => {
@@ -374,6 +371,7 @@ const paginationReactive = reactive({
   pageCount: 1,
   pageSize: 30,
   showSizePicker: true,
+  showQuickJumper: true,
   pageSizes: [10, 30, 50, 100],
   onChange: (page: number) => {
     paginationReactive.page = page
