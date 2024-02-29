@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick, h, reactive, computed, watch, onBeforeUnmount } from 'vue';
-import { useMessage,DropdownOption, type DataTableColumns, type DataTableRowKey, NIcon, InputInst, NImage } from 'naive-ui';
+import { useMessage,DropdownOption, type DataTableColumns, type DataTableRowKey, NIcon, InputInst, NImage, PaginationProps } from 'naive-ui';
 import { RowData } from 'naive-ui/es/data-table/src/interface';
 const emit = defineEmits([
   'media_file_path',
@@ -213,6 +213,7 @@ const props = defineProps<{
   collapsed: Boolean;
   window_innerWidth: number;
   options_Sort_key:{ columnKey: string; order: string }[];
+  page_num: number;page_Size: number;
 }>();
 const checkedRowKeysRef = ref<DataTableRowKey[]>([]);
 const data_select_Index = ref<number>(0)
@@ -342,7 +343,7 @@ const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对�
       emit('this_audio_album_name',media_file.album)
       emit('page_song_index', page_index); 
 
-      data_select_Index.value = (current_page_num.value-1)*page_Size.value + page_index;
+      data_select_Index.value = (current_page_num.value-1)*props.page_Size + page_index;
       emit('data_select_Index', data_select_Index.value); 
 
       click_count = 0
@@ -357,30 +358,32 @@ const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对�
       yRef.value = e.clientY
     })
 
-    data_select_Index.value = (current_page_num.value-1)*page_Size.value + page_index;
+    data_select_Index.value = (current_page_num.value-1)*props.page_Size + page_index;
   }
 });
 const current_page_num = ref<number>(1)
-const page_Size = ref(10)
-const update_page_size = (pageSize: number) => {//当前页内的数据范围：10,20,30
-  page_Size.value = pageSize;
-  emit('page_Size',page_Size)
-};
-const paginationReactive = reactive({
-  page: 1,
+const paginationReactive: PaginationProps | undefined = reactive({
+  page: props.page_num,
   pageCount: 1,
-  pageSize: 30,
+  pageSize: props.page_Size,
   showSizePicker: true,
   showQuickJumper: true,
   pageSizes: [10, 30, 50, 100],
+  displayOrder: ['quick-jumper', 'pages', 'size-picker'] as Array<'quick-jumper' | 'pages' | 'size-picker'>,
   onChange: (page: number) => {
-    paginationReactive.page = page
+    if(paginationReactive != null){
+      paginationReactive.page = page;
+      emit('page_num', page);
+    }
   },
   onUpdatePageSize: (pageSize: number) => {
-    paginationReactive.pageSize = pageSize
-    paginationReactive.page = 1
+    if(paginationReactive != null){
+      paginationReactive.pageSize = pageSize;
+      paginationReactive.page = 1;
+      emit('page_Size', pageSize);
+    }
   }
-})
+});
 //
 enum state_Sort {
   Ascend = 'ascend',
@@ -592,7 +595,6 @@ const cleanup = () => {
   columns.value = [];
   // props.data_temporary = [];
   data_select_Index.value = -1;
-  page_Size.value = 10;
   
   if (timer.value) {
     clearInterval(timer.value);
@@ -710,7 +712,6 @@ import { RouterLink } from 'vue-router';
       flex-height
       striped
       default-expand-all
-      :on-update-page-size="update_page_size"
       :row-key="(row: RowData) => row.id"
       @update:checked-row-keys="checkedRowhandleCheck"
       @update-expanded-row-keys="checkedRowhandleCheck"

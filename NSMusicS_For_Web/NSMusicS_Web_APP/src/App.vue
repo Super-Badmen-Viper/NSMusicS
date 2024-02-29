@@ -179,24 +179,24 @@
     page_num.value = value
     console.log('page：'+value)
   }
-  const album_page_num = ref<number>(1)
+  const album_Page = ref<number>(1)
   function get_album_page_num(value: any) {
-    album_page_num.value = value
+    album_Page.value = value
     console.log('album_page_num：'+value)
-
     Album_Files_temporary.value = Album_Files.value.slice(
-      (value - 1) * album_page_Size.value,
-      (value - 1) * album_page_Size.value + album_page_Size.value
+      (value - 1) * album_PageSize.value,
+      (value - 1) * album_PageSize.value + album_PageSize.value
     );
   }
-  const album_page_Size = ref<number>(30)
-  function get_album_page_Size(value: any) {
-    album_page_Size.value = value
-    console.log('album_page_Size：'+value)
-
+  const album_PageSize = ref<number>(30)
+  function get_album_PageSize(value: any) {
+    album_PageCount.value = Math.floor(Album_Files.value.length / value) + 1
+    album_PageSize.value = value
+    console.log('album_PageSize：'+value)
+    
     Album_Files_temporary.value = Album_Files.value.slice(
       0,
-      album_page_Size.value
+      album_PageSize.value
     );
   }
   //
@@ -204,7 +204,7 @@
   const media_Files_temporary = ref<Media_File[]>([]);// data.slice() BUG Error: Because Init
   const Album_Files = ref<Item_Album[]>([]);
   const Album_Files_temporary = ref<Item_Album[]>([]);
-  const Album_PageCount = ref<number>();
+  const album_PageCount = ref<number>();
   //
   const options_Sort_key = ref<{ columnKey: string; order: string }[]>([]);
   function get_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
@@ -281,6 +281,7 @@
   }
   const fetchData = async () => {
     media_Files.value = []; // 清空数组
+    Album_Files.value = [];
     const moment = require('moment');
     let path = require('path');
     let Database = require('better-sqlite3');
@@ -331,7 +332,7 @@
       this_playList_num.value = media_Files_temporary.value.length;
 
       Album_Files_temporary.value = Album_Files.value.slice(0,30);
-      Album_PageCount.value = Math.floor(Album_Files.value.length / album_page_Size.value) + 1
+      album_PageCount.value = Math.floor(Album_Files.value.length / album_PageSize.value) + 1
     });
   });
 
@@ -386,7 +387,9 @@
                 @this_audio_album_name="get_this_audio_album_name"
                 @data_select_Index="get_data_select_Index"
                 @page_song_index="get_page_song_index"
+                :page_num="page_num"
                 @page_num="get_page_num"
+                :page_Size="page_Size"
                 @page_Size="get_page_Size"
                 :media_Files="media_Files"
                 :media_Files_temporary="media_Files_temporary"
@@ -397,9 +400,11 @@
                 
                 :Album_Files="Album_Files"
                 :Album_Files_temporary="Album_Files_temporary"
-                :Album_PageCount="Album_PageCount"
-                @album_page_num="get_album_page_num"
-                @album_page_Size="get_album_page_Size">
+                :album_Page="album_Page"
+                @album_Page="get_album_page_num"
+                :album_PageSize="album_PageSize"
+                @album_PageSize="get_album_PageSize"
+                :album_PageCount="album_PageCount">
               </RouterView>
               <div class="bar_top_setapp">
                 <section  style="

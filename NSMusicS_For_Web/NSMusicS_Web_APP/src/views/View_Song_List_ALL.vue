@@ -94,11 +94,13 @@ function get_reset_data(value: any) {
 const { 
   collapsed,window_innerWidth,
   media_Files,media_Files_temporary,
-  options_Sort_key
+  options_Sort_key,
+  page_num,page_Size
   } = defineProps<{
     collapsed:Boolean,window_innerWidth:number,
     media_Files:Media_File[],media_Files_temporary:Media_File[],
-    options_Sort_key:{ columnKey: string; order: string }[]
+    options_Sort_key:{ columnKey: string; order: string }[],
+    page_num:number,page_Size:number
   }>();
 </script>
 
@@ -116,7 +118,9 @@ const {
       @this_audio_album_name="get_this_audio_album_name"
       @data_select_Index="get_data_select_Index"
       @page_song_index="get_page_song_index"
+      :page_num="page_num"
       @page_num="get_page_num"
+      :page_Size="page_Size"
       @page_Size="get_page_Size"
       @media_PageFiles="get_media_PageFiles"
       @menu_edit_this_song="get_menu_edit_this_song"
