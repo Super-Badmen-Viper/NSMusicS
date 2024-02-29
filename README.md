@@ -65,8 +65,8 @@
 ## NSMusicS 4th Edition Project Development Document/Plan: -》 NSMusicS_Ultimate
   <img src="doc/NSMusicS 第4版 开发文档 规划 （更新中）.png" align="center" width="1200">
 
-## NSMusicS 4th Edition Project Development Document/Plan: -》 NSMusicS_KSing_KTV(仿制腾讯全民K歌的K歌模块)
-  <img src="doc/NSMusicS九歌 - K歌模块 - 算法功能实现 - 架构导图【作者：Xiang Cheng】.png" align="center" width="1200">
+## NSMusicS WPF Architecture Design
+  <img src="doc/架构设计_NSMusicS WPF_截止240229前.png" align="center" width="1200">
   
 # The R&D management dashboard for this project：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
 - If you want to join, please send an email to my QQmail: 1774148579@qq.com More than 5 people, I will launch an open source project management model, and the Mozi Cloud open source organization will officially begin its activities
