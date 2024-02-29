@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "NSMusicS_WinUI3 (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "NSMusicS_WinUI3 (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

@@ -12,7 +12,10 @@
     "dev": "vite",
     "preview": "vite preview",
     "build-only": "vite build",
-    "type-check": "vue-tsc --build --force"
+    "type-check": "vue-tsc --build --force",
+    "build-win64": "electron-builder --win --x64",
+		"build-linux": "electron-builder --linux",
+		"build-mac": "electron-builder --mac"
   },
   "dependencies": {
     "@vicons/carbon": "^0.12.0",

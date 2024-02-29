@@ -169,16 +169,42 @@
     console.log('page_song_index：'+value)
   }
   //
+  const page_Size = ref<number>(10)
+  function get_page_Size(value: number) {
+    page_Size.value = value
+    console.log('page_Size：'+value)
+  }
   const page_num = ref<Media_File[]>([]);
   function get_page_num(value: any) {
     page_num.value = value
     console.log('page：'+value)
+  }
+  const album_page_num = ref<number>(1)
+  function get_album_page_num(value: any) {
+    album_page_num.value = value
+    console.log('album_page_num：'+value)
+
+    Album_Files_temporary.value = Album_Files.value.slice(
+      (value - 1) * album_page_Size.value,
+      (value - 1) * album_page_Size.value + album_page_Size.value
+    );
+  }
+  const album_page_Size = ref<number>(30)
+  function get_album_page_Size(value: any) {
+    album_page_Size.value = value
+    console.log('album_page_Size：'+value)
+
+    Album_Files_temporary.value = Album_Files.value.slice(
+      0,
+      album_page_Size.value
+    );
   }
   //
   const media_Files = ref<Media_File[]>([]);
   const media_Files_temporary = ref<Media_File[]>([]);// data.slice() BUG Error: Because Init
   const Album_Files = ref<Item_Album[]>([]);
   const Album_Files_temporary = ref<Item_Album[]>([]);
+  const Album_PageCount = ref<number>();
   //
   const options_Sort_key = ref<{ columnKey: string; order: string }[]>([]);
   function get_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
@@ -186,12 +212,6 @@
       options_Sort_key.value = value;
       sortByColumnKeys(value);
     }
-  }
-  //
-  const page_Size = ref<number>(10)
-  function get_page_Size(value: number) {
-    page_Size.value = value
-    console.log('page_Size：'+value)
   }
   //
   function formatTime(currentTime: number): string {
@@ -311,10 +331,10 @@
       this_playList_num.value = media_Files_temporary.value.length;
 
       Album_Files_temporary.value = Album_Files.value.slice(0,30);
+      Album_PageCount.value = Math.floor(Album_Files.value.length / album_page_Size.value) + 1
     });
   });
 
-  
   //
   import { darkTheme } from 'naive-ui'
   import type { GlobalTheme } from 'naive-ui'
@@ -376,7 +396,10 @@
                 @reset_data="get_reset_data"
                 
                 :Album_Files="Album_Files"
-                :Album_Files_temporary="Album_Files_temporary">
+                :Album_Files_temporary="Album_Files_temporary"
+                :Album_PageCount="Album_PageCount"
+                @album_page_num="get_album_page_num"
+                @album_page_Size="get_album_page_Size">
               </RouterView>
               <div class="bar_top_setapp">
                 <section  style="

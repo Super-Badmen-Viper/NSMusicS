@@ -10,8 +10,16 @@ namespace NSMusicS.Models.Song_List_Infos
 {
     public class SongList_Info : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected internal virtual void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public int ID { get; set; }
         public string Name { get; set; }
+        public int SelectedIndex { get; set; }
 
         private ObservableCollection<Song_Info> songs { get; set; }
         public ObservableCollection<Song_Info> Songs
@@ -29,14 +37,6 @@ namespace NSMusicS.Models.Song_List_Infos
                 }
             }
         }
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected internal virtual void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public int SelectedIndex { get; set; }
 
         public static ObservableCollection<ObservableCollection<SongList_Info>> songList_Infos { get; set; }
         public static ObservableCollection<ObservableCollection<SongList_Info>> Retuen_This()

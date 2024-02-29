@@ -704,7 +704,6 @@ import { RouterLink } from 'vue-router';
     <!-- :row-key唯一标识，防止数据混乱  -->
     <n-data-table
       class="table"
-      :style="{ width:collapsed_width + 'px'}"
       :columns="columns" :loading="bool_loading" 
       :data="props.data_temporary"
       :bordered="false"
@@ -738,6 +737,7 @@ import { RouterLink } from 'vue-router';
 
 <style>
 .table {
+  width: calc(100vw - 200px);
   height: calc(100vh - 200px);
 }
 </style>
