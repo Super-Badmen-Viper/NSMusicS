@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <ApplicationIcon>NSMusicS_1920.ico</ApplicationIcon>
+    <ApplicationIcon>NSMusicS.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -337,9 +337,6 @@
     <None Remove="ico_ui_library\顺序播放.png" />
     <None Remove="NSMusicS.png" />
     <None Remove="NSMusicS.svg" />
-    <None Remove="NSMusicS_1080.ico" />
-    <None Remove="NSMusicS_1920.ico" />
-    <None Remove="NSMusicS_256.ico" />
     <None Remove="Resource\EXO Lotto ALL.jpg" />
     <None Remove="Resource\EXO Obsession ALL.jpg" />
     <None Remove="Resource\EXO Obsession.jpg" />
@@ -447,7 +444,7 @@
   <ItemGroup>
     <Content Include="bin\Debug\net8.0-windows7.0\Resources\NSMusicS.png" />
     <Content Include="bin\Debug\net8.0-windows7.0\Resources\NSMusicS_1080.ico" />
-    <Content Include="bin\Debug\net8.0-windows7.0\Resources\NSMusicS_1920.ico" />
+    <Resource Include="NSMusicS.ico" />
     <Content Include="bin\Debug\net8.0-windows7.0\Resources\NSMusicS_256.ico" />
     <Content Include="bin\Debug\net8.0-windows7.0\Resource\Button_Image_Ico\24gf-playCircle %281%29.png" />
     <Content Include="bin\Debug\net8.0-windows7.0\Resource\Button_Image_Ico\24gf-playCircle.png" />
@@ -563,7 +560,6 @@
     <Content Include="bin\Debug\net8.0-windows7.0\Resource\Temp_System\Close.txt" />
     <Content Include="bin\Debug\net8.0-windows7.0\Resource\User_Data\Data_Eq_Model_1.xml" />
     <Content Include="bin\Debug\net8.0-windows7.0\Resource\User_Data\Data_Personalized_Skin.xml" />
-    <Content Include="NSMusicS_1920.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -1353,9 +1349,6 @@
     <Resource Include="ico_ui_library\顺序播放.png" />
     <Resource Include="NSMusicS.png" />
     <Resource Include="NSMusicS.svg" />
-    <Resource Include="NSMusicS_1080.ico" />
-    <Resource Include="NSMusicS_1920.ico" />
-    <Resource Include="NSMusicS_256.ico" />
     <Resource Include="Resource\EXO Lotto ALL.jpg" />
     <Resource Include="Resource\EXO Obsession ALL.jpg" />
     <Resource Include="Resource\EXO Obsession.jpg" />

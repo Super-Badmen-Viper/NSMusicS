@@ -14,7 +14,7 @@
             ToolTipText="MZMusic"
             
             PopupActivation="LeftOrRightClick"
-            IconSource="/NSMusicS;component/NSMusicS_256.ico">
+            IconSource="/NSMusicS;component/NSMusicS.ico">
             <tb:TaskbarIcon.TrayToolTip>
                 <Border 
                     Background="White"
