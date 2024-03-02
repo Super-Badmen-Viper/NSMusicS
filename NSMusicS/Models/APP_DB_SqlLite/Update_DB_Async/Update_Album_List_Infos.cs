@@ -212,8 +212,8 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
                 convert_Album_Info.dbContext.Category_AlbumList_Infos.Load();
                 convert_Album_Info.dbContext.Product_Album_Infos.Load();
 
-                convert_Album_Info.dbContext.BulkDelete(convert_Album_Info.dbContext.Category_AlbumList_Infos);
-                convert_Album_Info.dbContext.BulkDelete(convert_Album_Info.dbContext.Product_Album_Infos);
+                convert_Album_Info.dbContext.Category_AlbumList_Infos.RemoveRange(convert_Album_Info.dbContext.Category_AlbumList_Infos);
+                convert_Album_Info.dbContext.Product_Album_Infos.RemoveRange(convert_Album_Info.dbContext.Product_Album_Infos);
                 convert_Album_Info.dbContext.SaveChanges();
 
                 await convert_Album_Info.Save_AlbumList_To_DatabaseAsync_Dapper(

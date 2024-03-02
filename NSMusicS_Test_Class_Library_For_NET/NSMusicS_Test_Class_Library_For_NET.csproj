@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="8.102.1.1" />
   </ItemGroup>
 
 </Project>

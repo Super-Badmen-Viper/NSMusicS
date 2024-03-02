@@ -34,7 +34,7 @@ interface Item_Album {
     catalog_num?: string;
     comment?: string;
     all_artist_ids?: string;
-    image_files?: string;
+    image_files: string;
     paths?: string;
     description: string;
     small_image_url: string;

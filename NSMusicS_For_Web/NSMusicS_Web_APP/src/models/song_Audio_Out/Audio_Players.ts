@@ -157,18 +157,27 @@ export class Audio_Players {
         // return null;
         return this.audioContext.currentTime;
     }
-    public async setCurrentTime(buffer:any): Promise<void> {
-        this.audioBuffer = await this.getAudioBuffer(buffer.buffer, this.audioContext);
-
+    public async setCurrentTime(buffer: any): Promise<void> {
+        const audioBuffer = await this.getAudioBuffer(buffer.buffer, this.audioContext);
+        const currentTime = this.audioContext.currentTime;
+    
+        this.releaseMemory(false);
+    
         this.bufferSourceNode = this.audioContext.createBufferSource();
         this.volumeGainNode = this.audioContext.createGain();
         this.fadeGainNode = this.audioContext.createGain();
-
-        this.bufferSourceNode.buffer = this.audioBuffer;
+    
+        this.bufferSourceNode.buffer = audioBuffer;
         this.bufferSourceNode.connect(this.volumeGainNode);
         this.volumeGainNode.connect(this.fadeGainNode);
         this.fadeGainNode.connect(this.audioContext.destination);
-        this.audioDuration = this.audioBuffer.duration;
+    
+        this.startTime = currentTime;
+        this.audioDuration = audioBuffer.duration;
+    
+        if (this.isPlaying) {
+            this.bufferSourceNode.start(0, this.startTime % this.audioDuration);
+        }
     }
     
     

@@ -169,7 +169,7 @@
     console.log('page_song_index：'+value)
   }
   //
-  const page_Size = ref<number>(10)
+  const page_Size = ref<number>(30)
   function get_page_Size(value: number) {
     page_Size.value = value
     console.log('page_Size：'+value)
@@ -279,39 +279,42 @@
       item.absoluteIndex = index + 1;
     });
   }
+  const path = require('path');
+  const Database = require('better-sqlite3');
+  const db = new Database(path.resolve('resources/navidrome.db'), { verbose: console.log }); 
   const fetchData = async () => {
     media_Files.value = []; // 清空数组
     Album_Files.value = [];
     const moment = require('moment');
-    let path = require('path');
-    let Database = require('better-sqlite3');
-    let dbPath = path.resolve('resources/navidrome.db');
-    let db = new Database(dbPath, { verbose: console.log }); 
     try {
       let stmt_media_file = db.prepare(`SELECT * FROM media_file`);
       let stmt_album = db.prepare(`SELECT * FROM album`);
       let rows = stmt_media_file.all();
       let imagefiles = stmt_album.all();
+      // media_file
       for (let row of rows) {
         row.duration_txt = formatTime(row.duration);
         let medium_image_url = row.path.replace('mp3','jpg');
         if(imagefiles[0].image_files.indexOf(medium_image_url) > 0)
           row.medium_image_url = medium_image_url
-
+        else
+          row.medium_image_url = '../../../resources/error_album.jpg'// path.resolve(process.cwd(), 'resources') + '\\error_album.jpg'
         media_Files.value.push(row);
       }
       rows = []
-
+      // album
       const stmt = db.prepare(`SELECT * FROM album`);
       rows = stmt.all();
       rows.forEach((row: Item_Album) => {
         row.medium_image_url = row.embed_art_path.replace('mp3','jpg');
+        //
         let fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
         let fileNameWithExtension: string | null = fileNameMatch ? fileNameMatch[0] : null;
         let fileNameWithoutExtension: string | null = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
         const fileNameWithoutPrefix: string | null = fileNameWithoutExtension ? fileNameWithoutExtension.replace(/.*?-\s*/, '') : null;
         if(fileNameWithoutPrefix != null)
           row.title = fileNameWithoutPrefix;
+        //
         row.album_title = row.title+"<br>"+row.artist
         row.updated_time = row.updated_at ? moment(row.updated_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
 
@@ -343,8 +346,8 @@
   //
   import { zhCN, dateZhCN } from 'naive-ui'
   import type { NLocale, NDateLocale } from 'naive-ui'
-  const locale = ref<NLocale | null>(null)
-  const dateLocale = ref<NDateLocale | null>(null)
+  const locale = ref<NLocale | null>(zhCN)
+  const dateLocale = ref<NDateLocale | null>(dateZhCN)
   //
   const window_innerWidth = ref<number>(window.innerWidth)
   window.addEventListener('resize', () => {

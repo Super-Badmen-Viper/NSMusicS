@@ -1071,7 +1071,6 @@
     <PackageReference Include="SharpVectors.Wpf" Version="1.8.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     <PackageReference Include="TagLibSharp" Version="2.3.0" />
-    <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="8.101.2" />
   </ItemGroup>
 
   <ItemGroup>

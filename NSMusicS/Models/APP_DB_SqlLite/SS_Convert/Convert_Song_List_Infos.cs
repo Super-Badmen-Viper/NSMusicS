@@ -22,7 +22,6 @@ using NSMusicS.Models.APP_DB_SqlLite.ProductContext;
 using NSMusicS.Models.APP_DB_SqlLite.Category;
 using NSMusicS.Models.Song_List_Infos;
 using Song_Info = NSMusicS.Models.Song_List_Infos.Song_Info;
-using Z.EntityFramework.Extensions;
 using Microsoft.Data.Sqlite;
 using Dapper;
 

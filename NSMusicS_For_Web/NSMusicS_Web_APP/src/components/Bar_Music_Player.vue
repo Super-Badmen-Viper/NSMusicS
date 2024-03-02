@@ -243,8 +243,8 @@
               @mouseover="hover_back_img" @mouseout="leave_back_svg"/>
         </div>
         <div class="bar_left_text_song_info">
-          <n-ellipsis id="bar_singer_name">{{ props.this_audio_singer_name }}</n-ellipsis>
           <n-ellipsis id="bar_song_name">{{ props.this_audio_song_name }}</n-ellipsis>
+          <n-ellipsis id="bar_singer_name">{{ props.this_audio_singer_name }}</n-ellipsis>  
           <n-ellipsis id="bar_album_name">{{ props.this_audio_album_name }}</n-ellipsis>
         </div>
       </div>

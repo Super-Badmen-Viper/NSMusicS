@@ -302,8 +302,8 @@ namespace NSMusicS.Models.APP_DB_SqlLite.Update_DB_Async
                 convert_Song_Info.dbContext.Category_SongList_Infos.Load();
                 convert_Song_Info.dbContext.Product_Song_Infos.Load();
 
-                convert_Song_Info.dbContext.BulkDelete(convert_Song_Info.dbContext.Category_SongList_Infos);
-                convert_Song_Info.dbContext.BulkDelete(convert_Song_Info.dbContext.Product_Song_Infos);
+                convert_Song_Info.dbContext.Category_SongList_Infos.RemoveRange(convert_Song_Info.dbContext.Category_SongList_Infos);
+                convert_Song_Info.dbContext.Product_Song_Infos.RemoveRange(convert_Song_Info.dbContext.Product_Song_Infos);
                 convert_Song_Info.dbContext.SaveChanges();
 
                 ///
