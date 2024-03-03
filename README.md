@@ -1,30 +1,25 @@
-## NSMusicS 跳转 [中文REANME_CN.md](https://github.com/Super-Badmen-Viper/NSMusicS/blob/main/README_CN.md)
-## [This is the blog for NSMusicS](http://124.223.62.181/):http://124.223.62.181/
-# Explain
-
-- ## Nine Song Music World(NSMusicS) Description:
-- - Based on dotNET_ C#_ WPF's Personal Open Source Music Client
-- - Demo effect: B-site link:
-- - - Latest version:[https://www.bilibili.com/video/BV1kN4y1k7Pm](https://www.bilibili.com/video/BV1kN4y1k7Pm)
-- - will use Flutter to refactor and deploy to Linux/Mac/web/Android/IOS
-  - [NSMusicS-Flutter Version of Figma UI ：](https://www.figma.com/file/bmE00Wr1JKk5j3CbxrMgHe/Flutter%E5%A4%9A%E5%B9%B3%E5%8F%B0%E7%89%88%E6%9C%AC%EF%BC%9A(Linux%2BDoccker)%2FWeb%2FWin%2FMacOS%2FIOS%2FAndroid?type=design&node-id=0%3A1&mode=design&t=VZZrp7eZH17RZzio-1)
-
-# Function:
-- 1. Support for synchronized animation and progress of lyrics (compatible with lyrics files from other music software), lyrics synchronization algorithm
-- 2. Support cross rotation of multi singer photo animations
-- 3. Audio dynamic spectrum animation
-- 4. Basic music player functions (no need to explain, there must be some)
+<br />
+<p align="center">
+  <a href="https://music.qier222.com" target="blank">
+    <img src="NSMusicS/NSMusicS.png" alt="Logo" width="156" height="156">
+  </a>
+  <h2 align="center" style="font-weight: 600">NSMusicS</h2>
+  <p align="center">
+    A local music software that is expected to support multiple platforms with AI capabilities and multimodal features.
+</div>  
+  </p>
+</p>      
 
 # Version：
 
 | Project   | Development status | Technology Framework     | Author/Copyright Owner | Operating systems         | LICENSE          |  Software positioning |
 | :-----    | ----:              | ----:                    | ----:             | :----:                    | :----:                    | :----:                    |
-| [NSMusicS](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">(complete): updateing</font> | .NET6 WPF C#           | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++)             | A-GPL 3.0 | Open source + Commercial | 
-| [NSMusicS_For_Web](https://github.com/Super-Badmen-Viper/NSMusicS/tree/main/NSMusicS_For_Web/NSMusicS_Web_APP)   |<font color="#00dd00">updateing</font>             |  Vue3 + TypeScript + Electron/Docker   | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  | (Windows,Linux(ubuntu+,Docker),MacOS,Android11++,IOS) Based on the Chrome kernel    | A-GPL 3.0 | Open source + Commercial | 
-| [NSMusicS_For_PythonApp_Of_AudioProcessing](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">will developed</font>             | pyhton / librosa / pytorch      | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  |    python    | Apache License 2.0 | Open source | 
-| [NSMusicS_For_Knowledge_Graph](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#FF0000">Not started</font>|  NebulaGraph / Neo4j / Spark       | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++/Linux)             | A-GPL 3.0 | Open source + Commercial | 
-| [NSMusicS_For_Flutter](https://github.com/Super-Badmen-Viper/NSMusicS/tree/main/NSMusicS_For_Flutter/nsmusics_for_flutter)   |<font color="#FF0000">Not started</font>    | Flutter Dart          | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++,Linux(ubuntu+,群晖Nas+Docker),MacOS,Android11++,IOS) | A-GPL 3.0 | Open source + Commercial | 
-| [MZMusic](https://github.com/MZMusic/MZMusic)   |<font color="#FF0000">Not started</font>             | Electron / Vue3         | [MZMusic Team](https://github.com/MZMusic)  | (win,linux,macos...)      | Apache License 2.0 | Open source | 
+| [NSMusicS](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">(complete): updateing</font> | dotnet8(wpf),cs,window [![My Skills](https://skillicons.dev/icons?i=dotnet,cs,windows)](https://skillicons.dev)           | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++)             | A-GPL 3.0 | Open source + Commercial | 
+| [NSMusicS_For_Web](https://github.com/Super-Badmen-Viper/NSMusicS/tree/main/NSMusicS_For_Web/NSMusicS_Web_APP)   |<font color="#00dd00">updateing</font>             | electron,docker,vue,nodejs,ts,vite  [![My Skills](https://skillicons.dev/icons?i=electron,docker,vue,nodejs,ts,vite)](https://skillicons.dev)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  | (Windows,Linux(ubuntu+,Docker),MacOS,Android11++,IOS) Based on the Chrome kernel    | A-GPL 3.0 | Open source + Commercial | 
+| [NSMusicS_For_PythonApp_Of_AudioProcessing](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">will developed</font>             | pytorch,py [![My Skills](https://skillicons.dev/icons?i=pytorch,py)](https://skillicons.dev)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  |    python    | Apache License 2.0 | Open source | 
+| [NSMusicS_For_Knowledge_Graph](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#FF0000">Not started</font>|  NebulaGraph / Neo4j <image width="200" src="https://www-cdn.nebula-graph.io/nebula-website-5.0/images/logo.png"/>      | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++/Linux)             | A-GPL 3.0 | Open source + Commercial | 
+| [NSMusicS_For_Flutter](https://github.com/Super-Badmen-Viper/NSMusicS/tree/main/NSMusicS_For_Flutter/nsmusics_for_flutter)   |<font color="#FF0000">Not started</font>    | flutter,dart  [![My Skills](https://skillicons.dev/icons?i=flutter,dart)](https://skillicons.dev)    | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++,Linux(ubuntu+,群晖Nas+Docker),MacOS,Android11++,IOS) | A-GPL 3.0 | Open source + Commercial | 
+| [MZMusic](https://github.com/MZMusic/MZMusic)   |<font color="#FF0000">Not started</font>             | electron,docker,vue,nodejs,ts,vite  [![My Skills](https://skillicons.dev/icons?i=electron,docker,vue,nodejs,ts,vite)](https://skillicons.dev)  | [MZMusic Team](https://github.com/MZMusic)  | (win,linux,macos...)      | Apache License 2.0 | Open source | 
  
 
 # Development Plan
@@ -44,9 +39,9 @@
  - ## NSMusicS_For_Knowledge_Graph
     - 1.Knowledge Graph+Machine Learning In NSMusicS
 
- - ## NSMusicS For Flutter
-    - The Flutter version will serve as a dedicated music player.
-    - Flutter supports cross-platform usage on various operating systems, including Windows 10++, Linux (Ubuntu+, Synology NAS+Docker), MacOS, Android 11++, and iOS.
+ - ## NSMusicS For Electron
+    - The Electron version will serve as a dedicated music player.
+    - Electron supports cross-platform usage on various operating systems, including Windows 10++, Linux (Ubuntu+, Synology NAS+Docker), MacOS, Android 11++, and iOS.
     - It shares the same features as NSMusicS, as described above.
       - However, it does not include a Windows music IDE similar to Adobe Audition.
 
