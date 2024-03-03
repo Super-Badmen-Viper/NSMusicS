@@ -1,6 +1,6 @@
 <br />
 <p align="center">
-  <a href="https://music.qier222.com" target="blank">
+  <a href="https://github.com/Super-Badmen-Viper/NSMusicS" target="blank">
     <img src="NSMusicS/NSMusicS.png" alt="Logo" width="156" height="156">
   </a>
   <h2 align="center" style="font-weight: 600">NSMusicS</h2>
