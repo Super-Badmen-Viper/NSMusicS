@@ -1,7 +1,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/Super-Badmen-Viper/NSMusicS" target="blank">
-    <img src="NSMusicS/NSMusicS.png" alt="Logo" width="156" height="156">
+    <img src="https://github.com/Super-Badmen-Viper/NSMusicS/blob/main/NSMusicS/bin/Debug/net8.0-windows7.0/Resources/NSMusicS.png" alt="Logo" width="156" height="156">
   </a>
   <h2 align="center" style="font-weight: 600">NSMusicS</h2>
   <p align="center">
