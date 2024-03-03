@@ -5,7 +5,8 @@
   </a>
   <h2 align="center" style="font-weight: 600">NSMusicS</h2>
   <p align="center">
-    A local music software that is expected to support multiple platforms with AI capabilities and multimodal features.
+    A local music software that is expected to support multiple platforms with AI capabilities and multimodal features.<br>
+    You can use software like MusicTag to embed album covers and lyrics into your local music files (mp3, etc.), and NSMusicS can perfectly read them
 </div>  
   </p>
 </p>      
