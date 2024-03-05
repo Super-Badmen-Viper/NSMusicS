@@ -23,49 +23,10 @@
     return () => h(NIcon, null, { default: () => h(icon) })
   }
   const menuOptions: MenuOption[] = [
-    {
-      label: () =>
-        h(
-          RouterLink,
-          {
-            to: {
-              name: 'home',
-            }
-          },
-          { default: () => '主页' }
-        ),
-      key: 'go-back-home',
-      icon: renderIcon(Home28Regular)
-    },
+    {label: () => h(RouterLink,{to: {name: 'home',}}, { default: () => '主页' }),key: 'go-back-home',icon: renderIcon(Home28Regular)},
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    {
-      label: () =>
-        h(
-          RouterLink,
-          {
-            to: {
-              name: 'View_Album_List_ALL',
-            }
-          },
-          { default: () => '专辑' }
-        ),
-      key: 'go-albums-list',
-      icon: renderIcon(AlbumFilled)
-    },
-    {
-      label: () =>
-        h(
-          RouterLink,
-          {
-            to: {
-              name: 'View_Song_List_ALL',
-            }
-          },
-          { default: () => '乐曲' }
-        ),
-      key: 'go-songs-list',
-      icon: renderIcon(MusicNoteRound)
-    },
+    {label: () => h(RouterLink,{to: {name: 'View_Album_List_ALL',}},{ default: () => '专辑' }),key: 'go-albums-list',icon: renderIcon(AlbumFilled)},
+    {label: () => h(RouterLink,{to: {name: 'View_Song_List_ALL',}},{ default: () => '乐曲' }),key: 'go-songs-list',icon: renderIcon(MusicNoteRound)},
     {label: () => h(RouterLink,{to: {name: 'View_Artist_List_ALL',}},{ default: () => '艺术家' }),key: 'go-artist-list',icon: renderIcon(UserAvatarFilledAlt)},
     {label: () => h(RouterLink,{to: {name: 'home',}},{ default: () => '流派' }),key: 'go-Other',icon: renderIcon(Flag16Regular)},
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
@@ -94,15 +55,6 @@
   function closeWindow() {
     ipcRenderer.send('window-close');
   }
-  // function minimize() {
-  //   Electron.ipcRenderer.send('window-min');
-  // }
-  // function maximize() {
-  //   Electron.ipcRenderer.send('window-max');
-  // }
-  // function closeWindow() {
-  //   Electron.ipcRenderer.send('window-close');
-  // }
 
   // open view musicplayer
   import { ref,watch } from 'vue';
@@ -117,9 +69,6 @@
       }, 200); // 调整动画持续时间
     }
   });
-
-  // System Theme Color
-  // const this_App_background_color = ref('#FFFFFF');
 
   // System Bind Media Info
   const this_audio_file_path = ref('');//'C:/Users/17741/Music/G.E.M.邓紫棋 - 你把我灌醉.mp3'
@@ -168,43 +117,59 @@
     page_song_index.value = value
     console.log('page_song_index：'+value)
   }
-  //
-  const page_Size = ref<number>(30)
-  function get_page_Size(value: number) {
-    page_Size.value = value
-    console.log('page_Size：'+value)
-  }
-  const page_num = ref<Media_File[]>([]);
+  // 
+  const media_page_num = ref<number>(1);
   function get_page_num(value: any) {
-    page_num.value = value
-    console.log('page：'+value)
-  }
-  const album_Page = ref<number>(1)
-  function get_album_page_num(value: any) {
-    album_Page.value = value
-    console.log('album_page_num：'+value)
-    Album_Files_temporary.value = Album_Files.value.slice(
-      (value - 1) * album_PageSize.value,
-      (value - 1) * album_PageSize.value + album_PageSize.value
+    media_page_num.value = value
+    console.log('media_page_num：'+value)
+    media_Files_temporary.value = media_Files.value.slice(
+      (value - 1) * media_page_size.value,
+      (value - 1) * media_page_size.value + media_page_size.value
     );
   }
-  const album_PageSize = ref<number>(30)
+  const media_page_size = ref<number>(30)
+  function get_page_Size(value: number) {
+    if(media_file_count.value != null)
+        media_page_length.value = Math.floor(media_file_count.value / media_page_size.value) + 1
+    media_page_size.value = value
+    console.log('media_page_size：'+value)
+    
+    media_Files_temporary.value = media_Files.value.slice(
+      0,
+      media_page_size.value
+    );
+  }
+  const album_page_num = ref<number>(1)
+  function get_album_page_num(value: any) {
+    album_page_num.value = value
+    console.log('album_page_num：'+value)
+    Album_Files_temporary.value = Album_Files.value.slice(
+      (value - 1) * album_page_size.value,
+      (value - 1) * album_page_size.value + album_page_size.value
+    );
+  }
+  const album_page_size = ref<number>(30)
   function get_album_PageSize(value: any) {
-    album_PageCount.value = Math.floor(Album_Files.value.length / value) + 1
-    album_PageSize.value = value
+    if(album_file_count.value != null)
+        album_Page_length.value = Math.floor(album_file_count.value / album_page_size.value) + 1
+    album_page_size.value = value
     console.log('album_PageSize：'+value)
     
     Album_Files_temporary.value = Album_Files.value.slice(
       0,
-      album_PageSize.value
+      album_page_size.value
     );
   }
   //
   const media_Files = ref<Media_File[]>([]);
   const media_Files_temporary = ref<Media_File[]>([]);// data.slice() BUG Error: Because Init
+  const media_page_length = ref<number>();
+  const media_file_count = ref<number>();
+  //
   const Album_Files = ref<Item_Album[]>([]);
   const Album_Files_temporary = ref<Item_Album[]>([]);
-  const album_PageCount = ref<number>();
+  const album_Page_length = ref<number>();
+  const album_file_count = ref<number>();
   //
   const options_Sort_key = ref<{ columnKey: string; order: string }[]>([]);
   function get_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
@@ -234,7 +199,7 @@
     return `${formattedMinutes}:${formattedSeconds}`;
   }
   function sortByColumnKeys(sortersArray: { columnKey: string; order: string }[] = []) {
-    let sortedData = media_Files_temporary.value.slice(); // 克隆数组以避免直接修改原数组
+    let sortedData = media_Files_temporary.value.slice();
     let bool_default = false;
     for (let i = 0; i < sortersArray.length; i++) {
       sortedData = sortedData.sort((a, b) => {
@@ -253,7 +218,7 @@
       item.absoluteIndex = index + 1;
     });
     if (sortersArray.length === 0 || bool_default) {
-      sortedData = media_Files.value.slice(); // 恢复原始数据
+      sortedData = media_Files.value.slice();
       sortedData.forEach((item, index) => {
         item.absoluteIndex = index + 1;
       });
@@ -279,16 +244,18 @@
       item.absoluteIndex = index + 1;
     });
   }
-  const path = require('path');
-  const Database = require('better-sqlite3');
-  const db = new Database(path.resolve('resources/navidrome.db'), { verbose: console.log }); 
   const fetchData = async () => {
-    media_Files.value = []; // 清空数组
+    media_Files.value = [];
     Album_Files.value = [];
+    const path = require('path');
+    const Database = require('better-sqlite3');
+    const db = new Database(path.resolve('resources/navidrome.db'), { verbose: console.log }); 
     const moment = require('moment');
     try {
-      let stmt_media_file = db.prepare(`SELECT * FROM media_file`);
-      let stmt_album = db.prepare(`SELECT * FROM album`);
+      let offset = (media_page_num.value - 1) * media_page_size.value; // 计算偏移量
+      let stmt_media_file = db.prepare(`SELECT * FROM media_file LIMIT ${media_page_size.value} OFFSET ${offset}`);
+      offset = (album_page_num.value - 1) * album_page_size.value; // 计算偏移量
+      let stmt_album = db.prepare(`SELECT * FROM album LIMIT 1`);
       let rows = stmt_media_file.all();
       let imagefiles = stmt_album.all();
       // media_file
@@ -301,9 +268,13 @@
           row.medium_image_url = '../../../resources/error_album.jpg'// path.resolve(process.cwd(), 'resources') + '\\error_album.jpg'
         media_Files.value.push(row);
       }
+      const stmt_media_file_count = db.prepare('SELECT COUNT(*) AS count FROM media_file');
+      media_file_count.value = stmt_media_file_count.get().count;
+      if(media_file_count.value != null)
+        media_page_length.value = Math.floor(media_file_count.value / media_page_size.value) + 1
       rows = []
       // album
-      const stmt = db.prepare(`SELECT * FROM album`);
+      const stmt = db.prepare(`SELECT * FROM album LIMIT ${album_page_size.value} OFFSET ${offset}`);
       rows = stmt.all();
       rows.forEach((row: Item_Album) => {
         row.medium_image_url = row.embed_art_path.replace('mp3','jpg');
@@ -320,13 +291,20 @@
 
         Album_Files.value.push(row);
       });
+      const stmt_album_count = db.prepare('SELECT COUNT(*) AS count FROM album');
+      album_file_count.value = stmt_album_count.get().count;
+      if(album_file_count.value != null)
+        album_Page_length.value = Math.floor(album_file_count.value / album_page_size.value) + 1
     } catch (err: any) {
-      console.error(err.message);
+      console.error(err);
     } finally {
       db.close();
+      delete require.cache[require.resolve('better-sqlite3')];
+      delete require.cache[require.resolve('moment')];
     }
   };
   onMounted(async () => {
+    // 此处占用180M内存
     await fetchData().then(() => {
       media_Files.value.forEach((item: { absoluteIndex: any }, index: number) => {
         item.absoluteIndex = index + 1;
@@ -335,7 +313,6 @@
       this_playList_num.value = media_Files_temporary.value.length;
 
       Album_Files_temporary.value = Album_Files.value.slice(0,30);
-      album_PageCount.value = Math.floor(Album_Files.value.length / album_PageSize.value) + 1
     });
   });
 
@@ -356,100 +333,99 @@
 </script>
 <template>
   <n-config-provider :theme="theme" :locale="locale" :date-locale="dateLocale">
-    <n-message-provider>
-      <!-- :style="{ backgroundColor:this_App_background_color }" -->
-      <n-space vertical>
-          <!-- <n-switch v-model:value="collapsed" /> -->
-        <n-layout has-sider class="this_App">
-          <n-layout-sider
-            class="n_layout_sider"
-            bordered
-            show-trigger
-            collapse-mode="width"
-            :collapsed-width="64"
-            :width="160"
+    <!-- <n-message-provider></n-message-provider>> -->
+    <n-space vertical>
+      <n-layout has-sider class="this_App">
+        <n-layout-sider
+          class="n_layout_sider"
+          bordered
+          show-trigger
+          collapse-mode="width"
+          :collapsed-width="64"
+          :width="160"
+          :collapsed="collapsed"
+          @collapse="collapsed = true"
+          @expand="collapsed = false">
+          <n-menu
+            v-model:value="activeKey"
             :collapsed="collapsed"
-            @collapse="collapsed = true"
-            @expand="collapsed = false">
-            <n-menu
-              v-model:value="activeKey"
+            :collapsed-width="64"
+            :collapsed-icon-size="22"
+            :options="menuOptions"/>
+          </n-layout-sider>
+          <n-layout embedded style="height: calc(100vh - 80px);">
+            <RouterView
+              class="view_show" 
               :collapsed="collapsed"
-              :collapsed-width="64"
-              :collapsed-icon-size="22"
-              :options="menuOptions"/>
-            </n-layout-sider>
-            <n-layout embedded style="height: calc(100vh - 80px);">
-              <RouterView
-                class="view_show" v-slot="{ Component }"
-                :collapsed="collapsed"
-                :window_innerWidth="window_innerWidth"
-                @media_file_path="media_file_path"
-                @media_file_medium_image_url="get_media_file_medium_image_url"
-                @this_audio_singer_name="get_this_audio_singer_name"
-                @this_audio_song_name="get_this_audio_song_name"
-                @this_audio_album_name="get_this_audio_album_name"
-                @data_select_Index="get_data_select_Index"
-                @page_song_index="get_page_song_index"
-                :page_num="page_num"
-                @page_num="get_page_num"
-                :page_Size="page_Size"
-                @page_Size="get_page_Size"
-                :media_Files="media_Files"
-                :media_Files_temporary="media_Files_temporary"
-                :options_Sort_key="options_Sort_key"
-                @options_Sort_key="get_options_Sort_key"
-                @keyword="get_keyword"
-                @reset_data="get_reset_data"
-                
-                :Album_Files="Album_Files"
-                :Album_Files_temporary="Album_Files_temporary"
-                :album_Page="album_Page"
-                @album_Page="get_album_page_num"
-                :album_PageSize="album_PageSize"
-                @album_PageSize="get_album_PageSize"
-                :album_PageCount="album_PageCount">
-              </RouterView>
-              <div class="bar_top_setapp">
-                <section  style="
-                          -webkit-app-region: no-drag;
-                          width: auto;/*设置为 auto 即为单分布，100vw 为多分布(左，中，右) */
-                          position: absolute;right: 0;
-                          text-align:center;
-                          z-index: 99;
-                          ">
-                          <n-button @click="() => {locale = null,dateLocale = null}">英文</n-button>
-                          <n-button @click="() => {locale = zhCN,dateLocale = dateZhCN}">中文</n-button>
-                          <n-button @click="theme = darkTheme">深色</n-button>
-                          <n-button @click="theme = null">浅色</n-button>
-                          <div type="button" class="win_close" @click="closeWindow"></div>
-                          <div type="button" class="win_max" @click="maximize"></div>
-                          <div type="button" class="win_min" @click="minimize"></div>
-                </section>
-              </div>
-          </n-layout>
+              :window_innerWidth="window_innerWidth"
+              @media_file_path="media_file_path"
+              @media_file_medium_image_url="get_media_file_medium_image_url"
+              @this_audio_singer_name="get_this_audio_singer_name"
+              @this_audio_song_name="get_this_audio_song_name"
+              @this_audio_album_name="get_this_audio_album_name"
+              @data_select_Index="get_data_select_Index"
+              @page_song_index="get_page_song_index"
+              :media_page_num="media_page_num"
+              @media_page_num="get_page_num"
+              :media_page_size="media_page_size"
+              @media_page_size="get_page_Size"
+              :media_page_length="media_page_length"
+              :media_Files="media_Files"
+              :media_Files_temporary="media_Files_temporary"
+              :options_Sort_key="options_Sort_key"
+              @options_Sort_key="get_options_Sort_key"
+              @keyword="get_keyword"
+              @reset_data="get_reset_data"
+              
+              :Album_Files="Album_Files"
+              :Album_Files_temporary="Album_Files_temporary"
+              :album_page_num="album_page_num"
+              @album_page_num="get_album_page_num"
+              :album_page_size="album_page_size"
+              @album_page_size="get_album_PageSize"
+              :album_Page_length="album_Page_length">
+              
+            </RouterView>
+            <div class="bar_top_setapp">
+              <section  style="
+                        -webkit-app-region: no-drag;
+                        width: auto;/*设置为 auto 即为单分布，100vw 为多分布(左，中，右) */
+                        position: absolute;right: 0;
+                        text-align:center;
+                        z-index: 99;
+                        ">
+                        <n-button @click="() => {locale = null,dateLocale = null}">英文</n-button>
+                        <n-button @click="() => {locale = zhCN,dateLocale = dateZhCN}">中文</n-button>
+                        <n-button @click="theme = darkTheme">深色</n-button>
+                        <n-button @click="theme = null">浅色</n-button>
+                        <div type="button" class="win_close" @click="closeWindow"></div>
+                        <div type="button" class="win_max" @click="maximize"></div>
+                        <div type="button" class="win_min" @click="minimize"></div>
+              </section>
+            </div>
         </n-layout>
-        <n-layout-footer
-          position="absolute"
-          bordered>
-          <Bar_Music_Player 
-            :this_audio_file_path="this_audio_file_path"
-            :this_playList_num="this_playList_num"
-            :this_audio_file_medium_image_url="this_audio_file_medium_image_url"
-            :this_audio_refresh="this_audio_refresh"
-            @this_audio_refresh="get_this_audio_refresh"
-            :this_audio_singer_name="this_audio_singer_name"
-            :this_audio_song_name="this_audio_song_name"
-            :this_audio_album_name="this_audio_album_name"
-            @on-click="get_send_onclick" />
-        </n-layout-footer>
-      </n-space>
-      <View_Screen_Music_Player 
-        class="view_music_player" 
-        v-if="isVisible"
-        :style="{ height: `calc(100vh - ${margin_top_value_view_music_player}vh)` }">
+      </n-layout>
+      <n-layout-footer
+        position="absolute"
+        bordered>
+        <Bar_Music_Player 
+          :this_audio_file_path="this_audio_file_path"
+          :this_playList_num="this_playList_num"
+          :this_audio_file_medium_image_url="this_audio_file_medium_image_url"
+          :this_audio_refresh="this_audio_refresh"
+          @this_audio_refresh="get_this_audio_refresh"
+          :this_audio_singer_name="this_audio_singer_name"
+          :this_audio_song_name="this_audio_song_name"
+          :this_audio_album_name="this_audio_album_name"
+          @on-click="get_send_onclick" />
+      </n-layout-footer>
+    </n-space>
+    <View_Screen_Music_Player 
+      class="view_music_player" 
+      v-if="isVisible"
+      :style="{ height: `calc(100vh - ${margin_top_value_view_music_player}vh)` }">
 
-      </View_Screen_Music_Player>
-    </n-message-provider>
+    </View_Screen_Music_Player>
   </n-config-provider>
 </template>
 

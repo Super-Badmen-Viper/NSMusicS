@@ -1,5 +1,8 @@
-import { app, BrowserWindow,dialog  } from 'electron'
+import { app, BrowserWindow,dialog, Menu  } from 'electron'
 import { readFileSync } from 'fs';
+
+app.commandLine.appendSwitch('disable-http-cache');
+Menu.setApplicationMenu(null)
 
 async function createWindow() {
     const win = await new BrowserWindow({
@@ -76,13 +79,6 @@ async function createWindow() {
     }); 
     ipc.handle('readFile', async (event, filePath) => {
         return readFileSync(filePath);
-    });
-    const fs = require('fs');
-    ipc.handle('existsFile', async (event, filePath) => {
-        if (!fs.existsSync(filePath)) {
-            return false
-        }
-        return true
     });
 }
 

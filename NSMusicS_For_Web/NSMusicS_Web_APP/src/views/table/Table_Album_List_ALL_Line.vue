@@ -11,8 +11,8 @@ const emit = defineEmits([
   'data_select_Index',
   'data_page',
   'page_song_index',
-  'page_num',
-  'page_Size',
+  'media_page_num',
+  'media_page_size',
   'media_PageFiles',
   'menu_edit_this_song',
   'menu_add_this_song',
@@ -371,7 +371,6 @@ const handleSelect_data_dropmenu = (option: string) => {
 const onClickoutside = () => {
   showDropdownRef.value = false
 }
-const message = useMessage()
 const showDropdownRef = ref(false)
 const xRef = ref(0)
 const yRef = ref(0)
@@ -381,7 +380,6 @@ const forceUpdate = ref(false); // 创建一个响应式引用
 const click_play_this_medialist = () => {
   if(bool_start_play.value == true){
     let Item_Album:Item_Album = data_temporary.value[0]
-    message.info(Item_Album.artist + " - " + Item_Album.title);
     emit('media_file_path', Item_Album.embed_art_path)
     emit('media_file_medium_image_url',Item_Album.medium_image_url)
     emit('this_audio_singer_name',Item_Album.artist)
@@ -389,7 +387,7 @@ const click_play_this_medialist = () => {
     emit('this_audio_album_name',Item_Album.name)
     emit('data_select_Index', data_select_Index.value); 
   }else{
-    message.info('请退出 批量操作 模式');
+
   }
 }
 const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对分页的项的下标:0~(pageSize-1)
@@ -399,7 +397,6 @@ const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对�
   onDblclick: (_e: MouseEvent) => {
     if(click_count >= 2){
       let Item_Album:Item_Album =JSON.parse(JSON.stringify(row, null, 2))
-      message.info(Item_Album.artist + " - " + Item_Album.title);
       emit('media_file_path', Item_Album.embed_art_path)
       emit('media_file_medium_image_url',Item_Album.medium_image_url)
       emit('this_audio_singer_name',Item_Album.artist)
@@ -407,7 +404,7 @@ const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对�
       emit('this_audio_album_name',Item_Album.name)
       emit('page_song_index', page_index); 
 
-      data_select_Index.value = (current_page_num.value-1)*page_Size.value + page_index;
+      data_select_Index.value = (current_page_num.value-1)*media_page_size.value + page_index;
       emit('data_select_Index', data_select_Index.value); 
 
       click_count = 0
@@ -422,15 +419,15 @@ const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对�
       yRef.value = e.clientY
     })
 
-    data_select_Index.value = (current_page_num.value-1)*page_Size.value + page_index;
+    data_select_Index.value = (current_page_num.value-1)*media_page_size.value + page_index;
   }
 });
 const current_page_num = ref<number>(1)
 const data_page = ref<Item_Album[]>([]);
 const update_page = (page: number) => {//当前页数Update
   data_page.value.length = 0;
-  const startIndex = (page - 1) * page_Size.value;
-  const endIndex = startIndex + page_Size.value;
+  const startIndex = (page - 1) * media_page_size.value;
+  const endIndex = startIndex + media_page_size.value;
   for (let index = startIndex; index < endIndex; index++) {
     data_page.value.push(data_temporary.value[index]);
   }
@@ -439,10 +436,10 @@ const update_page = (page: number) => {//当前页数Update
 
   current_page_num.value = page
 };
-const page_Size = ref(10)
+const media_page_size = ref(10)
 const update_page_size = (pageSize: number) => {//当前页内的数据范围：10,20,30
-  page_Size.value = pageSize;
-  emit('page_Size',page_Size)
+  media_page_size.value = pageSize;
+  emit('media_page_size',media_page_size)
 };
 const paginationReactive = reactive({
   page: 1,

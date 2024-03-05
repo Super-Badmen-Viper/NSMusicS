@@ -2,8 +2,8 @@
   import { computed, h, nextTick, onMounted, reactive, ref, watch } from 'vue';
 
   const emit = defineEmits([
-    'album_Page',
-    'album_PageSize',
+    'album_page_num',
+    'album_page_size',
     'options_Sort_key','keyword','reset_data'
   ]);
   const props = defineProps<{
@@ -20,7 +20,7 @@
 
   //
   const item_album_margin = ref<number>(12)
-  const item_album = ref<number>(180)
+  const item_album = ref<number>(170)
   const item_album_image = ref<number>(item_album.value - 20)
   const item_album_txt = ref<number>(item_album.value - 30)
   //
@@ -34,13 +34,13 @@
   })
   const pagination_onChange = (page: number) => {
     paginationReactive.page = page
-    emit('album_Page',page)
+    emit('album_page_num',page)
     scrollToTop()
   }
   const pagination_onUpdatePageSize = (pageSize: number) => {
     paginationReactive.pageSize = pageSize
     paginationReactive.page = 1
-    emit('album_PageSize',pageSize)
+    emit('album_page_size',pageSize)
   }
   //
   const scrollbar = ref<HTMLElement | null>(null);
@@ -219,7 +219,6 @@
   } from '@vicons/fluent'
   import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
   import { InputInst, NIcon } from 'naive-ui';
-
 </script>
 <template>
   <n-space  :size="12">

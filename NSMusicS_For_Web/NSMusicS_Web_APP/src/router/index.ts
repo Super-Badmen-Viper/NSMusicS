@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,20 +6,17 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue')
+      component: () => import('../views/HomeView.vue'),
+      meta: {
+        cleanup: true
+      }
     },
     {
       path: '/View_Album_List_ALL',
       name: 'View_Album_List_ALL',
       component: () => import('../views/View_Album_List_ALL.vue'),
       meta: {
-        keepalive: true,
-        cleanup: false
+        cleanup: true
       }
     },
     {
@@ -28,8 +24,7 @@ const router = createRouter({
       name: 'View_Song_List_ALL',
       component: () => import('../views/View_Song_List_ALL.vue'),
       meta: {
-        keepalive: true,
-        cleanup: false
+        cleanup: true
       }
     },
     {
@@ -37,10 +32,9 @@ const router = createRouter({
       name: 'View_Artist_List_ALL',
       component: () => import('../views/View_Artist_List_ALL.vue'),
       meta: {
-        keepalive: true,
-        cleanup: false
+        cleanup: true
       }
-    },
+    }
   ]
 })
 

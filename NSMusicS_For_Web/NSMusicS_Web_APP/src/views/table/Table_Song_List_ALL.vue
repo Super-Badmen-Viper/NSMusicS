@@ -10,8 +10,8 @@ const emit = defineEmits([
   'this_audio_album_name',
   'data_select_Index',
   'page_song_index',
-  'page_num',
-  'page_Size',
+  'media_page_num',
+  'media_page_size',
   'media_PageFiles',
   'menu_edit_this_song',
   'menu_add_this_song',
@@ -213,7 +213,7 @@ const props = defineProps<{
   collapsed: Boolean;
   window_innerWidth: number;
   options_Sort_key:{ columnKey: string; order: string }[];
-  page_num: number;page_Size: number;
+  media_page_num: number;media_page_size: number;media_page_length: number;
 }>();
 const checkedRowKeysRef = ref<DataTableRowKey[]>([]);
 const data_select_Index = ref<number>(0)
@@ -305,7 +305,6 @@ const handleSelect_data_dropmenu = (option: string) => {
 const onClickoutside = () => {
   showDropdownRef.value = false
 }
-const message = useMessage()
 const showDropdownRef = ref(false)
 const xRef = ref(0)
 const yRef = ref(0)
@@ -316,7 +315,6 @@ const click_play_this_medialist = () => {
   if(bool_start_play.value == true){
     if(props.data_temporary != null && props.data_temporary.length > 0){
       let media_file:Media_File = props.data_temporary[0]
-      message.info(media_file.artist + " - " + media_file.title);
       emit('media_file_path', media_file.path)
       emit('media_file_medium_image_url',media_file.medium_image_url)
       emit('this_audio_singer_name',media_file.artist)
@@ -325,7 +323,6 @@ const click_play_this_medialist = () => {
       emit('data_select_Index', data_select_Index.value); 
     }
   }else{
-    message.info('请退出 批量操作 模式');
   }
 }
 const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对分页的项的下标:0~(pageSize-1)
@@ -335,7 +332,6 @@ const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对�
   onDblclick: (_e: MouseEvent) => {
     if(click_count >= 2){
       let media_file:Media_File =JSON.parse(JSON.stringify(row, null, 2))
-      message.info(media_file.artist + " - " + media_file.title);
       emit('media_file_path', media_file.path)
       emit('media_file_medium_image_url',media_file.medium_image_url)
       emit('this_audio_singer_name',media_file.artist)
@@ -343,7 +339,7 @@ const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对�
       emit('this_audio_album_name',media_file.album)
       emit('page_song_index', page_index); 
 
-      data_select_Index.value = (current_page_num.value-1)*props.page_Size + page_index;
+      data_select_Index.value = (current_page_num.value-1)*props.media_page_size + page_index;
       emit('data_select_Index', data_select_Index.value); 
 
       click_count = 0
@@ -358,32 +354,36 @@ const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对�
       yRef.value = e.clientY
     })
 
-    data_select_Index.value = (current_page_num.value-1)*props.page_Size + page_index;
+    data_select_Index.value = (current_page_num.value-1)*props.media_page_size + page_index;
   }
 });
 const current_page_num = ref<number>(1)
 const paginationReactive: PaginationProps | undefined = reactive({
-  page: props.page_num,
-  pageCount: 1,
-  pageSize: props.page_Size,
+  page: props.media_page_num,
+  pageCount: props.media_page_length,
+  pageSize: props.media_page_size,
   showSizePicker: true,
   showQuickJumper: true,
   pageSizes: [10, 30, 50, 100],
   displayOrder: ['quick-jumper', 'pages', 'size-picker'] as Array<'quick-jumper' | 'pages' | 'size-picker'>,
-  onChange: (page: number) => {
-    if(paginationReactive != null){
-      paginationReactive.page = page;
-      emit('page_num', page);
-    }
-  },
-  onUpdatePageSize: (pageSize: number) => {
-    if(paginationReactive != null){
-      paginationReactive.pageSize = pageSize;
-      paginationReactive.page = 1;
-      emit('page_Size', pageSize);
-    }
-  }
 });
+const pagination_onChange = (page: number) => {
+  paginationReactive.page = page
+  emit('media_page_num',page)
+  scrollToTop()
+}
+const pagination_onUpdatePageSize = (pageSize: number) => {
+  paginationReactive.pageSize = pageSize
+  paginationReactive.page = 1
+  emit('media_page_size',pageSize)
+}
+//
+const scrollbar = ref<HTMLElement | null>(null);
+const scrollToTop = () => {
+  if (scrollbar.value) {
+    scrollbar.value.scrollTop = 0;
+  }
+};
 //
 enum state_Sort {
   Ascend = 'ascend',
@@ -576,7 +576,6 @@ const cleanup = () => {
   }
 };
 
-
 import {
   AddCircle32Regular,
   MultiselectLtr20Filled,
@@ -689,11 +688,21 @@ import { RouterLink } from 'vue-router';
       @select="handleSelect_data_dropmenu"
       :row-props="rowProps"
 
-      :pagination="paginationReactive"
-
       :scroll-x="1800"
+      virtual-scroll
     />
   </n-space>
+  <n-pagination
+    style="position: absolute;right: 10px;bottom: 10px;"
+    :display-order="['quick-jumper', 'pages', 'size-picker']"
+    :page-sizes="[10, 30, 50]"
+    :pageSize="props.media_page_size"
+    :on-update-page="pagination_onChange"
+    :on-update-page-size="pagination_onUpdatePageSize"
+    :page="props.media_page_num"
+    :page-count="props.media_page_length"
+    show-quick-jumper
+    show-size-picker/>
   <n-dropdown
     placement="bottom-start"
     trigger="manual"

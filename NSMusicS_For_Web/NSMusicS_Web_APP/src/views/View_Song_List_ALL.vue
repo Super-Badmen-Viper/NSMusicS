@@ -8,7 +8,7 @@ function get_data_select_Index(value: any) {
   emit('data_select_Index',data_select_Index.value)
 }
 function get_page_Size(value: number) {
-  emit('page_Size',value)
+  emit('media_page_size',value)
 }
 
 const menu_edit_this_song = ref<Media_File>()
@@ -47,8 +47,8 @@ const emit = defineEmits([
   'this_audio_album_name',
   'data_select_Index',
   'page_song_index',
-  'page_num',
-  'page_Size',
+  'media_page_num',
+  'media_page_size',
   'media_PageFiles',
   'menu_edit_this_song',
   'menu_add_this_song',
@@ -76,7 +76,7 @@ function get_page_song_index(value: any) {
   emit('page_song_index',value)
 }
 function get_page_num(value: any) {
-  emit('page_num',value)
+  emit('media_page_num',value)
 }
 function get_media_PageFiles(value: any) {
   emit('media_PageFiles',value)
@@ -95,12 +95,12 @@ const {
   collapsed,window_innerWidth,
   media_Files,media_Files_temporary,
   options_Sort_key,
-  page_num,page_Size
+  media_page_num,media_page_size,media_page_length
   } = defineProps<{
     collapsed:Boolean,window_innerWidth:number,
     media_Files:Media_File[],media_Files_temporary:Media_File[],
     options_Sort_key:{ columnKey: string; order: string }[],
-    page_num:number,page_Size:number
+    media_page_num:number,media_page_size:number,media_page_length:number
   }>();
 </script>
 
@@ -118,10 +118,11 @@ const {
       @this_audio_album_name="get_this_audio_album_name"
       @data_select_Index="get_data_select_Index"
       @page_song_index="get_page_song_index"
-      :page_num="page_num"
-      @page_num="get_page_num"
-      :page_Size="page_Size"
-      @page_Size="get_page_Size"
+      :media_page_num="media_page_num"
+      @media_page_num="get_page_num"
+      :media_page_size="media_page_size"
+      @media_page_size="get_page_Size"
+      :media_page_length="media_page_length"
       @media_PageFiles="get_media_PageFiles"
       @menu_edit_this_song="get_menu_edit_this_song"
       @menu_add_this_song="get_menu_add_this_song"
