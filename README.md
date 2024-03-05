@@ -9,10 +9,12 @@
     You can use software like MusicTag to embed album covers and lyrics into your local music files (mp3, etc.), and NSMusicS can perfectly read them
 </div>  
   </p>
-</p>      
+</p>
+
+# Author's message
+  NSMusicS will continue to be updated, whether it is keeping up with various advanced technologies or continuously refactoring the underlying architecture. So I don't care who unstars or forks it, and I don't care how NSMusicS compares to other open-source music projects, because I know that NSMusicS's open-source technology will never serve anyone other than NSMusicS fans. They will all fade away with the passing of time, while NSMusicS will always embrace new beginnings.
 
 # Version：
-
 | Project   | Development status | Technology Framework     | Author/Copyright Owner | Operating systems         | LICENSE          |  Software positioning |
 | :-----    | ----:              | ----:                    | ----:             | :----:                    | :----:                    | :----:                    |
 | [NSMusicS](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">(complete): updateing</font> | dotnet8(wpf),cs,window,sqlite [![My Skills](https://skillicons.dev/icons?i=dotnet,cs,windows,sqlite)](https://skillicons.dev)           | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++)             | A-GPL 3.0 | Open source + Commercial | 
