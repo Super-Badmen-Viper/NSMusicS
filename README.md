@@ -5,7 +5,8 @@
   </a>
   <h2 align="center" style="font-weight: 600">NSMusicS</h2>
   <p align="center">
-    A local music software that is expected to support multiple platforms with AI capabilities and multimodal features.
+    A local music software that is expected to support multiple platforms with AI capabilities and multimodal features.<br>
+    You can use software like MusicTag to embed album covers and lyrics into your local music files (mp3, etc.), and NSMusicS can perfectly read them
 </div>  
   </p>
 </p>      
@@ -14,8 +15,8 @@
 
 | Project   | Development status | Technology Framework     | Author/Copyright Owner | Operating systems         | LICENSE          |  Software positioning |
 | :-----    | ----:              | ----:                    | ----:             | :----:                    | :----:                    | :----:                    |
-| [NSMusicS](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">(complete): updateing</font> | dotnet8(wpf),cs,window [![My Skills](https://skillicons.dev/icons?i=dotnet,cs,windows)](https://skillicons.dev)           | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++)             | A-GPL 3.0 | Open source + Commercial | 
-| [NSMusicS_For_Web](https://github.com/Super-Badmen-Viper/NSMusicS/tree/main/NSMusicS_For_Web/NSMusicS_Web_APP)   |<font color="#00dd00">updateing</font>             | electron,docker,vue,nodejs,ts,vite  [![My Skills](https://skillicons.dev/icons?i=electron,docker,vue,nodejs,ts,vite)](https://skillicons.dev)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  | (Windows,Linux(ubuntu+,Docker),MacOS,Android11++,IOS) Based on the Chrome kernel    | A-GPL 3.0 | Open source + Commercial | 
+| [NSMusicS](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">(complete): updateing</font> | dotnet8(wpf),cs,window,sqlite [![My Skills](https://skillicons.dev/icons?i=dotnet,cs,windows,sqlite)](https://skillicons.dev)           | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++)             | A-GPL 3.0 | Open source + Commercial | 
+| [NSMusicS_For_Web](https://github.com/Super-Badmen-Viper/NSMusicS/tree/main/NSMusicS_For_Web/NSMusicS_Web_APP)   |<font color="#00dd00">updateing</font>             | electron,docker,vue,nodejs,ts,vite,sqlite  [![My Skills](https://skillicons.dev/icons?i=electron,docker,vue,nodejs,ts,vite,sqlite)](https://skillicons.dev)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  | (Windows,Linux(ubuntu+,Docker),MacOS,Android11++,IOS) Based on the Chrome kernel    | A-GPL 3.0 | Open source + Commercial | 
 | [NSMusicS_For_PythonApp_Of_AudioProcessing](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">will developed</font>             | pytorch,py [![My Skills](https://skillicons.dev/icons?i=pytorch,py)](https://skillicons.dev)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  |    python    | Apache License 2.0 | Open source | 
 | [NSMusicS_For_Knowledge_Graph](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#FF0000">Not started</font>|  NebulaGraph / Neo4j <image width="200" src="https://www-cdn.nebula-graph.io/nebula-website-5.0/images/logo.png"/>      | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++/Linux)             | A-GPL 3.0 | Open source + Commercial | 
 | [NSMusicS_For_Flutter](https://github.com/Super-Badmen-Viper/NSMusicS/tree/main/NSMusicS_For_Flutter/nsmusics_for_flutter)   |<font color="#FF0000">Not started</font>    | flutter,dart  [![My Skills](https://skillicons.dev/icons?i=flutter,dart)](https://skillicons.dev)    | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++,Linux(ubuntu+,群晖Nas+Docker),MacOS,Android11++,IOS) | A-GPL 3.0 | Open source + Commercial | 
