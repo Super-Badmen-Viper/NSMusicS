@@ -9,10 +9,14 @@
     You can use software like MusicTag to embed album covers and lyrics into your local music files (mp3, etc.), and NSMusicS can perfectly read them
 </div>  
   </p>
-</p>      
+</p>
+
+# Author's message
+  - NSMusicS will continue to be updated, whether it is keeping up with various advanced technologies or continuously refactoring the underlying architecture. 
+  - NSMusicS will not disappoint those who believe it, and those who have doubts about NSMusicS will not be recognized by NSMusicS.
+  - If you are willing to believe and support, NSMusicS will achieve all its goals
 
 # Version：
-
 | Project   | Development status | Technology Framework     | Author/Copyright Owner | Operating systems         | LICENSE          |  Software positioning |
 | :-----    | ----:              | ----:                    | ----:             | :----:                    | :----:                    | :----:                    |
 | [NSMusicS](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">(complete): updateing</font> | dotnet8(wpf),cs,window,sqlite [![My Skills](https://skillicons.dev/icons?i=dotnet,cs,windows,sqlite)](https://skillicons.dev)           | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++)             | A-GPL 3.0 | Open source + Commercial | 
