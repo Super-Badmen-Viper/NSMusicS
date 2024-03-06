@@ -200,6 +200,20 @@
     
   }
   //
+  const itemsPerRow = 6; // 每行显示的 album 数量
+  const calculateRowHeight = computed(() => {
+    const albumHeight = 200; // 请根据实际情况调整每个 album 的高度
+    return albumHeight + 2 * item_album_margin.value; // 加上上下 margin
+  });
+  const rowItems = computed(() => {
+    const data = props.data_temporary;
+    const result = [];
+    for (let i = 0; i < data.length; i += itemsPerRow) {
+      result.push(data.slice(i, i + itemsPerRow));
+    }
+    return result;
+  });
+  //
 
   import {
     Play16Filled,
@@ -274,8 +288,7 @@
     </n-dropdown>  
   </n-space>
   <n-space class="album-wall-container" vertical>
-    <div class="album-wall" ref="scrollbar" style="overflow-y: scroll;">
-      <!-- @contextmenu="onContextmenu" -->
+    <!-- <div class="album-wall" ref="scrollbar" style="overflow-y: scroll;">
       <div v-for="item in props.data_temporary" :key="item.id" class="album" 
         :style="{ margin: item_album_margin + 'px' }"
         @mouseover="item.isHovered = true"
@@ -332,7 +345,129 @@
           </div>
         </n-space>
       </div>
-    </div>
+    </div> -->
+    <!-- <n-virtual-list class="album-wall" 
+      :item-size="42"
+      :items="props.data_temporary">
+      <template #default="{ item }">
+        <div :key="item.id" class="album" :style="{ margin: item_album_margin + 'px' }"
+            @mouseover="item.isHovered = true"
+            @mouseleave="item.isHovered = false">
+          <div 
+            :style="{ 
+              width: item_album_image + 'px', 
+              height: item_album_image + 'px', 
+              position: 'relative' }">
+            <img 
+              :src="item.medium_image_url"
+              @error="handleImageError"
+              :style="{ 
+                width: item_album_image + 'px', 
+                height: item_album_image + 'px', 
+                borderRadius: '6px' }"/>
+            <n-space 
+              v-if="item.isHovered"
+              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 6px;
+              background: linear-gradient(to bottom, transparent, black);">
+              <div style="
+                display: flex; justify-content: center; align-items: center; 
+                height: 100%;">
+                <n-float-button 
+                  :style="{ left: item_album / 3 + 'px'}"
+                  color="#FFFFFF" position="absolute">
+                  <n-icon><Play16Filled /></n-icon>
+                </n-float-button>
+                <div style="position: absolute; bottom: 10px; right: 10px;">
+                  <n-button quaternary circle color="#FFFFFF">
+                    <template #icon>
+                      <n-icon><Heart24Regular /></n-icon>
+                    </template>
+                  </n-button>
+                  <n-button quaternary circle color="#FFFFFF">
+                    <template #icon>
+                      <n-icon><MoreCircle32Regular /></n-icon>
+                    </template>
+                  </n-button>
+                </div>
+              </div>
+            </n-space>
+          </div>
+          <n-space class="album_text"
+            :style="{ width: + 'px'}">
+            <div class="bar_left_text_song_info" 
+              :style="{ width:item_album_image + 'px'}">
+              <n-ellipsis id="bar_singer_name"
+                :style="{ maxWidth:item_album_txt + 'px'}">{{ item.name }}</n-ellipsis>
+              <n-ellipsis id="bar_song_name"
+                :style="{ maxWidth:item_album_txt + 'px'}">{{ item.artist }}</n-ellipsis>
+              <n-ellipsis id="bar_album_name"
+                :style="{ maxWidth:item_album_txt + 'px'}">{{ item.updated_time }}</n-ellipsis>
+            </div>
+          </n-space>
+        </div>
+      </template>
+    </n-virtual-list> -->
+    <n-virtual-list class="album-wall" :item-size="calculateRowHeight" :items="rowItems">
+      <template #default="{ item }">
+        <div class="album-row">
+          <div v-for="album in item" :key="album.id" class="album" :style="{ margin: item_album_margin + 'px' }"
+            @mouseover="album.isHovered = true"
+            @mouseleave="album.isHovered = false">
+            <div 
+              :style="{ 
+                width: item_album_image + 'px', 
+                height: item_album_image + 'px', 
+                position: 'relative' }">
+              <img 
+                :src="album.medium_image_url"
+                @error="handleImageError"
+                :style="{ 
+                  width: item_album_image + 'px', 
+                  height: item_album_image + 'px', 
+                  borderRadius: '6px' }"/>
+              <n-space 
+                v-if="album.isHovered"
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 6px;
+                background: linear-gradient(to bottom, transparent, black);">
+                <div style="
+                  display: flex; justify-content: center; align-items: center; 
+                  height: 100%;">
+                  <n-float-button 
+                    :style="{ left: item_album / 3 + 'px'}"
+                    color="#FFFFFF" position="absolute">
+                    <n-icon><Play16Filled /></n-icon>
+                  </n-float-button>
+                  <div style="position: absolute; bottom: 10px; right: 10px;">
+                    <n-button quaternary circle color="#FFFFFF">
+                      <template #icon>
+                        <n-icon><Heart24Regular /></n-icon>
+                      </template>
+                    </n-button>
+                    <n-button quaternary circle color="#FFFFFF">
+                      <template #icon>
+                        <n-icon><MoreCircle32Regular /></n-icon>
+                      </template>
+                    </n-button>
+                  </div>
+                </div>
+              </n-space>
+            </div>
+            <n-space class="album_text"
+              :style="{ width: + 'px'}">
+              <div class="bar_left_text_song_info" 
+                :style="{ width:item_album_image + 'px'}">
+                <n-ellipsis id="bar_singer_name"
+                  :style="{ maxWidth:item_album_txt + 'px'}">{{ album.name }}</n-ellipsis>
+                <n-ellipsis id="bar_song_name"
+                  :style="{ maxWidth:item_album_txt + 'px'}">{{ album.artist }}</n-ellipsis>
+                <n-ellipsis id="bar_album_name"
+                  :style="{ maxWidth:item_album_txt + 'px'}">{{ album.updated_time }}</n-ellipsis>
+              </div>
+            </n-space>
+          </div>
+        </div>
+      </template>
+    </n-virtual-list>
   </n-space>
   <n-pagination
     style="position: absolute;right: 10px;bottom: 10px;"
@@ -350,8 +485,13 @@
 .album-wall-container {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 .album-wall {
+  overflow-y: auto;
+  margin-right: -17px; /* 调整为滚动条宽度 */
+  padding-right: 17px; /* 补偿滚动条的空间 */
+
   width: calc(100vw - 200px);
   height: calc(100vh - 230px);
   margin-top: 10px;

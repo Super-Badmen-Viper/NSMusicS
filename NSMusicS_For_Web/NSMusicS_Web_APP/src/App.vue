@@ -106,61 +106,6 @@
   }
 
   //
-  const data_select_Index = ref<number>(-1)//绝对index
-  function get_data_select_Index(value: any) {
-    data_select_Index.value = value
-    console.log('data_select_Index：'+value)
-  }
-  //
-  const page_song_index = ref(0)//相对index
-  function get_page_song_index(value: any) {
-    page_song_index.value = value
-    console.log('page_song_index：'+value)
-  }
-  // 
-  const media_page_num = ref<number>(1);
-  function get_page_num(value: any) {
-    media_page_num.value = value
-    console.log('media_page_num：'+value)
-    media_Files_temporary.value = media_Files.value.slice(
-      (value - 1) * media_page_size.value,
-      (value - 1) * media_page_size.value + media_page_size.value
-    );
-  }
-  const media_page_size = ref<number>(30)
-  function get_page_Size(value: number) {
-    if(media_file_count.value != null)
-        media_page_length.value = Math.floor(media_file_count.value / media_page_size.value) + 1
-    media_page_size.value = value
-    console.log('media_page_size：'+value)
-    
-    media_Files_temporary.value = media_Files.value.slice(
-      0,
-      media_page_size.value
-    );
-  }
-  const album_page_num = ref<number>(1)
-  function get_album_page_num(value: any) {
-    album_page_num.value = value
-    console.log('album_page_num：'+value)
-    Album_Files_temporary.value = Album_Files.value.slice(
-      (value - 1) * album_page_size.value,
-      (value - 1) * album_page_size.value + album_page_size.value
-    );
-  }
-  const album_page_size = ref<number>(30)
-  function get_album_PageSize(value: any) {
-    if(album_file_count.value != null)
-        album_Page_length.value = Math.floor(album_file_count.value / album_page_size.value) + 1
-    album_page_size.value = value
-    console.log('album_PageSize：'+value)
-    
-    Album_Files_temporary.value = Album_Files.value.slice(
-      0,
-      album_page_size.value
-    );
-  }
-  //
   const media_Files = ref<Media_File[]>([]);
   const media_Files_temporary = ref<Media_File[]>([]);// data.slice() BUG Error: Because Init
   const media_page_length = ref<number>();
@@ -172,31 +117,13 @@
   const album_file_count = ref<number>();
   //
   const options_Sort_key = ref<{ columnKey: string; order: string }[]>([]);
-  function get_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
+  async function get_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
     if (value != null) {
       options_Sort_key.value = value;
-      sortByColumnKeys(value);
+      await fetchData_Media().then(() => {
+        
+      });
     }
-  }
-  //
-  function formatTime(currentTime: number): string {
-    const minutes = Math.floor(currentTime / 60);
-    const seconds = currentTime % 60;
-
-    let formattedMinutes = String(minutes);
-    let formattedSeconds = String(seconds);
-
-    if(formattedMinutes.length == 1)
-      formattedMinutes = '0' + formattedMinutes;
-    formattedMinutes = formattedMinutes.replace('.','');
-    formattedMinutes = formattedMinutes.substring(0, 2);
-
-    formattedSeconds = formattedSeconds.substring(0,formattedSeconds.indexOf('.'));
-    if(formattedSeconds.length == 1)
-      formattedSeconds = '0' + formattedSeconds;
-    formattedSeconds = formattedSeconds.substring(0, 2);
-
-    return `${formattedMinutes}:${formattedSeconds}`;
   }
   function sortByColumnKeys(sortersArray: { columnKey: string; order: string }[] = []) {
     let sortedData = media_Files_temporary.value.slice();
@@ -225,37 +152,113 @@
     }
     media_Files_temporary.value = sortedData;
   }
-  function get_keyword(value: any) {
-    media_Files_temporary.value = media_Files.value.filter((item: Media_File) => {
-      const { title, artist, album, path } = item;
-      const lowerValue = value.toLowerCase();
-      return title.toLowerCase().includes(lowerValue) ||
-        artist.toLowerCase().includes(lowerValue) ||
-        album.toLowerCase().includes(lowerValue) ||
-        path.toLowerCase().includes(lowerValue);
-    });
-    media_Files_temporary.value.forEach((item: Media_File, index: number) => {
-      item.absoluteIndex = index + 1;
+  //
+  function formatTime(currentTime: number): string {
+    const minutes = Math.floor(currentTime / 60);
+    const seconds = currentTime % 60;
+
+    let formattedMinutes = String(minutes);
+    let formattedSeconds = String(seconds);
+
+    if(formattedMinutes.length == 1)
+      formattedMinutes = '0' + formattedMinutes;
+    formattedMinutes = formattedMinutes.replace('.','');
+    formattedMinutes = formattedMinutes.substring(0, 2);
+
+    formattedSeconds = formattedSeconds.substring(0,formattedSeconds.indexOf('.'));
+    if(formattedSeconds.length == 1)
+      formattedSeconds = '0' + formattedSeconds;
+    formattedSeconds = formattedSeconds.substring(0, 2);
+
+    return `${formattedMinutes}:${formattedSeconds}`;
+  }
+  //
+  const keyword = ref<string>('')
+  async function get_keyword(value: any) {
+    keyword.value = value;
+    console.log('keyword:' + value)
+    await fetchData_Media().then(() => {
+        
     });
   }
-  function get_reset_data(value: any) {
-    media_Files_temporary.value = media_Files.value.slice();
-    media_Files_temporary.value.forEach((item: Media_File, index: number) => {
-      item.absoluteIndex = index + 1;
+  async function get_reset_data(value: any) {
+    keyword.value = '';
+    console.log('reset_data?:' + value)
+    await fetchData_Media().then(() => {
+        
     });
   }
+  //
+  const data_select_Index = ref<number>(-1)//绝对index
+  function get_data_select_Index(value: any) {
+    data_select_Index.value = value
+    console.log('data_select_Index：'+value)
+  }
+  const page_song_index = ref(0)//相对index
+  function get_page_song_index(value: any) {
+    page_song_index.value = value
+    console.log('page_song_index：'+value)
+  }
+  // 
+  const media_page_num = ref<number>(1);
+  async function get_media_page_num(value: any) {
+    media_page_num.value = value
+    console.log('media_page_num：'+value)
+    await fetchData_Media().then(() => {
+        
+    });
+  }
+  const media_page_size = ref<number>(30)
+  async function get_media_page_size(value: number) {
+    if(media_file_count.value != null)
+      media_page_length.value = Math.floor(media_file_count.value / media_page_size.value) + 1
+    media_page_size.value = value
+    console.log('media_page_size：'+value)
+    
+    await fetchData_Media().then(() => {
+        
+    });
+  }
+  const album_page_num = ref<number>(1)
+  async function get_album_page_num(value: any) {
+    album_page_num.value = value
+    console.log('album_page_num：'+value)
+    await fetchData_Album().then(() => {
+        
+    });
+  }
+  const album_page_size = ref<number>(30)
+  async function get_album_PageSize(value: any) {
+    if(album_file_count.value != null)
+      album_Page_length.value = Math.floor(album_file_count.value / album_page_size.value) + 1
+    album_page_size.value = value
+    console.log('album_PageSize：'+value)
+    
+    await fetchData_Media().then(() => {
+        
+    });
+  }
+  //
   const fetchData = async () => {
     media_Files.value = [];
     Album_Files.value = [];
-    const path = require('path');
-    const Database = require('better-sqlite3');
-    const db = new Database(path.resolve('resources/navidrome.db'), { verbose: console.log }); 
-    const moment = require('moment');
+    let path = require('path');
+    let Database = require('better-sqlite3');
+    let db = new Database(path.resolve('resources/navidrome.db'), { verbose: console.log }); 
+    db.pragma('journal_mode = WAL');
+    let moment = require('moment');
     try {
       let offset = (media_page_num.value - 1) * media_page_size.value; // 计算偏移量
-      let stmt_media_file = db.prepare(`SELECT * FROM media_file LIMIT ${media_page_size.value} OFFSET ${offset}`);
+      let stmt_media_file = db.prepare(
+        `SELECT id,title,artist,album,duration,path 
+        FROM media_file 
+        LIMIT ${media_page_size.value} 
+        OFFSET ${offset}`);
       offset = (album_page_num.value - 1) * album_page_size.value; // 计算偏移量
-      let stmt_album = db.prepare(`SELECT * FROM album LIMIT 1`);
+      let stmt_album = db.prepare(
+        `SELECT * 
+        FROM album 
+        LIMIT 1`);
       let rows = stmt_media_file.all();
       let imagefiles = stmt_album.all();
       // media_file
@@ -268,13 +271,19 @@
           row.medium_image_url = '../../../resources/error_album.jpg'// path.resolve(process.cwd(), 'resources') + '\\error_album.jpg'
         media_Files.value.push(row);
       }
-      const stmt_media_file_count = db.prepare('SELECT COUNT(*) AS count FROM media_file');
+      let stmt_media_file_count = db.prepare('SELECT COUNT(*) AS count FROM media_file');
       media_file_count.value = stmt_media_file_count.get().count;
       if(media_file_count.value != null)
         media_page_length.value = Math.floor(media_file_count.value / media_page_size.value) + 1
       rows = []
+      stmt_media_file = []
+      stmt_album = []
       // album
-      const stmt = db.prepare(`SELECT * FROM album LIMIT ${album_page_size.value} OFFSET ${offset}`);
+      let stmt = db.prepare(
+        `SELECT id,name,embed_art_path,artist,updated_at,medium_image_url
+        FROM album 
+        LIMIT ${album_page_size.value} 
+        OFFSET ${offset}`);
       rows = stmt.all();
       rows.forEach((row: Item_Album) => {
         row.medium_image_url = row.embed_art_path.replace('mp3','jpg');
@@ -282,7 +291,7 @@
         let fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
         let fileNameWithExtension: string | null = fileNameMatch ? fileNameMatch[0] : null;
         let fileNameWithoutExtension: string | null = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
-        const fileNameWithoutPrefix: string | null = fileNameWithoutExtension ? fileNameWithoutExtension.replace(/.*?-\s*/, '') : null;
+        let fileNameWithoutPrefix: string | null = fileNameWithoutExtension ? fileNameWithoutExtension.replace(/.*?-\s*/, '') : null;
         if(fileNameWithoutPrefix != null)
           row.title = fileNameWithoutPrefix;
         //
@@ -291,29 +300,194 @@
 
         Album_Files.value.push(row);
       });
-      const stmt_album_count = db.prepare('SELECT COUNT(*) AS count FROM album');
+      let stmt_album_count = db.prepare('SELECT COUNT(*) AS count FROM album');
       album_file_count.value = stmt_album_count.get().count;
       if(album_file_count.value != null)
         album_Page_length.value = Math.floor(album_file_count.value / album_page_size.value) + 1
+      stmt = []
+      rows = []
     } catch (err: any) {
       console.error(err);
     } finally {
       db.close();
+      console.log('db.close().......')
+      console.log('db.open?:'+db.open)
       delete require.cache[require.resolve('better-sqlite3')];
       delete require.cache[require.resolve('moment')];
+      db = null;
+      path = null;
+      Database = null;
+      moment = null;
     }
   };
-  onMounted(async () => {
-    // 此处占用180M内存
-    await fetchData().then(() => {
-      media_Files.value.forEach((item: { absoluteIndex: any }, index: number) => {
-        item.absoluteIndex = index + 1;
-      });
-      media_Files_temporary.value = media_Files.value.slice();
-      this_playList_num.value = media_Files_temporary.value.length;
+  const fetchData_Media = async () => {
+    media_Files.value = [];
+    Album_Files.value = [];
+    media_Files_temporary.value = [];
+    Album_Files_temporary.value = [];
+    let path = require('path');
+    let Database = require('better-sqlite3');
+    let db = new Database(path.resolve('resources/navidrome.db'), { verbose: console.log }); 
+    db.pragma('journal_mode = WAL');
+    try {
+      let offset = (media_page_num.value - 1) * media_page_size.value;
+      var stmt_media_file = null;
+      if (options_Sort_key.value.length > 0 && options_Sort_key.value[0].order != 'default') {
+        if(keyword.value.length > 0){
+          stmt_media_file = db.prepare(
+          `SELECT id,title,artist,album,duration,path 
+          FROM media_file
+          WHERE title LIKE '%${keyword.value}%' OR artist LIKE '%${keyword.value}%' OR album LIKE '%${keyword.value}%' 
+          ORDER BY ${options_Sort_key.value[0].columnKey} ${options_Sort_key.value[0].order.replace('end','')}
+          LIMIT ${media_page_size.value} 
+          OFFSET ${offset}`
+          );
+        }else{
+          stmt_media_file = db.prepare(
+          `SELECT id,title,artist,album,duration,path 
+          FROM media_file
+          ORDER BY ${options_Sort_key.value[0].columnKey} ${options_Sort_key.value[0].order.replace('end','')}
+          LIMIT ${media_page_size.value} 
+          OFFSET ${offset}
+          `
+          );
+        }
+      }else{
+        if(keyword.value.length > 0){
+          stmt_media_file = db.prepare(
+          `SELECT id,title,artist,album,duration,path 
+          FROM media_file 
+          WHERE title LIKE '%${keyword.value}%' OR artist LIKE '%${keyword.value}%' OR album LIKE '%${keyword.value}%' 
+          LIMIT ${media_page_size.value} 
+          OFFSET ${offset}
+          `
+          );
+        }else{
+          stmt_media_file = db.prepare(
+          `SELECT id,title,artist,album,duration,path 
+          FROM media_file 
+          LIMIT ${media_page_size.value}
+          OFFSET ${offset}`
+          );
+        }
+      }
+      
+      let stmt_album = db.prepare(
+        `SELECT * 
+        FROM album 
+        LIMIT 1`);
+      let rows = stmt_media_file.all();
+      let imagefiles = stmt_album.all();
+      // media_file
+      for (let row of rows) {
+        row.duration_txt = formatTime(row.duration);
+        let medium_image_url = row.path.replace('mp3','jpg');
+        if(imagefiles[0].image_files.indexOf(medium_image_url) > 0)
+          row.medium_image_url = medium_image_url
+        else
+          row.medium_image_url = '../../../resources/error_album.jpg'// path.resolve(process.cwd(), 'resources') + '\\error_album.jpg'
+        media_Files_temporary.value.push(row);
+      }
+      let stmt_media_file_count = db.prepare('SELECT COUNT(*) AS count FROM media_file');
+      media_file_count.value = stmt_media_file_count.get().count;
+      if(media_file_count.value != null)
+        media_page_length.value = Math.floor(media_file_count.value / media_page_size.value) + 1
+      rows = null
+      stmt_media_file = null
+      stmt_album = null
 
-      Album_Files_temporary.value = Album_Files.value.slice(0,30);
-    });
+      media_Files_temporary.value.forEach((item: { absoluteIndex: any }, index: number) => {
+        item.absoluteIndex = index + offset + 1;
+      });
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+      db.close();
+      console.log('db.close().......')
+      console.log('db.open?:'+db.open)
+      delete require.cache[require.resolve('better-sqlite3')];
+      db = null;
+      path = null;
+      Database = null;
+    }
+  }
+  const fetchData_Album = async () => {
+    media_Files.value = [];
+    Album_Files.value = [];
+    media_Files_temporary.value = [];
+    Album_Files_temporary.value = [];
+    let path = require('path');
+    let Database = require('better-sqlite3');
+    let db = new Database(path.resolve('resources/navidrome.db'), { verbose: console.log }); 
+    db.pragma('journal_mode = WAL');
+    let moment = require('moment');
+    try {
+      // album
+      let offset = (album_page_num.value - 1) * album_page_size.value;
+      let stmt = db.prepare(
+        `SELECT id,name,embed_art_path,artist,updated_at,medium_image_url
+        FROM album 
+        LIMIT ${album_page_size.value} 
+        OFFSET ${offset}`);
+      let rows = stmt.all();
+      rows.forEach((row: Item_Album) => {
+        row.medium_image_url = row.embed_art_path.replace('mp3','jpg');
+        //
+        let fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
+        let fileNameWithExtension: string | null = fileNameMatch ? fileNameMatch[0] : null;
+        let fileNameWithoutExtension: string | null = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
+        let fileNameWithoutPrefix: string | null = fileNameWithoutExtension ? fileNameWithoutExtension.replace(/.*?-\s*/, '') : null;
+        if(fileNameWithoutPrefix != null)
+          row.title = fileNameWithoutPrefix;
+        //
+        row.album_title = row.title+"<br>"+row.artist
+        row.updated_time = row.updated_at ? moment(row.updated_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
+
+        Album_Files_temporary.value.push(row);
+      });
+      let stmt_album_count = db.prepare('SELECT COUNT(*) AS count FROM album');
+      album_file_count.value = stmt_album_count.get().count;
+      if(album_file_count.value != null)
+        album_Page_length.value = Math.floor(album_file_count.value / album_page_size.value) + 1
+      stmt = null
+      rows = null
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+      db.close();
+      console.log('db.close().......')
+      console.log('db.open?:'+db.open)
+      delete require.cache[require.resolve('better-sqlite3')];
+      delete require.cache[require.resolve('moment')];
+      db = null;
+      path = null;
+      Database = null;
+      moment = null;
+    }
+  }
+  const fetchData_Artist = async () => {
+    
+  }
+  //
+  async function get_router_select(value: any) {
+    // auto clear
+    media_Files.value = [];
+    Album_Files.value = [];
+    media_Files_temporary.value = [];
+    Album_Files_temporary.value = [];
+    // 
+    if(value === 'View_Song_List_ALL'){
+      await fetchData_Media().then(() => {
+        
+      });
+    }else if(value === 'View_Album_List_ALL'){
+      await fetchData_Album().then(() => {
+        
+      });
+    }
+  }
+  onMounted(async () => {
+    
   });
 
   //
@@ -356,6 +530,9 @@
           <n-layout embedded style="height: calc(100vh - 80px);">
             <RouterView
               class="view_show" 
+
+              @router_select="get_router_select"
+
               :collapsed="collapsed"
               :window_innerWidth="window_innerWidth"
               @media_file_path="media_file_path"
@@ -366,9 +543,9 @@
               @data_select_Index="get_data_select_Index"
               @page_song_index="get_page_song_index"
               :media_page_num="media_page_num"
-              @media_page_num="get_page_num"
+              @media_page_num="get_media_page_num"
               :media_page_size="media_page_size"
-              @media_page_size="get_page_Size"
+              @media_page_size="get_media_page_size"
               :media_page_length="media_page_length"
               :media_Files="media_Files"
               :media_Files_temporary="media_Files_temporary"

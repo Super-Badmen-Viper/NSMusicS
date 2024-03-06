@@ -513,15 +513,17 @@ const click_search = () => {
 const back_search_default = () => {
   if(options_Sort_key_Default.value != null){
     options_Sort_key.value = options_Sort_key_Default.value.slice()
-    options_Sort_key.value.forEach(element => {
-      if(element.key != options_Sort_key_Default_key.value){
-        handleSelect_Sort(element.key)
-      }
-    });
-    for(let i = 0;i < options_Sort_key.value.length;i++)
-    {
-      if(options_Sort_key.value[i].key === options_Sort_key_Default_key.value){   
-        handleSelect_Sort(options_Sort_key.value[i].key)
+    for (let i = 0; i < options_Sort_key.value.length; i++) {
+      if (options_Sort_key.value[i].key === options_Sort_key_Default_key.value) {
+        const sortersArray: { columnKey: string; order: string }[] = [];
+        if (options_Sort_key.value[i].order === 'default') {
+          emit('options_Sort_key', null);
+        } else {
+          const sorter = { columnKey: options_Sort_key.value[i].key, order: options_Sort_key.value[i].state_Sort };
+          sortersArray.push(sorter);
+          emit('options_Sort_key', sortersArray);
+        }
+        break;
       }
     }
   }
@@ -690,6 +692,7 @@ import { RouterLink } from 'vue-router';
 
       :scroll-x="1800"
       virtual-scroll
+      :max-height="1000"
     />
   </n-space>
   <n-pagination
@@ -718,6 +721,6 @@ import { RouterLink } from 'vue-router';
 <style>
 .table {
   width: calc(100vw - 200px);
-  height: calc(100vh - 200px);
+  height: calc(100vh - 230px);
 }
 </style>

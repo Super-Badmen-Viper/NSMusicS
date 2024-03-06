@@ -3,6 +3,7 @@ import { ref, onMounted,defineEmits } from 'vue';
 import Table_Album_List_ALL from '../views/table/Table_Album_List_ALL_Lineblock.vue'
 
 const emit = defineEmits([
+  'router_select',
   'album_page_num',
   'album_page_size',
   'options_Sort_key',
@@ -16,6 +17,12 @@ function get_album_PageSize(value: any) {
 function get_options_Sort_key(value: any) {
   emit('options_Sort_key',value)
 }
+function get_router_select(value: any) {
+  emit('router_select',value)
+}
+onMounted(async () => {
+  emit('router_select','View_Album_List_ALL')
+});
 
 const { 
   collapsed,

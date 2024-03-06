@@ -14,8 +14,8 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "build-win64": "electron-builder --win --x64",
-		"build-linux": "electron-builder --linux",
-		"build-mac": "electron-builder --mac"
+    "build-linux": "electron-builder --linux",
+    "build-mac": "electron-builder --mac"
   },
   "dependencies": {
     "@vicons/carbon": "^0.12.0",
@@ -29,8 +29,7 @@
     "prebuild-install": "^7.1.1"
   },
   "devDependencies": {
-    "bindings": "^1.5.0",
-    "file-uri-to-path": "^2.0.0",
+    "vue-virtual-scroller": "^2.0.0-beta.8",
     "@iconify-json/carbon": "^1.1.28",
     "@iconify-json/ep": "^1.1.14",
     "@iconify-json/noto": "^1.1.18",
@@ -39,25 +38,27 @@
     "@vitejs/plugin-vue": "^4.5.2",
     "@vue/compiler-sfc": "^3.4.15",
     "@vue/tsconfig": "^0.5.1",
+    "bindings": "^1.5.0",
     "electron": "^28.2.3",
     "electron-builder": "^24.12.0",
+    "electron-store": "^8.1.0",
+    "esbuild": "^0.19.12",
+    "file-uri-to-path": "^2.0.0",
+    "jsmediatags": "^3.9.7",
+    "lodash": "^4.17.21",
     "naive-ui": "^2.37.3",
+    "nodemon": "^3.0.3",
     "npm-run-all2": "^6.1.1",
+    "rebuild": "^0.1.2",
+    "styled-components": "latest",
     "typescript": "^5.3.3",
+    "unplugin-auto-import": "^0.17.5",
     "unplugin-icons": "^0.18.3",
     "unplugin-vue-components": "^0.26.0",
     "vfonts": "^0.0.3",
     "vite": "^5.0.10",
-    "vue-tsc": "^1.8.25",
-    "electron-store": "^8.1.0",
-    "esbuild": "^0.19.12",
-    "jsmediatags": "^3.9.7",
-    "lodash": "^4.17.21",
-    "nodemon": "^3.0.3",
-    "rebuild": "^0.1.2",
-    "styled-components": "latest",
-    "unplugin-auto-import": "^0.17.5",
     "vue": "^3.3.11",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "vue-tsc": "^1.8.25"
   }
 }

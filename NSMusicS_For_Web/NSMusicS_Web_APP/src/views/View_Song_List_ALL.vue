@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref,defineEmits, onBeforeUnmount } from 'vue';
+import { ref,defineEmits, onBeforeUnmount, onMounted } from 'vue';
 import Table_Song_List from '../views/table/Table_Song_List_ALL.vue'
 
 const data_select_Index = ref<number>(-1)
@@ -7,7 +7,7 @@ function get_data_select_Index(value: any) {
   data_select_Index.value = value
   emit('data_select_Index',data_select_Index.value)
 }
-function get_page_Size(value: number) {
+function get_media_page_size(value: number) {
   emit('media_page_size',value)
 }
 
@@ -39,6 +39,7 @@ const cleanup = () => {
 // import { useRouter } from "vue-router";
 // const router = useRouter();
 const emit = defineEmits([
+  'router_select',
   'media_Files',
   'media_file_path',
   'media_file_medium_image_url',
@@ -75,7 +76,7 @@ function get_this_audio_album_name(value: any) {
 function get_page_song_index(value: any) {
   emit('page_song_index',value)
 }
-function get_page_num(value: any) {
+function get_media_page_num(value: any) {
   emit('media_page_num',value)
 }
 function get_media_PageFiles(value: any) {
@@ -90,6 +91,12 @@ function get_keyword(value: any) {
 function get_reset_data(value: any) {
   emit('reset_data',value)
 }
+function get_router_select(value: any) {
+  emit('router_select',value)
+}
+onMounted(async () => {
+  emit('router_select','View_Song_List_ALL')
+});
 
 const { 
   collapsed,window_innerWidth,
@@ -119,9 +126,9 @@ const {
       @data_select_Index="get_data_select_Index"
       @page_song_index="get_page_song_index"
       :media_page_num="media_page_num"
-      @media_page_num="get_page_num"
+      @media_page_num="get_media_page_num"
       :media_page_size="media_page_size"
-      @media_page_size="get_page_Size"
+      @media_page_size="get_media_page_size"
       :media_page_length="media_page_length"
       @media_PageFiles="get_media_PageFiles"
       @menu_edit_this_song="get_menu_edit_this_song"

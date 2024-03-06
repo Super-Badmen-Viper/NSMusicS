@@ -766,7 +766,7 @@ import { RouterLink } from 'vue-router';
     <n-data-table
       class="table"
       :style="{ width:collapsed_width + 'px'}"
-      :columns="columns" :loading="bool_loading" 
+      :columns="columns"
       @update:sorter="handleUpdateSorter"
       :data="data_temporary"
       :bordered="false"
