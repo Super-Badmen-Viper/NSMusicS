@@ -28,17 +28,17 @@ const {
   collapsed,
   window_innerWidth,
   options_Sort_key,
-  Album_Files,Album_Files_temporary,album_page_num,album_page_size,album_Page_length } = defineProps<{
+  Album_Files_temporary,album_page_num,album_page_size,album_Page_length,} = defineProps<{
   collapsed:Boolean,
   window_innerWidth:number,
   options_Sort_key:{ columnKey: string; order: string }[],
-  Album_Files:Item_Album[],Album_Files_temporary:Item_Album[],album_page_num:number,album_page_size:number,album_Page_length:number}>();
+  Album_Files_temporary:Item_Album[],
+  album_page_num:number,album_page_size:number,album_Page_length:number,}>();
 </script>
 
 <template>
   <div class="view_show">
     <Table_Album_List_ALL
-      :data="Album_Files" 
       :data_temporary="Album_Files_temporary"
       :collapsed="collapsed"
       :window_innerWidth="window_innerWidth"

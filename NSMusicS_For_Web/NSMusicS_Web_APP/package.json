@@ -25,6 +25,7 @@
     "@vicons/material": "^0.12.0",
     "@vicons/utils": "^0.1.4",
     "better-sqlite3": "^9.4.1",
+    "increase-memory-limit": "^1.0.7",
     "moment": "^2.30.1",
     "prebuild-install": "^7.1.1"
   },

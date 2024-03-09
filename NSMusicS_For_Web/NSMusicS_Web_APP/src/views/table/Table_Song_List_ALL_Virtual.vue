@@ -30,21 +30,12 @@ const createColumns_normal = (): DataTableColumns<RowData> => [
       tooltip: true
     }
   },
-  // {
-  //   type: 'expand',
-  //   expandable: (rowData) => rowData.name !== 'Jim Green',
-  //   renderExpand: (rowData) => {
-  //     return `${rowData.name} is a good guy.`
-  //   },
-  //   width: '30px',
-  // },
   {
     title: '#',
     key: 'absoluteIndex',
     width: '60px',
     fixed: 'left',
   },
-  // Naive UI 虚拟化无法释放图片资源内存，将会内存泄漏
   {
     title: 'Title',
     key: 'medium_image_url',
@@ -119,45 +110,6 @@ const createColumns_normal = (): DataTableColumns<RowData> => [
       return h('div', {}, routerLinks_artists);
     }
   },
-  // {
-  //   title: 'Artist',
-  //   key: 'artist',
-  //   width: '300px',
-  //   ellipsis: {
-  //     tooltip: true
-  //   },
-  //   render(row) {
-  //     const artists = row.artist.split('/'); // 将艺术家名称分割成一个字符串数组
-  //     // 创建一个包含所有艺术家名称的RouterLink数组
-  //     const routerLinks_artists = artists.map((artist: any, index: any) => {
-  //       return h(
-  //         RouterLink,
-  //         {
-  //           to: { name: 'home' },
-  //           params: { artist },
-  //           style: {
-  //             color: 'inherit',
-  //             textDecoration: 'none',
-  //             cursor: 'pointer',
-  //             transition: 'color 0.3s'
-  //           },
-  //           onMouseenter: (event: { target: { style: { textDecoration: string; color: string; }; }; }) => {
-  //             event.target.style.textDecoration = 'underline';
-  //             // event.target.style.color = 'blue';
-  //           },
-  //           onMouseleave: (event: { target: { style: { textDecoration: string; color: string; }; }; }) => {
-  //             event.target.style.textDecoration = 'none';
-  //             event.target.style.color = 'inherit';
-  //           },
-  //           key: index // 添加一个唯一的key属性以帮助Vue识别每个RouterLink
-  //         },
-  //         { default: () => artist }
-  //       );
-  //     });
-  //     // 将routerLinks数组转换为一个div元素并返回
-  //     return h('div', {}, routerLinks_artists);
-  //   }
-  // },
   {
     title: 'Album',
     key: 'album',
@@ -198,7 +150,6 @@ const createColumns_normal = (): DataTableColumns<RowData> => [
       tooltip: true
     }
   },
-  
 ];
 const createColumns_select = (): DataTableColumns<RowData> => [
   {
@@ -579,6 +530,10 @@ const cleanup = () => {
   }
 };
 
+const itemSize = 54;// height
+const gridItems = 5;
+const itemSecondarySize = 180;// width
+
 import {
   AddCircle32Regular,
   MultiselectLtr20Filled,
@@ -676,7 +631,7 @@ import { RouterLink } from 'vue-router';
 
     <!-- :pagination="paginationReactive" || virtual-scroll :max-height="1000" -->
     <!-- :row-key唯一标识，防止数据混乱  -->
-    <n-data-table
+    <!-- <n-data-table
       class="table"
       :columns="columns" :loading="bool_loading" 
       :data="props.data_temporary"
@@ -694,7 +649,67 @@ import { RouterLink } from 'vue-router';
       :scroll-x="1800"
       virtual-scroll
       :max-height="1000"
-    />
+    /> -->
+
+    <!-- 
+      :grid-items="gridItems"
+      :item-secondary-size="itemSecondarySize"
+    -->
+    <DynamicScroller
+      class="table"
+      :items="props.data_temporary"
+      :emit-update="true"
+      :item-size="itemSize">
+      <template #before>
+        <div class="notice">
+          The message heights are unknown.
+        </div>
+      </template>
+      <template #after>
+        <div class="notice">
+          You have reached the end.
+        </div>
+      </template>
+      <template #default="{ item, index, active }">
+        <DynamicScrollerItem
+          :item="item"
+          :active="active"
+          :data-index="index"
+          :data-active="active"
+          class="message"    
+          :size-dependencies="[
+            item.message,
+          ]"
+          :title="`Click to change message ${index}`">
+          <div class="media_info">
+            <div class="index">
+              <span>{{ index }}</span>
+            </div>
+            <div class="medium_image_url" style="width: 50px; height: 50px; border-radius: 6px; overflow: hidden;">
+              <img
+                :key="item.id"
+                :src="item.medium_image_url"
+                style="width: 100%; height: 100%; object-fit: cover;"
+                class="image"
+              >
+            </div>
+            <div class="title">
+              <span>{{ item.title }}</span>
+            </div>
+            <div class="artist">
+              <span>{{ item.artist }}</span>
+            </div>
+            <div class="album">
+              <span>{{ item.album }}</span>
+            </div>
+            <div class="duration_txt">
+              <span>{{ item.duration_txt }}</span>
+            </div>
+          </div>
+          
+        </DynamicScrollerItem>
+      </template>
+    </DynamicScroller>
   </n-space>
   <!-- <n-pagination
     style="position: absolute;right: 10px;bottom: 10px;"
@@ -723,5 +738,52 @@ import { RouterLink } from 'vue-router';
 .table {
   width: calc(100vw - 200px);
   height: calc(100vh - 230px);
+  flex: auto 1 1;
+  border: solid 1px #42b983;
+}
+.message {
+  display: flex;
+  min-height: 12px;
+  padding: 12px;
+  box-sizing: border-box;
+}
+.dynamic-scroller-demo {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.index{
+
+}
+.medium_image_url{
+  margin-left: 10px;
+  width: 50px;
+}
+.title{
+  margin-left: 10px;
+  width: 200px;
+}
+.artist{
+  margin-left: 10px;
+  width: 200px;
+}
+.album{
+  margin-left: 10px;
+  width: 200px;
+}
+.duration_txt{
+  margin-left: 10px;
+  width: 200px;
+}
+
+.media_info {
+  width: 100vw;
+  height: 54px;
+  display: flex;
+  box-sizing: border-box;
+}
+.media_info:hover {
+  background-color: #42b983;
 }
 </style>

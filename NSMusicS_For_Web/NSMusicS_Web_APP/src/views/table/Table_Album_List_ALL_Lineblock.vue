@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, h, nextTick, onMounted, reactive, ref, watch } from 'vue';
+  import { computed, h, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 
   const emit = defineEmits([
     'album_page_num',
@@ -7,7 +7,6 @@
     'options_Sort_key','keyword','reset_data'
   ]);
   const props = defineProps<{
-    data: Item_Album[];
     data_temporary: Item_Album[];
     page: number;
     pageSize: number;
@@ -16,32 +15,16 @@
     window_innerWidth: number;
     options_Sort_key:{ columnKey: string; order: string }[];
   }>();
-  // 重新渲染列表 width
-
+  //
+  const click_play_this_medialist = () => {
+    // 添加函数的具体逻辑
+    
+  }
   //
   const item_album_margin = ref<number>(12)
   const item_album = ref<number>(170)
   const item_album_image = ref<number>(item_album.value - 20)
   const item_album_txt = ref<number>(item_album.value - 30)
-  //
-  const paginationReactive = reactive({
-    page: 1,
-    pageCount: props.pageCount,
-    pageSize: props.pageSize,
-    showSizePicker: true,
-    showQuickJumper: true,
-    pageSizes: [10, 30, 50],
-  })
-  const pagination_onChange = (page: number) => {
-    paginationReactive.page = page
-    emit('album_page_num',page)
-    scrollToTop()
-  }
-  const pagination_onUpdatePageSize = (pageSize: number) => {
-    paginationReactive.pageSize = pageSize
-    paginationReactive.page = 1
-    emit('album_page_size',pageSize)
-  }
   //
   const scrollbar = ref<HTMLElement | null>(null);
   const scrollToTop = () => {
@@ -53,167 +36,6 @@
   const handleImageError = (event:any) => {
     event.target.src = '../../../resources/error_album.jpg'; // 设置备用图片路径
   };
-  //
-  enum state_Sort {
-    Ascend = 'ascend',
-    Descend = 'descend',
-    Default = 'default'
-  }
-  type SortItem = {
-    label:string;
-    key: string;
-    state_Sort: state_Sort;
-  };
-  const options_Sort_key = ref<SortItem[]>([
-    {label:'标题名', key: 'title', state_Sort: state_Sort.Default },
-    {label:'歌手名', key: 'artist', state_Sort: state_Sort.Default },
-    {label:'专辑名', key: 'album', state_Sort: state_Sort.Default }
-  ]);
-  const options_Sort = computed(() => {
-    if(props.options_Sort_key != null && props.options_Sort_key.length > 0){
-      options_Sort_key.value.forEach(element => {
-        if(element.key === props.options_Sort_key[0].columnKey)
-          if(props.options_Sort_key[0].order === state_Sort.Ascend)
-            element.state_Sort = state_Sort.Ascend
-          else if(props.options_Sort_key[0].order === state_Sort.Descend)
-            element.state_Sort = state_Sort.Descend
-      });
-    }
-    return options_Sort_key.value.map(item => {
-      let icon: DefineComponent<{}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, EmitsOptions, string, VNodeProps & AllowedComponentProps & ComponentCustomProps, Readonly<ExtractPropTypes<{}>>, {}, {}>;
-      switch (item.state_Sort) {
-        case state_Sort.Ascend:
-          icon = TextSortAscending20Regular;
-          break;
-        case state_Sort.Descend:
-          icon = TextSortDescending20Regular;
-          break;
-        case state_Sort.Default:
-          icon = ArrowSort24Regular;
-          break;
-      }
-      return {
-        label: item.label,
-        key: item.key,
-        icon() {
-          return h(NIcon, null, {
-            default: () => h(icon)
-          });
-        }
-      };
-    });
-  });
-  const handleSelect_Sort = (key: string | number) => {
-    let _state_Sort_: state_Sort = state_Sort.Default;
-    let idx: number = -1;
-    // 查找当前 key 对应的状态及索引
-    for (let i = 0; i < options_Sort_key.value.length; i++) {
-      if (options_Sort_key.value[i].key === key) {
-        _state_Sort_ = options_Sort_key.value[i].state_Sort;
-        idx = i;
-      } else {
-        // 将其他 key 对应的状态设置为 Default
-        options_Sort_key.value[i].state_Sort = state_Sort.Default;
-      }
-    }
-    // 切换当前 key 对应的状态
-    switch (_state_Sort_) {
-      case state_Sort.Ascend:
-        options_Sort_key.value[idx].state_Sort = state_Sort.Descend;
-        _state_Sort_ = state_Sort.Descend;
-        break;
-      case state_Sort.Descend:
-        options_Sort_key.value[idx].state_Sort = state_Sort.Default;
-        _state_Sort_ = state_Sort.Default;
-        break;
-      case state_Sort.Default:
-        options_Sort_key.value[idx].state_Sort = state_Sort.Ascend;
-        _state_Sort_ = state_Sort.Ascend;
-        break;
-    }
-    // emit('options_Sort_key',options_Sort_key.value)
-    // 更新排序参数数组并执行排序操作
-    const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
-    emit('options_Sort_key',sortersArray)
-    // sortByColumnKeys(sortersArray);
-  }
-  const options_Sort_key_Default_key = ref<string>()
-  const options_Sort_key_Default = ref<SortItem[]>()
-  //
-  const bool_show_search_area = ref<boolean>(false)
-  const show_search_area = () => {
-    if(bool_show_search_area.value === true)
-    {
-      bool_show_search_area.value = false
-      if(bool_input_search == true){
-        emit('reset_data',true)
-        back_search_default()
-        bool_input_search = false
-      }
-    }
-    else
-    {
-      bool_show_search_area.value = true
-      options_Sort_key_Default.value = options_Sort_key.value.slice()
-      options_Sort_key.value.forEach(element => {//保存 sort key
-        if(element.state_Sort != state_Sort.Default)
-          options_Sort_key_Default_key.value = element.key
-      });
-    }
-    input_search_InstRef.value?.clear()
-  }
-  const input_search_InstRef = ref<InputInst>()
-  const input_search_Value = ref<string>()
-  let bool_input_search = false
-  const click_search = () => {
-    if (input_search_Value.value){
-      const keyword = input_search_Value.value.toLowerCase();
-      emit('keyword',keyword)
-      bool_input_search = true
-      options_Sort_key.value.forEach(element => {
-        element.state_Sort = state_Sort.Default
-      });
-    }else{
-      emit('reset_data',true)
-      bool_input_search = false
-      back_search_default()
-    }
-  };
-  const back_search_default = () => {
-    if(options_Sort_key_Default.value != null){
-      options_Sort_key.value = options_Sort_key_Default.value.slice()
-      options_Sort_key.value.forEach(element => {
-        if(element.key != options_Sort_key_Default_key.value){
-          handleSelect_Sort(element.key)
-        }
-      });
-      for(let i = 0;i < options_Sort_key.value.length;i++)
-      {
-        if(options_Sort_key.value[i].key === options_Sort_key_Default_key.value){   
-          handleSelect_Sort(options_Sort_key.value[i].key)
-        }
-      }
-    }
-  }
-  //
-  const click_play_this_medialist = () => {
-    
-  }
-  //
-  const itemsPerRow = 6; // 每行显示的 album 数量
-  const calculateRowHeight = computed(() => {
-    const albumHeight = 200; // 请根据实际情况调整每个 album 的高度
-    return albumHeight + 2 * item_album_margin.value; // 加上上下 margin
-  });
-  const rowItems = computed(() => {
-    const data = props.data_temporary;
-    const result = [];
-    for (let i = 0; i < data.length; i += itemsPerRow) {
-      result.push(data.slice(i, i + itemsPerRow));
-    }
-    return result;
-  });
-  //
 
   import {
     Play16Filled,
@@ -233,151 +55,80 @@
   } from '@vicons/fluent'
   import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
   import { InputInst, NIcon } from 'naive-ui';
+
+  //
+  const data = ref<Item_Album[]>([]);
+  const itemSize = 220;
+  const gridItems = 5;
+  const itemSecondarySize = 180;
+
+  onMounted(() => {
+    // 在组件挂载后，初始化数据等操作
+    loadData();
+  });
+  function loadData() {
+    // 加载数据到动态滚动组件
+    data.value = props.data_temporary.slice()
+  }
+  onBeforeUnmount(() => {
+    // 在组件销毁之前执行清理操作
+    unsubscribeEvents();
+    destroyChildComponents();
+    clearData();
+    resetReferences();
+  });
+  function unsubscribeEvents() {
+    // 取消事件订阅，以防止内存泄漏
+    
+  }
+  function destroyChildComponents() {
+    // 销毁动态滚动组件的子组件
+    
+  }
+  function clearData() {
+    // 清空动态滚动组件的数据
+    data.value = [];
+  }
+
+  function resetReferences() {
+    // 重置对动态滚动组件的引用
+  
+  }
+  function onWheel(event:any) {
+    // 处理滚动事件的逻辑
+    
+  }
+
 </script>
 <template>
-  <n-space  :size="12">
-    <n-space>
-      <n-button type="primary" secondary strong tertiary round @click="click_play_this_medialist">
-        <template #icon>
-          <n-icon :size="26">
-            <PlayCircle20Filled/>
-          </n-icon>
-        </template>
-        播放
-      </n-button>
-    </n-space>
-    
-    <n-dropdown 
-      trigger="click" :show-arrow="true" 
-      :options="options_Sort" @select="handleSelect_Sort">
-      <n-button tertiary circle>
-        <template #icon>
-          <n-icon :size="20"><Filter16Regular/></n-icon>
-        </template>
-      </n-button>
-    </n-dropdown>
-
-    <n-button tertiary circle @click="show_search_area">
-      <template #icon>
-        <n-icon :size="20"><Search20Filled/></n-icon>
-      </template>
-    </n-button>
-    <n-input-group 
-      v-if="bool_show_search_area"
-      :style="{ width: '200px' }">
-      <n-input 
-        :style="{ width: '160px' }" 
-        ref="input_search_InstRef" 
-        v-model:value="input_search_Value"
-        @keydown.enter="click_search"/>
-      <n-button type="primary" ghost @click="click_search">
-        <template #icon>
-          <n-icon :size="20"><Search20Filled/></n-icon>
-        </template>
-      </n-button>
-    </n-input-group>
-
-    <n-dropdown 
-      trigger="click" :show-arrow="true" 
-      :options="options_Sort" @select="handleSelect_Sort">
-      <n-button tertiary circle>
-        <template #icon>
-          <n-icon :size="20"><ArrowSort24Regular/></n-icon>
-        </template>
-      </n-button>
-    </n-dropdown>  
-  </n-space>
   <n-space class="album-wall-container" vertical>
-    <!-- <div class="album-wall" ref="scrollbar" style="overflow-y: scroll;">
-      <div v-for="item in props.data_temporary" :key="item.id" class="album" 
-        :style="{ margin: item_album_margin + 'px' }"
-        @mouseover="item.isHovered = true"
-        @mouseleave="item.isHovered = false">
-        <div 
-          :style="{ 
-            width: item_album_image + 'px', 
-            height: item_album_image + 'px', 
-            position: 'relative' }">
-          <img 
-            v-bind:src="item.medium_image_url"
-            @error="handleImageError"
-            :style="{ 
-              width: item_album_image + 'px', 
-              height: item_album_image + 'px', 
-              borderRadius: '6px' }"/>
-          <n-space 
-            v-if="item.isHovered"
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 6px;
-            background: linear-gradient(to bottom, transparent, black);">
-            <div style="
-              display: flex; justify-content: center; align-items: center; 
-              height: 100%;">
-              <n-float-button 
-                :style="{ left: item_album / 3 + 'px'}"
-                color="#FFFFFF" position="absolute">
-                <n-icon><Play16Filled /></n-icon>
-              </n-float-button>
-              <div style="position: absolute; bottom: 10px; right: 10px;">
-                <n-button quaternary circle color="#FFFFFF">
-                  <template #icon>
-                    <n-icon><Heart24Regular /></n-icon>
-                  </template>
-                </n-button>
-                <n-button quaternary circle color="#FFFFFF">
-                  <template #icon>
-                    <n-icon><MoreCircle32Regular /></n-icon>
-                  </template>
-                </n-button>
-              </div>
-            </div>
-          </n-space>
-        </div>
-        <n-space class="album_text"
-          :style="{ width: + 'px'}">
-          <div class="bar_left_text_song_info" 
-            :style="{ width:item_album_image + 'px'}">
-            <n-ellipsis id="bar_singer_name"
-              :style="{ maxWidth:item_album_txt + 'px'}">{{ item.name }}</n-ellipsis>
-            <n-ellipsis id="bar_song_name"
-              :style="{ maxWidth:item_album_txt + 'px'}">{{ item.artist }}</n-ellipsis>
-            <n-ellipsis id="bar_album_name"
-              :style="{ maxWidth:item_album_txt + 'px'}">{{ item.updated_time }}</n-ellipsis>
-          </div>
-        </n-space>
-      </div>
-    </div> -->
-    <!-- <n-virtual-list class="album-wall" 
-      :item-size="42"
-      :items="props.data_temporary">
+    <DynamicScroller
+      class="album-wall"
+      :items="props.data_temporary"
+      :key-field="'id'"
+      :item-size="itemSize"
+      :grid-items="gridItems"
+      :item-secondary-size="itemSecondarySize">
       <template #default="{ item }">
-        <div :key="item.id" class="album" :style="{ margin: item_album_margin + 'px' }"
-            @mouseover="item.isHovered = true"
-            @mouseleave="item.isHovered = false">
-          <div 
-            :style="{ 
-              width: item_album_image + 'px', 
-              height: item_album_image + 'px', 
-              position: 'relative' }">
-            <img 
+        <div
+          :key="item.id"
+          class="album"
+          :style="{ margin: item_album_margin + 'px' }"
+        >
+          <div
+            :style="{ width: item_album_image + 'px', height: item_album_image + 'px', position: 'relative' }"
+          >
+            <img
               :src="item.medium_image_url"
               @error="handleImageError"
-              :style="{ 
-                width: item_album_image + 'px', 
-                height: item_album_image + 'px', 
-                borderRadius: '6px' }"/>
-            <n-space 
-              v-if="item.isHovered"
-              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 6px;
-              background: linear-gradient(to bottom, transparent, black);">
-              <div style="
-                display: flex; justify-content: center; align-items: center; 
-                height: 100%;">
-                <n-float-button 
-                  :style="{ left: item_album / 3 + 'px'}"
-                  color="#FFFFFF" position="absolute">
+              :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"
+            />
+            <n-space class="hover-overlay">
+              <div class="hover-content">
+                <n-float-button :style="{ left: item_album / 3 + 'px' }" color="#FFFFFF" position="absolute">
                   <n-icon><Play16Filled /></n-icon>
                 </n-float-button>
-                <div style="position: absolute; bottom: 10px; right: 10px;">
+                <div class="hover-buttons">
                   <n-button quaternary circle color="#FFFFFF">
                     <template #icon>
                       <n-icon><Heart24Regular /></n-icon>
@@ -392,84 +143,18 @@
               </div>
             </n-space>
           </div>
-          <n-space class="album_text"
-            :style="{ width: + 'px'}">
-            <div class="bar_left_text_song_info" 
-              :style="{ width:item_album_image + 'px'}">
-              <n-ellipsis id="bar_singer_name"
-                :style="{ maxWidth:item_album_txt + 'px'}">{{ item.name }}</n-ellipsis>
-              <n-ellipsis id="bar_song_name"
-                :style="{ maxWidth:item_album_txt + 'px'}">{{ item.artist }}</n-ellipsis>
-              <n-ellipsis id="bar_album_name"
-                :style="{ maxWidth:item_album_txt + 'px'}">{{ item.updated_time }}</n-ellipsis>
+          <n-space class="album_text" :style="{ width: item_album_image + 'px' }">
+            <div class="bar_left_text_song_info" :style="{ width: item_album_txt + 'px' }">
+              <n-ellipsis id="bar_singer_name" :style="{ maxWidth: item_album_txt + 'px' }">{{ item.name }}</n-ellipsis>
+              <n-ellipsis id="bar_song_name" :style="{ maxWidth: item_album_txt + 'px' }">{{ item.artist }}</n-ellipsis>
+              <n-ellipsis id="bar_album_name" :style="{ maxWidth: item_album_txt + 'px' }">{{ item.updated_time }}</n-ellipsis>
             </div>
           </n-space>
         </div>
       </template>
-    </n-virtual-list> -->
-    <n-virtual-list class="album-wall" :item-size="calculateRowHeight" :items="rowItems">
-      <template #default="{ item }">
-        <div class="album-row">
-          <div v-for="album in item" :key="album.id" class="album" :style="{ margin: item_album_margin + 'px' }"
-            @mouseover="album.isHovered = true"
-            @mouseleave="album.isHovered = false">
-            <div 
-              :style="{ 
-                width: item_album_image + 'px', 
-                height: item_album_image + 'px', 
-                position: 'relative' }">
-              <img 
-                :src="album.medium_image_url"
-                @error="handleImageError"
-                :style="{ 
-                  width: item_album_image + 'px', 
-                  height: item_album_image + 'px', 
-                  borderRadius: '6px' }"/>
-              <n-space 
-                v-if="album.isHovered"
-                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 6px;
-                background: linear-gradient(to bottom, transparent, black);">
-                <div style="
-                  display: flex; justify-content: center; align-items: center; 
-                  height: 100%;">
-                  <n-float-button 
-                    :style="{ left: item_album / 3 + 'px'}"
-                    color="#FFFFFF" position="absolute">
-                    <n-icon><Play16Filled /></n-icon>
-                  </n-float-button>
-                  <div style="position: absolute; bottom: 10px; right: 10px;">
-                    <n-button quaternary circle color="#FFFFFF">
-                      <template #icon>
-                        <n-icon><Heart24Regular /></n-icon>
-                      </template>
-                    </n-button>
-                    <n-button quaternary circle color="#FFFFFF">
-                      <template #icon>
-                        <n-icon><MoreCircle32Regular /></n-icon>
-                      </template>
-                    </n-button>
-                  </div>
-                </div>
-              </n-space>
-            </div>
-            <n-space class="album_text"
-              :style="{ width: + 'px'}">
-              <div class="bar_left_text_song_info" 
-                :style="{ width:item_album_image + 'px'}">
-                <n-ellipsis id="bar_singer_name"
-                  :style="{ maxWidth:item_album_txt + 'px'}">{{ album.name }}</n-ellipsis>
-                <n-ellipsis id="bar_song_name"
-                  :style="{ maxWidth:item_album_txt + 'px'}">{{ album.artist }}</n-ellipsis>
-                <n-ellipsis id="bar_album_name"
-                  :style="{ maxWidth:item_album_txt + 'px'}">{{ album.updated_time }}</n-ellipsis>
-              </div>
-            </n-space>
-          </div>
-        </div>
-      </template>
-    </n-virtual-list>
+    </DynamicScroller>
   </n-space>
-  <n-pagination
+  <!-- <n-pagination
     style="position: absolute;right: 10px;bottom: 10px;"
     :display-order="['quick-jumper', 'pages', 'size-picker']"
     :page-sizes="[10, 30, 50]"
@@ -479,13 +164,12 @@
     :page="props.page"
     :page-count="props.pageCount"
     show-quick-jumper
-    show-size-picker/>
+    show-size-picker/> -->
 </template>
 <style>
 .album-wall-container {
   width: 100%;
   height: 100%;
-  overflow: hidden;
 }
 .album-wall {
   overflow-y: auto;
@@ -495,15 +179,43 @@
   width: calc(100vw - 200px);
   height: calc(100vh - 230px);
   margin-top: 10px;
+
   display: flex;
-  flex-wrap: wrap;
-  justify-content: start;  
-  align-items: flex-start;
+  flex-direction: column;
 }
+
 .album {
   float: left;
   flex-direction: column;
   align-items: left;
+  width: 100px; /* 设置每个网格项的宽度 */
+  height: 100px; /* 设置每个网格项的高度 */
+  margin: 10px; /* 设置每个网格项的外边距 */
+}
+.album .hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(to bottom, transparent, black);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.album:hover .hover-overlay {
+  opacity: 1;
+}
+.album .hover-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.album .hover-buttons {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 
 .album_text .bar_left_text_song_info{
@@ -511,6 +223,7 @@
   text-align: left;
 }
 .album_text .bar_left_text_song_info #bar_singer_name{
+  margin-top: 2px;
   font-size: 14px;
   font-weight: 500;
   display: -webkit-box;

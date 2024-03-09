@@ -75,13 +75,15 @@ export class Audio_Players {
         // 断开音频节点的连接
         this.disconnectNodes();
 
-        if(audioBuffer_clear)
-            this.audioBuffer = null;//手动清空
-
         this.bufferSourceNode = null;
         this.volumeGainNode = null;
         this.fadeGainNode = null;
         this.progressBarNode = null;
+
+        if(audioBuffer_clear){
+            // this.audioContext.close();
+            this.audioBuffer = null;//手动清空
+        }
     }
     // 停止音频播放
     private stop(): void {

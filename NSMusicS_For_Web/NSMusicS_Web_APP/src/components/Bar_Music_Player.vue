@@ -7,12 +7,16 @@
   const emit = defineEmits();
 
   // open view musicplayer
-  const svg_shrink_up_arrow = ref<string>('../../resources/shrink_up_arrow.svg');
-  const svg_shrink_down_arrow = ref<string>('../../resources/shrink_down_arrow.svg');
+  const svg_shrink_up_arrow = ref<string>('shrink_up_arrow.svg');
+  const svg_shrink_down_arrow = ref<string>('shrink_down_arrow.svg');
   const back_display = ref('none');
   const back_filter_blurValue  = ref(0);
   function getAssetImage(firstImage: string) {
     return new URL(firstImage, import.meta.url).href;
+  }
+  let path = require('path');
+  function getAssetImage_SVG(firstImage: string) {
+    return new URL(path.resolve(process.cwd(), 'resources') + '\\'+firstImage).href;
   }
   const hover_back_img = () => {
     back_display.value = 'block';
@@ -25,7 +29,7 @@
   const click_back_svg = () => {
     svg_shrink_up_arrow.value = 
     svg_shrink_up_arrow.value === 
-      '../../resources/shrink_up_arrow.svg' ? svg_shrink_down_arrow.value : '../../resources/shrink_up_arrow.svg';
+      'shrink_up_arrow.svg' ? svg_shrink_down_arrow.value : 'shrink_up_arrow.svg';
 
     margin_top_value_view_music_player.value = 
       margin_top_value_view_music_player.value === 
@@ -56,7 +60,7 @@
   };
   const total_play_time = ref('04:42');
   const current_play_time = ref('01:36');
-  const slider_singleValue = ref(60)
+  const slider_singleValue = ref(0)
   const currentTime_added_value = ref(0)
   const player_no_progress_jump = ref(true)
   //
@@ -87,6 +91,7 @@
             currentTime_added_value.value = 0;
             player.releaseMemory(true);
             clearInterval(timer);
+            this_audio_buffer_file.value = null
 
             player_no_progress_jump.value = false;
           }
@@ -158,6 +163,7 @@
             currentTime_added_value.value = 0;
             player.releaseMemory(true);
             clearInterval(timer);
+            this_audio_buffer_file.value = null
 
             player_no_progress_jump.value = false;
           }
@@ -234,7 +240,7 @@
       <div class="gird_Left">
         <div class="button_open_player_view">
           <img class="back_svg" 
-              :src="getAssetImage(svg_shrink_up_arrow)" 
+              :src="getAssetImage_SVG(svg_shrink_up_arrow)" 
               :style="{ display: back_display }"
               @click="click_back_svg" @mouseover="hover_back_img" @mouseout="leave_back_svg"/>
           <img class="back_img" 

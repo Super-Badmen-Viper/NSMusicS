@@ -1,67 +1,83 @@
-<script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
-const avatars = [
-  'https://avatars.githubusercontent.com/u/20943608?s=60&v=4',
-  'https://avatars.githubusercontent.com/u/46394163?s=60&v=4',
-  'https://avatars.githubusercontent.com/u/39197136?s=60&v=4',
-  'https://avatars.githubusercontent.com/u/19239641?s=60&v=4'
-]
-
-const items = ref<{ key: string; value: number; avatar: string; }[]>([])
-const albumSize = ref(20) // 初始专辑尺寸
-
-onMounted(() => {
-  items.value = Array.from({ length: 10000 }, (_, i) => ({
-    key: `${i}`,
-    value: i,
-    avatar: avatars[i % avatars.length]
-  }))
-})
-</script>
 <template>
-  <div class="album-wall-container">
-    <n-virtual-list class="album-wall" 
-      :item-size="albumSize" 
-      :items="items"
-      ignore-item-resize>
-      <template #default="{ item }">
-        <div class="album" :key="item.key">
-          <img class="album-cover" :src="item.avatar" alt="">
-          <br>
-          <span class="album-title">{{ item.value }}</span>
+  <DynamicScroller
+    :items="generateItems(20000)"
+    :key-field="'id'"
+    :min-item-size="54"
+    class="scroller"
+  >
+    <template v-slot="{ item, index, active }">
+      <DynamicScrollerItem
+        :item="item"
+        :active="active"
+        :size-dependencies="[
+          item.message,
+        ]"
+        :data-index="index"
+      >
+        <div class="grid-item">
+          <div class="avatar">
+            <img
+              :src="item.avatar"
+              :key="item.avatar"
+              alt="avatar"
+              class="image"
+            >
+          </div>
+          <div class="text">{{ item.message }}</div>
         </div>
-      </template>
-    </n-virtual-list>
-  </div>
+      </DynamicScrollerItem>
+    </template>
+  </DynamicScroller>
 </template>
-<style>
-.album-wall-container {
-  width: 100%;
+
+<script>
+export default {
+  props: {
+    items: Array,
+  },
+  methods: {
+    generateItems(count) {
+      const items = [];
+      for (let i = 0; i < count; i++) {
+        items.push({
+          id: i,
+          avatar: `path/to/avatar-${i}.png`,
+          message: `Message ${i + 1}`,
+        });
+      }
+      return items;
+    },
+  },
+};
+</script>
+
+<style scoped>
+.scroller {
   height: 100%;
 }
-.album-wall {
-  max-width: calc(100vw - 200px);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: start;
-  align-items: flex-start;
-  padding: 10px;
-}
-.album {
-  margin: 10px;
-  float: left;
-  flex-direction: column;
+
+.grid-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 10px;
   align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
 }
-.album-cover {
-  width: 150px;
-  height: 150px;
-  border-radius: 8px;
+
+.avatar {
+  width: 50px;
+  height: 50px;
 }
-.album-title {
-  margin-top: 10px;
-  font-size: 14px;
-  text-align: center;
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.text {
+  font-size: 16px;
+  font-weight: bold;
 }
 </style>

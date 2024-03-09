@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref,defineEmits, onBeforeUnmount, onMounted } from 'vue';
-import Table_Song_List from '../views/table/Table_Song_List_ALL.vue'
+import Table_Song_List from '../views/table/Table_Song_List_ALL_Virtual.vue'
 
 const data_select_Index = ref<number>(-1)
 function get_data_select_Index(value: any) {
@@ -100,21 +100,20 @@ onMounted(async () => {
 
 const { 
   collapsed,window_innerWidth,
-  media_Files,media_Files_temporary,
+  media_Files_temporary,
   options_Sort_key,
-  media_page_num,media_page_size,media_page_length
+  media_page_num,media_page_size,media_page_length,
   } = defineProps<{
     collapsed:Boolean,window_innerWidth:number,
-    media_Files:Media_File[],media_Files_temporary:Media_File[],
+    media_Files_temporary:Media_File[],
     options_Sort_key:{ columnKey: string; order: string }[],
-    media_page_num:number,media_page_size:number,media_page_length:number
+    media_page_num:number,media_page_size:number,media_page_length:number,
   }>();
 </script>
 
 <template>
   <div class="view_show">
     <Table_Song_List
-      :data="media_Files" 
       :data_temporary="media_Files_temporary"
       :collapsed="collapsed"
       :window_innerWidth="window_innerWidth"

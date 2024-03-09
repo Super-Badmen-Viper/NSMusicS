@@ -3,7 +3,6 @@ interface Item_Album {
     title:string;
     album_title:string;
     updated_time:string;
-    isHovered:boolean;
 
     id: string;
     name: string;
