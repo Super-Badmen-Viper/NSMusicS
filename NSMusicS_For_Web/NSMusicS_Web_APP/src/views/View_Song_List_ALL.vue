@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref,defineEmits, onBeforeUnmount, onMounted } from 'vue';
-import Table_Song_List from '../views/table/Table_Song_List_ALL_Virtual.vue'
+import Table_Song_List from '../views/table/Table_Song_List_ALL_Line_Virtual.vue'
 
 const data_select_Index = ref<number>(-1)
 function get_data_select_Index(value: any) {
@@ -56,7 +56,9 @@ const emit = defineEmits([
   'menu_delete_this_song',
   'options_Sort_key',
   'keyword',
-  'reset_data'
+  'reset_data',
+  'media_Files_selected',
+  'set_media_Files_selected'
 ]);
 function get_media_path(value: any) {
   emit('media_file_path',value)
@@ -94,18 +96,24 @@ function get_reset_data(value: any) {
 function get_router_select(value: any) {
   emit('router_select',value)
 }
+function get_media_Files_selected(value: Media_File) {
+  emit('media_Files_selected',value)
+}
+function set_media_Files_selected(value: boolean) {
+  emit('set_media_Files_selected',value)
+}
 onMounted(async () => {
   emit('router_select','View_Song_List_ALL')
 });
 
 const { 
   collapsed,window_innerWidth,
-  media_Files_temporary,
+  media_Files_temporary,media_Files_selected,
   options_Sort_key,
   media_page_num,media_page_size,media_page_length,
   } = defineProps<{
     collapsed:Boolean,window_innerWidth:number,
-    media_Files_temporary:Media_File[],
+    media_Files_temporary:Media_File[],media_Files_selected:Media_File[],
     options_Sort_key:{ columnKey: string; order: string }[],
     media_page_num:number,media_page_size:number,media_page_length:number,
   }>();
@@ -115,6 +123,9 @@ const {
   <div class="view_show">
     <Table_Song_List
       :data_temporary="media_Files_temporary"
+      :data_temporary_selected="media_Files_selected"
+      @media_Files_selected="get_media_Files_selected"
+      @set_media_Files_selected="set_media_Files_selected"
       :collapsed="collapsed"
       :window_innerWidth="window_innerWidth"
       @media_file_path="get_media_path" 
@@ -146,3 +157,4 @@ const {
   height: calc(100vh - 200px);
 }
 </style>
+./table/Table_Song_List_ALL_Line_Virtual.vue

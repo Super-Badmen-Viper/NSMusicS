@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted,defineEmits } from 'vue';
-import Table_Album_List_ALL from '../views/table/Table_Album_List_ALL_Lineblock.vue'
+import Table_Album_List_ALL from '../views/table/Table_Album_List_ALL_Grid_Virtual.vue'
 
 const emit = defineEmits([
   'router_select',
@@ -58,3 +58,4 @@ const {
   height: calc(100vh - 200px);
 }
 </style>
+./table/Table_Album_List_ALL_Grid_Virtual.vue

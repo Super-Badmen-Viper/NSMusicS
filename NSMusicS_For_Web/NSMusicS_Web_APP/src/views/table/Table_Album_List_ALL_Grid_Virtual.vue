@@ -16,11 +16,6 @@
     options_Sort_key:{ columnKey: string; order: string }[];
   }>();
   //
-  const click_play_this_medialist = () => {
-    // 添加函数的具体逻辑
-    
-  }
-  //
   const item_album_margin = ref<number>(12)
   const item_album = ref<number>(170)
   const item_album_image = ref<number>(item_album.value - 20)
@@ -57,73 +52,87 @@
   import { InputInst, NIcon } from 'naive-ui';
 
   //
-  const data = ref<Item_Album[]>([]);
   const itemSize = 220;
-  const gridItems = 5;
-  const itemSecondarySize = 180;
-
-  onMounted(() => {
-    // 在组件挂载后，初始化数据等操作
-    loadData();
-  });
-  function loadData() {
-    // 加载数据到动态滚动组件
-    data.value = props.data_temporary.slice()
-  }
-  onBeforeUnmount(() => {
-    // 在组件销毁之前执行清理操作
-    unsubscribeEvents();
-    destroyChildComponents();
-    clearData();
-    resetReferences();
-  });
-  function unsubscribeEvents() {
-    // 取消事件订阅，以防止内存泄漏
-    
-  }
-  function destroyChildComponents() {
-    // 销毁动态滚动组件的子组件
-    
-  }
-  function clearData() {
-    // 清空动态滚动组件的数据
-    data.value = [];
-  }
-
-  function resetReferences() {
-    // 重置对动态滚动组件的引用
+  const gridItems = ref(6);
+  const itemSecondarySize = 160;
+  // 重新渲染gridItems
+  // const stopWatching_collapsed_width = watch(() => props.collapsed, (newValue, oldValue) => {
+  //   if (props.collapsed == true) {
+  //     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
+  //   } else {
+  //     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
+  //   }
+  // });
+  // let bool_watch = false;
+  // const timer = ref<NodeJS.Timeout | null>(null);//防止大量的重复渲染，造成界面假死
+  // const startTimer = () => {
+  //   timer.value = setInterval(() => {
+  //     bool_watch = true;
+  //   }, 1000);
+  // };
+  // onMounted(() => {
+  //   startTimer();
+  // });
+  // const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (newValue, oldValue) => {
+  //   bool_watch = false;
+  //   if (props.collapsed == true) {
+  //     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
+  //   } else {
+  //     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
+  //   }
+  //   if (bool_watch) {
+  //     startTimer();
+  //   }
+  // });
+  // //
+  // onBeforeUnmount(() => {
+  //   cleanup();
+  // });
+  // const cleanup = () => {
+  //   stopWatching_collapsed_width()
+  //   stopWatching_window_innerWidth()
+  //   if (timer.value) {
+  //     clearInterval(timer.value);
+  //     timer.value = null;
+  //   }
+  // };
   
-  }
-  function onWheel(event:any) {
-    // 处理滚动事件的逻辑
-    
-  }
-
+  // const data = ref<Item_Album[]>(props.data_temporary.slice());
+  // let bool_init = false;
+  // watch(data, () => {
+  //   if (props.data_temporary.length !== 0 && !bool_init) {
+  //     data.value = props.data_temporary.slice();
+  //     bool_init = true;
+  //   }
+  // });
+  // onBeforeUnmount(() => {
+  //   cleanup();
+  // });
+  // const cleanup = () => {
+  //   data.value = [];
+  // };
 </script>
 <template>
-  <n-space class="album-wall-container" vertical>
+  <div class="album-wall-container">
     <DynamicScroller
-      class="album-wall"
+      class="album-wall" 
       :items="props.data_temporary"
-      :key-field="'id'"
-      :item-size="itemSize"
+      :itemSize="itemSize"
+      :minItemSize="itemSize"
       :grid-items="gridItems"
       :item-secondary-size="itemSecondarySize">
       <template #default="{ item }">
         <div
           :key="item.id"
           class="album"
-          :style="{ margin: item_album_margin + 'px' }"
-        >
+          :style="{ margin: item_album_margin + 'px' }">
           <div
-            :style="{ width: item_album_image + 'px', height: item_album_image + 'px', position: 'relative' }"
-          >
+            :style="{ width: item_album_image + 'px', height: item_album_image + 'px', position: 'relative' }">
             <img
               :src="item.medium_image_url"
               @error="handleImageError"
-              :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"
-            />
-            <n-space class="hover-overlay">
+              :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
+            <div class="hover-overlay">
               <div class="hover-content">
                 <n-float-button :style="{ left: item_album / 3 + 'px' }" color="#FFFFFF" position="absolute">
                   <n-icon><Play16Filled /></n-icon>
@@ -141,30 +150,19 @@
                   </n-button>
                 </div>
               </div>
-            </n-space>
+            </div>
           </div>
-          <n-space class="album_text" :style="{ width: item_album_image + 'px' }">
+          <div class="album_text" :style="{ width: item_album_image + 'px' }">
             <div class="bar_left_text_song_info" :style="{ width: item_album_txt + 'px' }">
               <n-ellipsis id="bar_singer_name" :style="{ maxWidth: item_album_txt + 'px' }">{{ item.name }}</n-ellipsis>
               <n-ellipsis id="bar_song_name" :style="{ maxWidth: item_album_txt + 'px' }">{{ item.artist }}</n-ellipsis>
               <n-ellipsis id="bar_album_name" :style="{ maxWidth: item_album_txt + 'px' }">{{ item.updated_time }}</n-ellipsis>
             </div>
-          </n-space>
+          </div>
         </div>
       </template>
     </DynamicScroller>
-  </n-space>
-  <!-- <n-pagination
-    style="position: absolute;right: 10px;bottom: 10px;"
-    :display-order="['quick-jumper', 'pages', 'size-picker']"
-    :page-sizes="[10, 30, 50]"
-    :pageSize="props.pageSize"
-    :on-update-page="pagination_onChange"
-    :on-update-page-size="pagination_onUpdatePageSize"
-    :page="props.page"
-    :page-count="props.pageCount"
-    show-quick-jumper
-    show-size-picker/> -->
+  </div>
 </template>
 <style>
 .album-wall-container {
@@ -173,24 +171,16 @@
 }
 .album-wall {
   overflow-y: auto;
-  margin-right: -17px; /* 调整为滚动条宽度 */
-  padding-right: 17px; /* 补偿滚动条的空间 */
-
   width: calc(100vw - 200px);
   height: calc(100vh - 230px);
   margin-top: 10px;
-
   display: flex;
   flex-direction: column;
 }
-
 .album {
   float: left;
   flex-direction: column;
   align-items: left;
-  width: 100px; /* 设置每个网格项的宽度 */
-  height: 100px; /* 设置每个网格项的高度 */
-  margin: 10px; /* 设置每个网格项的外边距 */
 }
 .album .hover-overlay {
   position: absolute;
@@ -224,8 +214,8 @@
 }
 .album_text .bar_left_text_song_info #bar_singer_name{
   margin-top: 2px;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 800;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1; 

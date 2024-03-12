@@ -18,7 +18,9 @@ const emit = defineEmits([
   'menu_delete_this_song',
   'options_Sort_key',
   'keyword',
-  'reset_data'
+  'reset_data',
+  'media_Files_selected',
+  'set_media_Files_selected'
 ]);
 const columns = ref<DataTableColumns<RowData>>();
 const createColumns_normal = (): DataTableColumns<RowData> => [
@@ -158,7 +160,7 @@ const createColumns_select = (): DataTableColumns<RowData> => [
   }
 ];
 const props = defineProps<{
-  data_temporary: Media_File[];
+  data_temporary: Media_File[];data_temporary_selected: Media_File[];
   collapsed: Boolean;
   window_innerWidth: number;
   options_Sort_key:{ columnKey: string; order: string }[];
@@ -167,21 +169,13 @@ const props = defineProps<{
 onBeforeUnmount(() => {
   
 });
-const checkedRowKeysRef = ref<DataTableRowKey[]>([]);
 const data_select_Index = ref<number>(0)
-const checkedRowhandleCheck = (rowKeys: DataTableRowKey[]) => {
-  checkedRowKeysRef.value = rowKeys; 
-  click_count = 0
-};
 const click_select_ALL_row = () => {
-  if(checkedRowKeysRef.value.length != 0)
-  {
-    checkedRowKeysRef.value.length = 0
+  if(props.data_temporary_selected.length == 0){
+    emit('set_media_Files_selected', true);
   }else{
-    checkedRowKeysRef.value = props.data_temporary.map((row: { id: any; }) => row.id);
+    emit('set_media_Files_selected', false);
   }
-  // 强制更新组件
-  forceUpdate.value = !forceUpdate.value;
 }
 const click_bulk_operation = () => {
   if(bool_start_play.value == true)
@@ -530,9 +524,31 @@ const cleanup = () => {
   }
 };
 
-const itemSize = 54;// height
+const itemSize = 70;// height
 const gridItems = 5;
 const itemSecondarySize = 180;// width
+//
+const handleItemClick = () => {
+  click_count++
+}
+const handleItemDbClick = (media_file:Media_File) => {
+  if(bool_start_play.value == true){
+    emit('media_file_path', media_file.path)
+    emit('media_file_medium_image_url',media_file.medium_image_url)
+    emit('this_audio_singer_name',media_file.artist)
+    emit('this_audio_song_name',media_file.title)
+    emit('this_audio_album_name',media_file.album)
+    // emit('page_song_index', page_index); 
+
+    // data_select_Index.value = (current_page_num.value-1)*props.media_page_size + page_index;
+
+    // emit('data_select_Index', data_select_Index.value); 
+    emit('data_select_Index', media_file.absoluteIndex); 
+  }
+}
+
+const breadcrumbItems = ref(['乐曲','所有歌曲']);
+// const change_page_header_color = ref<>
 
 import {
   AddCircle32Regular,
@@ -625,103 +641,137 @@ import { RouterLink } from 'vue-router';
             <n-icon :size="20"><Delete20Regular/></n-icon>
           </template>
         </n-button>
-        <n-p style="margin-top: 6px;"> 你选中了 {{ checkedRowKeysRef.length }} 行。 </n-p>
+        <n-p style="margin-top: 6px;"> 你选中了 {{ props.data_temporary_selected.length }} 行。 </n-p>
       </n-space>
     </n-space>
-
-    <!-- :pagination="paginationReactive" || virtual-scroll :max-height="1000" -->
-    <!-- :row-key唯一标识，防止数据混乱  -->
-    <!-- <n-data-table
-      class="table"
-      :columns="columns" :loading="bool_loading" 
-      :data="props.data_temporary"
-      :bordered="false"
-      flex-height
-      striped
-      default-expand-all
-      :row-key="(row: RowData) => row.id"
-      @update:checked-row-keys="checkedRowhandleCheck"
-      @update-expanded-row-keys="checkedRowhandleCheck"
-      :checked-row-keys="checkedRowKeysRef"
-      @select="handleSelect_data_dropmenu"
-      :row-props="rowProps"
-
-      :scroll-x="1800"
-      virtual-scroll
-      :max-height="1000"
-    /> -->
 
     <!-- 
       :grid-items="gridItems"
       :item-secondary-size="itemSecondarySize"
     -->
-    <DynamicScroller
-      class="table"
-      :items="props.data_temporary"
-      :emit-update="true"
-      :item-size="itemSize">
-      <template #before>
-        <div class="notice">
-          The message heights are unknown.
-        </div>
-      </template>
-      <template #after>
-        <div class="notice">
-          You have reached the end.
-        </div>
-      </template>
-      <template #default="{ item, index, active }">
-        <DynamicScrollerItem
-          :item="item"
-          :active="active"
-          :data-index="index"
-          :data-active="active"
-          class="message"    
-          :size-dependencies="[
-            item.message,
-          ]"
-          :title="`Click to change message ${index}`">
-          <div class="media_info">
-            <div class="index">
-              <span>{{ index }}</span>
+    <div class="dynamic-scroller-demo">
+      <DynamicScroller 
+        class="table"
+        :items="props.data_temporary"
+        :emit-update="true" 
+        :itemSize="itemSize"
+        :minItemSize="itemSize - 20">
+        <template #before>
+          <div class="notice">
+            <div style="
+              position: absolute;
+              z-index: 0;
+              width: calc(100vw - 220px);height: calc(100vh - 440px);
+              border-radius: 20px;
+              overflow: hidden;
+              background-image: url(../../../resources/AOA_1.jpg);
+              background-size: cover;
+              background-position: top;
+              filter: blur(0px);
+              background-color: transparent;">
+              <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+                <defs>
+                  <linearGradient v-if="false" id="gradient" gradientTransform="rotate(90)">
+                    <stop offset="0%" stop-color="#d5d4d0"></stop>
+                    <stop offset="1%" stop-color="#d5d4d0"></stop> 
+                    <stop offset="31%" stop-color="#eeeeec"></stop>
+                    <stop offset="75%" stop-color="#efeeec"></stop>
+                    <stop offset="100%" stop-color="#e9e9e7"></stop>
+                  </linearGradient>
+                  <linearGradient v-if="true" id="gradient" gradientTransform="rotate(90)">
+                    <stop offset="0%" stop-color="#323232"></stop>
+                    <stop offset="40%" stop-color="#3F3F3F"></stop>
+                    <stop offset="150%" stop-color="#1C1C1C"></stop>
+                  </linearGradient>
+                </defs>
+                <path d="M0 0 L400 0 L0 800 Z" fill="url(#gradient)"></path>
+              </svg>
             </div>
-            <div class="medium_image_url" style="width: 50px; height: 50px; border-radius: 6px; overflow: hidden;">
-              <img
-                :key="item.id"
-                :src="item.medium_image_url"
-                style="width: 100%; height: 100%; object-fit: cover;"
-                class="image"
-              >
-            </div>
-            <div class="title">
-              <span>{{ item.title }}</span>
-            </div>
-            <div class="artist">
-              <span>{{ item.artist }}</span>
-            </div>
-            <div class="album">
-              <span>{{ item.album }}</span>
-            </div>
-            <div class="duration_txt">
-              <span>{{ item.duration_txt }}</span>
-            </div>
+            <n-page-header 
+              style="
+                position: relative;
+                z-index: 1;
+                width: calc(100vw - 220px);height: calc(100vh - 440px);
+                border-radius: 20px;
+                margin-bottom: 10px;">
+              <n-grid 
+                :cols="2" :x-gap="30" :y-gap="24" layout-shift-disabled
+                style="margin-left: 30px;width: 370px;">
+                <n-gi><n-statistic style="text-shadow: 10px white;" label="所有歌曲" value="1222 首" /></n-gi>
+                <n-gi><n-statistic label="收藏歌曲" value="68 首" /></n-gi>
+                <n-gi><n-statistic label="最近播放" value="999+ 首" /></n-gi>
+                <n-gi><n-statistic/></n-gi>
+                <n-gi><n-statistic style="font-size: 12px;" label="最多收听" value="Rain - Hip Song" /></n-gi>
+              </n-grid>
+              <template #title>
+                <n-space>
+                  <n-breadcrumb separator=">">
+                      <n-breadcrumb-item 
+                        v-for="item in breadcrumbItems" 
+                        :key="item" 
+                        style="font-size: 22px">
+                        {{ item }}
+                      </n-breadcrumb-item>
+                  </n-breadcrumb>
+                </n-space>  
+              </template>
+              <template #header>
+                
+              </template>
+              <template #avatar>
+                <n-image
+                  width="80px" 
+                  style="border-radius: 8px;margin-left: 20px;margin-top: 20px;"
+                  src="../../../resources/00album.png"
+                />
+              </template>
+              <template #extra>
+                
+              </template>
+              <template #footer>
+                
+              </template>
+            </n-page-header>
           </div>
+        </template>
+        <template #after>
           
-        </DynamicScrollerItem>
-      </template>
-    </DynamicScroller>
+        </template>
+        <template #default="{ item, index, active }">
+          <DynamicScrollerItem
+            :item="item"
+            :active="active"
+            :data-index="index"
+            :data-active="active"
+            class="message"
+            @Dblclick="handleItemDbClick(item)">
+            <div class="media_info">
+              <n-checkbox class="checkbox" 
+                v-if="!bool_start_play"
+                v-model:checked="item.selected"
+                @update:checked="checked => { 
+                  item.selected = checked;
+                  emit('media_Files_selected', item);
+                }"
+                />
+              <div class="medium_image_url">
+                <img
+                  :key="item.id"
+                  :src="item.medium_image_url"
+                  style="width: 100%; height: 100%; object-fit: cover;"
+                  class="image"/>
+              </div>
+              <n-ellipsis class="title">{{ item.title }}</n-ellipsis>
+              <n-ellipsis class="artist">{{ item.artist }}</n-ellipsis>
+              <n-ellipsis class="album">{{ item.album }}</n-ellipsis>
+              <n-ellipsis class="duration_txt" >{{ item.duration_txt }}</n-ellipsis>
+              <n-ellipsis class="index" style="margin-left: auto; text-align: left;">{{ index + 1 }}</n-ellipsis>
+            </div>
+          </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
+    </div>
   </n-space>
-  <!-- <n-pagination
-    style="position: absolute;right: 10px;bottom: 10px;"
-    :display-order="['quick-jumper', 'pages', 'size-picker']"
-    :page-sizes="[10, 30, 50]"
-    :pageSize="props.media_page_size"
-    :on-update-page="pagination_onChange"
-    :on-update-page-size="pagination_onUpdatePageSize"
-    :page="props.media_page_num"
-    :page-count="props.media_page_length"
-    show-quick-jumper
-    show-size-picker/> -->
   <n-dropdown
     placement="bottom-start"
     trigger="manual"
@@ -735,55 +785,56 @@ import { RouterLink } from 'vue-router';
 </template>
 
 <style>
-.table {
-  width: calc(100vw - 200px);
-  height: calc(100vh - 230px);
-  flex: auto 1 1;
-  border: solid 1px #42b983;
-}
-.message {
-  display: flex;
-  min-height: 12px;
-  padding: 12px;
-  box-sizing: border-box;
-}
 .dynamic-scroller-demo {
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
   display: flex;
   flex-direction: column;
 }
+.table {
+  width: calc(100vw - 200px);
+  height: calc(100vh - 200px);
+}
+.message {
+  display: flex;
+  align-items: left;
+}
+.media_info {
+  width: 100vw;
+  height: 70px;
+  display: flex;
+  align-items: center;
+}
+.media_info:hover {
+  background-color: #FFFFFF20;
+}
+.checkbox{
+  width: 20px;
+  margin-left: 12px;
+}
 .index{
-
+  width: 50px;
+  margin-left: 12px;
 }
 .medium_image_url{
   margin-left: 10px;
-  width: 50px;
+  width: 58px;height: 58px; 
+  border-radius: 6px; overflow: hidden;
 }
 .title{
   margin-left: 10px;
-  width: 200px;
+  width: 240px;
 }
 .artist{
   margin-left: 10px;
-  width: 200px;
+  width: 240px;
 }
 .album{
   margin-left: 10px;
-  width: 200px;
+  width: 240px;
 }
 .duration_txt{
   margin-left: 10px;
-  width: 200px;
-}
-
-.media_info {
-  width: 100vw;
-  height: 54px;
-  display: flex;
-  box-sizing: border-box;
-}
-.media_info:hover {
-  background-color: #42b983;
+  width: 50px;
 }
 </style>

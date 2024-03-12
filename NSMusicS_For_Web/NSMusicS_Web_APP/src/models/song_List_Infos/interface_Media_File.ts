@@ -3,6 +3,7 @@ interface Media_File {
     duration_txt:string;
     absoluteIndex: number;
     medium_image_url:string;
+    selected:boolean;
 
     id: string;
     path: string;

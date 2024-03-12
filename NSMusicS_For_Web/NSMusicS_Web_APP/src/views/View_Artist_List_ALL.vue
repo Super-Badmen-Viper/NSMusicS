@@ -1,83 +1,180 @@
 <template>
-  <DynamicScroller
-    :items="generateItems(20000)"
-    :key-field="'id'"
-    :min-item-size="54"
-    class="scroller"
-  >
-    <template v-slot="{ item, index, active }">
-      <DynamicScrollerItem
-        :item="item"
-        :active="active"
-        :size-dependencies="[
-          item.message,
-        ]"
-        :data-index="index"
+  <div class="dynamic-scroller-demo">
+    <div class="toolbar">
+      <input
+        v-model="search"
+        placeholder="Filter..."
       >
-        <div class="grid-item">
+      <span>({{ updateParts.viewStartIdx }} - [{{ updateParts.visibleStartIdx }} - {{ updateParts.visibleEndIdx }}] - {{ updateParts.viewEndIdx }})</span>
+    </div>
+
+    <DynamicScroller
+      :items="filteredItems"
+      :min-item-size="54"
+      :emit-update="true"
+      class="scroller"
+      @resize="onResize"
+      @update="onUpdate">
+      <template #before>
+        <div class="notice">
+          The message heights are unknown.
+        </div>
+      </template>
+      <template #after>
+        <div class="notice">
+          You have reached the end.
+        </div>
+      </template>
+      <template #default="{ item, index, active }">
+        <DynamicScrollerItem
+          :item="item"
+          :active="active"
+          :size-dependencies="[
+            item.message,
+          ]"
+          :data-index="index"
+          :data-active="active"
+          :title="`Click to change message ${index}`"
+          class="message"
+          @click="changeMessage(item)">
           <div class="avatar">
             <img
-              :src="item.avatar"
               :key="item.avatar"
+              :src="item.avatar"
               alt="avatar"
               class="image"
             >
           </div>
-          <div class="text">{{ item.message }}</div>
-        </div>
-      </DynamicScrollerItem>
-    </template>
-  </DynamicScroller>
+          <div class="text">
+            {{ item.message }}
+          </div>
+          <div class="index">
+            <span>{{ item.id }} (id)</span>
+            <span>{{ index }} (index)</span>
+          </div>
+        </DynamicScrollerItem>
+      </template>
+    </DynamicScroller>
+  </div>
 </template>
 
-<script>
+<script lang="ts">
+import { generateMessage } from '../models/data_Creater_Json/data'
+
+const items: any[] = []
+for (let i = 0; i < 10000; i++) {
+  items.push({
+    id: i,
+    ...generateMessage(),
+  })
+}
+
 export default {
-  props: {
-    items: Array,
+  data () {
+    return {
+      items,
+      search: '',
+      updateParts: { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 },
+    }
   },
-  methods: {
-    generateItems(count) {
-      const items = [];
-      for (let i = 0; i < count; i++) {
-        items.push({
-          id: i,
-          avatar: `path/to/avatar-${i}.png`,
-          message: `Message ${i + 1}`,
-        });
-      }
-      return items;
+
+  computed: {
+    filteredItems () {
+      const { search, items } = this
+      if (!search) return items
+      const lowerCaseSearch = search.toLowerCase()
+      return items.filter(i => i.message.toLowerCase().includes(lowerCaseSearch))
     },
   },
-};
+
+  methods: {
+    changeMessage (message: any) {
+      Object.assign(message, generateMessage())
+    },
+
+    onResize () {
+      console.log('resize')
+    },
+
+    onUpdate (viewStartIndex: number, viewEndIndex: number, visibleStartIndex: number, visibleEndIndex: number) {
+      this.updateParts.viewStartIdx = viewStartIndex
+      this.updateParts.viewEndIdx = viewEndIndex
+      this.updateParts.visibleStartIdx = visibleStartIndex
+      this.updateParts.visibleEndIdx = visibleEndIndex
+    },
+  },
+}
 </script>
 
 <style scoped>
-.scroller {
+.dynamic-scroller-demo {
+  width: calc(100vw - 200px);
   height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.grid-item {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-gap: 10px;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
+.scroller {
+  flex: auto 1 1;
+}
+
+.scroller {
+  border: solid 1px #42b983;
+}
+
+.toolbar {
+  flex: auto 0 0;
+  text-align: center;
+}
+
+.toolbar > *:not(:last-child) {
+  margin-right: 24px;
+}
+
+.notice {
+  padding: 24px;
+  font-size: 20px;
+  color: #999;
+}
+
+.message {
+  display: flex;
+  min-height: 32px;
+  padding: 12px;
+  box-sizing: border-box;
 }
 
 .avatar {
-  width: 50px;
-  height: 50px;
+  flex: auto 0 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 12px;
 }
 
-.image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.avatar .image {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 50%;
+}
+
+.index,
+.text {
+  flex: 1;
 }
 
 .text {
-  font-size: 16px;
-  font-weight: bold;
+  max-width: 400px;
+}
+
+.index {
+  opacity: .5;
+}
+
+.index span {
+  display: inline-block;
+  width: 160px;
+  text-align: right;
 }
 </style>

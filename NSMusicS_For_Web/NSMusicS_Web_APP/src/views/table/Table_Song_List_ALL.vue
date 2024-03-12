@@ -674,6 +674,7 @@ import { RouterLink } from 'vue-router';
       </n-space>
     </n-space>
 
+    <!-- Naive UI n-data-table数据源每刷新一次，其缓存会造成内存泄漏 -->
     <!-- :pagination="paginationReactive" || virtual-scroll :max-height="1000" -->
     <!-- :row-key唯一标识，防止数据混乱  -->
     <n-data-table

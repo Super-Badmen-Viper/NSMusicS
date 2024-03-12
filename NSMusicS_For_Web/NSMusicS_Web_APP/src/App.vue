@@ -44,7 +44,7 @@
   import Bar_Music_Player from '../src/components/Bar_Music_Player.vue'
   import View_Screen_Music_Player from '../src/views/View_Screen_Music_Player.vue'
 
-  // System BrowserWindow Set
+  ////// System BrowserWindow Set
   const { ipcRenderer } = require('electron');
   function minimize() {
     ipcRenderer.send('window-min');
@@ -56,22 +56,22 @@
     ipcRenderer.send('window-close');
   }
 
-  // open view musicplayer
+  ////// open view musicplayer
   import { ref,watch } from 'vue';
   const margin_top_value_view_music_player = ref(100);
   const get_send_onclick = (value:any) => margin_top_value_view_music_player.value = value
   const isVisible = ref(true);
-  // watch监听 margin_top_value_view_music_player 的变化
+  ////// watch监听 margin_top_value_view_music_player 的变化
   watch(isVisible, (newValue) => {
     if (newValue) {
       setTimeout(() => {
         isVisible.value = false;
-      }, 200); // 调整动画持续时间
+      }, 200); ////// 调整动画持续时间
     }
   });
 
-  // System Bind Media Info
-  const this_audio_file_path = ref('');//'C:/Users/17741/Music/G.E.M.邓紫棋 - 你把我灌醉.mp3'
+  ////// System Bind Media Info
+  const this_audio_file_path = ref('');//////'C:/Users/17741/Music/G.E.M.邓紫棋 - 你把我灌醉.mp3'
   function media_file_path(value: any) {
     this_audio_file_path.value = value
     get_this_audio_refresh(true)
@@ -84,7 +84,7 @@
     get_this_audio_refresh(true)
     console.log('this_audio_file_medium_image_url'+value)
   }
-  const this_audio_refresh = ref<boolean>(false)//重播触发
+  const this_audio_refresh = ref<boolean>(false)//////重播触发
   function get_this_audio_refresh(value: any) {
     this_audio_refresh.value = value;
     console.log('this_audio_refresh：'+value)
@@ -105,15 +105,48 @@
     console.log('this_audio_album_name：'+value)
   }
 
-  //
-  const media_Files_temporary = ref<Media_File[]>([]);// data.slice() BUG Error: Because Init
+  //////
+  const media_Files_temporary = ref<Media_File[]>([]);////// data.slice() BUG Error: Because Init
+  const media_Files_selected = ref<Media_File[]>([])
+  function get_media_Files_selected(value: Media_File) {
+    if (value.selected === true) {
+      media_Files_temporary.value.forEach((item, index) => {
+        if (item.id === value.id) {
+          media_Files_temporary.value[index].selected = true;
+        }
+      });
+      media_Files_selected.value.push(value)
+      console.log('media_Files_selected：'+value.path+'  '+value.selected)
+    } else {
+      media_Files_temporary.value.forEach((item, index) => {
+        if (item.id === value.id) {
+          media_Files_temporary.value[index].selected = false;
+        }
+      });
+      media_Files_selected.value = media_Files_selected.value.filter(item => item.id !== value.id);
+      console.log('media_Files_selected：'+value.path+'  '+value.selected)
+    }
+  }
+  function set_media_Files_selected(value: boolean) {
+    if (value === true) {
+      media_Files_temporary.value.forEach((item, index) => {
+        media_Files_temporary.value[index].selected = true;
+      });
+      media_Files_selected.value = media_Files_temporary.value.slice();
+    } else {
+      media_Files_temporary.value.forEach((item, index) => {
+        media_Files_temporary.value[index].selected = false;
+      });
+      media_Files_selected.value = [];
+    }
+  }
   const media_page_length = ref<number>();
   const media_file_count = ref<number>();
-  //
+  //////
   const Album_Files_temporary = ref<Item_Album[]>([]);
   const album_Page_length = ref<number>();
   const album_file_count = ref<number>();
-  //
+  //////
   const options_Sort_key = ref<{ columnKey: string; order: string }[]>([]);
   function get_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
     if (value != null) {
@@ -121,6 +154,7 @@
       fetchData_Media()
     }
   }
+  // 弃用
   function sortByColumnKeys(sortersArray: { columnKey: string; order: string }[] = []) {
     let sortedData = media_Files_temporary.value.slice();
     let bool_default = false;
@@ -148,7 +182,6 @@
     }
     media_Files_temporary.value = sortedData;
   }
-  //
   function formatTime(currentTime: number): string {
     const minutes = Math.floor(currentTime / 60);
     const seconds = currentTime % 60;
@@ -168,7 +201,7 @@
 
     return `${formattedMinutes}:${formattedSeconds}`;
   }
-  //
+  //////
   const keyword = ref<string>('')
   function get_keyword(value: any) {
     keyword.value = value;
@@ -180,18 +213,18 @@
     console.log('reset_data?:' + value)
     fetchData_Media()
   }
-  //
-  const data_select_Index = ref<number>(-1)//绝对index
+  //////
+  const data_select_Index = ref<number>(-1)//////绝对index
   function get_data_select_Index(value: any) {
     data_select_Index.value = value
     console.log('data_select_Index：'+value)
   }
-  const page_song_index = ref(0)//相对index
+  const page_song_index = ref(0)//////相对index
   function get_page_song_index(value: any) {
     page_song_index.value = value
     console.log('page_song_index：'+value)
   }
-  // 
+  // 弃用
   const media_page_num = ref<number>(1);
   function get_media_page_num(value: any) {
     media_page_num.value = value
@@ -222,19 +255,16 @@
     album_page_num.value = 1
     fetchData_Album()
   }
-  //
+  //////
   const path = require('path');
-  const Database = require('better-sqlite3');
   const fetchData_Home = () => {
     
   }
   const fetchData_Media = () => {
-    media_Files_temporary.value = [];
-    Album_Files_temporary.value = [];
     let db:any = null;
-    
+    clear_Files_temporary()
     try {
-      db = new Database(path.resolve('resources/navidrome.db'), { memory: true });
+      db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
       db.pragma('journal_mode = WAL');
 
       const offset = (media_page_num.value - 1) * media_page_size.value;
@@ -247,26 +277,26 @@
         `WHERE title LIKE '%${keyword.value}%' OR artist LIKE '%${keyword.value}%' OR album LIKE '%${keyword.value}%'` :
         '';
 
-      // const stmt_media_file = db.prepare(`
-      //   SELECT id, title, artist, album, duration, path 
-      //   FROM media_file 
-      //   ${keywordFilter}
-      //   ORDER BY ${sortKey} ${sortOrder}
-      //   LIMIT ${media_page_size.value} 
-      //   OFFSET ${offset}
-      // `);
+      ////// const stmt_media_file = db.prepare(`
+      //////   SELECT id, title, artist, album, duration, path 
+      //////   FROM media_file 
+      //////   ${keywordFilter}
+      //////   ORDER BY ${sortKey} ${sortOrder}
+      //////   LIMIT ${media_page_size.value} 
+      //////   OFFSET ${offset}
+      ////// `);
       const stmt_media_file = db.prepare(`
         SELECT id, title, artist, album, duration, path 
         FROM media_file 
         ${keywordFilter}
         ORDER BY ${sortKey} ${sortOrder}
       `);
+      const stmt_album_limit_1_imagefiles = db.prepare('SELECT * FROM album LIMIT 1');
+      const rows = stmt_media_file.all();  
+      const imagefiles = stmt_album_limit_1_imagefiles.all();
 
-      const stmt_album = db.prepare('SELECT * FROM album LIMIT 1');
-      const rows = stmt_media_file.all();
-      const imagefiles = stmt_album.all();
-
-      for (const row of rows) {
+      rows.forEach((row: Media_File) => {
+        row.selected = false;
         row.duration_txt = formatTime(row.duration);
         const medium_image_url = row.path.replace('mp3', 'jpg');
         if (imagefiles[0].image_files.indexOf(medium_image_url) > 0)
@@ -274,33 +304,38 @@
         else
           row.medium_image_url = '../../../resources/error_album.jpg';
         media_Files_temporary.value.push(row);
-      }
+      })
       rows.value = []
       imagefiles.value = []
 
       const stmt_media_file_count = db.prepare('SELECT COUNT(*) AS count FROM media_file');
       media_file_count.value = stmt_media_file_count.get().count;
+      
       if (media_file_count.value != null)
         media_page_length.value = Math.floor(media_file_count.value / media_page_size.value) + 1;
-
       media_Files_temporary.value.forEach((item: { absoluteIndex: any }, index: number) => {
         item.absoluteIndex = index + offset + 1;
       });
+
+      ////// stmt_media_file.value.finalize();
+      ////// stmt_media_file.value = null;
+      ////// stmt_album_limit_1_imagefiles.value.finalize();
+      ////// stmt_album_limit_1_imagefiles.value = null;
+      ////// stmt_media_file_count.value.finalize();
+      ////// stmt_media_file_count.value = null;
     } catch (err: any) {
       console.error(err);
     } finally {
       db.close();
       console.log('db.close().......');
-      delete require.cache[require.resolve('better-sqlite3')];
       db = null;
     }
+    
+    delete require.cache[require.resolve('better-sqlite3')];
   };
   const fetchData_Album = () => {
-    media_Files_temporary.value = [];
-    Album_Files_temporary.value = [];
-
     let moment = require('moment');
-
+    clear_Files_temporary()
     let rows = [];
     let album_file_count_value = 0;
     let album_Page_length_value = 0;
@@ -308,19 +343,19 @@
     let db:any = null;
 
     try {
-      db = new Database(path.resolve('resources/navidrome.db'), { memory: true });
+      db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
       db.pragma('journal_mode = WAL');
 
-      // const offset = (album_page_num.value - 1) * album_page_size.value;
-      // const stmt = db.prepare(`
-      //   SELECT id,name,embed_art_path,artist,updated_at,medium_image_url
-      //   FROM album 
-      //   LIMIT ${album_page_size.value} 
-      //   OFFSET ${offset}`);
-      const stmt = db.prepare(`
+      ////// const offset = (album_page_num.value - 1) * album_page_size.value;
+      ////// const stmt = db.prepare(`
+      //////   SELECT id,name,embed_art_path,artist,updated_at,medium_image_url
+      //////   FROM album 
+      //////   LIMIT ${album_page_size.value} 
+      //////   OFFSET ${offset}`);
+      const stmt_album = db.prepare(`
         SELECT id,name,embed_art_path,artist,updated_at,medium_image_url
         FROM album`);
-      rows = stmt.all();
+      rows = stmt_album.all();
 
       rows.forEach((row: Item_Album) => {
         row.medium_image_url = row.embed_art_path.replace('mp3','jpg');
@@ -339,14 +374,19 @@
 
         Album_Files_temporary.value.push(row);
       });
+      rows.length = 0
       rows = []
-
+      
       const stmt_album_count = db.prepare('SELECT COUNT(*) AS count FROM album');
       album_file_count_value = stmt_album_count.get().count;
-
       if (album_file_count_value !== null) {
         album_Page_length_value = Math.floor(album_file_count_value / album_page_size.value) + 1;
       }
+
+      ////// stmt_album.value.finalize();
+      ////// stmt_album.value = null;
+      ////// stmt_album_count.value.finalize();
+      ////// stmt_album_count.value = null;
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -356,21 +396,19 @@
 
       db.close();
       console.log('db.close().......');
-      delete require.cache[require.resolve('better-sqlite3')];
       db = null;
 
       moment = null;
     }
+
+    delete require.cache[require.resolve('better-sqlite3')];
   }
   const fetchData_Artist = () => {
     
   }
-  //
+  //////
   function get_router_select(value: any) {
-    // auto clear
-    media_Files_temporary.value = [];
-    Album_Files_temporary.value = [];
-    // 
+    ////// 
     if(value === 'home'){
       fetchData_Home()
     }else if(value === 'View_Song_List_ALL'){
@@ -381,20 +419,34 @@
       fetchData_Artist()
     }
   }
+  //////
+  import router from './router'
+  router.beforeEach((to, from, next) => {
+    clear_Files_temporary()
+    next();
+  });
+  router.afterEach((to, from) => {
+    clear_Files_temporary()
+  });
+  const clear_Files_temporary = () => {
+    media_Files_temporary.value.splice(0, media_Files_temporary.value.length);
+    Album_Files_temporary.value.splice(0, Album_Files_temporary.value.length);
+  }
   onMounted(() => {
     
   });
 
-  //
+  //////
   import { darkTheme } from 'naive-ui'
   import type { GlobalTheme } from 'naive-ui'
   const theme = ref<GlobalTheme | null>(null)
-  //
+  //////
   import { zhCN, dateZhCN } from 'naive-ui'
   import type { NLocale, NDateLocale } from 'naive-ui'
+  //////
   const locale = ref<NLocale | null>(zhCN)
   const dateLocale = ref<NDateLocale | null>(dateZhCN)
-  //
+  //////
   const window_innerWidth = ref<number>(window.innerWidth)
   window.addEventListener('resize', () => {
     window_innerWidth.value = window.innerWidth;
@@ -402,100 +454,103 @@
 </script>
 <template>
   <n-config-provider :theme="theme" :locale="locale" :date-locale="dateLocale">
-    <!-- <n-message-provider></n-message-provider>> -->
-    <n-space vertical>
-      <n-layout has-sider class="this_App">
-        <n-layout-sider
-          class="n_layout_sider"
-          bordered
-          show-trigger
-          collapse-mode="width"
-          :collapsed-width="64"
-          :width="160"
-          :collapsed="collapsed"
-          @collapse="collapsed = true"
-          @expand="collapsed = false">
-          <n-menu
-            v-model:value="activeKey"
-            :collapsed="collapsed"
+    <n-message-provider>
+      <n-space vertical>
+        <n-layout has-sider class="this_App">
+          <n-layout-sider
+            class="n_layout_sider"
+            show-trigger="bar"
+            collapse-mode="width"
             :collapsed-width="64"
-            :collapsed-icon-size="22"
-            :options="menuOptions"/>
-          </n-layout-sider>
-          <n-layout embedded style="height: calc(100vh - 80px);">
-            <RouterView
-              class="view_show"
-
-              @router_select="get_router_select"
-
+            :width="160"
+            :collapsed="collapsed"
+            @collapse="collapsed = true"
+            @expand="collapsed = false">
+            <n-menu
+              v-model:value="activeKey"
               :collapsed="collapsed"
-              :window_innerWidth="window_innerWidth"
-              @media_file_path="media_file_path"
-              @media_file_medium_image_url="get_media_file_medium_image_url"
-              @this_audio_singer_name="get_this_audio_singer_name"
-              @this_audio_song_name="get_this_audio_song_name"
-              @this_audio_album_name="get_this_audio_album_name"
-              @data_select_Index="get_data_select_Index"
-              @page_song_index="get_page_song_index"
-              :media_page_num="media_page_num"
-              @media_page_num="get_media_page_num"
-              :media_page_size="media_page_size"
-              @media_page_size="get_media_page_size"
-              :media_page_length="media_page_length"
-              :media_Files_temporary="media_Files_temporary"
-              :options_Sort_key="options_Sort_key"
-              @options_Sort_key="get_options_Sort_key"
-              @keyword="get_keyword"
-              @reset_data="get_reset_data"
-              
-              :Album_Files_temporary="Album_Files_temporary"
-              :album_page_num="album_page_num"
-              @album_page_num="get_album_page_num"
-              :album_page_size="album_page_size"
-              @album_page_size="get_album_PageSize"
-              :album_Page_length="album_Page_length">
-              
-            </RouterView>
-            <div class="bar_top_setapp">
-              <section  style="
-                        -webkit-app-region: no-drag;
-                        width: auto;/*设置为 auto 即为单分布，100vw 为多分布(左，中，右) */
-                        position: absolute;right: 0;
-                        text-align:center;
-                        z-index: 99;
-                        ">
-                        <n-button @click="() => {locale = null,dateLocale = null}">英文</n-button>
-                        <n-button @click="() => {locale = zhCN,dateLocale = dateZhCN}">中文</n-button>
-                        <n-button @click="theme = darkTheme">深色</n-button>
-                        <n-button @click="theme = null">浅色</n-button>
-                        <div type="button" class="win_close" @click="closeWindow"></div>
-                        <div type="button" class="win_max" @click="maximize"></div>
-                        <div type="button" class="win_min" @click="minimize"></div>
-              </section>
-            </div>
-        </n-layout>
-      </n-layout>
-      <n-layout-footer
-        position="absolute"
-        bordered>
-        <Bar_Music_Player 
-          :this_audio_file_path="this_audio_file_path"
-          :this_playList_num="this_playList_num"
-          :this_audio_file_medium_image_url="this_audio_file_medium_image_url"
-          :this_audio_refresh="this_audio_refresh"
-          @this_audio_refresh="get_this_audio_refresh"
-          :this_audio_singer_name="this_audio_singer_name"
-          :this_audio_song_name="this_audio_song_name"
-          :this_audio_album_name="this_audio_album_name"
-          @on-click="get_send_onclick" />
-      </n-layout-footer>
-    </n-space>
-    <View_Screen_Music_Player 
-      class="view_music_player" 
-      v-if="isVisible"
-      :style="{ height: `calc(100vh - ${margin_top_value_view_music_player}vh)` }">
+              :collapsed-width="64"
+              :collapsed-icon-size="22"
+              :options="menuOptions"/>
+            </n-layout-sider>
+            <n-layout embedded style="height: calc(100vh - 80px);">
+              <RouterView
+                class="view_show"
 
-    </View_Screen_Music_Player>
+                @router_select="get_router_select"
+
+                :collapsed="collapsed"
+                :window_innerWidth="window_innerWidth"
+                @media_file_path="media_file_path"
+                @media_file_medium_image_url="get_media_file_medium_image_url"
+                @this_audio_singer_name="get_this_audio_singer_name"
+                @this_audio_song_name="get_this_audio_song_name"
+                @this_audio_album_name="get_this_audio_album_name"
+                @data_select_Index="get_data_select_Index"
+                @page_song_index="get_page_song_index"
+                :media_page_num="media_page_num"
+                @media_page_num="get_media_page_num"
+                :media_page_size="media_page_size"
+                @media_page_size="get_media_page_size"
+                :media_page_length="media_page_length"
+                :media_Files_temporary="media_Files_temporary"
+                :media_Files_selected="media_Files_selected"
+                @media_Files_selected="get_media_Files_selected"
+                @set_media_Files_selected="set_media_Files_selected"
+                :options_Sort_key="options_Sort_key"
+                @options_Sort_key="get_options_Sort_key"
+                @keyword="get_keyword"
+                @reset_data="get_reset_data"
+                
+                :Album_Files_temporary="Album_Files_temporary"
+                :album_page_num="album_page_num"
+                @album_page_num="get_album_page_num"
+                :album_page_size="album_page_size"
+                @album_page_size="get_album_PageSize"
+                :album_Page_length="album_Page_length">
+                
+              </RouterView>
+              <div class="bar_top_setapp">
+                <section  style="
+                          -webkit-app-region: no-drag;
+                          width: auto;/*设置为 auto 即为单分布，100vw 为多分布(左，中，右) */
+                          position: absolute;right: 0;
+                          text-align:center;
+                          z-index: 99;
+                          ">
+                          <n-button @click="() => {locale = null,dateLocale = null}">英文</n-button>
+                          <n-button @click="() => {locale = zhCN,dateLocale = dateZhCN}">中文</n-button>
+                          <n-button @click="theme = darkTheme">深色</n-button>
+                          <n-button @click="theme = null">浅色</n-button>
+                          <div type="button" class="win_close" @click="closeWindow"></div>
+                          <div type="button" class="win_max" @click="maximize"></div>
+                          <div type="button" class="win_min" @click="minimize"></div>
+                </section>
+              </div>
+          </n-layout>
+        </n-layout>
+        <n-layout-footer
+          position="absolute"
+          bordered>
+          <Bar_Music_Player 
+            :this_audio_file_path="this_audio_file_path"
+            :this_playList_num="this_playList_num"
+            :this_audio_file_medium_image_url="this_audio_file_medium_image_url"
+            :this_audio_refresh="this_audio_refresh"
+            @this_audio_refresh="get_this_audio_refresh"
+            :this_audio_singer_name="this_audio_singer_name"
+            :this_audio_song_name="this_audio_song_name"
+            :this_audio_album_name="this_audio_album_name"
+            @on-click="get_send_onclick" />
+        </n-layout-footer>
+      </n-space>
+      <View_Screen_Music_Player 
+        class="view_music_player" 
+        v-if="isVisible"
+        :style="{ height: `calc(100vh - ${margin_top_value_view_music_player}vh)` }">
+
+      </View_Screen_Music_Player>
+    </n-message-provider>
   </n-config-provider>
 </template>
 
