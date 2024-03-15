@@ -83,6 +83,9 @@
     this_audio_file_medium_image_url.value = value
     get_this_audio_refresh(true)
     console.log('this_audio_file_medium_image_url'+value)
+
+    page_top_album_image_url.value = '';
+    page_top_album_image_url.value = value;
   }
   const this_audio_refresh = ref<boolean>(false)//////重播触发
   function get_this_audio_refresh(value: any) {
@@ -103,6 +106,7 @@
   function get_this_audio_album_name(value: any) {
     this_audio_album_name.value = value
     console.log('this_audio_album_name：'+value)
+    page_top_album_name.value = value;
   }
 
   //////
@@ -202,8 +206,24 @@
     return `${formattedMinutes}:${formattedSeconds}`;
   }
   //////
-  const keyword = ref<string>('')
+  const keyword = ref<string>('');
+  const model_num_accurate_search = ref<number>(0);
   function get_keyword(value: any) {
+    if(value.indexOf('accurate_search') > 0){
+      value = value.replace('accurate_search','');
+      if(value.indexOf('__title__') > 0){
+        value = value.replace('__title__','');
+        model_num_accurate_search.value = 1;
+      }else if(value.indexOf('__artist__') > 0){
+        value = value.replace('__artist__','');
+        model_num_accurate_search.value = 2;
+      }else if(value.indexOf('__album__') > 0){
+        value = value.replace('__album__','');
+        model_num_accurate_search.value = 3;
+      }
+    }else{  
+      model_num_accurate_search.value = 0;
+    }
     keyword.value = value;
     console.log('keyword:' + value)
     fetchData_Media()
@@ -257,34 +277,50 @@
   }
   //////
   const path = require('path');
+  const fs = require('fs');
+  function fileExists(filePath: string) {
+    return new Promise((resolve, reject) => {
+      fs.access(filePath, fs.constants.F_OK, (error: any) => {
+        if (error) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      });
+    });
+  }
+  const page_top_album_image_url = ref<string>('../../../resources/00album.png')
+  const page_top_album_name = ref<string>()
+  const page_songlists_options = ref<{label: string;value: string}[]>()
+  const page_songlists = ref<Play_List[]>()
+  /////
   const fetchData_Home = () => {
     
   }
-  const fetchData_Media = () => {
+  const fetchData_Media = async () => {
     let db:any = null;
     clear_Files_temporary()
     try {
       db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
       db.pragma('journal_mode = WAL');
 
+      //
       const offset = (media_page_num.value - 1) * media_page_size.value;
       const sortKey = options_Sort_key.value.length > 0 && options_Sort_key.value[0].order !== 'default' ?
-        options_Sort_key.value[0].columnKey : 'id';
+        options_Sort_key.value[0].columnKey : 'created_at';
       const sortOrder = options_Sort_key.value.length > 0 && options_Sort_key.value[0].order !== 'default' ?
         options_Sort_key.value[0].order.replace('end', '') : '';
-
-      const keywordFilter = keyword.value.length > 0 ?
+      let keywordFilter = keyword.value.length > 0 ?
         `WHERE title LIKE '%${keyword.value}%' OR artist LIKE '%${keyword.value}%' OR album LIKE '%${keyword.value}%'` :
         '';
-
-      ////// const stmt_media_file = db.prepare(`
-      //////   SELECT id, title, artist, album, duration, path 
-      //////   FROM media_file 
-      //////   ${keywordFilter}
-      //////   ORDER BY ${sortKey} ${sortOrder}
+      if(model_num_accurate_search.value != 0){
+        if(keywordFilter.length > 0){
+          keywordFilter = keywordFilter.replace('LIKE','=').replace(/%/g, '');
+        }
+        model_num_accurate_search.value = 0
+      }
       //////   LIMIT ${media_page_size.value} 
       //////   OFFSET ${offset}
-      ////// `);
       const stmt_media_file = db.prepare(`
         SELECT id, title, artist, album, duration, path 
         FROM media_file 
@@ -294,7 +330,6 @@
       const stmt_album_limit_1_imagefiles = db.prepare('SELECT * FROM album LIMIT 1');
       const rows = stmt_media_file.all();  
       const imagefiles = stmt_album_limit_1_imagefiles.all();
-
       rows.forEach((row: Media_File) => {
         row.selected = false;
         row.duration_txt = formatTime(row.duration);
@@ -307,22 +342,79 @@
       })
       rows.value = []
       imagefiles.value = []
-
+      //
       const stmt_media_file_count = db.prepare('SELECT COUNT(*) AS count FROM media_file');
-      media_file_count.value = stmt_media_file_count.get().count;
-      
+      media_file_count.value = stmt_media_file_count.get().count;   
       if (media_file_count.value != null)
         media_page_length.value = Math.floor(media_file_count.value / media_page_size.value) + 1;
       media_Files_temporary.value.forEach((item: { absoluteIndex: any }, index: number) => {
         item.absoluteIndex = index + offset + 1;
       });
+      //
+      page_songlists_options.value = [];
+      page_songlists.value = []
+      const temp_Play_List_ALL: Play_List = {
+        label: '全部歌曲',
+        value: 'song_list_all',
+        id: 'song_list_all',
+        name: '全部歌曲',
+        comment: '全部歌曲',
+        duration: 0,
+        song_count: media_Files_temporary.value.length,
+        public: false,
+        created_at: null,
+        updated_at: null,
+        path: '',
+        sync: false,
+        size: 0,
+        rules: null,
+        evaluated_at: null,
+        owner_id: ''
+      }
+      page_songlists_options.value.push(temp_Play_List_ALL);
+      page_songlists.value.push(temp_Play_List_ALL)
+      const temp_Play_List_Love: Play_List = {
+        label: '收藏歌曲',
+        value: 'song_list_love',
+        id: 'song_list_love',
+        name: '收藏歌曲',
+        comment: '收藏歌曲',
+        duration: 0,
+        song_count: media_Files_temporary.value.length,
+        public: false,
+        created_at: null,
+        updated_at: null,
+        path: '',
+        sync: false,
+        size: 0,
+        rules: null,
+        evaluated_at: null,
+        owner_id: ''
+      }
+      page_songlists_options.value.push(temp_Play_List_Love);
+      page_songlists.value.push(temp_Play_List_Love)
+      const temp_Play_List_Recently: Play_List = {
+        label: '最近播放',
+        value: 'song_list_recently',
+        id: 'song_list_recently',
+        name: '最近播放',
+        comment: '最近播放',
+        duration: 0,
+        song_count: media_Files_temporary.value.length,
+        public: false,
+        created_at: null,
+        updated_at: null,
+        path: '',
+        sync: false,
+        size: 0,
+        rules: null,
+        evaluated_at: null,
+        owner_id: ''
+      }
+      page_songlists_options.value.push(temp_Play_List_Recently);
+      page_songlists.value.push(temp_Play_List_Recently)
+      
 
-      ////// stmt_media_file.value.finalize();
-      ////// stmt_media_file.value = null;
-      ////// stmt_album_limit_1_imagefiles.value.finalize();
-      ////// stmt_album_limit_1_imagefiles.value = null;
-      ////// stmt_media_file_count.value.finalize();
-      ////// stmt_media_file_count.value = null;
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -330,8 +422,17 @@
       console.log('db.close().......');
       db = null;
     }
-    
-    delete require.cache[require.resolve('better-sqlite3')];
+
+    page_top_album_image_url.value = '';
+    if(media_Files_temporary.value.length > 0)
+      for (let i = 0; i < media_Files_temporary.value.length; i++) {
+        if (await fileExists(media_Files_temporary.value[i].path) === true) {
+          page_top_album_image_url.value = media_Files_temporary.value[i].medium_image_url;
+          page_top_album_name.value = media_Files_temporary.value[i].album;
+          break;  
+        }
+      }
+    // delete require.cache[require.resolve('better-sqlite3')];
   };
   const fetchData_Album = () => {
     let moment = require('moment');
@@ -346,10 +447,6 @@
       db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
       db.pragma('journal_mode = WAL');
 
-      ////// const offset = (album_page_num.value - 1) * album_page_size.value;
-      ////// const stmt = db.prepare(`
-      //////   SELECT id,name,embed_art_path,artist,updated_at,medium_image_url
-      //////   FROM album 
       //////   LIMIT ${album_page_size.value} 
       //////   OFFSET ${offset}`);
       const stmt_album = db.prepare(`
@@ -382,11 +479,6 @@
       if (album_file_count_value !== null) {
         album_Page_length_value = Math.floor(album_file_count_value / album_page_size.value) + 1;
       }
-
-      ////// stmt_album.value.finalize();
-      ////// stmt_album.value = null;
-      ////// stmt_album_count.value.finalize();
-      ////// stmt_album_count.value = null;
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -440,9 +532,20 @@
   import { darkTheme } from 'naive-ui'
   import type { GlobalTheme } from 'naive-ui'
   const theme = ref<GlobalTheme | null>(null)
+  const theme_bar_top_setapp = ref('transparent')
+  const change_page_header_color = ref(false)
+  const theme_normal_mode_click = () => {
+    theme.value = null
+    change_page_header_color.value = false
+  }
+  const theme_dark_mode_click = () => {
+    theme.value = darkTheme
+    change_page_header_color.value = true
+  }
   //////
   import { zhCN, dateZhCN } from 'naive-ui'
   import type { NLocale, NDateLocale } from 'naive-ui'
+import { template } from 'lodash'
   //////
   const locale = ref<NLocale | null>(zhCN)
   const dateLocale = ref<NDateLocale | null>(dateZhCN)
@@ -501,16 +604,23 @@
                 @options_Sort_key="get_options_Sort_key"
                 @keyword="get_keyword"
                 @reset_data="get_reset_data"
+                :page_top_album_image_url="page_top_album_image_url"
+                :page_top_album_name="page_top_album_name"
+                :page_songlists_options="page_songlists_options"
+                :page_songlists="page_songlists"
                 
                 :Album_Files_temporary="Album_Files_temporary"
                 :album_page_num="album_page_num"
                 @album_page_num="get_album_page_num"
                 :album_page_size="album_page_size"
                 @album_page_size="get_album_PageSize"
-                :album_Page_length="album_Page_length">
+                :album_Page_length="album_Page_length"
+                :change_page_header_color="change_page_header_color"
+
+                :this_audio_album_name="this_audio_album_name">
                 
               </RouterView>
-              <div class="bar_top_setapp">
+              <div class="bar_top_setapp" :style="{ backgroundColor: theme_bar_top_setapp }">
                 <section  style="
                           -webkit-app-region: no-drag;
                           width: auto;/*设置为 auto 即为单分布，100vw 为多分布(左，中，右) */
@@ -520,8 +630,8 @@
                           ">
                           <n-button @click="() => {locale = null,dateLocale = null}">英文</n-button>
                           <n-button @click="() => {locale = zhCN,dateLocale = dateZhCN}">中文</n-button>
-                          <n-button @click="theme = darkTheme">深色</n-button>
-                          <n-button @click="theme = null">浅色</n-button>
+                          <n-button @click="theme_dark_mode_click">深色</n-button>
+                          <n-button @click="theme_normal_mode_click">浅色</n-button>
                           <div type="button" class="win_close" @click="closeWindow"></div>
                           <div type="button" class="win_max" @click="maximize"></div>
                           <div type="button" class="win_min" @click="minimize"></div>
@@ -597,7 +707,7 @@
 
       position: fixed;
       top: 0;
-      left: 200px;
+      left: 160px;
 
       -webkit-app-region: drag;
     }

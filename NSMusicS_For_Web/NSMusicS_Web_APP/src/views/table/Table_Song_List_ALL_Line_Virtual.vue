@@ -161,6 +161,8 @@ const createColumns_select = (): DataTableColumns<RowData> => [
 ];
 const props = defineProps<{
   data_temporary: Media_File[];data_temporary_selected: Media_File[];
+  change_page_header_color: boolean;page_top_album_image_url:string;page_top_album_name:string;
+  page_options_songlists:Play_List[];page_songlists_options:{label: string;value: string}[];
   collapsed: Boolean;
   window_innerWidth: number;
   options_Sort_key:{ columnKey: string; order: string }[];
@@ -304,30 +306,11 @@ const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对�
   }
 });
 const current_page_num = ref<number>(1)
-const paginationReactive: PaginationProps | undefined = reactive({
-  page: props.media_page_num,
-  pageCount: props.media_page_length,
-  pageSize: props.media_page_size,
-  showSizePicker: true,
-  showQuickJumper: true,
-  pageSizes: [10, 30, 50, 100],
-  displayOrder: ['quick-jumper', 'pages', 'size-picker'] as Array<'quick-jumper' | 'pages' | 'size-picker'>,
-});
-const pagination_onChange = (page: number) => {
-  paginationReactive.page = page
-  emit('media_page_num',page)
-  scrollToTop()
-}
-const pagination_onUpdatePageSize = (pageSize: number) => {
-  paginationReactive.pageSize = pageSize
-  paginationReactive.page = 1
-  emit('media_page_size',pageSize)
-}
 //
-const scrollbar = ref<HTMLElement | null>(null);
+const scrollbar = ref(null as any);
 const scrollToTop = () => {
-  if (scrollbar.value) {
-    scrollbar.value.scrollTop = 0;
+  if (scrollbar.value !== null) {
+    scrollbar.value.scrollToItem(0);
   }
 };
 //
@@ -413,6 +396,8 @@ const handleSelect_Sort = (key: string | number) => {
   const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
   emit('options_Sort_key',sortersArray)
   // sortByColumnKeys(sortersArray);
+
+  scrollToTop()
 }
 const options_Sort_key_Default_key = ref<string>()
 const options_Sort_key_Default = ref<SortItem[]>()
@@ -422,10 +407,12 @@ const show_search_area = () => {
   if(bool_show_search_area.value === true)
   {
     bool_show_search_area.value = false
+    input_search_InstRef.value?.clear()
     if(bool_input_search == true){
       emit('reset_data',true)
       back_search_default()
       bool_input_search = false
+      scrollToTop()
     }
   }
   else
@@ -437,7 +424,7 @@ const show_search_area = () => {
         options_Sort_key_Default_key.value = element.key
     });
   }
-  input_search_InstRef.value?.clear()
+  // input_search_InstRef.value?.clear()
 }
 const input_search_InstRef = ref<InputInst>()
 const input_search_Value = ref<string>()
@@ -533,22 +520,69 @@ const handleItemClick = () => {
 }
 const handleItemDbClick = (media_file:Media_File) => {
   if(bool_start_play.value == true){
-    emit('media_file_path', media_file.path)
-    emit('media_file_medium_image_url',media_file.medium_image_url)
-    emit('this_audio_singer_name',media_file.artist)
-    emit('this_audio_song_name',media_file.title)
-    emit('this_audio_album_name',media_file.album)
-    // emit('page_song_index', page_index); 
+    if(click_count >= 2){
+      click_count = 0
 
-    // data_select_Index.value = (current_page_num.value-1)*props.media_page_size + page_index;
+      emit('media_file_path', media_file.path)
+      emit('media_file_medium_image_url',media_file.medium_image_url)
+      emit('this_audio_singer_name',media_file.artist)
+      emit('this_audio_song_name',media_file.title)
+      emit('this_audio_album_name',media_file.album)
+      // emit('page_song_index', page_index); 
 
-    // emit('data_select_Index', data_select_Index.value); 
-    emit('data_select_Index', media_file.absoluteIndex); 
+      // data_select_Index.value = (current_page_num.value-1)*props.media_page_size + page_index;
+
+      // emit('data_select_Index', data_select_Index.value); 
+      emit('data_select_Index', media_file.absoluteIndex); 
+    }
   }
 }
+const handleItemClick_title = (title:string) => {
+  click_count = 0;
+  input_search_Value.value = title+'accurate_search'+'__title__'
+  bool_show_search_area.value = false
+  show_search_area()
+  click_search()
+  scrollToTop()
+}
+const handleItemClick_artist = (artist:string) => {
+  click_count = 0;
+  input_search_Value.value = artist//+'accurate_search'+'__artist__'//artist不参与精确搜索
+  bool_show_search_area.value = false
+  show_search_area()
+  click_search()
+  scrollToTop()
+}
+const handleItemClick_album = (album:string) => {
+  click_count = 0;
+  input_search_Value.value = album+'accurate_search'+'__album__'
+  bool_show_search_area.value = false
+  show_search_area()
+  click_search()
+  scrollToTop()
+}
 
-const breadcrumbItems = ref(['乐曲','所有歌曲']);
-// const change_page_header_color = ref<>
+
+const selected_value_for_songlistall = ref('song_list_all')
+const handleSelected_value_for_songlistall = (value: any) => {
+  selected_value_for_songlistall.value = value;
+  console.log('selected_value_for_songlistall：'+value);
+  breadcrumbItems.value = props.page_songlists_options.find(option => option.value === value)?.label || '';
+};
+const breadcrumbItems = ref('所有歌曲');
+//
+const scroller = ref(null);
+const onResize = () => {
+  // console.log('resize')
+}
+const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
+const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any, visibleEndIndex: any) => {
+  console.log('update')
+  updateParts.viewStartIdx = viewStartIndex
+  updateParts.viewEndIdx = viewEndIndex
+  updateParts.visibleStartIdx = visibleStartIndex
+  updateParts.visibleEndIdx = visibleEndIndex
+}
 
 import {
   AddCircle32Regular,
@@ -563,32 +597,15 @@ import {
 } from '@vicons/fluent'
 import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
 import { RouterLink } from 'vue-router';
+
+function getAssetImage(firstImage: string) {
+  return new URL(firstImage, import.meta.url).href;
+}
 </script>
 
 <template>
   <n-space vertical :size="12">
     <n-space>
-      <n-space>
-        <n-button type="primary" secondary strong tertiary round @click="click_play_this_medialist">
-          <template #icon>
-            <n-icon :size="26">
-              <PlayCircle20Filled/>
-            </n-icon>
-          </template>
-          播放
-        </n-button>
-      </n-space>
-      
-      <n-dropdown 
-        trigger="click" :show-arrow="true" 
-        :options="options_Sort" @select="handleSelect_Sort">
-        <n-button tertiary circle>
-          <template #icon>
-            <n-icon :size="20"><Filter16Regular/></n-icon>
-          </template>
-        </n-button>
-      </n-dropdown>
-
       <n-button tertiary circle @click="show_search_area">
         <template #icon>
           <n-icon :size="20"><Search20Filled/></n-icon>
@@ -651,68 +668,117 @@ import { RouterLink } from 'vue-router';
     -->
     <div class="dynamic-scroller-demo">
       <DynamicScroller 
-        class="table"
+        class="table" ref="scrollbar"
         :items="props.data_temporary"
-        :emit-update="true" 
         :itemSize="itemSize"
-        :minItemSize="itemSize - 20">
+        :minItemSize="itemSize - 20"
+        @resize="onResize"
+        @update="onUpdate">
         <template #before>
           <div class="notice">
+            <div
+              style="
+                position: absolute;
+                z-index: 0;
+                width: calc(100vw - 220px);height: 296px;
+                border-radius: 20px;
+                overflow: hidden;
+                background-size: cover;
+                background-position: center;
+                filter: blur(0px);
+                background-color: transparent;
+              ">
+              <!-- <img 
+                v-for="(imageUrl, index) in props.page_top_album_image_url" 
+                :key="index"
+                :style="`margin-left: 0px; width: auto; height: 300px;`"
+                :src="getAssetImage(imageUrl)"
+              /> -->
+              <img 
+                :style="`
+                  margin-left: 200px; margin-top: -300px; 
+                  width: auto; height: calc(100vw - 400px);
+                `"
+                :src="getAssetImage(props.page_top_album_image_url)"
+              />
+              <!-- <div 
+                v-if="!props.change_page_header_color"
+                style="
+                  width: 100px;height: 100px;
+                  position: absolute;bottom: 0;left: calc(100vw - 440px);
+                  z-index: 1;      
+                  border-left: 1000px solid transparent;border-right: 1000px solid transparent;border-bottom: 1500px solid #FAFAFC;">
+              </div>
+              <div 
+                v-if="props.change_page_header_color"
+                style="
+                  width: 100px;height: 100px;
+                  position: absolute;bottom: 0;left: calc(100vw - 440px);
+                  z-index: 1;      
+                  border-left: 1000px solid transparent;border-right: 1000px solid transparent;border-bottom: 1500px solid #101014;">
+              </div> -->
+            </div>
             <div style="
               position: absolute;
               z-index: 0;
-              width: calc(100vw - 220px);height: calc(100vh - 440px);
+              width: calc(100vw - 220px);height: 300px;
               border-radius: 20px;
-              overflow: hidden;
-              background-image: url(../../../resources/AOA_1.jpg);
-              background-size: cover;
-              background-position: top;
-              filter: blur(0px);
-              background-color: transparent;">
-              <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+              overflow: hidden;">
+              <svg 
+                style="
+                  position: absolute; top: -2; left: 0; 
+                  width: 100%; height: 100%;">
                 <defs>
-                  <linearGradient v-if="false" id="gradient" gradientTransform="rotate(90)">
-                    <stop offset="0%" stop-color="#d5d4d0"></stop>
-                    <stop offset="1%" stop-color="#d5d4d0"></stop> 
-                    <stop offset="31%" stop-color="#eeeeec"></stop>
-                    <stop offset="75%" stop-color="#efeeec"></stop>
-                    <stop offset="100%" stop-color="#e9e9e7"></stop>
+                  <linearGradient v-if="!props.change_page_header_color" id="gradient" gradientTransform="rotate(90)">
+                    <stop offset="0%" stop-color="#fdfbfb"></stop>
+                    <stop offset="100%" stop-color="#ebedee"></stop>
                   </linearGradient>
-                  <linearGradient v-if="true" id="gradient" gradientTransform="rotate(90)">
+                  <linearGradient v-if="props.change_page_header_color" id="gradient" gradientTransform="rotate(90)">
                     <stop offset="0%" stop-color="#323232"></stop>
                     <stop offset="40%" stop-color="#3F3F3F"></stop>
                     <stop offset="150%" stop-color="#1C1C1C"></stop>
                   </linearGradient>
                 </defs>
-                <path d="M0 0 L400 0 L0 800 Z" fill="url(#gradient)"></path>
+                <!-- fill="url(#gradient)" -->
+                <path 
+                  fill-rule="evenodd" clip-rule="evenodd" 
+                  d="M462 61.401L281 300L0 300V0H413.923L462 61.401ZM302 300L320.666 273.625L338.466 250H653.344C660.802 250 665.59 257.923 662.124 264.526L639 300H302ZM426.805 61.407L394.831 102.26C394.337 102.886 394.783 103.814 395.59 103.814H404.903C405.493 103.814 406.059 103.537 406.421 103.079L437.178 63.7803C437.71 63.1016 438 62.2638 438 61.401C438 60.5382 437.71 59.7004 437.178 59.0216L406.421 19.7349C406.059 19.265 405.493 19 404.903 19H395.59C394.783 19 394.337 19.9276 394.831 20.5541L426.805 61.407ZM358.207 102.26L390.181 61.407L358.207 20.5541C357.713 19.9276 358.159 19 358.966 19H368.278C368.869 19 369.435 19.265 369.796 19.7349L400.554 59.0216C401.086 59.7004 401.376 60.5382 401.376 61.401C401.376 62.2638 401.086 63.1016 400.554 63.7803L369.796 103.079C369.435 103.537 368.869 103.814 368.278 103.814H358.966C358.159 103.814 357.713 102.886 358.207 102.26ZM365.794 273.009L358.105 263.184C358.015 263.066 357.873 263 357.726 263H355.397C355.196 263 355.084 263.232 355.208 263.389L363.201 273.602L355.208 283.815C355.195 283.831 355.184 283.849 355.176 283.868C355.167 283.89 355.161 283.914 355.158 283.938C355.153 283.983 355.161 284.028 355.181 284.069C355.201 284.109 355.232 284.143 355.27 284.167C355.293 284.181 355.317 284.192 355.343 284.198C355.361 284.202 355.379 284.204 355.397 284.204H357.726C357.873 284.204 358.015 284.134 358.105 284.02L365.794 274.198C366.069 273.846 366.069 273.358 365.794 273.009ZM348.949 263.184L356.638 273.009C356.912 273.358 356.912 273.846 356.638 274.198L348.949 284.02C348.859 284.134 348.717 284.204 348.57 284.204H346.241C346.196 284.204 346.152 284.191 346.114 284.167C346.076 284.143 346.045 284.109 346.025 284.069C346.005 284.028 345.997 283.983 346.002 283.938C346.007 283.893 346.024 283.851 346.052 283.815L354.045 273.602L346.052 263.389C345.928 263.232 346.04 263 346.241 263H348.57C348.717 263 348.859 263.066 348.949 263.184Z"
+                  fill="url(#gradient)"/>
+
               </svg>
             </div>
             <n-page-header 
               style="
                 position: relative;
                 z-index: 1;
-                width: calc(100vw - 220px);height: calc(100vh - 440px);
+                width: calc(100vw - 220px);height: 300px;
                 border-radius: 20px;
                 margin-bottom: 10px;">
               <n-grid 
-                :cols="2" :x-gap="30" :y-gap="24" layout-shift-disabled
+                :cols="2" :x-gap="30" :y-gap="10" layout-shift-disabled
                 style="margin-left: 30px;width: 370px;">
                 <n-gi><n-statistic style="text-shadow: 10px white;" label="所有歌曲" value="1222 首" /></n-gi>
                 <n-gi><n-statistic label="收藏歌曲" value="68 首" /></n-gi>
                 <n-gi><n-statistic label="最近播放" value="999+ 首" /></n-gi>
-                <n-gi><n-statistic/></n-gi>
-                <n-gi><n-statistic style="font-size: 12px;" label="最多收听" value="Rain - Hip Song" /></n-gi>
+                <n-gi><n-statistic style="font-size: 12px;" label="播放列表" value="6 组" /></n-gi>
               </n-grid>
               <template #title>
-                <n-space>
+                <n-space vertical style="margin-top:2px;margin-left: 10px;">
                   <n-breadcrumb separator=">">
-                      <n-breadcrumb-item 
-                        v-for="item in breadcrumbItems" 
-                        :key="item" 
-                        style="font-size: 22px">
-                        {{ item }}
+                      <n-breadcrumb-item style="font-size: 22px">乐库</n-breadcrumb-item>
+                      <n-breadcrumb-item> 
+                        <n-ellipsis 
+                          style="
+                            max-width: 120px;height: 40px;position: relative;top: 14px;
+                            text-align: left;font-size: 22px;">
+                          {{ breadcrumbItems }}
+                        </n-ellipsis>
                       </n-breadcrumb-item>
                   </n-breadcrumb>
+                  <n-select 
+                    v-model:value="selected_value_for_songlistall" 
+                    :options="props.page_songlists_options" style="width: 192px;"
+                    :on-update:value="handleSelected_value_for_songlistall" />
                 </n-space>  
               </template>
               <template #header>
@@ -720,16 +786,29 @@ import { RouterLink } from 'vue-router';
               </template>
               <template #avatar>
                 <n-image
-                  width="80px" 
+                  width="80px" height="80px" object-fit="contain"
                   style="border-radius: 8px;margin-left: 20px;margin-top: 20px;"
-                  src="../../../resources/00album.png"
+                  :src="getAssetImage(props.page_top_album_image_url)"
                 />
               </template>
               <template #extra>
                 
               </template>
               <template #footer>
-                
+                <div style="
+                  margin-left: 380px;margin-top: -20px;
+                  text-align: left;
+                  width: 200px;height: 40px;font-weight: 900;">
+                  <n-button text @click="handleItemClick_album(props.page_top_album_name)">
+                    <n-ellipsis 
+                      style="
+                        max-width: 250px;height: 40px;
+                        text-align: left;font-size: 24px;
+                        font-weight: 900;">
+                      {{ props.page_top_album_name }}
+                    </n-ellipsis>
+                  </n-button>
+                </div>
               </template>
             </n-page-header>
           </div>
@@ -744,6 +823,7 @@ import { RouterLink } from 'vue-router';
             :data-index="index"
             :data-active="active"
             class="message"
+            @click="handleItemClick"
             @Dblclick="handleItemDbClick(item)">
             <div class="media_info">
               <n-checkbox class="checkbox" 
@@ -761,11 +841,25 @@ import { RouterLink } from 'vue-router';
                   style="width: 100%; height: 100%; object-fit: cover;"
                   class="image"/>
               </div>
-              <n-ellipsis class="title">{{ item.title }}</n-ellipsis>
-              <n-ellipsis class="artist">{{ item.artist }}</n-ellipsis>
-              <n-ellipsis class="album">{{ item.album }}</n-ellipsis>
-              <n-ellipsis class="duration_txt" >{{ item.duration_txt }}</n-ellipsis>
-              <n-ellipsis class="index" style="margin-left: auto; text-align: left;">{{ index + 1 }}</n-ellipsis>
+              <div class="title">
+                <n-button text @click="handleItemClick_title(item.title)">
+                  <n-ellipsis style="max-width: 200px;text-align: left;font-size: 15px;">{{ item.title }}</n-ellipsis>
+                </n-button>
+              </div>
+              <div class="artist">
+                <template v-for="artist in item.artist.split('/')">
+                  <n-button text @click="handleItemClick_artist(artist)">
+                    <n-ellipsis style="max-width: 200px;text-align: left;font-size: 15px;">{{ artist + '&nbsp' }}</n-ellipsis>
+                  </n-button>
+                </template>
+              </div>
+              <div class="album">
+                <n-button text @click="handleItemClick_album(item.album)">
+                  <n-ellipsis style="max-width: 200px;text-align: left;font-size: 15px;">{{ item.album }}</n-ellipsis>
+                </n-button>
+              </div>
+              <n-ellipsis class="duration_txt" style="margin-left: auto; text-align: left;font-size: 15px;">{{ item.duration_txt }}</n-ellipsis>
+              <n-ellipsis class="index" style="margin-left: auto; text-align: left;font-size: 15px;">{{ index + 1 }}</n-ellipsis>
             </div>
           </DynamicScrollerItem>
         </template>
@@ -782,6 +876,17 @@ import { RouterLink } from 'vue-router';
     :on-clickoutside="onClickoutside"
     @select="handleSelect_data_dropmenu"
   />
+  <div class="scorller_to_SortAZ" v-if="false">
+    <n-space>
+      <n-button 
+        v-for="charCode in Array.from({length: 26}, (_, i) => i + 65)" 
+        :key="charCode" 
+        text 
+        style="display: block;">
+        {{ String.fromCharCode(charCode) }}
+      </n-button>
+    </n-space>
+  </div>
 </template>
 
 <style>
@@ -800,13 +905,16 @@ import { RouterLink } from 'vue-router';
   align-items: left;
 }
 .media_info {
-  width: 100vw;
+  width: calc(100vw - 230px);
   height: 70px;
   display: flex;
   align-items: center;
+  border-radius: 6px;
+
+  transition: background-color 0.3s;
 }
 .media_info:hover {
-  background-color: #FFFFFF20;
+  background-color: #f0f0f080;
 }
 .checkbox{
   width: 20px;
@@ -823,18 +931,55 @@ import { RouterLink } from 'vue-router';
 }
 .title{
   margin-left: 10px;
+  text-align: left;
   width: 240px;
+}
+.title :hover{
+  color: #3DC3FF;
 }
 .artist{
   margin-left: 10px;
+  text-align: left;
   width: 240px;
+}
+.artist :hover{
+  color: #3DC3FF;
 }
 .album{
   margin-left: 10px;
+  text-align: left;
   width: 240px;
+}
+.album :hover{
+  color: #3DC3FF;
 }
 .duration_txt{
   margin-left: 10px;
+  text-align: left;
   width: 50px;
+}
+
+.scorller_to_SortAZ{
+  width: 16px;
+  height: calc(100vh - 200px);
+  position: absolute;
+  top: 106px;right: 24px;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+  border-radius: 6px;
 }
 </style>

@@ -56,61 +56,46 @@
   const gridItems = ref(6);
   const itemSecondarySize = 160;
   // 重新渲染gridItems
-  // const stopWatching_collapsed_width = watch(() => props.collapsed, (newValue, oldValue) => {
-  //   if (props.collapsed == true) {
-  //     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
-  //   } else {
-  //     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
-  //   }
-  // });
-  // let bool_watch = false;
-  // const timer = ref<NodeJS.Timeout | null>(null);//防止大量的重复渲染，造成界面假死
-  // const startTimer = () => {
-  //   timer.value = setInterval(() => {
-  //     bool_watch = true;
-  //   }, 1000);
-  // };
-  // onMounted(() => {
-  //   startTimer();
-  // });
-  // const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (newValue, oldValue) => {
-  //   bool_watch = false;
-  //   if (props.collapsed == true) {
-  //     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
-  //   } else {
-  //     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
-  //   }
-  //   if (bool_watch) {
-  //     startTimer();
-  //   }
-  // });
-  // //
-  // onBeforeUnmount(() => {
-  //   cleanup();
-  // });
-  // const cleanup = () => {
-  //   stopWatching_collapsed_width()
-  //   stopWatching_window_innerWidth()
-  //   if (timer.value) {
-  //     clearInterval(timer.value);
-  //     timer.value = null;
-  //   }
-  // };
-  
-  // const data = ref<Item_Album[]>(props.data_temporary.slice());
-  // let bool_init = false;
-  // watch(data, () => {
-  //   if (props.data_temporary.length !== 0 && !bool_init) {
-  //     data.value = props.data_temporary.slice();
-  //     bool_init = true;
-  //   }
-  // });
-  // onBeforeUnmount(() => {
-  //   cleanup();
-  // });
-  // const cleanup = () => {
-  //   data.value = [];
-  // };
+  const stopWatching_collapsed_width = watch(() => props.collapsed, (newValue, oldValue) => {
+    if (props.collapsed == true) {
+      gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
+    } else {
+      gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
+    }
+  });
+  let bool_watch = false;
+  const timer = ref<NodeJS.Timeout | null>(null);//防止大量的重复渲染，造成界面假死
+  const startTimer = () => {
+    timer.value = setInterval(() => {
+      bool_watch = true;
+    }, 1000);
+  };
+  onMounted(() => {
+    startTimer();
+  });
+  const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (newValue, oldValue) => {
+    bool_watch = false;
+    if (props.collapsed == true) {
+      gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
+    } else {
+      gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
+    }
+    if (bool_watch) {
+      startTimer();
+    }
+  });
+  //
+  onBeforeUnmount(() => {
+    cleanup();
+  });
+  const cleanup = () => {
+    stopWatching_collapsed_width()
+    stopWatching_window_innerWidth()
+    if (timer.value) {
+      clearInterval(timer.value);
+      timer.value = null;
+    }
+  };
 </script>
 <template>
   <div class="album-wall-container">

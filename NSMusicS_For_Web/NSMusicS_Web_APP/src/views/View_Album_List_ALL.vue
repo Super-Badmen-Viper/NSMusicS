@@ -29,7 +29,7 @@ const {
   window_innerWidth,
   options_Sort_key,
   Album_Files_temporary,album_page_num,album_page_size,album_Page_length,} = defineProps<{
-  collapsed:Boolean,
+  collapsed:boolean,
   window_innerWidth:number,
   options_Sort_key:{ columnKey: string; order: string }[],
   Album_Files_temporary:Item_Album[],

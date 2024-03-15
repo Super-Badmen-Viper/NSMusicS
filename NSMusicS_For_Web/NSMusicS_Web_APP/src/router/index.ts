@@ -4,16 +4,16 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/View_Song_List_ALL',
-      name: 'View_Song_List_ALL',
-      component: () => import('../views/View_Song_List_ALL.vue'),
+      path: '/',
+      name: 'home',
+      component: () => import('../views/HomeView.vue'),
       meta: {
         cleanup: true
       }
     },
     {
-      path: '/',
-      name: 'home',
+      path: '/View_Song_List_ALL',
+      name: 'View_Song_List_ALL',
       component: () => import('../views/View_Song_List_ALL.vue'),
       meta: {
         cleanup: true

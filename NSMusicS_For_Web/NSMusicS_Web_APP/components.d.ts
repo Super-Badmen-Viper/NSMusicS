@@ -34,6 +34,7 @@ declare module 'vue' {
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
     NP: typeof import('naive-ui')['NP']
     NPageHeader: typeof import('naive-ui')['NPageHeader']
+    NSelect: typeof import('naive-ui')['NSelect']
     NSpace: typeof import('naive-ui')['NSpace']
     NStatistic: typeof import('naive-ui')['NStatistic']
     RouterLink: typeof import('vue-router')['RouterLink']

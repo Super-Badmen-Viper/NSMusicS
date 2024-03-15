@@ -27,11 +27,11 @@ async function createWindow() {
     win.setMaximizable(false)
     // 禁用水平滚动条
     win.webContents.on('did-finish-load', () => {
-        win.webContents.insertCSS(`
-        ::-webkit-scrollbar {
-            display: none;
-        }
-        `)
+        // win.webContents.insertCSS(`
+        // ::-webkit-scrollbar {
+        //     display: none;
+        // }
+        // `)
     })
     // 去除警告：Policy set or a policy with “unsafe-eval“ enabled. 
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
