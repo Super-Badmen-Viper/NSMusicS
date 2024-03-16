@@ -58,7 +58,8 @@ const emit = defineEmits([
   'keyword',
   'reset_data',
   'media_Files_selected',
-  'set_media_Files_selected'
+  'media_Files_selected_temp',
+  'page_songlists_selected'
 ]);
 function get_media_path(value: any) {
   emit('media_file_path',value)
@@ -100,7 +101,10 @@ function get_media_Files_selected(value: Media_File) {
   emit('media_Files_selected',value)
 }
 function set_media_Files_selected(value: boolean) {
-  emit('set_media_Files_selected',value)
+  emit('media_Files_selected_temp',value)
+}
+function set_page_songlists_selected(value: boolean) {
+  emit('page_songlists_selected',value)
 }
 onMounted(async () => {
   emit('router_select','View_Song_List_ALL')
@@ -108,15 +112,21 @@ onMounted(async () => {
 
 const { 
   collapsed,window_innerWidth,
+
   change_page_header_color,page_top_album_image_url,page_top_album_name,
-  page_options_songlists,page_songlists_options,
+  page_songlists,page_songlists_options,page_songlists_statistic,
+  page_songlists_selected,
+
   media_Files_temporary,media_Files_selected,
   options_Sort_key,
   media_page_num,media_page_size,media_page_length,
   } = defineProps<{
     collapsed:Boolean,window_innerWidth:number,
+
     change_page_header_color:boolean,page_top_album_image_url:string,page_top_album_name:string,
-    page_options_songlists:Play_List[],page_songlists_options:{label: string;value: string}[],
+    page_songlists:Play_List[],page_songlists_options:{label: string;value: string}[],page_songlists_statistic:{label: string;song_count: number;id: string;}[],
+    page_songlists_selected:string;
+    
     media_Files_temporary:Media_File[],media_Files_selected:Media_File[],
     options_Sort_key:{ columnKey: string; order: string }[],
     media_page_num:number,media_page_size:number,media_page_length:number,
@@ -128,13 +138,18 @@ const {
     <Table_Song_List
       :data_temporary="media_Files_temporary"
       :data_temporary_selected="media_Files_selected"
+
       :change_page_header_color="change_page_header_color"
       :page_top_album_image_url="page_top_album_image_url"
       :page_top_album_name="page_top_album_name"
       :page_songlists_options="page_songlists_options"
-      :page_options_songlists="page_options_songlists"
+      :page_songlists_statistic="page_songlists_statistic"
+      :page_songlists="page_songlists"
+      :page_songlists_selected="page_songlists_selected"
+      @page_songlists_selected="set_page_songlists_selected"
+
       @media_Files_selected="get_media_Files_selected"
-      @set_media_Files_selected="set_media_Files_selected"
+      @media_Files_selected_temp="set_media_Files_selected"
       :collapsed="collapsed"
       :window_innerWidth="window_innerWidth"
       @media_file_path="get_media_path" 

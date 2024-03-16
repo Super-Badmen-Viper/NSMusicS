@@ -20,7 +20,8 @@ const emit = defineEmits([
   'keyword',
   'reset_data',
   'media_Files_selected',
-  'set_media_Files_selected'
+  'media_Files_selected_temp',
+  'page_songlists_selected'
 ]);
 const columns = ref<DataTableColumns<RowData>>();
 const createColumns_normal = (): DataTableColumns<RowData> => [
@@ -161,8 +162,11 @@ const createColumns_select = (): DataTableColumns<RowData> => [
 ];
 const props = defineProps<{
   data_temporary: Media_File[];data_temporary_selected: Media_File[];
+
   change_page_header_color: boolean;page_top_album_image_url:string;page_top_album_name:string;
-  page_options_songlists:Play_List[];page_songlists_options:{label: string;value: string}[];
+  page_songlists:Play_List[];page_songlists_options:{label: string;value: string}[];page_songlists_statistic:{label: string;song_count: number;id: string;}[];
+  page_songlists_selected:string;
+  
   collapsed: Boolean;
   window_innerWidth: number;
   options_Sort_key:{ columnKey: string; order: string }[];
@@ -174,9 +178,9 @@ onBeforeUnmount(() => {
 const data_select_Index = ref<number>(0)
 const click_select_ALL_row = () => {
   if(props.data_temporary_selected.length == 0){
-    emit('set_media_Files_selected', true);
+    emit('media_Files_selected_temp', true);
   }else{
-    emit('set_media_Files_selected', false);
+    emit('media_Files_selected_temp', false);
   }
 }
 const click_bulk_operation = () => {
@@ -561,11 +565,12 @@ const handleItemClick_album = (album:string) => {
   click_search()
   scrollToTop()
 }
-
-
-const selected_value_for_songlistall = ref('song_list_all')
+//
+watch(() => props.page_songlists_selected, (newValue, oldValue) => {
+  
+});
 const handleSelected_value_for_songlistall = (value: any) => {
-  selected_value_for_songlistall.value = value;
+  emit('page_songlists_selected',value)
   console.log('selected_value_for_songlistall：'+value);
   breadcrumbItems.value = props.page_songlists_options.find(option => option.value === value)?.label || '';
 };
@@ -670,17 +675,14 @@ function getAssetImage(firstImage: string) {
       <DynamicScroller 
         class="table" ref="scrollbar"
         :items="props.data_temporary"
-        :itemSize="itemSize"
-        :minItemSize="itemSize - 20"
-        @resize="onResize"
-        @update="onUpdate">
+        :minItemSize="itemSize - 20">
         <template #before>
           <div class="notice">
             <div
               style="
                 position: absolute;
                 z-index: 0;
-                width: calc(100vw - 220px);height: 296px;
+                width: calc(100vw - 220px);height: 298px;
                 border-radius: 20px;
                 overflow: hidden;
                 background-size: cover;
@@ -688,12 +690,6 @@ function getAssetImage(firstImage: string) {
                 filter: blur(0px);
                 background-color: transparent;
               ">
-              <!-- <img 
-                v-for="(imageUrl, index) in props.page_top_album_image_url" 
-                :key="index"
-                :style="`margin-left: 0px; width: auto; height: 300px;`"
-                :src="getAssetImage(imageUrl)"
-              /> -->
               <img 
                 :style="`
                   margin-left: 200px; margin-top: -300px; 
@@ -701,22 +697,6 @@ function getAssetImage(firstImage: string) {
                 `"
                 :src="getAssetImage(props.page_top_album_image_url)"
               />
-              <!-- <div 
-                v-if="!props.change_page_header_color"
-                style="
-                  width: 100px;height: 100px;
-                  position: absolute;bottom: 0;left: calc(100vw - 440px);
-                  z-index: 1;      
-                  border-left: 1000px solid transparent;border-right: 1000px solid transparent;border-bottom: 1500px solid #FAFAFC;">
-              </div>
-              <div 
-                v-if="props.change_page_header_color"
-                style="
-                  width: 100px;height: 100px;
-                  position: absolute;bottom: 0;left: calc(100vw - 440px);
-                  z-index: 1;      
-                  border-left: 1000px solid transparent;border-right: 1000px solid transparent;border-bottom: 1500px solid #101014;">
-              </div> -->
             </div>
             <div style="
               position: absolute;
@@ -740,9 +720,11 @@ function getAssetImage(firstImage: string) {
                   </linearGradient>
                 </defs>
                 <!-- fill="url(#gradient)" -->
+                <path fill-rule="evenodd" clip-rule="evenodd" 
+                d="M462 61.401L281 300L0 300V0H413.923L462 61.401ZM388.66 272.022L371.424 250H387.28L405.723 273.565L385.033 300H369.178L388.66 275.115C389.372 274.199 389.372 272.93 388.66 272.022ZM412.466 272.022L395.23 250H693.474L711.917 273.565L691.228 300H392.984L412.466 275.115C413.178 274.199 413.178 272.93 412.466 272.022ZM426.805 61.407L394.831 102.26C394.337 102.886 394.783 103.814 395.59 103.814H404.903C405.493 103.814 406.059 103.537 406.421 103.079L437.178 63.7803C437.71 63.1016 438 62.2638 438 61.401C438 60.5382 437.71 59.7004 437.178 59.0216L406.421 19.7349C406.059 19.265 405.493 19 404.903 19H395.59C394.783 19 394.337 19.9276 394.831 20.5541L426.805 61.407ZM358.207 102.26L390.181 61.407L358.207 20.5541C357.713 19.9276 358.159 19 358.966 19H368.278C368.869 19 369.435 19.265 369.796 19.7349L400.554 59.0216C401.086 59.7004 401.376 60.5382 401.376 61.401C401.376 62.2638 401.086 63.1016 400.554 63.7803L369.796 103.079C369.435 103.537 368.869 103.814 368.278 103.814H358.966C358.159 103.814 357.713 102.886 358.207 102.26Z"
+                  fill="url(#gradient)"/>
                 <path 
-                  fill-rule="evenodd" clip-rule="evenodd" 
-                  d="M462 61.401L281 300L0 300V0H413.923L462 61.401ZM302 300L320.666 273.625L338.466 250H653.344C660.802 250 665.59 257.923 662.124 264.526L639 300H302ZM426.805 61.407L394.831 102.26C394.337 102.886 394.783 103.814 395.59 103.814H404.903C405.493 103.814 406.059 103.537 406.421 103.079L437.178 63.7803C437.71 63.1016 438 62.2638 438 61.401C438 60.5382 437.71 59.7004 437.178 59.0216L406.421 19.7349C406.059 19.265 405.493 19 404.903 19H395.59C394.783 19 394.337 19.9276 394.831 20.5541L426.805 61.407ZM358.207 102.26L390.181 61.407L358.207 20.5541C357.713 19.9276 358.159 19 358.966 19H368.278C368.869 19 369.435 19.265 369.796 19.7349L400.554 59.0216C401.086 59.7004 401.376 60.5382 401.376 61.401C401.376 62.2638 401.086 63.1016 400.554 63.7803L369.796 103.079C369.435 103.537 368.869 103.814 368.278 103.814H358.966C358.159 103.814 357.713 102.886 358.207 102.26ZM365.794 273.009L358.105 263.184C358.015 263.066 357.873 263 357.726 263H355.397C355.196 263 355.084 263.232 355.208 263.389L363.201 273.602L355.208 283.815C355.195 283.831 355.184 283.849 355.176 283.868C355.167 283.89 355.161 283.914 355.158 283.938C355.153 283.983 355.161 284.028 355.181 284.069C355.201 284.109 355.232 284.143 355.27 284.167C355.293 284.181 355.317 284.192 355.343 284.198C355.361 284.202 355.379 284.204 355.397 284.204H357.726C357.873 284.204 358.015 284.134 358.105 284.02L365.794 274.198C366.069 273.846 366.069 273.358 365.794 273.009ZM348.949 263.184L356.638 273.009C356.912 273.358 356.912 273.846 356.638 274.198L348.949 284.02C348.859 284.134 348.717 284.204 348.57 284.204H346.241C346.196 284.204 346.152 284.191 346.114 284.167C346.076 284.143 346.045 284.109 346.025 284.069C346.005 284.028 345.997 283.983 346.002 283.938C346.007 283.893 346.024 283.851 346.052 283.815L354.045 273.602L346.052 263.389C345.928 263.232 346.04 263 346.241 263H348.57C348.717 263 348.859 263.066 348.949 263.184Z"
+                d="M718.66 272.022C719.372 272.93 719.372 274.199 718.66 275.115L699.178 300H715.033L735.723 273.565L717.28 250H701.424L718.66 272.022Z"
                   fill="url(#gradient)"/>
 
               </svg>
@@ -755,12 +737,11 @@ function getAssetImage(firstImage: string) {
                 border-radius: 20px;
                 margin-bottom: 10px;">
               <n-grid 
-                :cols="2" :x-gap="30" :y-gap="10" layout-shift-disabled
+                :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
                 style="margin-left: 30px;width: 370px;">
-                <n-gi><n-statistic style="text-shadow: 10px white;" label="所有歌曲" value="1222 首" /></n-gi>
-                <n-gi><n-statistic label="收藏歌曲" value="68 首" /></n-gi>
-                <n-gi><n-statistic label="最近播放" value="999+ 首" /></n-gi>
-                <n-gi><n-statistic style="font-size: 12px;" label="播放列表" value="6 组" /></n-gi>
+                <n-gi v-for="songlist in props.page_songlists_statistic" :key="songlist.id">
+                  <n-statistic :label="songlist.label" :value="songlist.song_count" />
+                </n-gi>
               </n-grid>
               <template #title>
                 <n-space vertical style="margin-top:2px;margin-left: 10px;">
@@ -776,10 +757,10 @@ function getAssetImage(firstImage: string) {
                       </n-breadcrumb-item>
                   </n-breadcrumb>
                   <n-select 
-                    v-model:value="selected_value_for_songlistall" 
+                    :value="props.page_songlists_selected" 
                     :options="props.page_songlists_options" style="width: 192px;"
                     :on-update:value="handleSelected_value_for_songlistall" />
-                </n-space>  
+                </n-space>
               </template>
               <template #header>
                 
@@ -789,6 +770,7 @@ function getAssetImage(firstImage: string) {
                   width="80px" height="80px" object-fit="contain"
                   style="border-radius: 8px;margin-left: 20px;margin-top: 20px;"
                   :src="getAssetImage(props.page_top_album_image_url)"
+                  :show-toolbar="false"
                 />
               </template>
               <template #extra>
@@ -796,13 +778,13 @@ function getAssetImage(firstImage: string) {
               </template>
               <template #footer>
                 <div style="
-                  margin-left: 380px;margin-top: -20px;
+                  margin-left: 430px;margin-top: -20px;
                   text-align: left;
-                  width: 200px;height: 40px;font-weight: 900;">
+                  height: 40px;font-weight: 900;">
                   <n-button text @click="handleItemClick_album(props.page_top_album_name)">
                     <n-ellipsis 
                       style="
-                        max-width: 250px;height: 40px;
+                        max-width: 256px;height: 40px;
                         text-align: left;font-size: 24px;
                         font-weight: 900;">
                       {{ props.page_top_album_name }}
@@ -834,32 +816,28 @@ function getAssetImage(firstImage: string) {
                   emit('media_Files_selected', item);
                 }"
                 />
-              <div class="medium_image_url">
+              <div 
+                style="margin-left: 10px;
+                  width: 58px;height: 58px; 
+                  border-radius: 6px; overflow: hidden;">
                 <img
                   :key="item.id"
                   :src="item.medium_image_url"
-                  style="width: 100%; height: 100%; object-fit: cover;"
-                  class="image"/>
+                  style="width: 100%; height: 100%; object-fit: cover;"/>
               </div>
               <div class="title">
-                <n-button text @click="handleItemClick_title(item.title)">
-                  <n-ellipsis style="max-width: 200px;text-align: left;font-size: 15px;">{{ item.title }}</n-ellipsis>
-                </n-button>
+                <span @click="handleItemClick_title(item.title)">{{ item.title }}</span>
               </div>
               <div class="artist">
                 <template v-for="artist in item.artist.split('/')">
-                  <n-button text @click="handleItemClick_artist(artist)">
-                    <n-ellipsis style="max-width: 200px;text-align: left;font-size: 15px;">{{ artist + '&nbsp' }}</n-ellipsis>
-                  </n-button>
+                  <span @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
                 </template>
               </div>
               <div class="album">
-                <n-button text @click="handleItemClick_album(item.album)">
-                  <n-ellipsis style="max-width: 200px;text-align: left;font-size: 15px;">{{ item.album }}</n-ellipsis>
-                </n-button>
+                <span @click="handleItemClick_album(item.album)">{{ item.album }}</span>
               </div>
-              <n-ellipsis class="duration_txt" style="margin-left: auto; text-align: left;font-size: 15px;">{{ item.duration_txt }}</n-ellipsis>
-              <n-ellipsis class="index" style="margin-left: auto; text-align: left;font-size: 15px;">{{ index + 1 }}</n-ellipsis>
+              <span class="duration_txt" style="margin-left: auto; text-align: left;font-size: 15px;">{{ item.duration_txt }}</span>
+              <span class="index" style="margin-left: auto; text-align: left;font-size: 15px;">{{ index + 1 }}</span>
             </div>
           </DynamicScrollerItem>
         </template>
@@ -924,33 +902,38 @@ function getAssetImage(firstImage: string) {
   width: 50px;
   margin-left: 12px;
 }
-.medium_image_url{
-  margin-left: 10px;
-  width: 58px;height: 58px; 
-  border-radius: 6px; overflow: hidden;
-}
 .title{
   margin-left: 10px;
   text-align: left;
   width: 240px;
+  font-size: 15px;
+  overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
 .title :hover{
+  text-decoration: underline;
+  cursor: pointer;
   color: #3DC3FF;
 }
 .artist{
   margin-left: 10px;
   text-align: left;
   width: 240px;
+  overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
 .artist :hover{
+  text-decoration: underline;
+  cursor: pointer;
   color: #3DC3FF;
 }
 .album{
   margin-left: 10px;
   text-align: left;
   width: 240px;
+  overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
 .album :hover{
+  text-decoration: underline;
+  cursor: pointer;
   color: #3DC3FF;
 }
 .duration_txt{

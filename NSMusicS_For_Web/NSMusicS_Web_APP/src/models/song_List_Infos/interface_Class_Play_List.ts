@@ -6,7 +6,7 @@ interface Play_List {
     name: string; // 播放列表的名称
     comment: string; // 播放列表的注释
     duration: number; // 播放列表的总时长（以秒为单位）
-    song_count: number; // 播放列表中包含的歌曲数量
+    song_count: string; // 播放列表中包含的歌曲数量
     public: boolean; // 播放列表是否公开可见
     created_at: Date | null; // 播放列表的创建日期和时间，可以为 null
     updated_at: Date | null; // 播放列表的最后更新日期和时间，可以为 null

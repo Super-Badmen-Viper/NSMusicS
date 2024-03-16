@@ -11,7 +11,6 @@
     <DynamicScroller
       :items="filteredItems"
       :min-item-size="54"
-      :emit-update="true"
       class="scroller"
       @resize="onResize"
       @update="onUpdate">

@@ -131,6 +131,7 @@
       console.log('media_Files_selected：'+value.path+'  '+value.selected)
     }
   }
+  const media_Files_selected_temp = ref<Media_File[]>([])
   function set_media_Files_selected(value: boolean) {
     if (value === true) {
       media_Files_temporary.value.forEach((item, index) => {
@@ -144,12 +145,12 @@
       media_Files_selected.value = [];
     }
   }
-  const media_page_length = ref<number>();
-  const media_file_count = ref<number>();
+  const media_page_length = ref<number>(0);
+  const media_file_count = ref<number>(0);
   //////
   const Album_Files_temporary = ref<Item_Album[]>([]);
-  const album_Page_length = ref<number>();
-  const album_file_count = ref<number>();
+  const album_Page_length = ref<number>(0);
+  const album_file_count = ref<number>(0);
   //////
   const options_Sort_key = ref<{ columnKey: string; order: string }[]>([]);
   function get_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
@@ -289,13 +290,21 @@
       });
     });
   }
-  const page_top_album_image_url = ref<string>('../../../resources/00album.png')
-  const page_top_album_name = ref<string>()
-  const page_songlists_options = ref<{label: string;value: string}[]>()
-  const page_songlists = ref<Play_List[]>()
   /////
   const fetchData_Home = () => {
     
+  }
+  //
+  const page_top_album_image_url = ref<string>('../../../resources/00album.png')
+  const page_top_album_name = ref<string>('')
+  const page_songlists_options = ref<{label: string;value: string}[]>([])
+  const page_songlists_statistic = ref<{label: string;song_count: string;id: string;}[]>([])
+  const page_songlists = ref<Play_List[]>([])
+  const page_songlists_selected = ref<string>('song_list_all')
+  const get_page_songlists_selected = (value: any) => {
+    page_songlists_selected.value = value
+    console.log('page_songlists_selected：'+value)
+    fetchData_Media()
   }
   const fetchData_Media = async () => {
     let db:any = null;
@@ -304,45 +313,7 @@
       db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
       db.pragma('journal_mode = WAL');
 
-      //
-      const offset = (media_page_num.value - 1) * media_page_size.value;
-      const sortKey = options_Sort_key.value.length > 0 && options_Sort_key.value[0].order !== 'default' ?
-        options_Sort_key.value[0].columnKey : 'created_at';
-      const sortOrder = options_Sort_key.value.length > 0 && options_Sort_key.value[0].order !== 'default' ?
-        options_Sort_key.value[0].order.replace('end', '') : '';
-      let keywordFilter = keyword.value.length > 0 ?
-        `WHERE title LIKE '%${keyword.value}%' OR artist LIKE '%${keyword.value}%' OR album LIKE '%${keyword.value}%'` :
-        '';
-      if(model_num_accurate_search.value != 0){
-        if(keywordFilter.length > 0){
-          keywordFilter = keywordFilter.replace('LIKE','=').replace(/%/g, '');
-        }
-        model_num_accurate_search.value = 0
-      }
-      //////   LIMIT ${media_page_size.value} 
-      //////   OFFSET ${offset}
-      const stmt_media_file = db.prepare(`
-        SELECT id, title, artist, album, duration, path 
-        FROM media_file 
-        ${keywordFilter}
-        ORDER BY ${sortKey} ${sortOrder}
-      `);
-      const stmt_album_limit_1_imagefiles = db.prepare('SELECT * FROM album LIMIT 1');
-      const rows = stmt_media_file.all();  
-      const imagefiles = stmt_album_limit_1_imagefiles.all();
-      rows.forEach((row: Media_File) => {
-        row.selected = false;
-        row.duration_txt = formatTime(row.duration);
-        const medium_image_url = row.path.replace('mp3', 'jpg');
-        if (imagefiles[0].image_files.indexOf(medium_image_url) > 0)
-          row.medium_image_url = medium_image_url;
-        else
-          row.medium_image_url = '../../../resources/error_album.jpg';
-        media_Files_temporary.value.push(row);
-      })
-      rows.value = []
-      imagefiles.value = []
-      //
+      // load media_model data
       const stmt_media_file_count = db.prepare('SELECT COUNT(*) AS count FROM media_file');
       media_file_count.value = stmt_media_file_count.get().count;   
       if (media_file_count.value != null)
@@ -352,7 +323,9 @@
       });
       //
       page_songlists_options.value = [];
+      page_songlists_statistic.value = [];
       page_songlists.value = []
+      //////
       const temp_Play_List_ALL: Play_List = {
         label: '全部歌曲',
         value: 'song_list_all',
@@ -360,7 +333,7 @@
         name: '全部歌曲',
         comment: '全部歌曲',
         duration: 0,
-        song_count: media_Files_temporary.value.length,
+        song_count: stmt_media_file_count.get().count + ' 首',
         public: false,
         created_at: null,
         updated_at: null,
@@ -372,7 +345,17 @@
         owner_id: ''
       }
       page_songlists_options.value.push(temp_Play_List_ALL);
+      page_songlists_statistic.value.push({
+        label: temp_Play_List_ALL.label,
+        song_count: temp_Play_List_ALL.song_count.toString(),
+        id: temp_Play_List_ALL.id
+      });
       page_songlists.value.push(temp_Play_List_ALL)
+      //////
+      const stmt_media_Annotation_Starred_Count = db.prepare(`
+        SELECT COUNT(*) AS count FROM annotation 
+        WHERE starred = 1 AND item_type='media_file'
+      `);
       const temp_Play_List_Love: Play_List = {
         label: '收藏歌曲',
         value: 'song_list_love',
@@ -380,7 +363,7 @@
         name: '收藏歌曲',
         comment: '收藏歌曲',
         duration: 0,
-        song_count: media_Files_temporary.value.length,
+        song_count: stmt_media_Annotation_Starred_Count.get().count + ' 首',
         public: false,
         created_at: null,
         updated_at: null,
@@ -392,7 +375,17 @@
         owner_id: ''
       }
       page_songlists_options.value.push(temp_Play_List_Love);
+      page_songlists_statistic.value.push({
+        label: temp_Play_List_Love.label,
+        song_count: temp_Play_List_Love.song_count.toString(),
+        id: temp_Play_List_Love.id
+      });
       page_songlists.value.push(temp_Play_List_Love)
+      //////
+      const stmt_media_Annotation_Recently_Count = db.prepare(`
+        SELECT COUNT(*) AS count FROM annotation 
+        WHERE play_count >= 1 AND item_type='media_file'
+      `);
       const temp_Play_List_Recently: Play_List = {
         label: '最近播放',
         value: 'song_list_recently',
@@ -400,7 +393,7 @@
         name: '最近播放',
         comment: '最近播放',
         duration: 0,
-        song_count: media_Files_temporary.value.length,
+        song_count: stmt_media_Annotation_Recently_Count.get().count + ' 首',
         public: false,
         created_at: null,
         updated_at: null,
@@ -412,8 +405,85 @@
         owner_id: ''
       }
       page_songlists_options.value.push(temp_Play_List_Recently);
+      page_songlists_statistic.value.push({
+        label: temp_Play_List_Recently.label,
+        song_count: temp_Play_List_Recently.song_count.toString(),
+        id: temp_Play_List_Recently.id
+      });
       page_songlists.value.push(temp_Play_List_Recently)
+      //////
+      const stmt_media_Annotation_PlayList_Count = db.prepare(`
+        SELECT COUNT(*) AS count FROM playlist
+      `);
+      page_songlists_statistic.value.push({
+        label: '播放列表',
+        song_count: stmt_media_Annotation_PlayList_Count.get().count + ' 组',
+        id: 'song_list_all_PlayList'
+      });
+      //////
       
+      // load media_Files_temporary data
+      const offset = (media_page_num.value - 1) * media_page_size.value;
+      const sortKey = options_Sort_key.value.length > 0 && options_Sort_key.value[0].order !== 'default' ?
+        options_Sort_key.value[0].columnKey : 'created_at';
+      const sortOrder = options_Sort_key.value.length > 0 && options_Sort_key.value[0].order !== 'default' ?
+        options_Sort_key.value[0].order.replace('end', '') : '';
+      let keywordFilter = keyword.value.length > 0 ?
+        `WHERE title LIKE '%${keyword.value}%' OR artist LIKE '%${keyword.value}%' OR album LIKE '%${keyword.value}%'` :
+        '';
+      if (model_num_accurate_search.value != 0) {
+        if (keywordFilter.length > 0) {
+          keywordFilter = keywordFilter.replace('LIKE', '=').replace(/%/g, '');
+        }
+        model_num_accurate_search.value = 0;
+      }
+
+      const stmt_media_file = db.prepare(`
+        SELECT id, title, artist, album, duration, path 
+        FROM media_file 
+        ${keywordFilter}
+        ORDER BY ${sortKey} ${sortOrder}
+      `);
+      const stmt_album_limit_1_imagefiles = db.prepare('SELECT * FROM album LIMIT 1');
+      const rows = stmt_media_file.all();
+      const imagefiles = stmt_album_limit_1_imagefiles.all();
+
+      rows.forEach((row: Media_File) => {
+        row.selected = false;
+        row.duration_txt = formatTime(row.duration);
+        const medium_image_url = row.path.replace('mp3', 'jpg');
+        if (imagefiles[0].image_files.indexOf(medium_image_url) > 0)
+          row.medium_image_url = medium_image_url;
+        else
+          row.medium_image_url = '../../../resources/error_album.jpg';
+        media_Files_temporary.value.push(row);
+      });
+
+      media_Files_temporary.value = media_Files_temporary.value.filter((item) => {
+        if (page_songlists_selected.value === 'song_list_all') {
+          return true;
+        } else if (page_songlists_selected.value === 'song_list_love') {
+          const stmt_media_Annotation_Starred_Items = db.prepare(`
+            SELECT item_id FROM annotation 
+            WHERE starred = 1 AND item_type='media_file'
+          `);
+          const annotations = stmt_media_Annotation_Starred_Items.all();
+          return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
+        } else if (page_songlists_selected.value === 'song_list_recently') {
+          const stmt_media_Annotation_Recently_Items = db.prepare(`
+            SELECT item_id FROM annotation 
+            WHERE play_count >= 1 AND item_type='media_file'
+          `);
+          const annotations = stmt_media_Annotation_Recently_Items.all();
+          return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
+        } else if (page_songlists_selected.value === 'song_list_all_PlayList') {
+          return true;
+        }
+      });
+
+      rows.value = [];
+      imagefiles.value = [];
+      //////
 
     } catch (err: any) {
       console.error(err);
@@ -514,6 +584,7 @@
   //////
   import router from './router'
   router.beforeEach((to, from, next) => {
+    keyword.value = '';
     clear_Files_temporary()
     next();
   });
@@ -545,7 +616,6 @@
   //////
   import { zhCN, dateZhCN } from 'naive-ui'
   import type { NLocale, NDateLocale } from 'naive-ui'
-import { template } from 'lodash'
   //////
   const locale = ref<NLocale | null>(zhCN)
   const dateLocale = ref<NDateLocale | null>(dateZhCN)
@@ -599,7 +669,7 @@ import { template } from 'lodash'
                 :media_Files_temporary="media_Files_temporary"
                 :media_Files_selected="media_Files_selected"
                 @media_Files_selected="get_media_Files_selected"
-                @set_media_Files_selected="set_media_Files_selected"
+                @media_Files_selected_temp="set_media_Files_selected"
                 :options_Sort_key="options_Sort_key"
                 @options_Sort_key="get_options_Sort_key"
                 @keyword="get_keyword"
@@ -607,7 +677,10 @@ import { template } from 'lodash'
                 :page_top_album_image_url="page_top_album_image_url"
                 :page_top_album_name="page_top_album_name"
                 :page_songlists_options="page_songlists_options"
+                :page_songlists_statistic="page_songlists_statistic"
                 :page_songlists="page_songlists"
+                :page_songlists_selected="page_songlists_selected"
+                @page_songlists_selected="get_page_songlists_selected"
                 
                 :Album_Files_temporary="Album_Files_temporary"
                 :album_page_num="album_page_num"
@@ -675,9 +748,15 @@ import { template } from 'lodash'
       position: absolute;
       top: 0;left: 0;
     }
-    .n_layout_sider{
-      margin:60px 0px 80px 0px;
+    .n_layout_sider {
+      margin: 60px 0px 80px 0px;
+      border-radius: 0px 20px 20px 0px;
+      border: 0px;
     }
+    /* .n_layout_sider:hover {
+      border: 1px solid #7FE7C4;
+      box-shadow: 0 0 5px #7FE7C4;
+    } */
     .view_show {
       width: calc(100vw - 100px);
       height: calc(100vh - 200px);
