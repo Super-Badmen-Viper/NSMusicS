@@ -2,16 +2,16 @@
   import { computed, h, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 
   const emit = defineEmits([
-    'album_page_num',
-    'options_Sort_key','page_albumlists_keyword','page_albumlists_reset_data',
-    'page_albumlists_selected'
+    'artist_page_num',
+    'options_Sort_key','page_artistlists_keyword','page_artistlists_reset_data',
+    'page_artistlists_selected'
   ]);
   const props = defineProps<{
-    data_temporary: Album[];
+    data_temporary: Artist[];
 
-    change_page_header_color:boolean,page_albumlists_top_album_image_url:string,page_albumlists_top_album_name:string,
-    page_albumlists:Play_List[],page_albumlists_options:{label: string;value: string}[],page_albumlists_statistic:{label: string;album_count: number;id: string;}[],
-    page_albumlists_selected:string;
+    change_page_header_color:boolean,page_artistlists_top_artist_image_url:string,page_artistlists_top_artist_name:string,
+    page_artistlists:Play_List[],page_artistlists_options:{label: string;value: string}[],page_artistlists_statistic:{label: string;artist_count: number;id: string;}[],
+    page_artistlists_selected:string;
 
     page: number;
     pageSize: number;
@@ -45,13 +45,9 @@
     state_Sort: state_Sort;
   };
   const options_Sort_key = ref<SortItem[]>([
-    {label:'专辑名', key: 'name', state_Sort: state_Sort.Default },
-    {label:'歌手名', key: 'artist', state_Sort: state_Sort.Default },
-    {label:'年份(最小)', key: 'min_year', state_Sort: state_Sort.Default },
-    {label:'年份(最大)', key: 'max_year', state_Sort: state_Sort.Default },
-    {label:'容量', key: 'size', state_Sort: state_Sort.Default },
-    {label:'创建时间', key: 'created_at', state_Sort: state_Sort.Default },
-    {label:'更新时间', key: 'updated_at', state_Sort: state_Sort.Default },
+    {label:'歌手名', key: 'name', state_Sort: state_Sort.Default },
+    {label:'专辑数', key: 'album_count', state_Sort: state_Sort.Default },
+    {label:'歌曲数', key: 'song_count', state_Sort: state_Sort.Default },
     {label:'更新时间(外部信息)', key: 'external_info_updated_at', state_Sort: state_Sort.Default }
   ]);
   const options_Sort = computed(() => {
@@ -134,7 +130,7 @@
       bool_show_search_area.value = false
       input_search_InstRef.value?.clear()
       if(bool_input_search == true){
-        emit('page_albumlists_reset_data',true)
+        emit('page_artistlists_reset_data',true)
         back_search_default()
         bool_input_search = false
         scrollToTop()
@@ -156,14 +152,14 @@
   let bool_input_search = false
   const click_search = () => {
     if (input_search_Value.value){
-      const page_albumlists_keyword = input_search_Value.value.toLowerCase();
-      emit('page_albumlists_keyword',page_albumlists_keyword)
+      const page_artistlists_keyword = input_search_Value.value.toLowerCase();
+      emit('page_artistlists_keyword',page_artistlists_keyword)
       bool_input_search = true
       options_Sort_key.value.forEach(element => {
         element.state_Sort = state_Sort.Default
       });
     }else{
-      emit('page_albumlists_reset_data',true)
+      emit('page_artistlists_reset_data',true)
       bool_input_search = false
       back_search_default()
     }
@@ -191,10 +187,10 @@
 
 
   //
-  const item_album_margin = ref<number>(12)
-  const item_album = ref<number>(170)
-  const item_album_image = ref<number>(item_album.value - 20)
-  const item_album_txt = ref<number>(item_album.value - 20)
+  const item_artist_margin = ref<number>(12)
+  const item_artist = ref<number>(170)
+  const item_artist_image = ref<number>(item_artist.value - 20)
+  const item_artist_txt = ref<number>(item_artist.value - 20)
   //
   const scrollbar = ref<HTMLElement | null>(null);
   const scrollToTop = () => {
@@ -204,7 +200,7 @@
   };
   //
   const handleImageError = (event:any) => {
-    event.target.src = '../../../resources/error_album.jpg'; // 设置备用图片路径
+    event.target.src = '../../../resources/error_artist.jpg'; // 设置备用图片路径
   };
 
   import {
@@ -233,16 +229,16 @@
   const gridItems = ref(5);
   const itemSecondarySize = 190;
   //
-  const handleSelected_value_for_albumlistall = (value: any) => {
-    emit('page_albumlists_selected',value)
-    console.log('selected_value_for_albumlistall：'+value);
-    breadcrumbItems.value = props.page_albumlists_options.find(option => option.value === value)?.label || '';
+  const handleSelected_value_for_artistlistall = (value: any) => {
+    emit('page_artistlists_selected',value)
+    console.log('selected_value_for_artistlistall：'+value);
+    breadcrumbItems.value = props.page_artistlists_options.find(option => option.value === value)?.label || '';
   };
-  const breadcrumbItems = ref('所有专辑');
+  const breadcrumbItems = ref('所有歌手');
   // go to media page
-  const handleItemClick_album = (album:string) => {
+  const handleItemClick_artist = (artist:string) => {
     // router.push({ path: '/media' });
-    input_search_Value.value = album+'accurate_search'+'__album__'
+    input_search_Value.value = artist+'accurate_search'+'__artist__'
     bool_show_search_area.value = false
     show_search_area()
     click_search()
@@ -340,9 +336,9 @@
       </n-dropdown>
     </n-space>
 
-    <div class="album-wall-container">
+    <div class="artist-wall-container">
       <DynamicScroller
-        class="album-wall" 
+        class="artist-wall" 
         :items="props.data_temporary"
         :itemSize="itemSize"
         :minItemSize="itemSize"
@@ -367,7 +363,7 @@
                   margin-left: 200px; margin-top: -300px; 
                   width: auto; height: calc(100vw - 400px);
                 `"
-                :src="getAssetImage(props.page_albumlists_top_album_image_url)"
+                :src="getAssetImage(props.page_artistlists_top_artist_image_url)"
               />
             </div>
             <div style="
@@ -410,14 +406,14 @@
               <n-grid 
                 :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
                 style="margin-left: 30px;width: 370px;">
-                <n-gi v-for="albumlist in props.page_albumlists_statistic" :key="albumlist.id">
-                  <n-statistic :label="albumlist.label" :value="albumlist.album_count" />
+                <n-gi v-for="artistlist in props.page_artistlists_statistic" :key="artistlist.id">
+                  <n-statistic :label="artistlist.label" :value="artistlist.artist_count" />
                 </n-gi>
               </n-grid>
               <template #title>
                 <n-space vertical style="margin-top:2px;margin-left: 10px;">
                   <n-breadcrumb separator=">">
-                      <n-breadcrumb-item style="font-size: 22px">专辑</n-breadcrumb-item>
+                      <n-breadcrumb-item style="font-size: 22px">歌手</n-breadcrumb-item>
                       <n-breadcrumb-item> 
                         <n-ellipsis 
                           style="
@@ -428,9 +424,9 @@
                       </n-breadcrumb-item>
                   </n-breadcrumb>
                   <n-select 
-                    :value="props.page_albumlists_selected" 
-                    :options="props.page_albumlists_options" style="width: 192px;"
-                    :on-update:value="handleSelected_value_for_albumlistall" />
+                    :value="props.page_artistlists_selected" 
+                    :options="props.page_artistlists_options" style="width: 192px;"
+                    :on-update:value="handleSelected_value_for_artistlistall" />
                 </n-space>
               </template>
               <template #header>
@@ -440,7 +436,7 @@
                 <n-image
                   width="80px" height="80px" object-fit="contain"
                   style="border-radius: 8px;margin-left: 20px;margin-top: 20px;"
-                  :src="getAssetImage(props.page_albumlists_top_album_image_url)"
+                  :src="getAssetImage(props.page_artistlists_top_artist_image_url)"
                   :show-toolbar="false"
                 />
               </template>
@@ -452,13 +448,13 @@
                   margin-left: 430px;margin-top: -20px;
                   text-align: left;
                   height: 40px;font-weight: 900;">
-                  <n-button text @click="handleItemClick_album(props.page_albumlists_top_album_name)">
+                  <n-button text @click="handleItemClick_artist(props.page_artistlists_top_artist_name)">
                     <n-ellipsis 
                       style="
                         max-width: 256px;height: 40px;
                         text-align: left;font-size: 24px;
                         font-weight: 900;">
-                      {{ props.page_albumlists_top_album_name }}
+                      {{ props.page_artistlists_top_artist_name }}
                     </n-ellipsis>
                   </n-button>
                 </div>
@@ -477,18 +473,18 @@
             :data-active="active">
             <div
               :key="item.id"
-              class="album"
-              :style="{ margin: item_album_margin + 'px' }">
+              class="artist"
+              :style="{ margin: item_artist_margin + 'px' }">
               <div
-                :style="{ width: item_album_image + 'px', height: item_album_image + 'px', position: 'relative' }">
+                :style="{ width: item_artist_image + 'px', height: item_artist_image + 'px', position: 'relative' }">
                 <img
                   :src="item.medium_image_url"
                   @error="handleImageError"
-                  :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
+                  :style="{ width: item_artist_image + 'px', height: item_artist_image + 'px', borderRadius: '6px' }"/>
                 <div class="hover-overlay">
                   <div class="hover-content">
                     <n-button 
-                      class="play_this_album"
+                      class="play_this_artist"
                       quaternary circle size="large" color="#FFFFFF" style="transform: scale(1.3);">
                       <template #icon>
                         <n-icon size="30"><PlayCircle24Regular/></n-icon>
@@ -496,7 +492,7 @@
                     </n-button>
                     <div class="hover-buttons">
                       <n-button 
-                        class="love_this_album"
+                        class="love_this_artist"
                         quaternary circle color="#FFFFFF">
                         <template #icon>
                           <n-icon v-if="item.favorite" :size="20" color="red"><Heart28Filled/></n-icon>
@@ -504,7 +500,7 @@
                         </template>
                       </n-button>
                       <n-button 
-                        class="more_this_album"
+                        class="more_this_artist"
                         quaternary circle color="#FFFFFF">
                         <template #icon>
                           <n-icon><MoreCircle32Regular /></n-icon>
@@ -514,11 +510,11 @@
                   </div>
                 </div>
               </div>
-              <div class="album_text" :style="{ width: item_album_image + 'px' }">
-                <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
-                  <div><span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }">{{ item.name }}</span></div>
-                  <div><span id="album_singer_name" :style="{ maxWidth: item_album_txt + 'px' }">{{ item.artist }}</span></div>
-                  <div><span id="album_album_name" :style="{ maxWidth: item_album_txt + 'px' }">{{ item.updated_time }}</span></div>
+              <div class="artist_text" :style="{ width: item_artist_image + 'px' }">
+                <div class="artist_left_text_artist_info" :style="{ width: item_artist_txt + 'px' }">
+                  <div><span id="artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">{{ item.name }}</span></div>
+                  <div><span id="artist_singer_name" :style="{ maxWidth: item_artist_txt + 'px' }"> 专辑数：{{ item.album_count }}</span></div>
+                  <div><span id="artist_artist_name" :style="{ maxWidth: item_artist_txt + 'px' }"> 歌曲数：{{ item.song_count }}</span></div>
                 </div>
               </div>
             </div>
@@ -529,23 +525,23 @@
   </n-space>
 </template> 
 <style>
-.album-wall-container {
+.artist-wall-container {
   width: 100%;
   height: 100%;
 }
-.album-wall {
+.artist-wall {
   overflow-y: auto;
   width: calc(100vw - 200px);
   height: calc(100vh - 200px);
   display: flex;
   flex-direction: column;
 }
-.album {
+.artist {
   float: left;
   flex-direction: column;
   align-items: left;
 }
-.album .hover-overlay {
+.artist .hover-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -556,26 +552,26 @@
   opacity: 0;
   transition: opacity 0.3s;
 }
-.album:hover .hover-overlay {
+.artist:hover .hover-overlay {
   opacity: 1;
 }
-.album .hover-content {
+.artist .hover-content {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
 }
-.album .hover-buttons {
+.artist .hover-buttons {
   position: absolute;
   bottom: 10px;
   right: 10px;
 }
 
-.album_left_text_album_info{
+.artist_left_text_artist_info{
   float: left;
   text-align: left;
 }
-#album_name{
+#artist_name{
   margin-top: 2px;
   font-size: 15px;
   font-weight: 500;
@@ -585,12 +581,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#album_name:hover {
+#artist_name:hover {
   text-decoration: underline;
   cursor: pointer;
   color: #3DC3FF;
 }
-#album_singer_name{
+#artist_singer_name{
   font-size: 12px;
   font-weight: 500;
   display: -webkit-box;
@@ -599,12 +595,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#album_singer_name:hover{
+#artist_singer_name:hover{
   text-decoration: underline;
   cursor: pointer;
   color: #3DC3FF;
 }
-#album_album_name{
+#artist_artist_name{
   font-size: 12px;
   font-weight: 500;
   display: -webkit-box;
@@ -613,19 +609,19 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#album_album_name:hover{
+#artist_artist_name:hover{
   text-decoration: underline;
   cursor: pointer;
   color: #3DC3FF;
 }
 
-.play_this_album:hover{
+.play_this_artist:hover{
   color: #3DC3FF;
 }
-.love_this_album:hover{
+.love_this_artist:hover{
   color: #3DC3FF;
 }
-.more_this_album:hover{
+.more_this_artist:hover{
   color: #3DC3FF;
 }
 

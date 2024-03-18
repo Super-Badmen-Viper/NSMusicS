@@ -1,179 +1,84 @@
-<template>
-  <div class="dynamic-scroller-demo">
-    <div class="toolbar">
-      <input
-        v-model="search"
-        placeholder="Filter..."
-      >
-      <span>({{ updateParts.viewStartIdx }} - [{{ updateParts.visibleStartIdx }} - {{ updateParts.visibleEndIdx }}] - {{ updateParts.viewEndIdx }})</span>
-    </div>
+<script setup lang="ts">
+import { ref, onMounted,defineEmits } from 'vue';
+import Table_Artist_List_ALL from '../views/table/Table_Artist_List_ALL_Grid_Virtual.vue'
 
-    <DynamicScroller
-      :items="filteredItems"
-      :min-item-size="54"
-      class="scroller"
-      @resize="onResize"
-      @update="onUpdate">
-      <template #before>
-        <div class="notice">
-          The message heights are unknown.
-        </div>
-      </template>
-      <template #after>
-        <div class="notice">
-          You have reached the end.
-        </div>
-      </template>
-      <template #default="{ item, index, active }">
-        <DynamicScrollerItem
-          :item="item"
-          :active="active"
-          :size-dependencies="[
-            item.message,
-          ]"
-          :data-index="index"
-          :data-active="active"
-          :title="`Click to change message ${index}`"
-          class="message"
-          @click="changeMessage(item)">
-          <div class="avatar">
-            <img
-              :key="item.avatar"
-              :src="item.avatar"
-              alt="avatar"
-              class="image"
-            >
-          </div>
-          <div class="text">
-            {{ item.message }}
-          </div>
-          <div class="index">
-            <span>{{ item.id }} (id)</span>
-            <span>{{ index }} (index)</span>
-          </div>
-        </DynamicScrollerItem>
-      </template>
-    </DynamicScroller>
+const emit = defineEmits([
+  'router_select',
+  'artist_page_num',
+  'artist_page_size',
+  'page_artistlists_options_Sort_key',
+  'page_artistlists_selected'
+]);
+function get_artist_page_num(value: any) {
+  emit('artist_page_num',value)
+}
+function get_artist_PageSize(value: any) {
+  emit('artist_page_size',value)
+}
+function get_page_artistlists_options_Sort_key(value: any) {
+  emit('page_artistlists_options_Sort_key',value)
+}
+function get_router_select(value: any) {
+  emit('router_select',value)
+}
+function set_page_artistlists_selected(value: boolean) {
+  emit('page_artistlists_selected',value)
+}
+onMounted(async () => {
+  emit('router_select','View_Artist_List_ALL')
+});
+
+const { 
+  collapsed,
+  window_innerWidth,
+
+  change_page_header_color,page_artistlists_top_artist_image_url,page_artistlists_top_artist_name,
+  page_artistlists,page_artistlists_options,page_artistlists_statistic,
+  page_artistlists_selected,
+
+  page_artistlists_options_Sort_key,
+  artist_Files_temporary,artist_page_num,artist_page_size,artist_Page_length,} = defineProps<{
+  collapsed:boolean,
+  window_innerWidth:number,
+
+  change_page_header_color:boolean,page_artistlists_top_artist_image_url:string,page_artistlists_top_artist_name:string,
+  page_artistlists:Play_List[],page_artistlists_options:{label: string;value: string}[],page_artistlists_statistic:{label: string;artist_count: number;id: string;}[],
+  page_artistlists_selected:string;
+
+  page_artistlists_options_Sort_key:{ columnKey: string; order: string }[],
+  artist_Files_temporary:Artist[],
+  artist_page_num:number,artist_page_size:number,artist_Page_length:number,}>();
+</script>
+
+<template>
+  <div class="view_show">
+    <Table_Artist_List_ALL
+      :data_temporary="artist_Files_temporary"
+
+      :change_page_header_color="change_page_header_color"
+      :page_artistlists_top_artist_image_url="page_artistlists_top_artist_image_url"
+      :page_artistlists_top_artist_name="page_artistlists_top_artist_name"
+      :page_artistlists_options="page_artistlists_options"
+      :page_artistlists_statistic="page_artistlists_statistic"
+      :page_artistlists="page_artistlists"
+      :page_artistlists_selected="page_artistlists_selected"
+      @page_artistlists_selected="set_page_artistlists_selected"
+
+      :collapsed="collapsed"
+      :window_innerWidth="window_innerWidth"
+      :page="artist_page_num"
+      :pageSize="artist_page_size"
+      :pageCount="artist_Page_length"
+      @artist_page_num="get_artist_page_num"
+      @artist_page_size="get_artist_PageSize"
+      :options_Sort_key="page_artistlists_options_Sort_key"
+      @options_Sort_key="get_page_artistlists_options_Sort_key"/>
   </div>
 </template>
 
-<script lang="ts">
-import { generateMessage } from '../models/data_Creater_Json/data'
-
-const items: any[] = []
-for (let i = 0; i < 10000; i++) {
-  items.push({
-    id: i,
-    ...generateMessage(),
-  })
-}
-
-export default {
-  data () {
-    return {
-      items,
-      search: '',
-      updateParts: { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 },
-    }
-  },
-
-  computed: {
-    filteredItems () {
-      const { search, items } = this
-      if (!search) return items
-      const lowerCaseSearch = search.toLowerCase()
-      return items.filter(i => i.message.toLowerCase().includes(lowerCaseSearch))
-    },
-  },
-
-  methods: {
-    changeMessage (message: any) {
-      Object.assign(message, generateMessage())
-    },
-
-    onResize () {
-      console.log('resize')
-    },
-
-    onUpdate (viewStartIndex: number, viewEndIndex: number, visibleStartIndex: number, visibleEndIndex: number) {
-      this.updateParts.viewStartIdx = viewStartIndex
-      this.updateParts.viewEndIdx = viewEndIndex
-      this.updateParts.visibleStartIdx = visibleStartIndex
-      this.updateParts.visibleEndIdx = visibleEndIndex
-    },
-  },
-}
-</script>
-
-<style scoped>
-.dynamic-scroller-demo {
-  width: calc(100vw - 200px);
-  height: 100%;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.scroller {
-  flex: auto 1 1;
-}
-
-.scroller {
-  border: solid 1px #42b983;
-}
-
-.toolbar {
-  flex: auto 0 0;
-  text-align: center;
-}
-
-.toolbar > *:not(:last-child) {
-  margin-right: 24px;
-}
-
-.notice {
-  padding: 24px;
-  font-size: 20px;
-  color: #999;
-}
-
-.message {
-  display: flex;
-  min-height: 32px;
-  padding: 12px;
-  box-sizing: border-box;
-}
-
-.avatar {
-  flex: auto 0 0;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  margin-right: 12px;
-}
-
-.avatar .image {
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 50%;
-}
-
-.index,
-.text {
-  flex: 1;
-}
-
-.text {
-  max-width: 400px;
-}
-
-.index {
-  opacity: .5;
-}
-
-.index span {
-  display: inline-block;
-  width: 160px;
-  text-align: right;
+<style>
+.view_show {
+  width: 100vw;
+  height: calc(100vh - 200px);
 }
 </style>

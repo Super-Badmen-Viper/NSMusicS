@@ -17,8 +17,8 @@ const emit = defineEmits([
   'menu_add_this_song',
   'menu_delete_this_song',
   'options_Sort_key',
-  'keyword',
-  'reset_data'
+  'page_songlists_keyword',
+  'page_songlists_reset_data'
 ]);
 const columns = ref<DataTableColumns<RowData>>();
 const createColumns_normal = (): DataTableColumns<RowData> => [
@@ -127,8 +127,8 @@ const createColumns_normal = (): DataTableColumns<RowData> => [
   //     tooltip: true
   //   },
   //   render(row) {
-  //     const artists = row.artist.split('/'); // 将艺术家名称分割成一个字符串数组
-  //     // 创建一个包含所有艺术家名称的RouterLink数组
+  //     const artists = row.artist.split('/'); // 将歌手名称分割成一个字符串数组
+  //     // 创建一个包含所有歌手名称的RouterLink数组
   //     const routerLinks_artists = artists.map((artist: any, index: any) => {
   //       return h(
   //         RouterLink,
@@ -478,7 +478,7 @@ const show_search_area = () => {
   {
     bool_show_search_area.value = false
     if(bool_input_search == true){
-      emit('reset_data',true)
+      emit('page_songlists_reset_data',true)
       back_search_default()
       bool_input_search = false
     }
@@ -499,14 +499,14 @@ const input_search_Value = ref<string>()
 let bool_input_search = false
 const click_search = () => {
   if (input_search_Value.value){
-    const keyword = input_search_Value.value.toLowerCase();
-    emit('keyword',keyword)
+    const page_songlists_keyword = input_search_Value.value.toLowerCase();
+    emit('page_songlists_keyword',page_songlists_keyword)
     bool_input_search = true
     options_Sort_key.value.forEach(element => {
       element.state_Sort = state_Sort.Default
     });
   }else{
-    emit('reset_data',true)
+    emit('page_songlists_reset_data',true)
     bool_input_search = false
     back_search_default()
   }

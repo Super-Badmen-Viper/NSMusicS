@@ -54,9 +54,9 @@ const emit = defineEmits([
   'menu_edit_this_song',
   'menu_add_this_song',
   'menu_delete_this_song',
-  'options_Sort_key',
-  'keyword',
-  'reset_data',
+  'page_songlists_options_Sort_key',
+  'page_songlists_keyword',
+  'page_songlists_reset_data',
   'media_Files_selected',
   'media_Files_selected_temp',
   'page_songlists_selected'
@@ -85,14 +85,14 @@ function get_media_page_num(value: any) {
 function get_media_PageFiles(value: any) {
   emit('media_PageFiles',value)
 }
-function get_options_Sort_key(value: any) {
-  emit('options_Sort_key',value)
+function get_page_songlists_options_Sort_key(value: any) {
+  emit('page_songlists_options_Sort_key',value)
 }
-function get_keyword(value: any) {
-  emit('keyword',value)
+function page_songlists_get_keyword(value: any) {
+  emit('page_songlists_keyword',value)
 }
-function get_reset_data(value: any) {
-  emit('reset_data',value)
+function page_songlists_get_reset_data(value: any) {
+  emit('page_songlists_reset_data',value)
 }
 function get_router_select(value: any) {
   emit('router_select',value)
@@ -113,22 +113,22 @@ onMounted(async () => {
 const { 
   collapsed,window_innerWidth,
 
-  change_page_header_color,page_top_album_image_url,page_top_album_name,
+  change_page_header_color,page_songlists_top_album_image_url,page_songlists_top_album_name,
   page_songlists,page_songlists_options,page_songlists_statistic,
   page_songlists_selected,
 
   media_Files_temporary,media_Files_selected,
-  options_Sort_key,
+  page_songlists_options_Sort_key,
   media_page_num,media_page_size,media_page_length,
   } = defineProps<{
     collapsed:Boolean,window_innerWidth:number,
 
-    change_page_header_color:boolean,page_top_album_image_url:string,page_top_album_name:string,
+    change_page_header_color:boolean,page_songlists_top_album_image_url:string,page_songlists_top_album_name:string,
     page_songlists:Play_List[],page_songlists_options:{label: string;value: string}[],page_songlists_statistic:{label: string;song_count: number;id: string;}[],
     page_songlists_selected:string;
     
     media_Files_temporary:Media_File[],media_Files_selected:Media_File[],
-    options_Sort_key:{ columnKey: string; order: string }[],
+    page_songlists_options_Sort_key:{ columnKey: string; order: string }[],
     media_page_num:number,media_page_size:number,media_page_length:number,
   }>();
 </script>
@@ -140,8 +140,8 @@ const {
       :data_temporary_selected="media_Files_selected"
 
       :change_page_header_color="change_page_header_color"
-      :page_top_album_image_url="page_top_album_image_url"
-      :page_top_album_name="page_top_album_name"
+      :page_songlists_top_album_image_url="page_songlists_top_album_image_url"
+      :page_songlists_top_album_name="page_songlists_top_album_name"
       :page_songlists_options="page_songlists_options"
       :page_songlists_statistic="page_songlists_statistic"
       :page_songlists="page_songlists"
@@ -168,10 +168,10 @@ const {
       @menu_edit_this_song="get_menu_edit_this_song"
       @menu_add_this_song="get_menu_add_this_song"
       @menu_delete_this_song="get_menu_delete_this_song"
-      :options_Sort_key="options_Sort_key"
-      @options_Sort_key="get_options_Sort_key"
-      @keyword="get_keyword"
-      @reset_data="get_reset_data"/>
+      :options_Sort_key="page_songlists_options_Sort_key"
+      @options_Sort_key="get_page_songlists_options_Sort_key"
+      @page_songlists_keyword="page_songlists_get_keyword"
+      @page_songlists_reset_data="page_songlists_get_reset_data"/>
   </div>
 </template>
 

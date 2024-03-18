@@ -17,8 +17,8 @@ const emit = defineEmits([
   'menu_add_this_song',
   'menu_delete_this_song',
   'options_Sort_key',
-  'keyword',
-  'reset_data',
+  'page_songlists_keyword',
+  'page_songlists_reset_data',
   'media_Files_selected',
   'media_Files_selected_temp',
   'page_songlists_selected'
@@ -163,7 +163,7 @@ const createColumns_select = (): DataTableColumns<RowData> => [
 const props = defineProps<{
   data_temporary: Media_File[];data_temporary_selected: Media_File[];
 
-  change_page_header_color: boolean;page_top_album_image_url:string;page_top_album_name:string;
+  change_page_header_color: boolean;page_songlists_top_album_image_url:string;page_songlists_top_album_name:string;
   page_songlists:Play_List[];page_songlists_options:{label: string;value: string}[];page_songlists_statistic:{label: string;song_count: number;id: string;}[];
   page_songlists_selected:string;
   
@@ -331,7 +331,11 @@ type SortItem = {
 const options_Sort_key = ref<SortItem[]>([
   {label:'标题名', key: 'title', state_Sort: state_Sort.Default },
   {label:'歌手名', key: 'artist', state_Sort: state_Sort.Default },
-  {label:'专辑名', key: 'album', state_Sort: state_Sort.Default }
+  {label:'专辑名', key: 'album', state_Sort: state_Sort.Default },
+  {label:'年份', key: 'year', state_Sort: state_Sort.Default },
+  {label:'播放时长', key: 'duration', state_Sort: state_Sort.Default },
+  {label:'创建时间', key: 'created_at', state_Sort: state_Sort.Default },
+  {label:'更新时间', key: 'updated_at', state_Sort: state_Sort.Default },
 ]);
 const options_Sort = computed(() => {
   if(props.options_Sort_key != null && props.options_Sort_key.length > 0){
@@ -413,7 +417,7 @@ const show_search_area = () => {
     bool_show_search_area.value = false
     input_search_InstRef.value?.clear()
     if(bool_input_search == true){
-      emit('reset_data',true)
+      emit('page_songlists_reset_data',true)
       back_search_default()
       bool_input_search = false
       scrollToTop()
@@ -435,14 +439,14 @@ const input_search_Value = ref<string>()
 let bool_input_search = false
 const click_search = () => {
   if (input_search_Value.value){
-    const keyword = input_search_Value.value.toLowerCase();
-    emit('keyword',keyword)
+    const page_songlists_keyword = input_search_Value.value.toLowerCase();
+    emit('page_songlists_keyword',page_songlists_keyword)
     bool_input_search = true
     options_Sort_key.value.forEach(element => {
       element.state_Sort = state_Sort.Default
     });
   }else{
-    emit('reset_data',true)
+    emit('page_songlists_reset_data',true)
     bool_input_search = false
     back_search_default()
   }
@@ -566,9 +570,6 @@ const handleItemClick_album = (album:string) => {
   scrollToTop()
 }
 //
-watch(() => props.page_songlists_selected, (newValue, oldValue) => {
-  
-});
 const handleSelected_value_for_songlistall = (value: any) => {
   emit('page_songlists_selected',value)
   console.log('selected_value_for_songlistall：'+value);
@@ -598,7 +599,9 @@ import {
   ArrowSort24Regular,TextSortAscending20Regular,TextSortDescending20Regular,
   Search20Filled,
   Filter16Regular,
-  SaveEdit24Regular
+  SaveEdit24Regular,
+  Heart24Regular,Heart28Filled,
+  ChevronLeft16Filled,ChevronRight16Filled,
 } from '@vicons/fluent'
 import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -611,6 +614,16 @@ function getAssetImage(firstImage: string) {
 <template>
   <n-space vertical :size="12">
     <n-space>
+      <n-button tertiary circle>
+        <template #icon>
+          <n-icon :size="20"><ChevronLeft16Filled/></n-icon>
+        </template>
+      </n-button>
+      <n-button tertiary circle>
+        <template #icon>
+          <n-icon :size="20"><ChevronRight16Filled/></n-icon>
+        </template>
+      </n-button>
       <n-button tertiary circle @click="show_search_area">
         <template #icon>
           <n-icon :size="20"><Search20Filled/></n-icon>
@@ -695,7 +708,7 @@ function getAssetImage(firstImage: string) {
                   margin-left: 200px; margin-top: -300px; 
                   width: auto; height: calc(100vw - 400px);
                 `"
-                :src="getAssetImage(props.page_top_album_image_url)"
+                :src="getAssetImage(props.page_songlists_top_album_image_url)"
               />
             </div>
             <div style="
@@ -709,23 +722,21 @@ function getAssetImage(firstImage: string) {
                   position: absolute; top: -2; left: 0; 
                   width: 100%; height: 100%;">
                 <defs>
-                  <linearGradient v-if="!props.change_page_header_color" id="gradient" gradientTransform="rotate(90)">
+                  <linearGradient v-if="!props.change_page_header_color" id="gradient" gradientTransform="rotate(30)">
                     <stop offset="0%" stop-color="#fdfbfb"></stop>
                     <stop offset="100%" stop-color="#ebedee"></stop>
                   </linearGradient>
-                  <linearGradient v-if="props.change_page_header_color" id="gradient" gradientTransform="rotate(90)">
+                  <linearGradient v-if="props.change_page_header_color" id="gradient" gradientTransform="rotate(30)">
                     <stop offset="0%" stop-color="#323232"></stop>
                     <stop offset="40%" stop-color="#3F3F3F"></stop>
                     <stop offset="150%" stop-color="#1C1C1C"></stop>
                   </linearGradient>
                 </defs>
                 <!-- fill="url(#gradient)" -->
-                <path fill-rule="evenodd" clip-rule="evenodd" 
-                d="M462 61.401L281 300L0 300V0H413.923L462 61.401ZM388.66 272.022L371.424 250H387.28L405.723 273.565L385.033 300H369.178L388.66 275.115C389.372 274.199 389.372 272.93 388.66 272.022ZM412.466 272.022L395.23 250H693.474L711.917 273.565L691.228 300H392.984L412.466 275.115C413.178 274.199 413.178 272.93 412.466 272.022ZM426.805 61.407L394.831 102.26C394.337 102.886 394.783 103.814 395.59 103.814H404.903C405.493 103.814 406.059 103.537 406.421 103.079L437.178 63.7803C437.71 63.1016 438 62.2638 438 61.401C438 60.5382 437.71 59.7004 437.178 59.0216L406.421 19.7349C406.059 19.265 405.493 19 404.903 19H395.59C394.783 19 394.337 19.9276 394.831 20.5541L426.805 61.407ZM358.207 102.26L390.181 61.407L358.207 20.5541C357.713 19.9276 358.159 19 358.966 19H368.278C368.869 19 369.435 19.265 369.796 19.7349L400.554 59.0216C401.086 59.7004 401.376 60.5382 401.376 61.401C401.376 62.2638 401.086 63.1016 400.554 63.7803L369.796 103.079C369.435 103.537 368.869 103.814 368.278 103.814H358.966C358.159 103.814 357.713 102.886 358.207 102.26Z"
-                  fill="url(#gradient)"/>
-                <path 
-                d="M718.66 272.022C719.372 272.93 719.372 274.199 718.66 275.115L699.178 300H715.033L735.723 273.565L717.28 250H701.424L718.66 272.022Z"
-                  fill="url(#gradient)"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M462 61.401L281 300L0 300V0H413.923L462 61.401ZM426.805 61.407L394.831 102.26C394.337 102.886 394.783 103.814 395.59 103.814H404.903C405.493 103.814 406.059 103.537 406.421 103.079L437.178 63.7803C437.71 63.1016 438 62.2638 438 61.401C438 60.5382 437.71 59.7004 437.178 59.0216L406.421 19.7349C406.059 19.265 405.493 19 404.903 19H395.59C394.783 19 394.337 19.9276 394.831 20.5541L426.805 61.407ZM358.207 102.26L390.181 61.407L358.207 20.5541C357.713 19.9276 358.159 19 358.966 19H368.278C368.869 19 369.435 19.265 369.796 19.7349L400.554 59.0216C401.086 59.7004 401.376 60.5382 401.376 61.401C401.376 62.2638 401.086 63.1016 400.554 63.7803L369.796 103.079C369.435 103.537 368.869 103.814 368.278 103.814H358.966C358.159 103.814 357.713 102.886 358.207 102.26Z" fill="url(#gradient)"/>
+                <path d="M692.435 277.978C691.723 277.07 691.723 275.801 692.435 274.885L711.917 250H413.673L392.983 276.435L411.427 300H709.671L692.435 277.978Z" fill="url(#gradient)"/>
+                <path d="M386.241 277.978C385.529 277.07 385.529 275.801 386.241 274.885L413.723 242H397.868L350.7 300H403.477L386.241 277.978Z" fill="url(#gradient)"/>
+                <path d="M716.241 277.978C715.528 277.07 715.528 275.801 716.241 274.885L749.723 233H733.868L719.868 250L699.178 276.435L717.621 300H733.477L716.241 277.978Z" fill="url(#gradient)"/>
 
               </svg>
             </div>
@@ -746,7 +757,7 @@ function getAssetImage(firstImage: string) {
               <template #title>
                 <n-space vertical style="margin-top:2px;margin-left: 10px;">
                   <n-breadcrumb separator=">">
-                      <n-breadcrumb-item style="font-size: 22px">乐库</n-breadcrumb-item>
+                      <n-breadcrumb-item style="font-size: 22px">乐曲</n-breadcrumb-item>
                       <n-breadcrumb-item> 
                         <n-ellipsis 
                           style="
@@ -769,7 +780,7 @@ function getAssetImage(firstImage: string) {
                 <n-image
                   width="80px" height="80px" object-fit="contain"
                   style="border-radius: 8px;margin-left: 20px;margin-top: 20px;"
-                  :src="getAssetImage(props.page_top_album_image_url)"
+                  :src="getAssetImage(props.page_songlists_top_album_image_url)"
                   :show-toolbar="false"
                 />
               </template>
@@ -781,13 +792,13 @@ function getAssetImage(firstImage: string) {
                   margin-left: 430px;margin-top: -20px;
                   text-align: left;
                   height: 40px;font-weight: 900;">
-                  <n-button text @click="handleItemClick_album(props.page_top_album_name)">
+                  <n-button text @click="handleItemClick_album(props.page_songlists_top_album_name)">
                     <n-ellipsis 
                       style="
                         max-width: 256px;height: 40px;
                         text-align: left;font-size: 24px;
                         font-weight: 900;">
-                      {{ props.page_top_album_name }}
+                      {{ props.page_songlists_top_album_name }}
                     </n-ellipsis>
                   </n-button>
                 </div>
@@ -835,6 +846,14 @@ function getAssetImage(firstImage: string) {
               </div>
               <div class="album">
                 <span @click="handleItemClick_album(item.album)">{{ item.album }}</span>
+              </div>
+              <div class="love" style="margin-left: auto;">
+                <n-button circle text size="small" style="display: block;">
+                  <template #icon>
+                    <n-icon v-if="item.favorite" :size="20" color="red"><Heart28Filled/></n-icon>
+                    <n-icon v-else :size="20"><Heart24Regular/></n-icon>
+                  </template>
+                </n-button>
               </div>
               <span class="duration_txt" style="margin-left: auto; text-align: left;font-size: 15px;">{{ item.duration_txt }}</span>
               <span class="index" style="margin-left: auto; text-align: left;font-size: 15px;">{{ index + 1 }}</span>
@@ -932,6 +951,16 @@ function getAssetImage(firstImage: string) {
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
 .album :hover{
+  text-decoration: underline;
+  cursor: pointer;
+  color: #3DC3FF;
+}
+.love{
+  margin-left: 10px;
+  text-align: left;
+  width: 50px;
+}
+.love :hover{
   text-decoration: underline;
   cursor: pointer;
   color: #3DC3FF;

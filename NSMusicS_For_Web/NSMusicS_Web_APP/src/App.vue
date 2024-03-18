@@ -27,7 +27,7 @@
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
     {label: () => h(RouterLink,{to: {name: 'View_Album_List_ALL',}},{ default: () => '专辑' }),key: 'go-albums-list',icon: renderIcon(AlbumFilled)},
     {label: () => h(RouterLink,{to: {name: 'View_Song_List_ALL',}},{ default: () => '乐曲' }),key: 'go-songs-list',icon: renderIcon(MusicNoteRound)},
-    {label: () => h(RouterLink,{to: {name: 'View_Artist_List_ALL',}},{ default: () => '艺术家' }),key: 'go-artist-list',icon: renderIcon(UserAvatarFilledAlt)},
+    {label: () => h(RouterLink,{to: {name: 'View_Artist_List_ALL',}},{ default: () => '歌手' }),key: 'go-artist-list',icon: renderIcon(UserAvatarFilledAlt)},
     {label: () => h(RouterLink,{to: {name: 'home',}},{ default: () => '流派' }),key: 'go-Other',icon: renderIcon(Flag16Regular)},
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
     {label: () => h(RouterLink,{to: {name: 'home',}},{ default: () => '猜你喜欢' }),key: 'go-Other',icon: renderIcon(DocumentHeart20Regular)},
@@ -78,14 +78,14 @@
     console.log('this_audio_file_path：'+value)
   }
   const this_playList_num= ref(0);
-  const this_audio_file_medium_image_url = ref('../../../resources/00album.png');
+  const this_audio_file_medium_image_url = ref('../../../resources/error_album.png');
   function get_media_file_medium_image_url(value: any) {
     this_audio_file_medium_image_url.value = value
     get_this_audio_refresh(true)
     console.log('this_audio_file_medium_image_url'+value)
 
-    page_top_album_image_url.value = '';
-    page_top_album_image_url.value = value;
+    page_songlists_top_album_image_url.value = '';
+    page_songlists_top_album_image_url.value = value;
   }
   const this_audio_refresh = ref<boolean>(false)//////重播触发
   function get_this_audio_refresh(value: any) {
@@ -106,59 +106,12 @@
   function get_this_audio_album_name(value: any) {
     this_audio_album_name.value = value
     console.log('this_audio_album_name：'+value)
-    page_top_album_name.value = value;
+    page_songlists_top_album_name.value = value;
   }
 
   //////
-  const media_Files_temporary = ref<Media_File[]>([]);////// data.slice() BUG Error: Because Init
-  const media_Files_selected = ref<Media_File[]>([])
-  function get_media_Files_selected(value: Media_File) {
-    if (value.selected === true) {
-      media_Files_temporary.value.forEach((item, index) => {
-        if (item.id === value.id) {
-          media_Files_temporary.value[index].selected = true;
-        }
-      });
-      media_Files_selected.value.push(value)
-      console.log('media_Files_selected：'+value.path+'  '+value.selected)
-    } else {
-      media_Files_temporary.value.forEach((item, index) => {
-        if (item.id === value.id) {
-          media_Files_temporary.value[index].selected = false;
-        }
-      });
-      media_Files_selected.value = media_Files_selected.value.filter(item => item.id !== value.id);
-      console.log('media_Files_selected：'+value.path+'  '+value.selected)
-    }
-  }
-  const media_Files_selected_temp = ref<Media_File[]>([])
-  function set_media_Files_selected(value: boolean) {
-    if (value === true) {
-      media_Files_temporary.value.forEach((item, index) => {
-        media_Files_temporary.value[index].selected = true;
-      });
-      media_Files_selected.value = media_Files_temporary.value.slice();
-    } else {
-      media_Files_temporary.value.forEach((item, index) => {
-        media_Files_temporary.value[index].selected = false;
-      });
-      media_Files_selected.value = [];
-    }
-  }
-  const media_page_length = ref<number>(0);
-  const media_file_count = ref<number>(0);
-  //////
-  const Album_Files_temporary = ref<Item_Album[]>([]);
-  const album_Page_length = ref<number>(0);
-  const album_file_count = ref<number>(0);
-  //////
-  const options_Sort_key = ref<{ columnKey: string; order: string }[]>([]);
-  function get_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
-    if (value != null) {
-      options_Sort_key.value = value;
-      fetchData_Media()
-    }
-  }
+  
+  
   // 弃用
   function sortByColumnKeys(sortersArray: { columnKey: string; order: string }[] = []) {
     let sortedData = media_Files_temporary.value.slice();
@@ -205,34 +158,6 @@
     formattedSeconds = formattedSeconds.substring(0, 2);
 
     return `${formattedMinutes}:${formattedSeconds}`;
-  }
-  //////
-  const keyword = ref<string>('');
-  const model_num_accurate_search = ref<number>(0);
-  function get_keyword(value: any) {
-    if(value.indexOf('accurate_search') > 0){
-      value = value.replace('accurate_search','');
-      if(value.indexOf('__title__') > 0){
-        value = value.replace('__title__','');
-        model_num_accurate_search.value = 1;
-      }else if(value.indexOf('__artist__') > 0){
-        value = value.replace('__artist__','');
-        model_num_accurate_search.value = 2;
-      }else if(value.indexOf('__album__') > 0){
-        value = value.replace('__album__','');
-        model_num_accurate_search.value = 3;
-      }
-    }else{  
-      model_num_accurate_search.value = 0;
-    }
-    keyword.value = value;
-    console.log('keyword:' + value)
-    fetchData_Media()
-  }
-  function get_reset_data(value: any) {
-    keyword.value = '';
-    console.log('reset_data?:' + value)
-    fetchData_Media()
   }
   //////
   const data_select_Index = ref<number>(-1)//////绝对index
@@ -294,13 +219,85 @@
   const fetchData_Home = () => {
     
   }
-  //
-  const page_top_album_image_url = ref<string>('../../../resources/00album.png')
-  const page_top_album_name = ref<string>('')
+  // media model
+  const media_Files_temporary = ref<Media_File[]>([]);////// data.slice() BUG Error: Because Init
+  const media_Files_selected = ref<Media_File[]>([])
+  function get_media_Files_selected(value: Media_File) {
+    if (value.selected === true) {
+      media_Files_temporary.value.forEach((item, index) => {
+        if (item.id === value.id) {
+          media_Files_temporary.value[index].selected = true;
+        }
+      });
+      media_Files_selected.value.push(value)
+      console.log('media_Files_selected：'+value.path+'  '+value.selected)
+    } else {
+      media_Files_temporary.value.forEach((item, index) => {
+        if (item.id === value.id) {
+          media_Files_temporary.value[index].selected = false;
+        }
+      });
+      media_Files_selected.value = media_Files_selected.value.filter(item => item.id !== value.id);
+      console.log('media_Files_selected：'+value.path+'  '+value.selected)
+    }
+  }
+  const media_Files_selected_temp = ref<Media_File[]>([])
+  function set_media_Files_selected(value: boolean) {
+    if (value === true) {
+      media_Files_temporary.value.forEach((item, index) => {
+        media_Files_temporary.value[index].selected = true;
+      });
+      media_Files_selected.value = media_Files_temporary.value.slice();
+    } else {
+      media_Files_temporary.value.forEach((item, index) => {
+        media_Files_temporary.value[index].selected = false;
+      });
+      media_Files_selected.value = [];
+    }
+  }
+  const media_page_length = ref<number>(0);
+  const media_file_count = ref<number>(0);
+  ////// page_songlists
+  const page_songlists_top_album_image_url = ref<string>('../../../resources/error_album.png')
+  const page_songlists_top_album_name = ref<string>('')
   const page_songlists_options = ref<{label: string;value: string}[]>([])
   const page_songlists_statistic = ref<{label: string;song_count: string;id: string;}[]>([])
   const page_songlists = ref<Play_List[]>([])
   const page_songlists_selected = ref<string>('song_list_all')
+  const page_songlists_keyword = ref<string>('');
+  const page_songlists_get_keyword_model_num = ref<number>(0);
+  const page_songlists_options_Sort_key = ref<{ columnKey: string; order: string }[]>([]);
+  function get_page_songlists_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
+    if (value != null) {
+      page_songlists_options_Sort_key.value = value;
+      fetchData_Media()
+    }
+  }
+  function page_songlists_get_keyword(value: any) {
+    if(value.indexOf('accurate_search') > 0){
+      value = value.replace('accurate_search','');
+      if(value.indexOf('__title__') > 0){
+        value = value.replace('__title__','');
+        page_songlists_get_keyword_model_num.value = 1;
+      }else if(value.indexOf('__artist__') > 0){
+        value = value.replace('__artist__','');
+        page_songlists_get_keyword_model_num.value = 2;
+      }else if(value.indexOf('__album__') > 0){
+        value = value.replace('__album__','');
+        page_songlists_get_keyword_model_num.value = 3;
+      }
+    }else{  
+      page_songlists_get_keyword_model_num.value = 0;
+    }
+    page_songlists_keyword.value = value;
+    console.log('page_songlists_keyword:' + value)
+    fetchData_Media()
+  }
+  function page_songlists_get_reset_data(value: any) {
+    page_songlists_keyword.value = '';
+    console.log('page_songlists_reset_data?:' + value)
+    fetchData_Media()
+  }
   const get_page_songlists_selected = (value: any) => {
     page_songlists_selected.value = value
     console.log('page_songlists_selected：'+value)
@@ -314,132 +311,135 @@
       db.pragma('journal_mode = WAL');
 
       // load media_model data
-      const stmt_media_file_count = db.prepare('SELECT COUNT(*) AS count FROM media_file');
-      media_file_count.value = stmt_media_file_count.get().count;   
-      if (media_file_count.value != null)
-        media_page_length.value = Math.floor(media_file_count.value / media_page_size.value) + 1;
-      media_Files_temporary.value.forEach((item: { absoluteIndex: any }, index: number) => {
-        item.absoluteIndex = index + offset + 1;
-      });
-      //
-      page_songlists_options.value = [];
-      page_songlists_statistic.value = [];
-      page_songlists.value = []
-      //////
-      const temp_Play_List_ALL: Play_List = {
-        label: '全部歌曲',
-        value: 'song_list_all',
-        id: 'song_list_all',
-        name: '全部歌曲',
-        comment: '全部歌曲',
-        duration: 0,
-        song_count: stmt_media_file_count.get().count + ' 首',
-        public: false,
-        created_at: null,
-        updated_at: null,
-        path: '',
-        sync: false,
-        size: 0,
-        rules: null,
-        evaluated_at: null,
-        owner_id: ''
+      try{
+        const stmt_media_file_count = db.prepare('SELECT COUNT(*) AS count FROM media_file');
+        media_file_count.value = stmt_media_file_count.get().count;   
+        if (media_file_count.value != null)
+          media_page_length.value = Math.floor(media_file_count.value / media_page_size.value) + 1;
+        media_Files_temporary.value.forEach((item: { absoluteIndex: any }, index: number) => {
+          item.absoluteIndex = index + 1;
+        });
+        //
+        page_songlists_options.value = [];
+        page_songlists_statistic.value = [];
+        page_songlists.value = []
+        //////
+        const temp_Play_List_ALL: Play_List = {
+          label: '全部歌曲',
+          value: 'song_list_all',
+          id: 'song_list_all',
+          name: '全部歌曲',
+          comment: '全部歌曲',
+          duration: 0,
+          song_count: stmt_media_file_count.get().count + ' 首',
+          public: false,
+          created_at: null,
+          updated_at: null,
+          path: '',
+          sync: false,
+          size: 0,
+          rules: null,
+          evaluated_at: null,
+          owner_id: ''
+        }
+        page_songlists_options.value.push(temp_Play_List_ALL);
+        page_songlists_statistic.value.push({
+          label: temp_Play_List_ALL.label,
+          song_count: temp_Play_List_ALL.song_count.toString(),
+          id: temp_Play_List_ALL.id
+        });
+        page_songlists.value.push(temp_Play_List_ALL)
+        //////
+        const stmt_media_Annotation_Starred_Count = db.prepare(`
+          SELECT COUNT(*) AS count FROM annotation 
+          WHERE starred = 1 AND item_type='media_file'
+        `);
+        const temp_Play_List_Love: Play_List = {
+          label: '收藏歌曲',
+          value: 'song_list_love',
+          id: 'song_list_love',
+          name: '收藏歌曲',
+          comment: '收藏歌曲',
+          duration: 0,
+          song_count: stmt_media_Annotation_Starred_Count.get().count + ' 首',
+          public: false,
+          created_at: null,
+          updated_at: null,
+          path: '',
+          sync: false,
+          size: 0,
+          rules: null,
+          evaluated_at: null,
+          owner_id: ''
+        }
+        page_songlists_options.value.push(temp_Play_List_Love);
+        page_songlists_statistic.value.push({
+          label: temp_Play_List_Love.label,
+          song_count: temp_Play_List_Love.song_count.toString(),
+          id: temp_Play_List_Love.id
+        });
+        page_songlists.value.push(temp_Play_List_Love)
+        //////
+        const stmt_media_Annotation_Recently_Count = db.prepare(`
+          SELECT COUNT(*) AS count FROM annotation 
+          WHERE play_count >= 1 AND item_type='media_file'
+        `);
+        const temp_Play_List_Recently: Play_List = {
+          label: '最近播放',
+          value: 'song_list_recently',
+          id: 'song_list_recently',
+          name: '最近播放',
+          comment: '最近播放',
+          duration: 0,
+          song_count: stmt_media_Annotation_Recently_Count.get().count + ' 首',
+          public: false,
+          created_at: null,
+          updated_at: null,
+          path: '',
+          sync: false,
+          size: 0,
+          rules: null,
+          evaluated_at: null,
+          owner_id: ''
+        }
+        page_songlists_options.value.push(temp_Play_List_Recently);
+        page_songlists_statistic.value.push({
+          label: temp_Play_List_Recently.label,
+          song_count: temp_Play_List_Recently.song_count.toString(),
+          id: temp_Play_List_Recently.id
+        });
+        page_songlists.value.push(temp_Play_List_Recently)
+        //////
+        const stmt_media_Annotation_PlayList_Count = db.prepare(`
+          SELECT COUNT(*) AS count FROM playlist
+        `);
+        page_songlists_statistic.value.push({
+          label: '播放列表',
+          song_count: stmt_media_Annotation_PlayList_Count.get().count + ' 组',
+          id: 'song_list_all_PlayList'
+        });
+      }catch (err: any) {
+        console.error(err);
       }
-      page_songlists_options.value.push(temp_Play_List_ALL);
-      page_songlists_statistic.value.push({
-        label: temp_Play_List_ALL.label,
-        song_count: temp_Play_List_ALL.song_count.toString(),
-        id: temp_Play_List_ALL.id
-      });
-      page_songlists.value.push(temp_Play_List_ALL)
-      //////
-      const stmt_media_Annotation_Starred_Count = db.prepare(`
-        SELECT COUNT(*) AS count FROM annotation 
-        WHERE starred = 1 AND item_type='media_file'
-      `);
-      const temp_Play_List_Love: Play_List = {
-        label: '收藏歌曲',
-        value: 'song_list_love',
-        id: 'song_list_love',
-        name: '收藏歌曲',
-        comment: '收藏歌曲',
-        duration: 0,
-        song_count: stmt_media_Annotation_Starred_Count.get().count + ' 首',
-        public: false,
-        created_at: null,
-        updated_at: null,
-        path: '',
-        sync: false,
-        size: 0,
-        rules: null,
-        evaluated_at: null,
-        owner_id: ''
-      }
-      page_songlists_options.value.push(temp_Play_List_Love);
-      page_songlists_statistic.value.push({
-        label: temp_Play_List_Love.label,
-        song_count: temp_Play_List_Love.song_count.toString(),
-        id: temp_Play_List_Love.id
-      });
-      page_songlists.value.push(temp_Play_List_Love)
-      //////
-      const stmt_media_Annotation_Recently_Count = db.prepare(`
-        SELECT COUNT(*) AS count FROM annotation 
-        WHERE play_count >= 1 AND item_type='media_file'
-      `);
-      const temp_Play_List_Recently: Play_List = {
-        label: '最近播放',
-        value: 'song_list_recently',
-        id: 'song_list_recently',
-        name: '最近播放',
-        comment: '最近播放',
-        duration: 0,
-        song_count: stmt_media_Annotation_Recently_Count.get().count + ' 首',
-        public: false,
-        created_at: null,
-        updated_at: null,
-        path: '',
-        sync: false,
-        size: 0,
-        rules: null,
-        evaluated_at: null,
-        owner_id: ''
-      }
-      page_songlists_options.value.push(temp_Play_List_Recently);
-      page_songlists_statistic.value.push({
-        label: temp_Play_List_Recently.label,
-        song_count: temp_Play_List_Recently.song_count.toString(),
-        id: temp_Play_List_Recently.id
-      });
-      page_songlists.value.push(temp_Play_List_Recently)
-      //////
-      const stmt_media_Annotation_PlayList_Count = db.prepare(`
-        SELECT COUNT(*) AS count FROM playlist
-      `);
-      page_songlists_statistic.value.push({
-        label: '播放列表',
-        song_count: stmt_media_Annotation_PlayList_Count.get().count + ' 组',
-        id: 'song_list_all_PlayList'
-      });
       //////
       
       // load media_Files_temporary data
-      const offset = (media_page_num.value - 1) * media_page_size.value;
-      const sortKey = options_Sort_key.value.length > 0 && options_Sort_key.value[0].order !== 'default' ?
-        options_Sort_key.value[0].columnKey : 'created_at';
-      const sortOrder = options_Sort_key.value.length > 0 && options_Sort_key.value[0].order !== 'default' ?
-        options_Sort_key.value[0].order.replace('end', '') : '';
-      let keywordFilter = keyword.value.length > 0 ?
-        `WHERE title LIKE '%${keyword.value}%' OR artist LIKE '%${keyword.value}%' OR album LIKE '%${keyword.value}%'` :
+      // const offset = (media_page_num.value - 1) * media_page_size.value;
+      const sortKey = page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
+        page_songlists_options_Sort_key.value[0].columnKey : 'id';
+      const sortOrder = page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
+        page_songlists_options_Sort_key.value[0].order.replace('end', '') : '';
+      let keywordFilter = page_songlists_keyword.value.length > 0 ?
+        `WHERE title LIKE '%${page_songlists_keyword.value}%' OR artist LIKE '%${page_songlists_keyword.value}%' OR album LIKE '%${page_songlists_keyword.value}%'` :
         '';
-      if (model_num_accurate_search.value != 0) {
+      if (page_songlists_get_keyword_model_num.value != 0) {
         if (keywordFilter.length > 0) {
           keywordFilter = keywordFilter.replace('LIKE', '=').replace(/%/g, '');
         }
-        model_num_accurate_search.value = 0;
+        page_songlists_get_keyword_model_num.value = 0;
       }
-
       const stmt_media_file = db.prepare(`
-        SELECT id, title, artist, album, duration, path 
+        SELECT id, title, artist,artist_id, album,album_id, duration, path 
         FROM media_file 
         ${keywordFilter}
         ORDER BY ${sortKey} ${sortOrder}
@@ -447,7 +447,6 @@
       const stmt_album_limit_1_imagefiles = db.prepare('SELECT * FROM album LIMIT 1');
       const rows = stmt_media_file.all();
       const imagefiles = stmt_album_limit_1_imagefiles.all();
-
       rows.forEach((row: Media_File) => {
         row.selected = false;
         row.duration_txt = formatTime(row.duration);
@@ -458,16 +457,24 @@
           row.medium_image_url = '../../../resources/error_album.jpg';
         media_Files_temporary.value.push(row);
       });
-
+      ////// find favorite for media_Files_temporary
+      const stmt_media_Annotation_Starred_Items = db.prepare(`
+        SELECT item_id FROM annotation 
+        WHERE starred = 1 AND item_type='media_file'
+      `);
+      const annotations = stmt_media_Annotation_Starred_Items.all();
+      for (let i = 0; i < media_Files_temporary.value.length; i++) {
+        if (annotations.some((annotation: { item_id: string }) => annotation.item_id === media_Files_temporary.value[i].id)) {
+          media_Files_temporary.value[i].favorite = true;
+        } else {
+          media_Files_temporary.value[i].favorite = false;
+        }
+      }
+      ////// filter selected_list for media_Files_temporary
       media_Files_temporary.value = media_Files_temporary.value.filter((item) => {
         if (page_songlists_selected.value === 'song_list_all') {
           return true;
         } else if (page_songlists_selected.value === 'song_list_love') {
-          const stmt_media_Annotation_Starred_Items = db.prepare(`
-            SELECT item_id FROM annotation 
-            WHERE starred = 1 AND item_type='media_file'
-          `);
-          const annotations = stmt_media_Annotation_Starred_Items.all();
           return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
         } else if (page_songlists_selected.value === 'song_list_recently') {
           const stmt_media_Annotation_Recently_Items = db.prepare(`
@@ -480,6 +487,17 @@
           return true;
         }
       });
+      ////// update page_songlists_top_album_image_url and page_songlists_top_album_name
+      page_songlists_top_album_image_url.value = '';
+      if(media_Files_temporary.value.length > 0)
+        for (let i = 0; i < media_Files_temporary.value.length; i++) {
+          if (await fileExists(media_Files_temporary.value[i].path) === true) {
+            page_songlists_top_album_image_url.value = media_Files_temporary.value[i].medium_image_url;
+            page_songlists_top_album_name.value = media_Files_temporary.value[i].album;
+            break;  
+          }
+        }
+      ////// 
 
       rows.value = [];
       imagefiles.value = [];
@@ -492,81 +510,519 @@
       console.log('db.close().......');
       db = null;
     }
-
-    page_top_album_image_url.value = '';
-    if(media_Files_temporary.value.length > 0)
-      for (let i = 0; i < media_Files_temporary.value.length; i++) {
-        if (await fileExists(media_Files_temporary.value[i].path) === true) {
-          page_top_album_image_url.value = media_Files_temporary.value[i].medium_image_url;
-          page_top_album_name.value = media_Files_temporary.value[i].album;
-          break;  
-        }
-      }
     // delete require.cache[require.resolve('better-sqlite3')];
   };
-  const fetchData_Album = () => {
+  // album model
+  const album_Files_temporary = ref<Album[]>([]);
+  const album_Page_length = ref<number>(0);
+  const album_file_count = ref<number>(0);
+  ////// page_albumlists
+  const page_albumlists_top_album_image_url = ref<string>('../../../resources/error_album.png')
+  const page_albumlists_top_album_name = ref<string>('')
+  const page_albumlists_options = ref<{label: string;value: string}[]>([])
+  const page_albumlists_statistic = ref<{label: string;album_count: string;id: string;}[]>([])
+  const page_albumlists = ref<Play_List[]>([])
+  const page_albumlists_selected = ref<string>('album_list_all')
+  const page_albumlists_keyword = ref<string>('');
+  const page_albumlists_get_keyword_model_num = ref<number>(0);
+  const page_albumlists_options_Sort_key = ref<{ columnKey: string; order: string }[]>([]);
+  function get_page_albumlists_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
+    if (value != null) {
+      page_albumlists_options_Sort_key.value = value;
+      fetchData_Album()
+    }
+  }
+  function page_albumlists_get_keyword(value: any) {
+    if(value.indexOf('accurate_search') > 0){
+      value = value.replace('accurate_search','');
+      if(value.indexOf('__title__') > 0){
+        value = value.replace('__title__','');
+        page_albumlists_get_keyword_model_num.value = 1;
+      }else if(value.indexOf('__artist__') > 0){
+        value = value.replace('__artist__','');
+        page_albumlists_get_keyword_model_num.value = 2;
+      }else if(value.indexOf('__album__') > 0){
+        value = value.replace('__album__','');
+        page_albumlists_get_keyword_model_num.value = 3;
+      }
+    }else{  
+      page_albumlists_get_keyword_model_num.value = 0;
+    }
+    page_albumlists_keyword.value = value;
+    console.log('page_albumlists_keyword:' + value)
+    fetchData_Album()
+  }
+  function page_albumlists_get_reset_data(value: any) {
+    page_albumlists_keyword.value = '';
+    console.log('page_albumlists_reset_data?:' + value)
+    fetchData_Album()
+  }
+  const get_page_albumlists_selected = (value: any) => {
+    page_albumlists_selected.value = value
+    console.log('page_albumlists_selected：'+value)
+    fetchData_Album()
+  }
+  const fetchData_Album = async () => {
+    let db:any = null;
     let moment = require('moment');
     clear_Files_temporary()
-    let rows = [];
-    let album_file_count_value = 0;
-    let album_Page_length_value = 0;
-
-    let db:any = null;
 
     try {
       db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
-      db.pragma('journal_mode = WAL');
+      db.pragma('journal_mode = WAL');  
 
-      //////   LIMIT ${album_page_size.value} 
-      //////   OFFSET ${offset}`);
+      // load album_model data
+      try {
+        const stmt_album_count = db.prepare('SELECT COUNT(*) AS count FROM album');
+        //
+        page_albumlists_options.value = [];
+        page_albumlists_statistic.value = [];
+        page_albumlists.value = []
+        //////
+        const temp_Play_List_ALL: Play_List = {
+          label: '全部专辑',
+          value: 'album_list_all',
+          id: 'album_list_all',
+          name: '全部专辑',
+          comment: '全部专辑',
+          duration: 0,
+          song_count: stmt_album_count.get().count + ' 组',
+          public: false,
+          created_at: null,
+          updated_at: null,
+          path: '',
+          sync: false,
+          size: 0,
+          rules: null,
+          evaluated_at: null,
+          owner_id: ''
+        }
+        page_albumlists_options.value.push(temp_Play_List_ALL);
+        page_albumlists_statistic.value.push({
+          label: temp_Play_List_ALL.label,
+          album_count: temp_Play_List_ALL.song_count.toString(),
+          id: temp_Play_List_ALL.id
+        });
+        page_albumlists.value.push(temp_Play_List_ALL)
+        //////
+        const stmt_album_Annotation_Starred_Count = db.prepare(`
+          SELECT COUNT(*) AS count FROM annotation 
+          WHERE starred = 1 AND item_type='album'
+        `);
+        const temp_Play_List_Love: Play_List = {
+          label: '收藏专辑',
+          value: 'album_list_love',
+          id: 'album_list_love',
+          name: '收藏专辑',
+          comment: '收藏专辑',
+          duration: 0,
+          song_count: stmt_album_Annotation_Starred_Count.get().count + ' 组',
+          public: false,
+          created_at: null,
+          updated_at: null,
+          path: '',
+          sync: false,
+          size: 0,
+          rules: null,
+          evaluated_at: null,
+          owner_id: ''
+        }
+        page_albumlists_options.value.push(temp_Play_List_Love);
+        page_albumlists_statistic.value.push({
+          label: temp_Play_List_Love.label,
+          album_count: temp_Play_List_Love.song_count.toString(),
+          id: temp_Play_List_Love.id
+        });
+        page_albumlists.value.push(temp_Play_List_Love)
+        //////
+        const stmt_album_Annotation_Recently_Count = db.prepare(`
+          SELECT COUNT(*) AS count FROM annotation 
+          WHERE play_count >= 1 AND item_type='album'
+        `);
+        const temp_Play_List_Recently: Play_List = {
+          label: '最近播放',
+          value: 'album_list_recently',
+          id: 'album_list_recently',
+          name: '最近播放',
+          comment: '最近播放',
+          duration: 0,
+          song_count: stmt_album_Annotation_Recently_Count.get().count + ' 组',
+          public: false,
+          created_at: null,
+          updated_at: null,
+          path: '',
+          sync: false,
+          size: 0,
+          rules: null,
+          evaluated_at: null,
+          owner_id: ''
+        }
+        page_albumlists_options.value.push(temp_Play_List_Recently);
+        page_albumlists_statistic.value.push({
+          label: temp_Play_List_Recently.label,
+          album_count: temp_Play_List_Recently.song_count.toString(),
+          id: temp_Play_List_Recently.id
+        });
+        page_albumlists.value.push(temp_Play_List_Recently)
+        //////
+        const stmt_album_Annotation_PlayList_Count = db.prepare(`
+          SELECT COUNT(*) AS count FROM playlist
+        `);
+        page_albumlists_statistic.value.push({
+          label: '播放列表',
+          album_count: stmt_album_Annotation_PlayList_Count.get().count + ' 组',
+          id: 'album_list_all_PlayList'
+        });
+      }catch (err: any) {
+        console.error(err);
+      }
+      //////
+
+      // load album_Files_temporary data
+      const sortKey = page_albumlists_options_Sort_key.value.length > 0 && page_albumlists_options_Sort_key.value[0].order !== 'default' ?
+        page_albumlists_options_Sort_key.value[0].columnKey : 'id';
+      const sortOrder = page_albumlists_options_Sort_key.value.length > 0 && page_albumlists_options_Sort_key.value[0].order !== 'default' ?
+        page_albumlists_options_Sort_key.value[0].order.replace('end', '') : '';
+      let keywordFilter = page_albumlists_keyword.value.length > 0 ?
+        `WHERE name LIKE '%${page_albumlists_keyword.value}%' OR artist LIKE '%${page_albumlists_keyword.value}%' OR created_at LIKE '%${page_albumlists_keyword.value}%'` :
+        '';
+      if (page_albumlists_get_keyword_model_num.value != 0) {
+        if (keywordFilter.length > 0) {
+          keywordFilter = keywordFilter.replace('LIKE', '=').replace(/%/g, '');
+        }
+        page_albumlists_get_keyword_model_num.value = 0;
+      }
       const stmt_album = db.prepare(`
         SELECT id,name,embed_art_path,artist,updated_at,medium_image_url
-        FROM album`);
-      rows = stmt_album.all();
-
-      rows.forEach((row: Item_Album) => {
+        FROM album
+        ${keywordFilter}
+        ORDER BY ${sortKey} ${sortOrder}  
+      `);
+      let rows = stmt_album.all();
+      rows.forEach((row: Album) => {
         row.medium_image_url = row.embed_art_path.replace('mp3','jpg');
-
         const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
         const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
         const fileNameWithoutExtension = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
         const fileNameWithoutPrefix = fileNameWithoutExtension ? fileNameWithoutExtension.replace(/.*?-\s*/, '') : null;
-
         if (fileNameWithoutPrefix !== null) {
           row.title = fileNameWithoutPrefix;
         }
-
         row.album_title = row.title + "<br>" + row.artist;
         row.updated_time = row.updated_at ? moment(row.updated_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
-
-        Album_Files_temporary.value.push(row);
+        album_Files_temporary.value.push(row);
       });
       rows.length = 0
       rows = []
-      
-      const stmt_album_count = db.prepare('SELECT COUNT(*) AS count FROM album');
-      album_file_count_value = stmt_album_count.get().count;
-      if (album_file_count_value !== null) {
-        album_Page_length_value = Math.floor(album_file_count_value / album_page_size.value) + 1;
+      moment = null;
+      ////// find favorite for album_Files_temporary
+      const stmt_album_Annotation_Starred_Items = db.prepare(`
+        SELECT item_id FROM annotation 
+        WHERE starred = 1 AND item_type='album'
+      `);
+      const annotations = stmt_album_Annotation_Starred_Items.all();
+      for (let i = 0; i < album_Files_temporary.value.length; i++) {
+        if (annotations.some((annotation: { item_id: string }) => annotation.item_id === album_Files_temporary.value[i].id)) {
+          album_Files_temporary.value[i].favorite = true;
+        } else {
+          album_Files_temporary.value[i].favorite = false;
+        }
       }
+      ////// filter selected_list for album_Files_temporary
+      album_Files_temporary.value = album_Files_temporary.value.filter((item) => {
+        if (page_albumlists_selected.value === 'album_list_all') {
+          return true;
+        } else if (page_albumlists_selected.value === 'album_list_love') {
+          return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
+        } else if (page_albumlists_selected.value === 'album_list_recently') {
+          const stmt_album_Annotation_Recently_Items = db.prepare(`
+            SELECT item_id FROM annotation 
+            WHERE play_count >= 1 AND item_type='album'
+          `);
+          const annotations = stmt_album_Annotation_Recently_Items.all();
+          return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
+        } else if (page_albumlists_selected.value === 'album_list_all_PlayList') {
+          return true;
+        }
+      });
+      ////// update page_albumlists_top_album_image_url and page_albumlists_top_album_name
+      page_albumlists_top_album_image_url.value = '';
+      if(album_Files_temporary.value.length > 0)
+        for (let i = 0; i < album_Files_temporary.value.length; i++) {
+          if (await fileExists(album_Files_temporary.value[i].medium_image_url) === true) {
+            page_albumlists_top_album_image_url.value = album_Files_temporary.value[i].medium_image_url;
+            page_albumlists_top_album_name.value = album_Files_temporary.value[i].name;
+            break;  
+          }
+        }
+
     } catch (err: any) {
       console.error(err);
     } finally {
-      rows = [];
-      album_file_count.value = album_file_count_value;
-      album_Page_length.value = album_Page_length_value;
-
       db.close();
       console.log('db.close().......');
       db = null;
-
-      moment = null;
     }
 
     delete require.cache[require.resolve('better-sqlite3')];
   }
-  const fetchData_Artist = () => {
-    
+  // artist model
+  const artist_Files_temporary = ref<Artist[]>([]);
+  ////// page_artistlists
+  const page_artistlists_top_artist_image_url = ref<string>('../../../resources/error_album.png')
+  const page_artistlists_top_artist_name = ref<string>('')
+  const page_artistlists_options = ref<{label: string;value: string}[]>([])
+  const page_artistlists_statistic = ref<{label: string;artist_count: string;id: string;}[]>([])
+  const page_artistlists = ref<Play_List[]>([])
+  const page_artistlists_selected = ref<string>('artist_list_all')
+  const page_artistlists_keyword = ref<string>('');
+  const page_artistlists_get_keyword_model_num = ref<number>(0);
+  const page_artistlists_options_Sort_key = ref<{ columnKey: string; order: string }[]>([]);
+  function get_page_artistlists_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
+    if (value != null) {
+      page_artistlists_options_Sort_key.value = value;
+      fetchData_Artist()
+    }
+  }
+  function page_artistlists_get_keyword(value: any) {
+    if(value.indexOf('accurate_search') > 0){
+      value = value.replace('accurate_search','');
+      if(value.indexOf('__title__') > 0){
+        value = value.replace('__title__','');
+        page_artistlists_get_keyword_model_num.value = 1;
+      }else if(value.indexOf('__artist__') > 0){
+        value = value.replace('__artist__','');
+        page_artistlists_get_keyword_model_num.value = 2;
+      }else if(value.indexOf('__album__') > 0){
+        value = value.replace('__album__','');
+        page_artistlists_get_keyword_model_num.value = 3;
+      }
+    }else{  
+      page_artistlists_get_keyword_model_num.value = 0;
+    }
+    page_artistlists_keyword.value = value;
+    console.log('page_artistlists_keyword:' + value)
+    fetchData_Artist()
+  }
+  function page_artistlists_get_reset_data(value: any) {
+    page_artistlists_keyword.value = '';
+    console.log('page_artistlists_reset_data?:' + value)
+    fetchData_Artist()
+  }
+  const get_page_artistlists_selected = (value: any) => {
+    page_artistlists_selected.value = value
+    console.log('page_artistlists_selected：'+value)
+    fetchData_Artist()
+  }
+  const fetchData_Artist = async () => {
+    let db:any = null;
+    clear_Files_temporary()
+
+    try {
+      db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+      db.pragma('journal_mode = WAL');  
+
+      // load artist_model data
+      try {
+        const stmt_artist_count = db.prepare('SELECT COUNT(*) AS count FROM artist');
+        //
+        page_artistlists_options.value = [];
+        page_artistlists_statistic.value = [];
+        page_artistlists.value = []
+        //////
+        const temp_Play_List_ALL: Play_List = {
+          label: '全部歌手',
+          value: 'artist_list_all',
+          id: 'artist_list_all',
+          name: '全部歌手',
+          comment: '全部歌手',
+          duration: 0,
+          song_count: stmt_artist_count.get().count + ' 组',
+          public: false,
+          created_at: null,
+          updated_at: null,
+          path: '',
+          sync: false,
+          size: 0,
+          rules: null,
+          evaluated_at: null,
+          owner_id: ''
+        }
+        page_artistlists_options.value.push(temp_Play_List_ALL);
+        page_artistlists_statistic.value.push({
+          label: temp_Play_List_ALL.label,
+          artist_count: temp_Play_List_ALL.song_count.toString(),
+          id: temp_Play_List_ALL.id
+        });
+        page_artistlists.value.push(temp_Play_List_ALL)
+        //////
+        const stmt_artist_Annotation_Starred_Count = db.prepare(`
+          SELECT COUNT(*) AS count FROM annotation 
+          WHERE starred = 1 AND item_type='artist'
+        `);
+        const temp_Play_List_Love: Play_List = {
+          label: '收藏歌手',
+          value: 'artist_list_love',
+          id: 'artist_list_love',
+          name: '收藏歌手',
+          comment: '收藏歌手',
+          duration: 0,
+          song_count: stmt_artist_Annotation_Starred_Count.get().count + ' 组',
+          public: false,
+          created_at: null,
+          updated_at: null,
+          path: '',
+          sync: false,
+          size: 0,
+          rules: null,
+          evaluated_at: null,
+          owner_id: ''
+        }
+        page_artistlists_options.value.push(temp_Play_List_Love);
+        page_artistlists_statistic.value.push({
+          label: temp_Play_List_Love.label,
+          artist_count: temp_Play_List_Love.song_count.toString(),
+          id: temp_Play_List_Love.id
+        });
+        page_artistlists.value.push(temp_Play_List_Love)
+        //////
+        const stmt_artist_Annotation_Recently_Count = db.prepare(`
+          SELECT COUNT(*) AS count FROM annotation 
+          WHERE play_count >= 1 AND item_type='artist'
+        `);
+        const temp_Play_List_Recently: Play_List = {
+          label: '最近播放',
+          value: 'artist_list_recently',
+          id: 'artist_list_recently',
+          name: '最近播放',
+          comment: '最近播放',
+          duration: 0,
+          song_count: stmt_artist_Annotation_Recently_Count.get().count + ' 组',
+          public: false,
+          created_at: null,
+          updated_at: null,
+          path: '',
+          sync: false,
+          size: 0,
+          rules: null,
+          evaluated_at: null,
+          owner_id: ''
+        }
+        page_artistlists_options.value.push(temp_Play_List_Recently);
+        page_artistlists_statistic.value.push({
+          label: temp_Play_List_Recently.label,
+          artist_count: temp_Play_List_Recently.song_count.toString(),
+          id: temp_Play_List_Recently.id
+        });
+        page_artistlists.value.push(temp_Play_List_Recently)
+        //////
+        const stmt_artist_Annotation_PlayList_Count = db.prepare(`
+          SELECT COUNT(*) AS count FROM playlist
+        `);
+        page_artistlists_statistic.value.push({
+          label: '播放列表',
+          artist_count: stmt_artist_Annotation_PlayList_Count.get().count + ' 组',
+          id: 'artist_list_all_PlayList'
+        });
+      }catch (err: any) {
+        console.error(err);
+      }
+      //////
+
+      // load artist_Files_temporary data
+      const sortKey = page_artistlists_options_Sort_key.value.length > 0 && page_artistlists_options_Sort_key.value[0].order !== 'default' ?
+        page_artistlists_options_Sort_key.value[0].columnKey : 'id';
+      const sortOrder = page_artistlists_options_Sort_key.value.length > 0 && page_artistlists_options_Sort_key.value[0].order !== 'default' ?
+        page_artistlists_options_Sort_key.value[0].order.replace('end', '') : '';
+      let keywordFilter = page_artistlists_keyword.value.length > 0 ?
+        `WHERE name LIKE '%${page_artistlists_keyword.value}%' OR external_info_updated_at LIKE '%${page_artistlists_keyword.value}%'` :
+        '';
+      if (page_artistlists_get_keyword_model_num.value != 0) {
+        if (keywordFilter.length > 0) {
+          keywordFilter = keywordFilter.replace('LIKE', '=').replace(/%/g, '');
+        }
+        page_artistlists_get_keyword_model_num.value = 0;
+      }
+      const stmt_album_limit_1_imagefiles = db.prepare('SELECT * FROM album LIMIT 1');
+      const imagefiles = stmt_album_limit_1_imagefiles.all();
+      const stmt_media_file = db.prepare(`SELECT id, title, artist,artist_id, album,album_id, duration, path FROM media_file`);
+      const pathfiles = stmt_media_file.all();
+      const stmt_artist = db.prepare(`
+        SELECT id,name,album_count,song_count,medium_image_url,external_info_updated_at
+        FROM artist
+        ${keywordFilter}
+        ORDER BY ${sortKey} ${sortOrder}  
+      `);
+      let rows = stmt_artist.all();
+      rows.forEach((row: Artist) => {
+        for (let j = 0; j < pathfiles.length; j++) {
+          if (pathfiles[j].artist_id === row.id) {
+            if (imagefiles[0].image_files.indexOf(pathfiles[j].path.replace('mp3', 'jpg')) > 0)
+              row.medium_image_url = pathfiles[j].path.replace('mp3', 'jpg');
+            else
+              row.medium_image_url = '../../../resources/error_album.jpg';
+
+            break;
+          }
+          if (j === pathfiles.length - 1) {
+            row.medium_image_url = '../../../resources/error_album.jpg';
+          }
+        }
+        artist_Files_temporary.value.push(row);
+      });
+      rows.length = 0
+      rows = []
+      ////// find favorite for artist_Files_temporary
+      const stmt_artist_Annotation_Starred_Items = db.prepare(`
+        SELECT item_id FROM annotation 
+        WHERE starred = 1 AND item_type='artist'
+      `);
+      const annotations = stmt_artist_Annotation_Starred_Items.all();
+      for (let i = 0; i < artist_Files_temporary.value.length; i++) {
+        if (annotations.some((annotation: { item_id: string }) => annotation.item_id === artist_Files_temporary.value[i].id)) {
+          artist_Files_temporary.value[i].favorite = true;
+        } else {
+          artist_Files_temporary.value[i].favorite = false;
+        }
+      }
+      ////// filter selected_list for artist_Files_temporary
+      artist_Files_temporary.value = artist_Files_temporary.value.filter((item) => {
+        if (page_artistlists_selected.value === 'artist_list_all') {
+          return true;
+        } else if (page_artistlists_selected.value === 'artist_list_love') {
+          return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
+        } else if (page_artistlists_selected.value === 'artist_list_recently') {
+          const stmt_artist_Annotation_Recently_Items = db.prepare(`
+            SELECT item_id FROM annotation 
+            WHERE play_count >= 1 AND item_type='artist'
+          `);
+          const annotations = stmt_artist_Annotation_Recently_Items.all();
+          return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
+        } else if (page_artistlists_selected.value === 'artist_list_all_PlayList') {
+          return true;
+        }
+      });
+      ////// update page_artistlists_top_artist_image_url and page_artistlists_top_artist_name
+      page_artistlists_top_artist_image_url.value = '';
+      if(artist_Files_temporary.value.length > 0)
+        for (let i = 0; i < artist_Files_temporary.value.length; i++) {
+          if (await fileExists(artist_Files_temporary.value[i].medium_image_url) === true) {
+            page_artistlists_top_artist_image_url.value = artist_Files_temporary.value[i].medium_image_url;
+            page_artistlists_top_artist_name.value = artist_Files_temporary.value[i].name;
+            break;  
+          }
+        }
+
+
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+      db.close();
+      console.log('db.close().......');
+      db = null;
+    }
+
+    delete require.cache[require.resolve('better-sqlite3')];
   }
   //////
   function get_router_select(value: any) {
@@ -584,7 +1040,9 @@
   //////
   import router from './router'
   router.beforeEach((to, from, next) => {
-    keyword.value = '';
+    page_songlists_keyword.value = '';// reset songlist of search model
+    page_albumlists_keyword.value = '';// reset albumlist of search model
+    page_artistlists_keyword.value = '';// reset artistlist of search model
     clear_Files_temporary()
     next();
   });
@@ -593,7 +1051,8 @@
   });
   const clear_Files_temporary = () => {
     media_Files_temporary.value.splice(0, media_Files_temporary.value.length);
-    Album_Files_temporary.value.splice(0, Album_Files_temporary.value.length);
+    album_Files_temporary.value.splice(0, album_Files_temporary.value.length);
+    artist_Files_temporary.value.splice(0, artist_Files_temporary.value.length);
   }
   onMounted(() => {
     
@@ -670,26 +1129,50 @@
                 :media_Files_selected="media_Files_selected"
                 @media_Files_selected="get_media_Files_selected"
                 @media_Files_selected_temp="set_media_Files_selected"
-                :options_Sort_key="options_Sort_key"
-                @options_Sort_key="get_options_Sort_key"
-                @keyword="get_keyword"
-                @reset_data="get_reset_data"
-                :page_top_album_image_url="page_top_album_image_url"
-                :page_top_album_name="page_top_album_name"
+                :page_songlists_options_Sort_key="page_songlists_options_Sort_key"
+                @page_songlists_options_Sort_key="get_page_songlists_options_Sort_key"
+                @page_songlists_keyword="page_songlists_get_keyword"
+                @page_songlists_reset_data="page_songlists_get_reset_data"
+                :page_songlists_top_album_image_url="page_songlists_top_album_image_url"
+                :page_songlists_top_album_name="page_songlists_top_album_name"
                 :page_songlists_options="page_songlists_options"
                 :page_songlists_statistic="page_songlists_statistic"
                 :page_songlists="page_songlists"
                 :page_songlists_selected="page_songlists_selected"
                 @page_songlists_selected="get_page_songlists_selected"
                 
-                :Album_Files_temporary="Album_Files_temporary"
                 :album_page_num="album_page_num"
                 @album_page_num="get_album_page_num"
                 :album_page_size="album_page_size"
                 @album_page_size="get_album_PageSize"
                 :album_Page_length="album_Page_length"
-                :change_page_header_color="change_page_header_color"
+                :album_Files_temporary="album_Files_temporary"
+                :page_albumlists_options_Sort_key="page_albumlists_options_Sort_key"
+                @page_albumlists_options_Sort_key="get_page_albumlists_options_Sort_key"
+                @page_albumlists_keyword="page_albumlists_get_keyword"
+                @page_albumlists_reset_data="page_albumlists_get_reset_data"
+                :page_albumlists_top_album_image_url="page_albumlists_top_album_image_url"
+                :page_albumlists_top_album_name="page_albumlists_top_album_name"
+                :page_albumlists_options="page_albumlists_options"
+                :page_albumlists_statistic="page_albumlists_statistic"
+                :page_albumlists="page_albumlists"
+                :page_albumlists_selected="page_albumlists_selected"
+                @page_albumlists_selected="get_page_albumlists_selected"
 
+                :artist_Files_temporary="artist_Files_temporary"
+                :page_artistlists_options_Sort_key="page_artistlists_options_Sort_key"
+                @page_artistlists_options_Sort_key="get_page_artistlists_options_Sort_key"
+                @page_artistlists_keyword="page_artistlists_get_keyword"
+                @page_artistlists_reset_data="page_artistlists_get_reset_data"
+                :page_artistlists_top_artist_image_url="page_artistlists_top_artist_image_url"
+                :page_artistlists_top_artist_name="page_artistlists_top_artist_name"
+                :page_artistlists_options="page_artistlists_options"
+                :page_artistlists_statistic="page_artistlists_statistic"
+                :page_artistlists="page_artistlists"
+                :page_artistlists_selected="page_artistlists_selected"
+                @page_artistlists_selected="get_page_artistlists_selected"
+
+                :change_page_header_color="change_page_header_color"
                 :this_audio_album_name="this_audio_album_name">
                 
               </RouterView>

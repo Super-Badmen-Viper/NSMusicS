@@ -1,4 +1,5 @@
-interface Item_Album {
+interface Album {
+    favorite:boolean;
     absoluteIndex: number;
     title:string;
     album_title:string;
