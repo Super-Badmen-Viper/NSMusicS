@@ -1,4 +1,6 @@
 interface Artist {
+    favorite:boolean;
+
     id: string;
     name: string;
     album_count: number;

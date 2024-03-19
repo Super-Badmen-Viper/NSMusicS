@@ -37,7 +37,7 @@ const {
   page_artistlists_selected,
 
   page_artistlists_options_Sort_key,
-  artist_Files_temporary,artist_page_num,artist_page_size,artist_Page_length,} = defineProps<{
+  artist_Files_temporary,} = defineProps<{
   collapsed:boolean,
   window_innerWidth:number,
 
@@ -46,8 +46,7 @@ const {
   page_artistlists_selected:string;
 
   page_artistlists_options_Sort_key:{ columnKey: string; order: string }[],
-  artist_Files_temporary:Artist[],
-  artist_page_num:number,artist_page_size:number,artist_Page_length:number,}>();
+  artist_Files_temporary:Artist[],}>();
 </script>
 
 <template>
@@ -66,11 +65,6 @@ const {
 
       :collapsed="collapsed"
       :window_innerWidth="window_innerWidth"
-      :page="artist_page_num"
-      :pageSize="artist_page_size"
-      :pageCount="artist_Page_length"
-      @artist_page_num="get_artist_page_num"
-      @artist_page_size="get_artist_PageSize"
       :options_Sort_key="page_artistlists_options_Sort_key"
       @options_Sort_key="get_page_artistlists_options_Sort_key"/>
   </div>

@@ -10,9 +10,6 @@ const emit = defineEmits([
   'this_audio_album_name',
   'data_select_Index',
   'page_song_index',
-  'media_page_num',
-  'media_page_size',
-  'media_PageFiles',
   'menu_edit_this_song',
   'menu_add_this_song',
   'menu_delete_this_song',
@@ -170,7 +167,6 @@ const props = defineProps<{
   collapsed: Boolean;
   window_innerWidth: number;
   options_Sort_key:{ columnKey: string; order: string }[];
-  media_page_num: number;media_page_size: number;media_page_length: number;
 }>();
 onBeforeUnmount(() => {
   
@@ -262,54 +258,6 @@ const xRef = ref(0)
 const yRef = ref(0)
 let click_count = 0
 const bool_start_play = ref<boolean>(true)
-const forceUpdate = ref(false); // 创建一个响应式引用
-const click_play_this_medialist = () => {
-  if(bool_start_play.value == true){
-    if(props.data_temporary != null && props.data_temporary.length > 0){
-      let media_file:Media_File = props.data_temporary[0]
-      emit('media_file_path', media_file.path)
-      emit('media_file_medium_image_url',media_file.medium_image_url)
-      emit('this_audio_singer_name',media_file.artist)
-      emit('this_audio_song_name',media_file.title)
-      emit('this_audio_album_name',media_file.album)
-      emit('data_select_Index', data_select_Index.value); 
-    }
-  }else{
-  }
-}
-const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对分页的项的下标:0~(pageSize-1)
-  onclick: (_e: MouseEvent) => {
-    click_count++
-  },
-  onDblclick: (_e: MouseEvent) => {
-    if(click_count >= 2){
-      let media_file:Media_File =JSON.parse(JSON.stringify(row, null, 2))
-      emit('media_file_path', media_file.path)
-      emit('media_file_medium_image_url',media_file.medium_image_url)
-      emit('this_audio_singer_name',media_file.artist)
-      emit('this_audio_song_name',media_file.title)
-      emit('this_audio_album_name',media_file.album)
-      emit('page_song_index', page_index); 
-
-      data_select_Index.value = (current_page_num.value-1)*props.media_page_size + page_index;
-      emit('data_select_Index', data_select_Index.value); 
-
-      click_count = 0
-    }
-  },
-  onContextmenu: (e: MouseEvent) => {
-    e.preventDefault()
-    showDropdownRef.value = false
-    nextTick().then(() => {
-      showDropdownRef.value = true
-      xRef.value = e.clientX
-      yRef.value = e.clientY
-    })
-
-    data_select_Index.value = (current_page_num.value-1)*props.media_page_size + page_index;
-  }
-});
-const current_page_num = ref<number>(1)
 //
 const scrollbar = ref(null as any);
 const scrollToTop = () => {
@@ -890,6 +838,7 @@ function getAssetImage(firstImage: string) {
 .dynamic-scroller-demo {
   height: 100%;
   overflow: auto;
+  overflow-x:hidden;
   display: flex;
   flex-direction: column;
 }

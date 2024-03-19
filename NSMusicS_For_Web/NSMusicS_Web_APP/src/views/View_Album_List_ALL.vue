@@ -4,14 +4,10 @@ import Table_Album_List_ALL from '../views/table/Table_Album_List_ALL_Grid_Virtu
 
 const emit = defineEmits([
   'router_select',
-  'album_page_num',
   'album_page_size',
   'page_albumlists_options_Sort_key',
   'page_albumlists_selected'
 ]);
-function get_album_page_num(value: any) {
-  emit('album_page_num',value)
-}
 function get_album_PageSize(value: any) {
   emit('album_page_size',value)
 }
@@ -36,8 +32,7 @@ const {
   page_albumlists,page_albumlists_options,page_albumlists_statistic,
   page_albumlists_selected,
 
-  page_albumlists_options_Sort_key,
-  album_Files_temporary,album_page_num,album_page_size,album_Page_length,} = defineProps<{
+  page_albumlists_options_Sort_key,} = defineProps<{
   collapsed:boolean,
   window_innerWidth:number,
 
@@ -46,8 +41,7 @@ const {
   page_albumlists_selected:string;
 
   page_albumlists_options_Sort_key:{ columnKey: string; order: string }[],
-  album_Files_temporary:Album[],
-  album_page_num:number,album_page_size:number,album_Page_length:number,}>();
+  album_Files_temporary:Album[],}>();
 </script>
 
 <template>
@@ -66,11 +60,6 @@ const {
 
       :collapsed="collapsed"
       :window_innerWidth="window_innerWidth"
-      :page="album_page_num"
-      :pageSize="album_page_size"
-      :pageCount="album_Page_length"
-      @album_page_num="get_album_page_num"
-      @album_page_size="get_album_PageSize"
       :options_Sort_key="page_albumlists_options_Sort_key"
       @options_Sort_key="get_page_albumlists_options_Sort_key"/>
   </div>

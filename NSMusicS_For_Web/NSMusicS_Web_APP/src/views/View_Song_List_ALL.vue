@@ -7,9 +7,6 @@ function get_data_select_Index(value: any) {
   data_select_Index.value = value
   emit('data_select_Index',data_select_Index.value)
 }
-function get_media_page_size(value: number) {
-  emit('media_page_size',value)
-}
 
 const menu_edit_this_song = ref<Media_File>()
 function get_menu_edit_this_song(value: any) {
@@ -48,9 +45,6 @@ const emit = defineEmits([
   'this_audio_album_name',
   'data_select_Index',
   'page_song_index',
-  'media_page_num',
-  'media_page_size',
-  'media_PageFiles',
   'menu_edit_this_song',
   'menu_add_this_song',
   'menu_delete_this_song',
@@ -78,12 +72,6 @@ function get_this_audio_album_name(value: any) {
 }
 function get_page_song_index(value: any) {
   emit('page_song_index',value)
-}
-function get_media_page_num(value: any) {
-  emit('media_page_num',value)
-}
-function get_media_PageFiles(value: any) {
-  emit('media_PageFiles',value)
 }
 function get_page_songlists_options_Sort_key(value: any) {
   emit('page_songlists_options_Sort_key',value)
@@ -119,7 +107,6 @@ const {
 
   media_Files_temporary,media_Files_selected,
   page_songlists_options_Sort_key,
-  media_page_num,media_page_size,media_page_length,
   } = defineProps<{
     collapsed:Boolean,window_innerWidth:number,
 
@@ -129,7 +116,6 @@ const {
     
     media_Files_temporary:Media_File[],media_Files_selected:Media_File[],
     page_songlists_options_Sort_key:{ columnKey: string; order: string }[],
-    media_page_num:number,media_page_size:number,media_page_length:number,
   }>();
 </script>
 
@@ -159,12 +145,6 @@ const {
       @this_audio_album_name="get_this_audio_album_name"
       @data_select_Index="get_data_select_Index"
       @page_song_index="get_page_song_index"
-      :media_page_num="media_page_num"
-      @media_page_num="get_media_page_num"
-      :media_page_size="media_page_size"
-      @media_page_size="get_media_page_size"
-      :media_page_length="media_page_length"
-      @media_PageFiles="get_media_PageFiles"
       @menu_edit_this_song="get_menu_edit_this_song"
       @menu_add_this_song="get_menu_add_this_song"
       @menu_delete_this_song="get_menu_delete_this_song"

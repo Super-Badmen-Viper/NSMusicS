@@ -22,6 +22,8 @@
   function renderIcon (icon: Component) {
     return () => h(NIcon, null, { default: () => h(icon) })
   }
+  // Prohibiting the use of trigger events in this Naive UI menu item will cause Vue in RouterView Internal error in Js, 
+  // try to use native Vue.js operation RouterLink as much as possible
   const menuOptions: MenuOption[] = [
     {label: () => h(RouterLink,{to: {name: 'home',}}, { default: () => '主页' }),key: 'go-back-home',icon: renderIcon(Home28Regular)},
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
@@ -170,37 +172,6 @@
     page_song_index.value = value
     console.log('page_song_index：'+value)
   }
-  // 弃用
-  const media_page_num = ref<number>(1);
-  function get_media_page_num(value: any) {
-    media_page_num.value = value
-    console.log('media_page_num：'+value)
-    fetchData_Media()
-  }
-  const media_page_size = ref<number>(30)
-  function get_media_page_size(value: number) {
-    if(media_file_count.value != null)
-      media_page_length.value = Math.floor(media_file_count.value / media_page_size.value) + 1
-    media_page_size.value = value
-    console.log('media_page_size：'+value)
-    media_page_num.value = 1
-    fetchData_Media()
-  }
-  const album_page_num = ref<number>(1)
-  function get_album_page_num(value: any) {
-    album_page_num.value = value
-    console.log('album_page_num：'+value)
-    fetchData_Album()
-  }
-  const album_page_size = ref<number>(30)
-  function get_album_PageSize(value: any) {
-    if(album_file_count.value != null)
-      album_Page_length.value = Math.floor(album_file_count.value / album_page_size.value) + 1
-    album_page_size.value = value
-    console.log('album_PageSize：'+value)
-    album_page_num.value = 1
-    fetchData_Album()
-  }
   //////
   const path = require('path');
   const fs = require('fs');
@@ -241,22 +212,6 @@
       console.log('media_Files_selected：'+value.path+'  '+value.selected)
     }
   }
-  const media_Files_selected_temp = ref<Media_File[]>([])
-  function set_media_Files_selected(value: boolean) {
-    if (value === true) {
-      media_Files_temporary.value.forEach((item, index) => {
-        media_Files_temporary.value[index].selected = true;
-      });
-      media_Files_selected.value = media_Files_temporary.value.slice();
-    } else {
-      media_Files_temporary.value.forEach((item, index) => {
-        media_Files_temporary.value[index].selected = false;
-      });
-      media_Files_selected.value = [];
-    }
-  }
-  const media_page_length = ref<number>(0);
-  const media_file_count = ref<number>(0);
   ////// page_songlists
   const page_songlists_top_album_image_url = ref<string>('../../../resources/error_album.png')
   const page_songlists_top_album_name = ref<string>('')
@@ -303,9 +258,12 @@
     console.log('page_songlists_selected：'+value)
     fetchData_Media()
   }
-  const fetchData_Media = async () => {
+  const fetchData_Media = async () => {                
     let db:any = null;
+    // clear RouterView of vue-virtual-scroller data
     clear_Files_temporary()
+    router_select_model_media.value = true;
+
     try {
       db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
       db.pragma('journal_mode = WAL');
@@ -313,13 +271,6 @@
       // load media_model data
       try{
         const stmt_media_file_count = db.prepare('SELECT COUNT(*) AS count FROM media_file');
-        media_file_count.value = stmt_media_file_count.get().count;   
-        if (media_file_count.value != null)
-          media_page_length.value = Math.floor(media_file_count.value / media_page_size.value) + 1;
-        media_Files_temporary.value.forEach((item: { absoluteIndex: any }, index: number) => {
-          item.absoluteIndex = index + 1;
-        });
-        //
         page_songlists_options.value = [];
         page_songlists_statistic.value = [];
         page_songlists.value = []
@@ -424,7 +375,6 @@
       //////
       
       // load media_Files_temporary data
-      // const offset = (media_page_num.value - 1) * media_page_size.value;
       const sortKey = page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
         page_songlists_options_Sort_key.value[0].columnKey : 'id';
       const sortOrder = page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
@@ -514,8 +464,6 @@
   };
   // album model
   const album_Files_temporary = ref<Album[]>([]);
-  const album_Page_length = ref<number>(0);
-  const album_file_count = ref<number>(0);
   ////// page_albumlists
   const page_albumlists_top_album_image_url = ref<string>('../../../resources/error_album.png')
   const page_albumlists_top_album_name = ref<string>('')
@@ -565,7 +513,10 @@
   const fetchData_Album = async () => {
     let db:any = null;
     let moment = require('moment');
+    // clear RouterView of vue-virtual-scroller data
     clear_Files_temporary()
+    router_select_model_album.value = true;
+
 
     try {
       db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
@@ -816,7 +767,9 @@
   }
   const fetchData_Artist = async () => {
     let db:any = null;
+    // clear RouterView of vue-virtual-scroller data
     clear_Files_temporary()
+    router_select_model_artist.value = true;
 
     try {
       db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
@@ -1030,10 +983,13 @@
     if(value === 'home'){
       fetchData_Home()
     }else if(value === 'View_Song_List_ALL'){
+      router_select_model_media.value = true
       fetchData_Media()
     }else if(value === 'View_Album_List_ALL'){
+      router_select_model_album.value = true
       fetchData_Album()
     }else if(value === 'View_Artist_List_ALL'){
+      router_select_model_artist.value = true
       fetchData_Artist()
     }
   }
@@ -1048,11 +1004,24 @@
   });
   router.afterEach((to, from) => {
     clear_Files_temporary()
+    if(to.name === 'View_Song_List_ALL'){
+      router_select_model_media.value = true
+    }else if(to.name === 'View_Album_List_ALL'){
+      router_select_model_album.value = true
+    }else if(to.name === 'View_Artist_List_ALL'){
+      router_select_model_artist.value = true
+    }
   });
+  const router_select_model_media = ref<Boolean>(false)
+  const router_select_model_album = ref<Boolean>(false)
+  const router_select_model_artist = ref<Boolean>(false)
   const clear_Files_temporary = () => {
-    media_Files_temporary.value.splice(0, media_Files_temporary.value.length);
-    album_Files_temporary.value.splice(0, album_Files_temporary.value.length);
-    artist_Files_temporary.value.splice(0, artist_Files_temporary.value.length);
+    router_select_model_media.value = false
+    router_select_model_album.value = false
+    router_select_model_artist.value = false
+    media_Files_temporary.value = [];
+    album_Files_temporary.value = [];
+    artist_Files_temporary.value = [];
   }
   onMounted(() => {
     
@@ -1106,7 +1075,7 @@
               :options="menuOptions"/>
             </n-layout-sider>
             <n-layout embedded style="height: calc(100vh - 80px);">
-              <RouterView
+              <!-- <RouterView
                 class="view_show"
 
                 @router_select="get_router_select"
@@ -1120,15 +1089,9 @@
                 @this_audio_album_name="get_this_audio_album_name"
                 @data_select_Index="get_data_select_Index"
                 @page_song_index="get_page_song_index"
-                :media_page_num="media_page_num"
-                @media_page_num="get_media_page_num"
-                :media_page_size="media_page_size"
-                @media_page_size="get_media_page_size"
-                :media_page_length="media_page_length"
                 :media_Files_temporary="media_Files_temporary"
                 :media_Files_selected="media_Files_selected"
                 @media_Files_selected="get_media_Files_selected"
-                @media_Files_selected_temp="set_media_Files_selected"
                 :page_songlists_options_Sort_key="page_songlists_options_Sort_key"
                 @page_songlists_options_Sort_key="get_page_songlists_options_Sort_key"
                 @page_songlists_keyword="page_songlists_get_keyword"
@@ -1141,11 +1104,6 @@
                 :page_songlists_selected="page_songlists_selected"
                 @page_songlists_selected="get_page_songlists_selected"
                 
-                :album_page_num="album_page_num"
-                @album_page_num="get_album_page_num"
-                :album_page_size="album_page_size"
-                @album_page_size="get_album_PageSize"
-                :album_Page_length="album_Page_length"
                 :album_Files_temporary="album_Files_temporary"
                 :page_albumlists_options_Sort_key="page_albumlists_options_Sort_key"
                 @page_albumlists_options_Sort_key="get_page_albumlists_options_Sort_key"
@@ -1175,7 +1133,92 @@
                 :change_page_header_color="change_page_header_color"
                 :this_audio_album_name="this_audio_album_name">
                 
+              </RouterView> -->
+              <RouterView
+                class="view_show"
+                v-if="router_select_model_media"
+                @router_select="get_router_select"
+                :collapsed="collapsed"
+                :window_innerWidth="window_innerWidth"
+
+                @media_file_path="media_file_path"
+                @media_file_medium_image_url="get_media_file_medium_image_url"
+                @this_audio_singer_name="get_this_audio_singer_name"
+                @this_audio_song_name="get_this_audio_song_name"
+                @this_audio_album_name="get_this_audio_album_name"
+                @data_select_Index="get_data_select_Index"
+                @page_song_index="get_page_song_index"
+                :media_Files_temporary="media_Files_temporary"
+                :media_Files_selected="media_Files_selected"
+                @media_Files_selected="get_media_Files_selected"
+                :page_songlists_options_Sort_key="page_songlists_options_Sort_key"
+                @page_songlists_options_Sort_key="get_page_songlists_options_Sort_key"
+                @page_songlists_keyword="page_songlists_get_keyword"
+                @page_songlists_reset_data="page_songlists_get_reset_data"
+                :page_songlists_top_album_image_url="page_songlists_top_album_image_url"
+                :page_songlists_top_album_name="page_songlists_top_album_name"
+                :page_songlists_options="page_songlists_options"
+                :page_songlists_statistic="page_songlists_statistic"
+                :page_songlists="page_songlists"
+                :page_songlists_selected="page_songlists_selected"
+                @page_songlists_selected="get_page_songlists_selected"
+
+                :change_page_header_color="change_page_header_color"
+                :this_audio_album_name="this_audio_album_name"
+              >
+              
               </RouterView>
+              <RouterView
+                class="view_show"
+                v-else-if="router_select_model_album"
+                @router_select="get_router_select"
+                :collapsed="collapsed"
+                :window_innerWidth="window_innerWidth"
+
+                :album_Files_temporary="album_Files_temporary"
+                :page_albumlists_options_Sort_key="page_albumlists_options_Sort_key"
+                @page_albumlists_options_Sort_key="get_page_albumlists_options_Sort_key"
+                @page_albumlists_keyword="page_albumlists_get_keyword"
+                @page_albumlists_reset_data="page_albumlists_get_reset_data"
+                :page_albumlists_top_album_image_url="page_albumlists_top_album_image_url"
+                :page_albumlists_top_album_name="page_albumlists_top_album_name"
+                :page_albumlists_options="page_albumlists_options"
+                :page_albumlists_statistic="page_albumlists_statistic"
+                :page_albumlists="page_albumlists"
+                :page_albumlists_selected="page_albumlists_selected"
+                @page_albumlists_selected="get_page_albumlists_selected"
+
+                :change_page_header_color="change_page_header_color"
+                :this_audio_album_name="this_audio_album_name"
+              >
+
+              </RouterView>
+              <RouterView
+                class="view_show"
+                v-else-if="router_select_model_artist"
+                @router_select="get_router_select"
+                :collapsed="collapsed"
+                :window_innerWidth="window_innerWidth"
+
+                :artist_Files_temporary="artist_Files_temporary"
+                :page_artistlists_options_Sort_key="page_artistlists_options_Sort_key"
+                @page_artistlists_options_Sort_key="get_page_artistlists_options_Sort_key"
+                @page_artistlists_keyword="page_artistlists_get_keyword"
+                @page_artistlists_reset_data="page_artistlists_get_reset_data"
+                :page_artistlists_top_artist_image_url="page_artistlists_top_artist_image_url"
+                :page_artistlists_top_artist_name="page_artistlists_top_artist_name"
+                :page_artistlists_options="page_artistlists_options"
+                :page_artistlists_statistic="page_artistlists_statistic"
+                :page_artistlists="page_artistlists"
+                :page_artistlists_selected="page_artistlists_selected"
+                @page_artistlists_selected="get_page_artistlists_selected"
+
+                :change_page_header_color="change_page_header_color"
+                :this_audio_album_name="this_audio_album_name"
+              >
+              
+              </RouterView>
+
               <div class="bar_top_setapp" :style="{ backgroundColor: theme_bar_top_setapp }">
                 <section  style="
                           -webkit-app-region: no-drag;

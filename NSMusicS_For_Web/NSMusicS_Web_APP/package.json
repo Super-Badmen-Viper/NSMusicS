@@ -29,6 +29,7 @@
     "element-plus": "^2.6.1",
     "increase-memory-limit": "^1.0.7",
     "moment": "^2.30.1",
+    "pinia": "^2.1.7",
     "prebuild-install": "^7.1.1"
   },
   "devDependencies": {

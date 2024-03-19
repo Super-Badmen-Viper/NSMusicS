@@ -13,9 +13,6 @@
     page_artistlists:Play_List[],page_artistlists_options:{label: string;value: string}[],page_artistlists_statistic:{label: string;artist_count: number;id: string;}[],
     page_artistlists_selected:string;
 
-    page: number;
-    pageSize: number;
-    pageCount: number;
     collapsed: Boolean;
     window_innerWidth: number;
     options_Sort_key:{ columnKey: string; order: string }[];
@@ -200,34 +197,12 @@
   };
   //
   const handleImageError = (event:any) => {
-    event.target.src = '../../../resources/error_artist.jpg'; // 设置备用图片路径
+    event.target.src = '../../../resources/error_album.jpg'; // 设置备用图片路径
   };
-
-  import {
-    Play16Filled,
-    MoreCircle32Regular
-  } from '@vicons/fluent'
-  import {
-    AddCircle32Regular,
-    MultiselectLtr20Filled,
-    Delete20Regular,
-    SelectAllOn24Regular,
-    PlayCircle20Filled,
-    ArrowSort24Regular,TextSortAscending20Regular,TextSortDescending20Regular,
-    Search20Filled,
-    Filter16Regular,
-    SaveEdit24Regular,
-    PlayCircle24Regular,
-    Heart24Regular,Heart28Filled,
-    ChevronLeft16Filled,ChevronRight16Filled,
-  } from '@vicons/fluent'
-  import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
-  import { InputInst, NIcon } from 'naive-ui';
-
   //
   const itemSize = 220;
   const gridItems = ref(5);
-  const itemSecondarySize = 190;
+  const itemSecondarySize = 186;
   //
   const handleSelected_value_for_artistlistall = (value: any) => {
     emit('page_artistlists_selected',value)
@@ -291,6 +266,27 @@
   function getAssetImage(firstImage: string) {
     return new URL(firstImage, import.meta.url).href;
   }
+
+  import {
+    Play16Filled,
+    MoreCircle32Regular
+  } from '@vicons/fluent'
+  import {
+    AddCircle32Regular,
+    MultiselectLtr20Filled,
+    Delete20Regular,
+    SelectAllOn24Regular,
+    PlayCircle20Filled,
+    ArrowSort24Regular,TextSortAscending20Regular,TextSortDescending20Regular,
+    Search20Filled,
+    Filter16Regular,
+    SaveEdit24Regular,
+    PlayCircle24Regular,
+    Heart24Regular,Heart28Filled,
+    ChevronLeft16Filled,ChevronRight16Filled,
+  } from '@vicons/fluent'
+  import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
+  import { InputInst, NIcon } from 'naive-ui';
 </script>
 <template>
   <n-space vertical :size="12">
@@ -535,6 +531,7 @@
   height: calc(100vh - 200px);
   display: flex;
   flex-direction: column;
+  overflow-x:hidden;
 }
 .artist {
   float: left;
