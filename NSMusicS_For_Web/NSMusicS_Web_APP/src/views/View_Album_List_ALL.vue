@@ -5,8 +5,9 @@ import Table_Album_List_ALL from '../views/table/Table_Album_List_ALL_Grid_Virtu
 const emit = defineEmits([
   'router_select',
   'album_page_size',
-  'page_albumlists_options_Sort_key',
-  'page_albumlists_selected'
+  'page_albumlists_options_Sort_key','page_albumlists_keyword','page_albumlists_reset_data',
+  'page_albumlists_selected',
+  'media_list_of_album_id'
 ]);
 function get_album_PageSize(value: any) {
   emit('album_page_size',value)
@@ -20,6 +21,15 @@ function get_router_select(value: any) {
 function set_page_albumlists_selected(value: boolean) {
   emit('page_albumlists_selected',value)
 }
+function get_media_list_of_album_id(value: any) {
+  emit('media_list_of_album_id',value)
+}
+function page_albumlists_get_keyword(value: string) {
+  emit('page_albumlists_keyword',value)
+}
+function page_albumlists_get_reset_data(value: any) {
+  emit('page_albumlists_reset_data',value)
+}
 onMounted(async () => {
   emit('router_select','View_Album_List_ALL')
 });
@@ -32,7 +42,7 @@ const {
   page_albumlists,page_albumlists_options,page_albumlists_statistic,
   page_albumlists_selected,
 
-  page_albumlists_options_Sort_key,} = defineProps<{
+  page_albumlists_options_Sort_key,page_albumlists_keyword} = defineProps<{
   collapsed:boolean,
   window_innerWidth:number,
 
@@ -41,7 +51,7 @@ const {
   page_albumlists_selected:string;
 
   page_albumlists_options_Sort_key:{ columnKey: string; order: string }[],
-  album_Files_temporary:Album[],}>();
+  album_Files_temporary:Album[],page_albumlists_keyword:string}>();
 </script>
 
 <template>
@@ -58,10 +68,16 @@ const {
       :page_albumlists_selected="page_albumlists_selected"
       @page_albumlists_selected="set_page_albumlists_selected"
 
+      @media_list_of_album_id="get_media_list_of_album_id"
+
       :collapsed="collapsed"
       :window_innerWidth="window_innerWidth"
       :options_Sort_key="page_albumlists_options_Sort_key"
-      @options_Sort_key="get_page_albumlists_options_Sort_key"/>
+      @options_Sort_key="get_page_albumlists_options_Sort_key"
+      :page_albumlists_keyword="page_albumlists_keyword"
+      @page_albumlists_keyword="page_albumlists_get_keyword"
+      @page_albumlists_reset_data="page_albumlists_get_reset_data"
+      />
   </div>
 </template>
 

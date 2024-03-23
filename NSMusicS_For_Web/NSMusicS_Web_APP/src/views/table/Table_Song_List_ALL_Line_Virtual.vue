@@ -17,7 +17,8 @@ const emit = defineEmits([
   'page_songlists_keyword',
   'page_songlists_reset_data',
   'media_Files_selected',
-  'media_Files_selected_temp',
+  'media_Files_selected_set',
+  'media_Files_selected_set_all',
   'page_songlists_selected'
 ]);
 const columns = ref<DataTableColumns<RowData>>();
@@ -163,6 +164,8 @@ const props = defineProps<{
   change_page_header_color: boolean;page_songlists_top_album_image_url:string;page_songlists_top_album_name:string;
   page_songlists:Play_List[];page_songlists_options:{label: string;value: string}[];page_songlists_statistic:{label: string;song_count: number;id: string;}[];
   page_songlists_selected:string;
+
+  page_songlists_keyword:string;
   
   collapsed: Boolean;
   window_innerWidth: number;
@@ -174,9 +177,9 @@ onBeforeUnmount(() => {
 const data_select_Index = ref<number>(0)
 const click_select_ALL_row = () => {
   if(props.data_temporary_selected.length == 0){
-    emit('media_Files_selected_temp', true);
+    emit('media_Files_selected_set_all', true);
   }else{
-    emit('media_Files_selected_temp', false);
+    emit('media_Files_selected_set_all', false);
   }
 }
 const click_bulk_operation = () => {
@@ -417,17 +420,13 @@ const back_search_default = () => {
     }
   }
 }
-// 重新渲染列表 width
-const collapsed_width = ref<number>(1090)
+// 重新渲染gridItems
+const collapsed_width = ref<number>(1090);
 const stopWatching_collapsed_width = watch(() => props.collapsed, (newValue, oldValue) => {
-  if (props.collapsed == true) {
-    collapsed_width.value = window.innerWidth - 110;
-  } else {
-    collapsed_width.value = window.innerWidth - 220;
-  }
+  updateGridItems();
 });
 let bool_watch = false;
-const timer = ref<NodeJS.Timeout | null>(null);//防止大量的重复渲染，造成界面假死
+const timer = ref<NodeJS.Timeout | null>(null);
 const startTimer = () => {
   timer.value = setInterval(() => {
     bool_watch = true;
@@ -435,22 +434,37 @@ const startTimer = () => {
 };
 onMounted(() => {
   startTimer();
+  updateGridItems();
 });
 const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (newValue, oldValue) => {
   bool_watch = false;
-  if (props.collapsed == true) {
-    collapsed_width.value = props.window_innerWidth - 110;
-  } else {
-    collapsed_width.value = props.window_innerWidth - 220;
-  }
+  updateGridItems();
   if (bool_watch) {
     startTimer();
   }
 });
+const updateGridItems = () => {
+  if (props.collapsed == true) {
+    collapsed_width.value = 145;
+  } else {
+    collapsed_width.value = 240;
+  }
+};
 //
 let bool_loading = false
 onMounted(() => {
   columns.value = createColumns_normal()
+
+  input_search_Value.value = props.page_songlists_keyword
+  if(input_search_Value.value.length > 0){
+    bool_show_search_area.value = true
+    bool_input_search = true
+  }
+  else{
+    bool_show_search_area.value = false
+    bool_input_search = false
+  }
+
 });
 //
 onBeforeUnmount(() => {
@@ -495,7 +509,7 @@ const handleItemDbClick = (media_file:Media_File) => {
 }
 const handleItemClick_title = (title:string) => {
   click_count = 0;
-  input_search_Value.value = title+'accurate_search'+'__title__'
+  input_search_Value.value = title//+'accurate_search'+'__title__'
   bool_show_search_area.value = false
   show_search_area()
   click_search()
@@ -634,16 +648,17 @@ function getAssetImage(firstImage: string) {
     -->
     <div class="dynamic-scroller-demo">
       <DynamicScroller 
-        class="table" ref="scrollbar"
+        class="table" ref="scrollbar" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
         :items="props.data_temporary"
         :minItemSize="itemSize - 20">
         <template #before>
           <div class="notice">
             <div
+              :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)'}"
               style="
                 position: absolute;
                 z-index: 0;
-                width: calc(100vw - 220px);height: 298px;
+                height: 298px;
                 border-radius: 20px;
                 overflow: hidden;
                 background-size: cover;
@@ -652,19 +667,24 @@ function getAssetImage(firstImage: string) {
                 background-color: transparent;
               ">
               <img 
-                :style="`
-                  margin-left: 200px; margin-top: -300px; 
-                  width: auto; height: calc(100vw - 400px);
-                `"
+                :style="{ 
+                  width: 'calc(100vw - ' + (collapsed_width + 200) + 'px)',
+                  height: 'calc(100vw - ' + (collapsed_width + 200) + 'px)'
+                }"
+                style="
+                  margin-left: 200px; margin-top: -300px;
+                "
                 :src="getAssetImage(props.page_songlists_top_album_image_url)"
               />
             </div>
-            <div style="
-              position: absolute;
-              z-index: 0;
-              width: calc(100vw - 220px);height: 300px;
-              border-radius: 20px;
-              overflow: hidden;">
+            <div 
+              :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)'}"
+              style="
+                position: absolute;
+                z-index: 0;
+                height: 300px;
+                border-radius: 20px;
+                overflow: hidden;">
               <svg 
                 style="
                   position: absolute; top: -2; left: 0; 
@@ -766,13 +786,13 @@ function getAssetImage(firstImage: string) {
             class="message"
             @click="handleItemClick"
             @Dblclick="handleItemDbClick(item)">
-            <div class="media_info">
+            <div class="media_info" :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)'}">
               <n-checkbox class="checkbox" 
                 v-if="!bool_start_play"
                 v-model:checked="item.selected"
-                @update:checked="checked => { 
+                @update:checked="(checked: any) => { 
                   item.selected = checked;
-                  emit('media_Files_selected', item);
+                  emit('media_Files_selected_set', item);
                 }"
                 />
               <div 
@@ -784,15 +804,14 @@ function getAssetImage(firstImage: string) {
                   :src="item.medium_image_url"
                   style="width: 100%; height: 100%; object-fit: cover;"/>
               </div>
-              <div class="title">
+              <div class="songlist_title">
                 <span @click="handleItemClick_title(item.title)">{{ item.title }}</span>
-              </div>
-              <div class="artist">
+                <br>
                 <template v-for="artist in item.artist.split('/')">
                   <span @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
                 </template>
               </div>
-              <div class="album">
+              <div class="songlist_album">
                 <span @click="handleItemClick_album(item.album)">{{ item.album }}</span>
               </div>
               <div class="love" style="margin-left: auto;">
@@ -870,36 +889,36 @@ function getAssetImage(firstImage: string) {
   width: 50px;
   margin-left: 12px;
 }
-.title{
+.songlist_title{
   margin-left: 10px;
   text-align: left;
-  width: 240px;
+  width: 300px;
   font-size: 15px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
-.title :hover{
+.songlist_title :hover{
   text-decoration: underline;
   cursor: pointer;
   color: #3DC3FF;
 }
-.artist{
+.songlist_artist{
   margin-left: 10px;
   text-align: left;
   width: 240px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
-.artist :hover{
+.songlist_artist :hover{
   text-decoration: underline;
   cursor: pointer;
   color: #3DC3FF;
 }
-.album{
+.songlist_album{
   margin-left: 10px;
   text-align: left;
   width: 240px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
-.album :hover{
+.songlist_album :hover{
   text-decoration: underline;
   cursor: pointer;
   color: #3DC3FF;

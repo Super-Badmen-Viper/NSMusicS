@@ -213,6 +213,12 @@
     }
   }
 
+  // open playList
+  // const isVisible_Music_PlayList = ref(false);
+  const Set_isVisible_Music_PlayList = () => {
+    emit('isVisible_Music_PlayList',true);
+  }
+
   import {
     Heart24Regular,
     Video16Regular,
@@ -324,7 +330,7 @@
       <div class="gird_Right">
         <n-space class="gird_Right_current_playlist_button_area">
           <n-badge :value="props.this_playList_num" show-zero :max="9999" :offset="[-7, 3]">
-            <n-button strong secondary class="gird_Right_current_playlist_button_area_of_button">
+            <n-button strong secondary class="gird_Right_current_playlist_button_area_of_button" @click="Set_isVisible_Music_PlayList">
               <template #icon>
                 <n-icon :size="42"><QueueMusicRound/></n-icon>
               </template>

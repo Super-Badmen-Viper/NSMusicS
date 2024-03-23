@@ -2,9 +2,9 @@
   import { computed, h, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 
   const emit = defineEmits([
-
     'options_Sort_key','page_albumlists_keyword','page_albumlists_reset_data',
-    'page_albumlists_selected'
+    'page_albumlists_selected',
+    'media_list_of_album_id'
   ]);
   const props = defineProps<{
     data_temporary: Album[];
@@ -13,23 +13,12 @@
     page_albumlists:Play_List[],page_albumlists_options:{label: string;value: string}[],page_albumlists_statistic:{label: string;album_count: number;id: string;}[],
     page_albumlists_selected:string;
 
+    page_albumlists_keyword:string;
+
     collapsed: Boolean;
     window_innerWidth: number;
     options_Sort_key:{ columnKey: string; order: string }[];
   }>();
-  //
-  const bool_start_play = ref<boolean>(true)
-  const click_bulk_operation = () => {
-    // if(bool_start_play.value == true)
-    // {
-    //   bool_start_play.value = false
-    //   columns.value?.unshift(createColumns_select()[0])
-    // }
-    // else{
-    //   bool_start_play.value = true
-    //   columns.value?.splice(0, 1)
-    // }
-  }
   //
   enum state_Sort {
     Ascend = 'ascend',
@@ -184,8 +173,6 @@
     }
   }
 
-  
-
 
   //
   const item_album_margin = ref<number>(12)
@@ -204,9 +191,10 @@
     event.target.src = '../../../resources/error_album.jpg'; // 设置备用图片路径
   };
   //
-  const itemSize = 220;
+  const itemSize = ref(220);
   const gridItems = ref(5);
-  const itemSecondarySize = 186;
+  const itemSecondarySize = ref(185);
+  const collapsed_width = ref<number>(1090);
   //
   const handleSelected_value_for_albumlistall = (value: any) => {
     emit('page_albumlists_selected',value)
@@ -223,16 +211,23 @@
     click_search()
     scrollToTop()
   }
+  const handleItemClick_artist = (artist_id:string) => {
+    input_search_Value.value = artist_id+'accurate_search'+'__artist__'
+    bool_show_search_area.value = false
+    show_search_area()
+    click_search()
+    scrollToTop()
+  }
+  const play_this_album_click = (album_id:string) => {
+    console.log('play_this_album_click：'+album_id);
+    emit('media_list_of_album_id',album_id)
+  }
   // 重新渲染gridItems
   const stopWatching_collapsed_width = watch(() => props.collapsed, (newValue, oldValue) => {
-    if (props.collapsed == true) {
-      gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
-    } else {
-      gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
-    }
+    updateGridItems();
   });
   let bool_watch = false;
-  const timer = ref<NodeJS.Timeout | null>(null);//防止大量的重复渲染，造成界面假死
+  const timer = ref<NodeJS.Timeout | null>(null);
   const startTimer = () => {
     timer.value = setInterval(() => {
       bool_watch = true;
@@ -240,19 +235,41 @@
   };
   onMounted(() => {
     startTimer();
-    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
+    updateGridItems();
+
+    input_search_Value.value = props.page_albumlists_keyword
+    if(input_search_Value.value.length > 0){
+      bool_show_search_area.value = true
+      bool_input_search = true
+    }
+    else{
+      bool_show_search_area.value = false
+      bool_input_search = false
+    }
   });
   const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (newValue, oldValue) => {
     bool_watch = false;
-    if (props.collapsed == true) {
-      gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
-    } else {
-      gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
-    }
+    updateGridItems();
     if (bool_watch) {
       startTimer();
     }
   });
+  const updateGridItems = () => {
+    if (props.collapsed == true) {
+      collapsed_width.value = 145;
+      item_album.value = 150;
+      item_album_image.value = item_album.value - 20;
+      item_album_txt.value = item_album.value - 20;
+      itemSecondarySize.value = 144;
+    } else {
+      collapsed_width.value = 240;
+      item_album.value = 170;
+      item_album_image.value = item_album.value - 20;
+      item_album_txt.value = item_album.value - 20;
+      itemSecondarySize.value = 185;
+    }
+    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
+  };
   
   //
   onBeforeUnmount(() => {
@@ -338,7 +355,7 @@
 
     <div class="album-wall-container">
       <DynamicScroller
-        class="album-wall" 
+        class="album-wall" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
         :items="props.data_temporary"
         :itemSize="itemSize"
         :minItemSize="itemSize"
@@ -347,10 +364,11 @@
         <template #before>
           <div class="notice">
             <div
+              :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)'}"
               style="
                 position: absolute;
                 z-index: 0;
-                width: calc(100vw - 230px);height: 298px;
+                height: 298px;
                 border-radius: 20px;
                 overflow: hidden;
                 background-size: cover;
@@ -359,10 +377,12 @@
                 background-color: transparent;
               ">
               <img 
-                :style="`
+                :style="{ width: 'calc(100vw - ' +  (collapsed_width + 200) + 'px)'}"
+                style="
                   margin-left: 200px; margin-top: -300px; 
-                  width: auto; height: calc(100vw - 400px);
-                `"
+                  min-height: calc(100vw - 600px);
+                  height: auto;
+                "
                 :src="getAssetImage(props.page_albumlists_top_album_image_url)"
               />
             </div>
@@ -485,6 +505,7 @@
                   <div class="hover-content">
                     <n-button 
                       class="play_this_album"
+                      @click="play_this_album_click(item.id)"
                       quaternary circle size="large" color="#FFFFFF" style="transform: scale(1.3);">
                       <template #icon>
                         <n-icon size="30"><PlayCircle24Regular/></n-icon>
@@ -512,9 +533,26 @@
               </div>
               <div class="album_text" :style="{ width: item_album_image + 'px' }">
                 <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
-                  <div><span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }">{{ item.name }}</span></div>
-                  <div><span id="album_singer_name" :style="{ maxWidth: item_album_txt + 'px' }">{{ item.artist }}</span></div>
-                  <div><span id="album_album_name" :style="{ maxWidth: item_album_txt + 'px' }">{{ item.updated_time }}</span></div>
+                  <div>
+                    <span id="album_name" 
+                      :style="{ maxWidth: item_album_txt + 'px' }" 
+                      @click="handleItemClick_album(item.id)">
+                      {{ item.name }}
+                    </span> 
+                  </div>
+                  <div>
+                    <span id="album_singer_name" 
+                      :style="{ maxWidth: item_album_txt + 'px' }" 
+                      @click="handleItemClick_artist(item.artist_id)">
+                      {{ item.artist }}
+                    </span>
+                  </div>
+                  <div>
+                    <span id="album_album_name" 
+                      :style="{ maxWidth: item_album_txt + 'px' }">
+                      {{ item.updated_time }}
+                    </span> 
+                  </div>
                 </div>
               </div>
             </div>

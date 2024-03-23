@@ -4,7 +4,8 @@
   const emit = defineEmits([
     'artist_page_num',
     'options_Sort_key','page_artistlists_keyword','page_artistlists_reset_data',
-    'page_artistlists_selected'
+    'page_artistlists_selected',
+    'album_list_of_artist_id_artist'
   ]);
   const props = defineProps<{
     data_temporary: Artist[];
@@ -12,6 +13,8 @@
     change_page_header_color:boolean,page_artistlists_top_artist_image_url:string,page_artistlists_top_artist_name:string,
     page_artistlists:Play_List[],page_artistlists_options:{label: string;value: string}[],page_artistlists_statistic:{label: string;artist_count: number;id: string;}[],
     page_artistlists_selected:string;
+
+    page_artistlists_keyword:string;
 
     collapsed: Boolean;
     window_innerWidth: number;
@@ -200,9 +203,10 @@
     event.target.src = '../../../resources/error_album.jpg'; // 设置备用图片路径
   };
   //
-  const itemSize = 220;
+  const itemSize = ref(220);
   const gridItems = ref(5);
-  const itemSecondarySize = 186;
+  const itemSecondarySize = ref(185);
+  const collapsed_width = ref<number>(1090);
   //
   const handleSelected_value_for_artistlistall = (value: any) => {
     emit('page_artistlists_selected',value)
@@ -211,24 +215,25 @@
   };
   const breadcrumbItems = ref('所有歌手');
   // go to media page
-  const handleItemClick_artist = (artist:string) => {
-    // router.push({ path: '/media' });
-    input_search_Value.value = artist+'accurate_search'+'__artist__'
-    bool_show_search_area.value = false
-    show_search_area()
-    click_search()
-    scrollToTop()
+  const handleItemClick_artist = (artist_id:string) => {
+    // artist model don't need search,the id is only one
+    // input_search_Value.value = artist_id+'accurate_search'+'__artist__'
+    // bool_show_search_area.value = false
+    // show_search_area()
+    // click_search()
+    // scrollToTop()
+
+  }
+  const album_list_of_artist_id_artist_click = (artist_id:string) => {
+    console.log('album_list_of_artist_id_artist_click：'+artist_id);
+    emit('album_list_of_artist_id_artist',artist_id)
   }
   // 重新渲染gridItems
   const stopWatching_collapsed_width = watch(() => props.collapsed, (newValue, oldValue) => {
-    if (props.collapsed == true) {
-      gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
-    } else {
-      gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
-    }
+    updateGridItems();
   });
   let bool_watch = false;
-  const timer = ref<NodeJS.Timeout | null>(null);//防止大量的重复渲染，造成界面假死
+  const timer = ref<NodeJS.Timeout | null>(null);
   const startTimer = () => {
     timer.value = setInterval(() => {
       bool_watch = true;
@@ -236,20 +241,41 @@
   };
   onMounted(() => {
     startTimer();
-    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
+    updateGridItems();
+
+    input_search_Value.value = props.page_artistlists_keyword
+    if(input_search_Value.value.length > 0){
+      bool_show_search_area.value = true
+      bool_input_search = true
+    }
+    else{
+      bool_show_search_area.value = false
+      bool_input_search = false
+    }
   });
   const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (newValue, oldValue) => {
     bool_watch = false;
-    if (props.collapsed == true) {
-      gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
-    } else {
-      gridItems.value = Math.floor(window.innerWidth / itemSecondarySize) - 1;
-    }
+    updateGridItems();
     if (bool_watch) {
       startTimer();
     }
   });
-  
+  const updateGridItems = () => {
+    if (props.collapsed == true) {
+      collapsed_width.value = 145;
+      item_artist.value = 150;
+      item_artist_image.value = item_artist.value - 20;
+      item_artist_txt.value = item_artist.value - 20;
+      itemSecondarySize.value = 144;
+    } else {
+      collapsed_width.value = 240;
+      item_artist.value = 170;
+      item_artist_image.value = item_artist.value - 20;
+      item_artist_txt.value = item_artist.value - 20;
+      itemSecondarySize.value = 185;
+    }
+    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
+  };
   //
   onBeforeUnmount(() => {
     cleanup();
@@ -334,7 +360,7 @@
 
     <div class="artist-wall-container">
       <DynamicScroller
-        class="artist-wall" 
+        class="artist-wall" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
         :items="props.data_temporary"
         :itemSize="itemSize"
         :minItemSize="itemSize"
@@ -343,10 +369,11 @@
         <template #before>
           <div class="notice">
             <div
+              :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)'}"
               style="
                 position: absolute;
                 z-index: 0;
-                width: calc(100vw - 220px);height: 298px;
+                height: 298px;
                 border-radius: 20px;
                 overflow: hidden;
                 background-size: cover;
@@ -355,10 +382,12 @@
                 background-color: transparent;
               ">
               <img 
-                :style="`
+                :style="{ width: 'calc(100vw - ' +  (collapsed_width + 200) + 'px)'}"
+                style="
                   margin-left: 200px; margin-top: -300px; 
-                  width: auto; height: calc(100vw - 400px);
-                `"
+                  min-height: calc(100vw - 600px);
+                  height: auto;
+                "
                 :src="getAssetImage(props.page_artistlists_top_artist_image_url)"
               />
             </div>
@@ -481,7 +510,7 @@
                   <div class="hover-content">
                     <n-button 
                       class="play_this_artist"
-                      quaternary circle size="large" color="#FFFFFF" style="transform: scale(1.3);">
+                      quaternary circle size="large" color="#FFFFFF" style="transform: scale(1.3);" @click="album_list_of_artist_id_artist_click(item.id)">
                       <template #icon>
                         <n-icon size="30"><PlayCircle24Regular/></n-icon>
                       </template>
@@ -508,9 +537,23 @@
               </div>
               <div class="artist_text" :style="{ width: item_artist_image + 'px' }">
                 <div class="artist_left_text_artist_info" :style="{ width: item_artist_txt + 'px' }">
-                  <div><span id="artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">{{ item.name }}</span></div>
-                  <div><span id="artist_singer_name" :style="{ maxWidth: item_artist_txt + 'px' }"> 专辑数：{{ item.album_count }}</span></div>
-                  <div><span id="artist_artist_name" :style="{ maxWidth: item_artist_txt + 'px' }"> 歌曲数：{{ item.song_count }}</span></div>
+                  <div>
+                    <span id="artist_name" 
+                      :style="{ maxWidth: item_artist_txt + 'px' }"
+                      @click="handleItemClick_artist(item.id)">
+                      {{ item.name }}
+                    </span>
+                  </div>
+                  <div>
+                    <span id="artist_singer_name" :style="{ maxWidth: item_artist_txt + 'px' }">
+                       专辑数：{{ item.album_count }}
+                    </span>
+                  </div>
+                  <div>
+                    <span id="artist_artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">
+                       歌曲数：{{ item.song_count }}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -578,11 +621,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#artist_name:hover {
-  text-decoration: underline;
-  cursor: pointer;
-  color: #3DC3FF;
-}
 #artist_singer_name{
   font-size: 12px;
   font-weight: 500;
@@ -592,11 +630,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#artist_singer_name:hover{
-  text-decoration: underline;
-  cursor: pointer;
-  color: #3DC3FF;
-}
 #artist_artist_name{
   font-size: 12px;
   font-weight: 500;
@@ -605,11 +638,6 @@
   -webkit-line-clamp: 1; 
   overflow: hidden;
   text-overflow: ellipsis;
-}
-#artist_artist_name:hover{
-  text-decoration: underline;
-  cursor: pointer;
-  color: #3DC3FF;
 }
 
 .play_this_artist:hover{

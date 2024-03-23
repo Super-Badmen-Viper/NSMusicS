@@ -52,7 +52,8 @@ const emit = defineEmits([
   'page_songlists_keyword',
   'page_songlists_reset_data',
   'media_Files_selected',
-  'media_Files_selected_temp',
+  'media_Files_selected_set',
+  'media_Files_selected_set_all',
   'page_songlists_selected'
 ]);
 function get_media_path(value: any) {
@@ -89,7 +90,10 @@ function get_media_Files_selected(value: Media_File) {
   emit('media_Files_selected',value)
 }
 function set_media_Files_selected(value: boolean) {
-  emit('media_Files_selected_temp',value)
+  emit('media_Files_selected_set',value)
+}
+function set_media_Files_selected_all(value: boolean) {
+  emit('media_Files_selected_set_all',value)
 }
 function set_page_songlists_selected(value: boolean) {
   emit('page_songlists_selected',value)
@@ -105,6 +109,8 @@ const {
   page_songlists,page_songlists_options,page_songlists_statistic,
   page_songlists_selected,
 
+  page_songlists_keyword,
+
   media_Files_temporary,media_Files_selected,
   page_songlists_options_Sort_key,
   } = defineProps<{
@@ -113,6 +119,8 @@ const {
     change_page_header_color:boolean,page_songlists_top_album_image_url:string,page_songlists_top_album_name:string,
     page_songlists:Play_List[],page_songlists_options:{label: string;value: string}[],page_songlists_statistic:{label: string;song_count: number;id: string;}[],
     page_songlists_selected:string;
+
+    page_songlists_keyword:string;
     
     media_Files_temporary:Media_File[],media_Files_selected:Media_File[],
     page_songlists_options_Sort_key:{ columnKey: string; order: string }[],
@@ -135,7 +143,8 @@ const {
       @page_songlists_selected="set_page_songlists_selected"
 
       @media_Files_selected="get_media_Files_selected"
-      @media_Files_selected_temp="set_media_Files_selected"
+      @media_Files_selected_set="set_media_Files_selected"
+      @media_Files_selected_set_all="set_media_Files_selected_all"
       :collapsed="collapsed"
       :window_innerWidth="window_innerWidth"
       @media_file_path="get_media_path" 
@@ -150,6 +159,7 @@ const {
       @menu_delete_this_song="get_menu_delete_this_song"
       :options_Sort_key="page_songlists_options_Sort_key"
       @options_Sort_key="get_page_songlists_options_Sort_key"
+      :page_songlists_keyword="page_songlists_keyword"
       @page_songlists_keyword="page_songlists_get_keyword"
       @page_songlists_reset_data="page_songlists_get_reset_data"/>
   </div>
