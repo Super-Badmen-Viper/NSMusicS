@@ -25,7 +25,9 @@
 | [NSMusicS_For_Knowledge_Graph](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#FF0000">Not started</font>|  NebulaGraph / Neo4j <image width="200" src="https://www-cdn.nebula-graph.io/nebula-website-5.0/images/logo.png"/>      | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++/Linux)             | A-GPL 3.0 | Open source + Commercial | 
 | [NSMusicS_For_Flutter](https://github.com/Super-Badmen-Viper/NSMusicS/tree/main/NSMusicS_For_Flutter/nsmusics_for_flutter)   |<font color="#FF0000">Not started</font>    | flutter,dart  [![My Skills](https://skillicons.dev/icons?i=flutter,dart)](https://skillicons.dev)    | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++,Linux(ubuntu+,群晖Nas+Docker),MacOS,Android11++,IOS) | A-GPL 3.0 | Open source + Commercial | 
 | [MZMusic](https://github.com/MZMusic/MZMusic)   |<font color="#FF0000">Not started</font>             | electron,docker,vue,nodejs,ts,vite  [![My Skills](https://skillicons.dev/icons?i=electron,docker,vue,nodejs,ts,vite)](https://skillicons.dev)  | [MZMusic Team](https://github.com/MZMusic)  | (win,linux,macos...)      | Apache License 2.0 | Open source | 
- 
+
+# The management dashboard for NSMusicS_Web
+  - [Dashboard For NSMusicS_Web](https://github.com/users/Super-Badmen-Viper/projects/4)
 
 # Development Plan
  - ## After the completion of any of the following planning and development, except for NSMusicS (WPF), the completed projects will be separated into independent open source projects
@@ -62,15 +64,6 @@
     </tr>
   </table>
   
-## NSMusicS 4th Edition Project Development Document/Plan: -》 NSMusicS_Ultimate
-  <img src="doc/NSMusicS 第4版 开发文档 规划 （更新中）.png" align="center" width="1200">
-
-## NSMusicS WPF Architecture Design
-  <img src="doc/架构设计_NSMusicS WPF_截止240229前.png" align="center" width="1200">
-  
-# The R&D management dashboard for this project：[https://github.com/users/Super-Badmen-Viper/projects/3](https://github.com/users/Super-Badmen-Viper/projects/3)
-- If you want to join, please send an email to my QQmail: 1774148579@qq.com More than 5 people, I will launch an open source project management model, and the Mozi Cloud open source organization will officially begin its activities
-
 ## Participated in open source co construction, QQ group communication group number: 610551734: NSMusicSYunOpenSourceCommunity
 
 # Quick to use:
