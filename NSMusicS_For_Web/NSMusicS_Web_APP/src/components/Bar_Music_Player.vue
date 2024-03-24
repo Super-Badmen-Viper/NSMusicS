@@ -1,10 +1,20 @@
 <script setup lang="ts">
-  import { ref, watch } from 'vue';
+  import { h, ref, watch } from 'vue';
 
   // send this SetInfo
   import { defineEmits } from 'vue';
   const margin_top_value_view_music_player = ref(670);
-  const emit = defineEmits();
+  const emit = defineEmits([
+    'on-click',
+    'this_audio_refresh',
+    'this_audio_file_path','this_audio_file_medium_image_url',
+    'media_file_medium_image_url',
+    'this_audio_singer_name',
+    'this_audio_song_name',
+    'this_audio_album_name',
+    'data_select_Index',
+    'isVisible_Music_PlayList'
+  ]);
 
   // open view musicplayer
   const svg_shrink_up_arrow = ref<string>('shrink_up_arrow.svg');
@@ -46,7 +56,7 @@
   const this_audio_buffer_file = ref(null)
   import { defineProps} from 'vue';
   const props = defineProps([
-    'this_audio_file_path','this_playList_num',
+    'this_audio_file_path','playlist_Files_temporary',
     'this_audio_file_medium_image_url','this_audio_refresh',
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name']);
   watch(() => props.this_audio_refresh, (newValue, oldValue) => {
@@ -95,6 +105,8 @@
 
             player_no_progress_jump.value = false;
           }
+
+          Play_Media_Switching()
         });
         player.bufferSourceNode.start(player.audioContext.currentTime, player.startTime, player.audioDuration);
 
@@ -105,6 +117,44 @@
         total_play_time.value = formatTime(player.getTotalTime());
       }
     });
+  };
+  function Play_Media_Order() {
+    if(props.playlist_Files_temporary.length > 0){
+      let index = props.playlist_Files_temporary.findIndex((item: any) => item.path == props.this_audio_file_path);
+      if(index != -1){
+        if(index == props.playlist_Files_temporary.length - 1){
+          index = 0;
+        }else{
+          index += 1;
+        }
+        emit('this_audio_file_path', props.playlist_Files_temporary[index].path)
+        emit('this_audio_file_medium_image_url',props.playlist_Files_temporary[index].medium_image_url)
+        emit('this_audio_singer_name',props.playlist_Files_temporary[index].artist)
+        emit('this_audio_song_name',props.playlist_Files_temporary[index].title)
+        emit('this_audio_album_name',props.playlist_Files_temporary[index].album)
+        console.log(props.playlist_Files_temporary[index])
+      }
+    }
+  }
+  const throttleDuration = 1000; // 节流的时间间隔，单位为毫秒
+  let lastTriggerTime = 0; // 上次触发的时间戳
+  const Play_Media_Switching = () => {
+    const currentTime = Date.now();
+    if (currentTime - lastTriggerTime > throttleDuration) {
+      // 在节流时间间隔内首次触发
+      lastTriggerTime = currentTime;
+      if(slider_singleValue.value >= 99 && player.getTotalTime() != 0){
+        current_play_time.value = formatTime(player.getTotalTime());
+        currentTime_added_value.value = 0;
+        player.releaseMemory(true);
+        clearInterval(timer);
+        this_audio_buffer_file.value = null
+
+        player_no_progress_jump.value = false;
+
+        Play_Media_Order()
+      }
+    }
   };
 
   // player slider formatTime area
@@ -130,6 +180,9 @@
     formattedSeconds = formattedSeconds.substring(0, 2);
 
     return `${formattedMinutes}:${formattedSeconds}`;
+  }
+  function formatTime_tooltip(value: number): string {
+    return formatTime((value / 100 * player.getTotalTime()));
   }
   const get_current_play_time = () => {
     if((player.getCurrentTime() + currentTime_added_value.value) <= player.getTotalTime())
@@ -167,6 +220,8 @@
 
             player_no_progress_jump.value = false;
           }
+
+          Play_Media_Switching()
         });
         player.isPlaying = true;
         clearInterval(timer);
@@ -174,9 +229,8 @@
         total_play_time.value = formatTime(player.getTotalTime());
 
         // 注意，此时currentTime将从0开始，需要计算附加值
-        let el = <HTMLInputElement>document.getElementById('player_range_duration');
-        let newtime = (Number(el.value) / 100) * player.audioDuration;
-        if(Number(el.value) != 0 && Number(el.value) != 100){
+        let newtime = (Number(slider_singleValue.value) / 100) * player.audioDuration;
+        if(Number(slider_singleValue.value) != 0 && Number(slider_singleValue.value) != 100){
           player.bufferSourceNode.start(0,newtime);
           currentTime_added_value.value = newtime;
         }
@@ -187,6 +241,12 @@
       }
     });
   }
+  const update_dragend_slider_singleValue = () => {
+    if(slider_singleValue.value >= 99.5 || slider_singleValue.value == 0){
+      player_range_duration_handleclick()
+    }
+    player_range_duration_isDragging = false;
+  };
 
   // player voice area
   const backpanel_voice_click = () => {
@@ -211,6 +271,39 @@
     }else{
       slider_order_show.value = true;
     }
+  }
+  const options_Order = [
+    { label: '顺序播放', key: 'playback-1', 
+      icon() {
+        return h(NIcon, null, {
+          default: () => h(Heart24Regular)
+        });
+      } 
+    },
+    { label: '列表循环', key: 'playback-2', 
+      icon() {
+        return h(NIcon, null, {
+          default: () => h(Heart24Regular)
+        });
+      }
+    },
+    { label: '单曲循环', key: 'playback-3', 
+      icon() {
+        return h(NIcon, null, {
+          default: () => h(Heart24Regular)
+        });
+      }
+    },
+    { label: '随机播放', key: 'playback-4', 
+      icon() {
+        return h(NIcon, null, {
+          default: () => h(Heart24Regular)
+        });
+      }
+    }
+  ];
+  const handleSelect_Order = (value: any) => {
+    console.log(value);
   }
 
   // open playList
@@ -238,6 +331,7 @@
   import {
     Random
   } from '@vicons/fa'
+import { NIcon } from 'naive-ui';
 </script>
 
 <template>
@@ -262,11 +356,14 @@
       </div>
       <div class="gird_Middle">
         <n-space class="grid_Middle_button_area" justify="center">
-          <n-button quaternary round size="small" @click="backpanel_order_click">
-            <template #icon>
-              <n-icon :size="26"><ReorderFour/></n-icon>
-            </template>
-          </n-button>
+          <n-dropdown 
+            trigger="click" :show-arrow="true" :options="options_Order" @select="handleSelect_Order">
+            <n-button quaternary round size="small">
+              <template #icon>
+                <n-icon :size="26"><ReorderFour/></n-icon>
+              </template>
+            </n-button>
+          </n-dropdown>
           <n-button quaternary round size="small">
             <template #icon>
               <n-icon :size="26"><PlaySkipBack/></n-icon>
@@ -287,31 +384,21 @@
               <n-icon :size="26"><VolumeMedium/></n-icon>
             </template>
           </n-button>
-
-          <!-- <n-float-button quaternary round size="small" @click="backpanel_order_click">
-              <n-icon :size="26"><ReorderFour/></n-icon>
-          </n-float-button>
-          <n-float-button quaternary round size="small">
-              <n-icon :size="26"><PlaySkipBack/></n-icon>
-          </n-float-button>
-          <n-float-button quaternary round size="medium" @click="Init_Audio_Player">
-              <n-icon :size="36"><Play/></n-icon>
-          </n-float-button>
-          <n-float-button quaternary round size="small">
-              <n-icon :size="26"><PlaySkipForward/></n-icon>
-          </n-float-button>
-          <n-float-button quaternary round size="small" @click="backpanel_voice_click">
-              <n-icon :size="26"><VolumeMedium/></n-icon>
-          </n-float-button> -->
         </n-space>
         <div>
-          <input 
-            id="player_range_duration" type="range"
-            style="width: 90%;margin-top: 10px;"
+          <n-slider 
+            style="
+              width: 90%;
+              margin-left:5%;margin-top:8px;
+              color: #3DC3FF;
+              border-radius: 10px;
+            "
+            v-model:value="slider_singleValue" :on-dragend="update_dragend_slider_singleValue"
+            :min="0" :max="100" :keyboard="true" :format-tooltip="formatTime_tooltip"
             @mousedown="player_range_duration_handleMouseDown"
             @mouseup="player_range_duration_handleMouseUp"
             @click="player_range_duration_handleclick"
-            :min="0" :max="100" :hideTip="true" v-model.value="slider_singleValue"/>
+            />
         </div>
         <div>
           <div id="backpanel_voice" 
@@ -321,15 +408,11 @@
               :min="0" :max="100" :hideTip="true" v-model.value="slider_volume_value"/>
             <h4>{{ slider_volume_value }}%</h4>
           </div>
-          <div id="backpanel_order" 
-            v-show="slider_order_show">
-            
-          </div>
         </div>
       </div>
       <div class="gird_Right">
         <n-space class="gird_Right_current_playlist_button_area">
-          <n-badge :value="props.this_playList_num" show-zero :max="9999" :offset="[-7, 3]">
+          <n-badge :value="props.playlist_Files_temporary.length" show-zero :max="9999" :offset="[-7, 3]">
             <n-button strong secondary class="gird_Right_current_playlist_button_area_of_button" @click="Set_isVisible_Music_PlayList">
               <template #icon>
                 <n-icon :size="42"><QueueMusicRound/></n-icon>
@@ -510,13 +593,12 @@
 }
 .gird_Middle #backpanel_voice{
   position: absolute;
-  top: -200px;
+  top: -202px;
   margin-left: 290px;
   width: 60px;
   height: 210px;
   background-color: #FFFFFF;
   border-radius: 10px;
-  border: #283248 1px solid;
 }
 .gird_Middle #backpanel_voice #player_range_voice{
   height: 80px;

@@ -89,7 +89,10 @@
     playlist_Files_temporary.value = [];
     playlist_Files_temporary.value = [...media_Files_temporary.value];
   }
-  const this_playList_num= ref(0);
+  function get_this_audio_file_path(value: any) {
+    this_audio_file_path.value = value
+    console.log('this_audio_file_path：'+value)
+  }
   const this_audio_file_medium_image_url = ref('../../../resources/error_album.png');
   function get_media_file_medium_image_url(value: any) {
     this_audio_file_medium_image_url.value = value
@@ -242,6 +245,7 @@
   }
   function page_songlists_get_reset_data(value: any) {
     page_songlists_keyword.value = '';
+    find_music_model.value = false;
     console.log('page_songlists_reset_data?:' + value)
     fetchData_Media()
   }
@@ -1275,13 +1279,20 @@
           bordered>
           <Bar_Music_Player 
             :this_audio_file_path="this_audio_file_path"
-            :this_playList_num="this_playList_num"
+            @this_audio_file_path="get_this_audio_file_path"
             :this_audio_file_medium_image_url="this_audio_file_medium_image_url"
+            @this_audio_file_medium_image_url="get_media_file_medium_image_url"
             :this_audio_refresh="this_audio_refresh"
             @this_audio_refresh="get_this_audio_refresh"
             :this_audio_singer_name="this_audio_singer_name"
+            @this_audio_singer_name="get_this_audio_singer_name"
             :this_audio_song_name="this_audio_song_name"
+            @this_audio_song_name="get_this_audio_song_name"
             :this_audio_album_name="this_audio_album_name"
+            @this_audio_album_name="get_this_audio_album_name"
+
+            :playlist_Files_temporary="playlist_Files_temporary"
+
             @on-click="get_send_onclick"
             @isVisible_Music_PlayList="get_isVisible_Music_PlayList"/>
           
