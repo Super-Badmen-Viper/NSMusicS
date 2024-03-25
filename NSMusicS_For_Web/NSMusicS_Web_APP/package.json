@@ -15,7 +15,8 @@
     "type-check": "vue-tsc --build --force",
     "build-win64": "electron-builder --win --x64",
     "build-linux": "electron-builder --linux",
-    "build-mac": "electron-builder --mac"
+    "build-mac": "electron-builder --mac",
+    "rebuild": "electron-rebuild -f -w better-sqlite3"
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",

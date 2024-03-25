@@ -59,14 +59,32 @@
     'this_audio_file_path','playlist_Files_temporary',
     'this_audio_file_medium_image_url','this_audio_refresh',
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name']);
+  const timer_this_audio_refresh = ref<NodeJS.Timeout>();
+  const lastTriggerValue = ref<any>(null);// 接收大量数据时，仅触发最后一个值
   watch(() => props.this_audio_refresh, (newValue, oldValue) => {
-    if(newValue == true){
-      handleAudioFilePathChange();
-      emit('this_audio_refresh',false)
+    if (newValue === true) {
+      lastTriggerValue.value = newValue; // 更新最后一个触发的值
+      clearTimeout(timer_this_audio_refresh.value);
+      // 延迟触发
+      timer_this_audio_refresh.value = setTimeout(() => {
+        if (newValue === lastTriggerValue.value) { // 检查最后一个触发的值是否与当前触发的值相等
+          handleAudioFilePathChange();
+          emit('this_audio_refresh', false);
+        }
+      }, 200);
     }
   });
   const handleAudioFilePathChange = async () => {
-    await Init_Audio_Player()
+    current_play_time.value = formatTime(player.getTotalTime());
+    currentTime_added_value.value = 0;
+    player.releaseMemory(true);
+    this_audio_buffer_file.value = null;
+    player_no_progress_jump.value = false;
+    player.isPlaying = false;
+
+    player = new Audio_Players(); // restart player
+    buffer_init.value = false;
+    Init_Audio_Player()
   };
   const total_play_time = ref('04:42');
   const current_play_time = ref('01:36');
@@ -83,59 +101,139 @@
   import { Audio_Players } from '../models/song_Audio_Out/Audio_Players';
   const { ipcRenderer } = require('electron');
   let player = new Audio_Players();
+  const play_order = ref('playback-2');
+  const is_play_ended = ref(false);
+  const buffer_init = ref(false);
   const Init_Audio_Player = async () => {
-    const buffer = await ipcRenderer.invoke('readFile', props.this_audio_file_path);
-    this_audio_buffer_file.value = buffer;
-    currentTime_added_value.value = 0;
-    player.releaseMemory(true);
-    player.loadAudio(buffer,true).then(() => {
-      if(player.bufferSourceNode != null){
-        player.setVolume(Number(slider_volume_value.value));
-        player.setFadein();
-        player.setFadeout();
-        player.audioContext.resume();
-        player.bufferSourceNode.addEventListener('ended', () => {
-          //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
-          if(player_no_progress_jump.value == true){
-            current_play_time.value = formatTime(player.getTotalTime());
-            currentTime_added_value.value = 0;
-            player.releaseMemory(true);
-            clearInterval(timer);
-            this_audio_buffer_file.value = null
+    if(player.isPlaying === false){
+      if(this_audio_buffer_file.value === null){
+        buffer_init.value = true;
+        this_audio_buffer_file.value = await ipcRenderer.invoke('readFile', props.this_audio_file_path);
+        if(buffer_init.value === true){
+          currentTime_added_value.value = 0;
+          player.releaseMemory(true);
+          player.loadAudio(this_audio_buffer_file.value,true).then(() => {
+            if(player.bufferSourceNode != null){
+              player.setVolume(Number(slider_volume_value.value));
+              player.setFadein();
+              player.setFadeout();
+              player.audioContext.resume();
+              player.bufferSourceNode.addEventListener('ended', () => {
+                //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
+                if(player_no_progress_jump.value == true){
+                  current_play_time.value = formatTime(player.getTotalTime());
+                  currentTime_added_value.value = 0;
+                  player.releaseMemory(true);
+                  clearInterval(timer);
+                  this_audio_buffer_file.value = null
 
-            player_no_progress_jump.value = false;
-          }
+                  player_no_progress_jump.value = false;
 
-          Play_Media_Switching()
-        });
-        player.bufferSourceNode.start(player.audioContext.currentTime, player.startTime, player.audioDuration);
+                  player.isPlaying = false;
+                  is_play_ended.value = true;
+                }
+                Play_Media_Switching()
+              });
+              
+              try {
+                player.bufferSourceNode.start(player.audioContext.currentTime, player.startTime, player.audioDuration);
+              }catch (error) {
+                console.log(error);
+                setTimeout(() => {
+                  handleAudioFilePathChange();
+                }, 200);
+              }
 
-        player.isPlaying = true;
-        player_no_progress_jump.value = true;
-        clearInterval(timer);
-        timer = setInterval(synchronize_playback_time, 200);
-        total_play_time.value = formatTime(player.getTotalTime());
-      }
-    });
-  };
-  function Play_Media_Order() {
-    if(props.playlist_Files_temporary.length > 0){
-      let index = props.playlist_Files_temporary.findIndex((item: any) => item.path == props.this_audio_file_path);
-      if(index != -1){
-        if(index == props.playlist_Files_temporary.length - 1){
-          index = 0;
-        }else{
-          index += 1;
+              player.isPlaying = true;
+              is_play_ended.value = false;
+              player_no_progress_jump.value = true;
+              clearInterval(timer);
+              timer = setInterval(synchronize_playback_time, 200);
+              total_play_time.value = formatTime(player.getTotalTime());
+            }
+          });
         }
-        emit('this_audio_file_path', props.playlist_Files_temporary[index].path)
-        emit('this_audio_file_medium_image_url',props.playlist_Files_temporary[index].medium_image_url)
-        emit('this_audio_singer_name',props.playlist_Files_temporary[index].artist)
-        emit('this_audio_song_name',props.playlist_Files_temporary[index].title)
-        emit('this_audio_album_name',props.playlist_Files_temporary[index].album)
-        console.log(props.playlist_Files_temporary[index])
+      }else{
+        player.resume();
+      }
+    }else{
+      player.pause();
+    }
+  };
+  function Play_Media_Order(model_num: string, increased: number) {
+    if (props.playlist_Files_temporary.length > 0) {
+      let index = props.playlist_Files_temporary.findIndex((item: any) => item.path === props.this_audio_file_path);
+      let stop_play = false;
+      if (index !== -1) {
+        if (model_num === 'playback-1') {
+          index += increased;
+          if (index >= props.playlist_Files_temporary.length) {
+            if(is_play_ended.value === true){
+              stop_play = true;
+              is_play_ended.value = false;
+            }else{
+              index = 0;
+            }
+          }else if(index < 0){
+            index = props.playlist_Files_temporary.length - 1;
+          }
+        } else if (model_num === 'playback-2') {
+          index += increased;
+          while (index < 0) {
+            index += props.playlist_Files_temporary.length;
+          }
+          index %= props.playlist_Files_temporary.length;
+        } else if (model_num === 'playback-3') {
+          if (increased !== 0) {
+            index += increased;
+            if (index < 0) {
+              index = props.playlist_Files_temporary.length - 1;
+            } else if (index >= props.playlist_Files_temporary.length) {
+              index = 0;
+            }
+          }
+        } else if (model_num === 'playback-4') {
+          index = Math.floor(Math.random() * props.playlist_Files_temporary.length);
+        } else {
+          stop_play = true;
+        }
+
+        if (!stop_play) {
+          emit('this_audio_file_path', props.playlist_Files_temporary[index].path);
+          emit('this_audio_file_medium_image_url', props.playlist_Files_temporary[index].medium_image_url);
+          emit('this_audio_singer_name', props.playlist_Files_temporary[index].artist);
+          emit('this_audio_song_name', props.playlist_Files_temporary[index].title);
+          emit('this_audio_album_name', props.playlist_Files_temporary[index].album);
+          console.log(props.playlist_Files_temporary[index]);
+        }
       }
     }
   }
+  const play_skip_back_click = () => {
+    current_play_time.value = formatTime(player.getTotalTime());
+    currentTime_added_value.value = 0;
+    player.releaseMemory(true);
+    clearInterval(timer);
+    this_audio_buffer_file.value = null
+
+    player_no_progress_jump.value = false;
+
+    player.isPlaying = false;
+    Play_Media_Order(play_order.value,-1)
+  }
+  const play_skip_forward_click = () => {
+    current_play_time.value = formatTime(player.getTotalTime());
+    currentTime_added_value.value = 0;
+    player.releaseMemory(true);
+    clearInterval(timer);
+    this_audio_buffer_file.value = null
+
+    player_no_progress_jump.value = false;
+
+    player.isPlaying = false;
+    Play_Media_Order(play_order.value,1)
+  }
+  
   const throttleDuration = 1000; // 节流的时间间隔，单位为毫秒
   let lastTriggerTime = 0; // 上次触发的时间戳
   const Play_Media_Switching = () => {
@@ -152,7 +250,13 @@
 
         player_no_progress_jump.value = false;
 
-        Play_Media_Order()
+        player.isPlaying = false;
+        is_play_ended.value = true;
+
+        if(play_order.value === 'playback-3')
+          Play_Media_Order(play_order.value,0)
+        else
+          Play_Media_Order(play_order.value,1)
       }
     }
   };
@@ -219,11 +323,15 @@
             this_audio_buffer_file.value = null
 
             player_no_progress_jump.value = false;
-          }
 
+            player.isPlaying = false;
+            is_play_ended.value = true;
+          }
+          
           Play_Media_Switching()
         });
         player.isPlaying = true;
+        is_play_ended.value = false;
         clearInterval(timer);
         timer = setInterval(synchronize_playback_time, 200);
         total_play_time.value = formatTime(player.getTotalTime());
@@ -243,6 +351,7 @@
   }
   const update_dragend_slider_singleValue = () => {
     if(slider_singleValue.value >= 99.5 || slider_singleValue.value == 0){
+      is_play_ended.value = true;
       player_range_duration_handleclick()
     }
     player_range_duration_isDragging = false;
@@ -276,34 +385,35 @@
     { label: '顺序播放', key: 'playback-1', 
       icon() {
         return h(NIcon, null, {
-          default: () => h(Heart24Regular)
+          default: () => h(ArrowAutofitDown24Regular)
         });
       } 
     },
     { label: '列表循环', key: 'playback-2', 
       icon() {
         return h(NIcon, null, {
-          default: () => h(Heart24Regular)
+          default: () => h(ArrowRepeatAll16Regular)
         });
       }
     },
     { label: '单曲循环', key: 'playback-3', 
       icon() {
         return h(NIcon, null, {
-          default: () => h(Heart24Regular)
+          default: () => h(RepeatOneRound)
         });
       }
     },
     { label: '随机播放', key: 'playback-4', 
       icon() {
-        return h(NIcon, null, {
-          default: () => h(Heart24Regular)
+        return h(NIcon, { size: '12px' }, {
+          default: () => h(Random)
         });
       }
     }
   ];
   const handleSelect_Order = (value: any) => {
     console.log(value);
+    play_order.value = value;
   }
 
   // open playList
@@ -317,16 +427,17 @@
     Video16Regular,
     DesktopFlow24Regular,
     MoreCircle32Regular,
+    ArrowRepeatAll16Regular,ArrowAutofitDown24Regular,
   } from '@vicons/fluent'
   import {
-    QueueMusicRound
+    QueueMusicRound,
+    RepeatOneRound
   } from '@vicons/material' 
   import {
-    ReorderFour,ReloadCircle,
-    Play,
+    ReorderFour,
+    Play,Pause,
     PlaySkipBack,PlaySkipForward,
-    PlayBack,PlayForward,
-    VolumeMedium,VolumeOff
+    VolumeMedium,
   } from '@vicons/ionicons5' 
   import {
     Random
@@ -360,21 +471,33 @@ import { NIcon } from 'naive-ui';
             trigger="click" :show-arrow="true" :options="options_Order" @select="handleSelect_Order">
             <n-button quaternary round size="small">
               <template #icon>
-                <n-icon :size="26"><ReorderFour/></n-icon>
+                <n-icon :size="26" v-if="play_order === 'playback-1'">
+                  <ArrowAutofitDown24Regular/>
+                </n-icon>
+                <n-icon :size="26" v-else-if="play_order === 'playback-2'">
+                  <ArrowRepeatAll16Regular/>
+                </n-icon>
+                <n-icon :size="26" v-else-if="play_order === 'playback-3'">
+                  <RepeatOneRound/>
+                </n-icon>
+                <n-icon :size="20" v-else-if="play_order === 'playback-4'">
+                  <Random/>
+                </n-icon>
               </template>
             </n-button>
           </n-dropdown>
-          <n-button quaternary round size="small">
+          <n-button quaternary round size="small" @click="play_skip_back_click">
             <template #icon>
               <n-icon :size="26"><PlaySkipBack/></n-icon>
             </template>
           </n-button>
           <n-button quaternary round size="medium" @click="Init_Audio_Player">
             <template #icon>
-              <n-icon :size="36"><Play/></n-icon>
+              <n-icon v-if="player.isPlaying" :size="36"><Pause/></n-icon>
+              <n-icon v-else :size="36"><Play/></n-icon>
             </template>
           </n-button>
-          <n-button quaternary round size="small">
+          <n-button quaternary round size="small" @click="play_skip_forward_click">
             <template #icon>
               <n-icon :size="26"><PlaySkipForward/></n-icon>
             </template>
@@ -401,8 +524,9 @@ import { NIcon } from 'naive-ui';
             />
         </div>
         <div>
+          <!-- :class="{ show: slider_volume_show }" -->
           <div id="backpanel_voice" 
-            v-show="slider_volume_show">
+            v-if="slider_volume_show">
             <input id="player_range_voice" type="range"
               style="height: 90%;bottom: 20;"
               :min="0" :max="100" :hideTip="true" v-model.value="slider_volume_value"/>

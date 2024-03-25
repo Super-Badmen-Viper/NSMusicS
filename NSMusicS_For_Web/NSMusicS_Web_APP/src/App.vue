@@ -8,7 +8,8 @@
     SlideMicrophone32Regular,
     DocumentHeart20Regular,
     TextIndentIncreaseLtr20Filled as lyric,
-    PeopleCommunity16Regular
+    PeopleCommunity16Regular,
+    ArrowMinimize16Regular,Maximize16Regular,ColorBackground20Regular,
   } from '@vicons/fluent'
   import {
     AlbumFilled,
@@ -18,6 +19,7 @@
   import {
     UserAvatarFilledAlt,
     Hearing,
+    Close,Settings,Menu as MenuIcon,
   } from '@vicons/carbon'
   function renderIcon (icon: any) {
     return () => h(NIcon, null, { default: () => h(icon) })
@@ -1124,6 +1126,13 @@
     theme.value = darkTheme
     change_page_header_color.value = true
   }
+  const theme_mode_change_click = () => {
+    if(change_page_header_color.value){
+      theme_normal_mode_click()
+    }else{
+      theme_dark_mode_click()
+    }
+  }
   //////
   import { zhCN, dateZhCN } from 'naive-ui'
   import type { NLocale, NDateLocale } from 'naive-ui'
@@ -1135,6 +1144,11 @@
   window.addEventListener('resize', () => {
     window_innerWidth.value = window.innerWidth;
   });
+  //////
+  const Show_View_System_List_ALL = () => {
+    router.push('View_System_List_ALL')
+    activeKey.value = null
+  }
 </script>
 <template>
   <n-config-provider :theme="theme" :locale="locale" :date-locale="dateLocale">
@@ -1156,122 +1170,153 @@
               :collapsed-width="64"
               :collapsed-icon-size="22"
               :options="menuOptions"/>
-            </n-layout-sider>
-            <n-layout embedded style="height: calc(100vh - 80px);">
-              <RouterView
-                class="view_show"
-                v-if="router_select_model_media"
-                @router_select="get_router_select"
-                :collapsed="collapsed"
-                :window_innerWidth="window_innerWidth"
+          </n-layout-sider>
+          <n-layout embedded style="height: calc(100vh - 80px);">
+            <RouterView
+              class="view_show"
+              v-if="router_select_model_media"
+              @router_select="get_router_select"
+              :collapsed="collapsed"
+              :window_innerWidth="window_innerWidth"
 
-                @media_file_path="media_file_path"
-                @media_file_medium_image_url="get_media_file_medium_image_url"
-                @this_audio_singer_name="get_this_audio_singer_name"
-                @this_audio_song_name="get_this_audio_song_name"
-                @this_audio_album_name="get_this_audio_album_name"
-                @data_select_Index="get_data_select_Index"
-                @page_song_index="get_page_song_index"
-                :media_Files_temporary="media_Files_temporary"
-                :media_Files_selected="media_Files_selected"
-                @media_Files_selected_set="set_media_Files_selected"
-                @media_Files_selected_set_all="set_media_Files_selected_all"
-                :page_songlists_options_Sort_key="page_songlists_options_Sort_key"
-                @page_songlists_options_Sort_key="get_page_songlists_options_Sort_key"
+              @media_file_path="media_file_path"
+              @media_file_medium_image_url="get_media_file_medium_image_url"
+              @this_audio_singer_name="get_this_audio_singer_name"
+              @this_audio_song_name="get_this_audio_song_name"
+              @this_audio_album_name="get_this_audio_album_name"
+              @data_select_Index="get_data_select_Index"
+              @page_song_index="get_page_song_index"
+              :media_Files_temporary="media_Files_temporary"
+              :media_Files_selected="media_Files_selected"
+              @media_Files_selected_set="set_media_Files_selected"
+              @media_Files_selected_set_all="set_media_Files_selected_all"
+              :page_songlists_options_Sort_key="page_songlists_options_Sort_key"
+              @page_songlists_options_Sort_key="get_page_songlists_options_Sort_key"
 
-                :page_songlists_keyword=page_songlists_keyword
-                @page_songlists_keyword="page_songlists_get_keyword"
+              :page_songlists_keyword=page_songlists_keyword
+              @page_songlists_keyword="page_songlists_get_keyword"
 
-                @page_songlists_reset_data="page_songlists_get_reset_data"
-                :page_songlists_top_album_image_url="page_songlists_top_album_image_url"
-                :page_songlists_top_album_name="page_songlists_top_album_name"
-                :page_songlists_options="page_songlists_options"
-                :page_songlists_statistic="page_songlists_statistic"
-                :page_songlists="page_songlists"
-                :page_songlists_selected="page_songlists_selected"
-                @page_songlists_selected="get_page_songlists_selected"
+              @page_songlists_reset_data="page_songlists_get_reset_data"
+              :page_songlists_top_album_image_url="page_songlists_top_album_image_url"
+              :page_songlists_top_album_name="page_songlists_top_album_name"
+              :page_songlists_options="page_songlists_options"
+              :page_songlists_statistic="page_songlists_statistic"
+              :page_songlists="page_songlists"
+              :page_songlists_selected="page_songlists_selected"
+              @page_songlists_selected="get_page_songlists_selected"
 
-                :change_page_header_color="change_page_header_color"
-                :this_audio_album_name="this_audio_album_name"
-              >
-              
-              </RouterView>
-              <RouterView
-                class="view_show"
-                v-else-if="router_select_model_album"
-                @router_select="get_router_select"
-                :collapsed="collapsed"
-                :window_innerWidth="window_innerWidth"
+              :change_page_header_color="change_page_header_color"
+              :this_audio_album_name="this_audio_album_name"
+            >
+            
+            </RouterView>
+            <RouterView
+              class="view_show"
+              v-else-if="router_select_model_album"
+              @router_select="get_router_select"
+              :collapsed="collapsed"
+              :window_innerWidth="window_innerWidth"
 
-                :album_Files_temporary="album_Files_temporary"
-                :page_albumlists_options_Sort_key="page_albumlists_options_Sort_key"
-                @page_albumlists_options_Sort_key="get_page_albumlists_options_Sort_key"
-                :page_albumlists_keyword="page_albumlists_keyword"
-                @page_albumlists_keyword="page_albumlists_get_keyword"
-                @page_albumlists_reset_data="page_albumlists_get_reset_data"
-                :page_albumlists_top_album_image_url="page_albumlists_top_album_image_url"
-                :page_albumlists_top_album_name="page_albumlists_top_album_name"
-                :page_albumlists_options="page_albumlists_options"
-                :page_albumlists_statistic="page_albumlists_statistic"
-                :page_albumlists="page_albumlists"
-                :page_albumlists_selected="page_albumlists_selected"
-                @page_albumlists_selected="get_page_albumlists_selected"
+              :album_Files_temporary="album_Files_temporary"
+              :page_albumlists_options_Sort_key="page_albumlists_options_Sort_key"
+              @page_albumlists_options_Sort_key="get_page_albumlists_options_Sort_key"
+              :page_albumlists_keyword="page_albumlists_keyword"
+              @page_albumlists_keyword="page_albumlists_get_keyword"
+              @page_albumlists_reset_data="page_albumlists_get_reset_data"
+              :page_albumlists_top_album_image_url="page_albumlists_top_album_image_url"
+              :page_albumlists_top_album_name="page_albumlists_top_album_name"
+              :page_albumlists_options="page_albumlists_options"
+              :page_albumlists_statistic="page_albumlists_statistic"
+              :page_albumlists="page_albumlists"
+              :page_albumlists_selected="page_albumlists_selected"
+              @page_albumlists_selected="get_page_albumlists_selected"
 
-                @media_list_of_album_id="get_media_list_of_album_id"
-                @media_list_of_artist_id="get_album_list_of_artist_id"
+              @media_list_of_album_id="get_media_list_of_album_id"
+              @media_list_of_artist_id="get_album_list_of_artist_id"
 
-                :change_page_header_color="change_page_header_color"
-                :this_audio_album_name="this_audio_album_name"
-              >
+              :change_page_header_color="change_page_header_color"
+              :this_audio_album_name="this_audio_album_name"
+            >
 
-              </RouterView>
-              <RouterView
-                class="view_show"
-                v-else-if="router_select_model_artist"
-                @router_select="get_router_select"
-                :collapsed="collapsed"
-                :window_innerWidth="window_innerWidth"
+            </RouterView>
+            <RouterView
+              class="view_show"
+              v-else-if="router_select_model_artist"
+              @router_select="get_router_select"
+              :collapsed="collapsed"
+              :window_innerWidth="window_innerWidth"
 
-                :artist_Files_temporary="artist_Files_temporary"
-                :page_artistlists_options_Sort_key="page_artistlists_options_Sort_key"
-                @page_artistlists_options_Sort_key="get_page_artistlists_options_Sort_key"
-                :page_artistlists_keyword="page_artistlists_keyword"
-                @page_artistlists_keyword="page_artistlists_get_keyword"
-                @page_artistlists_reset_data="page_artistlists_get_reset_data"
-                :page_artistlists_top_artist_image_url="page_artistlists_top_artist_image_url"
-                :page_artistlists_top_artist_name="page_artistlists_top_artist_name"
-                :page_artistlists_options="page_artistlists_options"
-                :page_artistlists_statistic="page_artistlists_statistic"
-                :page_artistlists="page_artistlists"
-                :page_artistlists_selected="page_artistlists_selected"
-                @page_artistlists_selected="get_page_artistlists_selected"
+              :artist_Files_temporary="artist_Files_temporary"
+              :page_artistlists_options_Sort_key="page_artistlists_options_Sort_key"
+              @page_artistlists_options_Sort_key="get_page_artistlists_options_Sort_key"
+              :page_artistlists_keyword="page_artistlists_keyword"
+              @page_artistlists_keyword="page_artistlists_get_keyword"
+              @page_artistlists_reset_data="page_artistlists_get_reset_data"
+              :page_artistlists_top_artist_image_url="page_artistlists_top_artist_image_url"
+              :page_artistlists_top_artist_name="page_artistlists_top_artist_name"
+              :page_artistlists_options="page_artistlists_options"
+              :page_artistlists_statistic="page_artistlists_statistic"
+              :page_artistlists="page_artistlists"
+              :page_artistlists_selected="page_artistlists_selected"
+              @page_artistlists_selected="get_page_artistlists_selected"
 
-                @album_list_of_artist_id_artist="get_album_list_of_artist_id_artist"
+              @album_list_of_artist_id_artist="get_album_list_of_artist_id_artist"
 
-                :change_page_header_color="change_page_header_color"
-                :this_audio_album_name="this_audio_album_name"
-              >
-              
-              </RouterView>
+              :change_page_header_color="change_page_header_color"
+              :this_audio_album_name="this_audio_album_name"
+            >
+            
+            </RouterView>
 
 
-              <div class="bar_top_setapp" :style="{ backgroundColor: theme_bar_top_setapp }">
-                <section  style="
-                          -webkit-app-region: no-drag;
-                          width: auto;/* auto 为单分布，100vw 为多分布(left，middle，right) */
-                          position: absolute;right: 0;
-                          text-align:center;
-                          z-index: 99;
-                          ">
-                          <n-button @click="() => {locale = null,dateLocale = null}">英文</n-button>
-                          <n-button @click="() => {locale = zhCN,dateLocale = dateZhCN}">中文</n-button>
-                          <n-button @click="theme_dark_mode_click">深色</n-button>
-                          <n-button @click="theme_normal_mode_click">浅色</n-button>
-                          <div type="button" class="win_close" @click="closeWindow"></div>
-                          <div type="button" class="win_max" @click="maximize"></div>
-                          <div type="button" class="win_min" @click="minimize"></div>
-                </section>
-              </div>
+            <div class="bar_top_setapp" :style="{ backgroundColor: theme_bar_top_setapp }">
+              <section  
+                style="
+                  -webkit-app-region: no-drag;
+                  width: auto;/* auto 为单分布，100vw 为多分布(left，middle，right) */
+                  position: absolute;right: 0;top:20px;
+                  text-align:center;
+                  z-index: 99;
+                ">
+                <div v-if="false">
+                  <n-button tertiary circle size="medium" @click="() => {locale = null,dateLocale = null}">英文</n-button>
+                  <n-button tertiary circle size="medium" @click="() => {locale = zhCN,dateLocale = dateZhCN}">中文</n-button>
+                  <n-button tertiary circle size="medium" @click="theme_dark_mode_click">深色</n-button>
+                  <n-button tertiary circle size="medium" @click="theme_normal_mode_click">浅色</n-button>
+                  <n-button quaternary circle size="medium" style="margin-right:12px" @click="Show_View_System_List_ALL">
+                    <template #icon>
+                      <n-icon><Settings/></n-icon>
+                    </template>
+                  </n-button>
+                </div>
+
+                <n-button quaternary circle size="medium" style="margin-right:4px" @click="theme_mode_change_click">
+                  <template #icon>
+                    <n-icon size="20" :depth="3"><ColorBackground20Regular/></n-icon>
+                  </template>
+                </n-button>
+                <n-button quaternary circle size="medium" style="margin-right:4px">
+                  <template #icon>
+                    <n-icon size="20" :depth="3"><MenuIcon/></n-icon>
+                  </template>
+                </n-button>
+                <n-button quaternary circle size="medium" style="margin-right:4px" @click="minimize">
+                  <template #icon>
+                    <n-icon size="18" :depth="3"><ArrowMinimize16Regular/></n-icon>
+                  </template>
+                </n-button>
+                <n-button quaternary circle size="medium" style="margin-right:4px" @click="maximize">
+                  <template #icon>
+                    <n-icon size="24" :depth="3"><Maximize16Regular/></n-icon>
+                  </template>
+                </n-button>
+                <n-button quaternary circle size="medium" style="margin-right:48px" @click="closeWindow">
+                  <template #icon>
+                    <n-icon size="28" :depth="3"><Close/></n-icon>
+                  </template>
+                </n-button>
+              </section>
+            </div>
           </n-layout>
         </n-layout>
         <n-layout-footer
@@ -1387,39 +1432,15 @@
 
       position: fixed;
       top: 0;
-      left: 160px;
+      left: 50%;
+      transform: translateX(-50%);
 
       -webkit-app-region: drag;
-    }
-    .win_min {
-      float: right;
-      margin-top: 20px;
-      margin-right: 20px;
-      width: 20px;
-      height: 20px;
-      border-radius: 15px;
-      opacity: 0.8;
-      background-color:#2BCB3B;
-    }
-    .win_max {
-      float: right;
-      margin-top: 20px;
-      margin-right: 20px;
-      width: 20px;
-      height: 20px;
-      border-radius: 15px;
-      opacity: 0.8;
-      background-color: #FEB732;
-    }
-    .win_close {
-      float: right;
-      margin-top: 20px;
-      margin-right: 220px;
-      width: 20px;
-      height: 20px;
-      border-radius: 15px;
-      opacity: 0.8;
-      background: #FE5F58;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      background-color: #00000000;
     }
     nav {
       text-align: center;

@@ -34,6 +34,14 @@ const router = createRouter({
       meta: {
         cleanup: true
       }
+    },
+    {
+      path: '/View_System_List_ALL',
+      name: 'View_System_List_ALL',
+      component: () => import('../views/View_System_List_ALL.vue'),
+      meta: {
+        cleanup: true
+      }
     }
   ]
 })

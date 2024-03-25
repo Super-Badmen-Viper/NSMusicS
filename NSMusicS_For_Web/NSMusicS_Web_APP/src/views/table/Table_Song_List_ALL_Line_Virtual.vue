@@ -812,7 +812,7 @@ function getAssetImage(firstImage: string) {
                 </template>
               </div>
               <div class="songlist_album">
-                <span @click="handleItemClick_album(item.album)">{{ item.album }}</span>
+                <span @click="handleItemClick_album(item.album_id)">{{ item.album }}</span>
               </div>
               <div class="love" style="margin-left: auto;">
                 <n-button circle text size="small" style="display: block;">
@@ -866,8 +866,7 @@ function getAssetImage(firstImage: string) {
   height: calc(100vh - 200px);
 }
 .message {
-  display: flex;
-  align-items: left;
+  width: calc(100vw - 230px);
 }
 .media_info {
   width: calc(100vw - 230px);
@@ -879,7 +878,7 @@ function getAssetImage(firstImage: string) {
   transition: background-color 0.3s;
 }
 .media_info:hover {
-  background-color: #f0f0f080;
+  background-color: #f0f0f090;
 }
 .checkbox{
   width: 20px;
@@ -915,7 +914,7 @@ function getAssetImage(firstImage: string) {
 .songlist_album{
   margin-left: 10px;
   text-align: left;
-  width: 240px;
+  width: 340px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
 .songlist_album :hover{

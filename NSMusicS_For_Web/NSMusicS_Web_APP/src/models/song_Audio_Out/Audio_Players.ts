@@ -34,8 +34,11 @@ export class Audio_Players {
         this.fadeGainNode?.connect(this.progressBarNode);
         this.progressBarNode?.connect(this.audioContext.destination);
     }
-    // 初始化播放
     public async loadAudio(buffer:any,audioBuffer_clear:boolean): Promise<void> {
+        if (this.bufferSourceNode) {
+            this.bufferSourceNode.stop();
+        }
+
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
 
         this.progressBarNode = this.audioContext.createGain();
@@ -56,23 +59,14 @@ export class Audio_Players {
         this.volumeGainNode.connect(this.fadeGainNode);
         this.fadeGainNode.connect(this.audioContext.destination);   
     }
-    // private async getAudioArrayBuffer(audioUrl: string): Promise<ArrayBuffer> {
-    //     const res = await fetch(audioUrl);
-    //     return res.arrayBuffer();
-    // }
     private async getAudioBuffer(arrayBuffer: ArrayBuffer, audioContext: AudioContext): Promise<AudioBuffer> {
         let resolveFn
         const promise = new Promise(resolve => resolveFn = resolve)
         audioContext.decodeAudioData(arrayBuffer, resolveFn)
         return promise as Promise<AudioBuffer>
     }
-
-    // 释放内存，停止音频并释放相关资源
     public releaseMemory(audioBuffer_clear:boolean): void {
-        // 停止音频播放
         this.stop();
-
-        // 断开音频节点的连接
         this.disconnectNodes();
 
         this.bufferSourceNode = null;
@@ -81,17 +75,14 @@ export class Audio_Players {
         this.progressBarNode = null;
 
         if(audioBuffer_clear){
-            // this.audioContext.close();
             this.audioBuffer = null;//手动清空
         }
     }
-    // 停止音频播放
     private stop(): void {
         if (this.bufferSourceNode) {
             this.bufferSourceNode.stop();
         }
     }
-    // 断开音频节点的连接
     private disconnectNodes(): void {
         if (this.volumeGainNode) {
             this.volumeGainNode.disconnect();
@@ -103,8 +94,6 @@ export class Audio_Players {
             this.progressBarNode.disconnect();
         }
     }
-
-
     //
     public setFadein(): void {
         // 淡入时间
