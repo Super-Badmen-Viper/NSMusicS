@@ -5,7 +5,8 @@
     'artist_page_num',
     'options_Sort_key','page_artistlists_keyword','page_artistlists_reset_data',
     'page_artistlists_selected',
-    'album_list_of_artist_id_artist'
+    'album_list_of_artist_id_artist',
+    'play_this_artist_song_list'
   ]);
   const props = defineProps<{
     data_temporary: Artist[];
@@ -224,9 +225,13 @@
     // scrollToTop()
 
   }
-  const album_list_of_artist_id_artist_click = (artist_id:string) => {
+  const Open_this_artist_all_album_list_click = (artist_id:string) => {
     console.log('album_list_of_artist_id_artist_click：'+artist_id);
     emit('album_list_of_artist_id_artist',artist_id)
+  }
+  const Play_this_artist_all_media_list_click = (artist_id:string) => {
+    console.log('play_this_artist_song_list：'+artist_id);
+    emit('play_this_artist_song_list',artist_id)
   }
   // 重新渲染gridItems
   const stopWatching_collapsed_width = watch(() => props.collapsed, (newValue, oldValue) => {
@@ -309,7 +314,7 @@
     SaveEdit24Regular,
     PlayCircle24Regular,
     Heart24Regular,Heart28Filled,
-    ChevronLeft16Filled,ChevronRight16Filled,
+    ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
   } from '@vicons/fluent'
   import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
   import { InputInst, NIcon } from 'naive-ui';
@@ -505,17 +510,25 @@
                 <img
                   :src="item.medium_image_url"
                   @error="handleImageError"
+                  style="objectFit: cover; objectPosition: 'center';"
                   :style="{ width: item_artist_image + 'px', height: item_artist_image + 'px', borderRadius: '6px' }"/>
                 <div class="hover-overlay">
                   <div class="hover-content">
                     <n-button 
-                      class="play_this_artist"
-                      quaternary circle size="large" color="#FFFFFF" style="transform: scale(1.3);" @click="album_list_of_artist_id_artist_click(item.id)">
+                      class="play_this_artist" @click="Play_this_artist_all_media_list_click(item.id)"
+                      quaternary circle size="large" color="#FFFFFF" style="transform: scale(1.3);">
                       <template #icon>
                         <n-icon size="30"><PlayCircle24Regular/></n-icon>
                       </template>
                     </n-button>
                     <div class="hover-buttons">
+                      <n-button 
+                        class="open_this_artist"
+                        quaternary circle color="#FFFFFF" @click="Open_this_artist_all_album_list_click(item.id)">
+                        <template #icon>
+                          <n-icon><Open28Filled /></n-icon>
+                        </template>
+                      </n-button>
                       <n-button 
                         class="love_this_artist"
                         quaternary circle color="#FFFFFF">
@@ -641,6 +654,9 @@
 }
 
 .play_this_artist:hover{
+  color: #3DC3FF;
+}
+.open_this_artist:hover{
   color: #3DC3FF;
 }
 .love_this_artist:hover{

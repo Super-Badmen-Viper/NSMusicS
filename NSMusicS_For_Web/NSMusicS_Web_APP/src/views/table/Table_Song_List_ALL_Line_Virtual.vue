@@ -3,11 +3,11 @@ import { ref, onMounted, nextTick, h, reactive, computed, watch, onBeforeUnmount
 import { useMessage,DropdownOption, type DataTableColumns, type DataTableRowKey, NIcon, InputInst, NImage, PaginationProps } from 'naive-ui';
 import { RowData } from 'naive-ui/es/data-table/src/interface';
 const emit = defineEmits([
-  'media_file_path',
+  'media_file_path','media_file_path_from_playlist',
   'media_file_medium_image_url',
   'this_audio_singer_name',
   'this_audio_song_name',
-  'this_audio_album_name',
+  'this_audio_album_name','this_audio_album_id',
   'data_select_Index',
   'page_song_index',
   'menu_edit_this_song',
@@ -161,7 +161,7 @@ const createColumns_select = (): DataTableColumns<RowData> => [
 const props = defineProps<{
   data_temporary: Media_File[];data_temporary_selected: Media_File[];
 
-  change_page_header_color: boolean;page_songlists_top_album_image_url:string;page_songlists_top_album_name:string;
+  change_page_header_color: boolean;page_songlists_top_album_image_url:string;page_songlists_top_album_name:string;page_songlists_top_album_id:string;
   page_songlists:Play_List[];page_songlists_options:{label: string;value: string}[];page_songlists_statistic:{label: string;song_count: number;id: string;}[];
   page_songlists_selected:string;
 
@@ -493,10 +493,12 @@ const handleItemDbClick = (media_file:Media_File) => {
     if(click_count >= 2){
       click_count = 0
 
+      emit('media_file_path_from_playlist',false)
       emit('media_file_path', media_file.path)
       emit('media_file_medium_image_url',media_file.medium_image_url)
       emit('this_audio_singer_name',media_file.artist)
       emit('this_audio_song_name',media_file.title)
+      emit('this_audio_album_id', media_file.album_id);
       emit('this_audio_album_name',media_file.album)
       // emit('page_song_index', page_index); 
 
@@ -760,7 +762,7 @@ function getAssetImage(firstImage: string) {
                   margin-left: 430px;margin-top: -20px;
                   text-align: left;
                   height: 40px;font-weight: 900;">
-                  <n-button text @click="handleItemClick_album(props.page_songlists_top_album_name)">
+                  <n-button text @click="handleItemClick_album(props.page_songlists_top_album_id)">
                     <n-ellipsis 
                       style="
                         max-width: 256px;height: 40px;

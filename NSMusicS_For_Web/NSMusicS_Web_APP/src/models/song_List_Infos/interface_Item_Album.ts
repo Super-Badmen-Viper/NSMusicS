@@ -3,6 +3,7 @@ interface Album {
     absoluteIndex: number;
     title:string;
     album_title:string;
+    created_time:string;
     updated_time:string;
 
     id: string;

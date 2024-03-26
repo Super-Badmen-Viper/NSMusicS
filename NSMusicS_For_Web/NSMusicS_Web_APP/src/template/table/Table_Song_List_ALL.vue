@@ -7,7 +7,7 @@ const emit = defineEmits([
   'media_file_medium_image_url',
   'this_audio_singer_name',
   'this_audio_song_name',
-  'this_audio_album_name',
+  'this_audio_album_name','this_audio_album_id',
   'data_select_Index',
   'page_song_index',
   'media_page_num',
@@ -320,6 +320,7 @@ const click_play_this_medialist = () => {
       emit('media_file_medium_image_url',media_file.medium_image_url)
       emit('this_audio_singer_name',media_file.artist)
       emit('this_audio_song_name',media_file.title)
+      emit('this_audio_album_id', media_file.album_id);
       emit('this_audio_album_name',media_file.album)
       emit('data_select_Index', data_select_Index.value); 
     }
@@ -337,6 +338,7 @@ const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对�
       emit('media_file_medium_image_url',media_file.medium_image_url)
       emit('this_audio_singer_name',media_file.artist)
       emit('this_audio_song_name',media_file.title)
+      emit('this_audio_album_id', media_file.album_id);
       emit('this_audio_album_name',media_file.album)
       emit('page_song_index', page_index); 
 

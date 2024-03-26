@@ -38,10 +38,11 @@ const cleanup = () => {
 const emit = defineEmits([
   'router_select',
   'playlist_Files',
-  'media_file_path',
+  'media_file_path','media_file_path_from_playlist',
   'media_file_medium_image_url',
   'this_audio_singer_name',
   'this_audio_song_name',
+  'this_audio_album_id',
   'this_audio_album_name',
   'data_select_Index',
   'page_song_index',
@@ -58,6 +59,9 @@ const emit = defineEmits([
 function get_playlist_path(value: any) {
   emit('media_file_path',value)
 }
+function get_media_file_path_from_playlist(value: any) {
+  emit('media_file_path_from_playlist',value)
+}
 function get_playlist_file_medium_image_url(value: any) {
   emit('media_file_medium_image_url',value)
 }
@@ -66,6 +70,9 @@ function get_this_audio_singer_name(value: any) {
 }
 function get_this_audio_song_name(value: any) {
   emit('this_audio_song_name',value)
+}
+function get_this_audio_album_id(value: any) {
+  emit('this_audio_album_id',value)
 }
 function get_this_audio_album_name(value: any) {
   emit('this_audio_album_name',value)
@@ -113,9 +120,11 @@ const {
         @playlist_Files_selected_set_all="set_playlist_Files_selected_all"
         
         @media_file_path="get_playlist_path" 
+        @media_file_path_from_playlist="get_media_file_path_from_playlist"
         @media_file_medium_image_url="get_playlist_file_medium_image_url"
         @this_audio_singer_name="get_this_audio_singer_name"
         @this_audio_song_name="get_this_audio_song_name"
+        @this_audio_album_id="get_this_audio_album_id"
         @this_audio_album_name="get_this_audio_album_name"
         @data_select_Index="get_data_select_Index"
         @page_song_index="get_page_song_index"

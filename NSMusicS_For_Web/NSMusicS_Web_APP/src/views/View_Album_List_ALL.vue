@@ -7,7 +7,8 @@ const emit = defineEmits([
   'album_page_size',
   'page_albumlists_options_Sort_key','page_albumlists_keyword','page_albumlists_reset_data',
   'page_albumlists_selected',
-  'media_list_of_album_id'
+  'media_list_of_album_id',
+  'play_this_album_song_list',
 ]);
 function get_album_PageSize(value: any) {
   emit('album_page_size',value)
@@ -30,6 +31,9 @@ function page_albumlists_get_keyword(value: string) {
 function page_albumlists_get_reset_data(value: any) {
   emit('page_albumlists_reset_data',value)
 }
+function get_play_this_album_song_list(value: any) {
+  emit('play_this_album_song_list',value)
+}
 onMounted(async () => {
   emit('router_select','View_Album_List_ALL')
 });
@@ -38,7 +42,7 @@ const {
   collapsed,
   window_innerWidth,
 
-  change_page_header_color,page_albumlists_top_album_image_url,page_albumlists_top_album_name,
+  change_page_header_color,page_albumlists_top_album_image_url,page_albumlists_top_album_name,page_albumlists_top_album_id,
   page_albumlists,page_albumlists_options,page_albumlists_statistic,
   page_albumlists_selected,
 
@@ -46,7 +50,7 @@ const {
   collapsed:boolean,
   window_innerWidth:number,
 
-  change_page_header_color:boolean,page_albumlists_top_album_image_url:string,page_albumlists_top_album_name:string,
+  change_page_header_color:boolean,page_albumlists_top_album_image_url:string,page_albumlists_top_album_name:string,page_albumlists_top_album_id:string,
   page_albumlists:Play_List[],page_albumlists_options:{label: string;value: string}[],page_albumlists_statistic:{label: string;album_count: number;id: string;}[],
   page_albumlists_selected:string;
 
@@ -61,6 +65,7 @@ const {
 
       :change_page_header_color="change_page_header_color"
       :page_albumlists_top_album_image_url="page_albumlists_top_album_image_url"
+      :page_albumlists_top_album_id="page_albumlists_top_album_id"
       :page_albumlists_top_album_name="page_albumlists_top_album_name"
       :page_albumlists_options="page_albumlists_options"
       :page_albumlists_statistic="page_albumlists_statistic"
@@ -69,6 +74,7 @@ const {
       @page_albumlists_selected="set_page_albumlists_selected"
 
       @media_list_of_album_id="get_media_list_of_album_id"
+      @play_this_album_song_list="get_play_this_album_song_list"
 
       :collapsed="collapsed"
       :window_innerWidth="window_innerWidth"

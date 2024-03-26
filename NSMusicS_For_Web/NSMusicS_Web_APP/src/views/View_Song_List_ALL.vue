@@ -38,10 +38,11 @@ const cleanup = () => {
 const emit = defineEmits([
   'router_select',
   'media_Files',
-  'media_file_path',
+  'media_file_path','media_file_path_from_playlist',
   'media_file_medium_image_url',
   'this_audio_singer_name',
   'this_audio_song_name',
+  'this_audio_album_id',
   'this_audio_album_name',
   'data_select_Index',
   'page_song_index',
@@ -59,6 +60,9 @@ const emit = defineEmits([
 function get_media_path(value: any) {
   emit('media_file_path',value)
 }
+function get_media_file_path_from_playlist(value: any) {
+  emit('media_file_path_from_playlist',value)
+}
 function get_media_file_medium_image_url(value: any) {
   emit('media_file_medium_image_url',value)
 }
@@ -67,6 +71,9 @@ function get_this_audio_singer_name(value: any) {
 }
 function get_this_audio_song_name(value: any) {
   emit('this_audio_song_name',value)
+}
+function get_this_audio_album_id(value: any) {
+  emit('this_audio_album_id',value)
 }
 function get_this_audio_album_name(value: any) {
   emit('this_audio_album_name',value)
@@ -105,7 +112,7 @@ onMounted(async () => {
 const { 
   collapsed,window_innerWidth,
 
-  change_page_header_color,page_songlists_top_album_image_url,page_songlists_top_album_name,
+  change_page_header_color,page_songlists_top_album_image_url,page_songlists_top_album_name,page_songlists_top_album_id,
   page_songlists,page_songlists_options,page_songlists_statistic,
   page_songlists_selected,
 
@@ -116,7 +123,7 @@ const {
   } = defineProps<{
     collapsed:Boolean,window_innerWidth:number,
 
-    change_page_header_color:boolean,page_songlists_top_album_image_url:string,page_songlists_top_album_name:string,
+    change_page_header_color:boolean,page_songlists_top_album_image_url:string,page_songlists_top_album_name:string,page_songlists_top_album_id:string,
     page_songlists:Play_List[],page_songlists_options:{label: string;value: string}[],page_songlists_statistic:{label: string;song_count: number;id: string;}[],
     page_songlists_selected:string;
 
@@ -135,6 +142,7 @@ const {
 
       :change_page_header_color="change_page_header_color"
       :page_songlists_top_album_image_url="page_songlists_top_album_image_url"
+      :page_songlists_top_album_id="page_songlists_top_album_id"
       :page_songlists_top_album_name="page_songlists_top_album_name"
       :page_songlists_options="page_songlists_options"
       :page_songlists_statistic="page_songlists_statistic"
@@ -148,9 +156,11 @@ const {
       :collapsed="collapsed"
       :window_innerWidth="window_innerWidth"
       @media_file_path="get_media_path" 
+      @media_file_path_from_playlist="get_media_file_path_from_playlist"
       @media_file_medium_image_url="get_media_file_medium_image_url"
       @this_audio_singer_name="get_this_audio_singer_name"
       @this_audio_song_name="get_this_audio_song_name"
+      @this_audio_album_id="get_this_audio_album_id"
       @this_audio_album_name="get_this_audio_album_name"
       @data_select_Index="get_data_select_Index"
       @page_song_index="get_page_song_index"

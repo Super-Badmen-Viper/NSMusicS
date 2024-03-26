@@ -8,7 +8,8 @@ const emit = defineEmits([
   'artist_page_size',
   'page_artistlists_options_Sort_key','page_artistlists_keyword',
   'page_artistlists_selected','page_artistlists_reset_data',
-  'album_list_of_artist_id_artist'
+  'album_list_of_artist_id_artist',
+  'play_this_artist_song_list'
 ]);
 function get_artist_page_num(value: any) {
   emit('artist_page_num',value)
@@ -33,6 +34,9 @@ function page_artistlists_get_reset_data(value: any) {
 }
 function get_album_list_of_artist_id_artist(value: any) {
   emit('album_list_of_artist_id_artist',value)
+}
+function get_play_this_artist_song_list(value: any) {
+  emit('play_this_artist_song_list',value)
 }
 onMounted(async () => {
   emit('router_select','View_Artist_List_ALL')
@@ -80,6 +84,7 @@ const {
       @page_artistlists_reset_data="page_artistlists_get_reset_data"
 
       @album_list_of_artist_id_artist="get_album_list_of_artist_id_artist"
+      @play_this_artist_song_list="get_play_this_artist_song_list"
 
       :page_artistlists_keyword="page_artistlists_keyword"
       @page_artistlists_keyword="page_artistlists_get_keyword"

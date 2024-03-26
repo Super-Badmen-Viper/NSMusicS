@@ -4,12 +4,12 @@
   const emit = defineEmits([
     'options_Sort_key','page_albumlists_keyword','page_albumlists_reset_data',
     'page_albumlists_selected',
-    'media_list_of_album_id'
+    'media_list_of_album_id','play_this_album_song_list'
   ]);
   const props = defineProps<{
     data_temporary: Album[];
 
-    change_page_header_color:boolean,page_albumlists_top_album_image_url:string,page_albumlists_top_album_name:string,
+    change_page_header_color:boolean,page_albumlists_top_album_image_url:string,page_albumlists_top_album_name:string,page_albumlists_top_album_id:string,
     page_albumlists:Play_List[],page_albumlists_options:{label: string;value: string}[],page_albumlists_statistic:{label: string;album_count: number;id: string;}[],
     page_albumlists_selected:string;
 
@@ -205,7 +205,7 @@
   // go to media page
   const handleItemClick_album = (album:string) => {
     // router.push({ path: '/media' });
-    input_search_Value.value = album+'accurate_search'+'__album__'
+    input_search_Value.value = album//+'accurate_search'+'__album__'
     bool_show_search_area.value = false
     show_search_area()
     click_search()
@@ -218,9 +218,20 @@
     click_search()
     scrollToTop()
   }
-  const play_this_album_click = (album_id:string) => {
-    console.log('play_this_album_click：'+album_id);
+  const handleItemClick_album_timelist = (created_at:string) => {
+    input_search_Value.value = created_at+'accurate_search'+'__title__'
+    bool_show_search_area.value = false
+    show_search_area()
+    click_search()
+    scrollToTop()
+  }
+  const Open_this_album_SongList_click = (album_id:string) => {
+    console.log('media_list_of_album_id：'+album_id);
     emit('media_list_of_album_id',album_id)
+  }
+  const Play_this_album_SongList_click = (album_id:string) => {
+    console.log('play_this_album_click：'+album_id);
+    emit('play_this_album_song_list',album_id)
   }
   // 重新渲染gridItems
   const stopWatching_collapsed_width = watch(() => props.collapsed, (newValue, oldValue) => {
@@ -304,7 +315,7 @@
     SaveEdit24Regular,
     PlayCircle24Regular,
     Heart24Regular,Heart28Filled,
-    ChevronLeft16Filled,ChevronRight16Filled,
+    ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
   } from '@vicons/fluent'
   import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
   import { InputInst, NIcon } from 'naive-ui';
@@ -468,7 +479,7 @@
                   margin-left: 430px;margin-top: -20px;
                   text-align: left;
                   height: 40px;font-weight: 900;">
-                  <n-button text @click="handleItemClick_album(props.page_albumlists_top_album_name)">
+                  <n-button text @click="handleItemClick_album(props.page_albumlists_top_album_id)">
                     <n-ellipsis 
                       style="
                         max-width: 256px;height: 40px;
@@ -500,18 +511,25 @@
                 <img
                   :src="item.medium_image_url"
                   @error="handleImageError"
+                  style="objectFit: cover; objectPosition: 'center';"
                   :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
                 <div class="hover-overlay">
                   <div class="hover-content">
                     <n-button 
-                      class="play_this_album"
-                      @click="play_this_album_click(item.id)"
+                      class="play_this_album" @click="Play_this_album_SongList_click(item.id)"
                       quaternary circle size="large" color="#FFFFFF" style="transform: scale(1.3);">
                       <template #icon>
                         <n-icon size="30"><PlayCircle24Regular/></n-icon>
                       </template>
                     </n-button>
                     <div class="hover-buttons">
+                      <n-button 
+                        class="open_this_artist"
+                        quaternary circle color="#FFFFFF" @click="Open_this_album_SongList_click(item.id)">
+                        <template #icon>
+                          <n-icon><Open28Filled /></n-icon>
+                        </template>
+                      </n-button>
                       <n-button 
                         class="love_this_album"
                         quaternary circle color="#FFFFFF">
@@ -536,7 +554,7 @@
                   <div>
                     <span id="album_name" 
                       :style="{ maxWidth: item_album_txt + 'px' }" 
-                      @click="handleItemClick_album(item.id)">
+                      @click="handleItemClick_album(item.name)">
                       {{ item.name }}
                     </span> 
                   </div>
@@ -548,9 +566,10 @@
                     </span>
                   </div>
                   <div>
-                    <span id="album_album_name" 
-                      :style="{ maxWidth: item_album_txt + 'px' }">
-                      {{ item.updated_time }}
+                    <span id="album_time" 
+                      :style="{ maxWidth: item_album_txt + 'px' }"
+                      @click="handleItemClick_album_timelist(item.created_at)">
+                      {{ item.created_time }}
                     </span> 
                   </div>
                 </div>
@@ -639,7 +658,7 @@
   cursor: pointer;
   color: #3DC3FF;
 }
-#album_album_name{
+#album_time{
   font-size: 12px;
   font-weight: 500;
   display: -webkit-box;
@@ -648,13 +667,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#album_album_name:hover{
+#album_time:hover{
   text-decoration: underline;
   cursor: pointer;
   color: #3DC3FF;
 }
 
 .play_this_album:hover{
+  color: #3DC3FF;
+}
+.open_this_artist:hover{
   color: #3DC3FF;
 }
 .love_this_album:hover{

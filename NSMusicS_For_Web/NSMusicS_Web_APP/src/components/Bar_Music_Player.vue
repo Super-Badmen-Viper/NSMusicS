@@ -11,7 +11,7 @@
     'media_file_medium_image_url',
     'this_audio_singer_name',
     'this_audio_song_name',
-    'this_audio_album_name',
+    'this_audio_album_name','this_audio_album_id',
     'data_select_Index',
     'isVisible_Music_PlayList'
   ]);
@@ -59,8 +59,20 @@
     'this_audio_file_path','playlist_Files_temporary',
     'this_audio_file_medium_image_url','this_audio_refresh',
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name']);
+  const total_play_time = ref('04:42');
+  const current_play_time = ref('01:36');
+  const slider_singleValue = ref(0)
+  const currentTime_added_value = ref(0)
+  const player_no_progress_jump = ref(true)
+  const slider_volume_value = ref(100)
+  const slider_volume_show = ref(false)
+  const slider_order_show = ref(false)
+  // audio system
+  import { Audio_Players } from '../models/song_Audio_Out/Audio_Players';
+  const { ipcRenderer } = require('electron');
+  // audio player
   const timer_this_audio_refresh = ref<NodeJS.Timeout>();
-  const lastTriggerValue = ref<any>(null);// 接收大量数据时，仅触发最后一个值
+  const lastTriggerValue = ref<any>(null);// 延迟触发：接收大量数据时，仅触发最后一个值
   watch(() => props.this_audio_refresh, (newValue, oldValue) => {
     if (newValue === true) {
       lastTriggerValue.value = newValue; // 更新最后一个触发的值
@@ -86,25 +98,11 @@
     buffer_init.value = false;
     Init_Audio_Player()
   };
-  const total_play_time = ref('04:42');
-  const current_play_time = ref('01:36');
-  const slider_singleValue = ref(0)
-  const currentTime_added_value = ref(0)
-  const player_no_progress_jump = ref(true)
-  //
-  const slider_volume_value = ref(100)
-  const slider_volume_show = ref(false)
-  //
-  const slider_order_show = ref(false)
-
-  // audio system
-  import { Audio_Players } from '../models/song_Audio_Out/Audio_Players';
-  const { ipcRenderer } = require('electron');
   let player = new Audio_Players();
   const play_order = ref('playback-2');
   const is_play_ended = ref(false);
   const buffer_init = ref(false);
-  const timer_this_audio_player = ref<NodeJS.Timeout>();
+  const timer_this_audio_player = ref<NodeJS.Timeout>();// 延迟触发：接收大量数据时，仅触发最后一个值
   watch(() => this_audio_buffer_file.value, (newValue, oldValue) => {
     if (newValue !== oldValue) {
       clearTimeout(timer_this_audio_player.value);
@@ -156,19 +154,6 @@
               total_play_time.value = formatTime(player.getTotalTime());
             }
           });
-
-          // fix quick load a lot of media of memory questions(web-audio-api start of no-start)
-          // clearTimeout(timer_this_audio_player.value);
-          // timer_this_audio_player.value = setTimeout(() => {
-          //   if(player.isPlaying === false)
-          //     handleAudioFilePathChange()
-          //   else{
-          //     // fix web-audio-api fake play
-          //     player.pause();
-          //     player.resume();
-          //   }
-          // }, 400);
-          //
         }
       }, 400);
     }
@@ -186,6 +171,7 @@
       player.pause();
     }
   };
+  ////// play order area
   function Play_Media_Order(model_num: string, increased: number) {
     if (props.playlist_Files_temporary.length > 0) {
       let index = props.playlist_Files_temporary.findIndex((item: any) => item.path === props.this_audio_file_path);
@@ -229,12 +215,14 @@
           emit('this_audio_file_medium_image_url', props.playlist_Files_temporary[index].medium_image_url);
           emit('this_audio_singer_name', props.playlist_Files_temporary[index].artist);
           emit('this_audio_song_name', props.playlist_Files_temporary[index].title);
+          emit('this_audio_album_id', props.playlist_Files_temporary[index].album_id);
           emit('this_audio_album_name', props.playlist_Files_temporary[index].album);
           console.log(props.playlist_Files_temporary[index]);
         }
       }
     }
   }
+  ////// player button area
   const play_skip_back_click = () => {
     current_play_time.value = formatTime(player.getTotalTime());
     currentTime_added_value.value = 0;
@@ -259,7 +247,6 @@
     player.isPlaying = false;
     Play_Media_Order(play_order.value,1)
   }
-  
   const throttleDuration = 1000; // 节流的时间间隔，单位为毫秒
   let lastTriggerTime = 0; // 上次触发的时间戳
   const Play_Media_Switching = () => {
@@ -286,8 +273,7 @@
       }
     }
   };
-
-  // player slider formatTime area
+  ////// player slider formatTime area
   const set_slider_singleValue = () => {
     if ( player_range_duration_isDragging == false) 
       slider_singleValue.value = (player.getCurrentTime() + currentTime_added_value.value) / player.getTotalTime() * 100;
@@ -483,6 +469,7 @@ import { NIcon } from 'naive-ui';
           <img class="back_img" 
               :src="getAssetImage(props.this_audio_file_medium_image_url)"
               :style="{ filter: 'blur(' + back_filter_blurValue + 'px)' }"
+              style="objectFit: cover; objectPosition: center;"
               @mouseover="hover_back_img" @mouseout="leave_back_svg"/>
         </div>
         <div class="bar_left_text_song_info">
