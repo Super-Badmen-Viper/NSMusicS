@@ -104,11 +104,11 @@
   const play_order = ref('playback-2');
   const is_play_ended = ref(false);
   const buffer_init = ref(false);
-  const Init_Audio_Player = async () => {
-    if(player.isPlaying === false){
-      if(this_audio_buffer_file.value === null){
-        buffer_init.value = true;
-        this_audio_buffer_file.value = await ipcRenderer.invoke('readFile', props.this_audio_file_path);
+  const timer_this_audio_player = ref<NodeJS.Timeout>();
+  watch(() => this_audio_buffer_file.value, (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+      clearTimeout(timer_this_audio_player.value);
+      timer_this_audio_player.value = setTimeout(() => {
         if(buffer_init.value === true){
           currentTime_added_value.value = 0;
           player.releaseMemory(true);
@@ -135,8 +135,12 @@
                 Play_Media_Switching()
               });
               
+              // fix quick load a lot of media of memory questions(web-audio-api start error)
               try {
                 player.bufferSourceNode.start(player.audioContext.currentTime, player.startTime, player.audioDuration);
+                if (player.audioContext.state === 'suspended') {
+                    player.audioContext.resume();
+                }
               }catch (error) {
                 console.log(error);
                 setTimeout(() => {
@@ -152,7 +156,29 @@
               total_play_time.value = formatTime(player.getTotalTime());
             }
           });
+
+          // fix quick load a lot of media of memory questions(web-audio-api start of no-start)
+          // clearTimeout(timer_this_audio_player.value);
+          // timer_this_audio_player.value = setTimeout(() => {
+          //   if(player.isPlaying === false)
+          //     handleAudioFilePathChange()
+          //   else{
+          //     // fix web-audio-api fake play
+          //     player.pause();
+          //     player.resume();
+          //   }
+          // }, 400);
+          //
         }
+      }, 400);
+    }
+  });
+  const Init_Audio_Player = async () => {
+    if(player.isPlaying === false){
+      if(this_audio_buffer_file.value === null){
+        buffer_init.value = true;
+        this_audio_buffer_file.value = await ipcRenderer.invoke('readFile', props.this_audio_file_path);
+        // watch(() => this_audio_buffer_file.value, (newValue, oldValue) =>
       }else{
         player.resume();
       }

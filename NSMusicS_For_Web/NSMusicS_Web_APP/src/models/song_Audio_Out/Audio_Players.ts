@@ -37,6 +37,7 @@ export class Audio_Players {
     public async loadAudio(buffer:any,audioBuffer_clear:boolean): Promise<void> {
         if (this.bufferSourceNode) {
             this.bufferSourceNode.stop();
+            this.isPlaying = false;
         }
 
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
