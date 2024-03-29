@@ -63,9 +63,21 @@
 
   ////// open view musicplayer
   import { ref,watch } from 'vue';
+  const player_show_click = ref(false);
+  const get_player_show_click = (value:any) => {
+    player_show_click.value = value
+    console.log('player_show_click：'+value)
+  }
   const margin_top_value_view_music_player = ref(100);
   const get_send_onclick = (value:any) => {
     margin_top_value_view_music_player.value = value
+    setTimeout(() => {
+      if(value === 0){
+        theme_app.value = darkTheme
+      }else{
+        theme_app.value = theme.value
+      }
+    }, 200);
   }
   ////// open bar musicplaylist
   const isVisible_Music_PlayList = ref(false);
@@ -1212,17 +1224,20 @@
   });
 
   //////
-  import { darkTheme } from 'naive-ui'
+  import { darkTheme,lightTheme } from 'naive-ui'
   import type { GlobalTheme } from 'naive-ui'
   const theme = ref<GlobalTheme | null>(null)
+  const theme_app =ref<GlobalTheme | null>(null)
   const theme_bar_top_setapp = ref('transparent')
   const change_page_header_color = ref(false)
   const theme_normal_mode_click = () => {
-    theme.value = null
+    theme.value = lightTheme
+    theme_app.value = lightTheme
     change_page_header_color.value = false
   }
   const theme_dark_mode_click = () => {
     theme.value = darkTheme
+    theme_app.value = darkTheme
     change_page_header_color.value = true
   }
   const theme_mode_change_click = () => {
@@ -1374,8 +1389,6 @@
             >
             
             </RouterView>
-
-
             <div class="bar_top_setapp" :style="{ backgroundColor: theme_bar_top_setapp }">
               <section  
                 style="
@@ -1426,7 +1439,7 @@
             </div>
           </n-layout>
         </n-layout>
-        <n-layout-footer
+        <!-- <n-layout-footer
           position="absolute"
           bordered>
           <Bar_Music_Player 
@@ -1447,25 +1460,12 @@
 
             :playlist_Files_temporary="playlist_Files_temporary"
 
-            @on-click="get_send_onclick"
+            @player_show_height="get_send_onclick"
             @isVisible_Music_PlayList="get_isVisible_Music_PlayList"/>
           
             
-        </n-layout-footer>
+        </n-layout-footer> -->
       </n-space>
-      <View_Screen_Music_Player 
-        class="view_music_player"
-        :style="{ height: `calc(100vh - ${margin_top_value_view_music_player}vh - 80px)` }"
-        
-        :this_audio_file_path="this_audio_file_path"
-        :this_audio_file_medium_image_url="this_audio_file_medium_image_url"
-        :this_audio_refresh="this_audio_refresh"
-        :this_audio_singer_name="this_audio_singer_name"
-        :this_audio_song_name="this_audio_song_name"
-        :this_audio_album_id="this_audio_album_id"
-        :this_audio_album_name="this_audio_album_name">
-
-      </View_Screen_Music_Player>
       <n-drawer 
         v-model:show="isVisible_Music_PlayList" 
         :width="470" 
@@ -1500,6 +1500,54 @@
       </n-drawer>
     </n-message-provider>
   </n-config-provider>
+  <n-config-provider :theme="theme_app">
+    <!-- n-card can change Bar_Music_Player(text color) -->
+    <n-card
+      style=" 
+        position: fixed;left: 0;bottom: 0;
+        width: 100vw;height: 80px;
+        background-color: #00000000;
+        z-index: 100;
+        border-radius: 12px 12px 0px 0px;border: 0px #00000000">
+      <Bar_Music_Player 
+        :this_audio_file_path="this_audio_file_path"
+        @this_audio_file_path="get_this_audio_file_path"
+        :this_audio_file_medium_image_url="this_audio_file_medium_image_url"
+        @this_audio_file_medium_image_url="get_media_file_medium_image_url"
+        :this_audio_refresh="this_audio_refresh"
+        @this_audio_refresh="get_this_audio_refresh"
+        :this_audio_singer_name="this_audio_singer_name"
+        @this_audio_singer_name="get_this_audio_singer_name"
+        :this_audio_song_name="this_audio_song_name"
+        @this_audio_song_name="get_this_audio_song_name"
+        :this_audio_album_id="this_audio_album_id"
+        @this_audio_album_id="get_this_audio_album_id"
+        :this_audio_album_name="this_audio_album_name"
+        @this_audio_album_name="get_this_audio_album_name"
+
+        :playlist_Files_temporary="playlist_Files_temporary"
+
+        :player_show_click="player_show_click"
+        @player_show_click="get_player_show_click"
+        @player_show_height="get_send_onclick"
+        @isVisible_Music_PlayList="get_isVisible_Music_PlayList"/>
+    </n-card>
+    <View_Screen_Music_Player 
+      class="view_music_player"
+      :style="{ height: `calc(100vh - ${margin_top_value_view_music_player}vh)` }"
+      
+      :this_audio_file_path="this_audio_file_path"
+      :this_audio_file_medium_image_url="this_audio_file_medium_image_url"
+      :this_audio_refresh="this_audio_refresh"
+      :this_audio_singer_name="this_audio_singer_name"
+      :this_audio_song_name="this_audio_song_name"
+      :this_audio_album_id="this_audio_album_id"
+      :this_audio_album_name="this_audio_album_name"
+      
+      @player_show_click="get_player_show_click">
+
+    </View_Screen_Music_Player>
+  </n-config-provider>
 </template>
 
 <style scoped>
@@ -1532,7 +1580,7 @@
     .view_music_player{
       width: 100vw;
       z-index: 10;
-      position: absolute;bottom: 80px;left: 0;
+      position: absolute;bottom: 0;left: 0;
       transition: height 0.2s;
     }
     .bar_top_setapp{

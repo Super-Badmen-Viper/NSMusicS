@@ -5,7 +5,7 @@
   import { defineEmits } from 'vue';
   const margin_top_value_view_music_player = ref(670);
   const emit = defineEmits([
-    'on-click',
+    'player_show_height',
     'this_audio_refresh',
     'this_audio_file_path','this_audio_file_medium_image_url',
     'media_file_medium_image_url',
@@ -13,8 +13,16 @@
     'this_audio_song_name',
     'this_audio_album_name','this_audio_album_id',
     'data_select_Index',
-    'isVisible_Music_PlayList'
+    'isVisible_Music_PlayList',
+    'player_show_click'
   ]);
+  import { defineProps} from 'vue';
+  const props = defineProps([
+    'this_audio_file_path','playlist_Files_temporary',
+    'this_audio_file_medium_image_url','this_audio_refresh',
+    'this_audio_singer_name','this_audio_song_name','this_audio_album_name',
+    'this_audio_album_id',
+    'player_show_click',]);
 
   // open view musicplayer
   let path = require('path');
@@ -44,29 +52,37 @@
     back_filter_blurValue.value = 0;
   };
   const click_back_svg = () => {
-    svg_shrink_up_arrow.value = 
-    svg_shrink_up_arrow.value === 
-      'shrink_up_arrow.svg' ? svg_shrink_down_arrow.value : 'shrink_up_arrow.svg';
-    back_ChevronDouble.value = '../../resources/'+svg_shrink_up_arrow.value;
-
     margin_top_value_view_music_player.value = 
       margin_top_value_view_music_player.value === 
         0 ? 670 : 0;
-        emit('on-click',margin_top_value_view_music_player.value);
+        emit('player_show_height',margin_top_value_view_music_player.value);
+    if(margin_top_value_view_music_player.value === 0)
+      svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
+    else
+      svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
+    back_ChevronDouble.value = '../../resources/'+svg_shrink_up_arrow.value;
     
     musicplayer_background_color.value =
       musicplayer_background_color.value === 
         '#FFFFFF'?'#FFFFFFE5':'#FFFFFF';
   };
+  watch(() => props.player_show_click, (newValue, oldValue) => {
+    if (newValue === true) {
+      margin_top_value_view_music_player.value = 670;
+      emit('player_show_height',margin_top_value_view_music_player.value)
+      if(margin_top_value_view_music_player.value === 0)
+        svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
+      else
+        svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
+      back_ChevronDouble.value = '../../resources/'+svg_shrink_up_arrow.value;
+
+      emit('player_show_click', false);
+    }
+  });
 
   // binding
   const musicplayer_background_color = ref('#FFFFFF');
   const this_audio_buffer_file = ref(null)
-  import { defineProps} from 'vue';
-  const props = defineProps([
-    'this_audio_file_path','playlist_Files_temporary',
-    'this_audio_file_medium_image_url','this_audio_refresh',
-    'this_audio_singer_name','this_audio_song_name','this_audio_album_name']);
   const total_play_time = ref('04:42');
   const current_play_time = ref('01:36');
   const slider_singleValue = ref(0)

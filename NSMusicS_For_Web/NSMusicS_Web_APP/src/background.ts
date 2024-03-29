@@ -42,9 +42,9 @@ async function createWindow() {
         win.loadFile('index.html')
     }
     // Open the DevTools.
-    // win.webContents.openDevTools({
-    //     mode:'bottom'
-    // });
+    win.webContents.openDevTools({
+        mode:'bottom'
+    });
 
     const electron = require('electron')
     const ipc = electron.ipcMain
