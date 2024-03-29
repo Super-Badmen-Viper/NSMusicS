@@ -294,9 +294,14 @@
       timer.value = null;
     }
   };
-
+  const os = require('os');
   function getAssetImage(firstImage: string) {
-    return new URL(firstImage, import.meta.url).href;
+    if(os.type() || process.platform === 'win32')
+      return new URL(firstImage, import.meta.url).href;
+    else if(os.type() || process.platform === 'darwin')
+      return new URL(firstImage, import.meta.url).href;
+    else if(os.type() || process.platform === 'linux')
+      return new URL(firstImage, import.meta.url).href;
   }
 
   import {
@@ -395,6 +400,7 @@
                   height: auto;
                 "
                 :src="getAssetImage(props.page_albumlists_top_album_image_url)"
+                @error="handleImageError"
               />
             </div>
             <div style="

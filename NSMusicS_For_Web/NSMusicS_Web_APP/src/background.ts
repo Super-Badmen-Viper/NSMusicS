@@ -64,22 +64,14 @@ async function createWindow() {
         win.close();
     })
     
-    ipc.on('open-music-file', (event) => {
-        dialog.showOpenDialog({
-            properties: ['openFile', 'multiSelections'],
-            filters: [{ name: 'Music', extensions: ['mp3', 'flac'] }]
-        }).then((res) => {
-            // 拿到结果
-            const { canceled, filePaths } = res
-            if (!canceled && filePaths.length) {
-                event.sender.send('selected-file', filePaths)
-            }
-        }).catch(err => {
-            // 错误
-        })
-    }); 
     ipc.handle('readFile', async (event, filePath) => {
         return readFileSync(filePath);
+    });
+
+    const { app } = require('electron');
+    const appPath = app.getAppPath();
+    ipc.handle('getAppPath', async () => {
+        return appPath;
     });
 }
 

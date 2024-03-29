@@ -17,17 +17,24 @@
   ]);
 
   // open view musicplayer
+  let path = require('path');
   const svg_shrink_up_arrow = ref<string>('shrink_up_arrow.svg');
   const svg_shrink_down_arrow = ref<string>('shrink_down_arrow.svg');
   const back_display = ref('none');
+  const back_ChevronDouble = ref('../../resources/'+svg_shrink_up_arrow.value)
   const back_filter_blurValue  = ref(0);
+  const os = require('os');
   function getAssetImage(firstImage: string) {
-    return new URL(firstImage, import.meta.url).href;
+    if(os.type() || process.platform === 'win32')
+      return new URL(firstImage, import.meta.url).href;
+    else if(os.type() || process.platform === 'darwin')
+      return new URL(firstImage, import.meta.url).href;
+    else if(os.type() || process.platform === 'linux')
+      return new URL(firstImage, import.meta.url).href;
   }
-  let path = require('path');
-  function getAssetImage_SVG(firstImage: string) {
-    return new URL(path.resolve(process.cwd(), 'resources') + '\\'+firstImage).href;
-  }
+  const handleImageError = (event:any) => {
+    event.target.src = '../../resources/error_album.jpg'; // 设置备用图片路径
+  };
   const hover_back_img = () => {
     back_display.value = 'block';
     back_filter_blurValue.value = 3;
@@ -40,19 +47,20 @@
     svg_shrink_up_arrow.value = 
     svg_shrink_up_arrow.value === 
       'shrink_up_arrow.svg' ? svg_shrink_down_arrow.value : 'shrink_up_arrow.svg';
+    back_ChevronDouble.value = '../../resources/'+svg_shrink_up_arrow.value;
 
     margin_top_value_view_music_player.value = 
       margin_top_value_view_music_player.value === 
         0 ? 670 : 0;
         emit('on-click',margin_top_value_view_music_player.value);
     
-    // musicplayer_background_color.value =
-    //   musicplayer_background_color.value === 
-    //     '#FFFFFF'?'#FFFFFFE5':'#FFFFFF';
+    musicplayer_background_color.value =
+      musicplayer_background_color.value === 
+        '#FFFFFF'?'#FFFFFFE5':'#FFFFFF';
   };
 
   // binding
-  // const musicplayer_background_color = ref('#FFFFFF');
+  const musicplayer_background_color = ref('#FFFFFF');
   const this_audio_buffer_file = ref(null)
   import { defineProps} from 'vue';
   const props = defineProps([
@@ -440,6 +448,7 @@
     DesktopFlow24Regular,
     MoreCircle32Regular,
     ArrowRepeatAll16Regular,ArrowAutofitDown24Regular,
+    ChevronDoubleDown16Filled,ChevronDoubleUp16Filled
   } from '@vicons/fluent'
   import {
     QueueMusicRound,
@@ -458,23 +467,31 @@ import { NIcon } from 'naive-ui';
 </script>
 
 <template>
+   <!-- :style="{backgroundColor : `${musicplayer_background_color}` }" -->
   <n-space class="this_Bar_Music_Player">
     <div class="layout_distribution_3">
       <div class="gird_Left">
         <div class="button_open_player_view">
-          <img class="back_svg" 
-              :src="getAssetImage_SVG(svg_shrink_up_arrow)" 
+          <img class="back_svg"
+              :src="back_ChevronDouble"
               :style="{ display: back_display }"
               @click="click_back_svg" @mouseover="hover_back_img" @mouseout="leave_back_svg"/>
+              
           <img class="back_img" 
               :src="getAssetImage(props.this_audio_file_medium_image_url)"
+              @error="handleImageError"
               :style="{ filter: 'blur(' + back_filter_blurValue + 'px)' }"
               style="objectFit: cover; objectPosition: center;"
+              @click="click_back_svg"
               @mouseover="hover_back_img" @mouseout="leave_back_svg"/>
         </div>
         <div class="bar_left_text_song_info">
           <n-ellipsis id="bar_song_name">{{ props.this_audio_song_name }}</n-ellipsis>
-          <n-ellipsis id="bar_singer_name">{{ props.this_audio_singer_name }}</n-ellipsis>  
+          <n-ellipsis id="bar_singer_name">
+            <template v-for="artist in props.this_audio_singer_name.split(/[\/|｜]/)">
+              <span id="bar_singer_name_part">{{ artist + '&nbsp' }}</span>
+            </template>
+          </n-ellipsis>
           <n-ellipsis id="bar_album_name">{{ props.this_audio_album_name }}</n-ellipsis>
         </div>
       </div>
@@ -670,7 +687,7 @@ import { NIcon } from 'naive-ui';
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.gird_Left .bar_left_text_song_info #bar_singer_name:hover {
+.gird_Left .bar_left_text_song_info #bar_singer_name_part:hover {
   text-decoration: underline;
   color: #3DC3FF;
 }

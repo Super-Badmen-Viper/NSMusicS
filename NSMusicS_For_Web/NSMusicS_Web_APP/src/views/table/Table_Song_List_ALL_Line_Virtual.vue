@@ -193,6 +193,10 @@ const click_bulk_operation = () => {
     columns.value?.splice(0, 1)
   }
 }
+
+const handleImageError = (event:any) => {
+  event.target.src = '../../../resources/error_album.jpg'; // 设置备用图片路径
+};
 //
 const options_data_dropmenu: DropdownOption[] = [
   {
@@ -519,7 +523,7 @@ const handleItemClick_title = (title:string) => {
 }
 const handleItemClick_artist = (artist:string) => {
   click_count = 0;
-  input_search_Value.value = artist//+'accurate_search'+'__artist__'//artist不参与精确搜索
+  input_search_Value.value = artist+'accurate_search'+'__artist__'//artist不参与精确搜索
   bool_show_search_area.value = false
   show_search_area()
   click_search()
@@ -570,8 +574,14 @@ import {
 import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
 import { RouterLink } from 'vue-router';
 
+const os = require('os');
 function getAssetImage(firstImage: string) {
-  return new URL(firstImage, import.meta.url).href;
+  if(os.type() || process.platform === 'win32')
+    return new URL(firstImage, import.meta.url).href;
+  else if(os.type() || process.platform === 'darwin')
+    return new URL(firstImage, import.meta.url).href;
+  else if(os.type() || process.platform === 'linux')
+    return new URL(firstImage, import.meta.url).href;
 }
 </script>
 
@@ -677,6 +687,7 @@ function getAssetImage(firstImage: string) {
                   margin-left: 200px; margin-top: -300px;
                 "
                 :src="getAssetImage(props.page_songlists_top_album_image_url)"
+                @error="handleImageError"
               />
             </div>
             <div 
@@ -751,6 +762,7 @@ function getAssetImage(firstImage: string) {
                   width="80px" height="80px" object-fit="contain"
                   style="border-radius: 8px;margin-left: 20px;margin-top: 20px;"
                   :src="getAssetImage(props.page_songlists_top_album_image_url)"
+                  @error="handleImageError"
                   :show-toolbar="false"
                 />
               </template>
@@ -786,6 +798,7 @@ function getAssetImage(firstImage: string) {
             :data-index="index"
             :data-active="active"
             class="message"
+            :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)'}"
             @click="handleItemClick"
             @Dblclick="handleItemDbClick(item)">
             <div class="media_info" :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)'}">
@@ -804,18 +817,19 @@ function getAssetImage(firstImage: string) {
                 <img
                   :key="item.id"
                   :src="item.medium_image_url"
+                  @error="handleImageError"
                   style="width: 100%; height: 100%; object-fit: cover;"/>
               </div>
               <div class="songlist_title">
                 <span @click="handleItemClick_title(item.title)">{{ item.title }}</span>
                 <br>
-                <template v-for="artist in item.artist.split('/')">
+                <template v-for="artist in item.artist.split(/[\/|｜]/)">
                   <span @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
                 </template>
               </div>
               <div class="songlist_album">
                 <span @click="handleItemClick_album(item.album_id)">{{ item.album }}</span>
-              </div>
+              </div> 
               <div class="love" style="margin-left: auto;">
                 <n-button circle text size="small" style="display: block;">
                   <template #icon>

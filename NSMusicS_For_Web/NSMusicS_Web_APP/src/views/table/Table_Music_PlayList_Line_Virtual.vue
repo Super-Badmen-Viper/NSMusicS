@@ -169,8 +169,14 @@ import {
 import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
 import { RouterLink } from 'vue-router';
 
+const os = require('os');
 function getAssetImage(firstImage: string) {
-  return new URL(firstImage, import.meta.url).href;
+  if(os.type() || process.platform === 'win32')
+    return new URL(firstImage, import.meta.url).href;
+  else if(os.type() || process.platform === 'darwin')
+    return new URL(firstImage, import.meta.url).href;
+  else if(os.type() || process.platform === 'linux')
+    return new URL(firstImage, import.meta.url).href;
 }
 </script>
 

@@ -11,7 +11,7 @@
   const props = defineProps<{
     data_temporary: Artist[];
 
-    change_page_header_color:boolean,page_artistlists_top_artist_image_url:string,page_artistlists_top_artist_name:string,
+    change_page_header_color:boolean,page_artistlists_top_artist_image_url:string,page_artistlists_top_artist_name:string,page_artistlists_top_artist_id:string,
     page_artistlists:Play_List[],page_artistlists_options:{label: string;value: string}[],page_artistlists_statistic:{label: string;artist_count: number;id: string;}[],
     page_artistlists_selected:string;
 
@@ -294,8 +294,14 @@
     }
   };
 
+  const os = require('os');
   function getAssetImage(firstImage: string) {
-    return new URL(firstImage, import.meta.url).href;
+    if(os.type() || process.platform === 'win32')
+      return new URL(firstImage, import.meta.url).href;
+    else if(os.type() || process.platform === 'darwin')
+      return new URL(firstImage, import.meta.url).href;
+    else if(os.type() || process.platform === 'linux')
+      return new URL(firstImage, import.meta.url).href;
   }
 
   import {
@@ -394,6 +400,7 @@
                   height: auto;
                 "
                 :src="getAssetImage(props.page_artistlists_top_artist_image_url)"
+                @error="handleImageError"
               />
             </div>
             <div style="
@@ -478,7 +485,8 @@
                   margin-left: 430px;margin-top: -20px;
                   text-align: left;
                   height: 40px;font-weight: 900;">
-                  <n-button text @click="handleItemClick_artist(props.page_artistlists_top_artist_name)">
+                  <!-- @click="handleItemClick_artist(props.page_artistlists_top_artist_id)" -->
+                  <n-button text >
                     <n-ellipsis 
                       style="
                         max-width: 256px;height: 40px;
