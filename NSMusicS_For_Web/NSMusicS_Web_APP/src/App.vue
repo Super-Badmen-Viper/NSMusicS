@@ -42,7 +42,7 @@
     {label: () => h(RouterLink,{to: {name: 'home',}},{ default: () => '音乐社区' }),key: 'go-Other',icon: renderIcon(PeopleCommunity16Regular)},
   ]
   const collapsed = ref(false)
-  const activeKey = ref<string | null>(null)
+  const menu_select_activeKey = ref<string | null>(null)
 
   import { RouterLink, RouterView } from 'vue-router'
   import Bar_Music_Player from '../src/components/Bar_Music_Player.vue'
@@ -69,15 +69,39 @@
     console.log('player_show_click：'+value)
   }
   const margin_top_value_view_music_player = ref(100);
+  const view_music_player_show = ref(false)
   const get_send_onclick = (value:any) => {
-    margin_top_value_view_music_player.value = value
+    if(value === 0)
+      view_music_player_show.value = true
+    setTimeout(() => {
+      margin_top_value_view_music_player.value = value
+      setTimeout(() => {
+        if(value === 0){
+          theme_app.value = darkTheme
+        }else{
+          theme_app.value = theme.value
+          view_music_player_show.value = false
+        }
+      }, 200);
+    }, 30);
+
     setTimeout(() => {
       if(value === 0){
-        theme_app.value = darkTheme
+        router_select_model_album.value = false;
+        router_select_model_media.value = false;
+        router_select_model_artist.value = false;
+        router_all_app_page.value = false;
       }else{
-        theme_app.value = theme.value
+        if(menu_select_activeKey.value === 'go-albums-list'){
+          router_select_model_album.value = true;
+        }else if(menu_select_activeKey.value === 'go-songs-list'){
+          router_select_model_media.value = true;
+        }else if(menu_select_activeKey.value === 'go-artist-list'){
+          router_select_model_artist.value = true;
+        }
+        router_all_app_page.value = true;
       }
-    }, 200);
+    }, 400);
   }
   ////// open bar musicplaylist
   const isVisible_Music_PlayList = ref(false);
@@ -89,6 +113,18 @@
   ////// System Bind Media Info
   const path = require('path');
   const fs = require('fs');
+  import { Audio_Players } from '../src/models/song_Audio_Out/Audio_Players';
+  const player = ref<Audio_Players>(new Audio_Players());
+  function get_player(value: Audio_Players) {
+    player.value = value
+    console.log('player：'+value)
+  }
+  const currentTime_added_value = ref(0);
+  function get_currentTime_added_value(value: any) {
+    currentTime_added_value.value = value
+    console.log('currentTime_added_value：'+value)
+  }
+  //
   const this_audio_file_path_from_playlist = ref(false);
   const fetchData_This_AlbumOrArtist_PlayMedia_Model = ref<boolean>(false);
   function get_this_audio_file_path_from_playlist (value: any) {
@@ -100,16 +136,59 @@
     this_audio_file_path.value = value
     get_this_audio_refresh(true)
     console.log('this_audio_file_path：'+value)
-
+    //
     if(this_audio_file_path_from_playlist.value === false){
       playlist_Files_temporary.value = [];
       playlist_Files_temporary.value = [...media_Files_temporary.value];
     }
+    //
   }
   function get_this_audio_file_path(value: any) {
     this_audio_file_path.value = value
     console.log('this_audio_file_path：'+value)
   }
+  const this_audio_lyrics_string = ref<string>('')
+  const this_audio_lyrics_info_line = ref<string[]>([])
+  const this_audio_lyrics_info_time = ref<number[]>([])
+  function get_this_audio_lyrics_string(value: any) {
+    this_audio_lyrics_string.value = value
+    // split lyrics
+    this_audio_lyrics_info_line.value = []
+    for (let i = 0; i < 7; i++) {
+      this_audio_lyrics_info_line.value.push('')
+    }
+    this_audio_lyrics_info_time.value = []
+    //
+    let line_all = value.split('\n')
+    let line_times = []
+    for (let i = 0; i < line_all.length; i++) {
+      let line = line_all[i].split(']')
+      if (line.length > 1) {
+        line_times.push(line[0].replace('[', ''))
+        this_audio_lyrics_info_line.value.push(line[1])
+      }
+    }
+    for (let i = 0; i < 7; i++) {
+      this_audio_lyrics_info_line.value.push('')
+    }
+    //
+    for (let i = 0; i < line_times.length; i++) {
+      this_audio_lyrics_info_time.value[i] = convertToMilliseconds(line_times[i]);
+    }
+    //
+    // console.log('this_audio_lyrics：'+value)
+  }
+  const play_go_index_time = ref(0);
+  function get_play_go_index_time(value: any) {
+    play_go_index_time.value = value
+    console.log('get_play_go_index_time：'+value)
+  }
+  function convertToMilliseconds(timeString: { split: (arg0: string) => [any, any] }) {
+    const [minutes, seconds] = timeString.split(':');
+    const totalMilliseconds = (parseInt(minutes) * 60 + parseInt(seconds)) * 1000;
+    return totalMilliseconds;
+  }
+  //////
   const this_audio_file_medium_image_url = ref(path.resolve('resources/error_album.jpg'));
   function get_media_file_medium_image_url(value: any) {
     this_audio_file_medium_image_url.value = value
@@ -298,7 +377,7 @@
     }
 
     try {
-      db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+      db = require('better-sqlite3')(navidrome_db);
       db.pragma('journal_mode = WAL');
 
       // load media_model data
@@ -417,8 +496,10 @@
         '';
       if (find_music_model.value === true){
         keywordFilter = `WHERE album_id = '${page_songlists_keyword.value}'`
+        find_music_model.value = false;
       }else if(find_artist_model.value === true){
         keywordFilter = `WHERE artist_id = '${page_songlists_keyword.value}'`
+        find_artist_model.value = false;
       }else{
         if (page_songlists_get_keyword_model_num.value != 0) {
           if (keywordFilter.length > 0) {
@@ -428,7 +509,7 @@
         }
       }
       const stmt_media_file = db.prepare(`
-        SELECT id, title, artist,artist_id, album,album_id, duration, path 
+        SELECT id, title, artist,artist_id, album,album_id, duration, path ,lyrics
         FROM media_file 
         ${keywordFilter}
         ORDER BY ${sortKey} ${sortOrder}
@@ -560,7 +641,7 @@
     router_select_model_album.value = true;
 
     try {
-      db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+      db = require('better-sqlite3')(navidrome_db);
       db.pragma('journal_mode = WAL');  
 
       // load album_model data
@@ -792,6 +873,7 @@
     if(playlist_Files_temporary.value.length > 0){
       get_this_audio_file_path_from_playlist(false)
       media_file_path(playlist_Files_temporary.value[0].path)
+      get_this_audio_lyrics_string(playlist_Files_temporary.value[0].lyrics)
       get_media_file_medium_image_url(playlist_Files_temporary.value[0].medium_image_url)
       get_this_audio_singer_name(playlist_Files_temporary.value[0].artist)
       get_this_audio_song_name(playlist_Files_temporary.value[0].title)
@@ -855,7 +937,7 @@
     router_select_model_artist.value = true;
 
     try {
-      db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+      db = require('better-sqlite3')(navidrome_db);
       db.pragma('journal_mode = WAL');  
 
       // load artist_model data
@@ -973,17 +1055,6 @@
       let keywordFilter = page_artistlists_keyword.value.length > 0 ?
         `WHERE name LIKE '%${page_artistlists_keyword.value}%' OR external_info_updated_at LIKE '%${page_artistlists_keyword.value}%'` :
         '';
-      // if (find_artist_model.value === true){
-      //   keywordFilter = `WHERE artist_id = '${page_artistlists_keyword.value}'`
-      //   find_artist_model.value = false;
-      // }
-      // else{
-      //   if (page_artistlists_get_keyword_model_num.value != 0) {
-      //     if (keywordFilter.length > 0) {
-      //       keywordFilter = keywordFilter.replace('LIKE', '=').replace(/%/g, '').replace('name', 'id');
-      //     }
-      //   }
-      // }
       const stmt_album_limit_1_imagefiles = db.prepare('SELECT * FROM album LIMIT 1');
       const imagefiles = stmt_album_limit_1_imagefiles.all();
       const stmt_media_file = db.prepare(`SELECT id, title, artist,artist_id, album,album_id, duration, path FROM media_file`);
@@ -1086,6 +1157,7 @@
     if(playlist_Files_temporary.value.length > 0){
       get_this_audio_file_path_from_playlist(false)
       media_file_path(playlist_Files_temporary.value[0].path)
+      get_this_audio_lyrics_string(playlist_Files_temporary.value[0].lyrics)
       get_media_file_medium_image_url(playlist_Files_temporary.value[0].medium_image_url)
       get_this_audio_singer_name(playlist_Files_temporary.value[0].artist)
       get_this_audio_song_name(playlist_Files_temporary.value[0].title)
@@ -1139,7 +1211,7 @@
     find_music_model.value = true
 
     router.push('View_Song_List_ALL')
-    activeKey.value = 'go-songs-list'
+    menu_select_activeKey.value = 'go-songs-list'
   }
   // album -> album(artist)
   function get_album_list_of_artist_id(value: any) {
@@ -1155,10 +1227,10 @@
     // open album_files model，keywords set
     page_albumlists_keyword.value = value
     page_albumlists_get_keyword_model_num.value = 2
-    find_artist_model.value = true
+    find_artist_model.value = false
 
     router.push('View_Album_List_ALL')
-    activeKey.value = 'go-albums-list'
+    menu_select_activeKey.value = 'go-albums-list'
   }
 
 
@@ -1208,6 +1280,7 @@
       }
     }
   });
+  const router_all_app_page = ref<Boolean>(true)
   const router_select_model_media = ref<Boolean>(false)
   const router_select_model_album = ref<Boolean>(false)
   const router_select_model_artist = ref<Boolean>(false)
@@ -1261,8 +1334,10 @@
   //////
   const Show_View_System_List_ALL = () => {
     router.push('View_System_List_ALL')
-    activeKey.value = null
+    menu_select_activeKey.value = null
   }
+  //////
+  let navidrome_db = path.resolve('resources/navidrome.db');
 </script>
 <template>
   <n-config-provider :theme="theme" :locale="locale" :date-locale="dateLocale">
@@ -1279,7 +1354,7 @@
             @collapse="collapsed = true"
             @expand="collapsed = false">
             <n-menu
-              v-model:value="activeKey"
+              v-model:value="menu_select_activeKey"
               :collapsed="collapsed"
               :collapsed-width="64"
               :collapsed-icon-size="22"
@@ -1293,6 +1368,7 @@
               :collapsed="collapsed"
               :window_innerWidth="window_innerWidth"
 
+              @this_audio_lyrics_string="get_this_audio_lyrics_string"
               @media_file_path="media_file_path"
               @media_file_path_from_playlist="get_this_audio_file_path_from_playlist"
               @media_file_medium_image_url="get_media_file_medium_image_url"
@@ -1439,32 +1515,6 @@
             </div>
           </n-layout>
         </n-layout>
-        <!-- <n-layout-footer
-          position="absolute"
-          bordered>
-          <Bar_Music_Player 
-            :this_audio_file_path="this_audio_file_path"
-            @this_audio_file_path="get_this_audio_file_path"
-            :this_audio_file_medium_image_url="this_audio_file_medium_image_url"
-            @this_audio_file_medium_image_url="get_media_file_medium_image_url"
-            :this_audio_refresh="this_audio_refresh"
-            @this_audio_refresh="get_this_audio_refresh"
-            :this_audio_singer_name="this_audio_singer_name"
-            @this_audio_singer_name="get_this_audio_singer_name"
-            :this_audio_song_name="this_audio_song_name"
-            @this_audio_song_name="get_this_audio_song_name"
-            :this_audio_album_id="this_audio_album_id"
-            @this_audio_album_id="get_this_audio_album_id"
-            :this_audio_album_name="this_audio_album_name"
-            @this_audio_album_name="get_this_audio_album_name"
-
-            :playlist_Files_temporary="playlist_Files_temporary"
-
-            @player_show_height="get_send_onclick"
-            @isVisible_Music_PlayList="get_isVisible_Music_PlayList"/>
-          
-            
-        </n-layout-footer> -->
       </n-space>
       <n-drawer 
         v-model:show="isVisible_Music_PlayList" 
@@ -1475,6 +1525,7 @@
             <Bar_Music_PlayList
               v-if="isVisible_Music_PlayList"
 
+              @this_audio_lyrics_string="get_this_audio_lyrics_string"
               @media_file_path="media_file_path"
               @media_file_path_from_playlist="get_this_audio_file_path_from_playlist"
               @media_file_medium_image_url="get_media_file_medium_image_url"
@@ -1510,6 +1561,13 @@
         z-index: 100;
         border-radius: 12px 12px 0px 0px;border: 0px #00000000">
       <Bar_Music_Player 
+        :player="player"
+        @player="get_player"
+        @currentTime_added_value="get_currentTime_added_value"
+        :play_go_index_time="play_go_index_time"
+
+        @this_audio_lyrics_string="get_this_audio_lyrics_string"
+
         :this_audio_file_path="this_audio_file_path"
         @this_audio_file_path="get_this_audio_file_path"
         :this_audio_file_medium_image_url="this_audio_file_medium_image_url"
@@ -1534,7 +1592,16 @@
     </n-card>
     <View_Screen_Music_Player 
       class="view_music_player"
+      v-if="view_music_player_show"
       :style="{ height: `calc(100vh - ${margin_top_value_view_music_player}vh)` }"
+      
+      :player="player"
+      :currentTime_added_value="currentTime_added_value"
+      @play_go_index_time="get_play_go_index_time"
+
+      :this_audio_lyrics_string="this_audio_lyrics_string"
+      :this_audio_lyrics_info_line="this_audio_lyrics_info_line"
+      :this_audio_lyrics_info_time="this_audio_lyrics_info_time"
       
       :this_audio_file_path="this_audio_file_path"
       :this_audio_file_medium_image_url="this_audio_file_medium_image_url"

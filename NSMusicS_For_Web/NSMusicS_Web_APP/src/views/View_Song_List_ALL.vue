@@ -55,7 +55,8 @@ const emit = defineEmits([
   'media_Files_selected',
   'media_Files_selected_set',
   'media_Files_selected_set_all',
-  'page_songlists_selected'
+  'page_songlists_selected',
+  'this_audio_lyrics_string'
 ]);
 function get_media_path(value: any) {
   emit('media_file_path',value)
@@ -104,6 +105,9 @@ function set_media_Files_selected_all(value: boolean) {
 }
 function set_page_songlists_selected(value: boolean) {
   emit('page_songlists_selected',value)
+}
+function get_this_audio_lyrics_string(value: string) {
+  emit('this_audio_lyrics_string',value)
 }
 onMounted(async () => {
   emit('router_select','View_Song_List_ALL')
@@ -155,6 +159,8 @@ const {
       @media_Files_selected_set_all="set_media_Files_selected_all"
       :collapsed="collapsed"
       :window_innerWidth="window_innerWidth"
+
+      @this_audio_lyrics_string="get_this_audio_lyrics_string"
       @media_file_path="get_media_path" 
       @media_file_path_from_playlist="get_media_file_path_from_playlist"
       @media_file_medium_image_url="get_media_file_medium_image_url"

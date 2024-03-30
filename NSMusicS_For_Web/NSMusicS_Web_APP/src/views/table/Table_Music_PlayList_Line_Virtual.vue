@@ -18,7 +18,8 @@ const emit = defineEmits([
   'page_songlists_reset_data',
   'playlist_Files_selected_set',
   'playlist_Files_selected_set_all',
-  'page_songlists_selected'
+  'page_songlists_selected',
+  'this_audio_lyrics_string'
 ]);
 const props = defineProps<{
   data_temporary: Media_File[];data_temporary_selected: Media_File[];
@@ -128,6 +129,7 @@ const handleItemDbClick = (media_file:Media_File) => {
 
       emit('media_file_path_from_playlist',true)
       emit('media_file_path', media_file.path)
+      emit('this_audio_lyrics_string', media_file.lyrics)
       emit('media_file_medium_image_url',media_file.medium_image_url)
       emit('this_audio_singer_name',media_file.artist)
       emit('this_audio_song_name',media_file.title)
