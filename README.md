@@ -25,7 +25,7 @@
   - [Dashboard For NSMusicS_Web](https://github.com/users/Super-Badmen-Viper/projects/4)
 
 # Interface preview:
-  ## NSMusicS Web(Electron)：
+  ## NSMusicS Web(Electron)：Under development
   ![bandicam 2024-03-31 20-00-07-710](https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/fad7e26f-c364-4a05-b238-1915042e9f07)
     <table>
       <tr>
@@ -33,7 +33,7 @@
         <td><img src="doc/Web (1).png" width="594"></td>
       </tr>
     </table>
-  ## NSMusicS WPF：
+  ## NSMusicS .NET(WPF)：Development completed
   ![bandicam 2024-01-14 19-59-29-810~1](https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/3e6d1ca7-2a6b-440a-8e01-338c617a281d)
   <table>
     <tr>
