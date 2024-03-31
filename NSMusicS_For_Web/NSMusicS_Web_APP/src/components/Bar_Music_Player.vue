@@ -69,7 +69,7 @@
       musicplayer_background_color.value === 
         '#FFFFFF'?'#FFFFFFE5':'#FFFFFF';
   };
-  watch(() => props.player_show_click, (newValue, oldValue) => {
+  let unwatch_player_show_click = watch(() => props.player_show_click, (newValue, oldValue) => {
     if (newValue === true) {
       margin_top_value_view_music_player.value = 670;
       emit('player_show_height',margin_top_value_view_music_player.value)
@@ -90,7 +90,7 @@
   const current_play_time = ref('01:36');
   const slider_singleValue = ref(0)
   const currentTime_added_value = ref(0)
-  watch(() => currentTime_added_value.value, (newValue, oldValue) => {
+  let unwatch_currentTime_added_value = watch(() => currentTime_added_value.value, (newValue, oldValue) => {
     emit('currentTime_added_value',newValue);
   });
   const player_no_progress_jump = ref(true)
@@ -103,7 +103,7 @@
   // audio player
   const timer_this_audio_refresh = ref<NodeJS.Timeout>();
   const lastTriggerValue = ref<any>(null);// 延迟触发：接收大量数据时，仅触发最后一个值
-  watch(() => props.this_audio_refresh, (newValue, oldValue) => {
+  let unwatch_this_audio_refresh = watch(() => props.this_audio_refresh, (newValue, oldValue) => {
     if (newValue === true) {
       lastTriggerValue.value = newValue; // 更新最后一个触发的值
       clearTimeout(timer_this_audio_refresh.value);
@@ -133,7 +133,7 @@
   const is_play_ended = ref(false);
   const buffer_init = ref(false);
   const timer_this_audio_player = ref<NodeJS.Timeout>();// 延迟触发：接收大量数据时，仅触发最后一个值
-  watch(() => this_audio_buffer_file.value, (newValue, oldValue) => {
+  let unwatch_this_audio_buffer_file =  watch(() => this_audio_buffer_file.value, (newValue, oldValue) => {
     if (newValue !== oldValue) {
       clearTimeout(timer_this_audio_player.value);
       timer_this_audio_player.value = setTimeout(() => {
@@ -193,7 +193,6 @@
       if(this_audio_buffer_file.value === null){
         buffer_init.value = true;
         this_audio_buffer_file.value = await ipcRenderer.invoke('readFile', props.this_audio_file_path);
-        // watch(() => this_audio_buffer_file.value, (newValue, oldValue) =>
       }else{
         props.player.resume();
       }
@@ -350,7 +349,7 @@
   const player_range_duration_handleclick = async () => {
     play_go_duration(slider_singleValue.value,true);
   }
-  watch(() => props.play_go_index_time, (newValue, oldValue) => {
+  let unwatch_play_go_index_time =  watch(() => props.play_go_index_time, (newValue, oldValue) => {
     play_go_duration(props.play_go_index_time,false)
   });
   const play_go_duration = (silder_value:number,silder_path:boolean) => {
@@ -427,7 +426,7 @@
       slider_volume_show.value = true;
     }
   }
-  watch(
+  let unwatch_slider_volume_value = watch(
     slider_volume_value,
     (newValue, oldValue) => {
       props.player.setVolume(newValue ? Number(slider_volume_value.value) : 0);
@@ -484,6 +483,18 @@
     emit('isVisible_Music_PlayList',true);
   }
 
+  import { onBeforeUnmount } from 'vue';
+  onBeforeUnmount(() => {
+    clearInterval(timer);
+  });
+  onBeforeUnmount(() => {
+    unwatch_player_show_click()
+    unwatch_currentTime_added_value()
+    unwatch_this_audio_refresh()
+    unwatch_this_audio_buffer_file()
+    unwatch_play_go_index_time()
+    unwatch_slider_volume_value()
+  });
   import {
     Heart24Regular,
     Video16Regular,
@@ -505,7 +516,7 @@
   import {
     Random
   } from '@vicons/fa'
-import { NIcon } from 'naive-ui';
+  import { NIcon } from 'naive-ui';
 </script>
 
 <template>

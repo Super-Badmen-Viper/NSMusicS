@@ -85,23 +85,23 @@
       }, 200);
     }, 30);
 
-    setTimeout(() => {
-      if(value === 0){
-        router_select_model_album.value = false;
-        router_select_model_media.value = false;
-        router_select_model_artist.value = false;
-        router_all_app_page.value = false;
-      }else{
-        if(menu_select_activeKey.value === 'go-albums-list'){
-          router_select_model_album.value = true;
-        }else if(menu_select_activeKey.value === 'go-songs-list'){
-          router_select_model_media.value = true;
-        }else if(menu_select_activeKey.value === 'go-artist-list'){
-          router_select_model_artist.value = true;
-        }
-        router_all_app_page.value = true;
-      }
-    }, 400);
+    // setTimeout(() => {
+    //   if(value === 0){
+    //     router_select_model_album.value = false;
+    //     router_select_model_media.value = false;
+    //     router_select_model_artist.value = false;
+    //     router_all_app_page.value = false;
+    //   }else{
+    //     if(menu_select_activeKey.value === 'go-albums-list'){
+    //       router_select_model_album.value = true;
+    //     }else if(menu_select_activeKey.value === 'go-songs-list'){
+    //       router_select_model_media.value = true;
+    //     }else if(menu_select_activeKey.value === 'go-artist-list'){
+    //       router_select_model_artist.value = true;
+    //     }
+    //     router_all_app_page.value = true;
+    //   }
+    // }, 400);
   }
   ////// open bar musicplaylist
   const isVisible_Music_PlayList = ref(false);
@@ -1676,5 +1676,9 @@
       padding: 1rem 0;
       margin-top: 1rem;
     }
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 </style>

@@ -1,5 +1,6 @@
 import { app, BrowserWindow,dialog, Menu  } from 'electron'
 import { readFileSync } from 'fs';
+import { createReadStream } from 'fs';
 import path from 'path';
 
 app.commandLine.appendSwitch('disable-http-cache');
@@ -42,9 +43,9 @@ async function createWindow() {
         win.loadFile('index.html')
     }
     // Open the DevTools.
-    win.webContents.openDevTools({
-        mode:'bottom'
-    });
+    // win.webContents.openDevTools({
+    //     mode:'bottom'
+    // });
 
     const electron = require('electron')
     const ipc = electron.ipcMain
@@ -65,7 +66,10 @@ async function createWindow() {
     })
     
     ipc.handle('readFile', async (event, filePath) => {
-        return readFileSync(filePath);
+        return readFileSync(filePath); // read all btyes
+    });
+    ipc.handle('readFileStream', async (event, filePath) => {
+        return createReadStream(filePath);// read stream bytes
     });
 
     const { app } = require('electron');

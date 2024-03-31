@@ -22,7 +22,7 @@
   };
 
   ////// lyircs load
-  watch(() => props.this_audio_lyrics_string, (value) => {
+  let unwatch = watch(() => props.this_audio_lyrics_string, (value) => {
     load_lyrics()
   });
   onMounted(() => {
@@ -133,7 +133,7 @@
   };
   const scrollToTop = () => {
     if (scrollbar.value !== null) {
-      scrollToItem(0);
+      scrollToItem(7);
     }
   };
   const lyrics_list_whell = ref(false);
@@ -159,6 +159,13 @@
     emits('player_show_click', true);
   }
 
+  import { onBeforeUnmount } from 'vue';
+  onBeforeUnmount(() => {
+    clearInterval(lyrics_animation);
+  });
+  onBeforeUnmount(() => {
+    unwatch();
+  });
   import {
     Home28Regular,
     Flag16Regular,

@@ -78,6 +78,11 @@ export class Audio_Players {
         if(audioBuffer_clear){
             this.audioBuffer = null;//手动清空
         }
+
+        if (this.audioContext) {
+            this.audioContext.close();
+            // this.audioContext = {} as AudioContext;
+        }
     }
     private stop(): void {
         if (this.bufferSourceNode) {
