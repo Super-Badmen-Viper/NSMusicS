@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "electron": "^28.1.4",
+    "electron-builder": "^24.9.1"
+  },
+  "dependencies": {
+    "vue-router": "^4.2.5"
+  }
+}
