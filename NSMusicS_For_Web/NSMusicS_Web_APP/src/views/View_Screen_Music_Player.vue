@@ -133,7 +133,7 @@
   };
   const scrollToTop = () => {
     if (scrollbar.value !== null) {
-      scrollToItem(7);
+      scrollToItem(0);
     }
   };
   const lyrics_list_whell = ref(false);
@@ -288,20 +288,6 @@
                 width: 40vw;height: calc(100vh - 180px);
                 border-radius: 20px
               ">
-              <!-- <n-virtual-list
-                class="table" ref="virtualListInst"
-                style="max-height: 1040px"
-                :item-size="42"
-                :items="props.this_audio_lyrics_info_line"
-                item-resizable>
-                <template #default="{ item, index }">
-                  <div :key="item.key" class="lyrics_info" style="border: 0px solid #00000000;" @click="handleItemDbClick(index)">
-                    <div class="lyrics_text_active">
-                      {{ item }}
-                    </div>
-                  </div>
-                </template>
-              </n-virtual-list> -->
               <n-list
                 clickable :show-divider="false"
                 class="table" ref="scrollbar"
@@ -388,7 +374,7 @@
 }
 .lyrics_text_active {
   max-width: calc(36vw);
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 800;
   padding-left: 20px;padding-top: 0px;padding-bottom: 4px;
 }

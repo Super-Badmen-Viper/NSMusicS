@@ -1,8 +1,14 @@
 interface Router_date {
-    key:string;
+    id: number;
 
-    name:string;
+    menu_select_active_key:string;
+    router_name:string;
 
-    bool_show_search_area:boolean;
-    keyword:string;
+    router_select_model_media:boolean;
+    router_select_model_album:boolean;
+    router_select_model_artist:boolean;
+
+    page_lists_keyword:string;
+
+    stmt_string:string;
 }

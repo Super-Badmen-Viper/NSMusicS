@@ -79,10 +79,10 @@ export class Audio_Players {
             this.audioBuffer = null;//手动清空
         }
 
-        if (this.audioContext) {
-            this.audioContext.close();
-            // this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-        }
+        // if (this.audioContext) {
+        //     this.audioContext.close();
+        //     // this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+        // }
     }
     private stop(): void {
         if (this.bufferSourceNode) {

@@ -20,7 +20,8 @@ const emit = defineEmits([
   'media_Files_selected_set',
   'media_Files_selected_set_all',
   'page_songlists_selected',
-  'this_audio_lyrics_string'
+  'this_audio_lyrics_string',
+  'router_history_model',
 ]);
 const columns = ref<DataTableColumns<RowData>>();
 const createColumns_normal = (): DataTableColumns<RowData> => [
@@ -171,6 +172,8 @@ const props = defineProps<{
   collapsed: Boolean;
   window_innerWidth: number;
   options_Sort_key:{ columnKey: string; order: string }[];
+
+  router_select_history_date: Router_date;router_history_datas: Router_date[];
 }>();
 onBeforeUnmount(() => {
   
@@ -559,6 +562,12 @@ const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any
   updateParts.visibleStartIdx = visibleStartIndex
   updateParts.visibleEndIdx = visibleEndIndex
 }
+const get_router_history_model_pervious = () => {
+  emit('router_history_model',-1)
+}
+const get_router_history_model_next = () =>  {
+  emit('router_history_model',1)
+}
 
 import {
   AddCircle32Regular,
@@ -590,12 +599,15 @@ function getAssetImage(firstImage: string) {
 <template>
   <n-space vertical :size="12">
     <n-space>
-      <n-button tertiary circle>
+      <n-button tertiary circle @click="get_router_history_model_pervious">
         <template #icon>
           <n-icon :size="20"><ChevronLeft16Filled/></n-icon>
         </template>
       </n-button>
-      <n-button tertiary circle>
+      <div style="margin-top: 4px;">
+        {{ props.router_select_history_date?.id ?? '' }} / {{ props.router_history_datas?.length ?? '' }}
+      </div>
+      <n-button tertiary circle @click="get_router_history_model_next">
         <template #icon>
           <n-icon :size="20"><ChevronRight16Filled/></n-icon>
         </template>
@@ -673,7 +685,7 @@ function getAssetImage(firstImage: string) {
                 position: absolute;
                 z-index: 0;
                 height: 298px;
-                border-radius: 20px;
+                border-radius: 10px;
                 overflow: hidden;
                 background-size: cover;
                 background-position: center;
@@ -698,7 +710,7 @@ function getAssetImage(firstImage: string) {
                 position: absolute;
                 z-index: 0;
                 height: 300px;
-                border-radius: 20px;
+                border-radius: 10px;
                 overflow: hidden;">
               <svg 
                 style="
@@ -728,7 +740,7 @@ function getAssetImage(firstImage: string) {
                 position: relative;
                 z-index: 1;
                 width: calc(100vw - 220px);height: 300px;
-                border-radius: 20px;
+                border-radius: 10px;
                 margin-bottom: 10px;">
               <n-grid 
                 :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled

@@ -586,10 +586,10 @@
             </template>
           </n-button>
           <n-button quaternary round size="small" @click="backpanel_voice_click">
-            <template #icon>
-              <n-icon :size="26"><VolumeMedium/></n-icon>
-            </template>
-          </n-button>
+              <template #icon>
+                <n-icon :size="26"><VolumeMedium/></n-icon>
+              </template>
+            </n-button>
         </n-space>
         <div>
           <n-slider 

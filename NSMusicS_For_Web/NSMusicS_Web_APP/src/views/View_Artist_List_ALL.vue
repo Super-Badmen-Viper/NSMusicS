@@ -9,7 +9,8 @@ const emit = defineEmits([
   'page_artistlists_options_Sort_key','page_artistlists_keyword',
   'page_artistlists_selected','page_artistlists_reset_data',
   'album_list_of_artist_id_artist',
-  'play_this_artist_song_list'
+  'play_this_artist_song_list',
+  'router_history_model',
 ]);
 function get_artist_page_num(value: any) {
   emit('artist_page_num',value)
@@ -38,6 +39,9 @@ function get_album_list_of_artist_id_artist(value: any) {
 function get_play_this_artist_song_list(value: any) {
   emit('play_this_artist_song_list',value)
 }
+function get_router_history_model(value: string) {
+  emit('router_history_model',value)
+}
 onMounted(async () => {
   emit('router_select','View_Artist_List_ALL')
 });
@@ -53,7 +57,10 @@ const {
   page_artistlists_keyword,
 
   page_artistlists_options_Sort_key,
-  artist_Files_temporary,} = defineProps<{
+  artist_Files_temporary,
+
+  router_select_history_date,router_history_datas,
+} = defineProps<{
   collapsed:boolean,
   window_innerWidth:number,
 
@@ -64,13 +71,20 @@ const {
   page_artistlists_keyword:string;
 
   page_artistlists_options_Sort_key:{ columnKey: string; order: string }[],
-  artist_Files_temporary:Artist[],}>();
+  artist_Files_temporary:Artist[],
+  
+  router_select_history_date:Router_date,router_history_datas:Router_date[]
+  }>();
 </script>
 
 <template>
   <div class="view_show">
     <Table_Artist_List_ALL
       :data_temporary="artist_Files_temporary"
+
+      @router_history_model="get_router_history_model"
+      :router_select_history_date="router_select_history_date"
+      :router_history_datas="router_history_datas"
 
       :change_page_header_color="change_page_header_color"
       :page_artistlists_top_artist_image_url="page_artistlists_top_artist_image_url"

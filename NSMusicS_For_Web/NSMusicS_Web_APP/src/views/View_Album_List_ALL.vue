@@ -9,6 +9,7 @@ const emit = defineEmits([
   'page_albumlists_selected',
   'media_list_of_album_id',
   'play_this_album_song_list',
+  'router_history_model',
 ]);
 function get_album_PageSize(value: any) {
   emit('album_page_size',value)
@@ -34,6 +35,9 @@ function page_albumlists_get_reset_data(value: any) {
 function get_play_this_album_song_list(value: any) {
   emit('play_this_album_song_list',value)
 }
+function get_router_history_model(value: string) {
+  emit('router_history_model',value)
+}
 onMounted(async () => {
   emit('router_select','View_Album_List_ALL')
 });
@@ -46,7 +50,10 @@ const {
   page_albumlists,page_albumlists_options,page_albumlists_statistic,
   page_albumlists_selected,
 
-  page_albumlists_options_Sort_key,page_albumlists_keyword} = defineProps<{
+  page_albumlists_options_Sort_key,page_albumlists_keyword,
+
+  router_select_history_date,router_history_datas,
+} = defineProps<{
   collapsed:boolean,
   window_innerWidth:number,
 
@@ -55,13 +62,20 @@ const {
   page_albumlists_selected:string;
 
   page_albumlists_options_Sort_key:{ columnKey: string; order: string }[],
-  album_Files_temporary:Album[],page_albumlists_keyword:string}>();
+  album_Files_temporary:Album[],page_albumlists_keyword:string,
+  
+  router_select_history_date:Router_date,router_history_datas:Router_date[]
+  }>();
 </script>
 
 <template>
   <div class="view_show">
     <Table_Album_List_ALL
       :data_temporary="album_Files_temporary"
+
+      @router_history_model="get_router_history_model"
+      :router_select_history_date="router_select_history_date"
+      :router_history_datas="router_history_datas"
 
       :change_page_header_color="change_page_header_color"
       :page_albumlists_top_album_image_url="page_albumlists_top_album_image_url"

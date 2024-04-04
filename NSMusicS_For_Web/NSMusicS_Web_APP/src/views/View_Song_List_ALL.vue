@@ -56,7 +56,8 @@ const emit = defineEmits([
   'media_Files_selected_set',
   'media_Files_selected_set_all',
   'page_songlists_selected',
-  'this_audio_lyrics_string'
+  'this_audio_lyrics_string',
+  'router_history_model',
 ]);
 function get_media_path(value: any) {
   emit('media_file_path',value)
@@ -109,6 +110,9 @@ function set_page_songlists_selected(value: boolean) {
 function get_this_audio_lyrics_string(value: string) {
   emit('this_audio_lyrics_string',value)
 }
+function get_router_history_model(value: string) {
+  emit('router_history_model',value)
+}
 onMounted(async () => {
   emit('router_select','View_Song_List_ALL')
 });
@@ -124,6 +128,8 @@ const {
 
   media_Files_temporary,media_Files_selected,
   page_songlists_options_Sort_key,
+
+  router_select_history_date,router_history_datas,
   } = defineProps<{
     collapsed:Boolean,window_innerWidth:number,
 
@@ -135,6 +141,8 @@ const {
     
     media_Files_temporary:Media_File[],media_Files_selected:Media_File[],
     page_songlists_options_Sort_key:{ columnKey: string; order: string }[],
+
+    router_select_history_date:Router_date,router_history_datas:Router_date[]
   }>();
 </script>
 
@@ -143,6 +151,10 @@ const {
     <Table_Song_List
       :data_temporary="media_Files_temporary"
       :data_temporary_selected="media_Files_selected"
+
+      @router_history_model="get_router_history_model"
+      :router_select_history_date="router_select_history_date"
+      :router_history_datas="router_history_datas"
 
       :change_page_header_color="change_page_header_color"
       :page_songlists_top_album_image_url="page_songlists_top_album_image_url"

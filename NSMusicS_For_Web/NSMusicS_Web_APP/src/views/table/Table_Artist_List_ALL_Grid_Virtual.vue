@@ -6,7 +6,8 @@
     'options_Sort_key','page_artistlists_keyword','page_artistlists_reset_data',
     'page_artistlists_selected',
     'album_list_of_artist_id_artist',
-    'play_this_artist_song_list'
+    'play_this_artist_song_list',
+    'router_history_model',
   ]);
   const props = defineProps<{
     data_temporary: Artist[];
@@ -20,6 +21,8 @@
     collapsed: Boolean;
     window_innerWidth: number;
     options_Sort_key:{ columnKey: string; order: string }[];
+
+    router_select_history_date: Router_date;router_history_datas: Router_date[];
   }>();
   //
   const bool_start_play = ref<boolean>(true)
@@ -304,6 +307,13 @@
       return new URL(firstImage, import.meta.url).href;
   }
 
+  const get_router_history_model_pervious = () => {
+    emit('router_history_model',-1)
+  }
+  const get_router_history_model_next = () =>  {
+    emit('router_history_model',1)
+  }
+
   import {
     Play16Filled,
     MoreCircle32Regular
@@ -328,12 +338,15 @@
 <template>
   <n-space vertical :size="12">
     <n-space>
-      <n-button tertiary circle>
+      <n-button tertiary circle @click="get_router_history_model_pervious">
         <template #icon>
           <n-icon :size="20"><ChevronLeft16Filled/></n-icon>
         </template>
       </n-button>
-      <n-button tertiary circle>
+      <div style="margin-top: 4px;">
+        {{ props.router_select_history_date?.id ?? '' }} / {{ props.router_history_datas?.length ?? '' }}
+      </div>
+      <n-button tertiary circle @click="get_router_history_model_next">
         <template #icon>
           <n-icon :size="20"><ChevronRight16Filled/></n-icon>
         </template>
@@ -385,7 +398,7 @@
                 position: absolute;
                 z-index: 0;
                 height: 298px;
-                border-radius: 20px;
+                border-radius: 10px;
                 overflow: hidden;
                 background-size: cover;
                 background-position: center;
@@ -407,7 +420,7 @@
               position: absolute;
               z-index: 0;
               width: calc(100vw - 220px);height: 300px;
-              border-radius: 20px;
+              border-radius: 10px;
               overflow: hidden;">
               <svg 
                 style="
@@ -438,7 +451,7 @@
                 position: relative;
                 z-index: 1;
                 width: calc(100vw - 220px);height: 300px;
-                border-radius: 20px;
+                border-radius: 10px;
                 margin-bottom: 10px;">
               <n-grid 
                 :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
