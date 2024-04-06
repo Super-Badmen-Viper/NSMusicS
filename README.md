@@ -1,15 +1,17 @@
-<br />
-<p align="center">
-  <a href="https://github.com/Super-Badmen-Viper/NSMusicS" target="blank">
-    <img src="https://github.com/Super-Badmen-Viper/NSMusicS/blob/main/NSMusicS/bin/Debug/net8.0-windows7.0/Resources/NSMusicS.png" alt="Logo" width="156" height="156">
-  </a>
-  <h2 align="center" style="font-weight: 600">NSMusicS</h2>
-  <p align="center">
-    A local music software that is expected to support multiple platforms with AI capabilities and multimodal features.<br>
-    You can use software like MusicTag to embed album covers and lyrics into your local music files (mp3, etc.), and NSMusicS can perfectly read them
-</div>  
-  </p>
-</p>
+<div style="display: flex; align-items: center;">
+    <img src="https://github.com/Super-Badmen-Viper/NSMusicS/blob/main/NSMusicS/bin/Debug/net8.0-windows7.0/Resources/NSMusicS.png" alt="Logo" width="156" height="156" style="margin-right: 20px;">
+    <div>
+        <h2>NSMusicS</h2>
+        <p>
+            A local music software that is expected to support multiple platforms with AI capabilities and multimodal features.<br>
+        </p>
+        <p>
+            The goal of NSMusicS is to integrate various functions (such as artificial intelligence, streaming, music library management, cross platform, etc.), which can be understood as similar to Navidrome but with more features than Navidrome. It wants to become a plugin integrated application that can almost have all music functions.
+        </p>
+    </div>
+</div>
+
+
 
 # Version：
 | Project   | Development status | Technology Framework     | Author/Copyright Owner | Operating systems         | LICENSE          |  Software positioning |
