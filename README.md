@@ -1,15 +1,17 @@
-<br />
-<p align="center">
-  <a href="https://github.com/Super-Badmen-Viper/NSMusicS" target="blank">
-    <img src="https://github.com/Super-Badmen-Viper/NSMusicS/blob/main/NSMusicS/bin/Debug/net8.0-windows7.0/Resources/NSMusicS.png" alt="Logo" width="156" height="156">
-  </a>
-  <h2 align="center" style="font-weight: 600">NSMusicS</h2>
-  <p align="center">
-    A local music software that is expected to support multiple platforms with AI capabilities and multimodal features.<br>
-    You can use software like MusicTag to embed album covers and lyrics into your local music files (mp3, etc.), and NSMusicS can perfectly read them
-</div>  
-  </p>
-</p>
+<div style="display: flex; align-items: center;">
+    <img src="https://github.com/Super-Badmen-Viper/NSMusicS/blob/main/NSMusicS/bin/Debug/net8.0-windows7.0/Resources/NSMusicS.png" alt="Logo" width="156" height="156" style="margin-right: 20px;">
+    <div>
+        <h2>NSMusicS</h2>
+        <p>
+            A local music software that is expected to support multiple platforms with AI capabilities and multimodal features.<br>
+        </p>
+        <p>
+            The goal of NSMusicS is to integrate various functions (such as artificial intelligence, streaming, music library management, cross platform, etc.), which can be understood as similar to Navidrome but with more features than Navidrome. It wants to become a plugin integrated application that can almost have all music functions.
+        </p>
+    </div>
+</div>
+
+
 
 # Version：
 | Project   | Development status | Technology Framework     | Author/Copyright Owner | Operating systems         | LICENSE          |  Software positioning |
@@ -41,6 +43,9 @@
       <td><img src="doc/Test (3).png" width="594"></td>
     </tr>
   </table>
+
+# Author's Message
+ - As this project is currently independently developed by Xiang Cheng(myself), programming standards are a personal habit of the Xiang Cheng(myself), and coding standards are not yet standardized enough. However, this project will continue to undergo self refactoring and reverse development. It can be affirmed that in the future, NSMusicS will form a standard coding specification, which will be beneficial for the community to develop third-party NSMusicS plugins, Enable NSMusicS to meet the diverse needs of more potential customers，Most importantly, NSMusicS will always be open source and continuously updated
 
 # Related projects:(Thanks)
 - NSMusicS Web Of Thanks：
