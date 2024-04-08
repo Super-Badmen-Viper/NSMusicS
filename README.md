@@ -44,6 +44,9 @@
     </tr>
   </table>
 
+# Author's Message
+ - As this project is currently independently developed by Xiang Cheng(myself), programming standards are a personal habit of the Xiang Cheng(myself), and coding standards are not yet standardized enough. However, this project will continue to undergo self refactoring and reverse development. It can be affirmed that in the future, NSMusicS will form a standard coding specification, which will be beneficial for the community to develop third-party NSMusicS plugins, Enable NSMusicS to meet the diverse needs of more potential customers，Most importantly, NSMusicS will always be open source and continuously updated
+
 # Related projects:(Thanks)
 - NSMusicS Web Of Thanks：
   - [Electron](https://github.com/electron/electron)
