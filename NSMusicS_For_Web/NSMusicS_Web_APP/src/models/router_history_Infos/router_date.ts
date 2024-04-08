@@ -11,4 +11,6 @@ interface Router_date {
     page_lists_keyword:string;
 
     stmt_string:string;
+
+    page_lists_selected:string;
 }
