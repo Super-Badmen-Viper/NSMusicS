@@ -58,6 +58,3 @@
   - [cscore](https://github.com/filoe/cscore)
   - [LottieSharp](https://github.com/quicoli/LottieSharp)
   - [AudioVisualizer](https://github.com/SlimeNull/AudioVisualizer)
-
-# Sponsorship (WeChat/Alipay):
-  <img src="doc/Test (4).png" align="center" width="400">
