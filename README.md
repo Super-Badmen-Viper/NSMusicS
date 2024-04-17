@@ -1,5 +1,5 @@
+![Frame](https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/97cd54e8-e0e4-4671-8a93-93cc94f74a91)
 <div style="display: flex; align-items: center;">
-    <img src="https://github.com/Super-Badmen-Viper/NSMusicS/blob/main/NSMusicS/bin/Debug/net8.0-windows7.0/Resources/NSMusicS.png" alt="Logo" width="156" height="156" style="margin-right: 20px;">
     <div>
         <h2>NSMusicS</h2>
         <p>
@@ -58,6 +58,3 @@
   - [cscore](https://github.com/filoe/cscore)
   - [LottieSharp](https://github.com/quicoli/LottieSharp)
   - [AudioVisualizer](https://github.com/SlimeNull/AudioVisualizer)
-
-# Sponsorship (WeChat/Alipay):
-  <img src="doc/Test (4).png" align="center" width="400">
