@@ -1,7 +1,10 @@
 import { app, BrowserWindow,dialog, Menu  } from 'electron'
 import { readFileSync } from 'fs';
 import { createReadStream } from 'fs';
-import path from 'path';
+import { promisify } from 'util';
+const { Readable } = require('stream');
+const fs = require('fs');
+
 
 app.commandLine.appendSwitch('disable-http-cache');
 Menu.setApplicationMenu(null)
@@ -68,9 +71,35 @@ async function createWindow() {
     ipc.handle('readFile', async (event, filePath) => {
         return readFileSync(filePath); // read all btyes
     });
-    ipc.handle('readFileStream', async (event, filePath) => {
-        return createReadStream(filePath);// read stream bytes
+    ipc.handle('readFile_Stream', async (event, filePath) => {
+        const readFileAsync = promisify(createReadStream)
+        return readFileAsync(filePath, 'utf-8');// read stream bytes
     });
+    //
+    const createReadStreamAsync = promisify(fs.createReadStream);
+    ipc.handle('readFileStream', async (event, filePath) => {
+        // 创建可读流
+        const readStream = createReadStreamAsync(filePath);
+        // 创建一个Promise来将流中的数据转换为Buffer，并检查是否还有更多数据可用
+        const bufferPromise = new Promise((resolve, reject) => {
+            const chunks: any[] = [];
+            readStream.on('data', (chunk: any) => {
+                chunks.push(chunk);
+            });
+            readStream.on('end', () => {
+                // 将所有chunk连接起来，并创建一个Buffer
+                const buffer = Buffer.concat(chunks);
+                resolve({ buffer, hasMoreData: false });
+            });
+            readStream.on('error', (err: any) => {
+                reject(err);
+            });
+        });
+        // 等待Promise完成，返回结果对象
+        return bufferPromise;
+    });
+    
+
 
     const { app } = require('electron');
     const appPath = app.getAppPath();

@@ -184,7 +184,7 @@ function getAssetImage(firstImage: string) {
 
 <template>
   <n-space vertical :size="12">
-    <n-space>
+    <n-space v-if="false">
       <n-button tertiary circle @click="click_bulk_operation">
         <template #icon>
           <n-icon :size="20"><MultiselectLtr20Filled/></n-icon>
@@ -287,10 +287,6 @@ function getAssetImage(firstImage: string) {
   overflow: auto;
   display: flex;
   flex-direction: column;
-}
-.table_playlist {
-  width: 430px;
-  overflow-x:hidden;
 }
 .message {
   display: flex;

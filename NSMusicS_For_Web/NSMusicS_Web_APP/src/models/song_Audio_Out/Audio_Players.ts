@@ -50,7 +50,7 @@ export class Audio_Players {
             this.audioBuffer = await this.getAudioBuffer(buffer.buffer, this.audioContext);
             this.audioDuration = this.audioBuffer.duration;    
         }
-
+        
         this.bufferSourceNode = this.audioContext.createBufferSource();
         this.volumeGainNode = this.audioContext.createGain();
         this.fadeGainNode = this.audioContext.createGain();
@@ -78,11 +78,10 @@ export class Audio_Players {
         if(audioBuffer_clear){
             this.audioBuffer = null;//手动清空
         }
-
-        // if (this.audioContext) {
-        //     this.audioContext.close();
-        //     // this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-        // }
+        if (this.audioContext) {
+            if(this.audioContext.state === 'running')
+                this.audioContext.close();
+        }
     }
     private stop(): void {
         if (this.bufferSourceNode) {
@@ -177,59 +176,67 @@ export class Audio_Players {
         }
     }
     
-    
-    
     public getTotalTime(): number {
         return this.audioDuration;
     }
     
-    private eqNodes: BiquadFilterNode[] = [];
+    private chunks : Array<AudioBufferSourceNode> = [];
+    private lastChunkOffset: number = 0;
+    public sampleRate: number = 256;
+    public bufferSize: number = 6;
+    private debug = true;
+    private createChunk(chunk:Float32Array)  {
+        var audioBuffer = this.audioContext.createBuffer(2, chunk.length, this.sampleRate);
+        audioBuffer.getChannelData(0).set(chunk);
+        var source = this.audioContext.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(this.audioContext.destination);
+        source.onended = (e:Event) => { 
+            this.chunks.splice(this.chunks.indexOf(source),1);
+            if (this.chunks.length == 0) {
+                this.isPlaying = false;
+                this.startTime = 0;
+                this.lastChunkOffset = 0;
+            }
+        };
 
-    private initEqualizer(): void {
-        const equalizerBands = this.createEqualizerBands();
-        this.connectEqualizerBands(equalizerBands);
-        if (this.volumeGainNode) {
-            equalizerBands[0].connect(this.volumeGainNode);
-        } 
-        this.eqNodes = equalizerBands;
+        return source;
     }
-    private createEqualizerBands(): BiquadFilterNode[] {
-        const bands: BiquadFilterNode[] = [];
-
-        for (const frequency of this.frequencies) {
-            const band = this.audioContext.createBiquadFilter();
-            band.type = 'peaking';
-            band.frequency.value = frequency;
-            band.Q.value = 1;
-            band.gain.value = 0;
-
-            bands.push(band);
-        }
-
-        return bands;
-    }
-    private connectEqualizerBands(bands: BiquadFilterNode[]): void {
-        for (let i = 0; i < bands.length - 1; i++) {
-            bands[i].connect(bands[i + 1]);
-        }
-        bands[bands.length - 1].connect(this.audioContext.destination);
-    }
-    public setEqualizerGain(frequency: number, gainValue: number): void {
-        const targetNode = this.eqNodes.find((node) => node.frequency.value === frequency);
-        if (targetNode) {
-            targetNode.gain.value = gainValue;
-        } else {
-            this.frequencies.push(frequency);
-            this.initEqualizer();
+    private log(data:string) {
+        if (this.debug) {
+            console.log(new Date().toUTCString() + " : " + data);
         }
     }
-    public setEqualizerBandProperties(frequency: number, properties: BiquadFilterNode): void {
-        const targetNode = this.eqNodes.find((node) => node.frequency.value === frequency);
-        if (targetNode) {
-            Object.assign(targetNode, properties);
-        } else {
-            this.frequencies.push(frequency);
-            this.initEqualizer();
+    public addChunk(data: Float32Array) {
+        if (this.isPlaying && (this.chunks.length > this.bufferSize)) {
+            this.log("chunk discarded");
+            return; // throw away
+        } else if (this.isPlaying && (this.chunks.length <= this.bufferSize)) { // schedule & add right now
+            this.log("chunk accepted");
+            let chunk = this.createChunk(data);
+            if (chunk.buffer) {
+                chunk.start(this.startTime + this.lastChunkOffset);
+                this.lastChunkOffset += chunk.buffer.duration;
+                this.chunks.push(chunk);
+            }
+        } else if ((this.chunks.length < (this.bufferSize / 2)) && !this.isPlaying) {  // add & don't schedule
+            this.log("chunk queued");
+            let chunk = this.createChunk(data);
+            this.chunks.push(chunk);
+        } else  { // add & schedule entire buffer
+            this.log("queued chunks scheduled");
+            this.isPlaying = true;
+            let chunk = this.createChunk(data);
+            this.chunks.push(chunk);
+            this.startTime = this.audioContext.currentTime;
+            this.lastChunkOffset = 0;
+            for (let i = 0;i<this.chunks.length;i++) {
+                let chunk = this.chunks[i];
+                if (chunk.buffer) {
+                    chunk.start(this.startTime + this.lastChunkOffset);
+                    this.lastChunkOffset += chunk.buffer.duration;
+                }
+            }
         }
     }
 }

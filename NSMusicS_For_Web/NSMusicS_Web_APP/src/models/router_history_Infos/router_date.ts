@@ -13,4 +13,7 @@ interface Router_date {
     stmt_string:string;
 
     page_lists_selected:string;
+
+    columnKey: string; 
+    order: string
 }

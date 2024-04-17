@@ -1,4 +1,4 @@
-class SoundBuffer {
+export class SoundBuffer {
     private chunks : Array<AudioBufferSourceNode> = [];
     private isPlaying: boolean = false;
     private startTime: number = 0;

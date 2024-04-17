@@ -24,7 +24,7 @@
     'this_audio_file_medium_image_url','this_audio_refresh',
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name',
     'this_audio_album_id',
-    'player_show_click',
+    'player_show_click','view_music_player_show_complete',
     'player','play_go_index_time']);
 
   // open view musicplayer
@@ -55,19 +55,21 @@
     back_filter_blurValue.value = 0;
   };
   const click_back_svg = () => {
-    margin_top_value_view_music_player.value = 
-      margin_top_value_view_music_player.value === 
-        0 ? 670 : 0;
-        emit('player_show_height',margin_top_value_view_music_player.value);
-    if(margin_top_value_view_music_player.value === 0)
-      svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
-    else
-      svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
-    back_ChevronDouble.value = '../../resources/'+svg_shrink_up_arrow.value;
-    
-    musicplayer_background_color.value =
-      musicplayer_background_color.value === 
-        '#FFFFFF'?'#FFFFFFE5':'#FFFFFF';
+    if(props.view_music_player_show_complete){
+      margin_top_value_view_music_player.value = 
+        margin_top_value_view_music_player.value === 
+          0 ? 670 : 0;
+          emit('player_show_height',margin_top_value_view_music_player.value);
+      if(margin_top_value_view_music_player.value === 0)
+        svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
+      else
+        svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
+      back_ChevronDouble.value = '../../resources/'+svg_shrink_up_arrow.value;
+      
+      musicplayer_background_color.value =
+        musicplayer_background_color.value === 
+          '#FFFFFF'?'#FFFFFFE5':'#FFFFFF';
+    }
   };
   let unwatch_player_show_click = watch(() => props.player_show_click, (newValue, oldValue) => {
     if (newValue === true) {
@@ -124,8 +126,9 @@
     player_no_progress_jump.value = false;
     props.player.isPlaying = false;
 
-    // player = new Audio_Players(); // restart player
-    emit('player', new Audio_Players());
+    // restart player
+    // player = new Audio_Players(); // 1
+    emit('player', new Audio_Players()); // 2
     buffer_init.value = false;
     Init_Audio_Player()
   };
@@ -145,7 +148,9 @@
               props.player.setVolume(Number(slider_volume_value.value));
               props.player.setFadein();
               props.player.setFadeout();
-              props.player.audioContext.resume();
+              if (props.player.audioContext.state === 'suspended') {
+                props.player.audioContext.resume();
+              }
               props.player.bufferSourceNode.addEventListener('ended', () => {
                 //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
                 if(player_no_progress_jump.value == true){
@@ -360,7 +365,9 @@
         props.player.setVolume(Number(slider_volume_value.value));
         props.player.setFadein();
         props.player.setFadeout();
-        props.player.audioContext.resume();
+        if (props.player.audioContext.state === 'suspended') {
+          props.player.audioContext.resume();
+        }
         props.player.bufferSourceNode.addEventListener('ended', () => {
           //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
           if(player_no_progress_jump.value == true){
@@ -520,8 +527,13 @@
 </script>
 
 <template>
-   <!-- :style="{backgroundColor : `${musicplayer_background_color}` }" -->
+  <!-- :style="{backgroundColor : `${musicplayer_background_color}` }" -->
   <n-space class="this_Bar_Music_Player">
+    <!-- <audio 
+      id="player_audio_htmlelement" 
+      :src="props.this_audio_file_path">
+    
+    </audio> -->
     <div class="layout_distribution_3">
       <div class="gird_Left">
         <div class="button_open_player_view">

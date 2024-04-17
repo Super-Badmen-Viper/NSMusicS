@@ -10,6 +10,7 @@
     TextIndentIncreaseLtr20Filled as lyric,
     PeopleCommunity16Regular,
     ArrowMinimize16Regular,Maximize16Regular,ColorBackground20Regular,
+    AddSquareMultiple20Regular,Delete16Regular
   } from '@vicons/fluent'
   import {
     AlbumFilled,
@@ -70,7 +71,10 @@
   }
   const margin_top_value_view_music_player = ref(100);
   const view_music_player_show = ref(false)
+  const view_music_player_show_complete = ref(true)
   const get_send_onclick = (value:any) => {
+    view_music_player_show_complete.value = false
+
     if(value === 0)
       view_music_player_show.value = true
     setTimeout(() => {
@@ -85,23 +89,24 @@
       }, 200);
     }, 30);
 
-    // setTimeout(() => {
-    //   if(value === 0){
-    //     router_select_model_album.value = false;
-    //     router_select_model_media.value = false;
-    //     router_select_model_artist.value = false;
-    //     router_all_app_page.value = false;
-    //   }else{
-    //     if(menu_select_activeKey.value === 'go-albums-list'){
-    //       router_select_model_album.value = true;
-    //     }else if(menu_select_activeKey.value === 'go-songs-list'){
-    //       router_select_model_media.value = true;
-    //     }else if(menu_select_activeKey.value === 'go-artist-list'){
-    //       router_select_model_artist.value = true;
-    //     }
-    //     router_all_app_page.value = true;
-    //   }
-    // }, 400);
+    // Vue UI WYSIWYG
+    setTimeout(() => {
+      if(value === 0){
+        router_select_model_album.value = false;
+        router_select_model_media.value = false;
+        router_select_model_artist.value = false;
+      }else{
+        if(menu_select_activeKey.value === 'go-albums-list'){
+          router_select_model_album.value = true;
+        }else if(menu_select_activeKey.value === 'go-songs-list'){
+          router_select_model_media.value = true;
+        }else if(menu_select_activeKey.value === 'go-artist-list'){
+          router_select_model_artist.value = true;
+        }
+      }
+
+      view_music_player_show_complete.value = true
+    }, 400);
   }
   ////// open bar musicplaylist
   const isVisible_Music_PlayList = ref(false);
@@ -114,10 +119,11 @@
   const path = require('path');
   const fs = require('fs');
   import { Audio_Players } from '../src/models/song_Audio_Out/Audio_Players';
-  const player = ref<Audio_Players>(new Audio_Players());
+  let player = new Audio_Players();
   function get_player(value: Audio_Players) {
-    player.value.releaseMemory(true);
-    player.value = value
+    player.releaseMemory(true);
+
+    player = value
     console.log('player：'+value)
   }
   const currentTime_added_value = ref(0);
@@ -566,6 +572,10 @@
           page_lists_keyword: page_songlists_keyword.value,
           stmt_string: stmt_media_file_string,
           page_lists_selected: page_songlists_selected.value,
+          columnKey:page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
+            page_songlists_options_Sort_key.value[0].columnKey : 'id',
+          order:page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
+            page_songlists_options_Sort_key.value[0].order.replace('end', '') : '',
         };
         add_router_history_of_Media(routerDate);// 重复路由不添加
         //////
@@ -576,6 +586,12 @@
           router_select_model_media.value = true;
           page_songlists_keyword.value = router_select_history_date_of_Media.value.page_lists_keyword;
           page_songlists_selected.value = router_select_history_date_of_Media.value.page_lists_selected;
+          page_songlists_options_Sort_key.value = [
+            {
+              columnKey:router_select_history_date_of_Media.value.columnKey,
+              order:router_select_history_date_of_Media.value.order
+            }
+          ];
           stmt_media_file = db.prepare(router_select_history_date_of_Media.value.stmt_string);
         }
         router_history_model_of_Media.value = 0;
@@ -876,6 +892,10 @@
           page_lists_keyword: page_albumlists_keyword.value,
           stmt_string: stmt_album_string,
           page_lists_selected: page_albumlists_selected.value,
+          columnKey:page_albumlists_options_Sort_key.value.length > 0 && page_albumlists_options_Sort_key.value[0].order !== 'default' ?
+            page_albumlists_options_Sort_key.value[0].columnKey : 'id',
+          order:page_albumlists_options_Sort_key.value.length > 0 && page_albumlists_options_Sort_key.value[0].order !== 'default' ?
+            page_albumlists_options_Sort_key.value[0].order.replace('end', '') : '',
         };
         add_router_history_of_Album(routerDate);// 重复路由不添加
         //////
@@ -886,6 +906,12 @@
           router_select_model_album.value = true;
           page_albumlists_keyword.value = router_select_history_date_of_Album.value.page_lists_keyword;
           page_albumlists_selected.value = router_select_history_date_of_Album.value.page_lists_selected;
+          page_albumlists_options_Sort_key.value = [
+            {
+              columnKey:router_select_history_date_of_Album.value.columnKey,
+              order:router_select_history_date_of_Album.value.order
+            }
+          ];
           stmt_album = db.prepare(router_select_history_date_of_Album.value.stmt_string);
         }
         router_history_model_of_Album.value = 0;
@@ -1207,6 +1233,10 @@
           page_lists_keyword: page_artistlists_keyword.value,
           stmt_string: stmt_artist_string,
           page_lists_selected: page_artistlists_selected.value,
+          columnKey:page_artistlists_options_Sort_key.value.length > 0 && page_artistlists_options_Sort_key.value[0].order !== 'default' ?
+            page_artistlists_options_Sort_key.value[0].columnKey : 'id',
+          order:page_artistlists_options_Sort_key.value.length > 0 && page_artistlists_options_Sort_key.value[0].order !== 'default' ?
+            page_artistlists_options_Sort_key.value[0].order.replace('end', '') : '',
         };
         add_router_history_of_Artist(routerDate);// 重复路由不添加
         //////
@@ -1217,6 +1247,12 @@
           router_select_model_artist.value = true;
           page_artistlists_keyword.value = router_select_history_date_of_Artist.value.page_lists_keyword;
           page_artistlists_selected.value = router_select_history_date_of_Artist.value.page_lists_selected;
+          page_artistlists_options_Sort_key.value = [
+            {
+              columnKey:router_select_history_date_of_Artist.value.columnKey,
+              order:router_select_history_date_of_Artist.value.order
+            }
+          ];
           stmt_artist = db.prepare(router_select_history_date_of_Artist.value.stmt_string);
         }
         router_history_model_of_Artist.value = 0;
@@ -1481,10 +1517,14 @@
       if (router_history_datas_of_Media.value[i].stmt_string === new_Router_date.stmt_string) {
         if (router_history_datas_of_Media.value[i].page_lists_keyword === new_Router_date.page_lists_keyword) {
           if (router_history_datas_of_Media.value[i].page_lists_selected === new_Router_date.page_lists_selected) {
-            new_Router_date.id = router_history_datas_of_Media.value[i].id;
-            router_history_datas_of_Media.value[i] = new_Router_date;
-            router_select_history_date_of_Media.value = new_Router_date;
-            return;
+            if(router_history_datas_of_Media.value[i].columnKey === new_Router_date.columnKey) {
+              if(router_history_datas_of_Media.value[i].order === new_Router_date.order) {
+                new_Router_date.id = router_history_datas_of_Media.value[i].id;
+                router_history_datas_of_Media.value[i] = new_Router_date;
+                router_select_history_date_of_Media.value = new_Router_date;
+                return;
+              }
+            }
           }
         }
       }
@@ -1533,10 +1573,14 @@
       if (router_history_datas_of_Album.value[i].stmt_string === new_Router_date.stmt_string) {
         if (router_history_datas_of_Album.value[i].page_lists_keyword === new_Router_date.page_lists_keyword) {
           if (router_history_datas_of_Album.value[i].page_lists_selected === new_Router_date.page_lists_selected) {
-            new_Router_date.id = router_history_datas_of_Album.value[i].id;
-            router_history_datas_of_Album.value[i] = new_Router_date;
-            router_select_history_date_of_Album.value = new_Router_date;
-            return;
+            if(router_history_datas_of_Album.value[i].columnKey === new_Router_date.columnKey) {
+              if(router_history_datas_of_Album.value[i].order === new_Router_date.order) {
+                new_Router_date.id = router_history_datas_of_Album.value[i].id;
+                router_history_datas_of_Album.value[i] = new_Router_date;
+                router_select_history_date_of_Album.value = new_Router_date;
+                return;
+              }
+            }
           }
         }
       }
@@ -1585,10 +1629,14 @@
       if (router_history_datas_of_Artist.value[i].stmt_string === new_Router_date.stmt_string) {
         if (router_history_datas_of_Artist.value[i].page_lists_keyword === new_Router_date.page_lists_keyword) {
           if (router_history_datas_of_Artist.value[i].page_lists_selected === new_Router_date.page_lists_selected) {
-            new_Router_date.id = router_history_datas_of_Artist.value[i].id;
-            router_history_datas_of_Artist.value[i] = new_Router_date;
-            router_select_history_date_of_Artist.value = new_Router_date;
-            return;
+            if(router_history_datas_of_Artist.value[i].columnKey === new_Router_date.columnKey) {
+              if(router_history_datas_of_Artist.value[i].order === new_Router_date.order) {
+                new_Router_date.id = router_history_datas_of_Artist.value[i].id;
+                router_history_datas_of_Artist.value[i] = new_Router_date;
+                router_select_history_date_of_Artist.value = new_Router_date;
+                return;
+              }
+            }
           }
         }
       }
@@ -1845,8 +1893,29 @@
       <n-drawer 
         v-model:show="isVisible_Music_PlayList" 
         :width="470" 
-        style="border-radius: 12px;">
-        <n-drawer-content title="播放列表" v-if="isVisible_Music_PlayList">
+        style="border-radius: 12px 0 0 12px;margin-top: 72px;margin-bottom:80px;">
+        <n-drawer-content v-if="isVisible_Music_PlayList">
+          <template #header>
+            <n-badge :value="playlist_Files_temporary.length" show-zero :max="9999" :offset="[24, 8]" style="margin-right:40px;">
+              <span style="font-weight:600;font-size:18px;">播放列表</span>
+            </n-badge>
+            <n-button size="small" style="position: absolute;right:110px;top:12px;" >
+              <template #icon>
+                <n-icon>
+                  <AddSquareMultiple20Regular/>
+                </n-icon>
+              </template>
+              收藏全部
+            </n-button>
+            <n-button size="small" style="position: absolute;right:20px;top:12px;">
+              <template #icon>
+                <n-icon>
+                  <Delete16Regular/>
+                </n-icon>
+              </template>
+              清空
+            </n-button>
+          </template>
           <template #default>
             <Bar_Music_PlayList
               v-if="isVisible_Music_PlayList"
@@ -1865,13 +1934,8 @@
               :playlist_Files_temporary="playlist_Files_temporary"
               :playlist_Files_selected="playlist_Files_selected"
               @playlist_Files_selected_set="set_playlist_Files_selected"
-              @playlist_Files_selected_set_all="set_playlist_Files_selected_all"
-              >
-          
+              @playlist_Files_selected_set_all="set_playlist_Files_selected_all">
             </Bar_Music_PlayList>
-          </template>
-          <template #footer>
-            播放列表
           </template>
         </n-drawer-content>
       </n-drawer>
@@ -1913,6 +1977,7 @@
 
         :player_show_click="player_show_click"
         @player_show_click="get_player_show_click"
+        :view_music_player_show_complete="view_music_player_show_complete"
         @player_show_height="get_send_onclick"
         @isVisible_Music_PlayList="get_isVisible_Music_PlayList"/>
     </n-card>
@@ -1937,7 +2002,8 @@
       :this_audio_album_id="this_audio_album_id"
       :this_audio_album_name="this_audio_album_name"
       
-      @player_show_click="get_player_show_click">
+      @player_show_click="get_player_show_click"
+      :view_music_player_show_complete="view_music_player_show_complete">
 
     </View_Screen_Music_Player>
   </n-config-provider>
