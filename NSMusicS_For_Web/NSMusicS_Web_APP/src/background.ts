@@ -47,7 +47,7 @@ async function createWindow() {
     }
     // Open the DevTools.
     win.webContents.openDevTools({
-        mode:'bottom'
+        mode:'detach'
     });
 
     const electron = require('electron')

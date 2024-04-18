@@ -157,11 +157,14 @@
   const this_audio_lyrics_string = ref<string>('')
   const this_audio_lyrics_info_line = ref<string[]>([])
   const this_audio_lyrics_info_time = ref<number[]>([])
+  const this_audio_lyrics_info_line_num = ref(28)// Prevent page up movement caused by scrolling lyrics based on block: center
   function get_this_audio_lyrics_string(value: any) {
+    // this_audio_lyrics_info_line_num.value = Math.floor(window.innerHeight / 50) - 9;
+
     this_audio_lyrics_string.value = value
     // split lyrics
     this_audio_lyrics_info_line.value = []
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < this_audio_lyrics_info_line_num.value; i++) {
       this_audio_lyrics_info_line.value.push('')
     }
     this_audio_lyrics_info_time.value = []
@@ -175,7 +178,7 @@
         this_audio_lyrics_info_line.value.push(line[1])
       }
     }
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < this_audio_lyrics_info_line_num.value; i++) {
       this_audio_lyrics_info_line.value.push('')
     }
     //
@@ -1702,6 +1705,13 @@
   }
   //////
   let navidrome_db = path.resolve('resources/navidrome.db');
+  ////// disabled scroll
+  const scrollContent_this_App = document.querySelector('.this_App');
+  if (scrollContent_this_App){
+    scrollContent_this_App.addEventListener('wheel', function(event) {
+      event.stopPropagation();
+    });
+  }
 </script>
 <template>
   <n-config-provider :theme="theme" :locale="locale" :date-locale="dateLocale">
@@ -1890,55 +1900,6 @@
           </div>
         </n-layout>
       </n-layout>
-      <n-drawer 
-        v-model:show="isVisible_Music_PlayList" 
-        :width="470" 
-        style="border-radius: 12px 0 0 12px;margin-top: 72px;margin-bottom:80px;">
-        <n-drawer-content v-if="isVisible_Music_PlayList">
-          <template #header>
-            <n-badge :value="playlist_Files_temporary.length" show-zero :max="9999" :offset="[24, 8]" style="margin-right:40px;">
-              <span style="font-weight:600;font-size:18px;">播放列表</span>
-            </n-badge>
-            <n-button size="small" style="position: absolute;right:110px;top:12px;" >
-              <template #icon>
-                <n-icon>
-                  <AddSquareMultiple20Regular/>
-                </n-icon>
-              </template>
-              收藏全部
-            </n-button>
-            <n-button size="small" style="position: absolute;right:20px;top:12px;">
-              <template #icon>
-                <n-icon>
-                  <Delete16Regular/>
-                </n-icon>
-              </template>
-              清空
-            </n-button>
-          </template>
-          <template #default>
-            <Bar_Music_PlayList
-              v-if="isVisible_Music_PlayList"
-
-              @this_audio_lyrics_string="get_this_audio_lyrics_string"
-              @media_file_path="media_file_path"
-              @media_file_path_from_playlist="get_this_audio_file_path_from_playlist"
-              @media_file_medium_image_url="get_media_file_medium_image_url"
-              @this_audio_singer_name="get_this_audio_singer_name"
-              @this_audio_song_name="get_this_audio_song_name"
-              @this_audio_album_id="get_this_audio_album_id"
-              @this_audio_album_name="get_this_audio_album_name"
-              @data_select_Index="get_data_select_Index"
-              @page_song_index="get_page_song_index"
-
-              :playlist_Files_temporary="playlist_Files_temporary"
-              :playlist_Files_selected="playlist_Files_selected"
-              @playlist_Files_selected_set="set_playlist_Files_selected"
-              @playlist_Files_selected_set_all="set_playlist_Files_selected_all">
-            </Bar_Music_PlayList>
-          </template>
-        </n-drawer-content>
-      </n-drawer>
     </n-message-provider>
   </n-config-provider>
   <n-config-provider :theme="theme_app">
@@ -1989,6 +1950,7 @@
       :player="player"
       :currentTime_added_value="currentTime_added_value"
       @play_go_index_time="get_play_go_index_time"
+      :this_audio_lyrics_info_line_num="this_audio_lyrics_info_line_num"
 
       :this_audio_lyrics_string="this_audio_lyrics_string"
       :this_audio_lyrics_info_line="this_audio_lyrics_info_line"
@@ -2006,6 +1968,62 @@
       :view_music_player_show_complete="view_music_player_show_complete">
 
     </View_Screen_Music_Player>
+  </n-config-provider>
+  <!-- right drwaer of music_playlist -->
+  <n-config-provider :theme="null">
+    <n-drawer 
+      v-model:show="isVisible_Music_PlayList" 
+      :width="470" 
+      style="
+        border-radius: 12px 0 0 12px;
+        margin-top: 72px;margin-bottom:88px;
+        background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);  
+      ">
+      <n-drawer-content v-if="isVisible_Music_PlayList">
+        <template #header>
+          <n-badge :value="playlist_Files_temporary.length" show-zero :max="9999" :offset="[24, 9]" style="margin-right:40px;">
+            <span style="font-weight:600;font-size:20px;">播放列表</span>
+          </n-badge>
+          <n-button size="small" text style="position: absolute;right:140px;top:12px;" >
+            <template #icon>
+              <n-icon>
+                <AddSquareMultiple20Regular/>
+              </n-icon>
+            </template>
+            收藏全部
+          </n-button>
+          <n-button size="small" text style="position: absolute;right:70px;top:12px;">
+            <template #icon>
+              <n-icon>
+                <Delete16Regular/>
+              </n-icon>
+            </template>
+            清空
+          </n-button>
+        </template>
+        <template #default>
+          <Bar_Music_PlayList
+            v-if="isVisible_Music_PlayList"
+
+            @this_audio_lyrics_string="get_this_audio_lyrics_string"
+            @media_file_path="media_file_path"
+            @media_file_path_from_playlist="get_this_audio_file_path_from_playlist"
+            @media_file_medium_image_url="get_media_file_medium_image_url"
+            @this_audio_singer_name="get_this_audio_singer_name"
+            @this_audio_song_name="get_this_audio_song_name"
+            @this_audio_album_id="get_this_audio_album_id"
+            @this_audio_album_name="get_this_audio_album_name"
+            @data_select_Index="get_data_select_Index"
+            @page_song_index="get_page_song_index"
+
+            :playlist_Files_temporary="playlist_Files_temporary"
+            :playlist_Files_selected="playlist_Files_selected"
+            @playlist_Files_selected_set="set_playlist_Files_selected"
+            @playlist_Files_selected_set_all="set_playlist_Files_selected_all">
+          </Bar_Music_PlayList>
+        </template>
+      </n-drawer-content>
+    </n-drawer>
   </n-config-provider>
 </template>
 

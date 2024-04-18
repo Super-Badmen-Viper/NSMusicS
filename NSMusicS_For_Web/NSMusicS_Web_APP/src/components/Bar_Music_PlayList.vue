@@ -146,8 +146,6 @@ const {
 <style>
 .this_Bar_Music_PlayList {
   margin-top: 0px;
-  width: auto;
-  height: auto;
   z-index: 100;
   border-radius: 12px 12px 0px 12px;
 }
@@ -157,4 +155,6 @@ const {
   justify-content: space-between;
   z-index: 99;
 }
+
+
 </style>

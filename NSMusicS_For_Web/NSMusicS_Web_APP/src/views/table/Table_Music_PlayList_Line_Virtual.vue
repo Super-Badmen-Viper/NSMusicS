@@ -282,11 +282,14 @@ function getAssetImage(firstImage: string) {
   />
 </template>
 
-<style>
+<style scoped>
 .dynamic-scroller-demo {
   overflow: auto;
   display: flex;
   flex-direction: column;
+}
+.table{
+  height: calc(100vh - 250px);
 }
 .message {
   display: flex;
