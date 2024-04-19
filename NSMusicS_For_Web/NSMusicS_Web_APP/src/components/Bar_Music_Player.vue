@@ -13,7 +13,7 @@
     'this_audio_song_name',
     'this_audio_album_name','this_audio_album_id',
     'data_select_Index',
-    'isVisible_Music_PlayList',
+    'isVisible_Music_PlayList','isVisible_Player_Sound_effects',
     'player_show_click',
     'this_audio_lyrics_string',
     'player','currentTime_added_value'
@@ -485,9 +485,12 @@
   }
 
   // open playList
-  // const isVisible_Music_PlayList = ref(false);
   const Set_isVisible_Music_PlayList = () => {
     emit('isVisible_Music_PlayList',true);
+  }
+  // open sound effects
+  const Set_isVisible_Player_Sound_effects= () => {
+    emit('isVisible_Player_Sound_effects',true);
   }
 
   import { onBeforeUnmount } from 'vue';
@@ -508,7 +511,8 @@
     DesktopFlow24Regular,
     MoreCircle32Regular,
     ArrowRepeatAll16Regular,ArrowAutofitDown24Regular,
-    ChevronDoubleDown16Filled,ChevronDoubleUp16Filled
+    ChevronDoubleDown16Filled,ChevronDoubleUp16Filled,
+    TopSpeed20Regular,DeviceEq24Filled
   } from '@vicons/fluent'
   import {
     QueueMusicRound,
@@ -638,9 +642,9 @@
               </template>
             </n-button>
           </n-badge>
-        </n-space>
+        </n-space>   
         <div class="gird_Right_button_area">
-          <div class="gird_Right_button_area_up">
+          <n-space justify="space-around" style="margin-top: 10px;">
             <n-button size="tiny" text>
               <template #icon>
                 <n-icon :size="22"><Heart24Regular/></n-icon>
@@ -651,6 +655,8 @@
                 <n-icon :size="22"><Video16Regular/></n-icon>
               </template>
             </n-button>
+          </n-space>
+          <n-space justify="space-around" style="margin-top: 10px;">
             <n-button size="tiny" text>
               <template #icon>
                 <n-icon :size="22"><DesktopFlow24Regular/></n-icon>
@@ -661,23 +667,29 @@
                 <n-icon :size="22"><MoreCircle32Regular/></n-icon>
               </template>
             </n-button>
-          </div>
-          <div class="gird_Right_button_area_down">
-            <n-button size="tiny" secondary strong id="button_audio_speed">
-              <n-ellipsis>倍速</n-ellipsis>
-            </n-button>
-            <n-button size="tiny" secondary strong id="button_sound_effects">
-              <n-ellipsis>音效</n-ellipsis>
-            </n-button>
-          </div>
+          </n-space>
         </div>
-        <div class="gird_Right_audio_play_time_area">
+        <!-- <div class="gird_Right_audio_play_time_area">
           <div>
             <n-ellipsis id="current_play_time">{{ current_play_time }}</n-ellipsis><br>
-            <n-ellipsis id="divider_play_time"> ------ </n-ellipsis><br>
+            <n-ellipsis id="divider_play_time"> ------- </n-ellipsis><br>
             <n-ellipsis id="total_play_time">{{ total_play_time }}</n-ellipsis>
           </div>
-        </div>
+        </div> -->
+        <n-space class="gird_Right_sound_effects_button_area">
+          <n-button text secondary class="gird_Right_speed_effects_button_area" @click="Set_isVisible_Music_PlayList">
+            <template #icon>
+              <n-icon :size="26"><DeviceEq24Filled/></n-icon>
+            </template>
+          </n-button>
+        </n-space>
+        <n-space class="gird_Right_sound_speed_button_area">
+          <n-button text secondary class="gird_Right_speed_effects_button_area" @click="Set_isVisible_Music_PlayList">
+            <template #icon>
+              <n-icon :size="26"><TopSpeed20Regular/></n-icon>
+            </template>
+          </n-button>
+        </n-space>
       </div>
     </div>
   </n-space>
@@ -712,6 +724,7 @@
 .gird_Left {
   width: 380px;
   height: 80px;
+  margin-left: 12px;
   
   cursor: default;
   user-select: none;
@@ -830,72 +843,27 @@
   color: #283248;
   margin-top: -16px;
 }
-
-
 .gird_Right {
   width: 380px;
   height: 80px;
+  margin-right: 12px;
   
   cursor: default;
   user-select: none;
 }
-.gird_Right .gird_Right_audio_play_time_area{
-  width: 130px;
-  height: 80px;
-  float: right;
-}
-.gird_Right .gird_Right_audio_play_time_area #current_play_time{
-  font-size: 16px;
-  position: absolute;
-  top: 12px;
-}
-.gird_Right .gird_Right_audio_play_time_area #divider_play_time{
-  position: absolute;
-  top: 30px;
-}
-.gird_Right .gird_Right_audio_play_time_area #total_play_time{
-  font-size: 16px;
-  position: absolute;
-  bottom: 8px;
-}
 .gird_Right .gird_Right_button_area{
-  width: 130px;
+  width: 50px;
   height: 80px;
   float: right;
-}
-.gird_Right .gird_Right_button_area .gird_Right_button_area_up{
-  margin-top: 10px;
-  width: 130px;
-  height: 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.gird_Right .gird_Right_button_area .gird_Right_button_area_down{
-  width: 110px;
-  height: 30px;
-  margin-top: 6px;
-}
-.gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_audio_speed{
-  width: 40px;height: 22px;
-}
-.gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_audio_speed :hover{
-  color: #3DC3FF;
-}
-.gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_sound_effects{
-  width: 40px;
-  width: 40px;height: 22px;
-  margin-left: 10px;
-}
-.gird_Right .gird_Right_button_area .gird_Right_button_area_down #button_sound_effects :hover{
-  color: #3DC3FF;
+  margin-top: 3px;
+  margin-right: 8px;
 }
 .gird_Right .gird_Right_current_playlist_button_area{
   width: 60px;
   height: 60px;
   float: right;
   margin-top: 10px;
-  margin-left: 20px;
+  margin-left: 10px;
   margin-right: 20px;
   border-radius: 10px;
 }
@@ -906,6 +874,46 @@
 }
 .gird_Right .gird_Right_current_playlist_button_area_of_button :hover{
   color: #3DC3FF;
+}
+.gird_Right .gird_Right_audio_play_time_area{
+  height: 80px;
+  float: right;
+  margin-right: 56px;
+}
+.gird_Right .gird_Right_audio_play_time_area #current_play_time{
+  font-size: 16px;
+  position: absolute;
+  top: 10px;
+}
+.gird_Right .gird_Right_audio_play_time_area #divider_play_time{
+  position: absolute;
+  top: 28px;
+}
+.gird_Right .gird_Right_audio_play_time_area #total_play_time{
+  font-size: 16px;
+  position: absolute;
+  bottom: 10px;
+}
+.gird_Right .gird_Right_sound_effects_button_area{
+  width: 30px;
+  height: 30px;
+  float: right;
+  margin-top: 24px;
+  margin-right: 10px;
+  border-radius: 10px;
+}
+.gird_Right .gird_Right_speed_effects_button_area{
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+}
+.gird_Right .gird_Right_sound_speed_button_area{
+  width: 30px;
+  height: 30px;
+  float: right;
+  margin-top: 24px;
+  margin-right: 2px;
+  border-radius: 10px;
 }
 
 </style>

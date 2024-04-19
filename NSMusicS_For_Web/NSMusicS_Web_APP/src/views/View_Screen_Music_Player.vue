@@ -243,7 +243,7 @@
       id: 4,
       name: '歌手写真',
       normalStyle: {
-        image_url: '../../resources/player_theme_2.png',
+        image_url: '../../resources/player_theme_3.png',
 
         size: '54vh',
         radius: '10px',
@@ -266,7 +266,7 @@
       id: 5,
       name: '皮肤底图',
       normalStyle: {
-        image_url: '../../resources/player_theme_2.png',
+        image_url: '../../resources/player_theme_3.png',
 
         size: '54vh',
         radius: '10px',
@@ -294,7 +294,7 @@
     ]
   );
   // player bind style
-  const player_theme_lyricItem_Styles_Selected = ref<number>(1)
+  const player_theme_lyricItem_Styles_Selected = ref<number>(0)
   const player_theme_lyricItem_0_bind_style = ref<PlayerTheme_LyricItem>(player_theme_lyricItem_Styles.value[player_theme_lyricItem_Styles_Selected.value]);
   const player_theme_set_theme = (index:number) => {
     if(index < 0 || index >= player_theme_lyricItem_Styles.value.length){
@@ -447,9 +447,11 @@
         :src="getAssetImage(props.this_audio_file_medium_image_url)"
         @error="handleImageError"> -->
     </div>
-    <div style="
-      position: absolute;top: 6px;left: calc(50vw - 88px);
-      -webkit-app-region: no-drag;margin-top: 30px;margin-left:30px;">
+    <div 
+      style="
+        position: absolute;top: 6px;left: calc(50vw - 88px);
+        -webkit-app-region: no-drag;margin-top: 35px;margin-left:30px;
+      ">
       <n-radio-group size="small" v-model:value="checkStrategy">
         <n-radio-button size="small" value="player">
           播放
@@ -541,7 +543,7 @@
         :width="470" 
         style="
           border-radius: 12px 0 0 12px;
-          margin-top: calc(50vh - 240px);height: 480px;
+          margin-top: calc(50vh - 260px);height: 520px;
           background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
         ">
         <n-drawer-content v-if="isVisible_Player_page_ui">
@@ -588,7 +590,7 @@
                 />
               </n-space>
             </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;">
+            <n-space style="margin-left: 12px;margin-top: 24px;">
               <span style="font-size:16px;color: #858585;">歌词颜色</span>
               <n-space style="margin-left: 8px;">
                 <n-radio></n-radio><n-radio></n-radio><n-radio></n-radio><n-radio></n-radio>
@@ -622,6 +624,16 @@
             </n-space>
             <n-space style="margin-left: 12px;margin-top: 20px;">
               <span style="font-size:16px;color: #858585;">专辑底图模糊度</span>
+              <n-space style="margin-left: 8px;">
+                <n-input-number 
+                  v-model:value="player_lyric_panel_fontsize" 
+                  clearable
+                  style="width: 170px;margin-top: -4px;"
+                />
+              </n-space>
+            </n-space>
+            <n-space style="margin-left: 12px;margin-top: 20px;">
+              <span style="font-size:16px;color: #858585;">皮肤底图模糊度</span>
               <n-space style="margin-left: 8px;">
                 <n-input-number 
                   v-model:value="player_lyric_panel_fontsize" 
@@ -675,7 +687,7 @@
                 </template>
               </n-button>
               <n-button quaternary circle size="medium" 
-                style="margin-right:48px" @click="closeWindow">
+                style="margin-right:30px" @click="closeWindow">
                 <template #icon>
                   <n-icon size="28" :depth="3"><Close/></n-icon>
                 </template>
@@ -692,11 +704,11 @@
                 :collapsed="collapsed_slider" @collapse="collapsed_slider = true" @expand="collapsed_slider = false"
                 :show-collapsed-content="false" collapse-mode="transform"
                 position="static"
-                collapsed-width="30.5vw" width="54vw"
+                collapsed-width="30vw" width="53vw"
                 show-trigger="bar"
                 style="background-color: transparent;">
-                <n-space vertical align="end" style="margin-right:5vw;">
-                  <n-space vertical style="width: 54vh;">
+                <n-space vertical align="end" style="margin-right:6vw;">
+                  <n-space vertical>
                     <img
                       class="player_album_image"
                       :style="{width: player_album_size, height: player_album_size, borderRadius: player_album_radius}"
@@ -708,10 +720,9 @@
                       :src="getAssetImage(props.this_audio_file_medium_image_url)"
                       @error="handleImageError">
                     <div
-                      :style="{textAlign: player_album_info_left ? 'left' : 'center',}"
+                      :style="{width: player_album_size,textAlign: player_album_info_left ? 'left' : 'center',}"
                       style="
                         margin-left: 2px;
-                        max-width: 54vh;
                         color: #E7E5E5;
                         font-weight: 900;font-size: 26px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
@@ -719,10 +730,9 @@
                       {{ props.this_audio_song_name }}
                     </div>
                     <div
-                      :style="{textAlign: player_album_info_left ? 'left' : 'center',}"
+                      :style="{width: player_album_size,textAlign: player_album_info_left ? 'left' : 'center',}"
                       style="
                         margin-left: 2px;margin-top: -10px;
-                        max-width: 54vh;
                         color: #989292;
                         font-weight: 550;font-size: 18px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
@@ -734,19 +744,22 @@
               </n-layout-sider>
               <!-- Lyic -->
               <n-layout-content
-                style="background-color: transparent;">
+                style="background-color: transparent;margin-left:2vw;">
                 <div 
                   style="
                     width: 40vw;height: calc(100vh - 180px);
-                    border-radius: 20px;margin-top:16px;margin-left:12px;
+                    border-radius: 20px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                   ">
                   <n-list
                     clickable :show-divider="false"
-                    class="table" ref="scrollbar"
+                    ref="scrollbar"
                     @wheel="handleWheel"
                     @mouseleave="handleLeave"
                     style="
-                      width: calc(40vw);max-height: calc(100vh);
+                      width: calc(40vw);max-height: calc(65vh);
                       overflow: auto;
                       background-color: #00000000;
                     ">

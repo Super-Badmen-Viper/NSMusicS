@@ -114,6 +114,12 @@
     isVisible_Music_PlayList.value = value
     console.log('isVisible_Music_PlayList：'+value)
   }
+  ////// open bar player sounde effects
+  const isVisible_Player_Sound_effects = ref(false);
+  const get_isVisible_Player_Sound_effects = (value:any) => {
+    isVisible_Player_Sound_effects.value = value
+    console.log('isVisible_Player_Sound_effects：'+value)
+  }
 
   ////// System Bind Media Info
   const path = require('path');
@@ -1855,7 +1861,7 @@
               style="
                 -webkit-app-region: no-drag;
                 width: auto;/* auto 为单分布，100vw 为多分布(left，middle，right) */
-                position: absolute;right: 0;top:20px;
+                position: absolute;right: 0;top:30px;
                 text-align:center;
                 z-index: 99;
               ">
@@ -1891,7 +1897,7 @@
                   <n-icon size="24" :depth="3"><Maximize16Regular/></n-icon>
                 </template>
               </n-button>
-              <n-button quaternary circle size="medium" style="margin-right:48px" @click="closeWindow">
+              <n-button quaternary circle size="medium" style="margin-right:30px" @click="closeWindow">
                 <template #icon>
                   <n-icon size="28" :depth="3"><Close/></n-icon>
                 </template>
@@ -1940,7 +1946,8 @@
         @player_show_click="get_player_show_click"
         :view_music_player_show_complete="view_music_player_show_complete"
         @player_show_height="get_send_onclick"
-        @isVisible_Music_PlayList="get_isVisible_Music_PlayList"/>
+        @isVisible_Music_PlayList="get_isVisible_Music_PlayList"
+        @isVisible_Player_Sound_effects="get_isVisible_Player_Sound_effects"/>
     </n-card>
     <View_Screen_Music_Player 
       class="view_music_player"
@@ -2021,6 +2028,39 @@
             @playlist_Files_selected_set="set_playlist_Files_selected"
             @playlist_Files_selected_set_all="set_playlist_Files_selected_all">
           </Bar_Music_PlayList>
+        </template>
+      </n-drawer-content>
+    </n-drawer>
+  </n-config-provider>
+  <!-- bottom drwaer of player sound effects -->
+  <n-config-provider :theme="null">
+    <n-drawer 
+      v-model:show="isVisible_Player_Sound_effects"
+      :width="500" 
+      style="
+        border-radius: 12px 0 0 12px;
+        margin-top: calc(50vh - 280px);height: 560px;
+        background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);  
+      ">
+      <n-drawer-content v-if="isVisible_Player_Sound_effects">
+        <template #header>
+          <span style="font-weight:600;font-size:20px;">音效设置</span>
+        </template>
+        <template #default>
+          <n-tabs type="line" animated>
+            <n-tab-pane name="001" tab="九歌音效插件">
+              九歌音效插件
+            </n-tab-pane>
+            <n-tab-pane name="002" tab="均衡器(简易)">
+              均衡器(简易)
+            </n-tab-pane>
+            <n-tab-pane name="003" tab="均衡器(专业)">
+              均衡器(专业)
+            </n-tab-pane>
+            <n-tab-pane name="004" tab="多音轨">
+              多音轨
+            </n-tab-pane>
+          </n-tabs>
         </template>
       </n-drawer-content>
     </n-drawer>

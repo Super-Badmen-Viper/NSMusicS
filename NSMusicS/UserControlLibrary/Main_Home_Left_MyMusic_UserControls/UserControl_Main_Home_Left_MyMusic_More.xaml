@@ -144,10 +144,9 @@
                 Loaded="UserControl_Loaded" SourceUpdated="ListView_Download_SongList_Info_SourceUpdated"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                AllowDrop="True" ScrollViewer.CanContentScroll="True"
-                VirtualizingStackPanel.IsVirtualizing="True" 
-                VirtualizingStackPanel.VirtualizationMode="Recycling"
-                  >
+                AllowDrop="True" ScrollViewer.CanContentScroll="True">
+                <!--.IsVirtualizing="True" 
+                VirtualizingStackPanel.VirtualizationMode="Recycling"-->
 
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
