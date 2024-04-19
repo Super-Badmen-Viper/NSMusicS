@@ -25,6 +25,10 @@
 
 # The management dashboard for NSMusicS_Web
   - [Dashboard For NSMusicS_Web](https://github.com/users/Super-Badmen-Viper/projects/4)
+    
+## Downloads
+  - [NSMusicS Electron Test (Now)](https://github.com/Super-Badmen-Viper/NSMusicS/releases)
+  - [NSMusicS_Win(WPF)_3.1.0 (Old)](https://github.com/Super-Badmen-Viper/NSMusicS/releases/tag/NSMusicS_Win(WPF)_3.1.0)
 
 # Interface preview:
   ## NSMusicS Web(Electron)：Under development
