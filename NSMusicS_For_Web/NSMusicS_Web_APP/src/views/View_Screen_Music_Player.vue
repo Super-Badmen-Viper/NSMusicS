@@ -88,10 +88,12 @@
     emits('play_go_index_time', time);
   };
   const scrollbar = ref(null as any);
-  const virtualListInst = ref<VirtualListInst>()
   const perviousIndex = ref(0);
   const scrollToItem = (index: number) => {
     if (!scrollbar.value) {
+      return;
+    }
+    if(lyrics_list_whell.value){
       return;
     }
 
@@ -101,12 +103,13 @@
 
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
     itemElements[index].style.color = player_theme_lyricItem_0_bind_style.value.hoverStyle.colorHover;
+    itemElements[index].style.filter = 'blur(0px)';
     itemElements[index].style.transition = 'color 0.5s, transform 0.5s';
     if(collapsed_slider.value === false){
-      itemElements[index].style.transform = 'scale(1.05) translateY(0px)';
+      itemElements[index].style.transform = 'scale(1.1) translateY(0px)';
       itemElements[index].style.transformOrigin = 'left center';
     }else{
-      itemElements[index].style.transform = 'scale(1.1)  translateX(8px)';
+      itemElements[index].style.transform = 'scale(1.1)  translateX(0px)';
       itemElements[index].style.transformOrigin = 'center';
     }
     // BUG: if space-line Not fully covered at the bottom, exceeding the bottom portion , The entire page will be moved up，because block: 'center' used this page
@@ -117,6 +120,20 @@
         if(perviousIndex.value >= props.this_audio_lyrics_info_line_num){
           itemElements[perviousIndex.value].style.color = player_theme_lyricItem_0_bind_style.value.normalStyle.color;
           itemElements[perviousIndex.value].style.transform = 'scale(1)';
+          
+          let color_hidden = player_lyric_color.value.slice(0, -2);
+          let blurValue = 0.05;
+          for (let i = index - 16; i <= index + 16; i++) {
+            if (i < index) {
+              itemElements[i].style.color = `${color_hidden}${Math.max(90 - (index - i) * 20, 0)}`;
+              itemElements[i].style.filter = `blur(${blurValue}px)`;
+              blurValue += 0.05;
+            } else {
+              itemElements[i].style.color = `${color_hidden}${Math.max(90 - (i - index) * 20, 0)}`;
+              itemElements[i].style.filter = `blur(${blurValue}px)`;
+              blurValue += 0.05;
+            }
+          }
         }
       }
     }
@@ -125,9 +142,31 @@
   const lyrics_list_whell = ref(false);
   const handleWheel = (event: any) => {
     lyrics_list_whell.value = true;
+    const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
+    for (let i = 0; i < itemElements.length; i++) {
+      itemElements[i].style.color = player_theme_lyricItem_0_bind_style.value.normalStyle.color;
+      itemElements[i].style.transform = 'scale(1)';
+      itemElements[i].style.filter = 'blur(0px)';
+    }
   };
   const handleLeave = () => {
     lyrics_list_whell.value = false;
+    const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
+    let color_hidden = player_lyric_color.value.slice(0, -2);
+    let blurValue = 0.05;
+    for (let i = perviousIndex.value - 16; i <= perviousIndex.value + 16; i++) {
+      if (i < perviousIndex.value) {
+        const colorValue = Math.max(90 - (perviousIndex.value - i) * 20, 0);
+        itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+        itemElements[i].style.filter = `blur(${blurValue}px)`;
+        blurValue += 0.05;
+      } else {
+        const colorValue = Math.max(90 - (i - perviousIndex.value) * 20, 0);
+        itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+        itemElements[i].style.filter = `blur(${blurValue}px)`;
+        blurValue += 0.05;
+      }
+    }
   };
   ////// player theme seting
   const collapsed_slider = ref(false);// collapsed_slider.value = player_theme_lyricItem_0_bind_style.value.normalStyle.collapsed_slider;
@@ -823,13 +862,15 @@
   z-index: -1;
 }
 .lyrics_info {
-  color: v-bind(player_lyric_color);
+  /* color: v-bind(player_lyric_color); */
+  color: transparent;
   width: calc(40vw);
   margin-top: 6px;min-height: 50px;
   cursor: pointer;
   border-radius: 10px;
   line-height: 1.2;
   transition: color 0.5s, background-color 0.5s;
+  filter: blur(0.05px);
 }
 .lyrics_info:hover {
   background-color: #FFFFFF16;

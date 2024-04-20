@@ -802,11 +802,11 @@
 .gird_Left .bar_left_text_song_info{
   width: 280px;
   height: 56px;
-  margin-top: 5px;margin-left: 14px;
+  margin-top: 7px;margin-left: 14px;
   float: left;text-align: left;
 }
 .gird_Left .bar_left_text_song_info #bar_singer_name{
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   user-select: none;
   max-width: 240px;
@@ -822,7 +822,7 @@
   color: #3DC3FF;
 }
 .gird_Left .bar_left_text_song_info #bar_song_name{
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   max-width: 240px;
   /* 行数超出后显示省略号 */
@@ -837,7 +837,7 @@
   color: #3DC3FF;
 }
 .gird_Left .bar_left_text_song_info #bar_album_name{
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   max-width: 240px;
   /* 行数超出后显示省略号 */
