@@ -28,19 +28,17 @@
     
 ## Downloads
   - [NSMusicS Electron Test (Now)](https://github.com/Super-Badmen-Viper/NSMusicS/releases)
-  - [NSMusicS_Win(WPF)_3.1.0 (Old)](https://github.com/Super-Badmen-Viper/NSMusicS/releases/tag/NSMusicS_Win(WPF)_3.1.0)
+  - [NSMusicS_Win(WPF)_3.1.0 (Old)](https://github.com/Super-Badmen-Viper/NSMusicS/releases/tag/NSMusicS_Win(WPF)_3.1.1)
 
 # Interface preview:
   ## NSMusicS Web(Electron)：Under development
-  ![bandicam 2024-03-31 20-00-07-710](https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/fad7e26f-c364-4a05-b238-1915042e9f07)
-    <table>
+  <table>
       <tr>
         <td><img src="doc/Web (0).png" width="594"></td>
         <td><img src="doc/Web (1).png" width="594"></td>
       </tr>
-    </table>
+  </table>
   ## NSMusicS .NET(WPF)：Development completed
-  ![bandicam 2024-01-14 19-59-29-810~1](https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/3e6d1ca7-2a6b-440a-8e01-338c617a281d)
   <table>
     <tr>
       <td><img src="doc/Test (2).png" width="594"></td>
