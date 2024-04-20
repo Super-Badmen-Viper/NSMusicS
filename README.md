@@ -28,7 +28,7 @@
     
 ## Downloads
   - [NSMusicS Electron Test (Now)](https://github.com/Super-Badmen-Viper/NSMusicS/releases)
-  - [NSMusicS_Win(WPF)_3.1.0 (Old)](https://github.com/Super-Badmen-Viper/NSMusicS/releases/tag/NSMusicS_Win(WPF)_3.1.0)
+  - [NSMusicS_Win(WPF)_3.1.0 (Old)](https://github.com/Super-Badmen-Viper/NSMusicS/releases/tag/NSMusicS_Win(WPF)_3.1.1)
 
 # Interface preview:
   ## NSMusicS Web(Electron)：Under development
