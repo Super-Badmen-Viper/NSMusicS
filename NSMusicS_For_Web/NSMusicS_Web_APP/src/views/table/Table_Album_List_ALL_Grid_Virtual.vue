@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, h, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 
-  const emit = defineEmits([
+  const emits = defineEmits([
     'options_Sort_key','page_albumlists_keyword','page_albumlists_reset_data',
     'page_albumlists_selected',
     'media_list_of_album_id','play_this_album_song_list',
@@ -105,10 +105,10 @@
         _state_Sort_ = state_Sort.Ascend;
         break;
     }
-    // emit('options_Sort_key',options_Sort_key.value)
+    // emits('options_Sort_key',options_Sort_key.value)
     // 更新排序参数数组并执行排序操作
     const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
-    emit('options_Sort_key',sortersArray)
+    emits('options_Sort_key',sortersArray)
     // sortByColumnKeys(sortersArray);
 
     scrollToTop()
@@ -123,7 +123,7 @@
       bool_show_search_area.value = false
       input_search_InstRef.value?.clear()
       if(bool_input_search == true){
-        emit('page_albumlists_reset_data',true)
+        emits('page_albumlists_reset_data',true)
         back_search_default()
         bool_input_search = false
         scrollToTop()
@@ -146,13 +146,13 @@
   const click_search = () => {
     if (input_search_Value.value){
       const page_albumlists_keyword = input_search_Value.value.toLowerCase();
-      emit('page_albumlists_keyword',page_albumlists_keyword)
+      emits('page_albumlists_keyword',page_albumlists_keyword)
       bool_input_search = true
       options_Sort_key.value.forEach(element => {
         element.state_Sort = state_Sort.Default
       });
     }else{
-      emit('page_albumlists_reset_data',true)
+      emits('page_albumlists_reset_data',true)
       bool_input_search = false
       back_search_default()
     }
@@ -164,11 +164,11 @@
         if (options_Sort_key.value[i].key === options_Sort_key_Default_key.value) {
           const sortersArray: { columnKey: string; order: string }[] = [];
           if (options_Sort_key.value[i].state_Sort === 'default') {
-            emit('options_Sort_key', null);
+            emits('options_Sort_key', null);
           } else {
             const sorter = { columnKey: options_Sort_key.value[i].key, order: options_Sort_key.value[i].state_Sort };
             sortersArray.push(sorter);
-            emit('options_Sort_key', sortersArray);
+            emits('options_Sort_key', sortersArray);
           }
           break;
         }
@@ -200,7 +200,7 @@
   const collapsed_width = ref<number>(1090);
   //
   const handleSelected_value_for_albumlistall = (value: any) => {
-    emit('page_albumlists_selected',value)
+    emits('page_albumlists_selected',value)
     console.log('selected_value_for_albumlistall：'+value);
     breadcrumbItems.value = props.page_albumlists_options.find(option => option.value === value)?.label || '';
   };
@@ -230,11 +230,11 @@
   }
   const Open_this_album_SongList_click = (album_id:string) => {
     console.log('media_list_of_album_id：'+album_id);
-    emit('media_list_of_album_id',album_id)
+    emits('media_list_of_album_id',album_id)
   }
   const Play_this_album_SongList_click = (album_id:string) => {
     console.log('play_this_album_click：'+album_id);
-    emit('play_this_album_song_list',album_id)
+    emits('play_this_album_song_list',album_id)
   }
   // 重新渲染gridItems
   const stopWatching_collapsed_width = watch(() => props.collapsed, (newValue, oldValue) => {
@@ -308,10 +308,10 @@
   }
 
   const get_router_history_model_pervious = () => {
-    emit('router_history_model',-1)
+    emits('router_history_model',-1)
   }
   const get_router_history_model_next = () =>  {
-    emit('router_history_model',1)
+    emits('router_history_model',1)
   }
 
   import {

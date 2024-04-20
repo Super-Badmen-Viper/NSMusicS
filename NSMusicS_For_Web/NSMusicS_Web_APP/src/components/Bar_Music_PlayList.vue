@@ -5,7 +5,7 @@ import Table_Song_List from '../views/table/Table_Music_PlayList_Line_Virtual.vu
 const data_select_Index = ref<number>(-1)
 function get_data_select_Index(value: any) {
   data_select_Index.value = value
-  emit('data_select_Index',data_select_Index.value)
+  emits('data_select_Index',data_select_Index.value)
 }
 
 const menu_edit_this_song = ref<Media_File>()
@@ -35,14 +35,15 @@ const cleanup = () => {
 
 // import { useRouter } from "vue-router";
 // const router = useRouter();
-const emit = defineEmits([
+const emits = defineEmits([
   'router_select',
   'playlist_Files',
   'media_file_path','media_file_path_from_playlist',
   'media_file_medium_image_url',
   'this_audio_singer_name',
   'this_audio_song_name',
-  'this_audio_album_id',
+  'this_audio_album_id','this_audio_album_favite',
+  'this_audio_album_favite',
   'this_audio_album_name',
   'data_select_Index',
   'page_song_index',
@@ -58,52 +59,55 @@ const emit = defineEmits([
   'this_audio_lyrics_string'
 ]);
 function get_playlist_path(value: any) {
-  emit('media_file_path',value)
+  emits('media_file_path',value)
 }
 function get_media_file_path_from_playlist(value: any) {
-  emit('media_file_path_from_playlist',value)
+  emits('media_file_path_from_playlist',value)
 }
 function get_playlist_file_medium_image_url(value: any) {
-  emit('media_file_medium_image_url',value)
+  emits('media_file_medium_image_url',value)
 }
 function get_this_audio_singer_name(value: any) {
-  emit('this_audio_singer_name',value)
+  emits('this_audio_singer_name',value)
 }
 function get_this_audio_song_name(value: any) {
-  emit('this_audio_song_name',value)
+  emits('this_audio_song_name',value)
 }
 function get_this_audio_album_id(value: any) {
-  emit('this_audio_album_id',value)
+  emits('this_audio_album_id',value)
+}
+function get_this_audio_album_favite(value: any) {
+  emits('this_audio_album_favite',value)
 }
 function get_this_audio_album_name(value: any) {
-  emit('this_audio_album_name',value)
+  emits('this_audio_album_name',value)
 }
 function get_page_song_index(value: any) {
-  emit('page_song_index',value)
+  emits('page_song_index',value)
 }
 function get_page_songlists_options_Sort_key(value: any) {
-  emit('page_songlists_options_Sort_key',value)
+  emits('page_songlists_options_Sort_key',value)
 }
 function page_songlists_get_keyword(value: any) {
-  emit('page_songlists_keyword',value)
+  emits('page_songlists_keyword',value)
 }
 function page_songlists_get_reset_data(value: any) {
-  emit('page_songlists_reset_data',value)
+  emits('page_songlists_reset_data',value)
 }
 function get_router_select(value: any) {
-  emit('router_select',value)
+  emits('router_select',value)
 }
 function set_playlist_Files_selected(value: boolean) {
-  emit('playlist_Files_selected_set',value)
+  emits('playlist_Files_selected_set',value)
 }
 function set_playlist_Files_selected_all(value: boolean) {
-  emit('playlist_Files_selected_set_all',value)
+  emits('playlist_Files_selected_set_all',value)
 }
 function get_this_audio_lyrics_string(value: string) {
-  emit('this_audio_lyrics_string',value)
+  emits('this_audio_lyrics_string',value)
 }
 onMounted(async () => {
-  emit('router_select','View_Song_List_ALL')
+  emits('router_select','View_Song_List_ALL')
 });
 
 const { 
@@ -130,6 +134,7 @@ const {
         @this_audio_singer_name="get_this_audio_singer_name"
         @this_audio_song_name="get_this_audio_song_name"
         @this_audio_album_id="get_this_audio_album_id"
+        @this_audio_album_favite="get_this_audio_album_favite"
         @this_audio_album_name="get_this_audio_album_name"
         @data_select_Index="get_data_select_Index"
         @page_song_index="get_page_song_index"

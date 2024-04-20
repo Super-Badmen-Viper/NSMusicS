@@ -2,7 +2,7 @@
 import { ref, onMounted,defineEmits } from 'vue';
 import Table_Album_List_ALL from '../views/table/Table_Album_List_ALL_Grid_Virtual.vue'
 
-const emit = defineEmits([
+const emits = defineEmits([
   'router_select',
   'album_page_size',
   'page_albumlists_options_Sort_key','page_albumlists_keyword','page_albumlists_reset_data',
@@ -12,34 +12,34 @@ const emit = defineEmits([
   'router_history_model',
 ]);
 function get_album_PageSize(value: any) {
-  emit('album_page_size',value)
+  emits('album_page_size',value)
 }
 function get_page_albumlists_options_Sort_key(value: any) {
-  emit('page_albumlists_options_Sort_key',value)
+  emits('page_albumlists_options_Sort_key',value)
 }
 function get_router_select(value: any) {
-  emit('router_select',value)
+  emits('router_select',value)
 }
 function set_page_albumlists_selected(value: boolean) {
-  emit('page_albumlists_selected',value)
+  emits('page_albumlists_selected',value)
 }
 function get_media_list_of_album_id(value: any) {
-  emit('media_list_of_album_id',value)
+  emits('media_list_of_album_id',value)
 }
 function page_albumlists_get_keyword(value: string) {
-  emit('page_albumlists_keyword',value)
+  emits('page_albumlists_keyword',value)
 }
 function page_albumlists_get_reset_data(value: any) {
-  emit('page_albumlists_reset_data',value)
+  emits('page_albumlists_reset_data',value)
 }
 function get_play_this_album_song_list(value: any) {
-  emit('play_this_album_song_list',value)
+  emits('play_this_album_song_list',value)
 }
 function get_router_history_model(value: string) {
-  emit('router_history_model',value)
+  emits('router_history_model',value)
 }
 onMounted(async () => {
-  emit('router_select','View_Album_List_ALL')
+  emits('router_select','View_Album_List_ALL')
 });
 
 const { 

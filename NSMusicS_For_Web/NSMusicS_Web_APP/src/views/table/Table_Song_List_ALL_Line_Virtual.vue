@@ -2,12 +2,12 @@
 import { ref, onMounted, nextTick, h, reactive, computed, watch, onBeforeUnmount, createVNode } from 'vue';
 import { useMessage,DropdownOption, type DataTableColumns, type DataTableRowKey, NIcon, InputInst, NImage, PaginationProps } from 'naive-ui';
 import { RowData } from 'naive-ui/es/data-table/src/interface';
-const emit = defineEmits([
+const emits = defineEmits([
   'media_file_path','media_file_path_from_playlist',
   'media_file_medium_image_url',
   'this_audio_singer_name',
   'this_audio_song_name',
-  'this_audio_album_name','this_audio_album_id',
+  'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
   'data_select_Index',
   'page_song_index',
   'menu_edit_this_song',
@@ -181,9 +181,9 @@ onBeforeUnmount(() => {
 const data_select_Index = ref<number>(0)
 const click_select_ALL_row = () => {
   if(props.data_temporary_selected.length == 0){
-    emit('media_Files_selected_set_all', true);
+    emits('media_Files_selected_set_all', true);
   }else{
-    emit('media_Files_selected_set_all', false);
+    emits('media_Files_selected_set_all', false);
   }
 }
 const click_bulk_operation = () => {
@@ -251,13 +251,13 @@ const options_data_dropmenu: DropdownOption[] = [
 ]
 const handleSelect_data_dropmenu = (option: string) => {
   if (option === 'edit') {
-    emit('menu_edit_this_song',data_select_Index.value);
+    emits('menu_edit_this_song',data_select_Index.value);
   } 
   else if (option === 'add') {
-    emit('menu_add_this_song',data_select_Index.value);
+    emits('menu_add_this_song',data_select_Index.value);
   }
   else if (option === 'delete') {
-    emit('menu_delete_this_song',data_select_Index.value);
+    emits('menu_delete_this_song',data_select_Index.value);
   }
   showDropdownRef.value = false;
 }
@@ -358,10 +358,10 @@ const handleSelect_Sort = (key: string | number) => {
       _state_Sort_ = state_Sort.Ascend;
       break;
   }
-  // emit('options_Sort_key',options_Sort_key.value)
+  // emits('options_Sort_key',options_Sort_key.value)
   // 更新排序参数数组并执行排序操作
   const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
-  emit('options_Sort_key',sortersArray)
+  emits('options_Sort_key',sortersArray)
   // sortByColumnKeys(sortersArray);
 
   scrollToTop()
@@ -376,7 +376,7 @@ const show_search_area = () => {
     bool_show_search_area.value = false
     input_search_InstRef.value?.clear()
     if(bool_input_search == true){
-      emit('page_songlists_reset_data',true)
+      emits('page_songlists_reset_data',true)
       back_search_default()
       bool_input_search = false
       scrollToTop()
@@ -399,13 +399,13 @@ let bool_input_search = false
 const click_search = () => {
   if (input_search_Value.value){
     const page_songlists_keyword = input_search_Value.value.toLowerCase();
-    emit('page_songlists_keyword',page_songlists_keyword)
+    emits('page_songlists_keyword',page_songlists_keyword)
     bool_input_search = true
     options_Sort_key.value.forEach(element => {
       element.state_Sort = state_Sort.Default
     });
   }else{
-    emit('page_songlists_reset_data',true)
+    emits('page_songlists_reset_data',true)
     bool_input_search = false
     back_search_default()
   }
@@ -417,11 +417,11 @@ const back_search_default = () => {
       if (options_Sort_key.value[i].key === options_Sort_key_Default_key.value) {
         const sortersArray: { columnKey: string; order: string }[] = [];
         if (options_Sort_key.value[i].state_Sort === 'default') {
-          emit('options_Sort_key', null);
+          emits('options_Sort_key', null);
         } else {
           const sorter = { columnKey: options_Sort_key.value[i].key, order: options_Sort_key.value[i].state_Sort };
           sortersArray.push(sorter);
-          emit('options_Sort_key', sortersArray);
+          emits('options_Sort_key', sortersArray);
         }
         break;
       }
@@ -501,20 +501,21 @@ const handleItemDbClick = (media_file:Media_File) => {
     if(click_count >= 2){
       click_count = 0
 
-      emit('media_file_path_from_playlist',false)
-      emit('media_file_path', media_file.path)
-      emit('this_audio_lyrics_string', media_file.lyrics)
-      emit('media_file_medium_image_url',media_file.medium_image_url)
-      emit('this_audio_singer_name',media_file.artist)
-      emit('this_audio_song_name',media_file.title)
-      emit('this_audio_album_id', media_file.album_id);
-      emit('this_audio_album_name',media_file.album)
-      // emit('page_song_index', page_index); 
+      emits('media_file_path_from_playlist',false)
+      emits('media_file_path', media_file.path)
+      emits('this_audio_lyrics_string', media_file.lyrics)
+      emits('media_file_medium_image_url',media_file.medium_image_url)
+      emits('this_audio_singer_name',media_file.artist)
+      emits('this_audio_song_name',media_file.title)
+      emits('this_audio_album_id', media_file.album_id);
+      emits('this_audio_album_favite', media_file.favorite);
+      emits('this_audio_album_name',media_file.album)
+      // emits('page_song_index', page_index); 
 
       // data_select_Index.value = (current_page_num.value-1)*props.media_page_size + page_index;
 
-      // emit('data_select_Index', data_select_Index.value); 
-      emit('data_select_Index', media_file.absoluteIndex); 
+      // emits('data_select_Index', data_select_Index.value); 
+      emits('data_select_Index', media_file.absoluteIndex); 
     }
   }
 }
@@ -544,7 +545,7 @@ const handleItemClick_album = (album:string) => {
 }
 //
 const handleSelected_value_for_songlistall = (value: any) => {
-  emit('page_songlists_selected',value)
+  emits('page_songlists_selected',value)
   console.log('selected_value_for_songlistall：'+value);
   breadcrumbItems.value = props.page_songlists_options.find(option => option.value === value)?.label || '';
 };
@@ -563,10 +564,10 @@ const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any
   updateParts.visibleEndIdx = visibleEndIndex
 }
 const get_router_history_model_pervious = () => {
-  emit('router_history_model',-1)
+  emits('router_history_model',-1)
 }
 const get_router_history_model_next = () =>  {
-  emit('router_history_model',1)
+  emits('router_history_model',1)
 }
 
 import {
@@ -821,7 +822,7 @@ function getAssetImage(firstImage: string) {
                 v-model:checked="item.selected"
                 @update:checked="(checked: any) => { 
                   item.selected = checked;
-                  emit('media_Files_selected_set', item);
+                  emits('media_Files_selected_set', item);
                 }"
                 />
               <div 

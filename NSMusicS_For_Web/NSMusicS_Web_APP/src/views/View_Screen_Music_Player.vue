@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { defineEmits, ref, watch, onMounted } from 'vue';
-  const emits = defineEmits(['player_show_click','play_go_index_time']);
+  import { defineEmits, ref, watch, watchEffect, onMounted } from 'vue';
+  const emits = defineEmits(['player_show_click','play_go_index_time','view_collapsed_player_bar']);
 
   const props = defineProps([
     'this_audio_file_path','playlist_Files_temporary',
@@ -8,7 +8,8 @@
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name',
     'this_audio_lyrics_string','this_audio_lyrics_info_line','this_audio_lyrics_info_time',
     'player','currentTime_added_value',
-    'view_music_player_show_complete','this_audio_lyrics_info_line_num'
+    'view_music_player_show_complete','this_audio_lyrics_info_line_num',
+    'view_collapsed_player_bar'
   ]);
   const os = require('os');
   function getAssetImage(firstImage: string) {
@@ -22,6 +23,20 @@
   const handleImageError = (event:any) => {
     event.target.src = '../../resources/error_album.jpg'; // 设置备用图片路径
   };
+  ////// auto collapse player bar
+  let timer: string | number | NodeJS.Timeout | undefined;
+  const handleMouseMove = () => {
+    emits('view_collapsed_player_bar', false);
+    clearInterval(timer);
+    timer = setInterval(() => {
+      emits('view_collapsed_player_bar', true);
+    }, 3000);
+  };
+  const unwatch_view_collapsed_player_bar = watchEffect(() => {
+    if (props.view_collapsed_player_bar === false) {
+      clearInterval(timer);
+    }
+  });
 
   ////// lyircs load
   let unwatch = watch(() => props.this_audio_lyrics_string, (value) => {
@@ -119,7 +134,7 @@
   const player_album_size = ref('54vh')
   const player_album_radius = ref('10px')
   const player_album_info_left = ref(true)
-  const player_lyric_fontSize = ref('24px')
+  const player_lyric_fontSize = ref('22px')
   const player_lyric_fontWeight = ref('800')
   const player_lyric_color = ref('#FAFAFB60')
   // player theme style
@@ -158,7 +173,7 @@
         textAlign: true,
 
         color: '#FAFAFB60',
-        fontSize: '24px',
+        fontSize: '22px',
         fontWeight:'800',
         maxHeight: '100vh',
         collapsed_slider: false,
@@ -181,7 +196,7 @@
         textAlign: true,
 
         color: '#FAFAFB60',
-        fontSize: '24px',
+        fontSize: '22px',
         fontWeight:'800',
         maxHeight: '100vh',
         collapsed_slider: false,
@@ -204,7 +219,7 @@
         textAlign: true,
 
         color: '#FAFAFB60',
-        fontSize: '24px',
+        fontSize: '22px',
         fontWeight:'800',
         maxHeight: '100vh',
         collapsed_slider: false,
@@ -227,7 +242,7 @@
         textAlign: true,
 
         color: '#FAFAFB60',
-        fontSize: '24px',
+        fontSize: '22px',
         fontWeight:'800',
         maxHeight: '100vh',
         collapsed_slider: false,
@@ -250,7 +265,7 @@
         textAlign: false,
 
         color: '#FAFAFB60',
-        fontSize: '24px',
+        fontSize: '22px',
         fontWeight:'800',
         maxHeight: '100vh',
         collapsed_slider: true,
@@ -273,7 +288,7 @@
         textAlign: false,
 
         color: '#FAFAFB60',
-        fontSize: '24px',
+        fontSize: '22px',
         fontWeight:'800',
         maxHeight: '100vh',
         collapsed_slider: true,
@@ -399,9 +414,12 @@
   import { onBeforeUnmount } from 'vue';
   onBeforeUnmount(() => {
     clearInterval(lyrics_animation);
+    clearInterval(timer);
+    emits('view_collapsed_player_bar', false);
   });
   onBeforeUnmount(() => {
     unwatch();
+    unwatch_view_collapsed_player_bar();
   });
   import {
     Home28Regular,
@@ -427,7 +445,7 @@
 </script>
 
 <template>
-  <div style="overflow: hidden;">
+  <div style="overflow: hidden;" @mousemove="handleMouseMove">
     <div>
       <img
         id="player_bg_zindex_0"
@@ -447,28 +465,14 @@
         :src="getAssetImage(props.this_audio_file_medium_image_url)"
         @error="handleImageError"> -->
     </div>
-    <div 
-      style="
-        position: absolute;top: 6px;left: calc(50vw - 88px);
-        -webkit-app-region: no-drag;margin-top: 35px;margin-left:30px;
-      ">
-      <n-radio-group size="small" v-model:value="checkStrategy">
-        <n-radio-button size="small" value="player">
-          播放
-        </n-radio-button>
-        <n-radio-button size="small" value="related">
-          相关
-        </n-radio-button>
-      </n-radio-group>
-    </div>
     <n-config-provider :theme="null">
       <!-- right drwaer of Player_theme -->
       <n-drawer 
         v-model:show="isVisible_Player_theme" 
-        :width="470" 
+        :width="440" 
         style="
           border-radius: 12px 0 0 12px;
-          margin-top: calc(50vh - 340px);height: 680px;
+          margin-top: calc(50vh - 310px);height: 620px;
           background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
           ">
         <n-drawer-content v-if="isVisible_Player_theme">
@@ -482,7 +486,7 @@
               name="radiogroup"
               style="
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
                 align-items: start; /* 调整垂直对齐方式 */
                 grid-gap: 0px;
                 margin-left: 16px;"
@@ -492,7 +496,7 @@
                 :key="item.id" v-model:value="item.id"
                 style="height: 100%;z-index: 9;">
                 <n-space vertical justify="center" style="position: relative;left: -27px;z-index: -1;">
-                  <img :src="item.normalStyle.image_url" style="width: auto;height: 120px;object-fit: cover;border-radius: 8px;">
+                  <img :src="item.normalStyle.image_url" style="width: auto;height: 100px;object-fit: cover;border-radius: 8px;">
                   <span style="font-size: 16px;position: relative;top: -10px;left: 6px;color: #0F1213;">
                     {{ item.name }}
                   </span>
@@ -649,7 +653,10 @@
     <!-- body -->
     <n-space vertical :size="12" style="z-index: 99;overflow: hidden;">
       <n-space vertical>
-        <n-flex justify="space-between">
+        <n-flex 
+          justify="space-between" 
+          style="transition: margin 0.4s;"
+          :style="{ marginTop: view_collapsed_player_bar ? '-70px' : '0px' }">
           <n-flex style="height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-left:30px;">
               <n-button quaternary size="medium" 
@@ -660,6 +667,20 @@
               </n-button>
             </div>
           </n-flex>
+          <div 
+            v-if="false"
+            style="
+              -webkit-app-region: no-drag;margin-top: 35px;margin-left:calc(50vw - 306px);
+            ">
+            <n-radio-group size="small" v-model:value="checkStrategy">
+              <n-radio-button size="small" value="player">
+                播放
+              </n-radio-button>
+              <n-radio-button size="small" value="related">
+                相关
+              </n-radio-button>
+            </n-radio-group>
+          </div>
           <n-flex justify="end" style="height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;">
               <n-button quaternary style="margin-right:2px" @click="get_isVisible_Player_theme">
@@ -696,7 +717,10 @@
           </n-flex>
         </n-flex>
         <n-config-provider :theme="null">
-          <n-flex justify="center">
+          <n-flex 
+            justify="center" 
+            style="transition: margin 0.4s;"
+            :style="{ marginTop: view_collapsed_player_bar ? '70px' : '0px' }">
             <n-layout has-sider style="background-color: transparent;">
               <!-- Album 
                 show-trigger="bar" calc(50vw + 27vh + 8vw) :show-collapsed-content="false"-->
@@ -759,7 +783,7 @@
                     @wheel="handleWheel"
                     @mouseleave="handleLeave"
                     style="
-                      width: calc(40vw);max-height: calc(65vh);
+                      width: calc(40vw);max-height: calc(68vh);
                       overflow: auto;
                       background-color: #00000000;
                     ">

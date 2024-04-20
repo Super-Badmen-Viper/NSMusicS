@@ -2,7 +2,7 @@
 import { ref, onMounted,defineEmits } from 'vue';
 import Table_System_List_Line_Grid from '../views/table/Table_System_List_Line_Grid.vue'
 
-const emit = defineEmits([
+const emits = defineEmits([
   'router_select',
   'artist_page_num',
   'artist_page_size',
@@ -12,7 +12,7 @@ const emit = defineEmits([
 ]);
 
 onMounted(async () => {
-  emit('router_select','View_System_List_ALL')
+  emits('router_select','View_System_List_ALL')
 });
 
 const { } = defineProps<{}>();

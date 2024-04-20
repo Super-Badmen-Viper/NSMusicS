@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, h } from 'vue';
-const emit = defineEmits([
+const emits = defineEmits([
   'media_file_path',
   'media_file_medium_image_url',
   'this_audio_singer_name',

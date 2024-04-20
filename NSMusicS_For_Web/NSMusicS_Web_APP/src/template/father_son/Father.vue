@@ -20,6 +20,6 @@ function emitToChild() {
 
 // 子传父
 function getEmitValue(value: any) {
-  console.log('(父组件)emit 的值', '(子组件)' + value);
+  console.log('(父组件)emits 的值', '(子组件)' + value);
 }
 </script>

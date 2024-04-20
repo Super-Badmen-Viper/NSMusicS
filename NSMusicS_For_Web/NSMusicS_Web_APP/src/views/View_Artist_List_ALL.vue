@@ -2,7 +2,7 @@
 import { ref, onMounted,defineEmits } from 'vue';
 import Table_Artist_List_ALL from '../views/table/Table_Artist_List_ALL_Grid_Virtual.vue'
 
-const emit = defineEmits([
+const emits = defineEmits([
   'router_select',
   'artist_page_num',
   'artist_page_size',
@@ -13,37 +13,37 @@ const emit = defineEmits([
   'router_history_model',
 ]);
 function get_artist_page_num(value: any) {
-  emit('artist_page_num',value)
+  emits('artist_page_num',value)
 }
 function get_artist_PageSize(value: any) {
-  emit('artist_page_size',value)
+  emits('artist_page_size',value)
 }
 function get_page_artistlists_options_Sort_key(value: any) {
-  emit('page_artistlists_options_Sort_key',value)
+  emits('page_artistlists_options_Sort_key',value)
 }
 function get_router_select(value: any) {
-  emit('router_select',value)
+  emits('router_select',value)
 }
 function set_page_artistlists_selected(value: boolean) {
-  emit('page_artistlists_selected',value)
+  emits('page_artistlists_selected',value)
 }
 function page_artistlists_get_keyword(value: string) {
-  emit('page_artistlists_keyword',value)
+  emits('page_artistlists_keyword',value)
 }
 function page_artistlists_get_reset_data(value: any) {
-  emit('page_artistlists_reset_data',value)
+  emits('page_artistlists_reset_data',value)
 }
 function get_album_list_of_artist_id_artist(value: any) {
-  emit('album_list_of_artist_id_artist',value)
+  emits('album_list_of_artist_id_artist',value)
 }
 function get_play_this_artist_song_list(value: any) {
-  emit('play_this_artist_song_list',value)
+  emits('play_this_artist_song_list',value)
 }
 function get_router_history_model(value: string) {
-  emit('router_history_model',value)
+  emits('router_history_model',value)
 }
 onMounted(async () => {
-  emit('router_select','View_Artist_List_ALL')
+  emits('router_select','View_Artist_List_ALL')
 });
 
 const { 

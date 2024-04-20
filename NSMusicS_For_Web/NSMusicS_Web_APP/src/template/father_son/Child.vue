@@ -21,8 +21,8 @@ import { defineProps, defineEmits } from 'vue';
 const { propRef, propReactive } = defineProps(['propRef', 'propReactive']);
 
 // 子传父
-const emit = defineEmits();
+const emits = defineEmits();
 function emitToParent() {
-  emit('emitValue', '我是子组件的emit，我被发射了');
+  emits('emitValue', '我是子组件的emit，我被发射了');
 }
 </script>

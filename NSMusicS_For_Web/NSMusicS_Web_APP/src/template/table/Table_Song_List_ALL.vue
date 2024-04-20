@@ -2,12 +2,12 @@
 import { ref, onMounted, nextTick, h, reactive, computed, watch, onBeforeUnmount, createVNode } from 'vue';
 import { useMessage,DropdownOption, type DataTableColumns, type DataTableRowKey, NIcon, InputInst, NImage, PaginationProps } from 'naive-ui';
 import { RowData } from 'naive-ui/es/data-table/src/interface';
-const emit = defineEmits([
+const emits = defineEmits([
   'media_file_path',
   'media_file_medium_image_url',
   'this_audio_singer_name',
   'this_audio_song_name',
-  'this_audio_album_name','this_audio_album_id',
+  'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
   'data_select_Index',
   'page_song_index',
   'media_page_num',
@@ -293,13 +293,13 @@ const options_data_dropmenu: DropdownOption[] = [
 ]
 const handleSelect_data_dropmenu = (option: string) => {
   if (option === 'edit') {
-    emit('menu_edit_this_song',data_select_Index.value);
+    emits('menu_edit_this_song',data_select_Index.value);
   } 
   else if (option === 'add') {
-    emit('menu_add_this_song',data_select_Index.value);
+    emits('menu_add_this_song',data_select_Index.value);
   }
   else if (option === 'delete') {
-    emit('menu_delete_this_song',data_select_Index.value);
+    emits('menu_delete_this_song',data_select_Index.value);
   }
   showDropdownRef.value = false;
 }
@@ -316,13 +316,14 @@ const click_play_this_medialist = () => {
   if(bool_start_play.value == true){
     if(props.data_temporary != null && props.data_temporary.length > 0){
       let media_file:Media_File = props.data_temporary[0]
-      emit('media_file_path', media_file.path)
-      emit('media_file_medium_image_url',media_file.medium_image_url)
-      emit('this_audio_singer_name',media_file.artist)
-      emit('this_audio_song_name',media_file.title)
-      emit('this_audio_album_id', media_file.album_id);
-      emit('this_audio_album_name',media_file.album)
-      emit('data_select_Index', data_select_Index.value); 
+      emits('media_file_path', media_file.path)
+      emits('media_file_medium_image_url',media_file.medium_image_url)
+      emits('this_audio_singer_name',media_file.artist)
+      emits('this_audio_song_name',media_file.title)
+      emits('this_audio_album_id', media_file.album_id);
+      emits('this_audio_album_favite', media_file.favorite);
+      emits('this_audio_album_name',media_file.album)
+      emits('data_select_Index', data_select_Index.value); 
     }
   }else{
   }
@@ -334,16 +335,17 @@ const rowProps = (row:RowData,page_index: number) => ({//此处page代表相对�
   onDblclick: (_e: MouseEvent) => {
     if(click_count >= 2){
       let media_file:Media_File =JSON.parse(JSON.stringify(row, null, 2))
-      emit('media_file_path', media_file.path)
-      emit('media_file_medium_image_url',media_file.medium_image_url)
-      emit('this_audio_singer_name',media_file.artist)
-      emit('this_audio_song_name',media_file.title)
-      emit('this_audio_album_id', media_file.album_id);
-      emit('this_audio_album_name',media_file.album)
-      emit('page_song_index', page_index); 
+      emits('media_file_path', media_file.path)
+      emits('media_file_medium_image_url',media_file.medium_image_url)
+      emits('this_audio_singer_name',media_file.artist)
+      emits('this_audio_song_name',media_file.title)
+      emits('this_audio_album_id', media_file.album_id);
+      emits('this_audio_album_favite', media_file.favorite);
+      emits('this_audio_album_name',media_file.album)
+      emits('page_song_index', page_index); 
 
       data_select_Index.value = (current_page_num.value-1)*props.media_page_size + page_index;
-      emit('data_select_Index', data_select_Index.value); 
+      emits('data_select_Index', data_select_Index.value); 
 
       click_count = 0
     }
@@ -372,13 +374,13 @@ const paginationReactive: PaginationProps | undefined = reactive({
 });
 const pagination_onChange = (page: number) => {
   paginationReactive.page = page
-  emit('media_page_num',page)
+  emits('media_page_num',page)
   scrollToTop()
 }
 const pagination_onUpdatePageSize = (pageSize: number) => {
   paginationReactive.pageSize = pageSize
   paginationReactive.page = 1
-  emit('media_page_size',pageSize)
+  emits('media_page_size',pageSize)
 }
 //
 const scrollbar = ref<HTMLElement | null>(null);
@@ -465,10 +467,10 @@ const handleSelect_Sort = (key: string | number) => {
       _state_Sort_ = state_Sort.Ascend;
       break;
   }
-  // emit('options_Sort_key',options_Sort_key.value)
+  // emits('options_Sort_key',options_Sort_key.value)
   // 更新排序参数数组并执行排序操作
   const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
-  emit('options_Sort_key',sortersArray)
+  emits('options_Sort_key',sortersArray)
   // sortByColumnKeys(sortersArray);
 }
 const options_Sort_key_Default_key = ref<string>()
@@ -480,7 +482,7 @@ const show_search_area = () => {
   {
     bool_show_search_area.value = false
     if(bool_input_search == true){
-      emit('page_songlists_reset_data',true)
+      emits('page_songlists_reset_data',true)
       back_search_default()
       bool_input_search = false
     }
@@ -502,13 +504,13 @@ let bool_input_search = false
 const click_search = () => {
   if (input_search_Value.value){
     const page_songlists_keyword = input_search_Value.value.toLowerCase();
-    emit('page_songlists_keyword',page_songlists_keyword)
+    emits('page_songlists_keyword',page_songlists_keyword)
     bool_input_search = true
     options_Sort_key.value.forEach(element => {
       element.state_Sort = state_Sort.Default
     });
   }else{
-    emit('page_songlists_reset_data',true)
+    emits('page_songlists_reset_data',true)
     bool_input_search = false
     back_search_default()
   }
@@ -520,11 +522,11 @@ const back_search_default = () => {
       if (options_Sort_key.value[i].key === options_Sort_key_Default_key.value) {
         const sortersArray: { columnKey: string; order: string }[] = [];
         if (options_Sort_key.value[i].state_Sort === 'default') {
-          emit('options_Sort_key', null);
+          emits('options_Sort_key', null);
         } else {
           const sorter = { columnKey: options_Sort_key.value[i].key, order: options_Sort_key.value[i].state_Sort };
           sortersArray.push(sorter);
-          emit('options_Sort_key', sortersArray);
+          emits('options_Sort_key', sortersArray);
         }
         break;
       }

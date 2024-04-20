@@ -108,6 +108,10 @@
       view_music_player_show_complete.value = true
     }, 400);
   }
+  const view_collapsed_player_bar = ref(false);
+  const get_view_collapsed_player_bar = (value:any) => {
+    view_collapsed_player_bar.value = value
+  }
   ////// open bar musicplaylist
   const isVisible_Music_PlayList = ref(false);
   const get_isVisible_Music_PlayList = (value:any) => {
@@ -248,6 +252,11 @@
     page_songlists_top_album_id.value = value;
     page_albumlists_top_album_id.value = value;
     page_artistlists_top_artist_id.value = value;
+  }
+  const this_audio_album_favite = ref<string>('')
+  function get_this_audio_album_favite(value: any) {
+    this_audio_album_favite.value = value
+    console.log('this_audio_album_favite：'+value)
   }
   //////
   function formatTime(currentTime: number): string {
@@ -1029,6 +1038,7 @@
       get_this_audio_singer_name(playlist_Files_temporary.value[0].artist)
       get_this_audio_song_name(playlist_Files_temporary.value[0].title)
       get_this_audio_album_id(playlist_Files_temporary.value[0].album_id)
+      get_this_audio_album_favite(playlist_Files_temporary.value[0].favorite)
       get_this_audio_album_name(playlist_Files_temporary.value[0].album)
       get_data_select_Index(playlist_Files_temporary.value[0].absoluteIndex)
     }
@@ -1369,6 +1379,7 @@
       get_this_audio_singer_name(playlist_Files_temporary.value[0].artist)
       get_this_audio_song_name(playlist_Files_temporary.value[0].title)
       get_this_audio_album_id(playlist_Files_temporary.value[0].album_id)
+      get_this_audio_album_favite(playlist_Files_temporary.value[0].favorite)
       get_this_audio_album_name(playlist_Files_temporary.value[0].album)
       get_data_select_Index(playlist_Files_temporary.value[0].absoluteIndex)
     }
@@ -1759,6 +1770,7 @@
             @this_audio_song_name="get_this_audio_song_name"
             :this_audio_album_id="this_audio_album_id"
             @this_audio_album_id="get_this_audio_album_id"
+            @this_audio_album_favite="get_this_audio_album_favite"
             :this_audio_album_name="this_audio_album_name"
             @this_audio_album_name="get_this_audio_album_name"
             @data_select_Index="get_data_select_Index"
@@ -1923,6 +1935,10 @@
         @currentTime_added_value="get_currentTime_added_value"
         :play_go_index_time="play_go_index_time"
 
+        :view_collapsed_player_bar="view_collapsed_player_bar"
+        @view_collapsed_player_bar="get_view_collapsed_player_bar"
+        :view_music_player_show="view_music_player_show"
+
         @this_audio_lyrics_string="get_this_audio_lyrics_string"
 
         :this_audio_file_path="this_audio_file_path"
@@ -1937,6 +1953,8 @@
         @this_audio_song_name="get_this_audio_song_name"
         :this_audio_album_id="this_audio_album_id"
         @this_audio_album_id="get_this_audio_album_id"
+        :this_audio_album_favite="this_audio_album_favite"
+        @this_audio_album_favite="get_this_audio_album_favite"
         :this_audio_album_name="this_audio_album_name"
         @this_audio_album_name="get_this_audio_album_name"
 
@@ -1953,6 +1971,9 @@
       class="view_music_player"
       v-if="view_music_player_show"
       :style="{ height: `calc(100vh - ${margin_top_value_view_music_player}vh)` }"
+
+      :view_collapsed_player_bar="view_collapsed_player_bar"
+      @view_collapsed_player_bar="get_view_collapsed_player_bar"
       
       :player="player"
       :currentTime_added_value="currentTime_added_value"
@@ -1969,6 +1990,7 @@
       :this_audio_singer_name="this_audio_singer_name"
       :this_audio_song_name="this_audio_song_name"
       :this_audio_album_id="this_audio_album_id"
+      :this_audio_album_favite="this_audio_album_favite"
       :this_audio_album_name="this_audio_album_name"
       
       @player_show_click="get_player_show_click"
@@ -2019,6 +2041,7 @@
             @this_audio_singer_name="get_this_audio_singer_name"
             @this_audio_song_name="get_this_audio_song_name"
             @this_audio_album_id="get_this_audio_album_id"
+            @this_audio_album_favite="get_this_audio_album_favite"
             @this_audio_album_name="get_this_audio_album_name"
             @data_select_Index="get_data_select_Index"
             @page_song_index="get_page_song_index"

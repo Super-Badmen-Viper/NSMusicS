@@ -4,28 +4,31 @@
   // send this SetInfo
   import { defineEmits } from 'vue';
   const margin_top_value_view_music_player = ref(670);
-  const emit = defineEmits([
+  const emits = defineEmits([
     'player_show_height',
     'this_audio_refresh',
     'this_audio_file_path','this_audio_file_medium_image_url',
     'media_file_medium_image_url',
     'this_audio_singer_name',
     'this_audio_song_name',
-    'this_audio_album_name','this_audio_album_id',
+    'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
     'data_select_Index',
     'isVisible_Music_PlayList','isVisible_Player_Sound_effects',
     'player_show_click',
     'this_audio_lyrics_string',
-    'player','currentTime_added_value'
+    'player','currentTime_added_value',
+    'view_collapsed_player_bar'
   ]);
   import { defineProps} from 'vue';
   const props = defineProps([
     'this_audio_file_path','playlist_Files_temporary',
     'this_audio_file_medium_image_url','this_audio_refresh',
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name',
-    'this_audio_album_id',
+    'this_audio_album_id','this_audio_album_favite',
     'player_show_click','view_music_player_show_complete',
-    'player','play_go_index_time']);
+    'player','play_go_index_time',
+    'view_collapsed_player_bar','view_music_player_show'
+  ]);
 
   // open view musicplayer
   let path = require('path');
@@ -59,7 +62,7 @@
       margin_top_value_view_music_player.value = 
         margin_top_value_view_music_player.value === 
           0 ? 670 : 0;
-          emit('player_show_height',margin_top_value_view_music_player.value);
+          emits('player_show_height',margin_top_value_view_music_player.value);
       if(margin_top_value_view_music_player.value === 0)
         svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
       else
@@ -74,14 +77,14 @@
   let unwatch_player_show_click = watch(() => props.player_show_click, (newValue, oldValue) => {
     if (newValue === true) {
       margin_top_value_view_music_player.value = 670;
-      emit('player_show_height',margin_top_value_view_music_player.value)
+      emits('player_show_height',margin_top_value_view_music_player.value)
       if(margin_top_value_view_music_player.value === 0)
         svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
       else
         svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
       back_ChevronDouble.value = '../../resources/'+svg_shrink_up_arrow.value;
 
-      emit('player_show_click', false);
+      emits('player_show_click', false);
     }
   });
 
@@ -93,7 +96,7 @@
   const slider_singleValue = ref(0)
   const currentTime_added_value = ref(0)
   let unwatch_currentTime_added_value = watch(() => currentTime_added_value.value, (newValue, oldValue) => {
-    emit('currentTime_added_value',newValue);
+    emits('currentTime_added_value',newValue);
   });
   const player_no_progress_jump = ref(true)
   const slider_volume_value = ref(100)
@@ -113,7 +116,7 @@
       timer_this_audio_refresh.value = setTimeout(() => {
         if (newValue === lastTriggerValue.value) { // 检查最后一个触发的值是否与当前触发的值相等
           handleAudioFilePathChange();
-          emit('this_audio_refresh', false);
+          emits('this_audio_refresh', false);
         }
       }, 200);
     }
@@ -128,7 +131,7 @@
 
     // restart player
     // player = new Audio_Players(); // 1
-    emit('player', new Audio_Players()); // 2
+    emits('player', new Audio_Players()); // 2
     buffer_init.value = false;
     Init_Audio_Player()
   };
@@ -204,6 +207,8 @@
     }else{
       props.player.pause();
     }
+
+    handleRefusetohide();
   };
   ////// play order area
   function Play_Media_Order(model_num: string, increased: number) {
@@ -245,17 +250,20 @@
         }
 
         if (!stop_play) {
-          emit('this_audio_file_path', props.playlist_Files_temporary[index].path);
-          emit('this_audio_lyrics_string', props.playlist_Files_temporary[index].lyrics);
-          emit('this_audio_file_medium_image_url', props.playlist_Files_temporary[index].medium_image_url);
-          emit('this_audio_singer_name', props.playlist_Files_temporary[index].artist);
-          emit('this_audio_song_name', props.playlist_Files_temporary[index].title);
-          emit('this_audio_album_id', props.playlist_Files_temporary[index].album_id);
-          emit('this_audio_album_name', props.playlist_Files_temporary[index].album);
+          emits('this_audio_file_path', props.playlist_Files_temporary[index].path);
+          emits('this_audio_lyrics_string', props.playlist_Files_temporary[index].lyrics);
+          emits('this_audio_file_medium_image_url', props.playlist_Files_temporary[index].medium_image_url);
+          emits('this_audio_singer_name', props.playlist_Files_temporary[index].artist);
+          emits('this_audio_song_name', props.playlist_Files_temporary[index].title);
+          emits('this_audio_album_id', props.playlist_Files_temporary[index].album_id);
+          emits('this_audio_album_favite', props.playlist_Files_temporary[index].favite);
+          emits('this_audio_album_name', props.playlist_Files_temporary[index].album);
           console.log(props.playlist_Files_temporary[index]);
         }
       }
     }
+
+    handleRefusetohide();
   }
   ////// player button area
   const play_skip_back_click = () => {
@@ -307,6 +315,8 @@
           Play_Media_Order(play_order.value,1)
       }
     }
+
+    handleRefusetohide();
   };
   ////// player slider formatTime area
   const set_slider_singleValue = () => {
@@ -346,13 +356,19 @@
   let timer: string | number | NodeJS.Timeout | undefined;
   let player_range_duration_isDragging = false;
   const player_range_duration_handleMouseDown = () => {
-     player_range_duration_isDragging = true;
+    player_range_duration_isDragging = true;
+
+    handleRefusetohide();
   };
   const player_range_duration_handleMouseUp = () => {
-     player_range_duration_isDragging = false;
+    player_range_duration_isDragging = false;
+
+    handleRefusetohide();
   };
   const player_range_duration_handleclick = async () => {
     play_go_duration(slider_singleValue.value,true);
+
+    handleRefusetohide();
   }
   let unwatch_play_go_index_time =  watch(() => props.play_go_index_time, (newValue, oldValue) => {
     play_go_duration(props.play_go_index_time,false)
@@ -416,6 +432,8 @@
         
       }
     });
+
+    handleRefusetohide();
   }
   const update_dragend_slider_singleValue = () => {
     if(slider_singleValue.value >= 99.5 || slider_singleValue.value == 0){
@@ -423,6 +441,8 @@
       player_range_duration_handleclick()
     }
     player_range_duration_isDragging = false;
+
+    handleRefusetohide();
   };
 
   // player voice area
@@ -432,6 +452,8 @@
     }else{
       slider_volume_show.value = true;
     }
+
+    handleRefusetohide();
   }
   let unwatch_slider_volume_value = watch(
     slider_volume_value,
@@ -448,6 +470,8 @@
     }else{
       slider_order_show.value = true;
     }
+
+    handleRefusetohide();
   }
   const options_Order = [
     { label: '顺序播放', key: 'playback-1', 
@@ -482,15 +506,21 @@
   const handleSelect_Order = (value: any) => {
     console.log(value);
     play_order.value = value;
+
+    handleRefusetohide();
   }
 
   // open playList
   const Set_isVisible_Music_PlayList = () => {
-    emit('isVisible_Music_PlayList',true);
+    emits('isVisible_Music_PlayList',true);
+
+    handleRefusetohide();
   }
   // open sound effects
   const Set_isVisible_Player_Sound_effects= () => {
-    emit('isVisible_Player_Sound_effects',true);
+    emits('isVisible_Player_Sound_effects',true);
+
+    handleRefusetohide();
   }
 
   import { onBeforeUnmount } from 'vue';
@@ -506,7 +536,7 @@
     unwatch_slider_volume_value()
   });
   import {
-    Heart24Regular,
+    Heart24Regular,Heart28Filled,
     Video16Regular,
     DesktopFlow24Regular,
     MoreCircle32Regular,
@@ -528,11 +558,24 @@
     Random
   } from '@vicons/fa'
   import { NIcon } from 'naive-ui';
+
+  ////// auto collapse player bar
+  const handleRefusetohide = () => {
+    emits('view_collapsed_player_bar', false);
+  };
+  const handleShow = () => {
+    if(props.view_music_player_show === true)
+      emits('view_collapsed_player_bar', true)
+  }; 
 </script>
 
 <template>
   <!-- :style="{backgroundColor : `${musicplayer_background_color}` }" -->
-  <n-space class="this_Bar_Music_Player">
+  <n-space class="this_Bar_Music_Player"
+    style="transition: margin 0.4s;"
+    :style="{ marginBottom: view_collapsed_player_bar ? '-80px' : '0px' }"
+    @mousemove="handleRefusetohide" @mouseenter="handleRefusetohide" @mouseover="handleRefusetohide" 
+    @mouseleave="handleShow">
     <!-- <audio 
       id="player_audio_htmlelement" 
       :src="props.this_audio_file_path">
@@ -644,22 +687,11 @@
           </n-badge>
         </n-space>   
         <div class="gird_Right_button_area">
-          <n-space justify="space-around" style="margin-top: 10px;">
+          <n-space justify="space-between">
             <n-button size="tiny" text>
               <template #icon>
-                <n-icon :size="22"><Heart24Regular/></n-icon>
-              </template>
-            </n-button>
-            <n-button size="tiny" text>
-              <template #icon>
-                <n-icon :size="22"><Video16Regular/></n-icon>
-              </template>
-            </n-button>
-          </n-space>
-          <n-space justify="space-around" style="margin-top: 10px;">
-            <n-button size="tiny" text>
-              <template #icon>
-                <n-icon :size="22"><DesktopFlow24Regular/></n-icon>
+                <n-icon v-if="props.this_audio_album_favite" :size="22" color="red"><Heart28Filled/></n-icon>
+                <n-icon v-else :size="22"><Heart24Regular/></n-icon>
               </template>
             </n-button>
             <n-button size="tiny" text>
@@ -667,6 +699,26 @@
                 <n-icon :size="22"><MoreCircle32Regular/></n-icon>
               </template>
             </n-button>
+            <n-button size="tiny" text @click="Set_isVisible_Music_PlayList">
+              <template #icon>
+                <n-icon :size="22"><TopSpeed20Regular/></n-icon>
+              </template>
+            </n-button>
+            <n-button size="tiny" text @click="Set_isVisible_Music_PlayList">
+              <template #icon>
+                <n-icon :size="22"><DeviceEq24Filled/></n-icon>
+              </template>
+            </n-button>
+            <!-- <n-button size="tiny" text>
+              <template #icon>
+                <n-icon :size="25"><DesktopFlow24Regular/></n-icon>
+              </template>
+            </n-button>
+            <n-button size="tiny" text>
+              <template #icon>
+                <n-icon :size="25"><Video16Regular/></n-icon>
+              </template>
+            </n-button> -->
           </n-space>
         </div>
         <!-- <div class="gird_Right_audio_play_time_area">
@@ -676,7 +728,7 @@
             <n-ellipsis id="total_play_time">{{ total_play_time }}</n-ellipsis>
           </div>
         </div> -->
-        <n-space class="gird_Right_sound_effects_button_area">
+        <!-- <n-space class="gird_Right_sound_effects_button_area">
           <n-button text secondary class="gird_Right_speed_effects_button_area" @click="Set_isVisible_Music_PlayList">
             <template #icon>
               <n-icon :size="26"><DeviceEq24Filled/></n-icon>
@@ -689,7 +741,7 @@
               <n-icon :size="26"><TopSpeed20Regular/></n-icon>
             </template>
           </n-button>
-        </n-space>
+        </n-space> -->
       </div>
     </div>
   </n-space>
@@ -855,8 +907,8 @@
   width: 50px;
   height: 80px;
   float: right;
-  margin-top: 3px;
-  margin-right: 8px;
+  margin-top: 16px;
+  margin-right: 10px;
 }
 .gird_Right .gird_Right_current_playlist_button_area{
   width: 60px;
