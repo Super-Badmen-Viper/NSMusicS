@@ -32,12 +32,13 @@
 
 # Interface preview:
   ## NSMusicS Web(Electron)：Under development
-  <table>
+   <table>
       <tr>
         <td><img src="doc/Web (0).png" width="594"></td>
         <td><img src="doc/Web (1).png" width="594"></td>
       </tr>
-  </table>
+   </table>
+   
   ## NSMusicS .NET(WPF)：Development completed
   <table>
     <tr>
