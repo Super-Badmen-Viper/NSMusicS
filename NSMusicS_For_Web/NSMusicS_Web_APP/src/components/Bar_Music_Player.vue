@@ -118,14 +118,14 @@
   const handleAudioFilePathChange = async () => {
     current_play_time.value = formatTime(props.player.getDuration());
     currentTime_added_value.value = 0;
-    this_audio_buffer_file.value = false;
+    this_audio_buffer_file.value = null;
     player_no_progress_jump.value = false;
     props.player.isPlaying = false;
 
     Init_Audio_Player()
   };
   const play_order = ref('playback-2');
-  const this_audio_buffer_file = ref(false)
+  const this_audio_buffer_file = ref<any>()
   const is_play_ended = ref(false);
   const timer_this_audio_player = ref<NodeJS.Timeout>();// 延迟触发：接收大量数据时，仅触发最后一个值
   const { Howl } = require('howler');
@@ -156,7 +156,7 @@
             if(player_no_progress_jump.value == true){
               current_play_time.value = formatTime(props.player.getDuration());
               currentTime_added_value.value = 0;
-              this_audio_buffer_file.value = false;
+              this_audio_buffer_file.value = null;
               clearInterval(timer);
 
               player_no_progress_jump.value = false;
@@ -183,7 +183,7 @@
   const Init_Audio_Player = async () => {
     if(props.player.isPlaying === false){
       if(this_audio_buffer_file.value === null){
-        this_audio_buffer_file.value = true;
+        this_audio_buffer_file.value = Math.random().toString(36).substring(7);
       }else{
         props.player.resume();
       }
@@ -252,7 +252,7 @@
   const play_skip_back_click = () => {
     current_play_time.value = formatTime(props.player.getDuration());
     currentTime_added_value.value = 0;
-    this_audio_buffer_file.value = false;
+    this_audio_buffer_file.value = null;
     clearInterval(timer);
 
     player_no_progress_jump.value = false;
@@ -263,7 +263,7 @@
   const play_skip_forward_click = () => {
     current_play_time.value = formatTime(props.player.getDuration());
     currentTime_added_value.value = 0;
-    this_audio_buffer_file.value = false;
+    this_audio_buffer_file.value = null;
     clearInterval(timer);
 
     player_no_progress_jump.value = false;
@@ -274,7 +274,7 @@
   const Play_Media_Switching = () => {
     current_play_time.value = formatTime(props.player.getDuration());
     currentTime_added_value.value = 0;
-    this_audio_buffer_file.value = false;
+    this_audio_buffer_file.value = null;
     clearInterval(timer);
 
     player_no_progress_jump.value = false;
@@ -703,13 +703,13 @@
 
 .gird_Left .bar_left_text_song_info{
   width: 280px;
-  height: 56px;
-  margin-top: 13px;margin-left: 14px;
+  height: 50px;
+  margin-top: 11px;margin-left: 14px;
   float: left;text-align: left;
 }
 .gird_Left .bar_left_text_song_info #bar_song_name{
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 600;
   max-width: 240px;
 }
 .gird_Left .bar_left_text_song_info #bar_song_name:hover {
@@ -717,14 +717,15 @@
   color: #3DC3FF;
 }
 .gird_Left .bar_left_text_song_info #bar_singer_name_part {
-  font-size: 13px;
+  font-size: 16px;
+  font-weight: 500;
 }
 .gird_Left .bar_left_text_song_info #bar_singer_name_part:hover {
   text-decoration: underline;
   color: #3DC3FF;
 }
 .gird_Left .bar_left_text_song_info #bar_album_name{
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
   max-width: 240px;
 }
