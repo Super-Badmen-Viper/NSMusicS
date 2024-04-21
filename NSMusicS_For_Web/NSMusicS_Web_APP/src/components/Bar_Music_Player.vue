@@ -706,7 +706,7 @@
 .gird_Left .bar_left_text_song_info{
   width: 280px;
   height: 50px;
-  margin-top: 11px;margin-left: 14px;
+  margin-top: 12px;margin-left: 14px;
   float: left;text-align: left;
 }
 .gird_Left .bar_left_text_song_info #bar_song_name{

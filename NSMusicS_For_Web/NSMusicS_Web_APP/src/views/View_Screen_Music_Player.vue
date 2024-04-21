@@ -48,35 +48,43 @@
   function load_lyrics() {
     if(props.this_audio_lyrics_string.length > 0) {
       begin_lyrics_animation()
+      
+      try{
+        setTimeout(() => {
+          handleLeave()
+        }, 200);
+      }catch(e){
+        console.log(e)
+      }
     }
   }
   function begin_lyrics_animation() {
     clearInterval(lyrics_animation);
     lyrics_animation = setInterval(() => {
       for (let i = 0; i < props.this_audio_lyrics_info_time.length; i++) {
-          if(props.player !== null && props.player.getCurrentTime() !== undefined && props.player.getCurrentTime() !== null){
-            // let currentTime = (Math.floor(props.currentTime_added_value) + props.player.getCurrentTime())*1000;
-            let currentTime = props.player.getCurrentTime()*1000;
-            if(currentTime <= props.this_audio_lyrics_info_time[0]){  
+        if(props.player !== null && props.player.getCurrentTime() !== undefined && props.player.getCurrentTime() !== null){
+          // let currentTime = (Math.floor(props.currentTime_added_value) + props.player.getCurrentTime())*1000;
+          let currentTime = props.player.getCurrentTime()*1000;
+          if(currentTime <= props.this_audio_lyrics_info_time[0]){  
+            if(lyrics_list_whell.value === false){
+              scrollToItem(props.this_audio_lyrics_info_line_num);
+            }
+            break;
+          }else if(currentTime >= props.this_audio_lyrics_info_time[i]){
+            if(i === props.this_audio_lyrics_info_time.length - 1){
               if(lyrics_list_whell.value === false){
-                scrollToItem(props.this_audio_lyrics_info_line_num);
+                scrollToItem(i + props.this_audio_lyrics_info_line_num);
               }
               break;
-            }else if(currentTime >= props.this_audio_lyrics_info_time[i]){
-              if(i === props.this_audio_lyrics_info_time.length - 1){
-                if(lyrics_list_whell.value === false){
-                  scrollToItem(i + props.this_audio_lyrics_info_line_num);
-                }
-                break;
-              }else if(currentTime < props.this_audio_lyrics_info_time[i+1]){
-                if(lyrics_list_whell.value === false){
-                  scrollToItem(i + props.this_audio_lyrics_info_line_num);
-                }
-                break;
+            }else if(currentTime < props.this_audio_lyrics_info_time[i+1]){
+              if(lyrics_list_whell.value === false){
+                scrollToItem(i + props.this_audio_lyrics_info_line_num);
               }
+              break;
             }
           }
         }
+      }
     }, 100);
   }
   let lyrics_animation: string | number | NodeJS.Timeout | undefined;
