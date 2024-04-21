@@ -75,6 +75,8 @@
   const get_send_onclick = (value:any) => {
     view_music_player_show_complete.value = false
 
+    ipcRenderer.send('window-gc');
+
     if(value === 0)
       view_music_player_show.value = true
     setTimeout(() => {
@@ -1505,6 +1507,7 @@
     media_Files_temporary.value = [];
     album_Files_temporary.value = [];
     artist_Files_temporary.value = [];
+    ipcRenderer.send('window-gc');
   }
   // history model media
   const router_history_model_of_Media = ref<number>(0)

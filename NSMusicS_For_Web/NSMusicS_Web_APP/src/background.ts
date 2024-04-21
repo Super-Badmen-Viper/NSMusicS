@@ -2,7 +2,6 @@ import { app, BrowserWindow,dialog, Menu  } from 'electron'
 import { readFileSync } from 'fs';
 import { createReadStream } from 'fs';
 import { promisify } from 'util';
-const { Readable } = require('stream');
 const fs = require('fs');
 
 
@@ -66,6 +65,11 @@ async function createWindow() {
     })
     ipc.on('window-close', function () {
         win.close();
+    })
+
+    ipc.on('window-gc', function () {
+        win.webContents.session.flushStorageData();
+        console.log('GC Once');
     })
     
     ipc.handle('readFile', async (event, filePath) => {

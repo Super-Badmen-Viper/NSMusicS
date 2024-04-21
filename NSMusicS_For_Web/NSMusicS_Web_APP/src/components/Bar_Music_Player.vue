@@ -29,6 +29,7 @@
     'player','play_go_index_time',
     'view_collapsed_player_bar','view_music_player_show'
   ]);
+  const { ipcRenderer } = require('electron'); 
 
   // open view musicplayer
   const svg_shrink_up_arrow = ref<string>('shrink_up_arrow.svg');
@@ -132,6 +133,7 @@
   let unwatch_this_audio_buffer_file =  watch(() => this_audio_buffer_file.value, (newValue, oldValue) => {
     if (newValue !== oldValue) {
       props.player.unload();
+      ipcRenderer.send('window-gc');
       clearTimeout(timer_this_audio_player.value);
       timer_this_audio_player.value = setTimeout(() => {
         currentTime_added_value.value = 0;
