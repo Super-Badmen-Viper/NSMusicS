@@ -55,7 +55,8 @@
     lyrics_animation = setInterval(() => {
       for (let i = 0; i < props.this_audio_lyrics_info_time.length; i++) {
           if(props.player !== null && props.player.getCurrentTime() !== undefined && props.player.getCurrentTime() !== null){
-            let currentTime = (Math.floor(props.currentTime_added_value) + props.player.getCurrentTime())*1000;
+            // let currentTime = (Math.floor(props.currentTime_added_value) + props.player.getCurrentTime())*1000;
+            let currentTime = props.player.getCurrentTime()*1000;
             if(currentTime <= props.this_audio_lyrics_info_time[0]){  
               if(lyrics_list_whell.value === false){
                 scrollToItem(props.this_audio_lyrics_info_line_num);
@@ -83,7 +84,7 @@
     if(index < props.this_audio_lyrics_info_line_num) return;
     if(index > props.this_audio_lyrics_info_line.length - props.this_audio_lyrics_info_line_num - 1) return;
     const time = props.this_audio_lyrics_info_time[index - props.this_audio_lyrics_info_line_num];
-    if(time >= props.player.getTotalTime()*1000) return;
+    if(time >= props.player.getDuration()*1000) return;
     if(time < 0) return;
     emits('play_go_index_time', time);
   };
@@ -125,11 +126,13 @@
           let blurValue = 0.05;
           for (let i = index - 16; i <= index + 16; i++) {
             if (i < index) {
-              itemElements[i].style.color = `${color_hidden}${Math.max(90 - (index - i) * 20, 0)}`;
+              const colorValue = Math.max(90 - (index - i) * 20, 0);
+              itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
               itemElements[i].style.filter = `blur(${blurValue}px)`;
               blurValue += 0.05;
             } else {
-              itemElements[i].style.color = `${color_hidden}${Math.max(90 - (i - index) * 20, 0)}`;
+              const colorValue = Math.max(90 - (i - index) * 20, 0);
+              itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
               itemElements[i].style.filter = `blur(${blurValue}px)`;
               blurValue += 0.05;
             }
@@ -454,11 +457,9 @@
   onBeforeUnmount(() => {
     clearInterval(lyrics_animation);
     clearInterval(timer);
-    emits('view_collapsed_player_bar', false);
-  });
-  onBeforeUnmount(() => {
     unwatch();
     unwatch_view_collapsed_player_bar();
+    emits('view_collapsed_player_bar', false);
   });
   import {
     Home28Regular,
@@ -776,7 +777,7 @@
                       class="player_album_image"
                       :style="{width: player_album_size, height: player_album_size, borderRadius: player_album_radius}"
                       style="
-                        margin-top: calc(28vh - 180px);
+                        margin-top: calc(28vh - 162px);
                         object-fit: cover;object-position: center;
                         filter: blur(0px);
                       "

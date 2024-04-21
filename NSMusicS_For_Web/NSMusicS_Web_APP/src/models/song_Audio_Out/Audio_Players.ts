@@ -176,7 +176,7 @@ export class Audio_Players {
         }
     }
     
-    public getTotalTime(): number {
+    public getDuration(): number {
         return this.audioDuration;
     }
     

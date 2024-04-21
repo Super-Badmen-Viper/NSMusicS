@@ -54,6 +54,7 @@
 - NSMusicS Web Of Thanks：
   - [Electron](https://github.com/electron/electron)
   - [better-sqlite3](https://github.com/WiseLibs/better-sqlite3)
+  - [howler.js](https://github.com/goldfire/howler.js) 
   - [Vue3](https://github.com/vuejs/vue)
   - [Naive UI](https://github.com/tusen-ai/naive-ui)
 - NSMusicS WPF Of Thanks:

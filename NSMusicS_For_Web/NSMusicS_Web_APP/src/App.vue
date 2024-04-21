@@ -129,12 +129,14 @@
   const path = require('path');
   const fs = require('fs');
   import { Audio_Players } from '../src/models/song_Audio_Out/Audio_Players';
-  let player = new Audio_Players();
+  let player_web_audio_api = new Audio_Players();
+  import { Audio_howler }  from '../src/models/song_Audio_Out/Audio_howler';
+  let player = new Audio_howler();
   function get_player(value: Audio_Players) {
-    player.releaseMemory(true);
+    // player.releaseMemory(true);
 
-    player = value
-    console.log('player：'+value)
+    // player = value
+    // console.log('player：'+value)
   }
   const currentTime_added_value = ref(0);
   function get_currentTime_added_value(value: any) {

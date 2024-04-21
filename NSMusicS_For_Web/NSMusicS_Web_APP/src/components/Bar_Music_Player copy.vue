@@ -31,7 +31,9 @@
   ]);
 
   // open view musicplayer
+  let path = require('path');
   const svg_shrink_up_arrow = ref<string>('shrink_up_arrow.svg');
+  const svg_shrink_down_arrow = ref<string>('shrink_down_arrow.svg');
   const back_display = ref('none');
   const back_ChevronDouble = ref('../../resources/'+svg_shrink_up_arrow.value)
   const back_filter_blurValue  = ref(0);
@@ -88,6 +90,7 @@
 
   // binding
   const musicplayer_background_color = ref('#FFFFFF');
+  const this_audio_buffer_file = ref(null)
   const total_play_time = ref('04:42');
   const current_play_time = ref('01:36');
   const slider_singleValue = ref(0)
@@ -99,6 +102,10 @@
   const slider_volume_value = ref(100)
   const slider_volume_show = ref(false)
   const slider_order_show = ref(false)
+  // audio system
+  import { Audio_Players } from '../models/song_Audio_Out/Audio_Players';
+  import { Audio_howler }  from '../models/song_Audio_Out/Audio_howler';
+  const { ipcRenderer } = require('electron');
   // audio player
   const timer_this_audio_refresh = ref<NodeJS.Timeout>();
   const lastTriggerValue = ref<any>(null);// 延迟触发：接收大量数据时，仅触发最后一个值
@@ -118,72 +125,83 @@
   const handleAudioFilePathChange = async () => {
     current_play_time.value = formatTime(props.player.getDuration());
     currentTime_added_value.value = 0;
-    this_audio_buffer_file.value = false;
+    props.player.releaseMemory(true);
+    this_audio_buffer_file.value = null;
     player_no_progress_jump.value = false;
     props.player.isPlaying = false;
 
+    // restart player
+    // player = new Audio_Players(); // 1
+    emits('player', new Audio_Players()); // 2
+    buffer_init.value = false;
     Init_Audio_Player()
   };
   const play_order = ref('playback-2');
-  const this_audio_buffer_file = ref(false)
   const is_play_ended = ref(false);
+  const buffer_init = ref(false);
   const timer_this_audio_player = ref<NodeJS.Timeout>();// 延迟触发：接收大量数据时，仅触发最后一个值
-  const { Howl } = require('howler');
   let unwatch_this_audio_buffer_file =  watch(() => this_audio_buffer_file.value, (newValue, oldValue) => {
     if (newValue !== oldValue) {
-      props.player.unload();
       clearTimeout(timer_this_audio_player.value);
       timer_this_audio_player.value = setTimeout(() => {
-        currentTime_added_value.value = 0;
-        props.player.howl = new Howl({
-          src: [props.this_audio_file_path],
-          autoplay: false,
-          html5: true,
-          loop: false,
-          volume: 1.0,
-          onplay: () => {
-            props.player.isPlaying = true;
-          },
-          onpause: () => {
-            props.player.isPlaying = false;
-          },
-          onstop: () => {
-            props.player.isPlaying = false;
-          },
-          onend: () => {
-            props.player.isPlaying = false;
-            //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
-            if(player_no_progress_jump.value == true){
-              current_play_time.value = formatTime(props.player.getDuration());
-              currentTime_added_value.value = 0;
-              this_audio_buffer_file.value = false;
+        if(buffer_init.value === true){
+          currentTime_added_value.value = 0;
+          props.player.releaseMemory(true);
+          props.player.loadAudio(this_audio_buffer_file.value,true).then(() => {
+            if(props.player.bufferSourceNode != null){
+              props.player.setVolume(Number(slider_volume_value.value));
+              props.player.setFadein();
+              props.player.setFadeout();
+              if (props.player.audioContext.state === 'suspended') {
+                props.player.audioContext.resume();
+              }
+              props.player.bufferSourceNode.addEventListener('ended', () => {
+                //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
+                if(player_no_progress_jump.value == true){
+                  current_play_time.value = formatTime(props.player.getDuration());
+                  currentTime_added_value.value = 0;
+                  props.player.releaseMemory(true);
+                  clearInterval(timer);
+                  this_audio_buffer_file.value = null
+
+                  player_no_progress_jump.value = false;
+
+                  props.player.isPlaying = false;
+                  is_play_ended.value = true;
+                }
+                Play_Media_Switching()
+              });
+              
+              // fix quick load a lot of media of memory questions(web-audio-api start error)
+              try {
+                props.player.bufferSourceNode.start(props.player.audioContext.currentTime, props.player.startTime, props.player.audioDuration);
+                if (props.player.audioContext.state === 'suspended') {
+                    props.player.audioContext.resume();
+                }
+              }catch (error) {
+                console.log(error);
+                setTimeout(() => {
+                  handleAudioFilePathChange();
+                }, 200);
+              }
+
+              props.player.isPlaying = true;
+              is_play_ended.value = false;
+              player_no_progress_jump.value = true;
               clearInterval(timer);
-
-              player_no_progress_jump.value = false;
-
-              props.player.isPlaying = false;
-              is_play_ended.value = true;
+              timer = setInterval(synchronize_playback_time, 200);
+              total_play_time.value = formatTime(props.player.getDuration());
             }
-            Play_Media_Switching()
-          },
-          onloaderror: (id: any, error: any) => {
-            console.error('Failed to load audio:', error);
-          }
-        });
-        props.player.isPlaying = true;
-        is_play_ended.value = false;
-        player_no_progress_jump.value = true;
-        clearInterval(timer);
-        timer = setInterval(synchronize_playback_time, 200);
-        total_play_time.value = formatTime(props.player.getDuration());
-        props.player.play();
+          });
+        }
       }, 400);
     }
   });
   const Init_Audio_Player = async () => {
     if(props.player.isPlaying === false){
       if(this_audio_buffer_file.value === null){
-        this_audio_buffer_file.value = true;
+        buffer_init.value = true;
+        this_audio_buffer_file.value = await ipcRenderer.invoke('readFile', props.this_audio_file_path);
       }else{
         props.player.resume();
       }
@@ -252,8 +270,9 @@
   const play_skip_back_click = () => {
     current_play_time.value = formatTime(props.player.getDuration());
     currentTime_added_value.value = 0;
-    this_audio_buffer_file.value = false;
+    props.player.releaseMemory(true);
     clearInterval(timer);
+    this_audio_buffer_file.value = null
 
     player_no_progress_jump.value = false;
 
@@ -263,29 +282,40 @@
   const play_skip_forward_click = () => {
     current_play_time.value = formatTime(props.player.getDuration());
     currentTime_added_value.value = 0;
-    this_audio_buffer_file.value = false;
+    props.player.releaseMemory(true);
     clearInterval(timer);
+    this_audio_buffer_file.value = null
 
     player_no_progress_jump.value = false;
 
     props.player.isPlaying = false;
     Play_Media_Order(play_order.value,1)
   }
+  const throttleDuration = 1000; // 节流的时间间隔，单位为毫秒
+  let lastTriggerTime = 0; // 上次触发的时间戳
   const Play_Media_Switching = () => {
-    current_play_time.value = formatTime(props.player.getDuration());
-    currentTime_added_value.value = 0;
-    this_audio_buffer_file.value = false;
-    clearInterval(timer);
+    const currentTime = Date.now();
+    if (currentTime - lastTriggerTime > throttleDuration) {
+      // 在节流时间间隔内首次触发
+      lastTriggerTime = currentTime;
+      if(slider_singleValue.value >= 99 && props.player.getDuration() != 0){
+        current_play_time.value = formatTime(props.player.getDuration());
+        currentTime_added_value.value = 0;
+        props.player.releaseMemory(true);
+        clearInterval(timer);
+        this_audio_buffer_file.value = null
 
-    player_no_progress_jump.value = false;
+        player_no_progress_jump.value = false;
 
-    props.player.isPlaying = false;
-    is_play_ended.value = true;
+        props.player.isPlaying = false;
+        is_play_ended.value = true;
 
-    if(play_order.value === 'playback-3')
-      Play_Media_Order(play_order.value,0)
-    else
-      Play_Media_Order(play_order.value,1)
+        if(play_order.value === 'playback-3')
+          Play_Media_Order(play_order.value,0)
+        else
+          Play_Media_Order(play_order.value,1)
+      }
+    }
 
     handleRefusetohide();
   };
@@ -344,28 +374,65 @@
   let unwatch_play_go_index_time =  watch(() => props.play_go_index_time, (newValue, oldValue) => {
     play_go_duration(props.play_go_index_time,false)
   });
-  const play_go_duration = (slider_value:number,silder_path:boolean) => {
+  const play_go_duration = (silder_value:number,silder_path:boolean) => {
     player_no_progress_jump.value = false;
-    currentTime_added_value.value = 0;
-    if(props.player.isPlaying === true)
-    {
-      // 注意，此时currentTime将从0开始，需要计算附加值
-      if (silder_path) {
-        let newTime = (Number(slider_value) / 100) * props.player.getDuration();
-        if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
-            props.player.setCurrentTime(newTime);
-        } else {
-            props.player.setCurrentTime(0);
+    props.player.releaseMemory(false);
+    props.player.loadAudio( this_audio_buffer_file.value,false).then(() => {
+      if(props.player.bufferSourceNode != null){
+        props.player.setVolume(Number(slider_volume_value.value));
+        props.player.setFadein();
+        props.player.setFadeout();
+        if (props.player.audioContext.state === 'suspended') {
+          props.player.audioContext.resume();
         }
-      } else {
-        let newTime = Number(slider_value) / 1000;
-        if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
-            props.player.setCurrentTime(newTime);
-        } else {
-            props.player.setCurrentTime(0);
+        props.player.bufferSourceNode.addEventListener('ended', () => {
+          //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
+          if(player_no_progress_jump.value == true){
+            current_play_time.value = formatTime(props.player.getDuration());
+            currentTime_added_value.value = 0;
+            props.player.releaseMemory(true);
+            clearInterval(timer);
+            this_audio_buffer_file.value = null
+
+            player_no_progress_jump.value = false;
+
+            props.player.isPlaying = false;
+            is_play_ended.value = true;
+          }
+          
+          Play_Media_Switching()
+        });
+        props.player.isPlaying = true;
+        is_play_ended.value = false;
+        clearInterval(timer);
+        timer = setInterval(synchronize_playback_time, 200);
+        total_play_time.value = formatTime(props.player.getDuration());
+
+        // 注意，此时currentTime将从0开始，需要计算附加值
+        if(silder_path){
+          let newtime = (Number(silder_value) / 100) * props.player.audioDuration;
+          if(Number(silder_value) != 0 && Number(silder_value) != 100){
+            props.player.bufferSourceNode.start(0,newtime);
+            currentTime_added_value.value = newtime;
+          }
+          else{
+            props.player.bufferSourceNode.start(props.player.audioContext.currentTime, props.player.startTime, props.player.audioDuration);
+            currentTime_added_value.value = 0;
+          }
+        }else{
+          let newtime = silder_value / 1000;
+          if(Number(silder_value) != 0 && Number(silder_value) != 100){
+            props.player.bufferSourceNode.start(0,newtime);
+            currentTime_added_value.value = newtime;
+          }
+          else{
+            props.player.bufferSourceNode.start(props.player.audioContext.currentTime, props.player.startTime, props.player.audioDuration);
+            currentTime_added_value.value = 0;
+          }
         }
+        
       }
-    }
+    });
 
     handleRefusetohide();
   }
@@ -504,11 +571,17 @@
 </script>
 
 <template>
+  <!-- :style="{backgroundColor : `${musicplayer_background_color}` }" -->
   <n-space class="this_Bar_Music_Player"
     style="transition: margin 0.4s;"
     :style="{ marginBottom: view_collapsed_player_bar ? '-80px' : '0px' }"
     @mousemove="handleRefusetohide" @mouseenter="handleRefusetohide" @mouseover="handleRefusetohide" 
     @mouseleave="handleShow">
+    <!-- <audio 
+      id="player_audio_htmlelement" 
+      :src="props.this_audio_file_path">
+    
+    </audio> -->
     <div class="layout_distribution_3">
       <div class="gird_Left">
         <div class="button_open_player_view">
@@ -641,8 +714,39 @@
                 <n-icon :size="22"><DeviceEq24Filled/></n-icon>
               </template>
             </n-button>
+            <!-- <n-button size="tiny" text>
+              <template #icon>
+                <n-icon :size="25"><DesktopFlow24Regular/></n-icon>
+              </template>
+            </n-button>
+            <n-button size="tiny" text>
+              <template #icon>
+                <n-icon :size="25"><Video16Regular/></n-icon>
+              </template>
+            </n-button> -->
           </n-space>
         </div>
+        <!-- <div class="gird_Right_audio_play_time_area">
+          <div>
+            <n-ellipsis id="current_play_time">{{ current_play_time }}</n-ellipsis><br>
+            <n-ellipsis id="divider_play_time"> ------- </n-ellipsis><br>
+            <n-ellipsis id="total_play_time">{{ total_play_time }}</n-ellipsis>
+          </div>
+        </div> -->
+        <!-- <n-space class="gird_Right_sound_effects_button_area">
+          <n-button text secondary class="gird_Right_speed_effects_button_area" @click="Set_isVisible_Music_PlayList">
+            <template #icon>
+              <n-icon :size="26"><DeviceEq24Filled/></n-icon>
+            </template>
+          </n-button>
+        </n-space>
+        <n-space class="gird_Right_sound_speed_button_area">
+          <n-button text secondary class="gird_Right_speed_effects_button_area" @click="Set_isVisible_Music_PlayList">
+            <template #icon>
+              <n-icon :size="26"><TopSpeed20Regular/></n-icon>
+            </template>
+          </n-button>
+        </n-space> -->
       </div>
     </div>
   </n-space>
@@ -724,7 +828,7 @@
   color: #3DC3FF;
 }
 .gird_Left .bar_left_text_song_info #bar_album_name{
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
   max-width: 240px;
 }
