@@ -1688,6 +1688,10 @@
   //////
   import { darkTheme,lightTheme } from 'naive-ui'
   import type { GlobalTheme } from 'naive-ui'
+  // 050 Snow Again           background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+  // 098 Risky Concrete       background-image: linear-gradient(to top, #c4c5c7 0%, #dcdddf 52%, #ebebeb 100%);
+  // 018 Cloudy Knoxville     background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+  // 134 Glass Water          background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
   const theme = ref<GlobalTheme | null>(null)
   const theme_app =ref<GlobalTheme | null>(null)
   const theme_bar_top_setapp = ref('transparent')
@@ -2011,7 +2015,7 @@
       style="
         border-radius: 12px 0 0 12px;
         margin-top: 72px;margin-bottom:88px;
-        background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);  
+        background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
       ">
       <n-drawer-content v-if="isVisible_Music_PlayList">
         <template #header>

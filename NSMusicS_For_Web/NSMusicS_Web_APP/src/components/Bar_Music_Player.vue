@@ -170,6 +170,20 @@
           },
           onloaderror: (id: any, error: any) => {
             console.error('Failed to load audio:', error);
+            props.player.isPlaying = false;
+            //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
+            if(player_no_progress_jump.value == true){
+              current_play_time.value = formatTime(props.player.getDuration());
+              currentTime_added_value.value = 0;
+              this_audio_buffer_file.value = null;
+              clearInterval(timer);
+
+              player_no_progress_jump.value = false;
+
+              props.player.isPlaying = false;
+              is_play_ended.value = true;
+            }
+            Play_Media_Switching()
           }
         });
         props.player.isPlaying = true;
@@ -187,7 +201,7 @@
       if(this_audio_buffer_file.value === null){
         this_audio_buffer_file.value = Math.random().toString(36).substring(7);
       }else{
-        props.player.resume();
+        props.player.play();
       }
     }else{
       props.player.pause();

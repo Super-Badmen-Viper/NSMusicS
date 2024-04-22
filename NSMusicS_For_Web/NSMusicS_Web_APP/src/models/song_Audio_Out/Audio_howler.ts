@@ -22,11 +22,6 @@ export class Audio_howler {
             this.howl.pause();
         }
     }
-    resume() {
-        if (this.howl) {
-            this.howl.resume();
-        }
-    }
     stop() {
         if (this.howl) {
             this.howl.stop();
