@@ -713,6 +713,7 @@
 .gird_Left .button_open_player_view .back_img{
   width: 60px;height: 60px;
   border-radius: 6px;
+  border: 1.5px solid #FFFFFF20;
   box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.25);
   z-index: 0;
 }

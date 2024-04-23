@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick, h, reactive, computed, watch, onBeforeUnmount, createVNode } from 'vue';
+import { ref, h } from 'vue';
 import { useMessage,DropdownOption, type DataTableColumns, type DataTableRowKey, NIcon, InputInst, NImage, PaginationProps } from 'naive-ui';
 import { RowData } from 'naive-ui/es/data-table/src/interface';
 const emits = defineEmits([
@@ -242,7 +242,8 @@ function getAssetImage(firstImage: string) {
               <div 
                 style="margin-left: 10px;
                   width: 58px;height: 58px; 
-                  border-radius: 6px; overflow: hidden;">
+                  border-radius: 6px; border: 1.5px solid #FFFFFF20;
+                  overflow: hidden;">
                 <img
                   :key="item.id"
                   :src="item.medium_image_url"
@@ -290,7 +291,7 @@ function getAssetImage(firstImage: string) {
   flex-direction: column;
 }
 .table{
-  height: calc(100vh - 250px);
+  height: calc(100vh - 212px);
 }
 .message {
   display: flex;
@@ -305,7 +306,7 @@ function getAssetImage(firstImage: string) {
   transition: background-color 0.3s;
 }
 .media_info:hover {
-  background-color: #f0f0f080;
+  background-color: #FFFFFF24;
 }
 .checkbox{
   width: 20px;
@@ -347,15 +348,15 @@ function getAssetImage(firstImage: string) {
   width: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #888;
+  background-color: #55555550;
   border-radius: 6px;
 }
 ::-webkit-scrollbar-track {
-  background-color: #f1f1f1;
+  background-color: #f1f1f105;
   border-radius: 6px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
+  background-color: #88888850;
   border-radius: 6px;
 }
 </style>

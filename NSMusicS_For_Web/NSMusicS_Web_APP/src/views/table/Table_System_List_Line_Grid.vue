@@ -64,15 +64,15 @@ import {
   width: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #888;
+  background-color: #55555550;
   border-radius: 6px;
 }
 ::-webkit-scrollbar-track {
-  background-color: #f1f1f1;
+  background-color: #f1f1f105;
   border-radius: 6px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
+  background-color: #88888850;
   border-radius: 6px;
 }
 </style>

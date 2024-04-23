@@ -2008,37 +2008,18 @@
     </View_Screen_Music_Player>
   </n-config-provider>
   <!-- right drwaer of music_playlist -->
-  <n-config-provider :theme="null">
+  <n-config-provider :theme="darkTheme">
     <n-drawer 
       v-model:show="isVisible_Music_PlayList" 
       :width="470" 
       style="
         border-radius: 12px 0 0 12px;
-        margin-top: 72px;margin-bottom:88px;
-        background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
+        border: 1.5px solid #FFFFFF20;
+        margin-top: 88px;margin-bottom:88px;
+        background-color: rgba(127, 127, 127, 0.1); /* 半透明白色背景 */
+        backdrop-filter: blur(10px); /* 高斯模糊 */
       ">
       <n-drawer-content v-if="isVisible_Music_PlayList">
-        <template #header>
-          <n-badge :value="playlist_Files_temporary.length" show-zero :max="9999" :offset="[24, 9]" style="margin-right:40px;">
-            <span style="font-weight:600;font-size:20px;">播放列表</span>
-          </n-badge>
-          <n-button size="small" text style="position: absolute;right:140px;top:12px;" >
-            <template #icon>
-              <n-icon>
-                <AddSquareMultiple20Regular/>
-              </n-icon>
-            </template>
-            收藏全部
-          </n-button>
-          <n-button size="small" text style="position: absolute;right:70px;top:12px;">
-            <template #icon>
-              <n-icon>
-                <Delete16Regular/>
-              </n-icon>
-            </template>
-            清空
-          </n-button>
-        </template>
         <template #default>
           <Bar_Music_PlayList
             v-if="isVisible_Music_PlayList"

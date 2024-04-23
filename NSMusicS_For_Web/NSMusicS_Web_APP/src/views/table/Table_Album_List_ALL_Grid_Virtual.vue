@@ -178,7 +178,7 @@
 
 
   //
-  const item_album_margin = ref<number>(12)
+  const item_album_margin = ref<number>(20)
   const item_album = ref<number>(160)
   const item_album_image = ref<number>(item_album.value - 20)
   const item_album_txt = ref<number>(item_album.value - 20)
@@ -399,6 +399,7 @@
                 z-index: 0;
                 height: 298px;
                 border-radius: 10px;
+                border: 1.5px solid #FFFFFF20;
                 overflow: hidden;
                 background-size: cover;
                 background-position: center;
@@ -437,14 +438,12 @@
                     <stop offset="150%" stop-color="#1C1C1C"></stop>
                   </linearGradient>
                 </defs>
-                <!-- fill="url(#gradient)" -->
+                <!-- fill="url(#gradient)" -->      
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M462 61.401L281 300L0 300V0H413.923L462 61.401ZM426.805 61.407L394.831 102.26C394.337 102.886 394.783 103.814 395.59 103.814H404.903C405.493 103.814 406.059 103.537 406.421 103.079L437.178 63.7803C437.71 63.1016 438 62.2638 438 61.401C438 60.5382 437.71 59.7004 437.178 59.0216L406.421 19.7349C406.059 19.265 405.493 19 404.903 19H395.59C394.783 19 394.337 19.9276 394.831 20.5541L426.805 61.407ZM358.207 102.26L390.181 61.407L358.207 20.5541C357.713 19.9276 358.159 19 358.966 19H368.278C368.869 19 369.435 19.265 369.796 19.7349L400.554 59.0216C401.086 59.7004 401.376 60.5382 401.376 61.401C401.376 62.2638 401.086 63.1016 400.554 63.7803L369.796 103.079C369.435 103.537 368.869 103.814 368.278 103.814H358.966C358.159 103.814 357.713 102.886 358.207 102.26Z" fill="url(#gradient)"/>
                 <path d="M692.435 277.978C691.723 277.07 691.723 275.801 692.435 274.885L711.917 250H413.673L392.983 276.435L411.427 300H709.671L692.435 277.978Z" fill="url(#gradient)"/>
                 <path d="M386.241 277.978C385.529 277.07 385.529 275.801 386.241 274.885L413.723 242H397.868L350.7 300H403.477L386.241 277.978Z" fill="url(#gradient)"/>
-                <path d="M716.241 277.978C715.528 277.07 715.528 275.801 716.241 274.885L749.723 233H733.868L719.868 250L699.178 276.435L717.621 300H733.477L716.241 277.978Z" fill="url(#gradient)"/>
-
-              </svg>
-              
+                <path d="M716.241 277.978C715.528 277.07 715.528 275.801 716.241 274.885L742.5 242H726.5L719.868 250L699.178 276.435L717.5 300L733.5 300L716.241 277.978Z" fill="url(#gradient)"/>
+              </svg>       
             </div>
             <n-page-header 
               style="
@@ -530,7 +529,7 @@
                 <img
                   :src="item.medium_image_url"
                   @error="handleImageError"
-                  style="objectFit: cover; objectPosition: 'center';"
+                  style="objectFit: cover; objectPosition: 'center';border: 1.5px solid #FFFFFF20;"
                   :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
                 <div class="hover-overlay">
                   <div class="hover-content">
@@ -709,15 +708,15 @@
   width: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #888;
+  background-color: #55555550;
   border-radius: 6px;
 }
 ::-webkit-scrollbar-track {
-  background-color: #f1f1f1;
+  background-color: #f1f1f105;
   border-radius: 6px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
+  background-color: #88888850;
   border-radius: 6px;
 }
 </style>

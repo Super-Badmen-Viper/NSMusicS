@@ -113,6 +113,7 @@
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
     itemElements[index].style.color = player_theme_lyricItem_0_bind_style.value.hoverStyle.colorHover;
     itemElements[index].style.filter = 'blur(0px)';
+    itemElements[index].style.textShadow = '0 0 1px White';
     itemElements[index].style.transition = 'color 0.5s, transform 0.5s';
     if(collapsed_slider.value === false){
       itemElements[index].style.transform = 'scale(1.1) translateY(0px)';
@@ -129,6 +130,7 @@
         if(perviousIndex.value >= props.this_audio_lyrics_info_line_num){
           itemElements[perviousIndex.value].style.color = player_theme_lyricItem_0_bind_style.value.normalStyle.color;
           itemElements[perviousIndex.value].style.transform = 'scale(1)';
+          itemElements[perviousIndex.value].style.textShadow = '0 0 0px transparent';
           
           let color_hidden = player_lyric_color.value.slice(0, -2);
           let blurValue = 0.05;
@@ -500,7 +502,7 @@
         style="
           position: absolute;top: -20vw;left: -10vw;width: 120vw;height: 120vw;
           object-fit: cover;object-position: center;
-          filter: brightness(46%) blur(50px);"
+          filter: brightness(46%) blur(60px);"
         :src="getAssetImage(props.this_audio_file_medium_image_url)"
         @error="handleImageError">
       <!-- <img
@@ -781,13 +783,14 @@
                 style="background-color: transparent;">
                 <n-space vertical align="end" style="margin-right:6vw;">
                   <n-space vertical>
-                    <img
-                      class="player_album_image"
+                    <img class="player_album_image"
                       :style="{width: player_album_size, height: player_album_size, borderRadius: player_album_radius}"
                       style="
                         margin-top: calc(28vh - 162px);
+                        border: 1.5px solid #FFFFFF20;
                         object-fit: cover;object-position: center;
                         filter: blur(0px);
+                        box-shadow: 16px 16px 16px rgba(0, 0, 0, 0.20), 0px 0px 16px rgba(0, 0, 0, 0.20);
                       "
                       :src="getAssetImage(props.this_audio_file_medium_image_url)"
                       @error="handleImageError">
