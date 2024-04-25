@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { h, ref, watch } from 'vue';
+  import { h, ref, watch, watchEffect } from 'vue';
 
   // send this SetInfo
   import { defineEmits } from 'vue';
@@ -206,8 +206,6 @@
     }else{
       props.player.pause();
     }
-
-    handleRefusetohide();
   };
   ////// play order area
   function Play_Media_Order(model_num: string, increased: number) {
@@ -261,8 +259,6 @@
         }
       }
     }
-
-    handleRefusetohide();
   }
   ////// player button area
   const play_skip_back_click = () => {
@@ -302,8 +298,6 @@
       Play_Media_Order(play_order.value,0)
     else
       Play_Media_Order(play_order.value,1)
-
-    handleRefusetohide();
   };
   ////// player slider formatTime area
   const set_slider_singleValue = () => {
@@ -344,18 +338,12 @@
   let player_range_duration_isDragging = false;
   const player_range_duration_handleMouseDown = () => {
     player_range_duration_isDragging = true;
-
-    handleRefusetohide();
   };
   const player_range_duration_handleMouseUp = () => {
     player_range_duration_isDragging = false;
-
-    handleRefusetohide();
   };
   const player_range_duration_handleclick = async () => {
     play_go_duration(slider_singleValue.value,true);
-
-    handleRefusetohide();
   }
   let unwatch_play_go_index_time =  watch(() => props.play_go_index_time, (newValue, oldValue) => {
     play_go_duration(props.play_go_index_time,false)
@@ -382,8 +370,6 @@
         }
       }
     }
-
-    handleRefusetohide();
   }
   const update_dragend_slider_singleValue = () => {
     if(slider_singleValue.value >= 99.5 || slider_singleValue.value == 0){
@@ -391,8 +377,6 @@
       player_range_duration_handleclick()
     }
     player_range_duration_isDragging = false;
-
-    handleRefusetohide();
   };
 
   // player voice area
@@ -402,8 +386,6 @@
     }else{
       slider_volume_show.value = true;
     }
-
-    handleRefusetohide();
   }
   let unwatch_slider_volume_value = watch(
     slider_volume_value,
@@ -414,15 +396,6 @@
   );
 
   // player order area
-  const backpanel_order_click = () => {
-    if(slider_order_show.value){
-      slider_order_show.value = false;
-    }else{
-      slider_order_show.value = true;
-    }
-
-    handleRefusetohide();
-  }
   const options_Order = [
     { label: '顺序播放', key: 'playback-1', 
       icon() {
@@ -456,21 +429,15 @@
   const handleSelect_Order = (value: any) => {
     console.log(value);
     play_order.value = value;
-
-    handleRefusetohide();
   }
 
   // open playList
   const Set_isVisible_Music_PlayList = () => {
     emits('isVisible_Music_PlayList',true);
-
-    handleRefusetohide();
   }
   // open sound effects
   const Set_isVisible_Player_Sound_effects= () => {
     emits('isVisible_Player_Sound_effects',true);
-
-    handleRefusetohide();
   }
 
   import { onBeforeUnmount } from 'vue';
@@ -484,6 +451,7 @@
     unwatch_this_audio_buffer_file()
     unwatch_play_go_index_time()
     unwatch_slider_volume_value()
+    unwatch_view_collapsed_player_bar()
   });
   import {
     Heart24Regular,Heart28Filled,
@@ -513,18 +481,29 @@
   const handleRefusetohide = () => {
     emits('view_collapsed_player_bar', false);
   };
-  const handleShow = () => {
-    if(props.view_music_player_show === true)
-      emits('view_collapsed_player_bar', true)
-  }; 
+  let timer_auto_hidden: string | number | NodeJS.Timeout | undefined;
+  const handleMouseMove = () => {
+    if(props.view_music_player_show === true){
+      // emits('view_collapsed_player_bar', false);
+      // clearInterval(timer_auto_hidden);
+      // timer_auto_hidden = setInterval(() => {
+      //   emits('view_collapsed_player_bar', true);
+      // }, 600);
+      emits('view_collapsed_player_bar', true);
+    }
+  };
+  const unwatch_view_collapsed_player_bar = watchEffect(() => {
+    if (props.view_collapsed_player_bar === false) {
+      clearInterval(timer_auto_hidden);
+    }
+  });
 </script>
 
 <template>
   <n-space class="this_Bar_Music_Player"
     style="transition: margin 0.4s;"
     :style="{ marginBottom: view_collapsed_player_bar ? '-80px' : '0px' }"
-    @mousemove="handleRefusetohide" @mouseenter="handleRefusetohide" @mouseover="handleRefusetohide" 
-    @mouseleave="handleShow">
+    @mousemove="handleRefusetohide" @mouseleave="handleMouseMove" @mouseover="handleRefusetohide">
     <div class="layout_distribution_3">
       <div class="gird_Left">
         <div class="button_open_player_view">
@@ -719,7 +698,7 @@
 }
 
 .gird_Left .bar_left_text_song_info{
-  width: 280px;
+  width: 210px;
   height: 50px;
   margin-top: 12px;margin-left: 14px;
   float: left;text-align: left;

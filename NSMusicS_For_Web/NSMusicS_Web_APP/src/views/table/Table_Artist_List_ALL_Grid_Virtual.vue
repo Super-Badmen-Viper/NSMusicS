@@ -191,7 +191,7 @@
 
 
   //
-  const item_artist_margin = ref<number>(20)
+  const item_artist_margin = ref<number>(0)
   const item_artist = ref<number>(170)
   const item_artist_image = ref<number>(item_artist.value - 20)
   const item_artist_txt = ref<number>(item_artist.value - 20)
@@ -280,7 +280,7 @@
       item_artist.value = 170;
       item_artist_image.value = item_artist.value - 20;
       item_artist_txt.value = item_artist.value - 20;
-      itemSecondarySize.value = 185;
+      itemSecondarySize.value = 180;
     }
     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
   };
@@ -688,10 +688,11 @@
 }
 
 ::-webkit-scrollbar {
+  display: auto;
   width: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #55555550;
+  background-color: #88888850;
   border-radius: 6px;
 }
 ::-webkit-scrollbar-track {

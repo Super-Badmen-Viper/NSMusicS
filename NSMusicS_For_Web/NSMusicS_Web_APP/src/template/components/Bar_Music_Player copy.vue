@@ -565,8 +565,7 @@
     emits('view_collapsed_player_bar', false);
   };
   const handleShow = () => {
-    if(props.view_music_player_show === true)
-      emits('view_collapsed_player_bar', true)
+    emits('view_collapsed_player_bar', true)
   }; 
 </script>
 

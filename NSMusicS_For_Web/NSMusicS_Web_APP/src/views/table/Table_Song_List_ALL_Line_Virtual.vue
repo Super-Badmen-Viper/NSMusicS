@@ -687,6 +687,7 @@ function getAssetImage(firstImage: string) {
                 z-index: 0;
                 height: 298px;
                 border-radius: 10px;
+                border: 1.5px solid #FFFFFF20;
                 overflow: hidden;
                 background-size: cover;
                 background-position: center;
@@ -829,7 +830,8 @@ function getAssetImage(firstImage: string) {
               <div 
                 style="margin-left: 10px;
                   width: 58px;height: 58px; 
-                  border-radius: 6px; overflow: hidden;">
+                  border-radius: 6px;border: 1.5px solid #FFFFFF20;
+                  overflow: hidden;">
                 <img
                   :key="item.id"
                   :src="item.medium_image_url"
@@ -979,10 +981,11 @@ function getAssetImage(firstImage: string) {
 }
 
 ::-webkit-scrollbar {
+  display: auto;
   width: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #55555550;
+  background-color: #88888850;
   border-radius: 6px;
 }
 ::-webkit-scrollbar-track {

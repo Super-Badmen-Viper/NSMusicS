@@ -61,10 +61,11 @@ import {
 }
 
 ::-webkit-scrollbar {
+  display: auto;
   width: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #55555550;
+  background-color: #88888850;
   border-radius: 6px;
 }
 ::-webkit-scrollbar-track {

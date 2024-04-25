@@ -13,8 +13,8 @@ async function createWindow() {
         width: 1180,
         height: 760,
         // minWidth: 300,//移动端
-        minWidth:1180,//PC端
-        minHeight: 760,
+        minWidth:1110,//PC端
+        minHeight: 700,
         frame:false,
         resizable: true,
 

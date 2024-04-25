@@ -218,7 +218,7 @@ function getAssetImage(firstImage: string) {
     -->
     <div class="dynamic-scroller-demo">
       <DynamicScroller 
-        class="table" ref="scrollbar" style="width: 440px;"
+        class="table" ref="scrollbar" style="width: 410px;"
         :items="props.data_temporary"
         :minItemSize="itemSize - 20">
         <template #default="{ item, index, active }">
@@ -345,10 +345,11 @@ function getAssetImage(firstImage: string) {
 }
 
 ::-webkit-scrollbar {
+  display: auto;
   width: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #55555550;
+  background-color: #88888850;
   border-radius: 6px;
 }
 ::-webkit-scrollbar-track {

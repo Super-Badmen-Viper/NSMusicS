@@ -10,7 +10,8 @@
     TextIndentIncreaseLtr20Filled as lyric,
     PeopleCommunity16Regular,
     ArrowMinimize16Regular,Maximize16Regular,ColorBackground20Regular,
-    AddSquareMultiple20Regular,Delete16Regular
+    AddSquareMultiple20Regular,Delete16Regular,
+    Search20Filled
   } from '@vicons/fluent'
   import {
     AlbumFilled,
@@ -25,22 +26,35 @@
   function renderIcon (icon: any) {
     return () => h(NIcon, null, { default: () => h(icon) })
   }
+  function renderLabel (nameValue: any,defaultValue: any){
+    return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
+  }
+  function renderExtra (){
+    return () => h('div', { style: { width: '100px', height: '100px' } }, 'Extra Content')
+  }
   // Prohibiting the use of trigger events in this Naive UI menu item will cause Vue in RouterView Internal error in Js, 
   // try to use native Vue.js operation RouterLink as much as possible
   const menuOptions: MenuOption[] = [
-    {label: () => h(RouterLink,{to: {name: 'home',}}, { default: () => '主页' }),key: 'go-back-home',icon: renderIcon(Home28Regular)},
+    {
+      label: renderLabel('home','主页'),key: 'go-back-home',
+      icon: renderIcon(Home28Regular),
+      // icon: () => h('img', {
+      //   src: path.resolve('resources/00album.png'),
+      //   style: { width: '24px', height: '24px', borderRadius: '4px',border: '1.5px solid #FFFFFF20'}
+      // })
+    },
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    {label: () => h(RouterLink,{to: {name: 'View_Album_List_ALL',}},{ default: () => '专辑' }),key: 'go-albums-list',icon: renderIcon(AlbumFilled)},
-    {label: () => h(RouterLink,{to: {name: 'View_Song_List_ALL',}},{ default: () => '乐曲' }),key: 'go-songs-list',icon: renderIcon(MusicNoteRound)},
-    {label: () => h(RouterLink,{to: {name: 'View_Artist_List_ALL',}},{ default: () => '歌手' }),key: 'go-artist-list',icon: renderIcon(UserAvatarFilledAlt)},
-    {label: () => h(RouterLink,{to: {name: 'home',}},{ default: () => '流派' }),key: 'go-Other',icon: renderIcon(Flag16Regular)},
+    {label: renderLabel('View_Album_List_ALL','专辑'),key: 'go-albums-list',icon: renderIcon(AlbumFilled)},
+    {label: renderLabel('View_Song_List_ALL','乐曲'),key: 'go-songs-list',icon: renderIcon(MusicNoteRound)},
+    {label: renderLabel('View_Artist_List_ALL','歌手'),key: 'go-artist-list',icon: renderIcon(UserAvatarFilledAlt)},
+    {label: renderLabel('home','流派'),key: 'go-Other',icon: renderIcon(Flag16Regular)},
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    {label: () => h(RouterLink,{to: {name: 'home',}},{ default: () => '猜你喜欢' }),key: 'go-Other',icon: renderIcon(DocumentHeart20Regular)},
-    {label: () => h(RouterLink,{to: {name: 'home',}},{ default: () => 'K歌' }),key: 'go-Other',icon: renderIcon(SlideMicrophone32Regular)},
-    {label: () => h(RouterLink,{to: {name: 'home',}},{ default: () => '听歌识曲' }),key: 'go-Other',icon: renderIcon(Hearing)},
-    {label: () => h(RouterLink,{to: {name: 'home',}},{ default: () => '乐谱生成' }),key: 'go-Other',icon: renderIcon(LibraryMusicOutlined)},
-    {label: () => h(RouterLink,{to: {name: 'home',}},{ default: () => '歌词制作' }),key: 'go-Other',icon: renderIcon(lyric)},
-    {label: () => h(RouterLink,{to: {name: 'home',}},{ default: () => '音乐社区' }),key: 'go-Other',icon: renderIcon(PeopleCommunity16Regular)},
+    {label: renderLabel('home','猜你喜欢'),key: 'go-Other',icon: renderIcon(DocumentHeart20Regular)},
+    {label: renderLabel('home','K歌'),key: 'go-Other',icon: renderIcon(SlideMicrophone32Regular)},
+    {label: renderLabel('home','听歌识曲'),key: 'go-Other',icon: renderIcon(Hearing)},
+    {label: renderLabel('home','乐谱生成'),key: 'go-Other',icon: renderIcon(LibraryMusicOutlined)},
+    {label: renderLabel('home','歌词制作'),key: 'go-Other',icon: renderIcon(lyric)},
+    {label: renderLabel('home','音乐社区'),key: 'go-Other',icon: renderIcon(PeopleCommunity16Regular)},
   ]
   const collapsed = ref(false)
   const menu_select_activeKey = ref<string | null>(null)
@@ -130,16 +144,8 @@
   ////// System Bind Media Info
   const path = require('path');
   const fs = require('fs');
-  import { Audio_Players } from '../src/models/song_Audio_Out/Audio_Players';
-  let player_web_audio_api = new Audio_Players();
   import { Audio_howler }  from '../src/models/song_Audio_Out/Audio_howler';
   let player = new Audio_howler();
-  function get_player(value: Audio_Players) {
-    // player.releaseMemory(true);
-
-    // player = value
-    // console.log('player：'+value)
-  }
   const currentTime_added_value = ref(0);
   function get_currentTime_added_value(value: any) {
     currentTime_added_value.value = value
@@ -1740,8 +1746,8 @@
   }
 </script>
 <template>
-  <n-config-provider :theme="theme" :locale="locale" :date-locale="dateLocale">
-    <n-message-provider>
+  <n-config-provider class="this_App" :theme="theme" :locale="locale" :date-locale="dateLocale">
+    <n-message-provider class="this_App">
       <n-layout has-sider class="this_App">
         <n-layout-sider
           class="n_layout_sider"
@@ -1938,9 +1944,8 @@
         background-color: #00000000;
         z-index: 100;
         border-radius: 12px 12px 0px 0px;border: 0px #00000000">
-      <Bar_Music_Player 
+      <Bar_Music_Player
         :player="player"
-        @player="get_player"
         @currentTime_added_value="get_currentTime_added_value"
         :play_go_index_time="play_go_index_time"
 
@@ -2011,13 +2016,13 @@
   <n-config-provider :theme="darkTheme">
     <n-drawer 
       v-model:show="isVisible_Music_PlayList" 
-      :width="470" 
+      :width="440" 
       style="
         border-radius: 12px 0 0 12px;
         border: 1.5px solid #FFFFFF20;
-        margin-top: 88px;margin-bottom:88px;
-        background-color: rgba(127, 127, 127, 0.1); /* 半透明白色背景 */
+        background-color: rgba(127, 127, 127, 0.1); 
         backdrop-filter: blur(10px); /* 高斯模糊 */
+        margin-top: 88px;margin-bottom:88px;
       ">
       <n-drawer-content v-if="isVisible_Music_PlayList">
         <template #default>
@@ -2092,8 +2097,8 @@
     top: 0;left: 0;
   }
   .n_layout_sider {
-    margin: 60px 0px 80px 0px;
-    border-radius: 0px 20px 20px 0px;
+    margin: 0px 0px 80px 0px;
+    padding-top: 60px;
     border: 0px;
   }
   .view_show {
