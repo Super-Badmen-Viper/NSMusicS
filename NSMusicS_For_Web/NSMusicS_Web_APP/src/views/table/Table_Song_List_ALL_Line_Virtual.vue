@@ -600,22 +600,22 @@ function getAssetImage(firstImage: string) {
 <template>
   <n-space vertical :size="12">
     <n-space>
-      <n-button tertiary circle @click="get_router_history_model_pervious">
+      <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_pervious">
         <template #icon>
-          <n-icon :size="20"><ChevronLeft16Filled/></n-icon>
+          <n-icon size="20" :depth="2"><ChevronLeft16Filled/></n-icon>
         </template>
       </n-button>
       <div style="margin-top: 4px;">
         {{ props.router_select_history_date?.id ?? '' }} / {{ props.router_history_datas?.length ?? '' }}
       </div>
-      <n-button tertiary circle @click="get_router_history_model_next">
+      <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_next">
         <template #icon>
-          <n-icon :size="20"><ChevronRight16Filled/></n-icon>
+          <n-icon size="20" :depth="2"><ChevronRight16Filled/></n-icon>
         </template>
       </n-button>
-      <n-button tertiary circle @click="show_search_area">
+      <n-button quaternary circle size="medium" style="margin-left:4px" @click="show_search_area">
         <template #icon>
-          <n-icon :size="20"><Search20Filled/></n-icon>
+          <n-icon :size="20" :depth="2"><Search20Filled/></n-icon>
         </template>
       </n-button>
       <n-input-group 
@@ -626,9 +626,9 @@ function getAssetImage(firstImage: string) {
           ref="input_search_InstRef" 
           v-model:value="input_search_Value"
           @keydown.enter="click_search"/>
-        <n-button type="primary" ghost @click="click_search">
+        <n-button quaternary circle size="medium" style="margin-left:4px" @click="click_search">
           <template #icon>
-            <n-icon :size="20"><Search20Filled/></n-icon>
+            <n-icon :size="20" :depth="2"><Search20Filled/></n-icon>
           </template>
         </n-button>
       </n-input-group>
@@ -636,33 +636,33 @@ function getAssetImage(firstImage: string) {
       <n-dropdown 
         trigger="click" :show-arrow="true" 
         :options="options_Sort" @select="handleSelect_Sort">
-        <n-button tertiary circle>
+        <n-button quaternary circle size="medium" style="margin-left:4px">
           <template #icon>
-            <n-icon :size="20"><ArrowSort24Regular/></n-icon>
+            <n-icon :size="20" :depth="2"><ArrowSort24Regular/></n-icon>
           </template>
         </n-button>
       </n-dropdown>
 
-      <n-button tertiary circle @click="click_bulk_operation">
+      <n-button quaternary circle size="medium" style="margin-left:4px" @click="click_bulk_operation">
         <template #icon>
-          <n-icon :size="20"><MultiselectLtr20Filled/></n-icon>
+          <n-icon :size="20" :depth="2"><MultiselectLtr20Filled/></n-icon>
         </template>
       </n-button>   
       
       <n-space v-if="!bool_start_play">
-        <n-button tertiary circle @click="click_select_ALL_row">
+        <n-button quaternary circle size="medium" style="margin-left:4px" @click="click_select_ALL_row">
           <template #icon>
-            <n-icon :size="20"><SelectAllOn24Regular/></n-icon>
+            <n-icon :size="20" :depth="2"><SelectAllOn24Regular/></n-icon>
           </template>
         </n-button>
-        <n-button tertiary circle>
+        <n-button quaternary circle size="medium" style="margin-left:4px">
           <template #icon>
-            <n-icon :size="20"><AddCircle32Regular/></n-icon>
+            <n-icon :size="20" :depth="2"><AddCircle32Regular/></n-icon>
           </template>
         </n-button>
-        <n-button flo tertiary circle>
+        <n-button flo quaternary circle size="medium" style="margin-left:4px">
           <template #icon>
-            <n-icon :size="20"><Delete20Regular/></n-icon>
+            <n-icon :size="20" :depth="2"><Delete20Regular/></n-icon>
           </template>
         </n-button>
         <n-p style="margin-top: 6px;"> 你选中了 {{ props.data_temporary_selected.length }} 行。 </n-p>
@@ -897,7 +897,7 @@ function getAssetImage(firstImage: string) {
 }
 .table {
   width: calc(100vw - 200px);
-  height: calc(100vh - 200px);
+  height: calc(100vh - 194px);
 }
 .message {
   width: calc(100vw - 230px);

@@ -186,24 +186,24 @@ function getAssetImage(firstImage: string) {
 <template>
   <n-space vertical :size="12">
     <n-space v-if="false">
-      <n-button tertiary circle @click="click_bulk_operation">
+      <n-button quaternary circle size="medium" style="margin-left:4px" @click="click_bulk_operation">
         <template #icon>
           <n-icon :size="20"><MultiselectLtr20Filled/></n-icon>
         </template>
       </n-button>   
       
       <n-space v-if="!bool_start_play">
-        <n-button tertiary circle @click="click_select_ALL_row">
+        <n-button quaternary circle size="medium" style="margin-left:4px" @click="click_select_ALL_row">
           <template #icon>
             <n-icon :size="20"><SelectAllOn24Regular/></n-icon>
           </template>
         </n-button>
-        <n-button tertiary circle>
+        <n-button quaternary circle size="medium" style="margin-left:4px">
           <template #icon>
             <n-icon :size="20"><AddCircle32Regular/></n-icon>
           </template>
         </n-button>
-        <n-button flo tertiary circle>
+        <n-button flo quaternary circle size="medium" style="margin-left:4px">
           <template #icon>
             <n-icon :size="20"><Delete20Regular/></n-icon>
           </template>

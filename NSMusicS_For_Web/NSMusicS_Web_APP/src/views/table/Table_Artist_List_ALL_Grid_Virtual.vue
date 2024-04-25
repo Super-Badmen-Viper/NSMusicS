@@ -271,16 +271,16 @@
   const updateGridItems = () => {
     if (props.collapsed == true) {
       collapsed_width.value = 145;
-      item_artist.value = 150;
+      item_artist.value = 140;
       item_artist_image.value = item_artist.value - 20;
       item_artist_txt.value = item_artist.value - 20;
-      itemSecondarySize.value = 144;
+      itemSecondarySize.value = 135;
     } else {
       collapsed_width.value = 240;
       item_artist.value = 170;
       item_artist_image.value = item_artist.value - 20;
       item_artist_txt.value = item_artist.value - 20;
-      itemSecondarySize.value = 180;
+      itemSecondarySize.value = 170;
     }
     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
   };
@@ -338,7 +338,7 @@
 <template>
   <n-space vertical :size="12">
     <n-space>
-      <n-button tertiary circle @click="get_router_history_model_pervious">
+      <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_pervious">
         <template #icon>
           <n-icon :size="20"><ChevronLeft16Filled/></n-icon>
         </template>
@@ -346,12 +346,12 @@
       <div style="margin-top: 4px;">
         {{ props.router_select_history_date?.id ?? '' }} / {{ props.router_history_datas?.length ?? '' }}
       </div>
-      <n-button tertiary circle @click="get_router_history_model_next">
+      <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_next">
         <template #icon>
           <n-icon :size="20"><ChevronRight16Filled/></n-icon>
         </template>
       </n-button>
-      <n-button tertiary circle @click="show_search_area">
+      <n-button quaternary circle size="medium" style="margin-left:4px" @click="show_search_area">
         <template #icon>
           <n-icon :size="20"><Search20Filled/></n-icon>
         </template>
@@ -374,7 +374,7 @@
       <n-dropdown 
         trigger="click" :show-arrow="true" 
         :options="options_Sort" @select="handleSelect_Sort">
-        <n-button tertiary circle>
+        <n-button quaternary circle size="medium" style="margin-left:4px">
           <template #icon>
             <n-icon :size="20"><ArrowSort24Regular/></n-icon>
           </template>
@@ -605,7 +605,7 @@
 .artist-wall {
   overflow-y: auto;
   width: calc(100vw - 200px);
-  height: calc(100vh - 200px);
+  height: calc(100vh - 194px);
   display: flex;
   flex-direction: column;
   overflow-x:hidden;

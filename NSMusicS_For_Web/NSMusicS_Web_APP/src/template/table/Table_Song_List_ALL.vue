@@ -701,17 +701,6 @@ import { RouterLink } from 'vue-router';
       :max-height="1000"
     />
   </n-space>
-  <!-- <n-pagination
-    style="position: absolute;right: 10px;bottom: 10px;"
-    :display-order="['quick-jumper', 'pages', 'size-picker']"
-    :page-sizes="[10, 30, 50]"
-    :pageSize="props.media_page_size"
-    :on-update-page="pagination_onChange"
-    :on-update-page-size="pagination_onUpdatePageSize"
-    :page="props.media_page_num"
-    :page-count="props.media_page_length"
-    show-quick-jumper
-    show-size-picker/> -->
   <n-dropdown
     placement="bottom-start"
     trigger="manual"

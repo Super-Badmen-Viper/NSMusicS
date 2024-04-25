@@ -27,7 +27,7 @@
     'this_audio_album_id','this_audio_album_favite',
     'player_show_click','view_music_player_show_complete',
     'player','play_go_index_time',
-    'view_collapsed_player_bar','view_music_player_show'
+    'view_collapsed_player_bar','view_music_player_show','collapsed'
   ]);
   const { ipcRenderer } = require('electron'); 
 
@@ -504,7 +504,12 @@
     style="transition: margin 0.4s;"
     :style="{ marginBottom: view_collapsed_player_bar ? '-80px' : '0px' }"
     @mousemove="handleRefusetohide" @mouseleave="handleMouseMove" @mouseover="handleRefusetohide">
-    <div class="layout_distribution_3">
+    <div class="layout_distribution_3"
+      style="transition: margin 0.4s;"
+      :style="{ 
+        marginLeft: view_music_player_show ? '0px' : (collapsed ? '72px' : '167px'),
+        width: view_music_player_show ? '100vw' : (collapsed ? 'calc(100vw - 72px)' : 'calc(100vw - 167px)'),
+      }">
       <div class="gird_Left">
         <div class="button_open_player_view">
           <img class="back_svg"
@@ -670,7 +675,7 @@
 }
 
 .gird_Left {
-  width: 380px;
+  width: 300px;
   height: 80px;
   margin-left: 12px;
   
@@ -696,9 +701,8 @@
   box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.25);
   z-index: 0;
 }
-
 .gird_Left .bar_left_text_song_info{
-  width: 210px;
+  width: 150px;
   height: 50px;
   margin-top: 12px;margin-left: 14px;
   float: left;text-align: left;
@@ -706,7 +710,7 @@
 .gird_Left .bar_left_text_song_info #bar_song_name{
   font-size: 18px;
   font-weight: 600;
-  max-width: 240px;
+  max-width: 150px;
 }
 .gird_Left .bar_left_text_song_info #bar_song_name:hover {
   text-decoration: underline;
@@ -723,7 +727,7 @@
 .gird_Left .bar_left_text_song_info #bar_album_name{
   font-size: 16px;
   font-weight: 600;
-  max-width: 240px;
+  max-width: 150px;
 }
 .gird_Left .bar_left_text_song_info #bar_album_name:hover {
   text-decoration: underline;
@@ -773,8 +777,9 @@
   color: #283248;
   margin-top: -16px;
 }
+
 .gird_Right {
-  width: 380px;
+  width: 300px;
   height: 80px;
   margin-right: 12px;
   

@@ -35,14 +35,7 @@
   // Prohibiting the use of trigger events in this Naive UI menu item will cause Vue in RouterView Internal error in Js, 
   // try to use native Vue.js operation RouterLink as much as possible
   const menuOptions: MenuOption[] = [
-    {
-      label: renderLabel('home','主页'),key: 'go-back-home',
-      icon: renderIcon(Home28Regular),
-      // icon: () => h('img', {
-      //   src: path.resolve('resources/00album.png'),
-      //   style: { width: '24px', height: '24px', borderRadius: '4px',border: '1.5px solid #FFFFFF20'}
-      // })
-    },
+    {label: renderLabel('home','主页'),key: 'go-back-home',icon: renderIcon(Home28Regular),},
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
     {label: renderLabel('View_Album_List_ALL','专辑'),key: 'go-albums-list',icon: renderIcon(AlbumFilled)},
     {label: renderLabel('View_Song_List_ALL','乐曲'),key: 'go-songs-list',icon: renderIcon(MusicNoteRound)},
@@ -122,7 +115,7 @@
       }
 
       view_music_player_show_complete.value = true
-    }, 400);
+    }, 600);
   }
   const view_collapsed_player_bar = ref(false);
   const get_view_collapsed_player_bar = (value:any) => {
@@ -1703,14 +1696,14 @@
   const theme_bar_top_setapp = ref('transparent')
   const change_page_header_color = ref(false)
   const theme_normal_mode_click = () => {
-    theme.value = lightTheme
-    theme_app.value = lightTheme
-    change_page_header_color.value = false
+    // theme.value = lightTheme
+    // theme_app.value = lightTheme
+    // change_page_header_color.value = false
   }
   const theme_dark_mode_click = () => {
-    theme.value = darkTheme
-    theme_app.value = darkTheme
-    change_page_header_color.value = true
+    // theme.value = darkTheme
+    // theme_app.value = darkTheme
+    // change_page_header_color.value = true
   }
   const theme_mode_change_click = () => {
     if(change_page_header_color.value){
@@ -1737,16 +1730,9 @@
   }
   //////
   let navidrome_db = path.resolve('resources/navidrome.db');
-  ////// disabled scroll
-  const scrollContent_this_App = document.querySelector('.this_App');
-  if (scrollContent_this_App){
-    scrollContent_this_App.addEventListener('wheel', function(event) {
-      event.stopPropagation();
-    });
-  }
 </script>
 <template>
-  <n-config-provider class="this_App" :theme="theme" :locale="locale" :date-locale="dateLocale">
+  <n-config-provider class="this_App">
     <n-message-provider class="this_App">
       <n-layout has-sider class="this_App">
         <n-layout-sider
@@ -1765,7 +1751,7 @@
             :collapsed-icon-size="22"
             :options="menuOptions"/>
         </n-layout-sider>
-        <n-layout embedded style="height: calc(100vh - 80px);">
+        <n-layout embedded style="height: calc(100vh);">
           <RouterView
             class="view_show"
             v-if="router_select_model_media"
@@ -1906,27 +1892,27 @@
 
               <n-button quaternary circle size="medium" style="margin-right:4px" @click="theme_mode_change_click">
                 <template #icon>
-                  <n-icon size="20" :depth="3"><ColorBackground20Regular/></n-icon>
+                  <n-icon size="20" :depth="2"><ColorBackground20Regular/></n-icon>
                 </template>
               </n-button>
               <n-button quaternary circle size="medium" style="margin-right:4px">
                 <template #icon>
-                  <n-icon size="20" :depth="3"><MenuIcon/></n-icon>
+                  <n-icon size="20" :depth="2"><MenuIcon/></n-icon>
                 </template>
               </n-button>
               <n-button quaternary circle size="medium" style="margin-right:4px" @click="minimize">
                 <template #icon>
-                  <n-icon size="18" :depth="3"><ArrowMinimize16Regular/></n-icon>
+                  <n-icon size="18" :depth="2"><ArrowMinimize16Regular/></n-icon>
                 </template>
               </n-button>
               <n-button quaternary circle size="medium" style="margin-right:4px" @click="maximize">
                 <template #icon>
-                  <n-icon size="24" :depth="3"><Maximize16Regular/></n-icon>
+                  <n-icon size="24" :depth="2"><Maximize16Regular/></n-icon>
                 </template>
               </n-button>
               <n-button quaternary circle size="medium" style="margin-right:30px" @click="closeWindow">
                 <template #icon>
-                  <n-icon size="28" :depth="3"><Close/></n-icon>
+                  <n-icon size="28" :depth="2"><Close/></n-icon>
                 </template>
               </n-button>
             </section>
@@ -1946,12 +1932,14 @@
         border-radius: 12px 12px 0px 0px;border: 0px #00000000">
       <Bar_Music_Player
         :player="player"
+        
         @currentTime_added_value="get_currentTime_added_value"
         :play_go_index_time="play_go_index_time"
 
         :view_collapsed_player_bar="view_collapsed_player_bar"
         @view_collapsed_player_bar="get_view_collapsed_player_bar"
         :view_music_player_show="view_music_player_show"
+        :collapsed="collapsed"
 
         @this_audio_lyrics_string="get_this_audio_lyrics_string"
 
@@ -2090,14 +2078,15 @@
 
 /*当min-width >= 512px*/
 @media screen and (min-width: 512px) {
-  .this_App{
+  .this_App {
     width: 100vw;
     height: 100vh;
-    position: absolute;
-    top: 0;left: 0;
+    position: fixed; /* 将定位方式改为 fixed */
+    top: 0;
+    left: 0;
+    overflow: hidden; /* 隐藏溢出内容，防止出现滚动条 */
   }
   .n_layout_sider {
-    margin: 0px 0px 80px 0px;
     padding-top: 60px;
     border: 0px;
   }
@@ -2105,13 +2094,13 @@
     width: calc(100vw - 100px);
     height: calc(100vh - 200px);
 
-    margin-top: 60px;
+    margin-top: 70px;
     margin-left: 30px;
   }
   .view_music_player{
     width: 100vw;
     z-index: 10;
-    position: absolute;bottom: 0;left: 0;
+    position: fixed;bottom: 0;left: 0;
     transition: height 0.2s;
   }
   .bar_top_setapp{

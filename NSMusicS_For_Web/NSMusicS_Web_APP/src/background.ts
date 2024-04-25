@@ -10,11 +10,11 @@ Menu.setApplicationMenu(null)
 
 async function createWindow() {
     const win = await new BrowserWindow({
-        width: 1180,
-        height: 760,
+        width: 1080,
+        height: 690,
         // minWidth: 300,//移动端
-        minWidth:1110,//PC端
-        minHeight: 700,
+        minWidth:1080,//PC端
+        minHeight: 690,
         frame:false,
         resizable: true,
 
@@ -45,9 +45,9 @@ async function createWindow() {
         win.loadFile('index.html')
     }
     // Open the DevTools.
-    // win.webContents.openDevTools({
-    //     mode:'detach'
-    // });
+    win.webContents.openDevTools({
+        mode:'detach'
+    });
 
     const electron = require('electron')
     const ipc = electron.ipcMain
