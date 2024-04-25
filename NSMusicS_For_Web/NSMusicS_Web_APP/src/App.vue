@@ -1696,14 +1696,14 @@
   const theme_bar_top_setapp = ref('transparent')
   const change_page_header_color = ref(false)
   const theme_normal_mode_click = () => {
-    // theme.value = lightTheme
-    // theme_app.value = lightTheme
-    // change_page_header_color.value = false
+    theme.value = lightTheme
+    theme_app.value = lightTheme
+    change_page_header_color.value = false
   }
   const theme_dark_mode_click = () => {
-    // theme.value = darkTheme
-    // theme_app.value = darkTheme
-    // change_page_header_color.value = true
+    theme.value = darkTheme
+    theme_app.value = darkTheme
+    change_page_header_color.value = true
   }
   const theme_mode_change_click = () => {
     if(change_page_header_color.value){
@@ -1732,7 +1732,7 @@
   let navidrome_db = path.resolve('resources/navidrome.db');
 </script>
 <template>
-  <n-config-provider class="this_App">
+  <n-config-provider class="this_App" :theme="theme">
     <n-message-provider class="this_App">
       <n-layout has-sider class="this_App">
         <n-layout-sider
