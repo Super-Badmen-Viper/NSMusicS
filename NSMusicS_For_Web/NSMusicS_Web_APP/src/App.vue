@@ -121,6 +121,45 @@
   const get_view_collapsed_player_bar = (value:any) => {
     view_collapsed_player_bar.value = value
   }
+  // player theme
+  const collapsed_slider = ref(false);// collapsed_slider.value = player_theme_lyricItem_0_bind_style.value.normalStyle.collapsed_slider;
+  const get_collapsed_slider = (value:any) => {
+    collapsed_slider.value = value
+  }
+  const player_album_size = ref('54vh')
+  const get_player_album_size = (value:any) => {
+    player_album_size.value = value
+  }
+  const player_album_radius = ref('10px')
+  const get_player_album_radius = (value:any) => {
+    player_album_radius.value = value
+  }
+  const player_album_info_left = ref(true)
+  const get_player_album_info_left = (value:any) => {
+    player_album_info_left.value = value
+  }
+  const player_lyric_fontSize = ref('22px')
+  const get_player_lyric_fontSize = (value:any) => {
+    player_lyric_fontSize.value = value
+  }
+  const player_lyric_fontWeight = ref('800')
+  const get_player_lyric_fontWeight = (value:any) => {
+    player_lyric_fontWeight.value = value
+  }
+  const player_lyric_color = ref('#FAFAFB60')
+  const get_player_lyric_color = (value:any) => {
+    player_lyric_color.value = value
+  }
+  const player_album_cover_rotate = ref(false)
+  const get_player_album_cover_rotate = (value:any) => {
+    player_album_cover_rotate.value = value
+  }
+  const player_theme_lyricItem_Styles_Selected = ref<number>(0)
+  const get_player_theme_lyricItem_Styles_Selected = (value:any) => {
+    player_theme_lyricItem_Styles_Selected.value = value
+  }
+  // player setting
+
   ////// open bar musicplaylist
   const isVisible_Music_PlayList = ref(false);
   const get_isVisible_Music_PlayList = (value:any) => {
@@ -1976,6 +2015,25 @@
 
       :view_collapsed_player_bar="view_collapsed_player_bar"
       @view_collapsed_player_bar="get_view_collapsed_player_bar"
+
+      :collapsed_slider="collapsed_slider"
+      @collapsed_slider = get_collapsed_slider
+      :player_album_size="player_album_size"
+      @player_album_size = get_player_album_size
+      :player_album_radius="player_album_radius"
+      @player_album_radius = get_player_album_radius
+      :player_album_info_left="player_album_info_left"
+      @player_album_info_left = get_player_album_info_left
+      :player_lyric_fontSize="player_lyric_fontSize"
+      @player_lyric_fontSize = get_player_lyric_fontSize
+      :player_lyric_fontWeight="player_lyric_fontWeight"
+      @player_lyric_fontWeight = get_player_lyric_fontWeight
+      :player_lyric_color="player_lyric_color"
+      @player_lyric_color = get_player_lyric_color
+      :player_album_cover_rotate="player_album_cover_rotate"
+      @player_album_cover_rotate = get_player_album_cover_rotate
+      :player_theme_lyricItem_Styles_Selected="player_theme_lyricItem_Styles_Selected"
+      @player_theme_lyricItem_Styles_Selected="get_player_theme_lyricItem_Styles_Selected"
       
       :player="player"
       :currentTime_added_value="currentTime_added_value"

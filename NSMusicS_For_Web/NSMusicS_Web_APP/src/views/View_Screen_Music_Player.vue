@@ -1,6 +1,11 @@
 <script setup lang="ts">
   import { defineEmits, ref, watch, watchEffect, onMounted } from 'vue';
-  const emits = defineEmits(['player_show_click','play_go_index_time','view_collapsed_player_bar']);
+  const emits = defineEmits([
+    'player_show_click','play_go_index_time','view_collapsed_player_bar',
+    'collapsed_slider','player_album_size','player_album_radius','player_album_info_left',
+    'player_lyric_fontSize','player_lyric_fontWeight','player_lyric_color','player_album_cover_rotate',
+    'player_theme_lyricItem_Styles_Selected'
+  ]);
 
   const props = defineProps([
     'this_audio_file_path','playlist_Files_temporary',
@@ -9,7 +14,10 @@
     'this_audio_lyrics_string','this_audio_lyrics_info_line','this_audio_lyrics_info_time',
     'player','currentTime_added_value',
     'view_music_player_show_complete','this_audio_lyrics_info_line_num',
-    'view_collapsed_player_bar'
+    'view_collapsed_player_bar',
+    'collapsed_slider','player_album_size','player_album_radius','player_album_info_left',
+    'player_lyric_fontSize','player_lyric_fontWeight','player_lyric_color','player_album_cover_rotate',
+    'player_theme_lyricItem_Styles_Selected'
   ]);
   const os = require('os');
   function getAssetImage(firstImage: string) {
@@ -171,7 +179,17 @@
   const player_lyric_fontWeight = ref('800')
   const player_lyric_color = ref('#FAFAFB60')
   const player_album_cover_rotate = ref(false)
-  // player theme style
+  onMounted(() => {
+    player_album_size.value = props.player_album_size;
+    player_album_cover_rotate.value = props.player_album_cover_rotate;
+    player_album_radius.value = props.player_album_radius;
+    player_album_info_left.value = props.player_album_info_left;
+    player_lyric_fontSize.value = props.player_lyric_fontSize;
+    player_lyric_fontWeight.value = props.player_lyric_fontWeight;
+    player_lyric_color.value = props.player_lyric_color;
+    collapsed_slider.value = props.collapsed_slider;
+    player_theme_lyricItem_Styles_Selected.value = props.player_theme_lyricItem_Styles_Selected;
+  });
   type PlayerThemeStyle = {
     image_url: any;
 
@@ -358,6 +376,7 @@
     }
     player_theme_lyricItem_0_bind_style.value = player_theme_lyricItem_Styles.value[index];
     player_theme_lyricItem_Styles_Selected.value = index;
+    emits('player_theme_lyricItem_Styles_Selected' ,index);
     // set theme
     player_album_size.value = player_theme_lyricItem_0_bind_style.value.normalStyle.size;
     player_album_cover_rotate.value = player_theme_lyricItem_0_bind_style.value.normalStyle.cover_rotate;
@@ -367,6 +386,15 @@
     player_lyric_fontWeight.value = player_theme_lyricItem_0_bind_style.value.normalStyle.fontWeight;
     player_lyric_color.value = player_theme_lyricItem_0_bind_style.value.normalStyle.color;
     collapsed_slider.value = player_theme_lyricItem_0_bind_style.value.normalStyle.collapsed_slider;
+    // emits theme
+    emits('player_album_size' ,player_theme_lyricItem_0_bind_style.value.normalStyle.size);
+    emits('player_album_cover_rotate' ,player_theme_lyricItem_0_bind_style.value.normalStyle.cover_rotate);
+    emits('player_album_radius' ,player_theme_lyricItem_0_bind_style.value.normalStyle.radius);
+    emits('player_album_info_left' ,player_theme_lyricItem_0_bind_style.value.normalStyle.textAlign);
+    emits('player_lyric_fontSize' ,player_theme_lyricItem_0_bind_style.value.normalStyle.fontSize);
+    emits('player_lyric_fontWeight' ,player_theme_lyricItem_0_bind_style.value.normalStyle.fontWeight);
+    emits('player_lyric_color' ,player_theme_lyricItem_0_bind_style.value.normalStyle.color);
+    emits('collapsed_slider' ,player_theme_lyricItem_0_bind_style.value.normalStyle.collapsed_slider);
     // set lyric auto setting
     // 
   };
@@ -822,7 +850,7 @@
               <!-- Album 
                 show-trigger="bar" calc(50vw + 27vh + 8vw) :show-collapsed-content="false"-->
               <n-layout-sider 
-                :collapsed="collapsed_slider" @collapse="collapsed_slider = true" @expand="collapsed_slider = false"
+                :collapsed="collapsed_slider" @collapse="emits('collapsed_slider', true)" @expand="emits('collapsed_slider', false)"
                 :show-collapsed-content="false" collapse-mode="transform"
                 position="static"
                 collapsed-width="30vw" width="53vw"
@@ -938,7 +966,8 @@
   background-color: #FFFFFF16;
 }
 .lyrics_text_active {
-  font-size: v-bind(player_lyric_fontSize);font-weight: v-bind(player_lyric_fontWeight);
+  font-size: v-bind(player_lyric_fontSize);
+  font-weight: v-bind(player_lyric_fontWeight);
   max-width: calc(36vw);
   padding-left: 20px;padding-top: 0px;padding-bottom: 4px;
 }
