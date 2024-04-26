@@ -43,7 +43,7 @@ onMounted(async () => {
 });
 
 const { 
-  collapsed,
+  app_left_menu_collapsed,
   window_innerWidth,
 
   change_page_header_color,page_albumlists_top_album_image_url,page_albumlists_top_album_name,page_albumlists_top_album_id,
@@ -54,7 +54,7 @@ const {
 
   router_select_history_date,router_history_datas,
 } = defineProps<{
-  collapsed:boolean,
+  app_left_menu_collapsed:boolean,
   window_innerWidth:number,
 
   change_page_header_color:boolean,page_albumlists_top_album_image_url:string,page_albumlists_top_album_name:string,page_albumlists_top_album_id:string,
@@ -90,7 +90,7 @@ const {
       @media_list_of_album_id="get_media_list_of_album_id"
       @play_this_album_song_list="get_play_this_album_song_list"
 
-      :collapsed="collapsed"
+      :app_left_menu_collapsed="app_left_menu_collapsed"
       :window_innerWidth="window_innerWidth"
       :options_Sort_key="page_albumlists_options_Sort_key"
       @options_Sort_key="get_page_albumlists_options_Sort_key"

@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick, h, reactive, computed, watch, onBeforeUnmount, createVNode } from 'vue';
-import { useMessage,DropdownOption, type DataTableColumns, type DataTableRowKey, NIcon, InputInst, NImage, PaginationProps } from 'naive-ui';
-import { RowData } from 'naive-ui/es/data-table/src/interface';
+import { ref, onMounted, h, computed, watch, onBeforeUnmount } from 'vue';
+import { type DropdownOption, NIcon,type InputInst, NImage } from 'naive-ui';
 const emits = defineEmits([
   'media_file_path','media_file_path_from_playlist',
   'media_file_medium_image_url',
   'this_audio_singer_name',
   'this_audio_song_name',
   'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
-  'data_select_Index',
+  'this_audio_Index',
   'page_song_index',
   'menu_edit_this_song',
   'menu_add_this_song',
@@ -21,145 +20,8 @@ const emits = defineEmits([
   'media_Files_selected_set_all',
   'page_songlists_selected',
   'this_audio_lyrics_string',
-  'router_history_model',
+  'router_history_model','router_history_model_of_Media_scroller_value',
 ]);
-const columns = ref<DataTableColumns<RowData>>();
-const createColumns_normal = (): DataTableColumns<RowData> => [
-  {
-    title: 'Song_ID',
-    key: 'id',
-    width: '0px',
-    ellipsis: {
-      tooltip: true
-    }
-  },
-  {
-    title: '#',
-    key: 'absoluteIndex',
-    width: '60px',
-    fixed: 'left',
-  },
-  {
-    title: 'Title',
-    key: 'medium_image_url',
-    width: '76px',
-    ellipsis: {
-      tooltip: true
-    },
-    render(row) {
-      return createVNode('img', {
-        style: {
-          height: '50px',
-          objectFit: 'cover',
-          borderRadius: '6px',
-        },
-        src: row.medium_image_url,
-      });
-    }
-  },
-  {
-    title: '',
-    key: 'artist',
-    width: '500px',
-    ellipsis: {
-      tooltip: true
-    },
-    render(row) {
-      const artists = row.artist.split('/'); 
-      const routerLinks_artists = artists.map((artist: any, index: any) => {
-        return h(
-          RouterLink,
-          {
-            to: { name: 'home' },
-            params: { artist },
-            style: {
-              color: 'inherit',
-              textDecoration: 'none',
-              cursor: 'pointer',
-              transition: 'color 0.3s'
-            },
-            onMouseenter: (event: { target: { style: { textDecoration: string; color: string; }; }; }) => {
-              event.target.style.textDecoration = 'underline';
-              // event.target.style.color = 'blue';
-            },
-            onMouseleave: (event: { target: { style: { textDecoration: string; color: string; }; }; }) => {
-              event.target.style.textDecoration = 'none';
-              event.target.style.color = 'inherit';
-            },
-            key: index //唯一的key属性,识别每个RouterLink
-          },
-          { default: () => artist }
-        );
-      });
-      const routerLink_title = h(
-        RouterLink,
-        {
-          to: { name: 'home' },
-          params: { artist: row.title },
-          style: { color: 'inherit', textDecoration: 'none', cursor: 'pointer', transition: 'color 0.3s' },
-          onMouseenter: (event: { target: { style: { textDecoration: string; color: string; }; }; }) => {
-            event.target.style.textDecoration = 'underline';
-            // event.target.style.color = 'blue';
-          },
-          onMouseleave: (event: { target: { style: { textDecoration: string; color: string; }; }; }) => {
-            event.target.style.textDecoration = 'none';
-            event.target.style.color = 'inherit';
-          },
-        },
-        { default: () => row.title }
-      );
-      routerLinks_artists.unshift(h('br'));
-      routerLinks_artists.unshift(routerLink_title);
-      return h('div', {}, routerLinks_artists);
-    }
-  },
-  {
-    title: 'Album',
-    key: 'album',
-    width: '460px',
-    ellipsis: {
-      tooltip: true
-    },
-    render(row) {
-      return h(
-        RouterLink,
-        {
-          to: {name: 'home',},
-          params: {artist: row.album},
-          style: {color: 'inherit',textDecoration: 'none',cursor: 'pointer',transition: 'color 0.3s',},
-          onMouseenter: (event: { target: { style: { textDecoration: string; color: string; }; }; }) => {
-            event.target.style.textDecoration = 'underline';
-            // event.target.style.color = 'blue';
-          },
-          onMouseleave: (event: { target: { style: { textDecoration: string; color: string; }; }; }) => {
-            event.target.style.textDecoration = 'none';
-            event.target.style.color = 'inherit';
-          }
-        },
-        { default: () => row.album }
-      );
-    }
-  },
-  {
-    title: 'Path',
-    key: 'path',
-  },
-  {
-    title: 'Duration',
-    key: 'duration_txt',
-    width: '100px',
-    fixed: 'right',
-    ellipsis: {
-      tooltip: true
-    }
-  },
-];
-const createColumns_select = (): DataTableColumns<RowData> => [
-  {
-    type: 'selection',
-    width: '40px',
-  }
-];
 const props = defineProps<{
   data_temporary: Media_File[];data_temporary_selected: Media_File[];
 
@@ -169,16 +31,16 @@ const props = defineProps<{
 
   page_songlists_keyword:string;
   
-  collapsed: Boolean;
+  app_left_menu_collapsed: Boolean;
   window_innerWidth: number;
   options_Sort_key:{ columnKey: string; order: string }[];
 
-  router_select_history_date: Router_date;router_history_datas: Router_date[];
+  router_select_history_date: Router_date;router_history_datas: Router_date[];router_history_model_of_Media_scroller_value: number;
 }>();
 onBeforeUnmount(() => {
   
 });
-const data_select_Index = ref<number>(0)
+const this_audio_Index = ref<number>(0)
 const click_select_ALL_row = () => {
   if(props.data_temporary_selected.length == 0){
     emits('media_Files_selected_set_all', true);
@@ -190,11 +52,9 @@ const click_bulk_operation = () => {
   if(bool_start_play.value == true)
   {
     bool_start_play.value = false
-    columns.value?.unshift(createColumns_select()[0])
   }
   else{
     bool_start_play.value = true
-    columns.value?.splice(0, 1)
   }
 }
 
@@ -251,13 +111,13 @@ const options_data_dropmenu: DropdownOption[] = [
 ]
 const handleSelect_data_dropmenu = (option: string) => {
   if (option === 'edit') {
-    emits('menu_edit_this_song',data_select_Index.value);
+    emits('menu_edit_this_song',this_audio_Index.value);
   } 
   else if (option === 'add') {
-    emits('menu_add_this_song',data_select_Index.value);
+    emits('menu_add_this_song',this_audio_Index.value);
   }
   else if (option === 'delete') {
-    emits('menu_delete_this_song',data_select_Index.value);
+    emits('menu_delete_this_song',this_audio_Index.value);
   }
   showDropdownRef.value = false;
 }
@@ -307,7 +167,7 @@ const options_Sort = computed(() => {
     });
   }
   return options_Sort_key.value.map(item => {
-    let icon: DefineComponent<{}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, EmitsOptions, string, VNodeProps & AllowedComponentProps & ComponentCustomProps, Readonly<ExtractPropTypes<{}>>, {}, {}>;
+    let icon: any;
     switch (item.state_Sort) {
       case state_Sort.Ascend:
         icon = TextSortAscending20Regular;
@@ -430,7 +290,7 @@ const back_search_default = () => {
 }
 // 重新渲染gridItems
 const collapsed_width = ref<number>(1090);
-const stopWatching_collapsed_width = watch(() => props.collapsed, (newValue, oldValue) => {
+const stopWatching_collapsed_width = watch(() => props.app_left_menu_collapsed, (newValue, oldValue) => {
   updateGridItems();
 });
 let bool_watch = false;
@@ -452,7 +312,7 @@ const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (new
   }
 });
 const updateGridItems = () => {
-  if (props.collapsed == true) {
+  if (props.app_left_menu_collapsed == true) {
     collapsed_width.value = 145;
   } else {
     collapsed_width.value = 240;
@@ -461,8 +321,6 @@ const updateGridItems = () => {
 //
 let bool_loading = false
 onMounted(() => {
-  columns.value = createColumns_normal()
-
   input_search_Value.value = props.page_songlists_keyword
   if(input_search_Value.value.length > 0){
     bool_show_search_area.value = true
@@ -479,8 +337,7 @@ onBeforeUnmount(() => {
   cleanup();
 });
 const cleanup = () => {
-  columns.value = [];
-  data_select_Index.value = -1;
+  this_audio_Index.value = -1;
   stopWatching_collapsed_width()
   stopWatching_window_innerWidth()
   if (timer.value) {
@@ -510,12 +367,7 @@ const handleItemDbClick = (media_file:Media_File) => {
       emits('this_audio_album_id', media_file.album_id);
       emits('this_audio_album_favite', media_file.favorite);
       emits('this_audio_album_name',media_file.album)
-      // emits('page_song_index', page_index); 
-
-      // data_select_Index.value = (current_page_num.value-1)*props.media_page_size + page_index;
-
-      // emits('data_select_Index', data_select_Index.value); 
-      emits('data_select_Index', media_file.absoluteIndex); 
+      emits('this_audio_Index', media_file.absoluteIndex); 
     }
   }
 }
@@ -583,8 +435,6 @@ import {
   Heart24Regular,Heart28Filled,
   ChevronLeft16Filled,ChevronRight16Filled,
 } from '@vicons/fluent'
-import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
-import { RouterLink } from 'vue-router';
 
 const os = require('os');
 function getAssetImage(firstImage: string) {
@@ -719,16 +569,16 @@ function getAssetImage(firstImage: string) {
               <svg 
                 style="
                   position: absolute; top: -2; left: 0; 
-                  width: 100%; height: 100%;">
+                  width: 100%; height: 100%;
+                  ">
                 <defs>
                   <linearGradient v-if="!props.change_page_header_color" id="gradient" gradientTransform="rotate(30)">
-                    <stop offset="0%" stop-color="#fdfbfb"></stop>
-                    <stop offset="100%" stop-color="#ebedee"></stop>
+                    <stop offset="0%" stop-color="#FAFAFC"></stop>
+                    <stop offset="100%" stop-color="rgba(255, 255, 255, 0.4)"></stop>
                   </linearGradient>
                   <linearGradient v-if="props.change_page_header_color" id="gradient" gradientTransform="rotate(30)">
-                    <stop offset="0%" stop-color="#323232"></stop>
-                    <stop offset="40%" stop-color="#3F3F3F"></stop>
-                    <stop offset="150%" stop-color="#1C1C1C"></stop>
+                    <stop offset="0%" stop-color="#101014"></stop>
+                    <stop offset="150%" stop-color="rgba(0, 0, 0, 0.4)"></stop>
                   </linearGradient>
                 </defs>
                 <!-- fill="url(#gradient)" -->      
@@ -747,7 +597,7 @@ function getAssetImage(firstImage: string) {
                 margin-bottom: 10px;">
               <n-grid 
                 :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
-                style="margin-left: 30px;width: 370px;">
+                style="margin-left: 14px;width: 370px;">
                 <n-gi v-for="songlist in props.page_songlists_statistic" :key="songlist.id">
                   <n-statistic :label="songlist.label" :value="songlist.song_count" />
                 </n-gi>
@@ -777,7 +627,7 @@ function getAssetImage(firstImage: string) {
               <template #avatar>
                 <n-image
                   width="80px" height="80px" object-fit="contain"
-                  style="border-radius: 8px;margin-left: 20px;margin-top: 20px;"
+                  style="border-radius: 8px;margin-left: 12px;margin-top: 20px;"
                   :src="getAssetImage(props.page_songlists_top_album_image_url)"
                   @error="handleImageError"
                   :show-toolbar="false"
@@ -829,14 +679,14 @@ function getAssetImage(firstImage: string) {
                 />
               <div 
                 style="margin-left: 10px;
-                  width: 58px;height: 58px; 
+                  width: 60px;height: 60px; 
                   border-radius: 6px;border: 1.5px solid #FFFFFF20;
                   overflow: hidden;">
                 <img
                   :key="item.id"
                   :src="item.medium_image_url"
                   @error="handleImageError"
-                  style="width: 100%; height: 100%; object-fit: cover;"/>
+                  style="width: 60px; height: 60px; object-fit: cover;"/>
               </div>
               <div class="songlist_title">
                 <span @click="handleItemClick_title(item.title)">{{ item.title }}</span>

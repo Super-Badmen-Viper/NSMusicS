@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { ref, h } from 'vue';
-import { useMessage,DropdownOption, type DataTableColumns, type DataTableRowKey, NIcon, InputInst, NImage, PaginationProps } from 'naive-ui';
-import { RowData } from 'naive-ui/es/data-table/src/interface';
+import { ref, h, onMounted } from 'vue';
+import { type DropdownOption, NIcon } from 'naive-ui';
 const emits = defineEmits([
   'media_file_path','media_file_path_from_playlist',
   'media_file_medium_image_url',
   'this_audio_singer_name',
   'this_audio_song_name',
   'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
-  'data_select_Index',
+  'this_audio_Index',
   'page_song_index',
   'menu_edit_this_song',
   'menu_add_this_song',
@@ -23,8 +22,15 @@ const emits = defineEmits([
 ]);
 const props = defineProps<{
   data_temporary: Media_File[];data_temporary_selected: Media_File[];
+  this_audio_Index: number;
 }>();
-const data_select_Index = ref<number>(0)
+const this_audio_Index = ref<number>(0)
+onMounted(() => {
+  this_audio_Index.value = props.this_audio_Index;
+  if (scrollbar.value !== null) {
+    scrollbar.value.scrollToItem(this_audio_Index.value);
+  }
+});
 const click_select_ALL_row = () => {
   if(props.data_temporary_selected.length == 0){
     emits('playlist_Files_selected_set_all', true);
@@ -91,13 +97,13 @@ const options_data_dropmenu: DropdownOption[] = [
 ]
 const handleSelect_data_dropmenu = (option: string) => {
   if (option === 'edit') {
-    emits('menu_edit_this_song',data_select_Index.value);
+    emits('menu_edit_this_song',this_audio_Index.value);
   } 
   else if (option === 'add') {
-    emits('menu_add_this_song',data_select_Index.value);
+    emits('menu_add_this_song',this_audio_Index.value);
   }
   else if (option === 'delete') {
-    emits('menu_delete_this_song',data_select_Index.value);
+    emits('menu_delete_this_song',this_audio_Index.value);
   }
   showDropdownRef.value = false;
 }
@@ -136,12 +142,7 @@ const handleItemDbClick = (media_file:Media_File) => {
       emits('this_audio_album_id', media_file.album_id);
       emits('this_audio_album_favite', media_file.favorite);
       emits('this_audio_album_name',media_file.album)
-      // emits('page_song_index', page_index); 
-
-      // data_select_Index.value = (current_page_num.value-1)*props.media_page_size + page_index;
-
-      // emits('data_select_Index', data_select_Index.value); 
-      emits('data_select_Index', media_file.absoluteIndex); 
+      emits('this_audio_Index', media_file.absoluteIndex); 
     }
   }
 }
@@ -169,8 +170,6 @@ import {
   Heart24Regular,Heart28Filled,
   ChevronLeft16Filled,ChevronRight16Filled,
 } from '@vicons/fluent'
-import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
-import { RouterLink } from 'vue-router';
 
 const os = require('os');
 function getAssetImage(firstImage: string) {

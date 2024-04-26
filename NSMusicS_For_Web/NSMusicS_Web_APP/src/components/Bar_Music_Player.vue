@@ -3,7 +3,7 @@
 
   // send this SetInfo
   import { defineEmits } from 'vue';
-  const margin_top_value_view_music_player = ref(670);
+  const player_show_hight_animation_value = ref(670);
   const emits = defineEmits([
     'player_show_height',
     'this_audio_refresh',
@@ -12,12 +12,12 @@
     'this_audio_singer_name',
     'this_audio_song_name',
     'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
-    'data_select_Index',
-    'isVisible_Music_PlayList','isVisible_Player_Sound_effects',
+    'this_audio_Index',
+    'Playlist_Show','Player_Show_Sound_effects',
     'player_show_click',
     'this_audio_lyrics_string',
-    'player','currentTime_added_value',
-    'view_collapsed_player_bar'
+    'player','player_silder_currentTime_added_value',
+    'player_collapsed'
   ]);
   import { defineProps} from 'vue';
   const props = defineProps([
@@ -25,9 +25,9 @@
     'this_audio_file_medium_image_url','this_audio_refresh',
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name',
     'this_audio_album_id','this_audio_album_favite',
-    'player_show_click','view_music_player_show_complete',
+    'player_show_click','player_show_complete','Player_Show_Sound_effects',
     'player','play_go_index_time',
-    'view_collapsed_player_bar','view_music_player_show','collapsed'
+    'player_collapsed','player_show','collapsed'
   ]);
   const { ipcRenderer } = require('electron'); 
 
@@ -57,12 +57,12 @@
     back_filter_blurValue.value = 0;
   };
   const click_back_svg = () => {
-    if(props.view_music_player_show_complete){
-      margin_top_value_view_music_player.value = 
-        margin_top_value_view_music_player.value === 
+    if(props.player_show_complete){
+      player_show_hight_animation_value.value = 
+        player_show_hight_animation_value.value === 
           0 ? 670 : 0;
-          emits('player_show_height',margin_top_value_view_music_player.value);
-      if(margin_top_value_view_music_player.value === 0)
+          emits('player_show_height',player_show_hight_animation_value.value);
+      if(player_show_hight_animation_value.value === 0)
         svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
       else
         svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
@@ -75,9 +75,9 @@
   };
   let unwatch_player_show_click = watch(() => props.player_show_click, (newValue, oldValue) => {
     if (newValue === true) {
-      margin_top_value_view_music_player.value = 670;
-      emits('player_show_height',margin_top_value_view_music_player.value)
-      if(margin_top_value_view_music_player.value === 0)
+      player_show_hight_animation_value.value = 670;
+      emits('player_show_height',player_show_hight_animation_value.value)
+      if(player_show_hight_animation_value.value === 0)
         svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
       else
         svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
@@ -92,9 +92,9 @@
   const total_play_time = ref('04:42');
   const current_play_time = ref('01:36');
   const slider_singleValue = ref(0)
-  const currentTime_added_value = ref(0)
-  let unwatch_currentTime_added_value = watch(() => currentTime_added_value.value, (newValue, oldValue) => {
-    emits('currentTime_added_value',newValue);
+  const player_silder_currentTime_added_value = ref(0)
+  let unwatch_player_silder_currentTime_added_value = watch(() => player_silder_currentTime_added_value.value, (newValue, oldValue) => {
+    emits('player_silder_currentTime_added_value',newValue);
   });
   const player_no_progress_jump = ref(true)
   const slider_volume_value = ref(100)
@@ -118,7 +118,7 @@
   });
   const handleAudioFilePathChange = async () => {
     current_play_time.value = formatTime(props.player.getDuration());
-    currentTime_added_value.value = 0;
+    player_silder_currentTime_added_value.value = 0;
     this_audio_buffer_file.value = null;
     player_no_progress_jump.value = false;
     props.player.isPlaying = false;
@@ -136,7 +136,7 @@
       ipcRenderer.send('window-gc');
       clearTimeout(timer_this_audio_player.value);
       timer_this_audio_player.value = setTimeout(() => {
-        currentTime_added_value.value = 0;
+        player_silder_currentTime_added_value.value = 0;
         props.player.howl = new Howl({
           src: [props.this_audio_file_path],
           autoplay: false,
@@ -157,7 +157,7 @@
             //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
             if(player_no_progress_jump.value == true){
               current_play_time.value = formatTime(props.player.getDuration());
-              currentTime_added_value.value = 0;
+              player_silder_currentTime_added_value.value = 0;
               this_audio_buffer_file.value = null;
               clearInterval(timer);
 
@@ -174,7 +174,7 @@
             //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
             if(player_no_progress_jump.value == true){
               current_play_time.value = formatTime(props.player.getDuration());
-              currentTime_added_value.value = 0;
+              player_silder_currentTime_added_value.value = 0;
               this_audio_buffer_file.value = null;
               clearInterval(timer);
 
@@ -255,6 +255,7 @@
           emits('this_audio_album_id', props.playlist_Files_temporary[index].album_id);
           emits('this_audio_album_favite', props.playlist_Files_temporary[index].favite);
           emits('this_audio_album_name', props.playlist_Files_temporary[index].album);
+          emits('this_audio_Index',index)
           console.log(props.playlist_Files_temporary[index]);
         }
       }
@@ -263,7 +264,7 @@
   ////// player button area
   const play_skip_back_click = () => {
     current_play_time.value = formatTime(props.player.getDuration());
-    currentTime_added_value.value = 0;
+    player_silder_currentTime_added_value.value = 0;
     this_audio_buffer_file.value = null;
     clearInterval(timer);
 
@@ -274,7 +275,7 @@
   }
   const play_skip_forward_click = () => {
     current_play_time.value = formatTime(props.player.getDuration());
-    currentTime_added_value.value = 0;
+    player_silder_currentTime_added_value.value = 0;
     this_audio_buffer_file.value = null;
     clearInterval(timer);
 
@@ -285,7 +286,7 @@
   }
   const Play_Media_Switching = () => {
     current_play_time.value = formatTime(props.player.getDuration());
-    currentTime_added_value.value = 0;
+    player_silder_currentTime_added_value.value = 0;
     this_audio_buffer_file.value = null;
     clearInterval(timer);
 
@@ -302,7 +303,7 @@
   ////// player slider formatTime area
   const set_slider_singleValue = () => {
     if ( player_range_duration_isDragging == false) 
-      slider_singleValue.value = (props.player.getCurrentTime() + currentTime_added_value.value) / props.player.getDuration() * 100;
+      slider_singleValue.value = (props.player.getCurrentTime() + player_silder_currentTime_added_value.value) / props.player.getDuration() * 100;
   };
   function formatTime(currentTime: number): string {
     const minutes = Math.floor(currentTime / 60);
@@ -327,8 +328,8 @@
     return formatTime((value / 100 * props.player.getDuration()));
   }
   const get_current_play_time = () => {
-    if((props.player.getCurrentTime() + currentTime_added_value.value) <= props.player.getDuration())
-      current_play_time.value = formatTime((props.player.getCurrentTime() + currentTime_added_value.value));
+    if((props.player.getCurrentTime() + player_silder_currentTime_added_value.value) <= props.player.getDuration())
+      current_play_time.value = formatTime((props.player.getCurrentTime() + player_silder_currentTime_added_value.value));
   }
   const synchronize_playback_time = () => {
     set_slider_singleValue();
@@ -350,7 +351,7 @@
   });
   const play_go_duration = (slider_value:number,silder_path:boolean) => {
     player_no_progress_jump.value = false;
-    currentTime_added_value.value = 0;
+    player_silder_currentTime_added_value.value = 0;
     if(props.player.isPlaying === true)
     {
       // 注意，此时currentTime将从0开始，需要计算附加值
@@ -432,12 +433,15 @@
   }
 
   // open playList
-  const Set_isVisible_Music_PlayList = () => {
-    emits('isVisible_Music_PlayList',true);
+  const Set_Playlist_Show = () => {
+    emits('Playlist_Show',true);
   }
   // open sound effects
-  const Set_isVisible_Player_Sound_effects= () => {
-    emits('isVisible_Player_Sound_effects',true);
+  const Set_Player_Show_Sound_effects= () => {
+    if(props.Player_Show_Sound_effects === false)
+      emits('Player_Show_Sound_effects',true);
+    else
+      emits('Player_Show_Sound_effects',false);
   }
 
   import { onBeforeUnmount } from 'vue';
@@ -446,12 +450,12 @@
   });
   onBeforeUnmount(() => {
     unwatch_player_show_click()
-    unwatch_currentTime_added_value()
+    unwatch_player_silder_currentTime_added_value()
     unwatch_this_audio_refresh()
     unwatch_this_audio_buffer_file()
     unwatch_play_go_index_time()
     unwatch_slider_volume_value()
-    unwatch_view_collapsed_player_bar()
+    unwatch_player_collapsed()
   });
   import {
     Heart24Regular,Heart28Filled,
@@ -479,21 +483,21 @@
 
   ////// auto collapse player bar
   const handleRefusetohide = () => {
-    emits('view_collapsed_player_bar', false);
+    emits('player_collapsed', false);
   };
   let timer_auto_hidden: string | number | NodeJS.Timeout | undefined;
   const handleMouseMove = () => {
-    if(props.view_music_player_show === true){
-      // emits('view_collapsed_player_bar', false);
+    if(props.player_show === true){
+      // emits('player_collapsed', false);
       // clearInterval(timer_auto_hidden);
       // timer_auto_hidden = setInterval(() => {
-      //   emits('view_collapsed_player_bar', true);
+      //   emits('player_collapsed', true);
       // }, 600);
-      emits('view_collapsed_player_bar', true);
+      emits('player_collapsed', true);
     }
   };
-  const unwatch_view_collapsed_player_bar = watchEffect(() => {
-    if (props.view_collapsed_player_bar === false) {
+  const unwatch_player_collapsed = watchEffect(() => {
+    if (props.player_collapsed === false) {
       clearInterval(timer_auto_hidden);
     }
   });
@@ -502,13 +506,13 @@
 <template>
   <n-space class="this_Bar_Music_Player"
     style="transition: margin 0.4s;"
-    :style="{ marginBottom: view_collapsed_player_bar ? '-80px' : '0px' }"
+    :style="{ marginBottom: player_collapsed ? '-80px' : '0px' }"
     @mousemove="handleRefusetohide" @mouseleave="handleMouseMove" @mouseover="handleRefusetohide">
     <div class="layout_distribution_3"
       style="transition: margin 0.4s;"
       :style="{ 
-        marginLeft: view_music_player_show ? '0px' : (collapsed ? '72px' : '167px'),
-        width: view_music_player_show ? '100vw' : (collapsed ? 'calc(100vw - 72px)' : 'calc(100vw - 167px)'),
+        marginLeft: player_show ? '0px' : (collapsed ? '72px' : '167px'),
+        width: player_show ? '100vw' : (collapsed ? 'calc(100vw - 72px)' : 'calc(100vw - 167px)'),
       }">
       <div class="gird_Left">
         <div class="button_open_player_view">
@@ -611,7 +615,7 @@
       <div class="gird_Right">
         <n-space class="gird_Right_current_playlist_button_area">
           <n-badge :value="props.playlist_Files_temporary.length" show-zero :max="9999" :offset="[-7, 3]">
-            <n-button strong secondary class="gird_Right_current_playlist_button_area_of_button" @click="Set_isVisible_Music_PlayList">
+            <n-button strong secondary class="gird_Right_current_playlist_button_area_of_button" @click="Set_Playlist_Show">
               <template #icon>
                 <n-icon :size="42"><QueueMusicRound/></n-icon>
               </template>
@@ -631,12 +635,12 @@
                 <n-icon :size="22"><MoreCircle32Regular/></n-icon>
               </template>
             </n-button>
-            <n-button size="tiny" text @click="Set_isVisible_Music_PlayList">
+            <n-button size="tiny" text @click="Set_Playlist_Show">
               <template #icon>
                 <n-icon :size="22"><TopSpeed20Regular/></n-icon>
               </template>
             </n-button>
-            <n-button size="tiny" text @click="Set_isVisible_Music_PlayList">
+            <n-button size="tiny" text @click="Set_Player_Show_Sound_effects">
               <template #icon>
                 <n-icon :size="22"><DeviceEq24Filled/></n-icon>
               </template>

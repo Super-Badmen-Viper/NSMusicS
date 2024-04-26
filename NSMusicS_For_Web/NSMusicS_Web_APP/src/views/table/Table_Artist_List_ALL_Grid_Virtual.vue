@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { computed, h, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+  import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+  import { type InputInst, NIcon } from 'naive-ui';
 
   const emits = defineEmits([
     'artist_page_num',
@@ -18,7 +19,7 @@
 
     page_artistlists_keyword:string;
 
-    collapsed: Boolean;
+    app_left_menu_collapsed: Boolean;
     window_innerWidth: number;
     options_Sort_key:{ columnKey: string; order: string }[];
 
@@ -27,15 +28,13 @@
   //
   const bool_start_play = ref<boolean>(true)
   const click_bulk_operation = () => {
-    // if(bool_start_play.value == true)
-    // {
-    //   bool_start_play.value = false
-    //   columns.value?.unshift(createColumns_select()[0])
-    // }
-    // else{
-    //   bool_start_play.value = true
-    //   columns.value?.splice(0, 1)
-    // }
+    if(bool_start_play.value == true)
+    {
+      bool_start_play.value = false
+    }
+    else{
+      bool_start_play.value = true
+    }
   }
   //
   enum state_Sort {
@@ -65,7 +64,7 @@
       });
     }
     return options_Sort_key.value.map(item => {
-      let icon: DefineComponent<{}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, EmitsOptions, string, VNodeProps & AllowedComponentProps & ComponentCustomProps, Readonly<ExtractPropTypes<{}>>, {}, {}>;
+      let icon: any;
       switch (item.state_Sort) {
         case state_Sort.Ascend:
           icon = TextSortAscending20Regular;
@@ -237,7 +236,7 @@
     emits('play_this_artist_song_list',artist_id)
   }
   // 重新渲染gridItems
-  const stopWatching_collapsed_width = watch(() => props.collapsed, (newValue, oldValue) => {
+  const stopWatching_collapsed_width = watch(() => props.app_left_menu_collapsed, (newValue, oldValue) => {
     updateGridItems();
   });
   let bool_watch = false;
@@ -269,7 +268,7 @@
     }
   });
   const updateGridItems = () => {
-    if (props.collapsed == true) {
+    if (props.app_left_menu_collapsed == true) {
       collapsed_width.value = 145;
       item_artist.value = 140;
       item_artist_image.value = item_artist.value - 20;
@@ -332,8 +331,6 @@
     Heart24Regular,Heart28Filled,
     ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
   } from '@vicons/fluent'
-  import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
-  import { InputInst, NIcon } from 'naive-ui';
 </script>
 <template>
   <n-space vertical :size="12">
@@ -429,13 +426,12 @@
                   width: 100%; height: 100%;">
                 <defs>
                   <linearGradient v-if="!props.change_page_header_color" id="gradient" gradientTransform="rotate(30)">
-                    <stop offset="0%" stop-color="#fdfbfb"></stop>
-                    <stop offset="100%" stop-color="#ebedee"></stop>
+                    <stop offset="0%" stop-color="#FAFAFC"></stop>
+                    <stop offset="100%" stop-color="rgba(255, 255, 255, 0.4)"></stop>
                   </linearGradient>
                   <linearGradient v-if="props.change_page_header_color" id="gradient" gradientTransform="rotate(30)">
-                    <stop offset="0%" stop-color="#323232"></stop>
-                    <stop offset="40%" stop-color="#3F3F3F"></stop>
-                    <stop offset="150%" stop-color="#1C1C1C"></stop>
+                    <stop offset="0%" stop-color="#101014"></stop>
+                    <stop offset="150%" stop-color="rgba(0, 0, 0, 0.4)"></stop>
                   </linearGradient>
                 </defs>
                 <!-- fill="url(#gradient)" -->      
@@ -455,7 +451,7 @@
                 margin-bottom: 10px;">
               <n-grid 
                 :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
-                style="margin-left: 30px;width: 370px;">
+                style="margin-left: 14px;width: 370px;">
                 <n-gi v-for="artistlist in props.page_artistlists_statistic" :key="artistlist.id">
                   <n-statistic :label="artistlist.label" :value="artistlist.artist_count" />
                 </n-gi>
@@ -485,7 +481,7 @@
               <template #avatar>
                 <n-image
                   width="80px" height="80px" object-fit="contain"
-                  style="border-radius: 8px;margin-left: 20px;margin-top: 20px;"
+                  style="border-radius: 8px;margin-left: 12px;margin-top: 20px;"
                   :src="getAssetImage(props.page_artistlists_top_artist_image_url)"
                   :show-toolbar="false"
                 />
@@ -521,7 +517,8 @@
             :item="item"
             :active="active"
             :data-index="index"
-            :data-active="active">
+            :data-active="active"
+            style="margin-left: 10px;">
             <div
               :key="item.id"
               class="artist"

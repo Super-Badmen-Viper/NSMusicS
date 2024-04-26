@@ -2,32 +2,32 @@
 import { ref,defineEmits, onBeforeUnmount, onMounted } from 'vue';
 import Table_Song_List from '../views/table/Table_Song_List_ALL_Line_Virtual.vue'
 
-const data_select_Index = ref<number>(-1)
-function get_data_select_Index(value: any) {
-  data_select_Index.value = value
-  emits('data_select_Index',data_select_Index.value)
+const this_audio_Index = ref<number>(-1)
+function get_this_audio_Index(value: any) {
+  this_audio_Index.value = value
+  emits('this_audio_Index',this_audio_Index.value)
 }
 
 const menu_edit_this_song = ref<Media_File>()
 function get_menu_edit_this_song(value: any) {
   menu_edit_this_song.value = value
-  console.log('编辑：data_select_Index：'+value)
+  console.log('编辑：this_audio_Index：'+value)
 }
 const menu_add_this_song = ref<Media_File>()
 function get_menu_add_this_song(value: any) {
   menu_add_this_song.value = value
-  console.log('添加到：data_select_Index：'+value)
+  console.log('添加到：this_audio_Index：'+value)
 }
 const menu_delete_this_song = ref<Media_File>()
 function get_menu_delete_this_song(value: any) {
   menu_delete_this_song.value = value
-  console.log('添加到：data_select_Index：'+value)
+  console.log('添加到：this_audio_Index：'+value)
 }
 onBeforeUnmount(() => {
   cleanup();
 });
 const cleanup = () => {
-  data_select_Index.value = -1;
+  this_audio_Index.value = -1;
   menu_edit_this_song.value = undefined;
   menu_add_this_song.value = undefined;
   menu_delete_this_song.value = undefined;
@@ -45,7 +45,7 @@ const emits = defineEmits([
   'this_audio_album_id','this_audio_album_favite',
   'this_audio_album_favite',
   'this_audio_album_name',
-  'data_select_Index',
+  'this_audio_Index',
   'page_song_index',
   'menu_edit_this_song',
   'menu_add_this_song',
@@ -59,6 +59,7 @@ const emits = defineEmits([
   'page_songlists_selected',
   'this_audio_lyrics_string',
   'router_history_model',
+  'router_history_model_of_Media_scroller_value',
 ]);
 function get_media_path(value: any) {
   emits('media_file_path',value)
@@ -117,12 +118,15 @@ function get_this_audio_lyrics_string(value: string) {
 function get_router_history_model(value: string) {
   emits('router_history_model',value)
 }
+function get_router_history_model_of_Media_scroller_value(value: string) {
+  emits('router_history_model_of_Media_scroller_value',value)
+}
 onMounted(async () => {
   emits('router_select','View_Song_List_ALL')
 });
 
 const { 
-  collapsed,window_innerWidth,
+  app_left_menu_collapsed,window_innerWidth,
 
   change_page_header_color,page_songlists_top_album_image_url,page_songlists_top_album_name,page_songlists_top_album_id,
   page_songlists,page_songlists_options,page_songlists_statistic,
@@ -133,9 +137,9 @@ const {
   media_Files_temporary,media_Files_selected,
   page_songlists_options_Sort_key,
 
-  router_select_history_date,router_history_datas,
+  router_select_history_date,router_history_datas,router_history_model_of_Media_scroller_value
   } = defineProps<{
-    collapsed:Boolean,window_innerWidth:number,
+    app_left_menu_collapsed:Boolean,window_innerWidth:number,
 
     change_page_header_color:boolean,page_songlists_top_album_image_url:string,page_songlists_top_album_name:string,page_songlists_top_album_id:string,
     page_songlists:Play_List[],page_songlists_options:{label: string;value: string}[],page_songlists_statistic:{label: string;song_count: number;id: string;}[],
@@ -146,7 +150,7 @@ const {
     media_Files_temporary:Media_File[],media_Files_selected:Media_File[],
     page_songlists_options_Sort_key:{ columnKey: string; order: string }[],
 
-    router_select_history_date:Router_date,router_history_datas:Router_date[]
+    router_select_history_date:Router_date,router_history_datas:Router_date[],router_history_model_of_Media_scroller_value:number,
   }>();
 </script>
 
@@ -159,6 +163,8 @@ const {
       @router_history_model="get_router_history_model"
       :router_select_history_date="router_select_history_date"
       :router_history_datas="router_history_datas"
+      :router_history_model_of_Media_scroller_value="router_history_model_of_Media_scroller_value"
+      @router_history_model_of_Media_scroller_value="get_router_history_model_of_Media_scroller_value"
 
       :change_page_header_color="change_page_header_color"
       :page_songlists_top_album_image_url="page_songlists_top_album_image_url"
@@ -173,7 +179,7 @@ const {
       @media_Files_selected="get_media_Files_selected"
       @media_Files_selected_set="set_media_Files_selected"
       @media_Files_selected_set_all="set_media_Files_selected_all"
-      :collapsed="collapsed"
+      :app_left_menu_collapsed="app_left_menu_collapsed"
       :window_innerWidth="window_innerWidth"
 
       @this_audio_lyrics_string="get_this_audio_lyrics_string"
@@ -185,7 +191,7 @@ const {
       @this_audio_album_id="get_this_audio_album_id"
       @this_audio_album_favite="get_this_audio_album_favite"
       @this_audio_album_name="get_this_audio_album_name"
-      @data_select_Index="get_data_select_Index"
+      @this_audio_Index="get_this_audio_Index"
       @page_song_index="get_page_song_index"
       @menu_edit_this_song="get_menu_edit_this_song"
       @menu_add_this_song="get_menu_add_this_song"

@@ -49,7 +49,7 @@
     {label: renderLabel('home','歌词制作'),key: 'go-Other',icon: renderIcon(lyric)},
     {label: renderLabel('home','音乐社区'),key: 'go-Other',icon: renderIcon(PeopleCommunity16Regular)},
   ]
-  const collapsed = ref(false)
+  const app_left_menu_collapsed = ref(false)
   const menu_select_activeKey = ref<string | null>(null)
 
   import { RouterLink, RouterView } from 'vue-router'
@@ -70,30 +70,30 @@
   }
 
   ////// open view musicplayer
-  import { ref,watch } from 'vue';
+  import { ref } from 'vue';
   const player_show_click = ref(false);
   const get_player_show_click = (value:any) => {
     player_show_click.value = value
     console.log('player_show_click：'+value)
   }
-  const margin_top_value_view_music_player = ref(100);
-  const view_music_player_show = ref(false)
-  const view_music_player_show_complete = ref(true)
+  const player_show_hight_animation_value = ref(100);
+  const player_show = ref(false)
+  const player_show_complete = ref(true)
   const get_send_onclick = (value:any) => {
-    view_music_player_show_complete.value = false
+    player_show_complete.value = false
 
     ipcRenderer.send('window-gc');
 
     if(value === 0)
-      view_music_player_show.value = true
+      player_show.value = true
     setTimeout(() => {
-      margin_top_value_view_music_player.value = value
+      player_show_hight_animation_value.value = value
       setTimeout(() => {
         if(value === 0){
           theme_app.value = darkTheme
         }else{
           theme_app.value = theme.value
-          view_music_player_show.value = false
+          player_show.value = false
         }
       }, 200);
     }, 30);
@@ -114,17 +114,17 @@
         }
       }
 
-      view_music_player_show_complete.value = true
+      player_show_complete.value = true
     }, 600);
   }
-  const view_collapsed_player_bar = ref(false);
-  const get_view_collapsed_player_bar = (value:any) => {
-    view_collapsed_player_bar.value = value
+  const player_collapsed = ref(false);
+  const get_player_collapsed = (value:any) => {
+    player_collapsed.value = value
   }
   // player theme
-  const collapsed_slider = ref(false);// collapsed_slider.value = player_theme_lyricItem_0_bind_style.value.normalStyle.collapsed_slider;
-  const get_collapsed_slider = (value:any) => {
-    collapsed_slider.value = value
+  const player_collapsed_album = ref(false);// player_collapsed_album.value = player_theme_lyricItem_0_bind_style.value.normalStyle.player_collapsed_album;
+  const get_player_collapsed_album = (value:any) => {
+    player_collapsed_album.value = value
   }
   const player_album_size = ref('54vh')
   const get_player_album_size = (value:any) => {
@@ -158,19 +158,17 @@
   const get_player_theme_lyricItem_Styles_Selected = (value:any) => {
     player_theme_lyricItem_Styles_Selected.value = value
   }
-  // player setting
-
   ////// open bar musicplaylist
-  const isVisible_Music_PlayList = ref(false);
-  const get_isVisible_Music_PlayList = (value:any) => {
-    isVisible_Music_PlayList.value = value
-    console.log('isVisible_Music_PlayList：'+value)
+  const Playlist_Show = ref(false);
+  const get_Playlist_Show = (value:any) => {
+    Playlist_Show.value = value
+    console.log('Playlist_Show：'+value)
   }
   ////// open bar player sounde effects
-  const isVisible_Player_Sound_effects = ref(false);
-  const get_isVisible_Player_Sound_effects = (value:any) => {
-    isVisible_Player_Sound_effects.value = value
-    console.log('isVisible_Player_Sound_effects：'+value)
+  const Player_Show_Sound_effects = ref(false);
+  const get_Player_Show_Sound_effects = (value:any) => {
+    Player_Show_Sound_effects.value = value
+    console.log('Player_Show_Sound_effects：'+value)
   }
 
   ////// System Bind Media Info
@@ -178,10 +176,10 @@
   const fs = require('fs');
   import { Audio_howler }  from '../src/models/song_Audio_Out/Audio_howler';
   let player = new Audio_howler();
-  const currentTime_added_value = ref(0);
-  function get_currentTime_added_value(value: any) {
-    currentTime_added_value.value = value
-    console.log('currentTime_added_value：'+value)
+  const player_silder_currentTime_added_value = ref(0);
+  function get_player_silder_currentTime_added_value(value: any) {
+    player_silder_currentTime_added_value.value = value
+    console.log('player_silder_currentTime_added_value：'+value)
   }
   //
   const this_audio_file_path_from_playlist = ref(false);
@@ -300,6 +298,11 @@
     this_audio_album_favite.value = value
     console.log('this_audio_album_favite：'+value)
   }
+  const this_audio_Index = ref<number>(-1)//////绝对index
+  function get_this_audio_Index(value: any) {
+    this_audio_Index.value = value
+    console.log('this_audio_Index：'+value)
+  }
   //////
   function formatTime(currentTime: number): string {
     const minutes = Math.floor(currentTime / 60);
@@ -321,11 +324,6 @@
     return `${formattedMinutes}:${formattedSeconds}`;
   }
   //////
-  const data_select_Index = ref<number>(-1)//////绝对index
-  function get_data_select_Index(value: any) {
-    data_select_Index.value = value
-    console.log('data_select_Index：'+value)
-  }
   const page_song_index = ref(0)//////相对index
   function get_page_song_index(value: any) {
     page_song_index.value = value
@@ -344,7 +342,6 @@
     });
   }
   /////
-  const router_history_data = ref<Router_date[]>([]);
   const fetchData_Home = () => {
     
   }
@@ -396,6 +393,7 @@
   function get_page_songlists_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
     if (value != null) {
       page_songlists_options_Sort_key.value = value;
+      page_songlists_keyword.value = '';
       fetchData_Media()
     }
   }
@@ -659,7 +657,8 @@
       const stmt_album_limit_1_imagefiles = db.prepare('SELECT * FROM album LIMIT 1');
       const rows = stmt_media_file.all();
       const imagefiles = stmt_album_limit_1_imagefiles.all();
-      rows.forEach((row: Media_File) => {
+      rows.forEach((row: Media_File, index: number) => {
+        row.absoluteIndex = index;
         row.selected = false;
         row.duration_txt = formatTime(row.duration);
         if (row.path.indexOf('mp3') > 0)
@@ -746,6 +745,7 @@
   function get_page_albumlists_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
     if (value != null) {
       page_albumlists_options_Sort_key.value = value;
+      page_albumlists_keyword.value = '';
       fetchData_Album()
     }
   }
@@ -1082,7 +1082,7 @@
       get_this_audio_album_id(playlist_Files_temporary.value[0].album_id)
       get_this_audio_album_favite(playlist_Files_temporary.value[0].favorite)
       get_this_audio_album_name(playlist_Files_temporary.value[0].album)
-      get_data_select_Index(playlist_Files_temporary.value[0].absoluteIndex)
+      get_this_audio_Index(playlist_Files_temporary.value[0].absoluteIndex)
     }
   }
   // artist model
@@ -1102,6 +1102,7 @@
   function get_page_artistlists_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
     if (value != null) {
       page_artistlists_options_Sort_key.value = value;
+      page_artistlists_keyword.value = '';
       fetchData_Artist()
     }
   }
@@ -1423,7 +1424,7 @@
       get_this_audio_album_id(playlist_Files_temporary.value[0].album_id)
       get_this_audio_album_favite(playlist_Files_temporary.value[0].favorite)
       get_this_audio_album_name(playlist_Files_temporary.value[0].album)
-      get_data_select_Index(playlist_Files_temporary.value[0].absoluteIndex)
+      get_this_audio_Index(playlist_Files_temporary.value[0].absoluteIndex)
     }
   }
   // playlist model
@@ -1493,7 +1494,6 @@
     router.push('View_Album_List_ALL')
     menu_select_activeKey.value = 'go-albums-list'
   }
-
   //////
   function get_router_select(value: any) {
     ////// 
@@ -1502,15 +1502,12 @@
     }else if(value === 'View_Song_List_ALL'){
       router_select_model_media.value = true
       fetchData_Media()
-      
     }else if(value === 'View_Album_List_ALL'){
       router_select_model_album.value = true
       fetchData_Album()
-      
     }else if(value === 'View_Artist_List_ALL'){
       router_select_model_artist.value = true
       fetchData_Artist()
-      
     }
   }
   //////
@@ -1548,6 +1545,10 @@
     ipcRenderer.send('window-gc');
   }
   // history model media
+  const router_history_model_of_Media_scroller_value = ref<number>(0)
+  function get_router_history_model_of_Media_scroller_value (value: any) {
+    console.log('router_history_model_of_Media_scroller_value：'+value)
+  }
   const router_history_model_of_Media = ref<number>(0)
   function get_router_history_model_of_Media(value: any) {
     if (value !== 0) {
@@ -1604,6 +1605,10 @@
     }  
   };
   // history model album
+  const router_history_model_of_Album_scroller_value = ref<number>(0)
+  function get_router_history_model_of_Album_scroller_value (value: any) {
+    console.log('router_history_model_of_Album_scroller_value：'+value)
+  }
   const router_history_model_of_Album = ref<number>(0)
   function get_router_history_model_of_Album(value: any) {
     if (value !== 0) {
@@ -1660,6 +1665,10 @@
     }  
   };
   // history model artist
+  const router_history_model_of_Artist_scroller_value = ref<number>(0)
+  function get_router_history_model_of_Artist_scroller_value (value: any) {
+    console.log('router_history_model_of_Artist_scroller_value：'+value)
+  }
   const router_history_model_of_Artist = ref<number>(0)
   function get_router_history_model_of_Artist(value: any) {
     if (value !== 0) {
@@ -1722,7 +1731,6 @@
     router.push('View_Song_List_ALL')
     menu_select_activeKey.value = 'go-songs-list'
   });
-
   //////
   import { darkTheme,lightTheme } from 'naive-ui'
   import type { GlobalTheme } from 'naive-ui'
@@ -1780,12 +1788,12 @@
           collapse-mode="width"
           :collapsed-width="64"
           :width="160"
-          :collapsed="collapsed"
-          @collapse="collapsed = true"
-          @expand="collapsed = false">
+          :collapsed="app_left_menu_collapsed"
+          @collapse="app_left_menu_collapsed = true"
+          @expand="app_left_menu_collapsed = false">
           <n-menu
             v-model:value="menu_select_activeKey"
-            :collapsed="collapsed"
+            :collapsed="app_left_menu_collapsed"
             :collapsed-width="64"
             :collapsed-icon-size="22"
             :options="menuOptions"/>
@@ -1795,12 +1803,14 @@
             class="view_show"
             v-if="router_select_model_media"
             @router_select="get_router_select"
-            :collapsed="collapsed"
+            :app_left_menu_collapsed="app_left_menu_collapsed"
             :window_innerWidth="window_innerWidth"
 
             @router_history_model="get_router_history_model_of_Media"
             :router_select_history_date="router_select_history_date_of_Media"
             :router_history_datas="router_history_datas_of_Media"
+            :router_history_model_of_Media_scroller_value="router_history_model_of_Media_scroller_value"
+            @router_history_model_of_Media_scroller_value="get_router_history_model_of_Media_scroller_value"
 
             @this_audio_lyrics_string="get_this_audio_lyrics_string"
             @media_file_path="media_file_path"
@@ -1813,7 +1823,7 @@
             @this_audio_album_favite="get_this_audio_album_favite"
             :this_audio_album_name="this_audio_album_name"
             @this_audio_album_name="get_this_audio_album_name"
-            @data_select_Index="get_data_select_Index"
+            @this_audio_Index="get_this_audio_Index"
             @page_song_index="get_page_song_index"
             :media_Files_temporary="media_Files_temporary"
             :media_Files_selected="media_Files_selected"
@@ -1843,12 +1853,14 @@
             class="view_show"
             v-else-if="router_select_model_album"
             @router_select="get_router_select"
-            :collapsed="collapsed"
+            :app_left_menu_collapsed="app_left_menu_collapsed"
             :window_innerWidth="window_innerWidth"
 
             @router_history_model="get_router_history_model_of_Album"
             :router_select_history_date="router_select_history_date_of_Album"
             :router_history_datas="router_history_datas_of_Album"
+            :router_history_model_of_Album_scroller_value="router_history_model_of_Album_scroller_value"
+            @router_history_model_of_Album_scroller_value="get_router_history_model_of_Album_scroller_value"
 
             :album_Files_temporary="album_Files_temporary"
             :page_albumlists_options_Sort_key="page_albumlists_options_Sort_key"
@@ -1878,12 +1890,14 @@
             class="view_show"
             v-else-if="router_select_model_artist"
             @router_select="get_router_select"
-            :collapsed="collapsed"
+            :app_left_menu_collapsed="app_left_menu_collapsed"
             :window_innerWidth="window_innerWidth"
 
             @router_history_model="get_router_history_model_of_Artist"
             :router_select_history_date="router_select_history_date_of_Artist"
             :router_history_datas="router_history_datas_of_Artist"
+            :router_history_model_of_Artist_scroller_value="router_history_model_of_Artist_scroller_value"
+            @router_history_model_of_Artist_scroller_value="get_router_history_model_of_Artist_scroller_value"
 
             :artist_Files_temporary="artist_Files_temporary"
             :page_artistlists_options_Sort_key="page_artistlists_options_Sort_key"
@@ -1972,13 +1986,13 @@
       <Bar_Music_Player
         :player="player"
         
-        @currentTime_added_value="get_currentTime_added_value"
+        @player_silder_currentTime_added_value="get_player_silder_currentTime_added_value"
         :play_go_index_time="play_go_index_time"
 
-        :view_collapsed_player_bar="view_collapsed_player_bar"
-        @view_collapsed_player_bar="get_view_collapsed_player_bar"
-        :view_music_player_show="view_music_player_show"
-        :collapsed="collapsed"
+        :player_collapsed="player_collapsed"
+        @player_collapsed="get_player_collapsed"
+        :player_show="player_show"
+        :collapsed="app_left_menu_collapsed"
 
         @this_audio_lyrics_string="get_this_audio_lyrics_string"
 
@@ -2003,21 +2017,22 @@
 
         :player_show_click="player_show_click"
         @player_show_click="get_player_show_click"
-        :view_music_player_show_complete="view_music_player_show_complete"
+        :player_show_complete="player_show_complete"
         @player_show_height="get_send_onclick"
-        @isVisible_Music_PlayList="get_isVisible_Music_PlayList"
-        @isVisible_Player_Sound_effects="get_isVisible_Player_Sound_effects"/>
+        @Playlist_Show="get_Playlist_Show"
+        :Player_Show_Sound_effects="Player_Show_Sound_effects"
+        @Player_Show_Sound_effects="get_Player_Show_Sound_effects"/>
     </n-card>
     <View_Screen_Music_Player 
       class="view_music_player"
-      v-if="view_music_player_show"
-      :style="{ height: `calc(100vh - ${margin_top_value_view_music_player}vh)` }"
+      v-if="player_show"
+      :style="{ height: `calc(100vh - ${player_show_hight_animation_value}vh)` }"
 
-      :view_collapsed_player_bar="view_collapsed_player_bar"
-      @view_collapsed_player_bar="get_view_collapsed_player_bar"
+      :player_collapsed="player_collapsed"
+      @player_collapsed="get_player_collapsed"
 
-      :collapsed_slider="collapsed_slider"
-      @collapsed_slider = get_collapsed_slider
+      :player_collapsed_album="player_collapsed_album"
+      @player_collapsed_album = get_player_collapsed_album
       :player_album_size="player_album_size"
       @player_album_size = get_player_album_size
       :player_album_radius="player_album_radius"
@@ -2036,7 +2051,7 @@
       @player_theme_lyricItem_Styles_Selected="get_player_theme_lyricItem_Styles_Selected"
       
       :player="player"
-      :currentTime_added_value="currentTime_added_value"
+      :player_silder_currentTime_added_value="player_silder_currentTime_added_value"
       @play_go_index_time="get_play_go_index_time"
       :this_audio_lyrics_info_line_num="this_audio_lyrics_info_line_num"
 
@@ -2054,14 +2069,14 @@
       :this_audio_album_name="this_audio_album_name"
       
       @player_show_click="get_player_show_click"
-      :view_music_player_show_complete="view_music_player_show_complete">
+      :player_show_complete="player_show_complete">
 
     </View_Screen_Music_Player>
   </n-config-provider>
   <!-- right drwaer of music_playlist -->
   <n-config-provider :theme="darkTheme">
     <n-drawer 
-      v-model:show="isVisible_Music_PlayList" 
+      v-model:show="Playlist_Show" 
       :width="440" 
       style="
         border-radius: 12px 0 0 12px;
@@ -2070,10 +2085,10 @@
         backdrop-filter: blur(10px); /* 高斯模糊 */
         margin-top: 88px;margin-bottom:88px;
       ">
-      <n-drawer-content v-if="isVisible_Music_PlayList">
+      <n-drawer-content v-if="Playlist_Show">
         <template #default>
           <Bar_Music_PlayList
-            v-if="isVisible_Music_PlayList"
+            v-if="Playlist_Show"
 
             @this_audio_lyrics_string="get_this_audio_lyrics_string"
             @media_file_path="media_file_path"
@@ -2084,7 +2099,8 @@
             @this_audio_album_id="get_this_audio_album_id"
             @this_audio_album_favite="get_this_audio_album_favite"
             @this_audio_album_name="get_this_audio_album_name"
-            @data_select_Index="get_data_select_Index"
+            :this_audio_Index="this_audio_Index"
+            @this_audio_Index="get_this_audio_Index"
             @page_song_index="get_page_song_index"
 
             :playlist_Files_temporary="playlist_Files_temporary"
@@ -2097,32 +2113,31 @@
     </n-drawer>
   </n-config-provider>
   <!-- bottom drwaer of player sound effects -->
-  <n-config-provider :theme="null">
+  <n-config-provider :theme="darkTheme">
     <n-drawer 
-      v-model:show="isVisible_Player_Sound_effects"
-      :width="500" 
+      v-model:show="Player_Show_Sound_effects"
+      :width="440" 
       style="
         border-radius: 12px 0 0 12px;
+        border: 1.5px solid #FFFFFF20;
+        background-color: rgba(127, 127, 127, 0.1); 
+        backdrop-filter: blur(10px); /* 高斯模糊 */
         margin-top: calc(50vh - 280px);height: 560px;
-        background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);  
       ">
-      <n-drawer-content v-if="isVisible_Player_Sound_effects">
-        <template #header>
-          <span style="font-weight:600;font-size:20px;">音效设置</span>
-        </template>
+      <n-drawer-content v-if="Player_Show_Sound_effects">
         <template #default>
           <n-tabs type="line" animated>
-            <n-tab-pane name="001" tab="九歌音效插件">
-              九歌音效插件
+            <n-tab-pane name="001" tab="九歌音效">
+              九歌音效
+            </n-tab-pane>
+            <n-tab-pane name="004" tab="多音轨">
+              多音轨
             </n-tab-pane>
             <n-tab-pane name="002" tab="均衡器(简易)">
               均衡器(简易)
             </n-tab-pane>
             <n-tab-pane name="003" tab="均衡器(专业)">
               均衡器(专业)
-            </n-tab-pane>
-            <n-tab-pane name="004" tab="多音轨">
-              多音轨
             </n-tab-pane>
           </n-tabs>
         </template>

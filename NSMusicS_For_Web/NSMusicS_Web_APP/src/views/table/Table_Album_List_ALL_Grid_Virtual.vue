@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { computed, h, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+  import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+  import { type InputInst, NIcon } from 'naive-ui';
 
   const emits = defineEmits([
     'options_Sort_key','page_albumlists_keyword','page_albumlists_reset_data',
@@ -16,7 +17,7 @@
 
     page_albumlists_keyword:string;
 
-    collapsed: Boolean;
+    app_left_menu_collapsed: Boolean;
     window_innerWidth: number;
     options_Sort_key:{ columnKey: string; order: string }[];
 
@@ -54,7 +55,7 @@
       });
     }
     return options_Sort_key.value.map(item => {
-      let icon: DefineComponent<{}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, EmitsOptions, string, VNodeProps & AllowedComponentProps & ComponentCustomProps, Readonly<ExtractPropTypes<{}>>, {}, {}>;
+      let icon: any;
       switch (item.state_Sort) {
         case state_Sort.Ascend:
           icon = TextSortAscending20Regular;
@@ -237,7 +238,7 @@
     emits('play_this_album_song_list',album_id)
   }
   // 重新渲染gridItems
-  const stopWatching_collapsed_width = watch(() => props.collapsed, (newValue, oldValue) => {
+  const stopWatching_collapsed_width = watch(() => props.app_left_menu_collapsed, (newValue, oldValue) => {
     updateGridItems();
   });
   let bool_watch = false;
@@ -269,22 +270,21 @@
     }
   });
   const updateGridItems = () => {
-    if (props.collapsed == true) {
+    if (props.app_left_menu_collapsed == true) {
       collapsed_width.value = 145;
-      item_album.value = 150;
+      item_album.value = 145;
       item_album_image.value = item_album.value - 20;
       item_album_txt.value = item_album.value - 20;
-      itemSecondarySize.value = 144;
+      itemSecondarySize.value = 135;
     } else {
       collapsed_width.value = 240;
       item_album.value = 170;
       item_album_image.value = item_album.value - 20;
       item_album_txt.value = item_album.value - 20;
-      itemSecondarySize.value = 180;
+      itemSecondarySize.value = 170;
     }
     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
   };
-  
   //
   onBeforeUnmount(() => {
     cleanup();
@@ -332,8 +332,6 @@
     Heart24Regular,Heart28Filled,
     ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
   } from '@vicons/fluent'
-  import { DefineComponent, ComponentOptionsMixin, EmitsOptions, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue';
-  import { InputInst, NIcon } from 'naive-ui';
 </script>
 <template>
   <n-space vertical :size="12">
@@ -429,13 +427,12 @@
                   width: 100%; height: 100%;">
                 <defs>
                   <linearGradient v-if="!props.change_page_header_color" id="gradient" gradientTransform="rotate(30)">
-                    <stop offset="0%" stop-color="#fdfbfb"></stop>
-                    <stop offset="100%" stop-color="#ebedee"></stop>
+                    <stop offset="0%" stop-color="#FAFAFC"></stop>
+                    <stop offset="100%" stop-color="rgba(255, 255, 255, 0.4)"></stop>
                   </linearGradient>
                   <linearGradient v-if="props.change_page_header_color" id="gradient" gradientTransform="rotate(30)">
-                    <stop offset="0%" stop-color="#323232"></stop>
-                    <stop offset="40%" stop-color="#3F3F3F"></stop>
-                    <stop offset="150%" stop-color="#1C1C1C"></stop>
+                    <stop offset="0%" stop-color="#101014"></stop>
+                    <stop offset="150%" stop-color="rgba(0, 0, 0, 0.4)"></stop>
                   </linearGradient>
                 </defs>
                 <!-- fill="url(#gradient)" -->      
@@ -454,7 +451,7 @@
                 margin-bottom: 10px;">
               <n-grid 
                 :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
-                style="margin-left: 30px;width: 370px;">
+                style="margin-left: 14px;width: 370px;">
                 <n-gi v-for="albumlist in props.page_albumlists_statistic" :key="albumlist.id">
                   <n-statistic :label="albumlist.label" :value="albumlist.album_count" />
                 </n-gi>
@@ -484,7 +481,7 @@
               <template #avatar>
                 <n-image
                   width="80px" height="80px" object-fit="contain"
-                  style="border-radius: 8px;margin-left: 20px;margin-top: 20px;"
+                  style="border-radius: 8px;margin-left: 12px;margin-top: 20px;"
                   :src="getAssetImage(props.page_albumlists_top_album_image_url)"
                   :show-toolbar="false"
                 />
@@ -519,7 +516,8 @@
             :item="item"
             :active="active"
             :data-index="index"
-            :data-active="active">
+            :data-active="active"
+            style="margin-left: 10px;">
             <div
               :key="item.id"
               class="album"

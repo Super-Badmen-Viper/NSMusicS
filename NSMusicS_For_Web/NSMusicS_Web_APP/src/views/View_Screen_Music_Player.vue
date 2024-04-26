@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { defineEmits, ref, watch, watchEffect, onMounted } from 'vue';
   const emits = defineEmits([
-    'player_show_click','play_go_index_time','view_collapsed_player_bar',
-    'collapsed_slider','player_album_size','player_album_radius','player_album_info_left',
+    'player_show_click','play_go_index_time','player_collapsed',
+    'player_collapsed_album','player_album_size','player_album_radius','player_album_info_left',
     'player_lyric_fontSize','player_lyric_fontWeight','player_lyric_color','player_album_cover_rotate',
     'player_theme_lyricItem_Styles_Selected'
   ]);
@@ -12,10 +12,10 @@
     'this_audio_file_medium_image_url','this_audio_refresh',
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name',
     'this_audio_lyrics_string','this_audio_lyrics_info_line','this_audio_lyrics_info_time',
-    'player','currentTime_added_value',
-    'view_music_player_show_complete','this_audio_lyrics_info_line_num',
-    'view_collapsed_player_bar',
-    'collapsed_slider','player_album_size','player_album_radius','player_album_info_left',
+    'player','player_silder_currentTime_added_value',
+    'player_show_complete','this_audio_lyrics_info_line_num',
+    'player_collapsed',
+    'player_collapsed_album','player_album_size','player_album_radius','player_album_info_left',
     'player_lyric_fontSize','player_lyric_fontWeight','player_lyric_color','player_album_cover_rotate',
     'player_theme_lyricItem_Styles_Selected'
   ]);
@@ -56,7 +56,7 @@
     lyrics_animation = setInterval(() => {
       for (let i = 0; i < props.this_audio_lyrics_info_time.length; i++) {
         if(props.player !== null && props.player.getCurrentTime() !== undefined && props.player.getCurrentTime() !== null){
-          // let currentTime = (Math.floor(props.currentTime_added_value) + props.player.getCurrentTime())*1000;
+          // let currentTime = (Math.floor(props.player_silder_currentTime_added_value) + props.player.getCurrentTime())*1000;
           let currentTime = props.player.getCurrentTime()*1000;
           if(currentTime <= props.this_audio_lyrics_info_time[0]){  
             if(lyrics_list_whell.value === false){
@@ -108,7 +108,7 @@
     itemElements[index].style.filter = 'blur(0px)';
     itemElements[index].style.textShadow = '0 0 1px White';
     itemElements[index].style.transition = 'color 0.5s, transform 0.5s';
-    if(collapsed_slider.value === false){
+    if(player_collapsed_album.value === false){
       itemElements[index].style.transform = 'scale(1.1) translateY(0px)';
       itemElements[index].style.transformOrigin = 'left center';
     }else{
@@ -171,7 +171,7 @@
     }
   };
   ////// player theme seting
-  const collapsed_slider = ref(false);// collapsed_slider.value = player_theme_lyricItem_0_bind_style.value.normalStyle.collapsed_slider;
+  const player_collapsed_album = ref(false);// player_collapsed_album.value = player_theme_lyricItem_0_bind_style.value.normalStyle.player_collapsed_album;
   const player_album_size = ref('54vh')
   const player_album_radius = ref('10px')
   const player_album_info_left = ref(true)
@@ -187,7 +187,7 @@
     player_lyric_fontSize.value = props.player_lyric_fontSize;
     player_lyric_fontWeight.value = props.player_lyric_fontWeight;
     player_lyric_color.value = props.player_lyric_color;
-    collapsed_slider.value = props.collapsed_slider;
+    player_collapsed_album.value = props.player_collapsed_album;
     player_theme_lyricItem_Styles_Selected.value = props.player_theme_lyricItem_Styles_Selected;
   });
   type PlayerThemeStyle = {
@@ -202,7 +202,7 @@
     fontSize: any;
     fontWeight: any;
     maxHeight: any;
-    collapsed_slider: any;
+    player_collapsed_album: any;
   };
   type PlayerThemeHoverStyle = {
     colorHover:any;
@@ -230,7 +230,7 @@
         fontSize: '22px',
         fontWeight:'800',
         maxHeight: '100vh',
-        collapsed_slider: false,
+        player_collapsed_album: false,
       },
       hoverStyle: {
         colorHover: '#FFFFFF'
@@ -254,7 +254,7 @@
         fontSize: '22px',
         fontWeight:'800',
         maxHeight: '100vh',
-        collapsed_slider: false,
+        player_collapsed_album: false,
       },
       hoverStyle: {
         colorHover: '#FFFFFF'
@@ -278,7 +278,7 @@
         fontSize: '22px',
         fontWeight:'800',
         maxHeight: '100vh',
-        collapsed_slider: false,
+        player_collapsed_album: false,
       },
       hoverStyle: {
         colorHover: '#FFFFFF'
@@ -302,7 +302,7 @@
         fontSize: '22px',
         fontWeight:'800',
         maxHeight: '100vh',
-        collapsed_slider: false,
+        player_collapsed_album: false,
       },
       hoverStyle: {
         colorHover: '#FFFFFF'
@@ -326,7 +326,7 @@
         fontSize: '22px',
         fontWeight:'800',
         maxHeight: '100vh',
-        collapsed_slider: true,
+        player_collapsed_album: true,
       },
       hoverStyle: {
         colorHover: '#FFFFFF'
@@ -350,7 +350,7 @@
         fontSize: '22px',
         fontWeight:'800',
         maxHeight: '100vh',
-        collapsed_slider: true,
+        player_collapsed_album: true,
       },
       hoverStyle: {
         colorHover: '#FFFFFF'
@@ -385,7 +385,7 @@
     player_lyric_fontSize.value = player_theme_lyricItem_0_bind_style.value.normalStyle.fontSize;
     player_lyric_fontWeight.value = player_theme_lyricItem_0_bind_style.value.normalStyle.fontWeight;
     player_lyric_color.value = player_theme_lyricItem_0_bind_style.value.normalStyle.color;
-    collapsed_slider.value = player_theme_lyricItem_0_bind_style.value.normalStyle.collapsed_slider;
+    player_collapsed_album.value = player_theme_lyricItem_0_bind_style.value.normalStyle.player_collapsed_album;
     // emits theme
     emits('player_album_size' ,player_theme_lyricItem_0_bind_style.value.normalStyle.size);
     emits('player_album_cover_rotate' ,player_theme_lyricItem_0_bind_style.value.normalStyle.cover_rotate);
@@ -394,7 +394,7 @@
     emits('player_lyric_fontSize' ,player_theme_lyricItem_0_bind_style.value.normalStyle.fontSize);
     emits('player_lyric_fontWeight' ,player_theme_lyricItem_0_bind_style.value.normalStyle.fontWeight);
     emits('player_lyric_color' ,player_theme_lyricItem_0_bind_style.value.normalStyle.color);
-    emits('collapsed_slider' ,player_theme_lyricItem_0_bind_style.value.normalStyle.collapsed_slider);
+    emits('player_collapsed_album' ,player_theme_lyricItem_0_bind_style.value.normalStyle.player_collapsed_album);
     // set lyric auto setting
     // 
   };
@@ -477,20 +477,20 @@
   }
   //
   function close_media_player() {
-    if(props.view_music_player_show_complete)
+    if(props.player_show_complete)
       emits('player_show_click', true);
   }
   ////// auto collapse player bar
   let timer_auto_hidden: string | number | NodeJS.Timeout | undefined;
   const handleMouseMove = () => {
-    emits('view_collapsed_player_bar', false);
+    emits('player_collapsed', false);
     clearInterval(timer_auto_hidden);
     timer_auto_hidden = setInterval(() => {
-      emits('view_collapsed_player_bar', true);
+      emits('player_collapsed', true);
     }, 3000);
   };
-  const unwatch_view_collapsed_player_bar = watchEffect(() => {
-    if (props.view_collapsed_player_bar === false) {
+  const unwatch_player_collapsed = watchEffect(() => {
+    if (props.player_collapsed === false) {
       clearInterval(timer_auto_hidden);
     }
   });
@@ -500,8 +500,8 @@
     clearInterval(lyrics_animation);
     clearInterval(timer_auto_hidden);
     unwatch();
-    unwatch_view_collapsed_player_bar();
-    emits('view_collapsed_player_bar', false);
+    unwatch_player_collapsed();
+    emits('player_collapsed', false);
   });
   import { darkTheme,lightTheme } from 'naive-ui'
   import {
@@ -781,7 +781,7 @@
         <n-flex 
           justify="space-between" 
           style="transition: margin 0.4s;"
-          :style="{ marginTop: view_collapsed_player_bar ? '-70px' : '0px' }">
+          :style="{ marginTop: player_collapsed ? '-70px' : '0px' }">
           <n-flex style="height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-left:30px;">
               <n-button quaternary size="medium" 
@@ -845,12 +845,12 @@
           <n-flex 
             justify="center" 
             style="transition: margin 0.4s;"
-            :style="{ marginTop: view_collapsed_player_bar ? '70px' : '0px' }">
+            :style="{ marginTop: player_collapsed ? '70px' : '0px' }">
             <n-layout has-sider style="background-color: transparent;">
               <!-- Album 
                 show-trigger="bar" calc(50vw + 27vh + 8vw) :show-collapsed-content="false"-->
               <n-layout-sider 
-                :collapsed="collapsed_slider" @collapse="emits('collapsed_slider', true)" @expand="emits('collapsed_slider', false)"
+                :collapsed="player_collapsed_album" @collapse="emits('player_collapsed_album', true)" @expand="emits('player_collapsed_album', false)"
                 :show-collapsed-content="false" collapse-mode="transform"
                 position="static"
                 collapsed-width="30vw" width="53vw"
@@ -920,7 +920,7 @@
                       <n-list-item 
                         class="lyrics_info" 
                         :style="{
-                          textAlign: collapsed_slider ? 'center' : 'left',
+                          textAlign: player_collapsed_album ? 'center' : 'left',
                         }"
                         v-for="(item, index) in props.this_audio_lyrics_info_line" 
                         @click="handleItemDbClick(index)">

@@ -47,7 +47,7 @@ onMounted(async () => {
 });
 
 const { 
-  collapsed,
+  app_left_menu_collapsed,
   window_innerWidth,
 
   change_page_header_color,page_artistlists_top_artist_image_url,page_artistlists_top_artist_name,page_artistlists_top_artist_id,
@@ -61,7 +61,7 @@ const {
 
   router_select_history_date,router_history_datas,
 } = defineProps<{
-  collapsed:boolean,
+  app_left_menu_collapsed:boolean,
   window_innerWidth:number,
 
   change_page_header_color:boolean,page_artistlists_top_artist_image_url:string,page_artistlists_top_artist_name:string,page_artistlists_top_artist_id:string,
@@ -104,7 +104,7 @@ const {
       :page_artistlists_keyword="page_artistlists_keyword"
       @page_artistlists_keyword="page_artistlists_get_keyword"
 
-      :collapsed="collapsed"
+      :app_left_menu_collapsed="app_left_menu_collapsed"
       :window_innerWidth="window_innerWidth"
       :options_Sort_key="page_artistlists_options_Sort_key"
       @options_Sort_key="get_page_artistlists_options_Sort_key"/>

@@ -15,5 +15,5 @@ interface Router_date {
     page_lists_selected:string;
 
     columnKey: string; 
-    order: string
+    order: string;
 }

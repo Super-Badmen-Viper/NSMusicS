@@ -45,9 +45,9 @@ async function createWindow() {
         win.loadFile('index.html')
     }
     // Open the DevTools.
-    // win.webContents.openDevTools({
-    //     mode:'detach'
-    // });
+    win.webContents.openDevTools({
+        mode:'detach'
+    });
 
     const electron = require('electron')
     const ipc = electron.ipcMain

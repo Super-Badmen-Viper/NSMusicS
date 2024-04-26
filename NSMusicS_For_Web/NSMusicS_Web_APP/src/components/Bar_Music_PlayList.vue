@@ -1,40 +1,6 @@
 <script setup lang="ts">
 import { ref,defineEmits, onBeforeUnmount, onMounted } from 'vue';
 import Table_Song_List from '../views/table/Table_Music_PlayList_Line_Virtual.vue'
-
-const data_select_Index = ref<number>(-1)
-function get_data_select_Index(value: any) {
-  data_select_Index.value = value
-  emits('data_select_Index',data_select_Index.value)
-}
-
-const menu_edit_this_song = ref<Media_File>()
-function get_menu_edit_this_song(value: any) {
-  menu_edit_this_song.value = value
-  console.log('编辑：data_select_Index：'+value)
-}
-const menu_add_this_song = ref<Media_File>()
-function get_menu_add_this_song(value: any) {
-  menu_add_this_song.value = value
-  console.log('添加到：data_select_Index：'+value)
-}
-const menu_delete_this_song = ref<Media_File>()
-function get_menu_delete_this_song(value: any) {
-  menu_delete_this_song.value = value
-  console.log('添加到：data_select_Index：'+value)
-}
-onBeforeUnmount(() => {
-  cleanup();
-});
-const cleanup = () => {
-  data_select_Index.value = -1;
-  menu_edit_this_song.value = undefined;
-  menu_add_this_song.value = undefined;
-  menu_delete_this_song.value = undefined;
-};
-
-// import { useRouter } from "vue-router";
-// const router = useRouter();
 const emits = defineEmits([
   'router_select',
   'playlist_Files',
@@ -45,7 +11,7 @@ const emits = defineEmits([
   'this_audio_album_id','this_audio_album_favite',
   'this_audio_album_favite',
   'this_audio_album_name',
-  'data_select_Index',
+  'this_audio_Index',
   'page_song_index',
   'menu_edit_this_song',
   'menu_add_this_song',
@@ -58,6 +24,32 @@ const emits = defineEmits([
   'page_songlists_selected',
   'this_audio_lyrics_string'
 ]);
+const menu_edit_this_song = ref<Media_File>()
+function get_menu_edit_this_song(value: any) {
+  menu_edit_this_song.value = value
+  console.log('编辑：this_audio_Index：'+value)
+}
+const menu_add_this_song = ref<Media_File>()
+function get_menu_add_this_song(value: any) {
+  menu_add_this_song.value = value
+  console.log('添加到：this_audio_Index：'+value)
+}
+const menu_delete_this_song = ref<Media_File>()
+function get_menu_delete_this_song(value: any) {
+  menu_delete_this_song.value = value
+  console.log('添加到：this_audio_Index：'+value)
+}
+function get_this_audio_Index(value: any) {
+  emits('this_audio_Index',value)
+}
+onBeforeUnmount(() => {
+  cleanup();
+});
+const cleanup = () => {
+  menu_edit_this_song.value = undefined;
+  menu_add_this_song.value = undefined;
+  menu_delete_this_song.value = undefined;
+};
 function get_playlist_path(value: any) {
   emits('media_file_path',value)
 }
@@ -111,9 +103,9 @@ onMounted(async () => {
 });
 
 const { 
-  playlist_Files_temporary,playlist_Files_selected,
+  playlist_Files_temporary,playlist_Files_selected,this_audio_Index
   } = defineProps<{
-    playlist_Files_temporary:Media_File[],playlist_Files_selected:Media_File[],
+    playlist_Files_temporary:Media_File[],playlist_Files_selected:Media_File[],this_audio_Index: number,
   }>();
 </script>
 
@@ -136,7 +128,8 @@ const {
         @this_audio_album_id="get_this_audio_album_id"
         @this_audio_album_favite="get_this_audio_album_favite"
         @this_audio_album_name="get_this_audio_album_name"
-        @data_select_Index="get_data_select_Index"
+        :this_audio_Index="this_audio_Index"
+        @this_audio_Index="get_this_audio_Index"
         @page_song_index="get_page_song_index"
         @menu_edit_this_song="get_menu_edit_this_song"
         @menu_add_this_song="get_menu_add_this_song"
