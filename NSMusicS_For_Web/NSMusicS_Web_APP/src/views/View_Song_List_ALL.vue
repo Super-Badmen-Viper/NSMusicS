@@ -118,7 +118,7 @@ function get_this_audio_lyrics_string(value: string) {
 function get_router_history_model(value: string) {
   emits('router_history_model',value)
 }
-function get_router_history_model_of_Media_scroller_value(value: string) {
+function get_router_history_model_of_Media_scroller_value(value: any) {
   emits('router_history_model_of_Media_scroller_value',value)
 }
 onMounted(async () => {

@@ -24,11 +24,15 @@ const props = defineProps<{
   data_temporary: Media_File[];data_temporary_selected: Media_File[];
   this_audio_Index: number;
 }>();
+//
+const scrollbar = ref(null as any);
 const this_audio_Index = ref<number>(0)
 onMounted(() => {
   this_audio_Index.value = props.this_audio_Index;
-  if (scrollbar.value !== null) {
-    scrollbar.value.scrollToItem(this_audio_Index.value);
+  if (scrollbar !== null) {
+    setTimeout(() => {
+      scrollbar.value.scrollToItem(this_audio_Index.value);
+    }, 100);
   }
 });
 const click_select_ALL_row = () => {
@@ -116,13 +120,6 @@ const yRef = ref(0)
 let click_count = 0
 const bool_start_play = ref<boolean>(true)
 //
-const scrollbar = ref(null as any);
-const scrollToTop = () => {
-  if (scrollbar.value !== null) {
-    scrollbar.value.scrollToItem(0);
-  }
-};
-//
 const itemSize = 70;// height
 //
 const handleItemClick = () => {
@@ -148,13 +145,9 @@ const handleItemDbClick = (media_file:Media_File) => {
 }
 const handleItemClick_title = (title:string) => {
   click_count = 0;
-  
-  scrollToTop()
 }
 const handleItemClick_artist = (artist:string) => {
   click_count = 0;
- 
-  scrollToTop()
 }
 //
 import {

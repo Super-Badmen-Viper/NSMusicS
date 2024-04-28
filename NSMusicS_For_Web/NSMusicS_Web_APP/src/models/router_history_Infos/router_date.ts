@@ -16,4 +16,6 @@ interface Router_date {
 
     columnKey: string; 
     order: string;
+
+    page_lists_scrollindex :number;
 }

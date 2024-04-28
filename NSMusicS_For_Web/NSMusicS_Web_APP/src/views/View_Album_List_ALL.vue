@@ -9,7 +9,7 @@ const emits = defineEmits([
   'page_albumlists_selected',
   'media_list_of_album_id',
   'play_this_album_song_list',
-  'router_history_model',
+  'router_history_model','router_history_model_of_Album_scroller_value',
 ]);
 function get_album_PageSize(value: any) {
   emits('album_page_size',value)
@@ -38,6 +38,9 @@ function get_play_this_album_song_list(value: any) {
 function get_router_history_model(value: string) {
   emits('router_history_model',value)
 }
+function get_router_history_model_of_Album_scroller_value(value: any) {
+  emits('router_history_model_of_Album_scroller_value',value)
+}
 onMounted(async () => {
   emits('router_select','View_Album_List_ALL')
 });
@@ -52,7 +55,7 @@ const {
 
   page_albumlists_options_Sort_key,page_albumlists_keyword,
 
-  router_select_history_date,router_history_datas,
+  router_select_history_date,router_history_datas,router_history_model_of_Album_scroller_value,
 } = defineProps<{
   app_left_menu_collapsed:boolean,
   window_innerWidth:number,
@@ -64,7 +67,7 @@ const {
   page_albumlists_options_Sort_key:{ columnKey: string; order: string }[],
   album_Files_temporary:Album[],page_albumlists_keyword:string,
   
-  router_select_history_date:Router_date,router_history_datas:Router_date[]
+  router_select_history_date:Router_date,router_history_datas:Router_date[],router_history_model_of_Album_scroller_value:number,
   }>();
 </script>
 
@@ -76,6 +79,8 @@ const {
       @router_history_model="get_router_history_model"
       :router_select_history_date="router_select_history_date"
       :router_history_datas="router_history_datas"
+      :router_history_model_of_Album_scroller_value="router_history_model_of_Album_scroller_value"
+      @router_history_model_of_Album_scroller_value="get_router_history_model_of_Album_scroller_value"
 
       :change_page_header_color="change_page_header_color"
       :page_albumlists_top_album_image_url="page_albumlists_top_album_image_url"

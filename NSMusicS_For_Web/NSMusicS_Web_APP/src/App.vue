@@ -634,6 +634,7 @@
             page_songlists_options_Sort_key.value[0].columnKey : 'id',
           order:page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
             page_songlists_options_Sort_key.value[0].order.replace('end', '') : '',
+          page_lists_scrollindex: router_history_model_of_Media_scroller_value.value,
         };
         add_router_history_of_Media(routerDate);// 重复路由不添加
         //////
@@ -650,6 +651,7 @@
               order:router_select_history_date_of_Media.value.order
             }
           ];
+          router_history_model_of_Media_scroller_value.value = router_select_history_date_of_Media.value.page_lists_scrollindex;
           stmt_media_file = db.prepare(router_select_history_date_of_Media.value.stmt_string);
         }
         router_history_model_of_Media.value = 0;
@@ -956,6 +958,7 @@
             page_albumlists_options_Sort_key.value[0].columnKey : 'id',
           order:page_albumlists_options_Sort_key.value.length > 0 && page_albumlists_options_Sort_key.value[0].order !== 'default' ?
             page_albumlists_options_Sort_key.value[0].order.replace('end', '') : '',
+          page_lists_scrollindex: router_history_model_of_Album_scroller_value.value,
         };
         add_router_history_of_Album(routerDate);// 重复路由不添加
         //////
@@ -972,6 +975,7 @@
               order:router_select_history_date_of_Album.value.order
             }
           ];
+          router_history_model_of_Album_scroller_value.value = router_select_history_date_of_Album.value.page_lists_scrollindex;
           stmt_album = db.prepare(router_select_history_date_of_Album.value.stmt_string);
         }
         router_history_model_of_Album.value = 0;
@@ -1299,6 +1303,7 @@
             page_artistlists_options_Sort_key.value[0].columnKey : 'id',
           order:page_artistlists_options_Sort_key.value.length > 0 && page_artistlists_options_Sort_key.value[0].order !== 'default' ?
             page_artistlists_options_Sort_key.value[0].order.replace('end', '') : '',
+          page_lists_scrollindex: router_history_model_of_Artist_scroller_value.value,
         };
         add_router_history_of_Artist(routerDate);// 重复路由不添加
         //////
@@ -1315,6 +1320,7 @@
               order:router_select_history_date_of_Artist.value.order
             }
           ];
+          router_history_model_of_Artist_scroller_value.value = router_select_history_date_of_Artist.value.page_lists_scrollindex;
           stmt_artist = db.prepare(router_select_history_date_of_Artist.value.stmt_string);
         }
         router_history_model_of_Artist.value = 0;
@@ -1994,6 +2000,7 @@
         :player_show="player_show"
         :collapsed="app_left_menu_collapsed"
 
+        @this_audio_Index="get_this_audio_Index"
         @this_audio_lyrics_string="get_this_audio_lyrics_string"
 
         :this_audio_file_path="this_audio_file_path"
