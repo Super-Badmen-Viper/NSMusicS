@@ -40,7 +40,6 @@ const props = defineProps<{
 onBeforeUnmount(() => {
   
 });
-const this_audio_Index = ref<number>(0)
 const click_select_ALL_row = () => {
   if(props.data_temporary_selected.length == 0){
     emits('media_Files_selected_set_all', true);
@@ -130,13 +129,6 @@ const yRef = ref(0)
 let click_count = 0
 const bool_start_play = ref<boolean>(true)
 //
-const scrollbar = ref(null as any);
-const scrollToTop = () => {
-  if (scrollbar.value !== null) {
-    scrollbar.value.scrollToItem(0);
-  }
-};
-//
 enum state_Sort {
   Ascend = 'ascend',
   Descend = 'descend',
@@ -224,7 +216,7 @@ const handleSelect_Sort = (key: string | number) => {
   emits('options_Sort_key',sortersArray)
   // sortByColumnKeys(sortersArray);
 
-  scrollToTop()
+  scrollTo(0)
 }
 const options_Sort_key_Default_key = ref<string>()
 const options_Sort_key_Default = ref<SortItem[]>()
@@ -239,7 +231,7 @@ const show_search_area = () => {
       emits('page_songlists_reset_data',true)
       back_search_default()
       bool_input_search = false
-      scrollToTop()
+      scrollTo(0)
     }
   }
   else
@@ -330,7 +322,7 @@ onMounted(() => {
     bool_show_search_area.value = false
     bool_input_search = false
   }
-
+  scrollTo(props.router_history_model_of_Media_scroller_value)
 });
 //
 onBeforeUnmount(() => {
@@ -377,7 +369,7 @@ const handleItemClick_title = (title:string) => {
   bool_show_search_area.value = false
   show_search_area()
   click_search()
-  scrollToTop()
+  scrollTo(0)
 }
 const handleItemClick_artist = (artist:string) => {
   click_count = 0;
@@ -385,7 +377,7 @@ const handleItemClick_artist = (artist:string) => {
   bool_show_search_area.value = false
   show_search_area()
   click_search()
-  scrollToTop()
+  scrollTo(0)
 }
 const handleItemClick_album = (album:string) => {
   click_count = 0;
@@ -393,7 +385,7 @@ const handleItemClick_album = (album:string) => {
   bool_show_search_area.value = false
   show_search_area()
   click_search()
-  scrollToTop()
+  scrollTo(0)
 }
 //
 const handleSelected_value_for_songlistall = (value: any) => {
@@ -403,18 +395,31 @@ const handleSelected_value_for_songlistall = (value: any) => {
 };
 const breadcrumbItems = ref('所有歌曲');
 //
-const scroller = ref(null);
+const scrollbar = ref(null as any);
+const this_audio_Index = ref<number>(0)
+const scrollTo = (value :number) => {
+  if (scrollbar !== null) {
+    setTimeout(() => {
+      scrollbar.value.scrollToItem(value - (11 + Math.floor((window.innerHeight - 690) / 75)));// 1000:15，690:11  75 
+    }, 100);
+  }
+}
+onMounted(() => {
+  scrollTo(props.router_history_model_of_Media_scroller_value)
+});
 const onResize = () => {
-  // console.log('resize')
+  console.log('resize');
 }
 const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
 const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any, visibleEndIndex: any) => {
-  console.log('update')
   updateParts.viewStartIdx = viewStartIndex
   updateParts.viewEndIdx = viewEndIndex
   updateParts.visibleStartIdx = visibleStartIndex
   updateParts.visibleEndIdx = visibleEndIndex
+
+  emits('router_history_model_of_Media_scroller_value',viewEndIndex)
 }
+// 
 const get_router_history_model_pervious = () => {
   emits('router_history_model',-1)
 }
@@ -527,7 +532,10 @@ function getAssetImage(firstImage: string) {
       <DynamicScroller 
         class="table" ref="scrollbar" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
         :items="props.data_temporary"
-        :minItemSize="itemSize - 20">
+        :minItemSize="itemSize - 20"
+        :emit-update="true"
+        @resize="onResize"
+        @update="onUpdate">
         <template #before>
           <div class="notice">
             <div

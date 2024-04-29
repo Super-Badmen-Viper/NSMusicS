@@ -394,6 +394,7 @@
     if (value != null) {
       page_songlists_options_Sort_key.value = value;
       page_songlists_keyword.value = '';
+      fix_router_history_of_Media_scroller_value(router_history_model_of_Media_scroller_value.value) // 保留此滚轮值(上次浏览位置)
       fetchData_Media()
     }
   }
@@ -748,6 +749,7 @@
     if (value != null) {
       page_albumlists_options_Sort_key.value = value;
       page_albumlists_keyword.value = '';
+      fix_router_history_of_Album_scroller_value(router_history_model_of_Album_scroller_value.value) // 保留此滚轮值(上次浏览位置)
       fetchData_Album()
     }
   }
@@ -1107,6 +1109,7 @@
     if (value != null) {
       page_artistlists_options_Sort_key.value = value;
       page_artistlists_keyword.value = '';
+      fix_router_history_of_Artist_scroller_value(router_history_model_of_Artist_scroller_value.value) // 保留此滚轮值(上次浏览位置)
       fetchData_Artist()
     }
   }
@@ -1550,10 +1553,13 @@
     artist_Files_temporary.value = [];
     ipcRenderer.send('window-gc');
   }
-  // history model media
+  // history model media5
   const router_history_model_of_Media_scroller_value = ref<number>(0)
   function get_router_history_model_of_Media_scroller_value (value: any) {
-    console.log('router_history_model_of_Media_scroller_value：'+value)
+    if(value !== 0){
+      router_history_model_of_Media_scroller_value.value = value
+      console.log('router_history_model_of_Media_scroller_value：'+value)
+    }
   }
   const router_history_model_of_Media = ref<number>(0)
   function get_router_history_model_of_Media(value: any) {
@@ -1610,10 +1616,19 @@
       router_history_datas_of_Media.value.splice(index + 1);  
     }  
   };
+  const fix_router_history_of_Media_scroller_value = (value: number) => {
+    const index = router_history_datas_of_Media.value.findIndex(item => item.id === (router_select_history_date_of_Media.value?.id ?? ''));
+    if (index !== -1) {
+      router_history_datas_of_Media.value[index].page_lists_scrollindex = value;
+    }  
+  }
   // history model album
   const router_history_model_of_Album_scroller_value = ref<number>(0)
   function get_router_history_model_of_Album_scroller_value (value: any) {
-    console.log('router_history_model_of_Album_scroller_value：'+value)
+    if(value !== 0){
+      router_history_model_of_Album_scroller_value.value = value
+      console.log('router_history_model_of_Album_scroller_value：'+value)
+    }
   }
   const router_history_model_of_Album = ref<number>(0)
   function get_router_history_model_of_Album(value: any) {
@@ -1670,10 +1685,19 @@
       router_history_datas_of_Album.value.splice(index + 1);  
     }  
   };
+  const fix_router_history_of_Album_scroller_value = (value: number) => {
+    const index = router_history_datas_of_Album.value.findIndex(item => item.id === (router_select_history_date_of_Album.value?.id ?? ''));
+    if (index !== -1) {
+      router_history_datas_of_Album.value[index].page_lists_scrollindex = value;
+    }  
+  }
   // history model artist
   const router_history_model_of_Artist_scroller_value = ref<number>(0)
   function get_router_history_model_of_Artist_scroller_value (value: any) {
-    console.log('router_history_model_of_Artist_scroller_value：'+value)
+    if(value !== 0){
+      router_history_model_of_Artist_scroller_value.value = value
+      console.log('router_history_model_of_Artist_scroller_value：'+value)
+    }
   }
   const router_history_model_of_Artist = ref<number>(0)
   function get_router_history_model_of_Artist(value: any) {
@@ -1730,6 +1754,12 @@
       router_history_datas_of_Artist.value.splice(index + 1);  
     }  
   };
+  const fix_router_history_of_Artist_scroller_value = (value: number) => {
+    const index = router_history_datas_of_Artist.value.findIndex(item => item.id === (router_select_history_date_of_Artist.value?.id ?? ''));
+    if (index !== -1) {
+      router_history_datas_of_Artist.value[index].page_lists_scrollindex = value;
+    }  
+  }
   //////
   onMounted(() => {
     // fix init : if no access media_model,View_Screen_Music_Player will up animation

@@ -6,7 +6,7 @@
     'options_Sort_key','page_albumlists_keyword','page_albumlists_reset_data',
     'page_albumlists_selected',
     'media_list_of_album_id','play_this_album_song_list',
-    'router_history_model',
+    'router_history_model','router_history_model_of_Album_scroller_value',
   ]);
   const props = defineProps<{
     data_temporary: Album[];
@@ -21,7 +21,7 @@
     window_innerWidth: number;
     options_Sort_key:{ columnKey: string; order: string }[];
 
-    router_select_history_date: Router_date;router_history_datas: Router_date[];
+    router_select_history_date: Router_date;router_history_datas: Router_date[];router_history_model_of_Album_scroller_value:number;
   }>();
   //
   enum state_Sort {
@@ -112,7 +112,7 @@
     emits('options_Sort_key',sortersArray)
     // sortByColumnKeys(sortersArray);
 
-    scrollToTop()
+    scrollTo(0)
   }
   const options_Sort_key_Default_key = ref<string>()
   const options_Sort_key_Default = ref<SortItem[]>()
@@ -127,7 +127,7 @@
         emits('page_albumlists_reset_data',true)
         back_search_default()
         bool_input_search = false
-        scrollToTop()
+        scrollTo(0)
       }
     }
     else
@@ -176,20 +176,11 @@
       }
     }
   }
-
-
   //
   const item_album_margin = ref<number>(0)
   const item_album = ref<number>(160)
   const item_album_image = ref<number>(item_album.value - 20)
   const item_album_txt = ref<number>(item_album.value - 20)
-  //
-  const scrollbar = ref<HTMLElement | null>(null);
-  const scrollToTop = () => {
-    if (scrollbar.value) {
-      scrollbar.value.scrollTop = 0;
-    }
-  };
   //
   const handleImageError = (event:any) => {
     event.target.src = '../../../resources/error_album.jpg'; // 设置备用图片路径
@@ -213,21 +204,21 @@
     bool_show_search_area.value = false
     show_search_area()
     click_search()
-    scrollToTop()
+    scrollTo(0)
   }
   const handleItemClick_artist = (artist_id:string) => {
     input_search_Value.value = artist_id+'accurate_search'+'__artist__'
     bool_show_search_area.value = false
     show_search_area()
     click_search()
-    scrollToTop()
+    scrollTo(0)
   }
   const handleItemClick_album_timelist = (created_at:string) => {
     input_search_Value.value = created_at+'accurate_search'+'__title__'
     bool_show_search_area.value = false
     show_search_area()
     click_search()
-    scrollToTop()
+    scrollTo(0)
   }
   const Open_this_album_SongList_click = (album_id:string) => {
     console.log('media_list_of_album_id：'+album_id);
@@ -306,7 +297,32 @@
     else if(os.type() || process.platform === 'linux')
       return new URL(firstImage, import.meta.url).href;
   }
+  //
+  const scrollbar = ref(null as any);
+  const this_audio_Index = ref<number>(0)
+  const scrollTo = (value :number) => {
+    if (scrollbar !== null) {
+      setTimeout(() => {
+        scrollbar.value.scrollToItem(value - (11 + Math.floor((window.innerHeight - 690) / 75)));// 1000:15，690:11  75 
+      }, 100);
+    }
+  }
+  onMounted(() => {
+    scrollTo(props.router_history_model_of_Album_scroller_value)
+  });
+  const onResize = () => {
+    console.log('resize');
+  }
+  const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
+  const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any, visibleEndIndex: any) => {
+    updateParts.viewStartIdx = viewStartIndex
+    updateParts.viewEndIdx = viewEndIndex
+    updateParts.visibleStartIdx = visibleStartIndex
+    updateParts.visibleEndIdx = visibleEndIndex
 
+    emits('router_history_model_of_Album_scroller_value',viewEndIndex)
+  }
+  // 
   const get_router_history_model_pervious = () => {
     emits('router_history_model',-1)
   }
@@ -382,12 +398,15 @@
 
     <div class="album-wall-container">
       <DynamicScroller
-        class="album-wall" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
+        class="album-wall" ref="scrollbar" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
         :items="props.data_temporary"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :grid-items="gridItems"
-        :item-secondary-size="itemSecondarySize">
+        :item-secondary-size="itemSecondarySize"
+        :emit-update="true"
+        @resize="onResize"
+        @update="onUpdate">
         <template #before>
           <div class="notice">
             <div

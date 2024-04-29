@@ -8,7 +8,7 @@
     'page_artistlists_selected',
     'album_list_of_artist_id_artist',
     'play_this_artist_song_list',
-    'router_history_model',
+    'router_history_model','router_history_model_of_Artist_scroller_value',
   ]);
   const props = defineProps<{
     data_temporary: Artist[];
@@ -23,7 +23,7 @@
     window_innerWidth: number;
     options_Sort_key:{ columnKey: string; order: string }[];
 
-    router_select_history_date: Router_date;router_history_datas: Router_date[];
+    router_select_history_date: Router_date;router_history_datas: Router_date[];router_history_model_of_Artist_scroller_value: number;
   }>();
   //
   const bool_start_play = ref<boolean>(true)
@@ -121,7 +121,7 @@
     emits('options_Sort_key',sortersArray)
     // sortByColumnKeys(sortersArray);
 
-    scrollToTop()
+    scrollTo(0)
   }
   const options_Sort_key_Default_key = ref<string>()
   const options_Sort_key_Default = ref<SortItem[]>()
@@ -136,7 +136,7 @@
         emits('page_artistlists_reset_data',true)
         back_search_default()
         bool_input_search = false
-        scrollToTop()
+        scrollTo(0)
       }
     }
     else
@@ -185,22 +185,11 @@
       }
     }
   }
-
-  
-
-
   //
   const item_artist_margin = ref<number>(0)
   const item_artist = ref<number>(170)
   const item_artist_image = ref<number>(item_artist.value - 20)
   const item_artist_txt = ref<number>(item_artist.value - 20)
-  //
-  const scrollbar = ref<HTMLElement | null>(null);
-  const scrollToTop = () => {
-    if (scrollbar.value) {
-      scrollbar.value.scrollTop = 0;
-    }
-  };
   //
   const handleImageError = (event:any) => {
     event.target.src = '../../../resources/error_album.jpg'; // 设置备用图片路径
@@ -224,7 +213,7 @@
     // bool_show_search_area.value = false
     // show_search_area()
     // click_search()
-    // scrollToTop()
+    // scrollTo(0)
 
   }
   const Open_this_artist_all_album_list_click = (artist_id:string) => {
@@ -295,7 +284,6 @@
       timer.value = null;
     }
   };
-
   const os = require('os');
   function getAssetImage(firstImage: string) {
     if(os.type() || process.platform === 'win32')
@@ -305,7 +293,32 @@
     else if(os.type() || process.platform === 'linux')
       return new URL(firstImage, import.meta.url).href;
   }
+  //
+  const scrollbar = ref(null as any);
+  const this_audio_Index = ref<number>(0)
+  const scrollTo = (value :number) => {
+    if (scrollbar !== null) {
+      setTimeout(() => {
+        scrollbar.value.scrollToItem(value - (11 + Math.floor((window.innerHeight - 690) / 75)));// 1000:15，690:11  75 
+      }, 100);
+    }
+  }
+  onMounted(() => {
+    scrollTo(props.router_history_model_of_Artist_scroller_value)
+  });
+  const onResize = () => {
+    console.log('resize');
+  }
+  const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
+  const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any, visibleEndIndex: any) => {
+    updateParts.viewStartIdx = viewStartIndex
+    updateParts.viewEndIdx = viewEndIndex
+    updateParts.visibleStartIdx = visibleStartIndex
+    updateParts.visibleEndIdx = visibleEndIndex
 
+    emits('router_history_model_of_Artist_scroller_value',viewEndIndex)
+  }
+  //
   const get_router_history_model_pervious = () => {
     emits('router_history_model',-1)
   }
@@ -381,12 +394,15 @@
 
     <div class="artist-wall-container">
       <DynamicScroller
-        class="artist-wall" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
+        class="artist-wall" ref="scrollbar" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
         :items="props.data_temporary"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :grid-items="gridItems"
-        :item-secondary-size="itemSecondarySize">
+        :item-secondary-size="itemSecondarySize"
+        :emit-update="true"
+        @resize="onResize"
+        @update="onUpdate">
         <template #before>
           <div class="notice">
             <div
