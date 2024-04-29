@@ -69,7 +69,6 @@ async function createWindow() {
 
     ipc.on('window-gc', function () {
         win.webContents.session.flushStorageData();
-        console.log('GC Once');
     })
     
     ipc.handle('readFile', async (event, filePath) => {

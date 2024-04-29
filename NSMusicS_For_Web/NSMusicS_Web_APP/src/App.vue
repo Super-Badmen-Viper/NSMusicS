@@ -702,27 +702,9 @@
           return true;
         }
       });
-      ////// update page_songlists_top_album_image_url and page_songlists_top_album_name
-      try{
-        page_songlists_top_album_image_url.value = '';
-        if(media_Files_temporary.value.length > 0)
-          for (let i = 0; i < media_Files_temporary.value.length; i++) {
-            if (await fileExists(media_Files_temporary.value[i].path) === true) {
-              page_songlists_top_album_image_url.value = media_Files_temporary.value[i].medium_image_url;
-              page_songlists_top_album_id.value = media_Files_temporary.value[i].album_id;
-              page_songlists_top_album_name.value = media_Files_temporary.value[i].album;
-              break;  
-            }
-          }
-      }catch (err: any) {
-        console.error(err);
-      }
-      ////// 
-
-      rows.value = [];
-      imagefiles.value = [];
-      //////
-
+      media_Files_temporary.value.forEach((item, index) => {
+        item.absoluteIndex = index + 1;
+      });
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -1034,6 +1016,9 @@
         } else if (page_albumlists_selected.value === 'album_list_all_PlayList') {
           return true;
         }
+      });
+      album_Files_temporary.value.forEach((item, index) => {
+        item.absoluteIndex = index + 1;
       });
       ////// update page_albumlists_top_album_image_url and page_albumlists_top_album_name
       try{
@@ -1624,17 +1609,17 @@
     }  
   }
   // history model album
-  const router_history_model_of_Album_scroll = ref<Boolean>(false)
+  const router_history_model_of_Album_scroll = ref<Boolean>(false) // disabled
   const get_router_history_model_of_Album_scroll = (value: any) => {
-    router_history_model_of_Album_scroll.value = value
-    console.log('router_history_model_of_Album_scroll：'+value)
+    // router_history_model_of_Album_scroll.value = value
+    // console.log('router_history_model_of_Album_scroll：'+value)
   }
   const router_history_model_of_Album_scroller_value = ref<number>(0)
-  function get_router_history_model_of_Album_scroller_value (value: any) {
-    if(value !== 0){
-      router_history_model_of_Album_scroller_value.value = value
-      console.log('router_history_model_of_Album_scroller_value：'+value)
-    }
+  function get_router_history_model_of_Album_scroller_value (value: any) { // disabled
+    // if(value !== 0){
+    //   router_history_model_of_Album_scroller_value.value = value
+    //   console.log('router_history_model_of_Album_scroller_value：'+value)
+    // }
   }
   const router_history_model_of_Album = ref<number>(0)
   function get_router_history_model_of_Album(value: any) {
@@ -1694,17 +1679,17 @@
     }  
   }
   // history model artist
-  const router_history_model_of_Artist_scroll = ref<Boolean>(false)
+  const router_history_model_of_Artist_scroll = ref<Boolean>(false) // disabled
   const get_router_history_model_of_Artist_scroll = (value: any) => {
-    router_history_model_of_Artist_scroll.value = value
-    console.log('router_history_model_of_Artist_scroll：'+value)
+    // router_history_model_of_Artist_scroll.value = value
+    // console.log('router_history_model_of_Artist_scroll：'+value)
   }
   const router_history_model_of_Artist_scroller_value = ref<number>(0)
-  function get_router_history_model_of_Artist_scroller_value (value: any) {
-    if(value !== 0){
-      router_history_model_of_Artist_scroller_value.value = value
-      console.log('router_history_model_of_Artist_scroller_value：'+value)
-    }
+  function get_router_history_model_of_Artist_scroller_value (value: any) { // disabled
+    // if(value !== 0){
+    //   router_history_model_of_Artist_scroller_value.value = value
+    //   console.log('router_history_model_of_Artist_scroller_value：'+value)
+    // }
   }
   const router_history_model_of_Artist = ref<number>(0)
   function get_router_history_model_of_Artist(value: any) {

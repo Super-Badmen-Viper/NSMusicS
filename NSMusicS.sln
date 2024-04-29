@@ -25,6 +25,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "NSMusicS_For_Web", "NSMusic
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "56848"
+		SlnRelativePath = "NSMusicS_For_Web\"
 	EndProjectSection
 EndProject
 Global

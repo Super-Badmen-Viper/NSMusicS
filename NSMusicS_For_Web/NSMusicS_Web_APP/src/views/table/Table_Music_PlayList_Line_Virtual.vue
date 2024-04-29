@@ -125,7 +125,7 @@ const itemSize = 70;// height
 const handleItemClick = () => {
   click_count++
 }
-const handleItemDbClick = (media_file:Media_File) => {
+const handleItemDbClick = (media_file:Media_File,index:number) => {
   if(bool_start_play.value == true){
     if(click_count >= 2){
       click_count = 0
@@ -139,7 +139,7 @@ const handleItemDbClick = (media_file:Media_File) => {
       emits('this_audio_album_id', media_file.album_id);
       emits('this_audio_album_favite', media_file.favorite);
       emits('this_audio_album_name',media_file.album)
-      emits('this_audio_Index', media_file.absoluteIndex); 
+      emits('this_audio_Index', index); 
     }
   }
 }
@@ -221,7 +221,7 @@ function getAssetImage(firstImage: string) {
             :data-active="active"
             class="message" 
             @click="handleItemClick"
-            @Dblclick="handleItemDbClick(item)">
+            @Dblclick="handleItemDbClick(item,index)">
             <div class="media_info">
               <n-checkbox class="checkbox" 
                 v-if="!bool_start_play"
