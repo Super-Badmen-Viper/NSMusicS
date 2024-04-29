@@ -10,7 +10,7 @@ const emits = defineEmits([
   'page_artistlists_selected','page_artistlists_reset_data',
   'album_list_of_artist_id_artist',
   'play_this_artist_song_list',
-  'router_history_model','router_history_model_of_Artist_scroller_value',
+  'router_history_model','router_history_model_of_Artist_scroller_value','router_history_model_of_Artist_scroll',
 ]);
 function get_artist_page_num(value: any) {
   emits('artist_page_num',value)
@@ -45,6 +45,9 @@ function get_router_history_model(value: string) {
 function get_router_history_model_of_Artist_scroller_value(value: any) {
   emits('router_history_model_of_Artist_scroller_value',value)
 }
+function get_router_history_model_of_Artist_scroll(value: any) {
+  emits('router_history_model_of_Artist_scroll',value)
+}
 onMounted(async () => {
   emits('router_select','View_Artist_List_ALL')
 });
@@ -62,7 +65,7 @@ const {
   page_artistlists_options_Sort_key,
   artist_Files_temporary,
 
-  router_select_history_date,router_history_datas,router_history_model_of_Artist_scroller_value,
+  router_select_history_date,router_history_datas,router_history_model_of_Artist_scroller_value,router_history_model_of_Artist_scroll,
 } = defineProps<{
   app_left_menu_collapsed:boolean,
   window_innerWidth:number,
@@ -76,7 +79,7 @@ const {
   page_artistlists_options_Sort_key:{ columnKey: string; order: string }[],
   artist_Files_temporary:Artist[],
   
-  router_select_history_date:Router_date,router_history_datas:Router_date[],router_history_model_of_Artist_scroller_value:number,
+  router_select_history_date:Router_date,router_history_datas:Router_date[],router_history_model_of_Artist_scroller_value:number,router_history_model_of_Artist_scroll:Boolean,
   }>();
 </script>
 
@@ -90,6 +93,8 @@ const {
       :router_history_datas="router_history_datas"
       :router_history_model_of_Artist_scroller_value="router_history_model_of_Artist_scroller_value"
       @router_history_model_of_Artist_scroller_value="get_router_history_model_of_Artist_scroller_value"
+      :router_history_model_of_Artist_scroll="router_history_model_of_Artist_scroll"
+      @router_history_model_of_Artist_scroll="get_router_history_model_of_Artist_scroll"
 
       :change_page_header_color="change_page_header_color"
       :page_artistlists_top_artist_image_url="page_artistlists_top_artist_image_url"

@@ -7,6 +7,26 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS", "NSMusicS\NSMusi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSMusicS_For_Knowledge_Graph", "NSMusicS_For_Knowledge_Graph\NSMusicS_For_Knowledge_Graph.csproj", "{73C5149C-F2EE-420F-A39F-70A2ADFCFBB6}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "NSMusicS_For_Web", "NSMusicS_For_Web\", "{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8.1"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_56848"
+		Debug.AspNetCompiler.PhysicalPath = "NSMusicS_For_Web\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_56848\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_56848"
+		Release.AspNetCompiler.PhysicalPath = "NSMusicS_For_Web\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_56848\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "56848"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +65,22 @@ Global
 		{73C5149C-F2EE-420F-A39F-70A2ADFCFBB6}.Release|ARM64.ActiveCfg = Release|Any CPU
 		{73C5149C-F2EE-420F-A39F-70A2ADFCFBB6}.Release|x64.ActiveCfg = Release|Any CPU
 		{73C5149C-F2EE-420F-A39F-70A2ADFCFBB6}.Release|x86.ActiveCfg = Release|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Debug|x64.Build.0 = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Debug|x86.Build.0 = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Release|ARM64.ActiveCfg = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Release|ARM64.Build.0 = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Release|x64.ActiveCfg = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Release|x64.Build.0 = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Release|x86.ActiveCfg = Debug|Any CPU
+		{9C6F3217-11F8-45FD-B9D2-C76DA3A07EFA}.Release|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

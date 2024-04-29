@@ -8,7 +8,7 @@
     'page_artistlists_selected',
     'album_list_of_artist_id_artist',
     'play_this_artist_song_list',
-    'router_history_model','router_history_model_of_Artist_scroller_value',
+    'router_history_model','router_history_model_of_Artist_scroller_value','router_history_model_of_Artist_scroll',
   ]);
   const props = defineProps<{
     data_temporary: Artist[];
@@ -23,7 +23,7 @@
     window_innerWidth: number;
     options_Sort_key:{ columnKey: string; order: string }[];
 
-    router_select_history_date: Router_date;router_history_datas: Router_date[];router_history_model_of_Artist_scroller_value: number;
+    router_select_history_date: Router_date;router_history_datas: Router_date[];router_history_model_of_Artist_scroller_value: number;router_history_model_of_Artist_scroll:Boolean;
   }>();
   //
   const bool_start_play = ref<boolean>(true)
@@ -318,6 +318,13 @@
 
     emits('router_history_model_of_Artist_scroller_value',viewEndIndex)
   }
+  watch(() => props.router_history_model_of_Artist_scroll,(newValue) => {
+      if (newValue === true) {
+        scrollTo(props.router_history_model_of_Artist_scroller_value)
+        emits('router_history_model_of_Artist_scroll',false)
+      }
+    }
+  )
   //
   const get_router_history_model_pervious = () => {
     emits('router_history_model',-1)
@@ -420,11 +427,14 @@
                 background-color: transparent;
               ">
               <img 
-                :style="{ width: 'calc(100vw - ' +  (collapsed_width + 200) + 'px)'}"
+                :style="{ 
+                  width: 'calc(100vw - ' + (collapsed_width + 200) + 'px)',
+                  height: 'calc(100vw - ' + (collapsed_width + 200) + 'px)',
+                  maskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 50%)',
+                  WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 50%)'
+                }"
                 style="
-                  margin-left: 200px; margin-top: -300px; 
-                  min-height: calc(100vw - 600px);
-                  height: auto;
+                  margin-left: 200px; margin-top: -300px;
                 "
                 :src="getAssetImage(props.page_artistlists_top_artist_image_url)"
                 @error="handleImageError"

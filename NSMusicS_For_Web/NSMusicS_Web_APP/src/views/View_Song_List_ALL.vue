@@ -59,7 +59,7 @@ const emits = defineEmits([
   'page_songlists_selected',
   'this_audio_lyrics_string',
   'router_history_model',
-  'router_history_model_of_Media_scroller_value',
+  'router_history_model_of_Media_scroller_value','router_history_model_of_Media_scroll',
 ]);
 function get_media_path(value: any) {
   emits('media_file_path',value)
@@ -121,6 +121,9 @@ function get_router_history_model(value: string) {
 function get_router_history_model_of_Media_scroller_value(value: any) {
   emits('router_history_model_of_Media_scroller_value',value)
 }
+function get_router_history_model_of_Media_scroll(value: any) {
+  emits('router_history_model_of_Media_scroll',value)
+}
 onMounted(async () => {
   emits('router_select','View_Song_List_ALL')
 });
@@ -137,7 +140,7 @@ const {
   media_Files_temporary,media_Files_selected,
   page_songlists_options_Sort_key,
 
-  router_select_history_date,router_history_datas,router_history_model_of_Media_scroller_value
+  router_select_history_date,router_history_datas,router_history_model_of_Media_scroller_value,router_history_model_of_Media_scroll
   } = defineProps<{
     app_left_menu_collapsed:Boolean,window_innerWidth:number,
 
@@ -150,7 +153,7 @@ const {
     media_Files_temporary:Media_File[],media_Files_selected:Media_File[],
     page_songlists_options_Sort_key:{ columnKey: string; order: string }[],
 
-    router_select_history_date:Router_date,router_history_datas:Router_date[],router_history_model_of_Media_scroller_value:number,
+    router_select_history_date:Router_date,router_history_datas:Router_date[],router_history_model_of_Media_scroller_value:number,router_history_model_of_Media_scroll:Boolean,
   }>();
 </script>
 
@@ -165,6 +168,8 @@ const {
       :router_history_datas="router_history_datas"
       :router_history_model_of_Media_scroller_value="router_history_model_of_Media_scroller_value"
       @router_history_model_of_Media_scroller_value="get_router_history_model_of_Media_scroller_value"
+      :router_history_model_of_Media_scroll="router_history_model_of_Media_scroll"
+      @router_history_model_of_Media_scroll="get_router_history_model_of_Media_scroll"
 
       :change_page_header_color="change_page_header_color"
       :page_songlists_top_album_image_url="page_songlists_top_album_image_url"

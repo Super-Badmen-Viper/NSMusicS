@@ -20,7 +20,7 @@ const emits = defineEmits([
   'media_Files_selected_set_all',
   'page_songlists_selected',
   'this_audio_lyrics_string',
-  'router_history_model','router_history_model_of_Media_scroller_value',
+  'router_history_model','router_history_model_of_Media_scroller_value','router_history_model_of_Media_scroll',
 ]);
 const props = defineProps<{
   data_temporary: Media_File[];data_temporary_selected: Media_File[];
@@ -35,7 +35,7 @@ const props = defineProps<{
   window_innerWidth: number;
   options_Sort_key:{ columnKey: string; order: string }[];
 
-  router_select_history_date: Router_date;router_history_datas: Router_date[];router_history_model_of_Media_scroller_value: number;
+  router_select_history_date: Router_date;router_history_datas: Router_date[];router_history_model_of_Media_scroller_value: number;router_history_model_of_Media_scroll: Boolean;
 }>();
 onBeforeUnmount(() => {
   
@@ -419,6 +419,13 @@ const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any
 
   emits('router_history_model_of_Media_scroller_value',viewEndIndex)
 }
+watch(() => props.router_history_model_of_Media_scroll,(newValue) => {
+    if (newValue === true) {
+      scrollTo(props.router_history_model_of_Media_scroller_value)
+      emits('router_history_model_of_Media_scroll',false)
+    }
+  }
+)
 // 
 const get_router_history_model_pervious = () => {
   emits('router_history_model',-1)

@@ -1554,6 +1554,11 @@
     ipcRenderer.send('window-gc');
   }
   // history model media5
+  const router_history_model_of_Media_scroll = ref<Boolean>(false)
+  const get_router_history_model_of_Media_scroll = (value: any) => {
+    router_history_model_of_Media_scroll.value = value
+    console.log('router_history_model_of_Media_scroll：'+value)
+  }
   const router_history_model_of_Media_scroller_value = ref<number>(0)
   function get_router_history_model_of_Media_scroller_value (value: any) {
     if(value !== 0){
@@ -1568,19 +1573,15 @@
       const currentIndex = router_history_datas_of_Media.value.findIndex(item => item.id === (router_select_history_date_of_Media.value?.id ?? ''));
       if (currentIndex !== -1) {
         const newIndex = currentIndex + value;
-        if (newIndex >= 0 && newIndex < router_history_datas_of_Media.value.length) {
+        if (newIndex >= 0 && newIndex < router_history_datas_of_Media.value.length) {      
+          fix_router_history_of_Media_scroller_value(router_history_model_of_Media_scroller_value.value) // 保留此滚轮值(上次浏览位置)
           router_select_history_date_of_Media.value = router_history_datas_of_Media.value[newIndex];
           clear_Files_temporary();
           const selectedRouterName = router_select_history_date_of_Media.value.router_name;
           if (selectedRouterName === 'View_Song_List_ALL') {
             router_select_model_media.value = true;
             fetchData_Media();
-          } else if (selectedRouterName === 'View_Album_List_ALL') {
-            router_select_model_album.value = true;
-            fetchData_Album();
-          } else if (selectedRouterName === 'View_Artist_List_ALL') {
-            router_select_model_artist.value = true;
-            fetchData_Artist();
+            router_history_model_of_Media_scroll.value = true;
           }
         }
       }
@@ -1623,6 +1624,11 @@
     }  
   }
   // history model album
+  const router_history_model_of_Album_scroll = ref<Boolean>(false)
+  const get_router_history_model_of_Album_scroll = (value: any) => {
+    router_history_model_of_Album_scroll.value = value
+    console.log('router_history_model_of_Album_scroll：'+value)
+  }
   const router_history_model_of_Album_scroller_value = ref<number>(0)
   function get_router_history_model_of_Album_scroller_value (value: any) {
     if(value !== 0){
@@ -1638,18 +1644,14 @@
       if (currentIndex !== -1) {
         const newIndex = currentIndex + value;
         if (newIndex >= 0 && newIndex < router_history_datas_of_Album.value.length) {
+          fix_router_history_of_Album_scroller_value(router_history_model_of_Album_scroller_value.value) // 保留此滚轮值(上次浏览位置)
           router_select_history_date_of_Album.value = router_history_datas_of_Album.value[newIndex];
           clear_Files_temporary();
           const selectedRouterName = router_select_history_date_of_Album.value.router_name;
-          if (selectedRouterName === 'View_Song_List_ALL') {
-            router_select_model_media.value = true;
-            fetchData_Media();
-          } else if (selectedRouterName === 'View_Album_List_ALL') {
+          if (selectedRouterName === 'View_Album_List_ALL') {
             router_select_model_album.value = true;
             fetchData_Album();
-          } else if (selectedRouterName === 'View_Artist_List_ALL') {
-            router_select_model_artist.value = true;
-            fetchData_Artist();
+            router_history_model_of_Album_scroll.value = true;
           }
         }
       }
@@ -1692,6 +1694,11 @@
     }  
   }
   // history model artist
+  const router_history_model_of_Artist_scroll = ref<Boolean>(false)
+  const get_router_history_model_of_Artist_scroll = (value: any) => {
+    router_history_model_of_Artist_scroll.value = value
+    console.log('router_history_model_of_Artist_scroll：'+value)
+  }
   const router_history_model_of_Artist_scroller_value = ref<number>(0)
   function get_router_history_model_of_Artist_scroller_value (value: any) {
     if(value !== 0){
@@ -1707,18 +1714,14 @@
       if (currentIndex !== -1) {
         const newIndex = currentIndex + value;
         if (newIndex >= 0 && newIndex < router_history_datas_of_Artist.value.length) {
+          fix_router_history_of_Artist_scroller_value(router_history_model_of_Artist_scroller_value.value) // 保留此滚轮值(上次浏览位置)
           router_select_history_date_of_Artist.value = router_history_datas_of_Artist.value[newIndex];
           clear_Files_temporary();
           const selectedRouterName = router_select_history_date_of_Artist.value.router_name;
-          if (selectedRouterName === 'View_Song_List_ALL') {
-            router_select_model_media.value = true;
-            fetchData_Media();
-          } else if (selectedRouterName === 'View_Album_List_ALL') {
-            router_select_model_album.value = true;
-            fetchData_Album();
-          } else if (selectedRouterName === 'View_Artist_List_ALL') {
+          if (selectedRouterName === 'View_Artist_List_ALL') {
             router_select_model_artist.value = true;
             fetchData_Artist();
+            router_history_model_of_Artist_scroll.value = true;
           }
         }
       }
@@ -1847,6 +1850,8 @@
             :router_history_datas="router_history_datas_of_Media"
             :router_history_model_of_Media_scroller_value="router_history_model_of_Media_scroller_value"
             @router_history_model_of_Media_scroller_value="get_router_history_model_of_Media_scroller_value"
+            :router_history_model_of_Media_scroll="router_history_model_of_Media_scroll"
+            @router_history_model_of_Media_scroll="get_router_history_model_of_Media_scroll"
 
             @this_audio_lyrics_string="get_this_audio_lyrics_string"
             @media_file_path="media_file_path"
@@ -1897,6 +1902,8 @@
             :router_history_datas="router_history_datas_of_Album"
             :router_history_model_of_Album_scroller_value="router_history_model_of_Album_scroller_value"
             @router_history_model_of_Album_scroller_value="get_router_history_model_of_Album_scroller_value"
+            :router_history_model_of_Album_scroll="router_history_model_of_Album_scroll"
+            @router_history_model_of_Album_scroll="get_router_history_model_of_Album_scroll"
 
             :album_Files_temporary="album_Files_temporary"
             :page_albumlists_options_Sort_key="page_albumlists_options_Sort_key"
@@ -1934,6 +1941,8 @@
             :router_history_datas="router_history_datas_of_Artist"
             :router_history_model_of_Artist_scroller_value="router_history_model_of_Artist_scroller_value"
             @router_history_model_of_Artist_scroller_value="get_router_history_model_of_Artist_scroller_value"
+            :router_history_model_of_Artist_scroll="router_history_model_of_Artist_scroll"
+            @router_history_model_of_Artist_scroll="get_router_history_model_of_Artist_scroll"
 
             :artist_Files_temporary="artist_Files_temporary"
             :page_artistlists_options_Sort_key="page_artistlists_options_Sort_key"

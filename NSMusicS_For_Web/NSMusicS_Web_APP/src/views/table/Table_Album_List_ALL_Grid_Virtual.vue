@@ -6,7 +6,7 @@
     'options_Sort_key','page_albumlists_keyword','page_albumlists_reset_data',
     'page_albumlists_selected',
     'media_list_of_album_id','play_this_album_song_list',
-    'router_history_model','router_history_model_of_Album_scroller_value',
+    'router_history_model','router_history_model_of_Album_scroller_value','router_history_model_of_Album_scroll',
   ]);
   const props = defineProps<{
     data_temporary: Album[];
@@ -21,7 +21,7 @@
     window_innerWidth: number;
     options_Sort_key:{ columnKey: string; order: string }[];
 
-    router_select_history_date: Router_date;router_history_datas: Router_date[];router_history_model_of_Album_scroller_value:number;
+    router_select_history_date: Router_date;router_history_datas: Router_date[];router_history_model_of_Album_scroller_value:number;router_history_model_of_Album_scroll:Boolean;
   }>();
   //
   enum state_Sort {
@@ -322,6 +322,13 @@
 
     emits('router_history_model_of_Album_scroller_value',viewEndIndex)
   }
+  watch(() => props.router_history_model_of_Album_scroll,(newValue) => {
+      if (newValue === true) {
+        scrollTo(props.router_history_model_of_Album_scroller_value)
+        emits('router_history_model_of_Album_scroll',false)
+      }
+    }
+  )
   // 
   const get_router_history_model_pervious = () => {
     emits('router_history_model',-1)
@@ -424,11 +431,14 @@
                 background-color: transparent;
               ">
               <img 
-                :style="{ width: 'calc(100vw - ' +  (collapsed_width + 200) + 'px)'}"
+                :style="{ 
+                  width: 'calc(100vw - ' + (collapsed_width + 200) + 'px)',
+                  height: 'calc(100vw - ' + (collapsed_width + 200) + 'px)',
+                  maskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 50%)',
+                  WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 50%)'
+                }"
                 style="
-                  margin-left: 200px; margin-top: -300px; 
-                  min-height: calc(100vw - 600px);
-                  height: auto;
+                  margin-left: 200px; margin-top: -300px;
                 "
                 :src="getAssetImage(props.page_albumlists_top_album_image_url)"
                 @error="handleImageError"
