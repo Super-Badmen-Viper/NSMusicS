@@ -183,7 +183,7 @@
   const item_album_txt = ref<number>(item_album.value - 20)
   //
   const handleImageError = (event:any) => {
-    event.target.src = '../../../resources/error_album.jpg'; // 设置备用图片路径
+    event.target.src = '../../../resources/img/error_album.jpg'; // 设置备用图片路径
   };
   //
   const itemSize = ref(220);
@@ -439,6 +439,7 @@
                 }"
                 style="
                   margin-left: 200px; margin-top: -300px;
+                  object-fit: cover;object-position: center;
                 "
                 :src="getAssetImage(props.page_albumlists_top_album_image_url)"
                 @error="handleImageError"

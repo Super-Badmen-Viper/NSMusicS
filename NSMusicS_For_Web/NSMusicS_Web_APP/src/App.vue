@@ -150,9 +150,9 @@
   const get_player_lyric_color = (value:any) => {
     player_lyric_color.value = value
   }
-  const player_album_cover_rotate = ref(false)
+  const player_background_model_num = ref(0)
   const get_player_album_cover_rotate = (value:any) => {
-    player_album_cover_rotate.value = value
+    player_background_model_num.value = value
   }
   const player_theme_lyricItem_Styles_Selected = ref<number>(0)
   const get_player_theme_lyricItem_Styles_Selected = (value:any) => {
@@ -249,7 +249,7 @@
     return totalMilliseconds;
   }
   //////
-  const this_audio_file_medium_image_url = ref(path.resolve('resources/error_album.jpg'));
+  const this_audio_file_medium_image_url = ref(path.resolve('resources/img/error_album.jpg'));
   function get_media_file_medium_image_url(value: any) {
     this_audio_file_medium_image_url.value = value
     get_this_audio_refresh(true)
@@ -379,7 +379,7 @@
     console.log('media_Files_selected：'+value)
   }
   ////// page_songlists
-  const page_songlists_top_album_image_url = ref<string>(path.resolve('resources/error_album.jpg'))
+  const page_songlists_top_album_image_url = ref<string>(path.resolve('resources/img/error_album.jpg'))
   const page_songlists_top_album_id = ref<string>('')
   const page_songlists_top_album_name = ref<string>('')
   const page_songlists_options = ref<{label: string;value: string}[]>([])
@@ -669,7 +669,7 @@
         else if (row.path.indexOf('flac') > 0)
           row.medium_image_url = row.path.replace('flac', 'jpg');
         else
-          row.medium_image_url = '../../../resources/error_album.jpg';
+          row.medium_image_url = '../../../resources/img/error_album.jpg';
         media_Files_temporary.value.push(row);
       });
       ////// find favorite for media_Files_temporary
@@ -971,7 +971,7 @@
         else if (row.embed_art_path.indexOf('flac') > 0)
           row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
         else 
-          row.medium_image_url = '../../../resources/error_album.jpg';
+          row.medium_image_url = '../../../resources/img/error_album.jpg';
         const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
         const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
         const fileNameWithoutExtension = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
@@ -1324,11 +1324,11 @@
             else if (pathfiles[j].path.indexOf('flac') > 0)
               row.medium_image_url = pathfiles[j].path.replace('flac', 'jpg');
             else
-              row.medium_image_url = '../../../resources/error_album.jpg';
+              row.medium_image_url = '../../../resources/img/error_album.jpg';
             break;
           }
           if (j === pathfiles.length - 1) {
-            row.medium_image_url = '../../../resources/error_album.jpg';
+            row.medium_image_url = '../../../resources/img/error_album.jpg';
           }
         }
         artist_Files_temporary.value.push(row);
@@ -2076,8 +2076,8 @@
       @player_lyric_fontWeight = get_player_lyric_fontWeight
       :player_lyric_color="player_lyric_color"
       @player_lyric_color = get_player_lyric_color
-      :player_album_cover_rotate="player_album_cover_rotate"
-      @player_album_cover_rotate = get_player_album_cover_rotate
+      :player_background_model_num="player_background_model_num"
+      @player_background_model_num = get_player_album_cover_rotate
       :player_theme_lyricItem_Styles_Selected="player_theme_lyricItem_Styles_Selected"
       @player_theme_lyricItem_Styles_Selected="get_player_theme_lyricItem_Styles_Selected"
       

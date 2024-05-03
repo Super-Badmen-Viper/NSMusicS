@@ -3,7 +3,7 @@
   const emits = defineEmits([
     'player_show_click','play_go_index_time','player_collapsed',
     'player_collapsed_album','player_album_size','player_album_radius','player_album_info_left',
-    'player_lyric_fontSize','player_lyric_fontWeight','player_lyric_color','player_album_cover_rotate',
+    'player_lyric_fontSize','player_lyric_fontWeight','player_lyric_color','player_background_model_num',
     'player_theme_lyricItem_Styles_Selected'
   ]);
 
@@ -16,7 +16,7 @@
     'player_show_complete','this_audio_lyrics_info_line_num',
     'player_collapsed',
     'player_collapsed_album','player_album_size','player_album_radius','player_album_info_left',
-    'player_lyric_fontSize','player_lyric_fontWeight','player_lyric_color','player_album_cover_rotate',
+    'player_lyric_fontSize','player_lyric_fontWeight','player_lyric_color','player_background_model_num',
     'player_theme_lyricItem_Styles_Selected'
   ]);
   const os = require('os');
@@ -29,7 +29,7 @@
         return new URL(firstImage, import.meta.url).href;
   }
   const handleImageError = (event:any) => {
-    event.target.src = '../../resources/error_album.jpg'; // 设置备用图片路径
+    event.target.src = '../../resources/img/error_album.jpg'; // 设置备用图片路径
   };
   ////// lyircs load
   let unwatch = watch(() => props.this_audio_lyrics_string, (value) => {
@@ -178,10 +178,10 @@
   const player_lyric_fontSize = ref('22px')
   const player_lyric_fontWeight = ref('800')
   const player_lyric_color = ref('#FAFAFB60')
-  const player_album_cover_rotate = ref(false)
+  const player_background_model_num = ref(0)
   onMounted(() => {
     player_album_size.value = props.player_album_size;
-    player_album_cover_rotate.value = props.player_album_cover_rotate;
+    player_background_model_num.value = props.player_background_model_num;
     player_album_radius.value = props.player_album_radius;
     player_album_info_left.value = props.player_album_info_left;
     player_lyric_fontSize.value = props.player_lyric_fontSize;
@@ -194,7 +194,6 @@
     image_url: any;
 
     size:any;
-    cover_rotate:any;
     radius: any;
     textAlign: any;
 
@@ -219,10 +218,9 @@
       id: 0,
       name: '方形封面',
       normalStyle: {
-        image_url: '../../resources/player_theme_1.png',
+        image_url: '../../resources/img/player_theme_1.png',
 
         size: '54vh',
-        cover_rotate: false,
         radius: '10px',
         textAlign: true,
 
@@ -243,10 +241,9 @@
       id: 1,
       name: '旋转封面',
       normalStyle: {
-        image_url: '../../resources/player_theme_2.png',
+        image_url: '../../resources/img/player_theme_2.png',
 
         size: '54vh',
-        cover_rotate: true,
         radius: '27vh',
         textAlign: false,
 
@@ -267,12 +264,11 @@
       id: 2,
       name: '炫胶唱片',
       normalStyle: {
-        image_url: '../../resources/player_theme_1.png',
+        image_url: '../../resources/img/player_theme_1.png',
 
         size: '54vh',
-        cover_rotate: false,
         radius: '27vh',
-        textAlign: false,
+        textAlign: true,
 
         color: '#FAFAFB60',
         fontSize: '22px',
@@ -291,10 +287,9 @@
       id: 3,
       name: '聚光唱片',
       normalStyle: {
-        image_url: '../../resources/player_theme_1.png',
+        image_url: '../../resources/img/player_theme_1.png',
 
         size: '54vh',
-        cover_rotate: false,
         radius: '27vh',
         textAlign: false,
 
@@ -315,10 +310,9 @@
       id: 4,
       name: '歌手写真',
       normalStyle: {
-        image_url: '../../resources/player_theme_3.png',
+        image_url: '../../resources/img/player_theme_3.png',
 
         size: '54vh',
-        cover_rotate: false,
         radius: '10px',
         textAlign: false,
 
@@ -339,10 +333,9 @@
       id: 5,
       name: '皮肤底图',
       normalStyle: {
-        image_url: '../../resources/player_theme_3.png',
+        image_url: '../../resources/img/player_theme_3.png',
 
         size: '54vh',
-        cover_rotate: false,
         radius: '10px',
         textAlign: false,
 
@@ -379,7 +372,7 @@
     emits('player_theme_lyricItem_Styles_Selected' ,index);
     // set theme
     player_album_size.value = player_theme_lyricItem_0_bind_style.value.normalStyle.size;
-    player_album_cover_rotate.value = player_theme_lyricItem_0_bind_style.value.normalStyle.cover_rotate;
+    player_background_model_num.value = player_theme_lyricItem_0_bind_style.value.id;
     player_album_radius.value = player_theme_lyricItem_0_bind_style.value.normalStyle.radius;
     player_album_info_left.value = player_theme_lyricItem_0_bind_style.value.normalStyle.textAlign;
     player_lyric_fontSize.value = player_theme_lyricItem_0_bind_style.value.normalStyle.fontSize;
@@ -388,7 +381,7 @@
     player_collapsed_album.value = player_theme_lyricItem_0_bind_style.value.normalStyle.player_collapsed_album;
     // emits theme
     emits('player_album_size' ,player_theme_lyricItem_0_bind_style.value.normalStyle.size);
-    emits('player_album_cover_rotate' ,player_theme_lyricItem_0_bind_style.value.normalStyle.cover_rotate);
+    emits('player_background_model_num' ,player_theme_lyricItem_0_bind_style.value.id);
     emits('player_album_radius' ,player_theme_lyricItem_0_bind_style.value.normalStyle.radius);
     emits('player_album_info_left' ,player_theme_lyricItem_0_bind_style.value.normalStyle.textAlign);
     emits('player_lyric_fontSize' ,player_theme_lyricItem_0_bind_style.value.normalStyle.fontSize);
@@ -553,13 +546,13 @@
       <!-- right drwaer of Player_theme -->
       <n-drawer 
         v-model:show="isVisible_Player_theme" 
-        :width="384" 
+        :width="390" 
         style="
           border-radius: 12px 0 0 12px;
           border: 1.5px solid #FFFFFF20;
           background-color: rgba(127, 127, 127, 0.1); 
           backdrop-filter: blur(10px); 
-          margin-top: calc(50vh - 290px);height: 580px;
+          margin-top: calc(50vh - 294px);height: 588px;
           ">
         <n-drawer-content v-if="isVisible_Player_theme">
           <template #default>
@@ -808,7 +801,7 @@
           </div>
           <n-flex justify="end" style="height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;">
-              <n-button quaternary style="margin-right:2px" @click="get_isVisible_Player_theme">
+              <n-button quaternary style="margin-right:2px;" @click="get_isVisible_Player_theme">
                 <template #icon>
                   <n-icon :depth="3"><ChevronDown12Filled /></n-icon>
                 </template>
@@ -851,17 +844,110 @@
                 show-trigger="bar" calc(50vw + 27vh + 8vw) :show-collapsed-content="false"-->
               <n-layout-sider 
                 :collapsed="player_collapsed_album" @collapse="emits('player_collapsed_album', true)" @expand="emits('player_collapsed_album', false)"
-                :show-collapsed-content="false" collapse-mode="transform"
+                :show-collapsed-content="false" 
                 position="static"
                 collapsed-width="30vw" width="53vw"
                 style="background-color: transparent;">
                 <n-space vertical align="end" style="margin-right:6vw;">
                   <n-space vertical>
+                    <!-- 2 旋转封面-->
+                    <n-space v-if="player_background_model_num === 1">
+                      <img
+                        class="animate__rotate_slower"
+                        :style="{
+                          width: `calc(${player_album_size} - 10vh)`, 
+                          height: `calc(${player_album_size} - 10vh)`, 
+                          borderRadius: player_album_radius,
+                        }"
+                        style="
+                          margin-top: calc(33vh - 162px);margin-left: calc(5vh);
+                          border: 1.5px solid #FFFFFF20;
+                          object-fit: cover;object-position: center;
+                          filter: blur(0px);
+                          box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
+                        "
+                        :src="getAssetImage(props.this_audio_file_medium_image_url)"
+                        @error="handleImageError">
+                    </n-space> 
+                    <!-- 3 炫胶唱片-->
+                    <div v-else-if="player_background_model_num === 2" style="margin-left:-2vh;">
+                      <div
+                        :style="{
+                          width: `calc(${player_album_size} - 16vh)`, 
+                          height: `calc(${player_album_size} - 16vh)`, 
+                          marginLeft: `calc(${player_album_size} / 2.2) `,
+                          borderRadius: player_album_radius,
+                          WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 75%)'
+                        }"
+                        style="
+                          margin-top: calc(36vh - 162px);
+                          border: 1.5px solid #FFFFFF20;
+                          object-fit: cover;object-position: center;
+                          filter: blur(0px);
+                          box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.20),16px 16px 16px rgba(0, 0, 0, 0.20);
+                          position: absolute;
+                          background-color: #DCDBDD10;
+                        ">
+
+                      </div>
+                      <img
+                        class="animate__rotate_fast"
+                        :style="{
+                          width: `calc(${player_album_size} - 30vh)`, 
+                          height: `calc(${player_album_size} - 30vh)`, 
+                          marginLeft: `calc(${player_album_size} / 1.7) `,
+                          borderRadius: player_album_radius,
+                        }"
+                        style="
+                          margin-top: calc(43vh - 162px);
+                          border: 1.5px solid #FFFFFF20;
+                          object-fit: cover;object-position: center;
+                          filter: blur(0px);
+                          box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
+                          position: absolute;
+                        "
+                        :src="getAssetImage(props.this_audio_file_medium_image_url)"
+                        @error="handleImageError">
+                      <img
+                        :style="{
+                          width: `calc(${player_album_size} - 10vh)`, 
+                          height: `calc(${player_album_size} - 10vh)`, 
+                          borderRadius: `0 calc(${player_album_size}) calc(${player_album_size}) 0`,
+                          WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 75%)'
+                        }"
+                        style="
+                          margin-top: calc(33vh - 162px);
+                          border: 3px solid #FFFFFF20;
+                          object-fit: cover;object-position: center;
+                          box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
+                          filter: blur(0px);
+                        "
+                        :src="getAssetImage(props.this_audio_file_medium_image_url)"
+                        @error="handleImageError">
+                      <img
+                        :style="{
+                          width: `calc(${player_album_size} - 50vh)`, 
+                          height: `calc(${player_album_size} - 50vh)`, 
+                          marginLeft: `calc(-${player_album_size} + 52vh) `,
+                          borderRadius: player_album_radius,
+                        }"
+                        style="
+                          margin-top: calc(53vh - 162px);
+                          border: 10px solid #DCDBDD20;
+                          object-fit: cover;object-position: center;
+                          filter: blur(0px);
+                          position: absolute;
+                        "
+                        src="../../resources/img/DotCircle.png">
+                      </img>
+                    </div>
+                    <!-- 1 方形封面-->
                     <img
+                      v-else
                       :style="{
                         width: player_album_size, 
                         height: player_album_size, 
-                        borderRadius: player_album_radius
+                        borderRadius: player_album_radius,
                       }"
                       style="
                         margin-top: calc(28vh - 162px);
@@ -872,6 +958,7 @@
                       "
                       :src="getAssetImage(props.this_audio_file_medium_image_url)"
                       @error="handleImageError">
+
                     <div
                       :style="{width: player_album_size,textAlign: player_album_info_left ? 'left' : 'center',}"
                       style="
@@ -970,6 +1057,29 @@
   font-weight: v-bind(player_lyric_fontWeight);
   max-width: calc(36vw);
   padding-left: 20px;padding-top: 0px;padding-bottom: 4px;
+}
+
+.animate__rotate_slower {
+  animation: rotate 60s linear infinite;
+}
+.animate__rotate_fast {
+  animation: rotate 26s linear infinite;
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate__animated.animate__rotateIn {
+  --animate-duration: 1s;
+  --animate-delay: 0s;
+}
+.animate__animated.animate__fadeOut {
+  --animate-duration: 0s;
+  --animate-delay: 0s;
 }
 
 ::-webkit-scrollbar {

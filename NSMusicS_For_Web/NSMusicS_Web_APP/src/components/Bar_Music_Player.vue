@@ -34,7 +34,7 @@
   // open view musicplayer
   const svg_shrink_up_arrow = ref<string>('shrink_up_arrow.svg');
   const back_display = ref('none');
-  const back_ChevronDouble = ref('../../resources/'+svg_shrink_up_arrow.value)
+  const back_ChevronDouble = ref('../../resources/svg/'+svg_shrink_up_arrow.value)
   const back_filter_blurValue  = ref(0);
   const os = require('os');
   function getAssetImage(firstImage: string) {
@@ -46,7 +46,7 @@
       return new URL(firstImage, import.meta.url).href;
   }
   const handleImageError = (event:any) => {
-    event.target.src = '../../resources/error_album.jpg'; // 设置备用图片路径
+    event.target.src = '../../resources/img/error_album.jpg'; // 设置备用图片路径
   };
   const hover_back_img = () => {
     back_display.value = 'block';
@@ -66,7 +66,7 @@
         svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
       else
         svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
-      back_ChevronDouble.value = '../../resources/'+svg_shrink_up_arrow.value;
+      back_ChevronDouble.value = '../../resources/svg/'+svg_shrink_up_arrow.value;
       
       musicplayer_background_color.value =
         musicplayer_background_color.value === 
@@ -81,7 +81,7 @@
         svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
       else
         svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
-      back_ChevronDouble.value = '../../resources/'+svg_shrink_up_arrow.value;
+      back_ChevronDouble.value = '../../resources/svg/'+svg_shrink_up_arrow.value;
 
       emits('player_show_click', false);
     }

@@ -28,6 +28,7 @@
     "@vicons/ionicons5": "^0.12.0",
     "@vicons/material": "^0.12.0",
     "@vicons/utils": "^0.1.4",
+    "animate.css": "^4.1.1",
     "better-sqlite3": "^9.4.1",
     "howler": "^2.2.4",
     "increase-memory-limit": "^1.0.7",

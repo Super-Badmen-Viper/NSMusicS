@@ -58,7 +58,7 @@ const click_bulk_operation = () => {
 }
 
 const handleImageError = (event:any) => {
-  event.target.src = '../../../resources/error_album.jpg'; // 设置备用图片路径
+  event.target.src = '../../../resources/img/error_album.jpg'; // 设置备用图片路径
 };
 //
 const options_data_dropmenu: DropdownOption[] = [
@@ -568,6 +568,7 @@ function getAssetImage(firstImage: string) {
                 }"
                 style="
                   margin-left: 200px; margin-top: -300px;
+                  object-fit: cover;object-position: center;
                 "
                 :src="getAssetImage(props.page_songlists_top_album_image_url)"
                 @error="handleImageError"
