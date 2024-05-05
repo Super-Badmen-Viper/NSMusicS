@@ -2,11 +2,10 @@
   import { defineEmits, ref, watch, watchEffect, onMounted } from 'vue';
   const emits = defineEmits([
     'player_show_click','play_go_index_time','player_collapsed',
-    'player_collapsed_album','player_album_size','player_album_radius','player_album_info_left',
+    'player_collapsed_album','player_collapsed_skin','player_album_size','player_album_radius','player_album_info_left',
     'player_lyric_fontSize','player_lyric_fontWeight','player_lyric_color','player_background_model_num',
     'player_theme_lyricItem_Styles_Selected'
   ]);
-
   const props = defineProps([
     'this_audio_file_path','playlist_Files_temporary',
     'this_audio_file_medium_image_url','this_audio_refresh',
@@ -15,7 +14,7 @@
     'player','player_silder_currentTime_added_value',
     'player_show_complete','this_audio_lyrics_info_line_num',
     'player_collapsed',
-    'player_collapsed_album','player_album_size','player_album_radius','player_album_info_left',
+    'player_collapsed_album','player_collapsed_skin','player_album_size','player_album_radius','player_album_info_left',
     'player_lyric_fontSize','player_lyric_fontWeight','player_lyric_color','player_background_model_num',
     'player_theme_lyricItem_Styles_Selected'
   ]);
@@ -172,6 +171,7 @@
   };
   ////// player theme seting
   const player_collapsed_album = ref(false);// player_collapsed_album.value = player_theme_lyricItem_0_bind_style.value.normalStyle.player_collapsed_album;
+  const player_collapsed_skin = ref(true)
   const player_album_size = ref('54vh')
   const player_album_radius = ref('10px')
   const player_album_info_left = ref(true)
@@ -188,6 +188,7 @@
     player_lyric_fontWeight.value = props.player_lyric_fontWeight;
     player_lyric_color.value = props.player_lyric_color;
     player_collapsed_album.value = props.player_collapsed_album;
+    player_collapsed_skin.value = props.player_collapsed_skin;
     player_theme_lyricItem_Styles_Selected.value = props.player_theme_lyricItem_Styles_Selected;
   });
   type PlayerThemeStyle = {
@@ -202,6 +203,7 @@
     fontWeight: any;
     maxHeight: any;
     player_collapsed_album: any;
+    player_collapsed_skin: any;
   };
   type PlayerThemeHoverStyle = {
     colorHover:any;
@@ -229,6 +231,7 @@
         fontWeight:'800',
         maxHeight: '100vh',
         player_collapsed_album: false,
+        player_collapsed_skin: true,
       },
       hoverStyle: {
         colorHover: '#FFFFFF'
@@ -252,6 +255,7 @@
         fontWeight:'800',
         maxHeight: '100vh',
         player_collapsed_album: false,
+        player_collapsed_skin: true,
       },
       hoverStyle: {
         colorHover: '#FFFFFF'
@@ -264,7 +268,7 @@
       id: 2,
       name: '炫胶唱片',
       normalStyle: {
-        image_url: '../../resources/img/player_theme_1.png',
+        image_url: '../../resources/img/player_theme_3.png',
 
         size: '54vh',
         radius: '27vh',
@@ -275,42 +279,20 @@
         fontWeight:'800',
         maxHeight: '100vh',
         player_collapsed_album: false,
+        player_collapsed_skin: true,
       },
       hoverStyle: {
         colorHover: '#FFFFFF'
       }
     }
   );
-  // play model 4 ：聚光唱片
+  // play model 4 ：专辑底图
   const player_theme_lyricItem_4 = ref<PlayerTheme_LyricItem>(
     { 
       id: 3,
-      name: '聚光唱片',
+      name: '专辑底图',
       normalStyle: {
-        image_url: '../../resources/img/player_theme_1.png',
-
-        size: '54vh',
-        radius: '27vh',
-        textAlign: false,
-
-        color: '#FAFAFB60',
-        fontSize: '22px',
-        fontWeight:'800',
-        maxHeight: '100vh',
-        player_collapsed_album: false,
-      },
-      hoverStyle: {
-        colorHover: '#FFFFFF'
-      }
-    }
-  );
-  // play model 5 ：歌手写真
-  const player_theme_lyricItem_5 = ref<PlayerTheme_LyricItem>(
-    { 
-      id: 4,
-      name: '歌手写真',
-      normalStyle: {
-        image_url: '../../resources/img/player_theme_3.png',
+        image_url: '../../resources/img/player_theme_4.png',
 
         size: '54vh',
         radius: '10px',
@@ -321,16 +303,17 @@
         fontWeight:'800',
         maxHeight: '100vh',
         player_collapsed_album: true,
+        player_collapsed_skin: true,
       },
       hoverStyle: {
         colorHover: '#FFFFFF'
       }
     }
   );
-  // play model 6 ：皮肤底图
-  const player_theme_lyricItem_6 = ref<PlayerTheme_LyricItem>(
+  // play model 5 ：皮肤底图  :disabled
+  const player_theme_lyricItem_5 = ref<PlayerTheme_LyricItem>(
     { 
-      id: 5,
+      id: 4,
       name: '皮肤底图',
       normalStyle: {
         image_url: '../../resources/img/player_theme_3.png',
@@ -344,6 +327,7 @@
         fontWeight:'800',
         maxHeight: '100vh',
         player_collapsed_album: true,
+        player_collapsed_skin: false,
       },
       hoverStyle: {
         colorHover: '#FFFFFF'
@@ -356,8 +340,7 @@
       player_theme_lyricItem_2.value,
       player_theme_lyricItem_3.value,
       player_theme_lyricItem_4.value,
-      player_theme_lyricItem_5.value,
-      player_theme_lyricItem_6.value,
+      // player_theme_lyricItem_5.value, // :disabled
     ]
   );
   // player bind style
@@ -379,6 +362,7 @@
     player_lyric_fontWeight.value = player_theme_lyricItem_0_bind_style.value.normalStyle.fontWeight;
     player_lyric_color.value = player_theme_lyricItem_0_bind_style.value.normalStyle.color;
     player_collapsed_album.value = player_theme_lyricItem_0_bind_style.value.normalStyle.player_collapsed_album;
+    player_collapsed_skin.value = player_theme_lyricItem_0_bind_style.value.normalStyle.player_collapsed_skin;
     // emits theme
     emits('player_album_size' ,player_theme_lyricItem_0_bind_style.value.normalStyle.size);
     emits('player_background_model_num' ,player_theme_lyricItem_0_bind_style.value.id);
@@ -388,6 +372,7 @@
     emits('player_lyric_fontWeight' ,player_theme_lyricItem_0_bind_style.value.normalStyle.fontWeight);
     emits('player_lyric_color' ,player_theme_lyricItem_0_bind_style.value.normalStyle.color);
     emits('player_collapsed_album' ,player_theme_lyricItem_0_bind_style.value.normalStyle.player_collapsed_album);
+    emits('player_collapsed_skin' ,player_theme_lyricItem_0_bind_style.value.normalStyle.player_collapsed_skin);
     // set lyric auto setting
     // 
   };
@@ -524,7 +509,9 @@
 <template>
   <div style="overflow: hidden;" @mousemove="handleMouseMove" @click="handleMouseMove">
     <div>
+      <!--Album-->
       <img
+        v-if="player_collapsed_skin"
         id="player_bg_zindex_0"
         style="
           position: absolute;top: -20vw;left: -10vw;width: 120vw;height: 120vw;
@@ -532,27 +519,29 @@
           filter: brightness(46%) blur(60px);"
         :src="getAssetImage(props.this_audio_file_medium_image_url)"
         @error="handleImageError">
-      <!-- <img
+      <!--Skin-->
+      <img
+        v-else
         id="player_bg_zindex_1"
         style="
           position: absolute;top: 0;left: 0;width: 100vw;height: 100vw;
           margin-top: -20vw;
           object-fit: cover;object-position: center;
-          filter: blur(0px);"
+          filter: brightness(46%) blur(0px);"
         :src="getAssetImage(props.this_audio_file_medium_image_url)"
-        @error="handleImageError"> -->
+        @error="handleImageError">
     </div>
     <n-config-provider :theme="darkTheme">
       <!-- right drwaer of Player_theme -->
       <n-drawer 
         v-model:show="isVisible_Player_theme" 
-        :width="390" 
+        :width="416" 
         style="
           border-radius: 12px 0 0 12px;
           border: 1.5px solid #FFFFFF20;
           background-color: rgba(127, 127, 127, 0.1); 
           backdrop-filter: blur(10px); 
-          margin-top: calc(50vh - 294px);height: 588px;
+          margin-top: calc(50vh - 280px);height: 560px;
           ">
         <n-drawer-content v-if="isVisible_Player_theme">
           <template #default>
@@ -583,20 +572,103 @@
                 </n-space>
               </n-radio>
             </n-radio-group>
-            <n-space style="margin-left: 12px;margin-top: 8px;">
-              <span style="font-size:16px;">歌词行数</span>
-              <n-space style="margin-top: 2px;">
-                <n-radio
-                  :checked="!player_lyric_panel_checked_double_line" value="多行"
-                  @click="player_lyric_panel_checked_double_line = !player_lyric_panel_checked_double_line;">
-                  多行
-                </n-radio>
-                <n-radio
-                  :checked="player_lyric_panel_checked_double_line" value="双行"
-                  @click="player_lyric_panel_checked_double_line = !player_lyric_panel_checked_double_line;">
-                  双行
-                </n-radio>
+            <n-space style="margin-left: 12px;margin-top: 16px;">
+              <span style="font-size:16px;">字体设置</span>
+              <n-space>
+                <n-button text style="font-size: 24px;margin-top: 2px;">
+                  <n-icon>
+                    <MotionPhotosAutoOutlined />
+                  </n-icon>
+                </n-button>
+                <n-select
+                  v-model:value="player_lyric_panel_fontfamily_options_selected"
+                  :options="player_lyric_panel_fontfamily_options"
+                  placeholder="微软雅黑"
+                  :reset-menu-on-options-change="false"
+                  style="width: 207px;margin-top: -4px;"
+                />
               </n-space> 
+            </n-space>
+            <n-space style="margin-left: 12px;margin-top: 20px;">
+              <span style="font-size:16px;">字号设置</span>
+              <n-space>
+                <n-button text style="font-size: 24px;margin-top: 2px;">
+                  <n-icon>
+                    <MotionPhotosAutoOutlined />
+                  </n-icon>
+                </n-button>
+                <n-input-number 
+                  v-model:value="player_lyric_panel_fontsize" 
+                  clearable
+                  style="width: 109px;margin-top: -4px;"
+                />
+                <n-select
+                  v-model:value="player_lyric_panel_fontfamily_options_selected"
+                  :options="player_lyric_panel_fontfamily_options"
+                  placeholder="常规"
+                  :reset-menu-on-options-change="false"
+                  style="width: 86px;margin-top: -4px;"
+                />
+              </n-space>
+            </n-space>
+            <n-space style="margin-left: 12px;margin-top: 24px;">
+              <span style="font-size:16px;">歌词颜色</span>
+              <n-space>
+                <n-button text style="font-size: 24px">
+                  <n-icon>
+                    <MotionPhotosAutoOutlined />
+                  </n-icon>
+                </n-button>
+                <n-color-picker style="width: 177px;margin-top: -4px;"/>
+              </n-space>
+            </n-space>
+            <n-space style="margin-left: 12px;margin-top: 20px;">
+              <span style="font-size:16px;">歌词快慢</span>
+              <n-space>
+                <n-button text style="font-size: 24px;margin-top: 2px;">
+                  <n-icon>
+                    <MotionPhotosAutoOutlined />
+                  </n-icon>
+                </n-button>
+                <n-input-number 
+                  v-model:value="player_lyric_panel_fontsize" 
+                  clearable
+                  style="width: 109px;margin-top: -4px;"
+                />
+                <n-button style="margin-top: -4px;">
+                  重置
+                </n-button>
+              </n-space>
+            </n-space>
+            <n-space style="margin-left: 12px;margin-top: 20px;">
+              <span style="font-size:16px;">歌词行距</span>
+              <n-space>
+                <n-button text style="font-size: 24px;margin-top: 2px;">
+                  <n-icon>
+                    <MotionPhotosAutoOutlined />
+                  </n-icon>
+                </n-button>
+                <n-input-number 
+                  v-model:value="player_lyric_panel_fontsize" 
+                  clearable
+                  style="width: 109px;margin-top: -4px;"
+                />
+              </n-space>
+            </n-space>
+            <n-space style="margin-left: 12px;margin-top: 20px;">
+              <span style="font-size:16px;">底图模糊</span>
+              <n-space>
+                <n-button text style="font-size: 24px;margin-top: 2px;">
+                  <n-icon>
+                    <MotionPhotosAutoOutlined />
+                  </n-icon>
+                </n-button>
+                <n-input-number 
+                  v-model:value="player_lyric_panel_fontsize" 
+                  clearable
+                  style="width: 109px;margin-top: -4px;"
+                />
+              </n-space>
             </n-space>
             <n-space style="margin-left: 12px;margin-top: 20px;">
               <span style="font-size:16px;">歌词动效</span>
@@ -621,7 +693,7 @@
           </template>
         </n-drawer-content>
       </n-drawer>
-      <!-- right drwaer of Player_UI_Set -->
+      <!-- right drwaer of Player_UI_Set :disabled -->
       <n-drawer 
         v-model:show="isVisible_Player_page_ui" 
         :width="404" 
@@ -630,140 +702,11 @@
           border: 1.5px solid #FFFFFF20;
           background-color: rgba(127, 127, 127, 0.1); 
           backdrop-filter: blur(10px); 
-          margin-top: calc(50vh - 232px);height: 464px;
+          margin-top: calc(50vh - 190px);height: 380px;
         ">
         <n-drawer-content v-if="isVisible_Player_page_ui">
           <template #default>
-            <n-space style="margin-left: 12px;margin-top: 20px;">
-              <span style="font-size:16px;">字体设置</span>
-              <n-space style="margin-left: 8px;">
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-select
-                  v-model:value="player_lyric_panel_fontfamily_options_selected"
-                  :options="player_lyric_panel_fontfamily_options"
-                  placeholder="微软雅黑"
-                  :reset-menu-on-options-change="false"
-                  style="width: 218px;margin-top: -4px;"
-                />
-              </n-space> 
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;">
-              <span style="font-size:16px;">歌词语言</span>
-              <n-space style="margin-left: 8px;">
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-select
-                  v-model:value="player_lyric_panel_fontfamily_options_selected"
-                  :options="player_lyric_panel_fontfamily_options"
-                  placeholder="简体中文"
-                  :reset-menu-on-options-change="false"
-                  style="width: 218px;margin-top: -4px;"
-                />
-              </n-space> 
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;">
-              <span style="font-size:16px;">字号设置</span>
-              <n-space style="margin-left: 8px;">
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-input-number 
-                  v-model:value="player_lyric_panel_fontsize" 
-                  clearable
-                  style="width: 120px;margin-top: -4px;"
-                />
-                <n-select
-                  v-model:value="player_lyric_panel_fontfamily_options_selected"
-                  :options="player_lyric_panel_fontfamily_options"
-                  placeholder="常规"
-                  :reset-menu-on-options-change="false"
-                  style="width: 86px;margin-top: -4px;"
-                />
-              </n-space>
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;">
-              <span style="font-size:16px;">歌词行距</span>
-              <n-space style="margin-left: 8px;">
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-input-number 
-                  v-model:value="player_lyric_panel_fontsize" 
-                  clearable
-                  style="width: 120px;margin-top: -4px;"
-                />
-              </n-space>
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;">
-              <span style="font-size:16px;">歌词快慢</span>
-              <n-space style="margin-left: 8px;">
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-input-number 
-                  v-model:value="player_lyric_panel_fontsize" 
-                  clearable
-                  style="width: 120px;margin-top: -4px;"
-                />
-                <n-button style="margin-top: -4px;">
-                  重置
-                </n-button>
-              </n-space>
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 24px;">
-              <span style="font-size:16px;">歌词颜色</span>
-              <n-space style="margin-left: 8px;">
-                <n-button text style="font-size: 24px">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-color-picker style="width: 190px;margin-top: -4px;"/>
-              </n-space>
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;">
-              <span style="font-size:16px;">专辑底图模糊度</span>
-              <n-space style="margin-left: 8px;">
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-input-number 
-                  v-model:value="player_lyric_panel_fontsize" 
-                  clearable
-                  style="width: 120px;margin-top: -4px;"
-                />
-              </n-space>
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;">
-              <span style="font-size:16px;">皮肤底图模糊度</span>
-              <n-space style="margin-left: 8px;">
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-input-number 
-                  v-model:value="player_lyric_panel_fontsize" 
-                  clearable
-                  style="width: 120px;margin-top: -4px;"
-                />
-              </n-space>
-            </n-space>
+            <!--:disabled-->
           </template>
         </n-drawer-content>
       </n-drawer>
@@ -803,11 +746,11 @@
             <div style="-webkit-app-region: no-drag;margin-top: 30px;">
               <n-button quaternary style="margin-right:2px;" @click="get_isVisible_Player_theme">
                 <template #icon>
-                  <n-icon :depth="3"><ChevronDown12Filled /></n-icon>
+                  <n-icon :depth="3"><Settings24Regular /></n-icon>
                 </template>
-                <span style="font-weight: 500;">背景模式</span>
+                <span style="font-weight: 500;">界面设置</span>
               </n-button>
-              <n-button quaternary style="margin-right:10px" @click="get_isVisible_Player_page_ui">
+              <n-button quaternary style="margin-right:10px" @click="get_isVisible_Player_page_ui" v-if="false">
                 <template #icon>
                   <n-icon :depth="3"><Settings24Regular /></n-icon>
                 </template>
@@ -851,16 +794,16 @@
                 <n-space vertical align="end" style="margin-right:6vw;">
                   <n-space vertical>
                     <!-- 2 旋转封面-->
-                    <n-space v-if="player_background_model_num === 1">
+                    <n-space v-if="player_background_model_num === 1" style="margin-bottom: 2vh;">
                       <img
                         class="animate__rotate_slower"
                         :style="{
-                          width: `calc(${player_album_size} - 10vh)`, 
-                          height: `calc(${player_album_size} - 10vh)`, 
+                          width: `calc(${player_album_size} - 16vh)`, 
+                          height: `calc(${player_album_size} - 16vh)`, 
                           borderRadius: player_album_radius,
                         }"
                         style="
-                          margin-top: calc(33vh - 162px);margin-left: calc(5vh);
+                          margin-top: calc(36vh - 162px);margin-left: calc(9vh);
                           border: 1.5px solid #FFFFFF20;
                           object-fit: cover;object-position: center;
                           filter: blur(0px);
@@ -875,7 +818,7 @@
                         :style="{
                           width: `calc(${player_album_size} - 16vh)`, 
                           height: `calc(${player_album_size} - 16vh)`, 
-                          marginLeft: `calc(${player_album_size} / 2.2) `,
+                          marginLeft: `calc(${player_album_size} - 31.5vh) `,
                           borderRadius: player_album_radius,
                           WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 75%)'
                         }"
@@ -884,18 +827,17 @@
                           border: 1.5px solid #FFFFFF20;
                           object-fit: cover;object-position: center;
                           filter: blur(0px);
-                          box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.20),16px 16px 16px rgba(0, 0, 0, 0.20);
+                          box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
                           position: absolute;
                           background-color: #DCDBDD10;
                         ">
-
                       </div>
                       <img
                         class="animate__rotate_fast"
                         :style="{
                           width: `calc(${player_album_size} - 30vh)`, 
                           height: `calc(${player_album_size} - 30vh)`, 
-                          marginLeft: `calc(${player_album_size} / 1.7) `,
+                          marginLeft: `calc(${player_album_size} - 24.5vh) `,
                           borderRadius: player_album_radius,
                         }"
                         style="
@@ -910,25 +852,9 @@
                         @error="handleImageError">
                       <img
                         :style="{
-                          width: `calc(${player_album_size} - 10vh)`, 
-                          height: `calc(${player_album_size} - 10vh)`, 
-                          borderRadius: `0 calc(${player_album_size}) calc(${player_album_size}) 0`,
-                          WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 75%)'
-                        }"
-                        style="
-                          margin-top: calc(33vh - 162px);
-                          border: 3px solid #FFFFFF20;
-                          object-fit: cover;object-position: center;
-                          box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
-                          filter: blur(0px);
-                        "
-                        :src="getAssetImage(props.this_audio_file_medium_image_url)"
-                        @error="handleImageError">
-                      <img
-                        :style="{
                           width: `calc(${player_album_size} - 50vh)`, 
                           height: `calc(${player_album_size} - 50vh)`, 
-                          marginLeft: `calc(-${player_album_size} + 52vh) `,
+                          marginLeft: `calc(${player_album_size} - 14.5vh) `,
                           borderRadius: player_album_radius,
                         }"
                         style="
@@ -939,6 +865,22 @@
                           position: absolute;
                         "
                         src="../../resources/img/DotCircle.png">
+                      <img
+                        :style="{
+                          width: `calc(${player_album_size} - 12vh)`, 
+                          height: `calc(${player_album_size} - 12vh)`, 
+                          borderRadius: `0 calc(${player_album_size}) calc(${player_album_size}) 0`,
+                          WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 75%)'
+                        }"
+                        style="
+                          margin-top: calc(34vh - 162px);
+                          border: 2px solid #FFFFFF20;
+                          object-fit: cover;object-position: center;
+                          box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
+                          filter: blur(0px);
+                        "
+                        :src="getAssetImage(props.this_audio_file_medium_image_url)"
+                        @error="handleImageError">
                       </img>
                     </div>
                     <!-- 1 方形封面-->

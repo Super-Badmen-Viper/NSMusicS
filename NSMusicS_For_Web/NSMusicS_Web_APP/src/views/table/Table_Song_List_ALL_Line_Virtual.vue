@@ -522,7 +522,8 @@ function getAssetImage(firstImage: string) {
             <n-icon :size="20" :depth="2"><AddCircle32Regular/></n-icon>
           </template>
         </n-button>
-        <n-button flo quaternary circle size="medium" style="margin-left:4px">
+        <n-button flo quaternary circle size="medium" style="margin-left:4px"
+            v-if="props.page_songlists_selected !== 'song_list_all' && props.page_songlists_selected !== 'song_list_recently'">
           <template #icon>
             <n-icon :size="20" :depth="2"><Delete20Regular/></n-icon>
           </template>
@@ -563,8 +564,7 @@ function getAssetImage(firstImage: string) {
                 :style="{ 
                   width: 'calc(100vw - ' + (collapsed_width + 200) + 'px)',
                   height: 'calc(100vw - ' + (collapsed_width + 200) + 'px)',
-                  maskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 50%)',
-                  WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 50%)'
+                  WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 25%)'
                 }"
                 style="
                   margin-left: 200px; margin-top: -300px;

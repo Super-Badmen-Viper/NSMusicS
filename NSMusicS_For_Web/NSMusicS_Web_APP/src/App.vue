@@ -99,12 +99,11 @@
     }, 30);
 
     // Vue UI WYSIWYG
+    router_select_model_album.value = false;
+    router_select_model_media.value = false;
+    router_select_model_artist.value = false;
     setTimeout(() => {
-      if(value === 0){
-        router_select_model_album.value = false;
-        router_select_model_media.value = false;
-        router_select_model_artist.value = false;
-      }else{
+      if(value != 0){
         if(menu_select_activeKey.value === 'go-albums-list'){
           router_select_model_album.value = true;
         }else if(menu_select_activeKey.value === 'go-songs-list'){
@@ -125,6 +124,10 @@
   const player_collapsed_album = ref(false);// player_collapsed_album.value = player_theme_lyricItem_0_bind_style.value.normalStyle.player_collapsed_album;
   const get_player_collapsed_album = (value:any) => {
     player_collapsed_album.value = value
+  }
+  const player_collapsed_skin = ref(true)
+  const get_player_collapsed_skin = (value:any) => {
+    player_collapsed_skin.value = value
   }
   const player_album_size = ref('54vh')
   const get_player_album_size = (value:any) => {
@@ -169,6 +172,12 @@
   const get_Player_Show_Sound_effects = (value:any) => {
     Player_Show_Sound_effects.value = value
     console.log('Player_Show_Sound_effects：'+value)
+  }
+  ////// open bar player sounde speed
+  const Player_Show_Sound_speed = ref(false);
+  const get_Player_Show_Sound_speed = (value:any) => {
+    Player_Show_Sound_speed.value = value
+    console.log('Player_Show_Sound_speed：'+value)
   }
 
   ////// System Bind Media Info
@@ -1816,6 +1825,7 @@
           @collapse="app_left_menu_collapsed = true"
           @expand="app_left_menu_collapsed = false">
           <n-menu
+            v-if="!player_show"
             v-model:value="menu_select_activeKey"
             :collapsed="app_left_menu_collapsed"
             :collapsed-width="64"
@@ -2052,7 +2062,9 @@
         @player_show_height="get_send_onclick"
         @Playlist_Show="get_Playlist_Show"
         :Player_Show_Sound_effects="Player_Show_Sound_effects"
-        @Player_Show_Sound_effects="get_Player_Show_Sound_effects"/>
+        @Player_Show_Sound_effects="get_Player_Show_Sound_effects"
+        :Player_Show_Sound_speed="Player_Show_Sound_speed"
+        @Player_Show_Sound_speed="get_Player_Show_Sound_speed"/>
     </n-card>
     <View_Screen_Music_Player 
       class="view_music_player"
@@ -2064,6 +2076,8 @@
 
       :player_collapsed_album="player_collapsed_album"
       @player_collapsed_album = get_player_collapsed_album
+      :player_collapsed_skin="player_collapsed_skin"
+      @player_collapsed_skin= get_player_collapsed_skin
       :player_album_size="player_album_size"
       @player_album_size = get_player_album_size
       :player_album_radius="player_album_radius"
@@ -2113,7 +2127,7 @@
         border-radius: 12px 0 0 12px;
         border: 1.5px solid #FFFFFF20;
         background-color: rgba(127, 127, 127, 0.1); 
-        backdrop-filter: blur(10px); /* 高斯模糊 */
+        backdrop-filter: blur(10px);
         margin-top: 88px;margin-bottom:88px;
       ">
       <n-drawer-content v-if="Playlist_Show">
@@ -2152,7 +2166,7 @@
         border-radius: 12px 0 0 12px;
         border: 1.5px solid #FFFFFF20;
         background-color: rgba(127, 127, 127, 0.1); 
-        backdrop-filter: blur(10px); /* 高斯模糊 */
+        backdrop-filter: blur(10px);
         margin-top: calc(50vh - 280px);height: 560px;
       ">
       <n-drawer-content v-if="Player_Show_Sound_effects">
@@ -2170,6 +2184,24 @@
             <n-tab-pane name="003" tab="均衡器(专业)">
               均衡器(专业)
             </n-tab-pane>
+          </n-tabs>
+        </template>
+      </n-drawer-content>
+    </n-drawer>
+    <n-drawer 
+      v-model:show="Player_Show_Sound_speed"
+      :width="440" 
+      style="
+        border-radius: 12px 0 0 12px;
+        border: 1.5px solid #FFFFFF20;
+        background-color: rgba(127, 127, 127, 0.1); 
+        backdrop-filter: blur(10px);
+        margin-top: calc(50vh - 280px);height: 560px;
+      ">
+      <n-drawer-content v-if="Player_Show_Sound_speed">
+        <template #default>
+          <n-tabs type="line" animated>
+            开发中
           </n-tabs>
         </template>
       </n-drawer-content>

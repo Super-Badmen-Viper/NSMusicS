@@ -13,7 +13,7 @@
     'this_audio_song_name',
     'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
     'this_audio_Index',
-    'Playlist_Show','Player_Show_Sound_effects',
+    'Playlist_Show','Player_Show_Sound_effects','Player_Show_Sound_speed',
     'player_show_click',
     'this_audio_lyrics_string',
     'player','player_silder_currentTime_added_value',
@@ -25,7 +25,7 @@
     'this_audio_file_medium_image_url','this_audio_refresh',
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name',
     'this_audio_album_id','this_audio_album_favite',
-    'player_show_click','player_show_complete','Player_Show_Sound_effects',
+    'player_show_click','player_show_complete','Player_Show_Sound_effects','Player_Show_Sound_speed',
     'player','play_go_index_time',
     'player_collapsed','player_show','collapsed'
   ]);
@@ -443,6 +443,13 @@
     else
       emits('Player_Show_Sound_effects',false);
   }
+  // open sound speed
+  const Set_Player_Show_Sound_speed= () => {
+    if(props.Player_Show_Sound_speed === false)
+      emits('Player_Show_Sound_speed',true);
+    else
+      emits('Player_Show_Sound_speed',false);
+  }
 
   import { onBeforeUnmount } from 'vue';
   onBeforeUnmount(() => {
@@ -635,7 +642,7 @@
                 <n-icon :size="22"><MoreCircle32Regular/></n-icon>
               </template>
             </n-button>
-            <n-button size="tiny" text @click="Set_Playlist_Show">
+            <n-button size="tiny" text @click="Set_Player_Show_Sound_speed">
               <template #icon>
                 <n-icon :size="22"><TopSpeed20Regular/></n-icon>
               </template>

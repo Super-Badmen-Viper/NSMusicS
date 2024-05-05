@@ -434,8 +434,7 @@
                 :style="{ 
                   width: 'calc(100vw - ' + (collapsed_width + 200) + 'px)',
                   height: 'calc(100vw - ' + (collapsed_width + 200) + 'px)',
-                  maskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 50%)',
-                  WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 50%)'
+                  WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 25%)'
                 }"
                 style="
                   margin-left: 200px; margin-top: -300px;
