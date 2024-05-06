@@ -471,7 +471,7 @@
     }, 3000);
   };
   const unwatch_player_collapsed = watchEffect(() => {
-    if (props.player_UI_Theme.player_collapsed_action_bar_of_Immersion_model === false) {
+    if (props.player_collapsed_action_bar_of_Immersion_model === false) {
       clearInterval(timer_auto_hidden);
     }
   });
@@ -693,7 +693,7 @@
         <n-flex 
           justify="space-between" 
           style="transition: margin 0.4s;"
-          :style="{ marginTop: player_UI_Theme.player_collapsed_action_bar_of_Immersion_model ? '-70px' : '0px' }">
+          :style="{ marginTop: player_collapsed_action_bar_of_Immersion_model ? '-70px' : '0px' }">
           <n-flex style="height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-left:30px;">
               <n-button quaternary size="medium" 
@@ -751,7 +751,7 @@
           <n-flex 
             justify="center" 
             style="transition: margin 0.4s;"
-            :style="{ marginTop: player_UI_Theme.player_collapsed_action_bar_of_Immersion_model ? '70px' : '0px' }">
+            :style="{ marginTop: player_collapsed_action_bar_of_Immersion_model ? '70px' : '0px' }">
             <n-layout has-sider style="background-color: transparent;">
               <!-- Album 
                 show-trigger="bar" calc(50vw + 27vh + 8vw) :show-collapsed-content="false"-->
