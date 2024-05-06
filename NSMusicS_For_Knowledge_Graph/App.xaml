@@ -1,9 +1,0 @@
-﻿<Application x:Class="NSMusicS_For_Knowledge_Graph.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:NSMusicS_For_Knowledge_Graph"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
-</Application>
