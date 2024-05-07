@@ -1,7 +1,21 @@
 <script setup lang="ts">
+  ////// this_view resource of vicons_svg
+  import {
+    MoreCircle32Regular
+  } from '@vicons/fluent'
+  import {
+    ArrowSort24Regular,TextSortAscending20Regular,TextSortDescending20Regular,
+    Search20Filled,
+    PlayCircle24Regular,
+    Heart24Regular,Heart28Filled,
+    ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
+  } from '@vicons/fluent'
+
+  ////// this_app components of navie ui 
   import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
   import { type InputInst, NIcon } from 'naive-ui';
 
+  ////// passed as argument
   const emits = defineEmits([
     'artist_page_num',
     'options_Sort_key','page_artistlists_keyword','page_artistlists_reset_data',
@@ -25,18 +39,76 @@
 
     router_select_history_date: Router_date;router_history_datas: Router_date[];router_history_model_of_Artist_scroller_value: number;router_history_model_of_Artist_scroll:Boolean;
   }>();
-  //
-  const bool_start_play = ref<boolean>(true)
-  const click_bulk_operation = () => {
-    if(bool_start_play.value == true)
-    {
-      bool_start_play.value = false
+
+  ////// artistlist_view page_layout gridItems
+  const item_artist = ref<number>(170)
+  const item_artist_image = ref<number>(item_artist.value - 20)
+  const item_artist_txt = ref<number>(item_artist.value - 20)
+  const itemSize = ref(220);
+  const gridItems = ref(5);
+  const itemSecondarySize = ref(185);
+  const collapsed_width = ref<number>(1090);
+  const handleImageError = (event:any) => {
+    event.target.src = '../../../resources/img/error_album.jpg'; // 设置备用图片路径
+  };
+  const os = require('os');
+  function getAssetImage(firstImage: string) {
+    if(os.type() || process.platform === 'win32')
+      return new URL(firstImage, import.meta.url).href;
+    else if(os.type() || process.platform === 'darwin')
+      return new URL(firstImage, import.meta.url).href;
+    else if(os.type() || process.platform === 'linux')
+      return new URL(firstImage, import.meta.url).href;
+  }
+  // gridItems Re render
+  let bool_watch = false;
+  const timer = ref<NodeJS.Timeout | null>(null);
+  const startTimer = () => {
+    timer.value = setInterval(() => {
+      bool_watch = true;
+    }, 1000);
+  };
+  const stopWatching_collapsed_width = watch(() => props.app_left_menu_collapsed, (newValue, oldValue) => {
+    updateGridItems();
+  });
+  const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (newValue, oldValue) => {
+    bool_watch = false;
+    updateGridItems();
+    if (bool_watch) {
+      startTimer();
+    }
+  });
+  const updateGridItems = () => {
+    if (props.app_left_menu_collapsed == true) {
+      collapsed_width.value = 145;
+      item_artist.value = 140;
+      item_artist_image.value = item_artist.value - 20;
+      item_artist_txt.value = item_artist.value - 20;
+      itemSecondarySize.value = 135;
+    } else {
+      collapsed_width.value = 240;
+      item_artist.value = 170;
+      item_artist_image.value = item_artist.value - 20;
+      item_artist_txt.value = item_artist.value - 20;
+      itemSecondarySize.value = 170;
+    }
+    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
+  };
+  onMounted(() => {
+    startTimer();
+    updateGridItems();
+
+    input_search_Value.value = props.page_artistlists_keyword
+    if(input_search_Value.value.length > 0){
+      bool_show_search_area.value = true
+      bool_input_search = true
     }
     else{
-      bool_start_play.value = true
+      bool_show_search_area.value = false
+      bool_input_search = false
     }
-  }
-  //
+  });
+  // gridItems Sort
   enum state_Sort {
     Ascend = 'ascend',
     Descend = 'descend',
@@ -125,7 +197,7 @@
   }
   const options_Sort_key_Default_key = ref<string>()
   const options_Sort_key_Default = ref<SortItem[]>()
-  //
+  // gridItems Search(filter)
   const bool_show_search_area = ref<boolean>(false)
   const show_search_area = () => {
     if(bool_show_search_area.value === true)
@@ -185,127 +257,9 @@
       }
     }
   }
-  //
-  const item_artist_margin = ref<number>(0)
-  const item_artist = ref<number>(170)
-  const item_artist_image = ref<number>(item_artist.value - 20)
-  const item_artist_txt = ref<number>(item_artist.value - 20)
-  //
-  const handleImageError = (event:any) => {
-    event.target.src = '../../../resources/img/error_album.jpg'; // 设置备用图片路径
-  };
-  //
-  const itemSize = ref(220);
-  const gridItems = ref(5);
-  const itemSecondarySize = ref(185);
-  const collapsed_width = ref<number>(1090);
-  //
-  const handleSelected_value_for_artistlistall = (value: any) => {
-    emits('page_artistlists_selected',value)
-    console.log('selected_value_for_artistlistall：'+value);
-    breadcrumbItems.value = props.page_artistlists_options.find(option => option.value === value)?.label || '';
-  };
-  const breadcrumbItems = ref('所有歌手');
-  // go to media page
-  const handleItemClick_artist = (artist_id:string) => {
-    // artist model don't need search,the id is only one
-    // input_search_Value.value = artist_id+'accurate_search'+'__artist__'
-    // bool_show_search_area.value = false
-    // show_search_area()
-    // click_search()
-    // scrollTo(0)
 
-  }
-  const Open_this_artist_all_album_list_click = (artist_id:string) => {
-    console.log('album_list_of_artist_id_artist_click：'+artist_id);
-    emits('album_list_of_artist_id_artist',artist_id)
-  }
-  const Play_this_artist_all_media_list_click = (artist_id:string) => {
-    console.log('play_this_artist_song_list：'+artist_id);
-    emits('play_this_artist_song_list',artist_id)
-  }
-  // 重新渲染gridItems
-  const stopWatching_collapsed_width = watch(() => props.app_left_menu_collapsed, (newValue, oldValue) => {
-    updateGridItems();
-  });
-  let bool_watch = false;
-  const timer = ref<NodeJS.Timeout | null>(null);
-  const startTimer = () => {
-    timer.value = setInterval(() => {
-      bool_watch = true;
-    }, 1000);
-  };
-  onMounted(() => {
-    startTimer();
-    updateGridItems();
-
-    input_search_Value.value = props.page_artistlists_keyword
-    if(input_search_Value.value.length > 0){
-      bool_show_search_area.value = true
-      bool_input_search = true
-    }
-    else{
-      bool_show_search_area.value = false
-      bool_input_search = false
-    }
-  });
-  const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (newValue, oldValue) => {
-    bool_watch = false;
-    updateGridItems();
-    if (bool_watch) {
-      startTimer();
-    }
-  });
-  const updateGridItems = () => {
-    if (props.app_left_menu_collapsed == true) {
-      collapsed_width.value = 145;
-      item_artist.value = 140;
-      item_artist_image.value = item_artist.value - 20;
-      item_artist_txt.value = item_artist.value - 20;
-      itemSecondarySize.value = 135;
-    } else {
-      collapsed_width.value = 240;
-      item_artist.value = 170;
-      item_artist_image.value = item_artist.value - 20;
-      item_artist_txt.value = item_artist.value - 20;
-      itemSecondarySize.value = 170;
-    }
-    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
-  };
-  //
-  onBeforeUnmount(() => {
-    cleanup();
-  });
-  const cleanup = () => {
-    stopWatching_collapsed_width()
-    stopWatching_window_innerWidth()
-    if (timer.value) {
-      clearInterval(timer.value);
-      timer.value = null;
-    }
-  };
-  const os = require('os');
-  function getAssetImage(firstImage: string) {
-    if(os.type() || process.platform === 'win32')
-      return new URL(firstImage, import.meta.url).href;
-    else if(os.type() || process.platform === 'darwin')
-      return new URL(firstImage, import.meta.url).href;
-    else if(os.type() || process.platform === 'linux')
-      return new URL(firstImage, import.meta.url).href;
-  }
-  //
+  ////// scrollbar of artistlist_view
   const scrollbar = ref(null as any);
-  const this_audio_Index = ref<number>(0)
-  const scrollTo = (value :number) => {
-    if (scrollbar !== null) {
-      setTimeout(() => {
-        scrollbar.value.scrollToItem(value - (11 + Math.floor((window.innerHeight - 690) / 75)));// 1000:15，690:11  75 
-      }, 100);
-    }
-  }
-  onMounted(() => {
-    scrollTo(props.router_history_model_of_Artist_scroller_value)
-  });
   const onResize = () => {
     console.log('resize');
   }
@@ -318,14 +272,34 @@
 
     emits('router_history_model_of_Artist_scroller_value',viewEndIndex)
   }
-  watch(() => props.router_history_model_of_Artist_scroll,(newValue) => {
+  const stopWatching_router_history_model_of_Artist_scroll = watch(() => props.router_history_model_of_Artist_scroll,(newValue) => {
       if (newValue === true) {
         scrollTo(props.router_history_model_of_Artist_scroller_value)
         emits('router_history_model_of_Artist_scroll',false)
       }
     }
   )
-  //
+  const this_audio_Index_of_absolute_positioning_in_list = ref<number>(0)
+  const scrollTo = (value :number) => {
+    if (scrollbar !== null) {
+      setTimeout(() => {
+        scrollbar.value.scrollToItem(value - (12 + Math.floor((window.innerHeight - 765) / 75)));// 1000:15，690:11  75 
+      }, 100);
+    }
+  }
+  onMounted(() => {
+    scrollTo(props.router_history_model_of_Artist_scroller_value)
+  });
+
+  ////// select Dtatsource of artistlists
+  const breadcrumbItems = ref('所有歌手');
+  const page_artistlists_handleselected_updatevalue = (value: any) => {
+    emits('page_artistlists_selected',value)
+    console.log('selected_value_for_artistlistall：'+value);
+    breadcrumbItems.value = props.page_artistlists_options.find(option => option.value === value)?.label || '';
+  };
+
+  ////// router history 
   const get_router_history_model_pervious = () => {
     emits('router_history_model',-1)
   }
@@ -333,24 +307,34 @@
     emits('router_history_model',1)
   }
 
-  import {
-    Play16Filled,
-    MoreCircle32Regular
-  } from '@vicons/fluent'
-  import {
-    AddCircle32Regular,
-    MultiselectLtr20Filled,
-    Delete20Regular,
-    SelectAllOn24Regular,
-    PlayCircle20Filled,
-    ArrowSort24Regular,TextSortAscending20Regular,TextSortDescending20Regular,
-    Search20Filled,
-    Filter16Regular,
-    SaveEdit24Regular,
-    PlayCircle24Regular,
-    Heart24Regular,Heart28Filled,
-    ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
-  } from '@vicons/fluent'
+  ////// go to media_view
+  const handleItemClick_artist = (artist_id:string) => {
+    // artist model don't need search,the id is only one
+    // input_search_Value.value = artist_id+'accurate_search'+'__artist__'
+    // bool_show_search_area.value = false
+    // show_search_area()
+    // click_search()
+    // scrollTo(0)
+  }
+  const Open_this_artist_all_album_list_click = (artist_id:string) => {
+    console.log('album_list_of_artist_id_artist_click：'+artist_id);
+    emits('album_list_of_artist_id_artist',artist_id)
+  }
+  const Play_this_artist_all_media_list_click = (artist_id:string) => {
+    console.log('play_this_artist_song_list：'+artist_id);
+    emits('play_this_artist_song_list',artist_id)
+  }
+
+  ////// view artistlist_view Remove data
+  onBeforeUnmount(() => {
+    stopWatching_collapsed_width()
+    stopWatching_window_innerWidth()
+    stopWatching_router_history_model_of_Artist_scroll()
+    if (timer.value) {
+      clearInterval(timer.value);
+      timer.value = null;
+    }
+  });
 </script>
 <template>
   <n-space vertical :size="12">
@@ -498,7 +482,7 @@
                   <n-select 
                     :value="props.page_artistlists_selected" 
                     :options="props.page_artistlists_options" style="width: 192px;"
-                    :on-update:value="handleSelected_value_for_artistlistall" />
+                    :on-update:value="page_artistlists_handleselected_updatevalue" />
                 </n-space>
               </template>
               <template #header>
@@ -547,8 +531,7 @@
             style="margin-left: 10px;">
             <div
               :key="item.id"
-              class="artist"
-              :style="{ margin: item_artist_margin + 'px' }">
+              class="artist">
               <div
                 :style="{ width: item_artist_image + 'px', height: item_artist_image + 'px', position: 'relative' }">
                 <img

@@ -1,7 +1,21 @@
 <script setup lang="ts">
+  ////// this_view resource of vicons_svg
+  import {
+    MoreCircle32Regular
+  } from '@vicons/fluent'
+  import {
+    ArrowSort24Regular,TextSortAscending20Regular,TextSortDescending20Regular,
+    Search20Filled,
+    PlayCircle24Regular,
+    Heart24Regular,Heart28Filled,
+    ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
+  } from '@vicons/fluent'
+
+  ////// this_app components of navie ui 
   import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
   import { type InputInst, NIcon } from 'naive-ui';
 
+  ////// passed as argument
   const emits = defineEmits([
     'options_Sort_key','page_albumlists_keyword','page_albumlists_reset_data',
     'page_albumlists_selected',
@@ -23,7 +37,76 @@
 
     router_select_history_date: Router_date;router_history_datas: Router_date[];router_history_model_of_Album_scroller_value:number;router_history_model_of_Album_scroll:Boolean;
   }>();
-  //
+
+  ////// albumlist_view page_layout gridItems
+  const item_album = ref<number>(160)
+  const item_album_image = ref<number>(item_album.value - 20)
+  const item_album_txt = ref<number>(item_album.value - 20)
+  const itemSize = ref(220);
+  const gridItems = ref(5);
+  const itemSecondarySize = ref(185);
+  const collapsed_width = ref<number>(1090);
+  const handleImageError = (event:any) => {
+    event.target.src = '../../../resources/img/error_album.jpg'; // 设置备用图片路径
+  };
+  const os = require('os');
+  function getAssetImage(firstImage: string) {
+    if(os.type() || process.platform === 'win32')
+      return new URL(firstImage, import.meta.url).href;
+    else if(os.type() || process.platform === 'darwin')
+      return new URL(firstImage, import.meta.url).href;
+    else if(os.type() || process.platform === 'linux')
+      return new URL(firstImage, import.meta.url).href;
+  }
+  // gridItems Re render
+  let bool_watch = false;
+  const timer = ref<NodeJS.Timeout | null>(null);
+  const startTimer = () => {
+    timer.value = setInterval(() => {
+      bool_watch = true;
+    }, 1000);
+  };
+  const stopWatching_collapsed_width = watch(() => props.app_left_menu_collapsed, (newValue, oldValue) => {
+    updateGridItems();
+  });
+  const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (newValue, oldValue) => {
+    bool_watch = false;
+    updateGridItems();
+    if (bool_watch) {
+      startTimer();
+    }
+  });
+  const updateGridItems = () => {
+    if (props.app_left_menu_collapsed == true) {
+      collapsed_width.value = 145;
+      item_album.value = 145;
+      item_album_image.value = item_album.value - 20;
+      item_album_txt.value = item_album.value - 20;
+      itemSecondarySize.value = 135;
+    } else {
+      collapsed_width.value = 240;
+      item_album.value = 170;
+      item_album_image.value = item_album.value - 20;
+      item_album_txt.value = item_album.value - 20;
+      itemSecondarySize.value = 170;
+    }
+    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
+  };
+  onMounted(() => {
+    startTimer();
+    updateGridItems();
+
+    input_search_Value.value = props.page_albumlists_keyword
+    if(input_search_Value.value.length > 0){
+      bool_show_search_area.value = true
+      bool_input_search = true
+    }
+    else{
+      bool_show_search_area.value = false
+      bool_input_search = false
+    }
+  });
+  // gridItems Sort
   enum state_Sort {
     Ascend = 'ascend',
     Descend = 'descend',
@@ -116,7 +199,7 @@
   }
   const options_Sort_key_Default_key = ref<string>()
   const options_Sort_key_Default = ref<SortItem[]>()
-  //
+  // gridItems Search(filter)
   const bool_show_search_area = ref<boolean>(false)
   const show_search_area = () => {
     if(bool_show_search_area.value === true)
@@ -176,28 +259,56 @@
       }
     }
   }
-  //
-  const item_album_margin = ref<number>(0)
-  const item_album = ref<number>(160)
-  const item_album_image = ref<number>(item_album.value - 20)
-  const item_album_txt = ref<number>(item_album.value - 20)
-  //
-  const handleImageError = (event:any) => {
-    event.target.src = '../../../resources/img/error_album.jpg'; // 设置备用图片路径
-  };
-  //
-  const itemSize = ref(220);
-  const gridItems = ref(5);
-  const itemSecondarySize = ref(185);
-  const collapsed_width = ref<number>(1090);
-  //
-  const handleSelected_value_for_albumlistall = (value: any) => {
+
+  ////// scrollbar of albumlist_view
+  const scrollbar = ref(null as any);
+  const onResize = () => {
+    console.log('resize');
+  }
+  const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
+  const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any, visibleEndIndex: any) => {
+    updateParts.viewStartIdx = viewStartIndex
+    updateParts.viewEndIdx = viewEndIndex
+    updateParts.visibleStartIdx = visibleStartIndex
+    updateParts.visibleEndIdx = visibleEndIndex
+    emits('router_history_model_of_Album_scroller_value',viewEndIndex)
+  }
+  const stopWatching_router_history_model_of_Album_scroll = watch(() => props.router_history_model_of_Album_scroll,(newValue) => {
+      if (newValue === true) {
+        scrollTo(props.router_history_model_of_Album_scroller_value)
+        emits('router_history_model_of_Album_scroll',false)
+      }
+    }
+  )
+  const this_audio_Index_of_absolute_positioning_in_list = ref<number>(0)
+  const scrollTo = (value :number) => {
+    if (scrollbar !== null) {
+      setTimeout(() => {
+        scrollbar.value.scrollToItem(value - (12 + Math.floor((window.innerHeight - 765) / 75)));// 1000:15，690:11  75 
+      }, 100);
+    }
+  }
+  onMounted(() => {
+    scrollTo(props.router_history_model_of_Album_scroller_value)
+  });
+
+  ////// select Dtatsource of albumlists
+  const breadcrumbItems = ref('所有专辑');
+  const page_albumlists_handleSelected_updateValue = (value: any) => {
     emits('page_albumlists_selected',value)
     console.log('selected_value_for_albumlistall：'+value);
     breadcrumbItems.value = props.page_albumlists_options.find(option => option.value === value)?.label || '';
   };
-  const breadcrumbItems = ref('所有专辑');
-  // go to media page
+
+  ////// router history 
+  const get_router_history_model_pervious = () => {
+    emits('router_history_model',-1)
+  }
+  const get_router_history_model_next = () =>  {
+    emits('router_history_model',1)
+  }
+
+  ////// go to media_view
   const handleItemClick_album = (album:string) => {
     // router.push({ path: '/media' });
     input_search_Value.value = album//+'accurate_search'+'__album__'
@@ -228,125 +339,17 @@
     console.log('play_this_album_click：'+album_id);
     emits('play_this_album_song_list',album_id)
   }
-  // 重新渲染gridItems
-  const stopWatching_collapsed_width = watch(() => props.app_left_menu_collapsed, (newValue, oldValue) => {
-    updateGridItems();
-  });
-  let bool_watch = false;
-  const timer = ref<NodeJS.Timeout | null>(null);
-  const startTimer = () => {
-    timer.value = setInterval(() => {
-      bool_watch = true;
-    }, 1000);
-  };
-  onMounted(() => {
-    startTimer();
-    updateGridItems();
 
-    input_search_Value.value = props.page_albumlists_keyword
-    if(input_search_Value.value.length > 0){
-      bool_show_search_area.value = true
-      bool_input_search = true
-    }
-    else{
-      bool_show_search_area.value = false
-      bool_input_search = false
-    }
-  });
-  const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (newValue, oldValue) => {
-    bool_watch = false;
-    updateGridItems();
-    if (bool_watch) {
-      startTimer();
-    }
-  });
-  const updateGridItems = () => {
-    if (props.app_left_menu_collapsed == true) {
-      collapsed_width.value = 145;
-      item_album.value = 145;
-      item_album_image.value = item_album.value - 20;
-      item_album_txt.value = item_album.value - 20;
-      itemSecondarySize.value = 135;
-    } else {
-      collapsed_width.value = 240;
-      item_album.value = 170;
-      item_album_image.value = item_album.value - 20;
-      item_album_txt.value = item_album.value - 20;
-      itemSecondarySize.value = 170;
-    }
-    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
-  };
-  //
+  ////// view albumlist_view Remove data
   onBeforeUnmount(() => {
-    cleanup();
-  });
-  const cleanup = () => {
     stopWatching_collapsed_width()
     stopWatching_window_innerWidth()
+    stopWatching_router_history_model_of_Album_scroll()
     if (timer.value) {
       clearInterval(timer.value);
       timer.value = null;
     }
-  };
-  const os = require('os');
-  function getAssetImage(firstImage: string) {
-    if(os.type() || process.platform === 'win32')
-      return new URL(firstImage, import.meta.url).href;
-    else if(os.type() || process.platform === 'darwin')
-      return new URL(firstImage, import.meta.url).href;
-    else if(os.type() || process.platform === 'linux')
-      return new URL(firstImage, import.meta.url).href;
-  }
-  //
-  const scrollbar = ref(null as any);
-  const this_audio_Index = ref<number>(0)
-  const scrollTo = (value :number) => {
-    if (scrollbar !== null) {
-      setTimeout(() => {
-        scrollbar.value.scrollToItem(value - (11 + Math.floor((window.innerHeight - 690) / 75)));// 1000:15，690:11  75 
-      }, 100);
-    }
-  }
-  onMounted(() => {
-    scrollTo(props.router_history_model_of_Album_scroller_value)
   });
-  const onResize = () => {
-    console.log('resize');
-  }
-  const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
-  const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any, visibleEndIndex: any) => {
-    updateParts.viewStartIdx = viewStartIndex
-    updateParts.viewEndIdx = viewEndIndex
-    updateParts.visibleStartIdx = visibleStartIndex
-    updateParts.visibleEndIdx = visibleEndIndex
-
-    emits('router_history_model_of_Album_scroller_value',viewEndIndex)
-  }
-  watch(() => props.router_history_model_of_Album_scroll,(newValue) => {
-      if (newValue === true) {
-        scrollTo(props.router_history_model_of_Album_scroller_value)
-        emits('router_history_model_of_Album_scroll',false)
-      }
-    }
-  )
-  // 
-  const get_router_history_model_pervious = () => {
-    emits('router_history_model',-1)
-  }
-  const get_router_history_model_next = () =>  {
-    emits('router_history_model',1)
-  }
-
-  import {
-    MoreCircle32Regular
-  } from '@vicons/fluent'
-  import {
-    ArrowSort24Regular,TextSortAscending20Regular,TextSortDescending20Regular,
-    Search20Filled,
-    PlayCircle24Regular,
-    Heart24Regular,Heart28Filled,
-    ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
-  } from '@vicons/fluent'
 </script>
 <template>
   <n-space vertical :size="12">
@@ -493,7 +496,7 @@
                   <n-select 
                     :value="props.page_albumlists_selected" 
                     :options="props.page_albumlists_options" style="width: 192px;"
-                    :on-update:value="handleSelected_value_for_albumlistall" />
+                    :on-update:value="page_albumlists_handleSelected_updateValue" />
                 </n-space>
               </template>
               <template #header>
@@ -541,8 +544,7 @@
             style="margin-left: 10px;">
             <div
               :key="item.id"
-              class="album"
-              :style="{ margin: item_album_margin + 'px' }">
+              class="album">
               <div
                 :style="{ width: item_album_image + 'px', height: item_album_image + 'px', position: 'relative' }">
                 <img

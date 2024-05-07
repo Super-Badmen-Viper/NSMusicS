@@ -2,25 +2,25 @@
 import { ref,defineEmits, onBeforeUnmount, onMounted } from 'vue';
 import Table_Song_List from '../views/table/Table_Song_List_ALL_Line_Virtual.vue'
 
-const this_audio_Index = ref<number>(-1)
-function get_this_audio_Index(value: any) {
-  this_audio_Index.value = value
-  emits('this_audio_Index',this_audio_Index.value)
+const this_audio_Index_of_absolute_positioning_in_list = ref<number>(-1)
+function get_this_audio_Index_of_absolute_positioning_in_list(value: any) {
+  this_audio_Index_of_absolute_positioning_in_list.value = value
+  emits('this_audio_Index_of_absolute_positioning_in_list',this_audio_Index_of_absolute_positioning_in_list.value)
 }
 const menu_edit_this_song = ref<Media_File>()
 function get_menu_edit_this_song(value: any) {
   menu_edit_this_song.value = value
-  console.log('编辑：this_audio_Index：'+value)
+  console.log('编辑：this_audio_Index_of_absolute_positioning_in_list：'+value)
 }
 const menu_add_this_song = ref<Media_File>()
 function get_menu_add_this_song(value: any) {
   menu_add_this_song.value = value
-  console.log('添加到：this_audio_Index：'+value)
+  console.log('添加到：this_audio_Index_of_absolute_positioning_in_list：'+value)
 }
 const menu_delete_this_song = ref<Media_File>()
 function get_menu_delete_this_song(value: any) {
   menu_delete_this_song.value = value
-  console.log('添加到：this_audio_Index：'+value)
+  console.log('添加到：this_audio_Index_of_absolute_positioning_in_list：'+value)
 }
 function get_media_path(value: any) {
   emits('media_file_path',value)
@@ -45,9 +45,6 @@ function get_this_audio_album_favite(value: any) {
 }
 function get_this_audio_album_name(value: any) {
   emits('this_audio_album_name',value)
-}
-function get_page_song_index(value: any) {
-  emits('page_song_index',value)
 }
 function get_page_songlists_options_Sort_key(value: any) {
   emits('page_songlists_options_Sort_key',value)
@@ -86,14 +83,11 @@ onMounted(async () => {
   emits('router_select','View_Song_List_ALL')
 });
 onBeforeUnmount(() => {
-  cleanup();
-});
-const cleanup = () => {
-  this_audio_Index.value = -1;
+  this_audio_Index_of_absolute_positioning_in_list.value = -1;
   menu_edit_this_song.value = undefined;
   menu_add_this_song.value = undefined;
   menu_delete_this_song.value = undefined;
-};
+});
 
 const emits = defineEmits([
   'router_select',
@@ -105,8 +99,7 @@ const emits = defineEmits([
   'this_audio_album_id','this_audio_album_favite',
   'this_audio_album_favite',
   'this_audio_album_name',
-  'this_audio_Index',
-  'page_song_index',
+  'this_audio_Index_of_absolute_positioning_in_list',
   'menu_edit_this_song',
   'menu_add_this_song',
   'menu_delete_this_song',
@@ -189,8 +182,7 @@ const {
       @this_audio_album_id="get_this_audio_album_id"
       @this_audio_album_favite="get_this_audio_album_favite"
       @this_audio_album_name="get_this_audio_album_name"
-      @this_audio_Index="get_this_audio_Index"
-      @page_song_index="get_page_song_index"
+      @this_audio_Index_of_absolute_positioning_in_list="get_this_audio_Index_of_absolute_positioning_in_list"
       @menu_edit_this_song="get_menu_edit_this_song"
       @menu_add_this_song="get_menu_add_this_song"
       @menu_delete_this_song="get_menu_delete_this_song"

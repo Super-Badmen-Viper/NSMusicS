@@ -1,5 +1,6 @@
 import { ref } from "vue";
 
+// Player_UI_Theme all
 export class Player_UI_Theme {
   player_collapsed_album = ref(false);
   get_player_collapsed_album(value: any) {

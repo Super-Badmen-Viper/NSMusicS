@@ -14,7 +14,7 @@ function page_artistlists_get_keyword(value: string) {
 function page_artistlists_get_reset_data(value: any) {
   emits('page_artistlists_reset_data',value)
 }
-function get_album_list_of_artist_id_artist(value: any) {
+function get_album_list_of_artist_id_by_artist_info(value: any) {
   emits('album_list_of_artist_id_artist',value)
 }
 function get_play_this_artist_song_list(value: any) {
@@ -99,7 +99,7 @@ const {
 
       @page_artistlists_reset_data="page_artistlists_get_reset_data"
 
-      @album_list_of_artist_id_artist="get_album_list_of_artist_id_artist"
+      @album_list_of_artist_id_artist="get_album_list_of_artist_id_by_artist_info"
       @play_this_artist_song_list="get_play_this_artist_song_list"
 
       :page_artistlists_keyword="page_artistlists_keyword"

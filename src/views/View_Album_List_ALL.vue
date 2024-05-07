@@ -8,7 +8,7 @@ function get_page_albumlists_options_Sort_key(value: any) {
 function set_page_albumlists_selected(value: boolean) {
   emits('page_albumlists_selected',value)
 }
-function get_media_list_of_album_id(value: any) {
+function get_media_list_of_album_id_by_album_info(value: any) {
   emits('media_list_of_album_id',value)
 }
 function page_albumlists_get_keyword(value: string) {
@@ -91,7 +91,7 @@ const {
       :page_albumlists_selected="page_albumlists_selected"
       @page_albumlists_selected="set_page_albumlists_selected"
 
-      @media_list_of_album_id="get_media_list_of_album_id"
+      @media_list_of_album_id="get_media_list_of_album_id_by_album_info"
       @play_this_album_song_list="get_play_this_album_song_list"
 
       :app_left_menu_collapsed="app_left_menu_collapsed"

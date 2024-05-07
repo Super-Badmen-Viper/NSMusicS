@@ -6,13 +6,13 @@
   const player_show_hight_animation_value = ref(670);
   const emits = defineEmits([
     'player_show_height',
-    'this_audio_refresh',
+    'this_audio_restart_play',
     'this_audio_file_path','this_audio_file_medium_image_url',
     'media_file_medium_image_url',
     'this_audio_singer_name',
     'this_audio_song_name',
     'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
-    'this_audio_Index',
+    'this_audio_Index_of_absolute_positioning_in_list',
     'Playlist_Show','Player_Show_Sound_effects','Player_Show_Sound_speed',
     'player_show_click',
     'this_audio_lyrics_string',
@@ -22,11 +22,11 @@
   import { defineProps} from 'vue';
   const props = defineProps([
     'this_audio_file_path','playlist_Files_temporary',
-    'this_audio_file_medium_image_url','this_audio_refresh',
+    'this_audio_file_medium_image_url','this_audio_restart_play',
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name',
     'this_audio_album_id','this_audio_album_favite',
     'player_show_click','player_show_complete','Player_Show_Sound_effects','Player_Show_Sound_speed',
-    'player','play_go_index_time',
+    'player','player_go_lyricline_index_of_audio_play_progress',
     'player_collapsed_action_bar_of_Immersion_model','player_show','collapsed'
   ]);
   const { ipcRenderer } = require('electron'); 
@@ -101,17 +101,17 @@
   const slider_volume_show = ref(false)
   const slider_order_show = ref(false)
   // audio player
-  const timer_this_audio_refresh = ref<NodeJS.Timeout>();
+  const timer_this_audio_restart_play = ref<NodeJS.Timeout>();
   const lastTriggerValue = ref<any>(null);// 延迟触发：接收大量数据时，仅触发最后一个值
-  let unwatch_this_audio_refresh = watch(() => props.this_audio_refresh, (newValue, oldValue) => {
+  let unwatch_this_audio_restart_play = watch(() => props.this_audio_restart_play, (newValue, oldValue) => {
     if (newValue === true) {
       lastTriggerValue.value = newValue; // 更新最后一个触发的值
-      clearTimeout(timer_this_audio_refresh.value);
+      clearTimeout(timer_this_audio_restart_play.value);
       // 延迟触发
-      timer_this_audio_refresh.value = setTimeout(() => {
+      timer_this_audio_restart_play.value = setTimeout(() => {
         if (newValue === lastTriggerValue.value) { // 检查最后一个触发的值是否与当前触发的值相等
           handleAudioFilePathChange();
-          emits('this_audio_refresh', false);
+          emits('this_audio_restart_play', false);
         }
       }, 200);
     }
@@ -255,7 +255,7 @@
           emits('this_audio_album_id', props.playlist_Files_temporary[index].album_id);
           emits('this_audio_album_favite', props.playlist_Files_temporary[index].favite);
           emits('this_audio_album_name', props.playlist_Files_temporary[index].album);
-          emits('this_audio_Index',index)
+          emits('this_audio_Index_of_absolute_positioning_in_list',index)
           console.log(props.playlist_Files_temporary[index]);
         }
       }
@@ -346,8 +346,8 @@
   const player_range_duration_handleclick = async () => {
     play_go_duration(slider_singleValue.value,true);
   }
-  let unwatch_play_go_index_time =  watch(() => props.play_go_index_time, (newValue, oldValue) => {
-    play_go_duration(props.play_go_index_time,false)
+  let unwatch_play_go_index_time =  watch(() => props.player_go_lyricline_index_of_audio_play_progress, (newValue, oldValue) => {
+    play_go_duration(props.player_go_lyricline_index_of_audio_play_progress,false)
   });
   const play_go_duration = (slider_value:number,silder_path:boolean) => {
     player_no_progress_jump.value = false;
@@ -458,7 +458,7 @@
   onBeforeUnmount(() => {
     unwatch_player_show_click()
     unwatch_player_silder_currentTime_added_value()
-    unwatch_this_audio_refresh()
+    unwatch_this_audio_restart_play()
     unwatch_this_audio_buffer_file()
     unwatch_play_go_index_time()
     unwatch_slider_volume_value()

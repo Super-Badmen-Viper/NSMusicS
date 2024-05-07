@@ -50,12 +50,12 @@
 
   ////// passed as argument
   const emits = defineEmits([
-    'player_show_click','play_go_index_time','player_collapsed_action_bar_of_Immersion_model',
+    'player_show_click','player_go_lyricline_index_of_audio_play_progress','player_collapsed_action_bar_of_Immersion_model',
     'player_UI_Theme'
   ]);
   const props = defineProps([
     'this_audio_file_path','playlist_Files_temporary',
-    'this_audio_file_medium_image_url','this_audio_refresh',
+    'this_audio_file_medium_image_url','this_audio_restart_play',
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name',
     'this_audio_lyrics_string','this_audio_lyrics_info_line','this_audio_lyrics_info_time',
     'player','player_silder_currentTime_added_value',
@@ -115,7 +115,7 @@
     const time = props.this_audio_lyrics_info_time[index - props.this_audio_lyrics_info_line_num];
     if(time >= props.player.getDuration()*1000) return;
     if(time < 0) return;
-    emits('play_go_index_time', time);
+    emits('player_go_lyricline_index_of_audio_play_progress', time);
   };
   const scrollbar = ref(null as any);
   const perviousIndex = ref(0);
@@ -233,7 +233,6 @@
     normalStyle:PlayerTheme_Style;
     hoverStyle:PlayerTheme_HoverStyle;
   };
-  // play model 1 ：方形封面
   const player_theme_1 = ref<PlayerTheme_LyricItem>(
     { 
       id: 0,
@@ -257,7 +256,6 @@
       }
     }
   );
-  // play model 2 ：旋转封面
   const player_theme_2 = ref<PlayerTheme_LyricItem>(
     { 
       id: 1,
@@ -281,7 +279,6 @@
       }
     }
   );
-  // play model 3 ：炫胶唱片
   const player_theme_3 = ref<PlayerTheme_LyricItem>(
     { 
       id: 2,
@@ -305,7 +302,6 @@
       }
     }
   );
-  // play model 4 ：专辑底图
   const player_theme_4 = ref<PlayerTheme_LyricItem>(
     { 
       id: 3,
@@ -329,7 +325,6 @@
       }
     }
   );
-  // play model 5 ：皮肤底图  :disabled
   const player_theme_5 = ref<PlayerTheme_LyricItem>(
     { 
       id: 4,
@@ -355,15 +350,15 @@
   );
   const player_theme_Styles = ref<PlayerTheme_LyricItem[]>(
     [
-      player_theme_1.value,
-      player_theme_2.value,
-      player_theme_3.value,
-      player_theme_4.value,
-      // player_theme_5.value, // :disabled
+      player_theme_1.value,// play model 1 ：方形封面
+      player_theme_2.value,// play model 2 ：旋转封面
+      player_theme_3.value,// play model 3 ：炫胶唱片
+      player_theme_4.value,// play model 4 ：专辑底图
+      // player_theme_5.value, // play model 5 ：皮肤底图  :disabled
     ]
   );
 
-  ////// player bind theme
+  ////// player bind theme_all
   const player_theme_Styles_Selected = ref<number>(0)
   const player_theme_0_bind_style = ref<PlayerTheme_LyricItem>(player_theme_Styles.value[player_theme_Styles_Selected.value]);
   const player_theme_set_theme = (index:number) => {
@@ -476,7 +471,7 @@
     }
   });
 
-  ////// player Init&Remove data
+  ////// player Init data
   onMounted(() => {
     player_album_size.value = props.player_UI_Theme.player_album_size;
     player_background_model_num.value = props.player_UI_Theme.player_background_model_num;
@@ -490,6 +485,7 @@
     
     player_theme_Styles_Selected.value = props.player_UI_Theme.player_theme_Styles_Selected;
   });
+  ////// player Remove data
   onBeforeUnmount(() => {
     clearInterval(lyrics_animation);
     clearInterval(timer_auto_hidden);
@@ -663,9 +659,9 @@
                 />
               </n-space>
             </n-space>
-            <n-space style="margin-left: 16px;margin-top: 20px;">
+            <n-space style="margin-left: 12px;margin-top: 20px;">
               <span style="font-size:16px;">歌词动效</span>
-              <n-space style="width: 260px;margin-left: 76px;margin-top: -32px;">
+              <n-space style="width: 260px;margin-left: 80px;margin-top: -32px;">
                 <n-radio
                   :checked="player_lyric_panel_checked_animation === LyricAnimation.linebyLine" value="逐行精准"
                   @click="player_lyric_panel_checked_animation = LyricAnimation.linebyLine">
@@ -790,7 +786,7 @@
                         @error="handleImageError">
                     </n-space> 
                     <!-- 3 炫胶唱片-->
-                    <div v-else-if="player_background_model_num === 2" style="margin-left:-2vh;">
+                    <div v-else-if="player_background_model_num === 2" style="margin-left:-2vh;margin-top:1.5vh;">
                       <div
                         :style="{
                           width: `calc(${player_album_size} - 16vh)`, 
@@ -844,13 +840,13 @@
                         src="../../resources/img/DotCircle.png">
                       <img
                         :style="{
-                          width: `calc(${player_album_size} - 12vh)`, 
+                          width: `calc(${player_album_size} - 4vh)`, 
                           height: `calc(${player_album_size} - 12vh)`, 
                           borderRadius: `0 calc(${player_album_size}) calc(${player_album_size}) 0`,
                           WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 75%)'
                         }"
                         style="
-                          margin-top: calc(34vh - 162px);
+                          margin-top: calc(34vh - 162px);margin-left: calc(-8vh);
                           border: 2px solid #FFFFFF20;
                           object-fit: cover;object-position: center;
                           box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
