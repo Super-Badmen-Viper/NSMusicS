@@ -12,7 +12,7 @@
     ChevronLeft16Filled,ChevronRight16Filled,
   } from '@vicons/fluent'
 
-  ////// this_app components of navie ui 
+  ////// this_view components of navie ui 
   import { ref, onMounted, h, computed, watch, onBeforeUnmount } from 'vue';
   import { type DropdownOption, NIcon,type InputInst, NImage } from 'naive-ui';
 

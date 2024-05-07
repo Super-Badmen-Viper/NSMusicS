@@ -4,7 +4,7 @@
     Heart24Regular,Heart28Filled,
   } from '@vicons/fluent'
 
-  ////// this_app components of navie ui 
+  ////// this_view components of navie ui 
   import { ref, h, onMounted } from 'vue';
   import { type DropdownOption, NIcon } from 'naive-ui';
 

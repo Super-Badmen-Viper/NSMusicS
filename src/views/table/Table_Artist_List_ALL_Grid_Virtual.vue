@@ -11,7 +11,7 @@
     ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
   } from '@vicons/fluent'
 
-  ////// this_app components of navie ui 
+  ////// this_view components of navie ui 
   import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
   import { type InputInst, NIcon } from 'naive-ui';
 
