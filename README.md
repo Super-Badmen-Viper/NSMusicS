@@ -50,22 +50,26 @@
     </tr>
   </table>
 
-## Run it using source code for NSMusicS
+## Using the source code of NSMusicS
 ```sh
 cd NSMusicS
 npm install
 ```
 ```sh
+# You need to recompile the native module better sqlite3 to allow the sqlite database to read normally
 cd NSMusicS/node_modules/better-sqlite3 
 npm install electron-rebuild -D
-# open better-sqlite3/package.json 
-# scripts addline: "rebuild": "electron-rebuild -f -w better-sqlite3" 
-npm run rebuild
+# 1.open better-sqlite3/package.json 
+# 2.scripts addline: "rebuild": "electron-rebuild -f -w better-sqlite3" 
+npm run rebuild 
 ```
 ```sh
 cd NSMusicS
-npm run dev
-npm run build-only
+npm run dev # Direct operation NSmusicS
+```
+```sh
+cd NSMusicS
+npm run build-only # Package into the current system's software package (such as exe)
 ```
 
 ## Related projects:(Thanks)
