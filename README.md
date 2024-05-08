@@ -50,22 +50,31 @@
     </tr>
   </table>
 
-## Run it using source code for NSMusicS
+## Using the source code of NSMusicS
+#### If you would like to experience the latest development progress of NSMusicS Electron:
+ - If you haven't installed Navidrome, please install and start its service, and then add your computer's music to Navidrome.
+ - Copy and replace the navidrome.db file located in the resources folder of the folder where NSMusicS Electron is installed with the navidrome installation location \ navidrome installation version \ navidrome.db.
+#### Why is it necessary to install Navidrome for this test version?：
+ - Because the library management module has not been written yet, Navidrome is temporarily borrowed to achieve this. After the official version is released, users can choose whether to be compatible with Navidrome (if compatibility is needed, Navidrome service must exist on your host).
 ```sh
 cd NSMusicS
 npm install
 ```
 ```sh
+# You need to recompile the native module better sqlite3 to allow the sqlite database to read normally
 cd NSMusicS/node_modules/better-sqlite3 
 npm install electron-rebuild -D
-# open better-sqlite3/package.json 
-# scripts addline: "rebuild": "electron-rebuild -f -w better-sqlite3" 
-npm run rebuild
+# 1.open better-sqlite3/package.json 
+# 2.scripts addline: "rebuild": "electron-rebuild -f -w better-sqlite3" 
+npm run rebuild 
 ```
 ```sh
 cd NSMusicS
-npm run dev
-npm run build-only
+npm run dev # Direct operation NSmusicS
+```
+```sh
+cd NSMusicS
+npm run build-only # Package into the current system's software package (such as exe)
 ```
 
 ## Related projects:(Thanks)
