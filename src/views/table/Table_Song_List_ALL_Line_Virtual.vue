@@ -10,18 +10,19 @@
     SaveEdit24Regular,
     Heart24Regular,Heart28Filled,
     ChevronLeft16Filled,ChevronRight16Filled,
+    Star24Filled,Star24Regular
   } from '@vicons/fluent'
 
   ////// this_view components of navie ui 
   import { ref, onMounted, h, computed, watch, onBeforeUnmount } from 'vue';
-  import { type DropdownOption, NIcon,type InputInst, NImage } from 'naive-ui';
+  import { type DropdownOption, NIcon,type InputInst,NImage } from 'naive-ui';
 
   ////// passed as argument
   const emits = defineEmits([
     'media_file_path','media_file_path_from_playlist',
     'media_file_medium_image_url',
-    'this_audio_singer_name',
-    'this_audio_song_name',
+    'this_audio_singer_name','this_audio_singer_id',
+    'this_audio_song_name','this_audio_song_id',
     'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
     'this_audio_Index_of_absolute_positioning_in_list',
     'menu_edit_this_song',
@@ -323,7 +324,9 @@
         emits('this_audio_lyrics_string', media_file.lyrics)
         emits('media_file_medium_image_url',media_file.medium_image_url)
         emits('this_audio_singer_name',media_file.artist)
+        emits('this_audio_singer_id',media_file.artist_id)
         emits('this_audio_song_name',media_file.title)
+        emits('this_audio_song_id',media_file.id)
         emits('this_audio_album_id', media_file.album_id);
         emits('this_audio_album_favite', media_file.favorite);
         emits('this_audio_album_name',media_file.album)
@@ -354,6 +357,18 @@
     show_search_area()
     click_search()
     scrollTo(0)
+  }
+  
+  ////// changed_data write to sqlite
+  const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
+    click_count = 0;
+    
+    console.log('handleItemClick_Favorite_id：'+id+'  _favorite:'+!favorite)
+  }
+  const handleItemClick_Rating = (id: any,rating: number) => {
+    click_count = 0;
+    
+    console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
   }
 
 
@@ -708,11 +723,15 @@
                   <span @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
                 </template>
               </div>
-              <div class="songlist_album">
+              <div class="songlist_album" style="margin-right: 20px;">
                 <span @click="handleItemClick_album(item.album_id)">{{ item.album }}</span>
-              </div> 
+              </div>
+              <div class="love" style="margin-left: auto;margin-right: 80px;">
+                <n-rate clearable size="small" v-model:value="item.rating" @update:value="(value: number) => handleItemClick_Rating(item.id, value)"/>
+              </div>
               <div class="love" style="margin-left: auto;">
-                <n-button circle text size="small" style="display: block;">
+                <n-button circle text size="small" style="display: block;" 
+                  @click="handleItemClick_Favorite(item.id,item.favorite);item.favorite = !item.favorite;">
                   <template #icon>
                     <n-icon v-if="item.favorite" :size="20" color="red"><Heart28Filled/></n-icon>
                     <n-icon v-else :size="20"><Heart24Regular/></n-icon>
@@ -788,7 +807,7 @@
 .songlist_title{
   margin-left: 10px;
   text-align: left;
-  width: 300px;
+  width: 260px;
   font-size: 15px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
@@ -800,7 +819,7 @@
 .songlist_artist{
   margin-left: 10px;
   text-align: left;
-  width: 240px;
+  width: 200px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
 .songlist_artist :hover{
@@ -811,7 +830,7 @@
 .songlist_album{
   margin-left: 10px;
   text-align: left;
-  width: 340px;
+  width: 260px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
 .songlist_album :hover{

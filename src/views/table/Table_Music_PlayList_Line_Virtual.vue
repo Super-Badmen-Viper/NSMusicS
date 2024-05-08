@@ -12,8 +12,8 @@
   const emits = defineEmits([
     'media_file_path','media_file_path_from_playlist',
     'media_file_medium_image_url',
-    'this_audio_singer_name',
-    'this_audio_song_name',
+    'this_audio_singer_name','this_audio_singer_id',
+    'this_audio_song_name','this_audio_song_id',
     'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
     'this_audio_Index_of_absolute_positioning_in_list',
     'menu_edit_this_song',
@@ -49,7 +49,9 @@
     emits('this_audio_lyrics_string', media_file.lyrics)
     emits('media_file_medium_image_url',media_file.medium_image_url)
     emits('this_audio_singer_name',media_file.artist)
+    emits('this_audio_singer_id',media_file.artist_id)
     emits('this_audio_song_name',media_file.title)
+    emits('this_audio_song_id',media_file.id)
     emits('this_audio_album_id', media_file.album_id);
     emits('this_audio_album_favite', media_file.favorite);
     emits('this_audio_album_name',media_file.album)
@@ -61,6 +63,18 @@
   const handleItemClick_artist = (artist:string) => {
     
   }
+
+  ////// changed_data write to sqlite
+  const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
+    console.log('handleItemClick_Favorite_id：'+id+'  _favorite:'+!favorite)
+  }
+  const handleItemClick_Rating = (id: any,rating: number) => {
+    console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
+  }
+
+  const handleImageError = (event:any) => {
+    event.target.src = '../../../resources/img/error_album.jpg'; // 设置备用图片路径
+  };
 </script>
 <template>
   <n-space vertical :size="12">
@@ -86,6 +100,7 @@
                 <img
                   :key="item.id"
                   :src="item.medium_image_url"
+                  @error="handleImageError"
                   style="width: 100%; height: 100%; object-fit: cover;"/>
               </div>
               <div class="title_playlist">
@@ -94,14 +109,6 @@
                 <template v-for="artist in item.artist.split('/')">
                   <span @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
                 </template>
-              </div>
-              <div class="love">
-                <n-button circle text size="small" style="display: block;">
-                  <template #icon>
-                    <n-icon v-if="item.favorite" :size="20" color="red"><Heart28Filled/></n-icon>
-                    <n-icon v-else :size="20"><Heart24Regular/></n-icon>
-                  </template>
-                </n-button>
               </div>
               <span class="duration_txt" style="text-align: left;font-size: 15px;">{{ item.duration_txt }}</span>
               <span class="index" style="text-align: left;font-size: 15px;">{{ index + 1 }}</span>
@@ -168,7 +175,7 @@
   color: #3DC3FF;
 }
 .duration_txt{
-  margin-left: 10px;
+  margin-left: 20px;
   text-align: left;
   width: 50px;
 }

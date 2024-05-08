@@ -31,8 +31,14 @@ function get_media_file_path_from_playlist(value: any) {
 function get_media_file_medium_image_url(value: any) {
   emits('media_file_medium_image_url',value)
 }
+function get_this_audio_singer_id(value: any) {
+  emits('this_audio_singer_id',value)
+}
 function get_this_audio_singer_name(value: any) {
   emits('this_audio_singer_name',value)
+}
+function get_this_audio_song_id(value: any) {
+  emits('this_audio_song_id',value)
 }
 function get_this_audio_song_name(value: any) {
   emits('this_audio_song_name',value)
@@ -94,8 +100,8 @@ const emits = defineEmits([
   'media_Files',
   'media_file_path','media_file_path_from_playlist',
   'media_file_medium_image_url',
-  'this_audio_singer_name',
-  'this_audio_song_name',
+  'this_audio_singer_name','this_audio_singer_id',
+  'this_audio_song_name','this_audio_song_id',
   'this_audio_album_id','this_audio_album_favite',
   'this_audio_album_favite',
   'this_audio_album_name',
@@ -178,7 +184,9 @@ const {
       @media_file_path_from_playlist="get_media_file_path_from_playlist"
       @media_file_medium_image_url="get_media_file_medium_image_url"
       @this_audio_singer_name="get_this_audio_singer_name"
+      @this_audio_singer_id="get_this_audio_singer_id"
       @this_audio_song_name="get_this_audio_song_name"
+      @this_audio_song_id="get_this_audio_song_id"
       @this_audio_album_id="get_this_audio_album_id"
       @this_audio_album_favite="get_this_audio_album_favite"
       @this_audio_album_name="get_this_audio_album_name"

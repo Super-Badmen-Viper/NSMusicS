@@ -340,6 +340,14 @@
     emits('play_this_album_song_list',album_id)
   }
 
+  ////// changed_data write to sqlite
+  const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
+    console.log('handleItemClick_Favorite_id：'+id+'  _favorite:'+!favorite)
+  }
+  const handleItemClick_Rating = (id: any,rating: number) => {
+    console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
+  }
+
   ////// view albumlist_view Remove data
   onBeforeUnmount(() => {
     stopWatching_collapsed_width()
@@ -562,7 +570,10 @@
                         <n-icon size="30"><PlayCircle24Regular/></n-icon>
                       </template>
                     </n-button>
-                    <div class="hover-buttons">
+                    <div class="hover_buttons_top">
+                      <n-rate clearable size="small" v-model:value="item.rating" @update:value="(value: number) => handleItemClick_Rating(item.id, value)"/>
+                    </div>
+                    <div class="hover_buttons_bottom">
                       <n-button 
                         class="open_this_artist"
                         quaternary circle color="#FFFFFF" @click="Open_this_album_SongList_click(item.id)">
@@ -572,7 +583,8 @@
                       </n-button>
                       <n-button 
                         class="love_this_album"
-                        quaternary circle color="#FFFFFF">
+                        quaternary circle color="#FFFFFF"
+                        @click="handleItemClick_Favorite(item.id,item.favorite);item.favorite = !item.favorite;">
                         <template #icon>
                           <n-icon v-if="item.favorite" :size="20" color="red"><Heart28Filled/></n-icon>
                           <n-icon v-else :size="20"><Heart24Regular/></n-icon>
@@ -646,7 +658,7 @@
   width: 100%;
   height: 100%;
   border-radius: 6px;
-  background: linear-gradient(to bottom, transparent, black);
+  background: #00000090;
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -659,7 +671,12 @@
   align-items: center;
   height: 100%;
 }
-.album .hover-buttons {
+.album .hover_buttons_top {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+.album .hover_buttons_bottom {
   position: absolute;
   bottom: 10px;
   right: 10px;

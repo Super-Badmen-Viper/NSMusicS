@@ -1,16 +1,39 @@
 <script setup lang="ts">
-  import { h, ref, watch, watchEffect } from 'vue';
+  ////// this_view resource of vicons_svg
+  import {
+    Heart24Regular,Heart28Filled,
+    MoreCircle32Regular,
+    ArrowRepeatAll16Regular,ArrowAutofitDown24Regular,
+    TopSpeed20Regular,DeviceEq24Filled
+  } from '@vicons/fluent'
+  import {
+    QueueMusicRound,
+    RepeatOneRound
+  } from '@vicons/material' 
+  import {
+    Play,Pause,
+    PlaySkipBack,PlaySkipForward,
+    VolumeMedium,
+  } from '@vicons/ionicons5' 
+  import {
+    Random
+  } from '@vicons/fa'
+  import { NIcon } from 'naive-ui'; 
 
-  // send this SetInfo
+  ////// this_view components of navie ui 
+  import { h, ref, watch, watchEffect } from 'vue';
   import { defineEmits } from 'vue';
-  const player_show_hight_animation_value = ref(670);
+  import { onBeforeUnmount } from 'vue';
+  const { ipcRenderer } = require('electron'); 
+
+  ////// passed as argument
   const emits = defineEmits([
     'player_show_height',
     'this_audio_restart_play',
     'this_audio_file_path','this_audio_file_medium_image_url',
     'media_file_medium_image_url',
-    'this_audio_singer_name',
-    'this_audio_song_name',
+    'this_audio_singer_name','this_audio_singer_id',
+    'this_audio_song_name','this_audio_song_id',
     'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
     'this_audio_Index_of_absolute_positioning_in_list',
     'Playlist_Show','Player_Show_Sound_effects','Player_Show_Sound_speed','Player_Show_Sound_more',
@@ -23,19 +46,15 @@
   const props = defineProps([
     'this_audio_file_path','playlist_Files_temporary',
     'this_audio_file_medium_image_url','this_audio_restart_play',
-    'this_audio_singer_name','this_audio_song_name','this_audio_album_name',
-    'this_audio_album_id','this_audio_album_favite',
+    'this_audio_singer_name','this_audio_singer_id',
+    'this_audio_song_name','this_audio_song_id',
+    'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
     'player_show_click','player_show_complete','Player_Show_Sound_effects','Player_Show_Sound_speed','Player_Show_Sound_more',
     'player','player_go_lyricline_index_of_audio_play_progress',
     'player_collapsed_action_bar_of_Immersion_model','player_show','collapsed'
   ]);
-  const { ipcRenderer } = require('electron'); 
 
-  // open view musicplayer
-  const svg_shrink_up_arrow = ref<string>('shrink_up_arrow.svg');
-  const back_display = ref('none');
-  const back_ChevronDouble = ref('../../resources/svg/'+svg_shrink_up_arrow.value)
-  const back_filter_blurValue  = ref(0);
+  //////
   const os = require('os');
   function getAssetImage(firstImage: string) {
     if(os.type() || process.platform === 'win32')
@@ -48,6 +67,14 @@
   const handleImageError = (event:any) => {
     event.target.src = '../../resources/img/error_album.jpg'; // 设置备用图片路径
   };
+  
+
+  ////// open view musicplayer
+  const player_show_hight_animation_value = ref(670);
+  const svg_shrink_up_arrow = ref<string>('shrink_up_arrow.svg');
+  const back_display = ref('none');
+  const back_ChevronDouble = ref('../../resources/svg/'+svg_shrink_up_arrow.value)
+  const back_filter_blurValue  = ref(0);
   const hover_back_img = () => {
     back_display.value = 'block';
     back_filter_blurValue.value = 3;
@@ -67,10 +94,6 @@
       else
         svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
       back_ChevronDouble.value = '../../resources/svg/'+svg_shrink_up_arrow.value;
-      
-      musicplayer_background_color.value =
-        musicplayer_background_color.value === 
-          '#FFFFFF'?'#FFFFFFE5':'#FFFFFF';
     }
   };
   let unwatch_player_show_click = watch(() => props.player_show_click, (newValue, oldValue) => {
@@ -86,21 +109,8 @@
       emits('player_show_click', false);
     }
   });
-
-  // binding
-  const musicplayer_background_color = ref('#FFFFFF');
-  const total_play_time = ref('04:42');
-  const current_play_time = ref('01:36');
-  const slider_singleValue = ref(0)
-  const player_silder_currentTime_added_value = ref(0)
-  let unwatch_player_silder_currentTime_added_value = watch(() => player_silder_currentTime_added_value.value, (newValue, oldValue) => {
-    emits('player_silder_currentTime_added_value',newValue);
-  });
-  const player_no_progress_jump = ref(true)
-  const slider_volume_value = ref(100)
-  const slider_volume_show = ref(false)
-  const slider_order_show = ref(false)
-  // audio player
+  
+  ////// audio_player
   const timer_this_audio_restart_play = ref<NodeJS.Timeout>();
   const lastTriggerValue = ref<any>(null);// 延迟触发：接收大量数据时，仅触发最后一个值
   let unwatch_this_audio_restart_play = watch(() => props.this_audio_restart_play, (newValue, oldValue) => {
@@ -207,7 +217,52 @@
       props.player.pause();
     }
   };
-  ////// play order area
+  ////// audio_player of silder
+  const total_play_time = ref('04:42');
+  const current_play_time = ref('01:36');
+  const slider_singleValue = ref(0)
+  const player_silder_currentTime_added_value = ref(0)
+  let unwatch_player_silder_currentTime_added_value = watch(() => player_silder_currentTime_added_value.value, (newValue, oldValue) => {
+    emits('player_silder_currentTime_added_value',newValue);
+  });
+  const player_no_progress_jump = ref(true)
+
+
+  ////// player player_button order area
+  const options_Order = [
+    { label: '顺序播放', key: 'playback-1', 
+      icon() {
+        return h(NIcon, null, {
+          default: () => h(ArrowAutofitDown24Regular)
+        });
+      } 
+    },
+    { label: '列表循环', key: 'playback-2', 
+      icon() {
+        return h(NIcon, null, {
+          default: () => h(ArrowRepeatAll16Regular)
+        });
+      }
+    },
+    { label: '单曲循环', key: 'playback-3', 
+      icon() {
+        return h(NIcon, null, {
+          default: () => h(RepeatOneRound)
+        });
+      }
+    },
+    { label: '随机播放', key: 'playback-4', 
+      icon() {
+        return h(NIcon, { size: '12px' }, {
+          default: () => h(Random)
+        });
+      }
+    }
+  ];
+  const handleSelect_Order = (value: any) => {
+    console.log(value);
+    play_order.value = value;
+  }
   function Play_Media_Order(model_num: string, increased: number) {
     if (props.playlist_Files_temporary.length > 0) {
       let index = props.playlist_Files_temporary.findIndex((item: any) => item.path === props.this_audio_file_path);
@@ -251,7 +306,9 @@
           emits('this_audio_lyrics_string', props.playlist_Files_temporary[index].lyrics);
           emits('this_audio_file_medium_image_url', props.playlist_Files_temporary[index].medium_image_url);
           emits('this_audio_singer_name', props.playlist_Files_temporary[index].artist);
+          emits('this_audio_singer_id', props.playlist_Files_temporary[index].artist_id);
           emits('this_audio_song_name', props.playlist_Files_temporary[index].title);
+          emits('this_audio_song_id', props.playlist_Files_temporary[index].id);
           emits('this_audio_album_id', props.playlist_Files_temporary[index].album_id);
           emits('this_audio_album_favite', props.playlist_Files_temporary[index].favite);
           emits('this_audio_album_name', props.playlist_Files_temporary[index].album);
@@ -261,7 +318,7 @@
       }
     }
   }
-  ////// player button area
+  ////// player player_button middle area
   const play_skip_back_click = () => {
     current_play_time.value = formatTime(props.player.getDuration());
     player_silder_currentTime_added_value.value = 0;
@@ -300,6 +357,25 @@
     else
       Play_Media_Order(play_order.value,1)
   };
+  ////// player player_button voice area
+  const slider_volume_value = ref(100)
+  const slider_volume_show = ref(false)
+  const backpanel_voice_click = () => {
+    if(slider_volume_show.value){
+      slider_volume_show.value = false;
+    }else{
+      slider_volume_show.value = true;
+    }
+  }
+  let unwatch_slider_volume_value = watch(
+    slider_volume_value,
+    (newValue, oldValue) => {
+      props.player.setVolume(newValue ? Number(slider_volume_value.value) : 0);
+    },
+    { immediate: true }
+  );
+
+
   ////// player slider formatTime area
   const set_slider_singleValue = () => {
     if ( player_range_duration_isDragging == false) 
@@ -379,117 +455,32 @@
     }
     player_range_duration_isDragging = false;
   };
-
-  // player voice area
-  const backpanel_voice_click = () => {
-    if(slider_volume_show.value){
-      slider_volume_show.value = false;
-    }else{
-      slider_volume_show.value = true;
-    }
-  }
-  let unwatch_slider_volume_value = watch(
-    slider_volume_value,
-    (newValue, oldValue) => {
-      props.player.setVolume(newValue ? Number(slider_volume_value.value) : 0);
-    },
-    { immediate: true }
-  );
-
-  // player order area
-  const options_Order = [
-    { label: '顺序播放', key: 'playback-1', 
-      icon() {
-        return h(NIcon, null, {
-          default: () => h(ArrowAutofitDown24Regular)
-        });
-      } 
-    },
-    { label: '列表循环', key: 'playback-2', 
-      icon() {
-        return h(NIcon, null, {
-          default: () => h(ArrowRepeatAll16Regular)
-        });
-      }
-    },
-    { label: '单曲循环', key: 'playback-3', 
-      icon() {
-        return h(NIcon, null, {
-          default: () => h(RepeatOneRound)
-        });
-      }
-    },
-    { label: '随机播放', key: 'playback-4', 
-      icon() {
-        return h(NIcon, { size: '12px' }, {
-          default: () => h(Random)
-        });
-      }
-    }
-  ];
-  const handleSelect_Order = (value: any) => {
-    console.log(value);
-    play_order.value = value;
-  }
-
-  // open playList
+  
+  ////// open playList
   const Set_Playlist_Show = () => {
     emits('Playlist_Show',true);
   }
-  // open sound effects
+  ////// open sound effects
   const Set_Player_Show_Sound_effects= () => {
     if(props.Player_Show_Sound_effects === false)
       emits('Player_Show_Sound_effects',true);
     else
       emits('Player_Show_Sound_effects',false);
   }
-  // open sound speedPlayer_Show_Sound_more
+  ////// open sound speedPlayer_Show_Sound_more
   const Set_Player_Show_Sound_speed= () => {
     if(props.Player_Show_Sound_speed === false)
       emits('Player_Show_Sound_speed',true);
     else
       emits('Player_Show_Sound_speed',false);
   }
-  // open sound more info
+  ////// open sound more info
   const Set_Player_Show_Sound_more= () => {
     if(props.Player_Show_Sound_more === false)
       emits('Player_Show_Sound_more',true);
     else
       emits('Player_Show_Sound_more',false);
   }
-
-  import { onBeforeUnmount } from 'vue';
-  onBeforeUnmount(() => {
-    clearInterval(timer);
-  });
-  onBeforeUnmount(() => {
-    unwatch_player_show_click()
-    unwatch_player_silder_currentTime_added_value()
-    unwatch_this_audio_restart_play()
-    unwatch_this_audio_buffer_file()
-    unwatch_play_go_index_time()
-    unwatch_slider_volume_value()
-    unwatch_player_collapsed()
-  });
-  import {
-    Heart24Regular,Heart28Filled,
-    MoreCircle32Regular,
-    ArrowRepeatAll16Regular,ArrowAutofitDown24Regular,
-    TopSpeed20Regular,DeviceEq24Filled
-  } from '@vicons/fluent'
-  import {
-    QueueMusicRound,
-    RepeatOneRound
-  } from '@vicons/material' 
-  import {
-    Play,Pause,
-    PlaySkipBack,PlaySkipForward,
-    VolumeMedium,
-  } from '@vicons/ionicons5' 
-  import {
-    Random
-  } from '@vicons/fa'
-  import { NIcon } from 'naive-ui';
 
   ////// auto collapse player bar
   const handleRefusetohide = () => {
@@ -505,6 +496,28 @@
     if (props.player_collapsed_action_bar_of_Immersion_model === false) {
       clearInterval(timer_auto_hidden);
     }
+  });
+
+  ////// changed_data write to sqlite
+  const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
+    console.log('handleItemClick_Favorite_id：'+id+'  _favorite:'+!favorite)
+  }
+  const handleItemClick_Rating = (id: any,rating: number) => {
+    console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
+  }
+
+  ////// view albumlist_view Remove data
+  onBeforeUnmount(() => {
+    clearInterval(timer);
+  });
+  onBeforeUnmount(() => {
+    unwatch_player_show_click()
+    unwatch_player_silder_currentTime_added_value()
+    unwatch_this_audio_restart_play()
+    unwatch_this_audio_buffer_file()
+    unwatch_play_go_index_time()
+    unwatch_slider_volume_value()
+    unwatch_player_collapsed()
   });
 </script>
 
@@ -629,7 +642,7 @@
         </n-space>   
         <div class="gird_Right_button_area">
           <n-space justify="space-between">
-            <n-button size="tiny" text>
+            <n-button size="tiny" text @click="handleItemClick_Favorite(props.this_audio_song_id,props.this_audio_album_favite);">
               <template #icon>
                 <n-icon v-if="props.this_audio_album_favite" :size="22" color="red"><Heart28Filled/></n-icon>
                 <n-icon v-else :size="22"><Heart24Regular/></n-icon>

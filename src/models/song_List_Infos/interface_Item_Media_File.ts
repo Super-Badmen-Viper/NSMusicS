@@ -1,5 +1,6 @@
 interface Media_File {
     favorite:boolean;
+    rating:number;
     duration_txt:string;
     absoluteIndex: number;
     medium_image_url:string;
