@@ -16,8 +16,6 @@ async function createWindow() {
         minHeight: 765,
         frame:false,
         resizable: true,
-
-        // 配置窗口的WebPreferences选项，用于控制渲染进程的行为
         webPreferences: {
             nodeIntegration: true, // 启用Node.js集成
             contextIsolation: false, // 上下文隔离
@@ -25,9 +23,7 @@ async function createWindow() {
         },
     })
     win.setMenu(null)
-    // 设置窗口是否可以由用户手动最大化。
     win.setMaximizable(false)
-    // 禁用水平滚动条
     win.webContents.on('did-finish-load', () => {
         // win.webContents.insertCSS(`
         // ::-webkit-scrollbar {
@@ -44,9 +40,9 @@ async function createWindow() {
         win.loadFile('index.html')
     }
     // Open the DevTools.
-    // win.webContents.openDevTools({
-    //     mode:'detach'
-    // });
+    win.webContents.openDevTools({
+        mode:'detach'
+    });
 
     const electron = require('electron')
     const ipc = electron.ipcMain
@@ -71,37 +67,8 @@ async function createWindow() {
     })
     
     ipc.handle('readFile', async (event, filePath) => {
-        return readFileSync(filePath); // read all btyes
+        return readFileSync(filePath);
     });
-    ipc.handle('readFile_Stream', async (event, filePath) => {
-        const readFileAsync = promisify(createReadStream)
-        return readFileAsync(filePath, 'utf-8');// read stream bytes
-    });
-    //
-    const createReadStreamAsync = promisify(fs.createReadStream);
-    ipc.handle('readFileStream', async (event, filePath) => {
-        // 创建可读流
-        const readStream = createReadStreamAsync(filePath);
-        // 创建一个Promise来将流中的数据转换为Buffer，并检查是否还有更多数据可用
-        const bufferPromise = new Promise((resolve, reject) => {
-            const chunks: any[] = [];
-            readStream.on('data', (chunk: any) => {
-                chunks.push(chunk);
-            });
-            readStream.on('end', () => {
-                // 将所有chunk连接起来，并创建一个Buffer
-                const buffer = Buffer.concat(chunks);
-                resolve({ buffer, hasMoreData: false });
-            });
-            readStream.on('error', (err: any) => {
-                reject(err);
-            });
-        });
-        // 等待Promise完成，返回结果对象
-        return bufferPromise;
-    });
-    
-
 
     const { app } = require('electron');
     const appPath = app.getAppPath();
@@ -110,7 +77,6 @@ async function createWindow() {
     });
 }
 
-// 等待Electron应用就绪后创建BrowserWindow窗口
 app.whenReady().then(() => {
     createWindow(); 
 

@@ -53,15 +53,6 @@ function page_songlists_get_keyword(value: any) {
 function page_songlists_get_reset_data(value: any) {
   emits('page_songlists_reset_data',value)
 }
-function get_router_select(value: any) {
-  emits('router_select',value)
-}
-function set_playlist_Files_selected(value: boolean) {
-  emits('playlist_Files_selected_set',value)
-}
-function set_playlist_Files_selected_all(value: boolean) {
-  emits('playlist_Files_selected_set_all',value)
-}
 function get_this_audio_lyrics_string(value: string) {
   emits('this_audio_lyrics_string',value)
 }
@@ -91,15 +82,13 @@ const emits = defineEmits([
   'page_songlists_options_Sort_key',
   'page_songlists_keyword',
   'page_songlists_reset_data',
-  'playlist_Files_selected_set',
-  'playlist_Files_selected_set_all',
   'page_songlists_selected',
   'this_audio_lyrics_string'
 ]);
 const { 
-  playlist_Files_temporary,playlist_Files_selected,this_audio_Index_of_absolute_positioning_in_list
+  playlist_Files_temporary,this_audio_Index_of_absolute_positioning_in_list
 } = defineProps<{
-  playlist_Files_temporary:Media_File[],playlist_Files_selected:Media_File[],this_audio_Index_of_absolute_positioning_in_list: number,
+  playlist_Files_temporary:Media_File[],this_audio_Index_of_absolute_positioning_in_list: number,
 }>();
 </script>
 
@@ -109,10 +98,6 @@ const {
       <Table_Song_List
         :data_temporary="playlist_Files_temporary"
 
-        :data_temporary_selected="playlist_Files_selected"
-        @playlist_Files_selected_set="set_playlist_Files_selected"
-        @playlist_Files_selected_set_all="set_playlist_Files_selected_all"
-        
         @this_audio_lyrics_string="get_this_audio_lyrics_string"
         @media_file_path="get_playlist_path" 
         @media_file_path_from_playlist="get_media_file_path_from_playlist"

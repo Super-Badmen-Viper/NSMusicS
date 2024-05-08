@@ -5,8 +5,8 @@
   } from '@vicons/fluent'
 
   ////// this_view components of navie ui 
-  import { ref, h, onMounted } from 'vue';
-  import { type DropdownOption, NIcon } from 'naive-ui';
+  import { ref, onMounted } from 'vue';
+  import { NIcon } from 'naive-ui';
 
   ////// passed as argument
   const emits = defineEmits([
@@ -22,13 +22,11 @@
     'options_Sort_key',
     'page_songlists_keyword',
     'page_songlists_reset_data',
-    'playlist_Files_selected_set',
-    'playlist_Files_selected_set_all',
     'page_songlists_selected',
     'this_audio_lyrics_string'
   ]);
   const props = defineProps<{
-    data_temporary: Media_File[];data_temporary_selected: Media_File[];
+    data_temporary: Media_File[];
     this_audio_Index_of_absolute_positioning_in_list: number;
   }>();
 

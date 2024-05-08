@@ -642,7 +642,7 @@
                   width="80px" height="80px" object-fit="contain"
                   style="border-radius: 8px;margin-left: 12px;margin-top: 20px;"
                   :src="getAssetImage(props.page_songlists_top_album_image_url)"
-                  @error="handleImageError"
+                  fallback-src="../../../resources/img/error_album.jpg"
                   :show-toolbar="false"
                 />
               </template>

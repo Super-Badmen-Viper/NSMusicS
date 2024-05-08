@@ -13,7 +13,7 @@
     'this_audio_song_name',
     'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
     'this_audio_Index_of_absolute_positioning_in_list',
-    'Playlist_Show','Player_Show_Sound_effects','Player_Show_Sound_speed',
+    'Playlist_Show','Player_Show_Sound_effects','Player_Show_Sound_speed','Player_Show_Sound_more',
     'player_show_click',
     'this_audio_lyrics_string',
     'player','player_silder_currentTime_added_value',
@@ -25,7 +25,7 @@
     'this_audio_file_medium_image_url','this_audio_restart_play',
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name',
     'this_audio_album_id','this_audio_album_favite',
-    'player_show_click','player_show_complete','Player_Show_Sound_effects','Player_Show_Sound_speed',
+    'player_show_click','player_show_complete','Player_Show_Sound_effects','Player_Show_Sound_speed','Player_Show_Sound_more',
     'player','player_go_lyricline_index_of_audio_play_progress',
     'player_collapsed_action_bar_of_Immersion_model','player_show','collapsed'
   ]);
@@ -443,12 +443,19 @@
     else
       emits('Player_Show_Sound_effects',false);
   }
-  // open sound speed
+  // open sound speedPlayer_Show_Sound_more
   const Set_Player_Show_Sound_speed= () => {
     if(props.Player_Show_Sound_speed === false)
       emits('Player_Show_Sound_speed',true);
     else
       emits('Player_Show_Sound_speed',false);
+  }
+  // open sound more info
+  const Set_Player_Show_Sound_more= () => {
+    if(props.Player_Show_Sound_more === false)
+      emits('Player_Show_Sound_more',true);
+    else
+      emits('Player_Show_Sound_more',false);
   }
 
   import { onBeforeUnmount } from 'vue';
@@ -628,7 +635,7 @@
                 <n-icon v-else :size="22"><Heart24Regular/></n-icon>
               </template>
             </n-button>
-            <n-button size="tiny" text>
+            <n-button size="tiny" text @click="Set_Player_Show_Sound_more">
               <template #icon>
                 <n-icon :size="22"><MoreCircle32Regular/></n-icon>
               </template>

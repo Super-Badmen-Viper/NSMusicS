@@ -29,3 +29,5 @@ coverage
 
 *.tsbuildinfo
 /release
+resources/nsmusics.db-shm
+resources/nsmusics.db-wal

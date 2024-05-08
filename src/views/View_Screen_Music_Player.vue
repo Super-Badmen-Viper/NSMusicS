@@ -203,9 +203,6 @@
   let player_ui_theme = new Player_UI_Theme();
   const player_collapsed_album = ref(false);
   const player_collapsed_skin = ref(true)
-  const player_album_size = ref('54vh')
-  const player_album_radius = ref('10px')
-  const player_album_info_textAlign_left = ref(true)
   const player_lyric_fontSize = ref('22px')
   const player_lyric_fontWeight = ref('800')
   const player_lyric_color = ref('#FAFAFB60')
@@ -213,14 +210,11 @@
   type PlayerTheme_Style = {
     image_url: any;
 
-    size:any;
-    radius: any;
     textAlign: any;
 
     color:any;
     fontSize: any;
     fontWeight: any;
-    maxHeight: any;
     player_collapsed_album: any;
     player_collapsed_skin: any;
   };
@@ -240,14 +234,11 @@
       normalStyle: {
         image_url: '../../resources/img/player_theme_1.png',
 
-        size: '54vh',
-        radius: '10px',
         textAlign: true,
 
         color: '#FAFAFB60',
         fontSize: '22px',
         fontWeight:'800',
-        maxHeight: '100vh',
         player_collapsed_album: false,
         player_collapsed_skin: true,
       },
@@ -263,14 +254,11 @@
       normalStyle: {
         image_url: '../../resources/img/player_theme_2.png',
 
-        size: '54vh',
-        radius: '27vh',
         textAlign: false,
 
         color: '#FAFAFB60',
         fontSize: '22px',
         fontWeight:'800',
-        maxHeight: '100vh',
         player_collapsed_album: false,
         player_collapsed_skin: true,
       },
@@ -286,14 +274,11 @@
       normalStyle: {
         image_url: '../../resources/img/player_theme_3.png',
 
-        size: '54vh',
-        radius: '27vh',
         textAlign: true,
 
         color: '#FAFAFB60',
         fontSize: '22px',
         fontWeight:'800',
-        maxHeight: '100vh',
         player_collapsed_album: false,
         player_collapsed_skin: true,
       },
@@ -309,14 +294,11 @@
       normalStyle: {
         image_url: '../../resources/img/player_theme_4.png',
 
-        size: '54vh',
-        radius: '10px',
         textAlign: false,
 
         color: '#FAFAFB60',
         fontSize: '22px',
         fontWeight:'800',
-        maxHeight: '100vh',
         player_collapsed_album: true,
         player_collapsed_skin: true,
       },
@@ -332,14 +314,11 @@
       normalStyle: {
         image_url: '../../resources/img/player_theme_3.png',
 
-        size: '54vh',
-        radius: '10px',
         textAlign: false,
 
         color: '#FAFAFB60',
         fontSize: '22px',
         fontWeight:'800',
-        maxHeight: '100vh',
         player_collapsed_album: true,
         player_collapsed_skin: false,
       },
@@ -369,10 +348,7 @@
     player_theme_0_bind_style.value = player_theme_Styles.value[index];
     //
     player_theme_Styles_Selected.value = index;
-    player_album_size.value = player_theme_0_bind_style.value.normalStyle.size;
     player_background_model_num.value = player_theme_0_bind_style.value.id;
-    player_album_radius.value = player_theme_0_bind_style.value.normalStyle.radius;
-    player_album_info_textAlign_left.value = player_theme_0_bind_style.value.normalStyle.textAlign;
     player_lyric_fontSize.value = player_theme_0_bind_style.value.normalStyle.fontSize;
     player_lyric_fontWeight.value = player_theme_0_bind_style.value.normalStyle.fontWeight;
     player_lyric_color.value = player_theme_0_bind_style.value.normalStyle.color;
@@ -380,10 +356,7 @@
     player_collapsed_skin.value = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin;
 
     player_ui_theme.player_theme_Styles_Selected.value = index;
-    player_ui_theme.player_album_size.value = player_theme_0_bind_style.value.normalStyle.size;
     player_ui_theme.player_background_model_num.value = player_theme_0_bind_style.value.id;
-    player_ui_theme.player_album_radius.value = player_theme_0_bind_style.value.normalStyle.radius;
-    player_ui_theme.player_album_info_textAlign_left.value = player_theme_0_bind_style.value.normalStyle.textAlign;
     player_ui_theme.player_lyric_fontSize.value = player_theme_0_bind_style.value.normalStyle.fontSize;
     player_ui_theme.player_lyric_fontWeight.value = player_theme_0_bind_style.value.normalStyle.fontWeight;
     player_ui_theme.player_lyric_color.value = player_theme_0_bind_style.value.normalStyle.color;
@@ -471,18 +444,14 @@
     }
   });
 
-  ////// player Init data
+  ////// Load player Configs
   onMounted(() => {
-    player_album_size.value = props.player_UI_Theme.player_album_size;
     player_background_model_num.value = props.player_UI_Theme.player_background_model_num;
-    player_album_radius.value = props.player_UI_Theme.player_album_radius;
-    player_album_info_textAlign_left.value = props.player_UI_Theme.player_album_info_textAlign_left;
     player_lyric_fontSize.value = props.player_UI_Theme.player_lyric_fontSize;
     player_lyric_fontWeight.value = props.player_UI_Theme.player_lyric_fontWeight;
     player_lyric_color.value = props.player_UI_Theme.player_lyric_color;
     player_collapsed_album.value = props.player_UI_Theme.player_collapsed_album;
     player_collapsed_skin.value = props.player_UI_Theme.player_collapsed_skin;
-    
     player_theme_Styles_Selected.value = props.player_UI_Theme.player_theme_Styles_Selected;
   });
   ////// player Remove data
@@ -497,6 +466,7 @@
 
 <template>
   <div style="overflow: hidden;" @mousemove="handleMouseMove" @click="handleMouseMove">
+    <!-- background area -->
     <div>
       <!--Album-->
       <img
@@ -520,6 +490,7 @@
         :src="getAssetImage(props.this_audio_file_medium_image_url)"
         @error="handleImageError">
     </div>
+    <!-- drwaer right area -->
     <n-config-provider :theme="darkTheme">
       <!-- right drwaer of Player_theme -->
       <n-drawer 
@@ -686,6 +657,7 @@
     <!-- body -->
     <n-space vertical :size="12" style="z-index: 99;overflow: hidden;">
       <n-space vertical>
+        <!-- top bar -->
         <n-flex 
           justify="space-between" 
           style="transition: margin 0.4s;"
@@ -743,14 +715,15 @@
             </div>
           </n-flex>
         </n-flex>
+        <!-- middle area -->
         <n-config-provider :theme="null">
           <n-flex 
             justify="center" 
             style="transition: margin 0.4s;"
             :style="{ marginTop: player_collapsed_action_bar_of_Immersion_model ? '70px' : '0px' }">
             <n-layout has-sider style="background-color: transparent;">
-              <!-- Album 
-                show-trigger="bar" calc(50vw + 27vh + 8vw) :show-collapsed-content="false"-->
+              <!-- left area --><!-- Album Cover -->
+              <!-- show-trigger="bar" calc(50vw + 27vh + 8vw) :show-collapsed-content="false"-->
               <n-layout-sider 
                 :collapsed="player_collapsed_album" 
                 @collapse="
@@ -765,19 +738,16 @@
                 collapsed-width="30vw" width="53vw"
                 style="background-color: transparent;">
                 <n-space vertical align="end" style="margin-right:6vw;">
-                  <n-space vertical>
-                    <!-- 2 旋转封面-->
-                    <n-space v-if="player_background_model_num === 1" style="margin-bottom: 2vh;">
+                  <!-- 2 旋转封面-->
+                  <n-space vertical v-if="player_background_model_num === 1">
+                    <n-space style="margin-bottom: 2vh;">
                       <img
                         class="animate__rotate_slower"
-                        :style="{
-                          width: `calc(${player_album_size} - 16vh)`, 
-                          height: `calc(${player_album_size} - 16vh)`, 
-                          borderRadius: player_album_radius,
-                        }"
                         style="
+                          width: calc(54vh - 16vh);height: calc(54vh - 16vh);
                           margin-top: calc(36vh - 162px);margin-left: calc(9vh);
                           border: 1.5px solid #FFFFFF20;
+                          border-radius: 27vh;
                           object-fit: cover;object-position: center;
                           filter: blur(0px);
                           box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
@@ -785,19 +755,32 @@
                         :src="getAssetImage(props.this_audio_file_medium_image_url)"
                         @error="handleImageError">
                     </n-space> 
-                    <!-- 3 炫胶唱片-->
-                    <div v-else-if="player_background_model_num === 2" style="margin-left:-2vh;margin-top:1.5vh;">
+                    <div
+                      style="
+                        width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;
+                        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+                        text-align: center;">
+                      {{ props.this_audio_song_name }}
+                    </div>
+                    <div
+                      style="
+                        width: 54vh;margin-left: 2px;margin-top: -10px;color: #989292;font-weight: 550;font-size: 18px;
+                        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+                        text-align: center;">
+                      {{ props.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
+                    </div>
+                  </n-space>
+                  <!-- 3 炫胶唱片-->
+                  <n-space vertical v-else-if="player_background_model_num === 2">
+                    <div style="margin-left:0vh;margin-top:1vh;">
                       <div
-                        :style="{
-                          width: `calc(${player_album_size} - 16vh)`, 
-                          height: `calc(${player_album_size} - 16vh)`, 
-                          marginLeft: `calc(${player_album_size} - 31.5vh) `,
-                          borderRadius: player_album_radius,
-                          WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 75%)'
-                        }"
                         style="
-                          margin-top: calc(36vh - 162px);
+                          width: calc(54vh - 16vh); 
+                          height: calc(54vh - 16vh);
+                          margin-top: calc(36vh - 162px);margin-left: calc(54vh - 31.5vh);
+                          WebkitMask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 75%);
                           border: 1.5px solid #FFFFFF20;
+                          border-radius: 27vh;
                           object-fit: cover;object-position: center;
                           filter: blur(0px);
                           box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
@@ -807,15 +790,12 @@
                       </div>
                       <img
                         class="animate__rotate_fast"
-                        :style="{
-                          width: `calc(${player_album_size} - 30vh)`, 
-                          height: `calc(${player_album_size} - 30vh)`, 
-                          marginLeft: `calc(${player_album_size} - 24.5vh) `,
-                          borderRadius: player_album_radius,
-                        }"
                         style="
+                          width: calc(54vh - 30vh);height: calc(54vh - 30vh);
+                          margin-left: calc(54vh - 24.5vh);
                           margin-top: calc(43vh - 162px);
                           border: 1.5px solid #FFFFFF20;
+                          border-radius: 27vh;
                           object-fit: cover;object-position: center;
                           filter: blur(0px);
                           box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
@@ -823,31 +803,14 @@
                         "
                         :src="getAssetImage(props.this_audio_file_medium_image_url)"
                         @error="handleImageError">
+                      
                       <img
-                        :style="{
-                          width: `calc(${player_album_size} - 50vh)`, 
-                          height: `calc(${player_album_size} - 50vh)`, 
-                          marginLeft: `calc(${player_album_size} - 14.5vh) `,
-                          borderRadius: player_album_radius,
-                        }"
                         style="
-                          margin-top: calc(53vh - 162px);
-                          border: 10px solid #DCDBDD20;
-                          object-fit: cover;object-position: center;
-                          filter: blur(0px);
-                          position: absolute;
-                        "
-                        src="../../resources/img/DotCircle.png">
-                      <img
-                        :style="{
-                          width: `calc(${player_album_size} - 4vh)`, 
-                          height: `calc(${player_album_size} - 12vh)`, 
-                          borderRadius: `0 calc(${player_album_size}) calc(${player_album_size}) 0`,
-                          WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 75%)'
-                        }"
-                        style="
-                          margin-top: calc(34vh - 162px);margin-left: calc(-8vh);
+                          width: calc(54vh - 12vh);height: calc(54vh - 12vh);
+                          WebkitMask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 75%);
+                          margin-top: calc(34vh - 162px);
                           border: 2px solid #FFFFFF20;
+                          border-radius: 10px;
                           object-fit: cover;object-position: center;
                           box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
                           filter: blur(0px);
@@ -855,49 +818,67 @@
                         :src="getAssetImage(props.this_audio_file_medium_image_url)"
                         @error="handleImageError">
                       </img>
+                      <img
+                        style="
+                          width: calc(54vh - 50vh);
+                          height: calc(54vh - 50vh);
+                          margin-Left: calc(-2vh);
+                          margin-top: calc(53vh - 162px);
+                          border: 10px solid #DCDBDD20;
+                          border-radius: 27vh;
+                          object-fit: cover;object-position: center;
+                          filter: blur(0px);
+                          position: absolute;
+                        "
+                        src="../../resources/img/DotCircle.png">
                     </div>
-                    <!-- 1 方形封面-->
-                    <img
-                      v-else
-                      :style="{
-                        width: player_album_size, 
-                        height: player_album_size, 
-                        borderRadius: player_album_radius,
-                      }"
+                    <div
                       style="
+                        width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;
+                        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+                        text-align: left;">
+                      {{ props.this_audio_song_name }}
+                    </div>
+                    <div
+                      style="
+                        width: 54vh;margin-left: 2px;margin-top: -10px;color: #989292;font-weight: 550;font-size: 18px;
+                        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+                        text-align: left;">
+                      {{ props.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
+                    </div>
+                  </n-space>
+                  <!-- 1 方形封面-->
+                  <n-space vertical v-else>
+                    <img
+                      style="
+                        width: 54vh;height: 54vh;
                         margin-top: calc(28vh - 162px);
                         border: 1.5px solid #FFFFFF20;
+                        border-radius: 10px;
                         object-fit: cover;object-position: center;
                         filter: blur(0px);
                         box-shadow: 16px 16px 16px rgba(0, 0, 0, 0.20), 0px 0px 16px rgba(0, 0, 0, 0.20);
                       "
                       :src="getAssetImage(props.this_audio_file_medium_image_url)"
                       @error="handleImageError">
-
                     <div
-                      :style="{width: player_album_size,textAlign: player_album_info_textAlign_left ? 'left' : 'center',}"
                       style="
-                        margin-left: 2px;
-                        color: #E7E5E5;
-                        font-weight: 900;font-size: 26px;
+                        width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
-                      ">
+                        text-align: left;">
                       {{ props.this_audio_song_name }}
                     </div>
                     <div
-                      :style="{width: player_album_size,textAlign: player_album_info_textAlign_left ? 'left' : 'center',}"
                       style="
-                        margin-left: 2px;margin-top: -10px;
-                        color: #989292;
-                        font-weight: 550;font-size: 18px;
+                        width: 54vh;margin-left: 2px;margin-top: -10px;color: #989292;font-weight: 550;font-size: 18px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
-                      ">
+                        text-align: left;">
                       {{ props.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
                     </div>
                   </n-space>
                 </n-space>
               </n-layout-sider>
-              <!-- Lyic -->
+              <!-- right area --><!-- Lyics Lines List -->
               <n-layout-content
                 style="background-color: transparent;margin-left:2vw;">
                 <div 
