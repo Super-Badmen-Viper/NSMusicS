@@ -13,8 +13,8 @@
     'media_file_path','media_file_path_from_playlist',
     'media_file_medium_image_url',
     'this_audio_singer_name','this_audio_singer_id',
-    'this_audio_song_name','this_audio_song_id',
-    'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
+    'this_audio_song_name','this_audio_song_id','this_audio_song_rating','this_audio_song_favorite',
+    'this_audio_album_name','this_audio_album_id',
     'this_audio_Index_of_absolute_positioning_in_list',
     'menu_edit_this_song',
     'menu_add_this_song',
@@ -52,8 +52,9 @@
     emits('this_audio_singer_id',media_file.artist_id)
     emits('this_audio_song_name',media_file.title)
     emits('this_audio_song_id',media_file.id)
+    emits('this_audio_song_rating',media_file.rating)
+    emits('this_audio_song_favorite',media_file.favorite)
     emits('this_audio_album_id', media_file.album_id);
-    emits('this_audio_album_favite', media_file.favorite);
     emits('this_audio_album_name',media_file.album)
     emits('this_audio_Index_of_absolute_positioning_in_list', index); 
   }

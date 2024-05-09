@@ -30,7 +30,8 @@
     "increase-memory-limit": "^1.0.7",
     "moment": "^2.30.1",
     "prebuild-install": "^7.1.1",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "vue-virtual-scroller": "^2.0.0-beta.8",

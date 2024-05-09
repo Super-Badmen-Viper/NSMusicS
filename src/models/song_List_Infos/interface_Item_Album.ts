@@ -1,5 +1,7 @@
 interface Album {
     favorite:boolean;
+    rating:number;
+    
     absoluteIndex: number;
     title:string;
     album_title:string;

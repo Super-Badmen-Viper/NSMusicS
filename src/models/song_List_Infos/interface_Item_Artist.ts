@@ -1,5 +1,6 @@
 interface Artist {
     favorite:boolean;
+    rating:number;
 
     id: string;
     name: string;

@@ -228,6 +228,7 @@
     this_audio_restart_play.value = value;
     console.log('this_audio_restart_play：'+value)
   }
+  //
   const this_audio_singer_name = ref<string>('Xiang Cheng')
   function get_this_audio_singer_name(value: any) {
     this_audio_singer_name.value = value
@@ -238,6 +239,16 @@
     this_audio_singer_id.value = value
     console.log('this_audio_singer_id：'+value)
   }
+  const this_audio_singer_rating = ref<number>(0)
+  function get_this_audio_singer_rating(value: any) {
+    this_audio_singer_rating.value = value
+    console.log('this_audio_singer_rating：'+value)
+  }
+  const this_audio_singer_favorite = ref<number>(0)
+  function get_this_audio_singer_favorite(value: any) {
+    this_audio_singer_favorite.value = value
+    console.log('this_audio_singer_favorite：'+value)
+  }
   const this_audio_song_name = ref<string>('NSMusicS')
   function get_this_audio_song_name(value: any) {
     this_audio_song_name.value = value
@@ -247,6 +258,16 @@
   function get_this_audio_song_id(value: any) {
     this_audio_song_id.value = value
     console.log('this_audio_song_id：'+value)
+  }
+  const this_audio_song_rating = ref<number>(0)
+  function get_this_audio_song_rating(value: any) {
+    this_audio_song_rating.value = value
+    console.log('this_audio_song_rating：'+value)
+  }
+  const this_audio_song_favorite = ref<number>(0)
+  function get_this_audio_song_favorite(value: any) {
+    this_audio_song_favorite.value = value
+    console.log('this_audio_song_favorite：'+value)
   }
   const this_audio_album_name = ref<string>('A local music software that is expected to support multiple platforms with AI capabilities and multimodal features.')
   function get_this_audio_album_name(value: any) {
@@ -264,11 +285,17 @@
     page_albumlists_top_album_id.value = value;
     page_artistlists_top_artist_id.value = value;
   }
-  const this_audio_album_favite = ref<string>('')
-  function get_this_audio_album_favite(value: any) {
-    this_audio_album_favite.value = value
-    console.log('this_audio_album_favite：'+value)
+  const this_audio_album_rating = ref<string>('') // album model
+  function get_this_audio_album_rating(value: any) {
+    this_audio_album_rating.value = value
+    console.log('this_audio_album_rating：'+value)
   }
+  const this_audio_album_favorite = ref<string>('') // album model
+  function get_this_audio_album_favorite(value: any) {
+    this_audio_album_favorite.value = value
+    console.log('this_audio_album_favorite：'+value)
+  }
+  //
   const this_audio_Index_of_absolute_positioning_in_list = ref<number>(-1)
   function get_this_audio_Index_of_absolute_positioning_in_list(value: any) {
     this_audio_Index_of_absolute_positioning_in_list.value = value
@@ -325,6 +352,7 @@
     }
     console.log('media_Files_selected：'+value)
   }
+
   ////// player lyric_info
   const this_audio_lyrics_string = ref<string>('')
   const this_audio_lyrics_info_line = ref<string[]>([])
@@ -358,6 +386,7 @@
     //
     // console.log('this_audio_lyrics：'+value)
   }
+
   ////// this_app audio(Media) Class
   let player = new Audio_howler();
   const player_silder_currentTime_added_value = ref(0);
@@ -613,31 +642,16 @@
             page_songlists_get_keyword_model_num.value = 0;
           }
         }
-        stmt_media_file_string = `
-          SELECT id, title, artist,artist_id, album,album_id, duration, path ,lyrics
-          FROM media_file 
-          ${keywordFilter}
-          ORDER BY ${sortKey} ${sortOrder}
-        `;
+        stmt_media_file_string = `SELECT * FROM media_file ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
         stmt_media_file = db.prepare(stmt_media_file_string);
         try{ // if stmt_media_file is empty, then try to find artist_id or album_id
           if(stmt_media_file.get() === undefined){
             keywordFilter = `WHERE artist_id = '${page_songlists_keyword.value}'`
-            stmt_media_file_string = `
-              SELECT id, title, artist,artist_id, album,album_id, duration, path ,lyrics
-              FROM media_file 
-              ${keywordFilter}
-              ORDER BY ${sortKey} ${sortOrder}
-            `;
+            stmt_media_file_string = `SELECT * FROM media_file ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
             stmt_media_file = db.prepare(stmt_media_file_string);
             if(stmt_media_file.get() === undefined){
               keywordFilter = `WHERE album_id = '${page_songlists_keyword.value}'`
-              stmt_media_file_string = `
-                SELECT id, title, artist,artist_id, album,album_id, duration, path ,lyrics
-                FROM media_file 
-                ${keywordFilter}
-                ORDER BY ${sortKey} ${sortOrder}
-              `;
+              stmt_media_file_string = `SELECT * FROM media_file ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
               stmt_media_file = db.prepare(stmt_media_file_string);
             }
           }
@@ -1106,7 +1120,7 @@
       get_this_audio_singer_name(playlist_Files_temporary.value[0].artist)
       get_this_audio_song_name(playlist_Files_temporary.value[0].title)
       get_this_audio_album_id(playlist_Files_temporary.value[0].album_id)
-      get_this_audio_album_favite(playlist_Files_temporary.value[0].favorite)
+      get_this_audio_album_favorite(playlist_Files_temporary.value[0].favorite)
       get_this_audio_album_name(playlist_Files_temporary.value[0].album)
       get_this_audio_Index_of_absolute_positioning_in_list(playlist_Files_temporary.value[0].absoluteIndex)
     }
@@ -1444,7 +1458,7 @@
       get_this_audio_singer_name(playlist_Files_temporary.value[0].artist)
       get_this_audio_song_name(playlist_Files_temporary.value[0].title)
       get_this_audio_album_id(playlist_Files_temporary.value[0].album_id)
-      get_this_audio_album_favite(playlist_Files_temporary.value[0].favorite)
+      get_this_audio_album_favorite(playlist_Files_temporary.value[0].favorite)
       get_this_audio_album_name(playlist_Files_temporary.value[0].album)
       get_this_audio_Index_of_absolute_positioning_in_list(playlist_Files_temporary.value[0].absoluteIndex)
     }
@@ -1771,7 +1785,7 @@
     this_audio_song_name.value = ''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_song_name']
     this_audio_album_name.value = ''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_album_name']
     this_audio_album_id.value = ''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_album_id']
-    this_audio_album_favite.value = ''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_album_favite']
+    this_audio_album_favorite.value = ''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_album_favorite']
     this_audio_Index_of_absolute_positioning_in_list.value = Number(''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_Index_of_absolute_positioning_in_list'])
     //
     page_songlists_top_album_image_url.value = ''+system_Configs.player_Configs_of_Audio_Info.value['page_songlists_top_album_image_url']
@@ -1791,9 +1805,11 @@
   });
 </script>
 <template>
+  <!-- App Bady View-->
   <n-config-provider class="this_App" :theme="theme">
     <n-message-provider class="this_App">
       <n-layout has-sider class="this_App">
+        <!--Left Router_Menu-->
         <n-layout-sider
           class="n_layout_sider"
           show-trigger="bar"
@@ -1811,7 +1827,9 @@
             :collapsed-icon-size="22"
             :options="menuOptions"/>
         </n-layout-sider>
+        <!--Right Router_View-->
         <n-layout embedded style="height: calc(100vh);">
+          <!--Media View-->
           <RouterView
             class="view_show"
             v-if="router_select_model_media"
@@ -1831,11 +1849,12 @@
             @media_file_path="media_file_path"
             @media_file_path_from_playlist="get_this_audio_file_path_from_playlist"
             @media_file_medium_image_url="get_media_file_medium_image_url"
-            @this_audio_album_favite="get_this_audio_album_favite"
             @this_audio_singer_name="get_this_audio_singer_name"
             @this_audio_singer_id="get_this_audio_singer_id"
             @this_audio_song_name="get_this_audio_song_name"
             @this_audio_song_id="get_this_audio_song_id"
+            @this_audio_song_rating="get_this_audio_song_rating"
+            @this_audio_song_favorite="get_this_audio_song_favorite"
             :this_audio_album_name="this_audio_album_name"
             @this_audio_album_name="get_this_audio_album_name"
             @this_audio_album_id="get_this_audio_album_id"
@@ -1864,6 +1883,7 @@
           >
           
           </RouterView>
+          <!--Album View-->
           <RouterView
             class="view_show"
             v-else-if="router_select_model_album"
@@ -1903,6 +1923,7 @@
           >
 
           </RouterView>
+          <!--Artist View-->
           <RouterView
             class="view_show"
             v-else-if="router_select_model_artist"
@@ -1941,6 +1962,7 @@
           >
           
           </RouterView>
+          <!--Top Bar-->
           <div class="bar_top_setapp" :style="{ backgroundColor: theme_bar_top_setapp }">
             <section  
               style="
@@ -1981,6 +2003,7 @@
       </n-layout>
     </n-message-provider>
   </n-config-provider>
+  <!-- bottom PlayerBar and PlayerView -->
   <n-config-provider :theme="theme_app">
     <!-- n-card can change Bar_Music_Player(text color) -->
     <n-card
@@ -2010,8 +2033,7 @@
         @this_audio_file_medium_image_url="get_media_file_medium_image_url"
         :this_audio_restart_play="this_audio_restart_play"
         @this_audio_restart_play="get_this_audio_restart_play"
-        :this_audio_album_favite="this_audio_album_favite"
-        @this_audio_album_favite="get_this_audio_album_favite"
+        
         :this_audio_singer_name="this_audio_singer_name"
         @this_audio_singer_name="get_this_audio_singer_name"
         :this_audio_singer_id="this_audio_singer_id"
@@ -2020,6 +2042,10 @@
         @this_audio_song_name="get_this_audio_song_name"
         :this_audio_song_id="this_audio_song_id"
         @this_audio_song_id="get_this_audio_song_id"
+        :this_audio_song_rating="this_audio_song_rating"
+        @this_audio_song_rating="get_this_audio_song_rating"
+        :this_audio_song_favorite="this_audio_song_favorite"
+        @this_audio_song_favorite="get_this_audio_song_favorite"
         :this_audio_album_name="this_audio_album_name"
         @this_audio_album_name="get_this_audio_album_name"
         :this_audio_album_id="this_audio_album_id"
@@ -2065,7 +2091,7 @@
       :this_audio_singer_name="this_audio_singer_name"
       :this_audio_song_name="this_audio_song_name"
       :this_audio_album_id="this_audio_album_id"
-      :this_audio_album_favite="this_audio_album_favite"
+      :this_audio_album_favorite="this_audio_album_favorite"
       :this_audio_album_name="this_audio_album_name"
       
       @player_show_click="get_playerview_to_close_playerview"
@@ -2094,13 +2120,24 @@
             @media_file_path="media_file_path"
             @media_file_path_from_playlist="get_this_audio_file_path_from_playlist"
             @media_file_medium_image_url="get_media_file_medium_image_url"
+
             @this_audio_singer_name="get_this_audio_singer_name"
             @this_audio_singer_id="get_this_audio_singer_id"
+            :this_audio_singer_rating="this_audio_singer_rating"
+            @this_audio_singer_rating="get_this_audio_singer_rating"
+            :this_audio_singer_favorite="this_audio_singer_favorite"
+            @this_audio_singer_favorite="get_this_audio_singer_favorite"
             @this_audio_song_name="get_this_audio_song_name"
             @this_audio_song_id="get_this_audio_song_id"
-            @this_audio_album_id="get_this_audio_album_id"
-            @this_audio_album_favite="get_this_audio_album_favite"
+            @this_audio_song_rating="get_this_audio_song_rating"
+            @this_audio_song_favorite="get_this_audio_song_favorite"
             @this_audio_album_name="get_this_audio_album_name"
+            @this_audio_album_id="get_this_audio_album_id"
+            :this_audio_album_rating="this_audio_album_rating"
+            @this_audio_album_rating="get_this_audio_album_rating"
+            :this_audio_album_favorite="this_audio_album_favorite"
+            @this_audio_album_favorite="get_this_audio_album_favorite"
+            
             :this_audio_Index_of_absolute_positioning_in_list="this_audio_Index_of_absolute_positioning_in_list"
             @this_audio_Index_of_absolute_positioning_in_list="get_this_audio_Index_of_absolute_positioning_in_list"
 
@@ -2176,65 +2213,58 @@
     </n-drawer>
   </n-config-provider>
 </template>
-
 <style scoped>
-/*Auto：当min-width < 512px*/
-
-/*当min-width >= 512px*/
-@media screen and (min-width: 512px) {
-  .this_App {
-    width: 100vw;
-    height: 100vh;
-    position: fixed; /* 将定位方式改为 fixed */
-    top: 0;
-    left: 0;
-    overflow: hidden; /* 隐藏溢出内容，防止出现滚动条 */
-  }
-  .n_layout_sider {
-    padding-top: 60px;
-    border: 0px;
-  }
-  .view_show {
-    width: calc(100vw - 100px);
-    height: calc(100vh - 200px);
-
-    margin-top: 70px;
-    margin-left: 30px;
-  }
-  .view_music_player{
-    width: 100vw;
-    z-index: 10;
-    position: fixed;bottom: 0;left: 0;
-    transition: height 0.2s;
-  }
-  .bar_top_setapp{
-    width: 100vw;
-    height: 60px;
-
-    z-index: 1;
-
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-
-    -webkit-app-region: drag;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-
-    background-color: #00000000;
-  }
-  nav {
-    text-align: center;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.this_App {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
 }
+.n_layout_sider {
+  padding-top: 60px;
+  border: 0px;
+}
+.view_show {
+  width: calc(100vw - 100px);
+  height: calc(100vh - 200px);
 
+  margin-top: 70px;
+  margin-left: 30px;
+}
+.view_music_player{
+  width: 100vw;
+  z-index: 10;
+  position: fixed;bottom: 0;left: 0;
+  transition: height 0.2s;
+}
+.bar_top_setapp{
+  width: 100vw;
+  height: 60px;
+
+  z-index: 1;
+
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  -webkit-app-region: drag;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  background-color: #00000000;
+}
+nav {
+  text-align: center;
+  margin-left: -1rem;
+  font-size: 1rem;
+
+  padding: 1rem 0;
+  margin-top: 1rem;
+}
 ::-webkit-scrollbar {
   display: none;
 }

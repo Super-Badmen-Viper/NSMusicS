@@ -7,9 +7,10 @@ const defaultValues_player_Configs_of_Audio_Info: Record<string, any> = {
     this_audio_singer_id: '',
     this_audio_song_name: '',
     this_audio_song_id: '',
+    this_audio_song_rating: '',
+    this_audio_song_favorite: '',
     this_audio_album_name: '',
     this_audio_album_id: '',
-    this_audio_album_favite: '',
     this_audio_Index_of_absolute_positioning_in_list: null,
 
     page_songlists_top_album_image_url: '',

@@ -25,7 +25,7 @@
   import { defineEmits } from 'vue';
   import { onBeforeUnmount } from 'vue';
   const { ipcRenderer } = require('electron'); 
-
+  
   ////// passed as argument
   const emits = defineEmits([
     'player_show_height',
@@ -33,8 +33,8 @@
     'this_audio_file_path','this_audio_file_medium_image_url',
     'media_file_medium_image_url',
     'this_audio_singer_name','this_audio_singer_id',
-    'this_audio_song_name','this_audio_song_id',
-    'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
+    'this_audio_song_name','this_audio_song_id','this_audio_song_rating','this_audio_song_favorite',
+    'this_audio_album_name','this_audio_album_id',
     'this_audio_Index_of_absolute_positioning_in_list',
     'Playlist_Show','Player_Show_Sound_effects','Player_Show_Sound_speed','Player_Show_Sound_more',
     'player_show_click',
@@ -47,8 +47,8 @@
     'this_audio_file_path','playlist_Files_temporary',
     'this_audio_file_medium_image_url','this_audio_restart_play',
     'this_audio_singer_name','this_audio_singer_id',
-    'this_audio_song_name','this_audio_song_id',
-    'this_audio_album_name','this_audio_album_id','this_audio_album_favite',
+    'this_audio_song_name','this_audio_song_id','this_audio_song_rating','this_audio_song_favorite',
+    'this_audio_album_name','this_audio_album_id',
     'player_show_click','player_show_complete','Player_Show_Sound_effects','Player_Show_Sound_speed','Player_Show_Sound_more',
     'player','player_go_lyricline_index_of_audio_play_progress',
     'player_collapsed_action_bar_of_Immersion_model','player_show','collapsed'
@@ -309,8 +309,9 @@
           emits('this_audio_singer_id', props.playlist_Files_temporary[index].artist_id);
           emits('this_audio_song_name', props.playlist_Files_temporary[index].title);
           emits('this_audio_song_id', props.playlist_Files_temporary[index].id);
+          emits('this_audio_song_rating', props.playlist_Files_temporary[index].rating);
+          emits('this_audio_song_favorite', props.playlist_Files_temporary[index].favorite);
           emits('this_audio_album_id', props.playlist_Files_temporary[index].album_id);
-          emits('this_audio_album_favite', props.playlist_Files_temporary[index].favite);
           emits('this_audio_album_name', props.playlist_Files_temporary[index].album);
           emits('this_audio_Index_of_absolute_positioning_in_list',index)
           console.log(props.playlist_Files_temporary[index]);
@@ -642,9 +643,10 @@
         </n-space>   
         <div class="gird_Right_button_area">
           <n-space justify="space-between">
-            <n-button size="tiny" text @click="handleItemClick_Favorite(props.this_audio_song_id,props.this_audio_album_favite);">
+            <n-rate clearable size="small" v-model:value="props.this_audio_song_rating" @update:value="(value: number) => handleItemClick_Rating(props.this_audio_song_id, value)"/>
+            <n-button size="tiny" text @click="handleItemClick_Favorite(props.this_audio_song_id,props.this_audio_song_favorite);">
               <template #icon>
-                <n-icon v-if="props.this_audio_album_favite" :size="22" color="red"><Heart28Filled/></n-icon>
+                <n-icon v-if="props.this_audio_song_favorite" :size="22" color="red"><Heart28Filled/></n-icon>
                 <n-icon v-else :size="22"><Heart24Regular/></n-icon>
               </template>
             </n-button>
@@ -669,8 +671,6 @@
     </div>
   </n-space>
 </template>
-
-
 <style>
 .this_Bar_Music_Player {
   position: fixed;
@@ -809,7 +809,7 @@
   user-select: none;
 }
 .gird_Right .gird_Right_button_area{
-  width: 50px;
+  width: 105px;
   height: 80px;
   float: right;
   margin-top: 16px;
