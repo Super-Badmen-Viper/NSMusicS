@@ -21,17 +21,34 @@
   import { NIcon } from 'naive-ui'; 
 
   ////// this_view components of navie ui 
-  import { h, ref, watch, watchEffect } from 'vue';
+  import { h, onMounted, ref, watch, watchEffect } from 'vue';
   import { defineEmits } from 'vue';
   import { onBeforeUnmount } from 'vue';
   const { ipcRenderer } = require('electron'); 
-  
+
+  import lottie from 'lottie-web'
+  let animationInstance:any = null;
+  onMounted(() => {
+    const animationContainer = document.querySelector('#lottie');
+    if (animationContainer) {
+      animationInstance = lottie.loadAnimation({
+        container: animationContainer,
+        path: '../../resources/lottie_json/Animation - 1715318278722.json',
+        loop: true,
+        autoplay: false,
+        name: 'HomeBanner'
+      });
+    }
+  });
+
+
   ////// passed as argument
   const emits = defineEmits([
     'player_show_height',
     'this_audio_restart_play',
     'this_audio_file_path','this_audio_file_medium_image_url',
     'media_file_medium_image_url',
+    'page_songlists_keyword',
     'this_audio_singer_name','this_audio_singer_id',
     'this_audio_song_name','this_audio_song_id','this_audio_song_rating','this_audio_song_favorite',
     'this_audio_album_name','this_audio_album_id',
@@ -39,7 +56,7 @@
     'Playlist_Show','Player_Show_Sound_effects','Player_Show_Sound_speed','Player_Show_Sound_more',
     'player_show_click',
     'this_audio_lyrics_string',
-    'player','player_silder_currentTime_added_value',
+    'player','this_audio_is_playing','player_silder_currentTime_added_value',
     'player_collapsed_action_bar_of_Immersion_model'
   ]);
   import { defineProps} from 'vue';
@@ -155,15 +172,19 @@
           volume: 1.0,
           onplay: () => {
             props.player.isPlaying = true;
+            emits('this_audio_is_playing',true)
           },
           onpause: () => {
             props.player.isPlaying = false;
+            emits('this_audio_is_playing',false)
           },
           onstop: () => {
             props.player.isPlaying = false;
+            emits('this_audio_is_playing',false)
           },
           onend: () => {
             props.player.isPlaying = false;
+            emits('this_audio_is_playing',false)
             //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
             if(player_no_progress_jump.value == true){
               current_play_time.value = formatTime(props.player.getDuration());
@@ -174,6 +195,7 @@
               player_no_progress_jump.value = false;
 
               props.player.isPlaying = false;
+              emits('this_audio_is_playing',false)
               is_play_ended.value = true;
             }
             Play_Media_Switching()
@@ -181,6 +203,7 @@
           onloaderror: (id: any, error: any) => {
             console.error('Failed to load audio:', error);
             props.player.isPlaying = false;
+            emits('this_audio_is_playing',false)
             //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
             if(player_no_progress_jump.value == true){
               current_play_time.value = formatTime(props.player.getDuration());
@@ -191,30 +214,39 @@
               player_no_progress_jump.value = false;
 
               props.player.isPlaying = false;
+              emits('this_audio_is_playing',false)
               is_play_ended.value = true;
             }
             Play_Media_Switching()
           }
         });
         props.player.isPlaying = true;
+        emits('this_audio_is_playing',true)
         is_play_ended.value = false;
         player_no_progress_jump.value = true;
         clearInterval(timer);
         timer = setInterval(synchronize_playback_time, 200);
         total_play_time.value = formatTime(props.player.getDuration());
         props.player.play();
+        animationInstance.play();
       }, 400);
     }
   });
   const Init_Audio_Player = async () => {
-    if(props.player.isPlaying === false){
-      if(this_audio_buffer_file.value === null){
-        this_audio_buffer_file.value = Math.random().toString(36).substring(7);
+    if(props.this_audio_file_path.length > 0){
+      if(props.player.isPlaying === false){
+        if(this_audio_buffer_file.value === null){
+          this_audio_buffer_file.value = Math.random().toString(36).substring(7);
+        }else{
+          props.player.play();
+          animationInstance.play();
+          emits('this_audio_is_playing',true)
+        }
       }else{
-        props.player.play();
+        props.player.pause();
+        animationInstance.pause();
+        emits('this_audio_is_playing',false)
       }
-    }else{
-      props.player.pause();
     }
   };
   ////// audio_player of silder
@@ -500,11 +532,50 @@
   });
 
   ////// changed_data write to sqlite
+  import {Set_MediaInfo_To_LocalSqlite} from '../../src/models/data_Change_For_Sqlite/class_Set_MediaInfo_To_LocalSqlite'
+  let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
-    console.log('handleItemClick_Favorite_id：'+id+'  _favorite:'+!favorite)
+    set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id,favorite)
+    emits('this_audio_song_favorite',!favorite)
   }
   const handleItemClick_Rating = (id: any,rating: number) => {
-    console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
+    set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id,rating)
+    emits('this_audio_song_rating',rating)
+  }
+
+  /////// emits audio_info of songlist_view_list
+  const handleItemClick_title = (title:string) => {
+    emits('page_songlists_keyword',title)
+
+    player_show_hight_animation_value.value = 670;
+    emits('player_show_height',player_show_hight_animation_value.value);
+    if(player_show_hight_animation_value.value === 0)
+      svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
+    else
+      svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
+    back_ChevronDouble.value = '../../resources/svg/'+svg_shrink_up_arrow.value;
+  }
+  const handleItemClick_artist = (artist:string) => {
+    emits('page_songlists_keyword',artist+'accurate_search'+'__artist__')
+    
+    player_show_hight_animation_value.value = 670;
+    emits('player_show_height',player_show_hight_animation_value.value);
+    if(player_show_hight_animation_value.value === 0)
+      svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
+    else
+      svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
+    back_ChevronDouble.value = '../../resources/svg/'+svg_shrink_up_arrow.value;
+  }
+  const handleItemClick_album = (album:string) => {
+    emits('page_songlists_keyword',album+'accurate_search'+'__album__')
+    
+    player_show_hight_animation_value.value = 670;
+    emits('player_show_height',player_show_hight_animation_value.value);
+    if(player_show_hight_animation_value.value === 0)
+      svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
+    else
+      svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
+    back_ChevronDouble.value = '../../resources/svg/'+svg_shrink_up_arrow.value;
   }
 
   ////// view albumlist_view Remove data
@@ -551,14 +622,16 @@
         <div class="bar_left_text_song_info">
           <n-space>
             <n-ellipsis>
-              <span id="bar_song_name">{{ props.this_audio_song_name + '&nbsp-&nbsp' }}</span>
+              <span id="bar_song_name" @click="handleItemClick_title(props.this_audio_song_name)">{{ props.this_audio_song_name + '&nbsp-&nbsp' }}</span>
               <template v-for="artist in props.this_audio_singer_name.split(/[\/|｜]/)">
-                <span id="bar_singer_name_part">{{ artist + '&nbsp' }}</span>
+                <span id="bar_singer_name_part" @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
               </template>
             </n-ellipsis>
           </n-space>
           <n-space>
-            <n-ellipsis id="bar_album_name">{{ props.this_audio_album_name }}</n-ellipsis>
+            <n-ellipsis>
+              <span id="bar_album_name" @click="handleItemClick_album(props.this_audio_album_id)">{{ props.this_audio_album_name }}</span>
+            </n-ellipsis>
           </n-space>
         </div>
       </div>
@@ -636,7 +709,7 @@
           <n-badge :value="props.playlist_Files_temporary.length" show-zero :max="9999" :offset="[-7, 3]">
             <n-button strong secondary class="gird_Right_current_playlist_button_area_of_button" @click="Set_Playlist_Show">
               <template #icon>
-                <n-icon :size="42"><QueueMusicRound/></n-icon>
+                <!-- <n-icon :size="42"><QueueMusicRound/></n-icon> -->
               </template>
             </n-button>
           </n-badge>
@@ -668,6 +741,14 @@
           </n-space>
         </div>
       </div>
+    </div>
+
+    <div id="lottie" 
+      style="
+        position: absolute;bottom:14px;right:36px;
+        width:50px;height:50px;  
+      ">
+    
     </div>
   </n-space>
 </template>

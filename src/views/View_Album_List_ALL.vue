@@ -46,7 +46,7 @@ const {
   app_left_menu_collapsed,
   window_innerWidth,
 
-  change_page_header_color,page_albumlists_top_album_image_url,page_albumlists_top_album_name,page_albumlists_top_album_id,
+  change_page_header_color,page_top_album_image_url,page_top_album_name,page_top_album_id,
   page_albumlists,page_albumlists_options,page_albumlists_statistic,
   page_albumlists_selected,
 
@@ -57,7 +57,7 @@ const {
   app_left_menu_collapsed:boolean,
   window_innerWidth:number,
 
-  change_page_header_color:boolean,page_albumlists_top_album_image_url:string,page_albumlists_top_album_name:string,page_albumlists_top_album_id:string,
+  change_page_header_color:boolean,page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
   page_albumlists:Play_List[],page_albumlists_options:{label: string;value: string}[],page_albumlists_statistic:{label: string;album_count: number;id: string;}[],
   page_albumlists_selected:string;
 
@@ -82,9 +82,9 @@ const {
       @router_history_model_of_Album_scroll="get_router_history_model_of_Album_scroll"
 
       :change_page_header_color="change_page_header_color"
-      :page_albumlists_top_album_image_url="page_albumlists_top_album_image_url"
-      :page_albumlists_top_album_id="page_albumlists_top_album_id"
-      :page_albumlists_top_album_name="page_albumlists_top_album_name"
+      :page_top_album_image_url="page_top_album_image_url"
+      :page_top_album_id="page_top_album_id"
+      :page_top_album_name="page_top_album_name"
       :page_albumlists_options="page_albumlists_options"
       :page_albumlists_statistic="page_albumlists_statistic"
       :page_albumlists="page_albumlists"

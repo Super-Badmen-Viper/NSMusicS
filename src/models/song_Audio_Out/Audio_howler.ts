@@ -15,16 +15,19 @@ export class Audio_howler {
     play() {
         if (this.howl) {
             this.howl.play();
+            this.isPlaying = true;
         }
     }
     pause() {
         if (this.howl) {
             this.howl.pause();
+            this.isPlaying = false;
         }
     }
     stop() {
         if (this.howl) {
             this.howl.stop();
+            this.isPlaying = false;
         }
     }
     getDuration(): number {

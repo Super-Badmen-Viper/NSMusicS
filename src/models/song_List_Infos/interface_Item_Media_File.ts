@@ -5,6 +5,7 @@ interface Media_File {
     absoluteIndex: number;
     medium_image_url:string;
     selected:boolean;
+    playing:boolean;
 
     id: string;
     path: string;

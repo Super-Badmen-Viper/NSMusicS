@@ -73,6 +73,22 @@
     console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
   }
 
+  ////// 
+  import lottie from 'lottie-web'
+  let animationInstances: any[] = [];
+  onMounted(() => {
+    const animationContainers = document.querySelectorAll('.lottie_pkay_inlist');
+    animationInstances = Array.from(animationContainers).map(container => {
+      return lottie.loadAnimation({
+        container,
+        path: '../../../resources/lottie_json/Animation - 1715318278722.json',
+        loop: true,
+        autoplay: true,
+        name: 'lottie_pkay_inlist'
+      });
+    });
+  });
+
   const handleImageError = (event:any) => {
     event.target.src = '../../../resources/img/error_album.jpg'; // 设置备用图片路径
   };
@@ -93,6 +109,13 @@
             class="message"
             @Dblclick="handleItemDbClick(item,index)">
             <div class="media_info">
+              <div class="lottie_pkay_inlist" v-show="item.playing"
+                style="
+                  position: absolute;bottom:14px;right:36px;
+                  width:50px;height:50px;  
+                ">
+              
+              </div>
               <div 
                 style="margin-left: 10px;
                   width: 58px;height: 58px; 

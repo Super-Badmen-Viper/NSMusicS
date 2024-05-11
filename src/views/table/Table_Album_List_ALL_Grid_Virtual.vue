@@ -26,7 +26,7 @@
   const props = defineProps<{
     data_temporary: Album[];
 
-    change_page_header_color:boolean,page_albumlists_top_album_image_url:string,page_albumlists_top_album_name:string,page_albumlists_top_album_id:string,
+    change_page_header_color:boolean,page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
     page_albumlists:Play_List[],page_albumlists_options:{label: string;value: string}[],page_albumlists_statistic:{label: string;album_count: number;id: string;}[],
     page_albumlists_selected:string;
 
@@ -260,6 +260,23 @@
       }
     }
   }
+  // lineItems Filter To Favorite
+  const options_Filter = ref([
+    {
+      label: '收藏专辑',
+      key: 'filter_favorite',
+      icon() {
+        return h(NIcon, null, {
+          default: () => h(Heart28Filled)
+        });
+      }
+    }
+  ])
+  const options_Filter_handleSelect = (key: string | number) => {
+    emits('page_albumlists_selected','album_list_love')
+    console.log('selected_value_for_albumlistall：'+'album_list_love');
+    breadcrumbItems.value = props.page_albumlists_options.find(option => option.value === 'album_list_love')?.label || '';
+  }
 
   ////// scrollbar of albumlist_view
   const scrollbar = ref(null as any);
@@ -281,11 +298,10 @@
       }
     }
   )
-  const this_audio_Index_of_absolute_positioning_in_list = ref<number>(0)
   const scrollTo = (value :number) => {
     if (scrollbar !== null) {
       setTimeout(() => {
-        scrollbar.value.scrollToItem(value - (12 + Math.floor((window.innerHeight - 765) / 75)));// 1000:15，690:11  75 
+        scrollbar.value.scrollToItem(value - (20 + Math.floor((window.innerHeight - 765) / 220)));// 220
       }, 100);
     }
   }
@@ -342,11 +358,13 @@
   }
 
   ////// changed_data write to sqlite
+  import {Set_AlbumInfo_To_LocalSqlite} from '../../../src/models/data_Change_For_Sqlite/class_Set_AlbumInfo_To_LocalSqlite'
+  let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
-    console.log('handleItemClick_Favorite_id：'+id+'  _favorite:'+!favorite)
+    set_AlbumInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id,favorite)
   }
   const handleItemClick_Rating = (id: any,rating: number) => {
-    console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
+    set_AlbumInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id,rating)
   }
 
   ////// view albumlist_view Remove data
@@ -384,17 +402,12 @@
       </n-button>
       <n-input-group 
         v-if="bool_show_search_area"
-        :style="{ width: '200px' }">
+        style="width: 160px;">
         <n-input 
-          :style="{ width: '160px' }" 
+          style="width: 160px;" 
           ref="input_search_InstRef" 
           v-model:value="input_search_Value"
           @keydown.enter="click_search"/>
-        <n-button type="primary" ghost @click="click_search">
-          <template #icon>
-            <n-icon :size="20"><Search20Filled/></n-icon>
-          </template>
-        </n-button>
       </n-input-group>
       
       <n-dropdown 
@@ -409,7 +422,7 @@
 
       <n-dropdown 
         trigger="click" :show-arrow="true" 
-        :options="options_Sort" @select="handleSelect_Sort">
+        :options="options_Filter" @select="options_Filter_handleSelect">
         <n-button quaternary circle size="medium" style="margin-left:4px">
           <template #icon>
             <n-icon :size="20"><Filter20Filled/></n-icon>
@@ -456,7 +469,7 @@
                   margin-left: 200px; margin-top: -300px;
                   object-fit: cover;object-position: center;
                 "
-                :src="getAssetImage(props.page_albumlists_top_album_image_url)"
+                :src="getAssetImage(props.page_top_album_image_url)"
                 @error="handleImageError"
               />
             </div>
@@ -528,7 +541,7 @@
                   style="
                     border-radius: 6px;border: 1.5px solid #FFFFFF20;
                     margin-left: 12px;margin-top: 20px;"
-                  :src="getAssetImage(props.page_albumlists_top_album_image_url)"
+                  :src="getAssetImage(props.page_top_album_image_url)"
                   fallback-src="../../../resources/img/error_album.jpg"
                   :show-toolbar="false"
                 />
@@ -541,13 +554,13 @@
                   margin-left: 430px;margin-top: -20px;
                   text-align: left;
                   height: 40px;font-weight: 900;">
-                  <n-button text @click="handleItemClick_album(props.page_albumlists_top_album_id)">
+                  <n-button text @click="handleItemClick_album(props.page_top_album_id)">
                     <n-ellipsis 
                       style="
                         max-width: 256px;height: 40px;
                         text-align: left;font-size: 24px;
                         font-weight: 900;">
-                      {{ props.page_albumlists_top_album_name }}
+                      {{ props.page_top_album_name }}
                     </n-ellipsis>
                   </n-button>
                 </div>

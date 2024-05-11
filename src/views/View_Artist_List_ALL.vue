@@ -47,7 +47,7 @@ const {
   app_left_menu_collapsed,
   window_innerWidth,
 
-  change_page_header_color,page_artistlists_top_artist_image_url,page_artistlists_top_artist_name,page_artistlists_top_artist_id,
+  change_page_header_color,page_top_album_image_url,page_top_album_name,page_top_album_id,
   page_artistlists,page_artistlists_options,page_artistlists_statistic,
   page_artistlists_selected,
 
@@ -61,7 +61,7 @@ const {
   app_left_menu_collapsed:boolean,
   window_innerWidth:number,
 
-  change_page_header_color:boolean,page_artistlists_top_artist_image_url:string,page_artistlists_top_artist_name:string,page_artistlists_top_artist_id:string,
+  change_page_header_color:boolean,page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
   page_artistlists:Play_List[],page_artistlists_options:{label: string;value: string}[],page_artistlists_statistic:{label: string;artist_count: number;id: string;}[],
   page_artistlists_selected:string;
     
@@ -88,9 +88,9 @@ const {
       @router_history_model_of_Artist_scroll="get_router_history_model_of_Artist_scroll"
 
       :change_page_header_color="change_page_header_color"
-      :page_artistlists_top_artist_image_url="page_artistlists_top_artist_image_url"
-      :page_artistlists_top_artist_id="page_artistlists_top_artist_id"
-      :page_artistlists_top_artist_name="page_artistlists_top_artist_name"
+      :page_top_album_image_url="page_top_album_image_url"
+      :page_top_album_id="page_top_album_id"
+      :page_top_album_name="page_top_album_name"
       :page_artistlists_options="page_artistlists_options"
       :page_artistlists_statistic="page_artistlists_statistic"
       :page_artistlists="page_artistlists"

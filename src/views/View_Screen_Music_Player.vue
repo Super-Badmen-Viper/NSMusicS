@@ -58,7 +58,7 @@
     'this_audio_file_medium_image_url','this_audio_restart_play',
     'this_audio_singer_name','this_audio_song_name','this_audio_album_name',
     'this_audio_lyrics_string','this_audio_lyrics_info_line','this_audio_lyrics_info_time',
-    'player','player_silder_currentTime_added_value',
+    'player','this_audio_is_playing','player_silder_currentTime_added_value',
     'player_show_complete','this_audio_lyrics_info_line_num',
     'player_collapsed_action_bar_of_Immersion_model',
     'player_UI_Theme'
@@ -355,6 +355,8 @@
     player_collapsed_album.value = player_theme_0_bind_style.value.normalStyle.player_collapsed_album;
     player_collapsed_skin.value = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin;
 
+    player_lyric_panel_fontsize.value = Number(player_lyric_fontSize.value.replace('px',''));
+
     player_ui_theme.player_theme_Styles_Selected.value = index;
     player_ui_theme.player_background_model_num.value = player_theme_0_bind_style.value.id;
     player_ui_theme.player_lyric_fontSize.value = player_theme_0_bind_style.value.normalStyle.fontSize;
@@ -444,6 +446,29 @@
     }
   });
 
+  ////// Animation lottie Load
+  import lottie from 'lottie-web'
+  let animationInstance_model_1_spectrum:any = null;
+  let animationInstance_model_1_wave:any = null;
+  let animationInstance_model_2_wave:any = null;
+  let unwatch_animationInstance = watch(() => props.this_audio_is_playing, (newValue, oldValue) => {
+    if (newValue === true) {
+      if (player_background_model_num.value === 1){
+        animationInstance_model_1_spectrum.play();
+        animationInstance_model_1_wave.play();
+      }
+      if (player_background_model_num.value === 2)
+        animationInstance_model_2_wave.play();
+    } else {
+      if (player_background_model_num.value === 1){
+        animationInstance_model_1_spectrum.pause();
+        animationInstance_model_1_wave.pause();
+      }
+      if (player_background_model_num.value === 2)
+        animationInstance_model_2_wave.pause();
+    }
+  });
+
   ////// Load player Configs
   onMounted(() => {
     player_background_model_num.value = props.player_UI_Theme.player_background_model_num;
@@ -453,12 +478,53 @@
     player_collapsed_album.value = props.player_UI_Theme.player_collapsed_album;
     player_collapsed_skin.value = props.player_UI_Theme.player_collapsed_skin;
     player_theme_Styles_Selected.value = props.player_UI_Theme.player_theme_Styles_Selected;
+    //
+    player_lyric_panel_fontsize.value = Number(player_lyric_fontSize.value.replace('px',''));
+
+    /// animation
+    const animationContainer_model_1 = document.querySelector('#lottie_model_1_spectrum');
+    if (animationContainer_model_1) {
+      animationInstance_model_1_spectrum = lottie.loadAnimation({
+        container: animationContainer_model_1,
+        path: '../../resources/lottie_json/Animation - 1715392202806.json',
+        loop: true,
+        autoplay: false,
+        name: 'lottie_model_1_spectrum'
+      });
+      if(props.this_audio_is_playing)
+        animationInstance_model_1_spectrum.play();
+    }
+    const animationContainer_model_3 = document.querySelector('#lottie_model_1_wave');
+    if (animationContainer_model_3) {
+      animationInstance_model_1_wave = lottie.loadAnimation({
+        container: animationContainer_model_3,
+        path: '../../resources/lottie_json/Animation - 1715417974362.json',
+        loop: true,
+        autoplay: false,
+        name: 'lottie_model_1_wave'
+      });
+      if(props.this_audio_is_playing)
+        animationInstance_model_1_wave.play();
+    }
+    const animationContainer_model_2 = document.querySelector('#lottie_model_2_wave');
+    if (animationContainer_model_2) {
+      animationInstance_model_2_wave = lottie.loadAnimation({
+        container: animationContainer_model_2,
+        path: '../../resources/lottie_json/Animation - 1715417974362.json',
+        loop: true,
+        autoplay: false,
+        name: 'lottie_model_2_wave'
+      });
+      if(props.this_audio_is_playing)
+        animationInstance_model_2_wave.play();
+    }
   });
   ////// player Remove data
   onBeforeUnmount(() => {
     clearInterval(lyrics_animation);
     clearInterval(timer_auto_hidden);
     unwatch();
+    unwatch_animationInstance();
     unwatch_player_collapsed();
     emits('player_collapsed_action_bar_of_Immersion_model', false);
   });
@@ -532,8 +598,8 @@
                 </n-space>
               </n-radio>
             </n-radio-group>
-            <n-space style="margin-left: 12px;margin-top: 16px;">
-              <span style="font-size:16px;">字体设置</span>
+            <n-space style="margin-left: 12px;margin-top: 16px;" v-if="false">
+              <span style="font-size:16px;">歌词字体</span>
               <n-space>
                 <n-button text style="font-size: 24px;margin-top: 2px;">
                   <n-icon>
@@ -550,7 +616,7 @@
               </n-space> 
             </n-space>
             <n-space style="margin-left: 12px;margin-top: 20px;">
-              <span style="font-size:16px;">字号设置</span>
+              <span style="font-size:16px;">歌词字号</span>
               <n-space>
                 <n-button text style="font-size: 24px;margin-top: 2px;">
                   <n-icon>
@@ -571,7 +637,7 @@
                 />
               </n-space>
             </n-space>
-            <n-space style="margin-left: 12px;margin-top: 24px;">
+            <n-space style="margin-left: 12px;margin-top: 24px;" v-if="false">
               <span style="font-size:16px;">歌词颜色</span>
               <n-space>
                 <n-button text style="font-size: 24px">
@@ -600,7 +666,7 @@
                 </n-button>
               </n-space>
             </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;">
+            <n-space style="margin-left: 12px;margin-top: 20px;" v-if="false">
               <span style="font-size:16px;">歌词行距</span>
               <n-space>
                 <n-button text style="font-size: 24px;margin-top: 2px;">
@@ -738,11 +804,31 @@
                 collapsed-width="30vw" width="53vw"
                 style="background-color: transparent;">
                 <n-space vertical align="end" style="margin-right:6vw;">
+                  <!-- 0->4 Animation -->
+                  <div
+                    id="lottie_model_1_wave" v-show="player_background_model_num === 1"
+                    style="
+                      width: calc(60vh); 
+                      height: calc(60vh);
+                      margin-top: calc(25vh - 146px);margin-left: calc(-56.2vh);
+                      position: absolute;
+                    ">
+                  </div>
+                  <div
+                    id="lottie_model_2_wave" v-show="player_background_model_num === 2"
+                    style="
+                      width: calc(56vh); 
+                      height: calc(56vh);
+                      margin-top: calc(27vh - 154px);margin-left: calc(-40.8vh);
+                      position: absolute;
+                    ">
+                  </div> 
                   <!-- 2 旋转封面-->
                   <n-space vertical v-if="player_background_model_num === 1">
-                    <n-space style="margin-bottom: 2vh;">
+                    <n-space>
                       <img
                         class="animate__rotate_slower"
+                        :class="{ 'animate__rotate_slower_paused': !props.this_audio_is_playing }"
                         style="
                           width: calc(54vh - 16vh);height: calc(54vh - 16vh);
                           margin-top: calc(36vh - 162px);margin-left: calc(9vh);
@@ -772,13 +858,12 @@
                   </n-space>
                   <!-- 3 炫胶唱片-->
                   <n-space vertical v-else-if="player_background_model_num === 2">
-                    <div style="margin-left:0vh;margin-top:1vh;">
+                    <div style="margin-left:0vh;margin-top:0vh;">
                       <div
                         style="
                           width: calc(54vh - 16vh); 
                           height: calc(54vh - 16vh);
                           margin-top: calc(36vh - 162px);margin-left: calc(54vh - 31.5vh);
-                          WebkitMask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 75%);
                           border: 1.5px solid #FFFFFF20;
                           border-radius: 27vh;
                           object-fit: cover;object-position: center;
@@ -790,6 +875,7 @@
                       </div>
                       <img
                         class="animate__rotate_fast"
+                        :class="{ 'animate__rotate_fast_paused': !props.this_audio_is_playing }"
                         style="
                           width: calc(54vh - 30vh);height: calc(54vh - 30vh);
                           margin-left: calc(54vh - 24.5vh);
@@ -803,11 +889,10 @@
                         "
                         :src="getAssetImage(props.this_audio_file_medium_image_url)"
                         @error="handleImageError">
-                      
                       <img
                         style="
                           width: calc(54vh - 12vh);height: calc(54vh - 12vh);
-                          WebkitMask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 75%);
+                          WebkitMask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 25%);
                           margin-top: calc(34vh - 162px);
                           border: 2px solid #FFFFFF20;
                           border-radius: 10px;
@@ -876,6 +961,9 @@
                       {{ props.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
                     </div>
                   </n-space>
+                  <div id="lottie_model_1_spectrum" style="width: 54vh;height:40px;" v-show="player_background_model_num === 1">
+                  
+                  </div>
                 </n-space>
               </n-layout-sider>
               <!-- right area --><!-- Lyics Lines List -->
@@ -957,9 +1045,17 @@
 
 .animate__rotate_slower {
   animation: rotate 60s linear infinite;
+  animation-play-state: running;
+}
+.animate__rotate_slower_paused {
+  animation-play-state: paused;
 }
 .animate__rotate_fast {
   animation: rotate 26s linear infinite;
+  animation-play-state: running;
+}
+.animate__rotate_fast_paused {
+  animation-play-state: paused;
 }
 @keyframes rotate {
   from {

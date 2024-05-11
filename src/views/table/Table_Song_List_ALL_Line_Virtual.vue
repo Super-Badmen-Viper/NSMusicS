@@ -41,7 +41,7 @@
   const props = defineProps<{
     data_temporary: Media_File[];data_temporary_selected: Media_File[];
 
-    change_page_header_color: boolean;page_songlists_top_album_image_url:string;page_songlists_top_album_name:string;page_songlists_top_album_id:string;
+    change_page_header_color: boolean;page_top_album_image_url:string;page_top_album_name:string;page_top_album_id:string;
     page_songlists:Play_List[];page_songlists_options:{label: string;value: string}[];page_songlists_statistic:{label: string;song_count: number;id: string;}[];
     page_songlists_selected:string;
 
@@ -260,6 +260,23 @@
       bool_input_search = false
     }
   });
+  // lineItems Filter To Favorite
+  const options_Filter = ref([
+    {
+      label: '收藏歌曲',
+      key: 'filter_favorite',
+      icon() {
+        return h(NIcon, null, {
+          default: () => h(Heart28Filled)
+        });
+      }
+    }
+  ])
+  const options_Filter_handleSelect = (key: string | number) => {
+    emits('page_songlists_selected','song_list_love')
+    console.log('selected_value_for_songlistall：'+'song_list_love');
+    breadcrumbItems.value = props.page_songlists_options.find(option => option.value === 'song_list_love')?.label || '';
+  }
 
   ////// scrollbar of artistlist_view
   const scrollbar = ref(null as any);
@@ -361,7 +378,7 @@
   }
   
   ////// changed_data write to sqlite
-  import {Set_MediaInfo_To_LocalSqlite} from '../../../src/models/data_Change_For_Sqlite/Set_MediaInfo_To_LocalSqlite'
+  import {Set_MediaInfo_To_LocalSqlite} from '../../../src/models/data_Change_For_Sqlite/class_Set_MediaInfo_To_LocalSqlite'
   let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     click_count = 0;
@@ -371,7 +388,6 @@
     click_count = 0;
     set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id,rating)
   }
-
 
   ////// bulk_operation and select_line
   const click_select_SongList_ALL_Line = () => {
@@ -496,17 +512,12 @@
       </n-button>
       <n-input-group 
         v-if="bool_show_search_area"
-        :style="{ width: '200px' }">
+        style="width: 160px;">
         <n-input 
-          :style="{ width: '160px' }" 
+          style="width: 160px;"
           ref="input_search_InstRef" 
           v-model:value="input_search_Value"
           @keydown.enter="click_search"/>
-        <n-button quaternary circle size="medium" style="margin-left:4px" @click="click_search">
-          <template #icon>
-            <n-icon :size="20" :depth="2"><Search20Filled/></n-icon>
-          </template>
-        </n-button>
       </n-input-group>
       
       <n-dropdown 
@@ -521,10 +532,10 @@
 
       <n-dropdown 
         trigger="click" :show-arrow="true" 
-        :options="options_Sort" @select="handleSelect_Sort">
+        :options="options_Filter" @select="options_Filter_handleSelect">
         <n-button quaternary circle size="medium" style="margin-left:4px">
           <template #icon>
-            <n-icon :size="20" :depth="2"><Filter20Filled/></n-icon>
+            <n-icon :size="20"><Filter20Filled/></n-icon>
           </template>
         </n-button>
       </n-dropdown>
@@ -590,7 +601,7 @@
                   margin-left: 200px; margin-top: -300px;
                   object-fit: cover;object-position: center;
                 "
-                :src="getAssetImage(props.page_songlists_top_album_image_url)"
+                :src="getAssetImage(props.page_top_album_image_url)"
                 @error="handleImageError"
               />
             </div>
@@ -665,7 +676,7 @@
                   style="
                     border-radius: 6px;border: 1.5px solid #FFFFFF20;
                     margin-left: 12px;margin-top: 20px;"
-                  :src="getAssetImage(props.page_songlists_top_album_image_url)"
+                  :src="getAssetImage(props.page_top_album_image_url)"
                   fallback-src="../../../resources/img/error_album.jpg"
                   :show-toolbar="false"
                 />
@@ -678,13 +689,13 @@
                   margin-left: 430px;margin-top: -20px;
                   text-align: left;
                   height: 40px;font-weight: 900;">
-                  <n-button text @click="handleItemClick_album(props.page_songlists_top_album_id)">
+                  <n-button text @click="handleItemClick_album(props.page_top_album_id)">
                     <n-ellipsis 
                       style="
                         max-width: 256px;height: 40px;
                         text-align: left;font-size: 24px;
                         font-weight: 900;">
-                      {{ props.page_songlists_top_album_name }}
+                      {{ props.page_top_album_name }}
                     </n-ellipsis>
                   </n-button>
                 </div>
@@ -887,4 +898,4 @@
   background-color: #88888850;
   border-radius: 6px;
 }
-</style>
+</style>../../models/data_Change_For_Sqlite/class_Set_MediaInfo_To_LocalSqlite
