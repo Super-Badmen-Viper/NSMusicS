@@ -8,7 +8,5 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import VueVirtualScroller from 'vue-virtual-scroller'
 app.use(VueVirtualScroller)
 
-import 'animate.css';
-
 app.use(router)
 app.mount('#app')

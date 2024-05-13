@@ -30,9 +30,9 @@ async function createWindow() {
     } else {
         win.loadFile('index.html')
     }
-    win.webContents.openDevTools({
-        mode:'detach'
-    });
+    // win.webContents.openDevTools({
+    //     mode:'detach'
+    // });
 
     const electron = require('electron')
     const ipc = electron.ipcMain

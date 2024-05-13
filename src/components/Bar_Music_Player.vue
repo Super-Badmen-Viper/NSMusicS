@@ -24,23 +24,11 @@
   import { h, onMounted, ref, watch, watchEffect } from 'vue';
   import { defineEmits } from 'vue';
   import { onBeforeUnmount } from 'vue';
-  const { ipcRenderer } = require('electron'); 
+  const { ipcRenderer } = require('electron');
 
-  import lottie from 'lottie-web'
-  let animationInstance:any = null;
-  onMounted(() => {
-    const animationContainer = document.querySelector('#lottie');
-    if (animationContainer) {
-      animationInstance = lottie.loadAnimation({
-        container: animationContainer,
-        path: '../../resources/lottie_json/Animation - 1715318278722.json',
-        loop: true,
-        autoplay: false,
-        name: 'HomeBanner'
-      });
-    }
-  });
-
+  // This lottie-web will cause memory leaks
+  import "@lottiefiles/lottie-player";
+  const animationInstance = ref<any>(null);
 
   ////// passed as argument
   const emits = defineEmits([
@@ -228,7 +216,7 @@
         timer = setInterval(synchronize_playback_time, 200);
         total_play_time.value = formatTime(props.player.getDuration());
         props.player.play();
-        animationInstance.play();
+        animationInstance.value.play();
       }, 400);
     }
   });
@@ -239,12 +227,12 @@
           this_audio_buffer_file.value = Math.random().toString(36).substring(7);
         }else{
           props.player.play();
-          animationInstance.play();
+          animationInstance.value.play();
           emits('this_audio_is_playing',true)
         }
       }else{
         props.player.pause();
-        animationInstance.pause();
+        animationInstance.value.pause();
         emits('this_audio_is_playing',false)
       }
     }
@@ -742,14 +730,16 @@
         </div>
       </div>
     </div>
-
-    <div id="lottie" 
+    <lottie-player
+      ref="animationInstance"
+      loop
+      mode="normal"
+      src="../../resources/lottie_json/Animation - 1715318278722.json"
       style="
         position: absolute;bottom:14px;right:36px;
         width:50px;height:50px;  
       ">
-    
-    </div>
+    </lottie-player>
   </n-space>
 </template>
 <style>

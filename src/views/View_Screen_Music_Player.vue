@@ -446,26 +446,26 @@
     }
   });
 
-  ////// Animation lottie Load
-  import lottie from 'lottie-web'
-  let animationInstance_model_1_spectrum:any = null;
-  let animationInstance_model_1_wave:any = null;
-  let animationInstance_model_2_wave:any = null;
+  ////// Animation lottie Load // lottie-web will cause memory leaks，so replace lottie-player
+  import "@lottiefiles/lottie-player";
+  const animationInstance_model_1_spectrum = ref<any>(null);
+  const animationInstance_model_1_wave = ref<any>(null);
+  const animationInstance_model_2_wave = ref<any>(null);
   let unwatch_animationInstance = watch(() => props.this_audio_is_playing, (newValue, oldValue) => {
     if (newValue === true) {
       if (player_background_model_num.value === 1){
-        animationInstance_model_1_spectrum.play();
-        animationInstance_model_1_wave.play();
+        animationInstance_model_1_spectrum.value.play();
+        animationInstance_model_1_wave.value.play();
       }
       if (player_background_model_num.value === 2)
-        animationInstance_model_2_wave.play();
+        animationInstance_model_2_wave.value.play();
     } else {
       if (player_background_model_num.value === 1){
-        animationInstance_model_1_spectrum.pause();
-        animationInstance_model_1_wave.pause();
+        animationInstance_model_1_spectrum.value.pause();
+        animationInstance_model_1_wave.value.pause();
       }
       if (player_background_model_num.value === 2)
-        animationInstance_model_2_wave.pause();
+        animationInstance_model_2_wave.value.pause();
     }
   });
 
@@ -480,44 +480,6 @@
     player_theme_Styles_Selected.value = props.player_UI_Theme.player_theme_Styles_Selected;
     //
     player_lyric_panel_fontsize.value = Number(player_lyric_fontSize.value.replace('px',''));
-
-    /// animation
-    const animationContainer_model_1 = document.querySelector('#lottie_model_1_spectrum');
-    if (animationContainer_model_1) {
-      animationInstance_model_1_spectrum = lottie.loadAnimation({
-        container: animationContainer_model_1,
-        path: '../../resources/lottie_json/Animation - 1715392202806.json',
-        loop: true,
-        autoplay: false,
-        name: 'lottie_model_1_spectrum'
-      });
-      if(props.this_audio_is_playing)
-        animationInstance_model_1_spectrum.play();
-    }
-    const animationContainer_model_3 = document.querySelector('#lottie_model_1_wave');
-    if (animationContainer_model_3) {
-      animationInstance_model_1_wave = lottie.loadAnimation({
-        container: animationContainer_model_3,
-        path: '../../resources/lottie_json/Animation - 1715417974362.json',
-        loop: true,
-        autoplay: false,
-        name: 'lottie_model_1_wave'
-      });
-      if(props.this_audio_is_playing)
-        animationInstance_model_1_wave.play();
-    }
-    const animationContainer_model_2 = document.querySelector('#lottie_model_2_wave');
-    if (animationContainer_model_2) {
-      animationInstance_model_2_wave = lottie.loadAnimation({
-        container: animationContainer_model_2,
-        path: '../../resources/lottie_json/Animation - 1715417974362.json',
-        loop: true,
-        autoplay: false,
-        name: 'lottie_model_2_wave'
-      });
-      if(props.this_audio_is_playing)
-        animationInstance_model_2_wave.play();
-    }
   });
   ////// player Remove data
   onBeforeUnmount(() => {
@@ -804,42 +766,42 @@
                 collapsed-width="30vw" width="53vw"
                 style="background-color: transparent;">
                 <n-space vertical align="end" style="margin-right:6vw;">
-                  <!-- 0->4 Animation -->
-                  <div
-                    id="lottie_model_1_wave" v-show="player_background_model_num === 1"
-                    style="
-                      width: calc(60vh); 
-                      height: calc(60vh);
-                      margin-top: calc(25vh - 146px);margin-left: calc(-56.2vh);
-                      position: absolute;
-                    ">
-                  </div>
-                  <div
-                    id="lottie_model_2_wave" v-show="player_background_model_num === 2"
-                    style="
-                      width: calc(56vh); 
-                      height: calc(56vh);
-                      margin-top: calc(27vh - 154px);margin-left: calc(-40.8vh);
-                      position: absolute;
-                    ">
-                  </div> 
                   <!-- 2 旋转封面-->
                   <n-space vertical v-if="player_background_model_num === 1">
-                    <n-space>
-                      <img
-                        class="animate__rotate_slower"
-                        :class="{ 'animate__rotate_slower_paused': !props.this_audio_is_playing }"
-                        style="
-                          width: calc(54vh - 16vh);height: calc(54vh - 16vh);
-                          margin-top: calc(36vh - 162px);margin-left: calc(9vh);
-                          border: 1.5px solid #FFFFFF20;
-                          border-radius: 27vh;
-                          object-fit: cover;object-position: center;
-                          filter: blur(0px);
-                          box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
-                        "
-                        :src="getAssetImage(props.this_audio_file_medium_image_url)"
-                        @error="handleImageError">
+                    <lottie-player
+                      ref="animationInstance_model_1_wave"
+                      autoplay
+                      loop
+                      mode="normal"
+                      src="../../resources/lottie_json/Animation - 1715591164841.json"
+                      style="
+                        width: calc(60vh);
+                        height: calc(60vh);
+                        margin-top: calc(26vh - 162px);margin-left: calc(-2vh);
+                        position: absolute;
+                        transform: scale(1.1);
+                      "
+                      v-if="player_background_model_num === 1">
+                    </lottie-player>
+                    <n-space 
+                      style="
+                        width: calc(38vh);height: calc(38vh);
+                        margin-top: calc(36vh - 162px);margin-left: calc(9vh);
+                       ">
+                     <img
+                       class="animate__rotate_slower"
+                       :class="{ 'animate__rotate_slower_paused': !props.this_audio_is_playing }"
+                       style="
+                        width: calc(34vh);height: calc(34vh);
+                        margin-top: calc(2vh);margin-left: calc(2vh);
+                        border: 1.5px solid #FFFFFF20;
+                        border-radius: 27vh;
+                        object-fit: cover;object-position: center;
+                        filter: blur(0px);
+                        box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
+                       "
+                       :src="getAssetImage(props.this_audio_file_medium_image_url)"
+                       @error="handleImageError">
                     </n-space> 
                     <div
                       style="
@@ -855,14 +817,37 @@
                         text-align: center;">
                       {{ props.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
                     </div>
+                    <lottie-player
+                      ref="animationInstance_model_1_spectrum"
+                      autoplay
+                      loop
+                      mode="normal"
+                      src="../../resources/lottie_json/Animation - 1715392202806.json"
+                      style="width: 54vh;height:40px;"
+                      v-if="player_background_model_num === 1">
+                  </lottie-player>
                   </n-space>
                   <!-- 3 炫胶唱片-->
                   <n-space vertical v-else-if="player_background_model_num === 2">
+                    <lottie-player
+                      ref="animationInstance_model_2_wave"
+                      autoplay
+                      loop
+                      mode="normal"
+                      src="../../resources/lottie_json/Animation - 1715417974362.json"
+                      style="
+                        width: calc(56vh); 
+                        height: calc(56vh);
+                        margin-top: calc(27vh - 154px);margin-left: calc(13.5vh);
+                        position: absolute;
+                      "
+                      v-if="player_background_model_num === 2">
+                    </lottie-player>
                     <div style="margin-left:0vh;margin-top:0vh;">
                       <div
                         style="
-                          width: calc(54vh - 16vh); 
-                          height: calc(54vh - 16vh);
+                          width: calc(38vh); 
+                          height: calc(38vh);
                           margin-top: calc(36vh - 162px);margin-left: calc(54vh - 31.5vh);
                           border: 1.5px solid #FFFFFF20;
                           border-radius: 27vh;
@@ -961,9 +946,6 @@
                       {{ props.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
                     </div>
                   </n-space>
-                  <div id="lottie_model_1_spectrum" style="width: 54vh;height:40px;" v-show="player_background_model_num === 1">
-                  
-                  </div>
                 </n-space>
               </n-layout-sider>
               <!-- right area --><!-- Lyics Lines List -->
@@ -1064,14 +1046,6 @@
   to {
     transform: rotate(360deg);
   }
-}
-.animate__animated.animate__rotateIn {
-  --animate-duration: 1s;
-  --animate-delay: 0s;
-}
-.animate__animated.animate__fadeOut {
-  --animate-duration: 0s;
-  --animate-delay: 0s;
 }
 
 ::-webkit-scrollbar {
