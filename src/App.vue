@@ -20,6 +20,26 @@
     Close,Menu as MenuIcon,
   } from '@vicons/carbon'
 
+  const crypto = require('crypto');
+  function generateEncryptedPassword(password: string): { salt: string, token: string } {
+      const saltLength = 6;
+      const salt = generateRandomString(saltLength);
+      const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
+      return { salt, token };
+  }
+  function generateRandomString(length: number): string {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let randomString = '';
+      for (let i = 0; i < length; i++) {
+          const randomIndex = Math.floor(Math.random() * characters.length);
+          randomString += characters[randomIndex];
+      }
+      return randomString;
+  }
+  const { salt, token } = generateEncryptedPassword('sesame');
+  console.log('s-Salt:', salt);
+  console.log('t-Token:', token);
+
   ////// this_app components of navie ui 
   import { NIcon } from 'naive-ui'
   import type { MenuOption } from 'naive-ui'
@@ -68,21 +88,28 @@
   import Bar_Music_PlayList from '../src/components/Bar_Music_PlayList.vue'
   // player class
   import View_Screen_Music_Player from '../src/views/View_Screen_Music_Player.vue'
-  import { Player_UI_Theme } from '../src/features/player/Player_UI_Theme'
-  import { System_Configs } from '../src/features/system/System_Configs'
+  import { Player_UI_Theme_State } from '../src/features/player/Player_UI_Theme_State'
+  import { System_Configs_Read } from '../src/features/system/System_Configs_Read'
+  import { System_Configs_Write } from '../src/features/system/System_Configs_Write'
+  import { App_Configs } from '@/models/app_Configs_For_Sqlite/class_App_Configs';
+  import { Player_Configs_of_Audio_Info } from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_Audio_Info';
+  import { Player_Configs_of_UI } from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_UI';
 
   ////// this_app theme_color
   const theme = ref<GlobalTheme | null>(null)
+  const theme_name = ref<string>()
   const theme_app =ref<GlobalTheme | null>(null)
   const theme_bar_top_setapp = ref('transparent')
   const change_page_header_color = ref(false)
   const theme_normal_mode_click = () => {
     theme.value = lightTheme
+    theme_name.value = 'lightTheme'
     theme_app.value = lightTheme
     change_page_header_color.value = false
   }
   const theme_dark_mode_click = () => {
     theme.value = darkTheme
+    theme_name.value = 'darkTheme'
     theme_app.value = darkTheme
     change_page_header_color.value = true
   }
@@ -170,9 +197,9 @@
     console.log('player_show_click：'+value)
   }
   // player view of theme_all
-  const player_UI_Theme = ref(new Player_UI_Theme());
+  const player_UI_Theme_State = ref(new Player_UI_Theme_State());
   const get_player_UI_Theme = (value: any) => {
-    player_UI_Theme.value = value;
+    player_UI_Theme_State.value = value;
   }
 
   ////// open bar audio_playlist
@@ -1512,6 +1539,7 @@
   }
   // router custom class
   const router = useRouter();
+  const router_name = ref('')
   routers.beforeEach((to, from, next) => {
     if(to.name !== from.name){
       clear_Files_temporary()
@@ -1523,10 +1551,13 @@
       clear_Files_temporary()
       if(to.name === 'View_Song_List_ALL'){
         router_select_model_media.value = true
+        router_name.value = to.name
       }else if(to.name === 'View_Album_List_ALL'){
         router_select_model_album.value = true
+        router_name.value = to.name
       }else if(to.name === 'View_Artist_List_ALL'){
         router_select_model_artist.value = true
+        router_name.value = to.name
       }
     }
   });
@@ -1758,9 +1789,9 @@
 
   ////// Load this_app Configs
   onMounted(() => {
-    let system_Configs = new System_Configs();
+    let system_Configs_Read = new System_Configs_Read();
     /// App_Configs load
-    if((''+system_Configs.app_Configs.value['theme']) === 'lightTheme'){
+    if((''+system_Configs_Read.app_Configs.value['theme']) === 'lightTheme'){
       change_page_header_color.value = false;
       theme.value = lightTheme;
     }
@@ -1768,36 +1799,88 @@
       change_page_header_color.value = true;
       theme.value = darkTheme;
     }
-    app_left_menu_select_activeKey.value = ''+system_Configs.app_Configs.value['app_left_menu_select_activeKey']
-    app_left_menu_collapsed.value = ''+system_Configs.app_Configs.value['app_left_menu_collapsed'] === 'true'
-    router.push(''+system_Configs.app_Configs.value['router_name'])
+    theme_name.value = ''+system_Configs_Read.app_Configs.value['theme']
+    app_left_menu_select_activeKey.value = ''+system_Configs_Read.app_Configs.value['app_left_menu_select_activeKey']
+    app_left_menu_collapsed.value = ''+system_Configs_Read.app_Configs.value['app_left_menu_collapsed'] === 'true'
+    router_name.value = ''+system_Configs_Read.app_Configs.value['router_name']
+    router.push(router_name.value)
     /// player_Configs_For_UI
-    player_UI_Theme.value.player_theme_Styles_Selected = Number(''+system_Configs.player_Configs_of_UI.value['player_theme_Styles_Selected'])
-    player_UI_Theme.value.player_background_model_num = Number(''+system_Configs.player_Configs_of_UI.value['player_background_model_num'])
-    // player_UI_Theme.value.player_collapsed_album = ''+system_Configs.player_Configs_of_UI.value['player_collapsed_album']==='true'
-    // player_UI_Theme.value.player_collapsed_skin = ''+system_Configs.player_Configs_of_UI.value['player_collapsed_skin']==='true'
-    // player_UI_Theme.value.player_lyric_fontSize = ''+system_Configs.player_Configs_of_UI.value['player_lyric_fontSize']
-    // player_UI_Theme.value.player_lyric_fontWeight = ''+system_Configs.player_Configs_of_UI.value['player_lyric_fontWeight']
-    // player_UI_Theme.value.player_lyric_color = ''+system_Configs.player_Configs_of_UI.value['player_lyric_color']
+    player_UI_Theme_State.value.player_collapsed_album = ''+system_Configs_Read.player_Configs_of_UI.value['player_collapsed_album']==='true'
+    player_UI_Theme_State.value.player_collapsed_skin = ''+system_Configs_Read.player_Configs_of_UI.value['player_collapsed_skin']==='true'
+    player_UI_Theme_State.value.player_lyric_fontSize = ''+system_Configs_Read.player_Configs_of_UI.value['player_lyric_fontSize']
+    player_UI_Theme_State.value.player_lyric_fontWeight = ''+system_Configs_Read.player_Configs_of_UI.value['player_lyric_fontWeight']
+    player_UI_Theme_State.value.player_lyric_color = ''+system_Configs_Read.player_Configs_of_UI.value['player_lyric_color']
+    player_UI_Theme_State.value.player_theme_Styles_Selected = Number(''+system_Configs_Read.player_Configs_of_UI.value['player_theme_Styles_Selected'])
+    player_UI_Theme_State.value.player_background_model_num = Number(''+system_Configs_Read.player_Configs_of_UI.value['player_background_model_num'])
     /// player_Configs_of_Audio_Info
-    this_audio_file_path.value = ''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_file_path']
-    this_audio_file_medium_image_url.value = ''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_file_medium_image_url']
-    this_audio_singer_name.value = ''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_singer_name']
-    this_audio_song_name.value = ''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_song_name']
-    this_audio_album_name.value = ''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_album_name']
-    this_audio_album_id.value = ''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_album_id']
-    this_audio_album_favorite.value = ''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_album_favorite']
-    this_audio_Index_of_absolute_positioning_in_list.value = Number(''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_Index_of_absolute_positioning_in_list'])
+    this_audio_file_path.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path']
+    this_audio_file_medium_image_url.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_medium_image_url']
+    this_audio_singer_name.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_singer_name']
+    this_audio_song_name.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_name']
+    this_audio_album_name.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_name']
+    this_audio_album_id.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_id']
+    this_audio_album_favorite.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_favorite']
+    this_audio_Index_of_absolute_positioning_in_list.value = Number(''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_Index_of_absolute_positioning_in_list'])
     //
-    page_top_album_image_url.value = ''+system_Configs.player_Configs_of_Audio_Info.value['page_top_album_image_url']
-    page_top_album_id.value = ''+system_Configs.player_Configs_of_Audio_Info.value['page_top_album_id']
-    page_top_album_name.value = ''+system_Configs.player_Configs_of_Audio_Info.value['page_top_album_name']
+    page_top_album_image_url.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_image_url']
+    page_top_album_id.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_id']
+    page_top_album_name.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_name']
     //
-    this_audio_file_path_from_playlist.value = ''+system_Configs.player_Configs_of_Audio_Info.value['this_audio_file_path_from_playlist']==='true'
-    fetchData_This_AlbumOrArtist_PlayMedia_Model.value = ''+system_Configs.player_Configs_of_Audio_Info.value['fetchData_This_AlbumOrArtist_PlayMedia_Model']==='true'
+    this_audio_file_path_from_playlist.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path_from_playlist']==='true'
+    fetchData_This_AlbumOrArtist_PlayMedia_Model.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['fetchData_This_AlbumOrArtist_PlayMedia_Model']==='true'
     /// playlist_File_Configs
-    playlist_Files_temporary.value = system_Configs.playlist_File_Configs.value
+    playlist_Files_temporary.value = system_Configs_Read.playlist_File_Configs.value
+
+    save_system_config()
   });
+  ////// Save this_app Configs
+  function save_system_config(){
+    const app_Configs = ref(
+      new App_Configs({
+        theme: theme_name.value,
+        router_name: String(router_name.value),
+        app_left_menu_select_activeKey: String(app_left_menu_select_activeKey.value),
+        app_left_menu_collapsed: String(app_left_menu_collapsed.value)
+      }));
+    const player_Configs_of_UI = ref(
+      new Player_Configs_of_UI({
+        player_collapsed_album: String(player_UI_Theme_State.value.player_collapsed_album),
+        player_collapsed_skin: String(player_UI_Theme_State.value.player_collapsed_skin),
+        player_lyric_fontSize: String(player_UI_Theme_State.value.player_lyric_fontSize),
+        player_lyric_fontWeight: String(player_UI_Theme_State.value.player_lyric_fontWeight),
+        player_lyric_color: String(player_UI_Theme_State.value.player_lyric_color),
+        player_theme_Styles_Selected: String(player_UI_Theme_State.value.player_theme_Styles_Selected),
+        player_background_model_num: String(player_UI_Theme_State.value.player_background_model_num),
+      }))
+    const player_Configs_of_Audio_Info = ref(
+      new Player_Configs_of_Audio_Info({
+        this_audio_file_path: String(this_audio_file_path.value),
+        this_audio_file_medium_image_url: String(this_audio_file_medium_image_url.value),
+        this_audio_singer_name: String(this_audio_singer_name.value),
+        this_audio_singer_id: String(this_audio_singer_id.value),
+        this_audio_song_name: String(this_audio_song_name.value),
+        this_audio_song_id: String(this_audio_song_id.value),
+        this_audio_song_rating: String(this_audio_song_rating.value),
+        this_audio_song_favorite: String(this_audio_song_favorite.value),
+        this_audio_album_name: String(this_audio_album_name.value),
+        this_audio_album_id: String(this_audio_album_id.value),
+        this_audio_Index_of_absolute_positioning_in_list: String(this_audio_Index_of_absolute_positioning_in_list.value),
+    
+        page_top_album_image_url: String(page_top_album_image_url.value),
+        page_top_album_id: String(page_top_album_id.value),
+        page_top_album_name: String(page_top_album_name.value),
+    
+        this_audio_file_path_from_playlist: String(this_audio_file_path_from_playlist.value),
+        fetchData_This_AlbumOrArtist_PlayMedia_Model: String(fetchData_This_AlbumOrArtist_PlayMedia_Model.value),
+      }));
+    let system_Configs_Write = new System_Configs_Write(
+      app_Configs.value,
+      player_Configs_of_UI.value,
+      player_Configs_of_Audio_Info.value,
+      playlist_Files_temporary.value
+    );
+  }
+  
 </script>
 <template>
   <!-- App Bady View-->
@@ -2067,8 +2150,8 @@
       :player_collapsed_action_bar_of_Immersion_model="player_collapsed_action_bar_of_Immersion_model"
       @player_collapsed_action_bar_of_Immersion_model="get_player_collapsed"
 
-      :player_UI_Theme="player_UI_Theme"
-      @player_UI_Theme="get_player_UI_Theme"
+      :player_UI_Theme_State="player_UI_Theme_State"
+      @player_UI_Theme_State="get_player_UI_Theme"
       
       :player="player"
       :this_audio_is_playing="this_audio_is_playing"
@@ -2263,4 +2346,4 @@ nav {
 ::-webkit-scrollbar {
   display: none;
 }
-</style>
+</style>./features/system/System_Configs_Read./features/player/Player_UI_Theme_State

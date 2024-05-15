@@ -30,7 +30,7 @@
   import { defineEmits, ref, watch, watchEffect, onMounted } from 'vue';
   import { onBeforeUnmount } from 'vue';
   // audio_class & player_bar
-  import { Player_UI_Theme } from '../../src/features/player/Player_UI_Theme'
+  import { Player_UI_Theme_State } from '../../src/features/player/Player_UI_Theme_State'
 
   ////// System BrowserWindow Set
   const { ipcRenderer } = require('electron');
@@ -51,7 +51,7 @@
   ////// passed as argument
   const emits = defineEmits([
     'player_show_click','player_go_lyricline_index_of_audio_play_progress','player_collapsed_action_bar_of_Immersion_model',
-    'player_UI_Theme'
+    'player_UI_Theme_State'
   ]);
   const props = defineProps([
     'this_audio_file_path','playlist_Files_temporary',
@@ -61,7 +61,7 @@
     'player','this_audio_is_playing','player_silder_currentTime_added_value',
     'player_show_complete','this_audio_lyrics_info_line_num',
     'player_collapsed_action_bar_of_Immersion_model',
-    'player_UI_Theme'
+    'player_UI_Theme_State'
   ]);
 
   ////// lyircs load
@@ -200,7 +200,7 @@
   };
 
   ////// player theme BasicInfo
-  let player_ui_theme = new Player_UI_Theme();
+  let player_ui_theme = new Player_UI_Theme_State();
   const player_collapsed_album = ref(false);
   const player_collapsed_skin = ref(true)
   const player_lyric_fontSize = ref('22px')
@@ -366,7 +366,7 @@
     player_ui_theme.player_collapsed_skin.value = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin;
 
     // emits theme
-    emits('player_UI_Theme' ,player_ui_theme);
+    emits('player_UI_Theme_State' ,player_ui_theme);
   };
 
   ////// player page_ui set
@@ -471,13 +471,13 @@
 
   ////// Load player Configs
   onMounted(() => {
-    player_background_model_num.value = props.player_UI_Theme.player_background_model_num;
-    player_lyric_fontSize.value = props.player_UI_Theme.player_lyric_fontSize;
-    player_lyric_fontWeight.value = props.player_UI_Theme.player_lyric_fontWeight;
-    player_lyric_color.value = props.player_UI_Theme.player_lyric_color;
-    player_collapsed_album.value = props.player_UI_Theme.player_collapsed_album;
-    player_collapsed_skin.value = props.player_UI_Theme.player_collapsed_skin;
-    player_theme_Styles_Selected.value = props.player_UI_Theme.player_theme_Styles_Selected;
+    player_background_model_num.value = props.player_UI_Theme_State.player_background_model_num;
+    player_lyric_fontSize.value = props.player_UI_Theme_State.player_lyric_fontSize;
+    player_lyric_fontWeight.value = props.player_UI_Theme_State.player_lyric_fontWeight;
+    player_lyric_color.value = props.player_UI_Theme_State.player_lyric_color;
+    player_collapsed_album.value = props.player_UI_Theme_State.player_collapsed_album;
+    player_collapsed_skin.value = props.player_UI_Theme_State.player_collapsed_skin;
+    player_theme_Styles_Selected.value = props.player_UI_Theme_State.player_theme_Styles_Selected;
     //
     player_lyric_panel_fontsize.value = Number(player_lyric_fontSize.value.replace('px',''));
   });
@@ -756,10 +756,10 @@
                 :collapsed="player_collapsed_album" 
                 @collapse="
                   player_ui_theme.player_collapsed_album.value = true;
-                  emits('player_UI_Theme', player_ui_theme);" 
+                  emits('player_UI_Theme_State', player_ui_theme);" 
                 @expand="
                   player_ui_theme.player_collapsed_album.value = false;
-                  emits('player_UI_Theme', player_ui_theme)
+                  emits('player_UI_Theme_State', player_ui_theme)
                 "
                 :show-collapsed-content="false" 
                 position="static"
@@ -1051,4 +1051,4 @@
 ::-webkit-scrollbar {
   display: none;
 }
-</style>
+</style>../features/player/Player_UI_Theme_State
