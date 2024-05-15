@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "build-only": "vite build && electron-builder --win --config --publish always",
+    "build-only": "vite build",
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
