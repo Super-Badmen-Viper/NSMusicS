@@ -1,12 +1,6 @@
-import { app, BrowserWindow,dialog, Menu  } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import { readFileSync } from 'fs';
-import { createReadStream } from 'fs';
-import { promisify } from 'util';
-const fs = require('fs');
-
-
-app.commandLine.appendSwitch('disable-http-cache');
-Menu.setApplicationMenu(null)
+import { System_Configs_Write } from './features/system/System_Configs_Write';
 
 async function createWindow() {
     const win = await new BrowserWindow({
@@ -50,6 +44,15 @@ async function createWindow() {
     })
     ipc.on('window-close', function () {
         win.close();
+    })
+    ipc.on('config-save', (event, app_Configs,player_Configs_of_UI,player_Configs_of_Audio_Info,playlist_Files_temporary) => {
+        let system_Configs_Write = new System_Configs_Write(
+            app_Configs.value,
+            player_Configs_of_UI.value,
+            player_Configs_of_Audio_Info.value,
+            playlist_Files_temporary.value
+          );
+        console.log('save config succuessful')
     })
 
     ipc.on('window-gc', function () {

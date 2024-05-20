@@ -138,6 +138,7 @@
     ipcRenderer.send('window-max');
   }
   function closeWindow() {
+
     ipcRenderer.send('window-close');
   }
   const window_innerWidth = ref<number>(window.innerWidth)
@@ -152,8 +153,6 @@
   const player_show_complete = ref(true)
   const get_playerbar_to_Switch_playerview = (value:any) => {
     player_show_complete.value = false
-
-    ipcRenderer.send('window-gc');
 
     if(value === 0)
       player_show.value = true
@@ -186,6 +185,10 @@
 
       player_show_complete.value = true
     }, 600);
+
+    ipcRenderer.send('window-gc');
+    const { webFrame } = require('electron');
+    webFrame.clearCache();
   }
   const player_collapsed_action_bar_of_Immersion_model = ref(false);
   const get_player_collapsed = (value:any) => {
@@ -1536,6 +1539,8 @@
     album_Files_temporary.value = [];
     artist_Files_temporary.value = [];
     ipcRenderer.send('window-gc');
+    const { webFrame } = require('electron');
+    webFrame.clearCache();
   }
   // router custom class
   const router = useRouter();
@@ -1830,8 +1835,6 @@
     fetchData_This_AlbumOrArtist_PlayMedia_Model.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['fetchData_This_AlbumOrArtist_PlayMedia_Model']==='true'
     /// playlist_File_Configs
     playlist_Files_temporary.value = system_Configs_Read.playlist_File_Configs.value
-
-    save_system_config()
   });
   ////// Save this_app Configs
   function save_system_config(){
@@ -1873,12 +1876,7 @@
         this_audio_file_path_from_playlist: String(this_audio_file_path_from_playlist.value),
         fetchData_This_AlbumOrArtist_PlayMedia_Model: String(fetchData_This_AlbumOrArtist_PlayMedia_Model.value),
       }));
-    let system_Configs_Write = new System_Configs_Write(
-      app_Configs.value,
-      player_Configs_of_UI.value,
-      player_Configs_of_Audio_Info.value,
-      playlist_Files_temporary.value
-    );
+    ipcRenderer.send('config-save',app_Configs,player_Configs_of_UI,player_Configs_of_Audio_Info)
   }
   
 </script>

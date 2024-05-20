@@ -18,7 +18,7 @@
   import {
     Random
   } from '@vicons/fa'
-  import { NIcon } from 'naive-ui'; 
+  import { NIcon, NSlider, NSpace, NText } from 'naive-ui'; 
 
   ////// this_view components of navie ui 
   import { h, onMounted, ref, watch, watchEffect } from 'vue';
@@ -148,7 +148,6 @@
   let unwatch_this_audio_buffer_file =  watch(() => this_audio_buffer_file.value, (newValue, oldValue) => {
     if (newValue !== oldValue) {
       props.player.unload();
-      ipcRenderer.send('window-gc');
       clearTimeout(timer_this_audio_player.value);
       timer_this_audio_player.value = setTimeout(() => {
         player_silder_currentTime_added_value.value = 0;
@@ -215,10 +214,14 @@
         clearInterval(timer);
         timer = setInterval(synchronize_playback_time, 200);
         total_play_time.value = formatTime(props.player.getDuration());
+        props.player.setVolume(Number(slider_volume_value.value / 100))
         props.player.play();
         animationInstance.value.play();
       }, 400);
     }
+    ipcRenderer.send('window-gc');
+    const { webFrame } = require('electron');
+    webFrame.clearCache();
   });
   const Init_Audio_Player = async () => {
     if(props.this_audio_file_path.length > 0){
@@ -391,11 +394,63 @@
   let unwatch_slider_volume_value = watch(
     slider_volume_value,
     (newValue, oldValue) => {
-      props.player.setVolume(newValue ? Number(slider_volume_value.value) : 0);
+      props.player.setVolume(newValue ? Number(slider_volume_value.value / 100) : 0);
     },
     { immediate: true }
   );
-
+  const options_Volume = [
+    {
+      key: 'header',
+      type: 'render',
+      render: render_Slider
+    },
+    // {
+    //   label: '处理群消息 342 条',
+    //   key: 'stmt1'
+    // },
+  ];
+  function render_Slider () {
+    return h(
+      NSpace,
+      {
+        style: 'width: 50px;height: 140px;',
+        vertical: true,
+        justify: 'center',
+        align: 'center',
+        'on-mousemove': () => {
+          emits('player_collapsed_action_bar_of_Immersion_model', false);
+        },
+        'on-mouseover': () => {
+          emits('player_collapsed_action_bar_of_Immersion_model', false);
+        },
+      },
+      [
+        h(NSlider, {
+          style: 'width: 18px;height: 100px;',
+          min: 0,
+          max: 100,
+          vertical: true,
+          value: slider_volume_value.value,
+          'on-update:value': (value: number) => {
+            slider_volume_value.value = value;
+          },
+          'on-mousemove': () => {
+          emits('player_collapsed_action_bar_of_Immersion_model', false);
+          },
+          'on-mouseover': () => {
+            emits('player_collapsed_action_bar_of_Immersion_model', false);
+          },
+        }),
+        h('div', { style: 'font-size: 14px;' }, [
+          h(
+            NText,
+            { depth: 3 },
+            { default: () => slider_volume_value.value }
+          )
+        ]),
+      ]
+    )
+  }
 
   ////// player slider formatTime area
   const set_slider_singleValue = () => {
@@ -507,17 +562,12 @@
   const handleRefusetohide = () => {
     emits('player_collapsed_action_bar_of_Immersion_model', false);
   };
-  let timer_auto_hidden: string | number | NodeJS.Timeout | undefined;
   const handleMouseMove = () => {
     if(props.player_show === true){
       emits('player_collapsed_action_bar_of_Immersion_model', true);
+      slider_volume_show.value = false;
     }
   };
-  const unwatch_player_collapsed = watchEffect(() => {
-    if (props.player_collapsed_action_bar_of_Immersion_model === false) {
-      clearInterval(timer_auto_hidden);
-    }
-  });
 
   ////// changed_data write to sqlite
   import {Set_MediaInfo_To_LocalSqlite} from '../../src/models/data_Change_For_Sqlite/class_Set_MediaInfo_To_LocalSqlite'
@@ -577,7 +627,6 @@
     unwatch_this_audio_buffer_file()
     unwatch_play_go_index_time()
     unwatch_slider_volume_value()
-    unwatch_player_collapsed()
   });
 </script>
 
@@ -661,10 +710,10 @@
             </template>
           </n-button>
           <n-button quaternary round size="small" @click="backpanel_voice_click">
-              <template #icon>
-                <n-icon :size="26"><VolumeMedium/></n-icon>
-              </template>
-            </n-button>
+            <template #icon>
+              <n-icon :size="26"><VolumeMedium/></n-icon>
+            </template>
+          </n-button>
         </n-space>
         <div>
           <n-slider 
@@ -681,16 +730,36 @@
             @click="player_range_duration_handleclick"
             />
         </div>
-        <div>
-          <!-- :class="{ show: slider_volume_show }" -->
-          <div id="backpanel_voice" 
-            v-if="slider_volume_show">
-            <input id="player_range_voice" type="range"
-              style="height: 90%;bottom: 20;"
-              :min="0" :max="100" :hideTip="true" v-model.value="slider_volume_value"/>
-            <h4>{{ slider_volume_value }}%</h4>
+        <n-config-provider :theme="null">
+          <div id="backpanel_voice">
+            
           </div>
-        </div>
+          <n-drawer
+            v-model:show="slider_volume_show"      
+            placement="bottom"
+            :width="77"
+            :height="226"
+            to="#backpanel_voice"
+            show-mask="transparent"
+            style="border-radius: 10px;"
+          >
+            <n-drawer-content>
+              <n-space vertical justify="center" align="center" >
+                <n-slider 
+                  style="
+                    width: 18px;height: 158px;
+                    border-radius: 10px;
+                    margin-top: 6px;
+                  "
+                  vertical
+                  v-model:value="slider_volume_value"
+                  :min="0" :max="100" :keyboard="true" :tooltip="false"
+                />
+                <n-text>{{ slider_volume_value }}</n-text>
+              </n-space>
+            </n-drawer-content>
+          </n-drawer>
+        </n-config-provider>
       </div>
       <div class="gird_Right">
         <n-space class="gird_Right_current_playlist_button_area">
@@ -851,24 +920,12 @@
   border: #283248 1px solid;
 }
 .gird_Middle #backpanel_voice{
-  position: absolute;
-  top: -202px;
-  margin-left: 290px;
-  width: 60px;
-  height: 210px;
-  background-color: #FFFFFF;
+  position: fixed;
+  bottom: 80px;
+  margin-left: 280px;
+  width: 77px;
+  height: 100px;
   border-radius: 10px;
-}
-.gird_Middle #backpanel_voice #player_range_voice{
-  height: 80px;
-  width: 160px;
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
-  margin-left: -50px;
-}
-.gird_Middle #backpanel_voice h4{
-  color: #283248;
-  margin-top: -16px;
 }
 
 .gird_Right {

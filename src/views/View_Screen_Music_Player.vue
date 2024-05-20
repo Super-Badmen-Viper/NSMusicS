@@ -766,8 +766,37 @@
                 collapsed-width="30vw" width="53vw"
                 style="background-color: transparent;">
                 <n-space vertical align="end" style="margin-right:6vw;">
+                  <!-- 1 方形封面-->
+                  <n-space vertical v-if="player_background_model_num === 0">
+                    <img
+                      style="
+                        width: 54vh;height: 54vh;
+                        margin-top: calc(28vh - 162px);
+                        border: 1.5px solid #FFFFFF20;
+                        border-radius: 10px;
+                        object-fit: cover;object-position: center;
+                        filter: blur(0px);
+                        box-shadow: 16px 16px 16px rgba(0, 0, 0, 0.20), 0px 0px 16px rgba(0, 0, 0, 0.20);
+                      "
+                      :src="getAssetImage(props.this_audio_file_medium_image_url)"
+                      @error="handleImageError">
+                    <div
+                      style="
+                        width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;
+                        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+                        text-align: left;">
+                      {{ props.this_audio_song_name }}
+                    </div>
+                    <div
+                      style="
+                        width: 54vh;margin-left: 2px;margin-top: -10px;color: #989292;font-weight: 550;font-size: 18px;
+                        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+                        text-align: left;">
+                      {{ props.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
+                    </div>
+                  </n-space>
                   <!-- 2 旋转封面-->
-                  <n-space vertical v-if="player_background_model_num === 1">
+                  <n-space vertical v-else-if="player_background_model_num === 1">
                     <lottie-player
                       ref="animationInstance_model_1_wave"
                       autoplay
@@ -780,8 +809,7 @@
                         margin-top: calc(26vh - 162px);margin-left: calc(-2vh);
                         position: absolute;
                         transform: scale(1.1);
-                      "
-                      v-if="player_background_model_num === 1">
+                      ">
                     </lottie-player>
                     <n-space 
                       style="
@@ -823,12 +851,11 @@
                       loop
                       mode="normal"
                       src="../../resources/lottie_json/Animation - 1715392202806.json"
-                      style="width: 54vh;height:40px;"
-                      v-if="player_background_model_num === 1">
-                  </lottie-player>
+                      style="width: 54vh;height:40px;">
+                    </lottie-player>
                   </n-space>
                   <!-- 3 炫胶唱片-->
-                  <n-space vertical v-else-if="player_background_model_num === 2">
+                  <n-space vertical style="margin-top: -2vh;" v-else-if="player_background_model_num === 2">
                     <lottie-player
                       ref="animationInstance_model_2_wave"
                       autoplay
@@ -838,99 +865,54 @@
                       style="
                         width: calc(56vh); 
                         height: calc(56vh);
-                        margin-top: calc(27vh - 154px);margin-left: calc(13.5vh);
+                        margin-top: calc(29vh - 154px);margin-left: calc(13.5vh);
                         position: absolute;
-                      "
-                      v-if="player_background_model_num === 2">
+                      ">
                     </lottie-player>
-                    <div style="margin-left:0vh;margin-top:0vh;">
-                      <div
-                        style="
-                          width: calc(38vh); 
-                          height: calc(38vh);
-                          margin-top: calc(36vh - 162px);margin-left: calc(54vh - 31.5vh);
-                          border: 1.5px solid #FFFFFF20;
-                          border-radius: 27vh;
-                          object-fit: cover;object-position: center;
-                          filter: blur(0px);
-                          box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
-                          position: absolute;
-                          background-color: #DCDBDD10;
-                        ">
-                      </div>
-                      <img
-                        class="animate__rotate_fast"
-                        :class="{ 'animate__rotate_fast_paused': !props.this_audio_is_playing }"
-                        style="
-                          width: calc(54vh - 30vh);height: calc(54vh - 30vh);
-                          margin-left: calc(54vh - 24.5vh);
-                          margin-top: calc(43vh - 162px);
-                          border: 1.5px solid #FFFFFF20;
-                          border-radius: 27vh;
-                          object-fit: cover;object-position: center;
-                          filter: blur(0px);
-                          box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
-                          position: absolute;
-                        "
-                        :src="getAssetImage(props.this_audio_file_medium_image_url)"
-                        @error="handleImageError">
-                      <img
-                        style="
-                          width: calc(54vh - 12vh);height: calc(54vh - 12vh);
-                          WebkitMask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 25%);
-                          margin-top: calc(34vh - 162px);
-                          border: 2px solid #FFFFFF20;
-                          border-radius: 10px;
-                          object-fit: cover;object-position: center;
-                          box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
-                          filter: blur(0px);
-                        "
-                        :src="getAssetImage(props.this_audio_file_medium_image_url)"
-                        @error="handleImageError">
-                      </img>
-                      <img
-                        style="
-                          width: calc(54vh - 50vh);
-                          height: calc(54vh - 50vh);
-                          margin-Left: calc(-2vh);
-                          margin-top: calc(53vh - 162px);
-                          border: 10px solid #DCDBDD20;
-                          border-radius: 27vh;
-                          object-fit: cover;object-position: center;
-                          filter: blur(0px);
-                          position: absolute;
-                        "
-                        src="../../resources/img/DotCircle.png">
-                    </div>
                     <div
                       style="
-                        width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;
-                        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
-                        text-align: left;">
-                      {{ props.this_audio_song_name }}
-                    </div>
-                    <div
-                      style="
-                        width: 54vh;margin-left: 2px;margin-top: -10px;color: #989292;font-weight: 550;font-size: 18px;
-                        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
-                        text-align: left;">
-                      {{ props.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
-                    </div>
-                  </n-space>
-                  <!-- 1 方形封面-->
-                  <n-space vertical v-else>
-                    <img
-                      style="
-                        width: 54vh;height: 54vh;
-                        margin-top: calc(28vh - 162px);
+                        width: calc(38vh); 
+                        height: calc(38vh);
+                        margin-top: calc(38vh - 162px);margin-left: calc(54vh - 31.5vh);
                         border: 1.5px solid #FFFFFF20;
-                        border-radius: 10px;
+                        border-radius: 27vh;
                         object-fit: cover;object-position: center;
                         filter: blur(0px);
-                        box-shadow: 16px 16px 16px rgba(0, 0, 0, 0.20), 0px 0px 16px rgba(0, 0, 0, 0.20);
+                        box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
+                        position: absolute;
+                        background-color: #DCDBDD10;
+                      ">
+                    </div>
+                    <img
+                      class="animate__rotate_fast"
+                      :class="{ 'animate__rotate_fast_paused': !props.this_audio_is_playing }"
+                      style="
+                        width: calc(54vh - 30vh);height: calc(54vh - 30vh);
+                        margin-left: calc(54vh - 24.5vh);
+                        margin-top: calc(44vh - 162px);
+                        border: 1.5px solid #FFFFFF20;
+                        border-radius: 27vh;
+                        object-fit: cover;object-position: center;
+                        filter: blur(0px);
+                        box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
+                        position: absolute;
                       "
                       :src="getAssetImage(props.this_audio_file_medium_image_url)"
                       @error="handleImageError">
+                    <img
+                      style="
+                        width: calc(54vh - 12vh);height: calc(54vh - 12vh);
+                        WebkitMask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 25%);
+                        margin-top: calc(34vh - 162px);
+                        border: 2px solid #FFFFFF20;
+                        border-radius: 10px;
+                        object-fit: cover;object-position: center;
+                        box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
+                        filter: blur(0px);
+                      "
+                      :src="getAssetImage(props.this_audio_file_medium_image_url)"
+                      @error="handleImageError">
+                    </img>
                     <div
                       style="
                         width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;
