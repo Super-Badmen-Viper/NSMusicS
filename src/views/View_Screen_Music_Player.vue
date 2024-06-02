@@ -30,7 +30,7 @@
   import { defineEmits, ref, watch, watchEffect, onMounted } from 'vue';
   import { onBeforeUnmount } from 'vue';
   // audio_class & player_bar
-  import { Player_UI_Theme_State } from '../../src/features/player/Player_UI_Theme_State'
+  import { Player_UI_Theme_State } from '@/features/player/Player_UI_Theme_State'
 
   ////// System BrowserWindow Set
   const { ipcRenderer } = require('electron');
@@ -376,56 +376,6 @@
   }
   enum LyricAnimation {linebyLine,linebyWord,linebyJump}
   const player_lyric_panel_checked_animation = ref<LyricAnimation>(LyricAnimation.linebyLine)
-  const player_lyric_panel_fontfamily_options_selected = ref<{label:any,value:any}>();
-  const player_lyric_panel_fontfamily_options = ref([
-  {
-    label: 'Drive My Car',
-    value: 'song1'
-  },
-  {
-    label: 'Norwegian Wood',
-    value: 'song2'
-  },
-  {
-    label: "You Won't See",
-    value: 'song3'
-  },
-  {
-    label: 'Nowhere Man',
-    value: 'song4'
-  },
-  {
-    label: 'Think For Yourseld',
-    value: 'song5'
-  },
-  {
-    label: 'The Word',
-    value: 'song6'
-  },
-  {
-    label: 'Michelle',
-    value: 'song7'
-  },
-  {
-    label: 'What goes on',
-    value: 'song8'
-  },
-  {
-    label: 'Girl',
-    value: 'song9'
-  },
-  {
-    label: "I'm looking through you",
-    value: 'song10'
-  },
-  {
-    label: 'In My Life',
-    value: 'song11'
-  },
-  {
-    label: 'Wait',
-    value: 'song12'
-  }])
   const player_lyric_panel_fontsize = ref(24)
 
   ////// player this_audio(play_info , other_info) model check
@@ -451,7 +401,7 @@
   const animationInstance_model_1_spectrum = ref<any>(null);
   const animationInstance_model_1_wave = ref<any>(null);
   const animationInstance_model_2_wave = ref<any>(null);
-  let unwatch_animationInstance = watch(() => props.this_audio_is_playing, (newValue, oldValue) => {
+  let unwatch_animationInstance = watch(() => props.this_audio_is_playing, (newValue) => {
     if (newValue === true) {
       if (player_background_model_num.value === 1){
         animationInstance_model_1_spectrum.value.play();
@@ -505,7 +455,7 @@
           object-fit: cover;object-position: center;
           filter: brightness(46%) blur(60px);"
         :src="getAssetImage(props.this_audio_file_medium_image_url)"
-        @error="handleImageError">
+        @error="handleImageError" alt="">
       <!--Skin-->
       <img
         v-else
@@ -516,7 +466,7 @@
           object-fit: cover;object-position: center;
           filter: brightness(46%) blur(0px);"
         :src="getAssetImage(props.this_audio_file_medium_image_url)"
-        @error="handleImageError">
+        @error="handleImageError" alt="">
     </div>
     <!-- drwaer right area -->
     <n-config-provider :theme="darkTheme">
@@ -541,7 +491,7 @@
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
                 align-items: center; 
-                grid-gap: 0px;
+                grid-gap: 0;
                 margin-left: 9px;
                 margin-top: 12px;"
               >
@@ -550,33 +500,18 @@
                 :key="item.id" v-model:value="item.id"
                 style="height: 100%;z-index: 9;">
                 <n-space vertical justify="center" style="position: relative;left: -27px;z-index: -1;">
-                  <img 
-                    :src="item.normalStyle.image_url" 
-                    style="width: auto;height: 100px;object-fit: cover;
-                    border-radius: 8px;border-radius: 8px;border: 1.5px solid #FFFFFF20;">
+                  <img
+                    :src="item.normalStyle.image_url"
+                    style="
+                      width: auto;height: 100px;object-fit: cover;
+                      border-radius: 8px;border: 1.5px solid #FFFFFF20;
+                    " alt="">
                   <span style="font-size: 16px;position: relative;top: -10px;left: 6px;">
                     {{ item.name }}
                   </span>
                 </n-space>
               </n-radio>
             </n-radio-group>
-            <n-space style="margin-left: 12px;margin-top: 16px;" v-if="false">
-              <span style="font-size:16px;">歌词字体</span>
-              <n-space>
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-select
-                  v-model:value="player_lyric_panel_fontfamily_options_selected"
-                  :options="player_lyric_panel_fontfamily_options"
-                  placeholder="微软雅黑"
-                  :reset-menu-on-options-change="false"
-                  style="width: 207px;margin-top: -4px;"
-                />
-              </n-space> 
-            </n-space>
             <n-space style="margin-left: 12px;margin-top: 20px;">
               <span style="font-size:16px;">歌词字号</span>
               <n-space>
@@ -715,7 +650,7 @@
             </n-radio-group>
           </div>
           <n-flex justify="end" style="height: 70px;">
-            <div style="-webkit-app-region: no-drag;margin-top: 30px;">
+            <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
               <n-button quaternary style="margin-right:2px;" @click="get_isVisible_Player_theme">
                 <template #icon>
                   <n-icon :depth="3"><Settings24Regular /></n-icon>
@@ -776,10 +711,10 @@
                         border-radius: 10px;
                         object-fit: cover;object-position: center;
                         filter: blur(0px);
-                        box-shadow: 16px 16px 16px rgba(0, 0, 0, 0.20), 0px 0px 16px rgba(0, 0, 0, 0.20);
+                        box-shadow: 16px 16px 16px rgba(0, 0, 0, 0.20), 0 0 16px rgba(0, 0, 0, 0.20);
                       "
                       :src="getAssetImage(props.this_audio_file_medium_image_url)"
-                      @error="handleImageError">
+                      @error="handleImageError" alt="">
                     <div
                       style="
                         width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;
@@ -796,7 +731,7 @@
                     </div>
                   </n-space>
                   <!-- 2 旋转封面-->
-                  <n-space vertical v-else-if="player_background_model_num === 1">
+                  <n-space vertical v-if="player_background_model_num === 1">
                     <lottie-player
                       ref="animationInstance_model_1_wave"
                       autoplay
@@ -814,22 +749,21 @@
                     <n-space 
                       style="
                         width: calc(38vh);height: calc(38vh);
-                        margin-top: calc(36vh - 162px);margin-left: calc(9vh);
+                        margin-top: calc(38vh - 162px);margin-left: calc(11vh);
                        ">
                      <img
                        class="animate__rotate_slower"
                        :class="{ 'animate__rotate_slower_paused': !props.this_audio_is_playing }"
                        style="
                         width: calc(34vh);height: calc(34vh);
-                        margin-top: calc(2vh);margin-left: calc(2vh);
                         border: 1.5px solid #FFFFFF20;
                         border-radius: 27vh;
                         object-fit: cover;object-position: center;
                         filter: blur(0px);
-                        box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
+                        box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                        "
                        :src="getAssetImage(props.this_audio_file_medium_image_url)"
-                       @error="handleImageError">
+                       @error="handleImageError" alt="">
                     </n-space> 
                     <div
                       style="
@@ -855,17 +789,18 @@
                     </lottie-player>
                   </n-space>
                   <!-- 3 炫胶唱片-->
-                  <n-space vertical style="margin-top: -2vh;" v-else-if="player_background_model_num === 2">
+                  <n-space vertical style="margin-top: -2vh;" v-if="player_background_model_num === 2">
                     <lottie-player
                       ref="animationInstance_model_2_wave"
                       autoplay
+                      speed="0.8"
                       loop
                       mode="normal"
                       src="../../resources/lottie_json/Animation - 1715417974362.json"
                       style="
                         width: calc(56vh); 
                         height: calc(56vh);
-                        margin-top: calc(29vh - 154px);margin-left: calc(13.5vh);
+                        margin-top: calc(29vh - 155px);margin-left: calc(13.5vh);
                         position: absolute;
                       ">
                     </lottie-player>
@@ -878,7 +813,7 @@
                         border-radius: 27vh;
                         object-fit: cover;object-position: center;
                         filter: blur(0px);
-                        box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
+                        box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                         position: absolute;
                         background-color: #DCDBDD10;
                       ">
@@ -894,11 +829,11 @@
                         border-radius: 27vh;
                         object-fit: cover;object-position: center;
                         filter: blur(0px);
-                        box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
+                        box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                         position: absolute;
                       "
                       :src="getAssetImage(props.this_audio_file_medium_image_url)"
-                      @error="handleImageError">
+                      @error="handleImageError" alt="">
                     <img
                       style="
                         width: calc(54vh - 12vh);height: calc(54vh - 12vh);
@@ -907,12 +842,11 @@
                         border: 2px solid #FFFFFF20;
                         border-radius: 10px;
                         object-fit: cover;object-position: center;
-                        box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.20), 0px 0px 32px rgba(0, 0, 0, 0.20);
-                        filter: blur(0px);
+                        box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
+                        filter: blur(0);
                       "
                       :src="getAssetImage(props.this_audio_file_medium_image_url)"
-                      @error="handleImageError">
-                    </img>
+                      @error="handleImageError" alt="">
                     <div
                       style="
                         width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;
@@ -1004,7 +938,7 @@
   font-size: v-bind(player_lyric_fontSize);
   font-weight: v-bind(player_lyric_fontWeight);
   max-width: calc(36vw);
-  padding-left: 20px;padding-top: 0px;padding-bottom: 4px;
+  padding-left: 20px;padding-top: 0;padding-bottom: 4px;
 }
 
 .animate__rotate_slower {

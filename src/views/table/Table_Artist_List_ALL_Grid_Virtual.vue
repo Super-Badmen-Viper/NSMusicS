@@ -740,7 +740,7 @@
 
 ::-webkit-scrollbar {
   display: auto;
-  width: 10px;
+  width: 6px;
 }
 ::-webkit-scrollbar-thumb {
   background-color: #88888850;

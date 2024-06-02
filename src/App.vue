@@ -1,26 +1,41 @@
 <script setup lang="ts">
-  ////// this_app resource of vicons_svg
-  import {
-    Home28Regular,
-    Flag16Regular,
-    SlideMicrophone32Regular,
-    DocumentHeart20Regular,
-    TextIndentIncreaseLtr20Filled as lyric,
-    PeopleCommunity16Regular,
-    ArrowMinimize16Regular,Maximize16Regular,DarkTheme24Filled,
-  } from '@vicons/fluent'
-  import {
-    AlbumFilled,
-    MusicNoteRound,
-    LibraryMusicOutlined
-  } from '@vicons/material'
-  import {
-    UserAvatarFilledAlt,
-    Hearing,
-    Close,Menu as MenuIcon,
-  } from '@vicons/carbon'
+////// this_app resource of vicons_svg
+import {
+  ArrowMinimize16Regular,
+  DarkTheme24Filled,
+  DocumentHeart20Regular,
+  Flag16Regular,
+  Home28Regular,
+  Maximize16Regular,
+  PeopleCommunity16Regular,
+  SlideMicrophone32Regular,
+  TextIndentIncreaseLtr20Filled as lyric,
+} from '@vicons/fluent'
+import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound} from '@vicons/material'
+import {Close, Hearing, Menu as MenuIcon, UserAvatarFilledAlt,} from '@vicons/carbon'
+import type {GlobalTheme, MenuOption} from 'naive-ui'
+////// this_app components of navie ui
+// app theme_color
+////// this_app
+import {darkTheme, dateZhCN, lightTheme, NConfigProvider, NIcon, zhCN} from 'naive-ui'
+// vue3 function
+import {h, onMounted, ref} from 'vue';
+import routers from './router'
+import {RouterLink, RouterView, useRouter} from 'vue-router';
+// audio_class & player_bar class
+import {Audio_howler} from '@/models/song_Audio_Out/Audio_howler';
+import Bar_Music_Player from '@/components/Bar_Music_Player.vue'
+// current_audioList class
+import Bar_Music_PlayList from '@/components/Bar_Music_PlayList.vue'
+// player class
+import View_Screen_Music_Player from '@/views/View_Screen_Music_Player.vue'
+import {Player_UI_Theme_State} from '@/features/player/Player_UI_Theme_State'
+import {System_Configs_Read} from '@/features/system/System_Configs_Read'
+import {App_Configs} from '@/models/app_Configs_For_Sqlite/class_App_Configs';
+import {Player_Configs_of_Audio_Info} from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_Audio_Info';
+import {Player_Configs_of_UI} from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_UI';
 
-  const crypto = require('crypto');
+const crypto = require('crypto');
   function generateEncryptedPassword(password: string): { salt: string, token: string } {
       const saltLength = 6;
       const salt = generateRandomString(saltLength);
@@ -40,62 +55,57 @@
   console.log('s-Salt:', salt);
   console.log('t-Token:', token);
 
-  ////// this_app components of navie ui 
-  import { NIcon } from 'naive-ui'
-  import type { MenuOption } from 'naive-ui'
-  // naive ui of n-menu(app left menu bar)
+// naive ui of n-menu(app left menu bar)
   function renderIcon (icon: any) {
     return () => h(NIcon, null, { default: () => h(icon) })
   }
-  function renderLabel (nameValue: any,defaultValue: any){
+  function renderRouterLink (nameValue: any,defaultValue: any){
     return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
   }
   const menuOptions: MenuOption[] = [
-    {label: renderLabel('home','菜单'),key: 'go_back_menu',icon: renderIcon(MenuIcon),},
+    {label: renderRouterLink('View_Menu_AppSetting','菜单'),key: 'go_back_menu',icon: renderIcon(MenuIcon),},
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    {label: renderLabel('home','主页'),key: 'go_back_home',icon: renderIcon(Home28Regular),},
+    {label: renderRouterLink('View_Home','主页'),key: 'go_back_home',icon: renderIcon(Home28Regular),},
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    {label: renderLabel('View_Album_List_ALL','专辑'),key: 'go_albums_list',icon: renderIcon(AlbumFilled)},
-    {label: renderLabel('View_Song_List_ALL','乐曲'),key: 'go_songs_list',icon: renderIcon(MusicNoteRound)},
-    {label: renderLabel('View_Artist_List_ALL','歌手'),key: 'go_artist_list',icon: renderIcon(UserAvatarFilledAlt)},
-    {label: renderLabel('home','流派'),key: 'go_other',icon: renderIcon(Flag16Regular)},
+    {label: renderRouterLink('View_Album_List_ALL','专辑'),key: 'go_albums_list',icon: renderIcon(AlbumFilled)},
+    {label: renderRouterLink('View_Song_List_ALL','乐曲'),key: 'go_songs_list',icon: renderIcon(MusicNoteRound)},
+    {label: renderRouterLink('View_Artist_List_ALL','歌手'),key: 'go_artist_list',icon: renderIcon(UserAvatarFilledAlt)},
+    {label: renderRouterLink('View_Home','流派'),key: 'go_other',icon: renderIcon(Flag16Regular)},
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    {label: renderLabel('home','猜你喜欢'),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
-    {label: renderLabel('home','K歌'),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
-    {label: renderLabel('home','听歌识曲'),key: 'go_other',icon: renderIcon(Hearing)},
-    {label: renderLabel('home','乐谱生成'),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
-    {label: renderLabel('home','歌词制作'),key: 'go_other',icon: renderIcon(lyric)},
-    {label: renderLabel('home','音乐社区'),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
+    {label: renderRouterLink('View_Home','猜你喜欢'),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
+    {label: renderRouterLink('View_Home','K歌'),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
+    {label: renderRouterLink('View_Home','听歌识曲'),key: 'go_other',icon: renderIcon(Hearing)},
+    {label: renderRouterLink('View_Home','乐谱生成'),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
+    {label: renderRouterLink('View_Home','歌词制作'),key: 'go_other',icon: renderIcon(lyric)},
+    {label: renderRouterLink('View_Home','音乐社区'),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
   ]
   const app_left_menu_select_activeKey = ref<string | null>(null)
+  const app_left_menu_select_update = (key: string, item: MenuOption) => {
+    app_left_menu_select_activeKey.value = key
+
+    router_select_model_menu.value = false
+    router_select_model_home.value = false
+    router_select_model_media.value = false
+    router_select_model_album.value = false
+    router_select_model_artist.value = false
+    if(app_left_menu_select_activeKey.value === 'go_back_menu'){
+      router_select_model_menu.value = true;
+    }else if(app_left_menu_select_activeKey.value === 'go_back_home'){
+      router_select_model_home.value = true;
+    }else if(app_left_menu_select_activeKey.value === 'go_albums_list'){
+      router_select_model_album.value = true;
+    }else if(app_left_menu_select_activeKey.value === 'go_songs_list'){
+      router_select_model_media.value = true;
+    }else if(app_left_menu_select_activeKey.value === 'go_artist_list'){
+      router_select_model_artist.value = true;
+    }
+  }
   const app_left_menu_collapsed = ref(false)
-  // app theme_color
-  import { darkTheme,lightTheme } from 'naive-ui'
-  import type { GlobalTheme } from 'naive-ui'
-  // node function
+// node function
   const path = require('path');
   const fs = require('fs');
-  // vue3 function
-  import { ref } from 'vue';
-  import { h, onMounted } from 'vue'
-  import routers from './router'
-  import { useRouter } from 'vue-router'; 
-  import { RouterLink, RouterView } from 'vue-router'
-  // audio_class & player_bar class
-  import { Audio_howler }  from '../src/models/song_Audio_Out/Audio_howler';
-  import Bar_Music_Player from '../src/components/Bar_Music_Player.vue'
-  // current_audioList class
-  import Bar_Music_PlayList from '../src/components/Bar_Music_PlayList.vue'
-  // player class
-  import View_Screen_Music_Player from '../src/views/View_Screen_Music_Player.vue'
-  import { Player_UI_Theme_State } from '../src/features/player/Player_UI_Theme_State'
-  import { System_Configs_Read } from '../src/features/system/System_Configs_Read'
-  import { System_Configs_Write } from '../src/features/system/System_Configs_Write'
-  import { App_Configs } from '@/models/app_Configs_For_Sqlite/class_App_Configs';
-  import { Player_Configs_of_Audio_Info } from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_Audio_Info';
-  import { Player_Configs_of_UI } from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_UI';
 
-  ////// this_app theme_color
+////// this_app theme_color
   const theme = ref<GlobalTheme | null>(null)
   const theme_name = ref<string>()
   const theme_app =ref<GlobalTheme | null>(null)
@@ -121,12 +131,7 @@
     }
   }
 
-  ////// this_app 
-  import { defineComponent } from 'vue'
-  import { NConfigProvider } from 'naive-ui'
-  import { zhCN, dateZhCN } from 'naive-ui'
-
-  ////// this_app sqlite db
+////// this_app sqlite db
   let navidrome_db = path.resolve('resources/navidrome.db');
   
   ////// this_app BrowserWindow
@@ -138,7 +143,6 @@
     ipcRenderer.send('window-max');
   }
   function closeWindow() {
-
     ipcRenderer.send('window-close');
   }
   const window_innerWidth = ref<number>(window.innerWidth)
@@ -169,12 +173,18 @@
     }, 30);
 
     // Vue UI WYSIWYG
-    router_select_model_album.value = false;
-    router_select_model_media.value = false;
-    router_select_model_artist.value = false;
+    router_select_model_menu.value = false
+    router_select_model_home.value = false
+    router_select_model_media.value = false
+    router_select_model_album.value = false
+    router_select_model_artist.value = false
     setTimeout(() => {
       if(value != 0){
-        if(app_left_menu_select_activeKey.value === 'go_albums_list'){
+        if(app_left_menu_select_activeKey.value === 'go_back_menu'){
+          router_select_model_menu.value = true;
+        }else if(app_left_menu_select_activeKey.value === 'go_back_home'){
+          router_select_model_home.value = true;
+        }else if(app_left_menu_select_activeKey.value === 'go_albums_list'){
           router_select_model_album.value = true;
         }else if(app_left_menu_select_activeKey.value === 'go_songs_list'){
           router_select_model_media.value = true;
@@ -248,16 +258,10 @@
     console.log('this_audio_file_path：'+value)
 
     media_Files_temporary.value.forEach((item, index) => {
-      if(item.id === this_audio_song_id.value)
-        item.playing = true
-      else
-        item.playing = false
+      item.playing = item.id === this_audio_song_id.value;
     });
     playlist_Files_temporary.value.forEach((item, index) => {
-      if(item.id === this_audio_song_id.value)
-        item.playing = true
-      else
-        item.playing = false
+      item.playing = item.id === this_audio_song_id.value;
     });
   }
   const this_audio_file_medium_image_url = ref(path.resolve('resources/img/error_album.jpg'));
@@ -374,7 +378,7 @@
   const media_Files_temporary = ref<Media_File[]>([])
   const media_Files_selected = ref<Media_File[]>([])
   function set_media_Files_selected(value: Media_File) {
-    if (value.selected === true) {
+    if (value.selected) {
       media_Files_temporary.value.forEach((item, index) => {
         if (item.id === value.id) {
           media_Files_temporary.value[index].selected = true;
@@ -396,7 +400,7 @@
     media_Files_temporary.value.forEach((item, index) => {
       media_Files_temporary.value[index].selected = value;
     });
-    if (value === true) {
+    if (value) {
       media_Files_selected.value = media_Files_temporary.value.slice();
     } else {
       media_Files_selected.value = [];
@@ -452,11 +456,10 @@
   }
   function get_player_go_lyricline_index_of_audio_play_progress_of_convertToMilliseconds(timeString: { split: (arg0: string) => [any, any] }) {
     const [minutes, seconds] = timeString.split(':');
-    const totalMilliseconds = (parseInt(minutes) * 60 + parseInt(seconds)) * 1000;
-    return totalMilliseconds;
+    return (parseInt(minutes) * 60 + parseInt(seconds)) * 1000;
   }
 
-  ///// view of home
+  ///// view of View_Home
   const fetchData_Home = async () => { 
 
   };
@@ -762,11 +765,9 @@
       `);
       const annotations = stmt_media_Annotation_Starred_Items.all();
       for (let i = 0; i < media_Files_temporary.value.length; i++) {
-        if (annotations.some((annotation: { item_id: string }) => annotation.item_id === media_Files_temporary.value[i].id)) {
-          media_Files_temporary.value[i].favorite = true;
-        } else {
-          media_Files_temporary.value[i].favorite = false;
-        }
+        media_Files_temporary.value[i].favorite = !!annotations.some((annotation: {
+          item_id: string
+        }) => annotation.item_id === media_Files_temporary.value[i].id);
       }
       ////// find rating for media_Files_temporary
       const stmt_media_Annotation_Rating_Items = db.prepare(`
@@ -1073,7 +1074,6 @@
         album_Files_temporary.value.push(row);
       });
       rows.length = 0
-      rows = []
       moment = null;
       ////// find favorite for album_Files_temporary
       const stmt_album_Annotation_Starred_Items = db.prepare(`
@@ -1082,11 +1082,9 @@
       `);
       const annotations = stmt_album_Annotation_Starred_Items.all();
       for (let i = 0; i < album_Files_temporary.value.length; i++) {
-        if (annotations.some((annotation: { item_id: string }) => annotation.item_id === album_Files_temporary.value[i].id)) {
-          album_Files_temporary.value[i].favorite = true;
-        } else {
-          album_Files_temporary.value[i].favorite = false;
-        }
+        album_Files_temporary.value[i].favorite = !!annotations.some((annotation: {
+          item_id: string
+        }) => annotation.item_id === album_Files_temporary.value[i].id);
       }
       ////// find rating for album_Files_temporary
       const stmt_album_Annotation_Rating_Items = db.prepare(`
@@ -1388,7 +1386,7 @@
         }
         router_history_model_of_Artist.value = 0;
       }
-      const stmt_media_file = db.prepare(`SELECT id, title, artist,artist_id, album,album_id, duration, path FROM media_file`);
+      const stmt_media_file = db.prepare(`SELECT * FROM media_file`);
       const pathfiles = stmt_media_file.all();
       let rows = stmt_artist.all();
       rows.forEach((row: Artist) => {
@@ -1409,7 +1407,6 @@
         artist_Files_temporary.value.push(row);
       });
       rows.length = 0
-      rows = []
       ////// find favorite for artist_Files_temporary
       const stmt_artist_Annotation_Starred_Items = db.prepare(`
         SELECT item_id FROM annotation 
@@ -1417,11 +1414,9 @@
       `);
       const annotations = stmt_artist_Annotation_Starred_Items.all();
       for (let i = 0; i < artist_Files_temporary.value.length; i++) {
-        if (annotations.some((annotation: { item_id: string }) => annotation.item_id === artist_Files_temporary.value[i].id)) {
-          artist_Files_temporary.value[i].favorite = true;
-        } else {
-          artist_Files_temporary.value[i].favorite = false;
-        }
+        artist_Files_temporary.value[i].favorite = !!annotations.some((annotation: {
+          item_id: string
+        }) => annotation.item_id === artist_Files_temporary.value[i].id);
       }
       ////// find rating for artist_Files_temporary
       const stmt_artist_Annotation_Rating_Items = db.prepare(`
@@ -1528,10 +1523,14 @@
     app_left_menu_select_activeKey.value = 'go_albums_list'
   }
   // router Data_sources and rendering
+  const router_select_model_menu = ref<Boolean>(false)
+  const router_select_model_home = ref<Boolean>(false)
   const router_select_model_media = ref<Boolean>(false)
   const router_select_model_album = ref<Boolean>(false)
   const router_select_model_artist = ref<Boolean>(false)
   function clear_Files_temporary() {
+    router_select_model_menu.value = false
+    router_select_model_home.value = false
     router_select_model_media.value = false
     router_select_model_album.value = false
     router_select_model_artist.value = false
@@ -1554,7 +1553,13 @@
   routers.afterEach((to, from) => {
     if(to.name !== from.name){
       clear_Files_temporary()
-      if(to.name === 'View_Song_List_ALL'){
+      if(to.name === 'View_Menu_AppSetting'){
+        router_select_model_menu.value = true
+        router_name.value = to.name
+      }else if(to.name === 'View_Home'){
+        router_select_model_home.value = true
+        router_name.value = to.name
+      }else if(to.name === 'View_Song_List_ALL'){
         router_select_model_media.value = true
         router_name.value = to.name
       }else if(to.name === 'View_Album_List_ALL'){
@@ -1568,7 +1573,7 @@
   });
   const get_router_select = (value: any) => {
     ////// 
-    if(value === 'home'){
+    if(value === 'View_Home'){
       fetchData_Home()
     }else if(value === 'View_Song_List_ALL'){
       router_select_model_media.value = true
@@ -1902,14 +1907,31 @@
             :collapsed="app_left_menu_collapsed"
             :collapsed-width="64"
             :collapsed-icon-size="22"
-            :options="menuOptions"/>
+            :options="menuOptions"
+            :on-update:value="app_left_menu_select_update"/>
         </n-layout-sider>
         <!--Right Router_View-->
         <n-layout embedded style="height: calc(100vh);">
+          <RouterView
+            class="view_show_data"
+            v-if="router_select_model_menu"
+            @router_select="get_router_select"
+            :app_left_menu_collapsed="app_left_menu_collapsed"
+            :window_innerWidth="window_innerWidth">
+
+          </RouterView>
+          <RouterView
+            class="view_show_data"
+            v-else-if="router_select_model_home"
+            @router_select="get_router_select"
+            :app_left_menu_collapsed="app_left_menu_collapsed"
+            :window_innerWidth="window_innerWidth">
+
+          </RouterView>
           <!--Media View-->
           <RouterView
-            class="view_show"
-            v-if="router_select_model_media"
+            class="view_show_table"
+            v-else-if="router_select_model_media"
             @router_select="get_router_select"
             :app_left_menu_collapsed="app_left_menu_collapsed"
             :window_innerWidth="window_innerWidth"
@@ -1962,7 +1984,7 @@
           </RouterView>
           <!--Album View-->
           <RouterView
-            class="view_show"
+            class="view_show_table"
             v-else-if="router_select_model_album"
             @router_select="get_router_select"
             :app_left_menu_collapsed="app_left_menu_collapsed"
@@ -2002,7 +2024,7 @@
           </RouterView>
           <!--Artist View-->
           <RouterView
-            class="view_show"
+            class="view_show_table"
             v-else-if="router_select_model_artist"
             @router_select="get_router_select"
             :app_left_menu_collapsed="app_left_menu_collapsed"
@@ -2039,6 +2061,7 @@
           >
           
           </RouterView>
+          
           <!--Top Bar-->
           <div class="bar_top_setapp" :style="{ backgroundColor: theme_bar_top_setapp }">
             <section  
@@ -2084,7 +2107,7 @@
         width: 100vw;height: 80px;
         background-color: #00000000;
         z-index: 100;
-        border-radius: 12px 12px 0px 0px;border: 0px #00000000">
+        border-radius: 12px 12px 0 0;border: 0 #00000000">
       <Bar_Music_Player
         :player="player"
         @this_audio_is_playing="get_this_audio_is_playing"
@@ -2299,12 +2322,19 @@
   overflow: hidden;
 }
 .n_layout_sider {
-  padding-top: 60px;
-  border: 0px;
+  padding-top: 64px;
+  border: 0;
 }
-.view_show {
+.view_show_table {
   width: calc(100vw - 100px);
   height: calc(100vh - 200px);
+
+  margin-top: 70px;
+  margin-left: 30px;
+}
+.view_show_data {
+  width: calc(100vw - 100px);
+  height: calc(100vh - 150px);
 
   margin-top: 70px;
   margin-left: 30px;
@@ -2318,6 +2348,7 @@
 .bar_top_setapp{
   width: 100vw;
   height: 60px;
+  margin-left: 7px;
 
   z-index: 1;
 

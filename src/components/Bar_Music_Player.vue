@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  ////// this_view resource of vicons_svg
+  ////// this_view resource of icons_svg
   import {
     Heart24Regular,Heart28Filled,
     MoreCircle32Regular,
@@ -7,7 +7,6 @@
     TopSpeed20Regular,DeviceEq24Filled
   } from '@vicons/fluent'
   import {
-    QueueMusicRound,
     RepeatOneRound
   } from '@vicons/material' 
   import {
@@ -20,8 +19,8 @@
   } from '@vicons/fa'
   import { NIcon, NSlider, NSpace, NText } from 'naive-ui'; 
 
-  ////// this_view components of navie ui 
-  import { h, onMounted, ref, watch, watchEffect } from 'vue';
+  ////// this_view components of navie_ui
+  import { ref, watch } from 'vue';
   import { defineEmits } from 'vue';
   import { onBeforeUnmount } from 'vue';
   const { ipcRenderer } = require('electron');
@@ -101,7 +100,7 @@
       back_ChevronDouble.value = '../../resources/svg/'+svg_shrink_up_arrow.value;
     }
   };
-  let unwatch_player_show_click = watch(() => props.player_show_click, (newValue, oldValue) => {
+  let unwatch_player_show_click = watch(() => props.player_show_click, (newValue) => {
     if (newValue === true) {
       player_show_hight_animation_value.value = 670;
       emits('player_show_height',player_show_hight_animation_value.value)
@@ -118,7 +117,7 @@
   ////// audio_player
   const timer_this_audio_restart_play = ref<NodeJS.Timeout>();
   const lastTriggerValue = ref<any>(null);// 延迟触发：接收大量数据时，仅触发最后一个值
-  let unwatch_this_audio_restart_play = watch(() => props.this_audio_restart_play, (newValue, oldValue) => {
+  let unwatch_this_audio_restart_play = watch(() => props.this_audio_restart_play, (newValue) => {
     if (newValue === true) {
       lastTriggerValue.value = newValue; // 更新最后一个触发的值
       clearTimeout(timer_this_audio_restart_play.value);
@@ -138,7 +137,7 @@
     player_no_progress_jump.value = false;
     props.player.isPlaying = false;
 
-    Init_Audio_Player()
+    await Init_Audio_Player()
   };
   const play_order = ref('playback-2');
   const this_audio_buffer_file = ref<any>()
@@ -245,46 +244,16 @@
   const current_play_time = ref('01:36');
   const slider_singleValue = ref(0)
   const player_silder_currentTime_added_value = ref(0)
-  let unwatch_player_silder_currentTime_added_value = watch(() => player_silder_currentTime_added_value.value, (newValue, oldValue) => {
+  let unwatch_player_silder_currentTime_added_value = watch(() => player_silder_currentTime_added_value.value, (newValue) => {
     emits('player_silder_currentTime_added_value',newValue);
   });
   const player_no_progress_jump = ref(true)
 
 
   ////// player player_button order area
-  const options_Order = [
-    { label: '顺序播放', key: 'playback-1', 
-      icon() {
-        return h(NIcon, null, {
-          default: () => h(ArrowAutofitDown24Regular)
-        });
-      } 
-    },
-    { label: '列表循环', key: 'playback-2', 
-      icon() {
-        return h(NIcon, null, {
-          default: () => h(ArrowRepeatAll16Regular)
-        });
-      }
-    },
-    { label: '单曲循环', key: 'playback-3', 
-      icon() {
-        return h(NIcon, null, {
-          default: () => h(RepeatOneRound)
-        });
-      }
-    },
-    { label: '随机播放', key: 'playback-4', 
-      icon() {
-        return h(NIcon, { size: '12px' }, {
-          default: () => h(Random)
-        });
-      }
-    }
-  ];
-  const handleSelect_Order = (value: any) => {
-    console.log(value);
-    play_order.value = value;
+  const drawer_order_show = ref(false)
+  const backpanel_order_click = () => {
+    drawer_order_show.value = !drawer_order_show.value;
   }
   function Play_Media_Order(model_num: string, increased: number) {
     if (props.playlist_Files_temporary.length > 0) {
@@ -383,78 +352,21 @@
   };
   ////// player player_button voice area
   const slider_volume_value = ref(100)
-  const slider_volume_show = ref(false)
+  const drawer_volume_show = ref(false)
   const backpanel_voice_click = () => {
-    if(slider_volume_show.value){
-      slider_volume_show.value = false;
-    }else{
-      slider_volume_show.value = true;
-    }
+    drawer_volume_show.value = !drawer_volume_show.value;
   }
   let unwatch_slider_volume_value = watch(
     slider_volume_value,
-    (newValue, oldValue) => {
+    (newValue) => {
       props.player.setVolume(newValue ? Number(slider_volume_value.value / 100) : 0);
     },
     { immediate: true }
   );
-  const options_Volume = [
-    {
-      key: 'header',
-      type: 'render',
-      render: render_Slider
-    },
-    // {
-    //   label: '处理群消息 342 条',
-    //   key: 'stmt1'
-    // },
-  ];
-  function render_Slider () {
-    return h(
-      NSpace,
-      {
-        style: 'width: 50px;height: 140px;',
-        vertical: true,
-        justify: 'center',
-        align: 'center',
-        'on-mousemove': () => {
-          emits('player_collapsed_action_bar_of_Immersion_model', false);
-        },
-        'on-mouseover': () => {
-          emits('player_collapsed_action_bar_of_Immersion_model', false);
-        },
-      },
-      [
-        h(NSlider, {
-          style: 'width: 18px;height: 100px;',
-          min: 0,
-          max: 100,
-          vertical: true,
-          value: slider_volume_value.value,
-          'on-update:value': (value: number) => {
-            slider_volume_value.value = value;
-          },
-          'on-mousemove': () => {
-          emits('player_collapsed_action_bar_of_Immersion_model', false);
-          },
-          'on-mouseover': () => {
-            emits('player_collapsed_action_bar_of_Immersion_model', false);
-          },
-        }),
-        h('div', { style: 'font-size: 14px;' }, [
-          h(
-            NText,
-            { depth: 3 },
-            { default: () => slider_volume_value.value }
-          )
-        ]),
-      ]
-    )
-  }
 
   ////// player slider formatTime area
   const set_slider_singleValue = () => {
-    if ( player_range_duration_isDragging == false) 
+    if (!player_range_duration_isDragging)
       slider_singleValue.value = (props.player.getCurrentTime() + player_silder_currentTime_added_value.value) / props.player.getDuration() * 100;
   };
   function formatTime(currentTime: number): string {
@@ -498,7 +410,7 @@
   const player_range_duration_handleclick = async () => {
     play_go_duration(slider_singleValue.value,true);
   }
-  let unwatch_play_go_index_time =  watch(() => props.player_go_lyricline_index_of_audio_play_progress, (newValue, oldValue) => {
+  let unwatch_play_go_index_time =  watch(() => props.player_go_lyricline_index_of_audio_play_progress, () => {
     play_go_duration(props.player_go_lyricline_index_of_audio_play_progress,false)
   });
   const play_go_duration = (slider_value:number,silder_path:boolean) => {
@@ -565,12 +477,13 @@
   const handleMouseMove = () => {
     if(props.player_show === true){
       emits('player_collapsed_action_bar_of_Immersion_model', true);
-      slider_volume_show.value = false;
+      drawer_order_show.value = false;
+      drawer_volume_show.value = false;
     }
   };
 
   ////// changed_data write to sqlite
-  import {Set_MediaInfo_To_LocalSqlite} from '../../src/models/data_Change_For_Sqlite/class_Set_MediaInfo_To_LocalSqlite'
+  import { Set_MediaInfo_To_LocalSqlite } from '@/models/data_Change_For_Sqlite/class_Set_MediaInfo_To_LocalSqlite'
   let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id,favorite)
@@ -646,7 +559,7 @@
           <img class="back_svg"
               :src="back_ChevronDouble"
               :style="{ display: back_display }"
-              @click="click_back_svg" @mouseover="hover_back_img" @mouseout="leave_back_svg"/>
+              @click="click_back_svg" @mouseover="hover_back_img" @mouseout="leave_back_svg" alt=""/>
               
           <img class="back_img" 
               :src="getAssetImage(props.this_audio_file_medium_image_url)"
@@ -654,7 +567,7 @@
               :style="{ filter: 'blur(' + back_filter_blurValue + 'px)' }"
               style="objectFit: cover; objectPosition: center;"
               @click="click_back_svg"
-              @mouseover="hover_back_img" @mouseout="leave_back_svg"/>
+              @mouseover="hover_back_img" @mouseout="leave_back_svg" alt=""/>
         </div>
         <div class="bar_left_text_song_info">
           <n-space>
@@ -673,26 +586,24 @@
         </div>
       </div>
       <div class="gird_Middle">
+        <!-- grid_Middle_button_area -->
         <n-space class="grid_Middle_button_area" justify="center">
-          <n-dropdown 
-            trigger="click" :show-arrow="true" :options="options_Order" @select="handleSelect_Order">
-            <n-button quaternary round size="small">
-              <template #icon>
-                <n-icon :size="26" v-if="play_order === 'playback-1'">
-                  <ArrowAutofitDown24Regular/>
-                </n-icon>
-                <n-icon :size="26" v-else-if="play_order === 'playback-2'">
-                  <ArrowRepeatAll16Regular/>
-                </n-icon>
-                <n-icon :size="26" v-else-if="play_order === 'playback-3'">
-                  <RepeatOneRound/>
-                </n-icon>
-                <n-icon :size="20" v-else-if="play_order === 'playback-4'">
-                  <Random/>
-                </n-icon>
-              </template>
-            </n-button>
-          </n-dropdown>
+          <n-button quaternary round size="small" @click="backpanel_order_click">
+            <template #icon>
+              <n-icon :size="26" v-if="play_order === 'playback-1'">
+                <ArrowAutofitDown24Regular/>
+              </n-icon>
+              <n-icon :size="26" v-else-if="play_order === 'playback-2'">
+                <ArrowRepeatAll16Regular/>
+              </n-icon>
+              <n-icon :size="26" v-else-if="play_order === 'playback-3'">
+                <RepeatOneRound/>
+              </n-icon>
+              <n-icon :size="20" v-else-if="play_order === 'playback-4'">
+                <Random/>
+              </n-icon>
+            </template>
+          </n-button>
           <n-button quaternary round size="small" @click="play_skip_back_click">
             <template #icon>
               <n-icon :size="26"><PlaySkipBack/></n-icon>
@@ -715,6 +626,7 @@
             </template>
           </n-button>
         </n-space>
+        <!-- grid_Middle_slider_area -->
         <div>
           <n-slider 
             style="
@@ -730,12 +642,62 @@
             @click="player_range_duration_handleclick"
             />
         </div>
+        <!-- grid_Middle_drwaer_area -->
+        <n-config-provider :theme="null">
+          <div id="backpanel_order">
+            
+          </div>
+          <n-drawer
+            v-model:show="drawer_order_show"      
+            placement="bottom"
+            to="#backpanel_order"
+            :height="150"
+            show-mask="transparent"
+            style="border-radius: 10px;">
+            <n-drawer-content>
+              <n-space vertical style="height: 100px;">
+                <n-button quaternary @click="play_order = 'playback-1'" style="margin-left: -18px;margin-top: -8px;">
+                  <template #icon>
+                    <n-icon>
+                      <ArrowAutofitDown24Regular/>
+                    </n-icon>
+                  </template>
+                  顺序播放
+                </n-button>
+                <n-button quaternary @click="play_order = 'playback-2'" style="margin-left: -18px;margin-top: -8px;">
+                  <template #icon>
+                    <n-icon>
+                      <ArrowRepeatAll16Regular/>
+                    </n-icon>
+                  </template>
+                  列表循环
+                </n-button>
+                <n-button quaternary @click="play_order = 'playback-3'" style="margin-left: -18px;margin-top: -8px;">
+                  <template #icon>
+                    <n-icon>
+                      <RepeatOneRound/>
+                    </n-icon>
+                  </template>
+                  单曲循环
+                </n-button>
+                <n-button quaternary @click="play_order = 'playback-4'" style="margin-left: -18px;margin-top: -8px;">
+                  <template #icon>
+                    <n-icon :size="12">
+                      <Random />
+                    </n-icon>
+                  </template>
+                  随机播放
+                </n-button>
+              </n-space>
+            </n-drawer-content>
+          </n-drawer>
+        </n-config-provider>
         <n-config-provider :theme="null">
           <div id="backpanel_voice">
             
           </div>
           <n-drawer
-            v-model:show="slider_volume_show"      
+            v-model:show="drawer_volume_show"      
             placement="bottom"
             :width="77"
             :height="226"
@@ -819,7 +781,7 @@
   width: 100vw;
   height: 80px;
   z-index: 100;
-  border-radius: 12px 12px 0px 0px;
+  border-radius: 12px 12px 0 0;
 }
 
 .layout_distribution_3 {
@@ -860,7 +822,7 @@
   width: 60px;height: 60px;
   border-radius: 6px;
   border: 1.5px solid #FFFFFF20;
-  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
   z-index: 0;
 }
 .gird_Left .bar_left_text_song_info{
@@ -906,18 +868,14 @@
   display: flex;
   align-items: center;
   width: 300px;
-  margin: 0px auto;
-  margin-top: 10px;
+  margin: 10px auto 0;
 }
 .gird_Middle #backpanel_order{
   position: absolute;
-  top: -200px;
+  bottom: 80px;
   margin-left: 30px;
-  width: 100px;
-  height: 210px;
-  background-color: #FFFFFF;
+  width: 120px;
   border-radius: 10px;
-  border: #283248 1px solid;
 }
 .gird_Middle #backpanel_voice{
   position: fixed;
@@ -960,45 +918,4 @@
 .gird_Right .gird_Right_current_playlist_button_area_of_button :hover{
   color: #3DC3FF;
 }
-.gird_Right .gird_Right_audio_play_time_area{
-  height: 80px;
-  float: right;
-  margin-right: 56px;
-}
-.gird_Right .gird_Right_audio_play_time_area #current_play_time{
-  font-size: 16px;
-  position: absolute;
-  top: 10px;
-}
-.gird_Right .gird_Right_audio_play_time_area #divider_play_time{
-  position: absolute;
-  top: 28px;
-}
-.gird_Right .gird_Right_audio_play_time_area #total_play_time{
-  font-size: 16px;
-  position: absolute;
-  bottom: 10px;
-}
-.gird_Right .gird_Right_sound_effects_button_area{
-  width: 30px;
-  height: 30px;
-  float: right;
-  margin-top: 24px;
-  margin-right: 10px;
-  border-radius: 10px;
-}
-.gird_Right .gird_Right_speed_effects_button_area{
-  width: 30px;
-  height: 30px;
-  border-radius: 10px;
-}
-.gird_Right .gird_Right_sound_speed_button_area{
-  width: 30px;
-  height: 30px;
-  float: right;
-  margin-top: 24px;
-  margin-right: 2px;
-  border-radius: 10px;
-}
-
 </style>

@@ -18,6 +18,13 @@
     "noEmit": true,
     "module": "ESNext",
     "moduleResolution": "Node",
-    "types": ["naive-ui/volar"]
+    "types": ["naive-ui/volar"],
+    "baseUrl": "./",
+    "paths": {
+      "@/components/*": ["src/components/*"],
+      "@/features/*": ["src/features/*"],
+      "@/models/*": ["src/models/*"],
+      "@/views/*": ["src/views/*"]
+    }
   }
 }

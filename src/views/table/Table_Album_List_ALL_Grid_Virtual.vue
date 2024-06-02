@@ -481,7 +481,7 @@
               overflow: hidden;">
               <svg 
                 style="
-                  position: absolute; top: -2; left: 0; 
+                  position: absolute; top: -2; left: 0;
                   width: 100%; height: 100%;">
                 <defs>
                   <linearGradient v-if="!props.change_page_header_color" id="gradient" gradientTransform="rotate(30)">
@@ -772,7 +772,7 @@
 
 ::-webkit-scrollbar {
   display: auto;
-  width: 10px;
+  width: 6px;
 }
 ::-webkit-scrollbar-thumb {
   background-color: #88888850;
