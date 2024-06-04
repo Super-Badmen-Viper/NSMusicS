@@ -38,6 +38,7 @@
     "prebuild-install": "^7.1.1",
     "rxjs": "^7.8.1",
     "uuid": "^9.0.1",
+    "vue-i18n": "next",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -47,6 +48,7 @@
     "@tsconfig/node18": "^18.2.2",
     "@types/node": "^20.11.8",
     "@types/qs": "^6.9.15",
+    "@types/semver": "^7.5.8",
     "@vitejs/plugin-vue": "^4.5.2",
     "@vue/compiler-sfc": "^3.4.15",
     "@vue/tsconfig": "^0.5.1",

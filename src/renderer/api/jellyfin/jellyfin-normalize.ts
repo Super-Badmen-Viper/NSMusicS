@@ -1,16 +1,16 @@
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
-import { JFAlbum, JFPlaylist, JFMusicFolder, JFGenre } from '@/renderer/api/jellyfin.types';
+import { type JFAlbum, type JFPlaylist, type JFMusicFolder, type JFGenre } from '@/renderer/api/jellyfin.types';
 import { jfType } from '@/renderer/api/jellyfin/jellyfin-types';
 import {
-    Song,
+    type Song,
     LibraryItem,
-    Album,
-    AlbumArtist,
-    Playlist,
-    MusicFolder,
-    Genre,
-    ServerListItem,
+    type Album,
+    type AlbumArtist,
+    type Playlist,
+    type MusicFolder,
+    type Genre,
+    type ServerListItem,
     ServerType,
 } from '@/renderer/api/types';
 

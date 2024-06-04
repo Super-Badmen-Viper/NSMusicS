@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { ssType } from '@/renderer/api/subsonic/subsonic-types';
 import type { ServerListItem } from '@/renderer/api/types';
 import toast from "@/renderer/toast/index"
-import i18n from '@/renderer/i18n/i18n';
+import i18n from '@/i18n/i18n';
 
 const c = initContract();
 

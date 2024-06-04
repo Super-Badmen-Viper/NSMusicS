@@ -14,7 +14,7 @@
         "bpm": "bpm",
         "edit": "editar",
         "favorite": "favorito",
-        "currentSong": "$t(entity.track_one) atual",
+        "currentSong": "{arg} atual",
         "descending": "abaixar",
         "dismiss": "liberar",
         "duration": "duração",
@@ -72,7 +72,7 @@
         "none": "nenhum",
         "menu": "menu",
         "restartRequired": "é necessário reiniciar",
-        "previousSong": "anterior $t(entity.track_one)",
+        "previousSong": "anterior {arg}",
         "noResultsFromQuery": "a consulta não retornou resultados",
         "quit": "abandonar",
         "search": "procurar",
@@ -84,40 +84,40 @@
     },
     "action": {
         "goToPage": "vá para página",
-        "addToFavorites": "adicionar em $t(entity.favorite_other)",
-        "viewPlaylists": "ver $t(entity.playlist_other)",
+        "addToFavorites": "adicionar em {arg}",
+        "viewPlaylists": "ver {arg}",
         "setRating": "definir classificação",
         "moveToTop": "mover para o topo",
-        "refresh": "$t(common.refresh)",
+        "refresh": "{arg}",
         "removeFromQueue": "remover da fila",
         "moveToBottom": "mover para baixo",
-        "editPlaylist": "editar $t(entity.playlist_one)",
+        "editPlaylist": "editar {arg}",
         "clearQueue": "limpar fila",
-        "addToPlaylist": "adicionar à $t(entity.playlist_one)",
-        "createPlaylist": "criar $t(entity.playlist_one)",
-        "removeFromPlaylist": "remover da $t(entity.playlist_one)",
-        "deletePlaylist": "deletar $t(entity.playlist_one)",
+        "addToPlaylist": "adicionar à {arg}",
+        "createPlaylist": "criar {arg}",
+        "removeFromPlaylist": "remover da {arg}",
+        "deletePlaylist": "deletar {arg}",
         "deselectAll": "desmarcar todos",
-        "removeFromFavorites": "remover de $t(entity.favorite_other)"
+        "removeFromFavorites": "remover de {arg}"
     },
     "form": {
         "deletePlaylist": {
-            "title": "deletar $t(entity.playlist_one)"
+            "title": "deletar {arg}"
         },
         "addServer": {
             "title": "adicionar servidor"
         },
         "createPlaylist": {
-            "title": "criar $t(entity.playlist_one)"
+            "title": "criar {arg}"
         },
         "updateServer": {
             "title": "atualizar servidor"
         },
         "editPlaylist": {
-            "title": "editar $t(entity.playlist_one)"
+            "title": "editar {arg}"
         },
         "addToPlaylist": {
-            "title": "adicionar à $t(entity.playlist_one)"
+            "title": "adicionar à {arg}"
         },
         "lyricSearch": {
             "title": "pesquisa de letras"
@@ -127,7 +127,7 @@
         "discordIdleStatus_description": "quando ativado, atualiza o status enquanto o player está ocioso",
         "discordUpdateInterval_description": "o tempo em segundos entre cada atualização (mínimo 15 segundos)",
         "playButtonBehavior_description": "define o comportamento padrão do botão play ao adicionar músicas à fila",
-        "discordApplicationId": "{{discord}} ID do aplicativo"
+        "discordApplicationId": "{arg} ID do aplicativo"
     },
     "table": {
         "config": {
@@ -147,30 +147,30 @@
         "home": {
             "mostPlayed": "mais tocado",
             "newlyAdded": "lançamentos recém-adicionados",
-            "title": "$t(common.home)",
+            "title": "{arg}",
             "explore": "explore a sua biblioteca",
             "recentlyPlayed": "tocado recentemente"
         },
         "albumArtistList": {
-            "title": "$t(entity.albumArtist_other)"
+            "title": "{arg}"
         },
         "genreList": {
-            "title": "$t(entity.genre_other)"
+            "title": "{arg}"
         },
         "trackList": {
-            "title": "$t(entity.track_other)"
+            "title": "{arg}"
         },
         "globalSearch": {
             "title": "comandos"
         },
         "sidebar": {
-            "home": "$t(common.home)"
+            "home": "{arg}"
         },
         "playlistList": {
-            "title": "$t(entity.playlist_other)"
+            "title": "{arg}"
         },
         "albumList": {
-            "title": "$t(entity.album_other)"
+            "title": "{arg}"
         }
     },
     "filter": {
@@ -186,48 +186,48 @@
         "albumArtist_one": "artista do álbum",
         "albumArtist_many": "artistas do álbum",
         "albumArtist_other": "artistas do álbum",
-        "albumArtistCount_one": "{{count}} artista do álbum",
-        "albumArtistCount_many": "{{count}} artistas do álbum",
-        "albumArtistCount_other": "{{count}} artistas do álbum",
+        "albumArtistCount_one": "{arg} artista do álbum",
+        "albumArtistCount_many": "{arg} artistas do álbum",
+        "albumArtistCount_other": "{arg} artistas do álbum",
         "album_one": "álbum",
         "album_many": "álbuns",
         "album_other": "álbuns",
         "artist_one": "artista",
         "artist_many": "artistas",
         "artist_other": "artistas",
-        "albumWithCount_one": "{{count}} álbum",
-        "albumWithCount_many": "{{count}} álbuns",
-        "albumWithCount_other": "{{count}} álbuns",
+        "albumWithCount_one": "{arg} álbum",
+        "albumWithCount_many": "{arg} álbuns",
+        "albumWithCount_other": "{arg} álbuns",
         "favorite_one": "favorito",
         "favorite_many": "favoritos",
         "favorite_other": "favoritos",
-        "artistWithCount_one": "{{count}} artista",
-        "artistWithCount_many": "{{count}} artistas",
-        "artistWithCount_other": "{{count}} artistas",
+        "artistWithCount_one": "{arg} artista",
+        "artistWithCount_many": "{arg} artistas",
+        "artistWithCount_other": "{arg} artistas",
         "folder_one": "pasta",
         "folder_many": "pastas",
         "folder_other": "pastas",
         "genre_one": "gênero",
         "genre_many": "gêneros",
         "genre_other": "gêneros",
-        "playlistWithCount_one": "{{count}} playlist",
-        "playlistWithCount_many": "{{count}} playlists",
-        "playlistWithCount_other": "{{count}} playlists",
+        "playlistWithCount_one": "{arg} playlist",
+        "playlistWithCount_many": "{arg} playlists",
+        "playlistWithCount_other": "{arg} playlists",
         "playlist_one": "playlist",
         "playlist_many": "playlists",
         "playlist_other": "playlists",
-        "folderWithCount_one": "{{count}} pasta",
-        "folderWithCount_many": "{{count}} pastas",
-        "folderWithCount_other": "{{count}} pastas",
-        "genreWithCount_one": "{{count}} gênero",
-        "genreWithCount_many": "{{count}} gêneros",
-        "genreWithCount_other": "{{count}} gêneros"
+        "folderWithCount_one": "{arg} pasta",
+        "folderWithCount_many": "{arg} pastas",
+        "folderWithCount_other": "{arg} pastas",
+        "genreWithCount_one": "{arg} gênero",
+        "genreWithCount_many": "{arg} gêneros",
+        "genreWithCount_other": "{arg} gêneros"
     },
     "error": {
         "remotePortWarning": "reinicie o servidor para aplicar a nova porta",
         "systemFontError": "ocorreu um erro ao tentar obter fontes do sistema",
         "playbackError": "ocorreu um erro ao tentar reproduzir a mídia",
-        "endpointNotImplementedError": "endpoint {{endpoint}} não está implementado para {{serverType}}",
+        "endpointNotImplementedError": "endpoint {endpoint} não está implementado para {serverType}",
         "remotePortError": "ocorreu um erro ao tentar definir a porta do servidor remoto",
         "serverRequired": "servidor necessário",
         "authenticationFailed": "falha na autenticação",
@@ -235,10 +235,10 @@
         "genericError": "um erro ocorreu",
         "credentialsRequired": "credenciais necessárias",
         "sessionExpiredError": "sua sessão expirou",
-        "remoteEnableError": "ocorreu um erro ao tentar $t(common.enable) o servidor remoto",
+        "remoteEnableError": "ocorreu um erro ao tentar {arg} o servidor remoto",
         "localFontAccessDenied": "acesso negado a fontes locais",
         "serverNotSelectedError": "nenhum servidor selecionado",
-        "remoteDisableError": "ocorreu um erro ao tentar $t(common.disable) o servidor remoto",
+        "remoteDisableError": "ocorreu um erro ao tentar {arg} o servidor remoto",
         "mpvRequired": "MPV necessário",
         "audioDeviceFetchError": "ocorreu um erro ao tentar obter dispositivos de áudio",
         "invalidServer": "servidor inválido",

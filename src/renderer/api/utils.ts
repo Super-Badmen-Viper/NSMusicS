@@ -2,7 +2,6 @@ import { AxiosHeaders } from 'axios';
 import semverCoerce from 'semver/functions/coerce';
 import semverGte from 'semver/functions/gte';
 import { z } from 'zod';
-import { toast } from '@/renderer';
 import { useAuthStore } from '@/renderer/store';
 import type { ServerListItem } from '@/renderer/api/types';
 import { ServerFeature } from '@/renderer/api/features-types';

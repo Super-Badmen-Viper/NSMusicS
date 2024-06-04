@@ -1,41 +1,117 @@
 <script setup lang="ts">
-////// this_app resource of vicons_svg
-import {
-  ArrowMinimize16Regular,
-  DarkTheme24Filled,
-  DocumentHeart20Regular,
-  Flag16Regular,
-  Home28Regular,
-  Maximize16Regular,
-  PeopleCommunity16Regular,
-  SlideMicrophone32Regular,
-  TextIndentIncreaseLtr20Filled as lyric,
-} from '@vicons/fluent'
-import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound} from '@vicons/material'
-import {Close, Hearing, Menu as MenuIcon, UserAvatarFilledAlt,} from '@vicons/carbon'
-import type {GlobalTheme, MenuOption} from 'naive-ui'
-////// this_app components of navie ui
-// app theme_color
-////// this_app
-import {darkTheme, dateZhCN, lightTheme, NConfigProvider, NIcon, zhCN} from 'naive-ui'
-// vue3 function
-import {h, onMounted, ref} from 'vue';
-import routers from './router'
-import {RouterLink, RouterView, useRouter} from 'vue-router';
-// audio_class & player_bar class
-import {Audio_howler} from '@/models/song_Audio_Out/Audio_howler';
-import Bar_Music_Player from '@/components/Bar_Music_Player.vue'
-// current_audioList class
-import Bar_Music_PlayList from '@/components/Bar_Music_PlayList.vue'
-// player class
-import View_Screen_Music_Player from '@/views/View_Screen_Music_Player.vue'
-import {Player_UI_Theme_State} from '@/features/player/Player_UI_Theme_State'
-import {System_Configs_Read} from '@/features/system/System_Configs_Read'
-import {App_Configs} from '@/models/app_Configs_For_Sqlite/class_App_Configs';
-import {Player_Configs_of_Audio_Info} from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_Audio_Info';
-import {Player_Configs_of_UI} from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_UI';
+  ////// this_app resource of vicons_svg
+  import {
+    ArrowMinimize16Regular,
+    DarkTheme24Filled,
+    DocumentHeart20Regular,
+    Flag16Regular,
+    Home28Regular,
+    Maximize16Regular,
+    PeopleCommunity16Regular,
+    SlideMicrophone32Regular,
+    TextIndentIncreaseLtr20Filled as lyric,
+  } from '@vicons/fluent'
+  import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound} from '@vicons/material'
+  import {Close, Hearing, Menu as MenuIcon, UserAvatarFilledAlt,} from '@vicons/carbon'
+  ////// i18n auto lang
+  import { useI18n } from 'vue-i18n'
+  const { t, d, n } = useI18n({
+    inheritLocale: true
+  })
+  const languages = [
+    {
+      label: '简体中文',
+      value: 'zhHans',
+    },
+    {
+      label: '繁體中文',
+      value: 'zhHant',
+    },
+    {
+      label: 'English',
+      value: 'en',
+    },
+    {
+      label: 'Čeština',
+      value: 'cs',
+    },
+    {
+      label: 'Español',
+      value: 'es',
+    },
+    {
+      label: 'Deutsch',
+      value: 'de',
+    },
+    {
+      label: 'Français',
+      value: 'fr',
+    },
+    {
+      label: 'Italiano',
+      value: 'it',
+    },
+    {
+      label: '日本語',
+      value: 'ja',
+    },
+    {
+      label: 'Nederlands',
+      value: 'nl',
+    },
+    {
+      label: 'Português (Brasil)',
+      value: 'ptBr',
+    },
+    {
+      label: 'Polski',
+      value: 'pl',
+    },
+    {
+      label: 'Русский',
+      value: 'ru',
+    },
+    {
+      label: 'Srpski',
+      value: 'sr',
+    },
+    {
+      label: 'Svenska',
+      value: 'sv',
+    },
+  ];
+  function get_update_lang(value:any){
+    update_lang()
+    console.log(value)
+  }
+  function update_lang(){
+    menuOptions.value = []
+    menuOptions.value = create_menuOptions()
+  }
 
-const crypto = require('crypto');
+  ////// this_app components of navie ui
+  import type {GlobalTheme, MenuOption} from 'naive-ui'
+  // app theme_color
+  ////// this_app
+  import {darkTheme, dateZhCN, lightTheme, NConfigProvider, NIcon, zhCN} from 'naive-ui'
+  // vue3 function
+  import {h, onMounted, ref, watch} from 'vue';
+  import routers from './router'
+  import {RouterLink, RouterView, useRouter} from 'vue-router';
+  // audio_class & player_bar class
+  import {Audio_howler} from '@/models/song_Audio_Out/Audio_howler';
+  import Bar_Music_Player from '@/components/Bar_Music_Player.vue'
+  // current_audioList class
+  import Bar_Music_PlayList from '@/components/Bar_Music_PlayList.vue'
+  // player class
+  import View_Screen_Music_Player from '@/views/View_Screen_Music_Player.vue'
+  import {Player_UI_Theme_State} from '@/features/player/Player_UI_Theme_State'
+  import {System_Configs_Read} from '@/features/system/System_Configs_Read'
+  import {App_Configs} from '@/models/app_Configs_For_Sqlite/class_App_Configs';
+  import {Player_Configs_of_Audio_Info} from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_Audio_Info';
+  import {Player_Configs_of_UI} from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_UI';
+
+  const crypto = require('crypto');
   function generateEncryptedPassword(password: string): { salt: string, token: string } {
       const saltLength = 6;
       const salt = generateRandomString(saltLength);
@@ -55,57 +131,40 @@ const crypto = require('crypto');
   console.log('s-Salt:', salt);
   console.log('t-Token:', token);
 
-// naive ui of n-menu(app left menu bar)
+  // naive ui of n-menu(app left menu bar)
   function renderIcon (icon: any) {
     return () => h(NIcon, null, { default: () => h(icon) })
   }
   function renderRouterLink (nameValue: any,defaultValue: any){
     return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
   }
-  const menuOptions: MenuOption[] = [
-    {label: renderRouterLink('View_Menu_AppSetting','菜单'),key: 'go_back_menu',icon: renderIcon(MenuIcon),},
-    {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    {label: renderRouterLink('View_Home','主页'),key: 'go_back_home',icon: renderIcon(Home28Regular),},
-    {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    {label: renderRouterLink('View_Album_List_ALL','专辑'),key: 'go_albums_list',icon: renderIcon(AlbumFilled)},
-    {label: renderRouterLink('View_Song_List_ALL','乐曲'),key: 'go_songs_list',icon: renderIcon(MusicNoteRound)},
-    {label: renderRouterLink('View_Artist_List_ALL','歌手'),key: 'go_artist_list',icon: renderIcon(UserAvatarFilledAlt)},
-    {label: renderRouterLink('View_Home','流派'),key: 'go_other',icon: renderIcon(Flag16Regular)},
-    {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    {label: renderRouterLink('View_Home','猜你喜欢'),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
-    {label: renderRouterLink('View_Home','K歌'),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
-    {label: renderRouterLink('View_Home','听歌识曲'),key: 'go_other',icon: renderIcon(Hearing)},
-    {label: renderRouterLink('View_Home','乐谱生成'),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
-    {label: renderRouterLink('View_Home','歌词制作'),key: 'go_other',icon: renderIcon(lyric)},
-    {label: renderRouterLink('View_Home','音乐社区'),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
-  ]
+  const create_menuOptions = (): MenuOption[] => {
+    return [
+      {label: renderRouterLink('View_Menu_AppSetting',t('common.menu')),key: 'go_back_menu',icon: renderIcon(MenuIcon),},
+      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+      {label: renderRouterLink('View_Home',t('common.home')),key: 'go_back_home',icon: renderIcon(Home28Regular),},
+      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+      {label: renderRouterLink('View_Album_List_ALL',t('entity.album_other')),key: 'go_albums_list',icon: renderIcon(AlbumFilled)},
+      {label: renderRouterLink('View_Song_List_ALL',t('entity.track_other')),key: 'go_songs_list',icon: renderIcon(MusicNoteRound)},
+      {label: renderRouterLink('View_Artist_List_ALL',t('entity.artist_other')),key: 'go_artist_list',icon: renderIcon(UserAvatarFilledAlt)},
+      {label: renderRouterLink('View_Home',t('entity.genre_other')),key: 'go_other',icon: renderIcon(Flag16Regular)},
+      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+      {label: renderRouterLink('View_Home','猜你喜欢'),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
+      {label: renderRouterLink('View_Home','K歌'),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
+      {label: renderRouterLink('View_Home','听歌识曲'),key: 'go_other',icon: renderIcon(Hearing)},
+      {label: renderRouterLink('View_Home','乐谱生成'),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
+      {label: renderRouterLink('View_Home','歌词制作'),key: 'go_other',icon: renderIcon(lyric)},
+      {label: renderRouterLink('View_Home','音乐社区'),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
+    ]
+  };
+  const menuOptions = ref<MenuOption[]>(create_menuOptions())
   const app_left_menu_select_activeKey = ref<string | null>(null)
-  const app_left_menu_select_update = (key: string, item: MenuOption) => {
-    app_left_menu_select_activeKey.value = key
-
-    router_select_model_menu.value = false
-    router_select_model_home.value = false
-    router_select_model_media.value = false
-    router_select_model_album.value = false
-    router_select_model_artist.value = false
-    if(app_left_menu_select_activeKey.value === 'go_back_menu'){
-      router_select_model_menu.value = true;
-    }else if(app_left_menu_select_activeKey.value === 'go_back_home'){
-      router_select_model_home.value = true;
-    }else if(app_left_menu_select_activeKey.value === 'go_albums_list'){
-      router_select_model_album.value = true;
-    }else if(app_left_menu_select_activeKey.value === 'go_songs_list'){
-      router_select_model_media.value = true;
-    }else if(app_left_menu_select_activeKey.value === 'go_artist_list'){
-      router_select_model_artist.value = true;
-    }
-  }
   const app_left_menu_collapsed = ref(false)
-// node function
+  // node function
   const path = require('path');
   const fs = require('fs');
 
-////// this_app theme_color
+  ////// this_app theme_color
   const theme = ref<GlobalTheme | null>(null)
   const theme_name = ref<string>()
   const theme_app =ref<GlobalTheme | null>(null)
@@ -552,11 +611,11 @@ const crypto = require('crypto');
     page_songlists.value = []
     //////
     const temp_Play_List_ALL: Play_List = {
-      label: '全部歌曲',
+      label: '所有歌曲',
       value: 'song_list_all',
       id: 'song_list_all',
-      name: '全部歌曲',
-      comment: '全部歌曲',
+      name: '所有歌曲',
+      comment: '所有歌曲',
       duration: 0,
       song_count: stmt_media_file_count.get().count + ' 首',
       public: false,
@@ -877,11 +936,11 @@ const crypto = require('crypto');
     page_albumlists.value = []
     //////
     const temp_Play_List_ALL: Play_List = {
-      label: '全部专辑',
+      label: '所有专辑',
       value: 'album_list_all',
       id: 'album_list_all',
-      name: '全部专辑',
-      comment: '全部专辑',
+      name: '所有专辑',
+      comment: '所有专辑',
       duration: 0,
       song_count: stmt_album_count.get().count + ' 组',
       public: false,
@@ -1225,11 +1284,11 @@ const crypto = require('crypto');
     page_artistlists.value = []
     //////
     const temp_Play_List_ALL: Play_List = {
-      label: '全部歌手',
+      label: '所有歌手',
       value: 'artist_list_all',
       id: 'artist_list_all',
-      name: '全部歌手',
-      comment: '全部歌手',
+      name: '所有歌手',
+      comment: '所有歌手',
       duration: 0,
       song_count: stmt_artist_count.get().count + ' 组',
       public: false,
@@ -1883,7 +1942,8 @@ const crypto = require('crypto');
       }));
     ipcRenderer.send('config-save',app_Configs,player_Configs_of_UI,player_Configs_of_Audio_Info)
   }
-  
+
+
 </script>
 <template>
   <!-- App Bady View-->
@@ -1907,8 +1967,7 @@ const crypto = require('crypto');
             :collapsed="app_left_menu_collapsed"
             :collapsed-width="64"
             :collapsed-icon-size="22"
-            :options="menuOptions"
-            :on-update:value="app_left_menu_select_update"/>
+            :options="menuOptions"/>
         </n-layout-sider>
         <!--Right Router_View-->
         <n-layout embedded style="height: calc(100vh);">
@@ -1916,6 +1975,7 @@ const crypto = require('crypto');
             class="view_show_data"
             v-if="router_select_model_menu"
             @router_select="get_router_select"
+            @update_lang="get_update_lang"
             :app_left_menu_collapsed="app_left_menu_collapsed"
             :window_innerWidth="window_innerWidth">
 
@@ -2261,7 +2321,7 @@ const crypto = require('crypto');
       ">
       <n-drawer-content v-if="Player_Show_Sound_more">
         <template #default>
-          更多信息：开发中
+          更多设置：开发中
         </template>
       </n-drawer-content>
     </n-drawer>

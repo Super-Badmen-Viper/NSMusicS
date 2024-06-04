@@ -651,7 +651,7 @@
               <template #title>
                 <n-space vertical style="margin-top:2px;margin-left: 10px;">
                   <n-breadcrumb separator=">">
-                      <n-breadcrumb-item style="font-size: 22px">乐曲</n-breadcrumb-item>
+                      <n-breadcrumb-item style="font-size: 22px">{{ $t('entity.track_other') }}</n-breadcrumb-item>
                       <n-breadcrumb-item> 
                         <n-ellipsis 
                           style="

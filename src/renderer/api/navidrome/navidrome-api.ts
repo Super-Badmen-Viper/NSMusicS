@@ -8,8 +8,7 @@ import { ndType } from './navidrome-types';
 import { authenticationFailure, resultWithHeaders } from '@/renderer/api/utils';
 import { useAuthStore } from '@/renderer/store';
 import type { ServerListItem } from '@/renderer/api/types';
-import toast from "@/renderer/toast/index"
-import i18n from '@/renderer/i18n/i18n';
+import i18n from '@/i18n/i18n';
 
 const localSettings = isElectron() ? window.electron.localSettings : null;
 

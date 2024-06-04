@@ -1,22 +1,22 @@
 {
     "action": {
-        "editPlaylist": "redigera $t(entity.playlist_one)",
+        "editPlaylist": "redigera {arg}",
         "goToPage": "gå till sida",
         "moveToTop": "flytta till toppen",
         "clearQueue": "rensa kö",
-        "addToFavorites": "lägg till $t(entity.favorite_other)",
-        "addToPlaylist": "lägg till $t(entity.playlist_one)",
-        "createPlaylist": "skapa $t(entity.playlist_one)",
-        "removeFromPlaylist": "ta bort från $t(entity.playlist_one)",
-        "viewPlaylists": "visa $t(entity.playlist_other)",
-        "refresh": "$t(common.refresh)",
-        "deletePlaylist": "ta bort $t(entity.playlist_one)",
+        "addToFavorites": "lägg till {arg}",
+        "addToPlaylist": "lägg till {arg}",
+        "createPlaylist": "skapa {arg}",
+        "removeFromPlaylist": "ta bort från {arg}",
+        "viewPlaylists": "visa {arg}",
+        "refresh": "{arg}",
+        "deletePlaylist": "ta bort {arg}",
         "removeFromQueue": "ta bort från kö",
         "deselectAll": "avmarkera alla",
         "moveToBottom": "flytta till botten",
         "setRating": "sätt betyg",
-        "toggleSmartPlaylistEditor": "växla $t(entity.smartPlaylist) redigerare",
-        "removeFromFavorites": "ta bort från $t(entity.favorite_other)"
+        "toggleSmartPlaylistEditor": "växla {arg} redigerare",
+        "removeFromFavorites": "ta bort från {arg}"
     },
     "common": {
         "backward": "bakåt",
@@ -31,7 +31,7 @@
         "left": "vänster",
         "save": "spara",
         "right": "höger",
-        "currentSong": "aktuell $t(entity.track_one)",
+        "currentSong": "aktuell {arg}",
         "collapse": "kollaps",
         "trackNumber": "spår",
         "descending": "fallande",
@@ -84,7 +84,7 @@
         "none": "ingen",
         "menu": "meny",
         "restartRequired": "omstart krävs",
-        "previousSong": "föregående $t(entity.track_one)",
+        "previousSong": "föregående {arg}",
         "noResultsFromQuery": "frågan returnerade inga resultat",
         "quit": "avsluta",
         "expand": "expandera",
@@ -102,7 +102,7 @@
         "remotePortWarning": "starta om servern för att tillämpa den nya porten",
         "systemFontError": "ett fel uppstod vid försök att hämta systemteckensnitt",
         "playbackError": "ett fel uppstod vid försök att spela upp media",
-        "endpointNotImplementedError": "endpoint {{endpoint}} är inte implementerad för {{serverType}}",
+        "endpointNotImplementedError": "endpoint {endpoint} är inte implementerad för {serverType}",
         "remotePortError": "ett fel uppstod vid försök att ange serverporten",
         "serverRequired": "server krävs",
         "authenticationFailed": "autentiseringen misslyckades",
@@ -110,10 +110,10 @@
         "genericError": "ett fel uppstod",
         "credentialsRequired": "autentiseringsuppgifter som krävs",
         "sessionExpiredError": "din session har löpt ut",
-        "remoteEnableError": "Ett fel uppstod vid försök att $t(common.enable) servern",
+        "remoteEnableError": "Ett fel uppstod vid försök att {arg} servern",
         "localFontAccessDenied": "åtkomst nekad till lokala teckensnitt",
         "serverNotSelectedError": "ingen server vald",
-        "remoteDisableError": "ett fel uppstod vid försök av $t(common.disable) servern",
+        "remoteDisableError": "ett fel uppstod vid försök av {arg} servern",
         "mpvRequired": "MPV krävs",
         "audioDeviceFetchError": "ett fel uppstod vid hämtning av ljudenheter",
         "invalidServer": "ogiltig server",
@@ -124,16 +124,16 @@
         "comment": "kommentar",
         "playCount": "antal spelningar",
         "recentlyUpdated": "nyligen uppdaterad",
-        "channels": "$t(common.channel_other)",
+        "channels": "{arg}",
         "isCompilation": "är kompilering",
         "recentlyPlayed": "nyligen spelad",
         "isRated": "är betygsatt",
-        "owner": "$t(common.owner)",
+        "owner": "{arg}",
         "title": "titel",
         "rating": "betyg",
         "search": "sök",
         "bitrate": "bithastighet",
-        "genre": "$t(entity.genre_one)",
+        "genre": "{arg}",
         "recentlyAdded": "nyligen tillagda",
         "note": "anteckning",
         "name": "namn",
@@ -142,7 +142,7 @@
         "communityRating": "betyg från communityn",
         "path": "sökväg",
         "favorited": "favoritmärkt",
-        "albumArtist": "$t(entity.albumArtist_one)",
+        "albumArtist": "{arg}",
         "isRecentlyPlayed": "spelas nyligen",
         "isFavorited": "är favoritmärkt",
         "bpm": "bpm",
@@ -150,31 +150,31 @@
         "id": "id",
         "disc": "skiva",
         "biography": "biografi",
-        "artist": "$t(entity.artist_one)",
+        "artist": "{arg}",
         "duration": "längd",
         "isPublic": "är offentlig",
         "random": "slumpmässig",
         "lastPlayed": "senast spelad",
         "toYear": "till år",
         "fromYear": "från år",
-        "album": "$t(entity.album_one)",
+        "album": "{arg}",
         "trackNumber": "spår",
         "songCount": "sångräkning",
         "criticRating": "kritikerbetyg"
     },
     "form": {
         "deletePlaylist": {
-            "title": "ta bort $t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one) har tagits bort",
-            "input_confirm": "Skriv namnet på $t(entity.playlist_one) för att bekräfta"
+            "title": "ta bort {arg}",
+            "success": "{arg} har tagits bort",
+            "input_confirm": "Skriv namnet på {arg} för att bekräfta"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "skapa $t(entity.playlist_one)",
+            "title": "skapa {arg}",
             "input_public": "offentlig",
             "input_name": "$t(common.name)",
-            "success": "$t(entity.playlist_one) skapad",
-            "input_owner": "$t(common.owner)"
+            "success": "{arg} skapad",
+            "input_owner": "{arg}"
         },
         "addServer": {
             "title": "lägg till server",
@@ -185,15 +185,15 @@
             "input_name": "server namn",
             "success": "servern har lagts till",
             "input_savePassword": "spara lösenord",
-            "ignoreSsl": "ignorera ssl ($t(common.restartRequired))",
-            "ignoreCors": "ignorera cors ($t(common.restartRequired))",
+            "ignoreSsl": "ignorera ssl ({arg})",
+            "ignoreCors": "ignorera cors ({arg})",
             "error_savePassword": "ett fel uppstod när lösenordet skulle sparas"
         },
         "addToPlaylist": {
-            "success": "tillade {{message}} $t(entity.track_other) til {{numOfPlaylists}} $t(entity.playlist_other)",
-            "title": "lägg till i $t(entity.playlist_one)",
+            "success": "tillade {{message}} {arg} til {{numOfPlaylists}} {arg}",
+            "title": "lägg till i {arg}",
             "input_skipDuplicates": "hoppa över dubbletter",
-            "input_playlists": "$t(entity.playlist_other)"
+            "input_playlists": "{arg}"
         },
         "updateServer": {
             "title": "uppdatera server",
@@ -205,11 +205,11 @@
         },
         "lyricSearch": {
             "input_name": "$t(common.name)",
-            "input_artist": "$t(entity.artist_one)",
+            "input_artist": "{arg}",
             "title": "sångtext sök"
         },
         "editPlaylist": {
-            "title": "redigera $t(entity.playlist_one)"
+            "title": "redigera {arg}"
         }
     },
     "page": {
@@ -232,11 +232,11 @@
         "appMenu": {
             "selectServer": "välj server",
             "version": "version {{version}}",
-            "settings": "$t(common.setting_other)",
+            "settings": "{arg}",
             "manageServers": "hantera servrar",
             "expandSidebar": "expandera sidofältet",
             "openBrowserDevtools": "öppna webbläsarens utvecklingsverktyg",
-            "quit": "$t(common.quit)",
+            "quit": "{arg}",
             "goBack": "gå tillbaka",
             "goForward": "gå framåt",
             "collapseSidebar": "växla sidofältet"
@@ -251,23 +251,23 @@
             "createPlaylist": "$t(action.createPlaylist)",
             "removeFromPlaylist": "$t(action.removeFromPlaylist)",
             "removeFromFavorites": "$t(action.removeFromFavorites)",
-            "addNext": "$t(player.addNext)",
+            "addNext": "{arg}",
             "deselectAll": "$t(action.deselectAll)",
-            "addLast": "$t(player.addLast)",
+            "addLast": "{arg}",
             "addFavorite": "$t(action.addToFavorites)",
-            "play": "$t(player.play)",
-            "numberSelected": "{{count}} vald",
+            "play": "{arg}",
+            "numberSelected": "{arg} vald",
             "removeFromQueue": "$t(action.removeFromQueue)"
         },
         "albumDetail": {
-            "moreFromArtist": "mer från $t(entity.genre_one)",
+            "moreFromArtist": "mer från {arg}",
             "moreFromGeneric": "mer från {{item}}"
         },
         "albumArtistList": {
-            "title": "$t(entity.albumArtist_other)"
+            "title": "{arg}"
         },
         "albumList": {
-            "title": "$t(entity.album_other)"
+            "title": "{arg}"
         },
         "sidebar": {
             "nowPlaying": "nu spelas"
@@ -300,24 +300,24 @@
         "artist_other": "artister",
         "albumArtist_one": "albumartist",
         "albumArtist_other": "albumartister",
-        "albumArtistCount_one": "{{count}} Albumartist",
-        "albumArtistCount_other": "{{count}} Albumartister",
-        "albumWithCount_one": "{{count}} album",
-        "albumWithCount_other": "{{count}} album",
+        "albumArtistCount_one": "{arg} Albumartist",
+        "albumArtistCount_other": "{arg} Albumartister",
+        "albumWithCount_one": "{arg} album",
+        "albumWithCount_other": "{arg} album",
         "favorite_one": "favorit",
         "favorite_other": "favoriter",
         "folder_one": "mapp",
         "folder_other": "mappar",
         "album_one": "album",
         "album_other": "album",
-        "playlistWithCount_one": "{{count}} spellista",
-        "playlistWithCount_other": "{{count}} spellistor",
-        "folderWithCount_one": "{{count}} mapp",
-        "folderWithCount_other": "{{count}} mappar",
+        "playlistWithCount_one": "{arg} spellista",
+        "playlistWithCount_other": "{arg} spellistor",
+        "folderWithCount_one": "{arg} mapp",
+        "folderWithCount_other": "{arg} mappar",
         "track_one": "spår",
         "track_other": "spår",
-        "trackWithCount_one": "{{count}} spår",
-        "trackWithCount_other": "{{count}} spår"
+        "trackWithCount_one": "{arg} spår",
+        "trackWithCount_other": "{arg} spår"
     },
     "player": {
         "repeat_all": "repetera alla",

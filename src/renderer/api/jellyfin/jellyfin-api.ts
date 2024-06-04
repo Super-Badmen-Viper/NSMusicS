@@ -1,13 +1,13 @@
 import { useAuthStore } from '@/renderer/store';
 import { jfType } from '@/renderer/api/jellyfin/jellyfin-types';
 import { initClient, initContract } from '@ts-rest/core';
-import axios, { AxiosError, AxiosResponse, isAxiosError, Method } from 'axios';
+import axios, { AxiosError, type AxiosResponse, isAxiosError, type Method } from 'axios';
 import qs from 'qs';
-import { ServerListItem } from '@/renderer/api/types';
+import {type ServerListItem } from '@/renderer/api/types';
 import omitBy from 'lodash/omitBy';
 import { z } from 'zod';
 import { authenticationFailure } from '@/renderer/api/utils';
-import i18n from '@/renderer/i18n/i18n';
+import i18n from '@/i18n/i18n';
 
 const c = initContract();
 

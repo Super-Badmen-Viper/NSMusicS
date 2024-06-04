@@ -1,5 +1,4 @@
 import { useAuthStore } from '@/renderer/store';
-import { toast } from '@/renderer/toast/index';
 import type {
     AlbumDetailArgs,
     AlbumListArgs,
@@ -62,7 +61,7 @@ import type { DeletePlaylistResponse, RandomSongListArgs } from './types';
 import { ndController } from '@/renderer/api/navidrome/navidrome-controller';
 import { ssController } from '@/renderer/api/subsonic/subsonic-controller';
 import { jfController } from '@/renderer/api/jellyfin/jellyfin-controller';
-import i18n from '@/renderer/i18n/i18n';
+import i18n from '@/i18n/i18n';
 
 export type ControllerEndpoint = Partial<{
     addToPlaylist: (args: AddToPlaylistArgs) => Promise<AddToPlaylistResponse>;
