@@ -68,7 +68,7 @@ const authenticate = async (
 
     await ssApiClient({ server: null, url: cleanServerUrl }).authenticate({
         query: {
-            c: 'Feishin',
+            c: 'NSMusicS',
             f: 'json',
             v: '1.13.0',
             ...credentialParams,

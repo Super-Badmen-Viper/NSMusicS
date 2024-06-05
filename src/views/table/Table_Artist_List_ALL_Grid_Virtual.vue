@@ -16,6 +16,15 @@
   import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
   import { type InputInst, NIcon } from 'naive-ui';
 
+  ////// i18n auto lang
+  import { useI18n } from 'vue-i18n'
+  const { t, d, n } = useI18n({
+    inheritLocale: true
+  })
+  const computed_i18n_Label_ViewPageConfig_FilterAllArtist_1 = computed(() => t('nsmusics.view_page.allArtist'));
+  const computed_i18n_Label_ViewPageConfig_FilterLoveArtist_2 = computed(() => t('nsmusics.view_page.loveArtist'));
+  const computed_i18n_Label_ViewPageConfig_FilterRecentPlay = computed(() => t('nsmusics.view_page.recentPlay'));
+
   ////// passed as argument
   const emits = defineEmits([
     'artist_page_num',

@@ -3,14 +3,29 @@
   import {
     BareMetalServer,Add,Close
   } from '@vicons/carbon'
+
+  ////// this_view components of navie ui 
+  import { ref, onMounted, watch, onBeforeUnmount, computed } from 'vue';
+  import { NButton } from 'naive-ui'
+
+  ////// i18n auto lang
   import { useI18n } from 'vue-i18n'
   const { t, d, n } = useI18n({
     inheritLocale: true
   })
-
-  ////// this_view components of navie ui 
-  import { ref, onMounted, watch, onBeforeUnmount } from 'vue';
-  import { NButton } from 'naive-ui'
+  const computed_i18n_Label_HomePageConfiguration_1 = computed(() => t('page.home.mostPlayed'));
+  const computed_i18n_Label_HomePageConfiguration_2 = computed(() => t('page.home.explore'));
+  const computed_i18n_Label_HomePageConfiguration_3 = computed(() => t('page.home.newlyAdded'));
+  const computed_i18n_Label_HomePageConfiguration_4 = computed(() => t('page.home.recentlyPlayed'));
+  const computed_i18n_Label_SidebarConfiguration_1 = computed(() => t('page.sidebar.nowPlaying'));
+  const computed_i18n_Label_SidebarConfiguration_2 = computed(() => t('common.search'));
+  const computed_i18n_Label_SidebarConfiguration_3 = computed(() => t('common.home'));
+  const computed_i18n_Label_SidebarConfiguration_4 = computed(() => t('entity.album_other'));
+  const computed_i18n_Label_SidebarConfiguration_5 = computed(() => t('entity.track_other'));
+  const computed_i18n_Label_SidebarConfiguration_6 = computed(() => t('entity.artist_other'));
+  const computed_i18n_Label_SidebarConfiguration_7 = computed(() => t('entity.genre_other'));
+  const computed_i18n_Label_SidebarConfiguration_8 = computed(() => t('entity.playlist_other'));
+  const computed_i18n_Label_SidebarConfiguration_9 = computed(() => t('common.setting'));
 
   ////// passed as argument
   const emits = defineEmits([
@@ -110,6 +125,10 @@
     {
       label: 'Nederlands',
       value: 'nl',
+    },
+    {
+      label: 'فارسی',
+      value: 'fa',
     },
     {
       label: 'Português (Brasil)',
@@ -433,9 +452,9 @@
                 <!-- 通用-语言-字体 -->
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">语言</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.language') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">设置此应用的语言</span>
+                      <span style="font-size:12px;">{{ $t('setting.language_description',{ arg: $t('common.restartRequired') }) }}</span>
                     </div>
                   </n-space>
 <!--                  {{ $t('action.editPlaylist', { arg: 'kazupon' }) }}-->
@@ -450,9 +469,9 @@
                 <!-- 通用-主题 -->
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">跟随系统</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.useSystemTheme') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">使用系统定义的浅色或深色主题</span>
+                      <span style="font-size:12px;">{{ $t('setting.useSystemTheme_description') }}</span>
                     </div>
                   </n-space>
                   <n-switch
@@ -461,9 +480,9 @@
                 </n-space>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">主题</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.theme') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">设置此应用的主题</span>
+                      <span style="font-size:12px;">{{ $t('setting.theme_description') }}</span>
                     </div>
                   </n-space>
                   <n-select
@@ -477,9 +496,9 @@
                 <n-divider style="margin: 0;"/>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">保存播放列表</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.savePlayQueue') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">当应用程序关闭时保存播放队列，并在应用程序打开时恢复它</span>
+                      <span style="font-size:12px;">{{ $t('setting.savePlayQueue_description') }}</span>
                     </div>
                   </n-space>
                   <n-switch
@@ -490,25 +509,25 @@
                 <n-space vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space justify="space-between" align="center">
                     <n-space vertical>
-                      <span style="font-size:16px;font-weight: 600;">主页配置</span>
+                      <span style="font-size:16px;font-weight: 600;">{{ $t('setting.homeConfiguration') }}</span>
                       <div style="margin-top: -10px;">
-                        <span style="font-size:12px;">当应用程序关闭时保存播放队列，并在应用程序打开时恢复它</span>
+                        <span style="font-size:12px;">{{ $t('setting.homeConfiguration_description') }}</span>
                       </div>
                     </n-space>
                   </n-space>
                   <n-checkbox-group>
                     <n-grid :y-gap="8" :cols="4">
                       <n-gi>
-                        <n-checkbox value="Pushes Open" label="最多播放" />
+                        <n-checkbox value="Pushes Open" :label="computed_i18n_Label_HomePageConfiguration_1" />
                       </n-gi>
                       <n-gi>
-                        <n-checkbox value="The Window" label="从库中搜索" />
+                        <n-checkbox value="The Window" :label="computed_i18n_Label_HomePageConfiguration_2" />
                       </n-gi>
                       <n-gi>
-                        <n-checkbox value="And Raises" label="最近添加的发布" />
+                        <n-checkbox value="And Raises" :label="computed_i18n_Label_HomePageConfiguration_3" />
                       </n-gi>
                       <n-gi>
-                        <n-checkbox value="The Spyglass" label="最近播放" />
+                        <n-checkbox value="The Spyglass" :label="computed_i18n_Label_HomePageConfiguration_4" />
                       </n-gi>
                     </n-grid>
                   </n-checkbox-group>
@@ -517,47 +536,48 @@
                 <n-space vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space justify="space-between" align="center">
                     <n-space vertical>
-                      <span style="font-size:16px;font-weight: 600;">侧边栏设定</span>
+                      <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sidebarConfiguration') }}</span>
                       <div style="margin-top: -10px;">
-                        <span style="font-size:12px;">在折叠的侧边栏中显示或隐藏导航</span>
+                        <span style="font-size:12px;">{{ $t('setting.sidebarCollapsedNavigation_description') }}</span>
                       </div>
                     </n-space>
                   </n-space>
                   <n-checkbox-group>
-                    <n-grid :y-gap="8" :cols="4">
-                      <n-gi><n-checkbox value="Pushes Open" label="正在播放" /></n-gi>
-                      <n-gi><n-checkbox value="The Window" label="搜索" /></n-gi>
-                      <n-gi><n-checkbox value="And Raises" label="主页" /></n-gi>
-                      <n-gi><n-checkbox value="The Spyglass" label="专辑" /></n-gi>
-                      <n-gi><n-checkbox value="Pushes Open" label="歌曲" /></n-gi>
-                      <n-gi><n-checkbox value="The Window" label="歌手" /></n-gi>
-                      <n-gi><n-checkbox value="And Raises" label="流派" /></n-gi>
-                      <n-gi><n-checkbox value="The Spyglass" label="播放列表" /></n-gi>
-                      <n-gi><n-checkbox value="The Window" label="设置" /></n-gi>
+                    <n-grid :y-gap="8" :cols="5">
+                      <n-gi><n-checkbox value="And Raises" :label="computed_i18n_Label_SidebarConfiguration_3" /></n-gi>
+                      <n-gi><n-checkbox value="The Spyglass" :label="computed_i18n_Label_SidebarConfiguration_4" /></n-gi>
+                      <n-gi><n-checkbox value="Pushes Open" :label="computed_i18n_Label_SidebarConfiguration_5" /></n-gi>
+                      <n-gi><n-checkbox value="The Window" :label="computed_i18n_Label_SidebarConfiguration_6" /></n-gi>
+                      <n-gi><n-checkbox value="And Raises" :label="computed_i18n_Label_SidebarConfiguration_7" /></n-gi>
+                      <n-gi><n-checkbox value="And Raises" :label="computed_i18n_Label_SidebarConfiguration_7" /></n-gi>
+                      <n-gi><n-checkbox value="And Raises" :label="computed_i18n_Label_SidebarConfiguration_7" /></n-gi>
+                      <n-gi><n-checkbox value="And Raises" :label="computed_i18n_Label_SidebarConfiguration_7" /></n-gi>
+                      <n-gi><n-checkbox value="And Raises" :label="computed_i18n_Label_SidebarConfiguration_7" /></n-gi>
+                      <n-gi><n-checkbox value="And Raises" :label="computed_i18n_Label_SidebarConfiguration_7" /></n-gi>
                     </n-grid>
                   </n-checkbox-group>
                 </n-space>
                 <n-divider style="margin: 0;"/>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">清除NSMusicS缓存</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.clearQueryCache') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">feishin的“软清除”。这将会刷新播放列表、元数据并重置保存的歌词。会保留设置、服务器凭据和缓存图像</span>
+                      <span style="font-size:12px;">{{ $t('setting.clearQueryCache_description') }}</span>
                     </div>
                   </n-space>
                   <n-button>
-                    清空
+                    {{ $t('common.clear') }}
                   </n-button>
                 </n-space>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">清除浏览器缓存</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.clearCache') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">feishin的“硬清除”。除了清除feishin的缓存，清空浏览器缓存（保存的图像和其他资源）。会保留服务器凭据和设置"</span>
+                      <span style="font-size:12px;">{{ $t('setting.clearCache_description') }}</span>
                     </div>
                   </n-space>
                   <n-button>
-                    清空
+                    {{ $t('common.clear') }}
                   </n-button>
                 </n-space>
               </n-space>
@@ -573,9 +593,9 @@
                 <!-- 通用-语言-字体 -->
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">音频设备</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioDevice') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">选择用于播放的音频设备（仅 web 播放器）</span>
+                      <span style="font-size:12px;">{{ $t('setting.audioDevice_description') }}</span>
                     </div>
                   </n-space>
                   <n-select
@@ -588,9 +608,9 @@
                 </n-space>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">选择播放器的播放风格</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.playbackStyle_description') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">选择播放器的播放风格</span>
+                      <span style="font-size:12px;">{{ $t('setting.playbackStyle_description') }}</span>
                     </div>
                   </n-space>
                   <n-select
@@ -603,9 +623,9 @@
                 </n-space>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">淡入淡出持续时间</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.crossfadeStyle') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">选择用于音频播放器的淡入淡出风格</span>
+                      <span style="font-size:12px;">{{ $t('setting.crossfadeStyle_description') }}</span>
                     </div>
                   </n-space>
                   <n-input-group style="width: 207px;margin-top: -4px;">
@@ -615,23 +635,25 @@
                 </n-space>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">采样率</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sampleRate') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">如果选择的采样频率与当前媒体的采样频率不同，请选择要使用的输出采样率。小于 8000 的值将使用默认频率</span>
+                      <span style="font-size:12px;">{{ $t('setting.sampleRate_description') }}</span>
                     </div>
                   </n-space>
-                  <n-input-group style="width: 207px;margin-top: -4px;">
-                    <n-input clearable default-value="48000"/>
-                    <n-input-group-label>Hz</n-input-group-label>
-                  </n-input-group>
+                  <n-space justify="end" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                    <n-input-group style="width: 207px;margin-top: -4px;">
+                      <n-input clearable default-value="48000"/>
+                      <n-input-group-label>Hz</n-input-group-label>
+                    </n-input-group>
+                  </n-space>
                 </n-space>
                 <n-divider style="margin: 0;"/>
                 <!-- 通用-主题 -->
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">歌词偏移</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.lyricOffset') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">将歌词偏移指定的毫秒数</span>
+                      <span style="font-size:12px;">{{ $t('setting.lyricOffset_description') }}</span>
                     </div>
                   </n-space>
                   <n-input-group style="width: 207px;margin-top: -4px;">
@@ -647,6 +669,30 @@
             <template #tab>
               {{ $t('page.setting.hotkeysTab') }}
             </template>
+            <n-scrollbar style="max-height: 70vh;" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 203) + 'px)'}">
+              <n-space vertical>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.globalMediaHotkeys') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.globalMediaHotkeys_description') }}</span>
+                    </div>
+                  </n-space>
+                  <n-switch
+                      v-model:value="disabled">
+                  </n-switch>
+                </n-space>
+                <n-divider style="margin: 0;"/>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.applicationHotkeys') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.applicationHotkeys_description') }}</span>
+                    </div>
+                  </n-space>
+                </n-space>
+              </n-space>
+            </n-scrollbar>
           </n-tab-pane>
           <!-- 窗口 -->
           <n-tab-pane name="tab_pane_5">
@@ -657,9 +703,9 @@
               <n-space vertical>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">窗口顶栏风格</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.windowBarStyle') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">选择窗口顶栏风格</span>
+                      <span style="font-size:12px;">{{ $t('setting.windowBarStyle_description') }}</span>
                     </div>
                   </n-space>
                   <n-select
@@ -672,9 +718,9 @@
                 </n-space>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">最小化到托盘</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.minimizeToTray') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">将应用程序最小化到系统托盘</span>
+                      <span style="font-size:12px;">{{ $t('setting.minimizeToTray_description') }}</span>
                     </div>
                   </n-space>
                   <n-switch
@@ -683,9 +729,9 @@
                 </n-space>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">退出时最小化到托盘</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.exitToTray') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">退出应用时最小化到系统托盘而非关闭</span>
+                      <span style="font-size:12px;">{{ $t('setting.exitToTray_description') }}</span>
                     </div>
                   </n-space>
                   <n-switch
@@ -694,9 +740,9 @@
                 </n-space>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">启动最小化</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.startMinimized') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">在系统托盘中启动应用程序</span>
+                      <span style="font-size:12px;">{{ $t('setting.startMinimized_description') }}</span>
                     </div>
                   </n-space>
                   <n-switch
@@ -706,9 +752,9 @@
                 <n-divider style="margin: 0;"/>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">禁用自动更新</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.disableAutomaticUpdates') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">禁用自动更新</span>
+                      <span style="font-size:12px;">{{ $t('setting.disableAutomaticUpdates') }}</span>
                     </div>
                   </n-space>
                   <n-switch
@@ -718,8 +764,6 @@
               </n-space>
             </n-scrollbar>
           </n-tab-pane>
-
-
         </n-tabs>
       </n-card>
     </n-layout>

@@ -29,6 +29,17 @@
   // vue3 function
   import { defineEmits, ref, watch, watchEffect, onMounted } from 'vue';
   import { onBeforeUnmount } from 'vue';
+
+  ////// i18n auto lang
+  import { useI18n } from 'vue-i18n'
+  const { t, d, n } = useI18n({
+    inheritLocale: true
+  })
+  const computed_i18n_Label_ViewSetConfig_Cover_1 = computed(() => t('nsmusics.view_player.view_seting.coverSquare_1'));
+  const computed_i18n_Label_ViewSetConfig_Cover_2 = computed(() => t('nsmusics.view_player.view_seting.coverRotate_2'));
+  const computed_i18n_Label_ViewSetConfig_Cover_3 = computed(() => t('nsmusics.view_player.view_seting.coverBeaut_3'));
+  const computed_i18n_Label_ViewSetConfig_Cover_4 = computed(() => t('nsmusics.view_player.view_seting.coverBase_4'));
+
   // audio_class & player_bar
   import { Player_UI_Theme_State } from '@/features/player/Player_UI_Theme_State'
 
@@ -230,7 +241,7 @@
   const player_theme_1 = ref<PlayerTheme_LyricItem>(
     { 
       id: 0,
-      name: '方形封面',
+      name: computed_i18n_Label_ViewSetConfig_Cover_1.value,
       normalStyle: {
         image_url: '../../resources/img/player_theme_1.png',
 
@@ -250,7 +261,7 @@
   const player_theme_2 = ref<PlayerTheme_LyricItem>(
     { 
       id: 1,
-      name: '旋转封面',
+      name: computed_i18n_Label_ViewSetConfig_Cover_2.value,
       normalStyle: {
         image_url: '../../resources/img/player_theme_2.png',
 
@@ -270,7 +281,7 @@
   const player_theme_3 = ref<PlayerTheme_LyricItem>(
     { 
       id: 2,
-      name: '炫胶唱片',
+      name: computed_i18n_Label_ViewSetConfig_Cover_3.value,
       normalStyle: {
         image_url: '../../resources/img/player_theme_3.png',
 
@@ -290,7 +301,7 @@
   const player_theme_4 = ref<PlayerTheme_LyricItem>(
     { 
       id: 3,
-      name: '专辑底图',
+      name: computed_i18n_Label_ViewSetConfig_Cover_4.value,
       normalStyle: {
         image_url: '../../resources/img/player_theme_4.png',
 
@@ -513,7 +524,7 @@
               </n-radio>
             </n-radio-group>
             <n-space style="margin-left: 12px;margin-top: 20px;">
-              <span style="font-size:16px;">歌词字号</span>
+              <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricSize') }}</span>
               <n-space>
                 <n-button text style="font-size: 24px;margin-top: 2px;">
                   <n-icon>
@@ -546,7 +557,7 @@
               </n-space>
             </n-space>
             <n-space style="margin-left: 12px;margin-top: 20px;">
-              <span style="font-size:16px;">歌词快慢</span>
+              <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricSpeed') }}</span>
               <n-space>
                 <n-button text style="font-size: 24px;margin-top: 2px;">
                   <n-icon>
@@ -579,7 +590,7 @@
               </n-space>
             </n-space>
             <n-space style="margin-left: 12px;margin-top: 20px;">
-              <span style="font-size:16px;">底图模糊</span>
+              <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
               <n-space>
                 <n-button text style="font-size: 24px;margin-top: 2px;">
                   <n-icon>
@@ -594,22 +605,22 @@
               </n-space>
             </n-space>
             <n-space style="margin-left: 12px;margin-top: 20px;">
-              <span style="font-size:16px;">歌词动效</span>
+              <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricsAnimation') }}</span>
               <n-space style="width: 260px;margin-left: 80px;margin-top: -32px;">
                 <n-radio
                   :checked="player_lyric_panel_checked_animation === LyricAnimation.linebyLine" value="逐行精准"
                   @click="player_lyric_panel_checked_animation = LyricAnimation.linebyLine">
-                  逐行精准
+                  {{ $t('nsmusics.view_player.view_seting.lyricsAnimation_line_1') }}
                 </n-radio>
                 <n-radio
                   :checked="player_lyric_panel_checked_animation === LyricAnimation.linebyWord" value="逐字精准"
                   @click="player_lyric_panel_checked_animation = LyricAnimation.linebyWord">
-                  逐字精准
+                  {{ $t('nsmusics.view_player.view_seting.lyricsAnimation_byte_2') }}
                 </n-radio>
                 <n-radio
                   :checked="player_lyric_panel_checked_animation === LyricAnimation.linebyJump" value="跳跃精准"
                   @click="player_lyric_panel_checked_animation = LyricAnimation.linebyJump;">
-                  跳跃精准
+                  {{ $t('nsmusics.view_player.view_seting.lyricsAnimation_jump_3') }}
                 </n-radio>
               </n-space>
             </n-space>
@@ -655,7 +666,7 @@
                 <template #icon>
                   <n-icon :depth="3"><Settings24Regular /></n-icon>
                 </template>
-                <span style="font-weight: 500;">界面设置</span>
+                <span style="font-weight: 500;">{{ $t('nsmusics.view_player.view_seting.viewSeting') }}</span>
               </n-button>
               <n-button quaternary circle size="medium" 
                 style="margin-right:4px" @click="minimize">

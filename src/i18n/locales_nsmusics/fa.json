@@ -1,0 +1,40 @@
+{
+  "nsmusics": {
+    "siderbar_menu": {
+      "guessLike": "پسندیدید",
+      "karaoke": "کاراوکی",
+      "identifySong": "شناختن",
+      "scoreGeneration": "نот‌بندی",
+      "lyricsProduction": "تولید",
+      "musicCommunity": "جامعه"
+    },
+    "siderbar_player": {
+
+    },
+    "view_page": {
+      "allSong": "تمام آهنگ‌ها",
+      "loveSong": "آهنگ‌های دلخواه",
+      "allAlbum": "تمام آلبوم‌ها",
+      "loveAlbum": "آلبوم‌های دلخواه",
+      "allArtist": "تمام هنرمندان",
+      "loveArtist": "هنرمندان دلخواه",
+      "recentPlay": "آخرین پخش‌ها"
+    },
+    "view_player": {
+      "view_seting": {
+        "viewSeting": "تنظیمات",
+        "coverSquare_1": "مربع",
+        "coverRotate_2": "چرخاندن",
+        "coverBeaut_3": "ویnil",
+        "coverBase_4": "پایه",
+        "lyricSize": "اندازه متن",
+        "lyricSpeed": "سرعت متن",
+        "coverBaseVague": "تاری",
+        "lyricsAnimation": "پویانمایی",
+        "lyricsAnimation_line_1": "خطی",
+        "lyricsAnimation_byte_2": "حرفی",
+        "lyricsAnimation_jump_3": "پرش"
+      }
+    }
+  }
+}

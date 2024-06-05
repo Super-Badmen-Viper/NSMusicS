@@ -41,7 +41,7 @@ const getCoverArtUrl = (args: {
         `?id=${args.coverArtId}` +
         `&${args.credential}` +
         '&v=1.13.0' +
-        '&c=feishin' +
+        '&c=nsmusics' +
         `&size=${size}`
     );
 };
@@ -124,7 +124,7 @@ const normalizeSong = (
         serverId: server?.id || 'unknown',
         serverType: ServerType.NAVIDROME,
         size: item.size,
-        streamUrl: `${server?.url}/rest/stream.view?id=${id}&v=1.13.0&c=feishin_${deviceId}&${server?.credential}`,
+        streamUrl: `${server?.url}/rest/stream.view?id=${id}&v=1.13.0&c=nsmusics_${deviceId}&${server?.credential}`,
         trackNumber: item.trackNumber,
         uniqueId: nanoid(),
         updatedAt: item.updatedAt,

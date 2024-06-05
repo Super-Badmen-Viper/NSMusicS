@@ -13,6 +13,7 @@
   } from '@vicons/fluent'
   import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound} from '@vicons/material'
   import {Close, Hearing, Menu as MenuIcon, UserAvatarFilledAlt,} from '@vicons/carbon'
+
   ////// i18n auto lang
   import { useI18n } from 'vue-i18n'
   const { t, d, n } = useI18n({
@@ -81,13 +82,15 @@
     },
   ];
   function get_update_lang(value:any){
-    update_lang()
     console.log(value)
   }
-  function update_lang(){
-    menuOptions.value = []
-    menuOptions.value = create_menuOptions()
-  }
+  const computed_i18n_Label_ViewPageConfig_FilterAllSong_1 = computed(() => t('nsmusics.view_page.allSong'));
+  const computed_i18n_Label_ViewPageConfig_FilterLoveSong_2 = computed(() => t('nsmusics.view_page.loveSong'));
+  const computed_i18n_Label_ViewPageConfig_FilterAllAlbum_1 = computed(() => t('nsmusics.view_page.allAlbum'));
+  const computed_i18n_Label_ViewPageConfig_FilterLoveAlbum_2 = computed(() => t('nsmusics.view_page.loveAlbum'));
+  const computed_i18n_Label_ViewPageConfig_FilterAllArtist_1 = computed(() => t('nsmusics.view_page.allArtist'));
+  const computed_i18n_Label_ViewPageConfig_FilterLoveArtist_2 = computed(() => t('nsmusics.view_page.loveArtist'));
+  const computed_i18n_Label_ViewPageConfig_FilterRecentPlay = computed(() => t('nsmusics.view_page.recentPlay'));
 
   ////// this_app components of navie ui
   import type {GlobalTheme, MenuOption} from 'naive-ui'
@@ -95,7 +98,7 @@
   ////// this_app
   import {darkTheme, dateZhCN, lightTheme, NConfigProvider, NIcon, zhCN} from 'naive-ui'
   // vue3 function
-  import {h, onMounted, ref, watch} from 'vue';
+  import {h, onMounted, ref, computed} from 'vue';
   import routers from './router'
   import {RouterLink, RouterView, useRouter} from 'vue-router';
   // audio_class & player_bar class
@@ -140,21 +143,21 @@
   }
   const create_menuOptions = (): MenuOption[] => {
     return [
-      {label: renderRouterLink('View_Menu_AppSetting',t('common.menu')),key: 'go_back_menu',icon: renderIcon(MenuIcon),},
+      {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.menu'))),key: 'go_back_menu',icon: renderIcon(MenuIcon),},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: renderRouterLink('View_Home',t('common.home')),key: 'go_back_home',icon: renderIcon(Home28Regular),},
+      {label: computed(() => renderRouterLink('View_Home',t('common.home'))),key: 'go_back_home',icon: renderIcon(Home28Regular),},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: renderRouterLink('View_Album_List_ALL',t('entity.album_other')),key: 'go_albums_list',icon: renderIcon(AlbumFilled)},
-      {label: renderRouterLink('View_Song_List_ALL',t('entity.track_other')),key: 'go_songs_list',icon: renderIcon(MusicNoteRound)},
-      {label: renderRouterLink('View_Artist_List_ALL',t('entity.artist_other')),key: 'go_artist_list',icon: renderIcon(UserAvatarFilledAlt)},
-      {label: renderRouterLink('View_Home',t('entity.genre_other')),key: 'go_other',icon: renderIcon(Flag16Regular)},
+      {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'go_albums_list',icon: renderIcon(AlbumFilled)},
+      {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'go_songs_list',icon: renderIcon(MusicNoteRound)},
+      {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'go_artist_list',icon: renderIcon(UserAvatarFilledAlt)},
+      {label: computed(() => renderRouterLink('View_Home',t('entity.genre_other'))),key: 'go_other',icon: renderIcon(Flag16Regular)},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: renderRouterLink('View_Home','猜你喜欢'),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
-      {label: renderRouterLink('View_Home','K歌'),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
-      {label: renderRouterLink('View_Home','听歌识曲'),key: 'go_other',icon: renderIcon(Hearing)},
-      {label: renderRouterLink('View_Home','乐谱生成'),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
-      {label: renderRouterLink('View_Home','歌词制作'),key: 'go_other',icon: renderIcon(lyric)},
-      {label: renderRouterLink('View_Home','音乐社区'),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
+      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.guessLike'))),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
+      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.karaoke'))),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
+      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.identifySong'))),key: 'go_other',icon: renderIcon(Hearing)},
+      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
+      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'go_other',icon: renderIcon(lyric)},
+      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
     ]
   };
   const menuOptions = ref<MenuOption[]>(create_menuOptions())
@@ -637,7 +640,7 @@
     page_songlists.value.push(temp_Play_List_ALL)
     //////
     const stmt_media_Annotation_Starred_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM annotation 
+      SELECT COUNT(*) AS count FROM annotation
       WHERE starred = 1 AND item_type='media_file'
     `);
     const temp_Play_List_Love: Play_List = {
@@ -667,7 +670,7 @@
     page_songlists.value.push(temp_Play_List_Love)
     //////
     const stmt_media_Annotation_Recently_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM annotation 
+      SELECT COUNT(*) AS count FROM annotation
       WHERE play_count >= 1 AND item_type='media_file'
     `);
     const temp_Play_List_Recently: Play_List = {

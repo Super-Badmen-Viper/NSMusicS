@@ -1,43 +1,61 @@
 import { createI18n, type I18nOptions } from 'vue-i18n'
-import zhHans from './locales/zh-Hans.json';
-import zhHant from './locales/zh-Hant.json';
-import en from './locales/en.json';
-import es from './locales/es.json';
-import fa from './locales/fa.json';
-import fr from './locales/fr.json';
-import ja from './locales/ja.json';
-import pl from './locales/pl.json';
-import de from './locales/de.json';
-import it from './locales/it.json';
-import ru from './locales/ru.json';
-import ptBr from './locales/pt-BR.json';
-import sr from './locales/sr.json';
-import sv from './locales/sv.json';
-import cs from './locales/cs.json';
-import nl from './locales/nl.json';
+
+import zhHans_n from '@/i18n/locales_nsmusics/zh-Hans.json';
+import zhHant_n from '@/i18n/locales_nsmusics/zh-Hant.json';
+import en_n from '@/i18n/locales_nsmusics/en.json';
+import es_n from '@/i18n/locales_nsmusics/es.json';
+import fa_n from '@/i18n/locales_nsmusics/fa.json';
+import fr_n from '@/i18n/locales_nsmusics/fr.json';
+import ja_n from '@/i18n/locales_nsmusics/ja.json';
+import pl_n from '@/i18n/locales_nsmusics/pl.json';
+import de_n from '@/i18n/locales_nsmusics/de.json';
+import it_n from '@/i18n/locales_nsmusics/it.json';
+import ru_n from '@/i18n/locales_nsmusics/ru.json';
+import ptBr_n from '@/i18n/locales_nsmusics/pt-BR.json';
+import sr_n from '@/i18n/locales_nsmusics/sr.json';
+import sv_n from '@/i18n/locales_nsmusics/sv.json';
+import cs_n from '@/i18n/locales_nsmusics/cs.json';
+import nl_n from '@/i18n/locales_nsmusics/nl.json';
+
+import zhHans from '@/i18n/locales_feishin/zh-Hans.json';
+import zhHant from '@/i18n/locales_feishin/zh-Hant.json';
+import en from '@/i18n/locales_feishin/en.json';
+import es from '@/i18n/locales_feishin/es.json';
+import fa from '@/i18n/locales_feishin/fa.json';
+import fr from '@/i18n/locales_feishin/fr.json';
+import ja from '@/i18n/locales_feishin/ja.json';
+import pl from '@/i18n/locales_feishin/pl.json';
+import de from '@/i18n/locales_feishin/de.json';
+import it from '@/i18n/locales_feishin/it.json';
+import ru from '@/i18n/locales_feishin/ru.json';
+import ptBr from '@/i18n/locales_feishin/pt-BR.json';
+import sr from '@/i18n/locales_feishin/sr.json';
+import sv from '@/i18n/locales_feishin/sv.json';
+import cs from '@/i18n/locales_feishin/cs.json';
+import nl from '@/i18n/locales_feishin/nl.json';
 export class Language{
     public i18n:any;
     constructor() {
         const options: I18nOptions = {
             legacy: false,
-            locale: 'zhHans',
+            locale: 'en',
             messages: {
-                'zhHans': zhHans,
-                'zhHant': zhHant,
-                'en': en,
-                'es': es,
-                'fa': fa,
-                'fr': fr,
-                'ja': ja,
-                'pl': pl,
-                'de': de,
-                'it': it,
-                'ru': ru,
-                'ptBr': ptBr,
-                'sr': sr,
-                'sv': sv,
-                'cs': cs,
-                'nl': nl,
+                'zhHans': { ...zhHans, ...zhHans_n },
+                'zhHant': { ...zhHant, ...zhHant_n },
+                'en': { ...en, ...en_n },
+                'es': { ...es, ...es_n },
+                'fa': { ...fa, ...fa_n },
+                'fr': { ...fr, ...fr_n },
+                'ja': { ...ja, ...ja_n },
+                'pl': { ...pl, ...pl_n },
+                'de': { ...de, ...de_n },
+                'it': { ...it, ...it_n },
+                'ru': { ...ru, ...ru_n },
+                'ptBr': { ...ptBr, ...ptBr_n },
+                'sr': { ...sr, ...sr_n },
+                'sv': { ...sv, ...sv_n },
+                'cs': { ...cs, ...cs_n },
+                'nl': { ...nl, ...nl_n }
             }
         }
         this.i18n = createI18n<false, typeof options>(options)

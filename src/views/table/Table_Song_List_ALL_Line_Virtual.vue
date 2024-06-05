@@ -17,6 +17,15 @@
   import { ref, onMounted, h, computed, watch, onBeforeUnmount } from 'vue';
   import { type DropdownOption, NIcon,type InputInst,NImage } from 'naive-ui';
 
+  ////// i18n auto lang
+  import { useI18n } from 'vue-i18n'
+  const { t, d, n } = useI18n({
+    inheritLocale: true
+  })
+  const computed_i18n_Label_ViewPageConfig_FilterAllSong_1 = computed(() => t('nsmusics.view_page.allSong'));
+  const computed_i18n_Label_ViewPageConfig_FilterLoveSong_2 = computed(() => t('nsmusics.view_page.loveSong'));
+  const computed_i18n_Label_ViewPageConfig_FilterRecentPlay = computed(() => t('nsmusics.view_page.recentPlay'));
+
   ////// passed as argument
   const emits = defineEmits([
     'media_file_path','media_file_path_from_playlist',

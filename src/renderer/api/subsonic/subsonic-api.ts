@@ -210,7 +210,7 @@ export const ssApiClient = (args: {
                     headers,
                     method: method as Method,
                     params: {
-                        c: 'Feishin',
+                        c: 'NSMusicS',
                         f: 'json',
                         v: '1.13.0',
                         ...authParams,
