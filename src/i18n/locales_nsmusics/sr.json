@@ -1,0 +1,40 @@
+{
+    "nsmusics": {
+        "siderbar_menu": {
+            "guessLike": "Свиђа ти",
+            "karaoke": "Караке",
+            "identifySong": "Идентификуј",
+            "scoreGeneration": "Ноте",
+            "lyricsProduction": "Производња",
+            "musicCommunity": "Заједница"
+        },
+        "siderbar_player": {
+
+        },
+        "view_page": {
+            "allSong": "Све песме",
+            "loveSong": "Омиљене",
+            "allAlbum": "Сви албуми",
+            "loveAlbum": "Омиљени албуми",
+            "allArtist": "Сви уметници",
+            "loveArtist": "Омиљени уметници",
+            "recentPlay": "Недавно пуштано"
+        },
+        "view_player": {
+            "view_seting": {
+                "viewSeting": "Подешавања",
+                "coverSquare_1": "Квадратна",
+                "coverRotate_2": "Ротација",
+                "coverBeaut_3": "Винил",
+                "coverBase_4": "Основа",
+                "lyricSize": "Величина текста",
+                "lyricSpeed": "Брзина текста",
+                "coverBaseVague": "Неоспорено",
+                "lyricsAnimation": "Анимација",
+                "lyricsAnimation_line_1": "По линији",
+                "lyricsAnimation_byte_2": "По знаку",
+                "lyricsAnimation_jump_3": "Прецизно"
+            }
+        }
+    }
+}

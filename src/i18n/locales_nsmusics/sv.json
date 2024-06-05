@@ -1,0 +1,40 @@
+{
+    "nsmusics": {
+        "siderbar_menu": {
+            "guessLike": "Gissa Gillar",
+            "karaoke": "Karaoke",
+            "identifySong": "Identifiera",
+            "scoreGeneration": "Noter",
+            "lyricsProduction": "Skapa",
+            "musicCommunity": "Gemenskap"
+        },
+        "siderbar_player": {
+
+        },
+        "view_page": {
+            "allSong": "Alla Låtar",
+            "loveSong": "Favoritlåtar",
+            "allAlbum": "Alla Album",
+            "loveAlbum": "Favoritalbum",
+            "allArtist": "Alla Artister",
+            "loveArtist": "Favoritartister",
+            "recentPlay": "Nyligen Spelade"
+        },
+        "view_player": {
+            "view_seting": {
+                "viewSeting": "Inställningar",
+                "coverSquare_1": "Fyrkantig",
+                "coverRotate_2": "Rotera",
+                "coverBeaut_3": "Vinyl",
+                "coverBase_4": "Basad",
+                "lyricSize": "Textstorlek",
+                "lyricSpeed": "Texthastighet",
+                "coverBaseVague": "Oskärpa",
+                "lyricsAnimation": "Animation",
+                "lyricsAnimation_line_1": "Radvis",
+                "lyricsAnimation_byte_2": "Teckenvis",
+                "lyricsAnimation_jump_3": "Hoppvis"
+            }
+        }
+    }
+}

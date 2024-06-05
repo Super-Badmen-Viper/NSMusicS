@@ -1,0 +1,40 @@
+{
+    "nsmusics": {
+        "siderbar_menu": {
+            "guessLike": "推薦",
+            "karaoke": "カラオケ",
+            "identifySong": "識別",
+            "scoreGeneration": "楽譜",
+            "lyricsProduction": "歌詞制作",
+            "musicCommunity": "コミュニティ"
+        },
+        "siderbar_player": {
+
+        },
+        "view_page": {
+            "allSong": "全曲",
+            "loveSong": "お気に入り",
+            "allAlbum": "全アルバム",
+            "loveAlbum": "お気に入りアルバム",
+            "allArtist": "全アーティスト",
+            "loveArtist": "お気に入りアーティスト",
+            "recentPlay": "最近再生"
+        },
+        "view_player": {
+            "view_seting": {
+                "viewSeting": "設定",
+                "coverSquare_1": "正方形",
+                "coverRotate_2": "ローテート",
+                "coverBeaut_3": "ビニール",
+                "coverBase_4": "ベース",
+                "lyricSize": "文字サイズ",
+                "lyricSpeed": "歌詞速度",
+                "coverBaseVague": "ぼやけ",
+                "lyricsAnimation": "アニメーション",
+                "lyricsAnimation_line_1": "行単位",
+                "lyricsAnimation_byte_2": "字単位",
+                "lyricsAnimation_jump_3": "ジャンプ"
+            }
+        }
+    }
+}

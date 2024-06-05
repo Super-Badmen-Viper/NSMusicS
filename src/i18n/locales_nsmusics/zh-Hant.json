@@ -1,0 +1,40 @@
+{
+    "nsmusics": {
+        "siderbar_menu": {
+            "guessLike": "猜你喜歡",
+            "karaoke": "K歌",
+            "identifySong": "聽歌識曲",
+            "scoreGeneration": "樂譜生成",
+            "lyricsProduction": "歌詞製作",
+            "musicCommunity": "音樂社區"
+        },
+        "siderbar_player": {
+
+        },
+        "view_page": {
+            "allSong": "所有歌曲",
+            "loveSong": "收藏歌曲",
+            "allAlbum": "所有專輯",
+            "loveAlbum": "收藏專輯",
+            "allArtist": "所有歌手",
+            "loveArtist": "收藏歌手",
+            "recentPlay": "最近播放"
+        },
+        "view_player": {
+            "view_seting": {
+                "viewSeting": "界面設置",
+                "coverSquare_1": "方形封面",
+                "coverRotate_2": "旋轉封面",
+                "coverBeaut_3": "炫膠唱片",
+                "coverBase_4": "專輯底圖",
+                "lyricSize": "歌詞字號",
+                "lyricSpeed": "歌詞快慢",
+                "coverBaseVague": "底圖模糊",
+                "lyricsAnimation": "歌詞動效",
+                "lyricsAnimation_line_1": "逐行精準",
+                "lyricsAnimation_byte_2": "逐字精準",
+                "lyricsAnimation_jump_3": "跳躍精準"
+            }
+        }
+    }
+}

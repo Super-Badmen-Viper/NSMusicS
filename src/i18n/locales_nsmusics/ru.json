@@ -1,0 +1,40 @@
+{
+    "nsmusics": {
+        "siderbar_menu": {
+            "guessLike": "Понрав.",
+            "karaoke": "Караоке",
+            "identifySong": "Идентификатор",
+            "scoreGeneration": "Ноты",
+            "lyricsProduction": "Текст",
+            "musicCommunity": "Сообщество"
+        },
+        "siderbar_player": {
+
+        },
+        "view_page": {
+            "allSong": "Все песни",
+            "loveSong": "Избранные",
+            "allAlbum": "Все альбомы",
+            "loveAlbum": "Избранные альбомы",
+            "allArtist": "Все артисты",
+            "loveArtist": "Избранные артисты",
+            "recentPlay": "Недавно"
+        },
+        "view_player": {
+            "view_seting": {
+                "viewSeting": "Настройки",
+                "coverSquare_1": "Плоский",
+                "coverRotate_2": "Вращение",
+                "coverBeaut_3": "Винил",
+                "coverBase_4": "Основа",
+                "lyricSize": "Размер текста",
+                "lyricSpeed": "Скорость текста",
+                "coverBaseVague": "Размытие",
+                "lyricsAnimation": "Анимация",
+                "lyricsAnimation_line_1": "Стр.",
+                "lyricsAnimation_byte_2": "Букв.",
+                "lyricsAnimation_jump_3": "Пр."
+            }
+        }
+    }
+}

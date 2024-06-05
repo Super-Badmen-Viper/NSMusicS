@@ -1,22 +1,22 @@
 {
     "action": {
-        "editPlaylist": "редактировать {arg}",
+        "editPlaylist": "редактировать $t(entity.playlist_one)",
         "goToPage": "перейти на страницу",
         "moveToTop": "вверх",
         "clearQueue": "очистить очередь",
-        "addToFavorites": "добавить в {arg}",
-        "addToPlaylist": "добавить в {arg}",
-        "createPlaylist": "создать {arg}",
-        "removeFromPlaylist": "удалить из {arg}",
-        "viewPlaylists": "просмотреть {arg}",
-        "refresh": "{arg}",
-        "deletePlaylist": "удалить {arg}",
+        "addToFavorites": "добавить в $t(entity.favorite_other)",
+        "addToPlaylist": "добавить в $t(entity.playlist_one)",
+        "createPlaylist": "создать $t(entity.playlist_one)",
+        "removeFromPlaylist": "удалить из $t(entity.playlist_one)",
+        "viewPlaylists": "просмотреть $t(entity.playlist_other)",
+        "refresh": "$t(common.refresh)",
+        "deletePlaylist": "удалить $t(entity.playlist_one)",
         "removeFromQueue": "удалить из очереди",
         "deselectAll": "снять выделение",
         "moveToBottom": "вниз",
         "setRating": "оценить",
-        "toggleSmartPlaylistEditor": "вкл/выкл {arg} редактор",
-        "removeFromFavorites": "удалить из {arg}"
+        "toggleSmartPlaylistEditor": "вкл/выкл $t(entity.smartPlaylist) редактор",
+        "removeFromFavorites": "удалить из $t(entity.favorite_other)"
     },
     "common": {
         "backward": "назад",
@@ -31,7 +31,7 @@
         "left": "лево",
         "save": "сохранить",
         "right": "право",
-        "currentSong": "текущий {arg}",
+        "currentSong": "текущий $t(entity.track_one)",
         "collapse": "закрыть",
         "trackNumber": "трек",
         "descending": "убывающий",
@@ -87,7 +87,7 @@
         "sortOrder": "порядок",
         "menu": "меню",
         "restartRequired": "необходим перезапуск приложения",
-        "previousSong": "предыдущий {arg}",
+        "previousSong": "предыдущий $t(entity.track_one)",
         "noResultsFromQuery": "нет результатов",
         "quit": "выйти",
         "expand": "расширить",
@@ -108,46 +108,46 @@
         "genre_one": "жанр",
         "genre_few": "жанра",
         "genre_many": "жанров",
-        "playlistWithCount_one": "{arg} плейлист",
-        "playlistWithCount_few": "{arg} плейлиста",
-        "playlistWithCount_many": "{arg} плейлистов",
+        "playlistWithCount_one": "{{count}} плейлист",
+        "playlistWithCount_few": "{{count}} плейлиста",
+        "playlistWithCount_many": "{{count}} плейлистов",
         "playlist_one": "плейлист",
         "playlist_few": "плейлиста",
         "playlist_many": "плейлистов",
         "artist_one": "автор",
         "artist_few": "автора",
         "artist_many": "авторов",
-        "folderWithCount_one": "{arg} папка",
-        "folderWithCount_few": "{arg} папки",
-        "folderWithCount_many": "{arg} папок",
+        "folderWithCount_one": "{{count}} папка",
+        "folderWithCount_few": "{{count}} папки",
+        "folderWithCount_many": "{{count}} папок",
         "albumArtist_one": "автор альбома",
         "albumArtist_few": "автора альбома",
         "albumArtist_many": "авторов альбома",
         "track_one": "трек",
         "track_few": "трека",
         "track_many": "треков",
-        "albumArtistCount_one": "{arg} автор альбома",
-        "albumArtistCount_few": "{arg} автора альбома",
-        "albumArtistCount_many": "{arg} авторов альбома",
-        "albumWithCount_one": "{arg} альбом",
-        "albumWithCount_few": "{arg} альбома",
-        "albumWithCount_many": "{arg} альбомов",
+        "albumArtistCount_one": "{{count}} автор альбома",
+        "albumArtistCount_few": "{{count}} автора альбома",
+        "albumArtistCount_many": "{{count}} авторов альбома",
+        "albumWithCount_one": "{{count}} альбом",
+        "albumWithCount_few": "{{count}} альбома",
+        "albumWithCount_many": "{{count}} альбомов",
         "favorite_one": "любимый",
         "favorite_few": "любимых",
         "favorite_many": "любимые",
-        "artistWithCount_one": "{arg} автор",
-        "artistWithCount_few": "{arg} автора",
-        "artistWithCount_many": "{arg} авторов",
+        "artistWithCount_one": "{{count}} автор",
+        "artistWithCount_few": "{{count}} автора",
+        "artistWithCount_many": "{{count}} авторов",
         "folder_one": "папка",
         "folder_few": "папки",
         "folder_many": "папок",
-        "smartPlaylist": "умный {arg}",
-        "genreWithCount_one": "{arg} жанр",
-        "genreWithCount_few": "{arg} жанра",
-        "genreWithCount_many": "{arg} жанров",
-        "trackWithCount_one": "{arg} трек",
-        "trackWithCount_few": "{arg} трека",
-        "trackWithCount_many": "{arg} треков"
+        "smartPlaylist": "умный $t(entity.playlist_one)",
+        "genreWithCount_one": "{{count}} жанр",
+        "genreWithCount_few": "{{count}} жанра",
+        "genreWithCount_many": "{{count}} жанров",
+        "trackWithCount_one": "{{count}} трек",
+        "trackWithCount_few": "{{count}} трека",
+        "trackWithCount_many": "{{count}} треков"
     },
     "table": {
         "config": {
@@ -175,21 +175,21 @@
                 "trackNumber": "номер трека",
                 "rowIndex": "индекс ряда",
                 "rating": "$t(common.rating)",
-                "artist": "{arg}",
-                "album": "{arg}",
+                "artist": "$t(entity.artist_one)",
+                "album": "$t(entity.album_one)",
                 "note": "$t(common.note)",
                 "biography": "$t(common.biography)",
-                "owner": "{arg}",
+                "owner": "$t(common.owner)",
                 "path": "$t(common.path)",
-                "channels": "{arg}",
+                "channels": "$t(common.channel_other)",
                 "playCount": "количество воспроизведений",
                 "bitrate": "$t(common.bitrate)",
                 "actions": "$t(common.action_other)",
-                "genre": "{arg}",
+                "genre": "$t(entity.genre_one)",
                 "discNumber": "номер диска",
                 "favorite": "$t(common.favorite)",
                 "year": "$t(common.year)",
-                "albumArtist": "{arg}"
+                "albumArtist": "$t(entity.albumArtist_one)"
             }
         },
         "column": {
@@ -200,9 +200,9 @@
             "lastPlayed": "последний",
             "releaseDate": "дата выхода",
             "title": "название",
-            "songCount": "{arg}",
+            "songCount": "$t(entity.track_other)",
             "trackNumber": "трек",
-            "genre": "{arg}",
+            "genre": "$t(entity.genre_one)",
             "path": "путь",
             "discNumber": "диск",
             "size": "$t(common.size)"
@@ -212,7 +212,7 @@
         "remotePortWarning": "перезапустить сервер для применения нового порта",
         "systemFontError": "произошла ошибка при попытке получить системные шрифты",
         "playbackError": "произошла ошибка при попытке проиграть медиа",
-        "endpointNotImplementedError": "запрос {endpoint} is not implemented for {serverType}",
+        "endpointNotImplementedError": "запрос {{endpoint}} is not implemented for {{serverType}}",
         "remotePortError": "произошла ошибка при попытке установить порт удаленного сервера",
         "serverRequired": "необходим сервер",
         "authenticationFailed": "аутентификация завершилась с ошибкой",
@@ -220,10 +220,10 @@
         "genericError": "произошла ошибка",
         "credentialsRequired": "необходимы учётные данные",
         "sessionExpiredError": "ваш сеанс истек",
-        "remoteEnableError": "ошибка произошла при попытке {arg} удаленного сервера",
+        "remoteEnableError": "ошибка произошла при попытке $t(common.enable) удаленного сервера",
         "localFontAccessDenied": "не получилось получить доступ к шрифтам",
         "serverNotSelectedError": "не выбран сервер",
-        "remoteDisableError": "ошибка произошла при попытке {arg} удаленного сервера",
+        "remoteDisableError": "ошибка произошла при попытке $t(common.disable) удаленного сервера",
         "mpvRequired": "Необходим MPV",
         "audioDeviceFetchError": "произошла ошибка с аудиоустройством",
         "invalidServer": "недействительный сервер",
@@ -236,12 +236,12 @@
         "dateAdded": "дата добавления",
         "communityRating": "рейтинг сообщества",
         "favorited": "любимый",
-        "albumArtist": "{arg}",
+        "albumArtist": "$t(entity.albumArtist_one)",
         "isFavorited": "любимый",
         "bpm": "ударов в мин.",
         "disc": "диск",
         "biography": "биография",
-        "artist": "{arg}",
+        "artist": "$t(entity.artist_one)",
         "duration": "продолжительность",
         "fromYear": "из года",
         "criticRating": "рейтинг критиков",
@@ -249,18 +249,18 @@
         "comment": "комментировать",
         "playCount": "кол-во воспроизведений",
         "recentlyUpdated": "недавно обновлено",
-        "channels": "{arg}",
+        "channels": "$t(common.channel_other)",
         "recentlyPlayed": "недавно проиграно",
-        "owner": "{arg}",
+        "owner": "$t(common.owner)",
         "title": "название",
         "rating": "рейтинг",
         "search": "Поиск",
-        "genre": "{arg}",
+        "genre": "$t(entity.genre_one)",
         "recentlyAdded": "недавно добавлено",
         "note": "заметка",
         "name": "название",
         "releaseDate": "дата выхода",
-        "albumCount": "{arg} кол-во",
+        "albumCount": "$t(entity.album_other) кол-во",
         "path": "путь",
         "isRecentlyPlayed": "недавно проигрывалась",
         "releaseYear": "год выхода",
@@ -270,7 +270,7 @@
         "random": "случайный",
         "lastPlayed": "последний раз проигрывалась",
         "toYear": "до года",
-        "album": "{arg}",
+        "album": "$t(entity.album_one)",
         "trackNumber": "трек"
     },
     "player": {
@@ -307,16 +307,16 @@
     "page": {
         "sidebar": {
             "nowPlaying": "Cейчас проигрывается",
-            "playlists": "{arg}",
-            "search": "{arg}",
-            "tracks": "{arg}",
-            "albums": "{arg}",
-            "genres": "{arg}",
-            "folders": "{arg}",
-            "settings": "{arg}",
-            "home": "{arg}",
-            "artists": "{arg}",
-            "albumArtists": "{arg}"
+            "playlists": "$t(entity.playlist_other)",
+            "search": "$t(common.search)",
+            "tracks": "$t(entity.track_other)",
+            "albums": "$t(entity.album_other)",
+            "genres": "$t(entity.genre_other)",
+            "folders": "$t(entity.folder_other)",
+            "settings": "$t(common.setting_other)",
+            "home": "$t(common.home)",
+            "artists": "$t(entity.artist_other)",
+            "albumArtists": "$t(entity.albumArtist_other)"
         },
         "fullscreenPlayer": {
             "config": {
@@ -339,12 +339,12 @@
         "appMenu": {
             "selectServer": "выбрать сервер",
             "version": "версия {{version}}",
-            "settings": "{arg}",
+            "settings": "$t(common.setting_other)",
             "manageServers": "настроить список серверов",
             "expandSidebar": "развернуть",
             "collapseSidebar": "Скрыть боковую панель",
             "openBrowserDevtools": "открыть инструменты разработчика",
-            "quit": "{arg}",
+            "quit": "$t(common.quit)",
             "goBack": "назад",
             "goForward": "вперёд"
         },
@@ -358,23 +358,23 @@
             "createPlaylist": "$t(action.createPlaylist)",
             "removeFromPlaylist": "$t(action.removeFromPlaylist)",
             "removeFromFavorites": "$t(action.removeFromFavorites)",
-            "addNext": "{arg}",
+            "addNext": "$t(player.addNext)",
             "deselectAll": "$t(action.deselectAll)",
-            "addLast": "{arg}",
+            "addLast": "$t(player.addLast)",
             "addFavorite": "$t(action.addToFavorites)",
-            "play": "{arg}",
-            "numberSelected": "{arg} выбрано",
+            "play": "$t(player.play)",
+            "numberSelected": "{{count}} выбрано",
             "removeFromQueue": "$t(action.removeFromQueue)"
         },
         "home": {
             "mostPlayed": "наибольшее кол-во воспроизведений",
             "newlyAdded": "недавно добавленные релизы",
-            "title": "{arg}",
+            "title": "$t(common.home)",
             "explore": "изучите вашу медиатеку",
             "recentlyPlayed": "недавно прослушано"
         },
         "albumDetail": {
-            "moreFromArtist": "больше из жанра {arg}",
+            "moreFromArtist": "больше из жанра $t(entity.genre_one)",
             "moreFromGeneric": "больше из {{item}}"
         },
         "setting": {
@@ -384,13 +384,13 @@
             "windowTab": "окно"
         },
         "albumArtistList": {
-            "title": "{arg}"
+            "title": "$t(entity.albumArtist_other)"
         },
         "genreList": {
-            "title": "{arg}"
+            "title": "$t(entity.genre_other)"
         },
         "trackList": {
-            "title": "{arg}"
+            "title": "$t(entity.track_other)"
         },
         "globalSearch": {
             "commands": {
@@ -401,25 +401,25 @@
             "title": "комманды"
         },
         "playlistList": {
-            "title": "{arg}"
+            "title": "$t(entity.playlist_other)"
         },
         "albumList": {
-            "title": "{arg}"
+            "title": "$t(entity.album_other)"
         }
     },
     "form": {
         "deletePlaylist": {
-            "title": "удалить {arg}",
-            "success": "{arg} успешно удалён",
-            "input_confirm": "напишите название {arg}, чтобы подтвердить действие"
+            "title": "удалить $t(entity.playlist_one)",
+            "success": "$t(entity.playlist_one) успешно удалён",
+            "input_confirm": "напишите название $t(entity.playlist_one), чтобы подтвердить действие"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "создать {arg}",
+            "title": "создать $t(entity.playlist_one)",
             "input_public": "публичный",
             "input_name": "$t(common.name)",
-            "success": "{arg} успешно создан",
-            "input_owner": "{arg}"
+            "success": "$t(entity.playlist_one) успешно создан",
+            "input_owner": "$t(common.owner)"
         },
         "addServer": {
             "title": "добавить сервер",
@@ -430,15 +430,15 @@
             "input_name": "название сервера",
             "success": "сервер добавлен успешно",
             "input_savePassword": "сохранить пароль",
-            "ignoreSsl": "ignore ssl {arg}",
-            "ignoreCors": "{arg}",
+            "ignoreSsl": "ignore ssl $t(common.restartRequired)",
+            "ignoreCors": "$t(common.restartRequired)",
             "error_savePassword": "произошла ошибка во время попытки сохранения пароля"
         },
         "addToPlaylist": {
-            "success": "добавлено(а) {{message}} {arg} в {{numOfPlaylists}} {arg}",
-            "title": "добавить в {arg}",
+            "success": "добавлено(а) {{message}} $t(entity.track_other) в {{numOfPlaylists}} $t(entity.playlist_other)",
+            "title": "добавить в $t(entity.playlist_one)",
             "input_skipDuplicates": "пропустить дубликаты",
-            "input_playlists": "{arg}"
+            "input_playlists": "$t(entity.playlist_other)"
         },
         "updateServer": {
             "title": "обновить сервер",
@@ -450,11 +450,11 @@
         },
         "lyricSearch": {
             "input_name": "$t(common.name)",
-            "input_artist": "{arg}",
+            "input_artist": "$t(entity.artist_one)",
             "title": "поиск слов песни"
         },
         "editPlaylist": {
-            "title": "редактировать {arg}"
+            "title": "редактировать $t(entity.playlist_one)"
         }
     },
     "setting": {

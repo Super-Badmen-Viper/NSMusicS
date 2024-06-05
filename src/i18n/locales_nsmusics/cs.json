@@ -1,0 +1,40 @@
+{
+    "nsmusics": {
+        "siderbar_menu": {
+            "guessLike": "Takhle Mám",
+            "karaoke": "Karaoke",
+            "identifySong": "Rozpoznat",
+            "scoreGeneration": "Noty",
+            "lyricsProduction": "Vytvořit",
+            "musicCommunity": "Komunita"
+        },
+        "siderbar_player": {
+
+        },
+        "view_page": {
+            "allSong": "Všechny Skvely",
+            "loveSong": "Oblíbené",
+            "allAlbum": "Všechny Alby",
+            "loveAlbum": "Oblíbené Alby",
+            "allArtist": "Všichni Umělci",
+            "loveArtist": "Oblíbení Umělci",
+            "recentPlay": "Nedávno Přehráno"
+        },
+        "view_player": {
+            "view_seting": {
+                "viewSeting": "Nastavení",
+                "coverSquare_1": "Čtverec",
+                "coverRotate_2": "Otočit",
+                "coverBeaut_3": "Vinyl",
+                "coverBase_4": "Základ",
+                "lyricSize": "Velikost Textu",
+                "lyricSpeed": "Rychlost Textu",
+                "coverBaseVague": "Rozmazat",
+                "lyricsAnimation": "Animace",
+                "lyricsAnimation_line_1": "Pozice",
+                "lyricsAnimation_byte_2": "Znaky",
+                "lyricsAnimation_jump_3": "Přesnost"
+            }
+        }
+    }
+}

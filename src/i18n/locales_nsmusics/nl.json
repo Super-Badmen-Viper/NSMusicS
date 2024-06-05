@@ -1,0 +1,40 @@
+{
+    "nsmusics": {
+        "siderbar_menu": {
+            "guessLike": "Vind je leuk",
+            "karaoke": "Karaoke",
+            "identifySong": "Lied ident.",
+            "scoreGeneration": "Noten",
+            "lyricsProduction": "Tekst maken",
+            "musicCommunity": "Muziekgemeen"
+        },
+        "siderbar_player": {
+
+        },
+        "view_page": {
+            "allSong": "Alle nummers",
+            "loveSong": "Favorieten",
+            "allAlbum": "Alle albums",
+            "loveAlbum": "Favoriete albums",
+            "allArtist": "Alle artiesten",
+            "loveArtist": "Favoriete artiesten",
+            "recentPlay": "Recent gespeeld"
+        },
+        "view_player": {
+            "view_seting": {
+                "viewSeting": "Instellingen",
+                "coverSquare_1": "Vierkant",
+                "coverRotate_2": "Draaien",
+                "coverBeaut_3": "Vinyl",
+                "coverBase_4": "Basis",
+                "lyricSize": "Tekstgrootte",
+                "lyricSpeed": "Tekstsnelheid",
+                "coverBaseVague": "Vage",
+                "lyricsAnimation": "Animatie",
+                "lyricsAnimation_line_1": "Regelmatig",
+                "lyricsAnimation_byte_2": "Karaktersnel",
+                "lyricsAnimation_jump_3": "Spring exact"
+            }
+        }
+    }
+}

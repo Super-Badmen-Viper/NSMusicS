@@ -1,0 +1,40 @@
+{
+    "nsmusics": {
+        "siderbar_menu": {
+            "guessLike": "Lubisz",
+            "karaoke": "Karaoke",
+            "identifySong": "Zidentyfikuj",
+            "scoreGeneration": "Nuty",
+            "lyricsProduction": "Twórz",
+            "musicCommunity": "Społeczność"
+        },
+        "siderbar_player": {
+
+        },
+        "view_page": {
+            "allSong": "Wszystkie utwory",
+            "loveSong": "Ulubione",
+            "allAlbum": "Wszystkie albumy",
+            "loveAlbum": "Ulubione albumy",
+            "allArtist": "Wszyscy artyści",
+            "loveArtist": "Ulubieni artyści",
+            "recentPlay": "Ostatnio odtwarzane"
+        },
+        "view_player": {
+            "view_seting": {
+                "viewSeting": "Ustawienia",
+                "coverSquare_1": "Kwadratowy",
+                "coverRotate_2": "Obróć",
+                "coverBeaut_3": "Płyta",
+                "coverBase_4": "Podstawowy",
+                "lyricSize": "Rozmiar tekstu",
+                "lyricSpeed": "Prędkość tekstu",
+                "coverBaseVague": "Rozmycie",
+                "lyricsAnimation": "Animacja",
+                "lyricsAnimation_line_1": "Linijkowo",
+                "lyricsAnimation_byte_2": "Znak po znaku",
+                "lyricsAnimation_jump_3": "Dokładne sk"
+            }
+        }
+    }
+}

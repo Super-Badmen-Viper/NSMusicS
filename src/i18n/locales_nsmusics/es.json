@@ -1,0 +1,40 @@
+{
+    "nsmusics": {
+        "siderbar_menu": {
+            "guessLike": "Te Gusta",
+            "karaoke": "Karaoke",
+            "identifySong": "Identificar",
+            "scoreGeneration": "Partituras",
+            "lyricsProduction": "Creación",
+            "musicCommunity": "Comunidad"
+        },
+        "siderbar_player": {
+            
+        },
+        "view_page": {
+            "allSong": "Todas las Canciones",
+            "loveSong": "Canciones Favoritas",
+            "allAlbum": "Todos los Álbumes",
+            "loveAlbum": "Álbumes Favoritos",
+            "allArtist": "Todos los Artistas",
+            "loveArtist": "Artistas Favoritos",
+            "recentPlay": "Reproducciones Recientes"
+        },
+        "view_player": {
+            "view_seting": {
+                "viewSeting": "Configuración",
+                "coverSquare_1": "Cuadrada",
+                "coverRotate_2": "Rotar",
+                "coverBeaut_3": "Vinilo",
+                "coverBase_4": "Base",
+                "lyricSize": "Tamaño del Texto",
+                "lyricSpeed": "Velocidad del Texto",
+                "coverBaseVague": "Desenfoque",
+                "lyricsAnimation": "Animación",
+                "lyricsAnimation_line_1": "Por Línea",
+                "lyricsAnimation_byte_2": "Por Carácter",
+                "lyricsAnimation_jump_3": "Salto Prec."
+            }
+        }
+    }
+}

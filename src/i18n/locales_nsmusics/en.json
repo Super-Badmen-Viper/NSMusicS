@@ -1,0 +1,40 @@
+{
+    "nsmusics": {
+        "siderbar_menu": {
+            "guessLike": "guess",
+            "karaoke": "karaoke",
+            "identifySong": "identify",
+            "scoreGeneration": "score",
+            "lyricsProduction": "lyrics",
+            "musicCommunity": "colony"
+        },
+        "siderbar_player": {
+
+        },
+        "view_page": {
+            "allSong": "all Song",
+            "loveSong": "love Song",
+            "allAlbum": "all Album",
+            "loveAlbum": "love Album",
+            "allArtist": "all Artist",
+            "loveArtist": "love Artist",
+            "recentPlay": "recent Play"
+        },
+        "view_player": {
+            "view_seting": {
+                "viewSeting": "view Seting",
+                "coverSquare_1": "cover Square",
+                "coverRotate_2": "cover Rotate",
+                "coverBeaut_3": "cover Beaut",
+                "coverBase_4": "cover Base",
+                "lyricSize": "lyric Size",
+                "lyricSpeed": "lyric Speed",
+                "coverBaseVague": "cover Base Vague",
+                "lyricsAnimation": "lyrics Animation",
+                "lyricsAnimation_line_1": "lyrics Animation line",
+                "lyricsAnimation_byte_2": "lyrics Animation byte",
+                "lyricsAnimation_jump_3": "lyrics Animation jump"
+            }
+        }
+    }
+}

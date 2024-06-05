@@ -1,0 +1,40 @@
+{
+    "nsmusics": {
+        "siderbar_menu": {
+            "guessLike": "Recommand",
+            "karaoke": "Karaoké",
+            "identifySong": "Identifier",
+            "scoreGeneration": "Partitions",
+            "lyricsProduction": "Paroles",
+            "musicCommunity": "musicale"
+        },
+        "siderbar_player": {
+
+        },
+        "view_page": {
+            "allSong": "Tous les morceaux",
+            "loveSong": "Favoris",
+            "allAlbum": "Tous les albums",
+            "loveAlbum": "Albums préférés",
+            "allArtist": "Tous les artistes",
+            "loveArtist": "Artistes préférés",
+            "recentPlay": "Récemment joués"
+        },
+        "view_player": {
+            "view_seting": {
+                "viewSeting": "Réglages",
+                "coverSquare_1": "Carré",
+                "coverRotate_2": "Rotation",
+                "coverBeaut_3": "Vinyle",
+                "coverBase_4": "Base",
+                "lyricSize": "Taille texte",
+                "lyricSpeed": "Vitesse texte",
+                "coverBaseVague": "Flou",
+                "lyricsAnimation": "Animation",
+                "lyricsAnimation_line_1": "Par ligne",
+                "lyricsAnimation_byte_2": "Par caractère",
+                "lyricsAnimation_jump_3": "Saut précis"
+            }
+        }
+    }
+}
