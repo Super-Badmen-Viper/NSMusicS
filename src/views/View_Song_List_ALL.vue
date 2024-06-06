@@ -121,7 +121,7 @@ const emits = defineEmits([
   'router_history_model',
   'router_history_model_of_Media_scroller_value','router_history_model_of_Media_scroll',
 ]);
-const { 
+const {
   app_left_menu_collapsed,window_innerWidth,
 
   change_page_header_color,page_top_album_image_url,page_top_album_name,page_top_album_id,
@@ -142,7 +142,7 @@ const {
   page_songlists_selected:string;
 
   page_songlists_keyword:string;
-  
+
   media_Files_temporary:Media_File[],media_Files_selected:Media_File[],
   page_songlists_options_Sort_key:{ columnKey: string; order: string }[],
 
@@ -153,55 +153,55 @@ const {
 <template>
   <div class="view_show">
     <Table_Song_List
-      :data_temporary="media_Files_temporary"
-      :data_temporary_selected="media_Files_selected"
+        :data_temporary="media_Files_temporary"
+        :data_temporary_selected="media_Files_selected"
 
-      @router_history_model="get_router_history_model"
-      :router_select_history_date="router_select_history_date"
-      :router_history_datas="router_history_datas"
-      :router_history_model_of_Media_scroller_value="router_history_model_of_Media_scroller_value"
-      @router_history_model_of_Media_scroller_value="get_router_history_model_of_Media_scroller_value"
-      :router_history_model_of_Media_scroll="router_history_model_of_Media_scroll"
-      @router_history_model_of_Media_scroll="get_router_history_model_of_Media_scroll"
+        @router_history_model="get_router_history_model"
+        :router_select_history_date="router_select_history_date"
+        :router_history_datas="router_history_datas"
+        :router_history_model_of_Media_scroller_value="router_history_model_of_Media_scroller_value"
+        @router_history_model_of_Media_scroller_value="get_router_history_model_of_Media_scroller_value"
+        :router_history_model_of_Media_scroll="router_history_model_of_Media_scroll"
+        @router_history_model_of_Media_scroll="get_router_history_model_of_Media_scroll"
 
-      :change_page_header_color="change_page_header_color"
-      :page_top_album_image_url="page_top_album_image_url"
-      :page_top_album_id="page_top_album_id"
-      :page_top_album_name="page_top_album_name"
-      :page_songlists_options="page_songlists_options"
-      :page_songlists_statistic="page_songlists_statistic"
-      :page_songlists="page_songlists"
-      :page_songlists_selected="page_songlists_selected"
-      @page_songlists_selected="set_page_songlists_selected"
+        :change_page_header_color="change_page_header_color"
+        :page_top_album_image_url="page_top_album_image_url"
+        :page_top_album_id="page_top_album_id"
+        :page_top_album_name="page_top_album_name"
+        :page_songlists_options="page_songlists_options"
+        :page_songlists_statistic="page_songlists_statistic"
+        :page_songlists="page_songlists"
+        :page_songlists_selected="page_songlists_selected"
+        @page_songlists_selected="set_page_songlists_selected"
 
-      @media_Files_selected="get_media_Files_selected"
-      @media_Files_selected_set="set_media_Files_selected"
-      @media_Files_selected_set_all="set_media_Files_selected_all"
-      :app_left_menu_collapsed="app_left_menu_collapsed"
-      :window_innerWidth="window_innerWidth"
+        @media_Files_selected="get_media_Files_selected"
+        @media_Files_selected_set="set_media_Files_selected"
+        @media_Files_selected_set_all="set_media_Files_selected_all"
+        :app_left_menu_collapsed="app_left_menu_collapsed"
+        :window_innerWidth="window_innerWidth"
 
-      @this_audio_lyrics_string="get_this_audio_lyrics_string"
-      @media_file_path="get_media_path" 
-      @media_file_path_from_playlist="get_media_file_path_from_playlist"
-      @media_file_medium_image_url="get_media_file_medium_image_url"
-      @this_audio_singer_name="get_this_audio_singer_name"
-      @this_audio_singer_id="get_this_audio_singer_id"
-      @this_audio_song_name="get_this_audio_song_name"
-      @this_audio_song_id="get_this_audio_song_id"
-      @this_audio_song_rating="get_this_audio_song_rating"
-      @this_audio_song_favorite="get_this_audio_song_favorite"
-      @this_audio_album_name="get_this_audio_album_name"
-      @this_audio_album_id="get_this_audio_album_id"
+        @this_audio_lyrics_string="get_this_audio_lyrics_string"
+        @media_file_path="get_media_path"
+        @media_file_path_from_playlist="get_media_file_path_from_playlist"
+        @media_file_medium_image_url="get_media_file_medium_image_url"
+        @this_audio_singer_name="get_this_audio_singer_name"
+        @this_audio_singer_id="get_this_audio_singer_id"
+        @this_audio_song_name="get_this_audio_song_name"
+        @this_audio_song_id="get_this_audio_song_id"
+        @this_audio_song_rating="get_this_audio_song_rating"
+        @this_audio_song_favorite="get_this_audio_song_favorite"
+        @this_audio_album_name="get_this_audio_album_name"
+        @this_audio_album_id="get_this_audio_album_id"
 
-      @this_audio_Index_of_absolute_positioning_in_list="get_this_audio_Index_of_absolute_positioning_in_list"
-      @menu_edit_this_song="get_menu_edit_this_song"
-      @menu_add_this_song="get_menu_add_this_song"
-      @menu_delete_this_song="get_menu_delete_this_song"
-      :options_Sort_key="page_songlists_options_Sort_key"
-      @options_Sort_key="get_page_songlists_options_Sort_key"
-      :page_songlists_keyword="page_songlists_keyword"
-      @page_songlists_keyword="page_songlists_get_keyword"
-      @page_songlists_reset_data="page_songlists_get_reset_data"/>
+        @this_audio_Index_of_absolute_positioning_in_list="get_this_audio_Index_of_absolute_positioning_in_list"
+        @menu_edit_this_song="get_menu_edit_this_song"
+        @menu_add_this_song="get_menu_add_this_song"
+        @menu_delete_this_song="get_menu_delete_this_song"
+        :options_Sort_key="page_songlists_options_Sort_key"
+        @options_Sort_key="get_page_songlists_options_Sort_key"
+        :page_songlists_keyword="page_songlists_keyword"
+        @page_songlists_keyword="page_songlists_get_keyword"
+        @page_songlists_reset_data="page_songlists_get_reset_data"/>
   </div>
 </template>
 

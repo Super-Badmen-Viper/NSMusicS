@@ -19,68 +19,6 @@
   const { t, d, n } = useI18n({
     inheritLocale: true
   })
-  const languages = [
-    {
-      label: '简体中文',
-      value: 'zhHans',
-    },
-    {
-      label: '繁體中文',
-      value: 'zhHant',
-    },
-    {
-      label: 'English',
-      value: 'en',
-    },
-    {
-      label: 'Čeština',
-      value: 'cs',
-    },
-    {
-      label: 'Español',
-      value: 'es',
-    },
-    {
-      label: 'Deutsch',
-      value: 'de',
-    },
-    {
-      label: 'Français',
-      value: 'fr',
-    },
-    {
-      label: 'Italiano',
-      value: 'it',
-    },
-    {
-      label: '日本語',
-      value: 'ja',
-    },
-    {
-      label: 'Nederlands',
-      value: 'nl',
-    },
-    {
-      label: 'Português (Brasil)',
-      value: 'ptBr',
-    },
-    {
-      label: 'Polski',
-      value: 'pl',
-    },
-    {
-      label: 'Русский',
-      value: 'ru',
-    },
-    {
-      label: 'Srpski',
-      value: 'sr',
-    },
-    {
-      label: 'Svenska',
-      value: 'sv',
-    },
-  ];
   function get_update_lang(value:any){
     console.log(value)
   }
@@ -91,6 +29,7 @@
   const computed_i18n_Label_ViewPageConfig_FilterAllArtist_1 = computed(() => t('nsmusics.view_page.allArtist'));
   const computed_i18n_Label_ViewPageConfig_FilterLoveArtist_2 = computed(() => t('nsmusics.view_page.loveArtist'));
   const computed_i18n_Label_ViewPageConfig_FilterRecentPlay = computed(() => t('nsmusics.view_page.recentPlay'));
+  const computed_i18n_Label_ViewPageConfig_FilterPlayList = computed(() => t('entity.playlist_other'));
 
   ////// this_app components of navie ui
   import type {GlobalTheme, MenuOption} from 'naive-ui'
@@ -607,6 +546,7 @@
     console.log('page_songlists_selected：'+value)
     fetchData_Media()
   }
+  ///
   const Init_page_songlists_statistic_Data = (db: any) => {
     const stmt_media_file_count = db.prepare('SELECT COUNT(*) AS count FROM media_file');
     page_songlists_options.value = [];
@@ -614,11 +554,11 @@
     page_songlists.value = []
     //////
     const temp_Play_List_ALL: Play_List = {
-      label: '所有歌曲',
+      label: computed(() => t('nsmusics.view_page.allSong')),
       value: 'song_list_all',
       id: 'song_list_all',
-      name: '所有歌曲',
-      comment: '所有歌曲',
+      name: computed(() => t('nsmusics.view_page.allSong')),
+      comment: computed(() => t('nsmusics.view_page.allSong')),
       duration: 0,
       song_count: stmt_media_file_count.get().count + ' 首',
       public: false,
@@ -644,11 +584,11 @@
       WHERE starred = 1 AND item_type='media_file'
     `);
     const temp_Play_List_Love: Play_List = {
-      label: '收藏歌曲',
+      label: computed(() => t('nsmusics.view_page.loveSong')),
       value: 'song_list_love',
       id: 'song_list_love',
-      name: '收藏歌曲',
-      comment: '收藏歌曲',
+      name: computed(() => t('nsmusics.view_page.loveSong')),
+      comment: computed(() => t('nsmusics.view_page.loveSong')),
       duration: 0,
       song_count: stmt_media_Annotation_Starred_Count.get().count + ' 首',
       public: false,
@@ -674,11 +614,11 @@
       WHERE play_count >= 1 AND item_type='media_file'
     `);
     const temp_Play_List_Recently: Play_List = {
-      label: '最近播放',
+      label: computed(() => t('nsmusics.view_page.recentPlay')),
       value: 'song_list_recently',
       id: 'song_list_recently',
-      name: '最近播放',
-      comment: '最近播放',
+      name: computed(() => t('nsmusics.view_page.recentPlay')),
+      comment: computed(() => t('nsmusics.view_page.recentPlay')),
       duration: 0,
       song_count: stmt_media_Annotation_Recently_Count.get().count + ' 首',
       public: false,
@@ -703,12 +643,12 @@
       SELECT COUNT(*) AS count FROM playlist
     `);
     page_songlists_statistic.value.push({
-      label: '播放列表',
+      label: computed(() => t('entity.playlist_other')),
       song_count: stmt_media_Annotation_PlayList_Count.get().count + ' 组',
       id: 'song_list_all_PlayList'
     });
   }
-  const fetchData_Media = async () => {     
+  const fetchData_Media = async () => {
     let db:any = null;
     // clear RouterView of vue-virtual-scroller data
     if(fetchData_This_AlbumOrArtist_PlayMedia_Model.value === true){
@@ -726,7 +666,7 @@
 
       // Init media_model data
       Init_page_songlists_statistic_Data(db)
-      
+
       // load media_Files_temporary data
       if(router_history_model_of_Media.value === 0){
         const sortKey = page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
@@ -822,7 +762,7 @@
       });
       ////// find favorite for media_Files_temporary
       const stmt_media_Annotation_Starred_Items = db.prepare(`
-        SELECT item_id FROM annotation 
+        SELECT item_id FROM annotation
         WHERE starred = 1 AND item_type='media_file'
       `);
       const annotations = stmt_media_Annotation_Starred_Items.all();
@@ -833,7 +773,7 @@
       }
       ////// find rating for media_Files_temporary
       const stmt_media_Annotation_Rating_Items = db.prepare(`
-          SELECT item_id, rating FROM annotation 
+          SELECT item_id, rating FROM annotation
           WHERE rating > 0 AND item_type='media_file'
       `);
       const annotations_rating = stmt_media_Annotation_Rating_Items.all();
@@ -853,7 +793,7 @@
           return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
         } else if (page_songlists_selected.value === 'song_list_recently') {
           const stmt_media_Annotation_Recently_Items = db.prepare(`
-            SELECT item_id FROM annotation 
+            SELECT item_id FROM annotation
             WHERE play_count >= 1 AND item_type='media_file'
           `);
           const annotations = stmt_media_Annotation_Recently_Items.all();
@@ -906,7 +846,7 @@
         page_albumlists_get_keyword_model_num.value = 3;
       }
       find_album_model.value = true;
-    }else{  
+    }else{
       page_albumlists_get_keyword_model_num.value = 0;
     }
     page_albumlists_keyword.value = value;
@@ -939,11 +879,11 @@
     page_albumlists.value = []
     //////
     const temp_Play_List_ALL: Play_List = {
-      label: '所有专辑',
+      label: computed(() => t('nsmusics.view_page.allAlbum')),
       value: 'album_list_all',
       id: 'album_list_all',
-      name: '所有专辑',
-      comment: '所有专辑',
+      name: computed(() => t('nsmusics.view_page.allAlbum')),
+      comment: computed(() => t('nsmusics.view_page.allAlbum')),
       duration: 0,
       song_count: stmt_album_count.get().count + ' 组',
       public: false,
@@ -965,15 +905,15 @@
     page_albumlists.value.push(temp_Play_List_ALL)
     //////
     const stmt_album_Annotation_Starred_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM annotation 
+      SELECT COUNT(*) AS count FROM annotation
       WHERE starred = 1 AND item_type='album'
     `);
     const temp_Play_List_Love: Play_List = {
-      label: '收藏专辑',
+      label: computed(() => t('nsmusics.view_page.allAlbum')),
       value: 'album_list_love',
       id: 'album_list_love',
-      name: '收藏专辑',
-      comment: '收藏专辑',
+      name: computed(() => t('nsmusics.view_page.allAlbum')),
+      comment: computed(() => t('nsmusics.view_page.allAlbum')),
       duration: 0,
       song_count: stmt_album_Annotation_Starred_Count.get().count + ' 组',
       public: false,
@@ -995,15 +935,15 @@
     page_albumlists.value.push(temp_Play_List_Love)
     //////
     const stmt_album_Annotation_Recently_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM annotation 
+      SELECT COUNT(*) AS count FROM annotation
       WHERE play_count >= 1 AND item_type='album'
     `);
     const temp_Play_List_Recently: Play_List = {
-      label: '最近播放',
+      label: computed(() => t('nsmusics.view_page.recentPlay')),
       value: 'album_list_recently',
       id: 'album_list_recently',
-      name: '最近播放',
-      comment: '最近播放',
+      name: computed(() => t('nsmusics.view_page.recentPlay')),
+      comment: computed(() => t('nsmusics.view_page.recentPlay')),
       duration: 0,
       song_count: stmt_album_Annotation_Recently_Count.get().count + ' 组',
       public: false,
@@ -1028,7 +968,7 @@
       SELECT COUNT(*) AS count FROM playlist
     `);
     page_albumlists_statistic.value.push({
-      label: '播放列表',
+      label: computed(() => t('entity.playlist_other')),
       album_count: stmt_album_Annotation_PlayList_Count.get().count + ' 组',
       id: 'album_list_all_PlayList'
     });
@@ -1042,7 +982,7 @@
 
     try {
       db = require('better-sqlite3')(navidrome_db);
-      db.pragma('journal_mode = WAL');  
+      db.pragma('journal_mode = WAL');
       let stmt_album = null;
       let stmt_album_string = '';
 
@@ -1121,7 +1061,7 @@
           row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
         else if (row.embed_art_path.indexOf('flac') > 0)
           row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
-        else 
+        else
           row.medium_image_url = '../../../resources/img/error_album.jpg';
         const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
         const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
@@ -1139,7 +1079,7 @@
       moment = null;
       ////// find favorite for album_Files_temporary
       const stmt_album_Annotation_Starred_Items = db.prepare(`
-        SELECT item_id FROM annotation 
+        SELECT item_id FROM annotation
         WHERE starred = 1 AND item_type='album'
       `);
       const annotations = stmt_album_Annotation_Starred_Items.all();
@@ -1150,7 +1090,7 @@
       }
       ////// find rating for album_Files_temporary
       const stmt_album_Annotation_Rating_Items = db.prepare(`
-          SELECT item_id, rating FROM annotation 
+          SELECT item_id, rating FROM annotation
           WHERE rating > 0 AND item_type='album'
       `);
       const annotations_rating = stmt_album_Annotation_Rating_Items.all();
@@ -1170,7 +1110,7 @@
           return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
         } else if (page_albumlists_selected.value === 'album_list_recently') {
           const stmt_album_Annotation_Recently_Items = db.prepare(`
-            SELECT item_id FROM annotation 
+            SELECT item_id FROM annotation
             WHERE play_count >= 1 AND item_type='album'
           `);
           const annotations = stmt_album_Annotation_Recently_Items.all();
@@ -1206,9 +1146,9 @@
     playlist_Files_temporary.value = [];
     playlist_Files_temporary.value = [...media_Files_temporary.value];
     page_songlists_keyword.value = '';
-    
+
     router_select_model_album.value = true
-    
+
     if(playlist_Files_temporary.value.length > 0){
       get_this_audio_file_path_from_playlist(false)
       media_file_path(playlist_Files_temporary.value[0].path)
@@ -1254,7 +1194,7 @@
         value = value.replace('__album__','');
         page_artistlists_get_keyword_model_num.value = 3;
       }
-    }else{  
+    }else{
       page_artistlists_get_keyword_model_num.value = 0;
     }
     page_artistlists_keyword.value = value;
@@ -1287,11 +1227,11 @@
     page_artistlists.value = []
     //////
     const temp_Play_List_ALL: Play_List = {
-      label: '所有歌手',
+      label: computed(() => t('nsmusics.view_page.allArtist')),
       value: 'artist_list_all',
       id: 'artist_list_all',
-      name: '所有歌手',
-      comment: '所有歌手',
+      name: computed(() => t('nsmusics.view_page.allArtist')),
+      comment: computed(() => t('nsmusics.view_page.allArtist')),
       duration: 0,
       song_count: stmt_artist_count.get().count + ' 组',
       public: false,
@@ -1313,15 +1253,15 @@
     page_artistlists.value.push(temp_Play_List_ALL)
     //////
     const stmt_artist_Annotation_Starred_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM annotation 
+      SELECT COUNT(*) AS count FROM annotation
       WHERE starred = 1 AND item_type='artist'
     `);
     const temp_Play_List_Love: Play_List = {
-      label: '收藏歌手',
+      label: computed(() => t('nsmusics.view_page.loveArtist')),
       value: 'artist_list_love',
       id: 'artist_list_love',
-      name: '收藏歌手',
-      comment: '收藏歌手',
+      name: computed(() => t('nsmusics.view_page.loveArtist')),
+      comment: computed(() => t('nsmusics.view_page.loveArtist')),
       duration: 0,
       song_count: stmt_artist_Annotation_Starred_Count.get().count + ' 组',
       public: false,
@@ -1343,15 +1283,15 @@
     page_artistlists.value.push(temp_Play_List_Love)
     //////
     const stmt_artist_Annotation_Recently_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM annotation 
+      SELECT COUNT(*) AS count FROM annotation
       WHERE play_count >= 1 AND item_type='artist'
     `);
     const temp_Play_List_Recently: Play_List = {
-      label: '最近播放',
+      label: computed(() => t('nsmusics.view_page.recentPlay')),
       value: 'artist_list_recently',
       id: 'artist_list_recently',
-      name: '最近播放',
-      comment: '最近播放',
+      name: computed(() => t('nsmusics.view_page.recentPlay')),
+      comment: computed(() => t('nsmusics.view_page.recentPlay')),
       duration: 0,
       song_count: stmt_artist_Annotation_Recently_Count.get().count + ' 组',
       public: false,
@@ -1376,7 +1316,7 @@
       SELECT COUNT(*) AS count FROM playlist
     `);
     page_artistlists_statistic.value.push({
-      label: '播放列表',
+      label: computed(() => t('entity.playlist_other')),
       artist_count: stmt_artist_Annotation_PlayList_Count.get().count + ' 组',
       id: 'artist_list_all_PlayList'
     });

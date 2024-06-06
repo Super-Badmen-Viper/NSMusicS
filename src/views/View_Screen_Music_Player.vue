@@ -484,7 +484,7 @@
       <!-- right drwaer of Player_theme -->
       <n-drawer 
         v-model:show="isVisible_Player_theme" 
-        :width="416" 
+        :width="430"
         style="
           border-radius: 12px 0 0 12px;
           border: 1.5px solid #FFFFFF20;
@@ -504,8 +504,7 @@
                 align-items: center; 
                 grid-gap: 0;
                 margin-left: 9px;
-                margin-top: 12px;"
-              >
+                margin-top: 12px;">
               <n-radio
                 v-for="item in player_theme_Styles" 
                 :key="item.id" v-model:value="item.id"
@@ -523,9 +522,9 @@
                 </n-space>
               </n-radio>
             </n-radio-group>
-            <n-space style="margin-left: 12px;margin-top: 20px;">
+            <n-space style="margin-left: 12px;margin-top: 20px;" justify="space-between">
               <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricSize') }}</span>
-              <n-space>
+              <n-space style="margin-right: 32px;">
                 <n-button text style="font-size: 24px;margin-top: 2px;">
                   <n-icon>
                     <MotionPhotosAutoOutlined />
@@ -545,9 +544,9 @@
                 />
               </n-space>
             </n-space>
-            <n-space style="margin-left: 12px;margin-top: 24px;" v-if="false">
+            <n-space style="margin-left: 12px;margin-top: 24px;" v-if="false" justify="space-between">
               <span style="font-size:16px;">歌词颜色</span>
-              <n-space>
+              <n-space style="margin-right: 32px;">
                 <n-button text style="font-size: 24px">
                   <n-icon>
                     <MotionPhotosAutoOutlined />
@@ -556,9 +555,9 @@
                 <n-color-picker style="width: 177px;margin-top: -4px;"/>
               </n-space>
             </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;">
+            <n-space style="margin-left: 12px;margin-top: 20px;" justify="space-between">
               <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricSpeed') }}</span>
-              <n-space>
+              <n-space style="margin-right: 32px;">
                 <n-button text style="font-size: 24px;margin-top: 2px;">
                   <n-icon>
                     <MotionPhotosAutoOutlined />
@@ -574,24 +573,9 @@
                 </n-button>
               </n-space>
             </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;" v-if="false">
+            <n-space style="margin-left: 12px;margin-top: 20px;" v-if="false" justify="space-between">
               <span style="font-size:16px;">歌词行距</span>
-              <n-space>
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-input-number 
-                  v-model:value="player_lyric_panel_fontsize" 
-                  clearable
-                  style="width: 109px;margin-top: -4px;"
-                />
-              </n-space>
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;">
-              <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
-              <n-space>
+              <n-space style="margin-right: 32px;">
                 <n-button text style="font-size: 24px;margin-top: 2px;">
                   <n-icon>
                     <MotionPhotosAutoOutlined />
@@ -606,7 +590,7 @@
             </n-space>
             <n-space style="margin-left: 12px;margin-top: 20px;">
               <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricsAnimation') }}</span>
-              <n-space style="width: 260px;margin-left: 80px;margin-top: -32px;">
+              <n-space style="width: 260px;">
                 <n-radio
                   :checked="player_lyric_panel_checked_animation === LyricAnimation.linebyLine" value="逐行精准"
                   @click="player_lyric_panel_checked_animation = LyricAnimation.linebyLine">
@@ -622,6 +606,21 @@
                   @click="player_lyric_panel_checked_animation = LyricAnimation.linebyJump;">
                   {{ $t('nsmusics.view_player.view_seting.lyricsAnimation_jump_3') }}
                 </n-radio>
+              </n-space>
+            </n-space>
+            <n-space style="margin-left: 12px;margin-top: 20px;" justify="space-between">
+              <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
+              <n-space style="margin-right: 32px;">
+                <n-button text style="font-size: 24px;margin-top: 2px;">
+                  <n-icon>
+                    <MotionPhotosAutoOutlined />
+                  </n-icon>
+                </n-button>
+                <n-input-number
+                  v-model:value="player_lyric_panel_fontsize"
+                  clearable
+                  style="width: 109px;margin-top: -4px;"
+                />
               </n-space>
             </n-space>
           </template>
