@@ -16,6 +16,12 @@
   import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
   import { type InputInst, NIcon } from 'naive-ui';
 
+  ////// i18n auto lang
+  import { useI18n } from 'vue-i18n'
+  const { t, d, n } = useI18n({
+    inheritLocale: true
+  })
+
   ////// passed as argument
   const emits = defineEmits([
     'options_Sort_key','page_albumlists_keyword','page_albumlists_reset_data',
@@ -26,7 +32,7 @@
   const props = defineProps<{
     data_temporary: Album[];
 
-    change_page_header_color:boolean,page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
+    update_theme:boolean,page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
     page_albumlists:Play_List[],page_albumlists_options:{label: string;value: string}[],page_albumlists_statistic:{label: string;album_count: number;id: string;}[],
     page_albumlists_selected:string;
 
@@ -263,7 +269,7 @@
   // lineItems Filter To Favorite
   const options_Filter = ref([
     {
-      label: '收藏专辑',
+      label: t('nsmusics.view_page.loveAlbum'),
       key: 'filter_favorite',
       icon() {
         return h(NIcon, null, {
@@ -484,11 +490,11 @@
                   position: absolute; top: -2; left: 0;
                   width: 100%; height: 100%;">
                 <defs>
-                  <linearGradient v-if="!props.change_page_header_color" id="gradient" gradientTransform="rotate(30)">
+                  <linearGradient v-if="!props.update_theme" id="gradient" gradientTransform="rotate(30)">
                     <stop offset="0%" stop-color="#FAFAFC"></stop>
                     <stop offset="100%" stop-color="rgba(255, 255, 255, 0.4)"></stop>
                   </linearGradient>
-                  <linearGradient v-if="props.change_page_header_color" id="gradient" gradientTransform="rotate(30)">
+                  <linearGradient v-if="props.update_theme" id="gradient" gradientTransform="rotate(30)">
                     <stop offset="0%" stop-color="#101014"></stop>
                     <stop offset="150%" stop-color="rgba(0, 0, 0, 0.4)"></stop>
                   </linearGradient>

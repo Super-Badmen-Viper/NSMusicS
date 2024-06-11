@@ -124,7 +124,7 @@ const emits = defineEmits([
 const {
   app_left_menu_collapsed,window_innerWidth,
 
-  change_page_header_color,page_top_album_image_url,page_top_album_name,page_top_album_id,
+  update_theme,page_top_album_image_url,page_top_album_name,page_top_album_id,
   page_songlists,page_songlists_options,page_songlists_statistic,
   page_songlists_selected,
 
@@ -137,7 +137,7 @@ const {
 } = defineProps<{
   app_left_menu_collapsed:Boolean,window_innerWidth:number,
 
-  change_page_header_color:boolean,page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
+  update_theme:boolean,page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
   page_songlists:Play_List[],page_songlists_options:{label: string;value: string}[],page_songlists_statistic:{label: string;song_count: number;id: string;}[],
   page_songlists_selected:string;
 
@@ -164,7 +164,7 @@ const {
         :router_history_model_of_Media_scroll="router_history_model_of_Media_scroll"
         @router_history_model_of_Media_scroll="get_router_history_model_of_Media_scroll"
 
-        :change_page_header_color="change_page_header_color"
+        :update_theme="update_theme"
         :page_top_album_image_url="page_top_album_image_url"
         :page_top_album_id="page_top_album_id"
         :page_top_album_name="page_top_album_name"

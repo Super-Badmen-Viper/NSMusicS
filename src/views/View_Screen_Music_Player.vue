@@ -535,13 +535,6 @@
                   clearable
                   style="width: 109px;margin-top: -4px;"
                 />
-                <n-select
-                  v-model:value="player_lyric_panel_fontfamily_options_selected"
-                  :options="player_lyric_panel_fontfamily_options"
-                  placeholder="常规"
-                  :reset-menu-on-options-change="false"
-                  style="width: 86px;margin-top: -4px;"
-                />
               </n-space>
             </n-space>
             <n-space style="margin-left: 12px;margin-top: 24px;" v-if="false" justify="space-between">
@@ -568,9 +561,6 @@
                   clearable
                   style="width: 109px;margin-top: -4px;"
                 />
-                <n-button style="margin-top: -4px;">
-                  重置
-                </n-button>
               </n-space>
             </n-space>
             <n-space style="margin-left: 12px;margin-top: 20px;" v-if="false" justify="space-between">

@@ -22,14 +22,6 @@
   function get_update_lang(value:any){
     console.log(value)
   }
-  const computed_i18n_Label_ViewPageConfig_FilterAllSong_1 = computed(() => t('nsmusics.view_page.allSong'));
-  const computed_i18n_Label_ViewPageConfig_FilterLoveSong_2 = computed(() => t('nsmusics.view_page.loveSong'));
-  const computed_i18n_Label_ViewPageConfig_FilterAllAlbum_1 = computed(() => t('nsmusics.view_page.allAlbum'));
-  const computed_i18n_Label_ViewPageConfig_FilterLoveAlbum_2 = computed(() => t('nsmusics.view_page.loveAlbum'));
-  const computed_i18n_Label_ViewPageConfig_FilterAllArtist_1 = computed(() => t('nsmusics.view_page.allArtist'));
-  const computed_i18n_Label_ViewPageConfig_FilterLoveArtist_2 = computed(() => t('nsmusics.view_page.loveArtist'));
-  const computed_i18n_Label_ViewPageConfig_FilterRecentPlay = computed(() => t('nsmusics.view_page.recentPlay'));
-  const computed_i18n_Label_ViewPageConfig_FilterPlayList = computed(() => t('entity.playlist_other'));
 
   ////// this_app components of navie ui
   import type {GlobalTheme, MenuOption} from 'naive-ui'
@@ -80,7 +72,7 @@
   function renderRouterLink (nameValue: any,defaultValue: any){
     return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
   }
-  const create_menuOptions = (): MenuOption[] => {
+  const create_menuOptions_appBar = (): MenuOption[] => {
     return [
       {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.menu'))),key: 'go_back_menu',icon: renderIcon(MenuIcon),},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
@@ -99,7 +91,15 @@
       {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
     ]
   };
-  const menuOptions = ref<MenuOption[]>(create_menuOptions())
+  const menuOptions_appBar = ref<MenuOption[]>(create_menuOptions_appBar())
+  function get_menuOptions_appBar(value: any){
+    menuOptions_appBar.value = value
+    console.log(value)
+  }
+  const selectd_props_app_sidebar = ref<(string | number)[]>(['2', '4', '5', '6', '7', '9', '10', '11', '12', '13', '14']);
+  function get_selectd_props_app_sidebar(value: any){
+    selectd_props_app_sidebar.value = value
+  }
   const app_left_menu_select_activeKey = ref<string | null>(null)
   const app_left_menu_collapsed = ref(false)
   // node function
@@ -111,28 +111,35 @@
   const theme_name = ref<string>()
   const theme_app =ref<GlobalTheme | null>(null)
   const theme_bar_top_setapp = ref('transparent')
-  const change_page_header_color = ref(false)
+  const update_theme = ref(false)
+  function get_update_theme (value:any){
+    if(value === 'lightTheme')
+      update_theme.value = true;
+    else
+      update_theme.value = false;
+    theme_mode_change_click()
+  }
   const theme_normal_mode_click = () => {
     theme.value = lightTheme
     theme_name.value = 'lightTheme'
     theme_app.value = lightTheme
-    change_page_header_color.value = false
+    update_theme.value = false
   }
   const theme_dark_mode_click = () => {
     theme.value = darkTheme
     theme_name.value = 'darkTheme'
     theme_app.value = darkTheme
-    change_page_header_color.value = true
+    update_theme.value = true
   }
   const theme_mode_change_click = () => {
-    if(change_page_header_color.value){
+    if(update_theme.value){
       theme_normal_mode_click()
     }else{
       theme_dark_mode_click()
     }
   }
 
-////// this_app sqlite db
+  ////// this_app sqlite db
   let navidrome_db = path.resolve('resources/navidrome.db');
   
   ////// this_app BrowserWindow
@@ -1804,11 +1811,11 @@
     let system_Configs_Read = new System_Configs_Read();
     /// App_Configs load
     if((''+system_Configs_Read.app_Configs.value['theme']) === 'lightTheme'){
-      change_page_header_color.value = false;
+      update_theme.value = false;
       theme.value = lightTheme;
     }
     else{
-      change_page_header_color.value = true;
+      update_theme.value = true;
       theme.value = darkTheme;
     }
     theme_name.value = ''+system_Configs_Read.app_Configs.value['theme']
@@ -1910,7 +1917,7 @@
             :collapsed="app_left_menu_collapsed"
             :collapsed-width="64"
             :collapsed-icon-size="22"
-            :options="menuOptions"/>
+            :options="menuOptions_appBar"/>
         </n-layout-sider>
         <!--Right Router_View-->
         <n-layout embedded style="height: calc(100vh);">
@@ -1919,6 +1926,12 @@
             v-if="router_select_model_menu"
             @router_select="get_router_select"
             @update_lang="get_update_lang"
+            :update_theme="update_theme"
+            @update_theme="get_update_theme"
+            :menuOptions_appBar="menuOptions_appBar"
+            @menuOptions_appBar="get_menuOptions_appBar"
+            :selectd_props_app_sidebar="selectd_props_app_sidebar"
+            @selectd_props_app_sidebar="get_selectd_props_app_sidebar"
             :app_left_menu_collapsed="app_left_menu_collapsed"
             :window_innerWidth="window_innerWidth">
 
@@ -1981,7 +1994,7 @@
             :page_songlists_selected="page_songlists_selected"
             @page_songlists_selected="get_page_songlists_selected"
 
-            :change_page_header_color="change_page_header_color"
+            :update_theme="update_theme"
           >
           
           </RouterView>
@@ -2020,7 +2033,7 @@
             @media_list_of_artist_id="get_album_list_of_artist_id_by_album_info"
             @play_this_album_song_list="fetchData_This_Album_SongList"
 
-            :change_page_header_color="change_page_header_color"
+            :update_theme="update_theme"
             :this_audio_album_name="this_audio_album_name"
           >
 
@@ -2059,7 +2072,7 @@
             @album_list_of_artist_id_artist="get_album_list_of_artist_id_by_artist_info"
             @play_this_artist_song_list="fetchData_This_Artist_SongList"
 
-            :change_page_header_color="change_page_header_color"
+            :update_theme="update_theme"
             :this_audio_album_name="this_audio_album_name"
           >
           

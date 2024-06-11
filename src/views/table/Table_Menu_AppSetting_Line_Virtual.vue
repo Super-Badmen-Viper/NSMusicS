@@ -1,15 +1,53 @@
 <script setup lang="ts">
   ////// this_view resource of vicons_svg
   import {
-    BareMetalServer,Add,Close
+    BareMetalServer, Add, Close, Menu as MenuIcon, UserAvatarFilledAlt, Hearing
   } from '@vicons/carbon'
 
-  ////// this_view components of navie ui 
-  import { ref, onMounted, watch, onBeforeUnmount, computed } from 'vue';
-  import { NButton } from 'naive-ui'
+  ////// passed as argument
+  const emits = defineEmits([
+    'update_lang','update_theme','menuOptions_appBar','selectd_props_app_sidebar',
+  ]);
+  const props = defineProps<{
+    app_left_menu_collapsed: Boolean;
+    window_innerWidth: number;
+    update_theme:Boolean;
+    menuOptions_appBar:MenuOption[];
+    selectd_props_app_sidebar:(string | number)[];
+  }>();
+
+  ////// this_view components of navie ui
+  import {ref, onMounted, watch, onBeforeUnmount, computed, h} from 'vue';
+  import {type MenuOption, NButton, NIcon,} from 'naive-ui'
+  const theme_value = ref('lightTheme')
+  const theme_options = ref([
+    {
+      label: computed(() => t('setting.themeLight')),
+      value: 'lightTheme',
+    },
+    {
+      label: computed(() => t('setting.themeDark')),
+      value: 'darkTheme',
+    },
+  ])
+  onMounted(() => {
+    if(props.update_theme)
+      theme_value.value = theme_options.value[1].value
+    else
+      theme_value.value = theme_options.value[0].value
+  });
 
   ////// i18n auto lang
   import { useI18n } from 'vue-i18n'
+  import {
+    DocumentHeart20Regular,
+    Flag16Regular,
+    Home28Regular, PeopleCommunity16Regular,
+    SlideMicrophone32Regular,
+    TextIndentIncreaseLtr20Filled as lyric
+  } from "@vicons/fluent";
+  import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound} from "@vicons/material";
+  import {RouterLink} from "vue-router";
   const { t, d, n } = useI18n({
     inheritLocale: true
   })
@@ -17,24 +55,71 @@
   const computed_i18n_Label_HomePageConfiguration_2 = computed(() => t('page.home.explore'));
   const computed_i18n_Label_HomePageConfiguration_3 = computed(() => t('page.home.newlyAdded'));
   const computed_i18n_Label_HomePageConfiguration_4 = computed(() => t('page.home.recentlyPlayed'));
-  const computed_i18n_Label_SidebarConfiguration_1 = computed(() => t('page.sidebar.nowPlaying'));
-  const computed_i18n_Label_SidebarConfiguration_2 = computed(() => t('common.search'));
   const computed_i18n_Label_SidebarConfiguration_3 = computed(() => t('common.home'));
-  const computed_i18n_Label_SidebarConfiguration_4 = computed(() => t('entity.album_other'));
-  const computed_i18n_Label_SidebarConfiguration_5 = computed(() => t('entity.track_other'));
-  const computed_i18n_Label_SidebarConfiguration_6 = computed(() => t('entity.artist_other'));
-  const computed_i18n_Label_SidebarConfiguration_7 = computed(() => t('entity.genre_other'));
-  const computed_i18n_Label_SidebarConfiguration_8 = computed(() => t('entity.playlist_other'));
-  const computed_i18n_Label_SidebarConfiguration_9 = computed(() => t('common.setting'));
+  const computed_i18n_Label_SidebarConfiguration_5 = computed(() => t('entity.album_other'));
+  const computed_i18n_Label_SidebarConfiguration_6 = computed(() => t('entity.track_other'));
+  const computed_i18n_Label_SidebarConfiguration_7 = computed(() => t('entity.artist_other'));
+  const computed_i18n_Label_SidebarConfiguration_8 = computed(() => t('entity.genre_other'));
+  const computed_i18n_Label_SidebarConfiguration_10 = computed(() => t('nsmusics.siderbar_menu.guessLike'));
+  const computed_i18n_Label_SidebarConfiguration_11 = computed(() => t('nsmusics.siderbar_menu.karaoke'));
+  const computed_i18n_Label_SidebarConfiguration_12 = computed(() => t('nsmusics.siderbar_menu.identifySong'));
+  const computed_i18n_Label_SidebarConfiguration_13 = computed(() => t('nsmusics.siderbar_menu.scoreGeneration'));
+  const computed_i18n_Label_SidebarConfiguration_14 = computed(() => t('nsmusics.siderbar_menu.lyricsProduction'));
+  const computed_i18n_Label_SidebarConfiguration_15 = computed(() => t('nsmusics.siderbar_menu.musicCommunity'));
 
-  ////// passed as argument
-  const emits = defineEmits([
-    'update_lang'
-  ]);
-  const props = defineProps<{
-    app_left_menu_collapsed: Boolean;
-    window_innerWidth: number;
-  }>();
+  //////
+  const selectd_props_home_page = ref<(string | number)[] | null>(null)
+  const handleUpdate_selectd_props_home_page_Value = (value: (string | number)[]) => {
+    selectd_props_home_page.value = value
+    console.log(JSON.stringify(value))
+  }
+  const handleUpdate_selectd_props_app_sidebar_Value = (value: number[]) => {
+    emits('selectd_props_app_sidebar',value)
+    console.log(value)
+    let allMenuOptions = create_menuOptions_appBar();
+    let removeFlags = new Array(allMenuOptions.length).fill(true);
+    value.forEach(index => {
+      if (index < allMenuOptions.length) {
+        removeFlags[index] = false;
+      }
+    });
+    removeFlags[0] = false;
+    removeFlags[1] = false;
+    removeFlags[3] = removeFlags[2];
+    if(removeFlags[4] && removeFlags[5] && removeFlags[6] && removeFlags[7])
+      removeFlags[8] = true;
+    else
+      removeFlags[8] = false;
+    let menuOptions_appBar = allMenuOptions.filter((option, index) => {
+      return !removeFlags[index];
+    });
+    emits('menuOptions_appBar',menuOptions_appBar)
+  }
+  function renderIcon (icon: any) {
+    return () => h(NIcon, null, { default: () => h(icon) })
+  }
+  function renderRouterLink (nameValue: any,defaultValue: any){
+    return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
+  }
+  const create_menuOptions_appBar = (): MenuOption[] => {
+    return [
+      {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.menu'))),key: 'go_back_menu',icon: renderIcon(MenuIcon),},
+      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+      {label: computed(() => renderRouterLink('View_Home',t('common.home'))),key: 'go_back_home',icon: renderIcon(Home28Regular),},
+      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+      {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'go_albums_list',icon: renderIcon(AlbumFilled)},
+      {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'go_songs_list',icon: renderIcon(MusicNoteRound)},
+      {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'go_artist_list',icon: renderIcon(UserAvatarFilledAlt)},
+      {label: computed(() => renderRouterLink('View_Home',t('entity.genre_other'))),key: 'go_other',icon: renderIcon(Flag16Regular)},
+      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.guessLike'))),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
+      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.karaoke'))),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
+      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.identifySong'))),key: 'go_other',icon: renderIcon(Hearing)},
+      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
+      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'go_other',icon: renderIcon(lyric)},
+      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
+    ]
+  };
 
   ////// 服务器配置添加
   const Type_Server_Kinds = [
@@ -469,41 +554,19 @@
                 <!-- 通用-主题 -->
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.useSystemTheme') }}</span>
-                    <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">{{ $t('setting.useSystemTheme_description') }}</span>
-                    </div>
-                  </n-space>
-                  <n-switch
-                    v-model:value="disabled">
-                  </n-switch>
-                </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.theme') }}</span>
                     <div style="margin-top: -10px;">
                       <span style="font-size:12px;">{{ $t('setting.theme_description') }}</span>
                     </div>
                   </n-space>
                   <n-select
-                      v-model:value="player_lyric_panel_fontfamily_options_selected"
-                      :options="player_lyric_panel_fontfamily_options"
-                      placeholder="微软雅黑"
-                      :reset-menu-on-options-change="false"
-                      style="width: 207px;margin-top: -4px;"
+                    v-model:value="theme_value"
+                    :options="theme_options"
+                    @update:value="emits('update_theme',theme_value)"
+                    placeholder=""
+                    :reset-menu-on-options-change="false"
+                    style="width: 207px;margin-top: -4px;"
                   />
-                </n-space>
-                <n-divider style="margin: 0;"/>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.savePlayQueue') }}</span>
-                    <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">{{ $t('setting.savePlayQueue_description') }}</span>
-                    </div>
-                  </n-space>
-                  <n-switch
-                      v-model:value="disabled">
-                  </n-switch>
                 </n-space>
                 <n-divider style="margin: 0;"/>
                 <n-space vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
@@ -515,19 +578,19 @@
                       </div>
                     </n-space>
                   </n-space>
-                  <n-checkbox-group>
+                  <n-checkbox-group :value="selectd_props_home_page" @update:value="handleUpdate_selectd_props_home_page_Value">
                     <n-grid :y-gap="8" :cols="4">
                       <n-gi>
-                        <n-checkbox value="Pushes Open" :label="computed_i18n_Label_HomePageConfiguration_1" />
+                        <n-checkbox value="HomePageConfiguration_1" :label="computed_i18n_Label_HomePageConfiguration_1" />
                       </n-gi>
                       <n-gi>
-                        <n-checkbox value="The Window" :label="computed_i18n_Label_HomePageConfiguration_2" />
+                        <n-checkbox value="HomePageConfiguration_2" :label="computed_i18n_Label_HomePageConfiguration_2" />
                       </n-gi>
                       <n-gi>
-                        <n-checkbox value="And Raises" :label="computed_i18n_Label_HomePageConfiguration_3" />
+                        <n-checkbox value="HomePageConfiguration_3" :label="computed_i18n_Label_HomePageConfiguration_3" />
                       </n-gi>
                       <n-gi>
-                        <n-checkbox value="The Spyglass" :label="computed_i18n_Label_HomePageConfiguration_4" />
+                        <n-checkbox value="HomePageConfiguration_4" :label="computed_i18n_Label_HomePageConfiguration_4" />
                       </n-gi>
                     </n-grid>
                   </n-checkbox-group>
@@ -542,23 +605,24 @@
                       </div>
                     </n-space>
                   </n-space>
-                  <n-checkbox-group>
+                  <n-checkbox-group :value="props.selectd_props_app_sidebar" @update:value="handleUpdate_selectd_props_app_sidebar_Value">
                     <n-grid :y-gap="8" :cols="5">
-                      <n-gi><n-checkbox value="And Raises" :label="computed_i18n_Label_SidebarConfiguration_3" /></n-gi>
-                      <n-gi><n-checkbox value="The Spyglass" :label="computed_i18n_Label_SidebarConfiguration_4" /></n-gi>
-                      <n-gi><n-checkbox value="Pushes Open" :label="computed_i18n_Label_SidebarConfiguration_5" /></n-gi>
-                      <n-gi><n-checkbox value="The Window" :label="computed_i18n_Label_SidebarConfiguration_6" /></n-gi>
-                      <n-gi><n-checkbox value="And Raises" :label="computed_i18n_Label_SidebarConfiguration_7" /></n-gi>
-                      <n-gi><n-checkbox value="And Raises" :label="computed_i18n_Label_SidebarConfiguration_7" /></n-gi>
-                      <n-gi><n-checkbox value="And Raises" :label="computed_i18n_Label_SidebarConfiguration_7" /></n-gi>
-                      <n-gi><n-checkbox value="And Raises" :label="computed_i18n_Label_SidebarConfiguration_7" /></n-gi>
-                      <n-gi><n-checkbox value="And Raises" :label="computed_i18n_Label_SidebarConfiguration_7" /></n-gi>
-                      <n-gi><n-checkbox value="And Raises" :label="computed_i18n_Label_SidebarConfiguration_7" /></n-gi>
+                      <n-gi><n-checkbox value="2" :label="computed_i18n_Label_SidebarConfiguration_3" /></n-gi>
+                      <n-gi><n-checkbox value="4" :label="computed_i18n_Label_SidebarConfiguration_5" /></n-gi>
+                      <n-gi><n-checkbox value="5" :label="computed_i18n_Label_SidebarConfiguration_6" /></n-gi>
+                      <n-gi><n-checkbox value="6" :label="computed_i18n_Label_SidebarConfiguration_7" /></n-gi>
+                      <n-gi><n-checkbox value="7" :label="computed_i18n_Label_SidebarConfiguration_8" /></n-gi>
+                      <n-gi><n-checkbox value="9" :label="computed_i18n_Label_SidebarConfiguration_10" /></n-gi>
+                      <n-gi><n-checkbox value="10" :label="computed_i18n_Label_SidebarConfiguration_11" /></n-gi>
+                      <n-gi><n-checkbox value="11" :label="computed_i18n_Label_SidebarConfiguration_12" /></n-gi>
+                      <n-gi><n-checkbox value="12" :label="computed_i18n_Label_SidebarConfiguration_13" /></n-gi>
+                      <n-gi><n-checkbox value="13" :label="computed_i18n_Label_SidebarConfiguration_14" /></n-gi>
+                      <n-gi><n-checkbox value="14" :label="computed_i18n_Label_SidebarConfiguration_15" /></n-gi>
                     </n-grid>
                   </n-checkbox-group>
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.clearQueryCache') }}</span>
                     <div style="margin-top: -10px;">
@@ -569,7 +633,7 @@
                     {{ $t('common.clear') }}
                   </n-button>
                 </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.clearCache') }}</span>
                     <div style="margin-top: -10px;">
