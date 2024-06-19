@@ -6,7 +6,7 @@
 
   ////// passed as argument
   const emits = defineEmits([
-    'update_lang','update_theme','menuOptions_appBar','selectd_props_app_sidebar',
+    'update_lang','update_theme','menuOptions_appBar','selectd_props_app_sidebar','player_fade_value',
   ]);
   const props = defineProps<{
     app_left_menu_collapsed: Boolean;
@@ -14,6 +14,7 @@
     update_theme:Boolean;
     menuOptions_appBar:MenuOption[];
     selectd_props_app_sidebar:(string | number)[];
+    player_fade_value:number;
   }>();
 
   ////// this_view components of navie ui
@@ -120,6 +121,12 @@
       {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
     ]
   };
+
+  //////
+  const player_fade_value = ref<number>(props.player_fade_value)
+  function update_player_fade_value(value: any){
+    emits('player_fade_value',value)
+  }
 
   ////// 服务器配置添加
   const Type_Server_Kinds = [
@@ -534,7 +541,6 @@
             </template>
             <n-scrollbar style="max-height: 70vh;" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 203) + 'px)'}">
               <n-space vertical>
-                <!-- 通用-语言-字体 -->
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.language') }}</span>
@@ -551,7 +557,6 @@
                   />
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <!-- 通用-主题 -->
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.theme') }}</span>
@@ -654,8 +659,7 @@
             </template>
             <n-scrollbar style="max-height: 70vh;" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 203) + 'px)'}">
               <n-space vertical>
-                <!-- 通用-语言-字体 -->
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioDevice') }}</span>
                     <div style="margin-top: -10px;">
@@ -663,14 +667,15 @@
                     </div>
                   </n-space>
                   <n-select
+                      v-if="false"
                       v-model:value="player_lyric_panel_fontfamily_options_selected"
                       :options="player_lyric_panel_fontfamily_options"
-                      placeholder="微软雅黑"
+                      placeholder="not enabled"
                       :reset-menu-on-options-change="false"
                       style="width: 207px;margin-top: -4px;"
                   />
                 </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.playbackStyle_description') }}</span>
                     <div style="margin-top: -10px;">
@@ -678,9 +683,10 @@
                     </div>
                   </n-space>
                   <n-select
+                      v-if="false"
                       v-model:value="player_lyric_panel_fontfamily_options_selected"
                       :options="player_lyric_panel_fontfamily_options"
-                      placeholder="微软雅黑"
+                      placeholder="not enabled"
                       :reset-menu-on-options-change="false"
                       style="width: 207px;margin-top: -4px;"
                   />
@@ -693,18 +699,20 @@
                     </div>
                   </n-space>
                   <n-input-group style="width: 207px;margin-top: -4px;">
-                    <n-input clearable default-value="100"/>
+                    <n-input clearable v-model:value="player_fade_value" @update:value="update_player_fade_value"/>
                     <n-input-group-label>ms</n-input-group-label>
                   </n-input-group>
                 </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sampleRate') }}</span>
                     <div style="margin-top: -10px;">
                       <span style="font-size:12px;">{{ $t('setting.sampleRate_description') }}</span>
                     </div>
                   </n-space>
-                  <n-space justify="end" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space
+                    v-if="false"
+                    justify="end" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                     <n-input-group style="width: 207px;margin-top: -4px;">
                       <n-input clearable default-value="48000"/>
                       <n-input-group-label>Hz</n-input-group-label>
@@ -712,15 +720,16 @@
                   </n-space>
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <!-- 通用-主题 -->
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.lyricOffset') }}</span>
                     <div style="margin-top: -10px;">
                       <span style="font-size:12px;">{{ $t('setting.lyricOffset_description') }}</span>
                     </div>
                   </n-space>
-                  <n-input-group style="width: 207px;margin-top: -4px;">
+                  <n-input-group
+                    v-if="false"
+                    style="width: 207px;margin-top: -4px;">
                     <n-input clearable default-value="100"/>
                     <n-input-group-label>ms</n-input-group-label>
                   </n-input-group>
@@ -735,7 +744,7 @@
             </template>
             <n-scrollbar style="max-height: 70vh;" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 203) + 'px)'}">
               <n-space vertical>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.globalMediaHotkeys') }}</span>
                     <div style="margin-top: -10px;">
@@ -747,7 +756,7 @@
                   </n-switch>
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.applicationHotkeys') }}</span>
                     <div style="margin-top: -10px;">
@@ -765,7 +774,7 @@
             </template>
             <n-scrollbar style="max-height: 70vh;" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 203) + 'px)'}">
               <n-space vertical>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.windowBarStyle') }}</span>
                     <div style="margin-top: -10px;">
@@ -775,12 +784,12 @@
                   <n-select
                       v-model:value="player_lyric_panel_fontfamily_options_selected"
                       :options="player_lyric_panel_fontfamily_options"
-                      placeholder="微软雅黑"
+                      placeholder="not enabled"
                       :reset-menu-on-options-change="false"
                       style="width: 207px;margin-top: -4px;"
                   />
                 </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.minimizeToTray') }}</span>
                     <div style="margin-top: -10px;">
@@ -791,7 +800,7 @@
                       v-model:value="disabled">
                   </n-switch>
                 </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.exitToTray') }}</span>
                     <div style="margin-top: -10px;">
@@ -802,7 +811,7 @@
                       v-model:value="disabled">
                   </n-switch>
                 </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.startMinimized') }}</span>
                     <div style="margin-top: -10px;">
@@ -814,7 +823,7 @@
                   </n-switch>
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.disableAutomaticUpdates') }}</span>
                     <div style="margin-top: -10px;">

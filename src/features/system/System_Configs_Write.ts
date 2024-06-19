@@ -2,6 +2,7 @@ import { App_Configs } from '@/models/app_Configs_For_Sqlite/class_App_Configs';
 import { Player_Configs_of_Audio_Info } from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_Audio_Info';
 import { Player_Configs_of_UI } from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_UI';
 import { ref, type Ref } from 'vue'
+import path from "path";
 
 export class System_Configs_Write {
     constructor(
@@ -43,24 +44,7 @@ export class System_Configs_Write {
         db.exec("UPDATE sqlite_sequence SET seq = 0 WHERE name = 'system_playlist_file_config'");
         const playlistConfigStmt = db.prepare(`
             INSERT INTO system_playlist_file_config 
-            (id,
-            path,
-            title,
-            album,
-            artist,
-            artist_id,
-            album_artist,
-            album_id,
-            has_cover_art,
-            track_number,
-            disc_number,
-            year,
-            size,
-            suffix,
-            duration,
-            bit_rate,
-            genre,
-            compilation,
+            (id,path,title,album,artist,artist_id,album_artist,album_id,has_cover_art,track_number,disc_number,year,size,suffix,duration,bit_rate,genre,compilation,
             created_at,
             updated_at,
             full_text,
@@ -75,10 +59,7 @@ export class System_Configs_Write {
             disc_subtitle,
             mbz_track_id,
             mbz_album_id,
-            mbz_artist_id,
-            mbz_album_artist_id,
-            mbz_album_type,
-            mbz_album_comment,
+            mbz_artist_id,mbz_album_artist_id,mbz_album_type,mbz_album_comment,
             catalog_num,
             comment,
             lyrics,
@@ -145,5 +126,5 @@ export class System_Configs_Write {
         });
     
         db.close();
-    }    
+    }
 }

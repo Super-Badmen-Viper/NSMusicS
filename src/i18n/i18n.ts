@@ -35,10 +35,10 @@ import cs from '@/i18n/locales_feishin/cs.json';
 import nl from '@/i18n/locales_feishin/nl.json';
 export class Language{
     public i18n:any;
-    constructor() {
+    constructor(locale: any) {
         const options: I18nOptions = {
             legacy: false,
-            locale: 'en',
+            locale: locale,
             messages: {
                 'zhHans': { ...zhHans, ...zhHans_n },
                 'zhHant': { ...zhHant, ...zhHant_n },

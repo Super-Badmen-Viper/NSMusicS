@@ -7,6 +7,7 @@ export class System_Configs_Read {
     public app_Configs = ref(
         new App_Configs({
             theme: null,
+            lang: '',
             router_name: '',
             app_left_menu_select_activeKey: '',
             app_left_menu_collapsed: null
@@ -25,6 +26,7 @@ export class System_Configs_Read {
         new Player_Configs_of_Audio_Info({
             this_audio_file_path: '',
             this_audio_file_medium_image_url: '',
+            this_audio_file_lyric: '',
             this_audio_singer_name: '',
             this_audio_singer_id: '',
             this_audio_song_name: '',
@@ -38,6 +40,8 @@ export class System_Configs_Read {
             page_top_album_image_url: '',
             page_top_album_id: '',
             page_top_album_name: '',
+
+            page_songlists_selected: '',
         
             this_audio_file_path_from_playlist: null,
             fetchData_This_AlbumOrArtist_PlayMedia_Model: null,

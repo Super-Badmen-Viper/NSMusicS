@@ -46,13 +46,7 @@ async function createWindow() {
         win.close();
     })
     ipc.on('config-save', (event, app_Configs,player_Configs_of_UI,player_Configs_of_Audio_Info,playlist_Files_temporary) => {
-        let system_Configs_Write = new System_Configs_Write(
-            app_Configs.value,
-            player_Configs_of_UI.value,
-            player_Configs_of_Audio_Info.value,
-            playlist_Files_temporary.value
-          );
-        console.log('save config succuessful')
+
     })
 
     ipc.on('window-gc', function () {

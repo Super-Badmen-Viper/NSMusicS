@@ -3,6 +3,7 @@ import { ref, type Ref } from "vue";
 interface Player_Configs_of_Audio_Info_Props {
   this_audio_file_path: string,
   this_audio_file_medium_image_url: string,
+  this_audio_file_lyric: string,
   this_audio_singer_name: string,
   this_audio_singer_id: string,
   this_audio_song_name: string,
@@ -16,6 +17,8 @@ interface Player_Configs_of_Audio_Info_Props {
   page_top_album_image_url: string,
   page_top_album_id: string,
   page_top_album_name: string,
+
+  page_songlists_selected: string,
 
   this_audio_file_path_from_playlist: any,
   fetchData_This_AlbumOrArtist_PlayMedia_Model: any,

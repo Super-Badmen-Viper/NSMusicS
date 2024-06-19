@@ -43,7 +43,7 @@
     'Playlist_Show','Player_Show_Sound_effects','Player_Show_Sound_speed','Player_Show_Sound_more',
     'player_show_click',
     'this_audio_lyrics_string',
-    'player','this_audio_is_playing','player_silder_currentTime_added_value',
+    'player','player_new_data','this_audio_is_playing','player_silder_currentTime_added_value',
     'player_collapsed_action_bar_of_Immersion_model'
   ]);
   import { defineProps} from 'vue';
@@ -54,7 +54,7 @@
     'this_audio_song_name','this_audio_song_id','this_audio_song_rating','this_audio_song_favorite',
     'this_audio_album_name','this_audio_album_id',
     'player_show_click','player_show_complete','Player_Show_Sound_effects','Player_Show_Sound_speed','Player_Show_Sound_more',
-    'player','player_go_lyricline_index_of_audio_play_progress',
+    'player','player_fade_value','player_go_lyricline_index_of_audio_play_progress',
     'player_collapsed_action_bar_of_Immersion_model','player_show','collapsed'
   ]);
 
@@ -146,90 +146,102 @@
   const { Howl } = require('howler');
   let unwatch_this_audio_buffer_file =  watch(() => this_audio_buffer_file.value, (newValue, oldValue) => {
     if (newValue !== oldValue) {
-      props.player.unload();
-      clearTimeout(timer_this_audio_player.value);
-      timer_this_audio_player.value = setTimeout(() => {
-        player_silder_currentTime_added_value.value = 0;
-        props.player.howl = new Howl({
-          src: [props.this_audio_file_path],
-          autoplay: false,
-          html5: true,
-          loop: false,
-          volume: 1.0,
-          onplay: () => {
-            props.player.isPlaying = true;
-            emits('this_audio_is_playing',true)
-          },
-          onpause: () => {
-            props.player.isPlaying = false;
-            emits('this_audio_is_playing',false)
-          },
-          onstop: () => {
-            props.player.isPlaying = false;
-            emits('this_audio_is_playing',false)
-          },
-          onend: () => {
-            props.player.isPlaying = false;
-            emits('this_audio_is_playing',false)
-            //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
-            if(player_no_progress_jump.value == true){
-              current_play_time.value = formatTime(props.player.getDuration());
-              player_silder_currentTime_added_value.value = 0;
-              this_audio_buffer_file.value = null;
-              clearInterval(timer);
-
-              player_no_progress_jump.value = false;
-
-              props.player.isPlaying = false;
-              emits('this_audio_is_playing',false)
-              is_play_ended.value = true;
-            }
-            Play_Media_Switching()
-          },
-          onloaderror: (id: any, error: any) => {
-            console.error('Failed to load audio:', error);
-            props.player.isPlaying = false;
-            emits('this_audio_is_playing',false)
-            //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
-            if(player_no_progress_jump.value == true){
-              current_play_time.value = formatTime(props.player.getDuration());
-              player_silder_currentTime_added_value.value = 0;
-              this_audio_buffer_file.value = null;
-              clearInterval(timer);
-
-              player_no_progress_jump.value = false;
-
-              props.player.isPlaying = false;
-              emits('this_audio_is_playing',false)
-              is_play_ended.value = true;
-            }
-            Play_Media_Switching()
-          }
-        });
-        props.player.isPlaying = true;
-        emits('this_audio_is_playing',true)
-        is_play_ended.value = false;
-        player_no_progress_jump.value = true;
-        clearInterval(timer);
-        timer = setInterval(synchronize_playback_time, 200);
-        total_play_time.value = formatTime(props.player.getDuration());
-        props.player.setVolume(Number(slider_volume_value.value / 100))
-        props.player.play();
-        animationInstance.value.play();
-      }, 400);
+      Play_This_Audio_Path()
     }
     ipcRenderer.send('window-gc');
     const { webFrame } = require('electron');
     webFrame.clearCache();
   });
+  function Play_This_Audio_Path(){
+    props.player.unload();
+    clearTimeout(timer_this_audio_player.value);
+    timer_this_audio_player.value = setTimeout(() => {
+      player_silder_currentTime_added_value.value = 0;
+      props.player.howl = new Howl({
+        src: [props.this_audio_file_path],
+        autoplay: false,
+        html5: true,
+        loop: false,
+        volume: 1.0,
+        onplay: () => {
+          props.player.howl.fade(0, 1, props.player_fade_value);
+          props.player.isPlaying = true;
+          emits('this_audio_is_playing',true)
+        },
+        onpause: () => {
+          props.player.howl.fade(1, 0, props.player_fade_value);
+          props.player.isPlaying = false;
+          emits('this_audio_is_playing',false)
+        },
+        onstop: () => {
+          props.player.howl.fade(1, 0, props.player_fade_value);
+          props.player.isPlaying = false;
+          emits('this_audio_is_playing',false)
+        },
+        onend: () => {
+          props.player.howl.fade(1, 0, props.player_fade_value);
+          props.player.isPlaying = false;
+          emits('this_audio_is_playing',false)
+          //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
+          if(player_no_progress_jump.value == true){
+            current_play_time.value = formatTime(props.player.getDuration());
+            player_silder_currentTime_added_value.value = 0;
+            this_audio_buffer_file.value = null;
+            clearInterval(timer);
+
+            player_no_progress_jump.value = false;
+
+            props.player.isPlaying = false;
+            emits('this_audio_is_playing',false)
+            is_play_ended.value = true;
+          }
+          Play_Media_Switching()
+        },
+        onloaderror: (id: any, error: any) => {
+          console.error('Failed to load audio:', error);
+          props.player.isPlaying = false;
+          emits('this_audio_is_playing',false)
+          //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
+          if(player_no_progress_jump.value == true){
+            current_play_time.value = formatTime(props.player.getDuration());
+            player_silder_currentTime_added_value.value = 0;
+            this_audio_buffer_file.value = null;
+            clearInterval(timer);
+
+            player_no_progress_jump.value = false;
+
+            props.player.isPlaying = false;
+            emits('this_audio_is_playing',false)
+            is_play_ended.value = true;
+          }
+          Play_Media_Switching()
+        }
+      });
+      props.player.isPlaying = true;
+      emits('this_audio_is_playing',true)
+      emits('player_new_data',true)
+      is_play_ended.value = false;
+      player_no_progress_jump.value = true;
+      clearInterval(timer);
+      timer = setInterval(synchronize_playback_time, 200);
+      total_play_time.value = formatTime(props.player.getDuration());
+      props.player.setVolume(Number(slider_volume_value.value / 100))
+      props.player.play();
+      animationInstance.value.play();
+    }, 400);
+  }
   const Init_Audio_Player = async () => {
     if(props.this_audio_file_path.length > 0){
       if(props.player.isPlaying === false){
         if(this_audio_buffer_file.value === null){
           this_audio_buffer_file.value = Math.random().toString(36).substring(7);
         }else{
-          props.player.play();
-          animationInstance.value.play();
+          if(props.player.howl == null)
+            Play_This_Audio_Path()
+          else {
+            props.player.play();
+            animationInstance.value.play();
+          }
           emits('this_audio_is_playing',true)
         }
       }else{
@@ -248,7 +260,6 @@
     emits('player_silder_currentTime_added_value',newValue);
   });
   const player_no_progress_jump = ref(true)
-
 
   ////// player player_button order area
   const drawer_order_show = ref(false)

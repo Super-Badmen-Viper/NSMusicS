@@ -16,18 +16,23 @@ function get_menuOptions_appBar(value:any){
 function get_selectd_props_app_sidebar(value:any){
   emits('selectd_props_app_sidebar',value)
 }
+function get_player_fade_value(value:any){
+  emits('player_fade_value',value)
+}
 
 onMounted(async () => {
   emits('router_select','View_Menu_AppSetting')
 });
 const emits = defineEmits([
-  'router_select','update_lang','update_theme','menuOptions_appBar','selectd_props_app_sidebar',
+  'router_select','update_lang','update_theme','menuOptions_appBar','selectd_props_app_sidebar','player_fade_value',
 ]);
 const { 
   app_left_menu_collapsed,window_innerWidth,update_theme,menuOptions_appBar,
+  player_fade_value,
 } = defineProps<{
   app_left_menu_collapsed:Boolean,window_innerWidth:number,update_theme:Boolean,
   menuOptions_appBar:MenuOption[],selectd_props_app_sidebar:(string | number)[],
+  player_fade_value:number,
 }>();
 </script>
 
@@ -43,6 +48,8 @@ const {
       @menuOptions_appBar="get_menuOptions_appBar"
       :selectd_props_app_sidebar="selectd_props_app_sidebar"
       @selectd_props_app_sidebar="get_selectd_props_app_sidebar"
+      :player_fade_value="player_fade_value"
+      @player_fade_value="get_player_fade_value"
     />
   </div>
 </template>

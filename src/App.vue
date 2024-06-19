@@ -19,17 +19,20 @@
   const { t, d, n } = useI18n({
     inheritLocale: true
   })
+  const update_lang = ref('en')
   function get_update_lang(value:any){
+    update_lang.value = value;
     console.log(value)
+    save_system_config()
   }
 
   ////// this_app components of navie ui
   import type {GlobalTheme, MenuOption} from 'naive-ui'
   // app theme_color
   ////// this_app
-  import {darkTheme, dateZhCN, lightTheme, NConfigProvider, NIcon, zhCN} from 'naive-ui'
+  import {darkTheme, lightTheme, NConfigProvider, NIcon} from 'naive-ui'
   // vue3 function
-  import {h, onMounted, ref, computed} from 'vue';
+  import {h, onMounted, ref, computed, watch} from 'vue';
   import routers from './router'
   import {RouterLink, RouterView, useRouter} from 'vue-router';
   // audio_class & player_bar class
@@ -44,6 +47,7 @@
   import {App_Configs} from '@/models/app_Configs_For_Sqlite/class_App_Configs';
   import {Player_Configs_of_Audio_Info} from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_Audio_Info';
   import {Player_Configs_of_UI} from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_UI';
+  import {System_Configs_Write} from "@/features/system/System_Configs_Write";
 
   const crypto = require('crypto');
   function generateEncryptedPassword(password: string): { salt: string, token: string } {
@@ -101,10 +105,15 @@
     selectd_props_app_sidebar.value = value
   }
   const app_left_menu_select_activeKey = ref<string | null>(null)
+  watch(() => app_left_menu_select_activeKey.value, (newValue) => {
+    save_system_config()
+  });
   const app_left_menu_collapsed = ref(false)
+  watch(() => app_left_menu_collapsed.value, (newValue) => {
+    save_system_config()
+  });
   // node function
   const path = require('path');
-  const fs = require('fs');
 
   ////// this_app theme_color
   const theme = ref<GlobalTheme | null>(null)
@@ -118,6 +127,8 @@
     else
       update_theme.value = false;
     theme_mode_change_click()
+
+    save_system_config()
   }
   const theme_normal_mode_click = () => {
     theme.value = lightTheme
@@ -221,6 +232,7 @@
   const player_UI_Theme_State = ref(new Player_UI_Theme_State());
   const get_player_UI_Theme = (value: any) => {
     player_UI_Theme_State.value = value;
+    save_system_config()
   }
 
   ////// open bar audio_playlist
@@ -452,6 +464,13 @@
 
   ////// this_app audio(Media) Class
   let player = new Audio_howler();
+  function player_new_data(value: any){
+    save_system_config()
+  }
+  const player_fade_value = ref<number>(2000)
+  function get_player_fade_value(value: any){
+    player_fade_value.value = value
+  }
   const player_silder_currentTime_added_value = ref(0);
   function get_player_silder_currentTime_added_value(value: any) {
     player_silder_currentTime_added_value.value = value
@@ -1578,6 +1597,7 @@
         router_select_model_artist.value = true
         router_name.value = to.name
       }
+      save_system_config()
     }
   });
   const get_router_select = (value: any) => {
@@ -1819,6 +1839,7 @@
       theme.value = darkTheme;
     }
     theme_name.value = ''+system_Configs_Read.app_Configs.value['theme']
+    update_lang.value = ''+system_Configs_Read.app_Configs.value['lang']
     app_left_menu_select_activeKey.value = ''+system_Configs_Read.app_Configs.value['app_left_menu_select_activeKey']
     app_left_menu_collapsed.value = ''+system_Configs_Read.app_Configs.value['app_left_menu_collapsed'] === 'true'
     router_name.value = ''+system_Configs_Read.app_Configs.value['router_name']
@@ -1834,12 +1855,15 @@
     /// player_Configs_of_Audio_Info
     this_audio_file_path.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path']
     this_audio_file_medium_image_url.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_medium_image_url']
+    this_audio_lyrics_string.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_lyric']
+    get_this_audio_lyrics_string(this_audio_lyrics_string.value)
     this_audio_singer_name.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_singer_name']
     this_audio_song_name.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_name']
     this_audio_album_name.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_name']
     this_audio_album_id.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_id']
     this_audio_album_favorite.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_favorite']
     this_audio_Index_of_absolute_positioning_in_list.value = Number(''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_Index_of_absolute_positioning_in_list'])
+    page_songlists_selected.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['page_songlists_selected']
     //
     page_top_album_image_url.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_image_url']
     page_top_album_id.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_id']
@@ -1848,13 +1872,14 @@
     this_audio_file_path_from_playlist.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path_from_playlist']==='true'
     fetchData_This_AlbumOrArtist_PlayMedia_Model.value = ''+system_Configs_Read.player_Configs_of_Audio_Info.value['fetchData_This_AlbumOrArtist_PlayMedia_Model']==='true'
     /// playlist_File_Configs
-    playlist_Files_temporary.value = system_Configs_Read.playlist_File_Configs.value
+    // playlist_Files_temporary.value = system_Configs_Read.playlist_File_Configs.value
   });
   ////// Save this_app Configs
   function save_system_config(){
     const app_Configs = ref(
       new App_Configs({
         theme: theme_name.value,
+        lang: update_lang.value,
         router_name: String(router_name.value),
         app_left_menu_select_activeKey: String(app_left_menu_select_activeKey.value),
         app_left_menu_collapsed: String(app_left_menu_collapsed.value)
@@ -1873,6 +1898,7 @@
       new Player_Configs_of_Audio_Info({
         this_audio_file_path: String(this_audio_file_path.value),
         this_audio_file_medium_image_url: String(this_audio_file_medium_image_url.value),
+        this_audio_file_lyric: String(this_audio_lyrics_string.value),
         this_audio_singer_name: String(this_audio_singer_name.value),
         this_audio_singer_id: String(this_audio_singer_id.value),
         this_audio_song_name: String(this_audio_song_name.value),
@@ -1886,18 +1912,27 @@
         page_top_album_image_url: String(page_top_album_image_url.value),
         page_top_album_id: String(page_top_album_id.value),
         page_top_album_name: String(page_top_album_name.value),
+
+        page_songlists_selected: String(page_songlists_selected.value),
     
         this_audio_file_path_from_playlist: String(this_audio_file_path_from_playlist.value),
         fetchData_This_AlbumOrArtist_PlayMedia_Model: String(fetchData_This_AlbumOrArtist_PlayMedia_Model.value),
       }));
-    ipcRenderer.send('config-save',app_Configs,player_Configs_of_UI,player_Configs_of_Audio_Info)
+
+    let system_Configs_Write = new System_Configs_Write(
+        app_Configs.value,
+        player_Configs_of_UI.value,
+        player_Configs_of_Audio_Info.value,
+        []
+        // playlist_Files_temporary.value
+    );
+    console.log('save config succuessful')
+    // ipcRenderer.send('config-save',app_Configs,player_Configs_of_UI,player_Configs_of_Audio_Info)
   }
-
-
 </script>
 <template>
   <!-- App Bady View-->
-  <n-config-provider class="this_App" :theme="theme" :locale="zhCN" :date-locale="dateZhCN">
+  <n-config-provider class="this_App" :theme="theme">
     <n-global-style />
     <n-message-provider class="this_App">
       <n-layout has-sider class="this_App">
@@ -1932,6 +1967,8 @@
             @menuOptions_appBar="get_menuOptions_appBar"
             :selectd_props_app_sidebar="selectd_props_app_sidebar"
             @selectd_props_app_sidebar="get_selectd_props_app_sidebar"
+            :player_fade_value="player_fade_value"
+            @player_fade_value="get_player_fade_value"
             :app_left_menu_collapsed="app_left_menu_collapsed"
             :window_innerWidth="window_innerWidth">
 
@@ -2126,6 +2163,8 @@
         border-radius: 12px 12px 0 0;border: 0 #00000000">
       <Bar_Music_Player
         :player="player"
+        @player_new_data="player_new_data"
+        :player_fade_value="player_fade_value"
         @this_audio_is_playing="get_this_audio_is_playing"
         
         @player_silder_currentTime_added_value="get_player_silder_currentTime_added_value"
@@ -2391,4 +2430,4 @@ nav {
 ::-webkit-scrollbar {
   display: none;
 }
-</style>./features/system/System_Configs_Read./features/player/Player_UI_Theme_State
+</style>

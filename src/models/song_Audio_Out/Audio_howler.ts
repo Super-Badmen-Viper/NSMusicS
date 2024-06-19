@@ -52,8 +52,16 @@ export class Audio_howler {
             this.howl.volume(volume);
         }
     }
-    setisPlaying(isPlaying: boolean) {
-        this.isPlaying = isPlaying;
+    get_fade(from: any, to: any, duration: any){
+        if (this.howl) {
+            this.howl.fadein(from);
+            this.howl.fadeout(to)
+        }
+    }
+    set_fade(from: any, to: any, duration: any){
+        if (this.howl) {
+            // this.howl.volume(volume);
+        }
     }
     mute() {
         Howler.mute(true);
