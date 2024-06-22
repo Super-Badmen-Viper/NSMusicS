@@ -70,7 +70,7 @@ const {
   page_artistlists_options_Sort_key:{ columnKey: string; order: string }[],
   artist_Files_temporary:Artist[],
   
-  router_select_history_date:Router_date,router_history_datas:Router_date[],router_history_model_of_Artist_scroller_value:number,router_history_model_of_Artist_scroll:Boolean,
+  router_select_history_date:Interface_View_Router_Date,router_history_datas:Interface_View_Router_Date[],router_history_model_of_Artist_scroller_value:number,router_history_model_of_Artist_scroll:Boolean,
 }>();
 </script>
 

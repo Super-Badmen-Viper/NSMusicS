@@ -33,7 +33,9 @@
                 "lyricsAnimation": "Animation",
                 "lyricsAnimation_line_1": "Radvis",
                 "lyricsAnimation_byte_2": "Teckenvis",
-                "lyricsAnimation_jump_3": "Hoppvis"
+                "lyricsAnimation_jump_3": "Hoppvis",
+                "player_use_lottie": "Spela upp Animation",
+                "player_use_lottie_explain": "(Experimentellt) Aktivera animering vid uppspelning i gränssnittet (kan orsaka osäker minnesanvändning)"
             }
         }
     }

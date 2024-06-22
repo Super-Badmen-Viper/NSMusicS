@@ -1,15 +1,12 @@
-import { App_Configs } from '@/models/app_Configs_For_Sqlite/class_App_Configs';
-import { Player_Configs_of_Audio_Info } from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_Audio_Info';
-import { Player_Configs_of_UI } from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_UI';
+import { App_Configs } from '@/models/app_Configs/class_App_Configs';
+import { Player_Configs_of_Audio_Info } from '@/models/app_Configs/class_Player_Configs_of_Audio_Info';
+import { Player_Configs_of_UI } from '@/models/app_Configs/class_Player_Configs_of_UI';
 
 export class System_Configs_Write {
     system_app_config(
+        db: any,
         app_Configs: App_Configs,
     ){
-        const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/nsmusics.db'));
-        db.pragma('journal_mode = WAL');
-
         /// system_app_config
         db.exec("DELETE FROM system_app_config");
         db.exec("UPDATE sqlite_sequence SET seq = 0 WHERE name = 'system_app_config'");
@@ -17,18 +14,12 @@ export class System_Configs_Write {
         Object.entries(app_Configs).forEach(([propertyName, value]) => {
             appConfigStmt.run(propertyName, value);
         });
-
-        /// close
-        db.close();
     }
 
     system_player_config_of_ui(
+        db: any,
         player_Configs_of_UI: Player_Configs_of_UI,
     ){
-        const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/nsmusics.db'));
-        db.pragma('journal_mode = WAL');
-
         /// system_player_config_of_ui
         db.exec("DELETE FROM system_player_config_of_ui");
         db.exec("UPDATE sqlite_sequence SET seq = 0 WHERE name = 'system_player_config_of_ui'");
@@ -36,18 +27,12 @@ export class System_Configs_Write {
         Object.entries(player_Configs_of_UI).forEach(([propertyName, value]) => {
             uiConfigStmt.run(propertyName, value);
         });
-
-        /// close
-        db.close();
     }
 
     system_player_config_of_audio(
+        db: any,
         player_Configs_of_Audio_Info: Player_Configs_of_Audio_Info,
     ){
-        const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/nsmusics.db'));
-        db.pragma('journal_mode = WAL');
-
         /// system_player_config_of_audio
         db.exec("DELETE FROM system_player_config_of_audio");
         db.exec("UPDATE sqlite_sequence SET seq = 0 WHERE name = 'system_player_config_of_audio'");
@@ -55,18 +40,12 @@ export class System_Configs_Write {
         Object.entries(player_Configs_of_Audio_Info).forEach(([propertyName, value]) => {
             audioConfigStmt.run(propertyName, value);
         });
-
-        /// close
-        db.close();
     }
 
     system_playlist_file_config(
+        db: any,
         playlist_File_Configs: Media_File[],
     ){
-        const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/nsmusics.db'));
-        db.pragma('journal_mode = WAL');
-
         /// system_player_config_of_audio
         db.exec("DELETE FROM system_playlist_file_config");
         db.exec("UPDATE sqlite_sequence SET seq = 0 WHERE name = 'system_playlist_file_config'");
@@ -140,12 +119,10 @@ export class System_Configs_Write {
                 mediaFile.rg_track_peak,
             );
         });
-
-        /// close
-        db.close();
     }
 
     system_view_history(
+        db: any,
         view_Media_History_select_Configs: any,
         view_Media_History_Configs: Interface_View_Router_Date[],
         view_Album_History_select_Configs: any,
@@ -153,10 +130,6 @@ export class System_Configs_Write {
         view_Artist_History_select_Configs: any,
         view_Artist_History_Configs: Interface_View_Router_Date[],
     ){
-        const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/nsmusics.db'));
-        db.pragma('journal_mode = WAL');
-
         /// view_Media_History_select_Configs
         db.exec("DELETE FROM system_view_media_select_history");
         db.exec("UPDATE sqlite_sequence SET seq = 0 WHERE name = 'system_view_media_select_history'");
@@ -316,8 +289,5 @@ export class System_Configs_Write {
                 router_date.page_lists_scrollindex,
             );
         });
-
-        /// close
-        db.close();
     }
 }

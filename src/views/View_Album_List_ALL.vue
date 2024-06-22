@@ -64,7 +64,7 @@ const {
   page_albumlists_options_Sort_key:{ columnKey: string; order: string }[],
   album_Files_temporary:Album[],page_albumlists_keyword:string,
   
-  router_select_history_date:Router_date,router_history_datas:Router_date[],router_history_model_of_Album_scroller_value:number,router_history_model_of_Album_scroll:Boolean,
+  router_select_history_date:Interface_View_Router_Date,router_history_datas:Interface_View_Router_Date[],router_history_model_of_Album_scroller_value:number,router_history_model_of_Album_scroll:Boolean,
 }>();
 </script>
 

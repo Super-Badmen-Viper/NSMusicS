@@ -33,7 +33,9 @@
                 "lyricsAnimation": "アニメーション",
                 "lyricsAnimation_line_1": "行単位",
                 "lyricsAnimation_byte_2": "字単位",
-                "lyricsAnimation_jump_3": "ジャンプ"
+                "lyricsAnimation_jump_3": "ジャンプ",
+                "player_use_lottie": "アニメーション再生",
+                "player_use_lottie_explain": "(実験的)プレイヤーのインターフェースでアニメーションを有効化(メモリ使用量が不安定になる可能性があります)"
             }
         }
     }

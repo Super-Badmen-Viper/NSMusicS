@@ -33,7 +33,9 @@
                 "lyricsAnimation": "Animation",
                 "lyricsAnimation_line_1": "Par ligne",
                 "lyricsAnimation_byte_2": "Par caractère",
-                "lyricsAnimation_jump_3": "Saut précis"
+                "lyricsAnimation_jump_3": "Saut précis",
+                "player_use_lottie": "Lire l'Animation",
+                "player_use_lottie_explain": "(Expérimental) Activez l'animation de lecture dans l'interface (peut causer une utilisation de la mémoire instable)"
             }
         }
     }

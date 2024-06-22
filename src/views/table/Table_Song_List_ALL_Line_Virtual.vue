@@ -57,7 +57,7 @@ const props = defineProps<{
   window_innerWidth: number;
   options_Sort_key:{ columnKey: string; order: string }[];
 
-  router_select_history_date: Router_date;router_history_datas: Router_date[];router_history_model_of_Media_scroller_value: number;router_history_model_of_Media_scroll: Boolean;
+  router_select_history_date: Interface_View_Router_Date;router_history_datas: Interface_View_Router_Date[];router_history_model_of_Media_scroller_value: number;router_history_model_of_Media_scroll: Boolean;
 }>();
 
 ////// songlist_view page_layout lineItems
@@ -284,8 +284,8 @@ const options_Filter_handleSelect = (key: string | number) => {
   breadcrumbItems.value = props.page_songlists_options.find(option => option.value === 'song_list_love')?.label || '';
 }
 
-////// scrollbar of artistlist_view
-const scrollbar = ref(null as any);
+////// dynamicScroller of artistlist_view
+const dynamicScroller = ref(null as any);
 const onResize = () => {
   console.log('resize');
 }
@@ -307,9 +307,9 @@ const stopWatching_router_history_model_of_Media_scroll = watch(() => props.rout
 )
 const this_audio_Index_of_absolute_positioning_in_list = ref<number>(0)
 const scrollTo = (value :number) => {
-  if (scrollbar !== null) {
+  if (dynamicScroller !== null) {
     setTimeout(() => {
-      scrollbar.value.scrollToItem(value - (12 + Math.floor((window.innerHeight - 765) / 75)));// 1000:15，690:11  75
+      dynamicScroller.value.scrollToItem(value - (12 + Math.floor((window.innerHeight - 765) / 75)));// 1000:15，690:11  75
     }, 100);
   }
 }
@@ -384,7 +384,7 @@ const handleItemClick_album = (album:string) => {
 }
 
 ////// changed_data write to sqlite
-import {Set_MediaInfo_To_LocalSqlite} from '../../../src/models/data_Change_For_Sqlite/class_Set_MediaInfo_To_LocalSqlite'
+import {Set_MediaInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite'
 let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   click_count = 0;
@@ -575,7 +575,7 @@ onBeforeUnmount(() => {
     </n-space>
     <div class="dynamic-scroller-demo">
       <DynamicScroller
-          class="table" ref="scrollbar" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
+          class="table" ref="dynamicScroller" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
           :items="props.data_temporary"
           :minItemSize="50"
           :emit-update="true"

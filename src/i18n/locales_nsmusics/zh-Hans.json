@@ -33,7 +33,9 @@
                 "lyricsAnimation": "歌词动效",
                 "lyricsAnimation_line_1": "逐行精准",
                 "lyricsAnimation_byte_2": "逐字精准",
-                "lyricsAnimation_jump_3": "跳跃精准"
+                "lyricsAnimation_jump_3": "跳跃精准",
+                "player_use_lottie": "播放动效",
+                "player_use_lottie_explain": "(实验性)在播放界面中启用播放动画(会导致占用内存不稳定)"
             }
         }
     }

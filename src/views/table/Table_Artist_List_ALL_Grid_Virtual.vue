@@ -44,7 +44,7 @@
     window_innerWidth: number;
     options_Sort_key:{ columnKey: string; order: string }[];
 
-    router_select_history_date: Router_date;router_history_datas: Router_date[];router_history_model_of_Artist_scroller_value: number;router_history_model_of_Artist_scroll:Boolean;
+    router_select_history_date: Interface_View_Router_Date;router_history_datas: Interface_View_Router_Date[];router_history_model_of_Artist_scroller_value: number;router_history_model_of_Artist_scroll:Boolean;
   }>();
 
   ////// artistlist_view page_layout gridItems
@@ -282,8 +282,8 @@
     breadcrumbItems.value = props.page_artistlists_options.find(option => option.value === 'artist_list_love')?.label || '';
   }
 
-  ////// scrollbar of artistlist_view
-  const scrollbar = ref(null as any);
+  ////// dynamicScroller of artistlist_view
+  const dynamicScroller = ref(null as any);
   const onResize = () => {
     console.log('resize');
   }
@@ -304,9 +304,9 @@
     }
   )
   const scrollTo = (value :number) => {
-    if (scrollbar !== null) {
+    if (dynamicScroller !== null) {
       setTimeout(() => {
-        scrollbar.value.scrollToItem(value - (20 + Math.floor((window.innerHeight - 765) / 220)));// 220
+        dynamicScroller.value.scrollToItem(value - (20 + Math.floor((window.innerHeight - 765) / 220)));// 220
       }, 100);
     }
   }
@@ -349,7 +349,7 @@
   }
 
   ////// changed_data write to sqlite
-  import {Set_ArtistInfo_To_LocalSqlite} from '../../../src/models/data_Change_For_Sqlite/class_Set_ArtistInfo_To_LocalSqlite'
+  import {Set_ArtistInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_ArtistInfo_To_LocalSqlite'
   let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     set_ArtistInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id,favorite)
@@ -425,7 +425,7 @@
 
     <div class="artist-wall-container">
       <DynamicScroller
-        class="artist-wall" ref="scrollbar" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
+        class="artist-wall" ref="dynamicScroller" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
         :items="props.data_temporary"
         :itemSize="itemSize"
         :minItemSize="itemSize"

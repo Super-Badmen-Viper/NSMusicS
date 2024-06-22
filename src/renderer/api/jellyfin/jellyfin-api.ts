@@ -161,7 +161,7 @@ export const contract = c.router({
     },
     getServerInfo: {
         method: 'GET',
-        path: 'system/info',
+        path: 'system_configs/info',
         responses: {
             200: jfType._response.serverInfo,
             400: jfType._response.error,

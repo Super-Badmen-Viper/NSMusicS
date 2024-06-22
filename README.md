@@ -74,7 +74,7 @@ npm run dev # Direct operation NSmusicS
 ```
 ```sh
 cd NSMusicS
-npm run build-only # Package into the current system's software package (such as exe)
+npm run build-only # Package into the current system_configs's software package (such as exe)
 ```
 
 ## Related projects:(Thanks)

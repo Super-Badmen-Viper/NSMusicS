@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import { readFileSync } from 'fs';
-import { System_Configs_Write } from './features/system/System_Configs_Write';
+import { System_Configs_Write } from '@/features/system_configs/System_Configs_Write';
 
 async function createWindow() {
     const win = await new BrowserWindow({
@@ -44,9 +44,6 @@ async function createWindow() {
     })
     ipc.on('window-close', function () {
         win.close();
-    })
-    ipc.on('config-save', (event, app_Configs,player_Configs_of_UI,player_Configs_of_Audio_Info,playlist_Files_temporary) => {
-
     })
 
     ipc.on('window-gc', function () {

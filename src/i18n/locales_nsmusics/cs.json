@@ -33,7 +33,9 @@
                 "lyricsAnimation": "Animace",
                 "lyricsAnimation_line_1": "Pozice",
                 "lyricsAnimation_byte_2": "Znaky",
-                "lyricsAnimation_jump_3": "Přesnost"
+                "lyricsAnimation_jump_3": "Přesnost",
+                "player_use_lottie": "Přehrát Animace",
+                "player_use_lottie_explain": "(Experimentální) Povolit animace při přehrávání na rozhraní (může způsobit nestabilní využití paměti)"
             }
         }
     }

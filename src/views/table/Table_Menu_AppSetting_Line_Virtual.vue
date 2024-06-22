@@ -4,40 +4,6 @@
     BareMetalServer, Add, Close, Menu as MenuIcon, UserAvatarFilledAlt, Hearing
   } from '@vicons/carbon'
 
-  ////// passed as argument
-  const emits = defineEmits([
-    'update_lang','update_theme','menuOptions_appBar','selectd_props_app_sidebar','player_fade_value',
-  ]);
-  const props = defineProps<{
-    app_left_menu_collapsed: Boolean;
-    window_innerWidth: number;
-    update_theme:Boolean;
-    menuOptions_appBar:MenuOption[];
-    selectd_props_app_sidebar:(string | number)[];
-    player_fade_value:number;
-  }>();
-
-  ////// this_view components of navie ui
-  import {ref, onMounted, watch, onBeforeUnmount, computed, h} from 'vue';
-  import {type MenuOption, NButton, NIcon,} from 'naive-ui'
-  const theme_value = ref('lightTheme')
-  const theme_options = ref([
-    {
-      label: computed(() => t('setting.themeLight')),
-      value: 'lightTheme',
-    },
-    {
-      label: computed(() => t('setting.themeDark')),
-      value: 'darkTheme',
-    },
-  ])
-  onMounted(() => {
-    if(props.update_theme)
-      theme_value.value = theme_options.value[1].value
-    else
-      theme_value.value = theme_options.value[0].value
-  });
-
   ////// i18n auto lang
   import { useI18n } from 'vue-i18n'
   import {
@@ -67,6 +33,50 @@
   const computed_i18n_Label_SidebarConfiguration_13 = computed(() => t('nsmusics.siderbar_menu.scoreGeneration'));
   const computed_i18n_Label_SidebarConfiguration_14 = computed(() => t('nsmusics.siderbar_menu.lyricsProduction'));
   const computed_i18n_Label_SidebarConfiguration_15 = computed(() => t('nsmusics.siderbar_menu.musicCommunity'));
+
+  ////// passed as argument
+  const emits = defineEmits([
+    'menu_appsetting_select_tab_name',
+    'update_lang','update_theme','menuOptions_appBar','selectd_props_app_sidebar',
+    'player_fade_value','player_use_lottie_animation',
+  ]);
+  const props = defineProps<{
+    app_left_menu_collapsed: Boolean;
+    window_innerWidth: number;
+    menu_appsetting_select_tab_name:any;
+    update_theme:Boolean;
+    menuOptions_appBar:MenuOption[];
+    selectd_props_app_sidebar:(string | number)[];
+    player_fade_value:number;
+    player_use_lottie_animation:Boolean;
+  }>();
+
+  ////// this_view components of navie ui
+  import {ref, onMounted, watch, onBeforeUnmount, computed, h} from 'vue';
+  import {type MenuOption, NButton, NIcon,} from 'naive-ui'
+  const theme_value = ref('lightTheme')
+  const theme_options = ref([
+    {
+      label: computed(() => t('setting.themeLight')),
+      value: 'lightTheme',
+    },
+    {
+      label: computed(() => t('setting.themeDark')),
+      value: 'darkTheme',
+    },
+  ])
+  onMounted(() => {
+    if(props.update_theme)
+      theme_value.value = theme_options.value[1].value
+    else
+      theme_value.value = theme_options.value[0].value
+  });
+
+  //////
+  const menu_appsetting_select_tab_name = ref('tab_pane_1')
+  onMounted(() => {
+    menu_appsetting_select_tab_name.value = props.menu_appsetting_select_tab_name
+  });
 
   //////
   const selectd_props_home_page = ref<(string | number)[] | null>(null)
@@ -126,6 +136,10 @@
   const player_fade_value = ref<number>(props.player_fade_value)
   function update_player_fade_value(value: any){
     emits('player_fade_value',value)
+  }
+  const player_use_lottie_animation = ref<Boolean>(props.player_use_lottie_animation)
+  function update_player_use_lottie_animation(value: any){
+    emits('player_use_lottie_animation',value)
   }
 
   ////// 服务器配置添加
@@ -348,7 +362,8 @@
         :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)'}">
         <n-tabs
           style="margin-top: -20px;"
-          default-value="tab_pane_1"
+          v-model:value="menu_appsetting_select_tab_name"
+          @update:value="emits('menu_appsetting_select_tab_name',menu_appsetting_select_tab_name)"
           size="large"
           animated
           pane-wrapper-style="margin: 0 -4px"
@@ -659,6 +674,17 @@
             </template>
             <n-scrollbar style="max-height: 70vh;" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 203) + 'px)'}">
               <n-space vertical>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.player_use_lottie') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('nsmusics.view_player.view_seting.player_use_lottie_explain') }}</span>
+                    </div>
+                  </n-space>
+                  <n-switch
+                      v-model:value="player_use_lottie_animation" @update:value="update_player_use_lottie_animation">
+                  </n-switch>
+                </n-space>
                 <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioDevice') }}</span>

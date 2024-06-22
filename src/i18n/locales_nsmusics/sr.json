@@ -33,7 +33,9 @@
                 "lyricsAnimation": "Анимација",
                 "lyricsAnimation_line_1": "По линији",
                 "lyricsAnimation_byte_2": "По знаку",
-                "lyricsAnimation_jump_3": "Прецизно"
+                "lyricsAnimation_jump_3": "Прецизно",
+                "player_use_lottie": "Пуштање Анимације",
+                "player_use_lottie_explain": "(Eksperimentalno) Omogućite animaciju u interfejsu za reprodukovanje (može dovesti do nestabilnog korišćenja memorije)"
             }
         }
     }

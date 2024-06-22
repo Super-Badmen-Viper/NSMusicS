@@ -33,7 +33,9 @@
                 "lyricsAnimation": "Animation",
                 "lyricsAnimation_line_1": "Zeilenweise",
                 "lyricsAnimation_byte_2": "Zeichenweise",
-                "lyricsAnimation_jump_3": "Sprungweise"
+                "lyricsAnimation_jump_3": "Sprungweise",
+                "player_use_lottie": "Animation Abspielen",
+                "player_use_lottie_explain": "(Experimentell) Aktiviere die Wiedergabeanimation im Interface (kann zu instabiler Speichernutzung führen)"
             }
         }
     }

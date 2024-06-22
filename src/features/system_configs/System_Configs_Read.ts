@@ -1,7 +1,7 @@
 import { ref } from 'vue'
-import { App_Configs } from '@/models/app_Configs_For_Sqlite/class_App_Configs';
-import { Player_Configs_of_Audio_Info } from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_Audio_Info';
-import { Player_Configs_of_UI } from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_UI';
+import { App_Configs } from '@/models/app_Configs/class_App_Configs';
+import { Player_Configs_of_Audio_Info } from '@/models/app_Configs/class_Player_Configs_of_Audio_Info';
+import { Player_Configs_of_UI } from '@/models/app_Configs/class_Player_Configs_of_UI';
 
 export class System_Configs_Read {
     public app_Configs = ref(
@@ -21,6 +21,7 @@ export class System_Configs_Read {
             player_lyric_color: '',
             player_theme_Styles_Selected: null,
             player_background_model_num: null,
+            player_use_lottie_animation: null,
         }))
     public player_Configs_of_Audio_Info = ref(
         new Player_Configs_of_Audio_Info({

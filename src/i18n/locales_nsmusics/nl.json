@@ -33,7 +33,9 @@
                 "lyricsAnimation": "Animatie",
                 "lyricsAnimation_line_1": "Regelmatig",
                 "lyricsAnimation_byte_2": "Karaktersnel",
-                "lyricsAnimation_jump_3": "Spring exact"
+                "lyricsAnimation_jump_3": "Spring exact",
+                "player_use_lottie": "Animatie Afspelen",
+                "player_use_lottie_explain": "(Experimenteel) Schakel animatie in tijdens afspelen in de interface (kan leiden tot onstabiele geheugengebruik)"
             }
         }
     }

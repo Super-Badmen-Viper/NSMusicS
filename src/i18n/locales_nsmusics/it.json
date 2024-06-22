@@ -33,7 +33,9 @@
                 "lyricsAnimation": "Animazione",
                 "lyricsAnimation_line_1": "Per riga",
                 "lyricsAnimation_byte_2": "Per carattere",
-                "lyricsAnimation_jump_3": "Salti precisi"
+                "lyricsAnimation_jump_3": "Salti precisi",
+                "player_use_lottie": "Riprodurre Animazione",
+                "player_use_lottie_explain": "(Sperimentale) Abilita l'animazione di riproduzione nell'interfaccia (può causare un utilizzo di memoria instabile)"
             }
         }
     }

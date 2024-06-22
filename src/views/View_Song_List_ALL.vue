@@ -146,7 +146,7 @@ const {
   media_Files_temporary:Media_File[],media_Files_selected:Media_File[],
   page_songlists_options_Sort_key:{ columnKey: string; order: string }[],
 
-  router_select_history_date:Router_date,router_history_datas:Router_date[],router_history_model_of_Media_scroller_value:number,router_history_model_of_Media_scroll:Boolean,
+  router_select_history_date:Interface_View_Router_Date,router_history_datas:Interface_View_Router_Date[],router_history_model_of_Media_scroller_value:number,router_history_model_of_Media_scroll:Boolean,
 }>();
 </script>
 

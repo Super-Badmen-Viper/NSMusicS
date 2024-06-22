@@ -28,6 +28,7 @@
   // This lottie-web will cause memory leaks
   import "@lottiefiles/lottie-player";
   const animationInstance = ref<any>(null);
+  const animationInstance_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715318278722.json'))
 
   ////// passed as argument
   const emits = defineEmits([
@@ -261,7 +262,7 @@
   });
   const player_no_progress_jump = ref(true)
 
-  ////// player player_button order area
+  ////// player_configs player_button order area
   const drawer_order_show = ref(false)
   const backpanel_order_click = () => {
     drawer_order_show.value = !drawer_order_show.value;
@@ -322,7 +323,7 @@
       }
     }
   }
-  ////// player player_button middle area
+  ////// player_configs player_button middle area
   const play_skip_back_click = () => {
     current_play_time.value = formatTime(props.player.getDuration());
     player_silder_currentTime_added_value.value = 0;
@@ -361,7 +362,7 @@
     else
       Play_Media_Order(play_order.value,1)
   };
-  ////// player player_button voice area
+  ////// player_configs player_button voice area
   const slider_volume_value = ref(100)
   const drawer_volume_show = ref(false)
   const backpanel_voice_click = () => {
@@ -375,7 +376,7 @@
     { immediate: true }
   );
 
-  ////// player slider formatTime area
+  ////// player_configs slider formatTime area
   const set_slider_singleValue = () => {
     if (!player_range_duration_isDragging)
       slider_singleValue.value = (props.player.getCurrentTime() + player_silder_currentTime_added_value.value) / props.player.getDuration() * 100;
@@ -481,7 +482,7 @@
       emits('Player_Show_Sound_more',false);
   }
 
-  ////// auto collapse player bar
+  ////// auto collapse player_configs bar
   const handleRefusetohide = () => {
     emits('player_collapsed_action_bar_of_Immersion_model', false);
   };
@@ -494,7 +495,7 @@
   };
 
   ////// changed_data write to sqlite
-  import { Set_MediaInfo_To_LocalSqlite } from '@/models/data_Change_For_Sqlite/class_Set_MediaInfo_To_LocalSqlite'
+  import { Set_MediaInfo_To_LocalSqlite } from '@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite'
   let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id,favorite)
@@ -776,10 +777,10 @@
       ref="animationInstance"
       loop
       mode="normal"
-      src="../../resources/lottie_json/Animation - 1715318278722.json"
+      :src="animationInstance_json"
       style="
         position: absolute;bottom:14px;right:36px;
-        width:50px;height:50px;  
+        width:50px;height:50px;
       ">
     </lottie-player>
   </n-space>

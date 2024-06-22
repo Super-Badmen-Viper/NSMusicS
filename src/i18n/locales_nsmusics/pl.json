@@ -33,7 +33,9 @@
                 "lyricsAnimation": "Animacja",
                 "lyricsAnimation_line_1": "Linijkowo",
                 "lyricsAnimation_byte_2": "Znak po znaku",
-                "lyricsAnimation_jump_3": "Dokładne sk"
+                "lyricsAnimation_jump_3": "Dokładne sk",
+                "player_use_lottie": "Odtwarzanie Animacji",
+                "player_use_lottie_explain": "(Eksperymentalne) Włącz animację odtwarzania w interfejsie (może powodować niestabilne zużycie pamięci)"
             }
         }
     }

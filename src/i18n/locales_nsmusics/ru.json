@@ -33,7 +33,9 @@
                 "lyricsAnimation": "Анимация",
                 "lyricsAnimation_line_1": "Стр.",
                 "lyricsAnimation_byte_2": "Букв.",
-                "lyricsAnimation_jump_3": "Пр."
+                "lyricsAnimation_jump_3": "Пр.",
+                "player_use_lottie": "Воспроизвести Анимацию",
+                "player_use_lottie_explain": "(Экспериментально) Включите анимацию воспроизведения в интерфейсе (может вызвать нестабильное потребление памяти)"
             }
         }
     }

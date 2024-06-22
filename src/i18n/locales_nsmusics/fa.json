@@ -33,7 +33,9 @@
         "lyricsAnimation": "پویانمایی",
         "lyricsAnimation_line_1": "خطی",
         "lyricsAnimation_byte_2": "حرفی",
-        "lyricsAnimation_jump_3": "پرش"
+        "lyricsAnimation_jump_3": "پرش",
+        "player_use_lottie": "پخش انیمیشن",
+        "player_use_lottie_explain": "(آزمایشی) در صفحه پخش انیمیشن را فعال کنید (ممکن است باعث ناپایداری مصرف حافظه شود)"
       }
     }
   }

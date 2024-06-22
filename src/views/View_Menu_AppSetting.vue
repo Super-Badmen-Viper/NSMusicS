@@ -19,20 +19,32 @@ function get_selectd_props_app_sidebar(value:any){
 function get_player_fade_value(value:any){
   emits('player_fade_value',value)
 }
+function get_player_use_lottie_animation(value: any){
+  emits('player_use_lottie_animation',value)
+}
+function get_menu_appsetting_select_tab_name(value: any){
+  emits('menu_appsetting_select_tab_name',value)
+}
 
 onMounted(async () => {
   emits('router_select','View_Menu_AppSetting')
 });
 const emits = defineEmits([
-  'router_select','update_lang','update_theme','menuOptions_appBar','selectd_props_app_sidebar','player_fade_value',
+  'router_select',
+  'menu_appsetting_select_tab_name',
+  'update_lang','update_theme','menuOptions_appBar','selectd_props_app_sidebar',
+  'player_fade_value','player_use_lottie_animation',
 ]);
 const { 
-  app_left_menu_collapsed,window_innerWidth,update_theme,menuOptions_appBar,
-  player_fade_value,
+  app_left_menu_collapsed,window_innerWidth,
+  menu_appsetting_select_tab_name,
+  update_theme,menuOptions_appBar,
+  player_fade_value,player_use_lottie_animation
 } = defineProps<{
-  app_left_menu_collapsed:Boolean,window_innerWidth:number,update_theme:Boolean,
-  menuOptions_appBar:MenuOption[],selectd_props_app_sidebar:(string | number)[],
-  player_fade_value:number,
+  app_left_menu_collapsed:Boolean,window_innerWidth:number,
+  menu_appsetting_select_tab_name: any,
+  update_theme:Boolean, menuOptions_appBar:MenuOption[],selectd_props_app_sidebar:(string | number)[],
+  player_fade_value:number,player_use_lottie_animation:Boolean,
 }>();
 </script>
 
@@ -41,6 +53,8 @@ const {
     <Table_Menu_AppSetting
       :app_left_menu_collapsed="app_left_menu_collapsed"
       :window_innerWidth="window_innerWidth"
+      :menu_appsetting_select_tab_name="menu_appsetting_select_tab_name"
+      @menu_appsetting_select_tab_name="get_menu_appsetting_select_tab_name"
       @update_lang="get_update_lang"
       :update_theme="update_theme"
       @update_theme="get_update_theme"
@@ -50,6 +64,8 @@ const {
       @selectd_props_app_sidebar="get_selectd_props_app_sidebar"
       :player_fade_value="player_fade_value"
       @player_fade_value="get_player_fade_value"
+      :player_use_lottie_animation="player_use_lottie_animation"
+      @player_use_lottie_animation="get_player_use_lottie_animation"
     />
   </div>
 </template>
