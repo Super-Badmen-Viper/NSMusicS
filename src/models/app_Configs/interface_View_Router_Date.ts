@@ -1,4 +1,4 @@
-interface Router_date {
+interface Interface_View_Router_Date {
     id: number;
 
     menu_select_active_key:string;

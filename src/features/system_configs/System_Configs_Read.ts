@@ -1,7 +1,7 @@
+import { ref } from 'vue'
 import { App_Configs } from '@/models/app_Configs_For_Sqlite/class_App_Configs';
 import { Player_Configs_of_Audio_Info } from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_Audio_Info';
 import { Player_Configs_of_UI } from '@/models/app_Configs_For_Sqlite/class_Player_Configs_of_UI';
-import { ref } from 'vue'
 
 export class System_Configs_Read {
     public app_Configs = ref(
@@ -47,6 +47,12 @@ export class System_Configs_Read {
             fetchData_This_AlbumOrArtist_PlayMedia_Model: null,
         }))
     public playlist_File_Configs = ref<Media_File[]>([])
+    public view_Media_History_Configs = ref<Interface_View_Router_Date[]>([])
+    public view_Album_History_Configs = ref<Interface_View_Router_Date[]>([])
+    public view_Artist_History_Configs = ref<Interface_View_Router_Date[]>([])
+    public view_Media_History_select_Configs = ref<Interface_View_Router_Date>()
+    public view_Album_History_select_Configs = ref<Interface_View_Router_Date>()
+    public view_Artist_History_select_Configs = ref<Interface_View_Router_Date>()
 
     constructor() {
         const path = require('path');
@@ -55,21 +61,22 @@ export class System_Configs_Read {
         db = require('better-sqlite3')(path.resolve('resources/nsmusics.db'));
         db.pragma('journal_mode = WAL');
 
-        db.prepare(`SELECT * FROM system_app_config`).all().forEach((row: Config, index: number) => {
+        db.prepare(`SELECT * FROM system_app_config`).all().forEach((row: Config_Props, index: number) => {
             const propertyName = row.config_key;
             if (this.app_Configs.value.hasOwnProperty(propertyName))
                 this.app_Configs.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
         });
-        db.prepare(`SELECT * FROM system_player_config_of_audio`).all().forEach((row: Config, index: number) => {
+        db.prepare(`SELECT * FROM system_player_config_of_audio`).all().forEach((row: Config_Props, index: number) => {
             const propertyName = row.config_key;
             if (this.player_Configs_of_Audio_Info.value.hasOwnProperty(propertyName)) 
                 this.player_Configs_of_Audio_Info.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
         });
-        db.prepare(`SELECT * FROM system_player_config_of_ui`).all().forEach((row: Config, index: number) => {
+        db.prepare(`SELECT * FROM system_player_config_of_ui`).all().forEach((row: Config_Props, index: number) => {
             const propertyName = row.config_key;
             if (this.player_Configs_of_UI.value.hasOwnProperty(propertyName))
                 this.player_Configs_of_UI.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
         });
+        /// play_list
         db.prepare(`SELECT * FROM system_playlist_file_config`).all().forEach((row: Media_File, index: number) => {
             row.absoluteIndex = index;
             row.selected = false;
@@ -81,6 +88,25 @@ export class System_Configs_Read {
             else
                 row.medium_image_url = '../../../resources/img/error_album.jpg';
             this.playlist_File_Configs.value.push(row);
+        });
+        /// view_router_hisotry
+        db.prepare(`SELECT * FROM system_view_media_history`).all().forEach((row: Interface_View_Router_Date) => {
+            this.view_Media_History_Configs.value.push(row);
+        });
+        db.prepare(`SELECT * FROM system_view_album_history`).all().forEach((row: Interface_View_Router_Date) => {
+            this.view_Album_History_Configs.value.push(row);
+        });
+        db.prepare(`SELECT * FROM system_view_artist_history`).all().forEach((row: Interface_View_Router_Date) => {
+            this.view_Artist_History_Configs.value.push(row);
+        });
+        db.prepare(`SELECT * FROM system_view_media_select_history`).all().forEach((row: Interface_View_Router_Date) => {
+            this.view_Media_History_select_Configs.value = row;
+        });
+        db.prepare(`SELECT * FROM system_view_album_select_history`).all().forEach((row: Interface_View_Router_Date) => {
+            this.view_Album_History_select_Configs.value = row;
+        });
+        db.prepare(`SELECT * FROM system_view_artist_select_history`).all().forEach((row: Interface_View_Router_Date) => {
+            this.view_Artist_History_select_Configs.value = row;
         });
 
         db.close();
