@@ -4,9 +4,9 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/View_Home',
-      name: 'View_Home',
-      component: () => import('../views/HomeView.vue'),
+      path: '/View_Home_MusicLibrary_Browse',
+      name: 'View_Home_MusicLibrary_Browse',
+      component: () => import('../views/View_Home_MusicLibrary_Browse.vue'),
       meta: {
         cleanup: true
       }

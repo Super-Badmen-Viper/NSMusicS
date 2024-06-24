@@ -289,11 +289,11 @@
         "replayGainPreamp_description": "aggiusta la preamplificazione del gain applicato sui valori {{ReplayGain}}",
         "skipPlaylistPage": "Salta la pagina playlist",
         "sidebarCollapsedNavigation": "navigazione con barra laterale (collassata)",
-        "clearCache_description": "pulitura \"forzata\" di nsmusics. Oltre a pulire la cache di nsmusics, elimina la cache del browser(immagini salvate e altri elementi). credenziali e impostazioni del server saranno mantenute",
-        "clearQueryCache": "pulisci cache di nsmusics",
+        "clearCache_description": "pulitura \"forzata\" di NSMusicS. Oltre a pulire la cache di NSMusicS, elimina la cache del browser(immagini salvate e altri elementi). credenziali e impostazioni del server saranno mantenute",
+        "clearQueryCache": "pulisci cache di NSMusicS",
         "buttonSize_description": "Dimensione bottoni nella barra di riproduzione",
         "clearCache": "pulisci la cache del browser",
-        "clearQueryCache_description": "\"leggera\" pulizia di nsmusics. verranno aggiornate le playlist, metadata delle tracce e i testi salvati. impostazioni, credenziali del server e le immagini salvate saranno mantenute"
+        "clearQueryCache_description": "\"leggera\" pulizia di NSMusicS. verranno aggiornate le playlist, metadata delle tracce e i testi salvati. impostazioni, credenziali del server e le immagini salvate saranno mantenute"
     },
     "error": {
         "remotePortWarning": "riavvia il server per applicare la nuova porta",

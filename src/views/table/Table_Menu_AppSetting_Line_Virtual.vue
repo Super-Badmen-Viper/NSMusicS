@@ -15,7 +15,7 @@
   } from "@vicons/fluent";
   import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound} from "@vicons/material";
   import {RouterLink} from "vue-router";
-  const { t, d, n } = useI18n({
+  const { t } = useI18n({
     inheritLocale: true
   })
   const computed_i18n_Label_HomePageConfiguration_1 = computed(() => t('page.home.mostPlayed'));
@@ -116,19 +116,19 @@
     return [
       {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.menu'))),key: 'go_back_menu',icon: renderIcon(MenuIcon),},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: computed(() => renderRouterLink('View_Home',t('common.home'))),key: 'go_back_home',icon: renderIcon(Home28Regular),},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('common.home'))),key: 'go_back_home',icon: renderIcon(Home28Regular),},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
       {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'go_albums_list',icon: renderIcon(AlbumFilled)},
       {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'go_songs_list',icon: renderIcon(MusicNoteRound)},
       {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'go_artist_list',icon: renderIcon(UserAvatarFilledAlt)},
-      {label: computed(() => renderRouterLink('View_Home',t('entity.genre_other'))),key: 'go_other',icon: renderIcon(Flag16Regular)},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('entity.genre_other'))),key: 'go_other',icon: renderIcon(Flag16Regular)},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.guessLike'))),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
-      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.karaoke'))),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
-      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.identifySong'))),key: 'go_other',icon: renderIcon(Hearing)},
-      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
-      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'go_other',icon: renderIcon(lyric)},
-      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.guessLike'))),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.karaoke'))),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.identifySong'))),key: 'go_other',icon: renderIcon(Hearing)},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'go_other',icon: renderIcon(lyric)},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
     ]
   };
 

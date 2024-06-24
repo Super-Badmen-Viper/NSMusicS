@@ -7,7 +7,7 @@
     TopSpeed20Regular,DeviceEq24Filled
   } from '@vicons/fluent'
   import {
-    RepeatOneRound
+    RepeatOneRound,QueueMusicRound
   } from '@vicons/material' 
   import {
     Play,Pause,
@@ -26,9 +26,9 @@
   const { ipcRenderer } = require('electron');
 
   // This lottie-web will cause memory leaks
-  import "@lottiefiles/lottie-player";
-  const animationInstance = ref<any>(null);
-  const animationInstance_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715318278722.json'))
+  // import "@lottiefiles/lottie-player";
+  // const animationInstance = ref<any>(null);
+  // const animationInstance_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715318278722.json'))
 
   ////// passed as argument
   const emits = defineEmits([
@@ -44,7 +44,7 @@
     'Playlist_Show','Player_Show_Sound_effects','Player_Show_Sound_speed','Player_Show_Sound_more',
     'player_show_click',
     'this_audio_lyrics_string',
-    'player','player_new_data','this_audio_is_playing','player_silder_currentTime_added_value',
+    'player','player_save_new_data','this_audio_is_playing','player_silder_currentTime_added_value',
     'player_collapsed_action_bar_of_Immersion_model'
   ]);
   import { defineProps} from 'vue';
@@ -149,7 +149,6 @@
     if (newValue !== oldValue) {
       Play_This_Audio_Path()
     }
-    ipcRenderer.send('window-gc');
     const { webFrame } = require('electron');
     webFrame.clearCache();
   });
@@ -220,7 +219,7 @@
       });
       props.player.isPlaying = true;
       emits('this_audio_is_playing',true)
-      emits('player_new_data',true)
+      emits('player_save_new_data',true)
       is_play_ended.value = false;
       player_no_progress_jump.value = true;
       clearInterval(timer);
@@ -228,7 +227,7 @@
       total_play_time.value = formatTime(props.player.getDuration());
       props.player.setVolume(Number(slider_volume_value.value / 100))
       props.player.play();
-      animationInstance.value.play();
+      // animationInstance.value.play();
     }, 400);
   }
   const Init_Audio_Player = async () => {
@@ -241,13 +240,13 @@
             Play_This_Audio_Path()
           else {
             props.player.play();
-            animationInstance.value.play();
+            // animationInstance.value.play();
           }
           emits('this_audio_is_playing',true)
         }
       }else{
         props.player.pause();
-        animationInstance.value.pause();
+        // animationInstance.value.pause();
         emits('this_audio_is_playing',false)
       }
     }
@@ -740,7 +739,7 @@
           <n-badge :value="props.playlist_Files_temporary.length" show-zero :max="9999" :offset="[-7, 3]">
             <n-button strong secondary class="gird_Right_current_playlist_button_area_of_button" @click="Set_Playlist_Show">
               <template #icon>
-                <!-- <n-icon :size="42"><QueueMusicRound/></n-icon> -->
+                 <n-icon :size="42"><QueueMusicRound/></n-icon>
               </template>
             </n-button>
           </n-badge>
@@ -773,16 +772,16 @@
         </div>
       </div>
     </div>
-    <lottie-player
-      ref="animationInstance"
-      loop
-      mode="normal"
-      :src="animationInstance_json"
-      style="
-        position: absolute;bottom:14px;right:36px;
-        width:50px;height:50px;
-      ">
-    </lottie-player>
+<!--    <lottie-player-->
+<!--      ref="animationInstance"-->
+<!--      loop-->
+<!--      mode="normal"-->
+<!--      :src="animationInstance_json"-->
+<!--      style="-->
+<!--        position: absolute;bottom:14px;right:36px;-->
+<!--        width:50px;height:50px;-->
+<!--      ">-->
+<!--    </lottie-player>-->
   </n-space>
 </template>
 <style>

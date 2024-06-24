@@ -461,11 +461,11 @@
         "replayGainMode": "mode de {{ReplayGain}}",
         "replayGainFallback_description": "gain en dB à appliquer si le fichier n'a pas de tag {{ReplayGain}}",
         "replayGainPreamp_description": "ajuste le gain de préampli appliqué a la valeur de {{ReplayGain}}",
-        "clearQueryCache": "vide le cache de nsmusics",
+        "clearQueryCache": "vide le cache de NSMusicS",
         "clearCache": "Vider le cache navigateur",
         "buttonSize_description": "la taille des boutons de la barre de lecture",
-        "clearQueryCache_description": "un 'soft clear' de nsmusics. cela actualisera les playlists, les métadonnées des pistes, et réinitialisera les paroles enregistrées. les paramètres, identifiants serveurs et les images mises en cache sont conservés",
-        "clearCache_description": "un 'hard clear' de nsmusics. en plus de vider le cache de nsmusics, vide le cache du navigateur (images sauvegardées et autres ressources). les identifiants serveurs et paramètres sont conservés",
+        "clearQueryCache_description": "un 'soft clear' de NSMusicS. cela actualisera les playlists, les métadonnées des pistes, et réinitialisera les paroles enregistrées. les paramètres, identifiants serveurs et les images mises en cache sont conservés",
+        "clearCache_description": "un 'hard clear' de NSMusicS. en plus de vider le cache de NSMusicS, vide le cache du navigateur (images sauvegardées et autres ressources). les identifiants serveurs et paramètres sont conservés",
         "buttonSize": "taille des boutons de la barre de lecture"
     },
     "form": {

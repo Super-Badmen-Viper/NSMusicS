@@ -560,9 +560,9 @@
         "windowBarStyle_description": "wybierz styl paska okna",
         "useSystemTheme": "użyj motywu systemowego",
         "buttonSize": "Rozmiar przycisku paska odtwarzacza",
-        "clearQueryCache": "wyczyść pamięć podręczną nsmusics",
-        "clearCache_description": "\"twarde wyczyszczenie\" nsmusics. oprócz wyczyszczenia pamięci podręcznej nsmusics, opróżnij pamięć podręczną przeglądarki (zapisane obrazy i inne zasoby). dane i ustawienia serwera zostaną zachowane",
-        "clearQueryCache_description": "\"miękkie wyczyszczenie\" nsmusics. spowoduje to odświeżenie list odtwarzania, metadanych utworów i zresetowanie zapisanych tekstów. ustawienia, dane uwierzytelniające serwera i obrazy w pamięci podręcznej zostaną zachowane",
+        "clearQueryCache": "wyczyść pamięć podręczną NSMusicS",
+        "clearCache_description": "\"twarde wyczyszczenie\" NSMusicS. oprócz wyczyszczenia pamięci podręcznej NSMusicS, opróżnij pamięć podręczną przeglądarki (zapisane obrazy i inne zasoby). dane i ustawienia serwera zostaną zachowane",
+        "clearQueryCache_description": "\"miękkie wyczyszczenie\" NSMusicS. spowoduje to odświeżenie list odtwarzania, metadanych utworów i zresetowanie zapisanych tekstów. ustawienia, dane uwierzytelniające serwera i obrazy w pamięci podręcznej zostaną zachowane",
         "buttonSize_description": "rozmiar przycisków paska odtwarzacza",
         "clearCache": "wyczyść pamięć podręczną przeglądarki"
     },

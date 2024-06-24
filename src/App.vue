@@ -12,11 +12,11 @@
     TextIndentIncreaseLtr20Filled as lyric,
   } from '@vicons/fluent'
   import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound} from '@vicons/material'
-  import {Close, Hearing, Menu as MenuIcon, UserAvatarFilledAlt,} from '@vicons/carbon'
+  import {Close, Hearing, Menu as MenuIcon, UserAvatarFilledAlt,Clean} from '@vicons/carbon'
 
   ////// i18n auto lang
   import { useI18n } from 'vue-i18n'
-  const { t, d, n } = useI18n({
+  const { t } = useI18n({
     inheritLocale: true
   })
   const update_lang = ref('en')
@@ -81,19 +81,19 @@
     return [
       {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.menu'))),key: 'go_back_menu',icon: renderIcon(MenuIcon),},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: computed(() => renderRouterLink('View_Home',t('common.home'))),key: 'go_back_home',icon: renderIcon(Home28Regular),},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('common.home'))),key: 'go_back_home',icon: renderIcon(Home28Regular),},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
       {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'go_albums_list',icon: renderIcon(AlbumFilled)},
       {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'go_songs_list',icon: renderIcon(MusicNoteRound)},
       {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'go_artist_list',icon: renderIcon(UserAvatarFilledAlt)},
-      {label: computed(() => renderRouterLink('View_Home',t('entity.genre_other'))),key: 'go_other',icon: renderIcon(Flag16Regular)},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('entity.genre_other'))),key: 'go_other',icon: renderIcon(Flag16Regular)},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.guessLike'))),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
-      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.karaoke'))),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
-      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.identifySong'))),key: 'go_other',icon: renderIcon(Hearing)},
-      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
-      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'go_other',icon: renderIcon(lyric)},
-      {label: computed(() => renderRouterLink('View_Home',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.guessLike'))),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.karaoke'))),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.identifySong'))),key: 'go_other',icon: renderIcon(Hearing)},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'go_other',icon: renderIcon(lyric)},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
     ]
   };
   const menuOptions_appBar = ref<MenuOption[]>(create_menuOptions_appBar())
@@ -134,7 +134,6 @@
     else
       update_theme.value = false;
     theme_mode_change_click()
-
     save_system_config_of_App_Configs()
   }
   const theme_normal_mode_click = () => {
@@ -182,7 +181,6 @@
   const player_show_hight_animation_value = ref(100);
   const player_show = ref(false)
   const player_show_complete = ref(true)
-  const { webFrame } = require('electron');
   const get_playerbar_to_Switch_playerview = (value:any) => {
     player_show_complete.value = false
     clear_Files_temporary()
@@ -221,12 +219,10 @@
           router_select_model_artist.value = true;
         }
       }
-
       player_show_complete.value = true
-    }, 600);
 
-    ipcRenderer.send('window-gc');
-    webFrame.clearCache();
+      clear_session_clearCache()
+    }, 600);
   }
   const player_collapsed_action_bar_of_Immersion_model = ref(false);
   const get_player_collapsed = (value:any) => {
@@ -474,6 +470,11 @@
 
   ////// this_app audio(Media) Class
   let player = new Audio_howler();
+  // let player = null;
+  // ipcRenderer.invoke('get-player').then((player) => {
+  //   console.log('Received player:', player);
+  //   this.player = player;
+  // });
   const player_fade_value = ref<number>(2000)
   function get_player_fade_value(value: any){
     player_fade_value.value = value
@@ -504,9 +505,26 @@
     return (parseInt(minutes) * 60 + parseInt(seconds)) * 1000;
   }
 
-  ///// view of View_Home
-  const fetchData_Home = async () => { 
-
+  ///// view of View_Home_MusicLibrary_Browse
+  import {Get_HomeDataInfos_From_LocalSqlite} from '@/features/sqlite3_local_configs/class_Get_HomeDataInfos_From_LocalSqlite'
+  let get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
+  const home_Files_temporary_maximum_playback = ref<Album[]>([])
+  const home_Files_temporary_random_search = ref<Album[]>([])
+  const home_Files_temporary_recently_added = ref<Album[]>([])
+  const home_Files_temporary_recently_played = ref<Album[]>([])
+  const home_selected_top_album = ref<Album>()
+  function get_home_selected_top_album(value: any){
+    home_selected_top_album.value = (home_Files_temporary_random_search.value && home_Files_temporary_random_search.value.length > 0) ? home_Files_temporary_random_search.value[value] : undefined;
+  }
+  function get_refresh_home_temporary(value: any){
+    fetchData_Home()
+  }
+  const fetchData_Home = async () => {
+    home_Files_temporary_maximum_playback.value = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Maximum_Playback()
+    home_Files_temporary_random_search.value = get_HomeDataInfos_From_LocalSqlite.Get_AlbumFiles_Random_Search()
+    home_Files_temporary_recently_added.value = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Recently_Added()
+    home_Files_temporary_recently_played.value = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Recently_Played()
+    home_selected_top_album.value = (home_Files_temporary_random_search.value && home_Files_temporary_random_search.value.length > 0) ? home_Files_temporary_random_search.value[0] : undefined;
   };
   function formatTime(currentTime: number): string {
     const minutes = Math.floor(currentTime / 60);
@@ -953,11 +971,11 @@
       WHERE starred = 1 AND item_type='album'
     `);
     const temp_Play_List_Love: Play_List = {
-      label: computed(() => t('nsmusics.view_page.allAlbum')),
+      label: computed(() => t('nsmusics.view_page.loveSong')),
       value: 'album_list_love',
       id: 'album_list_love',
-      name: computed(() => t('nsmusics.view_page.allAlbum')),
-      comment: computed(() => t('nsmusics.view_page.allAlbum')),
+      name: computed(() => t('nsmusics.view_page.loveSong')),
+      comment: computed(() => t('nsmusics.view_page.loveSong')),
       duration: 0,
       song_count: stmt_album_Annotation_Starred_Count.get().count + ' 组',
       public: false,
@@ -1568,7 +1586,7 @@
     router.push('View_Album_List_ALL')
     app_left_menu_select_activeKey.value = 'go_albums_list'
   }
-  // router Data_sources and rendering
+  /// router Data_sources and rendering
   const router_select_model_menu = ref<Boolean>(false)
   const router_select_model_home = ref<Boolean>(false)
   const router_select_model_media = ref<Boolean>(false)
@@ -1580,13 +1598,20 @@
     router_select_model_media.value = false
     router_select_model_album.value = false
     router_select_model_artist.value = false
+    home_Files_temporary_maximum_playback.value = []
+    home_Files_temporary_random_search.value = []
+    home_Files_temporary_recently_added.value = []
+    home_Files_temporary_recently_played.value = []
     media_Files_temporary.value = [];
     album_Files_temporary.value = [];
     artist_Files_temporary.value = [];
-    ipcRenderer.send('window-gc');
-    webFrame.clearCache();
+    /// gc
+    clear_session_clearCache()
   }
-  // router custom class
+  function clear_session_clearCache() {
+    ipcRenderer.send('window-gc');
+  }
+  /// router custom class
   const router = useRouter();
   const router_name = ref('')
   routers.beforeEach((to, from, next) => {
@@ -1601,7 +1626,7 @@
       if(to.name === 'View_Menu_AppSetting'){
         router_select_model_menu.value = true
         router_name.value = to.name
-      }else if(to.name === 'View_Home'){
+      }else if(to.name === 'View_Home_MusicLibrary_Browse'){
         router_select_model_home.value = true
         router_name.value = to.name
       }else if(to.name === 'View_Song_List_ALL'){
@@ -1615,11 +1640,13 @@
         router_name.value = to.name
       }
       save_system_config_of_View_Router_History()
+      // ipcRenderer.send('window-reset-data');
     }
   });
   const get_router_select = (value: any) => {
     ////// 
-    if(value === 'View_Home'){
+    if(value === 'View_Home_MusicLibrary_Browse'){
+      router_select_model_home.value = true
       fetchData_Home()
     }else if(value === 'View_Song_List_ALL'){
       router_select_model_media.value = true
@@ -1850,10 +1877,12 @@
     if((''+system_Configs_Read.app_Configs.value['theme']) === 'lightTheme'){
       update_theme.value = false;
       theme.value = lightTheme;
+      theme_app.value = lightTheme;
     }
     else{
       update_theme.value = true;
       theme.value = darkTheme;
+      theme_app.value = darkTheme;
     }
     theme_name.value = ''+system_Configs_Read.app_Configs.value['theme']
     update_lang.value = ''+system_Configs_Read.app_Configs.value['lang']
@@ -2013,7 +2042,7 @@
   <n-config-provider class="this_App" :theme="theme">
     <n-global-style />
     <n-message-provider class="this_App">
-      <n-layout has-sider class="this_App">
+      <n-layout has-sider class="this_App" embedded>
         <!--Left Router_Menu-->
         <n-layout-sider
           class="n_layout_sider"
@@ -2033,7 +2062,7 @@
             :options="menuOptions_appBar"/>
         </n-layout-sider>
         <!--Right Router_View-->
-        <n-layout embedded style="height: calc(100vh);">
+        <n-layout embedded style="height: calc(100vh - 150px);margin-top: 70px;">
           <RouterView
             class="view_show_data"
             v-if="router_select_model_menu"
@@ -2060,7 +2089,18 @@
             v-else-if="router_select_model_home"
             @router_select="get_router_select"
             :app_left_menu_collapsed="app_left_menu_collapsed"
-            :window_innerWidth="window_innerWidth">
+            :window_innerWidth="window_innerWidth"
+            :update_theme="update_theme"
+            :home_Files_temporary_maximum_playback="home_Files_temporary_maximum_playback"
+            :home_Files_temporary_random_search="home_Files_temporary_random_search"
+            :home_Files_temporary_recently_added="home_Files_temporary_recently_added"
+            :home_Files_temporary_recently_played="home_Files_temporary_recently_played"
+            :home_selected_top_album="home_selected_top_album"
+            @home_selected_top_album="get_home_selected_top_album"
+            @refresh_home_temporary="get_refresh_home_temporary"
+            @media_list_of_album_id="get_media_list_of_album_id_by_album_info"
+            @play_this_album_song_list="fetchData_This_Album_SongList"
+          >
 
           </RouterView>
           <!--Media View-->
@@ -2207,6 +2247,12 @@
                 text-align:center;
                 z-index: 99;
               ">
+              <n-button quaternary circle style="margin-right:4px;" @click="ipcRenderer.send('window-reset-data');">
+                <template #icon>
+                  <n-icon size="20" :depth="2"><clean/></n-icon>
+                </template>
+                <!--<span style="font-weight: 500;">{{ $t('setting.clearQueryCache') }}</span>-->
+              </n-button>
               <n-button quaternary circle size="medium" style="margin-right:4px" @click="theme_mode_change_click">
                 <template #icon>
                   <n-icon size="20" :depth="2"><DarkTheme24Filled/></n-icon>
@@ -2467,14 +2513,12 @@
   width: calc(100vw - 100px);
   height: calc(100vh - 200px);
 
-  margin-top: 70px;
   margin-left: 30px;
 }
 .view_show_data {
   width: calc(100vw - 100px);
   height: calc(100vh - 150px);
 
-  margin-top: 70px;
   margin-left: 30px;
 }
 .view_music_player{

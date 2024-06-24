@@ -19,7 +19,7 @@ import { type DropdownOption, NIcon,type InputInst,NImage } from 'naive-ui';
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
-const { t, d, n } = useI18n({
+const { t } = useI18n({
   inheritLocale: true
 })
 
@@ -385,14 +385,16 @@ const handleItemClick_album = (album:string) => {
 
 ////// changed_data write to sqlite
 import {Set_MediaInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite'
+import {Icon} from "@vicons/utils";
 let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   click_count = 0;
   set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id,favorite)
 }
-const handleItemClick_Rating = (id: any,rating: number) => {
+const handleItemClick_Rating = (id_rating: any) => {
   click_count = 0;
-  set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id,rating)
+  const [id, rating] = id_rating.split('-');
+  set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, rating);
 }
 
 ////// bulk_operation and select_line
@@ -491,6 +493,7 @@ onBeforeUnmount(() => {
     clearInterval(timer.value);
     timer.value = null;
   }
+  dynamicScroller.value = null;
 });
 </script>
 
@@ -584,7 +587,7 @@ onBeforeUnmount(() => {
         <template #before>
           <div class="notice">
             <div
-                :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)'}"
+                :style="{ width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)'}"
                 style="
                 position: absolute;
                 z-index: 0;
@@ -599,8 +602,8 @@ onBeforeUnmount(() => {
               ">
               <img
                   :style="{
-                  width: 'calc(100vw - ' + (collapsed_width + 200) + 'px)',
-                  height: 'calc(100vw - ' + (collapsed_width + 200) + 'px)',
+                  width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
+                  height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 25%)'
                 }"
                   style="
@@ -646,6 +649,7 @@ onBeforeUnmount(() => {
                 z-index: 1;
                 width: calc(100vw - 220px);height: 300px;
                 border-radius: 10px;
+                margin-left: 10px;
                 margin-bottom: 10px;">
               <n-grid
                   :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
@@ -723,11 +727,11 @@ onBeforeUnmount(() => {
               @click="handleItemClick"
               @Dblclick="handleItemDbClick(item,index)">
             <div class="media_info" :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)'}">
-              <n-checkbox class="checkbox"
-                          v-if="!bool_start_play"
-                          v-model:checked="item.selected"
-                          @update:checked="(checked: any) => {
-                  item.selected = checked;
+              <input type="checkbox" class="checkbox"
+                 v-if="!bool_start_play"
+                 v-model="item.selected"
+                 @change="(event) => {
+                  item.selected = event.target.checked;
                   emits('media_Files_selected_set', item);
                 }"
               />
@@ -752,20 +756,42 @@ onBeforeUnmount(() => {
               <div class="songlist_album" style="margin-right: 20px;">
                 <span @click="handleItemClick_album(item.album_id)">{{ item.album }}</span>
               </div>
-              <div class="love" style="margin-left: auto;margin-right: 80px;">
-                <n-rate clearable size="small" v-model:value="item.rating" @update:value="(value: number) => handleItemClick_Rating(item.id, value)"/>
-              </div>
-              <div class="love" style="margin-left: auto;">
-                <n-button circle text size="small" style="display: block;"
-                          @click="handleItemClick_Favorite(item.id,item.favorite);item.favorite = !item.favorite;">
-                  <template #icon>
-                    <n-icon v-if="item.favorite" :size="20" color="red"><Heart28Filled/></n-icon>
-                    <n-icon v-else :size="20"><Heart24Regular/></n-icon>
+              <div class="love" style="margin-left: auto; margin-right: 80px; width: 240px; display: flex; flex-direction: row;">
+                <rate
+                  class="viaSlot"
+                  :length="5"
+                  v-model="item.rating"
+                  @after-rate="(value: number) => handleItemClick_Rating(item.id+'-'+value)"
+                  style="margin-right: 8px;"
+                />
+                <button
+                  @click="handleItemClick_Favorite(item.id, item.favorite); item.favorite = !item.favorite;"
+                  style="
+                    border: 0px; background-color: transparent;
+                    width: 28px; height: 28px;
+                    margin-left: 6px;margin-top: 2px;
+                    cursor: pointer;
+                  "
+                >
+                  <template v-if="item.favorite">
+                    <icon :size="20" color="red" style="margin-left: -2px; margin-top: 3px;"><Heart28Filled/></icon>
                   </template>
-                </n-button>
+                  <template v-else-if="!props.update_theme">
+                    <icon color="#101014" :size="20" style="margin-left: -2px; margin-top: 3px;"><Heart24Regular/></icon>
+                  </template>
+                  <template v-else-if="props.update_theme">
+                    <icon color="#FAFAFC" :size="20" style="margin-left: -2px; margin-top: 3px;"><Heart24Regular/></icon>
+                  </template>
+                </button>
+                <span
+                  class="duration_txt"
+                  style="
+                    margin-left: auto;margin-top: 5px;text-align: left;
+                    font-size: 15px;
+                  "
+                >{{ item.duration_txt }}</span>
               </div>
-              <span class="duration_txt" style="margin-left: auto; text-align: left;font-size: 15px;">{{ item.duration_txt }}</span>
-              <span class="index" style="margin-left: auto; text-align: left;font-size: 15px;">{{ index + 1 }}</span>
+              <span class="index" style="margin-left: auto; text-align: left;font-size: 15px;margin-top: 4px;">{{ index + 1 }}</span>
             </div>
           </DynamicScrollerItem>
         </template>
@@ -824,6 +850,7 @@ onBeforeUnmount(() => {
 }
 .checkbox{
   width: 20px;
+  transform: scale(1.3);
   margin-left: 12px;
 }
 .index{
@@ -887,6 +914,18 @@ onBeforeUnmount(() => {
   top: 106px;right: 24px;
   border-radius: 6px;
 }
+
+.RateCustom.viaSlot .icon {
+  width: 15px;
+  height: 25px;
+  margin: 0px;
+}
+.Rate.viaSlot .Rate__star {
+  width: 25px;
+  height: 25px;
+}
+//.Rate.viaSlot .Rate__star.filled{color: #813d1a;}
+//.Rate.viaSlot .Rate__star.hover{color: #E67136;}
 
 ::-webkit-scrollbar {
   display: auto;

@@ -8,7 +8,7 @@
     MotionPhotosAutoOutlined
   } from '@vicons/material'
   import {
-    Close,
+    Close,Clean
   } from '@vicons/carbon'
   const os = require('os');
   function getAssetImage(firstImage: string) {
@@ -32,7 +32,7 @@
 
   ////// i18n auto lang
   import { useI18n } from 'vue-i18n'
-  const { t, d, n } = useI18n({
+  const { t } = useI18n({
     inheritLocale: true
   })
   const computed_i18n_Label_ViewSetConfig_Cover_1 = computed(() => t('nsmusics.view_player.view_seting.coverSquare_1'));
@@ -377,7 +377,7 @@
     player_ui_theme.player_lyric_color.value = player_theme_0_bind_style.value.normalStyle.color;
     player_ui_theme.player_collapsed_album.value = player_theme_0_bind_style.value.normalStyle.player_collapsed_album;
     player_ui_theme.player_collapsed_skin.value = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin;
-    player_ui_theme.player_use_lottie_animation = player_use_lottie_animation.value;
+    player_ui_theme.player_use_lottie_animation.value = player_use_lottie_animation.value;
 
     // emits theme
     emits('player_UI_Theme_State' ,player_ui_theme);
@@ -688,6 +688,12 @@
           </div>
           <n-flex justify="end" style="height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
+              <n-button quaternary style="margin-right:2px;" @click="ipcRenderer.send('window-reset-data');">
+                <template #icon>
+                  <n-icon :depth="3"><Clean /></n-icon>
+                </template>
+                <span style="font-weight: 500;">{{ $t('setting.clearQueryCache') }}</span>
+              </n-button>
               <n-button quaternary style="margin-right:2px;" @click="get_isVisible_Player_theme">
                 <template #icon>
                   <n-icon :depth="3"><Settings24Regular /></n-icon>

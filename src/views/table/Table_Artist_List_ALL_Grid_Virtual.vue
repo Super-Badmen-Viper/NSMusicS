@@ -18,7 +18,7 @@
 
   ////// i18n auto lang
   import { useI18n } from 'vue-i18n'
-  const { t, d, n } = useI18n({
+  const { t } = useI18n({
     inheritLocale: true
   })
 
@@ -97,7 +97,7 @@
       item_artist.value = 170;
       item_artist_image.value = item_artist.value - 20;
       item_artist_txt.value = item_artist.value - 20;
-      itemSecondarySize.value = 170;
+      itemSecondarySize.value = 164;
     }
     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
   };
@@ -350,12 +350,14 @@
 
   ////// changed_data write to sqlite
   import {Set_ArtistInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_ArtistInfo_To_LocalSqlite'
+  import {Icon} from "@vicons/utils";
   let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     set_ArtistInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id,favorite)
   }
-  const handleItemClick_Rating = (id: any,rating: number) => {
-    set_ArtistInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id,rating)
+  const handleItemClick_Rating = (id_rating: any) => {
+    const [id, rating] = id_rating.split('-');
+    set_ArtistInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, rating);
   }
 
   ////// view artistlist_view Remove data
@@ -367,6 +369,7 @@
       clearInterval(timer.value);
       timer.value = null;
     }
+    dynamicScroller.value = null;
   });
 </script>
 <template>
@@ -437,7 +440,7 @@
         <template #before>
           <div class="notice">
             <div
-              :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)'}"
+              :style="{ width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)'}"
               style="
                 position: absolute;
                 z-index: 0;
@@ -452,8 +455,8 @@
               ">
               <img 
                 :style="{ 
-                  width: 'calc(100vw - ' + (collapsed_width + 200) + 'px)',
-                  height: 'calc(100vw - ' + (collapsed_width + 200) + 'px)',
+                  width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
+                  height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 25%)'
                 }"
                 style="
@@ -497,6 +500,7 @@
                 z-index: 1;
                 width: calc(100vw - 220px);height: 300px;
                 border-radius: 10px;
+                margin-left: 10px;
                 margin-bottom: 10px;">
               <n-grid 
                 :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
@@ -569,8 +573,7 @@
             :item="item"
             :active="active"
             :data-index="index"
-            :data-active="active"
-            style="margin-left: 10px;">
+            :data-active="active">
             <div
               :key="item.id"
               class="artist">
@@ -583,40 +586,61 @@
                   :style="{ width: item_artist_image + 'px', height: item_artist_image + 'px', borderRadius: '6px' }"/>
                 <div class="hover-overlay">
                   <div class="hover-content">
-                    <n-button 
-                      class="play_this_artist" @click="Play_this_artist_all_media_list_click(item.id)"
-                      quaternary circle size="large" color="#FFFFFF" style="transform: scale(1.3);">
-                      <template #icon>
-                        <n-icon size="30"><PlayCircle24Regular/></n-icon>
-                      </template>
-                    </n-button>
+                    <button
+                        class="play_this_artist"
+                        @click="Play_this_artist_all_media_list_click(item.id)"
+                        style="
+                        border: 0px;background-color: transparent;
+                        width: 50px;height: 50px;
+                        cursor: pointer;
+                      "
+                    >
+                      <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
+                    </button>
                     <div class="hover_buttons_top">
-                      <n-rate clearable size="small" v-model:value="item.rating" @update:value="(value: number) => handleItemClick_Rating(item.id, value)"/>
+                      <rate
+                        class="viaSlot"
+                        :length="5"
+                        v-model="item.rating"
+                        @after-rate="(value: number) => handleItemClick_Rating(item.id+'-'+value)"
+                        style="margin-right: 8px;"
+                      />
                     </div>
                     <div class="hover_buttons_bottom">
-                      <n-button 
-                        class="open_this_artist"
-                        quaternary circle color="#FFFFFF" @click="Open_this_artist_all_artist_list_click(item.id)">
-                        <template #icon>
-                          <n-icon><Open28Filled /></n-icon>
-                        </template>
-                      </n-button>
-                      <n-button 
-                        class="love_this_artist"
-                        quaternary circle color="#FFFFFF"
-                        @click="handleItemClick_Favorite(item.id,item.favorite);item.favorite = !item.favorite;">
-                        <template #icon>
-                          <n-icon v-if="item.favorite" :size="20" color="red"><Heart28Filled/></n-icon>
-                          <n-icon v-else :size="20"><Heart24Regular/></n-icon>
-                        </template>
-                      </n-button>
-                      <n-button 
-                        class="more_this_artist"
-                        quaternary circle color="#FFFFFF">
-                        <template #icon>
-                          <n-icon><MoreCircle32Regular /></n-icon>
-                        </template>
-                      </n-button>
+                      <button
+                          class="open_this_artist"
+                          @click="Open_this_artist_all_artist_list_click(item.id)"
+                          style="
+                          border: 0px;background-color: transparent;
+                          width: 28px;height: 28px;
+                          cursor: pointer;
+                        "
+                      >
+                        <icon :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><Open28Filled/></icon>
+                      </button>
+                      <button
+                          class="love_this_artist"
+                          @click="handleItemClick_Favorite(item.id,item.favorite);item.favorite = !item.favorite;"
+                          style="
+                          border: 0px;background-color: transparent;
+                          width: 28px;height: 28px;
+                          cursor: pointer;
+                        "
+                      >
+                        <icon v-if="item.favorite" :size="20" color="red" style="margin-left: -2px;margin-top: 3px;"><Heart28Filled/></icon>
+                        <icon v-else :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><Heart24Regular/></icon>
+                      </button>
+                      <button
+                          class="more_this_artist"
+                          @click="Open_this_artist_all_artist_list_click(item.id)"
+                          style="
+                          border: 0px;background-color: transparent;
+                          width: 28px;height: 28px;
+                          cursor: pointer;
+                        "
+                      >
+                        <icon :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><MoreCircle32Regular/></icon>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -689,13 +713,13 @@
 }
 .artist .hover_buttons_top {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 2px;
+  left: 0;
 }
 .artist .hover_buttons_bottom {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: 3px;
+  right: 3px;
 }
 
 .artist_left_text_artist_info{
@@ -743,6 +767,18 @@
 .more_this_artist:hover{
   color: #3DC3FF;
 }
+
+.RateCustom.viaSlot .icon {
+  width: 15px;
+  height: 25px;
+  margin: 0px;
+}
+.Rate.viaSlot .Rate__star {
+  width: 25px;
+  height: 25px;
+}
+//.Rate.viaSlot .Rate__star.filled{color: #813d1a;}
+//.Rate.viaSlot .Rate__star.hover{color: #E67136;}
 
 ::-webkit-scrollbar {
   display: auto;

@@ -18,15 +18,15 @@ async function createWindow() {
     })
     win.setMenu(null)
     win.setMaximizable(false)
+    win.webContents.openDevTools({
+        mode:'detach'
+    });
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
     if (process.argv[2]) {
         win.loadURL(process.argv[2])
     } else {
         win.loadFile('index.html')
     }
-    win.webContents.openDevTools({
-        mode:'detach'
-    });
 
     const electron = require('electron')
     const ipc = electron.ipcMain
@@ -45,19 +45,32 @@ async function createWindow() {
     ipc.on('window-close', function () {
         win.close();
     })
-
     ipc.on('window-gc', function () {
         win.webContents.session.flushStorageData();
+        setTimeout(clear_session_clearCache, 5000);
     })
-    
+    let lastResetTime: number | null = null;
+    const RESET_DEBOUNCE_TIME = 6000;
+    ipc.on('window-reset-data', function () {
+        const currentTime = Date.now();
+        if (!lastResetTime || currentTime - lastResetTime >= RESET_DEBOUNCE_TIME) {
+            lastResetTime = currentTime;
+            win.webContents.loadURL('about:blank');
+            if (process.argv[2]) {
+                win.loadURL(process.argv[2])
+            } else {
+                win.loadFile('index.html')
+            }
+        }
+    });
+    ipc.on('window-reset-all', function () {
+        win.close();
+        createWindow();
+    })
+
+    //////
     ipc.handle('readFile', async (event, filePath) => {
         return readFileSync(filePath);
-    });
-
-    const { app } = require('electron');
-    const appPath = app.getAppPath();
-    ipc.handle('getAppPath', async () => {
-        return appPath;
     });
 }
 
@@ -71,6 +84,21 @@ app.whenReady().then(() => {
     const zoomFactor: number = (window.innerHeight / devInnerHeight) * (window.devicePixelRatio / devDevicePixelRatio) * (devScaleFactor / scaleFactor);
     require('electron').webFrame.setZoomFactor(zoomFactor);
 })
+
+const { session } = require('electron');
+function clear_session_clearCache() {
+    const currentSession = session.defaultSession;
+    currentSession.clearCache().then(() => {
+        console.log('Cache cleared');
+    });
+    require("v8").setFlagsFromString("--expose_gc");
+    global.gc = require("vm").runInNewContext("gc");
+    console.log('global.gc used');
+}
+app.on('ready', () => {
+    setTimeout(clear_session_clearCache, 5000);
+});
+
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
       app.quit()

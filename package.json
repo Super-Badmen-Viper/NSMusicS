@@ -39,6 +39,7 @@
     "rxjs": "^7.8.1",
     "uuid": "^9.0.1",
     "vue-i18n": "next",
+    "vue-rate": "next",
     "vue-virtual-scroller": "next",
     "zod": "^3.23.8"
   },
@@ -62,7 +63,7 @@
     "file-uri-to-path": "^2.0.0",
     "jsmediatags": "^3.9.7",
     "lodash": "^4.17.21",
-    "naive-ui": "^2.37.3",
+    "naive-ui": "^2.38.2",
     "nodemon": "^3.0.3",
     "npm-run-all2": "^6.1.1",
     "rebuild": "^0.1.2",

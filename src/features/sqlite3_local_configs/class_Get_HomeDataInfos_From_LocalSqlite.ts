@@ -1,40 +1,136 @@
-import path from "path";
+import moment from "moment/moment";
 
-export class Get_Annotation_Infos_From_LocalSqlite {
-    public Get_Annotation_Maximum_Playback(id: any, value: number) {
-        let ann_id = null;
+export class Get_HomeDataInfos_From_LocalSqlite {
+    public Get_Annotation_Maximum_Playback() {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
-
-        const existingRecord = db.prepare(`SELECT * FROM annotation WHERE item_id = ?`).get(id);
-        if (!existingRecord) {
-            db.prepare(`INSERT INTO annotation (ann_id, item_id, item_type, rating) VALUES (?, ?, ?, ?)`)
-                .run(this.getUniqueId(db), id, 'media_file', value);
-        } else {
-            db.prepare(`UPDATE annotation SET rating = ? WHERE item_id = ? AND item_type = 'media_file'`)
-                .run(value, id);
-        }
-
+        const annsMap = new Map();
+        const anns = db.prepare(`SELECT * FROM annotation WHERE item_type = 'album' ORDER BY play_count desc LIMIT 18`).all();
+        anns.forEach((ann: { item_id: any; }) => {
+            annsMap.set(ann.item_id, ann); // 使用 item_id 作为键
+        });
+        const sql = `SELECT a.*, b.play_count 
+             FROM album a 
+             LEFT JOIN annotation b ON a.id = b.item_id AND b.item_type = 'album'
+             ORDER BY b.play_count desc, a.id desc
+             LIMIT 18`;
+        const allData = db.prepare(sql).all();
+        const result: Album[] = []
+        allData.forEach((row: Album) => {
+            if (row.embed_art_path.indexOf('mp3') > 0)
+                row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
+            else if (row.embed_art_path.indexOf('flac') > 0)
+                row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
+            else
+                row.medium_image_url = '../../../resources/img/error_album.jpg';
+            const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
+            const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
+            const fileNameWithoutExtension = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
+            const fileNameWithoutPrefix = fileNameWithoutExtension ? fileNameWithoutExtension.replace(/.*?-\s*/, '') : null;
+            if (fileNameWithoutPrefix !== null) {
+                row.title = fileNameWithoutPrefix;
+            }
+            row.album_title = row.title + "<br>" + row.artist;
+            row.updated_time = row.updated_at ? moment(row.updated_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
+            row.created_time = row.created_at ? moment(row.created_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
+            result.push(row);
+        });
         db.close();
-        console.log('handleItemClick_rating_id：'+id+'  _rating:'+!value + '\n: '+ann_id)
+        return result
     }
-    public Get_Album_Random_Search(id: any, value: number) {
-        let ann_id = null;
+    public Get_AlbumFiles_Random_Search() {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
-
-        const existingRecord = db.prepare(`SELECT * FROM annotation WHERE item_id = ?`).get(id);
-        if (!existingRecord) {
-            db.prepare(`INSERT INTO annotation (ann_id, item_id, item_type, rating) VALUES (?, ?, ?, ?)`)
-                .run(this.getUniqueId(db), id, 'media_file', value);
-        } else {
-            db.prepare(`UPDATE annotation SET rating = ? WHERE item_id = ? AND item_type = 'media_file'`)
-                .run(value, id);
-        }
-
+        const rows = db.prepare(`SELECT * FROM album ORDER BY RANDOM() LIMIT 18`).all();
+        const result: Album[] = []
+        rows.forEach((row: Album) => {
+            if (row.embed_art_path.indexOf('mp3') > 0)
+                row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
+            else if (row.embed_art_path.indexOf('flac') > 0)
+                row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
+            else
+                row.medium_image_url = '../../../resources/img/error_album.jpg';
+            const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
+            const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
+            const fileNameWithoutExtension = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
+            const fileNameWithoutPrefix = fileNameWithoutExtension ? fileNameWithoutExtension.replace(/.*?-\s*/, '') : null;
+            if (fileNameWithoutPrefix !== null) {
+                row.title = fileNameWithoutPrefix;
+            }
+            row.album_title = row.title + "<br>" + row.artist;
+            row.updated_time = row.updated_at ? moment(row.updated_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
+            row.created_time = row.created_at ? moment(row.created_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
+            result.push(row);
+        });
         db.close();
-        console.log('handleItemClick_rating_id：'+id+'  _rating:'+!value + '\n: '+ann_id)
+        return result
+    }
+    public Get_Annotation_Recently_Added() {
+        const path = require('path');
+        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        db.pragma('journal_mode = WAL');
+        const rows = db.prepare(`SELECT * FROM album ORDER BY created_at desc LIMIT 18`).all();
+        const result: Album[] = []
+        rows.forEach((row: Album) => {
+            if (row.embed_art_path.indexOf('mp3') > 0)
+                row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
+            else if (row.embed_art_path.indexOf('flac') > 0)
+                row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
+            else
+                row.medium_image_url = '../../../resources/img/error_album.jpg';
+            const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
+            const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
+            const fileNameWithoutExtension = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
+            const fileNameWithoutPrefix = fileNameWithoutExtension ? fileNameWithoutExtension.replace(/.*?-\s*/, '') : null;
+            if (fileNameWithoutPrefix !== null) {
+                row.title = fileNameWithoutPrefix;
+            }
+            row.album_title = row.title + "<br>" + row.artist;
+            row.updated_time = row.updated_at ? moment(row.updated_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
+            row.created_time = row.created_at ? moment(row.created_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
+            result.push(row);
+        });
+        db.close();
+        return result
+    }
+    public Get_Annotation_Recently_Played() {
+        const path = require('path');
+        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        db.pragma('journal_mode = WAL');
+        const annsMap = new Map();
+        const anns = db.prepare(`SELECT * FROM annotation WHERE item_type = 'album' ORDER BY play_date desc LIMIT 18`).all();
+        anns.forEach((ann: { item_id: any; }) => {
+            annsMap.set(ann.item_id, ann); // 使用 item_id 作为键
+        });
+        const sql = `SELECT a.*, b.play_count 
+             FROM album a 
+             LEFT JOIN annotation b ON a.id = b.item_id AND b.item_type = 'album'
+             ORDER BY b.play_count desc, a.id desc
+             LIMIT 18`;
+        const allData = db.prepare(sql).all();
+        const result: Album[] = []
+        allData.forEach((row: Album) => {
+            if (row.embed_art_path.indexOf('mp3') > 0)
+                row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
+            else if (row.embed_art_path.indexOf('flac') > 0)
+                row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
+            else
+                row.medium_image_url = '../../../resources/img/error_album.jpg';
+            const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
+            const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
+            const fileNameWithoutExtension = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
+            const fileNameWithoutPrefix = fileNameWithoutExtension ? fileNameWithoutExtension.replace(/.*?-\s*/, '') : null;
+            if (fileNameWithoutPrefix !== null) {
+                row.title = fileNameWithoutPrefix;
+            }
+            row.album_title = row.title + "<br>" + row.artist;
+            row.updated_time = row.updated_at ? moment(row.updated_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
+            row.created_time = row.created_at ? moment(row.created_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
+            result.push(row);
+        });
+        db.close();
+        return result
     }
 }
