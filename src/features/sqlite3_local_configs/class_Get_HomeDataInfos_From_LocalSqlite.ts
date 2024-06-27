@@ -36,6 +36,31 @@ export class Get_HomeDataInfos_From_LocalSqlite {
             row.created_time = row.created_at ? moment(row.created_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
             result.push(row);
         });
+        ////// find favorite for result
+        const stmt_album_Annotation_Starred_Items = db.prepare(`
+            SELECT item_id FROM annotation
+            WHERE starred = 1 AND item_type='album'
+        `);
+        const annotations = stmt_album_Annotation_Starred_Items.all();
+        for (let i = 0; i < result.length; i++) {
+            result[i].favorite = !!annotations.some((annotation: {
+                item_id: string
+            }) => annotation.item_id === result[i].id);
+        }
+        ////// find rating for result
+        const stmt_album_Annotation_Rating_Items = db.prepare(`
+            SELECT item_id, rating FROM annotation
+            WHERE rating > 0 AND item_type='album'
+        `);
+        const annotations_rating = stmt_album_Annotation_Rating_Items.all();
+        for (let i = 0; i < result.length; i++) {
+            const albumFile = result[i];
+            const matchingAnnotation = annotations_rating.find((annotation: { item_id: string, rating: number }) => annotation.item_id === albumFile.id);
+            if (matchingAnnotation)
+                albumFile.rating = matchingAnnotation.rating;
+            else
+                albumFile.rating = 0;
+        }
         db.close();
         return result
     }
@@ -64,6 +89,31 @@ export class Get_HomeDataInfos_From_LocalSqlite {
             row.created_time = row.created_at ? moment(row.created_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
             result.push(row);
         });
+        ////// find favorite for result
+        const stmt_album_Annotation_Starred_Items = db.prepare(`
+            SELECT item_id FROM annotation
+            WHERE starred = 1 AND item_type='album'
+        `);
+        const annotations = stmt_album_Annotation_Starred_Items.all();
+        for (let i = 0; i < result.length; i++) {
+            result[i].favorite = !!annotations.some((annotation: {
+                item_id: string
+            }) => annotation.item_id === result[i].id);
+        }
+        ////// find rating for result
+        const stmt_album_Annotation_Rating_Items = db.prepare(`
+            SELECT item_id, rating FROM annotation
+            WHERE rating > 0 AND item_type='album'
+        `);
+        const annotations_rating = stmt_album_Annotation_Rating_Items.all();
+        for (let i = 0; i < result.length; i++) {
+            const albumFile = result[i];
+            const matchingAnnotation = annotations_rating.find((annotation: { item_id: string, rating: number }) => annotation.item_id === albumFile.id);
+            if (matchingAnnotation)
+                albumFile.rating = matchingAnnotation.rating;
+            else
+                albumFile.rating = 0;
+        }
         db.close();
         return result
     }
@@ -92,6 +142,31 @@ export class Get_HomeDataInfos_From_LocalSqlite {
             row.created_time = row.created_at ? moment(row.created_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
             result.push(row);
         });
+        ////// find favorite for result
+        const stmt_album_Annotation_Starred_Items = db.prepare(`
+            SELECT item_id FROM annotation
+            WHERE starred = 1 AND item_type='album'
+        `);
+        const annotations = stmt_album_Annotation_Starred_Items.all();
+        for (let i = 0; i < result.length; i++) {
+            result[i].favorite = !!annotations.some((annotation: {
+                item_id: string
+            }) => annotation.item_id === result[i].id);
+        }
+        ////// find rating for result
+        const stmt_album_Annotation_Rating_Items = db.prepare(`
+            SELECT item_id, rating FROM annotation
+            WHERE rating > 0 AND item_type='album'
+        `);
+        const annotations_rating = stmt_album_Annotation_Rating_Items.all();
+        for (let i = 0; i < result.length; i++) {
+            const albumFile = result[i];
+            const matchingAnnotation = annotations_rating.find((annotation: { item_id: string, rating: number }) => annotation.item_id === albumFile.id);
+            if (matchingAnnotation)
+                albumFile.rating = matchingAnnotation.rating;
+            else
+                albumFile.rating = 0;
+        }
         db.close();
         return result
     }
@@ -130,6 +205,31 @@ export class Get_HomeDataInfos_From_LocalSqlite {
             row.created_time = row.created_at ? moment(row.created_at, moment.ISO_8601).format('YYYY-MM-DD') : '';
             result.push(row);
         });
+        ////// find favorite for result
+        const stmt_album_Annotation_Starred_Items = db.prepare(`
+            SELECT item_id FROM annotation
+            WHERE starred = 1 AND item_type='album'
+        `);
+        const annotations = stmt_album_Annotation_Starred_Items.all();
+        for (let i = 0; i < result.length; i++) {
+            result[i].favorite = !!annotations.some((annotation: {
+                item_id: string
+            }) => annotation.item_id === result[i].id);
+        }
+        ////// find rating for result
+        const stmt_album_Annotation_Rating_Items = db.prepare(`
+            SELECT item_id, rating FROM annotation
+            WHERE rating > 0 AND item_type='album'
+        `);
+        const annotations_rating = stmt_album_Annotation_Rating_Items.all();
+        for (let i = 0; i < result.length; i++) {
+            const albumFile = result[i];
+            const matchingAnnotation = annotations_rating.find((annotation: { item_id: string, rating: number }) => annotation.item_id === albumFile.id);
+            if (matchingAnnotation)
+                albumFile.rating = matchingAnnotation.rating;
+            else
+                albumFile.rating = 0;
+        }
         db.close();
         return result
     }

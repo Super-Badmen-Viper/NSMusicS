@@ -20,15 +20,10 @@
   import { NIcon, NSlider, NSpace, NText } from 'naive-ui'; 
 
   ////// this_view components of navie_ui
-  import { ref, watch } from 'vue';
+  import {onMounted, ref, watch} from 'vue';
   import { defineEmits } from 'vue';
   import { onBeforeUnmount } from 'vue';
   const { ipcRenderer } = require('electron');
-
-  // This lottie-web will cause memory leaks
-  // import "@lottiefiles/lottie-player";
-  // const animationInstance = ref<any>(null);
-  // const animationInstance_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715318278722.json'))
 
   ////// passed as argument
   const emits = defineEmits([
@@ -132,7 +127,7 @@
     }
   });
   const handleAudioFilePathChange = async () => {
-    current_play_time.value = formatTime(props.player.getDuration());
+    current_play_time.value = formatTime(await props.player.getDuration());
     player_silder_currentTime_added_value.value = 0;
     this_audio_buffer_file.value = null;
     player_no_progress_jump.value = false;
@@ -153,100 +148,62 @@
     webFrame.clearCache();
   });
   function Play_This_Audio_Path(){
-    props.player.unload();
     clearTimeout(timer_this_audio_player.value);
-    timer_this_audio_player.value = setTimeout(() => {
+    timer_this_audio_player.value = setTimeout(async () => {
       player_silder_currentTime_added_value.value = 0;
-      props.player.howl = new Howl({
-        src: [props.this_audio_file_path],
-        autoplay: false,
-        html5: true,
-        loop: false,
-        volume: 1.0,
-        onplay: () => {
-          props.player.howl.fade(0, 1, props.player_fade_value);
-          props.player.isPlaying = true;
-          emits('this_audio_is_playing',true)
-        },
-        onpause: () => {
-          props.player.howl.fade(1, 0, props.player_fade_value);
-          props.player.isPlaying = false;
-          emits('this_audio_is_playing',false)
-        },
-        onstop: () => {
-          props.player.howl.fade(1, 0, props.player_fade_value);
-          props.player.isPlaying = false;
-          emits('this_audio_is_playing',false)
-        },
-        onend: () => {
-          props.player.howl.fade(1, 0, props.player_fade_value);
-          props.player.isPlaying = false;
-          emits('this_audio_is_playing',false)
-          //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
-          if(player_no_progress_jump.value == true){
-            current_play_time.value = formatTime(props.player.getDuration());
-            player_silder_currentTime_added_value.value = 0;
-            this_audio_buffer_file.value = null;
-            clearInterval(timer);
-
-            player_no_progress_jump.value = false;
-
-            props.player.isPlaying = false;
-            emits('this_audio_is_playing',false)
-            is_play_ended.value = true;
-          }
-          Play_Media_Switching()
-        },
-        onloaderror: (id: any, error: any) => {
-          console.error('Failed to load audio:', error);
-          props.player.isPlaying = false;
-          emits('this_audio_is_playing',false)
-          //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
-          if(player_no_progress_jump.value == true){
-            current_play_time.value = formatTime(props.player.getDuration());
-            player_silder_currentTime_added_value.value = 0;
-            this_audio_buffer_file.value = null;
-            clearInterval(timer);
-
-            player_no_progress_jump.value = false;
-
-            props.player.isPlaying = false;
-            emits('this_audio_is_playing',false)
-            is_play_ended.value = true;
-          }
-          Play_Media_Switching()
-        }
-      });
+      // props.player.howl = new Howl();
+      props.player.load(props.this_audio_file_path)
       props.player.isPlaying = true;
-      emits('this_audio_is_playing',true)
-      emits('player_save_new_data',true)
+      emits('this_audio_is_playing', true)
+      emits('player_save_new_data', true)
       is_play_ended.value = false;
       player_no_progress_jump.value = true;
       clearInterval(timer);
       timer = setInterval(synchronize_playback_time, 200);
-      total_play_time.value = formatTime(props.player.getDuration());
-      props.player.setVolume(Number(slider_volume_value.value / 100))
+      total_play_time.value = formatTime(await props.player.getDuration());
+      props.player.setVolume(Number(slider_volume_value.value))
       props.player.play();
-      // animationInstance.value.play();
     }, 400);
   }
+  ipcRenderer.on('mpv-stopped', (event, message) => {
+    props.player.isPlaying = false;
+    emits('this_audio_is_playing',false)
+    //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
+    if(player_no_progress_jump.value == true){
+      current_play_time.value = formatTime(props.player.getDuration());
+      player_silder_currentTime_added_value.value = 0;
+      this_audio_buffer_file.value = null;
+      clearInterval(timer);
+
+      player_no_progress_jump.value = false;
+
+      props.player.isPlaying = false;
+      emits('this_audio_is_playing',false)
+      is_play_ended.value = true;
+    }
+    Play_Media_Switching()
+  });
+  onMounted(async () => {
+    timer = setInterval(synchronize_playback_time, 200);
+    await props.player.IsResumeing()
+    await props.player.IsPlaying()
+  })
   const Init_Audio_Player = async () => {
     if(props.this_audio_file_path.length > 0){
       if(props.player.isPlaying === false){
         if(this_audio_buffer_file.value === null){
           this_audio_buffer_file.value = Math.random().toString(36).substring(7);
         }else{
-          if(props.player.howl == null)
+          await props.player.IsResumeing();
+          if(!props.player.isResumeing)
             Play_This_Audio_Path()
           else {
             props.player.play();
-            // animationInstance.value.play();
           }
           emits('this_audio_is_playing',true)
         }
       }else{
         props.player.pause();
-        // animationInstance.value.pause();
         emits('this_audio_is_playing',false)
       }
     }
@@ -323,8 +280,8 @@
     }
   }
   ////// player_configs player_button middle area
-  const play_skip_back_click = () => {
-    current_play_time.value = formatTime(props.player.getDuration());
+  const play_skip_back_click = async () => {
+    current_play_time.value = formatTime(await props.player.getDuration());
     player_silder_currentTime_added_value.value = 0;
     this_audio_buffer_file.value = null;
     clearInterval(timer);
@@ -332,10 +289,10 @@
     player_no_progress_jump.value = false;
 
     props.player.isPlaying = false;
-    Play_Media_Order(play_order.value,-1)
+    Play_Media_Order(play_order.value, -1)
   }
-  const play_skip_forward_click = () => {
-    current_play_time.value = formatTime(props.player.getDuration());
+  const play_skip_forward_click = async () => {
+    current_play_time.value = formatTime(await props.player.getDuration());
     player_silder_currentTime_added_value.value = 0;
     this_audio_buffer_file.value = null;
     clearInterval(timer);
@@ -343,10 +300,10 @@
     player_no_progress_jump.value = false;
 
     props.player.isPlaying = false;
-    Play_Media_Order(play_order.value,1)
+    Play_Media_Order(play_order.value, 1)
   }
-  const Play_Media_Switching = () => {
-    current_play_time.value = formatTime(props.player.getDuration());
+  const Play_Media_Switching = async () => {
+    current_play_time.value = formatTime(await props.player.getDuration());
     player_silder_currentTime_added_value.value = 0;
     this_audio_buffer_file.value = null;
     clearInterval(timer);
@@ -356,10 +313,10 @@
     props.player.isPlaying = false;
     is_play_ended.value = true;
 
-    if(play_order.value === 'playback-3')
-      Play_Media_Order(play_order.value,0)
+    if (play_order.value === 'playback-3')
+      Play_Media_Order(play_order.value, 0)
     else
-      Play_Media_Order(play_order.value,1)
+      Play_Media_Order(play_order.value, 1)
   };
   ////// player_configs player_button voice area
   const slider_volume_value = ref(100)
@@ -370,15 +327,15 @@
   let unwatch_slider_volume_value = watch(
     slider_volume_value,
     (newValue) => {
-      props.player.setVolume(newValue ? Number(slider_volume_value.value / 100) : 0);
+      props.player.setVolume(newValue ? Number(slider_volume_value.value) : 0);
     },
     { immediate: true }
   );
 
   ////// player_configs slider formatTime area
-  const set_slider_singleValue = () => {
+  const set_slider_singleValue = async () => {
     if (!player_range_duration_isDragging)
-      slider_singleValue.value = (props.player.getCurrentTime() + player_silder_currentTime_added_value.value) / props.player.getDuration() * 100;
+      slider_singleValue.value = (await props.player.getCurrentTime() + player_silder_currentTime_added_value.value) / await props.player.getDuration() * 100;
   };
   function formatTime(currentTime: number): string {
     const minutes = Math.floor(currentTime / 60);
@@ -399,12 +356,12 @@
 
     return `${formattedMinutes}:${formattedSeconds}`;
   }
-  function formatTime_tooltip(value: number): string {
-    return formatTime((value / 100 * props.player.getDuration()));
+  function formatTime_tooltip(value: number){
+    return formatTime((value / 100 * props.player.isDuration));
   }
-  const get_current_play_time = () => {
-    if((props.player.getCurrentTime() + player_silder_currentTime_added_value.value) <= props.player.getDuration())
-      current_play_time.value = formatTime((props.player.getCurrentTime() + player_silder_currentTime_added_value.value));
+  const get_current_play_time = async () => {
+    if ((await props.player.getCurrentTime() + player_silder_currentTime_added_value.value) <= await props.player.getDuration())
+      current_play_time.value = formatTime((await props.player.getCurrentTime() + player_silder_currentTime_added_value.value));
   }
   const synchronize_playback_time = () => {
     set_slider_singleValue();
@@ -424,25 +381,24 @@
   let unwatch_play_go_index_time =  watch(() => props.player_go_lyricline_index_of_audio_play_progress, () => {
     play_go_duration(props.player_go_lyricline_index_of_audio_play_progress,false)
   });
-  const play_go_duration = (slider_value:number,silder_path:boolean) => {
+  const play_go_duration = async (slider_value: number, silder_path: boolean) => {
     player_no_progress_jump.value = false;
     player_silder_currentTime_added_value.value = 0;
-    if(props.player.isPlaying === true)
-    {
+    if (props.player.isPlaying === true) {
       // 注意，此时currentTime将从0开始，需要计算附加值
       if (silder_path) {
-        let newTime = (Number(slider_value) / 100) * props.player.getDuration();
+        let newTime = (Number(slider_value) / 100) * await props.player.getDuration();
         if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
-            props.player.setCurrentTime(newTime);
+          props.player.setCurrentTime(newTime);
         } else {
-            props.player.setCurrentTime(0);
+          props.player.setCurrentTime(0);
         }
       } else {
         let newTime = Number(slider_value) / 1000;
         if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
-            props.player.setCurrentTime(newTime);
+          props.player.setCurrentTime(newTime);
         } else {
-            props.player.setCurrentTime(0);
+          props.player.setCurrentTime(0);
         }
       }
     }
@@ -772,16 +728,6 @@
         </div>
       </div>
     </div>
-<!--    <lottie-player-->
-<!--      ref="animationInstance"-->
-<!--      loop-->
-<!--      mode="normal"-->
-<!--      :src="animationInstance_json"-->
-<!--      style="-->
-<!--        position: absolute;bottom:14px;right:36px;-->
-<!--        width:50px;height:50px;-->
-<!--      ">-->
-<!--    </lottie-player>-->
   </n-space>
 </template>
 <style>

@@ -92,24 +92,24 @@
   }
   function begin_lyrics_animation() {
     clearInterval(lyrics_animation);
-    lyrics_animation = setInterval(() => {
+    lyrics_animation = setInterval(async () => {
       for (let i = 0; i < props.this_audio_lyrics_info_time.length; i++) {
-        if(props.player !== null && props.player.getCurrentTime() !== undefined && props.player.getCurrentTime() !== null){
+        if (props.player !== null && await props.player.getCurrentTime() !== undefined && await props.player.getCurrentTime() !== null) {
           // let currentTime = (Math.floor(props.player_silder_currentTime_added_value) + props.player_configs.getCurrentTime())*1000;
-          let currentTime = props.player.getCurrentTime()*1000;
-          if(currentTime <= props.this_audio_lyrics_info_time[0]){  
-            if(lyrics_list_whell.value === false){
+          let currentTime = await props.player.getCurrentTime() * 1000;
+          if (currentTime <= props.this_audio_lyrics_info_time[0]) {
+            if (lyrics_list_whell.value === false) {
               scrollToItem(props.this_audio_lyrics_info_line_num);
             }
             break;
-          }else if(currentTime >= props.this_audio_lyrics_info_time[i]){
-            if(i === props.this_audio_lyrics_info_time.length - 1){
-              if(lyrics_list_whell.value === false){
+          } else if (currentTime >= props.this_audio_lyrics_info_time[i]) {
+            if (i === props.this_audio_lyrics_info_time.length - 1) {
+              if (lyrics_list_whell.value === false) {
                 scrollToItem(i + props.this_audio_lyrics_info_line_num);
               }
               break;
-            }else if(currentTime < props.this_audio_lyrics_info_time[i+1]){
-              if(lyrics_list_whell.value === false){
+            } else if (currentTime < props.this_audio_lyrics_info_time[i + 1]) {
+              if (lyrics_list_whell.value === false) {
                 scrollToItem(i + props.this_audio_lyrics_info_line_num);
               }
               break;
@@ -120,12 +120,12 @@
     }, 100);
   }
   let lyrics_animation: string | number | NodeJS.Timeout | undefined;
-  const handleItemDbClick = (index: any) => {
-    if(index < props.this_audio_lyrics_info_line_num) return;
-    if(index > props.this_audio_lyrics_info_line.length - props.this_audio_lyrics_info_line_num - 1) return;
+  const handleItemDbClick = async (index: any) => {
+    if (index < props.this_audio_lyrics_info_line_num) return;
+    if (index > props.this_audio_lyrics_info_line.length - props.this_audio_lyrics_info_line_num - 1) return;
     const time = props.this_audio_lyrics_info_time[index - props.this_audio_lyrics_info_line_num];
-    if(time >= props.player.getDuration()*1000) return;
-    if(time < 0) return;
+    if (time >= await props.player.getDuration() * 1000) return;
+    if (time < 0) return;
     emits('player_go_lyricline_index_of_audio_play_progress', time);
   };
   const scrollbar = ref(null as any);
@@ -600,7 +600,7 @@
             </n-space>
             <n-space style="margin-left: 12px;margin-top: 20px;">
               <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricsAnimation') }}</span>
-              <n-space style="width: 260px;">
+              <n-space style="width: 260px;margin-top: 2px;">
                 <n-radio
                   :checked="player_lyric_panel_checked_animation === LyricAnimation.linebyLine"
                   @click="player_lyric_panel_checked_animation = LyricAnimation.linebyLine">
@@ -688,11 +688,11 @@
           </div>
           <n-flex justify="end" style="height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
-              <n-button quaternary style="margin-right:2px;" @click="ipcRenderer.send('window-reset-data');">
+              <n-button quaternary circle style="margin-right:0px;" @click="ipcRenderer.send('window-reset-data');">
                 <template #icon>
                   <n-icon :depth="3"><Clean /></n-icon>
                 </template>
-                <span style="font-weight: 500;">{{ $t('setting.clearQueryCache') }}</span>
+<!--                <span style="font-weight: 500;">{{ $t('setting.clearQueryCache') }}</span>-->
               </n-button>
               <n-button quaternary style="margin-right:2px;" @click="get_isVisible_Player_theme">
                 <template #icon>

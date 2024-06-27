@@ -24,7 +24,6 @@ declare module 'vue' {
     NDropdown: typeof import('naive-ui')['NDropdown']
     NEllipsis: typeof import('naive-ui')['NEllipsis']
     NFlex: typeof import('naive-ui')['NFlex']
-    NFloatButton: typeof import('naive-ui')['NFloatButton']
     NForm: typeof import('naive-ui')['NForm']
     NGi: typeof import('naive-ui')['NGi']
     NGlobalStyle: typeof import('naive-ui')['NGlobalStyle']

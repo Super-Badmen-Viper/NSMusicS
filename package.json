@@ -35,6 +35,7 @@
     "is-electron": "^2.2.2",
     "moment": "^2.30.1",
     "nanoid": "^5.0.7",
+    "node-mpv": "beta",
     "prebuild-install": "^7.1.1",
     "rxjs": "^7.8.1",
     "uuid": "^9.0.1",

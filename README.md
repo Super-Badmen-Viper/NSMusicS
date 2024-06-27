@@ -81,7 +81,8 @@ npm run build-only # Package into the current system_configs's software package 
 - NSMusicS Web Of Thanks：
   - [Electron](https://github.com/electron/electron)
   - [better-sqlite3](https://github.com/WiseLibs/better-sqlite3)
-  - [howler.js](https://github.com/goldfire/howler.js) 
+  - [howler.js](https://github.com/goldfire/howler.js)
+  - [Node-MPV](https://github.com/j-holub/Node-MPV)
   - [Vue3](https://github.com/vuejs/vue)
   - [Naive UI](https://github.com/tusen-ai/naive-ui)
 - NSMusicS Web ImageResource Thanks:

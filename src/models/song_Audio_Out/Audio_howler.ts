@@ -24,12 +24,6 @@ export class Audio_howler {
             this.isPlaying = false;
         }
     }
-    stop() {
-        if (this.howl) {
-            this.howl.stop();
-            this.isPlaying = false;
-        }
-    }
     getDuration(): number {
         if (this.howl) {
             return this.howl.duration();
@@ -57,16 +51,5 @@ export class Audio_howler {
             this.howl.fadein(from);
             this.howl.fadeout(to)
         }
-    }
-    set_fade(from: any, to: any, duration: any){
-        if (this.howl) {
-            // this.howl.volume(volume);
-        }
-    }
-    mute() {
-        Howler.mute(true);
-    }
-    unmute() {
-        Howler.mute(false);
     }
 }

@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from 'electron'
-import { readFileSync } from 'fs';
-import { System_Configs_Write } from '@/features/system_configs/System_Configs_Write';
+import fs, { readFileSync } from 'fs';
+import path from "path";
+import { contextBridge, ipcRenderer } from 'electron'
 
 async function createWindow() {
     const win = await new BrowserWindow({
@@ -13,14 +14,14 @@ async function createWindow() {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            webSecurity: false,
+            webSecurity: false
         },
     })
     win.setMenu(null)
     win.setMaximizable(false)
-    win.webContents.openDevTools({
-        mode:'detach'
-    });
+    // win.webContents.openDevTools({
+    //     mode:'detach'
+    // });
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
     if (process.argv[2]) {
         win.loadURL(process.argv[2])
@@ -72,6 +73,66 @@ async function createWindow() {
     ipc.handle('readFile', async (event, filePath) => {
         return readFileSync(filePath);
     });
+
+    ////// mpv service for win
+    const mpvAPI = require('node-mpv');
+    let mpv = new mpvAPI({
+        audio_only: true,
+        auto_restart: true,
+        binary: path.resolve("resources/mpv-x86_64-20240623/mpv.exe"),
+        debug: true,
+        verbose: true
+    });
+    await mpv.start();
+    await mpv.pause();
+    let isPlaying = false;
+    let isResumeing = false;
+    ipc.handle('mpv-load', async (event,filePath) => {
+        try {
+            await mpv.load(filePath);
+            await mpv.play();
+            isPlaying = true;
+            isResumeing = false;
+            return true;
+        } catch (error) {
+            console.error('Error loading file in mpv:', error);
+            return false;
+        }
+    });
+    ipc.handle('mpv-isRunning',  async (event) => {
+        return mpv.isRunning();
+    });
+    ipc.handle('mpv-isPlaying',  async (event) => {
+        return isPlaying;
+    });
+    ipc.handle('mpv-isResumeing',  async (event) => {
+        return isResumeing;
+    });
+    ipc.handle('mpv-play',  async (event) => {
+        await mpv.resume();
+        isPlaying = true;
+        isResumeing = false;
+    });
+    ipc.handle('mpv-pause',  async (event) => {
+        await mpv.pause();
+        isPlaying = false;
+        isResumeing = true;
+    });
+    ipc.handle('mpv-get-duration', async (event) => {
+        try { return await mpv.getDuration() }catch{ return 0 }
+    });
+    ipc.handle('mpv-get-time-pos', async (event) => {
+        try { return await mpv.getTimePosition() }catch{ return 0 }
+    });
+    ipc.handle('mpv-set-time-pos', async (event,timePos) => {
+        await mpv.seek(timePos,"absolute")
+    });
+    ipc.handle('mpv-set-volume', async (event,volume) => {
+        await mpv.volume(volume)
+    });
+    mpv.on('stopped', () => {
+        win.webContents.send("mpv-stopped", true);
+    });
 }
 
 app.whenReady().then(() => {
@@ -87,13 +148,9 @@ app.whenReady().then(() => {
 
 const { session } = require('electron');
 function clear_session_clearCache() {
-    const currentSession = session.defaultSession;
-    currentSession.clearCache().then(() => {
-        console.log('Cache cleared');
-    });
+    session.defaultSession.clearCache();
     require("v8").setFlagsFromString("--expose_gc");
     global.gc = require("vm").runInNewContext("gc");
-    console.log('global.gc used');
 }
 app.on('ready', () => {
     setTimeout(clear_session_clearCache, 5000);
@@ -101,8 +158,8 @@ app.on('ready', () => {
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
-      app.quit()
+        app.quit()
     }
-  })
+})
 
   

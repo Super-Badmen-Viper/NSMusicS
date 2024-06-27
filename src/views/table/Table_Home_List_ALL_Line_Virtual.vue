@@ -203,17 +203,16 @@ onBeforeUnmount(() => {
           </div>
         </div>
       </div>
-      <n-space style="margin-left: 22px;margin-top: calc(126px - 320px);">
+      <n-space style="margin-left: 22px;margin-top: calc(126px - 340px);">
         <n-image
-          width="160px" height="160px" object-fit="contain"
-          style="
-            border-radius: 6px;border: 1.5px solid #FFFFFF20;"
+          width="180px" height="180px" object-fit="contain"
+          style="border-radius: 6px;border: 1.5px solid #FFFFFF20;"
           :src="getAssetImage(props.home_selected_top_album?.medium_image_url)"
           fallback-src="../../../resources/img/error_album.jpg"
           :show-toolbar="false"
         />
         <n-space vertical
-          style="margin-top: 8px;margin-left: 12px;"
+          style="margin-top: -2px;margin-left: 12px;"
           :style="{
             width: 'calc(100vw - ' + (collapsed_width + 300) + 'px)',
           }">
@@ -222,30 +221,30 @@ onBeforeUnmount(() => {
           </div>
           <div
             style="
-              margin-top: -8px;
-              font-weight: 900;font-size: 36px;
+              margin-top: -3px;
+              font-weight: 900;font-size: 44px;
               overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
           ">
             {{ props.home_selected_top_album?.name }}
           </div>
           <div
             style="
-              margin-top: -8px;
+              margin-top: -2px;
               font-weight: 550;font-size: 18px;
               overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
           ">
             {{ props.home_selected_top_album?.artist }}
           </div>
-          <n-space>
-            <n-button @click="Play_Next_album_SongList_click(-1)">
+          <n-space style="margin-top: 6px;">
+            <n-button @click="Play_Next_album_SongList_click(-1)" style="border-radius: 6px;border: 1.5px solid #FFFFFF20;">
               <n-icon>
                 <ChevronLeft16Filled />
               </n-icon>
             </n-button>
-            <n-button @click="Play_this_album_SongList_click(props.home_selected_top_album?.id)">
+            <n-button @click="Play_this_album_SongList_click(props.home_selected_top_album?.id)" style="border-radius: 6px;border: 1.5px solid #FFFFFF20;">
               {{ $t('player.play') }}
             </n-button>
-            <n-button @click="Play_Next_album_SongList_click(1)">
+            <n-button @click="Play_Next_album_SongList_click(1)" style="border-radius: 6px;border: 1.5px solid #FFFFFF20;">
               <n-icon>
                 <ChevronRight16Filled />
               </n-icon>
@@ -280,7 +279,7 @@ onBeforeUnmount(() => {
             :data-index="index"
             :data-active="active">
             <div
-                :key="item.id+'000'"
+                :key="item.id"
                 class="album">
               <div
                   :style="{ width: item_album_image + 'px', height: item_album_image + 'px', position: 'relative' }">
@@ -400,7 +399,7 @@ onBeforeUnmount(() => {
               :data-index="index"
               :data-active="active">
             <div
-                :key="item.id+'111'"
+                :key="item.id"
                 class="album">
               <div
                   :style="{ width: item_album_image + 'px', height: item_album_image + 'px', position: 'relative' }">
@@ -520,7 +519,7 @@ onBeforeUnmount(() => {
               :data-index="index"
               :data-active="active">
             <div
-                :key="item.id+'222'"
+                :key="item.id"
                 class="album">
               <div
                   :style="{ width: item_album_image + 'px', height: item_album_image + 'px', position: 'relative' }">
@@ -640,7 +639,7 @@ onBeforeUnmount(() => {
               :data-index="index"
               :data-active="active">
             <div
-                :key="item.id+'333'"
+                :key="item.id"
                 class="album">
               <div
                   :style="{ width: item_album_image + 'px', height: item_album_image + 'px', position: 'relative' }">
@@ -664,11 +663,11 @@ onBeforeUnmount(() => {
                     </button>
                     <div class="hover_buttons_top">
                       <rate
-                          class="viaSlot"
-                          :length="5"
-                          v-model="item.rating"
-                          @after-rate="(value: number) => handleItemClick_Rating(item.id+'-'+value)"
-                          style="margin-right: 8px;"
+                        class="viaSlot"
+                        :length="5"
+                        v-model="item.rating"
+                        @after-rate="(value: number) => handleItemClick_Rating(item.id+'-'+value)"
+                        style="margin-right: 8px;"
                       />
                     </div>
                     <div class="hover_buttons_bottom">
@@ -736,7 +735,7 @@ onBeforeUnmount(() => {
     </n-space>
   </div>
 </template>
-<style scoped>
+<style>
 .album-wall-container {
   width: 100%;
   height: 100%;
@@ -839,6 +838,8 @@ onBeforeUnmount(() => {
   width: 25px;
   height: 25px;
 }
+//.Rate.viaSlot .Rate__star.filled{color: #813d1a;}
+//.Rate.viaSlot .Rate__star.hover{color: #E67136;}
 
 ::-webkit-scrollbar {
   width: 6px;

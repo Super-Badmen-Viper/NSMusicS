@@ -278,6 +278,26 @@
       playlist_Files_temporary.value = [...media_Files_temporary.value];
     }
     //
+
+    // ipcRenderer.send('mpv-load',value)
+    // setTimeout(()=>{
+    //   ipcRenderer.send('mpv-pause');
+    //   setTimeout(()=>{
+    //     ipcRenderer.send('mpv-play');
+    //     setTimeout(async () => {
+    //       // const duration = await ipcRenderer.invoke('mpv-get-duration');
+    //       const duration = await player.getDuration();
+    //       console.log('Duration:', duration);
+    //       setTimeout(async () => {
+    //         // const time = await ipcRenderer.invoke('mpv-get-time-pos');
+    //         const time = await player.getCurrentTime();
+    //         console.log('Duration:', time);
+    //       }, 2000)
+    //     },2000)
+    //   },3000);
+    // },4000)
+    // ipcRenderer.send('mpv-set-time-pos',value)
+    // ipcRenderer.send('mpv-set-volume',value)
   }
   function get_this_audio_file_path(value: any) {
     this_audio_file_path.value = value
@@ -469,12 +489,8 @@
   }
 
   ////// this_app audio(Media) Class
-  let player = new Audio_howler();
-  // let player = null;
-  // ipcRenderer.invoke('get-player').then((player) => {
-  //   console.log('Received player:', player);
-  //   this.player = player;
-  // });
+  // let player = new Audio_howler();
+  let player = new Audio_node_mpv();
   const player_fade_value = ref<number>(2000)
   function get_player_fade_value(value: any){
     player_fade_value.value = value
@@ -507,6 +523,7 @@
 
   ///// view of View_Home_MusicLibrary_Browse
   import {Get_HomeDataInfos_From_LocalSqlite} from '@/features/sqlite3_local_configs/class_Get_HomeDataInfos_From_LocalSqlite'
+  import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
   let get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
   const home_Files_temporary_maximum_playback = ref<Album[]>([])
   const home_Files_temporary_random_search = ref<Album[]>([])
@@ -1222,6 +1239,8 @@
       get_this_audio_album_favorite(playlist_Files_temporary.value[0].favorite)
       get_this_audio_album_name(playlist_Files_temporary.value[0].album)
       get_this_audio_Index_of_absolute_positioning_in_list(playlist_Files_temporary.value[0].absoluteIndex)
+      get_this_audio_song_rating(playlist_Files_temporary.value[0].rating)
+      get_this_audio_song_favorite(playlist_Files_temporary.value[0].favorite)
     }
   }
 
@@ -1551,6 +1570,8 @@
       get_this_audio_album_favorite(playlist_Files_temporary.value[0].favorite)
       get_this_audio_album_name(playlist_Files_temporary.value[0].album)
       get_this_audio_Index_of_absolute_positioning_in_list(playlist_Files_temporary.value[0].absoluteIndex)
+      get_this_audio_song_rating(playlist_Files_temporary.value[0].rating)
+      get_this_audio_song_favorite(playlist_Files_temporary.value[0].favorite)
     }
   }
 
@@ -1640,7 +1661,6 @@
         router_name.value = to.name
       }
       save_system_config_of_View_Router_History()
-      // ipcRenderer.send('window-reset-data');
     }
   });
   const get_router_select = (value: any) => {
