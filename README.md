@@ -59,6 +59,9 @@
 ```sh
 cd NSMusicS
 npm install
+# Install MPV in the Windows environment (requires its executable file compressed file) 
+# https://mpv.io/installation/
+# unzip its contents to (NSMusicS\resources\mpv-x86_64-20240623)
 ```
 ```sh
 # You need to recompile the native module better sqlite3 to allow the sqlite database to read normally
