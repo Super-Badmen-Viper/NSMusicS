@@ -18,7 +18,9 @@
       "loveAlbum": "آلبوم‌های دلخواه",
       "allArtist": "تمام هنرمندان",
       "loveArtist": "هنرمندان دلخواه",
-      "recentPlay": "آخرین پخش‌ها"
+      "recentPlay": "آخرین پخش‌ها",
+      "countSong": "آهنگ",
+      "countList": "گروه"
     },
     "view_player": {
       "view_seting": {

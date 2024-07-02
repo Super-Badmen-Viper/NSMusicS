@@ -18,7 +18,9 @@
             "loveAlbum": "Preferiti album",
             "allArtist": "Tutti gli artisti",
             "loveArtist": "Preferiti artisti",
-            "recentPlay": "Riprodotti recenti"
+            "recentPlay": "Riprodotti recenti",
+            "countSong": "canzone",
+            "countList": "gruppo"
         },
         "view_player": {
             "view_seting": {

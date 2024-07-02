@@ -18,7 +18,9 @@
             "loveAlbum": "Омиљени албуми",
             "allArtist": "Сви уметници",
             "loveArtist": "Омиљени уметници",
-            "recentPlay": "Недавно пуштано"
+            "recentPlay": "Недавно пуштано",
+            "countSong": "песма",
+            "countList": "група"
         },
         "view_player": {
             "view_seting": {

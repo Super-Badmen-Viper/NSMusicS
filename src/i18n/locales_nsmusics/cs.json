@@ -18,7 +18,9 @@
             "loveAlbum": "Oblíbené Alby",
             "allArtist": "Všichni Umělci",
             "loveArtist": "Oblíbení Umělci",
-            "recentPlay": "Nedávno Přehráno"
+            "recentPlay": "Nedávno Přehráno",
+            "countSong": "píseň",
+            "countList": "sestava"
         },
         "view_player": {
             "view_seting": {

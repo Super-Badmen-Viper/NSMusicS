@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref,defineEmits, onBeforeUnmount, onMounted } from 'vue';
 import Table_Song_List from '../views/table/Table_Song_List_ALL_Line_Virtual.vue'
+import {RouterView} from "vue-router";
 
 const this_audio_Index_of_absolute_positioning_in_list = ref<number>(-1)
 function get_this_audio_Index_of_absolute_positioning_in_list(value: any) {
@@ -88,6 +89,15 @@ function get_this_audio_song_rating(value: any) {
 function get_this_audio_song_favorite(value: any) {
   emits('this_audio_song_favorite',value)
 }
+function get_playlist_Tracks_temporary_add(value: any){
+  emits('playlist_Tracks_temporary_add',value)
+}
+function get_playlist_Tracks_temporary_update(value: any){
+  emits('playlist_Tracks_temporary_update',value)
+}
+function get_playlist_Tracks_temporary_delete(value: any){
+  emits('playlist_Tracks_temporary_delete',value)
+}
 onMounted(async () => {
   emits('router_select','View_Song_List_ALL')
 });
@@ -120,6 +130,7 @@ const emits = defineEmits([
   'this_audio_lyrics_string',
   'router_history_model',
   'router_history_model_of_Media_scroller_value','router_history_model_of_Media_scroll',
+  'playlist_Tracks_temporary_add','playlist_Tracks_temporary_update','playlist_Tracks_temporary_delete',
 ]);
 const {
   app_left_menu_collapsed,window_innerWidth,
@@ -133,6 +144,8 @@ const {
   media_Files_temporary,media_Files_selected,
   page_songlists_options_Sort_key,
 
+  playlist_Tracks_temporary,
+
   router_select_history_date,router_history_datas,router_history_model_of_Media_scroller_value,router_history_model_of_Media_scroll
 } = defineProps<{
   app_left_menu_collapsed:Boolean,window_innerWidth:number,
@@ -145,6 +158,8 @@ const {
 
   media_Files_temporary:Media_File[],media_Files_selected:Media_File[],
   page_songlists_options_Sort_key:{ columnKey: string; order: string }[],
+
+  playlist_Tracks_temporary:{playlist:Play_List,playlist_tracks:Play_list_Track[]}[],
 
   router_select_history_date:Interface_View_Router_Date,router_history_datas:Interface_View_Router_Date[],router_history_model_of_Media_scroller_value:number,router_history_model_of_Media_scroll:Boolean,
 }>();
@@ -201,7 +216,13 @@ const {
         @options_Sort_key="get_page_songlists_options_Sort_key"
         :page_songlists_keyword="page_songlists_keyword"
         @page_songlists_keyword="page_songlists_get_keyword"
-        @page_songlists_reset_data="page_songlists_get_reset_data"/>
+        @page_songlists_reset_data="page_songlists_get_reset_data"
+
+        :playlist_Tracks_temporary="playlist_Tracks_temporary"
+        @playlist_Tracks_temporary_add="get_playlist_Tracks_temporary_add"
+        @playlist_Tracks_temporary_update="get_playlist_Tracks_temporary_update"
+        @playlist_Tracks_temporary_delete="get_playlist_Tracks_temporary_delete"
+    />
   </div>
 </template>
 

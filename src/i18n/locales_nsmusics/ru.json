@@ -18,7 +18,9 @@
             "loveAlbum": "Избранные альбомы",
             "allArtist": "Все артисты",
             "loveArtist": "Избранные артисты",
-            "recentPlay": "Недавно"
+            "recentPlay": "Недавно",
+            "countSong": "песня",
+            "countList": "группа"
         },
         "view_player": {
             "view_seting": {

@@ -1,7 +1,6 @@
 import { app, BrowserWindow } from 'electron'
-import fs, { readFileSync } from 'fs';
+import { readFileSync } from 'fs';
 import path from "path";
-import { contextBridge, ipcRenderer } from 'electron'
 
 async function createWindow() {
     const win = await new BrowserWindow({
@@ -19,9 +18,9 @@ async function createWindow() {
     })
     win.setMenu(null)
     win.setMaximizable(false)
-    // win.webContents.openDevTools({
-    //     mode:'detach'
-    // });
+    win.webContents.openDevTools({
+        mode:'detach'
+    });
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
     if (process.argv[2]) {
         win.loadURL(process.argv[2])
@@ -74,7 +73,7 @@ async function createWindow() {
         return readFileSync(filePath);
     });
 
-    ////// mpv service for win
+    ////// mpv services for win
     const mpvAPI = require('node-mpv');
     let mpv = new mpvAPI({
         audio_only: true,
@@ -125,6 +124,9 @@ async function createWindow() {
         try { return await mpv.getTimePosition() }catch{ return 0 }
     });
     ipc.handle('mpv-set-time-pos', async (event,timePos) => {
+        await mpv.resume();
+        isPlaying = true;
+        isResumeing = false;
         await mpv.seek(timePos,"absolute")
     });
     ipc.handle('mpv-set-volume', async (event,volume) => {
@@ -132,6 +134,10 @@ async function createWindow() {
     });
     mpv.on('stopped', () => {
         win.webContents.send("mpv-stopped", true);
+    });
+    //////
+    ipc.handle('window-get-memory', async (event) => {
+        try { return process.memoryUsage() }catch{ return 0 }
     });
 }
 

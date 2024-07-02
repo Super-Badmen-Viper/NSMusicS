@@ -5,7 +5,6 @@
   } from '@vicons/carbon'
 
   ////// i18n auto lang
-  import { useI18n } from 'vue-i18n'
   import {
     DocumentHeart20Regular,
     Flag16Regular,
@@ -15,6 +14,7 @@
   } from "@vicons/fluent";
   import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound} from "@vicons/material";
   import {RouterLink} from "vue-router";
+  import { useI18n } from 'vue-i18n'
   const { t } = useI18n({
     inheritLocale: true
   })
@@ -36,7 +36,7 @@
 
   ////// passed as argument
   const emits = defineEmits([
-    'menu_appsetting_select_tab_name',
+    'menu_appsetting_select_tab_name','server_config_of_current_user_of_sqlite','server_config_of_all_user_of_sqlite',
     'update_lang','update_theme','menuOptions_appBar','selectd_props_app_sidebar',
     'player_fade_value','player_use_lottie_animation',
   ]);
@@ -44,12 +44,125 @@
     app_left_menu_collapsed: Boolean;
     window_innerWidth: number;
     menu_appsetting_select_tab_name:any;
+
+    server_config_of_current_user_of_sqlite_of_select_servername: string;
+    server_config_of_current_user_of_sqlite_of_select:{label: string;value: string};
+    server_config_of_all_user_of_select:{label: string;value: string}[],
+    server_config_of_current_user_of_sqlite:Server_Configs_Props,
+    server_config_of_all_user_of_sqlite:Server_Configs_Props[],
+
     update_theme:Boolean;
     menuOptions_appBar:MenuOption[];
     selectd_props_app_sidebar:(string | number)[];
     player_fade_value:number;
     player_use_lottie_animation:Boolean;
   }>();
+
+  ////// server
+  const Type_Server_Kinds = [
+    {
+      value: "NSMusicS",
+      label: "NSMusicS"
+    },
+    {
+      value: "JellyFin",
+      label: "JellyFin"
+    },
+    {
+      value: 'Navidrome',
+      label: 'Navidrome'
+    },
+  ].map((s) => {
+    s.value = s.value.toLowerCase()
+    return s
+  })
+  const Type_Server_Selected = ref(Type_Server_Kinds[2].value)
+  const Type_Server_Add = ref(false)
+  import { useMessage } from 'naive-ui'
+  const message = useMessage()
+  /// server select
+  function update_server_config_of_current_user_of_sqlite(value: any){
+    const index = props.server_config_of_all_user_of_sqlite.findIndex(item => item.id === value);
+    emits('server_config_of_current_user_of_sqlite',props.server_config_of_all_user_of_sqlite[index])
+  }
+  /// server add
+  import { Set_ServerInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_ServerInfo_To_LocalSqlite";
+  const server_set_of_addUser_of_type = ref('')
+  const server_set_of_addUser_of_servername = ref('')
+  const server_set_of_addUser_of_url = ref('localhost:4533/rest')
+  const server_set_of_addUser_of_username = ref('mozhi')
+  const server_set_of_addUser_of_password = ref('qwer1234')
+  async function update_server_setUser(id:string,server_name:string,url:string, user_name:string,password:string) {
+    const userService = new User_ApiService_of_ND('http://'+url);
+    const {salt, token} = generateEncryptedPassword(password);
+    const userData = await userService.getUser(user_name, token, salt);
+    if (userData["subsonic-response"]["status"] === 'ok'){
+      let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
+      const data:Server_Configs_Props = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_SetUser_of_ND(id, server_name, url, user_name, password)
+      const new_data: Server_Configs_Props[] = props.server_config_of_all_user_of_sqlite;
+      const index = new_data.findIndex(item => item.id === data.id);
+      if (index !== -1) {
+        new_data[index] = data;
+      } else {
+        new_data.push(data);
+      }
+      emits('server_config_of_all_user_of_sqlite', new_data);
+      message.success(t('form.updateServer.success'))
+    }else{
+      message.error(t('error.invalidServer'))
+    }
+  }
+  async function update_server_deleteUser(id: string) {
+    let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
+    set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_DeleteUser_of_ND(id);
+    const new_data: Server_Configs_Props[] = props.server_config_of_all_user_of_sqlite;
+    const index = new_data.findIndex(item => item.id === id);
+    new_data.splice(index, 1);
+    emits('server_config_of_all_user_of_sqlite', new_data);
+  }
+  async function update_server_addUser() {
+    try{
+      server_set_of_addUser_of_type.value = Type_Server_Selected.value;
+      const userService = new User_ApiService_of_ND('http://'+server_set_of_addUser_of_url.value);
+      const {salt, token} = generateEncryptedPassword(server_set_of_addUser_of_password.value);
+      const userData = await userService.getUser(server_set_of_addUser_of_username.value, token, salt);
+      if (userData["subsonic-response"]["status"] === 'ok'){
+        let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
+        const data:Server_Configs_Props = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_CreateUser_of_ND(
+          server_set_of_addUser_of_servername.value,
+          server_set_of_addUser_of_url.value,
+          server_set_of_addUser_of_username.value,
+          server_set_of_addUser_of_password.value
+        );
+        const new_data: Server_Configs_Props[] = props.server_config_of_all_user_of_sqlite;
+        new_data.push(data)
+        emits('server_config_of_all_user_of_sqlite', new_data);
+        message.success(t('form.addServer.success'))
+        Type_Server_Add.value = !Type_Server_Add.value
+      }
+    }catch (e) {
+      message.error(t('error.invalidServer'),{ duration: 3000 })
+    }
+  }
+  ///
+  import { User_ApiService_of_ND } from "@/features/servers_configs/navidrome_api/services/user_management/index_service";
+  function generateEncryptedPassword(password: string): { salt: string, token: string } {
+    const saltLength = 6;
+    const salt = generateRandomString(saltLength);
+    const crypto = require('crypto');
+    const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
+    return { salt, token };
+  }
+  function generateRandomString(length: number): string {
+    const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';
+    let randomString = '';
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      randomString += characters[randomIndex];
+    }
+    return randomString;
+  }
+
 
   ////// this_view components of navie ui
   import {ref, onMounted, watch, onBeforeUnmount, computed, h} from 'vue';
@@ -141,54 +254,6 @@
   function update_player_use_lottie_animation(value: any){
     emits('player_use_lottie_animation',value)
   }
-
-  ////// 服务器配置添加
-  const Type_Server_Kinds = [
-    {
-      value: "NSMusicS",
-      label: "NSMusicS"
-    },
-    {
-      value: "JellyFin",
-      label: "JellyFin"
-    },
-    {
-      value: 'Navidrome',
-      label: 'Navidrome'
-    },
-  ].map((s) => {
-    s.value = s.value.toLowerCase()
-    return s
-  })
-  const Type_Server_Selected = ref(Type_Server_Kinds[2].value)
-  const Type_Server_Add = ref(false)
-  /// 服务器管理
-  type Type_Server_Info = {
-    id: string
-    tags: string[]
-    show: boolean
-    type: string
-    name: string
-    url: string
-    username: string
-    password: string
-  }
-  const createData = (): Type_Server_Info[] => {
-    const baseData = {
-      tags: ['nice', 'developer'],
-      show: false,
-      type: 'Navidrome',
-      name: 'mozhi',
-      url: 'yxbb',
-      username: 'xiang',
-      password: 'xiang',
-    };
-    return Array.from({ length: 25 }, (_, index) => ({
-      ...baseData,
-      id: ('0000' + (index + 1)).slice(-4), // 确保id是四位数，不足前面补0
-    }));
-  };
-  const data_temporary_Server_Info = ref(createData());
 
   ////// 设置：通用
   const languages = [
@@ -376,8 +441,15 @@
             <n-space style="height: calc(100vh - 230px);" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)'}">
               <!-- 服务器管理 -->
               <n-space vertical size="large">
-                <n-space justify="space-between">
-                  <span style="font-size: 20px;font-weight: 600;">{{ $t('page.appMenu.manageServers') }}</span>
+                <n-space>
+                  <n-space>
+                    <span style="font-size: 20px;font-weight: 600;">{{ $t('page.appMenu.selectServer') }}</span>
+                    <n-select
+                      v-model:value="props.server_config_of_current_user_of_sqlite_of_select_servername"
+                      :options="props.server_config_of_all_user_of_select" style="width: 166px;"
+                      @update:value="(value: number) => update_server_config_of_current_user_of_sqlite(value)"
+                    />
+                  </n-space>
                   <n-button tertiary  @click="Type_Server_Add = !Type_Server_Add" style="margin-right: 35px;">
                     <template #icon>
                       <n-icon>
@@ -387,10 +459,13 @@
                     {{ $t('form.addServer.title') }}
                   </n-button>
                 </n-space>
+<!--                <n-space justify="space-between">-->
+<!--                  <span style="font-size: 20px;font-weight: 600;">{{ $t('page.appMenu.manageServers') }}</span>-->
+<!--                </n-space>-->
                 <DynamicScroller
                   class="table" ref="scrollbar"
                   style="overflow: auto;width: 785px;max-height: 62vh;"
-                  :items="data_temporary_Server_Info"
+                  :items="props.server_config_of_all_user_of_sqlite"
                   :itemSize="70"
                   :grid-items="3"
                   :item-secondary-size="260">
@@ -419,9 +494,10 @@
                             <n-icon size="20">
                               <BareMetalServer />
                             </n-icon>
-                            <span>{{ item.type+' - '+item.name }}</span>
+                            <div style="width: 140px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                              {{ item.type+' - '+item.server_name }}</div>
                           </n-space>
-                          <span>{{ (index+1) }}</span>
+                          <span style="width: 18px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ (index+1) }}</span>
                         </n-space>
                         <n-modal
                           v-model:show="item.show">
@@ -441,29 +517,37 @@
                               <n-form style="margin-top: -12px;">
                                 <n-space vertical size="small" style="margin-bottom: 10px;">
                                   <span>{{ $t('form.addServer.input_name') }}</span>
-                                  <n-input clearable size="small" :default-value="item.name" placeholder=""/>
+                                  <n-input clearable size="small" v-model:value="item.server_name" placeholder=""/>
                                 </n-space>
                                 <n-space vertical size="small" style="margin-bottom: 10px;">
                                   <span>{{ $t('form.addServer.input_url') }}</span>
                                   <n-input-group>
                                     <n-input-group-label size="small">http://</n-input-group-label>
-                                    <n-input clearable size="small" :default-value="item.url" placeholder=""/>
+                                    <n-input clearable size="small" v-model:value="item.url" placeholder=""/>
                                   </n-input-group>
                                 </n-space>
                                 <n-space vertical size="small" style="margin-bottom: 10px;">
                                   <span>{{ $t('form.addServer.input_username') }}</span>
-                                  <n-input clearable size="small" :default-value="item.username" placeholder=""/>
+                                  <n-input clearable size="small" v-model:value="item.user_name" placeholder=""/>
                                 </n-space>
                                   <n-space vertical size="small" style="margin-bottom: 10px;">
                                   <span>{{ $t('form.addServer.input_password') }}</span>
-                                  <n-input clearable type="password" show-password-on="click" size="small" :default-value="item.password" placeholder=""/>
+                                  <n-input clearable type="password" show-password-on="click" size="small"
+                                           v-model:value="item.password"
+                                           placeholder=""/>
                                 </n-space>
                               </n-form>
                               <n-space justify="end">
-                                <n-button  size="small" strong secondary type="error">
+                                <n-button strong secondary type="error"
+                                          @click="item.show = false;update_server_deleteUser(item.id);">
                                   {{ $t('common.delete') }}
                                 </n-button>
-                                <n-button size="small" strong secondary type="info">
+                                <n-button strong secondary type="info"
+                                          @click="update_server_setUser(
+                                              item.id,
+                                              item.server_name,item.url,
+                                              item.user_name,item.password
+                                          )">
                                   {{ $t('common.save') }}
                                 </n-button>
                               </n-space>
@@ -516,31 +600,31 @@
                     <n-form inline>
                       <n-space vertical style="width: 150px;margin-bottom: 10px;">
                         <span>{{ $t('form.addServer.input_name') }}</span>
-                        <n-input clearable placeholder=""/>
+                        <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_servername"/>
                       </n-space>
                       <n-space vertical style="width: 250px;margin-bottom: 10px;">
                         <span>{{ $t('form.addServer.input_url') }}</span>
                         <n-input-group>
                           <n-input-group-label>http://</n-input-group-label>
-                          <n-input clearable placeholder=""/>
+                          <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_url"/>
                         </n-input-group>
                       </n-space>
                     </n-form>
                     <n-form style="margin-top: -12px;">
                       <n-space vertical style="margin-bottom: 10px;">
                         <span>{{ $t('form.addServer.input_username') }}</span>
-                        <n-input clearable placeholder=""/>
+                        <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_username"/>
                       </n-space>
                       <n-space vertical style="margin-bottom: 10px;">
                         <span>{{ $t('form.addServer.input_password') }}</span>
-                        <n-input clearable type="password" show-password-on="click" placeholder=""/>
+                        <n-input clearable type="password" show-password-on="click" placeholder="" v-model:value="server_set_of_addUser_of_password"/>
                       </n-space>
                     </n-form>
                     <n-space justify="end">
-                      <n-button strong secondary type="error">
+                      <n-button strong secondary type="error" @click="Type_Server_Add = !Type_Server_Add">
                         {{ $t('common.delete') }}
                       </n-button>
-                      <n-button strong secondary type="info">
+                      <n-button strong secondary type="info" @click="update_server_addUser();">
                         {{ $t('common.save') }}
                       </n-button>
                     </n-space>
@@ -560,7 +644,8 @@
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.language') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">{{ $t('setting.language_description',{ arg: $t('common.restartRequired') }) }}</span>
+                      <span style="font-size:12px;">{{ $t('setting.language_description') }}</span>
+<!--                      $t('setting.language_description',{ arg: $t('common.restartRequired') })-->
                     </div>
                   </n-space>
 <!--                  {{ $t('action.editPlaylist', { arg: 'kazupon' }) }}-->

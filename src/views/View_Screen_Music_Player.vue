@@ -80,7 +80,7 @@
   onMounted(() => {load_lyrics()});
   function load_lyrics() {
     if(props.this_audio_lyrics_string.length > 0) {
-      begin_lyrics_animation() 
+      begin_lyrics_animation()
       try{
         setTimeout(() => {
           handleLeave()
@@ -156,7 +156,7 @@
     }
     // BUG: if space-line Not fully covered at the bottom, exceeding the bottom portion , The entire page will be moved up，because block: 'center' used this page
     itemElements[index].scrollIntoView({ block: 'center', behavior: perviousIndex.value === index - 1 ? 'smooth' : 'instant' });
-    
+
     let color_hidden = player_lyric_color.value.slice(0, -2);
     let blurValue = 0.07;
     for (let i = index - 16; i <= index + 16; i++) {
@@ -198,14 +198,18 @@
     for (let i = perviousIndex.value - 16; i <= perviousIndex.value + 16; i++) {
       if (i < perviousIndex.value) {
         const colorValue = Math.max(90 - (perviousIndex.value - i) * 20, 0);
-        itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
-        itemElements[i].style.filter = `blur(${blurValue}px)`;
-        blurValue += 0.05;
+        try {
+          itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+          itemElements[i].style.filter = `blur(${blurValue}px)`;
+          blurValue += 0.05;
+        }catch{  }
       } else {
         const colorValue = Math.max(90 - (i - perviousIndex.value) * 20, 0);
-        itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
-        itemElements[i].style.filter = `blur(${blurValue}px)`;
-        blurValue += 0.05;
+        try {
+          itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+          itemElements[i].style.filter = `blur(${blurValue}px)`;
+          blurValue += 0.05;
+        }catch{  }
       }
     }
   };
@@ -241,7 +245,7 @@
     hoverStyle:PlayerTheme_HoverStyle;
   };
   const player_theme_1 = ref<PlayerTheme_LyricItem>(
-    { 
+    {
       id: 0,
       name: computed_i18n_Label_ViewSetConfig_Cover_1.value,
       normalStyle: {
@@ -261,7 +265,7 @@
     }
   );
   const player_theme_2 = ref<PlayerTheme_LyricItem>(
-    { 
+    {
       id: 1,
       name: computed_i18n_Label_ViewSetConfig_Cover_2.value,
       normalStyle: {
@@ -281,7 +285,7 @@
     }
   );
   const player_theme_3 = ref<PlayerTheme_LyricItem>(
-    { 
+    {
       id: 2,
       name: computed_i18n_Label_ViewSetConfig_Cover_3.value,
       normalStyle: {
@@ -301,7 +305,7 @@
     }
   );
   const player_theme_4 = ref<PlayerTheme_LyricItem>(
-    { 
+    {
       id: 3,
       name: computed_i18n_Label_ViewSetConfig_Cover_4.value,
       normalStyle: {
@@ -321,7 +325,7 @@
     }
   );
   const player_theme_5 = ref<PlayerTheme_LyricItem>(
-    { 
+    {
       id: 4,
       name: '皮肤底图',
       normalStyle: {
@@ -395,7 +399,7 @@
   ////// player_configs this_audio(play_info , other_info) model check
   const checkStrategy = ref<'player' | 'related'>('player')
 
-  ////// player_bar auto hidden 
+  ////// player_bar auto hidden
   let timer_auto_hidden: string | number | NodeJS.Timeout | undefined;
   const handleMouseMove = () => {
     emits('player_collapsed_action_bar_of_Immersion_model', false);
@@ -829,7 +833,7 @@
                     />
                   </n-space>
                   <!-- 3 炫胶唱片-->
-                  <n-space vertical style="margin-top: -2vh;" v-show="player_background_model_num === 2">
+                  <n-space vertical style="margin-top: -3vh;" v-show="player_background_model_num === 2">
                     <lottie-player
                       ref="animationInstance_model_2_wave" v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
                       speed="0.8"
@@ -907,7 +911,7 @@
               <!-- right area --><!-- Lyics Lines List -->
               <n-layout-content
                 style="background-color: transparent;margin-left:2vw;">
-                <div 
+                <div
                   style="
                     width: 40vw;height: calc(100vh - 200px);
                     border-radius: 20px;
@@ -926,12 +930,12 @@
                       background-color: #00000000;
                     ">
                     <template #default>
-                      <n-list-item 
-                        class="lyrics_info" 
+                      <n-list-item
+                        class="lyrics_info"
                         :style="{
                           textAlign: player_collapsed_album ? 'center' : 'left',
                         }"
-                        v-for="(item, index) in props.this_audio_lyrics_info_line" 
+                        v-for="(item, index) in props.this_audio_lyrics_info_line"
                         @click="handleItemDbClick(index)">
                         <div class="lyrics_text_active">
                           {{ item }}

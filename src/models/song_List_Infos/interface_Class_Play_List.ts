@@ -1,6 +1,6 @@
 interface Play_List {
-    label: string; // 播放列表的标签
-    value: string; // 播放列表的值
+    label: string,
+    value: string,
 
     id: string; // 播放列表的唯一标识符
     name: string; // 播放列表的名称

@@ -18,7 +18,9 @@
             "loveAlbum": "收藏专辑",
             "allArtist": "所有歌手",
             "loveArtist": "收藏歌手",
-            "recentPlay": "最近播放"
+            "recentPlay": "最近播放",
+            "countSong": "首",
+            "countList": "组"
         },
         "view_player": {
             "view_seting": {

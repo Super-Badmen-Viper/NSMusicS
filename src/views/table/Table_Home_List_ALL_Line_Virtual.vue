@@ -153,7 +153,10 @@ const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
 }
 const handleItemClick_Rating = (id_rating: any) => {
   const [id, rating] = id_rating.split('-');
-  set_AlbumInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, rating);
+  if(rating === '6') {
+    set_AlbumInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, 0);
+  }else
+    set_AlbumInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, rating);
 }
 
 ////// view albumlist_view Remove data
@@ -171,7 +174,7 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-  <div class="album-wall-container">
+  <div class="home-wall-container">
     <n-space vertical style="margin-top: 20px;">
       <div class="notice">
         <div
@@ -265,7 +268,7 @@ onBeforeUnmount(() => {
         </n-button>
       </n-space>
       <DynamicScroller
-          class="album-wall" ref="dynamicScroller_maximum_playback"
+          class="home-wall" ref="dynamicScroller_maximum_playback"
           :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}"
           :items="props.home_Files_temporary_maximum_playback"
           :itemSize="itemSize"
@@ -304,9 +307,9 @@ onBeforeUnmount(() => {
                     <div class="hover_buttons_top">
                       <rate
                           class="viaSlot"
-                          :length="5"
+                          :length="6"
                           v-model="item.rating"
-                          @after-rate="(value: number) => handleItemClick_Rating(item.id+'-'+value)"
+                          @after-rate="(value) => { handleItemClick_Rating(item.id + '-' + value); if (item.rating == 6) { item.rating = 0; } }"
                           style="margin-right: 8px;"
                       />
                     </div>
@@ -385,7 +388,7 @@ onBeforeUnmount(() => {
         </n-button>
       </n-space>
       <DynamicScroller
-        class="album-wall" ref="dynamicScroller_random_search"
+        class="home-wall" ref="dynamicScroller_random_search"
         :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}"
         :items="props.home_Files_temporary_random_search"
         :itemSize="itemSize"
@@ -424,9 +427,9 @@ onBeforeUnmount(() => {
                     <div class="hover_buttons_top">
                       <rate
                         class="viaSlot"
-                        :length="5"
+                        :length="6"
                         v-model="item.rating"
-                        @after-rate="(value: number) => handleItemClick_Rating(item.id+'-'+value)"
+                        @after-rate="(value) => { handleItemClick_Rating(item.id + '-' + value); if (item.rating == 6) { item.rating = 0; } }"
                         style="margin-right: 8px;"
                       />
                     </div>
@@ -505,7 +508,7 @@ onBeforeUnmount(() => {
         </n-button>
       </n-space>
       <DynamicScroller
-        class="album-wall" ref="dynamicScroller_recently_added"
+        class="home-wall" ref="dynamicScroller_recently_added"
         :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}"
         :items="props.home_Files_temporary_recently_added"
         :itemSize="itemSize"
@@ -544,9 +547,9 @@ onBeforeUnmount(() => {
                     <div class="hover_buttons_top">
                       <rate
                           class="viaSlot"
-                          :length="5"
+                          :length="6"
                           v-model="item.rating"
-                          @after-rate="(value: number) => handleItemClick_Rating(item.id+'-'+value)"
+                          @after-rate="(value) => { handleItemClick_Rating(item.id + '-' + value); if (item.rating == 6) { item.rating = 0; } }"
                           style="margin-right: 8px;"
                       />
                     </div>
@@ -625,7 +628,7 @@ onBeforeUnmount(() => {
         </n-button>
       </n-space>
       <DynamicScroller
-        class="album-wall" ref="dynamicScroller_recently_played"
+        class="home-wall" ref="dynamicScroller_recently_played"
         :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}"
         :items="props.home_Files_temporary_recently_played"
         :itemSize="itemSize"
@@ -664,9 +667,9 @@ onBeforeUnmount(() => {
                     <div class="hover_buttons_top">
                       <rate
                         class="viaSlot"
-                        :length="5"
+                        :length="6"
                         v-model="item.rating"
-                        @after-rate="(value: number) => handleItemClick_Rating(item.id+'-'+value)"
+                        @after-rate="(value) => { handleItemClick_Rating(item.id + '-' + value); if (item.rating == 6) { item.rating = 0; } }"
                         style="margin-right: 8px;"
                       />
                     </div>
@@ -736,11 +739,11 @@ onBeforeUnmount(() => {
   </div>
 </template>
 <style>
-.album-wall-container {
+.home-wall-container {
   width: 100%;
   height: 100%;
 }
-.album-wall {
+.home-wall {
   overflow-y: auto;
   width: calc(100vw - 200px);
   height: 246px;
@@ -776,6 +779,7 @@ onBeforeUnmount(() => {
   position: absolute;
   top: 2px;
   left: 0;
+  width: 140px;
 }
 .album .hover_buttons_bottom {
   position: absolute;
@@ -838,8 +842,8 @@ onBeforeUnmount(() => {
   width: 25px;
   height: 25px;
 }
-//.Rate.viaSlot .Rate__star.filled{color: #813d1a;}
-//.Rate.viaSlot .Rate__star.hover{color: #E67136;}
+.Rate.viaSlot .Rate__star:nth-child(8).filled{color: red;}
+.Rate.viaSlot .Rate__star:nth-child(8).hover{color: red;}
 
 ::-webkit-scrollbar {
   width: 6px;

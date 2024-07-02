@@ -18,7 +18,9 @@
             "loveAlbum": "Favoritalbum",
             "allArtist": "Alla Artister",
             "loveArtist": "Favoritartister",
-            "recentPlay": "Nyligen Spelade"
+            "recentPlay": "Nyligen Spelade",
+            "countSong": "sång",
+            "countList": "grupp"
         },
         "view_player": {
             "view_seting": {

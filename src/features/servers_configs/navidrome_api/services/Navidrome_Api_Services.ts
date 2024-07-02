@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export class ND_Api_Services {
+export class Navidrome_Api_Services {
     protected readonly baseUrl: string;
     constructor(baseUrl: string) {
         this.baseUrl = baseUrl;
@@ -16,7 +16,7 @@ export class ND_Api_Services {
         };
     }
     protected async sendRequest(
-        username: string,token: string,salt: string,
+        username: string, token: string, salt: string,
         endpoint: string, params?: Record<string, string>): Promise<any> {
         const queryString = new URLSearchParams({
             ...this.getCommonParams(username,token,salt),
@@ -27,7 +27,7 @@ export class ND_Api_Services {
             const response = await axios.get(url);
             return response.data;
         } catch (error: any) {
-            throw new Error(`API request failed: ${error.message}`);
+            return error.message;
         }
     }
 }

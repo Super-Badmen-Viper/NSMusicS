@@ -1,7 +1,7 @@
-import {Api_Services} from "@/features/servers_configs/navidrome_api/Api_Services";
+import {Navidrome_Api_Services} from "@/features/servers_configs/navidrome_api/services/Navidrome_Api_Services";
 
-export class UserApiService extends Api_Services {
-    public async getUser(username: string,password: string): Promise<any> {
-        return this.sendRequest(username,password,'getUser');
+export class User_ApiService_of_ND extends Navidrome_Api_Services {
+    public async getUser(username: string,token: string,salt: string): Promise<any> {
+        return this.sendRequest(username, token, salt, 'getUser');
     }
 }

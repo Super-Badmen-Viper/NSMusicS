@@ -456,8 +456,8 @@
     set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id,favorite)
     emits('this_audio_song_favorite',!favorite)
   }
-  const handleItemClick_Rating = (id: any,rating: number) => {
-    set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id,rating)
+  const handleItemClick_Rating = (id: any,rating: any) => {
+    set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, rating);
     emits('this_audio_song_rating',rating)
   }
 
@@ -702,7 +702,9 @@
         </n-space>   
         <div class="gird_Right_button_area">
           <n-space justify="space-between">
-            <n-rate clearable size="small" v-model:value="props.this_audio_song_rating" @update:value="(value: number) => handleItemClick_Rating(props.this_audio_song_id, value)"/>
+            <n-rate clearable size="small"
+                    v-model:value="props.this_audio_song_rating"
+                    @update:value="(value: number) => handleItemClick_Rating(props.this_audio_song_id, value)"/>
             <n-button size="tiny" text @click="handleItemClick_Favorite(props.this_audio_song_id,props.this_audio_song_favorite);">
               <template #icon>
                 <n-icon v-if="props.this_audio_song_favorite" :size="22" color="red"><Heart28Filled/></n-icon>

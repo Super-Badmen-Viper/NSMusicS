@@ -357,7 +357,10 @@
   }
   const handleItemClick_Rating = (id_rating: any) => {
     const [id, rating] = id_rating.split('-');
-    set_ArtistInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, rating);
+    if(rating === '6') {
+      set_ArtistInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, 0);
+    }else
+      set_ArtistInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, rating);
   }
 
   ////// view artistlist_view Remove data
@@ -457,7 +460,7 @@
                 :style="{ 
                   width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
-                  WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 25%)'
+                  WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)'
                 }"
                 style="
                   margin-left: 200px; margin-top: -300px;
@@ -466,33 +469,6 @@
                 :src="getAssetImage(props.page_top_album_image_url)"
                 @error="handleImageError"
               />
-            </div>
-            <div style="
-              position: absolute;
-              z-index: 0;
-              width: calc(100vw - 220px);height: 300px;
-              border-radius: 10px;
-              overflow: hidden;">
-              <svg 
-                style="
-                  position: absolute; top: -2; left: 0; 
-                  width: 100%; height: 100%;">
-                <defs>
-                  <linearGradient v-if="!props.update_theme" id="gradient" gradientTransform="rotate(30)">
-                    <stop offset="0%" stop-color="#FAFAFC"></stop>
-                    <stop offset="100%" stop-color="rgba(255, 255, 255, 0.4)"></stop>
-                  </linearGradient>
-                  <linearGradient v-if="props.update_theme" id="gradient" gradientTransform="rotate(30)">
-                    <stop offset="0%" stop-color="#101014"></stop>
-                    <stop offset="150%" stop-color="rgba(0, 0, 0, 0.4)"></stop>
-                  </linearGradient>
-                </defs>
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M462 61.401L281 300L0 300V0H413.923L462 61.401ZM426.805 61.407L394.831 102.26C394.337 102.886 394.783 103.814 395.59 103.814H404.903C405.493 103.814 406.059 103.537 406.421 103.079L437.178 63.7803C437.71 63.1016 438 62.2638 438 61.401C438 60.5382 437.71 59.7004 437.178 59.0216L406.421 19.7349C406.059 19.265 405.493 19 404.903 19H395.59C394.783 19 394.337 19.9276 394.831 20.5541L426.805 61.407ZM358.207 102.26L390.181 61.407L358.207 20.5541C357.713 19.9276 358.159 19 358.966 19H368.278C368.869 19 369.435 19.265 369.796 19.7349L400.554 59.0216C401.086 59.7004 401.376 60.5382 401.376 61.401C401.376 62.2638 401.086 63.1016 400.554 63.7803L369.796 103.079C369.435 103.537 368.869 103.814 368.278 103.814H358.966C358.159 103.814 357.713 102.886 358.207 102.26Z" fill="url(#gradient)"/>
-                <path d="M692.435 277.978C691.723 277.07 691.723 275.801 692.435 274.885L711.917 250H413.673L392.983 276.435L411.427 300H709.671L692.435 277.978Z" fill="url(#gradient)"/>
-                <path d="M386.241 277.978C385.529 277.07 385.529 275.801 386.241 274.885L413.723 242H397.868L350.7 300H403.477L386.241 277.978Z" fill="url(#gradient)"/>
-                <path d="M716.241 277.978C715.528 277.07 715.528 275.801 716.241 274.885L742.5 242H726.5L719.868 250L699.178 276.435L717.5 300L733.5 300L716.241 277.978Z" fill="url(#gradient)"/>
-              </svg>
-              
             </div>
             <n-page-header 
               style="
@@ -510,21 +486,21 @@
                 </n-gi>
               </n-grid>
               <template #title>
-                <n-space vertical style="margin-top:2px;margin-left: 10px;">
-                  <n-breadcrumb separator=">">
+                <n-space vertical style="margin-top:14px;margin-left: 10px;">
+                  <n-breadcrumb separator="|">
                       <n-breadcrumb-item style="font-size: 22px">{{ $t('entity.artist_other') }}</n-breadcrumb-item>
-                      <n-breadcrumb-item> 
-                        <n-ellipsis 
-                          style="
-                            max-width: 120px;height: 40px;position: relative;top: 14px;
-                            text-align: left;font-size: 22px;">
-                          {{ breadcrumbItems }}
-                        </n-ellipsis>
+                      <n-breadcrumb-item>
+                        <n-button text >
+                          <n-ellipsis
+                              style="text-align: left;font-size: 22px;">
+                            {{ props.page_top_album_name }}
+                          </n-ellipsis>
+                        </n-button>
                       </n-breadcrumb-item>
                   </n-breadcrumb>
                   <n-select 
                     :value="props.page_artistlists_selected" 
-                    :options="props.page_artistlists_options" style="width: 192px;"
+                    :options="props.page_artistlists_options" style="width: 166px;"
                     :on-update:value="page_artistlists_handleselected_updatevalue" />
                 </n-space>
               </template>
@@ -546,21 +522,7 @@
                 
               </template>
               <template #footer>
-                <div style="
-                  margin-left: 430px;margin-top: -20px;
-                  text-align: left;
-                  height: 40px;font-weight: 900;">
-                  <!-- @click="handleItemClick_artist(props.page_top_album_id)" -->
-                  <n-button text >
-                    <n-ellipsis 
-                      style="
-                        max-width: 256px;height: 40px;
-                        text-align: left;font-size: 24px;
-                        font-weight: 900;">
-                      {{ props.page_top_album_name }}
-                    </n-ellipsis>
-                  </n-button>
-                </div>
+
               </template>
             </n-page-header>
           </div>
@@ -600,9 +562,9 @@
                     <div class="hover_buttons_top">
                       <rate
                         class="viaSlot"
-                        :length="5"
+                        :length="6"
                         v-model="item.rating"
-                        @after-rate="(value: number) => handleItemClick_Rating(item.id+'-'+value)"
+                        @after-rate="(value) => { handleItemClick_Rating(item.id + '-' + value); if (item.rating == 6) { item.rating = 0; } }"
                         style="margin-right: 8px;"
                       />
                     </div>
@@ -777,8 +739,8 @@
   width: 25px;
   height: 25px;
 }
-//.Rate.viaSlot .Rate__star.filled{color: #813d1a;}
-//.Rate.viaSlot .Rate__star.hover{color: #E67136;}
+.Rate.viaSlot .Rate__star:nth-child(8).filled{color: red;}
+.Rate.viaSlot .Rate__star:nth-child(8).hover{color: red;}
 
 ::-webkit-scrollbar {
   display: auto;

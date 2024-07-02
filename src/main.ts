@@ -12,12 +12,13 @@ import rate from 'vue-rate'
 import 'vue-rate/dist/vue-rate.css'
 app.use(rate)
 
-import {System_Configs_Read} from "@/features/system_configs/System_Configs_Read";
-let system_Configs_Read = new System_Configs_Read();
 import { Language } from "@/i18n/i18n";
-const i18n = new Language(''+system_Configs_Read.app_Configs.value['lang']).i18n;
+const i18n = new Language().i18n;
 console.log(i18n.locale)
 app.use(i18n);
+
+// import api from "@/features/servers_configs/navidrome_api/api";
+// app.config.globalProperties.$api = api;
 
 app.use(router)
 app.mount('#app')

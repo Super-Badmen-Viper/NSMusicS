@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { App_Configs } from '@/models/app_Configs/class_App_Configs';
 import { Player_Configs_of_Audio_Info } from '@/models/app_Configs/class_Player_Configs_of_Audio_Info';
 import { Player_Configs_of_UI } from '@/models/app_Configs/class_Player_Configs_of_UI';
+import { Server_Configs } from "@/models/server_Configs/class_Server_Configs";
 
 export class System_Configs_Read {
     public app_Configs = ref(
@@ -47,13 +48,16 @@ export class System_Configs_Read {
             this_audio_file_path_from_playlist: null,
             fetchData_This_AlbumOrArtist_PlayMedia_Model: null,
         }))
-    public playlist_File_Configs = ref<Media_File[]>([])
+    public playlist_File_Configs = ref<string[]>([])
     public view_Media_History_Configs = ref<Interface_View_Router_Date[]>([])
     public view_Album_History_Configs = ref<Interface_View_Router_Date[]>([])
     public view_Artist_History_Configs = ref<Interface_View_Router_Date[]>([])
     public view_Media_History_select_Configs = ref<Interface_View_Router_Date>()
     public view_Album_History_select_Configs = ref<Interface_View_Router_Date>()
     public view_Artist_History_select_Configs = ref<Interface_View_Router_Date>()
+    ///
+    public server_Configs = ref<Server_Configs_Props[]>([])
+    public server_Configs_Current = ref<Server_Configs_Props>()
 
     constructor() {
         const path = require('path');
@@ -78,18 +82,21 @@ export class System_Configs_Read {
                 this.player_Configs_of_UI.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
         });
         /// play_list
-        db.prepare(`SELECT * FROM system_playlist_file_config`).all().forEach((row: Media_File, index: number) => {
-            row.absoluteIndex = index;
-            row.selected = false;
-            row.duration_txt = this.formatTime(row.duration);
-            if (row.path.indexOf('mp3') > 0)
-                row.medium_image_url = row.path.replace('mp3', 'jpg');
-            else if (row.path.indexOf('flac') > 0)
-                row.medium_image_url = row.path.replace('flac', 'jpg');
-            else
-                row.medium_image_url = '../../../resources/img/error_album.jpg';
-            this.playlist_File_Configs.value.push(row);
-        });
+        // db.prepare(`SELECT * FROM system_playlist_file_config`).all().forEach((row: Media_File, index: number) => {
+        //     row.absoluteIndex = index;
+        //     row.selected = false;
+        //     row.duration_txt = this.formatTime(row.duration);
+        //     if (row.path.indexOf('mp3') > 0)
+        //         row.medium_image_url = row.path.replace('mp3', 'jpg');
+        //     else if (row.path.indexOf('flac') > 0)
+        //         row.medium_image_url = row.path.replace('flac', 'jpg');
+        //     else
+        //         row.medium_image_url = '../../../resources/img/error_album.jpg';
+        //     this.playlist_File_Configs.value.push(row);
+        // });
+        const stmt_playlist_tracks_media_file_id = db.prepare(`SELECT * FROM system_playlist_file_id_config`);
+        this.playlist_File_Configs.value = stmt_playlist_tracks_media_file_id.all().map(item => item.media_file_id);
+
         /// view_router_hisotry
         db.prepare(`SELECT * FROM system_view_media_history`).all().forEach((row: Interface_View_Router_Date) => {
             this.view_Media_History_Configs.value.push(row);
@@ -109,28 +116,15 @@ export class System_Configs_Read {
         db.prepare(`SELECT * FROM system_view_artist_select_history`).all().forEach((row: Interface_View_Router_Date) => {
             this.view_Artist_History_select_Configs.value = row;
         });
+        ///
+        db.prepare(`SELECT * FROM system_servers_config`).all().forEach((row: Server_Configs_Props, index: number) => {
+            this.server_Configs.value.push(row);
+        });
+        db.prepare(`SELECT * FROM system_servers_config ORDER BY last_login_at desc LIMIT 1`).all().forEach((row: Server_Configs_Props) => {
+            this.server_Configs_Current.value = row;
+        });
 
         db.close();
         db = null;
     }
-
-    formatTime(currentTime: number): string {
-        const minutes = Math.floor(currentTime / 60);
-        const seconds = currentTime % 60;
-    
-        let formattedMinutes = String(minutes);
-        let formattedSeconds = String(seconds);
-    
-        if(formattedMinutes.length == 1)
-          formattedMinutes = '0' + formattedMinutes;
-        formattedMinutes = formattedMinutes.replace('.','');
-        formattedMinutes = formattedMinutes.substring(0, 2);
-    
-        formattedSeconds = formattedSeconds.substring(0,formattedSeconds.indexOf('.'));
-        if(formattedSeconds.length == 1)
-          formattedSeconds = '0' + formattedSeconds;
-        formattedSeconds = formattedSeconds.substring(0, 2);
-    
-        return `${formattedMinutes}:${formattedSeconds}`;
-      }
 }

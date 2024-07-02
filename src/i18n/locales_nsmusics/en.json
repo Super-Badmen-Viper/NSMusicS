@@ -18,7 +18,9 @@
             "loveAlbum": "love Album",
             "allArtist": "all Artist",
             "loveArtist": "love Artist",
-            "recentPlay": "recent Play"
+            "recentPlay": "recent Play",
+            "countSong": "song",
+            "countList": "set"
         },
         "view_player": {
             "view_seting": {

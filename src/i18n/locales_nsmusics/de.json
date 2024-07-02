@@ -18,7 +18,9 @@
             "loveAlbum": "Favorit-Alben",
             "allArtist": "Alle Künstler",
             "loveArtist": "Favorit-Künstler",
-            "recentPlay": "Zuletzt gespielt"
+            "recentPlay": "Zuletzt gespielt",
+            "countSong": "Lied",
+            "countList": "Gruppe"
         },
         "view_player": {
             "view_seting": {

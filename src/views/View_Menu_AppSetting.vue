@@ -25,24 +25,42 @@ function get_player_use_lottie_animation(value: any){
 function get_menu_appsetting_select_tab_name(value: any){
   emits('menu_appsetting_select_tab_name',value)
 }
+function get_server_config_of_current_user_of_sqlite(value: any){
+  emits('server_config_of_current_user_of_sqlite',value)
+}
+function get_server_config_of_all_user_of_sqlite(value: any){
+  emits('server_config_of_all_user_of_sqlite',value)
+}
 
 onMounted(async () => {
   emits('router_select','View_Menu_AppSetting')
 });
 const emits = defineEmits([
   'router_select',
-  'menu_appsetting_select_tab_name',
+  'menu_appsetting_select_tab_name','server_config_of_current_user_of_sqlite','server_config_of_all_user_of_sqlite',
   'update_lang','update_theme','menuOptions_appBar','selectd_props_app_sidebar',
   'player_fade_value','player_use_lottie_animation',
 ]);
 const { 
   app_left_menu_collapsed,window_innerWidth,
   menu_appsetting_select_tab_name,
+
+  server_config_of_current_user_of_sqlite_of_select_servername,
+  server_config_of_current_user_of_sqlite_of_select,
+  server_config_of_all_user_of_select,
+  server_config_of_current_user_of_sqlite,server_config_of_all_user_of_sqlite,
+
   update_theme,menuOptions_appBar,
   player_fade_value,player_use_lottie_animation
 } = defineProps<{
   app_left_menu_collapsed:Boolean,window_innerWidth:number,
   menu_appsetting_select_tab_name: any,
+
+  server_config_of_current_user_of_sqlite_of_select_servername: string,
+  server_config_of_current_user_of_sqlite_of_select: {label: string;value: string},
+  server_config_of_all_user_of_select: {label: string;value: string}[],
+  server_config_of_current_user_of_sqlite:Server_Configs_Props,server_config_of_all_user_of_sqlite:Server_Configs_Props[],
+
   update_theme:Boolean, menuOptions_appBar:MenuOption[],selectd_props_app_sidebar:(string | number)[],
   player_fade_value:number,player_use_lottie_animation:Boolean,
 }>();
@@ -55,6 +73,13 @@ const {
       :window_innerWidth="window_innerWidth"
       :menu_appsetting_select_tab_name="menu_appsetting_select_tab_name"
       @menu_appsetting_select_tab_name="get_menu_appsetting_select_tab_name"
+      :server_config_of_current_user_of_sqlite_of_select_servername="server_config_of_current_user_of_sqlite_of_select_servername"
+      :server_config_of_current_user_of_sqlite_of_select="server_config_of_current_user_of_sqlite_of_select"
+      :server_config_of_all_user_of_select="server_config_of_all_user_of_select"
+      :server_config_of_current_user_of_sqlite="server_config_of_current_user_of_sqlite"
+      @server_config_of_current_user_of_sqlite="get_server_config_of_current_user_of_sqlite"
+      :server_config_of_all_user_of_sqlite="server_config_of_all_user_of_sqlite"
+      @server_config_of_all_user_of_sqlite="get_server_config_of_all_user_of_sqlite"
       @update_lang="get_update_lang"
       :update_theme="update_theme"
       @update_theme="get_update_theme"
