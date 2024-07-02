@@ -1,4 +1,4 @@
-import type { SSArtistInfo } from '@/renderer/api/subsonic.types';
+import { SSArtistInfo } from '/@/renderer/api/subsonic.types';
 
 export type NDAuthenticate = {
     id: string;
