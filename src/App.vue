@@ -171,7 +171,7 @@
   
   ////// this_app BrowserWindow
   const { ipcRenderer } = require('electron');
-  async function minimize() {
+  function minimize() {
     ipcRenderer.send('window-min');
   }
   function maximize() {
@@ -348,6 +348,8 @@
   function get_this_audio_song_id(value: any) {
     this_audio_song_id.value = value
     console.log('this_audio_song_id：'+value)
+    let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
+    set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_PlayCount_of_Media_File(value)
   }
   const this_audio_song_rating = ref<number>(0)
   function get_this_audio_song_rating(value: any) {
@@ -380,6 +382,8 @@
     this_audio_album_id.value = value
     console.log('this_audio_album_id：'+value)
     page_top_album_id.value = value;
+    let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
+    set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_PlayCount_of_Album(value)
   }
   const this_audio_album_rating = ref<string>('') // album model
   function get_this_audio_album_rating(value: any) {
@@ -405,15 +409,70 @@
   import { Get_PlaylistInfo_From_LocalSqlite } from "@/features/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
   import { Set_PlaylistInfo_From_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_From_LocalSqlite";
   const playlist_Tracks_Current_Media_File_id_of_list = ref<string[]>([])
+  const playlist_All_of_list = ref<{label: string;value: string}[]>([])
   const playlist_Tracks_temporary = ref<{playlist:Play_List,playlist_tracks:Play_list_Track[]}[]>([])
   function get_playlist_Tracks_temporary_add(value: any){
-
+    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_From_LocalSqlite();
+    const playlist:Play_List = set_PlaylistInfo_From_LocalSqlite.Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
+        value,
+        'admin',0,0,0,'admin'
+    )
+    playlist_Tracks_temporary.value.push({
+      playlist: playlist,
+      playlist_tracks: []
+    })
+    let db = require('better-sqlite3')(navidrome_db);
+    db.pragma('journal_mode = WAL');
+    Init_page_songlists_statistic_Data(db);
+    db.close();
+    playlist_All_of_list.value = []
+    playlist_Tracks_temporary.value.forEach((item) => {
+      playlist_All_of_list.value.push({
+        label: item.playlist.name,
+        value: item.playlist.id
+      })
+    })
   }
   function get_playlist_Tracks_temporary_update(value: any){
-
+    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_From_LocalSqlite();
+    set_PlaylistInfo_From_LocalSqlite.Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(
+      value.id,value.name,
+      'admin',0,0,0,'admin'
+    )
+    const index = playlist_Tracks_temporary.value.findIndex(list => list.playlist.id === value.id);
+    if (index >= 0) {
+      playlist_Tracks_temporary.value[index].playlist.name = value.name;
+      let db = require('better-sqlite3')(navidrome_db);
+      db.pragma('journal_mode = WAL');
+      Init_page_songlists_statistic_Data(db);
+      db.close();
+      playlist_All_of_list.value = []
+      playlist_Tracks_temporary.value.forEach((item) => {
+        playlist_All_of_list.value.push({
+          label: item.playlist.name,
+          value: item.playlist.id
+        })
+      })
+    }
   }
   function get_playlist_Tracks_temporary_delete(value: any){
-
+    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_From_LocalSqlite();
+    set_PlaylistInfo_From_LocalSqlite.Set_PlaylistInfo_To_Update_DeletePlaylist_of_ND(value)
+    const index = playlist_Tracks_temporary.value.findIndex(list => list.playlist.id === value);
+    if (index >= 0) {
+      playlist_Tracks_temporary.value.splice(index,1)
+      let db = require('better-sqlite3')(navidrome_db);
+      db.pragma('journal_mode = WAL');
+      Init_page_songlists_statistic_Data(db);
+      db.close();
+      playlist_All_of_list.value = []
+      playlist_Tracks_temporary.value.forEach((item) => {
+        playlist_All_of_list.value.push({
+          label: item.playlist.name,
+          value: item.playlist.id
+        })
+      })
+    }
   }
   // player_configs audio_infos of current_playlist
   const playlist_Files_temporary = ref<Media_File[]>([]);
@@ -455,6 +514,9 @@
       media_Files_selected.value = [];
     }
     console.log('media_Files_selected：'+value)
+  }
+  function set_media_Files_selected_to_love(){
+
   }
 
   ////// player_configs lyric_info
@@ -523,20 +585,11 @@
     const [minutes, seconds] = timeString.split(':');
     return (parseInt(minutes) * 60 + parseInt(seconds)) * 1000;
   }
-  //
-  function update_Files_temporary_rating(type:any,id:any){
-    if(type === 'media'){
-
-    }else if (type === 'album'){
-
-    }else if (type === 'artist'){
-
-    }
-  }
 
   ///// view of View_Home_MusicLibrary_Browse
   import {Get_HomeDataInfos_From_LocalSqlite} from '@/features/sqlite3_local_configs/class_Get_HomeDataInfos_From_LocalSqlite'
   import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
+  import {Set_MediaInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
   let get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
   const home_Files_temporary_maximum_playback = ref<Album[]>([])
   const home_Files_temporary_random_search = ref<Album[]>([])
@@ -906,6 +959,7 @@
               mediaFile.rating = 0;
       }
       ////// filter selected_list for media_Files_temporary
+      let order_play_date = null;
       media_Files_temporary.value = media_Files_temporary.value.filter((item) => {
         if (page_songlists_selected.value === 'song_list_all') {
           return true;
@@ -915,9 +969,11 @@
           const stmt_media_Annotation_Recently_Items = db.prepare(`
             SELECT item_id FROM annotation
             WHERE play_count >= 1 AND item_type='media_file'
+            ORDER BY play_date DESC
           `);
-          const annotations = stmt_media_Annotation_Recently_Items.all();
-          return annotations.some((annotation) => annotation.item_id === item.id);
+          const annotations = stmt_media_Annotation_Recently_Items.all().map((annotation) => annotation.item_id);
+          order_play_date = annotations;
+          return annotations.includes(item.id);
         } else {
           const index = playlist_Tracks_temporary.value.findIndex(list => list.playlist.id === page_songlists_selected.value);
           if (index >= 0) {
@@ -928,6 +984,17 @@
           }
         }
       });
+      if (page_songlists_selected.value === 'song_list_recently') {
+        let new_sort: Media_File[] = media_Files_temporary.value.slice();
+        media_Files_temporary.value = [];
+        order_play_date.forEach((id) => {
+          const index = new_sort.findIndex(item => item.id === id);
+          if (index !== -1) {
+            media_Files_temporary.value.push(new_sort[index]);
+            new_sort.splice(index, 1);
+          }
+        });
+      }
       media_Files_temporary.value.forEach((item, index) => {
         item.absoluteIndex = index + 1;
       });
@@ -2020,13 +2087,12 @@
         server_config_of_current_user_of_sqlite_of_select.value = server_config_of_current_user_of_sqlite.value
         server_config_of_current_user_of_sqlite_of_select_servername.value = server_config_of_current_user_of_sqlite.value?.server_name
       }
+      save_system_config_of_Servers_Config()
 
       /// playlist media_file_id_of_list
       playlist_Tracks_Current_Media_File_id_of_list.value = system_Configs_Read.playlist_File_Configs.value
       let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
       playlist_Files_temporary.value = get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(playlist_Tracks_Current_Media_File_id_of_list.value)
-
-      save_system_config_of_Servers_Config()
     }catch (e) { console.error(e) }
 
     /// playlist configs
@@ -2034,6 +2100,10 @@
       let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
       const playlist_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist()
       playlist_temporary.forEach((item:Play_List) =>{
+        playlist_All_of_list.value.push({
+          label: item.name,
+          value: item.id
+        })
         playlist_Tracks_temporary.value.push({
           playlist: item,
           playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id)
@@ -2191,6 +2261,7 @@
           </n-layout-sider>
           <!--Right Router_View-->
           <n-layout embedded style="height: calc(100vh - 150px);margin-top: 70px;">
+            <!--Menu View -->
             <RouterView
               class="view_show_data"
               v-if="router_select_model_menu"
@@ -2219,6 +2290,7 @@
               :window_innerWidth="window_innerWidth">
 
             </RouterView>
+            <!--Home View -->
             <RouterView
               class="view_show_data"
               v-else-if="router_select_model_home"
@@ -2278,6 +2350,7 @@
               :page_songlists_keyword=page_songlists_keyword
               @page_songlists_keyword="page_songlists_get_keyword"
 
+              :playlist_All_of_list="playlist_All_of_list"
               :playlist_Tracks_temporary="playlist_Tracks_temporary"
               @playlist_Tracks_temporary_add="get_playlist_Tracks_temporary_add"
               @playlist_Tracks_temporary_update="get_playlist_Tracks_temporary_update"
@@ -2376,7 +2449,6 @@
             >
 
             </RouterView>
-
             <!--Top Bar-->
             <div class="bar_top_setapp" :style="{ backgroundColor: theme_bar_top_setapp }">
               <section

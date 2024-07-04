@@ -98,6 +98,9 @@ function get_playlist_Tracks_temporary_update(value: any){
 function get_playlist_Tracks_temporary_delete(value: any){
   emits('playlist_Tracks_temporary_delete',value)
 }
+function get_playlist_Temp_Current(value: any){
+  emits('playlist_Temp_Current',value)
+}
 onMounted(async () => {
   emits('router_select','View_Song_List_ALL')
 });
@@ -144,7 +147,7 @@ const {
   media_Files_temporary,media_Files_selected,
   page_songlists_options_Sort_key,
 
-  playlist_Tracks_temporary,
+  playlist_All_of_list,playlist_Tracks_temporary,
 
   router_select_history_date,router_history_datas,router_history_model_of_Media_scroller_value,router_history_model_of_Media_scroll
 } = defineProps<{
@@ -159,7 +162,7 @@ const {
   media_Files_temporary:Media_File[],media_Files_selected:Media_File[],
   page_songlists_options_Sort_key:{ columnKey: string; order: string }[],
 
-  playlist_Tracks_temporary:{playlist:Play_List,playlist_tracks:Play_list_Track[]}[],
+  playlist_All_of_list:{label: string;value: string}[],playlist_Tracks_temporary:{playlist:Play_List,playlist_tracks:Play_list_Track[]}[],
 
   router_select_history_date:Interface_View_Router_Date,router_history_datas:Interface_View_Router_Date[],router_history_model_of_Media_scroller_value:number,router_history_model_of_Media_scroll:Boolean,
 }>();
@@ -218,6 +221,7 @@ const {
         @page_songlists_keyword="page_songlists_get_keyword"
         @page_songlists_reset_data="page_songlists_get_reset_data"
 
+        :playlist_All_of_list="playlist_All_of_list"
         :playlist_Tracks_temporary="playlist_Tracks_temporary"
         @playlist_Tracks_temporary_add="get_playlist_Tracks_temporary_add"
         @playlist_Tracks_temporary_update="get_playlist_Tracks_temporary_update"

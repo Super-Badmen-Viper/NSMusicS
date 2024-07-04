@@ -10,10 +10,10 @@ import {
   SaveEdit24Regular,
   Heart24Regular,Heart28Filled,
   ChevronLeft16Filled,ChevronRight16Filled,
-  Filter20Filled,
+  Filter20Filled,MoreCircle20Regular,
 } from '@vicons/fluent'
 import { Icon } from "@vicons/utils";
-import { Add, Close } from "@vicons/carbon";
+import { Add, Close, Menu } from "@vicons/carbon";
 
 ////// this_view components of navie ui
 import { ref, onMounted, h, computed, watch, onBeforeUnmount } from 'vue';
@@ -60,7 +60,7 @@ const props = defineProps<{
   window_innerWidth: number;
   options_Sort_key:{ columnKey: string; order: string }[];
 
-  playlist_Tracks_temporary:{playlist:Play_List,playlist_tracks:Play_list_Track[]}[],
+  playlist_All_of_list:{label: string;value: string}[];playlist_Tracks_temporary:{playlist:Play_List,playlist_tracks:Play_list_Track[]}[];
 
   router_select_history_date: Interface_View_Router_Date;router_history_datas: Interface_View_Router_Date[];router_history_model_of_Media_scroller_value: number;router_history_model_of_Media_scroll: Boolean;
 }>();
@@ -404,24 +404,55 @@ const handleItemClick_Rating = (id_rating: any) => {
     set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, rating);
 }
 
-////// playlist_add
+////// playlist
+/// add
 import { Set_PlaylistInfo_From_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_From_LocalSqlite";
 let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_From_LocalSqlite()
 const Type_Playlist_Add = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
-const playlist_set_of_addPlaylist_of_comment = ref('')
+// const playlist_set_of_addPlaylist_of_comment = ref('')
 // const playlist_set_of_addPlaylist_of_duration = ref(false)
 // const playlist_set_of_addPlaylist_of_song_count = ref(false)
-const playlist_set_of_addPlaylist_of_public = ref(false)
+// const playlist_set_of_addPlaylist_of_public = ref(false)
 // const playlist_set_of_addPlaylist_of_owner_id = ref(false)
 async function update_playlist_addPlaylist(){
   try{
-    emits('server_config_of_all_user_of_sqlite', new_data);
-    Type_Server_Add.value = !Type_Server_Add.value
+    emits('playlist_Tracks_temporary_add', playlist_set_of_addPlaylist_of_playlistname.value);
+    Type_Playlist_Add.value = !Type_Playlist_Add.value
   }catch (e) {
-
+    console.error(e)
   }
 }
+/// update
+const Type_Playlist_Update = ref(false)
+const playlist_update_emit_id = ref<string>()
+const playlist_set_of_updatePlaylist_of_playlistcomment = ref('')
+function update_playlist_set_of_updatePlaylist_of_playlistname(value: Array | string | number | null, option: SelectBaseOption | null | SelectBaseOption[]){
+  playlist_update_emit_id.value = value
+  playlist_set_of_updatePlaylist_of_playlistcomment.value = option.label
+}
+async function update_playlist_updatePlaylist(){
+  try{
+    const playlist = {
+      id: playlist_update_emit_id.value,
+      name: playlist_set_of_updatePlaylist_of_playlistcomment.value
+    }
+    emits('playlist_Tracks_temporary_update', playlist);
+    Type_Playlist_Update.value = !Type_Playlist_Update.value
+  }catch (e) {
+    console.error(e)
+  }
+}
+async function update_playlist_deletePlaylist(){
+  try{
+    emits('playlist_Tracks_temporary_delete', playlist_update_emit_id.value);
+    Type_Playlist_Update.value = !Type_Playlist_Update.value
+  }catch (e) {
+    console.error(e)
+  }
+}
+/// update media_file
+
 
 ////// bulk_operation and select_line
 const click_select_SongList_ALL_Line = () => {
@@ -592,8 +623,8 @@ onBeforeUnmount(() => {
             <n-icon :size="20" :depth="2"><AddCircle32Regular/></n-icon>
           </template>
         </n-button>
-        <n-button flo quaternary circle size="medium" style="margin-left:4px"
-                  v-if="props.page_songlists_selected !== 'song_list_all' && props.page_songlists_selected !== 'song_list_recently'">
+<!--        v-if="props.page_songlists_selected !== 'song_list_all' && props.page_songlists_selected !== 'song_list_recently'"-->
+        <n-button quaternary circle size="medium" style="margin-left:4px">
           <template #icon>
             <n-icon :size="20" :depth="2"><Delete20Regular/></n-icon>
           </template>
@@ -619,7 +650,6 @@ onBeforeUnmount(() => {
               z-index: 0;
               height: 298px;
               border-radius: 10px;
-              border: 1.5px solid #FFFFFF20;
               overflow: hidden;
               background-size: cover;
               background-position: center;
@@ -673,7 +703,14 @@ onBeforeUnmount(() => {
                       :value="props.page_songlists_selected"
                       :options="props.page_songlists_options" style="width: 166px;"
                       :on-update:value="page_songlists_handleselected_updatevalue" />
-                    <n-button secondary strong @click="Type_Playlist_Add = !Type_Playlist_Add" style="margin-right: 35px;">
+                    <n-button secondary strong @click="Type_Playlist_Update = !Type_Playlist_Update">
+                      <template #icon>
+                        <n-icon>
+                          <Menu />
+                        </n-icon>
+                      </template>
+                    </n-button>
+                    <n-button secondary strong @click="Type_Playlist_Add = !Type_Playlist_Add">
                       <template #icon>
                         <n-icon>
                           <Add />
@@ -749,7 +786,7 @@ onBeforeUnmount(() => {
               <div class="songlist_album">
                 <span @click="handleItemClick_album(item.album_id)">{{ item.album }}</span>
               </div>
-              <div style="margin-left: auto; margin-right: 80px; width: 216px; display: flex; flex-direction: row;">
+              <div style="margin-left: auto; margin-right: 80px; width: 240px; display: flex; flex-direction: row;">
                 <rate
                   class="viaSlot" style="margin-right: 20px;"
                   :length="6"
@@ -761,7 +798,7 @@ onBeforeUnmount(() => {
                   style="
                     border: 0px; background-color: transparent;
                     width: 28px; height: 28px;
-                    margin-left: 16px;margin-top: 2px;
+                    margin-top: 2px;margin-right: 10px;
                     cursor: pointer;
                   "
                 >
@@ -775,6 +812,42 @@ onBeforeUnmount(() => {
                     <icon color="#FAFAFC" :size="20" style="margin-left: -2px; margin-top: 3px;"><Heart24Regular/></icon>
                   </template>
                 </button>
+                <VDropdown :distance="6">
+                  <button
+                    style="
+                      border: 0px; background-color: transparent;
+                      width: 28px; height: 28px;
+                      margin-top: 4px;
+                      cursor: pointer;
+                    "
+                  >
+                    <template v-if="true">
+                      <icon :size="20"><MoreCircle20Regular/></icon>
+                    </template>
+                  </button>
+                  <template #popper>
+                    <button
+                      style="
+                        border: 0px; background-color: transparent;
+                        width: 86px; height: 28px;
+                        cursor: pointer;
+                      "
+                      @click="click_count = 0;"
+                    >
+                      添加到
+                    </button><br>
+                    <button
+                      style="
+                        border: 0px; background-color: transparent;
+                        width: 86px; height: 28px;
+                        cursor: pointer;
+                      "
+                        @click="click_count = 0;"
+                    >
+                      删除
+                    </button>
+                  </template>
+                </VDropdown>
               </div>
               <span class="duration_txt" style="margin-left: auto;margin-top: 4px;margin-right: 25px;text-align: left;font-size: 15px;">{{ item.duration_txt }}</span>
               <span class="index" style="margin-left: auto; text-align: left;font-size: 15px;margin-top: 4px;">{{ index + 1 }}</span>
@@ -784,9 +857,45 @@ onBeforeUnmount(() => {
       </DynamicScroller>
     </div>
   </n-space>
-  <!-- 服务器添加 -->
+  <!-- 播放列表管理 -->
   <n-modal
-    v-model:show="Type_Playlist_Add">
+      v-model:show="Type_Playlist_Update">
+    <n-card style="width: 450px;border-radius: 6px;">
+      <n-space
+          vertical size="large" style="width: 400px;">
+        <n-space justify="space-between">
+          <span style="font-size: 20px;font-weight: 600;">{{ $t('common.manage') + $t('entity.playlist_other') }}</span>
+          <n-button tertiary size="small" @click="Type_Playlist_Update = !Type_Playlist_Update;playlist_set_of_updatePlaylist_of_playlistcomment = ''">
+            <template #icon>
+              <n-icon>
+                <Close />
+              </n-icon>
+            </template>
+          </n-button>
+        </n-space>
+        <n-select
+          :options="props.playlist_All_of_list" style="width: 166px;"
+          :on-update:value="update_playlist_set_of_updatePlaylist_of_playlistname" />
+        <n-form>
+          <n-space vertical style="margin-bottom: 10px;">
+            <span>{{ $t('common.name') }}</span>
+            <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_playlistcomment"/>
+          </n-space>
+        </n-form>
+        <n-space justify="end">
+          <n-button strong secondary type="error" @click="update_playlist_deletePlaylist();Type_Playlist_Update = !Type_Playlist_Update;playlist_set_of_updatePlaylist_of_playlistcomment = ''">
+            {{ $t('common.delete') }}
+          </n-button>
+          <n-button strong secondary type="info" @click="update_playlist_updatePlaylist();">
+            {{ $t('common.save') }}
+          </n-button>
+        </n-space>
+      </n-space>
+    </n-card>
+  </n-modal>
+  <!-- 播放列表添加 -->
+  <n-modal
+      v-model:show="Type_Playlist_Add">
     <n-card style="width: 450px;border-radius: 6px;">
       <n-space
           vertical size="large" style="width: 400px;">
@@ -806,16 +915,7 @@ onBeforeUnmount(() => {
             <n-input clearable placeholder="" v-model:value="playlist_set_of_addPlaylist_of_playlistname"/>
           </n-space>
         </n-form>
-        <n-form style="margin-top: -12px;">
-          <n-space vertical style="margin-bottom: 10px;">
-            <span>{{ $t('common.description') }}</span>
-            <n-input clearable placeholder="" v-model:value="playlist_set_of_addPlaylist_of_comment"/>
-          </n-space>
-        </n-form>
         <n-space justify="end">
-          <n-button strong secondary type="error" @click="Type_Playlist_Add = !Type_Playlist_Add">
-            {{ $t('common.delete') }}
-          </n-button>
           <n-button strong secondary type="info" @click="update_playlist_addPlaylist();">
             {{ $t('common.save') }}
           </n-button>
@@ -824,14 +924,14 @@ onBeforeUnmount(() => {
     </n-card>
   </n-modal>
   <n-dropdown
-      placement="bottom-start"
-      trigger="manual"
-      :x="xRef"
-      :y="yRef"
-      :options="options_data_dropmenu"
-      :show="showDropdownRef"
-      :on-clickoutside="onClickoutside"
-      @select="handleSelect_data_dropmenu"
+    placement="bottom-start"
+    trigger="manual"
+    :x="xRef"
+    :y="yRef"
+    :options="options_data_dropmenu"
+    :show="showDropdownRef"
+    :on-clickoutside="onClickoutside"
+    @select="handleSelect_data_dropmenu"
   />
   <div class="scorller_to_SortAZ" v-if="false">
     <n-space>
@@ -885,7 +985,7 @@ onBeforeUnmount(() => {
 .songlist_title{
   margin-left: 10px;
   text-align: left;
-  width: 260px;
+  width: 240px;
   font-size: 15px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
@@ -908,7 +1008,7 @@ onBeforeUnmount(() => {
 .songlist_album{
   margin-left: 10px;
   text-align: left;
-  width: 200px;
+  width: 180px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
 .songlist_album :hover{

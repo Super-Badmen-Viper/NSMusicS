@@ -182,7 +182,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         const sql = `SELECT a.*, b.play_count 
              FROM album a 
              LEFT JOIN annotation b ON a.id = b.item_id AND b.item_type = 'album'
-             ORDER BY b.play_count desc, a.id desc
+             ORDER BY b.play_date desc, a.id desc
              LIMIT 18`;
         const allData = db.prepare(sql).all();
         const result: Album[] = []

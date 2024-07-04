@@ -58,7 +58,9 @@
  - Because the library management module has not been written yet, Navidrome is temporarily borrowed to achieve this. After the official version is released, users can choose whether to be compatible with Navidrome (if compatibility is needed, Navidrome service must exist on your host).
 ```sh
 cd NSMusicS
-npm install
+# node      -v  20.15.0
+# npm       -v  10.4.0
+npm install 
 # Install MPV in the Windows environment (requires its executable file compressed file) 
 # https://mpv.io/installation/
 # unzip its contents to (NSMusicS\resources\mpv-x86_64-20240623)

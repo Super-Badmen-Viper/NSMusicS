@@ -462,7 +462,6 @@
                 z-index: 0;
                 height: 298px;
                 border-radius: 10px;
-                border: 1.5px solid #FFFFFF20;
                 overflow: hidden;
                 background-size: cover;
                 background-position: center;

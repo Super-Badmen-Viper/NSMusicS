@@ -5,7 +5,7 @@ export class Set_PlaylistInfo_From_LocalSqlite {
     private getUniqueId(db: any) {
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4();
-        while (db.prepare(`SELECT COUNT(*) FROM system_servers_config WHERE id = ?`).pluck().get(id) > 0) {
+        while (db.prepare(`SELECT COUNT(*) FROM playlist WHERE id = ?`).pluck().get(id) > 0) {
             id = uuidv4();
         }
         return id;
@@ -13,7 +13,7 @@ export class Set_PlaylistInfo_From_LocalSqlite {
     private getUniqueId_Replace(db: any) {
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4().replace(/-/g, '');
-        while (db.prepare(`SELECT COUNT(*) FROM system_servers_config WHERE id = ?`).pluck().get(id) > 0) {
+        while (db.prepare(`SELECT COUNT(*) FROM playlist WHERE id = ?`).pluck().get(id) > 0) {
             id = uuidv4().replace(/-/g, '');
         }
         return id;
@@ -37,27 +37,28 @@ export class Set_PlaylistInfo_From_LocalSqlite {
         let new_id = this.getUniqueId(db);
         let new_date = this.getCurrentDateTime();
         db.pragma('journal_mode = WAL');
+        // comment, duration, song_count, public,path, sync, size, rules, evaluated_at, owner_id
         db.prepare(`
-          INSERT INTO playlist (id, name, comment, duration, song_count, public, created_at, updated_at, path, sync, size, rules, evaluated_at, owner_id) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-            .run(new_id, name, comment, duration, song_count, _public_, new_date, new_date, null, null, null, null, null, owner_id);
+          INSERT INTO playlist (id, name, created_at, updated_at) 
+          VALUES (?, ?, ?, ?)
+        `).run(new_id, name, new_date, new_date);
         ///
         db.close();
         ///
-        const data:Play_List = {
+        const data = {
             id: new_id,
             name: name,
             comment: comment,
             duration: duration,
             song_count: song_count,
-            public: _public_,
+            public: 0,
             created_at: new_date,
             updated_at: new_date,
-            path: null,
-            sync: null,
-            size: null,
+            path: '',
+            sync: 0,
+            size: 0,
             rules: null,
-            evaluated_at: null,
+            evaluated_at: '',
             owner_id: owner_id,
         };
         return data;
@@ -72,37 +73,39 @@ export class Set_PlaylistInfo_From_LocalSqlite {
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
         ///
+        let new_id = this.getUniqueId(db);
         let new_date = this.getCurrentDateTime();
         const existingRecord = db.prepare(`SELECT * FROM playlist WHERE id = ?`).get(id);
         if (!existingRecord) {
             db.prepare(`
                 INSERT INTO playlist (id, name, comment, duration, song_count, public, created_at, updated_at, path, sync, size, rules, evaluated_at, owner_id) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-                .run(new_id, name, comment, duration, song_count, _public_, new_date, new_date, null, null, null, null, null, owner_id);
+                .run(new_id, name, comment, duration, song_count, 0, new_date, new_date, '', false, 0, null, null, owner_id);
         } else {
+            // , comment = ? , duration = ? , song_count = ? , public = ? ,
             db.prepare(`
                 UPDATE playlist 
-                SET name = ?, comment = ? , duration = ? , song_count = ? , public = ? , updated_at = ?
+                SET name = ?, updated_at = ?
                 WHERE id = ?`)
-                .run(name, comment, duration, song_count, _public_, new_date, id,);
+                .run(name, new_date, id);
         }
         ///
         db.close();
         ///
-        const data:Play_List = {
+        const data = {
             id: id,
             name: name,
             comment: comment,
             duration: duration,
             song_count: song_count,
-            public: _public_,
+            public: 0,
             created_at: new_date,
             updated_at: new_date,
-            path: null,
-            sync: null,
-            size: null,
+            path: '',
+            sync: 0,
+            size: 0,
             rules: null,
-            evaluated_at: null,
+            evaluated_at: '',
             owner_id: owner_id,
         };
         return data;
@@ -115,8 +118,25 @@ export class Set_PlaylistInfo_From_LocalSqlite {
         const existingRecord = db.prepare('SELECT * FROM playlist WHERE id = ?').get(id);
         if (existingRecord) {
             db.prepare('DELETE FROM playlist WHERE id = ?').run(id);
+            db.prepare('DELETE FROM playlist_tracks WHERE playlist_id = ?').run(id);
         }
         ///
+        db.close();
+    }
+
+    public Set_Selected_MediaInfo_To_Selected_Playlist(ids: string[], value: Boolean) {
+        const path = require('path');
+        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        db.pragma('journal_mode = WAL');
+
+        for (const id of ids) {
+            if (value) {/// add
+
+            } else {/// remove
+
+            }
+        }
+
         db.close();
     }
 }
