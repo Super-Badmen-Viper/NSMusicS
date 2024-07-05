@@ -1,16 +1,16 @@
 {
     "action": {
-        "editPlaylist": "редактировать $t(entity.playlist_one)",
+        "editPlaylist": "редактировать ",
         "goToPage": "перейти на страницу",
         "moveToTop": "вверх",
         "clearQueue": "очистить очередь",
         "addToFavorites": "добавить в $t(entity.favorite_other)",
-        "addToPlaylist": "добавить в $t(entity.playlist_one)",
-        "createPlaylist": "создать $t(entity.playlist_one)",
-        "removeFromPlaylist": "удалить из $t(entity.playlist_one)",
+        "addToPlaylist": "добавить в ",
+        "createPlaylist": "создать ",
+        "removeFromPlaylist": "удалить из ",
         "viewPlaylists": "просмотреть $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
-        "deletePlaylist": "удалить $t(entity.playlist_one)",
+        "deletePlaylist": "удалить ",
         "removeFromQueue": "удалить из очереди",
         "deselectAll": "снять выделение",
         "moveToBottom": "вниз",
@@ -141,7 +141,7 @@
         "folder_one": "папка",
         "folder_few": "папки",
         "folder_many": "папок",
-        "smartPlaylist": "умный $t(entity.playlist_one)",
+        "smartPlaylist": "умный ",
         "genreWithCount_one": "{{count}} жанр",
         "genreWithCount_few": "{{count}} жанра",
         "genreWithCount_many": "{{count}} жанров",
@@ -409,16 +409,16 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "удалить $t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one) успешно удалён",
-            "input_confirm": "напишите название $t(entity.playlist_one), чтобы подтвердить действие"
+            "title": "удалить ",
+            "success": " успешно удалён",
+            "input_confirm": "напишите название , чтобы подтвердить действие"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "создать $t(entity.playlist_one)",
+            "title": "создать ",
             "input_public": "публичный",
             "input_name": "$t(common.name)",
-            "success": "$t(entity.playlist_one) успешно создан",
+            "success": " успешно создан",
             "input_owner": "$t(common.owner)"
         },
         "addServer": {
@@ -436,7 +436,7 @@
         },
         "addToPlaylist": {
             "success": "добавлено(а) {{message}} $t(entity.track_other) в {{numOfPlaylists}} $t(entity.playlist_other)",
-            "title": "добавить в $t(entity.playlist_one)",
+            "title": "добавить в ",
             "input_skipDuplicates": "пропустить дубликаты",
             "input_playlists": "$t(entity.playlist_other)"
         },
@@ -454,7 +454,7 @@
             "title": "поиск слов песни"
         },
         "editPlaylist": {
-            "title": "редактировать $t(entity.playlist_one)"
+            "title": "редактировать "
         }
     },
     "setting": {

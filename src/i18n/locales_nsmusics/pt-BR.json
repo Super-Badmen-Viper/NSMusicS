@@ -20,7 +20,8 @@
             "loveArtist": "Artistas Favoritos",
             "recentPlay": "Tocadas Recentes",
             "countSong": "música",
-            "countList": "grupo"
+            "countList": "grupo",
+            "selectedSong": "Selecionado"
         },
         "view_player": {
             "view_seting": {

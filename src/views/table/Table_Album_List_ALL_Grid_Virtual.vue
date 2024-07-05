@@ -126,14 +126,14 @@
     state_Sort: state_Sort;
   };
   const options_Sort_key = ref<SortItem[]>([
-    {label:'专辑名', key: 'name', state_Sort: state_Sort.Default },
-    {label:'歌手名', key: 'artist', state_Sort: state_Sort.Default },
-    {label:'年份(最小)', key: 'min_year', state_Sort: state_Sort.Default },
-    {label:'年份(最大)', key: 'max_year', state_Sort: state_Sort.Default },
-    {label:'容量', key: 'size', state_Sort: state_Sort.Default },
-    {label:'创建时间', key: 'created_at', state_Sort: state_Sort.Default },
-    {label:'更新时间', key: 'updated_at', state_Sort: state_Sort.Default },
-    {label:'更新时间(外部信息)', key: 'external_info_updated_at', state_Sort: state_Sort.Default }
+    {label:computed(() => t('entity.album_other')), key: 'name', state_Sort: state_Sort.Default },
+    {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.toYear')), key: 'min_year', state_Sort: state_Sort.Default },
+    // {label:computed(() => t('filter.fromYear')), key: 'max_year', state_Sort: state_Sort.Default },
+    {label:computed(() => t('common.size')), key: 'size', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
+    // {label:'更新时间(外部信息)', key: 'external_info_updated_at', state_Sort: state_Sort.Default }
   ]);
   const options_Sort = computed(() => {
     if(props.options_Sort_key != null && props.options_Sort_key.length > 0){

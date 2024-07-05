@@ -20,7 +20,8 @@
             "loveArtist": "love Artist",
             "recentPlay": "recent Play",
             "countSong": "song",
-            "countList": "set"
+            "countList": "set",
+            "selectedSong": "Selected"
         },
         "view_player": {
             "view_seting": {

@@ -20,7 +20,8 @@
             "loveArtist": "お気に入りアーティスト",
             "recentPlay": "最近再生",
             "countSong": "曲",
-            "countList": "組"
+            "countList": "組",
+            "selectedSong": "選択"
         },
         "view_player": {
             "view_seting": {

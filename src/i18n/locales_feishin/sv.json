@@ -1,16 +1,16 @@
 {
     "action": {
-        "editPlaylist": "redigera $t(entity.playlist_one)",
+        "editPlaylist": "redigera ",
         "goToPage": "gå till sida",
         "moveToTop": "flytta till toppen",
         "clearQueue": "rensa kö",
         "addToFavorites": "lägg till $t(entity.favorite_other)",
-        "addToPlaylist": "lägg till $t(entity.playlist_one)",
-        "createPlaylist": "skapa $t(entity.playlist_one)",
-        "removeFromPlaylist": "ta bort från $t(entity.playlist_one)",
+        "addToPlaylist": "lägg till ",
+        "createPlaylist": "skapa ",
+        "removeFromPlaylist": "ta bort från ",
         "viewPlaylists": "visa $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
-        "deletePlaylist": "ta bort $t(entity.playlist_one)",
+        "deletePlaylist": "ta bort ",
         "removeFromQueue": "ta bort från kö",
         "deselectAll": "avmarkera alla",
         "moveToBottom": "flytta till botten",
@@ -164,16 +164,16 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "ta bort $t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one) har tagits bort",
-            "input_confirm": "Skriv namnet på $t(entity.playlist_one) för att bekräfta"
+            "title": "ta bort ",
+            "success": " har tagits bort",
+            "input_confirm": "Skriv namnet på  för att bekräfta"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "skapa $t(entity.playlist_one)",
+            "title": "skapa ",
             "input_public": "offentlig",
             "input_name": "$t(common.name)",
-            "success": "$t(entity.playlist_one) skapad",
+            "success": " skapad",
             "input_owner": "$t(common.owner)"
         },
         "addServer": {
@@ -191,7 +191,7 @@
         },
         "addToPlaylist": {
             "success": "tillade {{message}} $t(entity.track_other) til {{numOfPlaylists}} $t(entity.playlist_other)",
-            "title": "lägg till i $t(entity.playlist_one)",
+            "title": "lägg till i ",
             "input_skipDuplicates": "hoppa över dubbletter",
             "input_playlists": "$t(entity.playlist_other)"
         },
@@ -209,7 +209,7 @@
             "title": "sångtext sök"
         },
         "editPlaylist": {
-            "title": "redigera $t(entity.playlist_one)"
+            "title": "redigera "
         }
     },
     "page": {

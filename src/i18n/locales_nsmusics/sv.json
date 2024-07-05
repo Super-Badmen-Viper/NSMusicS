@@ -20,7 +20,8 @@
             "loveArtist": "Favoritartister",
             "recentPlay": "Nyligen Spelade",
             "countSong": "sång",
-            "countList": "grupp"
+            "countList": "grupp",
+            "selectedSong": "Vald"
         },
         "view_player": {
             "view_seting": {

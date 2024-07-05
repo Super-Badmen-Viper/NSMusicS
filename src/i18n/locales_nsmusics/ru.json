@@ -20,7 +20,8 @@
             "loveArtist": "Избранные артисты",
             "recentPlay": "Недавно",
             "countSong": "песня",
-            "countList": "группа"
+            "countList": "группа",
+            "selectedSong": "Выбрано"
         },
         "view_player": {
             "view_seting": {

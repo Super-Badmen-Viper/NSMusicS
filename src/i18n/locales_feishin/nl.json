@@ -1,15 +1,15 @@
 {
     "action": {
-        "editPlaylist": "pas $t(entity.playlist_one) aan",
+        "editPlaylist": "pas  aan",
         "goToPage": "ga naar pagina",
         "moveToTop": "verplaats naar top",
         "addToFavorites": "toevoegen aan $t(entity.favorite_other)",
-        "addToPlaylist": "toevoegen aan $t(entity.playlist_one)",
-        "createPlaylist": "maak $t(entity.playlist_one)",
-        "removeFromPlaylist": "verwijder van $t(entity.playlist_one)",
+        "addToPlaylist": "toevoegen aan ",
+        "createPlaylist": "maak ",
+        "removeFromPlaylist": "verwijder van ",
         "viewPlaylists": "bekijk $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
-        "deletePlaylist": "verwijder $t(entity.playlist_one)",
+        "deletePlaylist": "verwijder ",
         "removeFromQueue": "verwijder van lijst",
         "deselectAll": "deselecteer alles",
         "moveToBottom": "verplaats naar bodem",
@@ -239,7 +239,7 @@
         "artistWithCount_other": "{{count}} artiesten",
         "folder_one": "folder",
         "folder_other": "folders",
-        "smartPlaylist": "smart $t(entity.playlist_one)",
+        "smartPlaylist": "smart ",
         "album_one": "album",
         "album_other": "albums",
         "genreWithCount_one": "{{count}} genre",
@@ -277,21 +277,21 @@
             "error_savePassword": "er is iets mis gegaan met het opslaan van het wachtwoord"
         },
         "deletePlaylist": {
-            "title": "verwijder $t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one) succesvol verwijdert",
-            "input_confirm": "Typ de naam van $t(entity.playlist_one) om te bevestigen"
+            "title": "verwijder ",
+            "success": " succesvol verwijdert",
+            "input_confirm": "Typ de naam van  om te bevestigen"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "$t(entity.playlist_one) aanmaken",
+            "title": " aanmaken",
             "input_public": "publiek",
             "input_name": "$t(common.name)",
-            "success": "$t(entity.playlist_one) aangemaakt",
+            "success": " aangemaakt",
             "input_owner": "$t(common.owner)"
         },
         "addToPlaylist": {
             "success": "{{message}}$t(entity.song_other) aan {{numOfPlaylists}} $t(entity.playlist_other) toegevoegd",
-            "title": "aan $t(entity.playlist_one) toevoegen",
+            "title": "aan  toevoegen",
             "input_skipDuplicates": "duplicaten overslaan",
             "input_playlists": "$t(entity.playlist_other)"
         },
@@ -305,7 +305,7 @@
             "title": "tekst zoeken"
         },
         "editPlaylist": {
-            "title": "$t(entity.playlist_one) aanpassen"
+            "title": " aanpassen"
         },
         "updateServer": {
             "title": "update server",

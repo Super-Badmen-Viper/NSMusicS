@@ -46,6 +46,10 @@ const emits = defineEmits([
   'this_audio_lyrics_string',
   'router_history_model','router_history_model_of_Media_scroller_value','router_history_model_of_Media_scroll',
   'playlist_Tracks_temporary_add','playlist_Tracks_temporary_update','playlist_Tracks_temporary_delete',
+  'playlist_Tracks_temporary_update_media_file',
+  'selected_playlist_addMediaFile','selected_playlist_deleteMediaFile',
+  'selected_lovelist_addMediaFile',
+  'selected_lovelist_deleteMediaFile','selected_recentlist_deletetMediaFile'
 ]);
 const props = defineProps<{
   data_temporary: Media_File[];data_temporary_selected: Media_File[];
@@ -120,13 +124,13 @@ type SortItem = {
   state_Sort: state_Sort;
 };
 const options_Sort_key = ref<SortItem[]>([
-  {label:'标题名', key: 'title', state_Sort: state_Sort.Default },
-  {label:'歌手名', key: 'artist', state_Sort: state_Sort.Default },
-  {label:'专辑名', key: 'album', state_Sort: state_Sort.Default },
-  {label:'年份', key: 'year', state_Sort: state_Sort.Default },
-  {label:'播放时长', key: 'duration', state_Sort: state_Sort.Default },
-  {label:'创建时间', key: 'created_at', state_Sort: state_Sort.Default },
-  {label:'更新时间', key: 'updated_at', state_Sort: state_Sort.Default },
+  {label:computed(() => t('filter.title')), key: 'title', state_Sort: state_Sort.Default },
+  {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
+  {label:computed(() => t('entity.album_other')), key: 'album', state_Sort: state_Sort.Default },
+  {label:computed(() => t('filter.releaseYear')), key: 'year', state_Sort: state_Sort.Default },
+  {label:computed(() => t('filter.duration')), key: 'duration', state_Sort: state_Sort.Default },
+  {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
+  {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
 ]);
 const options_Sort = computed(() => {
   if(props.options_Sort_key != null && props.options_Sort_key.length > 0){
@@ -325,6 +329,7 @@ onMounted(() => {
 ////// select Dtatsource of artistlists
 const breadcrumbItems = ref('所有歌曲');
 const page_songlists_handleselected_updatevalue = (value: any) => {
+  emits('media_Files_selected_set_all', false);
   emits('page_songlists_selected',value)
   console.log('selected_value_for_songlistall：'+value);
   breadcrumbItems.value = props.page_songlists_options.find(option => option.value === value)?.label || '';
@@ -405,10 +410,12 @@ const handleItemClick_Rating = (id_rating: any) => {
 }
 
 ////// playlist
-/// add
+import { useMessage } from 'naive-ui'
+const message = useMessage()
+/// add playlist
 import { Set_PlaylistInfo_From_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_From_LocalSqlite";
 let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_From_LocalSqlite()
-const Type_Playlist_Add = ref(false)
+const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
 // const playlist_set_of_addPlaylist_of_comment = ref('')
 // const playlist_set_of_addPlaylist_of_duration = ref(false)
@@ -418,13 +425,13 @@ const playlist_set_of_addPlaylist_of_playlistname = ref('')
 async function update_playlist_addPlaylist(){
   try{
     emits('playlist_Tracks_temporary_add', playlist_set_of_addPlaylist_of_playlistname.value);
-    Type_Playlist_Add.value = !Type_Playlist_Add.value
+    Type_Add_Playlist.value = !Type_Add_Playlist.value
   }catch (e) {
     console.error(e)
   }
 }
-/// update
-const Type_Playlist_Update = ref(false)
+/// update playlist
+const Type_Update_Playlist = ref(false)
 const playlist_update_emit_id = ref<string>()
 const playlist_set_of_updatePlaylist_of_playlistcomment = ref('')
 function update_playlist_set_of_updatePlaylist_of_playlistname(value: Array | string | number | null, option: SelectBaseOption | null | SelectBaseOption[]){
@@ -438,7 +445,7 @@ async function update_playlist_updatePlaylist(){
       name: playlist_set_of_updatePlaylist_of_playlistcomment.value
     }
     emits('playlist_Tracks_temporary_update', playlist);
-    Type_Playlist_Update.value = !Type_Playlist_Update.value
+    Type_Update_Playlist.value = !Type_Update_Playlist.value
   }catch (e) {
     console.error(e)
   }
@@ -446,13 +453,67 @@ async function update_playlist_updatePlaylist(){
 async function update_playlist_deletePlaylist(){
   try{
     emits('playlist_Tracks_temporary_delete', playlist_update_emit_id.value);
-    Type_Playlist_Update.value = !Type_Playlist_Update.value
+    Type_Update_Playlist.value = !Type_Update_Playlist.value
   }catch (e) {
     console.error(e)
   }
 }
 /// update media_file
+async function update_playlist_addMediaFile(id: any, playlist_id: any){
+  try{
+    const result = await set_MediaInfo_To_LocalSqlite.Set_MediaInfo_Add_Selected_Playlist(id,playlist_id)
+    if(result)
+      message.success(t('common.add'))
+    else
+      message.error(t('common.add'))
+    emits('playlist_Tracks_temporary_update_media_file',true)
+  }catch (e) {
+    console.error(e)
+  }
+}
+async function update_playlist_deleteMediaFile(id: any){
+  try{
+    let result = null;
+    if(props.page_songlists_selected === 'song_list_all'){
 
+    }else if(props.page_songlists_selected === 'song_list_love'){
+      result = await set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id, true)
+    }else if(props.page_songlists_selected === 'song_list_recently'){
+
+    }else{
+      result = await set_MediaInfo_To_LocalSqlite.Set_MediaInfo_Delete_Selected_Playlist(id,props.page_songlists_selected)
+    }
+    if(result)
+      message.success(t('common.delete'))
+    else
+      message.error(t('common.delete'))
+    emits('playlist_Tracks_temporary_update_media_file',true)
+  }catch (e) {
+    console.error(e)
+  }
+}
+/// update selected media_file
+const Type_Selected_Media_File_To_Playlist = ref(false)
+async function update_playlist_addMediaFile_selected(playlist_id: any)
+{
+  emits('selected_playlist_addMediaFile',playlist_id)
+}
+async function update_playlist_deleteMediaFile_selected()
+{
+  emits('selected_playlist_deleteMediaFile',true)
+}
+async function update_lovelist_addMediaFile_selected()
+{
+  emits('selected_lovelist_addMediaFile',true)
+}
+async function update_lovelist_deleteMediaFile_selected()
+{
+  emits('selected_lovelist_deleteMediaFile',true)
+}
+async function update_recentlist_deletetMediaFile_selected()
+{
+  emits('selected_recentlist_deletetMediaFile',true)
+}
 
 ////// bulk_operation and select_line
 const click_select_SongList_ALL_Line = () => {
@@ -466,6 +527,7 @@ const click_open_bulk_operation = () => {
   if(bool_start_play.value == true)
   {
     bool_start_play.value = false
+    emits('media_Files_selected_set_all', false);
   }
   else{
     bool_start_play.value = true
@@ -474,71 +536,6 @@ const click_open_bulk_operation = () => {
 ////// Right_click_on_songline show menu
 let click_count = 0
 const bool_start_play = ref<boolean>(true)
-const xRef = ref(0)
-const yRef = ref(0)
-const showDropdownRef = ref(false)
-const options_data_dropmenu: DropdownOption[] = [
-  {
-    label: '搜索此歌手',
-    key: 'search_this_singer',
-    icon () {
-      return h(NIcon, null, {
-        default: () => h(Search20Filled)
-      })
-    },
-  },
-  {
-    label: '搜索此专辑',
-    key: 'search_this_album',
-    icon () {
-      return h(NIcon, null, {
-        default: () => h(Search20Filled)
-      })
-    },
-  },
-  {
-    label: '编辑歌曲信息',
-    key: 'edit',
-    icon () {
-      return h(NIcon, null, {
-        default: () => h(SaveEdit24Regular)
-      })
-    },
-  },
-  {
-    label: '添加到歌单',
-    key: 'add',
-    icon () {
-      return h(NIcon, null, {
-        default: () => h(AddCircle32Regular)
-      })
-    },
-  },
-  {
-    label: () => h('span', { style: { color: 'red' } }, '删除'),
-    key: 'delete',
-    icon () {
-      return h(NIcon, null, {
-        default: () => h(Delete20Regular)
-      })
-    },
-  }
-]
-const handleSelect_data_dropmenu = (option: string) => {
-  if (option === 'edit') {
-    emits('menu_edit_this_song',this_audio_Index_of_absolute_positioning_in_list.value);
-  }
-  else if (option === 'add') {
-    emits('menu_add_this_song',this_audio_Index_of_absolute_positioning_in_list.value);
-  }
-  else if (option === 'delete') {
-    emits('menu_delete_this_song',this_audio_Index_of_absolute_positioning_in_list.value);
-  }
-  showDropdownRef.value = false;
-}
-const onClickoutside = () => {
-  showDropdownRef.value = false
-}
 
 ////// view songlist_view Remove data
 onBeforeUnmount(() => {
@@ -618,7 +615,7 @@ onBeforeUnmount(() => {
             <n-icon :size="20" :depth="2"><SelectAllOn24Regular/></n-icon>
           </template>
         </n-button>
-        <n-button quaternary circle size="medium" style="margin-left:4px">
+        <n-button quaternary circle size="medium" style="margin-left:4px" @click="Type_Selected_Media_File_To_Playlist = !Type_Selected_Media_File_To_Playlist">
           <template #icon>
             <n-icon :size="20" :depth="2"><AddCircle32Regular/></n-icon>
           </template>
@@ -629,9 +626,8 @@ onBeforeUnmount(() => {
             <n-icon :size="20" :depth="2"><Delete20Regular/></n-icon>
           </template>
         </n-button>
-        <n-p style="margin-top: 6px;"> 你选中了 {{ props.data_temporary_selected.length }} 行。 </n-p>
+        <n-p style="margin-top: 6px;"> {{ $t('nsmusics.view_page.selectedSong') + ' ' + props.data_temporary_selected.length }} * </n-p>
       </n-space>
-
     </n-space>
     <div class="dynamic-scroller-demo">
       <DynamicScroller
@@ -703,14 +699,14 @@ onBeforeUnmount(() => {
                       :value="props.page_songlists_selected"
                       :options="props.page_songlists_options" style="width: 166px;"
                       :on-update:value="page_songlists_handleselected_updatevalue" />
-                    <n-button secondary strong @click="Type_Playlist_Update = !Type_Playlist_Update">
+                    <n-button secondary strong @click="Type_Update_Playlist = !Type_Update_Playlist">
                       <template #icon>
                         <n-icon>
                           <Menu />
                         </n-icon>
                       </template>
                     </n-button>
-                    <n-button secondary strong @click="Type_Playlist_Add = !Type_Playlist_Add">
+                    <n-button secondary strong @click="Type_Add_Playlist = !Type_Add_Playlist">
                       <template #icon>
                         <n-icon>
                           <Add />
@@ -812,7 +808,7 @@ onBeforeUnmount(() => {
                     <icon color="#FAFAFC" :size="20" style="margin-left: -2px; margin-top: 3px;"><Heart24Regular/></icon>
                   </template>
                 </button>
-                <VDropdown :distance="6">
+                <VDropdown :distance="6" v-if="active">
                   <button
                     style="
                       border: 0px; background-color: transparent;
@@ -821,30 +817,40 @@ onBeforeUnmount(() => {
                       cursor: pointer;
                     "
                   >
-                    <template v-if="true">
+                    <template v-if="!props.update_theme">
                       <icon :size="20"><MoreCircle20Regular/></icon>
+                    </template>
+                    <template v-else>
+                      <icon :size="20" color="#FFFFFF"><MoreCircle20Regular/></icon>
                     </template>
                   </button>
                   <template #popper>
-                    <button
-                      style="
-                        border: 0px; background-color: transparent;
-                        width: 86px; height: 28px;
-                        cursor: pointer;
-                      "
-                      @click="click_count = 0;"
+                    <VMenu
+                      key="001"
+                      placement="right-start"
+                      style="width:100px;"
+                      instant-move>
+                      <button class="songlist_more" style="width: 100px;height: 24px;border: 0px; background-color: transparent;">
+                        {{ $t('form.addToPlaylist.title') }}
+                      </button>
+                      <template #popper>
+                        <button
+                          v-for="n in props.playlist_All_of_list"
+                          :key="n.value"
+                          class="songlist_more"
+                          style="width: 100px;height: 24px;border: 0px; background-color: transparent;display: block;"
+                          @click="update_playlist_addMediaFile(item.id,n.value)"
+                        >
+                          {{ n.label }}
+                        </button>
+                      </template>
+                    </VMenu>
+                    <button class="songlist_more"
+                            v-if="props.page_songlists_selected !== 'song_list_all' && props.page_songlists_selected !== 'song_list_recently'"
+                            style="width: 100px;height: 24px;border: 0px; background-color: transparent;"
+                            @click="update_playlist_deleteMediaFile(item.id)"
                     >
-                      添加到
-                    </button><br>
-                    <button
-                      style="
-                        border: 0px; background-color: transparent;
-                        width: 86px; height: 28px;
-                        cursor: pointer;
-                      "
-                        @click="click_count = 0;"
-                    >
-                      删除
+                      {{ $t('common.delete') }}
                     </button>
                   </template>
                 </VDropdown>
@@ -857,15 +863,15 @@ onBeforeUnmount(() => {
       </DynamicScroller>
     </div>
   </n-space>
-  <!-- 播放列表管理 -->
+  <!-- 管理播放列表 -->
   <n-modal
-      v-model:show="Type_Playlist_Update">
+    v-model:show="Type_Update_Playlist">
     <n-card style="width: 450px;border-radius: 6px;">
       <n-space
           vertical size="large" style="width: 400px;">
         <n-space justify="space-between">
           <span style="font-size: 20px;font-weight: 600;">{{ $t('common.manage') + $t('entity.playlist_other') }}</span>
-          <n-button tertiary size="small" @click="Type_Playlist_Update = !Type_Playlist_Update;playlist_set_of_updatePlaylist_of_playlistcomment = ''">
+          <n-button tertiary size="small" @click="Type_Update_Playlist = !Type_Update_Playlist;playlist_set_of_updatePlaylist_of_playlistcomment = ''">
             <template #icon>
               <n-icon>
                 <Close />
@@ -883,7 +889,7 @@ onBeforeUnmount(() => {
           </n-space>
         </n-form>
         <n-space justify="end">
-          <n-button strong secondary type="error" @click="update_playlist_deletePlaylist();Type_Playlist_Update = !Type_Playlist_Update;playlist_set_of_updatePlaylist_of_playlistcomment = ''">
+          <n-button strong secondary type="error" @click="update_playlist_deletePlaylist();Type_Update_Playlist = !Type_Update_Playlist;playlist_set_of_updatePlaylist_of_playlistcomment = ''">
             {{ $t('common.delete') }}
           </n-button>
           <n-button strong secondary type="info" @click="update_playlist_updatePlaylist();">
@@ -893,15 +899,15 @@ onBeforeUnmount(() => {
       </n-space>
     </n-card>
   </n-modal>
-  <!-- 播放列表添加 -->
+  <!-- 添加播放列表 -->
   <n-modal
-      v-model:show="Type_Playlist_Add">
+    v-model:show="Type_Add_Playlist">
     <n-card style="width: 450px;border-radius: 6px;">
       <n-space
           vertical size="large" style="width: 400px;">
         <n-space justify="space-between">
           <span style="font-size: 20px;font-weight: 600;">{{ $t('common.add') + $t('entity.playlist_other') }}</span>
-          <n-button tertiary size="small" @click="Type_Playlist_Add = !Type_Playlist_Add">
+          <n-button tertiary size="small" @click="Type_Add_Playlist = !Type_Add_Playlist">
             <template #icon>
               <n-icon>
                 <Close />
@@ -923,16 +929,45 @@ onBeforeUnmount(() => {
       </n-space>
     </n-card>
   </n-modal>
-  <n-dropdown
-    placement="bottom-start"
-    trigger="manual"
-    :x="xRef"
-    :y="yRef"
-    :options="options_data_dropmenu"
-    :show="showDropdownRef"
-    :on-clickoutside="onClickoutside"
-    @select="handleSelect_data_dropmenu"
-  />
+  <!-- 选中歌曲添加 -->
+  <n-modal
+    v-model:show="Type_Selected_Media_File_To_Playlist">
+    <n-card style="width: 450px;border-radius: 6px;">
+      <n-space
+        vertical size="large" style="width: 400px;">
+        <n-space justify="space-between">
+          <span style="font-size: 20px;font-weight: 600;">{{ $t('nsmusics.view_page.selectedSong') + ' ' + props.data_temporary_selected.length + ' * ' + $t('form.addToPlaylist.title')  }}</span>
+          <n-button tertiary size="small" @click="Type_Selected_Media_File_To_Playlist = !Type_Selected_Media_File_To_Playlist;">
+            <template #icon>
+              <n-icon>
+                <Close />
+              </n-icon>
+            </template>
+          </n-button>
+        </n-space>
+        <n-space>
+          <n-button
+            :key="song_love"
+            class="songlist_more"
+            style="width: 100px;height: 24px;border: 0px; background-color: transparent;display: block;"
+            @click=""
+          >
+            {{ $t('nsmusics.view_page.loveSong') }}
+          </n-button>
+          <n-button
+            v-for="n in props.playlist_All_of_list"
+            :key="n.value"
+            class="songlist_more"
+            style="width: 100px;height: 24px;border: 0px; background-color: transparent;display: block;"
+          >
+<!--            @click="update_playlist_addMediaFile(item.id,n.value)"-->
+            {{ n.label }}
+          </n-button>
+        </n-space>
+      </n-space>
+    </n-card>
+  </n-modal>
+
   <div class="scorller_to_SortAZ" v-if="false">
     <n-space>
       <n-button
@@ -994,17 +1029,6 @@ onBeforeUnmount(() => {
   cursor: pointer;
   color: #3DC3FF;
 }
-.songlist_artist{
-  margin-left: 10px;
-  text-align: left;
-  width: 200px;
-  overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
-}
-.songlist_artist :hover{
-  text-decoration: underline;
-  cursor: pointer;
-  color: #3DC3FF;
-}
 .songlist_album{
   margin-left: 10px;
   text-align: left;
@@ -1020,6 +1044,9 @@ onBeforeUnmount(() => {
   margin-left: 10px;
   text-align: left;
   width: 40px;
+}
+.songlist_more:hover {
+  color: #3DC3FF;
 }
 
 .scorller_to_SortAZ{

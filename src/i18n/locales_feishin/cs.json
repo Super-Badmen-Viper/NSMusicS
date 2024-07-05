@@ -213,17 +213,17 @@
         "passwordStore_description": "který způsob ukládání hesel / tajných klíčů použít. změňte tuto možnost, pokud máte problémy s ukládáním hesel."
     },
     "action": {
-        "editPlaylist": "upravit $t(entity.playlist_one)",
+        "editPlaylist": "upravit ",
         "goToPage": "přejít na stránku",
         "moveToTop": "přesunout nahoru",
         "clearQueue": "vymazat frontu",
         "addToFavorites": "přidat do $t(entity.favorite_other)",
-        "addToPlaylist": "přidat do $t(entity.playlist_one)",
-        "createPlaylist": "vytvořit $t(entity.playlist_one)",
-        "removeFromPlaylist": "odebrat z $t(entity.playlist_one)",
+        "addToPlaylist": "přidat do ",
+        "createPlaylist": "vytvořit ",
+        "removeFromPlaylist": "odebrat z ",
         "viewPlaylists": "zobrazit $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
-        "deletePlaylist": "odstranit $t(entity.playlist_one)",
+        "deletePlaylist": "odstranit ",
         "removeFromQueue": "odebrat z fronty",
         "deselectAll": "zrušit výběr všeho",
         "moveToBottom": "přesunout dolů",
@@ -601,16 +601,16 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "odstranit $t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one) úspěšně odstraněn",
-            "input_confirm": "pro potvrzení zadejte název $t(entity.playlist_one)u"
+            "title": "odstranit ",
+            "success": " úspěšně odstraněn",
+            "input_confirm": "pro potvrzení zadejte název u"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "vytvořit $t(entity.playlist_one)",
+            "title": "vytvořit ",
             "input_public": "veřejné",
             "input_name": "$t(common.name)",
-            "success": "$t(entity.playlist_one) úspěšně vytvořen",
+            "success": " úspěšně vytvořen",
             "input_owner": "$t(common.owner)"
         },
         "addServer": {
@@ -628,7 +628,7 @@
         },
         "addToPlaylist": {
             "success": "přidáno $t(entity.trackWithCount, {\"count\": {{message}} }) do $t(entity.playlistWithCount, {\"count\": {{numOfPlaylists}} })",
-            "title": "přidat do $t(entity.playlist_one)",
+            "title": "přidat do ",
             "input_skipDuplicates": "přeskočit duplicity",
             "input_playlists": "$t(entity.playlist_other)"
         },
@@ -646,7 +646,7 @@
             "title": "Hledat texty"
         },
         "editPlaylist": {
-            "title": "upravit $t(entity.playlist_one)"
+            "title": "upravit "
         },
         "shareItem": {
             "allowDownloading": "umožnit stahování",
@@ -694,7 +694,7 @@
         "folder_one": "složka",
         "folder_few": "složky",
         "folder_other": "složky",
-        "smartPlaylist": "chytrý $t(entity.playlist_one)",
+        "smartPlaylist": "chytrý ",
         "album_one": "album",
         "album_few": "alba",
         "album_other": "alba",

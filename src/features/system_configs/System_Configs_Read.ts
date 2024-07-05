@@ -82,18 +82,6 @@ export class System_Configs_Read {
                 this.player_Configs_of_UI.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
         });
         /// play_list
-        // db.prepare(`SELECT * FROM system_playlist_file_config`).all().forEach((row: Media_File, index: number) => {
-        //     row.absoluteIndex = index;
-        //     row.selected = false;
-        //     row.duration_txt = this.formatTime(row.duration);
-        //     if (row.path.indexOf('mp3') > 0)
-        //         row.medium_image_url = row.path.replace('mp3', 'jpg');
-        //     else if (row.path.indexOf('flac') > 0)
-        //         row.medium_image_url = row.path.replace('flac', 'jpg');
-        //     else
-        //         row.medium_image_url = '../../../resources/img/error_album.jpg';
-        //     this.playlist_File_Configs.value.push(row);
-        // });
         const stmt_playlist_tracks_media_file_id = db.prepare(`SELECT * FROM system_playlist_file_id_config`);
         this.playlist_File_Configs.value = stmt_playlist_tracks_media_file_id.all().map(item => item.media_file_id);
 

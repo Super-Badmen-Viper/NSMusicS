@@ -53,6 +53,7 @@ export class Set_MediaInfo_To_LocalSqlite {
 
         db.close();
         console.log('handleItemClick_Favorite_id：'+id+'  _favorite:'+!value + '\n: '+ann_id)
+        return true
     }
     public Set_MediaInfo_To_Rating(id: any, value: number) {
         let ann_id = null;
@@ -80,8 +81,8 @@ export class Set_MediaInfo_To_LocalSqlite {
 
         let existingRecord = db.prepare(`SELECT play_count FROM annotation WHERE item_id = ?`).get(item_id);
         if (!existingRecord) {
-            db.prepare(`INSERT INTO annotation (ann_id, item_id, item_type) VALUES (?, ?, ?)`)
-                .run(this.getUniqueId(db), item_id, 'media_file');
+            db.prepare(`INSERT INTO annotation (ann_id, item_id, item_type, play_count, play_date) VALUES (?, ?, ?, ?, ?)`)
+                .run(this.getUniqueId(db), item_id, 'media_file', 1, this.getCurrentDateTime());
         } else {
             existingRecord.play_count += 1;
             db.prepare(`UPDATE annotation SET play_count = ?, play_date = ? WHERE item_id = ? AND item_type = 'media_file'`)
@@ -96,8 +97,8 @@ export class Set_MediaInfo_To_LocalSqlite {
 
         let existingRecord = db.prepare(`SELECT play_count FROM annotation WHERE item_id = ?`).get(item_id);
         if (!existingRecord) {
-            db.prepare(`INSERT INTO annotation (ann_id, item_id, item_type) VALUES (?, ?, ?)`)
-                .run(this.getUniqueId(db), item_id, 'album');
+            db.prepare(`INSERT INTO annotation (ann_id, item_id, item_type, play_count, play_date) VALUES (?, ?, ?, ?, ?)`)
+                .run(this.getUniqueId(db), item_id, 'album', 1, this.getCurrentDateTime());
         } else {
             existingRecord.play_count += 1;
             db.prepare(`UPDATE annotation SET play_count = ?, play_date = ? WHERE item_id = ? AND item_type = 'album'`)
@@ -106,17 +107,35 @@ export class Set_MediaInfo_To_LocalSqlite {
         db.close();
     }
 
-    public Set_MediaInfo_To_Selected_Playlist(media_file_id: any, playlist_id: any) {
+    public Set_MediaInfo_Add_Selected_Playlist(media_file_id: any, playlist_id: any) {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
 
-        const existingRecord = db.prepare(`SELECT * FROM playlist WHERE id = ?`).get(playlist_id);
+        const existingRecord = db.prepare(`SELECT * FROM playlist_tracks WHERE playlist_id = ? AND media_file_id = ?`).get(playlist_id, media_file_id);
         if (!existingRecord) {
             db.prepare(`INSERT INTO playlist_tracks (id, playlist_id, media_file_id) VALUES (?, ?, ?)`)
                 .run(this.getUniqueId(db), playlist_id, media_file_id);
+            db.close();
+            return true;
+        }else {
+            return false;
+            db.close();
         }
+    }
+    public Set_MediaInfo_Delete_Selected_Playlist(media_file_id: any, playlist_id: any) {
+        const path = require('path');
+        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        db.pragma('journal_mode = WAL');
 
-        db.close();
+        const existingRecord = db.prepare(`SELECT * FROM playlist_tracks WHERE playlist_id = ? AND media_file_id = ?`).get(playlist_id, media_file_id);
+        if (existingRecord) {
+            db.prepare('DELETE FROM playlist_tracks WHERE playlist_id = ? AND media_file_id = ?').run(playlist_id, media_file_id);
+            db.close();
+            return true;
+        }else {
+            return false;
+            db.close();
+        }
     }
 }

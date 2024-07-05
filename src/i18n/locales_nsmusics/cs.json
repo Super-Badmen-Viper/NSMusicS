@@ -20,7 +20,8 @@
             "loveArtist": "Oblíbení Umělci",
             "recentPlay": "Nedávno Přehráno",
             "countSong": "píseň",
-            "countList": "sestava"
+            "countList": "sestava",
+            "selectedSong": "Vybráno"
         },
         "view_player": {
             "view_seting": {

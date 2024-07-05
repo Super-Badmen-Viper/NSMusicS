@@ -20,7 +20,8 @@
             "loveArtist": "Омиљени уметници",
             "recentPlay": "Недавно пуштано",
             "countSong": "песма",
-            "countList": "група"
+            "countList": "група",
+            "selectedSong": "Изабрано"
         },
         "view_player": {
             "view_seting": {

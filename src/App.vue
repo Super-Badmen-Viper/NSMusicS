@@ -474,6 +474,23 @@
       })
     }
   }
+  function get_playlist_Tracks_temporary_update_media_file(value: any){
+    playlist_All_of_list.value = []
+    playlist_Tracks_temporary.value = []
+    let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
+    const playlist_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist()
+    playlist_temporary.forEach((item:Play_List) =>{
+      playlist_All_of_list.value.push({
+        label: item.name,
+        value: item.id
+      })
+      playlist_Tracks_temporary.value.push({
+        playlist: item,
+        playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id)
+      })
+    });
+    fetchData_Media()
+  }
   // player_configs audio_infos of current_playlist
   const playlist_Files_temporary = ref<Media_File[]>([]);
   const this_audio_file_path_from_playlist = ref(false);
@@ -515,8 +532,20 @@
     }
     console.log('media_Files_selected：'+value)
   }
-  function set_media_Files_selected_to_love(){
-
+  function get_selected_playlist_addMediaFile(value: any){
+    console.log('selected_playlist_addMediaFile',value)
+  }
+  function get_selected_playlist_deleteMediaFile(value: any){
+    console.log('selected_playlist_deleteMediaFile',value)
+  }
+  function get_selected_lovelist_addMediaFile(value: any){
+    console.log('selected_lovelist_addMediaFile',value)
+  }
+  function get_selected_lovelist_deleteMediaFile(value: any){
+    console.log('selected_lovelist_deleteMediaFile',value)
+  }
+  function get_selected_recentlist_deletetMediaFile(value: any){
+    console.log('selected_recentlist_deletetMediaFile',value)
   }
 
   ////// player_configs lyric_info
@@ -590,6 +619,7 @@
   import {Get_HomeDataInfos_From_LocalSqlite} from '@/features/sqlite3_local_configs/class_Get_HomeDataInfos_From_LocalSqlite'
   import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
   import {Set_MediaInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
+  import Table_Song_List from "@/views/table/Table_Song_List_ALL_Line_Virtual.vue";
   let get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
   const home_Files_temporary_maximum_playback = ref<Album[]>([])
   const home_Files_temporary_random_search = ref<Album[]>([])
@@ -756,7 +786,7 @@
     //////
     const stmt_media_Annotation_Recently_Count = db.prepare(`
       SELECT COUNT(*) AS count FROM annotation
-      WHERE play_count >= 1 AND item_type='media_file'
+      WHERE item_type='media_file'
     `);
     const temp_Play_List_Recently: Play_List = {
       label: computed(() => t('nsmusics.view_page.recentPlay')),
@@ -968,7 +998,7 @@
         } else if (page_songlists_selected.value === 'song_list_recently') {
           const stmt_media_Annotation_Recently_Items = db.prepare(`
             SELECT item_id FROM annotation
-            WHERE play_count >= 1 AND item_type='media_file'
+            WHERE item_type='media_file'
             ORDER BY play_date DESC
           `);
           const annotations = stmt_media_Annotation_Recently_Items.all().map((annotation) => annotation.item_id);
@@ -1129,7 +1159,7 @@
     //////
     const stmt_album_Annotation_Recently_Count = db.prepare(`
       SELECT COUNT(*) AS count FROM annotation
-      WHERE play_count >= 1 AND item_type='album'
+      WHERE item_type='album'
     `);
     const temp_Play_List_Recently: Play_List = {
       label: computed(() => t('nsmusics.view_page.recentPlay')),
@@ -1304,7 +1334,7 @@
         } else if (page_albumlists_selected.value === 'album_list_recently') {
           const stmt_album_Annotation_Recently_Items = db.prepare(`
             SELECT item_id FROM annotation
-            WHERE play_count >= 1 AND item_type='album'
+            WHERE item_type='album'
           `);
           const annotations = stmt_album_Annotation_Recently_Items.all();
           return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
@@ -1482,7 +1512,7 @@
     //////
     const stmt_artist_Annotation_Recently_Count = db.prepare(`
       SELECT COUNT(*) AS count FROM annotation
-      WHERE play_count >= 1 AND item_type='artist'
+      WHERE item_type='artist'
     `);
     const temp_Play_List_Recently: Play_List = {
       label: computed(() => t('nsmusics.view_page.recentPlay')),
@@ -1641,7 +1671,7 @@
         } else if (page_artistlists_selected.value === 'artist_list_recently') {
           const stmt_artist_Annotation_Recently_Items = db.prepare(`
             SELECT item_id FROM annotation 
-            WHERE play_count >= 1 AND item_type='artist'
+            WHERE item_type='artist'
           `);
           const annotations = stmt_artist_Annotation_Recently_Items.all();
           return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
@@ -2355,6 +2385,12 @@
               @playlist_Tracks_temporary_add="get_playlist_Tracks_temporary_add"
               @playlist_Tracks_temporary_update="get_playlist_Tracks_temporary_update"
               @playlist_Tracks_temporary_delete="get_playlist_Tracks_temporary_delete"
+              @playlist_Tracks_temporary_update_media_file="get_playlist_Tracks_temporary_update_media_file"
+              @selected_playlist_addMediaFile="get_selected_playlist_addMediaFile"
+              @selected_playlist_deleteMediaFile="get_selected_playlist_deleteMediaFile"
+              @selected_lovelist_addMediaFile="get_selected_lovelist_addMediaFile"
+              @selected_lovelist_deleteMediaFile="get_selected_lovelist_deleteMediaFile"
+              @selected_recentlist_deletetMediaFile="get_selected_recentlist_deletetMediaFile"
 
               @page_songlists_reset_data="page_songlists_get_reset_data"
               :page_top_album_image_url="page_top_album_image_url"

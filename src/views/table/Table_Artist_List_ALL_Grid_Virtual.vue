@@ -127,10 +127,10 @@
     state_Sort: state_Sort;
   };
   const options_Sort_key = ref<SortItem[]>([
-    {label:'歌手名', key: 'name', state_Sort: state_Sort.Default },
-    {label:'专辑数', key: 'album_count', state_Sort: state_Sort.Default },
-    {label:'歌曲数', key: 'song_count', state_Sort: state_Sort.Default },
-    {label:'更新时间(外部信息)', key: 'external_info_updated_at', state_Sort: state_Sort.Default }
+    {label:computed(() => t('entity.artist_other')), key: 'name', state_Sort: state_Sort.Default },
+    {label:computed(() => t('entity.album_other')), key: 'album_count', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.songCount')), key: 'song_count', state_Sort: state_Sort.Default },
+    // {label:'更新时间(外部信息)', key: 'external_info_updated_at', state_Sort: state_Sort.Default }
   ]);
   const options_Sort = computed(() => {
     if(props.options_Sort_key != null && props.options_Sort_key.length > 0){

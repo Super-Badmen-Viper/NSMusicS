@@ -20,7 +20,8 @@
             "loveArtist": "Favoriete artiesten",
             "recentPlay": "Recent gespeeld",
             "countSong": "lied",
-            "countList": "groep"
+            "countList": "groep",
+            "selectedSong": "Geselecteerd"
         },
         "view_player": {
             "view_seting": {

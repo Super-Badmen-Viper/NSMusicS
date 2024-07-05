@@ -20,7 +20,8 @@
       "loveArtist": "هنرمندان دلخواه",
       "recentPlay": "آخرین پخش‌ها",
       "countSong": "آهنگ",
-      "countList": "گروه"
+      "countList": "گروه",
+      "selectedSong": "انتخاب شده"
     },
     "view_player": {
       "view_seting": {
