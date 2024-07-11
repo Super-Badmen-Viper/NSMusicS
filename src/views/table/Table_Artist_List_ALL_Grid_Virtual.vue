@@ -353,14 +353,14 @@
   import {Icon} from "@vicons/utils";
   let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
-    set_ArtistInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id,favorite)
+    set_ArtistInfo_To_LocalSqlite.Set_ArtistInfo_To_Favorite(id,favorite)
   }
   const handleItemClick_Rating = (id_rating: any) => {
     const [id, rating] = id_rating.split('-');
     if(rating === '6') {
-      set_ArtistInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, 0);
+      set_ArtistInfo_To_LocalSqlite.Set_ArtistInfo_To_Rating(id, 0);
     }else
-      set_ArtistInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, rating);
+      set_ArtistInfo_To_LocalSqlite.Set_ArtistInfo_To_Rating(id, rating);
   }
 
   ////// view artistlist_view Remove data

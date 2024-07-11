@@ -21,7 +21,9 @@
             "recentPlay": "Nedávno Přehráno",
             "countSong": "píseň",
             "countList": "sestava",
-            "selectedSong": "Vybráno"
+            "selectedSong": "Vybráno",
+            "selectLibrary": "Import knihovny médií",
+            "selectLibrary_explain": "Vyberte složku a importujte všechny písně z této složky"
         },
         "view_player": {
             "view_seting": {

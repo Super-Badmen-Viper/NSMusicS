@@ -31,6 +31,9 @@ function get_server_config_of_current_user_of_sqlite(value: any){
 function get_server_config_of_all_user_of_sqlite(value: any){
   emits('server_config_of_all_user_of_sqlite',value)
 }
+function get_library_path(value: any){
+  emits('library_path',value)
+}
 
 onMounted(async () => {
   emits('router_select','View_Menu_AppSetting')
@@ -38,7 +41,7 @@ onMounted(async () => {
 const emits = defineEmits([
   'router_select',
   'menu_appsetting_select_tab_name','server_config_of_current_user_of_sqlite','server_config_of_all_user_of_sqlite',
-  'update_lang','update_theme','menuOptions_appBar','selectd_props_app_sidebar',
+  'update_lang','update_theme','library_path','menuOptions_appBar','selectd_props_app_sidebar',
   'player_fade_value','player_use_lottie_animation',
 ]);
 const { 
@@ -50,7 +53,7 @@ const {
   server_config_of_all_user_of_select,
   server_config_of_current_user_of_sqlite,server_config_of_all_user_of_sqlite,
 
-  update_theme,menuOptions_appBar,
+  update_theme,library_path,menuOptions_appBar,
   player_fade_value,player_use_lottie_animation
 } = defineProps<{
   app_left_menu_collapsed:Boolean,window_innerWidth:number,
@@ -61,11 +64,10 @@ const {
   server_config_of_all_user_of_select: {label: string;value: string}[],
   server_config_of_current_user_of_sqlite:Server_Configs_Props,server_config_of_all_user_of_sqlite:Server_Configs_Props[],
 
-  update_theme:Boolean, menuOptions_appBar:MenuOption[],selectd_props_app_sidebar:(string | number)[],
+  update_theme:Boolean,library_path: any,menuOptions_appBar:MenuOption[],selectd_props_app_sidebar:(string | number)[],
   player_fade_value:number,player_use_lottie_animation:Boolean,
 }>();
 </script>
-
 <template>
   <div class="view_show">
     <Table_Menu_AppSetting
@@ -83,6 +85,8 @@ const {
       @update_lang="get_update_lang"
       :update_theme="update_theme"
       @update_theme="get_update_theme"
+      :library_path="library_path"
+      @library_path="get_library_path"
       :menuOptions_appBar="menuOptions_appBar"
       @menuOptions_appBar="get_menuOptions_appBar"
       :selectd_props_app_sidebar="selectd_props_app_sidebar"

@@ -333,6 +333,8 @@ const page_songlists_handleselected_updatevalue = (value: any) => {
   emits('page_songlists_selected',value)
   console.log('selected_value_for_songlistall：'+value);
   breadcrumbItems.value = props.page_songlists_options.find(option => option.value === value)?.label || '';
+  bool_start_play.value = true
+  emits('media_Files_selected_set_all', false);
 };
 
 ////// router history
@@ -497,22 +499,39 @@ const Type_Selected_Media_File_To_Playlist = ref(false)
 async function update_playlist_addMediaFile_selected(playlist_id: any)
 {
   emits('selected_playlist_addMediaFile',playlist_id)
-}
-async function update_playlist_deleteMediaFile_selected()
-{
-  emits('selected_playlist_deleteMediaFile',true)
+  Type_Selected_Media_File_To_Playlist.value = false;
+  click_open_bulk_operation()
 }
 async function update_lovelist_addMediaFile_selected()
 {
   emits('selected_lovelist_addMediaFile',true)
+  Type_Selected_Media_File_To_Playlist.value = false;
+  click_open_bulk_operation()
 }
-async function update_lovelist_deleteMediaFile_selected()
-{
-  emits('selected_lovelist_deleteMediaFile',true)
+async function update_button_deleteMediaFile_selected(){
+  if(props.page_songlists_selected === 'song_list_love'){
+    update_lovelist_deleteMediaFile_selected(props.page_songlists_selected)
+  }else if(props.page_songlists_selected !== 'song_list_all'){
+    update_playlist_deleteMediaFile_selected(props.page_songlists_selected)
+  }
 }
-async function update_recentlist_deletetMediaFile_selected()
+async function update_playlist_deleteMediaFile_selected(playlist_id: any)
 {
-  emits('selected_recentlist_deletetMediaFile',true)
+  emits('selected_playlist_deleteMediaFile',playlist_id)
+  Type_Selected_Media_File_To_Playlist.value = false;
+  click_open_bulk_operation()
+}
+async function update_lovelist_deleteMediaFile_selected(playlist_id: any)
+{
+  emits('selected_lovelist_deleteMediaFile',playlist_id)
+  Type_Selected_Media_File_To_Playlist.value = false;
+  click_open_bulk_operation()
+}
+async function update_recentlist_deletetMediaFile_selected(playlist_id: any)
+{
+  emits('selected_recentlist_deletetMediaFile',playlist_id)
+  Type_Selected_Media_File_To_Playlist.value = false;
+  click_open_bulk_operation()
 }
 
 ////// bulk_operation and select_line
@@ -603,7 +622,9 @@ onBeforeUnmount(() => {
         </n-button>
       </n-dropdown>
 
-      <n-button quaternary circle size="medium" style="margin-left:4px" @click="click_open_bulk_operation">
+      <n-button
+          v-if="props.page_songlists_selected !== 'song_list_recently'"
+          quaternary circle size="medium" style="margin-left:4px" @click="click_open_bulk_operation">
         <template #icon>
           <n-icon :size="20" :depth="2"><MultiselectLtr20Filled/></n-icon>
         </template>
@@ -620,8 +641,9 @@ onBeforeUnmount(() => {
             <n-icon :size="20" :depth="2"><AddCircle32Regular/></n-icon>
           </template>
         </n-button>
-<!--        v-if="props.page_songlists_selected !== 'song_list_all' && props.page_songlists_selected !== 'song_list_recently'"-->
-        <n-button quaternary circle size="medium" style="margin-left:4px">
+        <n-button
+          v-if="props.page_songlists_selected !== 'song_list_all' && props.page_songlists_selected !== 'song_list_recently'"
+          quaternary circle size="medium" style="margin-left:4px" @click="update_button_deleteMediaFile_selected">
           <template #icon>
             <n-icon :size="20" :depth="2"><Delete20Regular/></n-icon>
           </template>
@@ -947,10 +969,10 @@ onBeforeUnmount(() => {
         </n-space>
         <n-space>
           <n-button
-            :key="song_love"
+            key="song_love"
             class="songlist_more"
             style="width: 100px;height: 24px;border: 0px; background-color: transparent;display: block;"
-            @click=""
+            @click="update_lovelist_addMediaFile_selected"
           >
             {{ $t('nsmusics.view_page.loveSong') }}
           </n-button>
@@ -959,6 +981,7 @@ onBeforeUnmount(() => {
             :key="n.value"
             class="songlist_more"
             style="width: 100px;height: 24px;border: 0px; background-color: transparent;display: block;"
+            @click="update_playlist_addMediaFile_selected(n.value)"
           >
 <!--            @click="update_playlist_addMediaFile(item.id,n.value)"-->
             {{ n.label }}

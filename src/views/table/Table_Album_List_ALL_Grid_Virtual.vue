@@ -368,14 +368,14 @@
   import {Set_AlbumInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite'
   let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
-    set_AlbumInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id,favorite)
+    set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Favorite(id,favorite)
   }
   const handleItemClick_Rating = (id_rating: any) => {
     const [id, rating] = id_rating.split('-');
     if(rating === '6') {
-      set_AlbumInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, 0);
+      set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Rating(id, 0);
     }else
-      set_AlbumInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, rating);
+      set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Rating(id, rating);
   }
 
   ////// view albumlist_view Remove data

@@ -9,35 +9,61 @@ export class Audio_node_mpv {
         this.isResumeing = false;
     }
     async load(path: string) {
-        await ipcRenderer.invoke('mpv-load', path)
-        this.isPlaying = true;
-        this.isResumeing = true;
+        try {
+            await ipcRenderer.invoke('mpv-load', path)
+            this.isPlaying = true;
+            this.isResumeing = true;
+        }catch{}
     }
     async IsResumeing() {
-        this.isResumeing = await ipcRenderer.invoke('mpv-isResumeing');
+        try {
+            this.isResumeing = await ipcRenderer.invoke('mpv-isResumeing');
+        }catch{}
     }
     async IsPlaying() {
-        this.isPlaying = await ipcRenderer.invoke('mpv-isPlaying');
+        try {
+            this.isPlaying = await ipcRenderer.invoke('mpv-isPlaying');
+        }catch{}
     }
     async play() {
-        await ipcRenderer.invoke('mpv-play')
-        this.isPlaying = true;
+        try {
+            await ipcRenderer.invoke('mpv-play')
+            this.isPlaying = true;
+        }catch{
+            this.isPlaying = false;
+        }
     }
     async pause() {
-        await ipcRenderer.invoke('mpv-pause')
-        this.isPlaying = false;
+        try {
+            await ipcRenderer.invoke('mpv-pause')
+            this.isPlaying = false;
+        }catch{
+            this.isPlaying = false;
+        }
     }
     async getDuration(): Promise<number | undefined> {
-        this.isDuration = await ipcRenderer.invoke('mpv-get-duration')
-        return this.isDuration;
+        try {
+            this.isDuration = await ipcRenderer.invoke('mpv-get-duration')
+            return this.isDuration;
+        }catch{
+            return 0
+        }
     }
     async getCurrentTime(): Promise<number> {
-        return await ipcRenderer.invoke('mpv-get-time-pos');;
+        try {
+            return await ipcRenderer.invoke('mpv-get-time-pos');
+        }catch{
+            return 0
+        }
     }
     async setCurrentTime(time: number) {
-        await ipcRenderer.invoke('mpv-set-time-pos',time)
+        try{
+            await ipcRenderer.invoke('mpv-set-time-pos',time)
+        }catch {}
     }
     async setVolume(volume: number) {
-        await ipcRenderer.invoke('mpv-set-volume',volume)
+        try{
+            await ipcRenderer.invoke('mpv-set-volume',volume)
+        }catch {}
     }
 }

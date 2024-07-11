@@ -10,6 +10,7 @@
     PeopleCommunity16Regular,
     SlideMicrophone32Regular,
     TextIndentIncreaseLtr20Filled as lyric,
+    FullScreenMaximize16Regular,
   } from '@vicons/fluent'
   import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound} from '@vicons/material'
   import {Close, Hearing, Menu as MenuIcon, UserAvatarFilledAlt,Clean} from '@vicons/carbon'
@@ -20,7 +21,7 @@
     inheritLocale: true
   })
   const update_lang = ref('en')
-  function get_update_lang(value:any){
+  async function get_update_lang(value:any){
     update_lang.value = value;
     console.log(value)
     save_system_config_of_App_Configs()
@@ -131,6 +132,13 @@
   const server_config_of_current_user_of_sqlite_of_select = ref<{label: string;value: string}>()
   const server_config_of_all_user_of_select = ref<{label: string;value: string}[]>([])
 
+  ////// this_app library
+  const library_path = ref('')
+  function get_library_path(value: any){
+    library_path.value = value
+    save_system_library_config()
+  }
+
   ////// this_app theme_color
   const theme = ref<GlobalTheme | null>(null)
   const theme_name = ref<string>()
@@ -157,10 +165,10 @@
     theme_app.value = darkTheme
     update_theme.value = true
   }
-  const theme_mode_change_click = () => {
-    if(update_theme.value){
+  const theme_mode_change_click = async () => {
+    if (update_theme.value) {
       theme_normal_mode_click()
-    }else{
+    } else {
       theme_dark_mode_click()
     }
   }
@@ -176,6 +184,9 @@
   }
   function maximize() {
     ipcRenderer.send('window-max');
+  }
+  function maximize_screen() {
+    ipcRenderer.send('window-fullscreen');
   }
   function closeWindow() {
     ipcRenderer.send('window-close');
@@ -382,8 +393,6 @@
     this_audio_album_id.value = value
     console.log('this_audio_album_id：'+value)
     page_top_album_id.value = value;
-    let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
-    set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_PlayCount_of_Album(value)
   }
   const this_audio_album_rating = ref<string>('') // album model
   function get_this_audio_album_rating(value: any) {
@@ -408,6 +417,8 @@
   // player_configs audio_infos of all_playlist
   import { Get_PlaylistInfo_From_LocalSqlite } from "@/features/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
   import { Set_PlaylistInfo_From_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_From_LocalSqlite";
+  import { Set_MediaInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
+  import { Set_AnnotationInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_AnnotationInfo_To_LocalSqlite";
   const playlist_Tracks_Current_Media_File_id_of_list = ref<string[]>([])
   const playlist_All_of_list = ref<{label: string;value: string}[]>([])
   const playlist_Tracks_temporary = ref<{playlist:Play_List,playlist_tracks:Play_list_Track[]}[]>([])
@@ -534,18 +545,38 @@
   }
   function get_selected_playlist_addMediaFile(value: any){
     console.log('selected_playlist_addMediaFile',value)
-  }
-  function get_selected_playlist_deleteMediaFile(value: any){
-    console.log('selected_playlist_deleteMediaFile',value)
+    const ids = media_Files_selected.value.map(file => file.id);
+    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_From_LocalSqlite();
+    set_PlaylistInfo_From_LocalSqlite.Set_Selected_MediaInfo_Add_Selected_Playlist(ids,value)
+    get_playlist_Tracks_temporary_update_media_file(true)
   }
   function get_selected_lovelist_addMediaFile(value: any){
     console.log('selected_lovelist_addMediaFile',value)
+    const ids = media_Files_selected.value.map(file => file.id);
+    let set_AnnotationInfo_To_LocalSqlite = new Set_AnnotationInfo_To_LocalSqlite()
+    set_AnnotationInfo_To_LocalSqlite.Set_MediaInfo_Add_Selected_Favorite(ids,true)
+    get_playlist_Tracks_temporary_update_media_file(true)
+  }
+  function get_selected_playlist_deleteMediaFile(value: any){
+    console.log('selected_playlist_deleteMediaFile',value)
+    const ids = media_Files_selected.value.map(file => file.id);
+    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_From_LocalSqlite();
+    set_PlaylistInfo_From_LocalSqlite.Set_Selected_MediaInfo_Delete_Selected_Playlist(ids,value)
+    get_playlist_Tracks_temporary_update_media_file(true)
   }
   function get_selected_lovelist_deleteMediaFile(value: any){
     console.log('selected_lovelist_deleteMediaFile',value)
+    const ids = media_Files_selected.value.map(file => file.id);
+    let set_AnnotationInfo_To_LocalSqlite = new Set_AnnotationInfo_To_LocalSqlite();
+    set_AnnotationInfo_To_LocalSqlite.Set_MediaInfo_Delete_Selected_Favorite(ids,value)
+    get_playlist_Tracks_temporary_update_media_file(true)
   }
   function get_selected_recentlist_deletetMediaFile(value: any){
     console.log('selected_recentlist_deletetMediaFile',value)
+    const ids = media_Files_selected.value.map(file => file.id);
+    let set_AnnotationInfo_To_LocalSqlite = new Set_AnnotationInfo_To_LocalSqlite();
+    set_AnnotationInfo_To_LocalSqlite.Set_MediaInfo_To_Selected_PlayCount_of_Delete(ids,value)
+    get_playlist_Tracks_temporary_update_media_file(true)
   }
 
   ////// player_configs lyric_info
@@ -618,8 +649,12 @@
   ///// view of View_Home_MusicLibrary_Browse
   import {Get_HomeDataInfos_From_LocalSqlite} from '@/features/sqlite3_local_configs/class_Get_HomeDataInfos_From_LocalSqlite'
   import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
-  import {Set_MediaInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
-  import Table_Song_List from "@/views/table/Table_Song_List_ALL_Line_Virtual.vue";
+  import {
+    Set_ReadLocalMusic_To_LocalSqlite
+  } from "@/features/sqlite3_local_configs/class_Set_ReadLocalMusic_To_LocalSqlite";
+  import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
+  import {Set_AlbumInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite";
+  import {Set_ArtistInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_ArtistInfo_To_LocalSqlite";
   let get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
   const home_Files_temporary_maximum_playback = ref<Album[]>([])
   const home_Files_temporary_random_search = ref<Album[]>([])
@@ -1132,11 +1167,11 @@
       WHERE starred = 1 AND item_type='album'
     `);
     const temp_Play_List_Love: Play_List = {
-      label: computed(() => t('nsmusics.view_page.loveSong')),
+      label: computed(() => t('nsmusics.view_page.loveAlbum')),
       value: 'album_list_love',
       id: 'album_list_love',
-      name: computed(() => t('nsmusics.view_page.loveSong')),
-      comment: computed(() => t('nsmusics.view_page.loveSong')),
+      name: computed(() => t('nsmusics.view_page.loveAlbum')),
+      comment: computed(() => t('nsmusics.view_page.loveAlbum')),
       duration: 0,
       song_count: stmt_album_Annotation_Starred_Count.get().count + ' *',
       public: false,
@@ -1326,6 +1361,7 @@
               albumFile.rating = 0;
       }
       ////// filter selected_list for album_Files_temporary
+      let order_play_date = null;
       album_Files_temporary.value = album_Files_temporary.value.filter((item) => {
         if (page_albumlists_selected.value === 'album_list_all') {
           return true;
@@ -1335,13 +1371,26 @@
           const stmt_album_Annotation_Recently_Items = db.prepare(`
             SELECT item_id FROM annotation
             WHERE item_type='album'
+            ORDER BY play_date DESC
           `);
-          const annotations = stmt_album_Annotation_Recently_Items.all();
-          return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
+          const annotations = stmt_album_Annotation_Recently_Items.all().map((annotation) => annotation.item_id);
+          order_play_date = annotations;
+          return annotations.includes(item.id);
         } else if (page_albumlists_selected.value === 'album_list_all_PlayList') {
           return true;
         }
       });
+      if (page_albumlists_selected.value === 'album_list_recently') {
+        let new_sort: Album[] = album_Files_temporary.value.slice();
+        album_Files_temporary.value = [];
+        order_play_date.forEach((id) => {
+          const index = new_sort.findIndex(item => item.id === id);
+          if (index !== -1) {
+            album_Files_temporary.value.push(new_sort[index]);
+            new_sort.splice(index, 1);
+          }
+        });
+      }
       album_Files_temporary.value.forEach((item, index) => {
         item.absoluteIndex = index + 1;
       });
@@ -1389,6 +1438,9 @@
       get_this_audio_song_rating(playlist_Files_temporary.value[0].rating)
       get_this_audio_song_favorite(playlist_Files_temporary.value[0].favorite)
     }
+
+    let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
+    set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_PlayCount_of_Album(album_id)
   }
 
   ////// view of artist
@@ -1663,6 +1715,7 @@
               artistFile.rating = 0;
       }
       ////// filter selected_list for artist_Files_temporary
+      let order_play_date = null;
       artist_Files_temporary.value = artist_Files_temporary.value.filter((item) => {
         if (page_artistlists_selected.value === 'artist_list_all') {
           return true;
@@ -1670,15 +1723,31 @@
           return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
         } else if (page_artistlists_selected.value === 'artist_list_recently') {
           const stmt_artist_Annotation_Recently_Items = db.prepare(`
-            SELECT item_id FROM annotation 
+            SELECT item_id FROM annotation
             WHERE item_type='artist'
+            ORDER BY play_date DESC
           `);
-          const annotations = stmt_artist_Annotation_Recently_Items.all();
-          return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
+          const annotations = stmt_artist_Annotation_Recently_Items.all().map((annotation) => annotation.item_id);
+          order_play_date = annotations;
+          return annotations.includes(item.id);
         } else if (page_artistlists_selected.value === 'artist_list_all_PlayList') {
           return true;
         }
       });
+      if (page_artistlists_selected.value === 'artist_list_recently') {
+        let new_sort: Artist[] = artist_Files_temporary.value.slice();
+        artist_Files_temporary.value = [];
+        order_play_date.forEach((id) => {
+          const index = new_sort.findIndex(item => item.id === id);
+          if (index !== -1) {
+            artist_Files_temporary.value.push(new_sort[index]);
+            new_sort.splice(index, 1);
+          }
+        });
+      }
+      // artist_Files_temporary.value.forEach((item, index) => {
+      //   item.absoluteIndex = index + 1;
+      // });
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -1723,6 +1792,9 @@
       get_this_audio_song_rating(playlist_Files_temporary.value[0].rating)
       get_this_audio_song_favorite(playlist_Files_temporary.value[0].favorite)
     }
+
+    let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite()
+    set_ArtistInfo_To_LocalSqlite.Set_ArtistInfo_To_PlayCount_of_Artist(playlist_Files_temporary.value[0].artist_id)
   }
 
   ////// router custom for history_search 
@@ -1812,10 +1884,12 @@
       }
       save_system_config_of_View_Router_History()
       ///
-      const memoryUsage = await ipcRenderer.invoke('window-get-memory')
-      if (memoryUsage.rss > MEMORY_THRESHOLD) {
-        ipcRenderer.send('window-reset-data')
-      }
+      try {
+        const memoryUsage = await ipcRenderer.invoke('window-get-memory')
+        if (memoryUsage.rss > MEMORY_THRESHOLD) {
+          ipcRenderer.send('window-reset-data')
+        }
+      }catch{}
     }
   });
   const MEMORY_THRESHOLD = 240 * 1024 * 1024; // 240MB
@@ -2066,6 +2140,9 @@
       app_left_menu_select_activeKey.value = '' + system_Configs_Read.app_Configs.value['app_left_menu_select_activeKey']
       app_left_menu_collapsed.value = '' + system_Configs_Read.app_Configs.value['app_left_menu_collapsed'] === 'true'
       router_name.value = '' + system_Configs_Read.app_Configs.value['router_name']
+      /// library_Config
+      library_path.value = '' + system_Configs_Read.library_Configs.value['library']
+      console.log(library_path)
       /// player_Configs_For_UI
       player_UI_Theme_State.value.player_collapsed_album = '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_album'] === 'true'
       player_UI_Theme_State.value.player_collapsed_skin = '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_skin'] === 'true'
@@ -2075,6 +2152,7 @@
       player_UI_Theme_State.value.player_theme_Styles_Selected = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_theme_Styles_Selected'])
       player_UI_Theme_State.value.player_background_model_num = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_background_model_num'])
       player_UI_Theme_State.value.player_use_lottie_animation = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lottie_animation'] === 'true'
+      player_use_lottie_animation.value = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lottie_animation'] === 'true'
       /// player_Configs_of_Audio_Info
       this_audio_file_path.value = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path']
       this_audio_file_medium_image_url.value = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_medium_image_url']
@@ -2162,6 +2240,21 @@
         db,
         app_Configs.value)
     console.log('save config succuessful')
+    db.close();db = null;
+  }
+  function save_system_library_config(){
+    let db:any = null;
+    db = require('better-sqlite3')(nsmusics_db);
+    db.pragma('journal_mode = WAL');
+    const library_Configs = ref(
+        new Library_Configs({
+          library: String(library_path.value)
+        }))
+    let system_Configs_Write = new System_Configs_Write()
+    system_Configs_Write.system_library_config(
+        db,
+        library_Configs.value)
+    save_system_config_of_App_Configs()
     db.close();db = null;
   }
   function save_system_config_of_Player_Configs_of_UI(){
@@ -2308,6 +2401,8 @@
               @update_lang="get_update_lang"
               :update_theme="update_theme"
               @update_theme="get_update_theme"
+              :library_path="library_path"
+              @library_path="get_library_path"
               :menuOptions_appBar="menuOptions_appBar"
               @menuOptions_appBar="get_menuOptions_appBar"
               :selectd_props_app_sidebar="selectd_props_app_sidebar"
@@ -2504,6 +2599,11 @@
                 <n-button quaternary circle size="medium" style="margin-right:4px" @click="theme_mode_change_click">
                   <template #icon>
                     <n-icon size="20" :depth="2"><DarkTheme24Filled/></n-icon>
+                  </template>
+                </n-button>
+                <n-button quaternary circle size="medium" style="margin-right:4px;" @click="maximize_screen">
+                  <template #icon>
+                    <n-icon size="20" :depth="2" style="margin-top: 1px;"><FullScreenMaximize16Regular/></n-icon>
                   </template>
                 </n-button>
                 <n-button quaternary circle size="medium" style="margin-right:4px" @click="minimize">

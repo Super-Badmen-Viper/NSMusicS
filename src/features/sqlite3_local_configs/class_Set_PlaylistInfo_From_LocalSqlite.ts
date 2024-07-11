@@ -26,11 +26,7 @@ export class Set_PlaylistInfo_From_LocalSqlite {
             }
         ).replace(/\//g, '-');
     }
-    public Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
-        name: string,comment: string,
-        duration: number,song_count: number,
-        _public_: number,owner_id: string
-    ) {
+    public Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(name: string,comment: string, duration: number,song_count: number, _public_: number,owner_id: string) {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         ///
@@ -63,12 +59,7 @@ export class Set_PlaylistInfo_From_LocalSqlite {
         };
         return data;
     }
-    public Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(
-        id: string,
-        name: string,comment: string,
-        duration: number,song_count: number,
-        _public_: number,owner_id: string
-    ) {
+    public Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(id: string, name: string,comment: string, duration: number,song_count: number, _public_: number,owner_id: string) {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
@@ -124,17 +115,51 @@ export class Set_PlaylistInfo_From_LocalSqlite {
         db.close();
     }
 
-    public Set_Selected_MediaInfo_To_Selected_Playlist(ids: string[], value: Boolean) {
+    public Set_Selected_MediaInfo_Add_Selected_Playlist(ids: string[], playlist_id: string) {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
 
-        for (const id of ids) {
-            if (value) {/// add
+        const existingRecord = db.prepare('SELECT * FROM playlist WHERE id = ?').get(playlist_id);
+        if (existingRecord) {
+            const existingTrackIds = db.prepare(`
+                SELECT media_file_id 
+                FROM playlist_tracks 
+                WHERE playlist_id = ?
+            `).all(playlist_id).map((row:Play_list_Track) => row.media_file_id);
+            const insertStmt = db.prepare(`
+                INSERT INTO playlist_tracks (id, playlist_id, media_file_id) 
+                VALUES (?, ?, ?)
+            `);
+            const insertTransaction = db.transaction(() => {
+                for (const id of ids) {
+                    if (!existingTrackIds.includes(id)) {
+                        insertStmt.run(this.getUniqueId(db), playlist_id, id);
+                    }
+                }
+            });
+            insertTransaction();
+        }
 
-            } else {/// remove
+        db.close();
+    }
+    public Set_Selected_MediaInfo_Delete_Selected_Playlist(ids: string[], playlist_id: string) {
+        const path = require('path');
+        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        db.pragma('journal_mode = WAL');
 
-            }
+        const existingRecord = db.prepare('SELECT * FROM playlist WHERE id = ?').get(playlist_id);
+            if (existingRecord) {
+                const deleteStmt = db.prepare(`
+                    DELETE FROM playlist_tracks 
+                    WHERE playlist_id = ? AND media_file_id = ?
+                `);
+            const deleteTransaction = db.transaction(() => {
+                for (const id of ids) {
+                    deleteStmt.run(playlist_id, id);
+                }
+            });
+            deleteTransaction();
         }
 
         db.close();

@@ -1,6 +1,10 @@
-import { app, BrowserWindow } from 'electron'
+import {app, BrowserWindow, ipcRenderer} from 'electron'
 import { readFileSync } from 'fs';
-import path from "path";
+const path = require('path');
+import fs from "fs";
+import {IAudioMetadata, IPicture, parseFile, selectCover} from 'music-metadata';
+import Database from 'better-sqlite3';
+import {v4 as uuidv4} from "uuid";
 
 async function createWindow() {
     const win = await new BrowserWindow({
@@ -30,18 +34,45 @@ async function createWindow() {
 
     const electron = require('electron')
     const ipc = electron.ipcMain
+    let originalBounds = null;
+    let isFullscreen = false;
     ipc.on('window-min', function () {
         win.minimize();
-    })
+    });
     ipc.on('window-max', function () {
-    if (win.isMaximized()) {
-        win.restore();
-    } else {
-        win.setMaximizable(true);
-        win.maximize();
-        win.setMaximizable(false);
-    }
-    })
+        if (isFullscreen) {
+            win.setBounds(originalBounds);
+            originalBounds = null;
+            isFullscreen = false;
+            win.restore();
+        } else if (win.isMaximized()) {
+            isFullscreen = false;
+            win.restore();
+        } else {
+            isFullscreen = false;
+            win.maximize();
+        }
+    });
+    ipc.on('window-fullscreen', function () {
+        if (isFullscreen) {
+            win.setBounds(originalBounds);
+            originalBounds = null;
+            isFullscreen = false;
+        } else {
+            win.restore();
+            originalBounds = win.getBounds();
+            const { screen } = require('electron');
+            const primaryDisplay = screen.getPrimaryDisplay();
+            const { width, height } = primaryDisplay.bounds;
+            win.setBounds({
+                x: -2,
+                y: -2,
+                width: width + 2,
+                height: height + 2,
+            });
+            isFullscreen = true;
+        }
+    });
     ipc.on('window-close', function () {
         win.close();
     })
@@ -67,11 +98,6 @@ async function createWindow() {
         win.close();
         createWindow();
     })
-
-    //////
-    ipc.handle('readFile', async (event, filePath) => {
-        return readFileSync(filePath);
-    });
 
     ////// mpv services for win
     const mpvAPI = require('node-mpv');
@@ -138,6 +164,539 @@ async function createWindow() {
     //////
     ipc.handle('window-get-memory', async (event) => {
         try { return process.memoryUsage() }catch{ return 0 }
+    });
+
+    ////// music-metadata
+    function getUniqueId_Media() {
+        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        db.pragma('journal_mode = WAL');
+        const { v4: uuidv4 } = require('uuid');
+        let id = uuidv4().replace(/-/g, '');
+        while (db.prepare(`SELECT COUNT(*) FROM media_file WHERE id = ?`).pluck().get(id) > 0) {
+            id = uuidv4().replace(/-/g, '');
+        }
+        return id;
+    }
+    function getUniqueId_Album() {
+        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        db.pragma('journal_mode = WAL');
+        const { v4: uuidv4 } = require('uuid');
+        let id = uuidv4().replace(/-/g, '');
+        while (db.prepare(`SELECT COUNT(*) FROM album WHERE id = ?`).pluck().get(id) > 0) {
+            id = uuidv4().replace(/-/g, '');
+        }
+        return id;
+    }
+    function getUniqueId_Artist() {
+        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        db.pragma('journal_mode = WAL');
+        const { v4: uuidv4 } = require('uuid');
+        let id = uuidv4().replace(/-/g, '');
+        while (db.prepare(`SELECT COUNT(*) FROM artist WHERE id = ?`).pluck().get(id) > 0) {
+            id = uuidv4().replace(/-/g, '');
+        }
+        return id;
+    }
+    function getCurrentDateTime() {
+        return new Date().toLocaleString(
+            'zh-CN', {
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+            }
+        ).replace(/\//g, '-');
+    }
+    function walkDirectory(directory:any){
+        let files:any[] = [];
+        const walkSync = (dir:any) => {
+            fs.readdirSync(dir).forEach((file:any) => {
+                const filePath = path.join(dir, file);
+                if (fs.statSync(filePath).isDirectory()) {
+                    walkSync(filePath);
+                } else if (filePath.endsWith('.mp3') || filePath.endsWith('.flac')) {
+                    files.push(filePath);
+                }
+            });
+        };
+        walkSync(directory);
+        return files;
+    }
+    function insertData(db:any, table:any, data_old:any) {
+        if (Object.keys(data_old).length === 0) return;
+        let data = { ...data_old };
+        if (table === 'artist' && data.hasOwnProperty('albums'))
+            delete data.albums;
+        if (table === 'album' && data.hasOwnProperty('media'))
+            delete data.media;
+        const columns = Object.keys(data).join(', ');
+        const values = Object.values(data).map(value => {
+            if (typeof value === 'object' && value !== null && 'id' in value) {
+                return value.id;
+            }
+            return String(value);
+        });
+        const sql = `INSERT INTO ${table} (${columns}) VALUES (${columns.split(', ').map(() => '?').join(', ')})`;
+        const stmt = db.prepare(sql);
+        try {
+            const result = stmt.run(values);
+            console.log(`Inserted ${result.changes} row(s)`);
+        } catch (error) {
+            console.error('Error inserting data:', error);
+        }
+    }
+    function isMediaExists(db:any, path:any) {
+        const sql = `SELECT COUNT(*) FROM media_file WHERE path = ?`;
+        const result = db.prepare(sql).get(path);
+        return result["COUNT(*)"] > 0;
+    }
+    function getMediaExists(db:any, path:any) {
+        const sql = `SELECT id FROM media_file WHERE path = ?`;
+        const id = db.prepare(sql).get(path);
+        return id;
+    }
+    function isAlbumExists(db:any, album_name:any, album_artist:any) {
+        const sql = `SELECT COUNT(*) FROM album WHERE name = ? AND artist = ?`;
+        const result = db.prepare(sql).get(album_name,album_artist);
+        return result["COUNT(*)"] > 0;
+    }
+    function getAlbumExists(db:any, album_name:any, album_artist:any) {
+        const sql = `SELECT id FROM album WHERE name = ? AND artist = ?`;
+        const id = db.prepare(sql).get(album_name,album_artist);
+        return id;
+    }
+    function isArtistExists(db:any, artist_name:any) {
+        const sql = `SELECT COUNT(*) FROM artist WHERE name = ?`;
+        const result = db.prepare(sql).get(artist_name);
+        return result["COUNT(*)"] > 0;
+    }
+    function getArtistExists(db:any, artist_name:any) {
+        const sql = `SELECT id FROM artist WHERE name = ?`;
+        const id = db.prepare(sql).get(artist_name);
+        return id;
+    }
+    function getCommentString(common:any) {
+        if (!common) {
+            throw new Error("common object is undefined");
+        }
+        if (!common.comment) {
+            common.comment = [];
+        } else if (!Array.isArray(common.comment)) {
+            common.comment = [common.comment];
+        }
+        return common.comment.join("");
+    }
+    function getLyricsString(common:any) {
+        if (!common) {
+            throw new Error("common object is undefined");
+        }
+        if (!common.lyrics) {
+            common.lyrics = [];
+        } else if (!Array.isArray(common.lyrics)) {
+            common.lyrics = [common.lyrics];
+        }
+        return common.lyrics.join("");
+    }
+    let percentage = 0;
+    async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
+        percentage = 0;
+        let directories: any[] = []
+        directoryPath.forEach((_path) => {
+            directories.push(
+                walkDirectory(_path)
+            )
+        })
+        percentage = 10;
+        ////
+        let resultArray = [];
+        let allCommons: any[] = [];
+        for (const directory of directories) {
+            for (const _path of directory) {
+                try {
+                    const { common } = await parseFile(_path);
+                    allCommons.push({ common, _path });
+                }catch (e) {
+                    console.error(e)
+                    const common: IAudioMetadata = undefined
+                    allCommons.push({ common, _path });
+                }
+            }
+        }
+        percentage = 50;
+        ////
+        const artistMap = new Map();
+        const albumMap = new Map();
+        for (const { common, _path } of allCommons) {
+            if(common === null || common === undefined){
+                let artistName = '';
+                let songName = '';
+                const fileName = _path.split('/').pop().split('\\').pop();
+                const fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
+                if (fileNameWithoutExtension.includes(' - ')) {
+                    const parts = fileNameWithoutExtension.split(' - ');
+                    artistName = parts[0];
+                    songName = parts[1];
+                } else {
+                    artistName = "null";
+                    songName = fileNameWithoutExtension;
+                }
+                const artistId = artistName;
+                const randomAlbumId = Math.floor(10000 + Math.random() * 90000);
+                const albumId = `${artistName}-${randomAlbumId}`;
+                if (!artistMap.has(artistId)) {
+                    const artist = {
+                        id: getUniqueId_Artist(),
+                        name: artistName,
+                        album_count: 0,
+                        full_text: '',
+                        order_artist_name: '',
+                        sort_artist_name: '',
+                        song_count: 0,
+                        size: 0,
+                        mbz_artist_id: '',
+                        biography: '',
+                        small_image_url: '',
+                        medium_image_url: '',
+                        large_image_url: '',
+                        similar_artists: '',
+                        external_url: '',
+                        external_info_updated_at: '',
+                    };
+                    artistMap.set(artistId, artist);
+                }
+
+                if (!albumMap.has(albumId)) {
+                    const artistObj = artistMap.get(artistId);
+                    const album = {
+                        id: getUniqueId_Album(),
+                        name: 'null',
+                        artist_id: artistObj.id,
+                        embed_art_path: _path,
+                        artist: artistName,
+                        album_artist: 'null-'+artistName,
+                        min_year: '',
+                        max_year: '',
+                        compilation: 0,
+                        song_count: 0,
+                        duration: 0,
+                        genre: '',
+                        created_at: getCurrentDateTime(),
+                        updated_at: getCurrentDateTime(),
+                        full_text: '',
+                        album_artist_id: '',
+                        order_album_name: '',
+                        order_album_artist_name: '',
+                        sort_album_name: '',
+                        sort_artist_name: '',
+                        sort_album_artist_name: '',
+                        size: 0,
+                        mbz_album_id: '',
+                        mbz_album_artist_id: '',
+                        mbz_album_type: '',
+                        mbz_album_comment: '',
+                        catalog_num: 0,
+                        comment: '',
+                        all_artist_ids: '',
+                        image_files: '',
+                        paths: '',
+                        description: '',
+                        small_image_url: '',
+                        medium_image_url: '',
+                        large_image_url: '',
+                        external_url: '',
+                        external_info_updated_at: ''
+                    };
+                    albumMap.set(albumId, album);
+                    artistObj.album_count++;
+                }
+
+                const albumObj = albumMap.get(albumId);
+                const media = {
+                    id: getUniqueId_Media(),
+                    path: _path,
+                    title: songName,
+                    artist: artistName,
+                    album: '',
+                    artist_id: albumObj.artist_id,
+                    album_id: albumObj.id,
+                    album_artist: artistName,
+                    has_cover_art: 0,
+                    track_number: 0,
+                    disc_number: 0,
+                    year: '',
+                    size: 0,
+                    suffix: '',
+                    duration: 0,
+                    bit_rate: 0,
+                    genre: '',
+                    compilation: 0,
+                    created_at: getCurrentDateTime(),
+                    updated_at: getCurrentDateTime(),
+                    full_text: '',
+                    album_artist_id: '',
+                    order_album_name: '',
+                    order_album_artist_name: '',
+                    order_artist_name: '',
+                    sort_album_name: '',
+                    sort_artist_name: '',
+                    sort_album_artist_name: '',
+                    sort_title: '',
+                    disc_subtitle: '',
+                    mbz_track_id: '',
+                    mbz_album_id: '',
+                    mbz_artist_id: '',
+                    mbz_album_artist_id: '',
+                    mbz_album_type: '',
+                    mbz_album_comment: '',
+                    catalog_num: 0,
+                    comment: '',
+                    lyrics: '',
+                    bpm: 0,
+                    channels: 0,
+                    order_title: '',
+                    mbz_release_track_id: '',
+                    rg_album_gain: 0,
+                    rg_album_peak: 0,
+                    rg_track_gain: 0,
+                    rg_track_peak: 0,
+                };
+
+                albumObj.media = albumObj.media || [];
+                albumObj.media.push(media);
+                albumObj.song_count++;
+                albumObj.duration += 0;
+            }else {
+                if (common.artist === null || common.artist === undefined) {
+                    const fileName = _path.split('/').pop().split('\\').pop();
+                    const fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
+                    const artistName = fileNameWithoutExtension.includes(' - ') ? fileNameWithoutExtension.split(' - ')[0] : "undefined";
+                    common.artist = artistName;
+                }
+                const artistId = common.artist;
+                const albumId = `${common.artist}-${common.album}`;
+
+                if (!artistMap.has(artistId)) {
+                    const artist = {
+                        id: getUniqueId_Artist(),
+                        name: common.artist,
+                        album_count: 0,
+                        full_text: '',
+                        order_artist_name: '',
+                        sort_artist_name: common.artistsort,
+                        song_count: 0,
+                        size: 0,
+                        mbz_artist_id: '',
+                        biography: '',
+                        small_image_url: '',
+                        medium_image_url: '',
+                        large_image_url: '',
+                        similar_artists: '',
+                        external_url: '',
+                        external_info_updated_at: '',
+                    };
+                    artistMap.set(artistId, artist);
+                }
+
+                if (!albumMap.has(albumId)) {
+                    const artistObj = artistMap.get(artistId);
+                    const album = {
+                        id: getUniqueId_Album(),
+                        name: common.album,
+                        artist_id: artistObj.id,
+                        embed_art_path: _path,
+                        artist: common.artist,
+                        album_artist: common.albumartist,
+                        min_year: common.year,
+                        max_year: common.year,
+                        compilation: 0,
+                        song_count: 0,
+                        duration: 0,
+                        genre: '',
+                        created_at: getCurrentDateTime(),
+                        updated_at: getCurrentDateTime(),
+                        full_text: '',
+                        album_artist_id: '',
+                        order_album_name: '',
+                        order_album_artist_name: '',
+                        sort_album_name: common.albumsort,
+                        sort_artist_name: common.artistsort,
+                        sort_album_artist_name: common.albumartistsort,
+                        size: 0,
+                        mbz_album_id: '',
+                        mbz_album_artist_id: '',
+                        mbz_album_type: '',
+                        mbz_album_comment: '',
+                        catalog_num: common.catalognumber,
+                        comment: getCommentString(common),
+                        all_artist_ids: '',
+                        image_files: '',
+                        paths: '',
+                        description: common.description,
+                        small_image_url: '',
+                        medium_image_url: '',
+                        large_image_url: '',
+                        external_url: '',
+                        external_info_updated_at: ''
+                    };
+                    albumMap.set(albumId, album);
+                    artistObj.album_count++;
+                }
+
+                const albumObj = albumMap.get(albumId);
+                const media = {
+                    id: getUniqueId_Media(),
+                    path: _path,
+                    title: common.title,
+                    artist: common.artist,
+                    album: common.album,
+                    artist_id: albumObj.artist_id,
+                    album_id: albumObj.id,
+                    album_artist: common.artist,
+                    has_cover_art: 0,
+                    track_number: 0,
+                    disc_number: 0,
+                    year: common.year,
+                    size: 0,
+                    suffix: '',
+                    duration: 0,
+                    bit_rate: 0,
+                    genre: '',
+                    compilation: 0,
+                    created_at: getCurrentDateTime(),
+                    updated_at: getCurrentDateTime(),
+                    full_text: common.title,
+                    album_artist_id: '',
+                    order_album_name: '',
+                    order_album_artist_name: '',
+                    order_artist_name: '',
+                    sort_album_name: common.albumsort,
+                    sort_artist_name: common.artistsort,
+                    sort_album_artist_name: common.albumartistsort,
+                    sort_title: common.titlesort,
+                    disc_subtitle: common.discsubtitle,
+                    mbz_track_id: '',
+                    mbz_album_id: '',
+                    mbz_artist_id: '',
+                    mbz_album_artist_id: '',
+                    mbz_album_type: '',
+                    mbz_album_comment: '',
+                    catalog_num: common.catalognumber,
+                    comment: getCommentString(common),
+                    lyrics: getLyricsString(common),
+                    bpm: 0,
+                    channels: 0,
+                    order_title: '',
+                    mbz_release_track_id: '',
+                    rg_album_gain: 0,
+                    rg_album_peak: 0,
+                    rg_track_gain: 0,
+                    rg_track_peak: 0,
+                };
+
+                albumObj.media = albumObj.media || [];
+                albumObj.media.push(media);
+                albumObj.song_count++;
+                // albumObj.duration += common.duration;
+            }
+        }
+        percentage = 70;
+        ////
+        resultArray = Array.from(artistMap.values()).map(artist => {
+            return {
+                artist: {
+                    ...artist,
+                    albums: Array.from(albumMap.values())
+                        .filter(album => album.artist_id === artist.id)
+                        .map(album => ({
+                            ...album,
+                            media: album.media
+                        }))
+                }
+            };
+        });
+        resultArray.forEach(music => {
+            let song_count = 0;
+            music.artist.albums.forEach((album: any) => {
+                album.media.forEach((media: any) => {
+                    song_count++;
+                })
+            })
+            music.artist.song_count = song_count;
+        })
+        percentage = 90;
+        ///
+        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        db.pragma('journal_mode = WAL');
+        resultArray.forEach(music => {
+            if (!isArtistExists(db, music.artist.name)) {
+                insertData(db, 'artist', music.artist);
+            }else{
+                music.artist.id = getArtistExists(db, music.artist.name);
+                music.artist.albums.forEach((album: any) => {
+                    album.artist_id = music.artist.id;
+                    album.media.forEach((media: any) => {
+                        media.artist_id = music.artist.id;
+                    })
+                })
+            }
+        });
+        resultArray.forEach(music => {
+            music.artist.albums.forEach((album: any) => {
+                if (!isAlbumExists(db, album.name, album.artist)) {
+                    insertData(db, 'album', album);
+                    album.media.forEach((media: any) => {
+                        if (!isMediaExists(db, media.path)) {
+                            insertData(db, 'media_file', media);
+                        } else {
+                            media.id = getMediaExists(db, media.path)
+                        }
+                    });
+                } else {
+                    album.id = getAlbumExists(db, album.name, album.artist);
+                    album.media.forEach((media: any) => {
+                        media.album_id = album.id;
+                    })
+                }
+            });
+        });
+        db.close();
+        percentage = 100;
+    }
+    ipc.handle('metadata-get-directory-filePath',  async (event,directoryPath: any[]) => {
+        console.log(directoryPath)
+        await Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath)
+        return false;
+    });
+    ipc.handle('metadata-get-directory-filePath-duration', async (event) => {
+        try { return percentage }catch{ return 0 }
+    });
+    ipc.handle('metadata-get-data',  async (event,filePath) => {
+        return await parseFile(filePath)
+    });
+    ipc.handle('metadata-lyrics',  async (event,filePath) => {
+        const {common} = await parseFile(filePath);
+        if(common.lyrics != null && common.lyrics.length > 0) {
+            return common.lyrics
+        } else {
+            return null
+        }
+    });
+    ipc.handle('metadata-picture',  async (event,filePath) => {
+        const {common} = await parseFile(filePath);
+        if(common.picture != null && common.picture.length > 0){
+            return common.picture[0]
+        } else {
+            return null
+        }
+    });
+    ipc.handle('library-select-folder', async (event) => {
+        const { dialog } = require('electron');
+        const result = await dialog.showOpenDialog({
+            properties: ['openDirectory'],
+        });
+        if (result.canceled) {
+            return null;
+        } else {
+            return result.filePaths[0];
+        }
     });
 }
 

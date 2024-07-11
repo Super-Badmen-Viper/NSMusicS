@@ -21,7 +21,9 @@
             "recentPlay": "recent Play",
             "countSong": "song",
             "countList": "set",
-            "selectedSong": "Selected"
+            "selectedSong": "Selected",
+            "selectLibrary": "Import Media Library",
+            "selectLibrary_explain": "Select a folder to import all songs from the folder"
         },
         "view_player": {
             "view_seting": {

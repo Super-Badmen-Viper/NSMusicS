@@ -21,7 +21,9 @@
             "recentPlay": "Récemment joués",
             "countSong": "chant",
             "countList": "groupe",
-            "selectedSong": "Sélectionné"
+            "selectedSong": "Sélectionné",
+            "selectLibrary": "Importer la bibliothèque multimédia",
+            "selectLibrary_explain": "Sélectionnez un dossier pour importer toutes les chansons du dossier"
         },
         "view_player": {
             "view_seting": {

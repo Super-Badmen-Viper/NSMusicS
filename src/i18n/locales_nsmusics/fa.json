@@ -21,7 +21,9 @@
       "recentPlay": "آخرین پخش‌ها",
       "countSong": "آهنگ",
       "countList": "گروه",
-      "selectedSong": "انتخاب شده"
+      "selectedSong": "انتخاب شده",
+      "selectLibrary": "درون‌ریزی کتابخانه رسانه‌ای",
+      "selectLibrary_explain": "یک پوشه را انتخاب کنید تا همه آهنگ‌های پوشه را درون‌ریزی کنید"
     },
     "view_player": {
       "view_seting": {

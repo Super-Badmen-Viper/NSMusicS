@@ -21,7 +21,9 @@
             "recentPlay": "Nyligen Spelade",
             "countSong": "sång",
             "countList": "grupp",
-            "selectedSong": "Vald"
+            "selectedSong": "Vald",
+            "selectLibrary": "Importera mediabibliotek",
+            "selectLibrary_explain": "Välj en mapp för att importera alla låtar från mappen"
         },
         "view_player": {
             "view_seting": {

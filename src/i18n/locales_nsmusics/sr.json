@@ -21,7 +21,9 @@
             "recentPlay": "Недавно пуштано",
             "countSong": "песма",
             "countList": "група",
-            "selectedSong": "Изабрано"
+            "selectedSong": "Изабрано",
+            "selectLibrary": "Увези медијску библиотеку",
+            "selectLibrary_explain": "Изаберите фасциклу да увезете све песме из ње"
         },
         "view_player": {
             "view_seting": {

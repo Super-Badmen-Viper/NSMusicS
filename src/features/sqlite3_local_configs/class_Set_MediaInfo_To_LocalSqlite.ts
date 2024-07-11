@@ -90,22 +90,6 @@ export class Set_MediaInfo_To_LocalSqlite {
         }
         db.close();
     }
-    public Set_MediaInfo_To_PlayCount_of_Album(item_id: any) {
-        const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
-        db.pragma('journal_mode = WAL');
-
-        let existingRecord = db.prepare(`SELECT play_count FROM annotation WHERE item_id = ?`).get(item_id);
-        if (!existingRecord) {
-            db.prepare(`INSERT INTO annotation (ann_id, item_id, item_type, play_count, play_date) VALUES (?, ?, ?, ?, ?)`)
-                .run(this.getUniqueId(db), item_id, 'album', 1, this.getCurrentDateTime());
-        } else {
-            existingRecord.play_count += 1;
-            db.prepare(`UPDATE annotation SET play_count = ?, play_date = ? WHERE item_id = ? AND item_type = 'album'`)
-                .run(existingRecord.play_count, this.getCurrentDateTime(), item_id);
-        }
-        db.close();
-    }
 
     public Set_MediaInfo_Add_Selected_Playlist(media_file_id: any, playlist_id: any) {
         const path = require('path');

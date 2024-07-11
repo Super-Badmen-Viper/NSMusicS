@@ -3,6 +3,7 @@ import { App_Configs } from '@/models/app_Configs/class_App_Configs';
 import { Player_Configs_of_Audio_Info } from '@/models/app_Configs/class_Player_Configs_of_Audio_Info';
 import { Player_Configs_of_UI } from '@/models/app_Configs/class_Player_Configs_of_UI';
 import { Server_Configs } from "@/models/server_Configs/class_Server_Configs";
+import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
 
 export class System_Configs_Read {
     public app_Configs = ref(
@@ -11,7 +12,11 @@ export class System_Configs_Read {
             lang: '',
             router_name: '',
             app_left_menu_select_activeKey: '',
-            app_left_menu_collapsed: null
+            app_left_menu_collapsed: null,
+        }))
+    public library_Configs = ref(
+        new Library_Configs({
+            library: ''
         }))
     public player_Configs_of_UI = ref(
         new Player_Configs_of_UI({
@@ -70,6 +75,11 @@ export class System_Configs_Read {
             const propertyName = row.config_key;
             if (this.app_Configs.value.hasOwnProperty(propertyName))
                 this.app_Configs.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
+        });
+        db.prepare(`SELECT * FROM system_library_config`).all().forEach((row: Config_Props, index: number) => {
+            const propertyName = row.config_key;
+            if (this.library_Configs.value.hasOwnProperty(propertyName))
+                this.library_Configs.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
         });
         db.prepare(`SELECT * FROM system_player_config_of_audio`).all().forEach((row: Config_Props, index: number) => {
             const propertyName = row.config_key;

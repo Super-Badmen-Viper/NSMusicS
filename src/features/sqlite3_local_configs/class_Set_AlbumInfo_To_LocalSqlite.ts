@@ -1,3 +1,5 @@
+import path from "path";
+
 export class Set_AlbumInfo_To_LocalSqlite {
     private getUniqueId(db: any) {
         const { v4: uuidv4 } = require('uuid');
@@ -24,7 +26,7 @@ export class Set_AlbumInfo_To_LocalSqlite {
         ).replace(/\//g, '-');
     }
 
-    public Set_MediaInfo_To_Favorite(id: string, value: Boolean) {
+    public Set_AlbumInfo_To_Favorite(id: string, value: Boolean) {
         let ann_id = null;
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
@@ -52,7 +54,7 @@ export class Set_AlbumInfo_To_LocalSqlite {
         db.close();
         console.log('handleItemClick_Favorite_id：'+id+'  _favorite:'+!value + '\n: '+ann_id)
     }
-    public Set_MediaInfo_To_Rating(id: any, value: number) {
+    public Set_AlbumInfo_To_Rating(id: any, value: number) {
         let ann_id = null;
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
@@ -69,5 +71,21 @@ export class Set_AlbumInfo_To_LocalSqlite {
 
         db.close();
         console.log('handleItemClick_rating_id：'+id+'  _rating:'+!value + '\n: '+ann_id)
-    }    
+    }
+    public Set_AlbumInfo_To_PlayCount_of_Album(item_id: any) {
+        const path = require('path');
+        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        db.pragma('journal_mode = WAL');
+
+        let existingRecord = db.prepare(`SELECT play_count FROM annotation WHERE item_id = ?`).get(item_id);
+        if (!existingRecord) {
+            db.prepare(`INSERT INTO annotation (ann_id, item_id, item_type, play_count, play_date) VALUES (?, ?, ?, ?, ?)`)
+                .run(this.getUniqueId(db), item_id, 'album', 1, this.getCurrentDateTime());
+        } else {
+            existingRecord.play_count += 1;
+            db.prepare(`UPDATE annotation SET play_count = ?, play_date = ? WHERE item_id = ? AND item_type = 'album'`)
+                .run(existingRecord.play_count, this.getCurrentDateTime(), item_id);
+        }
+        db.close();
+    }
 }

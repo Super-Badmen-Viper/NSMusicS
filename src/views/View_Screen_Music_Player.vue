@@ -1,8 +1,8 @@
 <script setup lang="ts">
   ////// this_view resource
   import {
-    ArrowMinimize16Regular,Maximize16Regular,
-    ChevronDown12Filled,Settings24Regular
+    ArrowMinimize16Regular, Maximize16Regular,
+    ChevronDown12Filled, Settings24Regular, FullScreenMaximize16Regular
   } from '@vicons/fluent'
   import {
     MotionPhotosAutoOutlined
@@ -25,7 +25,7 @@
 
   ////// navie ui components
   // app theme
-  import { darkTheme } from 'naive-ui'
+  import {darkTheme, NIcon} from 'naive-ui'
   // vue3 function
   import { defineEmits, ref, watch, watchEffect, onMounted, computed } from 'vue';
   import { onBeforeUnmount } from 'vue';
@@ -50,6 +50,9 @@
   }
   function maximize() {
     ipcRenderer.send('window-max');
+  }
+  function maximize_screen() {
+    ipcRenderer.send('window-fullscreen');
   }
   function closeWindow() {
     ipcRenderer.send('window-close');
@@ -704,6 +707,11 @@
                 </template>
                 <span style="font-weight: 500;">{{ $t('nsmusics.view_player.view_seting.viewSeting') }}</span>
               </n-button>
+              <n-button quaternary circle size="medium" style="margin-right:4px;" @click="maximize_screen">
+                <template #icon>
+                  <n-icon size="20" :depth="3" style="margin-top: 1px;"><FullScreenMaximize16Regular/></n-icon>
+                </template>
+              </n-button>
               <n-button quaternary circle size="medium"
                 style="margin-right:4px" @click="minimize">
                 <template #icon>
@@ -778,7 +786,7 @@
                     </div>
                   </n-space>
                   <!-- 2 旋转封面-->
-                  <n-space vertical v-show="player_background_model_num === 1">
+                  <n-space vertical v-show="player_background_model_num === 1" style="margin-top: -2vh;">
                     <lottie-player
                       ref="animationInstance_model_1_wave" v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
                       autoplay

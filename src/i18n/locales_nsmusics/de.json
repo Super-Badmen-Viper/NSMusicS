@@ -21,7 +21,9 @@
             "recentPlay": "Zuletzt gespielt",
             "countSong": "Lied",
             "countList": "Gruppe",
-            "selectedSong": "Ausgewählt"
+            "selectedSong": "Ausgewählt",
+            "selectLibrary": "Medienbibliothek importieren",
+            "selectLibrary_explain": "Wählen Sie einen Ordner aus, um alle Lieder aus dem Ordner zu importieren"
         },
         "view_player": {
             "view_seting": {

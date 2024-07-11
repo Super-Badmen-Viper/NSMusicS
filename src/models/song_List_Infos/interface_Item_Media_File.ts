@@ -15,7 +15,7 @@ interface Media_File {
     artist_id: string;
     album_artist: string;
     album_id: string;
-    has_cover_art: boolean;
+    has_cover_art: number;
     track_number: number;
     disc_number: number;
     year: number;
@@ -24,7 +24,7 @@ interface Media_File {
     duration: number;
     bit_rate: number;
     genre: string;
-    compilation: boolean;
+    compilation: number;
     created_at?: string;
     updated_at?: string;
     full_text: string;

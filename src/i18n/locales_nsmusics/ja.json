@@ -21,7 +21,9 @@
             "recentPlay": "最近再生",
             "countSong": "曲",
             "countList": "組",
-            "selectedSong": "選択"
+            "selectedSong": "選択",
+            "selectLibrary": "メディアライブラリのインポート",
+            "selectLibrary_explain": "フォルダを選択して、そのフォルダのすべての曲をインポートします"
         },
         "view_player": {
             "view_seting": {

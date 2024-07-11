@@ -21,7 +21,9 @@
             "recentPlay": "Riprodotti recenti",
             "countSong": "canzone",
             "countList": "gruppo",
-            "selectedSong": "Selezionato"
+            "selectedSong": "Selezionato",
+            "selectLibrary": "Importa libreria multimediale",
+            "selectLibrary_explain": "Seleziona una cartella per importare tutte le canzoni dalla cartella"
         },
         "view_player": {
             "view_seting": {

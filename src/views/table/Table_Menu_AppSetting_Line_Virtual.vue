@@ -37,7 +37,7 @@
   ////// passed as argument
   const emits = defineEmits([
     'menu_appsetting_select_tab_name','server_config_of_current_user_of_sqlite','server_config_of_all_user_of_sqlite',
-    'update_lang','update_theme','menuOptions_appBar','selectd_props_app_sidebar',
+    'update_lang','update_theme','library_path','menuOptions_appBar','selectd_props_app_sidebar',
     'player_fade_value','player_use_lottie_animation',
   ]);
   const props = defineProps<{
@@ -52,6 +52,7 @@
     server_config_of_all_user_of_sqlite:Server_Configs_Props[],
 
     update_theme:Boolean;
+    library_path:any[];
     menuOptions_appBar:MenuOption[];
     selectd_props_app_sidebar:(string | number)[];
     player_fade_value:number;
@@ -184,6 +185,37 @@
     else
       theme_value.value = theme_options.value[0].value
   });
+
+  //////
+  const { ipcRenderer } = require('electron');
+  const library_path = ref('')
+  let timer_percentage = ref<NodeJS.Timeout | null>(null);
+  async function selectFolder() {
+    if(!library_path_search.value) {
+      try {
+        library_path_search.value = true;
+        const folderPath = await ipcRenderer.invoke('library-select-folder');
+        if (folderPath) {
+          library_path.value = folderPath;
+          emits('library_path', folderPath)
+          console.log(folderPath)
+          clearInterval(timer_percentage.value);
+          timer_percentage.value = setInterval(synchronize_percentage_of_library_path_search, 200);
+          library_path_search.value = await ipcRenderer.invoke('metadata-get-directory-filePath', [folderPath])
+        }else {
+          library_path_search.value = false;
+        }
+      } catch (error) {
+        console.error('Error selecting folder:', error);
+      }
+    }
+  }
+  const percentage = ref(0)
+  const library_path_search = ref(false)
+  async function synchronize_percentage_of_library_path_search(){
+    percentage.value = await ipcRenderer.invoke('metadata-get-directory-filePath-duration');
+  }
+
 
   //////
   const menu_appsetting_select_tab_name = ref('tab_pane_1')
@@ -375,7 +407,7 @@
 
   ////// lineItems Re render
   let bool_watch = false;
-  const timer = ref<NodeJS.Timeout | null>(null);
+  let timer = ref<NodeJS.Timeout | null>(null);
   const startTimer = () => {
     timer.value = setInterval(() => {
       bool_watch = true;
@@ -674,7 +706,29 @@
                   />
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <n-space vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.selectLibrary') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('nsmusics.view_page.selectLibrary_explain') }}</span>
+                    </div>
+                  </n-space>
+                  <n-space vertical align="end">
+                    <n-button @click="selectFolder">
+                      {{ $t('nsmusics.view_page.selectedSong') + ' ' + $t('entity.folder_other')}}
+                    </n-button>
+                    <n-tag type="success">
+                      {{ props.library_path }}
+                    </n-tag>
+                    <n-progress
+                      type="line" style="width: 207px;"
+                      :percentage="percentage"
+                      :indicator-placement="'inside'"
+                    />
+                  </n-space>
+                </n-space>
+                <n-divider style="margin: 0;"/>
+                <n-space v-if="false" vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space justify="space-between" align="center">
                     <n-space vertical>
                       <span style="font-size:16px;font-weight: 600;">{{ $t('setting.homeConfiguration') }}</span>
@@ -700,8 +754,8 @@
                     </n-grid>
                   </n-checkbox-group>
                 </n-space>
-                <n-divider style="margin: 0;"/>
-                <n-space vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-divider v-if="false" style="margin: 0;"/>
+                <n-space v-if="false" vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space justify="space-between" align="center">
                     <n-space vertical>
                       <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sidebarConfiguration') }}</span>
@@ -726,7 +780,7 @@
                     </n-grid>
                   </n-checkbox-group>
                 </n-space>
-                <n-divider style="margin: 0;"/>
+                <n-divider v-if="false" style="margin: 0;"/>
                 <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.clearQueryCache') }}</span>

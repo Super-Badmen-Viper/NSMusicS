@@ -21,7 +21,9 @@
             "recentPlay": "Недавно",
             "countSong": "песня",
             "countList": "группа",
-            "selectedSong": "Выбрано"
+            "selectedSong": "Выбрано",
+            "selectLibrary": "Импорт медиатеки",
+            "selectLibrary_explain": "Выберите папку для импорта всех песен из папки"
         },
         "view_player": {
             "view_seting": {

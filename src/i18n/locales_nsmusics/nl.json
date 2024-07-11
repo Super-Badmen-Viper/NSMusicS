@@ -21,7 +21,9 @@
             "recentPlay": "Recent gespeeld",
             "countSong": "lied",
             "countList": "groep",
-            "selectedSong": "Geselecteerd"
+            "selectedSong": "Geselecteerd",
+            "selectLibrary": "Importeer mediabibliotheek",
+            "selectLibrary_explain": "Selecteer een map om alle liedjes uit de map te importeren"
         },
         "view_player": {
             "view_seting": {

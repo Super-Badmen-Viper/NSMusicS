@@ -21,7 +21,9 @@
             "recentPlay": "Tocadas Recentes",
             "countSong": "música",
             "countList": "grupo",
-            "selectedSong": "Selecionado"
+            "selectedSong": "Selecionado",
+            "selectLibrary": "Importar Biblioteca de Mídia",
+            "selectLibrary_explain": "Selecione uma pasta para importar todas as músicas da pasta"
         },
         "view_player": {
             "view_seting": {

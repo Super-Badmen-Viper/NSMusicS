@@ -21,7 +21,9 @@
             "recentPlay": "最近播放",
             "countSong": "首",
             "countList": "组",
-            "selectedSong": "选中"
+            "selectedSong": "选中",
+            "selectLibrary": "媒体库导入",
+            "selectLibrary_explain": "选中一个文件夹，将文件夹所有的歌曲导入"
         },
         "view_player": {
             "view_seting": {

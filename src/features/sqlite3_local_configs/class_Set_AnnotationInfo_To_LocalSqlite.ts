@@ -26,34 +26,62 @@ export class Set_AnnotationInfo_To_LocalSqlite {
             }
         ).replace(/\//g, '-');
     }
-    public Set_MediaInfo_To_Selected_Favorite(ids: string[], value: Boolean) {
+    public Set_MediaInfo_Add_Selected_Favorite(ids: string[], value: Boolean) {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
 
-        for (const id of ids) {
-            const existingRecord = db.prepare(`SELECT * FROM annotation WHERE item_id = ?`).get(id);
-            if (!existingRecord) {
-                db.prepare(`
-                INSERT INTO annotation (ann_id, item_id, item_type, starred, starred_at) 
-                VALUES (?, ?, ?, ?, ?)
-            `).run(
-                    this.getUniqueId(db), id, 'media_file', value ? 0 : 1,
-                    this.getCurrentDateTime()
-                );
-            } else {
-                db.prepare(`
-                UPDATE annotation 
-                SET starred = ?, starred_at = ? 
-                WHERE item_id = ? AND item_type = 'media_file'
-            `).run(
-                    value ? 0 : 1,
+        const insertStmt = db.prepare(`
+            INSERT INTO annotation (ann_id, item_id, item_type, starred, starred_at) 
+            VALUES (?, ?, ?, ?, ?)
+        `);
+        const updateStmt = db.prepare(`
+            UPDATE annotation 
+            SET starred = ?, starred_at = ? 
+            WHERE item_id = ? AND item_type = 'media_file'
+        `);
+        const transaction = db.transaction(() => {
+            for (const id of ids) {
+                const existingRecord = db.prepare(`SELECT * FROM annotation WHERE item_id = ?`).get(id);
+                const starredValue = value ? 1 : 0;
+                if (!existingRecord) {
+                    insertStmt.run(
+                        this.getUniqueId(db), id, 'media_file', starredValue,
+                        this.getCurrentDateTime()
+                    );
+                } else {
+                    updateStmt.run(
+                        starredValue,
+                        this.getCurrentDateTime(),
+                        id
+                    );
+                }
+            }
+        });
+
+        transaction();
+        db.close();
+    }
+    public Set_MediaInfo_Delete_Selected_Favorite(ids: string[], value: Boolean) {
+        const path = require('path');
+        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        db.pragma('journal_mode = WAL');
+
+        const updateStmt = db.prepare(`
+            UPDATE annotation 
+            SET starred = 0, starred_at = ? 
+            WHERE item_id = ? AND item_type = 'media_file'
+        `);
+        const transaction = db.transaction(() => {
+            for (const id of ids) {
+                updateStmt.run(
                     this.getCurrentDateTime(),
                     id
                 );
             }
-        }
+        });
 
+        transaction();
         db.close();
     }
     public Set_MediaInfo_To_Selected_PlayCount_of_Delete(ids: string[], value: Boolean) {
@@ -61,6 +89,21 @@ export class Set_AnnotationInfo_To_LocalSqlite {
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
 
+        const updateStmt = db.prepare(`
+            UPDATE annotation 
+            SET starred = 0, starred_at = ? 
+            WHERE item_id = ? AND item_type = 'media_file'
+        `);
+        const transaction = db.transaction(() => {
+            for (const id of ids) {
+                updateStmt.run(
+                    this.getCurrentDateTime(),
+                    id
+                );
+            }
+        });
+
+        transaction();
         db.close();
     }
 }
