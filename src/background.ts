@@ -20,9 +20,9 @@ async function createWindow() {
     })
     win.setMenu(null)
     win.setMaximizable(false)
-    win.webContents.openDevTools({
-        mode:'detach'
-    });
+    // win.webContents.openDevTools({
+    //     mode:'detach'
+    // });
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
     if (process.argv[2]) {
         win.loadURL(process.argv[2])
@@ -97,7 +97,7 @@ async function createWindow() {
         createWindow();
     })
     ipc.on('window-reset-all', () => {
-        app.relaunch();
+        // app.relaunch();
         app.exit();
     });
     ipc.handle('window-get-memory', async (event) => {
@@ -709,18 +709,18 @@ async function createWindow() {
         }
     });
 
-    autoUpdater.setFeedURL({
-        provider: 'github',
-        owner: 'Super-Badmen-Viper',
-        repo: 'NSMusicS',
-    });
-    autoUpdater.checkForUpdatesAndNotify();
-    autoUpdater.on('update-downloaded', (info) => {
-        win?.webContents.send('update-available', info);
-    });
-    autoUpdater.on('error', (err) => {
-        console.error('Update error:', err);
-    });
+    // autoUpdater.setFeedURL({
+    //     provider: 'github',
+    //     owner: 'Super-Badmen-Viper',
+    //     repo: 'NSMusicS',
+    // });
+    // autoUpdater.checkForUpdatesAndNotify();
+    // autoUpdater.on('update-downloaded', (info) => {
+    //     win?.webContents.send('update-available', info);
+    // });
+    // autoUpdater.on('error', (err) => {
+    //     console.error('Update error:', err);
+    // });
 }
 
 app.whenReady().then(() => {

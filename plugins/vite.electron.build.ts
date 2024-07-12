@@ -71,12 +71,12 @@ export const viteElectronBuild = (): Plugin => {
                         from:'./resources/',
                         to:''
                     },
-                    publish: {
-                        provider: 'github',
-                        owner: 'Super-Badmen-Viper',
-                        repo: 'NSMusicS',
-                        releaseType: 'release',
-                    }
+                    // publish: {
+                    //     provider: 'github',
+                    //     owner: 'Super-Badmen-Viper',
+                    //     repo: 'NSMusicS',
+                    //     releaseType: 'release',
+                    // }
                 }
             })
         }
