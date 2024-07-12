@@ -161,22 +161,15 @@
     itemElements[index].scrollIntoView({ block: 'center', behavior: perviousIndex.value === index - 1 ? 'smooth' : 'instant' });
 
     let color_hidden = player_lyric_color.value.slice(0, -2);
-    let blurValue = 0.07;
     for (let i = index - 16; i <= index + 16; i++) {
       if (i < index) {
-        const colorValue = Math.max(90 - (index - i) * 20, 0);
+        const colorValue = Math.max(90 - (index - i) * 18, 0);
         itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
-        itemElements[i].style.filter = `blur(${blurValue}px)`;
-        blurValue += 0.07;
-
         itemElements[i].style.transform = 'scale(1)';
         itemElements[i].style.textShadow = '0 0 0px transparent';
       } else if (i != index) {
-        const colorValue = Math.max(90 - (i - index) * 20, 0);
+        const colorValue = Math.max(90 - (i - index) * 18, 0);
         itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
-        itemElements[i].style.filter = `blur(${blurValue}px)`;
-        blurValue += 0.07;
-
         itemElements[i].style.transform = 'scale(1)';
         itemElements[i].style.textShadow = '0 0 0px transparent';
       }
@@ -197,21 +190,16 @@
     lyrics_list_whell.value = false;
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
     let color_hidden = player_lyric_color.value.slice(0, -2);
-    let blurValue = 0.05;
     for (let i = perviousIndex.value - 16; i <= perviousIndex.value + 16; i++) {
       if (i < perviousIndex.value) {
-        const colorValue = Math.max(90 - (perviousIndex.value - i) * 20, 0);
+        const colorValue = Math.max(90 - (perviousIndex.value - i) * 18, 0);
         try {
           itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
-          itemElements[i].style.filter = `blur(${blurValue}px)`;
-          blurValue += 0.05;
         }catch{  }
       } else {
-        const colorValue = Math.max(90 - (i - perviousIndex.value) * 20, 0);
+        const colorValue = Math.max(90 - (i - perviousIndex.value) * 18, 0);
         try {
           itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
-          itemElements[i].style.filter = `blur(${blurValue}px)`;
-          blurValue += 0.05;
         }catch{  }
       }
     }
@@ -517,7 +505,7 @@
           border: 1.5px solid #FFFFFF20;
           background-color: rgba(127, 127, 127, 0.1);
           backdrop-filter: blur(10px);
-          margin-top: calc(50vh - 305px);height: 610px;
+          margin-top: calc(50vh - 190px);height: 380px;
           ">
         <n-drawer-content v-if="isVisible_Player_theme">
           <template #default>
@@ -549,7 +537,7 @@
                 </n-space>
               </n-radio>
             </n-radio-group>
-            <n-space style="margin-left: 12px;margin-top: 20px;" justify="space-between">
+            <n-space style="margin-left: 12px;margin-top: 20px;" v-if="false" justify="space-between">
               <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricSize') }}</span>
               <n-space style="margin-right: 32px;">
                 <n-button text style="font-size: 24px;margin-top: 2px;">
@@ -575,7 +563,7 @@
                 <n-color-picker style="width: 177px;margin-top: -4px;"/>
               </n-space>
             </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;" justify="space-between">
+            <n-space style="margin-left: 12px;margin-top: 20px;" v-if="false" justify="space-between">
               <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricSpeed') }}</span>
               <n-space style="margin-right: 32px;">
                 <n-button text style="font-size: 24px;margin-top: 2px;">
@@ -605,7 +593,7 @@
                 />
               </n-space>
             </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;">
+            <n-space style="margin-left: 12px;margin-top: 20px;" v-if="false">
               <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricsAnimation') }}</span>
               <n-space style="width: 260px;margin-top: 2px;">
                 <n-radio
@@ -642,7 +630,7 @@
                 </n-switch>
               </n-space>
             </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;" justify="space-between">
+            <n-space style="margin-left: 12px;margin-top: 20px;" v-if="false" justify="space-between">
               <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
               <n-space style="margin-right: 32px;">
                 <n-button text style="font-size: 24px;margin-top: 2px;">
@@ -786,7 +774,7 @@
                     </div>
                   </n-space>
                   <!-- 2 旋转封面-->
-                  <n-space vertical v-show="player_background_model_num === 1" style="margin-top: -2vh;">
+                  <n-space vertical v-show="player_background_model_num === 1">
                     <lottie-player
                       ref="animationInstance_model_1_wave" v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
                       autoplay
@@ -796,7 +784,7 @@
                       style="
                         width: calc(60vh);
                         height: calc(60vh);
-                        margin-top: calc(26vh - 162px);margin-left: calc(-2vh);
+                        margin-top: calc(24vh - 162px);margin-left: calc(-2vh);
                         position: absolute;
                         transform: scale(1.1);
                       "
@@ -806,8 +794,8 @@
                         class="animate__rotate_slower"
                         :class="{ 'animate__rotate_slower_paused': !props.this_audio_is_playing }"
                         style="
-                          width: calc(34vh);height: calc(34vh);
-                          margin-top: calc(38vh - 162px);margin-left: calc(11vh);
+                          width: calc(36vh);height: calc(36vh);
+                          margin-top: calc(35vh - 162px);margin-left: calc(10vh);
                           border: 1.5px solid #FFFFFF20;
                           border-radius: 27vh;
                           object-fit: cover;object-position: center;

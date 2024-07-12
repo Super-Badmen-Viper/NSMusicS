@@ -23,7 +23,8 @@
             "countList": "组",
             "selectedSong": "选中",
             "selectLibrary": "媒体库导入",
-            "selectLibrary_explain": "选中一个文件夹，将文件夹所有的歌曲导入"
+            "selectLibrary_explain": "选中一个文件夹，将文件夹所有的歌曲导入",
+            "selectLibrary_end_explain": "点击确认后，请不要进行任何操作，导入成功后，将退出此应用，请再次手动启动此应用即可"
         },
         "view_player": {
             "view_seting": {

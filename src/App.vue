@@ -66,14 +66,14 @@
       {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'go_albums_list',icon: renderIcon(AlbumFilled)},
       {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'go_songs_list',icon: renderIcon(MusicNoteRound)},
       {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'go_artist_list',icon: renderIcon(UserAvatarFilledAlt)},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('entity.genre_other'))),key: 'go_other',icon: renderIcon(Flag16Regular)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('entity.genre_other'))),key: 'go_other',icon: renderIcon(Flag16Regular)},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.guessLike'))),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.karaoke'))),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.identifySong'))),key: 'go_other',icon: renderIcon(Hearing)},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'go_other',icon: renderIcon(lyric)},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.guessLike'))),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.karaoke'))),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.identifySong'))),key: 'go_other',icon: renderIcon(Hearing)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'go_other',icon: renderIcon(lyric)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
     ]
   };
   const menuOptions_appBar = ref<MenuOption[]>(create_menuOptions_appBar())
@@ -137,6 +137,9 @@
   function get_library_path(value: any){
     library_path.value = value
     save_system_library_config()
+    router_name.value = 'View_Song_List_ALL';
+    app_left_menu_select_activeKey.value = 'go_songs_list';
+    save_system_config_of_View_Router_History()
   }
 
   ////// this_app theme_color
@@ -222,6 +225,7 @@
     // Vue UI WYSIWYG
     router_select_model_menu.value = false
     router_select_model_home.value = false
+    router_select_model_updateing.value = false;
     router_select_model_media.value = false
     router_select_model_album.value = false
     router_select_model_artist.value = false
@@ -229,8 +233,10 @@
       if(value != 0){
         if(app_left_menu_select_activeKey.value === 'go_back_menu'){
           router_select_model_menu.value = true;
-        }else if(app_left_menu_select_activeKey.value === 'go_back_home'){
+        }else if(app_left_menu_select_activeKey.value === 'go_back_home') {
           router_select_model_home.value = true;
+        }else if(app_left_menu_select_activeKey.value === 'go_other'){
+          router_select_model_updateing.value = true;
         }else if(app_left_menu_select_activeKey.value === 'go_albums_list'){
           router_select_model_album.value = true;
         }else if(app_left_menu_select_activeKey.value === 'go_songs_list'){
@@ -564,6 +570,13 @@
     set_PlaylistInfo_From_LocalSqlite.Set_Selected_MediaInfo_Delete_Selected_Playlist(ids,value)
     get_playlist_Tracks_temporary_update_media_file(true)
   }
+  function get_selected_locallist_deleteMediaFile(value: any){
+    console.log('selected_locallist_deleteMediaFile',value)
+    const ids = media_Files_selected.value.map(file => file.id);
+    let set_LibraryInfo_To_LocalSqlite = new Set_LibraryInfo_To_LocalSqlite();
+    set_LibraryInfo_To_LocalSqlite.Set_LibraryInfo_Delete_Selected_Playlist(ids)
+    get_playlist_Tracks_temporary_update_media_file(true)
+  }
   function get_selected_lovelist_deleteMediaFile(value: any){
     console.log('selected_lovelist_deleteMediaFile',value)
     const ids = media_Files_selected.value.map(file => file.id);
@@ -655,6 +668,7 @@
   import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
   import {Set_AlbumInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite";
   import {Set_ArtistInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_ArtistInfo_To_LocalSqlite";
+  import {Set_LibraryInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_LibraryInfo_To_LocalSqlite";
   let get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
   const home_Files_temporary_maximum_playback = ref<Album[]>([])
   const home_Files_temporary_random_search = ref<Album[]>([])
@@ -755,6 +769,8 @@
     page_songlists_selected.value = value
     console.log('page_songlists_selected：'+value)
     fetchData_Media()
+    save_system_config_of_Player_Configs_of_Audio_Info()
+    save_system_config_of_View_Router_History()
   }
   ///
   const Init_page_songlists_statistic_Data = (db: any) => {
@@ -1832,12 +1848,14 @@
   /// router Data_sources and rendering
   const router_select_model_menu = ref<Boolean>(false)
   const router_select_model_home = ref<Boolean>(false)
+  const router_select_model_updateing = ref<Boolean>(false)
   const router_select_model_media = ref<Boolean>(false)
   const router_select_model_album = ref<Boolean>(false)
   const router_select_model_artist = ref<Boolean>(false)
   function clear_Files_temporary() {
     router_select_model_menu.value = false
     router_select_model_home.value = false
+    router_select_model_updateing.value = false
     router_select_model_media.value = false
     router_select_model_album.value = false
     router_select_model_artist.value = false
@@ -1871,6 +1889,9 @@
         router_name.value = to.name
       }else if(to.name === 'View_Home_MusicLibrary_Browse'){
         router_select_model_home.value = true
+        router_name.value = to.name
+      }else if(to.name === 'View_Updateing'){
+        router_select_model_updateing.value = true
         router_name.value = to.name
       }else if(to.name === 'View_Song_List_ALL'){
         router_select_model_media.value = true
@@ -2435,6 +2456,15 @@
             >
 
             </RouterView>
+            <!--Updateing View-->
+            <RouterView
+              class="view_show_data"
+              v-else-if="router_select_model_updateing"
+              @router_select="get_router_select"
+              :app_left_menu_collapsed="app_left_menu_collapsed"
+              :window_innerWidth="window_innerWidth"
+            >
+            </RouterView>
             <!--Media View-->
             <RouterView
               class="view_show_table"
@@ -2483,6 +2513,7 @@
               @playlist_Tracks_temporary_update_media_file="get_playlist_Tracks_temporary_update_media_file"
               @selected_playlist_addMediaFile="get_selected_playlist_addMediaFile"
               @selected_playlist_deleteMediaFile="get_selected_playlist_deleteMediaFile"
+              @selected_locallist_deleteMediaFile="get_selected_locallist_deleteMediaFile"
               @selected_lovelist_addMediaFile="get_selected_lovelist_addMediaFile"
               @selected_lovelist_deleteMediaFile="get_selected_lovelist_deleteMediaFile"
               @selected_recentlist_deletetMediaFile="get_selected_recentlist_deletetMediaFile"

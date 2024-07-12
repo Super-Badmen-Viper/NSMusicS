@@ -23,7 +23,8 @@
             "countList": "groep",
             "selectedSong": "Geselecteerd",
             "selectLibrary": "Importeer mediabibliotheek",
-            "selectLibrary_explain": "Selecteer een map om alle liedjes uit de map te importeren"
+            "selectLibrary_explain": "Selecteer een map om alle liedjes uit de map te importeren",
+            "selectLibrary_end_explain": "Na het klikken op OK, voer alstublieft geen enkele bewerking uit. Zodra de import is gelukt, zal de applicatie afsluiten. Start de applicatie opnieuw handmatig om door te gaan."
         },
         "view_player": {
             "view_seting": {

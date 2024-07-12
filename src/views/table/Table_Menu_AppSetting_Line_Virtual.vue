@@ -90,9 +90,9 @@
   import { Set_ServerInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_ServerInfo_To_LocalSqlite";
   const server_set_of_addUser_of_type = ref('')
   const server_set_of_addUser_of_servername = ref('')
-  const server_set_of_addUser_of_url = ref('localhost:4533/rest')
-  const server_set_of_addUser_of_username = ref('mozhi')
-  const server_set_of_addUser_of_password = ref('qwer1234')
+  const server_set_of_addUser_of_url = ref('')
+  const server_set_of_addUser_of_username = ref('')
+  const server_set_of_addUser_of_password = ref('')
   async function update_server_setUser(id:string,server_name:string,url:string, user_name:string,password:string) {
     const userService = new User_ApiService_of_ND('http://'+url);
     const {salt, token} = generateEncryptedPassword(password);
@@ -190,20 +190,29 @@
   const { ipcRenderer } = require('electron');
   const library_path = ref('')
   let timer_percentage = ref<NodeJS.Timeout | null>(null);
+  const show_selectFolder = ref(false)
   async function selectFolder() {
-    if(!library_path_search.value) {
+    if (!library_path_search.value) {
       try {
         library_path_search.value = true;
         const folderPath = await ipcRenderer.invoke('library-select-folder');
         if (folderPath) {
           library_path.value = folderPath;
-          emits('library_path', folderPath)
-          console.log(folderPath)
+          emits('library_path', folderPath);
           clearInterval(timer_percentage.value);
+          ipcRenderer.invoke('metadata-get-directory-filePath', [folderPath])
+              .then(filePath => {
+                library_path_search.value = filePath;
+                ipcRenderer.send('window-reset-all');
+              })
+              .catch(error => {
+                console.error('Error getting directory file path:', error);
+              });
           timer_percentage.value = setInterval(synchronize_percentage_of_library_path_search, 200);
-          library_path_search.value = await ipcRenderer.invoke('metadata-get-directory-filePath', [folderPath])
-        }else {
+          console.log(folderPath);
+        } else {
           library_path_search.value = false;
+          show_selectFolder.value = false;
         }
       } catch (error) {
         console.error('Error selecting folder:', error);
@@ -490,6 +499,9 @@
                     </template>
                     {{ $t('form.addServer.title') }}
                   </n-button>
+                  <n-space style="padding-top: 5px;">
+                    未开放API模块，仅可认证保存服务器而非使用
+                  </n-space>
                 </n-space>
 <!--                <n-space justify="space-between">-->
 <!--                  <span style="font-size: 20px;font-weight: 600;">{{ $t('page.appMenu.manageServers') }}</span>-->
@@ -707,19 +719,38 @@
                 </n-space>
                 <n-divider style="margin: 0;"/>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.selectLibrary') }}</span>
+                  <n-space vertical style="width: 500px;">
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.selectLibrary')}}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">{{ $t('nsmusics.view_page.selectLibrary_explain') }}</span>
+                      <span style="font-size:12px;">
+                        {{ $t('nsmusics.view_page.selectLibrary_explain') + ', ' + $t('common.restartRequired')}}
+                      </span>
+<!--                      <br>-->
+<!--                      <span style="font-size:12px;">-->
+<!--                        {{ $t('nsmusics.view_page.selectLibrary_end_explain') }}-->
+<!--                      </span>-->
                     </div>
                   </n-space>
                   <n-space vertical align="end">
-                    <n-button @click="selectFolder">
-                      {{ $t('nsmusics.view_page.selectedSong') + ' ' + $t('entity.folder_other')}}
-                    </n-button>
                     <n-tag type="success">
                       {{ props.library_path }}
                     </n-tag>
+                    <n-popconfirm v-model:show="show_selectFolder">
+                      <template #trigger>
+                        <n-button>
+                          {{ $t('nsmusics.view_page.selectedSong') + ' ' + $t('entity.folder_other')}}
+                        </n-button>
+                      </template>
+                      {{ $t('nsmusics.view_page.selectLibrary') + '?' }}
+                      <template #action>
+                        <n-button size="small" @click="show_selectFolder = false">
+                          {{ $t('common.cancel') }}
+                        </n-button>
+                        <n-button size="small" @click="selectFolder">
+                          {{ $t('common.confirm') }}
+                        </n-button>
+                      </template>
+                    </n-popconfirm>
                     <n-progress
                       type="line" style="width: 207px;"
                       :percentage="percentage"
@@ -824,7 +855,7 @@
                       v-model:value="player_use_lottie_animation" @update:value="update_player_use_lottie_animation">
                   </n-switch>
                 </n-space>
-                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioDevice') }}</span>
                     <div style="margin-top: -10px;">
@@ -840,7 +871,7 @@
                       style="width: 207px;margin-top: -4px;"
                   />
                 </n-space>
-                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.playbackStyle_description') }}</span>
                     <div style="margin-top: -10px;">
@@ -856,7 +887,7 @@
                       style="width: 207px;margin-top: -4px;"
                   />
                 </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.crossfadeStyle') }}</span>
                     <div style="margin-top: -10px;">
@@ -868,7 +899,7 @@
                     <n-input-group-label>ms</n-input-group-label>
                   </n-input-group>
                 </n-space>
-                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sampleRate') }}</span>
                     <div style="margin-top: -10px;">
@@ -885,7 +916,7 @@
                   </n-space>
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.lyricOffset') }}</span>
                     <div style="margin-top: -10px;">
@@ -909,7 +940,7 @@
             </template>
             <n-scrollbar style="max-height: 70vh;" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 203) + 'px)'}">
               <n-space vertical>
-                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.globalMediaHotkeys') }}</span>
                     <div style="margin-top: -10px;">
@@ -921,7 +952,7 @@
                   </n-switch>
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.applicationHotkeys') }}</span>
                     <div style="margin-top: -10px;">
@@ -939,7 +970,7 @@
             </template>
             <n-scrollbar style="max-height: 70vh;" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 203) + 'px)'}">
               <n-space vertical>
-                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.windowBarStyle') }}</span>
                     <div style="margin-top: -10px;">
@@ -954,7 +985,7 @@
                       style="width: 207px;margin-top: -4px;"
                   />
                 </n-space>
-                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.minimizeToTray') }}</span>
                     <div style="margin-top: -10px;">
@@ -965,7 +996,7 @@
                       v-model:value="disabled">
                   </n-switch>
                 </n-space>
-                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.exitToTray') }}</span>
                     <div style="margin-top: -10px;">
@@ -976,7 +1007,7 @@
                       v-model:value="disabled">
                   </n-switch>
                 </n-space>
-                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.startMinimized') }}</span>
                     <div style="margin-top: -10px;">
@@ -988,7 +1019,7 @@
                   </n-switch>
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <n-space style="filter: blur(1px);" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.disableAutomaticUpdates') }}</span>
                     <div style="margin-top: -10px;">

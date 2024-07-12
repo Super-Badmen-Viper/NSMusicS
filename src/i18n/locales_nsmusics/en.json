@@ -23,7 +23,8 @@
             "countList": "set",
             "selectedSong": "Selected",
             "selectLibrary": "Import Media Library",
-            "selectLibrary_explain": "Select a folder to import all songs from the folder"
+            "selectLibrary_explain": "Select a folder to import all songs from the folder",
+            "selectLibrary_end_explain": "After clicking OK, please do not perform any operations. Once the import is successful, the application will exit. Please manually restart the application to continue."
         },
         "view_player": {
             "view_seting": {

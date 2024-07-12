@@ -48,6 +48,7 @@ const emits = defineEmits([
   'playlist_Tracks_temporary_add','playlist_Tracks_temporary_update','playlist_Tracks_temporary_delete',
   'playlist_Tracks_temporary_update_media_file',
   'selected_playlist_addMediaFile','selected_playlist_deleteMediaFile',
+  'selected_locallist_deleteMediaFile',
   'selected_lovelist_addMediaFile',
   'selected_lovelist_deleteMediaFile','selected_recentlist_deletetMediaFile'
 ]);
@@ -509,7 +510,9 @@ async function update_lovelist_addMediaFile_selected()
   click_open_bulk_operation()
 }
 async function update_button_deleteMediaFile_selected(){
-  if(props.page_songlists_selected === 'song_list_love'){
+  if(props.page_songlists_selected === 'song_list_all'){
+    update_locallist_deleteMediaFile_selected(props.page_songlists_selected)
+  }else if(props.page_songlists_selected === 'song_list_love'){
     update_lovelist_deleteMediaFile_selected(props.page_songlists_selected)
   }else if(props.page_songlists_selected !== 'song_list_all'){
     update_playlist_deleteMediaFile_selected(props.page_songlists_selected)
@@ -518,6 +521,12 @@ async function update_button_deleteMediaFile_selected(){
 async function update_playlist_deleteMediaFile_selected(playlist_id: any)
 {
   emits('selected_playlist_deleteMediaFile',playlist_id)
+  Type_Selected_Media_File_To_Playlist.value = false;
+  click_open_bulk_operation()
+}
+async function update_locallist_deleteMediaFile_selected(playlist_id: any)
+{
+  emits('selected_locallist_deleteMediaFile',playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
@@ -642,7 +651,7 @@ onBeforeUnmount(() => {
           </template>
         </n-button>
         <n-button
-          v-if="props.page_songlists_selected !== 'song_list_all' && props.page_songlists_selected !== 'song_list_recently'"
+          v-if="props.page_songlists_selected !== 'song_list_recently'"
           quaternary circle size="medium" style="margin-left:4px" @click="update_button_deleteMediaFile_selected">
           <template #icon>
             <n-icon :size="20" :depth="2"><Delete20Regular/></n-icon>

@@ -130,7 +130,7 @@
     {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.toYear')), key: 'min_year', state_Sort: state_Sort.Default },
     // {label:computed(() => t('filter.fromYear')), key: 'max_year', state_Sort: state_Sort.Default },
-    {label:computed(() => t('common.size')), key: 'size', state_Sort: state_Sort.Default },
+    {label:computed(() => t('common.duration')), key: 'duration', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
     // {label:'更新时间(外部信息)', key: 'external_info_updated_at', state_Sort: state_Sort.Default }

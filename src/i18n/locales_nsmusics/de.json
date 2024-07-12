@@ -23,7 +23,8 @@
             "countList": "Gruppe",
             "selectedSong": "Ausgewählt",
             "selectLibrary": "Medienbibliothek importieren",
-            "selectLibrary_explain": "Wählen Sie einen Ordner aus, um alle Lieder aus dem Ordner zu importieren"
+            "selectLibrary_explain": "Wählen Sie einen Ordner aus, um alle Lieder aus dem Ordner zu importieren",
+            "selectLibrary_end_explain": "Bitte führen Sie nach dem Klicken auf OK keine weiteren Aktionen durch. Nachdem der Import erfolgreich war, wird die Anwendung beenden. Starten Sie die Anwendung erneut, um fortzufahren."
         },
         "view_player": {
             "view_seting": {

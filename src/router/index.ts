@@ -42,6 +42,14 @@ const router = createRouter({
       meta: {
         cleanup: true
       }
+    },
+    {
+      path: '/View_Updateing',
+      name: 'View_Updateing',
+      component: () => import('../views/View_Updateing.vue'),
+      meta: {
+        cleanup: true
+      }
     }
   ]
 })

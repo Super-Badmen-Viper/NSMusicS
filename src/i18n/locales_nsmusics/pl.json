@@ -23,7 +23,8 @@
             "countList": "grupa",
             "selectedSong": "Wybrany",
             "selectLibrary": "Importuj bibliotekę mediów",
-            "selectLibrary_explain": "Wybierz folder, aby zaimportować wszystkie utwory z folderu"
+            "selectLibrary_explain": "Wybierz folder, aby zaimportować wszystkie utwory z folderu",
+            "selectLibrary_end_explain": "Po kliknięciu OK, nie wykonuj żadnych działań. Po pomyślnym zaimportowaniu aplikacja się zamknie. Proszę ręcznie uruchomić aplikację ponownie, aby kontynuować."
         },
         "view_player": {
             "view_seting": {

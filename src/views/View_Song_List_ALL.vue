@@ -110,6 +110,9 @@ function get_selected_playlist_deleteMediaFile(value: any){
 function get_selected_lovelist_addMediaFile(value: any){
   emits('selected_lovelist_addMediaFile',value)
 }
+function get_selected_locallist_deleteMediaFile(value: any){
+  emits('selected_locallist_deleteMediaFile',value)
+}
 function get_selected_lovelist_deleteMediaFile(value: any){
   emits('selected_lovelist_deleteMediaFile',value)
 }
@@ -151,6 +154,7 @@ const emits = defineEmits([
   'playlist_Tracks_temporary_add','playlist_Tracks_temporary_update','playlist_Tracks_temporary_delete',
   'playlist_Tracks_temporary_update_media_file',
   'selected_playlist_addMediaFile','selected_playlist_deleteMediaFile',
+  'selected_locallist_deleteMediaFile',
   'selected_lovelist_addMediaFile',
   'selected_lovelist_deleteMediaFile','selected_recentlist_deletetMediaFile'
 ]);
@@ -248,6 +252,7 @@ const {
         @playlist_Tracks_temporary_update_media_file="get_playlist_Tracks_temporary_update_media_file"
         @selected_playlist_addMediaFile="get_selected_playlist_addMediaFile"
         @selected_playlist_deleteMediaFile="get_selected_playlist_deleteMediaFile"
+        @selected_locallist_deleteMediaFile="get_selected_locallist_deleteMediaFile"
         @selected_lovelist_addMediaFile="get_selected_lovelist_addMediaFile"
         @selected_lovelist_deleteMediaFile="get_selected_lovelist_deleteMediaFile"
         @selected_recentlist_deletetMediaFile="get_selected_recentlist_deletetMediaFile"

@@ -23,7 +23,8 @@
             "countList": "grupp",
             "selectedSong": "Vald",
             "selectLibrary": "Importera mediabibliotek",
-            "selectLibrary_explain": "Välj en mapp för att importera alla låtar från mappen"
+            "selectLibrary_explain": "Välj en mapp för att importera alla låtar från mappen",
+            "selectLibrary_end_explain": "Efter att ha klickat på OK, var snäll och utför inga åtgärder. När importen lyckats kommer applikationen att avslutas. Vänligen starta om applikationen manuellt för att fortsätta."
         },
         "view_player": {
             "view_seting": {
