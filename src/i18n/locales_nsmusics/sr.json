@@ -24,7 +24,9 @@
             "selectedSong": "Изабрано",
             "selectLibrary": "Увези медијску библиотеку",
             "selectLibrary_explain": "Изаберите фасциклу да увезете све песме из ње",
-            "selectLibrary_end_explain": "Nakon što kliknete na U redu, ne izvršavajte nijednu operaciju. Nakon uspešnog uvoza, aplikacija će se zatvoriti. Molimo ručno ponovo pokrenite aplikaciju kako biste nastavili."
+            "selectLibrary_end_explain": "Nakon što kliknete na U redu, ne izvršavajte nijednu operaciju. Nakon uspešnog uvoza, aplikacija će se zatvoriti. Molimo ručno ponovo pokrenite aplikaciju kako biste nastavili.",
+            "modelLocal": "Локални режим",
+            "modelServer": "Серверски режим"
         },
         "view_player": {
             "view_seting": {

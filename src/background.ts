@@ -20,9 +20,9 @@ async function createWindow() {
     })
     win.setMenu(null)
     win.setMaximizable(false)
-    // win.webContents.openDevTools({
-    //     mode:'detach'
-    // });
+    win.webContents.openDevTools({
+        mode:'detach'
+    });
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
     if (process.argv[2]) {
         win.loadURL(process.argv[2])
@@ -682,12 +682,16 @@ async function createWindow() {
         return await parseFile(filePath)
     });
     ipc.handle('metadata-lyrics',  async (event,filePath) => {
-        const {common} = await parseFile(filePath);
-        if(common.lyrics != null && common.lyrics.length > 0) {
-            return common.lyrics
-        } else {
+        const musicMetadata = require('music-metadata');
+        const metadata = await musicMetadata.parseBlob(filePath);
+        if(metadata != null && metadata != undefined) {
+            if (metadata.common.lyrics != null && metadata.common.lyrics.length > 0) {
+                return metadata.common.lyrics
+            } else {
+                return null
+            }
+        }else
             return null
-        }
     });
     ipc.handle('metadata-picture',  async (event,filePath) => {
         const {common} = await parseFile(filePath);
@@ -708,19 +712,6 @@ async function createWindow() {
             return result.filePaths[0];
         }
     });
-
-    // autoUpdater.setFeedURL({
-    //     provider: 'github',
-    //     owner: 'Super-Badmen-Viper',
-    //     repo: 'NSMusicS',
-    // });
-    // autoUpdater.checkForUpdatesAndNotify();
-    // autoUpdater.on('update-downloaded', (info) => {
-    //     win?.webContents.send('update-available', info);
-    // });
-    // autoUpdater.on('error', (err) => {
-    //     console.error('Update error:', err);
-    // });
 }
 
 app.whenReady().then(() => {

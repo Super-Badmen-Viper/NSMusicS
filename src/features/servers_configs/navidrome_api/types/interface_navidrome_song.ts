@@ -1,4 +1,4 @@
-interface Search3_Song{
+interface navidrome_song{
     id: string,
     parent: string,
     isDir: boolean,
@@ -23,5 +23,6 @@ interface Search3_Song{
     artistId: string,
     type: string,
     userRating: number,
-    isVideo: boolean
+    isVideo: boolean,
+    lyrics: string
 }

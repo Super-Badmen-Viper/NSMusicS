@@ -34,6 +34,9 @@ function get_server_config_of_all_user_of_sqlite(value: any){
 function get_library_path(value: any){
   emits('library_path',value)
 }
+function get_model_select(value: any){
+  emits('model_select',value)
+}
 
 onMounted(async () => {
   emits('router_select','View_Menu_AppSetting')
@@ -41,7 +44,7 @@ onMounted(async () => {
 const emits = defineEmits([
   'router_select',
   'menu_appsetting_select_tab_name','server_config_of_current_user_of_sqlite','server_config_of_all_user_of_sqlite',
-  'update_lang','update_theme','library_path','menuOptions_appBar','selectd_props_app_sidebar',
+  'update_lang','model_select','update_theme','library_path','menuOptions_appBar','selectd_props_app_sidebar',
   'player_fade_value','player_use_lottie_animation',
 ]);
 const { 
@@ -53,6 +56,7 @@ const {
   server_config_of_all_user_of_select,
   server_config_of_current_user_of_sqlite,server_config_of_all_user_of_sqlite,
 
+  model_select,
   update_theme,library_path,menuOptions_appBar,
   player_fade_value,player_use_lottie_animation
 } = defineProps<{
@@ -64,6 +68,7 @@ const {
   server_config_of_all_user_of_select: {label: string;value: string}[],
   server_config_of_current_user_of_sqlite:Server_Configs_Props,server_config_of_all_user_of_sqlite:Server_Configs_Props[],
 
+  model_select: any,
   update_theme:Boolean,library_path: any,menuOptions_appBar:MenuOption[],selectd_props_app_sidebar:(string | number)[],
   player_fade_value:number,player_use_lottie_animation:Boolean,
 }>();
@@ -85,6 +90,8 @@ const {
       @update_lang="get_update_lang"
       :update_theme="update_theme"
       @update_theme="get_update_theme"
+      :model_select="model_select"
+      @model_select="get_model_select"
       :library_path="library_path"
       @library_path="get_library_path"
       :menuOptions_appBar="menuOptions_appBar"

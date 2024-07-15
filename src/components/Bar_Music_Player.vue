@@ -339,20 +339,16 @@
   };
   function formatTime(currentTime: number): string {
     const minutes = Math.floor(currentTime / 60);
-    const seconds = currentTime % 60;
+    const seconds = Math.floor(currentTime % 60);
 
     let formattedMinutes = String(minutes);
     let formattedSeconds = String(seconds);
 
-    if(formattedMinutes.length == 1)
+    if (formattedMinutes.length == 1)
       formattedMinutes = '0' + formattedMinutes;
-    formattedMinutes = formattedMinutes.replace('.','');
-    formattedMinutes = formattedMinutes.substring(0, 2);
 
-    formattedSeconds = formattedSeconds.substring(0,formattedSeconds.indexOf('.'));
-    if(formattedSeconds.length == 1)
+    if (formattedSeconds.length == 1)
       formattedSeconds = '0' + formattedSeconds;
-    formattedSeconds = formattedSeconds.substring(0, 2);
 
     return `${formattedMinutes}:${formattedSeconds}`;
   }

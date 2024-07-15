@@ -24,7 +24,9 @@
             "selectedSong": "Seleccionado",
             "selectLibrary": "Importar Biblioteca de Medios",
             "selectLibrary_explain": "Seleccione una carpeta para importar todas las canciones de la carpeta",
-            "selectLibrary_end_explain": "Tras hacer clic en Aceptar, no realice ninguna operación. Una vez que la importación se haya realizado con éxito, la aplicación se cerrará. Inicie la aplicación de nuevo manualmente para continuar."
+            "selectLibrary_end_explain": "Tras hacer clic en Aceptar, no realice ninguna operación. Una vez que la importación se haya realizado con éxito, la aplicación se cerrará. Inicie la aplicación de nuevo manualmente para continuar.",
+            "modelLocal": "Modo local",
+            "modelServer": "Modo servidor"
         },
         "view_player": {
             "view_seting": {

@@ -22,9 +22,18 @@
             "countSong": "首",
             "countList": "组",
             "selectedSong": "选中",
-            "selectLibrary": "媒体库导入",
-            "selectLibrary_explain": "选中一个文件夹，将文件夹所有的歌曲导入",
-            "selectLibrary_end_explain": "点击确认后，请不要进行任何操作，导入成功后，将退出此应用，请再次手动启动此应用即可"
+            "selectLibrary": "导入本地(模式)库",
+            "selectLibrary_explain": "选中一个本地文件夹，将文件夹所有的歌曲导入",
+            "selectLibrary_end_explain": "点击确认后，请不要进行任何操作，导入成功后，系统将退出此应用，请再次手动启动此应用即可",
+            "selectLibrary_end_success": "导入本地(模式)库已完成，将于3秒后退出此应用，请再次手动启动此应用即可使用",
+            "selectServer": "导入服务器(模式)库",
+            "selectServer_explain": "选中一个已添加的服务器，将服务器的数据导入",
+            "selectServer_end_explain": "点击确认后，请不要进行任何操作，导入成功后，直接使用即可",
+            "selectServer_end_success": "导入服务器(模式)库已完成，您可直接继续使用",
+            "modelLocal": "本地模式",
+            "modelServer": "服务器模式",
+            "modelSelect": "音源模式选择",
+            "modelSelect_explain": "选择NSMusicS的音源来源(本地/服务器)"
         },
         "view_player": {
             "view_seting": {

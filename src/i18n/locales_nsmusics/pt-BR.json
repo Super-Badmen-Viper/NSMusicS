@@ -24,7 +24,9 @@
             "selectedSong": "Selecionado",
             "selectLibrary": "Importar Biblioteca de Mídia",
             "selectLibrary_explain": "Selecione uma pasta para importar todas as músicas da pasta",
-            "selectLibrary_end_explain": "Após clicar em OK, não realize nenhuma operação. Uma vez que a importação for bem-sucedida, o aplicativo será encerrado. Por favor, reinicie o aplicativo manualmente para continuar."
+            "selectLibrary_end_explain": "Após clicar em OK, não realize nenhuma operação. Uma vez que a importação for bem-sucedida, o aplicativo será encerrado. Por favor, reinicie o aplicativo manualmente para continuar.",
+            "modelLocal": "Modo local",
+            "modelServer": "Modo servidor"
         },
         "view_player": {
             "view_seting": {

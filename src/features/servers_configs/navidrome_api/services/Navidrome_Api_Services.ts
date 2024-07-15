@@ -19,7 +19,7 @@ export class Navidrome_Api_Services {
         username: string, token: string, salt: string,
         endpoint: string, params?: Record<string, string>): Promise<any> {
         const queryString = new URLSearchParams({
-            ...this.getCommonParams(username,token,salt),
+            ...this.getCommonParams(username, token, salt),
             ...params,
         }).toString();
         const url = `${this.baseUrl}/${endpoint}?${queryString}`;

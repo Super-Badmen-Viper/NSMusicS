@@ -37,7 +37,7 @@
   ////// passed as argument
   const emits = defineEmits([
     'menu_appsetting_select_tab_name','server_config_of_current_user_of_sqlite','server_config_of_all_user_of_sqlite',
-    'update_lang','update_theme','library_path','menuOptions_appBar','selectd_props_app_sidebar',
+    'update_lang','model_select','update_theme','library_path','menuOptions_appBar','selectd_props_app_sidebar',
     'player_fade_value','player_use_lottie_animation',
   ]);
   const props = defineProps<{
@@ -51,6 +51,7 @@
     server_config_of_current_user_of_sqlite:Server_Configs_Props,
     server_config_of_all_user_of_sqlite:Server_Configs_Props[],
 
+    model_select:any;
     update_theme:Boolean;
     library_path:any[];
     menuOptions_appBar:MenuOption[];
@@ -79,6 +80,24 @@
   })
   const Type_Server_Selected = ref(Type_Server_Kinds[2].value)
   const Type_Server_Add = ref(false)
+  const Type_Server_Model_Open = ref(true)
+  const Type_Server_Model_Open_Value = ref('local')
+  const Type_Server_Model_Open_Option = ref([
+    {
+      label: computed(() => t('nsmusics.view_page.modelLocal')),
+      value: 'local',
+    },
+    {
+      label: computed(() => t('nsmusics.view_page.modelServer')),
+      value: 'navidrome',
+    },
+  ])
+  onMounted(() => {
+    if(props.model_select === 'local')
+      Type_Server_Model_Open_Value.value = Type_Server_Model_Open_Option.value[0].value
+    else
+      Type_Server_Model_Open_Value.value = Type_Server_Model_Open_Option.value[1].value
+  });
   import { useMessage } from 'naive-ui'
   const message = useMessage()
   /// server select
@@ -94,7 +113,7 @@
   const server_set_of_addUser_of_username = ref('')
   const server_set_of_addUser_of_password = ref('')
   async function update_server_setUser(id:string,server_name:string,url:string, user_name:string,password:string) {
-    const userService = new User_ApiService_of_ND('http://'+url);
+    const userService = new User_ApiService_of_ND('http://'+url+'/rest');
     const {salt, token} = generateEncryptedPassword(password);
     const userData = await userService.getUser(user_name, token, salt);
     if (userData["subsonic-response"]["status"] === 'ok'){
@@ -124,7 +143,7 @@
   async function update_server_addUser() {
     try{
       server_set_of_addUser_of_type.value = Type_Server_Selected.value;
-      const userService = new User_ApiService_of_ND('http://'+server_set_of_addUser_of_url.value);
+      const userService = new User_ApiService_of_ND('http://'+server_set_of_addUser_of_url.value+'/rest');
       const {salt, token} = generateEncryptedPassword(server_set_of_addUser_of_password.value);
       const userData = await userService.getUser(server_set_of_addUser_of_username.value, token, salt);
       if (userData["subsonic-response"]["status"] === 'ok'){
@@ -168,6 +187,7 @@
   ////// this_view components of navie ui
   import {ref, onMounted, watch, onBeforeUnmount, computed, h} from 'vue';
   import {type MenuOption, NButton, NIcon,} from 'naive-ui'
+  import {store_model_check_of_sqlite_tablename} from "@/store/model_check_of_sqlite_tablename";
   const theme_value = ref('lightTheme')
   const theme_options = ref([
     {
@@ -481,17 +501,13 @@
             </template>
             <n-space style="height: calc(100vh - 230px);" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)'}">
               <!-- 服务器管理 -->
-              <n-space vertical size="large">
-                <n-space>
-                  <n-space>
-                    <span style="font-size: 20px;font-weight: 600;">{{ $t('page.appMenu.selectServer') }}</span>
-                    <n-select
-                      v-model:value="props.server_config_of_current_user_of_sqlite_of_select_servername"
-                      :options="props.server_config_of_all_user_of_select" style="width: 166px;"
-                      @update:value="(value: number) => update_server_config_of_current_user_of_sqlite(value)"
-                    />
-                  </n-space>
-                  <n-button tertiary  @click="Type_Server_Add = !Type_Server_Add" style="margin-right: 35px;">
+              <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space vertical style="width: 320px;">
+                  <span style="font-size:16px;font-weight: 600;">{{ $t('page.appMenu.selectServer') }}</span>
+
+                </n-space>
+                <n-space align="end">
+                  <n-button tertiary @click="Type_Server_Add = !Type_Server_Add">
                     <template #icon>
                       <n-icon>
                         <Add />
@@ -499,13 +515,10 @@
                     </template>
                     {{ $t('form.addServer.title') }}
                   </n-button>
-                  <n-space style="padding-top: 5px;">
-                    未开放API模块，仅可认证保存服务器而非使用
-                  </n-space>
                 </n-space>
-<!--                <n-space justify="space-between">-->
-<!--                  <span style="font-size: 20px;font-weight: 600;">{{ $t('page.appMenu.manageServers') }}</span>-->
-<!--                </n-space>-->
+              </n-space>
+              <n-space vertical size="large">
+                <span style="font-size:16px;font-weight: 600;">{{ $t('page.appMenu.manageServers') }}</span>
                 <DynamicScroller
                   class="table" ref="scrollbar"
                   style="overflow: auto;width: 785px;max-height: 62vh;"
@@ -689,10 +702,8 @@
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.language') }}</span>
                     <div style="margin-top: -10px;">
                       <span style="font-size:12px;">{{ $t('setting.language_description') }}</span>
-<!--                      $t('setting.language_description',{ arg: $t('common.restartRequired') })-->
                     </div>
                   </n-space>
-<!--                  {{ $t('action.editPlaylist', { arg: 'kazupon' }) }}-->
                   <n-select
                     v-model:value="$i18n.locale"
                     :options="languages"
@@ -719,26 +730,49 @@
                 </n-space>
                 <n-divider style="margin: 0;"/>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space vertical style="width: 500px;">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelSelect') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('nsmusics.view_page.modelSelect_explain') }}</span>
+                    </div>
+                  </n-space>
+                  <n-select
+                    v-model:value="Type_Server_Model_Open_Value"
+                    :options="Type_Server_Model_Open_Option"
+                    @update:value="
+                      Type_Server_Model_Open_Value === 'navidrome' ?
+                      (store_model_check_of_sqlite_tablename.switchToMode_Navidrome_Api(), emits('model_select', 'navidrome'))
+                      :
+                      (store_model_check_of_sqlite_tablename.switchToMode_Local(), emits('model_select', 'local'))
+                    "
+                    placeholder=""
+                    :reset-menu-on-options-change="false"
+                    style="width: 207px;margin-top: -4px;"
+                  />
+                </n-space>
+                <n-divider style="margin: 0;"/>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical style="width: 320px;">
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.selectLibrary')}}</span>
                     <div style="margin-top: -10px;">
                       <span style="font-size:12px;">
                         {{ $t('nsmusics.view_page.selectLibrary_explain') + ', ' + $t('common.restartRequired')}}
                       </span>
-<!--                      <br>-->
-<!--                      <span style="font-size:12px;">-->
-<!--                        {{ $t('nsmusics.view_page.selectLibrary_end_explain') }}-->
-<!--                      </span>-->
                     </div>
                   </n-space>
-                  <n-space vertical align="end">
-                    <n-tag type="success">
+                  <n-space align="end">
+                    <n-tag type="success" v-if="false">
                       {{ props.library_path }}
                     </n-tag>
                     <n-popconfirm v-model:show="show_selectFolder">
                       <template #trigger>
-                        <n-button>
-                          {{ $t('nsmusics.view_page.selectedSong') + ' ' + $t('entity.folder_other')}}
+                        <n-button tertiary style="width: 150px;">
+                          <template #icon>
+                            <n-icon>
+                              <Add />
+                            </n-icon>
+                          </template>
+                          {{ $t('nsmusics.view_page.selectedSong') + $t('entity.folder_other')}}
                         </n-button>
                       </template>
                       {{ $t('nsmusics.view_page.selectLibrary') + '?' }}
@@ -752,7 +786,30 @@
                       </template>
                     </n-popconfirm>
                     <n-progress
-                      type="line" style="width: 207px;"
+                      type="line" style="width: 207px;margin-bottom: 8px;"
+                      :percentage="percentage"
+                      :indicator-placement="'inside'"
+                    />
+                  </n-space>
+                </n-space>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical style="width: 320px;">
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.selectServer')}}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">
+                        {{ $t('nsmusics.view_page.selectServer_explain') }}
+                      </span>
+                    </div>
+                  </n-space>
+                  <n-space align="end">
+                    <n-select
+                      v-model:value="props.server_config_of_current_user_of_sqlite_of_select_servername"
+                      :options="props.server_config_of_all_user_of_select"
+                      style="width: 150px;"
+                      @update:value="(value: number) => update_server_config_of_current_user_of_sqlite(value)"
+                    />
+                    <n-progress
+                      type="line" style="width: 207px;margin-bottom: 8px;"
                       :percentage="percentage"
                       :indicator-placement="'inside'"
                     />

@@ -24,7 +24,9 @@
             "selectedSong": "選択",
             "selectLibrary": "メディアライブラリのインポート",
             "selectLibrary_explain": "フォルダを選択して、そのフォルダのすべての曲をインポートします",
-            "selectLibrary_end_explain": "確認ボタンをクリックした後、操作を行わないでください。インポートが成功すると、アプリケーションが終了します。アプリケーションを再度手動で起動してください。"
+            "selectLibrary_end_explain": "確認ボタンをクリックした後、操作を行わないでください。インポートが成功すると、アプリケーションが終了します。アプリケーションを再度手動で起動してください。",
+            "modelLocal": "ローカルモード",
+            "modelServer": "サーバーモード"
         },
         "view_player": {
             "view_seting": {

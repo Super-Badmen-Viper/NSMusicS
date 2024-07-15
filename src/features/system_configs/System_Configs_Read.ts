@@ -13,6 +13,7 @@ export class System_Configs_Read {
             router_name: '',
             app_left_menu_select_activeKey: '',
             app_left_menu_collapsed: null,
+            model_select: ''
         }))
     public library_Configs = ref(
         new Library_Configs({

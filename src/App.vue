@@ -104,11 +104,18 @@
 
   ////// this_app server of user_selected
   const server_config_of_current_user_of_sqlite = ref<Server_Configs_Props>()
-  function get_server_config_of_current_user_of_sqlite(value: Server_Configs_Props){
+  async function get_server_config_of_current_user_of_sqlite(value: Server_Configs_Props) {
     server_config_of_current_user_of_sqlite.value = value
     server_config_of_current_user_of_sqlite_of_select.value = value
     server_config_of_current_user_of_sqlite_of_select_servername.value = value.server_name
     console.log(value)
+    /// begin import server data
+    const {salt, token} = generateEncryptedPassword(server_config_of_current_user_of_sqlite.value?.password);
+    let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_Data_To_LocalSqlite()
+    await set_Navidrome_Data_To_LocalSqlite.Set_Read_Navidrome_Api_BasicInfo_Add_LocalSqlite(
+        'http://' + server_config_of_current_user_of_sqlite.value?.url + '/rest',
+        server_config_of_current_user_of_sqlite.value?.user_name, token, salt,
+    )
   }
   const server_config_of_all_user_of_sqlite = ref<Server_Configs_Props[]>([])
   function get_server_config_of_all_user_of_sqlite(value: Server_Configs_Props[]){
@@ -131,6 +138,47 @@
   const server_config_of_current_user_of_sqlite_of_select_servername = ref('')
   const server_config_of_current_user_of_sqlite_of_select = ref<{label: string;value: string}>()
   const server_config_of_all_user_of_select = ref<{label: string;value: string}[]>([])
+  //////
+  function generateEncryptedPassword(password: string): { salt: string, token: string } {
+    const saltLength = 6;
+    const salt = generateRandomString(saltLength);
+    const crypto = require('crypto');
+    const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
+    return { salt, token };
+  }
+  function generateRandomString(length: number): string {
+    const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';
+    let randomString = '';
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      randomString += characters[randomIndex];
+    }
+    return randomString;
+  }
+  //////
+  import { store_model_check_of_sqlite_tablename } from '@/store/model_check_of_sqlite_tablename'
+  const model_select = ref('local')
+  function get_model_select(value: any){
+    model_select.value = value
+    save_system_config_of_App_Configs()
+    /// playlist configs
+    playlist_All_of_list.value = []
+    playlist_Tracks_temporary.value = []
+    try{
+      let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
+      const playlist_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist()
+      playlist_temporary.forEach((item:Play_List) =>{
+        playlist_All_of_list.value.push({
+          label: item.name,
+          value: item.id
+        })
+        playlist_Tracks_temporary.value.push({
+          playlist: item,
+          playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id)
+        })
+      });
+    }catch (e) { console.error(e) }
+  }
 
   ////// this_app library
   const library_path = ref('')
@@ -422,15 +470,15 @@
   const page_top_album_name = ref<string>('')
   // player_configs audio_infos of all_playlist
   import { Get_PlaylistInfo_From_LocalSqlite } from "@/features/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
-  import { Set_PlaylistInfo_From_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_From_LocalSqlite";
+  import { Set_PlaylistInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_To_LocalSqlite";
   import { Set_MediaInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
   import { Set_AnnotationInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_AnnotationInfo_To_LocalSqlite";
   const playlist_Tracks_Current_Media_File_id_of_list = ref<string[]>([])
   const playlist_All_of_list = ref<{label: string;value: string}[]>([])
   const playlist_Tracks_temporary = ref<{playlist:Play_List,playlist_tracks:Play_list_Track[]}[]>([])
   function get_playlist_Tracks_temporary_add(value: any){
-    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_From_LocalSqlite();
-    const playlist:Play_List = set_PlaylistInfo_From_LocalSqlite.Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
+    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
+    const playlist = set_PlaylistInfo_From_LocalSqlite.Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
         value,
         'admin',0,0,0,'admin'
     )
@@ -451,7 +499,7 @@
     })
   }
   function get_playlist_Tracks_temporary_update(value: any){
-    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_From_LocalSqlite();
+    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
     set_PlaylistInfo_From_LocalSqlite.Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(
       value.id,value.name,
       'admin',0,0,0,'admin'
@@ -473,7 +521,7 @@
     }
   }
   function get_playlist_Tracks_temporary_delete(value: any){
-    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_From_LocalSqlite();
+    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
     set_PlaylistInfo_From_LocalSqlite.Set_PlaylistInfo_To_Update_DeletePlaylist_of_ND(value)
     const index = playlist_Tracks_temporary.value.findIndex(list => list.playlist.id === value);
     if (index >= 0) {
@@ -552,7 +600,7 @@
   function get_selected_playlist_addMediaFile(value: any){
     console.log('selected_playlist_addMediaFile',value)
     const ids = media_Files_selected.value.map(file => file.id);
-    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_From_LocalSqlite();
+    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
     set_PlaylistInfo_From_LocalSqlite.Set_Selected_MediaInfo_Add_Selected_Playlist(ids,value)
     get_playlist_Tracks_temporary_update_media_file(true)
   }
@@ -566,7 +614,7 @@
   function get_selected_playlist_deleteMediaFile(value: any){
     console.log('selected_playlist_deleteMediaFile',value)
     const ids = media_Files_selected.value.map(file => file.id);
-    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_From_LocalSqlite();
+    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
     set_PlaylistInfo_From_LocalSqlite.Set_Selected_MediaInfo_Delete_Selected_Playlist(ids,value)
     get_playlist_Tracks_temporary_update_media_file(true)
   }
@@ -669,6 +717,14 @@
   import {Set_AlbumInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite";
   import {Set_ArtistInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_ArtistInfo_To_LocalSqlite";
   import {Set_LibraryInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_LibraryInfo_To_LocalSqlite";
+  import {User_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services/user_management/index_service";
+  import {Set_ServerInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_ServerInfo_To_LocalSqlite";
+  import {Searching_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services/searching/index_service";
+  import crypto from "crypto";
+  import {Get_PageInfo_of_Song_of_ND} from "../src_example/get_PageInfo_of_Song";
+  import {
+    Set_Navidrome_Data_To_LocalSqlite
+  } from "@/features/servers_configs/navidrome_api/middleware/class_Set_Navidrome_Data_To_LocalSqlite";
   let get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
   const home_Files_temporary_maximum_playback = ref<Album[]>([])
   const home_Files_temporary_random_search = ref<Album[]>([])
@@ -690,20 +746,16 @@
   };
   function formatTime(currentTime: number): string {
     const minutes = Math.floor(currentTime / 60);
-    const seconds = currentTime % 60;
+    const seconds = Math.floor(currentTime % 60);
 
     let formattedMinutes = String(minutes);
     let formattedSeconds = String(seconds);
 
-    if(formattedMinutes.length == 1)
+    if (formattedMinutes.length == 1)
       formattedMinutes = '0' + formattedMinutes;
-    formattedMinutes = formattedMinutes.replace('.','');
-    formattedMinutes = formattedMinutes.substring(0, 2);
 
-    formattedSeconds = formattedSeconds.substring(0,formattedSeconds.indexOf('.'));
-    if(formattedSeconds.length == 1)
+    if (formattedSeconds.length == 1)
       formattedSeconds = '0' + formattedSeconds;
-    formattedSeconds = formattedSeconds.substring(0, 2);
 
     return `${formattedMinutes}:${formattedSeconds}`;
   }
@@ -778,7 +830,7 @@
     page_songlists_statistic.value = [];
     page_songlists.value = []
     //////
-    const stmt_media_file_count = db.prepare('SELECT COUNT(*) AS count FROM media_file');
+    const stmt_media_file_count = db.prepare(`SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.media_file}`);
     const temp_Play_List_ALL: Play_List = {
       label: computed(() => t('nsmusics.view_page.allSong')),
       value: 'song_list_all',
@@ -787,14 +839,14 @@
       comment: computed(() => t('nsmusics.view_page.allSong')),
       duration: 0,
       song_count: stmt_media_file_count.get().count + ' *',
-      public: false,
-      created_at: null,
-      updated_at: null,
+      public: 0,
+      created_at: '',
+      updated_at: '',
       path: '',
-      sync: false,
+      sync: 0,
       size: 0,
       rules: null,
-      evaluated_at: null,
+      evaluated_at: '',
       owner_id: ''
     }
     page_songlists_options.value.push(temp_Play_List_ALL);
@@ -806,7 +858,7 @@
     page_songlists.value.push(temp_Play_List_ALL)
     //////
     const stmt_media_Annotation_Starred_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM annotation
+      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.annotation}
       WHERE starred = 1 AND item_type='media_file'
     `);
     const temp_Play_List_Love: Play_List = {
@@ -817,14 +869,14 @@
       comment: computed(() => t('nsmusics.view_page.loveSong')),
       duration: 0,
       song_count: stmt_media_Annotation_Starred_Count.get().count + ' *',
-      public: false,
-      created_at: null,
-      updated_at: null,
+      public: 0,
+      created_at: '',
+      updated_at: '',
       path: '',
-      sync: false,
+      sync: 0,
       size: 0,
       rules: null,
-      evaluated_at: null,
+      evaluated_at: '',
       owner_id: ''
     }
     page_songlists_options.value.push(temp_Play_List_Love);
@@ -836,7 +888,7 @@
     page_songlists.value.push(temp_Play_List_Love)
     //////
     const stmt_media_Annotation_Recently_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM annotation
+      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.annotation}
       WHERE item_type='media_file'
     `);
     const temp_Play_List_Recently: Play_List = {
@@ -847,14 +899,14 @@
       comment: computed(() => t('nsmusics.view_page.recentPlay')),
       duration: 0,
       song_count: stmt_media_Annotation_Recently_Count.get().count + ' *',
-      public: false,
-      created_at: null,
-      updated_at: null,
+      public: 0,
+      created_at: '',
+      updated_at: '',
       path: '',
-      sync: false,
+      sync: 0,
       size: 0,
       rules: null,
-      evaluated_at: null,
+      evaluated_at: '',
       owner_id: ''
     }
     page_songlists_options.value.push(temp_Play_List_Recently);
@@ -866,7 +918,7 @@
     page_songlists.value.push(temp_Play_List_Recently)
     //////
     const stmt_media_Annotation_PlayList_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM playlist
+      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.playlist}
     `);
     page_songlists_statistic.value.push({
       label: computed(() => t('entity.playlist_other')),
@@ -911,7 +963,6 @@
       clear_Files_temporary()
       router_select_model_media.value = true;
     }
-
     try {
       db = require('better-sqlite3')(navidrome_db);
       db.pragma('journal_mode = WAL');
@@ -922,21 +973,21 @@
       Init_page_songlists_statistic_Data(db)
 
       // load media_Files_temporary data
-      if(router_history_model_of_Media.value === 0){
+      if (router_history_model_of_Media.value === 0) {
         const sortKey = page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
-          page_songlists_options_Sort_key.value[0].columnKey : 'id';
+            page_songlists_options_Sort_key.value[0].columnKey : 'id';
         const sortOrder = page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
-          page_songlists_options_Sort_key.value[0].order.replace('end', '') : '';
+            page_songlists_options_Sort_key.value[0].order.replace('end', '') : '';
         let keywordFilter = page_songlists_keyword.value.length > 0 ?
-          `WHERE title LIKE '%${page_songlists_keyword.value}%' OR artist LIKE '%${page_songlists_keyword.value}%' OR album LIKE '%${page_songlists_keyword.value}%'` :
-          '';
-        if (find_music_model.value === true){
+            `WHERE title LIKE '%${page_songlists_keyword.value}%' OR artist LIKE '%${page_songlists_keyword.value}%' OR album LIKE '%${page_songlists_keyword.value}%'` :
+            '';
+        if (find_music_model.value === true) {
           keywordFilter = `WHERE album_id = '${page_songlists_keyword.value}'`
           find_music_model.value = false;
-        }else if(find_artist_model.value === true){
+        } else if (find_artist_model.value === true) {
           keywordFilter = `WHERE artist_id = '${page_songlists_keyword.value}'`
           find_artist_model.value = false;
-        }else{
+        } else {
           if (page_songlists_get_keyword_model_num.value != 0) {
             if (keywordFilter.length > 0) {
               keywordFilter = keywordFilter.replace('LIKE', '=').replace(/%/g, '');
@@ -944,24 +995,25 @@
             page_songlists_get_keyword_model_num.value = 0;
           }
         }
-        stmt_media_file_string = `SELECT * FROM media_file ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
-        stmt_media_file = db.prepare(stmt_media_file_string);
-        try{ // if stmt_media_file is empty, then try to find artist_id or album_id
-          if(stmt_media_file.get() === undefined){
+        try {
+          stmt_media_file_string = `SELECT * FROM ${store_model_check_of_sqlite_tablename.media_file} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
+          stmt_media_file = db.prepare(stmt_media_file_string);
+          // if stmt_media_file is empty, then try to find artist_id or album_id
+          if (stmt_media_file.get() === undefined) {
             keywordFilter = `WHERE artist_id = '${page_songlists_keyword.value}'`
-            stmt_media_file_string = `SELECT * FROM media_file ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
+            stmt_media_file_string = `SELECT * FROM ${store_model_check_of_sqlite_tablename.media_file} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
             stmt_media_file = db.prepare(stmt_media_file_string);
-            if(stmt_media_file.get() === undefined){
+            if (stmt_media_file.get() === undefined) {
               keywordFilter = `WHERE album_id = '${page_songlists_keyword.value}'`
-              stmt_media_file_string = `SELECT * FROM media_file ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
+              stmt_media_file_string = `SELECT * FROM ${store_model_check_of_sqlite_tablename.media_file} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
               stmt_media_file = db.prepare(stmt_media_file_string);
             }
           }
-        }catch (err: any) {
+        } catch (err: any) {
           console.error(err);
         }
         //////
-        if (router_select_history_date_of_Media.value && page_songlists_keyword_reset.value === true){
+        if (router_select_history_date_of_Media.value && page_songlists_keyword_reset.value === true) {
           remove_router_history_of_Media(router_select_history_date_of_Media.value.id);// 若存在新操作，则覆盖后续的路由
           page_songlists_keyword_reset.value = false;
         }
@@ -975,16 +1027,17 @@
           page_lists_keyword: page_songlists_keyword.value,
           stmt_string: stmt_media_file_string,
           page_lists_selected: page_songlists_selected.value,
-          columnKey:page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
-            page_songlists_options_Sort_key.value[0].columnKey : 'id',
-          order:page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
-            page_songlists_options_Sort_key.value[0].order.replace('end', '') : '',
+          columnKey: page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
+              page_songlists_options_Sort_key.value[0].columnKey : 'id',
+          order: page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
+              page_songlists_options_Sort_key.value[0].order.replace('end', '') : '',
           page_lists_scrollindex: router_history_model_of_Media_scroller_value.value,
         };
         add_router_history_of_Media(routerDate);// 重复路由不添加
         //////
-      }else{
-        if (router_select_history_date_of_Media.value){
+      }
+      else {
+        if (router_select_history_date_of_Media.value) {
           router.push('View_Song_List_ALL')
           app_left_menu_select_activeKey.value = 'go_songs_list'
           router_select_model_media.value = true;
@@ -992,8 +1045,8 @@
           page_songlists_selected.value = router_select_history_date_of_Media.value.page_lists_selected;
           page_songlists_options_Sort_key.value = [
             {
-              columnKey:router_select_history_date_of_Media.value.columnKey,
-              order:router_select_history_date_of_Media.value.order
+              columnKey: router_select_history_date_of_Media.value.columnKey,
+              order: router_select_history_date_of_Media.value.order
             }
           ];
           router_history_model_of_Media_scroller_value.value = router_select_history_date_of_Media.value.page_lists_scrollindex;
@@ -1006,17 +1059,19 @@
         row.absoluteIndex = index;
         row.selected = false;
         row.duration_txt = formatTime(row.duration);
-        if (row.path.indexOf('mp3') > 0)
-          row.medium_image_url = row.path.replace('mp3', 'jpg');
-        else if (row.path.indexOf('flac') > 0)
-          row.medium_image_url = row.path.replace('flac', 'jpg');
-        else
-          row.medium_image_url = '../../../resources/img/error_album.jpg';
+        if(row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
+          if (row.path.indexOf('mp3') > 0)
+            row.medium_image_url = row.path.replace('mp3', 'jpg');
+          else if (row.path.indexOf('flac') > 0)
+            row.medium_image_url = row.path.replace('flac', 'jpg');
+          else
+            row.medium_image_url = '../../../resources/img/error_album.jpg';
+        }
         media_Files_temporary.value.push(row);
       });
       ////// find favorite for media_Files_temporary
       const stmt_media_Annotation_Starred_Items = db.prepare(`
-        SELECT item_id FROM annotation
+        SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
         WHERE starred = 1 AND item_type='media_file'
       `);
       const annotations = stmt_media_Annotation_Starred_Items.all();
@@ -1027,32 +1082,35 @@
       }
       ////// find rating for media_Files_temporary
       const stmt_media_Annotation_Rating_Items = db.prepare(`
-          SELECT item_id, rating FROM annotation
-          WHERE rating > 0 AND item_type='media_file'
+        SELECT item_id, rating FROM ${store_model_check_of_sqlite_tablename.annotation}
+        WHERE rating > 0 AND item_type='media_file'
       `);
       const annotations_rating = stmt_media_Annotation_Rating_Items.all();
       for (let i = 0; i < media_Files_temporary.value.length; i++) {
-          const mediaFile = media_Files_temporary.value[i];
-          const matchingAnnotation = annotations_rating.find((annotation: { item_id: string, rating: number }) => annotation.item_id === mediaFile.id);
-          if (matchingAnnotation)
-              mediaFile.rating = matchingAnnotation.rating;
-          else
-              mediaFile.rating = 0;
+        const mediaFile = media_Files_temporary.value[i];
+        const matchingAnnotation = annotations_rating.find((annotation: {
+          item_id: string,
+          rating: number
+        }) => annotation.item_id === mediaFile.id);
+        if (matchingAnnotation)
+          mediaFile.rating = matchingAnnotation.rating;
+        else
+          mediaFile.rating = 0;
       }
       ////// filter selected_list for media_Files_temporary
-      let order_play_date = null;
+      let order_play_date:any[] = [];
       media_Files_temporary.value = media_Files_temporary.value.filter((item) => {
         if (page_songlists_selected.value === 'song_list_all') {
           return true;
         } else if (page_songlists_selected.value === 'song_list_love') {
-          return annotations.some((annotation) => annotation.item_id === item.id);
+          return annotations.some((annotation: any) => annotation.item_id === item.id);
         } else if (page_songlists_selected.value === 'song_list_recently') {
           const stmt_media_Annotation_Recently_Items = db.prepare(`
-            SELECT item_id FROM annotation
-            WHERE item_type='media_file'
-            ORDER BY play_date DESC
-          `);
-          const annotations = stmt_media_Annotation_Recently_Items.all().map((annotation) => annotation.item_id);
+          SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
+          WHERE item_type='media_file'
+          ORDER BY play_date DESC
+        `);
+          const annotations = stmt_media_Annotation_Recently_Items.all().map((annotation: any) => annotation.item_id);
           order_play_date = annotations;
           return annotations.includes(item.id);
         } else {
@@ -1146,7 +1204,7 @@
     fetchData_Album()
   }
   const Init_page_albumlists_statistic_Data = (db: any) => {
-    const stmt_album_count = db.prepare('SELECT COUNT(*) AS count FROM album');
+    const stmt_album_count = db.prepare(`SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.album}`);
     //
     page_albumlists_options.value = [];
     page_albumlists_statistic.value = [];
@@ -1160,14 +1218,14 @@
       comment: computed(() => t('nsmusics.view_page.allAlbum')),
       duration: 0,
       song_count: stmt_album_count.get().count + ' *',
-      public: false,
-      created_at: null,
-      updated_at: null,
+      public: 0,
+      created_at: '',
+      updated_at: '',
       path: '',
-      sync: false,
+      sync: 0,
       size: 0,
       rules: null,
-      evaluated_at: null,
+      evaluated_at: '',
       owner_id: ''
     }
     page_albumlists_options.value.push(temp_Play_List_ALL);
@@ -1179,7 +1237,7 @@
     page_albumlists.value.push(temp_Play_List_ALL)
     //////
     const stmt_album_Annotation_Starred_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM annotation
+      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.annotation}
       WHERE starred = 1 AND item_type='album'
     `);
     const temp_Play_List_Love: Play_List = {
@@ -1190,14 +1248,14 @@
       comment: computed(() => t('nsmusics.view_page.loveAlbum')),
       duration: 0,
       song_count: stmt_album_Annotation_Starred_Count.get().count + ' *',
-      public: false,
-      created_at: null,
-      updated_at: null,
+      public: 0,
+      created_at: '',
+      updated_at: '',
       path: '',
-      sync: false,
+      sync: 0,
       size: 0,
       rules: null,
-      evaluated_at: null,
+      evaluated_at: '',
       owner_id: ''
     }
     page_albumlists_options.value.push(temp_Play_List_Love);
@@ -1209,7 +1267,7 @@
     page_albumlists.value.push(temp_Play_List_Love)
     //////
     const stmt_album_Annotation_Recently_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM annotation
+      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.annotation}
       WHERE item_type='album'
     `);
     const temp_Play_List_Recently: Play_List = {
@@ -1220,14 +1278,14 @@
       comment: computed(() => t('nsmusics.view_page.recentPlay')),
       duration: 0,
       song_count: stmt_album_Annotation_Recently_Count.get().count + ' *',
-      public: false,
-      created_at: null,
-      updated_at: null,
+      public: 0,
+      created_at: '',
+      updated_at: '',
       path: '',
-      sync: false,
+      sync: 0,
       size: 0,
       rules: null,
-      evaluated_at: null,
+      evaluated_at: '',
       owner_id: ''
     }
     page_albumlists_options.value.push(temp_Play_List_Recently);
@@ -1239,7 +1297,7 @@
     page_albumlists.value.push(temp_Play_List_Recently)
     //////
     const stmt_album_Annotation_PlayList_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM playlist
+      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.playlist}
     `);
     page_albumlists_statistic.value.push({
       label: computed(() => t('entity.playlist_other')),
@@ -1248,7 +1306,7 @@
     });
   }
   const fetchData_Album = async () => {
-    let db:any = null;
+    let db: any = null;
     let moment = require('moment');
     // clear RouterView of vue-virtual-scroller data
     clear_Files_temporary()
@@ -1264,32 +1322,31 @@
       Init_page_albumlists_statistic_Data(db)
 
       // load album_Files_temporary data
-      if(router_history_model_of_Album.value === 0){
+      if (router_history_model_of_Album.value === 0) {
         const sortKey = page_albumlists_options_Sort_key.value.length > 0 && page_albumlists_options_Sort_key.value[0].order !== 'default' ?
-          page_albumlists_options_Sort_key.value[0].columnKey : 'id';
+            page_albumlists_options_Sort_key.value[0].columnKey : 'id';
         const sortOrder = page_albumlists_options_Sort_key.value.length > 0 && page_albumlists_options_Sort_key.value[0].order !== 'default' ?
-          page_albumlists_options_Sort_key.value[0].order.replace('end', '') : '';
+            page_albumlists_options_Sort_key.value[0].order.replace('end', '') : '';
         let keywordFilter = page_albumlists_keyword.value.length > 0 ?
-          `WHERE id LIKE '%${page_albumlists_keyword.value}%' OR name LIKE '%${page_albumlists_keyword.value}%' OR artist LIKE '%${page_albumlists_keyword.value}%' OR created_at LIKE '%${page_albumlists_keyword.value}%'` :
-          '';
-        if (find_album_model.value === true){
-          if(page_albumlists_get_keyword_model_num.value != 1)
+            `WHERE id LIKE '%${page_albumlists_keyword.value}%' OR name LIKE '%${page_albumlists_keyword.value}%' OR artist LIKE '%${page_albumlists_keyword.value}%' OR created_at LIKE '%${page_albumlists_keyword.value}%'` :
+            '';
+        if (find_album_model.value === true) {
+          if (page_albumlists_get_keyword_model_num.value != 1)
             keywordFilter = `WHERE artist_id = '${page_albumlists_keyword.value}'`
           else
             keywordFilter = `WHERE created_at LIKE '${page_albumlists_keyword.value}'`
           find_album_model.value = false;
-        }
-        else{
+        } else {
           if (page_albumlists_get_keyword_model_num.value != 0) {
             if (keywordFilter.length > 0) {
               keywordFilter = keywordFilter.replace('LIKE', '=').replace(/%/g, '').replace('artist', 'artist_id');
             }
           }
         }
-        stmt_album_string = `SELECT * FROM album ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
+        stmt_album_string = `SELECT * FROM ${store_model_check_of_sqlite_tablename.album} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
         stmt_album = db.prepare(stmt_album_string);
         //////
-        if (router_select_history_date_of_Album.value && page_albumlists_keyword_reset.value === true){
+        if (router_select_history_date_of_Album.value && page_albumlists_keyword_reset.value === true) {
           remove_router_history_of_Album(router_select_history_date_of_Album.value.id);// 若存在新操作，则覆盖后续的路由
           page_albumlists_keyword_reset.value = false;
         }
@@ -1303,16 +1360,16 @@
           page_lists_keyword: page_albumlists_keyword.value,
           stmt_string: stmt_album_string,
           page_lists_selected: page_albumlists_selected.value,
-          columnKey:page_albumlists_options_Sort_key.value.length > 0 && page_albumlists_options_Sort_key.value[0].order !== 'default' ?
-            page_albumlists_options_Sort_key.value[0].columnKey : 'id',
-          order:page_albumlists_options_Sort_key.value.length > 0 && page_albumlists_options_Sort_key.value[0].order !== 'default' ?
-            page_albumlists_options_Sort_key.value[0].order.replace('end', '') : '',
+          columnKey: page_albumlists_options_Sort_key.value.length > 0 && page_albumlists_options_Sort_key.value[0].order !== 'default' ?
+              page_albumlists_options_Sort_key.value[0].columnKey : 'id',
+          order: page_albumlists_options_Sort_key.value.length > 0 && page_albumlists_options_Sort_key.value[0].order !== 'default' ?
+              page_albumlists_options_Sort_key.value[0].order.replace('end', '') : '',
           page_lists_scrollindex: router_history_model_of_Album_scroller_value.value,
         };
         add_router_history_of_Album(routerDate);// 重复路由不添加
         //////
-      }else{
-        if (router_select_history_date_of_Album.value){
+      } else {
+        if (router_select_history_date_of_Album.value) {
           router.push('View_Album_List_ALL')
           app_left_menu_select_activeKey.value = 'go_albums_list'
           router_select_model_album.value = true;
@@ -1320,8 +1377,8 @@
           page_albumlists_selected.value = router_select_history_date_of_Album.value.page_lists_selected;
           page_albumlists_options_Sort_key.value = [
             {
-              columnKey:router_select_history_date_of_Album.value.columnKey,
-              order:router_select_history_date_of_Album.value.order
+              columnKey: router_select_history_date_of_Album.value.columnKey,
+              order: router_select_history_date_of_Album.value.order
             }
           ];
           router_history_model_of_Album_scroller_value.value = router_select_history_date_of_Album.value.page_lists_scrollindex;
@@ -1331,12 +1388,14 @@
       }
       let rows = stmt_album.all();
       rows.forEach((row: Album) => {
-        if (row.embed_art_path.indexOf('mp3') > 0)
-          row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
-        else if (row.embed_art_path.indexOf('flac') > 0)
-          row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
-        else
-          row.medium_image_url = '../../../resources/img/error_album.jpg';
+        if(row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
+          if (row.embed_art_path.indexOf('mp3') > 0)
+            row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
+          else if (row.embed_art_path.indexOf('flac') > 0)
+            row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
+          else
+            row.medium_image_url = '../../../resources/img/error_album.jpg';
+        }
         const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
         const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
         const fileNameWithoutExtension = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
@@ -1353,9 +1412,9 @@
       moment = null;
       ////// find favorite for album_Files_temporary
       const stmt_album_Annotation_Starred_Items = db.prepare(`
-        SELECT item_id FROM annotation
-        WHERE starred = 1 AND item_type='album'
-      `);
+      SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
+      WHERE starred = 1 AND item_type='album'
+    `);
       const annotations = stmt_album_Annotation_Starred_Items.all();
       for (let i = 0; i < album_Files_temporary.value.length; i++) {
         album_Files_temporary.value[i].favorite = !!annotations.some((annotation: {
@@ -1364,20 +1423,23 @@
       }
       ////// find rating for album_Files_temporary
       const stmt_album_Annotation_Rating_Items = db.prepare(`
-          SELECT item_id, rating FROM annotation
-          WHERE rating > 0 AND item_type='album'
-      `);
+        SELECT item_id, rating FROM ${store_model_check_of_sqlite_tablename.annotation}
+        WHERE rating > 0 AND item_type='album'
+    `);
       const annotations_rating = stmt_album_Annotation_Rating_Items.all();
       for (let i = 0; i < album_Files_temporary.value.length; i++) {
-          const albumFile = album_Files_temporary.value[i];
-          const matchingAnnotation = annotations_rating.find((annotation: { item_id: string, rating: number }) => annotation.item_id === albumFile.id);
-          if (matchingAnnotation)
-              albumFile.rating = matchingAnnotation.rating;
-          else
-              albumFile.rating = 0;
+        const albumFile = album_Files_temporary.value[i];
+        const matchingAnnotation = annotations_rating.find((annotation: {
+          item_id: string,
+          rating: number
+        }) => annotation.item_id === albumFile.id);
+        if (matchingAnnotation)
+          albumFile.rating = matchingAnnotation.rating;
+        else
+          albumFile.rating = 0;
       }
       ////// filter selected_list for album_Files_temporary
-      let order_play_date = null;
+      let order_play_date:any[] = [];
       album_Files_temporary.value = album_Files_temporary.value.filter((item) => {
         if (page_albumlists_selected.value === 'album_list_all') {
           return true;
@@ -1385,11 +1447,11 @@
           return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
         } else if (page_albumlists_selected.value === 'album_list_recently') {
           const stmt_album_Annotation_Recently_Items = db.prepare(`
-            SELECT item_id FROM annotation
-            WHERE item_type='album'
-            ORDER BY play_date DESC
-          `);
-          const annotations = stmt_album_Annotation_Recently_Items.all().map((annotation) => annotation.item_id);
+          SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
+          WHERE item_type='album'
+          ORDER BY play_date DESC
+        `);
+          const annotations = stmt_album_Annotation_Recently_Items.all().map((annotation: any) => annotation.item_id);
           order_play_date = annotations;
           return annotations.includes(item.id);
         } else if (page_albumlists_selected.value === 'album_list_all_PlayList') {
@@ -1516,7 +1578,7 @@
     fetchData_Artist()
   }
   const Init_page_artistlists_statistic_Data = (db: any) => {
-    const stmt_artist_count = db.prepare('SELECT COUNT(*) AS count FROM artist');
+    const stmt_artist_count = db.prepare(`SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.artist}`);
     //
     page_artistlists_options.value = [];
     page_artistlists_statistic.value = [];
@@ -1530,14 +1592,14 @@
       comment: computed(() => t('nsmusics.view_page.allArtist')),
       duration: 0,
       song_count: stmt_artist_count.get().count + ' *',
-      public: false,
-      created_at: null,
-      updated_at: null,
+      public: 0,
+      created_at: '',
+      updated_at: '',
       path: '',
-      sync: false,
+      sync: 0,
       size: 0,
       rules: null,
-      evaluated_at: null,
+      evaluated_at: '',
       owner_id: ''
     }
     page_artistlists_options.value.push(temp_Play_List_ALL);
@@ -1549,7 +1611,7 @@
     page_artistlists.value.push(temp_Play_List_ALL)
     //////
     const stmt_artist_Annotation_Starred_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM annotation
+      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.annotation}
       WHERE starred = 1 AND item_type='artist'
     `);
     const temp_Play_List_Love: Play_List = {
@@ -1560,14 +1622,14 @@
       comment: computed(() => t('nsmusics.view_page.loveArtist')),
       duration: 0,
       song_count: stmt_artist_Annotation_Starred_Count.get().count + ' *',
-      public: false,
-      created_at: null,
-      updated_at: null,
+      public: 0,
+      created_at: '',
+      updated_at: '',
       path: '',
-      sync: false,
+      sync: 0,
       size: 0,
       rules: null,
-      evaluated_at: null,
+      evaluated_at: '',
       owner_id: ''
     }
     page_artistlists_options.value.push(temp_Play_List_Love);
@@ -1579,7 +1641,7 @@
     page_artistlists.value.push(temp_Play_List_Love)
     //////
     const stmt_artist_Annotation_Recently_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM annotation
+      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.annotation}
       WHERE item_type='artist'
     `);
     const temp_Play_List_Recently: Play_List = {
@@ -1590,14 +1652,14 @@
       comment: computed(() => t('nsmusics.view_page.recentPlay')),
       duration: 0,
       song_count: stmt_artist_Annotation_Recently_Count.get().count + ' *',
-      public: false,
-      created_at: null,
-      updated_at: null,
+      public: 0,
+      created_at: '',
+      updated_at: '',
       path: '',
-      sync: false,
+      sync: 0,
       size: 0,
       rules: null,
-      evaluated_at: null,
+      evaluated_at: '',
       owner_id: ''
     }
     page_artistlists_options.value.push(temp_Play_List_Recently);
@@ -1609,7 +1671,7 @@
     page_artistlists.value.push(temp_Play_List_Recently)
     //////
     const stmt_artist_Annotation_PlayList_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM playlist
+      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.playlist}
     `);
     page_artistlists_statistic.value.push({
       label: computed(() => t('entity.playlist_other')),
@@ -1618,7 +1680,7 @@
     });
   }
   const fetchData_Artist = async () => {
-    let db:any = null;
+    let db: any = null;
     // clear RouterView of vue-virtual-scroller data
     clear_Files_temporary()
     router_select_model_artist.value = true;
@@ -1633,18 +1695,18 @@
       Init_page_artistlists_statistic_Data(db)
 
       // load artist_Files_temporary data
-      if(router_history_model_of_Artist.value === 0){
+      if (router_history_model_of_Artist.value === 0) {
         const sortKey = page_artistlists_options_Sort_key.value.length > 0 && page_artistlists_options_Sort_key.value[0].order !== 'default' ?
-          page_artistlists_options_Sort_key.value[0].columnKey : 'id';
+            page_artistlists_options_Sort_key.value[0].columnKey : 'id';
         const sortOrder = page_artistlists_options_Sort_key.value.length > 0 && page_artistlists_options_Sort_key.value[0].order !== 'default' ?
-          page_artistlists_options_Sort_key.value[0].order.replace('end', '') : '';
+            page_artistlists_options_Sort_key.value[0].order.replace('end', '') : '';
         let keywordFilter = page_artistlists_keyword.value.length > 0 ?
-          `WHERE name LIKE '%${page_artistlists_keyword.value}%' OR external_info_updated_at LIKE '%${page_artistlists_keyword.value}%'` :
-          '';
-        stmt_artist_string = `SELECT * FROM artist ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
+            `WHERE name LIKE '%${page_artistlists_keyword.value}%' OR external_info_updated_at LIKE '%${page_artistlists_keyword.value}%'` :
+            '';
+        stmt_artist_string = `SELECT * FROM ${store_model_check_of_sqlite_tablename.artist} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
         stmt_artist = db.prepare(stmt_artist_string);
         //////
-        if (router_select_history_date_of_Artist.value && page_artistlists_keyword_reset.value === true){
+        if (router_select_history_date_of_Artist.value && page_artistlists_keyword_reset.value === true) {
           remove_router_history_of_Artist(router_select_history_date_of_Artist.value.id);// 若存在新操作，则覆盖后续的路由
           page_artistlists_keyword_reset.value = false;
         }
@@ -1658,16 +1720,16 @@
           page_lists_keyword: page_artistlists_keyword.value,
           stmt_string: stmt_artist_string,
           page_lists_selected: page_artistlists_selected.value,
-          columnKey:page_artistlists_options_Sort_key.value.length > 0 && page_artistlists_options_Sort_key.value[0].order !== 'default' ?
-            page_artistlists_options_Sort_key.value[0].columnKey : 'id',
-          order:page_artistlists_options_Sort_key.value.length > 0 && page_artistlists_options_Sort_key.value[0].order !== 'default' ?
-            page_artistlists_options_Sort_key.value[0].order.replace('end', '') : '',
+          columnKey: page_artistlists_options_Sort_key.value.length > 0 && page_artistlists_options_Sort_key.value[0].order !== 'default' ?
+              page_artistlists_options_Sort_key.value[0].columnKey : 'id',
+          order: page_artistlists_options_Sort_key.value.length > 0 && page_artistlists_options_Sort_key.value[0].order !== 'default' ?
+              page_artistlists_options_Sort_key.value[0].order.replace('end', '') : '',
           page_lists_scrollindex: router_history_model_of_Artist_scroller_value.value,
         };
         add_router_history_of_Artist(routerDate);// 重复路由不添加
         //////
-      }else{
-        if (router_select_history_date_of_Artist.value){
+      } else {
+        if (router_select_history_date_of_Artist.value) {
           router.push('View_Artist_List_ALL')
           app_left_menu_select_activeKey.value = 'go_artist_list'
           router_select_model_artist.value = true;
@@ -1675,8 +1737,8 @@
           page_artistlists_selected.value = router_select_history_date_of_Artist.value.page_lists_selected;
           page_artistlists_options_Sort_key.value = [
             {
-              columnKey:router_select_history_date_of_Artist.value.columnKey,
-              order:router_select_history_date_of_Artist.value.order
+              columnKey: router_select_history_date_of_Artist.value.columnKey,
+              order: router_select_history_date_of_Artist.value.order
             }
           ];
           router_history_model_of_Artist_scroller_value.value = router_select_history_date_of_Artist.value.page_lists_scrollindex;
@@ -1684,18 +1746,20 @@
         }
         router_history_model_of_Artist.value = 0;
       }
-      const stmt_media_file = db.prepare(`SELECT * FROM media_file`);
+      const stmt_media_file = db.prepare(`SELECT * FROM ${store_model_check_of_sqlite_tablename.media_file}`);
       const pathfiles = stmt_media_file.all();
       let rows = stmt_artist.all();
       rows.forEach((row: Artist) => {
         for (let j = 0; j < pathfiles.length; j++) {
           if (pathfiles[j].artist_id === row.id) {
-            if (pathfiles[j].path.indexOf('mp3') > 0)
-              row.medium_image_url = pathfiles[j].path.replace('mp3', 'jpg');
-            else if (pathfiles[j].path.indexOf('flac') > 0)
-              row.medium_image_url = pathfiles[j].path.replace('flac', 'jpg');
-            else
-              row.medium_image_url = '../../../resources/img/error_album.jpg';
+            if(row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
+              if (pathfiles[j].path.indexOf('mp3') > 0)
+                row.medium_image_url = pathfiles[j].path.replace('mp3', 'jpg');
+              else if (pathfiles[j].path.indexOf('flac') > 0)
+                row.medium_image_url = pathfiles[j].path.replace('flac', 'jpg');
+              else
+                row.medium_image_url = '../../../resources/img/error_album.jpg';
+            }
             break;
           }
           if (j === pathfiles.length - 1) {
@@ -1707,9 +1771,9 @@
       rows.length = 0
       ////// find favorite for artist_Files_temporary
       const stmt_artist_Annotation_Starred_Items = db.prepare(`
-        SELECT item_id FROM annotation 
-        WHERE starred = 1 AND item_type='artist'
-      `);
+      SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
+      WHERE starred = 1 AND item_type='artist'
+    `);
       const annotations = stmt_artist_Annotation_Starred_Items.all();
       for (let i = 0; i < artist_Files_temporary.value.length; i++) {
         artist_Files_temporary.value[i].favorite = !!annotations.some((annotation: {
@@ -1718,20 +1782,23 @@
       }
       ////// find rating for artist_Files_temporary
       const stmt_artist_Annotation_Rating_Items = db.prepare(`
-          SELECT item_id, rating FROM annotation 
-          WHERE rating > 0 AND item_type='artist'
-      `);
+        SELECT item_id, rating FROM ${store_model_check_of_sqlite_tablename.annotation}
+        WHERE rating > 0 AND item_type='artist'
+    `);
       const annotations_rating = stmt_artist_Annotation_Rating_Items.all();
       for (let i = 0; i < artist_Files_temporary.value.length; i++) {
-          const artistFile = artist_Files_temporary.value[i];
-          const matchingAnnotation = annotations_rating.find((annotation: { item_id: string, rating: number }) => annotation.item_id === artistFile.id);
-          if (matchingAnnotation)
-              artistFile.rating = matchingAnnotation.rating;
-          else
-              artistFile.rating = 0;
+        const artistFile = artist_Files_temporary.value[i];
+        const matchingAnnotation = annotations_rating.find((annotation: {
+          item_id: string,
+          rating: number
+        }) => annotation.item_id === artistFile.id);
+        if (matchingAnnotation)
+          artistFile.rating = matchingAnnotation.rating;
+        else
+          artistFile.rating = 0;
       }
       ////// filter selected_list for artist_Files_temporary
-      let order_play_date = null;
+      let order_play_date:any[] = [];
       artist_Files_temporary.value = artist_Files_temporary.value.filter((item) => {
         if (page_artistlists_selected.value === 'artist_list_all') {
           return true;
@@ -1739,11 +1806,11 @@
           return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
         } else if (page_artistlists_selected.value === 'artist_list_recently') {
           const stmt_artist_Annotation_Recently_Items = db.prepare(`
-            SELECT item_id FROM annotation
-            WHERE item_type='artist'
-            ORDER BY play_date DESC
-          `);
-          const annotations = stmt_artist_Annotation_Recently_Items.all().map((annotation) => annotation.item_id);
+          SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
+          WHERE item_type='artist'
+          ORDER BY play_date DESC
+        `);
+          const annotations = stmt_artist_Annotation_Recently_Items.all().map((annotation: any) => annotation.item_id);
           order_play_date = annotations;
           return annotations.includes(item.id);
         } else if (page_artistlists_selected.value === 'artist_list_all_PlayList') {
@@ -2147,6 +2214,11 @@
     try {
       let system_Configs_Read = new System_Configs_Read();
       /// App_Configs load
+      model_select.value = '' + system_Configs_Read.app_Configs.value['model_select']
+      model_select.value === 'navidrome' ?
+        store_model_check_of_sqlite_tablename.switchToMode_Navidrome_Api()
+        :
+        store_model_check_of_sqlite_tablename.switchToMode_Local()
       if (('' + system_Configs_Read.app_Configs.value['theme']) === 'lightTheme') {
         update_theme.value = false;
         theme.value = lightTheme;
@@ -2254,7 +2326,8 @@
           lang: update_lang.value,
           router_name: String(router_name.value),
           app_left_menu_select_activeKey: String(app_left_menu_select_activeKey.value),
-          app_left_menu_collapsed: String(app_left_menu_collapsed.value)
+          app_left_menu_collapsed: String(app_left_menu_collapsed.value),
+          model_select: String(model_select.value)
         }));
     let system_Configs_Write = new System_Configs_Write()
     system_Configs_Write.system_app_config(
@@ -2422,6 +2495,8 @@
               @update_lang="get_update_lang"
               :update_theme="update_theme"
               @update_theme="get_update_theme"
+              :model_select="model_select"
+              @model_select="get_model_select"
               :library_path="library_path"
               @library_path="get_library_path"
               :menuOptions_appBar="menuOptions_appBar"

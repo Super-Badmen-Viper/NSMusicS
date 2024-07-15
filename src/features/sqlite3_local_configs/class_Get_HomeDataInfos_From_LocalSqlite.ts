@@ -1,12 +1,12 @@
 import moment from "moment/moment";
-
+import { store_model_check_of_sqlite_tablename } from '@/store/model_check_of_sqlite_tablename'
 export class Get_HomeDataInfos_From_LocalSqlite {
     public Get_Annotation_Maximum_Playback() {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
         const annsMap = new Map();
-        const anns = db.prepare(`SELECT * FROM annotation WHERE item_type = 'album' ORDER BY play_count desc LIMIT 18`).all();
+        const anns = db.prepare(`SELECT * FROM ${store_model_check_of_sqlite_tablename.annotation} WHERE item_type = 'album' ORDER BY play_count desc LIMIT 18`).all();
         anns.forEach((ann: { item_id: any; }) => {
             annsMap.set(ann.item_id, ann); // 使用 item_id 作为键
         });
@@ -18,12 +18,14 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         const allData = db.prepare(sql).all();
         const result: Album[] = []
         allData.forEach((row: Album) => {
-            if (row.embed_art_path.indexOf('mp3') > 0)
-                row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
-            else if (row.embed_art_path.indexOf('flac') > 0)
-                row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
-            else
-                row.medium_image_url = '../../../resources/img/error_album.jpg';
+            if(row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
+                if (row.embed_art_path.indexOf('mp3') > 0)
+                    row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
+                else if (row.embed_art_path.indexOf('flac') > 0)
+                    row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
+                else
+                    row.medium_image_url = '../../../resources/img/error_album.jpg';
+            }
             const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
             const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
             const fileNameWithoutExtension = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
@@ -38,7 +40,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         });
         ////// find favorite for result
         const stmt_album_Annotation_Starred_Items = db.prepare(`
-            SELECT item_id FROM annotation
+            SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
             WHERE starred = 1 AND item_type='album'
         `);
         const annotations = stmt_album_Annotation_Starred_Items.all();
@@ -49,7 +51,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         }
         ////// find rating for result
         const stmt_album_Annotation_Rating_Items = db.prepare(`
-            SELECT item_id, rating FROM annotation
+            SELECT item_id, rating FROM ${store_model_check_of_sqlite_tablename.annotation}
             WHERE rating > 0 AND item_type='album'
         `);
         const annotations_rating = stmt_album_Annotation_Rating_Items.all();
@@ -68,15 +70,17 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
-        const rows = db.prepare(`SELECT * FROM album ORDER BY RANDOM() LIMIT 18`).all();
+        const rows = db.prepare(`SELECT * FROM ${store_model_check_of_sqlite_tablename.album} ORDER BY RANDOM() LIMIT 18`).all();
         const result: Album[] = []
         rows.forEach((row: Album) => {
-            if (row.embed_art_path.indexOf('mp3') > 0)
-                row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
-            else if (row.embed_art_path.indexOf('flac') > 0)
-                row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
-            else
-                row.medium_image_url = '../../../resources/img/error_album.jpg';
+            if(row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
+                if (row.embed_art_path.indexOf('mp3') > 0)
+                    row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
+                else if (row.embed_art_path.indexOf('flac') > 0)
+                    row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
+                else
+                    row.medium_image_url = '../../../resources/img/error_album.jpg';
+            }
             const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
             const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
             const fileNameWithoutExtension = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
@@ -91,7 +95,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         });
         ////// find favorite for result
         const stmt_album_Annotation_Starred_Items = db.prepare(`
-            SELECT item_id FROM annotation
+            SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
             WHERE starred = 1 AND item_type='album'
         `);
         const annotations = stmt_album_Annotation_Starred_Items.all();
@@ -102,7 +106,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         }
         ////// find rating for result
         const stmt_album_Annotation_Rating_Items = db.prepare(`
-            SELECT item_id, rating FROM annotation
+            SELECT item_id, rating FROM ${store_model_check_of_sqlite_tablename.annotation}
             WHERE rating > 0 AND item_type='album'
         `);
         const annotations_rating = stmt_album_Annotation_Rating_Items.all();
@@ -121,15 +125,17 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
-        const rows = db.prepare(`SELECT * FROM album ORDER BY created_at desc LIMIT 18`).all();
+        const rows = db.prepare(`SELECT * FROM ${store_model_check_of_sqlite_tablename.album} ORDER BY created_at desc LIMIT 18`).all();
         const result: Album[] = []
         rows.forEach((row: Album) => {
-            if (row.embed_art_path.indexOf('mp3') > 0)
-                row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
-            else if (row.embed_art_path.indexOf('flac') > 0)
-                row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
-            else
-                row.medium_image_url = '../../../resources/img/error_album.jpg';
+            if(row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
+                if (row.embed_art_path.indexOf('mp3') > 0)
+                    row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
+                else if (row.embed_art_path.indexOf('flac') > 0)
+                    row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
+                else
+                    row.medium_image_url = '../../../resources/img/error_album.jpg';
+            }
             const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
             const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
             const fileNameWithoutExtension = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
@@ -144,7 +150,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         });
         ////// find favorite for result
         const stmt_album_Annotation_Starred_Items = db.prepare(`
-            SELECT item_id FROM annotation
+            SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
             WHERE starred = 1 AND item_type='album'
         `);
         const annotations = stmt_album_Annotation_Starred_Items.all();
@@ -155,7 +161,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         }
         ////// find rating for result
         const stmt_album_Annotation_Rating_Items = db.prepare(`
-            SELECT item_id, rating FROM annotation
+            SELECT item_id, rating FROM ${store_model_check_of_sqlite_tablename.annotation}
             WHERE rating > 0 AND item_type='album'
         `);
         const annotations_rating = stmt_album_Annotation_Rating_Items.all();
@@ -175,7 +181,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
         const annsMap = new Map();
-        const anns = db.prepare(`SELECT * FROM annotation WHERE item_type = 'album' ORDER BY play_date desc LIMIT 18`).all();
+        const anns = db.prepare(`SELECT * FROM ${store_model_check_of_sqlite_tablename.annotation} WHERE item_type = 'album' ORDER BY play_date desc LIMIT 18`).all();
         anns.forEach((ann: { item_id: any; }) => {
             annsMap.set(ann.item_id, ann); // 使用 item_id 作为键
         });
@@ -187,12 +193,14 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         const allData = db.prepare(sql).all();
         const result: Album[] = []
         allData.forEach((row: Album) => {
-            if (row.embed_art_path.indexOf('mp3') > 0)
-                row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
-            else if (row.embed_art_path.indexOf('flac') > 0)
-                row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
-            else
-                row.medium_image_url = '../../../resources/img/error_album.jpg';
+            if(row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
+                if (row.embed_art_path.indexOf('mp3') > 0)
+                    row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
+                else if (row.embed_art_path.indexOf('flac') > 0)
+                    row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
+                else
+                    row.medium_image_url = '../../../resources/img/error_album.jpg';
+            }
             const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
             const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
             const fileNameWithoutExtension = fileNameWithExtension ? fileNameWithExtension.replace(/\.[^.]+$/, '') : null;
@@ -207,7 +215,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         });
         ////// find favorite for result
         const stmt_album_Annotation_Starred_Items = db.prepare(`
-            SELECT item_id FROM annotation
+            SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
             WHERE starred = 1 AND item_type='album'
         `);
         const annotations = stmt_album_Annotation_Starred_Items.all();
@@ -218,7 +226,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         }
         ////// find rating for result
         const stmt_album_Annotation_Rating_Items = db.prepare(`
-            SELECT item_id, rating FROM annotation
+            SELECT item_id, rating FROM ${store_model_check_of_sqlite_tablename.annotation}
             WHERE rating > 0 AND item_type='album'
         `);
         const annotations_rating = stmt_album_Annotation_Rating_Items.all();

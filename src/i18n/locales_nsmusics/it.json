@@ -24,7 +24,9 @@
             "selectedSong": "Selezionato",
             "selectLibrary": "Importa libreria multimediale",
             "selectLibrary_explain": "Seleziona una cartella per importare tutte le canzoni dalla cartella",
-            "selectLibrary_end_explain": "Dopo aver fatto clic su OK, non eseguire alcuna operazione. Una volta importato con successo, l'applicazione uscirà. Riavviare manualmente l'applicazione per continuare."
+            "selectLibrary_end_explain": "Dopo aver fatto clic su OK, non eseguire alcuna operazione. Una volta importato con successo, l'applicazione uscirà. Riavviare manualmente l'applicazione per continuare.",
+            "modelLocal": "Modalità locale",
+            "modelServer": "Modalità server"
         },
         "view_player": {
             "view_seting": {

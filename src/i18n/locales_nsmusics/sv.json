@@ -24,7 +24,9 @@
             "selectedSong": "Vald",
             "selectLibrary": "Importera mediabibliotek",
             "selectLibrary_explain": "Välj en mapp för att importera alla låtar från mappen",
-            "selectLibrary_end_explain": "Efter att ha klickat på OK, var snäll och utför inga åtgärder. När importen lyckats kommer applikationen att avslutas. Vänligen starta om applikationen manuellt för att fortsätta."
+            "selectLibrary_end_explain": "Efter att ha klickat på OK, var snäll och utför inga åtgärder. När importen lyckats kommer applikationen att avslutas. Vänligen starta om applikationen manuellt för att fortsätta.",
+            "modelLocal": "Lokal läges",
+            "modelServer": "Serverläge"
         },
         "view_player": {
             "view_seting": {

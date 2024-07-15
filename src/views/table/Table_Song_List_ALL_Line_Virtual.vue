@@ -416,8 +416,8 @@ const handleItemClick_Rating = (id_rating: any) => {
 import { useMessage } from 'naive-ui'
 const message = useMessage()
 /// add playlist
-import { Set_PlaylistInfo_From_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_From_LocalSqlite";
-let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_From_LocalSqlite()
+import { Set_PlaylistInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_To_LocalSqlite";
+let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite()
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
 // const playlist_set_of_addPlaylist_of_comment = ref('')

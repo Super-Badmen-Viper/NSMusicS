@@ -4,4 +4,5 @@ interface App_Configs_Props {
   router_name: string,
   app_left_menu_select_activeKey: string,
   app_left_menu_collapsed: any,
+  model_select: any
 };

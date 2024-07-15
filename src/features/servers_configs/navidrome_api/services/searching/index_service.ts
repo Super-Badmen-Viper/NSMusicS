@@ -1,32 +1,30 @@
 import {Navidrome_Api_Services} from "@/features/servers_configs/navidrome_api/services/Navidrome_Api_Services";
 
 export class Searching_ApiService_of_ND extends Navidrome_Api_Services {
+    // artistCount: artistCount.toString(),
+    // artistOffset: artistOffset.toString(),
+    // albumCount: albumCount.toString(),
+    // albumOffset: albumOffset.toString(),
+    // songCount: songCount.toString(),
+    // songOffset: songOffset.toString()
     public async getSearch2(
-        username: string,token: string,salt: string,
-        quary: string,
-        artistCount:number,artistOffset:number,
-        albumCount:number,albumOffset:number,
-        songCount:number,songOffset:number,): Promise<any> {
+        username: string, token: string, salt: string,
+        query: string,
+        artistCount: number, artistOffset: number,
+        albumCount: number, albumOffset: number,
+        songCount: number, songOffset: number): Promise<any> {
         return this.sendRequest(
             username, token, salt, 'search2', {
-                quary,
-                artistCount,artistOffset,
-                albumCount,albumOffset,
-                songCount,songOffset
-            });
+                query,
+            }
+        );
     }
     public async getSearch3(
         username: string,token: string,salt: string,
-        quary: string,
-        artistCount:number,artistOffset:number,
-        albumCount:number,albumOffset:number,
-        songCount:number,songOffset:number,): Promise<any> {
+        query: string,): Promise<any> {
         return this.sendRequest(
             username, token, salt, 'search3', {
-                quary,
-                artistCount,artistOffset,
-                albumCount,albumOffset,
-                songCount,songOffset
+                query,
             });
     }
 }

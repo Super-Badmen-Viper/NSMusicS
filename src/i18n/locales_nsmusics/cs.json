@@ -24,7 +24,9 @@
             "selectedSong": "Vybráno",
             "selectLibrary": "Import knihovny médií",
             "selectLibrary_explain": "Vyberte složku a importujte všechny písně z této složky",
-            "selectLibrary_end_explain": "Po kliknutí na potvrzení neprovádějte žádné operace. Po úspěšném importu se aplikace ukončí. Chcete-li pokračovat, restartujte aplikaci ručně."
+            "selectLibrary_end_explain": "Po kliknutí na potvrzení neprovádějte žádné operace. Po úspěšném importu se aplikace ukončí. Chcete-li pokračovat, restartujte aplikaci ručně.",
+            "modelLocal": "Místní režim",
+            "modelServer": "Režim serveru"
         },
         "view_player": {
             "view_seting": {
