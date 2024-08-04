@@ -1,9 +1,6 @@
 import {Playlists_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services/playlists/index_service";
 import {Browsing_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services/browsing/index_service";
-import {v4 as uuidv4} from "uuid";
 const path = require('path');
-import { useI18n } from 'vue-i18n'
-import { useMessage } from 'naive-ui'
 
 export class Set_Navidrome_Data_To_LocalSqlite{
     private getUniqueId(db: any,table: any) {
@@ -31,8 +28,7 @@ export class Set_Navidrome_Data_To_LocalSqlite{
         const sql = `INSERT INTO ${table} (${columns}) VALUES (${columns.split(', ').map(() => '?').join(', ')})`;
         const stmt = db.prepare(sql);
         try {
-            const result = stmt.run(values);
-            console.log(`Inserted ${result.changes} row(s)`);
+            stmt.run(values);
         } catch (error) {
             console.error('Error inserting data:', error);
         }
@@ -258,6 +254,14 @@ export class Set_Navidrome_Data_To_LocalSqlite{
 
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
+
+        db.exec("DELETE FROM server_album");
+        db.exec("DELETE FROM server_annotation");
+        db.exec("DELETE FROM server_artist");
+        db.exec("DELETE FROM server_media_file");
+        db.exec("DELETE FROM server_playlist");
+        db.exec("DELETE FROM server_playlist_tracks");
+
         resultArray.forEach(music => {
             this.insertData(db, 'server_artist', music.artist);
         });
@@ -284,47 +288,44 @@ export class Set_Navidrome_Data_To_LocalSqlite{
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
 
-        for (const playlist of playlists) {
-            const sqlite_playlists = {
-                id: playlist.id,
-                name: playlist.name,
-                comment: '',
-                duration: playlist.duration,
-                song_count: playlist.songCount,
-                public: playlist.public,
-                created_at: playlist.created,
-                updated_at: '',
-                path: '',
-                sync: '',
-                size: '',
-                rules: '',
-                evaluated_at: '',
-                owner_id: playlist.owner
-            };
-            const getPlaylist_id = await playlists_ApiService_of_ND.getPlaylist_id(username, token, salt, playlist.id);
-            const _playlist = getPlaylist_id["subsonic-response"]["playlist"];
-            sqlite_playlists.updated_at = _playlist.changed;
-            this.insertData(db, 'server_playlist', sqlite_playlists);
-
-            const playlSongs = Array.isArray(getPlaylist_id["subsonic-response"]["playlist"]["entry"])
-                ? getPlaylist_id["subsonic-response"]["playlist"]["entry"]
-                : [];
-
-            for (const song of playlSongs) {
-                const sqlite_song = {
-                    id: this.getUniqueId(db,'server_playlist_tracks'),
-                    playlist_id: _playlist.id,
-                    media_file_id: song.id
+        if(playlists != null) {
+            for (const playlist of playlists) {
+                const sqlite_playlists = {
+                    id: playlist.id,
+                    name: playlist.name,
+                    comment: '',
+                    duration: playlist.duration,
+                    song_count: playlist.songCount,
+                    public: playlist.public,
+                    created_at: playlist.created,
+                    updated_at: '',
+                    path: '',
+                    sync: '',
+                    size: '',
+                    rules: '',
+                    evaluated_at: '',
+                    owner_id: playlist.owner
                 };
-                this.insertData(db, 'server_playlist_tracks', sqlite_song);
+                const getPlaylist_id = await playlists_ApiService_of_ND.getPlaylist_id(username, token, salt, playlist.id);
+                const _playlist = getPlaylist_id["subsonic-response"]["playlist"];
+                sqlite_playlists.updated_at = _playlist.changed;
+                this.insertData(db, 'server_playlist', sqlite_playlists);
+
+                const playlSongs = Array.isArray(getPlaylist_id["subsonic-response"]["playlist"]["entry"])
+                    ? getPlaylist_id["subsonic-response"]["playlist"]["entry"]
+                    : [];
+
+                for (const song of playlSongs) {
+                    const sqlite_song = {
+                        id: this.getUniqueId(db, 'server_playlist_tracks'),
+                        playlist_id: _playlist.id,
+                        media_file_id: song.id
+                    };
+                    this.insertData(db, 'server_playlist_tracks', sqlite_song);
+                }
             }
         }
         db.close();
-
-        const { t } = useI18n({
-            inheritLocale: true
-        })
-        const message = useMessage()
 
     }
     public async Set_Read_Navidrome_Api_AnnotationInfo_Add_LocalSqlite(

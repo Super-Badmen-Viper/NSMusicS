@@ -22,11 +22,18 @@
             "countSong": "песма",
             "countList": "група",
             "selectedSong": "Изабрано",
-            "selectLibrary": "Увези медијску библиотеку",
-            "selectLibrary_explain": "Изаберите фасциклу да увезете све песме из ње",
-            "selectLibrary_end_explain": "Nakon što kliknete na U redu, ne izvršavajte nijednu operaciju. Nakon uspešnog uvoza, aplikacija će se zatvoriti. Molimo ručno ponovo pokrenite aplikaciju kako biste nastavili.",
+            "selectLibrary": "Увези локалну библиотеку",
+            "selectLibrary_explain": "Изаберите локалну фасциклу да увезете све песме из ње",
+            "selectLibrary_end_explain": "Пошто кликнете на у реду, не вршите ниједну операцију. Након успешне импортације, систем ће изаћи из овог програма. Ручно поново покрените програм да бисте наставили.",
+            "selectLibrary_end_success": "Увоз локалне библиотеке је завршен. Систем ће изаћи за 3 секунде. Ручно поново покрените програм да бисте га користили.",
+            "selectServer": "Увези серверску библиотеку",
+            "selectServer_explain": "Изаберите додатни сервер да увезете податке са сервера",
+            "selectServer_end_explain": "Пошто кликнете на у реду, не вршите ниједну операцију. Можете га директно користити након успешне импортације.",
+            "selectServer_end_success": "Увоз серверске библиотеке је завршен. Можете директно наставити са његовим коришћењем.",
             "modelLocal": "Локални режим",
-            "modelServer": "Серверски режим"
+            "modelServer": "Серверски режим",
+            "modelSelect": "Одабир режима звучног извора",
+            "modelSelect_explain": "Одаберите извор звучног материјала за NSMusicS (локално/сервер)"
         },
         "view_player": {
             "view_seting": {

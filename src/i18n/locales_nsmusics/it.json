@@ -22,11 +22,18 @@
             "countSong": "canzone",
             "countList": "gruppo",
             "selectedSong": "Selezionato",
-            "selectLibrary": "Importa libreria multimediale",
-            "selectLibrary_explain": "Seleziona una cartella per importare tutte le canzoni dalla cartella",
-            "selectLibrary_end_explain": "Dopo aver fatto clic su OK, non eseguire alcuna operazione. Una volta importato con successo, l'applicazione uscirà. Riavviare manualmente l'applicazione per continuare.",
+            "selectLibrary": "Importa libreria locale",
+            "selectLibrary_explain": "Seleziona una cartella locale per importare tutte le canzoni dalla cartella",
+            "selectLibrary_end_explain": "Dopo aver fatto clic su OK, non eseguire alcuna operazione. Una volta completato l'importo, l'applicazione verrà chiusa. Riavviare manualmente l'applicazione per continuare.",
+            "selectLibrary_end_success": "L'importazione della libreria locale è stata completata. L'applicazione uscirà tra 3 secondi. Riavviare manualmente l'applicazione per utilizzarla.",
+            "selectServer": "Importa libreria del server",
+            "selectServer_explain": "Seleziona un server aggiunto per importare i dati dal server",
+            "selectServer_end_explain": "Dopo aver fatto clic su OK, non eseguire alcuna operazione. Puoi usarlo direttamente dopo il successo dell'importazione.",
+            "selectServer_end_success": "L'importazione della libreria del server è stata completata. Puoi continuare a usarla direttamente.",
             "modelLocal": "Modalità locale",
-            "modelServer": "Modalità server"
+            "modelServer": "Modalità server",
+            "modelSelect": "Selezione della sorgente musicale",
+            "modelSelect_explain": "Seleziona la sorgente della musica per NSMusicS (locale/server)"
         },
         "view_player": {
             "view_seting": {

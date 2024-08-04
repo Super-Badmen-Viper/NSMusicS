@@ -11,8 +11,8 @@ export class Get_HomeDataInfos_From_LocalSqlite {
             annsMap.set(ann.item_id, ann); // 使用 item_id 作为键
         });
         const sql = `SELECT a.*, b.play_count 
-             FROM album a 
-             LEFT JOIN annotation b ON a.id = b.item_id AND b.item_type = 'album'
+             FROM ${store_model_check_of_sqlite_tablename.album} a 
+             LEFT JOIN ${store_model_check_of_sqlite_tablename.annotation} b ON a.id = b.item_id AND b.item_type = 'album'
              ORDER BY b.play_count desc, a.id desc
              LIMIT 18`;
         const allData = db.prepare(sql).all();
@@ -186,8 +186,8 @@ export class Get_HomeDataInfos_From_LocalSqlite {
             annsMap.set(ann.item_id, ann); // 使用 item_id 作为键
         });
         const sql = `SELECT a.*, b.play_count 
-             FROM album a 
-             LEFT JOIN annotation b ON a.id = b.item_id AND b.item_type = 'album'
+             FROM ${store_model_check_of_sqlite_tablename.album} a 
+             LEFT JOIN ${store_model_check_of_sqlite_tablename.annotation} b ON a.id = b.item_id AND b.item_type = 'album'
              ORDER BY b.play_date desc, a.id desc
              LIMIT 18`;
         const allData = db.prepare(sql).all();

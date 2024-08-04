@@ -113,7 +113,7 @@
   const server_set_of_addUser_of_username = ref('')
   const server_set_of_addUser_of_password = ref('')
   async function update_server_setUser(id:string,server_name:string,url:string, user_name:string,password:string) {
-    const userService = new User_ApiService_of_ND('http://'+url+'/rest');
+    const userService = new User_ApiService_of_ND(url+'/rest');
     const {salt, token} = generateEncryptedPassword(password);
     const userData = await userService.getUser(user_name, token, salt);
     if (userData["subsonic-response"]["status"] === 'ok'){
@@ -143,7 +143,7 @@
   async function update_server_addUser() {
     try{
       server_set_of_addUser_of_type.value = Type_Server_Selected.value;
-      const userService = new User_ApiService_of_ND('http://'+server_set_of_addUser_of_url.value+'/rest');
+      const userService = new User_ApiService_of_ND(server_set_of_addUser_of_url.value+'/rest');
       const {salt, token} = generateEncryptedPassword(server_set_of_addUser_of_password.value);
       const userData = await userService.getUser(server_set_of_addUser_of_username.value, token, salt);
       if (userData["subsonic-response"]["status"] === 'ok'){
@@ -579,7 +579,6 @@
                                 <n-space vertical size="small" style="margin-bottom: 10px;">
                                   <span>{{ $t('form.addServer.input_url') }}</span>
                                   <n-input-group>
-                                    <n-input-group-label size="small">http://</n-input-group-label>
                                     <n-input clearable size="small" v-model:value="item.url" placeholder=""/>
                                   </n-input-group>
                                 </n-space>
@@ -662,7 +661,6 @@
                       <n-space vertical style="width: 250px;margin-bottom: 10px;">
                         <span>{{ $t('form.addServer.input_url') }}</span>
                         <n-input-group>
-                          <n-input-group-label>http://</n-input-group-label>
                           <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_url"/>
                         </n-input-group>
                       </n-space>

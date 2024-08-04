@@ -22,11 +22,18 @@
             "countSong": "utwór",
             "countList": "grupa",
             "selectedSong": "Wybrany",
-            "selectLibrary": "Importuj bibliotekę mediów",
-            "selectLibrary_explain": "Wybierz folder, aby zaimportować wszystkie utwory z folderu",
-            "selectLibrary_end_explain": "Po kliknięciu OK, nie wykonuj żadnych działań. Po pomyślnym zaimportowaniu aplikacja się zamknie. Proszę ręcznie uruchomić aplikację ponownie, aby kontynuować.",
+            "selectLibrary": "Importuj bibliotekę lokalną",
+            "selectLibrary_explain": "Wybierz folder lokalny, aby zaimportować wszystkie utwory z folderu",
+            "selectLibrary_end_explain": "Po kliknięciu OK nie wykonuj żadnych działań. Po pomyślnym zaimportowaniu system zamknie tę aplikację. Proszę ręcznie uruchomić aplikację ponownie, aby kontynuować.",
+            "selectLibrary_end_success": "Importowanie biblioteki lokalnej zostało zakończone. Ta aplikacja zostanie zamknięta za 3 sekundy. Proszę ręcznie uruchomić aplikację ponownie, aby jej użyć.",
+            "selectServer": "Importuj bibliotekę serwera",
+            "selectServer_explain": "Wybierz dodany serwer, aby zaimportować dane z serwera",
+            "selectServer_end_explain": "Po kliknięciu OK nie wykonuj żadnych działań. Możesz użyć go bezpośrednio po pomyślnym zaimportowaniu.",
+            "selectServer_end_success": "Importowanie biblioteki serwera zostało zakończone. Możesz kontynuować korzystanie z niej bezpośrednio.",
             "modelLocal": "Tryb lokalny",
-            "modelServer": "Tryb serwera"
+            "modelServer": "Tryb serwera",
+            "modelSelect": "Wybór trybu źródła dźwięku",
+            "modelSelect_explain": "Wybierz źródło dźwięku dla NSMusicS (lokalny/serwer)"
         },
         "view_player": {
             "view_seting": {

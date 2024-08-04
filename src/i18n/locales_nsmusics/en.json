@@ -22,11 +22,18 @@
             "countSong": "song",
             "countList": "set",
             "selectedSong": "Selected",
-            "selectLibrary": "Import Media Library",
-            "selectLibrary_explain": "Select a folder to import all songs from the folder",
-            "selectLibrary_end_explain": "After clicking OK, please do not perform any operations. Once the import is successful, the application will exit. Please manually restart the application to continue.",
+            "selectLibrary": "Import Local (Mode) Library",
+            "selectLibrary_explain": "Select a local folder to import all songs from the folder",
+            "selectLibrary_end_explain": "After clicking OK, please do not perform any operations. Once the import is successful, the system will exit this application. Please manually restart the application to continue.",
+            "selectLibrary_end_success": "Importing the local (mode) library has been completed. The application will exit in 3 seconds. Please manually restart the application to use it.",
+            "selectServer": "Import Server (Mode) Library",
+            "selectServer_explain": "Select an added server to import the server's data",
+            "selectServer_end_explain": "After clicking OK, please do not perform any operations. You can directly use it once the import is successful.",
+            "selectServer_end_success": "Importing the server (mode) library has been completed. You may continue to use it directly.",
             "modelLocal": "Local Mode",
-            "modelServer": "Server Mode"
+            "modelServer": "Server Mode",
+            "modelSelect": "Music Source Mode Selection",
+            "modelSelect_explain": "Select the source of music for NSMusicS (Local/Server)"
         },
         "view_player": {
             "view_seting": {

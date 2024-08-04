@@ -22,11 +22,18 @@
             "countSong": "sång",
             "countList": "grupp",
             "selectedSong": "Vald",
-            "selectLibrary": "Importera mediabibliotek",
-            "selectLibrary_explain": "Välj en mapp för att importera alla låtar från mappen",
-            "selectLibrary_end_explain": "Efter att ha klickat på OK, var snäll och utför inga åtgärder. När importen lyckats kommer applikationen att avslutas. Vänligen starta om applikationen manuellt för att fortsätta.",
-            "modelLocal": "Lokal läges",
-            "modelServer": "Serverläge"
+            "selectLibrary": "Importera lokal bibliotek",
+            "selectLibrary_explain": "Välj en lokal mapp för att importera alla låtar från mappen",
+            "selectLibrary_end_explain": "Efter att du har klickat på OK, utför inga åtgärder. När importen är framgångsrik kommer systemet att avsluta denna app. Vänligen starta om appen manuellt för att fortsätta.",
+            "selectLibrary_end_success": "Importera den lokala biblioteket är klar. Appen kommer att avslutas om 3 sekunder. Vänligen starta om appen manuellt för att använda den.",
+            "selectServer": "Importera serverbibliotek",
+            "selectServer_explain": "Välj en tillagd server för att importera data från servern",
+            "selectServer_end_explain": "Efter att du har klickat på OK, utför inga åtgärder. Du kan använda den direkt efter importen är framgångsrik.",
+            "selectServer_end_success": "Importera serverbiblioteket är klart. Du kan fortsätta använda det direkt.",
+            "modelLocal": "Lokalt läge",
+            "modelServer": "Serverläge",
+            "modelSelect": "Val av musikkälla",
+            "modelSelect_explain": "Välj musikkälla för NSMusicS (lokal/server)"
         },
         "view_player": {
             "view_seting": {

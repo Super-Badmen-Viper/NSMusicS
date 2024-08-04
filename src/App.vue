@@ -113,7 +113,7 @@
     const {salt, token} = generateEncryptedPassword(server_config_of_current_user_of_sqlite.value?.password);
     let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_Data_To_LocalSqlite()
     await set_Navidrome_Data_To_LocalSqlite.Set_Read_Navidrome_Api_BasicInfo_Add_LocalSqlite(
-        'http://' + server_config_of_current_user_of_sqlite.value?.url + '/rest',
+        server_config_of_current_user_of_sqlite.value?.url + '/rest',
         server_config_of_current_user_of_sqlite.value?.user_name, token, salt,
     )
   }
@@ -738,6 +738,11 @@
     fetchData_Home()
   }
   const fetchData_Home = async () => {
+    home_Files_temporary_maximum_playback.value = []
+    home_Files_temporary_random_search.value = []
+    home_Files_temporary_recently_added.value = []
+    home_Files_temporary_recently_played.value = []
+    home_selected_top_album.value = undefined;
     home_Files_temporary_maximum_playback.value = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Maximum_Playback()
     home_Files_temporary_random_search.value = get_HomeDataInfos_From_LocalSqlite.Get_AlbumFiles_Random_Search()
     home_Files_temporary_recently_added.value = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Recently_Added()

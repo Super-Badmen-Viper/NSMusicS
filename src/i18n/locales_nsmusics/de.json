@@ -22,11 +22,18 @@
             "countSong": "Lied",
             "countList": "Gruppe",
             "selectedSong": "Ausgewählt",
-            "selectLibrary": "Medienbibliothek importieren",
-            "selectLibrary_explain": "Wählen Sie einen Ordner aus, um alle Lieder aus dem Ordner zu importieren",
-            "selectLibrary_end_explain": "Bitte führen Sie nach dem Klicken auf OK keine weiteren Aktionen durch. Nachdem der Import erfolgreich war, wird die Anwendung beenden. Starten Sie die Anwendung erneut, um fortzufahren.",
+            "selectLibrary": "Lokale Bibliothek importieren",
+            "selectLibrary_explain": "Wählen Sie einen lokalen Ordner aus, um alle Lieder aus dem Ordner zu importieren",
+            "selectLibrary_end_explain": "Nach dem Klicken auf OK führen Sie keine Operationen durch. Nachdem der Import erfolgreich war, wird die Anwendung beendet. Starten Sie die Anwendung erneut manuell, um fortzufahren.",
+            "selectLibrary_end_success": "Der Import der lokalen Bibliothek wurde abgeschlossen. Die Anwendung wird in 3 Sekunden beendet. Starten Sie die Anwendung erneut manuell, um sie zu verwenden.",
+            "selectServer": "Serverbibliothek importieren",
+            "selectServer_explain": "Wählen Sie einen hinzugefügten Server aus, um Daten vom Server zu importieren",
+            "selectServer_end_explain": "Nach dem Klicken auf OK führen Sie keine Operationen durch. Sie können die Anwendung direkt nach dem erfolgreichen Import verwenden.",
+            "selectServer_end_success": "Der Import der Serverbibliothek wurde abgeschlossen. Sie können sie direkt weiterverwenden.",
             "modelLocal": "Lokaler Modus",
-            "modelServer": "Server-Modus"
+            "modelServer": "Server-Modus",
+            "modelSelect": "Auswahl der Musikquelle",
+            "modelSelect_explain": "Wählen Sie die Musikquelle für NSMusicS (lokal/Server) aus"
         },
         "view_player": {
             "view_seting": {

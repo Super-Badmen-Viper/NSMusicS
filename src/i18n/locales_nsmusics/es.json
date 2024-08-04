@@ -22,11 +22,18 @@
             "countSong": "canción",
             "countList": "grupo",
             "selectedSong": "Seleccionado",
-            "selectLibrary": "Importar Biblioteca de Medios",
-            "selectLibrary_explain": "Seleccione una carpeta para importar todas las canciones de la carpeta",
-            "selectLibrary_end_explain": "Tras hacer clic en Aceptar, no realice ninguna operación. Una vez que la importación se haya realizado con éxito, la aplicación se cerrará. Inicie la aplicación de nuevo manualmente para continuar.",
-            "modelLocal": "Modo local",
-            "modelServer": "Modo servidor"
+            "selectLibrary": "Importar Biblioteca Local",
+            "selectLibrary_explain": "Seleccione una carpeta local para importar todas las canciones de la carpeta",
+            "selectLibrary_end_explain": "Después de hacer clic en Aceptar, no realice ninguna operación. Una vez que la importación haya sido exitosa, el sistema saldrá de la aplicación. Por favor, reinicie la aplicación manualmente para continuar.",
+            "selectLibrary_end_success": "La importación de la biblioteca local ha sido completada. La aplicación saldrá en 3 segundos. Por favor, reinicie la aplicación manualmente para usarla.",
+            "selectServer": "Importar Biblioteca del Servidor",
+            "selectServer_explain": "Seleccione un servidor agregado para importar datos desde el servidor",
+            "selectServer_end_explain": "Después de hacer clic en Aceptar, no realice ninguna operación. Puede usarla directamente una vez que la importación haya sido exitosa.",
+            "selectServer_end_success": "La importación de la biblioteca del servidor ha sido completada. Usted puede continuar usando directamente.",
+            "modelLocal": "Modo Local",
+            "modelServer": "Modo del Servidor",
+            "modelSelect": "Selección del Modo de Fuente de Música",
+            "modelSelect_explain": "Seleccione la fuente de música para NSMusicS (Local/Servidor)"
         },
         "view_player": {
             "view_seting": {

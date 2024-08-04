@@ -29,6 +29,7 @@ coverage
 
 *.tsbuildinfo
 /release
+/.VSCodeCounter
 resources/nsmusics.db-shm
 resources/nsmusics.db-wal
 resources/navidrome.db-wal

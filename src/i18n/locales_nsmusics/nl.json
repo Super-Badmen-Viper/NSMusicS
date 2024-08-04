@@ -22,11 +22,18 @@
             "countSong": "lied",
             "countList": "groep",
             "selectedSong": "Geselecteerd",
-            "selectLibrary": "Importeer mediabibliotheek",
-            "selectLibrary_explain": "Selecteer een map om alle liedjes uit de map te importeren",
-            "selectLibrary_end_explain": "Na het klikken op OK, voer alstublieft geen enkele bewerking uit. Zodra de import is gelukt, zal de applicatie afsluiten. Start de applicatie opnieuw handmatig om door te gaan.",
+            "selectLibrary": "Importeer lokale bibliotheek",
+            "selectLibrary_explain": "Selecteer een lokale map om alle liedjes uit de map te importeren",
+            "selectLibrary_end_explain": "Na het klikken op OK, voer alstublieft geen enkele bewerking uit. Zodra de import is gelukt, zal het systeem deze applicatie afsluiten. Start het opnieuw handmatig om door te gaan.",
+            "selectLibrary_end_success": "Importeren van de lokale bibliotheek is voltooid. Het systeem zal de applicatie afsluiten over 3 seconden. Start het opnieuw handmatig om het te gebruiken.",
+            "selectServer": "Importeer serverbibliotheek",
+            "selectServer_explain": "Selecteer een toegevoegd server om gegevens van de server te importeren",
+            "selectServer_end_explain": "Na het klikken op OK, voer alstublieft geen enkele bewerking uit. U kunt het direct gebruiken zodra de import is gelukt.",
+            "selectServer_end_success": "Importeren van de serverbibliotheek is voltooid. U kunt het direct blijven gebruiken.",
             "modelLocal": "Lokale modus",
-            "modelServer": "Servermodus"
+            "modelServer": "Servermodus",
+            "modelSelect": "Selectie van muziekbronmodus",
+            "modelSelect_explain": "Selecteer de muziekbron voor NSMusicS (lokaal/server)"
         },
         "view_player": {
             "view_seting": {

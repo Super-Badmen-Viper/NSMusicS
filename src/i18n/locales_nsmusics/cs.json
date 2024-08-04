@@ -22,11 +22,18 @@
             "countSong": "píseň",
             "countList": "sestava",
             "selectedSong": "Vybráno",
-            "selectLibrary": "Import knihovny médií",
-            "selectLibrary_explain": "Vyberte složku a importujte všechny písně z této složky",
-            "selectLibrary_end_explain": "Po kliknutí na potvrzení neprovádějte žádné operace. Po úspěšném importu se aplikace ukončí. Chcete-li pokračovat, restartujte aplikaci ručně.",
+            "selectLibrary": "Importovat místní knihovnu",
+            "selectLibrary_explain": "Vyberte místní adresář pro import všech písní z adresáře",
+            "selectLibrary_end_explain": "Po kliknutí na potvrzení neprovádějte žádné operace. Po úspěšném importu bude aplikace ukončena. Znovu ji spusťte ručně pro pokračování.",
+            "selectLibrary_end_success": "Import místní knihovny je dokončen. Aplikace bude ukončena za 3 vteřin. Znovu ji spusťte ručně pro použití.",
+            "selectServer": "Importovat serverovou knihovnu",
+            "selectServer_explain": "Vyberte přidaný server pro import dat ze serveru",
+            "selectServer_end_explain": "Po kliknutí na potvrzení neprovádějte žádné operace. Po úspěšném importu můžete pokračovat v používání.",
+            "selectServer_end_success": "Import serverové knihovny je dokončen. Můžete pokračovat v jeho používání.",
             "modelLocal": "Místní režim",
-            "modelServer": "Režim serveru"
+            "modelServer": "Serverový režim",
+            "modelSelect": "Výběr režimu zvukového zdroje",
+            "modelSelect_explain": "Vyberte zdroj zvuku pro NSMusicS (místní/serwerový)"
         },
         "view_player": {
             "view_seting": {

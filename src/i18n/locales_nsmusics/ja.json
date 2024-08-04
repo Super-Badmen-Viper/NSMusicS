@@ -22,11 +22,18 @@
             "countSong": "曲",
             "countList": "組",
             "selectedSong": "選択",
-            "selectLibrary": "メディアライブラリのインポート",
-            "selectLibrary_explain": "フォルダを選択して、そのフォルダのすべての曲をインポートします",
-            "selectLibrary_end_explain": "確認ボタンをクリックした後、操作を行わないでください。インポートが成功すると、アプリケーションが終了します。アプリケーションを再度手動で起動してください。",
+            "selectLibrary": "ローカルライブラリのインポート",
+            "selectLibrary_explain": "すべての曲をインポートするローカルフォルダを選択してください",
+            "selectLibrary_end_explain": "確認をクリックした後、操作を行わないでください。インポートが成功した後、アプリケーションは終了します。再度手動でアプリケーションを起動してください。",
+            "selectLibrary_end_success": "ローカルライブラリのインポートが完了しました。3秒後にアプリケーションが終了します。再度手動でアプリケーションを起動して使用してください。",
+            "selectServer": "サーバーライブラリのインポート",
+            "selectServer_explain": "サーバーのデータを取り込むために追加されたサーバーを選択してください",
+            "selectServer_end_explain": "確認をクリックした後、操作を行わないでください。インポートが成功した後、直接使用できます。",
+            "selectServer_end_success": "サーバーライブラリのインポートが完了しました。直接使用を続けてください。",
             "modelLocal": "ローカルモード",
-            "modelServer": "サーバーモード"
+            "modelServer": "サーバーモード",
+            "modelSelect": "音楽ソースの選択",
+            "modelSelect_explain": "NSMusicSの音楽ソース（ローカル/サーバー）を選択してください"
         },
         "view_player": {
             "view_seting": {
