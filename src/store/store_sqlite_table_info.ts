@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 
-export const store_model_check_of_sqlite_tablename = reactive({
+export const store_sqlite_table_info = reactive({
     album: 'album',
     annotation: 'annotation',
     artist: 'artist',
