@@ -116,6 +116,8 @@
         server_config_of_current_user_of_sqlite.value?.url + '/rest',
         server_config_of_current_user_of_sqlite.value?.user_name, token, salt,
     )
+    /// reset app data
+    ipcRenderer.send('window-reset-data');
   }
   const server_config_of_all_user_of_sqlite = ref<Server_Configs_Props[]>([])
   function get_server_config_of_all_user_of_sqlite(value: Server_Configs_Props[]){
@@ -156,7 +158,7 @@
     return randomString;
   }
   //////
-  import { store_model_check_of_sqlite_tablename } from '@/store/model_check_of_sqlite_tablename'
+  import { store_sqlite_table_info } from '@/store/store_sqlite_table_info'
   const model_select = ref('local')
   function get_model_select(value: any){
     model_select.value = value
@@ -835,7 +837,7 @@
     page_songlists_statistic.value = [];
     page_songlists.value = []
     //////
-    const stmt_media_file_count = db.prepare(`SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.media_file}`);
+    const stmt_media_file_count = db.prepare(`SELECT COUNT(*) AS count FROM ${store_sqlite_table_info.media_file}`);
     const temp_Play_List_ALL: Play_List = {
       label: computed(() => t('nsmusics.view_page.allSong')),
       value: 'song_list_all',
@@ -863,7 +865,7 @@
     page_songlists.value.push(temp_Play_List_ALL)
     //////
     const stmt_media_Annotation_Starred_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.annotation}
+      SELECT COUNT(*) AS count FROM ${store_sqlite_table_info.annotation}
       WHERE starred = 1 AND item_type='media_file'
     `);
     const temp_Play_List_Love: Play_List = {
@@ -893,7 +895,7 @@
     page_songlists.value.push(temp_Play_List_Love)
     //////
     const stmt_media_Annotation_Recently_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.annotation}
+      SELECT COUNT(*) AS count FROM ${store_sqlite_table_info.annotation}
       WHERE item_type='media_file'
     `);
     const temp_Play_List_Recently: Play_List = {
@@ -923,7 +925,7 @@
     page_songlists.value.push(temp_Play_List_Recently)
     //////
     const stmt_media_Annotation_PlayList_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.playlist}
+      SELECT COUNT(*) AS count FROM ${store_sqlite_table_info.playlist}
     `);
     page_songlists_statistic.value.push({
       label: computed(() => t('entity.playlist_other')),
@@ -1001,16 +1003,16 @@
           }
         }
         try {
-          stmt_media_file_string = `SELECT * FROM ${store_model_check_of_sqlite_tablename.media_file} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
+          stmt_media_file_string = `SELECT * FROM ${store_sqlite_table_info.media_file} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
           stmt_media_file = db.prepare(stmt_media_file_string);
           // if stmt_media_file is empty, then try to find artist_id or album_id
           if (stmt_media_file.get() === undefined) {
             keywordFilter = `WHERE artist_id = '${page_songlists_keyword.value}'`
-            stmt_media_file_string = `SELECT * FROM ${store_model_check_of_sqlite_tablename.media_file} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
+            stmt_media_file_string = `SELECT * FROM ${store_sqlite_table_info.media_file} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
             stmt_media_file = db.prepare(stmt_media_file_string);
             if (stmt_media_file.get() === undefined) {
               keywordFilter = `WHERE album_id = '${page_songlists_keyword.value}'`
-              stmt_media_file_string = `SELECT * FROM ${store_model_check_of_sqlite_tablename.media_file} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
+              stmt_media_file_string = `SELECT * FROM ${store_sqlite_table_info.media_file} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
               stmt_media_file = db.prepare(stmt_media_file_string);
             }
           }
@@ -1076,7 +1078,7 @@
       });
       ////// find favorite for media_Files_temporary
       const stmt_media_Annotation_Starred_Items = db.prepare(`
-        SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
+        SELECT item_id FROM ${store_sqlite_table_info.annotation}
         WHERE starred = 1 AND item_type='media_file'
       `);
       const annotations = stmt_media_Annotation_Starred_Items.all();
@@ -1087,7 +1089,7 @@
       }
       ////// find rating for media_Files_temporary
       const stmt_media_Annotation_Rating_Items = db.prepare(`
-        SELECT item_id, rating FROM ${store_model_check_of_sqlite_tablename.annotation}
+        SELECT item_id, rating FROM ${store_sqlite_table_info.annotation}
         WHERE rating > 0 AND item_type='media_file'
       `);
       const annotations_rating = stmt_media_Annotation_Rating_Items.all();
@@ -1111,7 +1113,7 @@
           return annotations.some((annotation: any) => annotation.item_id === item.id);
         } else if (page_songlists_selected.value === 'song_list_recently') {
           const stmt_media_Annotation_Recently_Items = db.prepare(`
-          SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
+          SELECT item_id FROM ${store_sqlite_table_info.annotation}
           WHERE item_type='media_file'
           ORDER BY play_date DESC
         `);
@@ -1209,7 +1211,7 @@
     fetchData_Album()
   }
   const Init_page_albumlists_statistic_Data = (db: any) => {
-    const stmt_album_count = db.prepare(`SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.album}`);
+    const stmt_album_count = db.prepare(`SELECT COUNT(*) AS count FROM ${store_sqlite_table_info.album}`);
     //
     page_albumlists_options.value = [];
     page_albumlists_statistic.value = [];
@@ -1242,7 +1244,7 @@
     page_albumlists.value.push(temp_Play_List_ALL)
     //////
     const stmt_album_Annotation_Starred_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.annotation}
+      SELECT COUNT(*) AS count FROM ${store_sqlite_table_info.annotation}
       WHERE starred = 1 AND item_type='album'
     `);
     const temp_Play_List_Love: Play_List = {
@@ -1272,7 +1274,7 @@
     page_albumlists.value.push(temp_Play_List_Love)
     //////
     const stmt_album_Annotation_Recently_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.annotation}
+      SELECT COUNT(*) AS count FROM ${store_sqlite_table_info.annotation}
       WHERE item_type='album'
     `);
     const temp_Play_List_Recently: Play_List = {
@@ -1302,7 +1304,7 @@
     page_albumlists.value.push(temp_Play_List_Recently)
     //////
     const stmt_album_Annotation_PlayList_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.playlist}
+      SELECT COUNT(*) AS count FROM ${store_sqlite_table_info.playlist}
     `);
     page_albumlists_statistic.value.push({
       label: computed(() => t('entity.playlist_other')),
@@ -1348,7 +1350,7 @@
             }
           }
         }
-        stmt_album_string = `SELECT * FROM ${store_model_check_of_sqlite_tablename.album} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
+        stmt_album_string = `SELECT * FROM ${store_sqlite_table_info.album} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
         stmt_album = db.prepare(stmt_album_string);
         //////
         if (router_select_history_date_of_Album.value && page_albumlists_keyword_reset.value === true) {
@@ -1417,7 +1419,7 @@
       moment = null;
       ////// find favorite for album_Files_temporary
       const stmt_album_Annotation_Starred_Items = db.prepare(`
-      SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
+      SELECT item_id FROM ${store_sqlite_table_info.annotation}
       WHERE starred = 1 AND item_type='album'
     `);
       const annotations = stmt_album_Annotation_Starred_Items.all();
@@ -1428,7 +1430,7 @@
       }
       ////// find rating for album_Files_temporary
       const stmt_album_Annotation_Rating_Items = db.prepare(`
-        SELECT item_id, rating FROM ${store_model_check_of_sqlite_tablename.annotation}
+        SELECT item_id, rating FROM ${store_sqlite_table_info.annotation}
         WHERE rating > 0 AND item_type='album'
     `);
       const annotations_rating = stmt_album_Annotation_Rating_Items.all();
@@ -1452,7 +1454,7 @@
           return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
         } else if (page_albumlists_selected.value === 'album_list_recently') {
           const stmt_album_Annotation_Recently_Items = db.prepare(`
-          SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
+          SELECT item_id FROM ${store_sqlite_table_info.annotation}
           WHERE item_type='album'
           ORDER BY play_date DESC
         `);
@@ -1583,7 +1585,7 @@
     fetchData_Artist()
   }
   const Init_page_artistlists_statistic_Data = (db: any) => {
-    const stmt_artist_count = db.prepare(`SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.artist}`);
+    const stmt_artist_count = db.prepare(`SELECT COUNT(*) AS count FROM ${store_sqlite_table_info.artist}`);
     //
     page_artistlists_options.value = [];
     page_artistlists_statistic.value = [];
@@ -1616,7 +1618,7 @@
     page_artistlists.value.push(temp_Play_List_ALL)
     //////
     const stmt_artist_Annotation_Starred_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.annotation}
+      SELECT COUNT(*) AS count FROM ${store_sqlite_table_info.annotation}
       WHERE starred = 1 AND item_type='artist'
     `);
     const temp_Play_List_Love: Play_List = {
@@ -1646,7 +1648,7 @@
     page_artistlists.value.push(temp_Play_List_Love)
     //////
     const stmt_artist_Annotation_Recently_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.annotation}
+      SELECT COUNT(*) AS count FROM ${store_sqlite_table_info.annotation}
       WHERE item_type='artist'
     `);
     const temp_Play_List_Recently: Play_List = {
@@ -1676,7 +1678,7 @@
     page_artistlists.value.push(temp_Play_List_Recently)
     //////
     const stmt_artist_Annotation_PlayList_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_model_check_of_sqlite_tablename.playlist}
+      SELECT COUNT(*) AS count FROM ${store_sqlite_table_info.playlist}
     `);
     page_artistlists_statistic.value.push({
       label: computed(() => t('entity.playlist_other')),
@@ -1708,7 +1710,7 @@
         let keywordFilter = page_artistlists_keyword.value.length > 0 ?
             `WHERE name LIKE '%${page_artistlists_keyword.value}%' OR external_info_updated_at LIKE '%${page_artistlists_keyword.value}%'` :
             '';
-        stmt_artist_string = `SELECT * FROM ${store_model_check_of_sqlite_tablename.artist} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
+        stmt_artist_string = `SELECT * FROM ${store_sqlite_table_info.artist} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
         stmt_artist = db.prepare(stmt_artist_string);
         //////
         if (router_select_history_date_of_Artist.value && page_artistlists_keyword_reset.value === true) {
@@ -1751,7 +1753,7 @@
         }
         router_history_model_of_Artist.value = 0;
       }
-      const stmt_media_file = db.prepare(`SELECT * FROM ${store_model_check_of_sqlite_tablename.media_file}`);
+      const stmt_media_file = db.prepare(`SELECT * FROM ${store_sqlite_table_info.media_file}`);
       const pathfiles = stmt_media_file.all();
       let rows = stmt_artist.all();
       rows.forEach((row: Artist) => {
@@ -1776,7 +1778,7 @@
       rows.length = 0
       ////// find favorite for artist_Files_temporary
       const stmt_artist_Annotation_Starred_Items = db.prepare(`
-      SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
+      SELECT item_id FROM ${store_sqlite_table_info.annotation}
       WHERE starred = 1 AND item_type='artist'
     `);
       const annotations = stmt_artist_Annotation_Starred_Items.all();
@@ -1787,7 +1789,7 @@
       }
       ////// find rating for artist_Files_temporary
       const stmt_artist_Annotation_Rating_Items = db.prepare(`
-        SELECT item_id, rating FROM ${store_model_check_of_sqlite_tablename.annotation}
+        SELECT item_id, rating FROM ${store_sqlite_table_info.annotation}
         WHERE rating > 0 AND item_type='artist'
     `);
       const annotations_rating = stmt_artist_Annotation_Rating_Items.all();
@@ -1811,7 +1813,7 @@
           return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
         } else if (page_artistlists_selected.value === 'artist_list_recently') {
           const stmt_artist_Annotation_Recently_Items = db.prepare(`
-          SELECT item_id FROM ${store_model_check_of_sqlite_tablename.annotation}
+          SELECT item_id FROM ${store_sqlite_table_info.annotation}
           WHERE item_type='artist'
           ORDER BY play_date DESC
         `);
@@ -2221,9 +2223,9 @@
       /// App_Configs load
       model_select.value = '' + system_Configs_Read.app_Configs.value['model_select']
       model_select.value === 'navidrome' ?
-        store_model_check_of_sqlite_tablename.switchToMode_Navidrome_Api()
+        store_sqlite_table_info.switchToMode_Navidrome_Api()
         :
-        store_model_check_of_sqlite_tablename.switchToMode_Local()
+        store_sqlite_table_info.switchToMode_Local()
       if (('' + system_Configs_Read.app_Configs.value['theme']) === 'lightTheme') {
         update_theme.value = false;
         theme.value = lightTheme;

@@ -1,5 +1,8 @@
 import {Playlists_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services/playlists/index_service";
 import {Browsing_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services/browsing/index_service";
+import {
+    Media_Retrieval_ApiService_of_ND
+} from "@/features/servers_configs/navidrome_api/services/media_retrieval/index_service";
 const path = require('path');
 
 export class Set_Navidrome_Data_To_LocalSqlite{
@@ -10,6 +13,17 @@ export class Set_Navidrome_Data_To_LocalSqlite{
             id = uuidv4();
         }
         return id;
+    }
+    private convertToLRC(lyrics: {start: number;value: string}[]): string {
+        let lrcContent = '';
+        for (const line of lyrics) {
+            const minutes = Math.floor(line.start / 60000);
+            const seconds = Math.floor((line.start % 60000) / 1000);
+            const milliseconds = (line.start % 1000).toString().padStart(3, '0').slice(0, 2);
+            const timeTag = `[${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds}]`;
+            lrcContent += `${timeTag}${line.value}\n`;
+        }
+        return lrcContent;
     }
     private insertData(db:any, table:any, data_old:any) {
         if (Object.keys(data_old).length === 0) return;
@@ -33,28 +47,6 @@ export class Set_Navidrome_Data_To_LocalSqlite{
             console.error('Error inserting data:', error);
         }
     }
-    private getCommentString(common:any) {
-        if (!common) {
-            throw new Error("common object is undefined");
-        }
-        if (!common.comment) {
-            common.comment = [];
-        } else if (!Array.isArray(common.comment)) {
-            common.comment = [common.comment];
-        }
-        return common.comment.join("");
-    }
-    private getLyricsString(common:any) {
-        if (!common) {
-            throw new Error("common object is undefined");
-        }
-        if (!common.lyrics) {
-            common.lyrics = [];
-        } else if (!Array.isArray(common.lyrics)) {
-            common.lyrics = [common.lyrics];
-        }
-        return common.lyrics.join("");
-    }
     public async Set_Read_Navidrome_Api_BasicInfo_Add_LocalSqlite(
         url: string,
         username: string,token: string,salt: string
@@ -65,6 +57,8 @@ export class Set_Navidrome_Data_To_LocalSqlite{
         let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
         const getArtists_ALL = await browsing_ApiService_of_ND.getArtists_ALL(username, token, salt);
         const list = getArtists_ALL["subsonic-response"]["artists"]["index"];
+
+        let media_Retrieval_ApiService_of_ND = new Media_Retrieval_ApiService_of_ND(url);
 
         const artistsArray: any[]= [];
         const albumsArray: any[]= [];
@@ -131,7 +125,13 @@ export class Set_Navidrome_Data_To_LocalSqlite{
                     }
 
                     const songs = getAlbum_id["subsonic-response"]["album"]["song"];
-                    songs.forEach((song: any) => {
+                    for (const song of songs) {
+                        const getLyrics_all = await media_Retrieval_ApiService_of_ND.getLyrics_all(username, token, salt, song.id);
+                        let lyrics = undefined;
+                        try {
+                            lyrics = this.convertToLRC(getLyrics_all["subsonic-response"]["lyricsList"]["structuredLyrics"][0]["line"]);
+                        }catch{ }
+
                         const sqlite_song= {
                             id: song.id,
                             title: song.title,
@@ -171,7 +171,7 @@ export class Set_Navidrome_Data_To_LocalSqlite{
                             mbz_album_comment: '',
                             catalog_num: '',
                             comment: '',
-                            lyrics: '',
+                            lyrics: lyrics,
                             bpm: 0,
                             channels: 0,
                             order_title: '',
@@ -183,7 +183,7 @@ export class Set_Navidrome_Data_To_LocalSqlite{
                             medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id
                         };
                         songsArray.push(sqlite_song);
-                    });
+                    }
                     return songs;
                 });
 
@@ -326,12 +326,6 @@ export class Set_Navidrome_Data_To_LocalSqlite{
             }
         }
         db.close();
-
-    }
-    public async Set_Read_Navidrome_Api_AnnotationInfo_Add_LocalSqlite(
-        url: string,
-        username: string,token: string,salt: string
-    ): Promise<any>{
 
     }
 }

@@ -187,7 +187,7 @@
   ////// this_view components of navie ui
   import {ref, onMounted, watch, onBeforeUnmount, computed, h} from 'vue';
   import {type MenuOption, NButton, NIcon,} from 'naive-ui'
-  import {store_model_check_of_sqlite_tablename} from "@/store/model_check_of_sqlite_tablename";
+  import {store_sqlite_table_info} from "@/store/store_sqlite_table_info";
   const theme_value = ref('lightTheme')
   const theme_options = ref([
     {
@@ -739,9 +739,9 @@
                     :options="Type_Server_Model_Open_Option"
                     @update:value="
                       Type_Server_Model_Open_Value === 'navidrome' ?
-                      (store_model_check_of_sqlite_tablename.switchToMode_Navidrome_Api(), emits('model_select', 'navidrome'))
+                      (store_sqlite_table_info.switchToMode_Navidrome_Api(), emits('model_select', 'navidrome'))
                       :
-                      (store_model_check_of_sqlite_tablename.switchToMode_Local(), emits('model_select', 'local'))
+                      (store_sqlite_table_info.switchToMode_Local(), emits('model_select', 'local'))
                     "
                     placeholder=""
                     :reset-menu-on-options-change="false"

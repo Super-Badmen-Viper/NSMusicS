@@ -26,6 +26,7 @@
     "@vicons/utils": "^0.1.4",
     "axios": "^1.7.2",
     "better-sqlite3": "^9.4.1",
+    "clone": "^2.1.2",
     "electron-updater": "^6.3.0-alpha.6",
     "floating-vue": "^5.2.2",
     "howler": "^2.2.4",
