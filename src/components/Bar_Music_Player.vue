@@ -120,13 +120,17 @@
     }
   });
   const handleAudioFilePathChange = async () => {
-    current_play_time.value = formatTime(await props.player.getDuration());
-    player_silder_currentTime_added_value.value = 0;
-    this_audio_buffer_file.value = null;
-    player_no_progress_jump.value = false;
-    props.player.isPlaying = false;
+    if(store_player_audio_info.this_audio_initial_trigger) {
+      current_play_time.value = formatTime(await props.player.getDuration());
+      player_silder_currentTime_added_value.value = 0;
+      this_audio_buffer_file.value = null;
+      player_no_progress_jump.value = false;
+      props.player.isPlaying = false;
 
-    await Init_Audio_Player()
+      await Init_Audio_Player()
+    }
+    // Prevent triggering events captured by "vue3 watch" during data initialization
+    store_player_audio_info.this_audio_initial_trigger = true
   };
   const play_order = ref('playback-2');
   const this_audio_buffer_file = ref<any>()

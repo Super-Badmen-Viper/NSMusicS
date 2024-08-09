@@ -30,8 +30,14 @@ export class Get_PlaylistInfo_From_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
-        const placeholders = list_of_media_file_id.map(() => '?').join(',');
-        const stmt = db.prepare(`SELECT * FROM ${store_server_user_model.media_file} WHERE id IN (${placeholders})`);
+        const stmt = db.prepare(`
+            SELECT * FROM ${store_server_user_model.media_file}
+            WHERE id IN (${list_of_media_file_id.map(() => '?')}) 
+            ORDER BY (
+                SELECT order_index FROM system_playlist_file_id_config
+                WHERE system_playlist_file_id_config.media_file_id = ${store_server_user_model.media_file}.id
+            )
+        `);
         const rows = stmt.all(...list_of_media_file_id);
         const result:Media_File[] = []
         rows.forEach((row: Media_File, index: number) => {

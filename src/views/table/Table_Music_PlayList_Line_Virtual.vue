@@ -42,7 +42,6 @@
   /////// emits audio_info of artistlist_view_list
   const handleItemDbClick = (media_file:Media_File,index:number) => {
     emits('media_file_path_from_playlist',true)
-    emits('media_file_path', media_file.path)
     store_player_audio_info.this_audio_file_path = media_file.path
     emits('this_audio_lyrics_string', media_file.lyrics)
     store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url

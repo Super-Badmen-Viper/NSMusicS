@@ -28,7 +28,6 @@
   }
 
   ////// this_app components
-  import type {GlobalTheme, MenuOption} from 'naive-ui'
   import {darkTheme, lightTheme, NConfigProvider, NIcon} from 'naive-ui'
   import {h, onMounted, ref, computed, watch} from 'vue';
   import routers from './router'
@@ -41,7 +40,6 @@
   import Bar_Music_PlayList from '@/components/Bar_Music_PlayList.vue'
   // player_configs class
   import View_Screen_Music_Player from '@/views/View_Screen_Music_Player.vue'
-  import {Player_UI_Theme_State} from '@/features/player_configs/Player_UI_Theme_State'
   import {System_Configs_Read} from '@/features/system_configs/System_Configs_Read'
   import {App_Configs} from '@/models/app_Configs/class_App_Configs';
   import {Player_Configs_of_Audio_Info} from '@/models/app_Configs/class_Player_Configs_of_Audio_Info';
@@ -135,13 +133,13 @@
 
   ////// server of check_model
   import { store_server_user_model } from '@/store/server/store_server_user_model'
-  function get_library_path(value: any){
-    store_server_user_model.library_path = value
+  watch(() => store_server_user_model.library_path, (newValue) => {
+    store_server_user_model.library_path = newValue
     save_system_library_config()
     router_name.value = 'View_Song_List_ALL';
     store_app_setting_configs.app_left_menu_select_activeKey = 'go_songs_list';
     save_system_config_of_View_Router_History()
-  }
+  });
 
   ////// theme
   function get_update_theme (value:any){
@@ -250,14 +248,16 @@
 
   ////// player_configs audio_info
   watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
-    store_player_audio_info.this_audio_file_path = newValue
-    store_player_audio_info.this_audio_restart_play = true
-    console.log('this_audio_file_path：'+newValue)
-    //
-    if(this_audio_file_path_from_playlist.value === false){
-      playlist_Files_temporary.value = [...media_Files_temporary.value];
-      playlist_Tracks_Current_Media_File_id_of_list.value = media_Files_temporary.value.map(item => item.id);
-      save_system_playlist_item_id_config();
+    if(media_Files_temporary.value != undefined && media_Files_temporary.value.length != 0) {
+      store_player_audio_info.this_audio_file_path = newValue
+      store_player_audio_info.this_audio_restart_play = true
+      console.log('this_audio_file_path：'+newValue)
+      //
+      if (this_audio_file_path_from_playlist.value === false) {
+        playlist_Files_temporary.value = [...media_Files_temporary.value];
+        playlist_Tracks_Current_Media_File_id_of_list.value = media_Files_temporary.value.map(item => item.id);
+        save_system_playlist_item_id_config();
+      }
     }
   });
   watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
@@ -2271,7 +2271,10 @@
   }
   function save_system_playlist_item_id_config(){
     let db:any = null;
-    db = require('better-sqlite3')(nsmusics_db);
+    if(store_server_user_model.model_select === 'local')
+      db = require('better-sqlite3')(nsmusics_db);
+    else
+      db = require('better-sqlite3')(navidrome_db);
     db.pragma('journal_mode = WAL');
     let system_Configs_Write = new System_Configs_Write();
     system_Configs_Write.system_playlist_item_id_config(
@@ -2347,7 +2350,6 @@
               @server_config_of_current_user_of_sqlite="get_server_config_of_current_user_of_sqlite"
               @update_lang="get_update_lang"
               @update_theme="get_update_theme"
-              @library_path="get_library_path"
               :player_fade_value="player_fade_value"
               @player_fade_value="get_player_fade_value"
               :player_use_lottie_animation="player_use_lottie_animation"

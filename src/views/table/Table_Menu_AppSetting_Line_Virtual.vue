@@ -37,7 +37,7 @@
   ////// passed as argument
   const emits = defineEmits([
     'server_config_of_current_user_of_sqlite',
-    'update_lang','update_theme','library_path',
+    'update_lang','update_theme',
     'player_fade_value','player_use_lottie_animation',
   ]);
   const props = defineProps<{
@@ -205,7 +205,6 @@
         const folderPath = await ipcRenderer.invoke('library-select-folder');
         if (folderPath) {
           store_server_user_model.library_path = folderPath;
-          emits('library_path', folderPath);
           clearInterval(timer_percentage.value);
           ipcRenderer.invoke('metadata-get-directory-filePath', [folderPath])
               .then(filePath => {

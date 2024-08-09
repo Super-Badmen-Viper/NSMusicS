@@ -1,6 +1,8 @@
 import { reactive } from 'vue'
 
 export const store_player_audio_info = reactive({
+    this_audio_initial_trigger: false,
+
     this_audio_file_path: '',
     this_audio_file_medium_image_url: '',
     this_audio_restart_play: false,

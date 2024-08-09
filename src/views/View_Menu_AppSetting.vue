@@ -22,9 +22,6 @@ function get_server_config_of_current_user_of_sqlite(value: any){
 function get_server_config_of_all_user_of_sqlite(value: any){
   emits('server_config_of_all_user_of_sqlite',value)
 }
-function get_library_path(value: any){
-  emits('library_path',value)
-}
 
 onMounted(async () => {
   emits('router_select','View_Menu_AppSetting')
@@ -32,7 +29,7 @@ onMounted(async () => {
 const emits = defineEmits([
   'router_select',
   'server_config_of_current_user_of_sqlite',
-  'update_lang','update_theme','library_path',
+  'update_lang','update_theme',
   'player_fade_value','player_use_lottie_animation',
 ]);
 const {
@@ -48,7 +45,6 @@ const {
       @server_config_of_all_user_of_sqlite="get_server_config_of_all_user_of_sqlite"
       @update_lang="get_update_lang"
       @update_theme="get_update_theme"
-      @library_path="get_library_path"
       :player_fade_value="player_fade_value"
       @player_fade_value="get_player_fade_value"
       :player_use_lottie_animation="player_use_lottie_animation"

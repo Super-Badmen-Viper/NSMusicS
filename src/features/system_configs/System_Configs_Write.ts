@@ -55,18 +55,19 @@ export class System_Configs_Write {
         });
     }
 
-    system_playlist_item_id_config(
+    public system_playlist_item_id_config(
         db: any,
         media_file_id_of_list: string[],
     ) {
         db.exec("DELETE FROM system_playlist_file_id_config");
         db.exec("UPDATE sqlite_sequence SET seq = 0 WHERE name = 'system_playlist_file_id_config'");
-        const playlistConfigStmt = db.prepare(`
-            INSERT INTO system_playlist_file_id_config (media_file_id)
-            VALUES (?) 
-        `);
+
+        let order_index = 1;
         media_file_id_of_list.forEach((mediaFileId) => {
-            playlistConfigStmt.run(mediaFileId);
+            db.prepare(`
+            INSERT INTO system_playlist_file_id_config (media_file_id, order_index)
+            VALUES (?, ?)
+        `).run(mediaFileId, order_index++);
         });
     }
 
