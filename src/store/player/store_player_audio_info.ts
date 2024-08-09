@@ -1,31 +1,20 @@
 import { reactive } from 'vue'
 
-export const store_player_basic = reactive({
-    percentage_of_local: 0,
-    percentage_of_nd: 0,
+export const store_player_audio_info = reactive({
+    this_audio_file_path: '',
+    this_audio_file_medium_image_url: '',
+    this_audio_restart_play: false,
+    this_audio_is_playing: true,
+    this_audio_singer_name: '',
+    this_audio_singer_id: '',
 
-    server_config_of_current_user_of_sqlite: undefined as Server_Configs_Props | undefined,
-    server_config_of_all_user_of_sqlite: [] as Server_Configs_Props[],
+    this_audio_singer_rating: 0,
+    this_audio_singer_favorite: 0,
+    this_audio_song_name: '',
 
-    server_config_of_current_user_of_select_servername: '',
-    server_config_of_current_user_of_select: undefined as { label: string; value: string } | undefined,
-    server_config_of_all_user_of_select: [] as { label: string; value: string }[],
+    this_audio_song_id: '',
 
-    get_server_config_of_all_user_of_sqlite(value: Server_Configs_Props[]) {
-        this.server_config_of_all_user_of_sqlite = value;
-        this.server_config_of_all_user_of_select = [];
-        value.forEach((item) => {
-            this.server_config_of_all_user_of_select.push({
-                label: item.server_name,
-                value: item.id
-            });
-        });
-
-        const index = this.server_config_of_all_user_of_sqlite.findIndex(item => item.id === this.server_config_of_current_user_of_select?.value);
-        if (index === 0) {
-            this.server_config_of_current_user_of_sqlite = undefined;
-            this.server_config_of_current_user_of_select = undefined;
-            this.server_config_of_current_user_of_select_servername = '';
-        }
-    },
+    this_audio_album_rating: '',
+    this_audio_album_favorite: '',
+    this_audio_Index_of_absolute_positioning_in_list: -1,
 });

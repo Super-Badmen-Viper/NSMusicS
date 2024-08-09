@@ -1,10 +1,10 @@
 import {ipcRenderer} from "electron";
-import {store_sqlite_table_info} from "@/store/store_sqlite_table_info";
+import {store_server_user_model} from "@/store/server/store_server_user_model";
 export class Set_ReadLocalMusic_To_LocalSqlite {
     private getUniqueId_Media(db: any) {
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4();
-        while (db.prepare(`SELECT COUNT(*) FROM ${store_sqlite_table_info.media_file} WHERE id = ?`).pluck().get(id) > 0) {
+        while (db.prepare(`SELECT COUNT(*) FROM ${store_server_user_model.media_file} WHERE id = ?`).pluck().get(id) > 0) {
             id = uuidv4().replace(/-/g, '');
         }
         return id;
@@ -12,7 +12,7 @@ export class Set_ReadLocalMusic_To_LocalSqlite {
     private getUniqueId_Album(db: any) {
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4();
-        while (db.prepare(`SELECT COUNT(*) FROM ${store_sqlite_table_info.album} WHERE id = ?`).pluck().get(id) > 0) {
+        while (db.prepare(`SELECT COUNT(*) FROM ${store_server_user_model.album} WHERE id = ?`).pluck().get(id) > 0) {
             id = uuidv4().replace(/-/g, '');
         }
         return id;
@@ -20,7 +20,7 @@ export class Set_ReadLocalMusic_To_LocalSqlite {
     private getUniqueId_Artist(db: any) {
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4();
-        while (db.prepare(`SELECT COUNT(*) FROM ${store_sqlite_table_info.artist} WHERE id = ?`).pluck().get(id) > 0) {
+        while (db.prepare(`SELECT COUNT(*) FROM ${store_server_user_model.artist} WHERE id = ?`).pluck().get(id) > 0) {
             id = uuidv4().replace(/-/g, '');
         }
         return id;

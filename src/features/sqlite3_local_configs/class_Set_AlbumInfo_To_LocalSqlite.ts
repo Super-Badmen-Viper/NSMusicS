@@ -1,9 +1,9 @@
-import {store_sqlite_table_info} from "@/store/store_sqlite_table_info";
+import {store_server_user_model} from "@/store/server/store_server_user_model";
 export class Set_AlbumInfo_To_LocalSqlite {
     private getUniqueId(db: any) {
         const { v4: uuidv4 } = require('uuid');
         let ann_id = uuidv4();
-        while (db.prepare(`SELECT COUNT(*) FROM ${store_sqlite_table_info.annotation} WHERE ann_id = ?`).pluck().get(ann_id) > 0) {
+        while (db.prepare(`SELECT COUNT(*) FROM ${store_server_user_model.annotation} WHERE ann_id = ?`).pluck().get(ann_id) > 0) {
             ann_id = uuidv4();
         }
         return ann_id;
@@ -11,7 +11,7 @@ export class Set_AlbumInfo_To_LocalSqlite {
     private getUniqueId_Replace(db: any) {
         const { v4: uuidv4 } = require('uuid');
         let ann_id = uuidv4().replace(/-/g, '');
-        while (db.prepare(`SELECT COUNT(*) FROM ${store_sqlite_table_info.annotation} WHERE ann_id = ?`).pluck().get(ann_id) > 0) {
+        while (db.prepare(`SELECT COUNT(*) FROM ${store_server_user_model.annotation} WHERE ann_id = ?`).pluck().get(ann_id) > 0) {
             ann_id = uuidv4().replace(/-/g, '');
         }
         return ann_id;
@@ -31,17 +31,17 @@ export class Set_AlbumInfo_To_LocalSqlite {
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
         
-        const existingRecord = db.prepare(`SELECT * FROM ${store_sqlite_table_info.annotation} WHERE item_id = ?`).get(id);
+        const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.annotation} WHERE item_id = ?`).get(id);
         if (!existingRecord) {
             db.prepare(`
-                INSERT INTO ${store_sqlite_table_info.annotation} (ann_id, item_id, item_type, starred, starred_at) 
+                INSERT INTO ${store_server_user_model.annotation} (ann_id, item_id, item_type, starred, starred_at) 
                 VALUES (?, ?, ?, ?, ?)`)
             .run(
                 this.getUniqueId(db), id, 'album', value ? 0 : 1, 
                 this.getCurrentDateTime(),);
         } else {
             db.prepare(`
-                UPDATE ${store_sqlite_table_info.annotation} 
+                UPDATE ${store_server_user_model.annotation} 
                 SET starred = ?, starred_at = ? 
                 WHERE item_id = ? AND item_type = 'album'`)
             .run(
@@ -59,12 +59,12 @@ export class Set_AlbumInfo_To_LocalSqlite {
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
 
-        const existingRecord = db.prepare(`SELECT * FROM ${store_sqlite_table_info.annotation} WHERE item_id = ?`).get(id);
+        const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.annotation} WHERE item_id = ?`).get(id);
         if (!existingRecord) {
-            db.prepare(`INSERT INTO ${store_sqlite_table_info.annotation} (ann_id, item_id, item_type, rating) VALUES (?, ?, ?, ?)`)
+            db.prepare(`INSERT INTO ${store_server_user_model.annotation} (ann_id, item_id, item_type, rating) VALUES (?, ?, ?, ?)`)
             .run(this.getUniqueId(db), id, 'album', value);
         } else {
-            db.prepare(`UPDATE ${store_sqlite_table_info.annotation} SET rating = ? WHERE item_id = ? AND item_type = 'album'`)
+            db.prepare(`UPDATE ${store_server_user_model.annotation} SET rating = ? WHERE item_id = ? AND item_type = 'album'`)
             .run(value, id);
         }
 
@@ -76,13 +76,13 @@ export class Set_AlbumInfo_To_LocalSqlite {
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
 
-        let existingRecord = db.prepare(`SELECT play_count FROM ${store_sqlite_table_info.annotation} WHERE item_id = ?`).get(item_id);
+        let existingRecord = db.prepare(`SELECT play_count FROM ${store_server_user_model.annotation} WHERE item_id = ?`).get(item_id);
         if (!existingRecord) {
-            db.prepare(`INSERT INTO ${store_sqlite_table_info.annotation} (ann_id, item_id, item_type, play_count, play_date) VALUES (?, ?, ?, ?, ?)`)
+            db.prepare(`INSERT INTO ${store_server_user_model.annotation} (ann_id, item_id, item_type, play_count, play_date) VALUES (?, ?, ?, ?, ?)`)
                 .run(this.getUniqueId(db), item_id, 'album', 1, this.getCurrentDateTime());
         } else {
             existingRecord.play_count += 1;
-            db.prepare(`UPDATE ${store_sqlite_table_info.annotation} SET play_count = ?, play_date = ? WHERE item_id = ? AND item_type = 'album'`)
+            db.prepare(`UPDATE ${store_server_user_model.annotation} SET play_count = ?, play_date = ? WHERE item_id = ? AND item_type = 'album'`)
                 .run(existingRecord.play_count, this.getCurrentDateTime(), item_id);
         }
         db.close();

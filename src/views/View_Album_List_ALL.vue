@@ -42,11 +42,8 @@ const emits = defineEmits([
   'play_this_album_song_list',
   'router_history_model','router_history_model_of_Album_scroller_value','router_history_model_of_Album_scroll',
 ]);
-const { 
-  app_left_menu_collapsed,
-  window_innerWidth,
-
-  update_theme,page_top_album_image_url,page_top_album_name,page_top_album_id,
+const {
+  page_top_album_image_url,page_top_album_name,page_top_album_id,
   page_albumlists,page_albumlists_options,page_albumlists_statistic,
   page_albumlists_selected,
 
@@ -54,10 +51,7 @@ const {
 
   router_select_history_date,router_history_datas,router_history_model_of_Album_scroller_value,router_history_model_of_Album_scroll,
 } = defineProps<{
-  app_left_menu_collapsed:boolean,
-  window_innerWidth:number,
-
-  update_theme:boolean,page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
+  page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
   page_albumlists:Play_List[],page_albumlists_options:{label: string;value: string}[],page_albumlists_statistic:{label: string;album_count: number;id: string;}[],
   page_albumlists_selected:string;
 
@@ -81,7 +75,6 @@ const {
       :router_history_model_of_Album_scroll="router_history_model_of_Album_scroll"
       @router_history_model_of_Album_scroll="get_router_history_model_of_Album_scroll"
 
-      :update_theme="update_theme"
       :page_top_album_image_url="page_top_album_image_url"
       :page_top_album_id="page_top_album_id"
       :page_top_album_name="page_top_album_name"
@@ -94,8 +87,6 @@ const {
       @media_list_of_album_id="get_media_list_of_album_id_by_album_info"
       @play_this_album_song_list="get_play_this_album_song_list"
 
-      :app_left_menu_collapsed="app_left_menu_collapsed"
-      :window_innerWidth="window_innerWidth"
       :options_Sort_key="page_albumlists_options_Sort_key"
       @options_Sort_key="get_page_albumlists_options_Sort_key"
       :page_albumlists_keyword="page_albumlists_keyword"

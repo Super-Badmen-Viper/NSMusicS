@@ -27,12 +27,9 @@ const { t } = useI18n({
 
 ////// passed as argument
 const emits = defineEmits([
-  'media_file_path','media_file_path_from_playlist',
-  'media_file_medium_image_url',
-  'this_audio_singer_name','this_audio_singer_id',
-  'this_audio_song_name','this_audio_song_id','this_audio_song_rating','this_audio_song_favorite',
+  'media_file_path_from_playlist',
+  'this_audio_song_rating','this_audio_song_favorite',
   'this_audio_album_name','this_audio_album_id',
-  'this_audio_Index_of_absolute_positioning_in_list',
   'menu_edit_this_song',
   'menu_add_this_song',
   'menu_delete_this_song',
@@ -55,14 +52,12 @@ const emits = defineEmits([
 const props = defineProps<{
   data_temporary: Media_File[];data_temporary_selected: Media_File[];
 
-  update_theme: boolean;page_top_album_image_url:string;page_top_album_name:string;page_top_album_id:string;
+  page_top_album_image_url:string;page_top_album_name:string;page_top_album_id:string;
   page_songlists:Play_List[];page_songlists_options:{label: string;value: string}[];page_songlists_statistic:{label: string;song_count: number;id: string;}[];
   page_songlists_selected:string;
 
   page_songlists_keyword:string;
 
-  app_left_menu_collapsed: Boolean;
-  window_innerWidth: number;
   options_Sort_key:{ columnKey: string; order: string }[];
 
   playlist_All_of_list:{label: string;value: string}[];playlist_Tracks_temporary:{playlist:Play_List,playlist_tracks:Play_list_Track[]}[];
@@ -92,10 +87,10 @@ const startTimer = () => {
     bool_watch = true;
   }, 1000);
 };
-const stopWatching_collapsed_width = watch(() => props.app_left_menu_collapsed, (newValue, oldValue) => {
+const stopWatching_collapsed_width = watch(() => store_app_setting_configs.app_left_menu_collapsed, (newValue, oldValue) => {
   updateGridItems();
 });
-const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (newValue, oldValue) => {
+const stopWatching_window_innerWidth = watch(() => store_app_setting_configs.window_innerWidth, (newValue, oldValue) => {
   bool_watch = false;
   updateGridItems();
   if (bool_watch) {
@@ -103,7 +98,7 @@ const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (new
   }
 });
 const updateGridItems = () => {
-  if (props.app_left_menu_collapsed == true) {
+  if (store_app_setting_configs.app_left_menu_collapsed == true) {
     collapsed_width.value = 145;
   } else {
     collapsed_width.value = 240;
@@ -357,17 +352,18 @@ const handleItemDbClick = (media_file:Media_File,index:number) => {
 
       emits('media_file_path_from_playlist',false)
       emits('media_file_path', media_file.path)
+      store_player_audio_info.this_audio_file_path = media_file.path
       emits('this_audio_lyrics_string', media_file.lyrics)
-      emits('media_file_medium_image_url',media_file.medium_image_url)
-      emits('this_audio_singer_name',media_file.artist)
-      emits('this_audio_singer_id',media_file.artist_id)
-      emits('this_audio_song_name',media_file.title)
-      emits('this_audio_song_id',media_file.id)
+      store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
+      store_player_audio_info.this_audio_singer_name = media_file.artist
+      store_player_audio_info.this_audio_singer_id = media_file.artist_id
+      store_player_audio_info.this_audio_song_name = media_file.title
+      store_player_audio_info.this_audio_song_id = media_file.id
       emits('this_audio_song_rating',media_file.rating)
       emits('this_audio_song_favorite',media_file.favorite)
       emits('this_audio_album_id', media_file.album_id);
       emits('this_audio_album_name',media_file.album)
-      emits('this_audio_Index_of_absolute_positioning_in_list', index);
+      store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
     }
   }
 }
@@ -417,6 +413,8 @@ import { useMessage } from 'naive-ui'
 const message = useMessage()
 /// add playlist
 import { Set_PlaylistInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_To_LocalSqlite";
+import {store_app_setting_configs} from "@/store/app/store_app_setting_configs";
+import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite()
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -832,10 +830,10 @@ onBeforeUnmount(() => {
                   <template v-if="item.favorite">
                     <icon :size="20" color="red" style="margin-left: -2px; margin-top: 3px;"><Heart28Filled/></icon>
                   </template>
-                  <template v-else-if="!props.update_theme">
+                  <template v-else-if="!store_app_setting_configs.update_theme">
                     <icon color="#101014" :size="20" style="margin-left: -2px; margin-top: 3px;"><Heart24Regular/></icon>
                   </template>
-                  <template v-else-if="props.update_theme">
+                  <template v-else-if="store_app_setting_configs.update_theme">
                     <icon color="#FAFAFC" :size="20" style="margin-left: -2px; margin-top: 3px;"><Heart24Regular/></icon>
                   </template>
                 </button>
@@ -848,7 +846,7 @@ onBeforeUnmount(() => {
                       cursor: pointer;
                     "
                   >
-                    <template v-if="!props.update_theme">
+                    <template v-if="!store_app_setting_configs.update_theme">
                       <icon :size="20"><MoreCircle20Regular/></icon>
                     </template>
                     <template v-else>

@@ -7,15 +7,13 @@
   ////// this_view components of navie ui 
   import { ref, onMounted } from 'vue';
   import { NIcon } from 'naive-ui';
+  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 
   ////// passed as argument
   const emits = defineEmits([
-    'media_file_path','media_file_path_from_playlist',
-    'media_file_medium_image_url',
-    'this_audio_singer_name','this_audio_singer_id',
-    'this_audio_song_name','this_audio_song_id','this_audio_song_rating','this_audio_song_favorite',
+    'media_file_path_from_playlist',
+    'this_audio_song_rating','this_audio_song_favorite',
     'this_audio_album_name','this_audio_album_id',
-    'this_audio_Index_of_absolute_positioning_in_list',
     'menu_edit_this_song',
     'menu_add_this_song',
     'menu_delete_this_song',
@@ -27,14 +25,13 @@
   ]);
   const props = defineProps<{
     data_temporary: Media_File[];
-    this_audio_Index_of_absolute_positioning_in_list: number;
   }>();
 
   ////// scrollbar of playlist_view
   const scrollbar = ref(null as any);
   const this_audio_Index_of_absolute_positioning_in_list = ref<number>(0)
   onMounted(() => {
-    this_audio_Index_of_absolute_positioning_in_list.value = props.this_audio_Index_of_absolute_positioning_in_list;
+    this_audio_Index_of_absolute_positioning_in_list.value = store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list;
     if (scrollbar !== null) {
       setTimeout(() => {
         scrollbar.value.scrollToItem(this_audio_Index_of_absolute_positioning_in_list.value);
@@ -46,17 +43,18 @@
   const handleItemDbClick = (media_file:Media_File,index:number) => {
     emits('media_file_path_from_playlist',true)
     emits('media_file_path', media_file.path)
+    store_player_audio_info.this_audio_file_path = media_file.path
     emits('this_audio_lyrics_string', media_file.lyrics)
-    emits('media_file_medium_image_url',media_file.medium_image_url)
-    emits('this_audio_singer_name',media_file.artist)
-    emits('this_audio_singer_id',media_file.artist_id)
-    emits('this_audio_song_name',media_file.title)
-    emits('this_audio_song_id',media_file.id)
+    store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
+    store_player_audio_info.this_audio_singer_name = media_file.artist
+    store_player_audio_info.this_audio_singer_id = media_file.artist_id
+    store_player_audio_info.this_audio_song_name = media_file.title
+    store_player_audio_info.this_audio_song_id = media_file.id
     emits('this_audio_song_rating',media_file.rating)
     emits('this_audio_song_favorite',media_file.favorite)
     emits('this_audio_album_id', media_file.album_id);
     emits('this_audio_album_name',media_file.album)
-    emits('this_audio_Index_of_absolute_positioning_in_list', index); 
+    store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
   }
   const handleItemClick_title = (title:string) => {
     

@@ -34,14 +34,12 @@
   const props = defineProps<{
     data_temporary: Artist[];
 
-    update_theme:boolean,page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
+    page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
     page_artistlists:Play_List[],page_artistlists_options:{label: string;value: string}[],page_artistlists_statistic:{label: string;artist_count: number;id: string;}[],
     page_artistlists_selected:string;
 
     page_artistlists_keyword:string;
 
-    app_left_menu_collapsed: Boolean;
-    window_innerWidth: number;
     options_Sort_key:{ columnKey: string; order: string }[];
 
     router_select_history_date: Interface_View_Router_Date;router_history_datas: Interface_View_Router_Date[];router_history_model_of_Artist_scroller_value: number;router_history_model_of_Artist_scroll:Boolean;
@@ -75,10 +73,10 @@
       bool_watch = true;
     }, 1000);
   };
-  const stopWatching_collapsed_width = watch(() => props.app_left_menu_collapsed, (newValue, oldValue) => {
+  const stopWatching_collapsed_width = watch(() => store_app_setting_configs.app_left_menu_collapsed, (newValue, oldValue) => {
     updateGridItems();
   });
-  const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (newValue, oldValue) => {
+  const stopWatching_window_innerWidth = watch(() => store_app_setting_configs.window_innerWidth, (newValue, oldValue) => {
     bool_watch = false;
     updateGridItems();
     if (bool_watch) {
@@ -86,7 +84,7 @@
     }
   });
   const updateGridItems = () => {
-    if (props.app_left_menu_collapsed == true) {
+    if (store_app_setting_configs.app_left_menu_collapsed == true) {
       collapsed_width.value = 145;
       item_artist.value = 140;
       item_artist_image.value = item_artist.value - 20;
@@ -351,6 +349,7 @@
   ////// changed_data write to sqlite
   import {Set_ArtistInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_ArtistInfo_To_LocalSqlite'
   import {Icon} from "@vicons/utils";
+  import {store_app_setting_configs} from "@/store/app/store_app_setting_configs";
   let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     set_ArtistInfo_To_LocalSqlite.Set_ArtistInfo_To_Favorite(id,favorite)

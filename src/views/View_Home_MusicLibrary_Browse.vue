@@ -23,14 +23,10 @@ const emits = defineEmits([
   'home_selected_top_album','refresh_home_temporary',
 ]);
 const {
-  app_left_menu_collapsed,window_innerWidth,
   home_Files_temporary_maximum_playback,home_Files_temporary_random_search,
   home_Files_temporary_recently_added,home_Files_temporary_recently_played,
   home_selected_top_album,
 } = defineProps<{
-  app_left_menu_collapsed:Boolean,window_innerWidth:number,
-  update_theme:boolean,
-
   home_Files_temporary_maximum_playback:Album[],home_Files_temporary_random_search:Album[],
   home_Files_temporary_recently_added:Album[],home_Files_temporary_recently_played:Album[],
   home_selected_top_album:Album,
@@ -40,10 +36,6 @@ const {
 <template>
   <div class="view_show">
     <Table_Home_List_ALL_Line
-      :app_left_menu_collapsed="app_left_menu_collapsed"
-      :window_innerWidth="window_innerWidth"
-      :update_theme="update_theme"
-
       :home_Files_temporary_maximum_playback="home_Files_temporary_maximum_playback"
       :home_Files_temporary_random_search="home_Files_temporary_random_search"
       :home_Files_temporary_recently_added="home_Files_temporary_recently_added"

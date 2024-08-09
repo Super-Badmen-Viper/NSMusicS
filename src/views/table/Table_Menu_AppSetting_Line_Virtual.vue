@@ -36,29 +36,17 @@
 
   ////// passed as argument
   const emits = defineEmits([
-    'menu_appsetting_select_tab_name','server_config_of_current_user_of_sqlite','server_config_of_all_user_of_sqlite',
-    'update_lang','model_select','update_theme','library_path','menuOptions_appBar','selectd_props_app_sidebar',
+    'server_config_of_current_user_of_sqlite',
+    'update_lang','update_theme','library_path',
     'player_fade_value','player_use_lottie_animation',
   ]);
   const props = defineProps<{
-    app_left_menu_collapsed: Boolean;
-    window_innerWidth: number;
-    menu_appsetting_select_tab_name:any;
-
-    server_config_of_current_user_of_sqlite_of_select_servername: string;
-    server_config_of_current_user_of_sqlite_of_select:{label: string;value: string};
-    server_config_of_all_user_of_select:{label: string;value: string}[],
-    server_config_of_current_user_of_sqlite:Server_Configs_Props,
-    server_config_of_all_user_of_sqlite:Server_Configs_Props[],
-
-    model_select:any;
-    update_theme:Boolean;
-    library_path:any[];
-    menuOptions_appBar:MenuOption[];
-    selectd_props_app_sidebar:(string | number)[];
     player_fade_value:number;
     player_use_lottie_animation:Boolean;
   }>();
+
+  import { store_app_setting_configs } from '@/store/app/store_app_setting_configs'
+  import { store_server_users } from '@/store/server/store_server_users'
 
   ////// server
   const Type_Server_Kinds = [
@@ -93,7 +81,7 @@
     },
   ])
   onMounted(() => {
-    if(props.model_select === 'local')
+    if(store_server_user_model.model_select === 'local')
       Type_Server_Model_Open_Value.value = Type_Server_Model_Open_Option.value[0].value
     else
       Type_Server_Model_Open_Value.value = Type_Server_Model_Open_Option.value[1].value
@@ -102,8 +90,8 @@
   const message = useMessage()
   /// server select
   function update_server_config_of_current_user_of_sqlite(value: any){
-    const index = props.server_config_of_all_user_of_sqlite.findIndex(item => item.id === value);
-    emits('server_config_of_current_user_of_sqlite',props.server_config_of_all_user_of_sqlite[index])
+    const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(item => item.id === value);
+    emits('server_config_of_current_user_of_sqlite',store_server_users.server_config_of_all_user_of_sqlite[index])
   }
   /// server add
   import { Set_ServerInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_ServerInfo_To_LocalSqlite";
@@ -119,14 +107,14 @@
     if (userData["subsonic-response"]["status"] === 'ok'){
       let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
       const data:Server_Configs_Props = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_SetUser_of_ND(id, server_name, url, user_name, password)
-      const new_data: Server_Configs_Props[] = props.server_config_of_all_user_of_sqlite;
+      const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
       const index = new_data.findIndex(item => item.id === data.id);
       if (index !== -1) {
         new_data[index] = data;
       } else {
         new_data.push(data);
       }
-      emits('server_config_of_all_user_of_sqlite', new_data);
+      store_server_users.get_server_config_of_all_user_of_sqlite(new_data)
       message.success(t('form.updateServer.success'))
     }else{
       message.error(t('error.invalidServer'))
@@ -135,10 +123,10 @@
   async function update_server_deleteUser(id: string) {
     let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
     set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_DeleteUser_of_ND(id);
-    const new_data: Server_Configs_Props[] = props.server_config_of_all_user_of_sqlite;
+    const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
     const index = new_data.findIndex(item => item.id === id);
     new_data.splice(index, 1);
-    emits('server_config_of_all_user_of_sqlite', new_data);
+    store_server_users.get_server_config_of_all_user_of_sqlite(new_data)
   }
   async function update_server_addUser() {
     try{
@@ -154,9 +142,9 @@
           server_set_of_addUser_of_username.value,
           server_set_of_addUser_of_password.value
         );
-        const new_data: Server_Configs_Props[] = props.server_config_of_all_user_of_sqlite;
+        const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
         new_data.push(data)
-        emits('server_config_of_all_user_of_sqlite', new_data);
+        store_server_users.get_server_config_of_all_user_of_sqlite(new_data)
         message.success(t('form.addServer.success'))
         Type_Server_Add.value = !Type_Server_Add.value
       }
@@ -187,7 +175,7 @@
   ////// this_view components of navie ui
   import {ref, onMounted, watch, onBeforeUnmount, computed, h} from 'vue';
   import {type MenuOption, NButton, NIcon,} from 'naive-ui'
-  import {store_sqlite_table_info} from "@/store/store_sqlite_table_info";
+  import {store_server_user_model} from "@/store/server/store_server_user_model";
   const theme_value = ref('lightTheme')
   const theme_options = ref([
     {
@@ -200,7 +188,7 @@
     },
   ])
   onMounted(() => {
-    if(props.update_theme)
+    if(store_app_setting_configs.update_theme)
       theme_value.value = theme_options.value[1].value
     else
       theme_value.value = theme_options.value[0].value
@@ -208,8 +196,7 @@
 
   //////
   const { ipcRenderer } = require('electron');
-  const library_path = ref('')
-  let timer_percentage = ref<NodeJS.Timeout | null>(null);
+  const timer_percentage = ref<NodeJS.Timeout | null>(null);
   const show_selectFolder = ref(false)
   async function selectFolder() {
     if (!library_path_search.value) {
@@ -217,7 +204,7 @@
         library_path_search.value = true;
         const folderPath = await ipcRenderer.invoke('library-select-folder');
         if (folderPath) {
-          library_path.value = folderPath;
+          store_server_user_model.library_path = folderPath;
           emits('library_path', folderPath);
           clearInterval(timer_percentage.value);
           ipcRenderer.invoke('metadata-get-directory-filePath', [folderPath])
@@ -239,18 +226,11 @@
       }
     }
   }
-  const percentage = ref(0)
+  const percentage_of_local = ref(0)
   const library_path_search = ref(false)
   async function synchronize_percentage_of_library_path_search(){
-    percentage.value = await ipcRenderer.invoke('metadata-get-directory-filePath-duration');
+    percentage_of_local.value = await ipcRenderer.invoke('metadata-get-directory-filePath-duration');
   }
-
-
-  //////
-  const menu_appsetting_select_tab_name = ref('tab_pane_1')
-  onMounted(() => {
-    menu_appsetting_select_tab_name.value = props.menu_appsetting_select_tab_name
-  });
 
   //////
   const selectd_props_home_page = ref<(string | number)[] | null>(null)
@@ -259,7 +239,7 @@
     console.log(JSON.stringify(value))
   }
   const handleUpdate_selectd_props_app_sidebar_Value = (value: number[]) => {
-    emits('selectd_props_app_sidebar',value)
+    store_app_setting_configs.selectd_props_app_sidebar = value
     console.log(value)
     let allMenuOptions = create_menuOptions_appBar();
     let removeFlags = new Array(allMenuOptions.length).fill(true);
@@ -278,7 +258,7 @@
     let menuOptions_appBar = allMenuOptions.filter((option, index) => {
       return !removeFlags[index];
     });
-    emits('menuOptions_appBar',menuOptions_appBar)
+    store_app_setting_configs.menuOptions_appBar = menuOptions_appBar
   }
   function renderIcon (icon: any) {
     return () => h(NIcon, null, { default: () => h(icon) })
@@ -442,10 +422,10 @@
       bool_watch = true;
     }, 1000);
   };
-  const stopWatching_collapsed_width = watch(() => props.app_left_menu_collapsed, (newValue, oldValue) => {
+  const stopWatching_collapsed_width = watch(() => store_app_setting_configs.app_left_menu_collapsed, (newValue, oldValue) => {
     updateGridItems();
   });
-  const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (newValue, oldValue) => {
+  const stopWatching_window_innerWidth = watch(() => store_app_setting_configs.window_innerWidth, (newValue, oldValue) => {
     bool_watch = false;
     updateGridItems();
     if (bool_watch) {
@@ -454,7 +434,7 @@
   });
   const collapsed_width = ref<number>(1090);
   const updateGridItems = () => {
-    if (props.app_left_menu_collapsed == true) {
+    if (store_app_setting_configs.app_left_menu_collapsed == true) {
       collapsed_width.value = 145;
     } else {
       collapsed_width.value = 240;
@@ -488,8 +468,7 @@
         :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)'}">
         <n-tabs
           style="margin-top: -20px;"
-          v-model:value="menu_appsetting_select_tab_name"
-          @update:value="emits('menu_appsetting_select_tab_name',menu_appsetting_select_tab_name)"
+          v-model:value="store_app_setting_configs.menu_app_setting_select_tab_name"
           size="large"
           animated
           pane-wrapper-style="margin: 0 -4px"
@@ -501,28 +480,26 @@
             </template>
             <n-space style="height: calc(100vh - 230px);" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)'}">
               <!-- 服务器管理 -->
-              <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                <n-space vertical style="width: 320px;">
-                  <span style="font-size:16px;font-weight: 600;">{{ $t('page.appMenu.selectServer') }}</span>
-
-                </n-space>
-                <n-space align="end">
-                  <n-button tertiary @click="Type_Server_Add = !Type_Server_Add">
-                    <template #icon>
-                      <n-icon>
-                        <Add />
-                      </n-icon>
-                    </template>
-                    {{ $t('form.addServer.title') }}
-                  </n-button>
-                </n-space>
-              </n-space>
               <n-space vertical size="large">
-                <span style="font-size:16px;font-weight: 600;">{{ $t('page.appMenu.manageServers') }}</span>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical style="width: 320px;">
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('page.appMenu.manageServers') }}</span>
+                  </n-space>
+                  <n-space align="end">
+                    <n-button tertiary @click="Type_Server_Add = !Type_Server_Add">
+                      <template #icon>
+                        <n-icon>
+                          <Add />
+                        </n-icon>
+                      </template>
+                      {{ $t('form.addServer.title') }}
+                    </n-button>
+                  </n-space>
+                </n-space>
                 <DynamicScroller
                   class="table" ref="scrollbar"
                   style="overflow: auto;width: 785px;max-height: 62vh;"
-                  :items="props.server_config_of_all_user_of_sqlite"
+                  :items="store_server_users.server_config_of_all_user_of_sqlite"
                   :itemSize="70"
                   :grid-items="3"
                   :item-secondary-size="260">
@@ -739,9 +716,9 @@
                     :options="Type_Server_Model_Open_Option"
                     @update:value="
                       Type_Server_Model_Open_Value === 'navidrome' ?
-                      (store_sqlite_table_info.switchToMode_Navidrome_Api(), emits('model_select', 'navidrome'))
+                      (store_server_user_model.switchToMode_Navidrome_Api(),store_server_user_model.model_select = 'navidrome')
                       :
-                      (store_sqlite_table_info.switchToMode_Local(), emits('model_select', 'local'))
+                      (store_server_user_model.switchToMode_Local(),store_server_user_model.model_select = 'local')
                     "
                     placeholder=""
                     :reset-menu-on-options-change="false"
@@ -760,7 +737,7 @@
                   </n-space>
                   <n-space align="end">
                     <n-tag type="success" v-if="false">
-                      {{ props.library_path }}
+                      {{ store_server_user_model.library_path }}
                     </n-tag>
                     <n-popconfirm v-model:show="show_selectFolder">
                       <template #trigger>
@@ -785,7 +762,7 @@
                     </n-popconfirm>
                     <n-progress
                       type="line" style="width: 207px;margin-bottom: 8px;"
-                      :percentage="percentage"
+                      :percentage="percentage_of_local"
                       :indicator-placement="'inside'"
                     />
                   </n-space>
@@ -801,14 +778,14 @@
                   </n-space>
                   <n-space align="end">
                     <n-select
-                      v-model:value="props.server_config_of_current_user_of_sqlite_of_select_servername"
-                      :options="props.server_config_of_all_user_of_select"
+                      v-model:value="store_server_users.server_config_of_current_user_of_select_servername"
+                      :options="store_server_users.server_config_of_all_user_of_select"
                       style="width: 150px;"
                       @update:value="(value: number) => update_server_config_of_current_user_of_sqlite(value)"
                     />
                     <n-progress
                       type="line" style="width: 207px;margin-bottom: 8px;"
-                      :percentage="percentage"
+                      :percentage="store_server_users.percentage_of_nd"
                       :indicator-placement="'inside'"
                     />
                   </n-space>
@@ -850,7 +827,7 @@
                       </div>
                     </n-space>
                   </n-space>
-                  <n-checkbox-group :value="props.selectd_props_app_sidebar" @update:value="handleUpdate_selectd_props_app_sidebar_Value">
+                  <n-checkbox-group :value="store_app_setting_configs.selectd_props_app_sidebar" @update:value="handleUpdate_selectd_props_app_sidebar_Value">
                     <n-grid :y-gap="8" :cols="5">
                       <n-gi><n-checkbox value="2" :label="computed_i18n_Label_SidebarConfiguration_3" /></n-gi>
                       <n-gi><n-checkbox value="4" :label="computed_i18n_Label_SidebarConfiguration_5" /></n-gi>

@@ -1,6 +1,7 @@
 import { reactive } from 'vue'
 
-export const store_server_get_users = reactive({
+export const store_server_users = reactive({
+    percentage_of_local: 0,
     percentage_of_nd: 0,
     
     server_config_of_current_user_of_sqlite: undefined as Server_Configs_Props | undefined,

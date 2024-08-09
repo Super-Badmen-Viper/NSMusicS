@@ -1,6 +1,6 @@
 import {reactive, ref} from 'vue'
 
-export const store_server_set_check_use_model = reactive({
+export const store_server_user_model = reactive({
     model_select: 'local',
     library_path: '',
 

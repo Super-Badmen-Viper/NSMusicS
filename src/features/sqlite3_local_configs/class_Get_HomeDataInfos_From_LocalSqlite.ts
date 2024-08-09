@@ -1,18 +1,18 @@
 import moment from "moment/moment";
-import { store_sqlite_table_info } from '@/store/store_sqlite_table_info'
+import { store_server_user_model } from '@/store/server/store_server_user_model'
 export class Get_HomeDataInfos_From_LocalSqlite {
     public Get_Annotation_Maximum_Playback() {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
         const annsMap = new Map();
-        const anns = db.prepare(`SELECT * FROM ${store_sqlite_table_info.annotation} WHERE item_type = 'album' ORDER BY play_count desc LIMIT 18`).all();
+        const anns = db.prepare(`SELECT * FROM ${store_server_user_model.annotation} WHERE item_type = 'album' ORDER BY play_count desc LIMIT 18`).all();
         anns.forEach((ann: { item_id: any; }) => {
             annsMap.set(ann.item_id, ann); // 使用 item_id 作为键
         });
         const sql = `SELECT a.*, b.play_count 
-             FROM ${store_sqlite_table_info.album} a 
-             LEFT JOIN ${store_sqlite_table_info.annotation} b ON a.id = b.item_id AND b.item_type = 'album'
+             FROM ${store_server_user_model.album} a 
+             LEFT JOIN ${store_server_user_model.annotation} b ON a.id = b.item_id AND b.item_type = 'album'
              ORDER BY b.play_count desc, a.id desc
              LIMIT 18`;
         const allData = db.prepare(sql).all();
@@ -40,7 +40,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         });
         ////// find favorite for result
         const stmt_album_Annotation_Starred_Items = db.prepare(`
-            SELECT item_id FROM ${store_sqlite_table_info.annotation}
+            SELECT item_id FROM ${store_server_user_model.annotation}
             WHERE starred = 1 AND item_type='album'
         `);
         const annotations = stmt_album_Annotation_Starred_Items.all();
@@ -51,7 +51,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         }
         ////// find rating for result
         const stmt_album_Annotation_Rating_Items = db.prepare(`
-            SELECT item_id, rating FROM ${store_sqlite_table_info.annotation}
+            SELECT item_id, rating FROM ${store_server_user_model.annotation}
             WHERE rating > 0 AND item_type='album'
         `);
         const annotations_rating = stmt_album_Annotation_Rating_Items.all();
@@ -70,7 +70,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
-        const rows = db.prepare(`SELECT * FROM ${store_sqlite_table_info.album} ORDER BY RANDOM() LIMIT 18`).all();
+        const rows = db.prepare(`SELECT * FROM ${store_server_user_model.album} ORDER BY RANDOM() LIMIT 18`).all();
         const result: Album[] = []
         rows.forEach((row: Album) => {
             if(row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
@@ -95,7 +95,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         });
         ////// find favorite for result
         const stmt_album_Annotation_Starred_Items = db.prepare(`
-            SELECT item_id FROM ${store_sqlite_table_info.annotation}
+            SELECT item_id FROM ${store_server_user_model.annotation}
             WHERE starred = 1 AND item_type='album'
         `);
         const annotations = stmt_album_Annotation_Starred_Items.all();
@@ -106,7 +106,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         }
         ////// find rating for result
         const stmt_album_Annotation_Rating_Items = db.prepare(`
-            SELECT item_id, rating FROM ${store_sqlite_table_info.annotation}
+            SELECT item_id, rating FROM ${store_server_user_model.annotation}
             WHERE rating > 0 AND item_type='album'
         `);
         const annotations_rating = stmt_album_Annotation_Rating_Items.all();
@@ -125,7 +125,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
-        const rows = db.prepare(`SELECT * FROM ${store_sqlite_table_info.album} ORDER BY created_at desc LIMIT 18`).all();
+        const rows = db.prepare(`SELECT * FROM ${store_server_user_model.album} ORDER BY created_at desc LIMIT 18`).all();
         const result: Album[] = []
         rows.forEach((row: Album) => {
             if(row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
@@ -150,7 +150,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         });
         ////// find favorite for result
         const stmt_album_Annotation_Starred_Items = db.prepare(`
-            SELECT item_id FROM ${store_sqlite_table_info.annotation}
+            SELECT item_id FROM ${store_server_user_model.annotation}
             WHERE starred = 1 AND item_type='album'
         `);
         const annotations = stmt_album_Annotation_Starred_Items.all();
@@ -161,7 +161,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         }
         ////// find rating for result
         const stmt_album_Annotation_Rating_Items = db.prepare(`
-            SELECT item_id, rating FROM ${store_sqlite_table_info.annotation}
+            SELECT item_id, rating FROM ${store_server_user_model.annotation}
             WHERE rating > 0 AND item_type='album'
         `);
         const annotations_rating = stmt_album_Annotation_Rating_Items.all();
@@ -181,13 +181,13 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
         const annsMap = new Map();
-        const anns = db.prepare(`SELECT * FROM ${store_sqlite_table_info.annotation} WHERE item_type = 'album' ORDER BY play_date desc LIMIT 18`).all();
+        const anns = db.prepare(`SELECT * FROM ${store_server_user_model.annotation} WHERE item_type = 'album' ORDER BY play_date desc LIMIT 18`).all();
         anns.forEach((ann: { item_id: any; }) => {
             annsMap.set(ann.item_id, ann); // 使用 item_id 作为键
         });
         const sql = `SELECT a.*, b.play_count 
-             FROM ${store_sqlite_table_info.album} a 
-             LEFT JOIN ${store_sqlite_table_info.annotation} b ON a.id = b.item_id AND b.item_type = 'album'
+             FROM ${store_server_user_model.album} a 
+             LEFT JOIN ${store_server_user_model.annotation} b ON a.id = b.item_id AND b.item_type = 'album'
              ORDER BY b.play_date desc, a.id desc
              LIMIT 18`;
         const allData = db.prepare(sql).all();
@@ -215,7 +215,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         });
         ////// find favorite for result
         const stmt_album_Annotation_Starred_Items = db.prepare(`
-            SELECT item_id FROM ${store_sqlite_table_info.annotation}
+            SELECT item_id FROM ${store_server_user_model.annotation}
             WHERE starred = 1 AND item_type='album'
         `);
         const annotations = stmt_album_Annotation_Starred_Items.all();
@@ -226,7 +226,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         }
         ////// find rating for result
         const stmt_album_Annotation_Rating_Items = db.prepare(`
-            SELECT item_id, rating FROM ${store_sqlite_table_info.annotation}
+            SELECT item_id, rating FROM ${store_server_user_model.annotation}
             WHERE rating > 0 AND item_type='album'
         `);
         const annotations_rating = stmt_album_Annotation_Rating_Items.all();

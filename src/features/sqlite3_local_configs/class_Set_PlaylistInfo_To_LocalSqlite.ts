@@ -1,9 +1,9 @@
-import {store_sqlite_table_info} from "@/store/store_sqlite_table_info";
+import {store_server_user_model} from "@/store/server/store_server_user_model";
 export class Set_PlaylistInfo_To_LocalSqlite {
     private getUniqueId(db: any) {
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4();
-        while (db.prepare(`SELECT COUNT(*) FROM ${store_sqlite_table_info.playlist} WHERE id = ?`).pluck().get(id) > 0) {
+        while (db.prepare(`SELECT COUNT(*) FROM ${store_server_user_model.playlist} WHERE id = ?`).pluck().get(id) > 0) {
             id = uuidv4();
         }
         return id;
@@ -11,7 +11,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
     private getUniqueId_Replace(db: any) {
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4().replace(/-/g, '');
-        while (db.prepare(`SELECT COUNT(*) FROM ${store_sqlite_table_info.playlist} WHERE id = ?`).pluck().get(id) > 0) {
+        while (db.prepare(`SELECT COUNT(*) FROM ${store_server_user_model.playlist} WHERE id = ?`).pluck().get(id) > 0) {
             id = uuidv4().replace(/-/g, '');
         }
         return id;
@@ -33,7 +33,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         db.pragma('journal_mode = WAL');
         // comment, duration, song_count, public,path, sync, size, rules, evaluated_at, owner_id
         db.prepare(`
-          INSERT INTO ${store_sqlite_table_info.playlist} (id, name, created_at, updated_at) 
+          INSERT INTO ${store_server_user_model.playlist} (id, name, created_at, updated_at) 
           VALUES (?, ?, ?, ?)
         `).run(new_id, name, new_date, new_date);
         ///
@@ -64,16 +64,16 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         ///
         let new_id = this.getUniqueId(db);
         let new_date = this.getCurrentDateTime();
-        const existingRecord = db.prepare(`SELECT * FROM ${store_sqlite_table_info.playlist} WHERE id = ?`).get(id);
+        const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.playlist} WHERE id = ?`).get(id);
         if (!existingRecord) {
             db.prepare(`
-                INSERT INTO ${store_sqlite_table_info.playlist} (id, name, comment, duration, song_count, public, created_at, updated_at, path, sync, size, rules, evaluated_at, owner_id) 
+                INSERT INTO ${store_server_user_model.playlist} (id, name, comment, duration, song_count, public, created_at, updated_at, path, sync, size, rules, evaluated_at, owner_id) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
                 .run(new_id, name, comment, duration, song_count, 0, new_date, new_date, '', false, 0, null, null, owner_id);
         } else {
             // , comment = ? , duration = ? , song_count = ? , public = ? ,
             db.prepare(`
-                UPDATE ${store_sqlite_table_info.playlist} 
+                UPDATE ${store_server_user_model.playlist} 
                 SET name = ?, updated_at = ?
                 WHERE id = ?`)
                 .run(name, new_date, id);
@@ -104,10 +104,10 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
         ///
-        const existingRecord = db.prepare(`SELECT * FROM ${store_sqlite_table_info.playlist} WHERE id = ?`).get(id);
+        const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.playlist} WHERE id = ?`).get(id);
         if (existingRecord) {
-            db.prepare(`DELETE FROM ${store_sqlite_table_info.playlist} WHERE id = ?`).run(id);
-            db.prepare(`DELETE FROM ${store_sqlite_table_info.playlist_tracks} WHERE playlist_id = ?`).run(id);
+            db.prepare(`DELETE FROM ${store_server_user_model.playlist} WHERE id = ?`).run(id);
+            db.prepare(`DELETE FROM ${store_server_user_model.playlist_tracks} WHERE playlist_id = ?`).run(id);
         }
         ///
         db.close();
@@ -118,15 +118,15 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
 
-        const existingRecord = db.prepare(`SELECT * FROM ${store_sqlite_table_info.playlist} WHERE id = ?`).get(playlist_id);
+        const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.playlist} WHERE id = ?`).get(playlist_id);
         if (existingRecord) {
             const existingTrackIds = db.prepare(`
                 SELECT media_file_id 
-                FROM ${store_sqlite_table_info.playlist_tracks} 
+                FROM ${store_server_user_model.playlist_tracks} 
                 WHERE playlist_id = ?
             `).all(playlist_id).map((row:Play_list_Track) => row.media_file_id);
             const insertStmt = db.prepare(`
-                INSERT INTO ${store_sqlite_table_info.playlist_tracks} (id, playlist_id, media_file_id) 
+                INSERT INTO ${store_server_user_model.playlist_tracks} (id, playlist_id, media_file_id) 
                 VALUES (?, ?, ?)
             `);
             const insertTransaction = db.transaction(() => {
@@ -146,10 +146,10 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
 
-        const existingRecord = db.prepare(`SELECT * FROM ${store_sqlite_table_info.playlist} WHERE id = ?`).get(playlist_id);
+        const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.playlist} WHERE id = ?`).get(playlist_id);
             if (existingRecord) {
                 const deleteStmt = db.prepare(`
-                    DELETE FROM ${store_sqlite_table_info.playlist_tracks} 
+                    DELETE FROM ${store_server_user_model.playlist_tracks} 
                     WHERE playlist_id = ? AND media_file_id = ?
                 `);
             const deleteTransaction = db.transaction(() => {

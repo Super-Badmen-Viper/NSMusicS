@@ -17,38 +17,8 @@ function get_menu_delete_this_song(value: any) {
   menu_delete_this_song.value = value
   console.log('添加到：this_audio_Index_of_absolute_positioning_in_list：'+value)
 }
-function get_this_audio_Index_of_absolute_positioning_in_list(value: any) {
-  emits('this_audio_Index_of_absolute_positioning_in_list',value)
-}
-function get_playlist_path(value: any) {
-  emits('media_file_path',value)
-}
-function get_media_file_path_from_playlist(value: any) {
-  emits('media_file_path_from_playlist',value)
-}
-function get_playlist_file_medium_image_url(value: any) {
-  emits('media_file_medium_image_url',value)
-}
-function get_this_audio_singer_id(value: any) {
-  emits('this_audio_singer_id',value)
-}
-function get_this_audio_singer_name(value: any) {
-  emits('this_audio_singer_name',value)
-}
-function get_this_audio_song_id(value: any) {
-  emits('this_audio_song_id',value)
-}
-function get_this_audio_song_name(value: any) {
-  emits('this_audio_song_name',value)
-}
 function get_this_audio_album_id(value: any) {
   emits('this_audio_album_id',value)
-}
-function get_this_audio_album_rating(value: any) {
-  emits('this_audio_album_rating',value)
-}
-function get_this_audio_album_favorite(value: any) {
-  emits('this_audio_album_favorite',value)
 }
 function get_this_audio_album_name(value: any) {
   emits('this_audio_album_name',value)
@@ -83,12 +53,9 @@ onBeforeUnmount(() => {
 const emits = defineEmits([
   'router_select',
   'playlist_Files',
-  'media_file_path','media_file_path_from_playlist',
-  'media_file_medium_image_url',
-  'this_audio_singer_name','this_audio_singer_id',
-  'this_audio_song_name','this_audio_song_id','this_audio_song_rating','this_audio_song_favorite',
-  'this_audio_album_id','this_audio_album_name','this_audio_album_favorite','this_audio_album_rating',
-  'this_audio_Index_of_absolute_positioning_in_list',
+  'media_file_path_from_playlist',
+  'this_audio_song_rating','this_audio_song_favorite',
+  'this_audio_album_id','this_audio_album_name',
   'menu_edit_this_song',
   'menu_add_this_song',
   'menu_delete_this_song',
@@ -99,9 +66,9 @@ const emits = defineEmits([
   'this_audio_lyrics_string'
 ]);
 const { 
-  playlist_Files_temporary,this_audio_Index_of_absolute_positioning_in_list
+  playlist_Files_temporary,
 } = defineProps<{
-  playlist_Files_temporary:Media_File[],this_audio_Index_of_absolute_positioning_in_list: number,
+  playlist_Files_temporary:Media_File[],
 }>();
 </script>
 
@@ -112,23 +79,12 @@ const {
         :data_temporary="playlist_Files_temporary"
 
         @this_audio_lyrics_string="get_this_audio_lyrics_string"
-        @media_file_path="get_playlist_path" 
-        @media_file_path_from_playlist="get_media_file_path_from_playlist"
-        @media_file_medium_image_url="get_playlist_file_medium_image_url"
 
-        @this_audio_singer_name="get_this_audio_singer_name"
-        @this_audio_singer_id="get_this_audio_singer_id"
-        @this_audio_song_name="get_this_audio_song_name"
-        @this_audio_song_id="get_this_audio_song_id"
         @this_audio_song_rating="get_this_audio_song_rating"
         @this_audio_song_favorite="get_this_audio_song_favorite"
         @this_audio_album_id="get_this_audio_album_id"
         @this_audio_album_name="get_this_audio_album_name"
-        @this_audio_album_rating="get_this_audio_album_rating"
-        @this_audio_album_favorite="get_this_audio_album_favorite"
-        
-        :this_audio_Index_of_absolute_positioning_in_list="this_audio_Index_of_absolute_positioning_in_list"
-        @this_audio_Index_of_absolute_positioning_in_list="get_this_audio_Index_of_absolute_positioning_in_list"
+
         @menu_edit_this_song="get_menu_edit_this_song"
         @menu_add_this_song="get_menu_add_this_song"
         @menu_delete_this_song="get_menu_delete_this_song"

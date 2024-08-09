@@ -1,4 +1,4 @@
-import {store_sqlite_table_info} from "@/store/store_sqlite_table_info";
+import {store_server_user_model} from "@/store/server/store_server_user_model";
 export class Set_LibraryInfo_To_LocalSqlite{
     public Set_LibraryInfo_Delete_Selected_Playlist(media_file_id: any[]) {
         const path = require('path');
@@ -7,20 +7,20 @@ export class Set_LibraryInfo_To_LocalSqlite{
         try {
             db.exec('BEGIN TRANSACTION');
 
-            const deleteMediaStmt = db.prepare(`DELETE FROM ${store_sqlite_table_info.media_file} WHERE id = ?`);
-            const updateAlbumSongCountStmt = db.prepare(`UPDATE ${store_sqlite_table_info.album} SET song_count = song_count - 1 WHERE id = (SELECT album_id FROM ${store_sqlite_table_info.media_file} WHERE id = ?)`);
-            const updateArtistSongCountStmt = db.prepare(`UPDATE ${store_sqlite_table_info.artist} SET song_count = song_count - 1 WHERE id = (SELECT artist_id FROM ${store_sqlite_table_info.media_file} WHERE id = ?)`);
-            const checkAndDeleteAlbumStmt = db.prepare(`SELECT song_count FROM ${store_sqlite_table_info.album} WHERE id = ?`);
-            const deleteAlbumStmt = db.prepare(`DELETE FROM ${store_sqlite_table_info.album} WHERE id = ?`);
-            const updateArtistAlbumCountStmt = db.prepare(`UPDATE ${store_sqlite_table_info.artist} SET album_count = album_count - 1 WHERE id = (SELECT artist_id FROM ${store_sqlite_table_info.album} WHERE id = ?)`);
-            const checkAndDeleteArtistStmt_album_count = db.prepare(`SELECT album_count FROM ${store_sqlite_table_info.artist} WHERE id = ?`);
-            const checkAndDeleteArtistStmt_song_count = db.prepare(`SELECT song_count FROM ${store_sqlite_table_info.artist} WHERE id = ?`);
-            const deleteArtistStmt = db.prepare(`DELETE FROM ${store_sqlite_table_info.artist} WHERE id = ?`);
-            const deleteAnnotationStmt = db.prepare(`DELETE FROM ${store_sqlite_table_info.annotation} WHERE item_id = ?`);
-            const deletePlaylistTracksStmt = db.prepare(`DELETE FROM ${store_sqlite_table_info.playlist_tracks} WHERE media_file_id = ?`);
+            const deleteMediaStmt = db.prepare(`DELETE FROM ${store_server_user_model.media_file} WHERE id = ?`);
+            const updateAlbumSongCountStmt = db.prepare(`UPDATE ${store_server_user_model.album} SET song_count = song_count - 1 WHERE id = (SELECT album_id FROM ${store_server_user_model.media_file} WHERE id = ?)`);
+            const updateArtistSongCountStmt = db.prepare(`UPDATE ${store_server_user_model.artist} SET song_count = song_count - 1 WHERE id = (SELECT artist_id FROM ${store_server_user_model.media_file} WHERE id = ?)`);
+            const checkAndDeleteAlbumStmt = db.prepare(`SELECT song_count FROM ${store_server_user_model.album} WHERE id = ?`);
+            const deleteAlbumStmt = db.prepare(`DELETE FROM ${store_server_user_model.album} WHERE id = ?`);
+            const updateArtistAlbumCountStmt = db.prepare(`UPDATE ${store_server_user_model.artist} SET album_count = album_count - 1 WHERE id = (SELECT artist_id FROM ${store_server_user_model.album} WHERE id = ?)`);
+            const checkAndDeleteArtistStmt_album_count = db.prepare(`SELECT album_count FROM ${store_server_user_model.artist} WHERE id = ?`);
+            const checkAndDeleteArtistStmt_song_count = db.prepare(`SELECT song_count FROM ${store_server_user_model.artist} WHERE id = ?`);
+            const deleteArtistStmt = db.prepare(`DELETE FROM ${store_server_user_model.artist} WHERE id = ?`);
+            const deleteAnnotationStmt = db.prepare(`DELETE FROM ${store_server_user_model.annotation} WHERE item_id = ?`);
+            const deletePlaylistTracksStmt = db.prepare(`DELETE FROM ${store_server_user_model.playlist_tracks} WHERE media_file_id = ?`);
 
             media_file_id.forEach(id => {
-                const mediaInfo = db.prepare(`SELECT album_id, artist_id FROM ${store_sqlite_table_info.media_file} WHERE id = ?`).get(id);
+                const mediaInfo = db.prepare(`SELECT album_id, artist_id FROM ${store_server_user_model.media_file} WHERE id = ?`).get(id);
                 const album_id = mediaInfo.album_id;
                 const artist_id = mediaInfo.artist_id;
 

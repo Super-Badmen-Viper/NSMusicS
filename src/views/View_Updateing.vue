@@ -5,21 +5,13 @@
   const emits = defineEmits([
     'router_select'
   ]);
-  const {
-    app_left_menu_collapsed,window_innerWidth
-  } = defineProps<{
-    app_left_menu_collapsed:Boolean,window_innerWidth:number
-  }>();
   onMounted(async () => {
     emits('router_select','View_Updateing')
   });
 </script>
 <template>
   <div class="view_show">
-    <Table_Updateing
-      :app_left_menu_collapsed="app_left_menu_collapsed"
-      :window_innerWidth="window_innerWidth"
-    />
+    <Table_Updateing/>
   </div>
 </template>
 <style>

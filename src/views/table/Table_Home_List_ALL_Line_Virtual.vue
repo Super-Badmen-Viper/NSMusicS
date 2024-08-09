@@ -31,16 +31,11 @@ const emits = defineEmits([
   'home_selected_top_album','refresh_home_temporary'
 ]);
 const props = defineProps<{
-  update_theme:boolean,
-
   home_Files_temporary_maximum_playback: Album[];
   home_Files_temporary_random_search: Album[];
   home_Files_temporary_recently_added: Album[];
   home_Files_temporary_recently_played: Album[];
   home_selected_top_album:Album;
-
-  app_left_menu_collapsed: Boolean;
-  window_innerWidth: number;
 }>();
 const home_selected_top_album_subscript = ref(0)
 
@@ -72,10 +67,10 @@ const startTimer = () => {
     bool_watch = true;
   }, 1000);
 };
-const stopWatching_collapsed_width = watch(() => props.app_left_menu_collapsed, (newValue, oldValue) => {
+const stopWatching_collapsed_width = watch(() => store_app_setting_configs.app_left_menu_collapsed, (newValue, oldValue) => {
   updateGridItems();
 });
-const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (newValue, oldValue) => {
+const stopWatching_window_innerWidth = watch(() => store_app_setting_configs.window_innerWidth, (newValue, oldValue) => {
   bool_watch = false;
   updateGridItems();
   if (bool_watch) {
@@ -83,7 +78,7 @@ const stopWatching_window_innerWidth = watch(() => props.window_innerWidth, (new
   }
 });
 const updateGridItems = () => {
-  if (props.app_left_menu_collapsed == true) {
+  if (store_app_setting_configs.app_left_menu_collapsed == true) {
     collapsed_width.value = 145;
     item_album.value = 190;
     item_album_image.value = item_album.value - 20;
@@ -147,6 +142,7 @@ const Play_Next_album_SongList_click = (value: number) => {
 import {Set_AlbumInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite'
 import {QueueMusicRound} from "@vicons/material";
 import {Icon} from "@vicons/utils";
+import {store_app_setting_configs} from "@/store/app/store_app_setting_configs";
 let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Favorite(id,favorite)

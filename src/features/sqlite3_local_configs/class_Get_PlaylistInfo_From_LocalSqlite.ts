@@ -1,11 +1,11 @@
-import { store_sqlite_table_info } from '@/store/store_sqlite_table_info'
+import { store_server_user_model } from '@/store/server/store_server_user_model'
 export class Get_PlaylistInfo_From_LocalSqlite {
     public Get_Playlist() {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
         const result: any[] = []
-        const stmt_playlist = db.prepare(`SELECT * FROM ${store_sqlite_table_info.playlist}`);
+        const stmt_playlist = db.prepare(`SELECT * FROM ${store_server_user_model.playlist}`);
         const rows = stmt_playlist.all();
         rows.forEach((row: Play_List) => {
             result.push(row)
@@ -17,7 +17,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
-        const stmt_playlist_tracks = db.prepare(`SELECT * FROM ${store_sqlite_table_info.playlist_tracks} WHERE playlist_id = ?`);
+        const stmt_playlist_tracks = db.prepare(`SELECT * FROM ${store_server_user_model.playlist_tracks} WHERE playlist_id = ?`);
         const rows = stmt_playlist_tracks.all(playlist_id);
         const result: Play_list_Track[] = [];
         rows.forEach((row: Play_list_Track) => {
@@ -31,7 +31,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
         const placeholders = list_of_media_file_id.map(() => '?').join(',');
-        const stmt = db.prepare(`SELECT * FROM ${store_sqlite_table_info.media_file} WHERE id IN (${placeholders})`);
+        const stmt = db.prepare(`SELECT * FROM ${store_server_user_model.media_file} WHERE id IN (${placeholders})`);
         const rows = stmt.all(...list_of_media_file_id);
         const result:Media_File[] = []
         rows.forEach((row: Media_File, index: number) => {

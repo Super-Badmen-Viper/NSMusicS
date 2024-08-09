@@ -58,24 +58,21 @@
     ipcRenderer.send('window-close');
   }
   function close_media_player() {
-    if(props.player_show_complete)
-      emits('player_show_click', true);
+    if(store_player_appearance.player_show_complete)
+      store_player_appearance.player_show_click = true
   }
 
   ////// passed as argument
   const emits = defineEmits([
-    'player_show_click','player_go_lyricline_index_of_audio_play_progress','player_collapsed_action_bar_of_Immersion_model',
-    'player_UI_Theme_State'
+    'player_go_lyricline_index_of_audio_play_progress',
   ]);
   const props = defineProps([
-    'this_audio_file_path','playlist_Files_temporary',
-    'this_audio_file_medium_image_url','this_audio_restart_play',
-    'this_audio_singer_name','this_audio_song_name','this_audio_album_name',
+    'playlist_Files_temporary',
+    'this_audio_album_name',
     'this_audio_lyrics_string','this_audio_lyrics_info_line','this_audio_lyrics_info_time',
-    'player','this_audio_is_playing','player_silder_currentTime_added_value',
-    'player_show_complete','this_audio_lyrics_info_line_num',
-    'player_collapsed_action_bar_of_Immersion_model',
-    'player_UI_Theme_State','player_use_lottie_animation',
+    'player','player_silder_currentTime_added_value',
+    'this_audio_lyrics_info_line_num',
+    'player_use_lottie_animation',
   ]);
 
   ////// lyircs load
@@ -374,8 +371,7 @@
     player_ui_theme.player_collapsed_skin.value = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin;
     player_ui_theme.player_use_lottie_animation.value = player_use_lottie_animation.value;
 
-    // emits theme
-    emits('player_UI_Theme_State' ,player_ui_theme);
+    store_player_appearance.player_UI_Theme_State = player_ui_theme
   };
 
   ////// player_configs page_ui set
@@ -393,20 +389,22 @@
   ////// player_bar auto hidden
   let timer_auto_hidden: string | number | NodeJS.Timeout | undefined;
   const handleMouseMove = () => {
-    emits('player_collapsed_action_bar_of_Immersion_model', false);
+    store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
     clearInterval(timer_auto_hidden);
     timer_auto_hidden = setInterval(() => {
-      emits('player_collapsed_action_bar_of_Immersion_model', true);
+      store_player_appearance.player_collapsed_action_bar_of_Immersion_model = true
     }, 3000);
   };
   const unwatch_player_collapsed = watchEffect(() => {
-    if (props.player_collapsed_action_bar_of_Immersion_model === false) {
+    if (store_player_appearance.player_collapsed_action_bar_of_Immersion_model === false) {
       clearInterval(timer_auto_hidden);
     }
   });
 
   ////// Animation lottie Load // lottie-web will cause memory leaks，so replace lottie-player_configs
   import "@lottiefiles/lottie-player";
+  import {store_player_appearance} from "@/store/player/store_player_appearance";
+  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
   const clear_lottie_animationInstance = ref(false)
   const animationInstance_model_1_spectrum = ref<any>(null);
   const animationInstance_model_1_spectrum_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715392202806.json'))
@@ -414,7 +412,7 @@
   const animationInstance_model_1_wave_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715591164841.json'))
   const animationInstance_model_2_wave = ref<any>(null);
   const animationInstance_model_2_wave_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715417974362.json'))
-  let unwatch_animationInstance = watch(() => props.this_audio_is_playing, (newValue) => {
+  let unwatch_animationInstance = watch(() => store_player_audio_info.this_audio_is_playing, (newValue) => {
     if(player_use_lottie_animation.value) {
       if (newValue === true) {
         if (player_background_model_num.value === 1) {
@@ -436,18 +434,18 @@
 
   ////// Load player_configs Configs
   onMounted(() => {
-    player_background_model_num.value = props.player_UI_Theme_State.player_background_model_num;
+    player_background_model_num.value = store_player_appearance.player_UI_Theme_State.player_background_model_num;
     //
-    player_lyric_fontSize.value = props.player_UI_Theme_State.player_lyric_fontSize;
-    player_lyric_fontWeight.value = props.player_UI_Theme_State.player_lyric_fontWeight;
-    player_lyric_color.value = props.player_UI_Theme_State.player_lyric_color;
-    player_collapsed_album.value = props.player_UI_Theme_State.player_collapsed_album;
-    player_collapsed_skin.value = props.player_UI_Theme_State.player_collapsed_skin;
-    player_theme_Styles_Selected.value = props.player_UI_Theme_State.player_theme_Styles_Selected;
+    player_lyric_fontSize.value = store_player_appearance.player_UI_Theme_State.player_lyric_fontSize;
+    player_lyric_fontWeight.value = store_player_appearance.player_UI_Theme_State.player_lyric_fontWeight;
+    player_lyric_color.value = store_player_appearance.player_UI_Theme_State.player_lyric_color;
+    player_collapsed_album.value = store_player_appearance.player_UI_Theme_State.player_collapsed_album;
+    player_collapsed_skin.value = store_player_appearance.player_UI_Theme_State.player_collapsed_skin;
+    player_theme_Styles_Selected.value = store_player_appearance.player_UI_Theme_State.player_theme_Styles_Selected;
     //
     player_lyric_panel_fontsize.value = Number(player_lyric_fontSize.value.replace('px',''));
     //
-    player_use_lottie_animation.value = props.player_UI_Theme_State.player_use_lottie_animation;
+    player_use_lottie_animation.value = store_player_appearance.player_UI_Theme_State.player_use_lottie_animation;
   });
   ////// player_configs Remove data
   onBeforeUnmount(() => {
@@ -464,7 +462,7 @@
     clear_lottie_animationInstance.value = true
 
     unwatch_player_collapsed();
-    emits('player_collapsed_action_bar_of_Immersion_model', false);
+    store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
   });
 </script>
 
@@ -480,7 +478,7 @@
           position: absolute;top: -20vw;left: -10vw;width: 120vw;height: 120vw;
           object-fit: cover;object-position: center;
           filter: brightness(46%) blur(60px);"
-        :src="getAssetImage(props.this_audio_file_medium_image_url)"
+        :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
         @error="handleImageError" alt="">
       <!--Skin-->
       <img
@@ -491,7 +489,7 @@
           margin-top: -20vw;
           object-fit: cover;object-position: center;
           filter: brightness(46%) blur(0px);"
-        :src="getAssetImage(props.this_audio_file_medium_image_url)"
+        :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
         @error="handleImageError" alt="">
     </div>
     <!-- drwaer right area -->
@@ -656,7 +654,7 @@
         <n-flex
           justify="space-between"
           style="transition: margin 0.4s;"
-          :style="{ marginTop: player_collapsed_action_bar_of_Immersion_model ? '-70px' : '0px' }">
+          :style="{ marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '-70px' : '0px' }">
           <n-flex style="height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-left:30px;">
               <n-button quaternary size="medium"
@@ -726,7 +724,7 @@
           <n-flex
             justify="center"
             style="transition: margin 0.4s;"
-            :style="{ marginTop: player_collapsed_action_bar_of_Immersion_model ? '70px' : '0px' }">
+            :style="{ marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '70px' : '0px' }">
             <n-layout has-sider style="background-color: transparent;">
               <!-- left area --><!-- Album Cover -->
               <!-- show-trigger="bar" calc(50vw + 27vh + 8vw) :show-collapsed-content="false"-->
@@ -734,10 +732,10 @@
                 :collapsed="player_collapsed_album"
                 @collapse="
                   player_ui_theme.player_collapsed_album.value = true;
-                  emits('player_UI_Theme_State', player_ui_theme);"
+                  store_player_appearance.player_UI_Theme_State = player_ui_theme"
                 @expand="
                   player_ui_theme.player_collapsed_album.value = false;
-                  emits('player_UI_Theme_State', player_ui_theme)
+                  store_player_appearance.player_UI_Theme_State = player_ui_theme
                 "
                 :show-collapsed-content="false"
                 position="static"
@@ -756,21 +754,21 @@
                         filter: blur(0px);
                         box-shadow: 16px 16px 16px rgba(0, 0, 0, 0.20), 0 0 16px rgba(0, 0, 0, 0.20);
                       "
-                      :src="getAssetImage(props.this_audio_file_medium_image_url)"
+                      :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
                       @error="handleImageError" alt="">
                     <div
                       style="
                         width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
-                      {{ props.this_audio_song_name }}
+                      {{ store_player_audio_info.this_audio_song_name }}
                     </div>
                     <div
                       style="
                         width: 54vh;margin-left: 2px;margin-top: -10px;color: #989292;font-weight: 550;font-size: 18px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
-                      {{ props.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
+                      {{ store_player_audio_info.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
                     </div>
                   </n-space>
                   <!-- 2 旋转封面-->
@@ -792,7 +790,7 @@
                     <div>
                       <img
                         class="animate__rotate_slower"
-                        :class="{ 'animate__rotate_slower_paused': !props.this_audio_is_playing }"
+                        :class="{ 'animate__rotate_slower_paused': !store_player_audio_info.this_audio_is_playing }"
                         style="
                           width: calc(36vh);height: calc(36vh);
                           margin-top: calc(35vh - 162px);margin-left: calc(10vh);
@@ -802,21 +800,21 @@
                           filter: blur(0px);
                           box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                          "
-                          :src="getAssetImage(props.this_audio_file_medium_image_url)"
+                          :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
                           @error="handleImageError" alt="">
                       <div
                         style="
                           width: 54vh;margin-left: 2px;margin-top: 8px;color: #E7E5E5;font-weight: 900;font-size: 26px;
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
-                        {{ props.this_audio_song_name }}
+                        {{ store_player_audio_info.this_audio_song_name }}
                       </div>
                       <div
                         style="
                           width: 54vh;margin-left: 2px;margin-top: 0px;color: #989292;font-weight: 550;font-size: 18px;
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
-                        {{ props.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
+                        {{ store_player_audio_info.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
                       </div>
                     </div>
                     <lottie-player
@@ -860,7 +858,7 @@
                     </div>
                     <img
                       class="animate__rotate_fast"
-                      :class="{ 'animate__rotate_fast_paused': !props.this_audio_is_playing }"
+                      :class="{ 'animate__rotate_fast_paused': !store_player_audio_info.this_audio_is_playing }"
                       style="
                         width: calc(54vh - 30vh);height: calc(54vh - 30vh);
                         margin-left: calc(54vh - 24.5vh);
@@ -872,7 +870,7 @@
                         box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                         position: absolute;
                       "
-                      :src="getAssetImage(props.this_audio_file_medium_image_url)"
+                      :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
                       @error="handleImageError" alt="">
                     <img
                       style="
@@ -885,21 +883,21 @@
                         box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                         filter: blur(0);
                       "
-                      :src="getAssetImage(props.this_audio_file_medium_image_url)"
+                      :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
                       @error="handleImageError" alt="">
                     <div
                       style="
                         width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
-                      {{ props.this_audio_song_name }}
+                      {{ store_player_audio_info.this_audio_song_name }}
                     </div>
                     <div
                       style="
                         width: 54vh;margin-left: 2px;margin-top: -10px;color: #989292;font-weight: 550;font-size: 18px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
-                      {{ props.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
+                      {{ store_player_audio_info.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
                     </div>
                   </n-space>
                 </n-space>

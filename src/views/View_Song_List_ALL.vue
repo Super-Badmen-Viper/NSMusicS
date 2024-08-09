@@ -23,26 +23,8 @@ function get_menu_delete_this_song(value: any) {
   menu_delete_this_song.value = value
   console.log('添加到：this_audio_Index_of_absolute_positioning_in_list：'+value)
 }
-function get_media_path(value: any) {
-  emits('media_file_path',value)
-}
 function get_media_file_path_from_playlist(value: any) {
   emits('media_file_path_from_playlist',value)
-}
-function get_media_file_medium_image_url(value: any) {
-  emits('media_file_medium_image_url',value)
-}
-function get_this_audio_singer_id(value: any) {
-  emits('this_audio_singer_id',value)
-}
-function get_this_audio_singer_name(value: any) {
-  emits('this_audio_singer_name',value)
-}
-function get_this_audio_song_id(value: any) {
-  emits('this_audio_song_id',value)
-}
-function get_this_audio_song_name(value: any) {
-  emits('this_audio_song_name',value)
 }
 function get_this_audio_album_id(value: any) {
   emits('this_audio_album_id',value)
@@ -132,10 +114,8 @@ onBeforeUnmount(() => {
 const emits = defineEmits([
   'router_select',
   'media_Files',
-  'media_file_path','media_file_path_from_playlist',
-  'media_file_medium_image_url',
-  'this_audio_singer_name','this_audio_singer_id',
-  'this_audio_song_name','this_audio_song_id','this_audio_song_rating','this_audio_song_favorite',
+  'media_file_path_from_playlist',
+  'this_audio_song_rating','this_audio_song_favorite',
   'this_audio_album_id','this_audio_album_name',
   'this_audio_Index_of_absolute_positioning_in_list',
   'menu_edit_this_song',
@@ -159,9 +139,7 @@ const emits = defineEmits([
   'selected_lovelist_deleteMediaFile','selected_recentlist_deletetMediaFile'
 ]);
 const {
-  app_left_menu_collapsed,window_innerWidth,
-
-  update_theme,page_top_album_image_url,page_top_album_name,page_top_album_id,
+  page_top_album_image_url,page_top_album_name,page_top_album_id,
   page_songlists,page_songlists_options,page_songlists_statistic,
   page_songlists_selected,
 
@@ -174,9 +152,7 @@ const {
 
   router_select_history_date,router_history_datas,router_history_model_of_Media_scroller_value,router_history_model_of_Media_scroll
 } = defineProps<{
-  app_left_menu_collapsed:Boolean,window_innerWidth:number,
-
-  update_theme:boolean,page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
+  page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
   page_songlists:Play_List[],page_songlists_options:{label: string;value: string}[],page_songlists_statistic:{label: string;song_count: number;id: string;}[],
   page_songlists_selected:string;
 
@@ -205,7 +181,6 @@ const {
         :router_history_model_of_Media_scroll="router_history_model_of_Media_scroll"
         @router_history_model_of_Media_scroll="get_router_history_model_of_Media_scroll"
 
-        :update_theme="update_theme"
         :page_top_album_image_url="page_top_album_image_url"
         :page_top_album_id="page_top_album_id"
         :page_top_album_name="page_top_album_name"
@@ -218,23 +193,14 @@ const {
         @media_Files_selected="get_media_Files_selected"
         @media_Files_selected_set="set_media_Files_selected"
         @media_Files_selected_set_all="set_media_Files_selected_all"
-        :app_left_menu_collapsed="app_left_menu_collapsed"
-        :window_innerWidth="window_innerWidth"
 
         @this_audio_lyrics_string="get_this_audio_lyrics_string"
-        @media_file_path="get_media_path"
         @media_file_path_from_playlist="get_media_file_path_from_playlist"
-        @media_file_medium_image_url="get_media_file_medium_image_url"
-        @this_audio_singer_name="get_this_audio_singer_name"
-        @this_audio_singer_id="get_this_audio_singer_id"
-        @this_audio_song_name="get_this_audio_song_name"
-        @this_audio_song_id="get_this_audio_song_id"
         @this_audio_song_rating="get_this_audio_song_rating"
         @this_audio_song_favorite="get_this_audio_song_favorite"
         @this_audio_album_name="get_this_audio_album_name"
         @this_audio_album_id="get_this_audio_album_id"
 
-        @this_audio_Index_of_absolute_positioning_in_list="get_this_audio_Index_of_absolute_positioning_in_list"
         @menu_edit_this_song="get_menu_edit_this_song"
         @menu_add_this_song="get_menu_add_this_song"
         @menu_delete_this_song="get_menu_delete_this_song"

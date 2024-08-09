@@ -28,31 +28,24 @@
   ////// passed as argument
   const emits = defineEmits([
     'player_show_height',
-    'this_audio_restart_play',
-    'this_audio_file_path','this_audio_file_medium_image_url',
-    'media_file_medium_image_url',
     'page_songlists_keyword',
-    'this_audio_singer_name','this_audio_singer_id',
-    'this_audio_song_name','this_audio_song_id','this_audio_song_rating','this_audio_song_favorite',
+    'this_audio_song_rating','this_audio_song_favorite',
     'this_audio_album_name','this_audio_album_id',
-    'this_audio_Index_of_absolute_positioning_in_list',
-    'Playlist_Show','Player_Show_Sound_effects','Player_Show_Sound_speed','Player_Show_Sound_more',
-    'player_show_click',
+    'player_show_sound_effects','player_show_sound_speed','player_show_sound_more',
     'this_audio_lyrics_string',
-    'player','player_save_new_data','this_audio_is_playing','player_silder_currentTime_added_value',
-    'player_collapsed_action_bar_of_Immersion_model'
+    'player','player_save_new_data','player_silder_currentTime_added_value',
   ]);
   import { defineProps} from 'vue';
   const props = defineProps([
-    'this_audio_file_path','playlist_Files_temporary',
-    'this_audio_file_medium_image_url','this_audio_restart_play',
-    'this_audio_singer_name','this_audio_singer_id',
-    'this_audio_song_name','this_audio_song_id','this_audio_song_rating','this_audio_song_favorite',
+    'playlist_Files_temporary',
+    'this_audio_song_rating','this_audio_song_favorite',
     'this_audio_album_name','this_audio_album_id',
-    'player_show_click','player_show_complete','Player_Show_Sound_effects','Player_Show_Sound_speed','Player_Show_Sound_more',
+    'player_show_sound_effects','player_show_sound_speed','player_show_sound_more',
     'player','player_fade_value','player_go_lyricline_index_of_audio_play_progress',
-    'player_collapsed_action_bar_of_Immersion_model','player_show','collapsed'
+    'collapsed'
   ]);
+
+  import { store_playlist_appearance } from '@/store/playlist/store_playlist_appearance'
 
   //////
   const os = require('os');
@@ -84,7 +77,7 @@
     back_filter_blurValue.value = 0;
   };
   const click_back_svg = () => {
-    if(props.player_show_complete){
+    if(store_player_appearance.player_show_complete){
       player_show_hight_animation_value.value = 
         player_show_hight_animation_value.value === 
           0 ? 670 : 0;
@@ -96,7 +89,7 @@
       back_ChevronDouble.value = '../../resources/svg/'+svg_shrink_up_arrow.value;
     }
   };
-  let unwatch_player_show_click = watch(() => props.player_show_click, (newValue) => {
+  let unwatch_player_show_click = watch(() => store_player_appearance.player_show_click, (newValue) => {
     if (newValue === true) {
       player_show_hight_animation_value.value = 670;
       emits('player_show_height',player_show_hight_animation_value.value)
@@ -106,14 +99,14 @@
         svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
       back_ChevronDouble.value = '../../resources/svg/'+svg_shrink_up_arrow.value;
 
-      emits('player_show_click', false);
+      store_player_appearance.player_show_click = false
     }
   });
   
   ////// audio_player
   const timer_this_audio_restart_play = ref<NodeJS.Timeout>();
   const lastTriggerValue = ref<any>(null);// 延迟触发：接收大量数据时，仅触发最后一个值
-  let unwatch_this_audio_restart_play = watch(() => props.this_audio_restart_play, (newValue) => {
+  let unwatch_this_audio_restart_play = watch(() => store_player_audio_info.this_audio_restart_play, (newValue) => {
     if (newValue === true) {
       lastTriggerValue.value = newValue; // 更新最后一个触发的值
       clearTimeout(timer_this_audio_restart_play.value);
@@ -121,7 +114,7 @@
       timer_this_audio_restart_play.value = setTimeout(() => {
         if (newValue === lastTriggerValue.value) { // 检查最后一个触发的值是否与当前触发的值相等
           handleAudioFilePathChange();
-          emits('this_audio_restart_play', false);
+          store_player_audio_info.this_audio_restart_play = false
         }
       }, 200);
     }
@@ -152,9 +145,9 @@
     timer_this_audio_player.value = setTimeout(async () => {
       player_silder_currentTime_added_value.value = 0;
       // props.player.howl = new Howl();
-      props.player.load(props.this_audio_file_path)
+      props.player.load(store_player_audio_info.this_audio_file_path)
       props.player.isPlaying = true;
-      emits('this_audio_is_playing', true)
+      store_player_audio_info.this_audio_is_playing = true
       emits('player_save_new_data', true)
       is_play_ended.value = false;
       player_no_progress_jump.value = true;
@@ -167,7 +160,7 @@
   }
   ipcRenderer.on('mpv-stopped', (event, message) => {
     props.player.isPlaying = false;
-    emits('this_audio_is_playing',false)
+    store_player_audio_info.this_audio_is_playing = false
     //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
     if(player_no_progress_jump.value == true){
       current_play_time.value = formatTime(props.player.getDuration());
@@ -178,7 +171,7 @@
       player_no_progress_jump.value = false;
 
       props.player.isPlaying = false;
-      emits('this_audio_is_playing',false)
+      store_player_audio_info.this_audio_is_playing = false
       is_play_ended.value = true;
     }
     Play_Media_Switching()
@@ -189,7 +182,7 @@
     await props.player.IsPlaying()
   })
   const Init_Audio_Player = async () => {
-    if(props.this_audio_file_path.length > 0){
+    if(store_player_audio_info.this_audio_file_path.length > 0){
       if(props.player.isPlaying === false){
         if(this_audio_buffer_file.value === null){
           this_audio_buffer_file.value = Math.random().toString(36).substring(7);
@@ -200,11 +193,11 @@
           else {
             props.player.play();
           }
-          emits('this_audio_is_playing',true)
+          store_player_audio_info.this_audio_is_playing = true
         }
       }else{
         props.player.pause();
-        emits('this_audio_is_playing',false)
+        store_player_audio_info.this_audio_is_playing = false
       }
     }
   };
@@ -225,7 +218,7 @@
   }
   function Play_Media_Order(model_num: string, increased: number) {
     if (props.playlist_Files_temporary.length > 0) {
-      let index = props.playlist_Files_temporary.findIndex((item: any) => item.path === props.this_audio_file_path);
+      let index = props.playlist_Files_temporary.findIndex((item: any) => item.path === store_player_audio_info.this_audio_file_path);
       let stop_play = false;
       if (index !== -1) {
         if (model_num === 'playback-1') {
@@ -262,18 +255,18 @@
         }
 
         if (!stop_play) {
-          emits('this_audio_file_path', props.playlist_Files_temporary[index].path);
+          store_player_audio_info.this_audio_file_path = props.playlist_Files_temporary[index].path;
           emits('this_audio_lyrics_string', props.playlist_Files_temporary[index].lyrics);
-          emits('this_audio_file_medium_image_url', props.playlist_Files_temporary[index].medium_image_url);
-          emits('this_audio_singer_name', props.playlist_Files_temporary[index].artist);
-          emits('this_audio_singer_id', props.playlist_Files_temporary[index].artist_id);
-          emits('this_audio_song_name', props.playlist_Files_temporary[index].title);
-          emits('this_audio_song_id', props.playlist_Files_temporary[index].id);
+          store_player_audio_info.this_audio_file_medium_image_url = props.playlist_Files_temporary[index].medium_image_url;
+          store_player_audio_info.this_audio_singer_name = props.playlist_Files_temporary[index].artist;
+          store_player_audio_info.this_audio_singer_id = props.playlist_Files_temporary[index].artist_id
+          store_player_audio_info.this_audio_song_name = props.playlist_Files_temporary[index].title
+          store_player_audio_info.this_audio_song_id = props.playlist_Files_temporary[index].id
           emits('this_audio_song_rating', props.playlist_Files_temporary[index].rating);
           emits('this_audio_song_favorite', props.playlist_Files_temporary[index].favorite);
           emits('this_audio_album_id', props.playlist_Files_temporary[index].album_id);
           emits('this_audio_album_name', props.playlist_Files_temporary[index].album);
-          emits('this_audio_Index_of_absolute_positioning_in_list',index)
+          store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
           console.log(props.playlist_Files_temporary[index]);
         }
       }
@@ -409,37 +402,37 @@
   
   ////// open playList
   const Set_Playlist_Show = () => {
-    emits('Playlist_Show',true);
+    store_playlist_appearance.playlist_show = true
   }
   ////// open sound effects
   const Set_Player_Show_Sound_effects= () => {
-    if(props.Player_Show_Sound_effects === false)
-      emits('Player_Show_Sound_effects',true);
+    if(props.player_show_sound_effects === false)
+      emits('player_show_sound_effects',true);
     else
-      emits('Player_Show_Sound_effects',false);
+      emits('player_show_sound_effects',false);
   }
   ////// open sound speedPlayer_Show_Sound_more
   const Set_Player_Show_Sound_speed= () => {
-    if(props.Player_Show_Sound_speed === false)
-      emits('Player_Show_Sound_speed',true);
+    if(props.player_show_sound_speed === false)
+      emits('player_show_sound_speed',true);
     else
-      emits('Player_Show_Sound_speed',false);
+      emits('player_show_sound_speed',false);
   }
   ////// open sound more info
   const Set_Player_Show_Sound_more= () => {
-    if(props.Player_Show_Sound_more === false)
-      emits('Player_Show_Sound_more',true);
+    if(props.player_show_sound_more === false)
+      emits('player_show_sound_more',true);
     else
-      emits('Player_Show_Sound_more',false);
+      emits('player_show_sound_more',false);
   }
 
   ////// auto collapse player_configs bar
   const handleRefusetohide = () => {
-    emits('player_collapsed_action_bar_of_Immersion_model', false);
+    store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
   };
   const handleMouseMove = () => {
-    if(props.player_show === true){
-      emits('player_collapsed_action_bar_of_Immersion_model', true);
+    if(store_player_appearance.player_show === true){
+      store_player_appearance.player_collapsed_action_bar_of_Immersion_model = true;
       drawer_order_show.value = false;
       drawer_volume_show.value = false;
     }
@@ -447,6 +440,8 @@
 
   ////// changed_data write to sqlite
   import { Set_MediaInfo_To_LocalSqlite } from '@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite'
+  import {store_player_appearance} from "@/store/player/store_player_appearance";
+  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
   let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id,favorite)
@@ -509,13 +504,13 @@
 <template>
   <n-space class="this_Bar_Music_Player"
     style="transition: margin 0.4s;"
-    :style="{ marginBottom: player_collapsed_action_bar_of_Immersion_model ? '-80px' : '0px' }"
+    :style="{ marginBottom: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '-80px' : '0px' }"
     @mousemove="handleRefusetohide" @mouseleave="handleMouseMove" @mouseover="handleRefusetohide">
     <div class="layout_distribution_3"
       style="transition: margin 0.4s;"
       :style="{ 
-        marginLeft: player_show ? '0px' : (collapsed ? '72px' : '167px'),
-        width: player_show ? '100vw' : (collapsed ? 'calc(100vw - 72px)' : 'calc(100vw - 167px)'),
+        marginLeft: store_player_appearance.player_show ? '0px' : (collapsed ? '72px' : '167px'),
+        width: store_player_appearance.player_show ? '100vw' : (collapsed ? 'calc(100vw - 72px)' : 'calc(100vw - 167px)'),
       }">
       <div class="gird_Left">
         <div class="button_open_player_view">
@@ -525,7 +520,7 @@
               @click="click_back_svg" @mouseover="hover_back_img" @mouseout="leave_back_svg" alt=""/>
               
           <img class="back_img" 
-              :src="getAssetImage(props.this_audio_file_medium_image_url)"
+              :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
               @error="handleImageError"
               :style="{ filter: 'blur(' + back_filter_blurValue + 'px)' }"
               style="objectFit: cover; objectPosition: center;"
@@ -535,8 +530,8 @@
         <div class="bar_left_text_song_info">
           <n-space>
             <n-ellipsis>
-              <span id="bar_song_name" @click="handleItemClick_title(props.this_audio_song_name)">{{ props.this_audio_song_name + '&nbsp-&nbsp' }}</span>
-              <template v-for="artist in props.this_audio_singer_name.split(/[\/|｜]/)">
+              <span id="bar_song_name" @click="handleItemClick_title(store_player_audio_info.this_audio_song_name)">{{ store_player_audio_info.this_audio_song_name + '&nbsp-&nbsp' }}</span>
+              <template v-for="artist in store_player_audio_info.this_audio_singer_name.split(/[\/|｜]/)">
                 <span id="bar_singer_name_part" @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
               </template>
             </n-ellipsis>
@@ -700,8 +695,8 @@
           <n-space justify="space-between">
             <n-rate clearable size="small"
                     v-model:value="props.this_audio_song_rating"
-                    @update:value="(value: number) => handleItemClick_Rating(props.this_audio_song_id, value)"/>
-            <n-button size="tiny" text @click="handleItemClick_Favorite(props.this_audio_song_id,props.this_audio_song_favorite);">
+                    @update:value="(value: number) => handleItemClick_Rating(store_player_audio_info.this_audio_song_id, value)"/>
+            <n-button size="tiny" text @click="handleItemClick_Favorite(store_player_audio_info.this_audio_song_id,props.this_audio_song_favorite);">
               <template #icon>
                 <n-icon v-if="props.this_audio_song_favorite" :size="22" color="red"><Heart28Filled/></n-icon>
                 <n-icon v-else :size="22"><Heart24Regular/></n-icon>
