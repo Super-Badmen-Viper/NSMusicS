@@ -1,12 +1,16 @@
-import { reactive } from 'vue'
+import {reactive, ref} from 'vue'
 
-export const store_sqlite_table_info = reactive({
+export const store_server_set_check_use_model = reactive({
+    model_select: 'local',
+    library_path: '',
+
     album: 'album',
     annotation: 'annotation',
     artist: 'artist',
     media_file: 'media_file',
     playlist: 'playlist',
     playlist_tracks: 'playlist_tracks',
+
     switchToMode_Local(){
         this.album = 'album'
         this.annotation = 'annotation'
