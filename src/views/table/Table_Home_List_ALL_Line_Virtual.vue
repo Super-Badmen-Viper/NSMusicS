@@ -28,16 +28,8 @@ const { t } = useI18n({
 ////// passed as argument
 const emits = defineEmits([
   'media_list_of_album_id','play_this_album_song_list',
-  'home_selected_top_album','refresh_home_temporary'
 ]);
-const props = defineProps<{
-  home_Files_temporary_maximum_playback: Album[];
-  home_Files_temporary_random_search: Album[];
-  home_Files_temporary_recently_added: Album[];
-  home_Files_temporary_recently_played: Album[];
-  home_selected_top_album:Album;
-}>();
-const home_selected_top_album_subscript = ref(0)
+import {store_view_home_page_info} from "@/store/view/home/store_view_home_page_info"
 
 ////// albumlist_view page_layout gridItems
 const item_album = ref<number>(160)
@@ -120,29 +112,33 @@ const Play_this_album_SongList_click = (album_id:string) => {
 }
 const Play_Next_album_SongList_click = (value: number) => {
   if(value === 1){
-    if(home_selected_top_album_subscript.value >= 17){
-      home_selected_top_album_subscript.value = 0;
-      emits('refresh_home_temporary',true)
+    if(store_view_home_page_info.home_selected_top_album_subscript >= 17){
+      store_view_home_page_info.home_selected_top_album_subscript = 0;
+      store_view_home_page_logic.list_data_StartUpdate = true
     }else{
-      home_selected_top_album_subscript.value += 1;
-      emits('home_selected_top_album',home_selected_top_album_subscript.value)
+      store_view_home_page_info.home_selected_top_album_subscript += 1;
     }
   }else{
-    if(home_selected_top_album_subscript.value === 0){
-      home_selected_top_album_subscript.value = 0;
-      emits('refresh_home_temporary',true)
+    if(store_view_home_page_info.home_selected_top_album_subscript === 0){
+      store_view_home_page_info.home_selected_top_album_subscript = 0;
+      store_view_home_page_logic.list_data_StartUpdate = true
     }else{
-      home_selected_top_album_subscript.value -= 1;
-      emits('home_selected_top_album',home_selected_top_album_subscript.value)
+      store_view_home_page_info.home_selected_top_album_subscript -= 1;
     }
   }
 }
+watch(() => store_view_home_page_info.home_selected_top_album_subscript, (newValue) => {
+  store_view_home_page_info.home_selected_top_album =
+      (store_view_home_page_info.home_Files_temporary_random_search && store_view_home_page_info.home_Files_temporary_random_search.length > 0)
+          ? store_view_home_page_info.home_Files_temporary_random_search[newValue] : undefined;
+});
 
 ////// changed_data write to sqlite
 import {Set_AlbumInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite'
 import {QueueMusicRound} from "@vicons/material";
 import {Icon} from "@vicons/utils";
 import {store_app_setting_configs} from "@/store/app/store_app_setting_configs";
+import {store_view_home_page_logic} from "@/store/view/home/store_view_home_page_logic";
 let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Favorite(id,favorite)
@@ -196,7 +192,7 @@ onBeforeUnmount(() => {
                 margin-top: -300px;position: absolute;
                 object-fit: cover;object-position: center;
               "
-                :src="getAssetImage(props.home_selected_top_album?.medium_image_url)"
+                :src="getAssetImage(store_view_home_page_info.home_selected_top_album?.medium_image_url)"
                 @error="handleImageError"
             />
           </div>
@@ -206,7 +202,7 @@ onBeforeUnmount(() => {
         <n-image
           width="180px" height="180px" object-fit="contain"
           style="border-radius: 6px;border: 1.5px solid #FFFFFF20;"
-          :src="getAssetImage(props.home_selected_top_album?.medium_image_url)"
+          :src="getAssetImage(store_view_home_page_info.home_selected_top_album?.medium_image_url)"
           fallback-src="../../../resources/img/error_album.jpg"
           :show-toolbar="false"
         />
@@ -224,7 +220,7 @@ onBeforeUnmount(() => {
               font-weight: 900;font-size: 44px;
               overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
           ">
-            {{ props.home_selected_top_album?.name }}
+            {{ store_view_home_page_info.home_selected_top_album?.name }}
           </div>
           <div
             style="
@@ -232,7 +228,7 @@ onBeforeUnmount(() => {
               font-weight: 550;font-size: 18px;
               overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
           ">
-            {{ props.home_selected_top_album?.artist }}
+            {{ store_view_home_page_info.home_selected_top_album?.artist }}
           </div>
           <n-space style="margin-top: 6px;">
             <n-button @click="Play_Next_album_SongList_click(-1)" style="border-radius: 6px;border: 1.5px solid #FFFFFF20;">
@@ -240,7 +236,7 @@ onBeforeUnmount(() => {
                 <ChevronLeft16Filled />
               </n-icon>
             </n-button>
-            <n-button @click="Play_this_album_SongList_click(props.home_selected_top_album?.id)" style="border-radius: 6px;border: 1.5px solid #FFFFFF20;">
+            <n-button @click="Play_this_album_SongList_click(store_view_home_page_info.home_selected_top_album?.id)" style="border-radius: 6px;border: 1.5px solid #FFFFFF20;">
               {{ $t('player.play') }}
             </n-button>
             <n-button @click="Play_Next_album_SongList_click(1)" style="border-radius: 6px;border: 1.5px solid #FFFFFF20;">
@@ -257,7 +253,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.mostPlayed') }}
         </span>
-        <n-button text style="margin-top: 5px;" @click="emits('refresh_home_temporary',true)">
+        <n-button text style="margin-top: 5px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
             <n-icon :size="26"><RefreshCircleOutline/></n-icon>
           </template>
@@ -266,7 +262,7 @@ onBeforeUnmount(() => {
       <DynamicScroller
           class="home-wall" ref="dynamicScroller_maximum_playback"
           :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}"
-          :items="props.home_Files_temporary_maximum_playback"
+          :items="store_view_home_page_info.home_Files_temporary_maximum_playback"
           :itemSize="itemSize"
           :minItemSize="itemSize"
           :emit-update="true"
@@ -377,7 +373,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.explore') }}
         </span>
-        <n-button text style="margin-top: 5px;" @click="emits('refresh_home_temporary',true)">
+        <n-button text style="margin-top: 5px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
             <n-icon :size="26"><RefreshCircleOutline/></n-icon>
           </template>
@@ -386,7 +382,7 @@ onBeforeUnmount(() => {
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_random_search"
         :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}"
-        :items="props.home_Files_temporary_random_search"
+        :items="store_view_home_page_info.home_Files_temporary_random_search"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :emit-update="true"
@@ -497,7 +493,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.newlyAdded') }}
         </span>
-        <n-button text style="margin-top: 5px;" @click="emits('refresh_home_temporary',true)">
+        <n-button text style="margin-top: 5px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
             <n-icon :size="26"><RefreshCircleOutline/></n-icon>
           </template>
@@ -506,7 +502,7 @@ onBeforeUnmount(() => {
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_recently_added"
         :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}"
-        :items="props.home_Files_temporary_recently_added"
+        :items="store_view_home_page_info.home_Files_temporary_recently_added"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :emit-update="true"
@@ -617,7 +613,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.recentlyPlayed') }}
         </span>
-        <n-button text style="margin-top: 5px;" @click="emits('refresh_home_temporary',true)">
+        <n-button text style="margin-top: 5px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
             <n-icon :size="26"><RefreshCircleOutline/></n-icon>
           </template>
@@ -626,7 +622,7 @@ onBeforeUnmount(() => {
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_recently_played"
         :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}"
-        :items="props.home_Files_temporary_recently_played"
+        :items="store_view_home_page_info.home_Files_temporary_recently_played"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :emit-update="true"

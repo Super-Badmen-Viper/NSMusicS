@@ -20,12 +20,11 @@
   const { t } = useI18n({
     inheritLocale: true
   })
-  const update_lang = ref('en')
-  async function get_update_lang(value:any){
-    update_lang.value = value;
-    console.log(value)
+  watch(() => store_app_setting_configs.update_lang, (newValue) => {
+    store_app_setting_configs.update_lang = newValue;
+    console.log(newValue)
     save_system_config_of_App_Configs()
-  }
+  });
 
   ////// this_app components
   import {darkTheme, lightTheme, NConfigProvider, NIcon} from 'naive-ui'
@@ -34,7 +33,6 @@
   import {RouterLink, RouterView, useRouter} from 'vue-router';
   const path = require('path');
   // audio_class & player_bar class
-  import {Audio_howler} from '@/models/song_Audio_Out/Audio_howler';
   import Bar_Music_Player from '@/components/Bar_Music_Player.vue'
   // current_audioList class
   import Bar_Music_PlayList from '@/components/Bar_Music_PlayList.vue'
@@ -102,35 +100,24 @@
 
   ////// server of user_selected
   import { store_server_users } from '@/store/server/store_server_users'
-  function generateEncryptedPassword(password: string): { salt: string, token: string } {
-    const saltLength = 6;
-    const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';
-    let randomString = '';
-    for (let i = 0; i < saltLength; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      randomString += characters[randomIndex];
-    }
-    const salt = randomString;
-    const crypto = require('crypto');
-    const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
-    return { salt, token };
-  }
   async function get_server_config_of_current_user_of_sqlite(value: Server_Configs_Props) {
     store_server_users.server_config_of_current_user_of_sqlite = value
     store_server_users.server_config_of_current_user_of_select = { label: value.server_name, value: value.id };
     store_server_users.server_config_of_current_user_of_select_servername = value.server_name
     console.log(value)
-    /// begin import server data
-    const {salt, token} = generateEncryptedPassword(store_server_users.server_config_of_current_user_of_sqlite?.password);
+
+    const {salt, token} = store_server_users.get_generateEncryptedPassword(
+        store_server_users.server_config_of_current_user_of_sqlite?.password
+    );
     let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_Data_To_LocalSqlite()
     await set_Navidrome_Data_To_LocalSqlite.Set_Read_Navidrome_Api_BasicInfo_Add_LocalSqlite(
         store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
         store_server_users.server_config_of_current_user_of_sqlite?.user_name, token, salt,
     )
+
     /// reset app data
     ipcRenderer.send('window-reset-data');
   }
-
   ////// server of check_model
   import { store_server_user_model } from '@/store/server/store_server_user_model'
   watch(() => store_server_user_model.library_path, (newValue) => {
@@ -148,7 +135,6 @@
     else
       store_app_setting_configs.update_theme = false;
     theme_mode_change_click()
-    save_system_config_of_App_Configs()
   }
   const theme_normal_mode_click = () => {
     store_app_setting_configs.theme = lightTheme
@@ -168,6 +154,7 @@
     } else {
       theme_dark_mode_click()
     }
+    save_system_config_of_App_Configs()
   }
 
   ////// player view
@@ -217,45 +204,23 @@
       clear_session_clearCache()
     }, 600);
   }
-  // player_configs view of theme_all
+  ////// player ui theme
   watch(() => store_player_appearance.player_UI_Theme_State, (newValue) => {
-    player_use_lottie_animation.value = store_player_appearance.player_UI_Theme_State.player_use_lottie_animation
+    store_player_audio_logic.player_use_lottie_animation = store_player_appearance.player_UI_Theme_State.player_use_lottie_animation
     save_system_config_of_Player_Configs_of_UI()
   });
-
-  ////// playlist view
-  import { store_playlist_appearance } from '@/store/playlist/store_playlist_appearance'
-  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-
-  ////// open bar audio_sounde_effects
-  const player_show_sound_effects = ref(false);
-  const get_player_show_sound_effects = (value:any) => {
-    player_show_sound_effects.value = value
-    console.log('player_show_sound_effects：'+value)
-  }
-  ////// open bar audio_sounde_speed
-  const player_show_sound_speed = ref(false);
-  const get_player_show_sound_speed = (value:any) => {
-    player_show_sound_speed.value = value
-    console.log('player_show_sound_speed：'+value)
-  }
-  ////// open bar audio_more_info
-  const player_show_sound_more = ref(false);
-  const get_player_show_sound_more = (value:any) => {
-    player_show_sound_more.value = value
-    console.log('player_show_sound_more：'+value)
-  }
-
-  ////// player_configs audio_info
+  ////// player audio_info
+  import { store_player_audio_info } from "@/store/player/store_player_audio_info";
+  import { Set_MediaInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
   watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
-    if(media_Files_temporary.value != undefined && media_Files_temporary.value.length != 0) {
+    if(store_view_media_page_info.media_Files_temporary != undefined && store_view_media_page_info.media_Files_temporary.length != 0) {
       store_player_audio_info.this_audio_file_path = newValue
       store_player_audio_info.this_audio_restart_play = true
       console.log('this_audio_file_path：'+newValue)
       //
-      if (this_audio_file_path_from_playlist.value === false) {
-        playlist_Files_temporary.value = [...media_Files_temporary.value];
-        playlist_Tracks_Current_Media_File_id_of_list.value = media_Files_temporary.value.map(item => item.id);
+      if (store_player_appearance.player_mode_of_audio_path_from_playlist === false) {
+        store_playlist_list_info.playlist_MediaFiles_temporary = [...store_view_media_page_info.media_Files_temporary];
+        store_playlist_list_info.playlist_datas_CurrentPlayListMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
         save_system_playlist_item_id_config();
       }
     }
@@ -264,10 +229,10 @@
     store_player_audio_info.this_audio_file_path = newValue
     console.log('this_audio_file_path：'+newValue)
 
-    media_Files_temporary.value.forEach((item, index) => {
+    store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
       item.playing = item.id === store_player_audio_info.this_audio_song_id;
     });
-    playlist_Files_temporary.value.forEach((item, index) => {
+    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
       item.playing = item.id === store_player_audio_info.this_audio_song_id;
     });
   });
@@ -276,8 +241,8 @@
     store_player_audio_info.this_audio_restart_play = true
     console.log('this_audio_file_medium_image_url'+newValue)
 
-    page_top_album_image_url.value = '';
-    page_top_album_image_url.value = newValue;
+    store_player_audio_info.page_top_album_image_url = '';
+    store_player_audio_info.page_top_album_image_url = newValue;
   });
   watch(() => store_player_audio_info.this_audio_song_id, (newValue) => {
     store_player_audio_info.this_audio_song_id = newValue
@@ -285,389 +250,166 @@
     let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
     set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_PlayCount_of_Media_File(newValue)
   });
-  const this_audio_song_rating = ref<number>(0)
-  function get_this_audio_song_rating(value: any) {
-    this_audio_song_rating.value = value
-    console.log('this_audio_song_rating：'+value)
+  watch(() => store_player_audio_info.this_audio_song_rating, (newValue) => {
+    store_player_audio_info.this_audio_song_rating = newValue
+    console.log('this_audio_song_rating：'+newValue)
 
-    media_Files_temporary.value.forEach((item, index) => {
+    store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
       if(item.id === store_player_audio_info.this_audio_song_id)
-        item.rating = this_audio_song_rating.value
+        item.rating = store_player_audio_info.this_audio_song_rating
     });
-  }
-  const this_audio_song_favorite = ref<any>(0)
-  function get_this_audio_song_favorite(value: any) {
-    this_audio_song_favorite.value = value
-    console.log('this_audio_song_favorite：'+value)
+  });
+  watch(() => store_player_audio_info.this_audio_song_favorite, (newValue) => {
+    store_player_audio_info.this_audio_song_favorite = newValue
+    console.log('this_audio_song_favorite：'+newValue)
 
-    media_Files_temporary.value.forEach((item, index) => {
+    store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
       if(item.id === store_player_audio_info.this_audio_song_id)
-        item.favorite = this_audio_song_favorite.value
+        item.favorite = store_player_audio_info.this_audio_song_favorite
     });
-  }
-  const this_audio_album_name = ref<string>('A local music software that is expected to support multiple platforms with AI capabilities and multimodal features.')
-  function get_this_audio_album_name(value: any) {
-    this_audio_album_name.value = value
-    console.log('this_audio_album_name：'+value)
-    page_top_album_name.value = value;
-  }
-  const this_audio_album_id = ref<string>('')
-  function get_this_audio_album_id(value: any) {
-    this_audio_album_id.value = value
-    console.log('this_audio_album_id：'+value)
-    page_top_album_id.value = value;
-  }
-
-  // player_configs audio_info of router_page_init_data
-  const page_top_album_image_url = ref<string>(path.resolve('resources/img/error_album.jpg'))
-  const page_top_album_id = ref<string>('')
-  const page_top_album_name = ref<string>('')
-  // player_configs audio_infos of all_playlist
-  import { Get_PlaylistInfo_From_LocalSqlite } from "@/features/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
-  import { Set_PlaylistInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_To_LocalSqlite";
-  import { Set_MediaInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
-  import { Set_AnnotationInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_AnnotationInfo_To_LocalSqlite";
-  const playlist_Tracks_Current_Media_File_id_of_list = ref<string[]>([])
-  const playlist_All_of_list = ref<{label: string;value: string}[]>([])
-  const playlist_Tracks_temporary = ref<{playlist:Play_List,playlist_tracks:Play_list_Track[]}[]>([])
-  function get_playlist_Tracks_temporary_add(value: any){
-    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
-    const playlist = set_PlaylistInfo_From_LocalSqlite.Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
-        value,
-        'admin',0,0,0,'admin'
-    )
-    playlist_Tracks_temporary.value.push({
-      playlist: playlist,
-      playlist_tracks: []
-    })
-    let db = require('better-sqlite3')(navidrome_db);
-    db.pragma('journal_mode = WAL');
-    Init_page_songlists_statistic_Data(db);
-    db.close();
-    playlist_All_of_list.value = []
-    playlist_Tracks_temporary.value.forEach((item) => {
-      playlist_All_of_list.value.push({
-        label: item.playlist.name,
-        value: item.playlist.id
-      })
-    })
-  }
-  function get_playlist_Tracks_temporary_update(value: any){
-    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
-    set_PlaylistInfo_From_LocalSqlite.Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(
-      value.id,value.name,
-      'admin',0,0,0,'admin'
-    )
-    const index = playlist_Tracks_temporary.value.findIndex(list => list.playlist.id === value.id);
-    if (index >= 0) {
-      playlist_Tracks_temporary.value[index].playlist.name = value.name;
-      let db = require('better-sqlite3')(navidrome_db);
-      db.pragma('journal_mode = WAL');
-      Init_page_songlists_statistic_Data(db);
-      db.close();
-      playlist_All_of_list.value = []
-      playlist_Tracks_temporary.value.forEach((item) => {
-        playlist_All_of_list.value.push({
-          label: item.playlist.name,
-          value: item.playlist.id
-        })
-      })
-    }
-  }
-  function get_playlist_Tracks_temporary_delete(value: any){
-    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
-    set_PlaylistInfo_From_LocalSqlite.Set_PlaylistInfo_To_Update_DeletePlaylist_of_ND(value)
-    const index = playlist_Tracks_temporary.value.findIndex(list => list.playlist.id === value);
-    if (index >= 0) {
-      playlist_Tracks_temporary.value.splice(index,1)
-      let db = require('better-sqlite3')(navidrome_db);
-      db.pragma('journal_mode = WAL');
-      Init_page_songlists_statistic_Data(db);
-      db.close();
-      playlist_All_of_list.value = []
-      playlist_Tracks_temporary.value.forEach((item) => {
-        playlist_All_of_list.value.push({
-          label: item.playlist.name,
-          value: item.playlist.id
-        })
-      })
-    }
-  }
-  function get_playlist_Tracks_temporary_update_media_file(value: any){
-    playlist_All_of_list.value = []
-    playlist_Tracks_temporary.value = []
-    let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
-    const playlist_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist()
-    playlist_temporary.forEach((item:Play_List) =>{
-      playlist_All_of_list.value.push({
-        label: item.name,
-        value: item.id
-      })
-      playlist_Tracks_temporary.value.push({
-        playlist: item,
-        playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id)
-      })
-    });
-    fetchData_Media()
-  }
-  // player_configs audio_infos of current_playlist
-  const playlist_Files_temporary = ref<Media_File[]>([]);
-  const fetchData_This_AlbumOrArtist_PlayMedia_Model = ref<boolean>(false);
-  const this_audio_file_path_from_playlist = ref(false);
-  function get_this_audio_file_path_from_playlist (value: any) {
-    this_audio_file_path_from_playlist.value = value
-    console.log('this_audio_file_path_from_playlist：'+value)
-  }
-  // player_configs audio_infos of audio_page
-  const media_Files_temporary = ref<Media_File[]>([])
-  const media_Files_selected = ref<Media_File[]>([])
-  function set_media_Files_selected(value: Media_File) {
-    if (value.selected) {
-      media_Files_temporary.value.forEach((item, index) => {
-        if (item.id === value.id) {
-          media_Files_temporary.value[index].selected = true;
-        }
-      });
-      media_Files_selected.value.push(value)
-      console.log('media_Files_selected：'+value.path+'  '+value.selected)
-    } else {
-      media_Files_temporary.value.forEach((item, index) => {
-        if (item.id === value.id) {
-          media_Files_temporary.value[index].selected = false;
-        }
-      });
-      media_Files_selected.value = media_Files_selected.value.filter(item => item.id !== value.id);
-      console.log('media_Files_selected：'+value.path+'  '+value.selected)
-    }
-  }
-  function set_media_Files_selected_all(value: boolean) {
-    media_Files_temporary.value.forEach((item, index) => {
-      media_Files_temporary.value[index].selected = value;
-    });
-    if (value) {
-      media_Files_selected.value = media_Files_temporary.value.slice();
-    } else {
-      media_Files_selected.value = [];
-    }
-    console.log('media_Files_selected：'+value)
-  }
-  function get_selected_playlist_addMediaFile(value: any){
-    console.log('selected_playlist_addMediaFile',value)
-    const ids = media_Files_selected.value.map(file => file.id);
-    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
-    set_PlaylistInfo_From_LocalSqlite.Set_Selected_MediaInfo_Add_Selected_Playlist(ids,value)
-    get_playlist_Tracks_temporary_update_media_file(true)
-  }
-  function get_selected_lovelist_addMediaFile(value: any){
-    console.log('selected_lovelist_addMediaFile',value)
-    const ids = media_Files_selected.value.map(file => file.id);
-    let set_AnnotationInfo_To_LocalSqlite = new Set_AnnotationInfo_To_LocalSqlite()
-    set_AnnotationInfo_To_LocalSqlite.Set_MediaInfo_Add_Selected_Favorite(ids,true)
-    get_playlist_Tracks_temporary_update_media_file(true)
-  }
-  function get_selected_playlist_deleteMediaFile(value: any){
-    console.log('selected_playlist_deleteMediaFile',value)
-    const ids = media_Files_selected.value.map(file => file.id);
-    let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
-    set_PlaylistInfo_From_LocalSqlite.Set_Selected_MediaInfo_Delete_Selected_Playlist(ids,value)
-    get_playlist_Tracks_temporary_update_media_file(true)
-  }
-  function get_selected_locallist_deleteMediaFile(value: any){
-    console.log('selected_locallist_deleteMediaFile',value)
-    const ids = media_Files_selected.value.map(file => file.id);
-    let set_LibraryInfo_To_LocalSqlite = new Set_LibraryInfo_To_LocalSqlite();
-    set_LibraryInfo_To_LocalSqlite.Set_LibraryInfo_Delete_Selected_Playlist(ids)
-    get_playlist_Tracks_temporary_update_media_file(true)
-  }
-  function get_selected_lovelist_deleteMediaFile(value: any){
-    console.log('selected_lovelist_deleteMediaFile',value)
-    const ids = media_Files_selected.value.map(file => file.id);
-    let set_AnnotationInfo_To_LocalSqlite = new Set_AnnotationInfo_To_LocalSqlite();
-    set_AnnotationInfo_To_LocalSqlite.Set_MediaInfo_Delete_Selected_Favorite(ids,value)
-    get_playlist_Tracks_temporary_update_media_file(true)
-  }
-  function get_selected_recentlist_deletetMediaFile(value: any){
-    console.log('selected_recentlist_deletetMediaFile',value)
-    const ids = media_Files_selected.value.map(file => file.id);
-    let set_AnnotationInfo_To_LocalSqlite = new Set_AnnotationInfo_To_LocalSqlite();
-    set_AnnotationInfo_To_LocalSqlite.Set_MediaInfo_To_Selected_PlayCount_of_Delete(ids,value)
-    get_playlist_Tracks_temporary_update_media_file(true)
-  }
-
-  ////// player_configs lyric_info
-  const this_audio_lyrics_string = ref<string>('')
-  const this_audio_lyrics_info_line = ref<string[]>([])
-  const this_audio_lyrics_info_time = ref<number[]>([])
-  const this_audio_lyrics_info_line_num = ref(28)
-  function get_this_audio_lyrics_string(value: any) {
-    this_audio_lyrics_string.value = value
+  });
+  watch(() => store_player_audio_info.this_audio_album_name, (newValue) => {
+    store_player_audio_info.this_audio_album_name = newValue
+    console.log('this_audio_album_name：'+newValue)
+    store_player_audio_info.page_top_album_name = newValue;
+  });
+  watch(() => store_player_audio_info.this_audio_album_id, (newValue) => {
+    store_player_audio_info.this_audio_album_id = newValue
+    console.log('this_audio_album_id：'+newValue)
+    store_player_audio_info.page_top_album_id = newValue;
+  });
+  watch(() => store_player_audio_info.this_audio_lyrics_string, (newValue) => {
+    store_player_audio_info.this_audio_lyrics_string = newValue
     // split lyrics
-    this_audio_lyrics_info_line.value = []
-    for (let i = 0; i < this_audio_lyrics_info_line_num.value; i++) {
-      this_audio_lyrics_info_line.value.push('')
+    store_player_audio_info.this_audio_lyrics_info_line = []
+    for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_num; i++) {
+      store_player_audio_info.this_audio_lyrics_info_line.push('')
     }
-    this_audio_lyrics_info_time.value = []
+    store_player_audio_info.this_audio_lyrics_info_time = []
     //
-    let line_all = value.split('\n')
+    let line_all = newValue.split('\n')
     let line_times = []
     for (let i = 0; i < line_all.length; i++) {
       let line = line_all[i].split(']')
       if (line.length > 1) {
         line_times.push(line[0].replace('[', ''))
-        this_audio_lyrics_info_line.value.push(line[1])
+        store_player_audio_info.this_audio_lyrics_info_line.push(line[1])
       }
     }
-    for (let i = 0; i < this_audio_lyrics_info_line_num.value; i++) {
-      this_audio_lyrics_info_line.value.push('')
+    for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_num; i++) {
+      store_player_audio_info.this_audio_lyrics_info_line.push('')
     }
     //
     for (let i = 0; i < line_times.length; i++) {
-      this_audio_lyrics_info_time.value[i] = get_player_go_lyricline_index_of_audio_play_progress_of_convertToMilliseconds(line_times[i]);
+      const [minutes, seconds] = line_times[i].split(':');
+      store_player_audio_info.this_audio_lyrics_info_time[i] = (parseInt(minutes) * 60 + parseInt(seconds)) * 1000;
     }
-    //
-    // console.log('this_audio_lyrics：'+value)
-  }
+  });
+
+  ////// playlist view
+  import { store_playlist_appearance } from '@/store/playlist/store_playlist_appearance'
+  import { store_playlist_list_info } from "@/store/playlist/store_playlist_list_info"
+  import { store_playlist_list_logic } from "@/store/playlist/store_playlist_list_logic"
+  import { Get_PlaylistInfo_From_LocalSqlite } from "@/features/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
 
   ////// this_app audio(Media) Class
-  // let player = new Audio_howler();
-  let player = new Audio_node_mpv();
-  const player_fade_value = ref<number>(2000)
-  function get_player_fade_value(value: any){
-    player_fade_value.value = value
-  }
-  const player_use_lottie_animation = ref(false);
-  function get_player_use_lottie_animation(value: any){
-    player_use_lottie_animation.value = value
-    store_player_appearance.player_UI_Theme_State.player_use_lottie_animation = value
-    console.log('实验性lottie动画状态：'+value)
+  watch(() => store_player_audio_logic.player_use_lottie_animation, (newValue) => {
+    store_player_audio_logic.player_use_lottie_animation = newValue
+    store_player_appearance.player_UI_Theme_State.player_use_lottie_animation = newValue
+    console.log('实验性lottie动画状态：'+newValue)
     save_system_config_of_Player_Configs_of_UI()
-  }
-  //
-  function player_save_new_data(value: any){
-    save_system_config_of_Player_Configs_of_Audio_Info()
-  }
-  const player_silder_currentTime_added_value = ref(0);
-  function get_player_silder_currentTime_added_value(value: any) {
-    player_silder_currentTime_added_value.value = value
-    console.log('player_silder_currentTime_added_value：'+value)
-  }
-  const player_go_lyricline_index_of_audio_play_progress = ref(0);
-  function get_player_go_lyricline_index_of_audio_play_progress(value: any) {
-    player_go_lyricline_index_of_audio_play_progress.value = value
-    console.log('get_play_go_index_time：'+value)
-  }
-  function get_player_go_lyricline_index_of_audio_play_progress_of_convertToMilliseconds(timeString: { split: (arg0: string) => [any, any] }) {
-    const [minutes, seconds] = timeString.split(':');
-    return (parseInt(minutes) * 60 + parseInt(seconds)) * 1000;
-  }
+  });
+  watch(() => store_player_audio_logic.player_save_new_data, (newValue) => {
+    if(newValue)
+      save_system_config_of_Player_Configs_of_Audio_Info()
+  });
+  watch(() => store_player_audio_logic.player_silder_currentTime_added_value, (newValue) => {
+    store_player_audio_logic.player_silder_currentTime_added_value = newValue
+    console.log('player_silder_currentTime_added_value：'+newValue)
+  });
+  watch(() => store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress, (newValue) => {
+    store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress = newValue
+    console.log('get_play_go_index_time：'+newValue)
+  });
 
-  ///// view of View_Home_MusicLibrary_Browse
+  import {store_player_appearance} from "@/store/player/store_player_appearance";
+  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+  import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
+  import {store_player_sound_effects} from "@/store/player/store_player_sound_effects";
+  import {store_player_sound_speed} from "@/store/player/store_player_sound_speed";
+  import {store_player_sound_more} from "@/store/player/store_player_sound_more";
+  import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
+  import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
+  import {store_view_home_page_info} from "@/store/view/home/store_view_home_page_info"
+  import {store_view_home_page_logic} from "@/store/view/home/store_view_home_page_logic"
   import {Get_HomeDataInfos_From_LocalSqlite} from '@/features/sqlite3_local_configs/class_Get_HomeDataInfos_From_LocalSqlite'
-  import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
-  import {
-    Set_ReadLocalMusic_To_LocalSqlite
-  } from "@/features/sqlite3_local_configs/class_Set_ReadLocalMusic_To_LocalSqlite";
   import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
   import {Set_AlbumInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite";
   import {Set_ArtistInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_ArtistInfo_To_LocalSqlite";
-  import {Set_LibraryInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_LibraryInfo_To_LocalSqlite";
-  import {User_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services/user_management/index_service";
-  import {Set_ServerInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_ServerInfo_To_LocalSqlite";
-  import {Searching_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services/searching/index_service";
-  import crypto from "crypto";
-  import {Get_PageInfo_of_Song_of_ND} from "../src_example/get_PageInfo_of_Song";
-  import {
-    Set_Navidrome_Data_To_LocalSqlite
-  } from "@/features/servers_configs/navidrome_api/middleware/class_Set_Navidrome_Data_To_LocalSqlite";
-  import {store_player_appearance} from "@/store/player/store_player_appearance";
-  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-  let get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
-  const home_Files_temporary_maximum_playback = ref<Album[]>([])
-  const home_Files_temporary_random_search = ref<Album[]>([])
-  const home_Files_temporary_recently_added = ref<Album[]>([])
-  const home_Files_temporary_recently_played = ref<Album[]>([])
-  const home_selected_top_album = ref<Album>()
-  function get_home_selected_top_album(value: any){
-    home_selected_top_album.value = (home_Files_temporary_random_search.value && home_Files_temporary_random_search.value.length > 0) ? home_Files_temporary_random_search.value[value] : undefined;
-  }
-  function get_refresh_home_temporary(value: any){
-    fetchData_Home()
-  }
-  const fetchData_Home = async () => {
-    home_Files_temporary_maximum_playback.value = []
-    home_Files_temporary_random_search.value = []
-    home_Files_temporary_recently_added.value = []
-    home_Files_temporary_recently_played.value = []
-    home_selected_top_album.value = undefined;
-    home_Files_temporary_maximum_playback.value = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Maximum_Playback()
-    home_Files_temporary_random_search.value = get_HomeDataInfos_From_LocalSqlite.Get_AlbumFiles_Random_Search()
-    home_Files_temporary_recently_added.value = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Recently_Added()
-    home_Files_temporary_recently_played.value = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Recently_Played()
-    home_selected_top_album.value = (home_Files_temporary_random_search.value && home_Files_temporary_random_search.value.length > 0) ? home_Files_temporary_random_search.value[0] : undefined;
+  import {Set_Navidrome_Data_To_LocalSqlite} from "@/features/servers_configs/navidrome_api/middleware/class_Set_Navidrome_Data_To_LocalSqlite";
+
+  ///// view of home
+  watch(() => store_view_home_page_logic.list_data_StartUpdate, (newValue) => {
+    if(newValue) {
+      fetchData_Home()
+      store_view_home_page_logic.list_data_StartUpdate = false
+      console.log("store_view_home_page_logic.list_data_StartUpdate")
+    }
+  });
+  const fetchData_Home = () => {
+    store_view_home_page_info.home_Files_temporary_maximum_playback = []
+    store_view_home_page_info.home_Files_temporary_random_search = []
+    store_view_home_page_info.home_Files_temporary_recently_added = []
+    store_view_home_page_info.home_Files_temporary_recently_played = []
+    store_view_home_page_info.home_selected_top_album = undefined;
+    let get_HomeDataInfos_From_LocalSqlite = new Get_HomeDataInfos_From_LocalSqlite()
+    store_view_home_page_info.home_Files_temporary_maximum_playback = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Maximum_Playback()
+    store_view_home_page_info.home_Files_temporary_random_search = get_HomeDataInfos_From_LocalSqlite.Get_AlbumFiles_Random_Search()
+    store_view_home_page_info.home_Files_temporary_recently_added = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Recently_Added()
+    store_view_home_page_info.home_Files_temporary_recently_played = get_HomeDataInfos_From_LocalSqlite.Get_Annotation_Recently_Played()
+    store_view_home_page_info.home_selected_top_album =
+        (store_view_home_page_info.home_Files_temporary_random_search
+            && store_view_home_page_info.home_Files_temporary_random_search.length > 0)
+            ? store_view_home_page_info.home_Files_temporary_random_search[0] : undefined;
   };
-  function formatTime(currentTime: number): string {
-    const minutes = Math.floor(currentTime / 60);
-    const seconds = Math.floor(currentTime % 60);
-
-    let formattedMinutes = String(minutes);
-    let formattedSeconds = String(seconds);
-
-    if (formattedMinutes.length == 1)
-      formattedMinutes = '0' + formattedMinutes;
-
-    if (formattedSeconds.length == 1)
-      formattedSeconds = '0' + formattedSeconds;
-
-    return `${formattedMinutes}:${formattedSeconds}`;
-  }
 
   ///// view of media
-  const page_songlists_options = ref<{label: string;value: string}[]>([])
-  const page_songlists_statistic = ref<{label: string;song_count: string;id: string;}[]>([])
-  const page_songlists = ref<Play_List[]>([])
-  const page_songlists_selected = ref<string>('song_list_all')
-  const page_songlists_keyword_reset = ref<boolean>(false)
-  const page_songlists_keyword = ref<string>('');
-  const page_songlists_get_keyword_model_num = ref<number>(0);
   const page_songlists_options_Sort_key = ref<{ columnKey: string; order: string }[]>([]);
   function get_page_songlists_options_Sort_key(value: { columnKey: string; order: string }[] = []) {
     if (value != null) {
       page_songlists_options_Sort_key.value = value;
-      page_songlists_keyword.value = '';
+      store_view_media_page_logic.page_songlists_keyword = '';
       fix_router_history_of_Media_scroller_value(router_history_model_of_Media_scroller_value.value) // 保留此滚轮值(上次浏览位置)
       fetchData_Media()
     }
   }
-  function page_songlists_get_keyword(value: any) {
-    if(value.indexOf('accurate_search') > 0){
-      value = value.replace('accurate_search','');
-      if(value.indexOf('__title__') > 0){
-        value = value.replace('__title__','');
-        page_songlists_get_keyword_model_num.value = 1;
-        find_music_model.value = true;
-      }else if(value.indexOf('__artist__') > 0){
-        value = value.replace('__artist__','');
-        page_songlists_get_keyword_model_num.value = 2;
-        
-      }else if(value.indexOf('__album__') > 0){
-        value = value.replace('__album__','');
-        page_songlists_get_keyword_model_num.value = 3;
-        find_music_model.value = true;
-      }      
-    }else{  
-      page_songlists_get_keyword_model_num.value = 0;
-      find_music_model.value = false;
+  watch(() => store_view_media_page_logic.page_songlists_keyword, (newValue) => {
+    if (newValue.indexOf('accurate_search') > 0) {
+      newValue = newValue.replace('accurate_search', '');
+      if (newValue.indexOf('__title__') > 0) {
+        newValue = newValue.replace('__title__', '');
+        store_view_media_page_logic.page_songlists_keywordFilter = `WHERE title LIKE '${newValue}'`
+      } else if (newValue.indexOf('__artist__') > 0) {
+        newValue = newValue.replace('__artist__', '');
+        store_view_media_page_logic.page_songlists_keywordFilter = `WHERE artist LIKE '${newValue}'`
+      } else if (newValue.indexOf('__album__') > 0) {
+        newValue = newValue.replace('__album__', '');
+        store_view_media_page_logic.page_songlists_keywordFilter = `WHERE album_id = '${newValue}'`
+      }
+    }else{
+      store_view_media_page_logic.page_songlists_keywordFilter = newValue.length > 0 ?
+      `WHERE title LIKE '%${newValue}%' OR artist LIKE '%${newValue}%' OR album LIKE '%${newValue}%'` :
+      '';
     }
-    page_songlists_keyword.value = value;
-    page_songlists_keyword_reset.value = true;
-    console.log('page_songlists_keyword:' + value)
-    
+    store_view_media_page_logic.page_songlists_keyword_reset = true;
+    console.log('page_songlists_keyword:' + newValue)
+
     store_app_setting_configs.app_left_menu_select_activeKey = 'go_songs_list'
     router.push('View_Song_List_ALL')
     fetchData_Media()
-  }
+  });
   function page_songlists_get_reset_data(value: any) {
-    page_songlists_keyword.value = '';
+    store_view_media_page_logic.page_songlists_keyword = '';
     find_music_model.value = false;
     console.log('page_songlists_reset_data?:' + value)
     fetchData_Media()
@@ -678,18 +420,28 @@
       router_history_datas_of_Media.value.push(router_select_history_date_of_Media.value);
     }
   }
-  const get_page_songlists_selected = (value: any) => {
-    page_songlists_selected.value = value
-    console.log('page_songlists_selected：'+value)
+  watch(() => store_view_media_page_logic.page_songlists_selected, (newValue) => {
+    store_view_media_page_logic.page_songlists_selected = newValue
+    console.log('page_songlists_selected：'+newValue)
     fetchData_Media()
     save_system_config_of_Player_Configs_of_Audio_Info()
     save_system_config_of_View_Router_History()
-  }
+  });
   ///
+  watch(() => store_playlist_list_logic.playlist_names_StartUpdate, (newValue) => {
+    if(newValue) {
+      let db = require('better-sqlite3')(navidrome_db);
+      db.pragma('journal_mode = WAL');
+      Init_page_songlists_statistic_Data(db);
+      db.close();
+      store_playlist_list_logic.playlist_names_StartUpdate = false
+      console.log("store_playlist_list_logic.playlist_names_StartUpdate")
+    }
+  });
   const Init_page_songlists_statistic_Data = (db: any) => {
-    page_songlists_options.value = [];
-    page_songlists_statistic.value = [];
-    page_songlists.value = []
+    store_view_media_page_logic.page_songlists_options = [];
+    store_view_media_page_logic.page_songlists_statistic = [];
+    store_view_media_page_logic.page_songlists = []
     //////
     const stmt_media_file_count = db.prepare(`SELECT COUNT(*) AS count FROM ${store_server_user_model.media_file}`);
     const temp_Play_List_ALL: Play_List = {
@@ -710,13 +462,13 @@
       evaluated_at: '',
       owner_id: ''
     }
-    page_songlists_options.value.push(temp_Play_List_ALL);
-    page_songlists_statistic.value.push({
+    store_view_media_page_logic.page_songlists_options.push(temp_Play_List_ALL);
+    store_view_media_page_logic.page_songlists_statistic.push({
       label: temp_Play_List_ALL.label,
       song_count: temp_Play_List_ALL.song_count.toString(),
       id: temp_Play_List_ALL.id
     });
-    page_songlists.value.push(temp_Play_List_ALL)
+    store_view_media_page_logic.page_songlists.push(temp_Play_List_ALL)
     //////
     const stmt_media_Annotation_Starred_Count = db.prepare(`
       SELECT COUNT(*) AS count FROM ${store_server_user_model.annotation}
@@ -740,13 +492,13 @@
       evaluated_at: '',
       owner_id: ''
     }
-    page_songlists_options.value.push(temp_Play_List_Love);
-    page_songlists_statistic.value.push({
+    store_view_media_page_logic.page_songlists_options.push(temp_Play_List_Love);
+    store_view_media_page_logic.page_songlists_statistic.push({
       label: temp_Play_List_Love.label,
       song_count: temp_Play_List_Love.song_count.toString(),
       id: temp_Play_List_Love.id
     });
-    page_songlists.value.push(temp_Play_List_Love)
+    store_view_media_page_logic.page_songlists.push(temp_Play_List_Love)
     //////
     const stmt_media_Annotation_Recently_Count = db.prepare(`
       SELECT COUNT(*) AS count FROM ${store_server_user_model.annotation}
@@ -770,24 +522,24 @@
       evaluated_at: '',
       owner_id: ''
     }
-    page_songlists_options.value.push(temp_Play_List_Recently);
-    page_songlists_statistic.value.push({
+    store_view_media_page_logic.page_songlists_options.push(temp_Play_List_Recently);
+    store_view_media_page_logic.page_songlists_statistic.push({
       label: temp_Play_List_Recently.label,
       song_count: temp_Play_List_Recently.song_count.toString(),
       id: temp_Play_List_Recently.id
     });
-    page_songlists.value.push(temp_Play_List_Recently)
+    store_view_media_page_logic.page_songlists.push(temp_Play_List_Recently)
     //////
     const stmt_media_Annotation_PlayList_Count = db.prepare(`
       SELECT COUNT(*) AS count FROM ${store_server_user_model.playlist}
     `);
-    page_songlists_statistic.value.push({
+    store_view_media_page_logic.page_songlists_statistic.push({
       label: computed(() => t('entity.playlist_other')),
       song_count: stmt_media_Annotation_PlayList_Count.get().count + ' *',
       id: 'song_list_all_PlayList'
     });
     //////
-    playlist_Tracks_temporary.value.forEach((item) =>{
+    store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.forEach((item: any) =>{
       const temp_playlist: Play_List = {
         label: item.playlist.name,
         value: item.playlist.id,
@@ -806,20 +558,29 @@
         evaluated_at: item.playlist.evaluated_at,
         owner_id: item.playlist.owner_id
       }
-      page_songlists_options.value.push(temp_playlist);
-      // page_songlists_statistic.value.push({
+      store_view_media_page_logic.page_songlists_options.push(temp_playlist);
+      // store_view_media_page_logic.page_songlists_statistic.push({
       //   label: temp_playlist.label,
       //   song_count: temp_playlist.song_count.toString(),
       //   id: temp_playlist.id
       // });
-      page_songlists.value.push(temp_playlist)
+      store_view_media_page_logic.page_songlists.push(temp_playlist)
     });
   }
+  ///
+  watch(() => store_view_media_page_logic.list_data_StartUpdate, (newValue) => {
+    if(newValue) {
+      fetchData_Media()
+      store_view_media_page_logic.list_data_StartUpdate = false
+      console.log("store_view_media_page_logic.list_data_StartUpdate")
+    }
+  });
+  ///
   const fetchData_Media = async () => {
     let db:any = null;
     // clear RouterView of vue-virtual-scroller data
-    if(fetchData_This_AlbumOrArtist_PlayMedia_Model.value === true){
-      fetchData_This_AlbumOrArtist_PlayMedia_Model.value = false;
+    if(store_player_appearance.player_mode_of_medialist_from_external_import === true){
+      store_player_appearance.player_mode_of_medialist_from_external_import = false;
     }else{
       clear_Files_temporary()
       router_select_model_media.value = true;
@@ -831,7 +592,7 @@
       let stmt_media_file_string = '';
 
       // Init media_model data
-      Init_page_songlists_statistic_Data(db)
+      store_playlist_list_logic.playlist_names_StartUpdate = true
 
       // load media_Files_temporary data
       if (router_history_model_of_Media.value === 0) {
@@ -839,44 +600,20 @@
             page_songlists_options_Sort_key.value[0].columnKey : 'id';
         const sortOrder = page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
             page_songlists_options_Sort_key.value[0].order.replace('end', '') : '';
-        let keywordFilter = page_songlists_keyword.value.length > 0 ?
-            `WHERE title LIKE '%${page_songlists_keyword.value}%' OR artist LIKE '%${page_songlists_keyword.value}%' OR album LIKE '%${page_songlists_keyword.value}%'` :
-            '';
-        if (find_music_model.value === true) {
-          keywordFilter = `WHERE album_id = '${page_songlists_keyword.value}'`
-          find_music_model.value = false;
-        } else if (find_artist_model.value === true) {
-          keywordFilter = `WHERE artist_id = '${page_songlists_keyword.value}'`
-          find_artist_model.value = false;
-        } else {
-          if (page_songlists_get_keyword_model_num.value != 0) {
-            if (keywordFilter.length > 0) {
-              keywordFilter = keywordFilter.replace('LIKE', '=').replace(/%/g, '');
-            }
-            page_songlists_get_keyword_model_num.value = 0;
-          }
-        }
         try {
-          stmt_media_file_string = `SELECT * FROM ${store_server_user_model.media_file} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
+          stmt_media_file_string =
+            `SELECT * FROM
+            ${store_server_user_model.media_file}
+            ${store_view_media_page_logic.page_songlists_keywordFilter}
+            ORDER BY ${sortKey} ${sortOrder}`;
           stmt_media_file = db.prepare(stmt_media_file_string);
-          // if stmt_media_file is empty, then try to find artist_id or album_id
-          if (stmt_media_file.get() === undefined) {
-            keywordFilter = `WHERE artist_id = '${page_songlists_keyword.value}'`
-            stmt_media_file_string = `SELECT * FROM ${store_server_user_model.media_file} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
-            stmt_media_file = db.prepare(stmt_media_file_string);
-            if (stmt_media_file.get() === undefined) {
-              keywordFilter = `WHERE album_id = '${page_songlists_keyword.value}'`
-              stmt_media_file_string = `SELECT * FROM ${store_server_user_model.media_file} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
-              stmt_media_file = db.prepare(stmt_media_file_string);
-            }
-          }
         } catch (err: any) {
           console.error(err);
         }
         //////
-        if (router_select_history_date_of_Media.value && page_songlists_keyword_reset.value === true) {
+        if (router_select_history_date_of_Media.value && store_view_media_page_logic.page_songlists_keyword_reset === true) {
           remove_router_history_of_Media(router_select_history_date_of_Media.value.id);// 若存在新操作，则覆盖后续的路由
-          page_songlists_keyword_reset.value = false;
+          store_view_media_page_logic.page_songlists_keyword_reset = false;
         }
         const routerDate: Interface_View_Router_Date = {
           id: router_history_datas_of_Media.value ? router_history_datas_of_Media.value.length + 1 : 1,
@@ -885,9 +622,9 @@
           router_select_model_media: true,
           router_select_model_album: false,
           router_select_model_artist: false,
-          page_lists_keyword: page_songlists_keyword.value,
+          page_lists_keyword: store_view_media_page_logic.page_songlists_keyword,
           stmt_string: stmt_media_file_string,
-          page_lists_selected: page_songlists_selected.value,
+          page_lists_selected: store_view_media_page_logic.page_songlists_selected,
           columnKey: page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
               page_songlists_options_Sort_key.value[0].columnKey : 'id',
           order: page_songlists_options_Sort_key.value.length > 0 && page_songlists_options_Sort_key.value[0].order !== 'default' ?
@@ -902,8 +639,8 @@
           router.push('View_Song_List_ALL')
           store_app_setting_configs.app_left_menu_select_activeKey = 'go_songs_list'
           router_select_model_media.value = true;
-          page_songlists_keyword.value = router_select_history_date_of_Media.value.page_lists_keyword;
-          page_songlists_selected.value = router_select_history_date_of_Media.value.page_lists_selected;
+          store_view_media_page_logic.page_songlists_keyword = router_select_history_date_of_Media.value.page_lists_keyword;
+          store_view_media_page_logic.page_songlists_selected = router_select_history_date_of_Media.value.page_lists_selected;
           page_songlists_options_Sort_key.value = [
             {
               columnKey: router_select_history_date_of_Media.value.columnKey,
@@ -928,7 +665,7 @@
           else
             row.medium_image_url = '../../../resources/img/error_album.jpg';
         }
-        media_Files_temporary.value.push(row);
+        store_view_media_page_info.media_Files_temporary.push(row);
       });
       ////// find favorite for media_Files_temporary
       const stmt_media_Annotation_Starred_Items = db.prepare(`
@@ -936,10 +673,10 @@
         WHERE starred = 1 AND item_type='media_file'
       `);
       const annotations = stmt_media_Annotation_Starred_Items.all();
-      for (let i = 0; i < media_Files_temporary.value.length; i++) {
-        media_Files_temporary.value[i].favorite = !!annotations.some((annotation: {
+      for (let i = 0; i < store_view_media_page_info.media_Files_temporary.length; i++) {
+        store_view_media_page_info.media_Files_temporary[i].favorite = !!annotations.some((annotation: {
           item_id: string
-        }) => annotation.item_id === media_Files_temporary.value[i].id);
+        }) => annotation.item_id === store_view_media_page_info.media_Files_temporary[i].id);
       }
       ////// find rating for media_Files_temporary
       const stmt_media_Annotation_Rating_Items = db.prepare(`
@@ -947,8 +684,8 @@
         WHERE rating > 0 AND item_type='media_file'
       `);
       const annotations_rating = stmt_media_Annotation_Rating_Items.all();
-      for (let i = 0; i < media_Files_temporary.value.length; i++) {
-        const mediaFile = media_Files_temporary.value[i];
+      for (let i = 0; i < store_view_media_page_info.media_Files_temporary.length; i++) {
+        const mediaFile = store_view_media_page_info.media_Files_temporary[i];
         const matchingAnnotation = annotations_rating.find((annotation: {
           item_id: string,
           rating: number
@@ -960,12 +697,12 @@
       }
       ////// filter selected_list for media_Files_temporary
       let order_play_date:any[] = [];
-      media_Files_temporary.value = media_Files_temporary.value.filter((item) => {
-        if (page_songlists_selected.value === 'song_list_all') {
+      store_view_media_page_info.media_Files_temporary = store_view_media_page_info.media_Files_temporary.filter((item: any) => {
+        if (store_view_media_page_logic.page_songlists_selected === 'song_list_all') {
           return true;
-        } else if (page_songlists_selected.value === 'song_list_love') {
+        } else if (store_view_media_page_logic.page_songlists_selected === 'song_list_love') {
           return annotations.some((annotation: any) => annotation.item_id === item.id);
-        } else if (page_songlists_selected.value === 'song_list_recently') {
+        } else if (store_view_media_page_logic.page_songlists_selected === 'song_list_recently') {
           const stmt_media_Annotation_Recently_Items = db.prepare(`
           SELECT item_id FROM ${store_server_user_model.annotation}
           WHERE item_type='media_file'
@@ -975,27 +712,27 @@
           order_play_date = annotations;
           return annotations.includes(item.id);
         } else {
-          const index = playlist_Tracks_temporary.value.findIndex(list => list.playlist.id === page_songlists_selected.value);
+          const index = store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.findIndex((list: any) => list.playlist.id === store_view_media_page_logic.page_songlists_selected);
           if (index >= 0) {
-            const result = playlist_Tracks_temporary.value[index].playlist_tracks.map(track => track.media_file_id);
+            const result = store_playlist_list_info.playlist_tracks_temporary_of_ALLLists[index].playlist_tracks.map(track => track.media_file_id);
             return result.includes(item.id);
           } else {
             return true;
           }
         }
       });
-      if (page_songlists_selected.value === 'song_list_recently') {
-        let new_sort: Media_File[] = media_Files_temporary.value.slice();
-        media_Files_temporary.value = [];
+      if (store_view_media_page_logic.page_songlists_selected === 'song_list_recently') {
+        let new_sort: Media_File[] = store_view_media_page_info.media_Files_temporary.slice();
+        store_view_media_page_info.media_Files_temporary = [];
         order_play_date.forEach((id) => {
           const index = new_sort.findIndex(item => item.id === id);
           if (index !== -1) {
-            media_Files_temporary.value.push(new_sort[index]);
+            store_view_media_page_info.media_Files_temporary.push(new_sort[index]);
             new_sort.splice(index, 1);
           }
         });
       }
-      media_Files_temporary.value.forEach((item, index) => {
+      store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
         item.absoluteIndex = index + 1;
       });
     } catch (err: any) {
@@ -1006,6 +743,21 @@
       db = null;
     }
   };
+  function formatTime(currentTime: number): string {
+    const minutes = Math.floor(currentTime / 60);
+    const seconds = Math.floor(currentTime % 60);
+
+    let formattedMinutes = String(minutes);
+    let formattedSeconds = String(seconds);
+
+    if (formattedMinutes.length == 1)
+      formattedMinutes = '0' + formattedMinutes;
+
+    if (formattedSeconds.length == 1)
+      formattedSeconds = '0' + formattedSeconds;
+
+    return `${formattedMinutes}:${formattedSeconds}`;
+  }
 
   ////// view of album
   const album_Files_temporary = ref<Album[]>([]);
@@ -1301,7 +1053,7 @@
       }
       ////// filter selected_list for album_Files_temporary
       let order_play_date:any[] = [];
-      album_Files_temporary.value = album_Files_temporary.value.filter((item) => {
+      album_Files_temporary.value = album_Files_temporary.value.filter((item: any) => {
         if (page_albumlists_selected.value === 'album_list_all') {
           return true;
         } else if (page_albumlists_selected.value === 'album_list_love') {
@@ -1330,7 +1082,7 @@
           }
         });
       }
-      album_Files_temporary.value.forEach((item, index) => {
+      album_Files_temporary.value.forEach((item: any, index: number) => {
         item.absoluteIndex = index + 1;
       });
     } catch (err: any) {
@@ -1342,11 +1094,11 @@
     }
   }
   const fetchData_This_Album_SongList = (album_id:any) => {
-    fetchData_This_AlbumOrArtist_PlayMedia_Model.value = true;
+    store_player_appearance.player_mode_of_medialist_from_external_import = true;
 
-    page_songlists_keyword.value = album_id;
-    page_songlists_selected.value = 'song_list_all'
-    media_Files_temporary.value = [];
+    store_view_media_page_logic.page_songlists_keywordFilter = `WHERE album_id = '${album_id}'`
+    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+    store_view_media_page_info.media_Files_temporary = [];
 
     find_music_model.value = true;
     find_album_model.value = false;
@@ -1354,28 +1106,27 @@
     fetchData_Media()
     find_music_model.value = false;
 
-    playlist_Files_temporary.value = [...media_Files_temporary.value];
-    playlist_Tracks_Current_Media_File_id_of_list.value = media_Files_temporary.value.map(item => item.id);
+    store_playlist_list_info.playlist_MediaFiles_temporary = [...store_view_media_page_info.media_Files_temporary];
+    store_playlist_list_info.playlist_datas_CurrentPlayListMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
     save_system_playlist_item_id_config();
-    page_songlists_keyword.value = '';
 
     router_select_model_album.value = true
 
-    if(playlist_Files_temporary.value.length > 0){
-      get_this_audio_file_path_from_playlist(false)
-      store_player_audio_info.this_audio_file_path = playlist_Files_temporary.value[0].path
-      get_this_audio_lyrics_string(playlist_Files_temporary.value[0].lyrics)
-      store_player_audio_info.this_audio_file_medium_image_url = playlist_Files_temporary.value[0].medium_image_url
-      store_player_audio_info.this_audio_singer_name = playlist_Files_temporary.value[0].artist
-      store_player_audio_info.this_audio_song_name = playlist_Files_temporary.value[0].title
-      get_this_audio_album_id(playlist_Files_temporary.value[0].album_id)
-      store_player_audio_info.this_audio_album_favorite = playlist_Files_temporary.value[0].favorite
-      get_this_audio_album_name(playlist_Files_temporary.value[0].album)
-      store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = playlist_Files_temporary.value[0].absoluteIndex
+    if(store_playlist_list_info.playlist_MediaFiles_temporary.length > 0){
+      store_player_appearance.player_mode_of_audio_path_from_playlist = false
+      store_player_audio_info.this_audio_file_path = store_playlist_list_info.playlist_MediaFiles_temporary[0].path
+      store_player_audio_info.this_audio_lyrics_string = store_playlist_list_info.playlist_MediaFiles_temporary[0].lyrics
+      store_player_audio_info.this_audio_file_medium_image_url = store_playlist_list_info.playlist_MediaFiles_temporary[0].medium_image_url
+      store_player_audio_info.this_audio_singer_name = store_playlist_list_info.playlist_MediaFiles_temporary[0].artist
+      store_player_audio_info.this_audio_song_name = store_playlist_list_info.playlist_MediaFiles_temporary[0].title
+      store_player_audio_info.this_audio_album_id = store_playlist_list_info.playlist_MediaFiles_temporary[0].album_id
+      store_player_audio_info.this_audio_album_favorite = store_playlist_list_info.playlist_MediaFiles_temporary[0].favorite
+      store_player_audio_info.this_audio_album_name = store_playlist_list_info.playlist_MediaFiles_temporary[0].album
+      store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = store_playlist_list_info.playlist_MediaFiles_temporary[0].absoluteIndex
       ///
-      store_player_audio_info.this_audio_song_id = playlist_Files_temporary.value[0].id
-      get_this_audio_song_rating(playlist_Files_temporary.value[0].rating)
-      get_this_audio_song_favorite(playlist_Files_temporary.value[0].favorite)
+      store_player_audio_info.this_audio_song_id = store_playlist_list_info.playlist_MediaFiles_temporary[0].id
+      store_player_audio_info.this_audio_song_rating = store_playlist_list_info.playlist_MediaFiles_temporary[0].rating
+      store_player_audio_info.this_audio_song_favorite = store_playlist_list_info.playlist_MediaFiles_temporary[0].favorite
     }
 
     let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
@@ -1660,7 +1411,7 @@
       }
       ////// filter selected_list for artist_Files_temporary
       let order_play_date:any[] = [];
-      artist_Files_temporary.value = artist_Files_temporary.value.filter((item) => {
+      artist_Files_temporary.value = artist_Files_temporary.value.filter((item: any) => {
         if (page_artistlists_selected.value === 'artist_list_all') {
           return true;
         } else if (page_artistlists_selected.value === 'artist_list_love') {
@@ -1689,7 +1440,7 @@
           }
         });
       }
-      // artist_Files_temporary.value.forEach((item, index) => {
+      // artist_Files_temporary.value.forEach((item: any, index: number) => {
       //   item.absoluteIndex = index + 1;
       // });
     } catch (err: any) {
@@ -1701,11 +1452,11 @@
     }
   }
   const fetchData_This_Artist_SongList = (artist_id:any) => {
-    fetchData_This_AlbumOrArtist_PlayMedia_Model.value = true;
+    store_player_appearance.player_mode_of_medialist_from_external_import = true;
 
-    page_songlists_keyword.value = artist_id;
-    page_songlists_selected.value = 'song_list_all'
-    media_Files_temporary.value = [];
+    store_view_media_page_logic.page_songlists_keywordFilter = `WHERE artist_id = '${artist_id}'`
+    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+    store_view_media_page_info.media_Files_temporary = [];
 
     find_music_model.value = false;
     find_album_model.value = false;
@@ -1713,32 +1464,31 @@
     fetchData_Media()
     find_artist_model.value = false;
 
-    playlist_Files_temporary.value = [...media_Files_temporary.value];
-    playlist_Tracks_Current_Media_File_id_of_list.value = media_Files_temporary.value.map(item => item.id);
+    store_playlist_list_info.playlist_MediaFiles_temporary = [...store_view_media_page_info.media_Files_temporary];
+    store_playlist_list_info.playlist_datas_CurrentPlayListMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
     save_system_playlist_item_id_config();
-    page_songlists_keyword.value = '';
     
     router_select_model_artist.value = true
     
-    if(playlist_Files_temporary.value.length > 0){
-      get_this_audio_file_path_from_playlist(false)
-      store_player_audio_info.this_audio_file_path = playlist_Files_temporary.value[0].path
-      get_this_audio_lyrics_string(playlist_Files_temporary.value[0].lyrics)
-      store_player_audio_info.this_audio_file_medium_image_url = playlist_Files_temporary.value[0].medium_image_url
-      store_player_audio_info.this_audio_singer_name = playlist_Files_temporary.value[0].artist
-      store_player_audio_info.this_audio_song_name = playlist_Files_temporary.value[0].title
-      get_this_audio_album_id(playlist_Files_temporary.value[0].album_id)
-      store_player_audio_info.this_audio_album_favorite = playlist_Files_temporary.value[0].favorite
-      get_this_audio_album_name(playlist_Files_temporary.value[0].album)
-      store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = playlist_Files_temporary.value[0].absoluteIndex
+    if(store_playlist_list_info.playlist_MediaFiles_temporary.length > 0){
+      store_player_appearance.player_mode_of_audio_path_from_playlist = false
+      store_player_audio_info.this_audio_file_path = store_playlist_list_info.playlist_MediaFiles_temporary[0].path
+      store_player_audio_info.this_audio_lyrics_string = store_playlist_list_info.playlist_MediaFiles_temporary[0].lyrics
+      store_player_audio_info.this_audio_file_medium_image_url = store_playlist_list_info.playlist_MediaFiles_temporary[0].medium_image_url
+      store_player_audio_info.this_audio_singer_name = store_playlist_list_info.playlist_MediaFiles_temporary[0].artist
+      store_player_audio_info.this_audio_song_name = store_playlist_list_info.playlist_MediaFiles_temporary[0].title
+      store_player_audio_info.this_audio_album_id = store_playlist_list_info.playlist_MediaFiles_temporary[0].album_id
+      store_player_audio_info.this_audio_album_favorite = store_playlist_list_info.playlist_MediaFiles_temporary[0].favorite
+      store_player_audio_info.this_audio_album_name = store_playlist_list_info.playlist_MediaFiles_temporary[0].album
+      store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = store_playlist_list_info.playlist_MediaFiles_temporary[0].absoluteIndex
       ///
-      store_player_audio_info.this_audio_song_id = playlist_Files_temporary.value[0].id
-      get_this_audio_song_rating(playlist_Files_temporary.value[0].rating)
-      get_this_audio_song_favorite(playlist_Files_temporary.value[0].favorite)
+      store_player_audio_info.this_audio_song_id = store_playlist_list_info.playlist_MediaFiles_temporary[0].id
+      store_player_audio_info.this_audio_song_rating = store_playlist_list_info.playlist_MediaFiles_temporary[0].rating
+      store_player_audio_info.this_audio_song_favorite = store_playlist_list_info.playlist_MediaFiles_temporary[0].favorite
     }
 
     let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite()
-    set_ArtistInfo_To_LocalSqlite.Set_ArtistInfo_To_PlayCount_of_Artist(playlist_Files_temporary.value[0].artist_id)
+    set_ArtistInfo_To_LocalSqlite.Set_ArtistInfo_To_PlayCount_of_Artist(store_playlist_list_info.playlist_MediaFiles_temporary[0].artist_id)
   }
 
   ////// router custom for history_search 
@@ -1749,8 +1499,9 @@
   function get_media_list_of_album_id_by_album_info(value: any) {
     console.log('get_media_list_of_album_model：'+value)
     // open media_files model，keywords set
-    page_songlists_keyword.value = value
-    page_songlists_get_keyword_model_num.value = 3
+    store_view_media_page_logic.page_songlists_keywordFilter = `WHERE album_id = '${value}'`
+
+    store_view_media_page_logic.page_songlists_get_keyword_model_num = 3
     find_music_model.value = true
 
     router.push('View_Song_List_ALL')
@@ -1787,11 +1538,11 @@
     router_select_model_media.value = false
     router_select_model_album.value = false
     router_select_model_artist.value = false
-    home_Files_temporary_maximum_playback.value = []
-    home_Files_temporary_random_search.value = []
-    home_Files_temporary_recently_added.value = []
-    home_Files_temporary_recently_played.value = []
-    media_Files_temporary.value = [];
+    store_view_home_page_info.home_Files_temporary_maximum_playback = []
+    store_view_home_page_info.home_Files_temporary_random_search = []
+    store_view_home_page_info.home_Files_temporary_recently_added = []
+    store_view_home_page_info.home_Files_temporary_recently_played = []
+    store_view_media_page_info.media_Files_temporary = [];
     album_Files_temporary.value = [];
     artist_Files_temporary.value = [];
     /// gc
@@ -2090,7 +1841,7 @@
         store_app_setting_configs.theme_app = darkTheme;
       }
       store_app_setting_configs.theme_name = '' + system_Configs_Read.app_Configs.value['theme']
-      update_lang.value = '' + system_Configs_Read.app_Configs.value['lang']
+      store_app_setting_configs.update_lang = '' + system_Configs_Read.app_Configs.value['lang']
       store_app_setting_configs.app_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_left_menu_select_activeKey']
       store_app_setting_configs.app_left_menu_collapsed = '' + system_Configs_Read.app_Configs.value['app_left_menu_collapsed'] === 'true'
       router_name.value = '' + system_Configs_Read.app_Configs.value['router_name']
@@ -2106,26 +1857,27 @@
       store_player_appearance.player_UI_Theme_State.player_theme_Styles_Selected = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_theme_Styles_Selected'])
       store_player_appearance.player_UI_Theme_State.player_background_model_num = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_background_model_num'])
       store_player_appearance.player_UI_Theme_State.player_use_lottie_animation = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lottie_animation'] === 'true'
-      player_use_lottie_animation.value = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lottie_animation'] === 'true'
+      store_player_audio_logic.player_use_lottie_animation = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lottie_animation'] === 'true'
       /// player_Configs_of_Audio_Info
       store_player_audio_info.this_audio_file_path = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path']
       store_player_audio_info.this_audio_file_medium_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_medium_image_url']
-      this_audio_lyrics_string.value = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_lyric']
-      get_this_audio_lyrics_string(this_audio_lyrics_string.value)
+      store_player_audio_info.this_audio_lyrics_string = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_lyric']
       store_player_audio_info.this_audio_singer_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_singer_name']
       store_player_audio_info.this_audio_song_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_name']
-      this_audio_album_name.value = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_name']
-      this_audio_album_id.value = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_id']
+      store_player_audio_info.this_audio_album_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_name']
+      store_player_audio_info.this_audio_album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_id']
       store_player_audio_info.this_audio_album_favorite = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_favorite']
       store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = Number('' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_Index_of_absolute_positioning_in_list'])
-      page_songlists_selected.value = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_songlists_selected']
+      store_view_media_page_logic.page_songlists_selected = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_songlists_selected']
       //
-      page_top_album_image_url.value = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_image_url']
-      page_top_album_id.value = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_id']
-      page_top_album_name.value = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_name']
+      store_player_audio_info.page_top_album_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_image_url']
+      store_player_audio_info.page_top_album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_id']
+      store_player_audio_info.page_top_album_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_name']
       //
-      this_audio_file_path_from_playlist.value = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path_from_playlist'] === 'true'
-      fetchData_This_AlbumOrArtist_PlayMedia_Model.value = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['fetchData_This_AlbumOrArtist_PlayMedia_Model'] === 'true'
+      store_player_appearance.player_mode_of_audio_path_from_playlist = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['player_mode_of_audio_path_from_playlist'] === 'true'
+      store_player_appearance.player_mode_of_medialist_from_external_import = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['player_mode_of_medialist_from_external_import'] === 'true'
+      //
+      store_player_audio_logic.play_order = '' + system_Configs_Read.app_Configs.value['play_order']
 
       /// view_router_history
       // router_history_datas_of_Media.value = system_Configs_Read.view_Media_History_Configs.value
@@ -2139,7 +1891,7 @@
       store_server_users.server_config_of_all_user_of_sqlite = system_Configs_Read.server_Configs.value
       store_server_users.server_config_of_current_user_of_sqlite = system_Configs_Read.server_Configs_Current.value
       if (store_server_users.server_config_of_current_user_of_sqlite) {
-        store_server_users.server_config_of_all_user_of_sqlite.forEach((item) => {
+        store_server_users.server_config_of_all_user_of_sqlite.forEach((item: any) => {
           store_server_users.server_config_of_all_user_of_select.push(
               {
                 label: item.server_name,
@@ -2152,9 +1904,9 @@
       save_system_config_of_Servers_Config()
 
       /// playlist media_file_id_of_list
-      playlist_Tracks_Current_Media_File_id_of_list.value = system_Configs_Read.playlist_File_Configs.value
+      store_playlist_list_info.playlist_datas_CurrentPlayListMediaIds = system_Configs_Read.playlist_File_Configs.value
       let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
-      playlist_Files_temporary.value = get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(playlist_Tracks_Current_Media_File_id_of_list.value)
+      store_playlist_list_info.playlist_MediaFiles_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(store_playlist_list_info.playlist_datas_CurrentPlayListMediaIds)
     }catch (e) { console.error(e) }
 
     /// playlist configs
@@ -2162,11 +1914,11 @@
       let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
       const playlist_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist()
       playlist_temporary.forEach((item:Play_List) =>{
-        playlist_All_of_list.value.push({
+        store_playlist_list_info.playlist_names_ALLLists.push({
           label: item.name,
           value: item.id
         })
-        playlist_Tracks_temporary.value.push({
+        store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
           playlist: item,
           playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id)
         })
@@ -2184,11 +1936,12 @@
     const app_Configs = ref(
         new App_Configs({
           theme: store_app_setting_configs.theme_name,
-          lang: update_lang.value,
+          lang: store_app_setting_configs.update_lang,
           router_name: String(router_name.value),
           app_left_menu_select_activeKey: String(store_app_setting_configs.app_left_menu_select_activeKey),
           app_left_menu_collapsed: String(store_app_setting_configs.app_left_menu_collapsed),
-          model_select: String(store_server_user_model.model_select)
+          model_select: String(store_server_user_model.model_select),
+          play_order: String(store_player_audio_logic.play_order)
         }));
     let system_Configs_Write = new System_Configs_Write()
     system_Configs_Write.system_app_config(
@@ -2242,25 +1995,25 @@
         new Player_Configs_of_Audio_Info({
           this_audio_file_path: String(store_player_audio_info.this_audio_file_path),
           this_audio_file_medium_image_url: String(store_player_audio_info.this_audio_file_medium_image_url),
-          this_audio_file_lyric: String(this_audio_lyrics_string.value),
+          this_audio_file_lyric: String(store_player_audio_info.this_audio_lyrics_string),
           this_audio_singer_name: String(store_player_audio_info.this_audio_singer_name),
           this_audio_singer_id: String(store_player_audio_info.this_audio_singer_id),
           this_audio_song_name: String(store_player_audio_info.this_audio_song_name),
           this_audio_song_id: String(store_player_audio_info.this_audio_song_id),
-          this_audio_song_rating: String(this_audio_song_rating.value),
-          this_audio_song_favorite: String(this_audio_song_favorite.value),
-          this_audio_album_name: String(this_audio_album_name.value),
-          this_audio_album_id: String(this_audio_album_id.value),
+          this_audio_song_rating: String(store_player_audio_info.this_audio_song_rating),
+          this_audio_song_favorite: String(store_player_audio_info.this_audio_song_favorite),
+          this_audio_album_name: String(store_player_audio_info.this_audio_album_name),
+          this_audio_album_id: String(store_player_audio_info.this_audio_album_id),
           this_audio_Index_of_absolute_positioning_in_list: String(store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list),
 
-          page_top_album_image_url: String(page_top_album_image_url.value),
-          page_top_album_id: String(page_top_album_id.value),
-          page_top_album_name: String(page_top_album_name.value),
+          page_top_album_image_url: String(store_player_audio_info.page_top_album_image_url),
+          page_top_album_id: String(store_player_audio_info.page_top_album_id),
+          page_top_album_name: String(store_player_audio_info.page_top_album_name),
 
-          page_songlists_selected: String(page_songlists_selected.value),
+          page_songlists_selected: String(store_view_media_page_logic.page_songlists_selected),
 
-          this_audio_file_path_from_playlist: String(this_audio_file_path_from_playlist.value),
-          fetchData_This_AlbumOrArtist_PlayMedia_Model: String(fetchData_This_AlbumOrArtist_PlayMedia_Model.value),
+          player_mode_of_audio_path_from_playlist: String(store_player_appearance.player_mode_of_audio_path_from_playlist),
+          player_mode_of_medialist_from_external_import: String(store_player_appearance.player_mode_of_medialist_from_external_import),
         }));
     let system_Configs_Write = new System_Configs_Write()
     system_Configs_Write.system_player_config_of_audio(
@@ -2271,15 +2024,12 @@
   }
   function save_system_playlist_item_id_config(){
     let db:any = null;
-    if(store_server_user_model.model_select === 'local')
-      db = require('better-sqlite3')(nsmusics_db);
-    else
-      db = require('better-sqlite3')(navidrome_db);
+    db = require('better-sqlite3')(nsmusics_db);
     db.pragma('journal_mode = WAL');
     let system_Configs_Write = new System_Configs_Write();
     system_Configs_Write.system_playlist_item_id_config(
       db,
-      playlist_Tracks_Current_Media_File_id_of_list.value
+      store_playlist_list_info.playlist_datas_CurrentPlayListMediaIds
     )
     save_system_config_of_App_Configs()
     db.close();db = null;
@@ -2348,12 +2098,7 @@
               v-if="router_select_model_menu"
               @router_select="get_router_select"
               @server_config_of_current_user_of_sqlite="get_server_config_of_current_user_of_sqlite"
-              @update_lang="get_update_lang"
-              @update_theme="get_update_theme"
-              :player_fade_value="player_fade_value"
-              @player_fade_value="get_player_fade_value"
-              :player_use_lottie_animation="player_use_lottie_animation"
-              @player_use_lottie_animation="get_player_use_lottie_animation">
+              @update_theme="get_update_theme">
 
             </RouterView>
             <!--Home View -->
@@ -2361,13 +2106,6 @@
               class="view_show_data"
               v-else-if="router_select_model_home"
               @router_select="get_router_select"
-              :home_Files_temporary_maximum_playback="home_Files_temporary_maximum_playback"
-              :home_Files_temporary_random_search="home_Files_temporary_random_search"
-              :home_Files_temporary_recently_added="home_Files_temporary_recently_added"
-              :home_Files_temporary_recently_played="home_Files_temporary_recently_played"
-              :home_selected_top_album="home_selected_top_album"
-              @home_selected_top_album="get_home_selected_top_album"
-              @refresh_home_temporary="get_refresh_home_temporary"
               @media_list_of_album_id="get_media_list_of_album_id_by_album_info"
               @play_this_album_song_list="fetchData_This_Album_SongList"
             >
@@ -2394,45 +2132,10 @@
               :router_history_model_of_Media_scroll="router_history_model_of_Media_scroll"
               @router_history_model_of_Media_scroll="get_router_history_model_of_Media_scroll"
 
-              @this_audio_lyrics_string="get_this_audio_lyrics_string"
-              @media_file_path_from_playlist="get_this_audio_file_path_from_playlist"
-              @this_audio_song_rating="get_this_audio_song_rating"
-              @this_audio_song_favorite="get_this_audio_song_favorite"
-              :this_audio_album_name="this_audio_album_name"
-              @this_audio_album_name="get_this_audio_album_name"
-              @this_audio_album_id="get_this_audio_album_id"
-              :media_Files_temporary="media_Files_temporary"
-              :media_Files_selected="media_Files_selected"
-              @media_Files_selected_set="set_media_Files_selected"
-              @media_Files_selected_set_all="set_media_Files_selected_all"
               :page_songlists_options_Sort_key="page_songlists_options_Sort_key"
               @page_songlists_options_Sort_key="get_page_songlists_options_Sort_key"
 
-              :page_songlists_keyword=page_songlists_keyword
-              @page_songlists_keyword="page_songlists_get_keyword"
-
-              :playlist_All_of_list="playlist_All_of_list"
-              :playlist_Tracks_temporary="playlist_Tracks_temporary"
-              @playlist_Tracks_temporary_add="get_playlist_Tracks_temporary_add"
-              @playlist_Tracks_temporary_update="get_playlist_Tracks_temporary_update"
-              @playlist_Tracks_temporary_delete="get_playlist_Tracks_temporary_delete"
-              @playlist_Tracks_temporary_update_media_file="get_playlist_Tracks_temporary_update_media_file"
-              @selected_playlist_addMediaFile="get_selected_playlist_addMediaFile"
-              @selected_playlist_deleteMediaFile="get_selected_playlist_deleteMediaFile"
-              @selected_locallist_deleteMediaFile="get_selected_locallist_deleteMediaFile"
-              @selected_lovelist_addMediaFile="get_selected_lovelist_addMediaFile"
-              @selected_lovelist_deleteMediaFile="get_selected_lovelist_deleteMediaFile"
-              @selected_recentlist_deletetMediaFile="get_selected_recentlist_deletetMediaFile"
-
               @page_songlists_reset_data="page_songlists_get_reset_data"
-              :page_top_album_image_url="page_top_album_image_url"
-              :page_top_album_id="page_top_album_id"
-              :page_top_album_name="page_top_album_name"
-              :page_songlists_options="page_songlists_options"
-              :page_songlists_statistic="page_songlists_statistic"
-              :page_songlists="page_songlists"
-              :page_songlists_selected="page_songlists_selected"
-              @page_songlists_selected="get_page_songlists_selected"
             >
 
             </RouterView>
@@ -2456,9 +2159,6 @@
               :page_albumlists_keyword="page_albumlists_keyword"
               @page_albumlists_keyword="page_albumlists_get_keyword"
               @page_albumlists_reset_data="page_albumlists_get_reset_data"
-              :page_top_album_image_url="page_top_album_image_url"
-              :page_top_album_id="page_top_album_id"
-              :page_top_album_name="page_top_album_name"
               :page_albumlists_options="page_albumlists_options"
               :page_albumlists_statistic="page_albumlists_statistic"
               :page_albumlists="page_albumlists"
@@ -2468,8 +2168,6 @@
               @media_list_of_album_id="get_media_list_of_album_id_by_album_info"
               @media_list_of_artist_id="get_album_list_of_artist_id_by_album_info"
               @play_this_album_song_list="fetchData_This_Album_SongList"
-
-              :this_audio_album_name="this_audio_album_name"
             >
 
             </RouterView>
@@ -2493,9 +2191,6 @@
               :page_artistlists_keyword="page_artistlists_keyword"
               @page_artistlists_keyword="page_artistlists_get_keyword"
               @page_artistlists_reset_data="page_artistlists_get_reset_data"
-              :page_top_album_image_url="page_top_album_image_url"
-              :page_top_album_id="page_top_album_id"
-              :page_top_album_name="page_top_album_name"
               :page_artistlists_options="page_artistlists_options"
               :page_artistlists_statistic="page_artistlists_statistic"
               :page_artistlists="page_artistlists"
@@ -2504,8 +2199,6 @@
 
               @album_list_of_artist_id_artist="get_album_list_of_artist_id_by_artist_info"
               @play_this_artist_song_list="fetchData_This_Artist_SongList"
-
-              :this_audio_album_name="this_audio_album_name"
             >
 
             </RouterView>
@@ -2567,54 +2260,12 @@
           z-index: 100;
           border-radius: 12px 12px 0 0;border: 0 #00000000">
         <Bar_Music_Player
-          :player="player"
-          @player_save_new_data="player_save_new_data"
-          :player_fade_value="player_fade_value"
-
-          @player_silder_currentTime_added_value="get_player_silder_currentTime_added_value"
-          :player_go_lyricline_index_of_audio_play_progress="player_go_lyricline_index_of_audio_play_progress"
-
-          @this_audio_lyrics_string="get_this_audio_lyrics_string"
-
-          @page_songlists_keyword="page_songlists_get_keyword"
-
-          :this_audio_song_rating="this_audio_song_rating"
-          @this_audio_song_rating="get_this_audio_song_rating"
-          :this_audio_song_favorite="this_audio_song_favorite"
-          @this_audio_song_favorite="get_this_audio_song_favorite"
-          :this_audio_album_name="this_audio_album_name"
-          @this_audio_album_name="get_this_audio_album_name"
-          :this_audio_album_id="this_audio_album_id"
-          @this_audio_album_id="get_this_audio_album_id"
-
-          :playlist_Files_temporary="playlist_Files_temporary"
-
-          @player_show_height="get_playerbar_to_Switch_playerview"
-          :player_show_sound_effects="player_show_sound_effects"
-          @player_show_sound_effects="get_player_show_sound_effects"
-          :player_show_sound_speed="player_show_sound_speed"
-          @player_show_sound_speed="get_player_show_sound_speed"
-          :player_show_sound_more="player_show_sound_more"
-          @player_show_sound_more="get_player_show_sound_more"/>
+          @player_show_height="get_playerbar_to_Switch_playerview"/>
       </n-card>
       <View_Screen_Music_Player
         class="view_music_player"
         v-if="store_player_appearance.player_show"
-        :style="{ height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)` }"
-
-        :player_use_lottie_animation="player_use_lottie_animation"
-
-        :player="player"
-        :player_silder_currentTime_added_value="player_silder_currentTime_added_value"
-        @player_go_lyricline_index_of_audio_play_progress="get_player_go_lyricline_index_of_audio_play_progress"
-        :this_audio_lyrics_info_line_num="this_audio_lyrics_info_line_num"
-
-        :this_audio_lyrics_string="this_audio_lyrics_string"
-        :this_audio_lyrics_info_line="this_audio_lyrics_info_line"
-        :this_audio_lyrics_info_time="this_audio_lyrics_info_time"
-
-        :this_audio_album_id="this_audio_album_id"
-        :this_audio_album_name="this_audio_album_name">
+        :style="{ height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)` }">
 
       </View_Screen_Music_Player>
     </n-config-provider>
@@ -2634,16 +2285,6 @@
           <template #default>
             <Bar_Music_PlayList
               v-if="store_playlist_appearance.playlist_show"
-
-              @this_audio_lyrics_string="get_this_audio_lyrics_string"
-              @media_file_path_from_playlist="get_this_audio_file_path_from_playlist"
-
-              @this_audio_song_rating="get_this_audio_song_rating"
-              @this_audio_song_favorite="get_this_audio_song_favorite"
-              @this_audio_album_name="get_this_audio_album_name"
-              @this_audio_album_id="get_this_audio_album_id"
-
-              :playlist_Files_temporary="playlist_Files_temporary"
               >
             </Bar_Music_PlayList>
           </template>
@@ -2653,7 +2294,7 @@
     <!-- bottom drwaer of player_bar(more,sound speed,sound effect) -->
     <n-config-provider :theme="darkTheme">
       <n-drawer
-        v-model:show="player_show_sound_more"
+        v-model:show="store_player_sound_more.player_show_sound_more"
         :width="440"
         style="
           border-radius: 12px 0 0 12px;
@@ -2662,14 +2303,14 @@
           backdrop-filter: blur(10px);
           margin-top: calc(50vh - 280px);height: 560px;
         ">
-        <n-drawer-content v-if="player_show_sound_more">
+        <n-drawer-content v-if="store_player_sound_more.player_show_sound_more">
           <template #default>
             更多设置：开发中
           </template>
         </n-drawer-content>
       </n-drawer>
       <n-drawer
-        v-model:show="player_show_sound_speed"
+        v-model:show="store_player_sound_speed.player_show_sound_speed"
         :width="440"
         style="
           border-radius: 12px 0 0 12px;
@@ -2678,14 +2319,14 @@
           backdrop-filter: blur(10px);
           margin-top: calc(50vh - 280px);height: 560px;
         ">
-        <n-drawer-content v-if="player_show_sound_speed">
+        <n-drawer-content v-if="store_player_sound_speed.player_show_sound_speed">
           <template #default>
             播放设置：开发中
           </template>
         </n-drawer-content>
       </n-drawer>
       <n-drawer
-        v-model:show="player_show_sound_effects"
+        v-model:show="store_player_sound_effects.player_show_sound_effects"
         :width="440"
         style="
           border-radius: 12px 0 0 12px;
@@ -2694,7 +2335,7 @@
           backdrop-filter: blur(10px);
           margin-top: calc(50vh - 280px);height: 560px;
         ">
-        <n-drawer-content v-if="player_show_sound_effects">
+        <n-drawer-content v-if="store_player_sound_effects.player_show_sound_effects">
           <template #default>
             <n-tabs type="line" animated>
               <n-tab-pane name="001" tab="九歌音效">

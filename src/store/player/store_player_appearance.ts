@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import {Player_UI_Theme_State} from "@/features/player_configs/Player_UI_Theme_State";
+import { Player_UI_Theme_State } from "@/features/player_configs/Player_UI_Theme_State";
 
 export const store_player_appearance = reactive({
     player_show: false,
@@ -9,4 +9,7 @@ export const store_player_appearance = reactive({
     player_show_click: false,
     player_UI_Theme_State: new Player_UI_Theme_State(),
     player_use_lottie_animation: false,
+
+    player_mode_of_medialist_from_external_import: false,
+    player_mode_of_audio_path_from_playlist: false,
 });

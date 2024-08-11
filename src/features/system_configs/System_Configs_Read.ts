@@ -2,7 +2,6 @@ import { ref } from 'vue'
 import { App_Configs } from '@/models/app_Configs/class_App_Configs';
 import { Player_Configs_of_Audio_Info } from '@/models/app_Configs/class_Player_Configs_of_Audio_Info';
 import { Player_Configs_of_UI } from '@/models/app_Configs/class_Player_Configs_of_UI';
-import { Server_Configs } from "@/models/server_Configs/class_Server_Configs";
 import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
 
 export class System_Configs_Read {
@@ -13,7 +12,8 @@ export class System_Configs_Read {
             router_name: '',
             app_left_menu_select_activeKey: '',
             app_left_menu_collapsed: null,
-            model_select: ''
+            model_select: '',
+            play_order: ''
         }))
     public library_Configs = ref(
         new Library_Configs({
@@ -51,8 +51,8 @@ export class System_Configs_Read {
 
             page_songlists_selected: '',
         
-            this_audio_file_path_from_playlist: null,
-            fetchData_This_AlbumOrArtist_PlayMedia_Model: null,
+            player_mode_of_audio_path_from_playlist: null,
+            player_mode_of_medialist_from_external_import: null,
         }))
     public playlist_File_Configs = ref<string[]>([])
     public view_Media_History_Configs = ref<Interface_View_Router_Date[]>([])

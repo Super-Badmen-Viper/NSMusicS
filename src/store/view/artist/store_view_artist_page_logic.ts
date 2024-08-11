@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
 
-export const store_view_home_page_logic = reactive({
+export const store_view_artist_page_logic = reactive({
 
 });

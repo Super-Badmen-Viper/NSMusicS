@@ -33,7 +33,6 @@
   const props = defineProps<{
     data_temporary: Album[];
 
-    page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
     page_albumlists:Play_List[],page_albumlists_options:{label: string;value: string}[],page_albumlists_statistic:{label: string;album_count: number;id: string;}[],
     page_albumlists_selected:string;
 
@@ -332,8 +331,7 @@
 
   ////// go to media_view
   const handleItemClick_album = (album:string) => {
-    // router.push({ path: '/media' });
-    input_search_Value.value = album//+'accurate_search'+'__album__'
+    input_search_Value.value = album
     bool_show_search_area.value = false
     show_search_area()
     click_search()
@@ -365,6 +363,7 @@
   ////// changed_data write to sqlite
   import {Set_AlbumInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite'
   import {store_app_setting_configs} from "@/store/app/store_app_setting_configs";
+  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
   let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Favorite(id,favorite)
@@ -477,7 +476,7 @@
                   margin-left: 200px; margin-top: -300px;
                   object-fit: cover;object-position: center;
                 "
-                :src="getAssetImage(props.page_top_album_image_url)"
+                :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
                 @error="handleImageError"
               />
             </div>
@@ -501,10 +500,10 @@
                   <n-breadcrumb separator="|">
                       <n-breadcrumb-item style="font-size: 22px">{{ $t('entity.album_other') }}</n-breadcrumb-item>
                       <n-breadcrumb-item>
-                        <n-button text @click="handleItemClick_album(props.page_top_album_id)">
+                        <n-button text @click="handleItemClick_album(store_player_audio_info.page_top_album_id)">
                           <n-ellipsis
                               style="text-align: left;font-size: 22px;">
-                            {{ props.page_top_album_name }}
+                            {{ store_player_audio_info.page_top_album_name }}
                           </n-ellipsis>
                         </n-button>
                       </n-breadcrumb-item>
@@ -524,7 +523,7 @@
                   style="
                     border-radius: 6px;border: 1.5px solid #FFFFFF20;
                     margin-left: 12px;margin-top: 20px;"
-                  :src="getAssetImage(props.page_top_album_image_url)"
+                  :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
                   fallback-src="../../../resources/img/error_album.jpg"
                   :show-toolbar="false"
                 />

@@ -48,6 +48,7 @@
     'player_collapsed_action_bar_of_Immersion_model'
   ]);
   import { defineProps} from 'vue';
+  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
   const props = defineProps([
     'this_audio_file_path','playlist_Files_temporary',
     'this_audio_file_medium_image_url','this_audio_restart_play',
@@ -132,13 +133,17 @@
     }
   });
   const handleAudioFilePathChange = async () => {
-    current_play_time.value = formatTime(props.player.getDuration());
-    player_silder_currentTime_added_value.value = 0;
-    this_audio_buffer_file.value = null;
-    player_no_progress_jump.value = false;
-    props.player.isPlaying = false;
+    if(store_player_audio_info.this_audio_initial_trigger) {
+      current_play_time.value = formatTime(props.player.getDuration());
+      player_silder_currentTime_added_value.value = 0;
+      this_audio_buffer_file.value = null;
+      player_no_progress_jump.value = false;
+      props.player.isPlaying = false;
 
-    await Init_Audio_Player()
+      await Init_Audio_Player()
+    }
+    // Prevent triggering events captured by "vue3 watch" during data initialization
+    store_player_audio_info.this_audio_initial_trigger = true
   };
   const play_order = ref('playback-2');
   const this_audio_buffer_file = ref<any>()

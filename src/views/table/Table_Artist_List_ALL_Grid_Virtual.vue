@@ -34,7 +34,6 @@
   const props = defineProps<{
     data_temporary: Artist[];
 
-    page_top_album_image_url:string,page_top_album_name:string,page_top_album_id:string,
     page_artistlists:Play_List[],page_artistlists_options:{label: string;value: string}[],page_artistlists_statistic:{label: string;artist_count: number;id: string;}[],
     page_artistlists_selected:string;
 
@@ -350,6 +349,7 @@
   import {Set_ArtistInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_ArtistInfo_To_LocalSqlite'
   import {Icon} from "@vicons/utils";
   import {store_app_setting_configs} from "@/store/app/store_app_setting_configs";
+  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
   let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     set_ArtistInfo_To_LocalSqlite.Set_ArtistInfo_To_Favorite(id,favorite)
@@ -464,7 +464,7 @@
                   margin-left: 200px; margin-top: -300px;
                   object-fit: cover;object-position: center;
                 "
-                :src="getAssetImage(props.page_top_album_image_url)"
+                :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
                 @error="handleImageError"
               />
             </div>
@@ -491,7 +491,7 @@
                         <n-button text >
                           <n-ellipsis
                               style="text-align: left;font-size: 22px;">
-                            {{ props.page_top_album_name }}
+                            {{ store_player_audio_info.page_top_album_name }}
                           </n-ellipsis>
                         </n-button>
                       </n-breadcrumb-item>
@@ -511,7 +511,7 @@
                   style="
                     border-radius: 6px;border: 1.5px solid #FFFFFF20;
                     margin-left: 12px;margin-top: 20px;"
-                  :src="getAssetImage(props.page_top_album_image_url)"
+                  :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
                   fallback-src="../../../resources/img/error_album.jpg"
                   :show-toolbar="false"
                 />

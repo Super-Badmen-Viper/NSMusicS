@@ -40,6 +40,9 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         db.close();
         ///
         const data = {
+            label: name,
+            value: new_id,
+
             id: new_id,
             name: name,
             comment: comment,

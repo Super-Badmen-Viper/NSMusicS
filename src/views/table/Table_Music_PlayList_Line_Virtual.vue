@@ -8,24 +8,17 @@
   import { ref, onMounted } from 'vue';
   import { NIcon } from 'naive-ui';
   import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+  import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
 
   ////// passed as argument
   const emits = defineEmits([
     'media_file_path_from_playlist',
-    'this_audio_song_rating','this_audio_song_favorite',
-    'this_audio_album_name','this_audio_album_id',
     'menu_edit_this_song',
     'menu_add_this_song',
     'menu_delete_this_song',
     'options_Sort_key',
-    'page_songlists_keyword',
     'page_songlists_reset_data',
-    'page_songlists_selected',
-    'this_audio_lyrics_string'
   ]);
-  const props = defineProps<{
-    data_temporary: Media_File[];
-  }>();
 
   ////// scrollbar of playlist_view
   const scrollbar = ref(null as any);
@@ -43,16 +36,16 @@
   const handleItemDbClick = (media_file:Media_File,index:number) => {
     emits('media_file_path_from_playlist',true)
     store_player_audio_info.this_audio_file_path = media_file.path
-    emits('this_audio_lyrics_string', media_file.lyrics)
+    store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
     store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
     store_player_audio_info.this_audio_singer_name = media_file.artist
     store_player_audio_info.this_audio_singer_id = media_file.artist_id
     store_player_audio_info.this_audio_song_name = media_file.title
     store_player_audio_info.this_audio_song_id = media_file.id
-    emits('this_audio_song_rating',media_file.rating)
-    emits('this_audio_song_favorite',media_file.favorite)
-    emits('this_audio_album_id', media_file.album_id);
-    emits('this_audio_album_name',media_file.album)
+    store_player_audio_info.this_audio_song_rating = media_file.rating
+    store_player_audio_info.this_audio_song_favorite = media_file.favorite
+    store_player_audio_info.this_audio_album_id = media_file.album_id
+    store_player_audio_info.this_audio_album_name = media_file.album
     store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
   }
   const handleItemClick_title = (title:string) => {
@@ -78,7 +71,7 @@
     <div class="dynamic-scroller-demo">
       <DynamicScroller 
         class="table" ref="scrollbar" style="width: 410px;"
-        :items="props.data_temporary"
+        :items="store_playlist_list_info.playlist_MediaFiles_temporary"
         :minItemSize="50">
         <template #default="{ item, index, active }">
           <DynamicScrollerItem

@@ -35,7 +35,6 @@
     "music-metadata": "^8.3.0",
     "node-cache": "^5.1.2",
     "node-mpv": "beta",
-    "pinia": "^2.2.1",
     "prebuild-install": "^7.1.1",
     "reflect-metadata": "^0.2.2",
     "uuid": "^9.0.1",

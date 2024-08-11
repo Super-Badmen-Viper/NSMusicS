@@ -62,24 +62,11 @@
       store_player_appearance.player_show_click = true
   }
 
-  ////// passed as argument
-  const emits = defineEmits([
-    'player_go_lyricline_index_of_audio_play_progress',
-  ]);
-  const props = defineProps([
-    'playlist_Files_temporary',
-    'this_audio_album_name',
-    'this_audio_lyrics_string','this_audio_lyrics_info_line','this_audio_lyrics_info_time',
-    'player','player_silder_currentTime_added_value',
-    'this_audio_lyrics_info_line_num',
-    'player_use_lottie_animation',
-  ]);
-
   ////// lyircs load
-  let unwatch = watch(() => props.this_audio_lyrics_string, (value) => {load_lyrics()});
+  let unwatch = watch(() => store_player_audio_info.this_audio_lyrics_string, (value) => {load_lyrics()});
   onMounted(() => {load_lyrics()});
   function load_lyrics() {
-    if(props.this_audio_lyrics_string.length > 0) {
+    if(store_player_audio_info.this_audio_lyrics_string.length > 0) {
       begin_lyrics_animation()
       try{
         setTimeout(() => {
@@ -93,24 +80,23 @@
   function begin_lyrics_animation() {
     clearInterval(lyrics_animation);
     lyrics_animation = setInterval(async () => {
-      for (let i = 0; i < props.this_audio_lyrics_info_time.length; i++) {
-        if (props.player !== null && await props.player.getCurrentTime() !== undefined && await props.player.getCurrentTime() !== null) {
-          // let currentTime = (Math.floor(props.player_silder_currentTime_added_value) + props.player_configs.getCurrentTime())*1000;
-          let currentTime = await props.player.getCurrentTime() * 1000;
-          if (currentTime <= props.this_audio_lyrics_info_time[0]) {
+      for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_time.length; i++) {
+        if (store_player_audio_logic.player !== null && await store_player_audio_logic.player.getCurrentTime() !== undefined && await store_player_audio_logic.player.getCurrentTime() !== null) {
+          let currentTime = await store_player_audio_logic.player.getCurrentTime() * 1000;
+          if (currentTime <= store_player_audio_info.this_audio_lyrics_info_time[0]) {
             if (lyrics_list_whell.value === false) {
-              scrollToItem(props.this_audio_lyrics_info_line_num);
+              scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num);
             }
             break;
-          } else if (currentTime >= props.this_audio_lyrics_info_time[i]) {
-            if (i === props.this_audio_lyrics_info_time.length - 1) {
+          } else if (currentTime >= store_player_audio_info.this_audio_lyrics_info_time[i]) {
+            if (i === store_player_audio_info.this_audio_lyrics_info_time.length - 1) {
               if (lyrics_list_whell.value === false) {
-                scrollToItem(i + props.this_audio_lyrics_info_line_num);
+                scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
               }
               break;
-            } else if (currentTime < props.this_audio_lyrics_info_time[i + 1]) {
+            } else if (currentTime < store_player_audio_info.this_audio_lyrics_info_time[i + 1]) {
               if (lyrics_list_whell.value === false) {
-                scrollToItem(i + props.this_audio_lyrics_info_line_num);
+                scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
               }
               break;
             }
@@ -121,12 +107,12 @@
   }
   let lyrics_animation: string | number | NodeJS.Timeout | undefined;
   const handleItemDbClick = async (index: any) => {
-    if (index < props.this_audio_lyrics_info_line_num) return;
-    if (index > props.this_audio_lyrics_info_line.length - props.this_audio_lyrics_info_line_num - 1) return;
-    const time = props.this_audio_lyrics_info_time[index - props.this_audio_lyrics_info_line_num];
-    if (time >= await props.player.getDuration() * 1000) return;
+    if (index < store_player_audio_info.this_audio_lyrics_info_line_num) return;
+    if (index > store_player_audio_info.this_audio_lyrics_info_line.length - store_player_audio_info.this_audio_lyrics_info_line_num - 1) return;
+    const time = store_player_audio_info.this_audio_lyrics_info_time[index - store_player_audio_info.this_audio_lyrics_info_line_num];
+    if (time >= await store_player_audio_logic.player.getDuration() * 1000) return;
     if (time < 0) return;
-    emits('player_go_lyricline_index_of_audio_play_progress', time);
+    store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress = time;
   };
   const scrollbar = ref(null as any);
   const perviousIndex = ref(0);
@@ -405,6 +391,7 @@
   import "@lottiefiles/lottie-player";
   import {store_player_appearance} from "@/store/player/store_player_appearance";
   import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+  import {store_player_audio_logic} from "@/store/player/store_player_audio_logic"
   const clear_lottie_animationInstance = ref(false)
   const animationInstance_model_1_spectrum = ref<any>(null);
   const animationInstance_model_1_spectrum_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715392202806.json'))
@@ -768,7 +755,7 @@
                         width: 54vh;margin-left: 2px;margin-top: -10px;color: #989292;font-weight: 550;font-size: 18px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
-                      {{ store_player_audio_info.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
+                      {{ store_player_audio_info.this_audio_singer_name }} -  {{ store_player_audio_info.this_audio_album_name }}
                     </div>
                   </n-space>
                   <!-- 2 旋转封面-->
@@ -814,7 +801,7 @@
                           width: 54vh;margin-left: 2px;margin-top: 0px;color: #989292;font-weight: 550;font-size: 18px;
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
-                        {{ store_player_audio_info.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
+                        {{ store_player_audio_info.this_audio_singer_name }} -  {{ store_player_audio_info.this_audio_album_name }}
                       </div>
                     </div>
                     <lottie-player
@@ -897,7 +884,7 @@
                         width: 54vh;margin-left: 2px;margin-top: -10px;color: #989292;font-weight: 550;font-size: 18px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
-                      {{ store_player_audio_info.this_audio_singer_name }} -  {{ props.this_audio_album_name }}
+                      {{ store_player_audio_info.this_audio_singer_name }} -  {{ store_player_audio_info.this_audio_album_name }}
                     </div>
                   </n-space>
                 </n-space>
@@ -929,7 +916,7 @@
                         :style="{
                           textAlign: player_collapsed_album ? 'center' : 'left',
                         }"
-                        v-for="(item, index) in props.this_audio_lyrics_info_line"
+                        v-for="(item: any, index: number) in store_player_audio_info.this_audio_lyrics_info_line"
                         @click="handleItemDbClick(index)">
                         <div class="lyrics_text_active">
                           {{ item }}

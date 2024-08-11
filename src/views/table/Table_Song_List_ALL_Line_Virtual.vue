@@ -28,39 +28,16 @@ const { t } = useI18n({
 ////// passed as argument
 const emits = defineEmits([
   'media_file_path_from_playlist',
-  'this_audio_song_rating','this_audio_song_favorite',
-  'this_audio_album_name','this_audio_album_id',
   'menu_edit_this_song',
   'menu_add_this_song',
   'menu_delete_this_song',
   'options_Sort_key',
-  'page_songlists_keyword',
   'page_songlists_reset_data',
   'media_Files_selected',
-  'media_Files_selected_set',
-  'media_Files_selected_set_all',
-  'page_songlists_selected',
-  'this_audio_lyrics_string',
   'router_history_model','router_history_model_of_Media_scroller_value','router_history_model_of_Media_scroll',
-  'playlist_Tracks_temporary_add','playlist_Tracks_temporary_update','playlist_Tracks_temporary_delete',
-  'playlist_Tracks_temporary_update_media_file',
-  'selected_playlist_addMediaFile','selected_playlist_deleteMediaFile',
-  'selected_locallist_deleteMediaFile',
-  'selected_lovelist_addMediaFile',
-  'selected_lovelist_deleteMediaFile','selected_recentlist_deletetMediaFile'
 ]);
 const props = defineProps<{
-  data_temporary: Media_File[];data_temporary_selected: Media_File[];
-
-  page_top_album_image_url:string;page_top_album_name:string;page_top_album_id:string;
-  page_songlists:Play_List[];page_songlists_options:{label: string;value: string}[];page_songlists_statistic:{label: string;song_count: number;id: string;}[];
-  page_songlists_selected:string;
-
-  page_songlists_keyword:string;
-
   options_Sort_key:{ columnKey: string; order: string }[];
-
-  playlist_All_of_list:{label: string;value: string}[];playlist_Tracks_temporary:{playlist:Play_List,playlist_tracks:Play_list_Track[]}[];
 
   router_select_history_date: Interface_View_Router_Date;router_history_datas: Interface_View_Router_Date[];router_history_model_of_Media_scroller_value: number;router_history_model_of_Media_scroll: Boolean;
 }>();
@@ -231,7 +208,7 @@ let bool_input_search = false
 const click_search = () => {
   if (input_search_Value.value){
     const page_songlists_keyword = input_search_Value.value.toLowerCase();
-    emits('page_songlists_keyword',page_songlists_keyword)
+    store_view_media_page_logic.page_songlists_keyword = page_songlists_keyword
     bool_input_search = true
     options_Sort_key.value.forEach(element => {
       element.state_Sort = state_Sort.Default
@@ -261,7 +238,7 @@ const back_search_default = () => {
   }
 }
 onMounted(() => {
-  input_search_Value.value = props.page_songlists_keyword
+  input_search_Value.value = store_view_media_page_logic.page_songlists_keyword
   if(input_search_Value.value.length > 0){
     bool_show_search_area.value = true
     bool_input_search = true
@@ -284,9 +261,9 @@ const options_Filter = ref([
   }
 ])
 const options_Filter_handleSelect = (key: string | number) => {
-  emits('page_songlists_selected','song_list_love')
+  store_view_media_page_logic.page_songlists_selected = 'song_list_love'
   console.log('selected_value_for_songlistall：'+'song_list_love');
-  breadcrumbItems.value = props.page_songlists_options.find(option => option.value === 'song_list_love')?.label || '';
+  breadcrumbItems.value = store_view_media_page_logic.page_songlists_options.find(option => option.value === 'song_list_love')?.label || '';
 }
 
 ////// dynamicScroller of artistlist_view
@@ -325,12 +302,12 @@ onMounted(() => {
 ////// select Dtatsource of artistlists
 const breadcrumbItems = ref('所有歌曲');
 const page_songlists_handleselected_updatevalue = (value: any) => {
-  emits('media_Files_selected_set_all', false);
-  emits('page_songlists_selected',value)
+  store_view_media_page_logic.set_media_Files_selected_all(false)
+  store_view_media_page_logic.page_songlists_selected = value
   console.log('selected_value_for_songlistall：'+value);
-  breadcrumbItems.value = props.page_songlists_options.find(option => option.value === value)?.label || '';
+  breadcrumbItems.value = store_view_media_page_logic.page_songlists_options.find(option => option.value === value)?.label || '';
   bool_start_play.value = true
-  emits('media_Files_selected_set_all', false);
+  store_view_media_page_logic.set_media_Files_selected_all(false)
 };
 
 ////// router history
@@ -352,16 +329,16 @@ const handleItemDbClick = (media_file:Media_File,index:number) => {
 
       emits('media_file_path_from_playlist',false)
       store_player_audio_info.this_audio_file_path = media_file.path
-      emits('this_audio_lyrics_string', media_file.lyrics)
+      store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
       store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
       store_player_audio_info.this_audio_singer_name = media_file.artist
       store_player_audio_info.this_audio_singer_id = media_file.artist_id
       store_player_audio_info.this_audio_song_name = media_file.title
       store_player_audio_info.this_audio_song_id = media_file.id
-      emits('this_audio_song_rating',media_file.rating)
-      emits('this_audio_song_favorite',media_file.favorite)
-      emits('this_audio_album_id', media_file.album_id);
-      emits('this_audio_album_name',media_file.album)
+      store_player_audio_info.this_audio_song_rating = media_file.rating
+      store_player_audio_info.this_audio_song_favorite = media_file.favorite
+      store_player_audio_info.this_audio_album_id = media_file.album_id
+      store_player_audio_info.this_audio_album_name = media_file.album
       store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
     }
   }
@@ -382,9 +359,9 @@ const handleItemClick_artist = (artist:string) => {
   click_search()
   scrollTo(0)
 }
-const handleItemClick_album = (album:string) => {
+const handleItemClick_album = (album_id:string) => {
   click_count = 0;
-  input_search_Value.value = album+'accurate_search'+'__album__'
+  input_search_Value.value = album_id+'accurate_search'+'__album__'
   bool_show_search_area.value = false
   show_search_area()
   click_search()
@@ -414,6 +391,10 @@ const message = useMessage()
 import { Set_PlaylistInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_To_LocalSqlite";
 import {store_app_setting_configs} from "@/store/app/store_app_setting_configs";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+import {store_playlist_list_info} from  "@/store/playlist/store_playlist_list_info"
+import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
+import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite()
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -424,7 +405,7 @@ const playlist_set_of_addPlaylist_of_playlistname = ref('')
 // const playlist_set_of_addPlaylist_of_owner_id = ref(false)
 async function update_playlist_addPlaylist(){
   try{
-    emits('playlist_Tracks_temporary_add', playlist_set_of_addPlaylist_of_playlistname.value);
+    store_playlist_list_logic.get_playlist_tracks_temporary_add(playlist_set_of_addPlaylist_of_playlistname.value)
     Type_Add_Playlist.value = !Type_Add_Playlist.value
   }catch (e) {
     console.error(e)
@@ -444,7 +425,7 @@ async function update_playlist_updatePlaylist(){
       id: playlist_update_emit_id.value,
       name: playlist_set_of_updatePlaylist_of_playlistcomment.value
     }
-    emits('playlist_Tracks_temporary_update', playlist);
+    store_playlist_list_logic.get_playlist_tracks_temporary_update(playlist)
     Type_Update_Playlist.value = !Type_Update_Playlist.value
   }catch (e) {
     console.error(e)
@@ -452,7 +433,7 @@ async function update_playlist_updatePlaylist(){
 }
 async function update_playlist_deletePlaylist(){
   try{
-    emits('playlist_Tracks_temporary_delete', playlist_update_emit_id.value);
+    store_playlist_list_logic.get_playlist_tracks_temporary_delete(playlist_update_emit_id.value)
     Type_Update_Playlist.value = !Type_Update_Playlist.value
   }catch (e) {
     console.error(e)
@@ -466,7 +447,7 @@ async function update_playlist_addMediaFile(id: any, playlist_id: any){
       message.success(t('common.add'))
     else
       message.error(t('common.add'))
-    emits('playlist_Tracks_temporary_update_media_file',true)
+    store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
   }catch (e) {
     console.error(e)
   }
@@ -474,20 +455,20 @@ async function update_playlist_addMediaFile(id: any, playlist_id: any){
 async function update_playlist_deleteMediaFile(id: any){
   try{
     let result = null;
-    if(props.page_songlists_selected === 'song_list_all'){
+    if(store_view_media_page_logic.page_songlists_selected === 'song_list_all'){
 
-    }else if(props.page_songlists_selected === 'song_list_love'){
+    }else if(store_view_media_page_logic.page_songlists_selected === 'song_list_love'){
       result = await set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id, true)
-    }else if(props.page_songlists_selected === 'song_list_recently'){
+    }else if(store_view_media_page_logic.page_songlists_selected === 'song_list_recently'){
 
     }else{
-      result = await set_MediaInfo_To_LocalSqlite.Set_MediaInfo_Delete_Selected_Playlist(id,props.page_songlists_selected)
+      result = await set_MediaInfo_To_LocalSqlite.Set_MediaInfo_Delete_Selected_Playlist(id,store_view_media_page_logic.page_songlists_selected)
     }
     if(result)
       message.success(t('common.delete'))
     else
       message.error(t('common.delete'))
-    emits('playlist_Tracks_temporary_update_media_file',true)
+    store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
   }catch (e) {
     console.error(e)
   }
@@ -496,63 +477,63 @@ async function update_playlist_deleteMediaFile(id: any){
 const Type_Selected_Media_File_To_Playlist = ref(false)
 async function update_playlist_addMediaFile_selected(playlist_id: any)
 {
-  emits('selected_playlist_addMediaFile',playlist_id)
+  store_view_media_page_logic.get_selected_playlist_add_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
 async function update_lovelist_addMediaFile_selected()
 {
-  emits('selected_lovelist_addMediaFile',true)
+  store_view_media_page_logic.get_selected_lovelist_add_MediaFile(true)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
 async function update_button_deleteMediaFile_selected(){
-  if(props.page_songlists_selected === 'song_list_all'){
-    update_locallist_deleteMediaFile_selected(props.page_songlists_selected)
-  }else if(props.page_songlists_selected === 'song_list_love'){
-    update_lovelist_deleteMediaFile_selected(props.page_songlists_selected)
-  }else if(props.page_songlists_selected !== 'song_list_all'){
-    update_playlist_deleteMediaFile_selected(props.page_songlists_selected)
+  if(store_view_media_page_logic.page_songlists_selected === 'song_list_all'){
+    update_locallist_deleteMediaFile_selected(store_view_media_page_logic.page_songlists_selected)
+  }else if(store_view_media_page_logic.page_songlists_selected === 'song_list_love'){
+    update_lovelist_deleteMediaFile_selected(store_view_media_page_logic.page_songlists_selected)
+  }else if(store_view_media_page_logic.page_songlists_selected !== 'song_list_all'){
+    update_playlist_deleteMediaFile_selected(store_view_media_page_logic.page_songlists_selected)
   }
 }
 async function update_playlist_deleteMediaFile_selected(playlist_id: any)
 {
-  emits('selected_playlist_deleteMediaFile',playlist_id)
+  store_view_media_page_logic.get_selected_playlist_delete_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
 async function update_locallist_deleteMediaFile_selected(playlist_id: any)
 {
-  emits('selected_locallist_deleteMediaFile',playlist_id)
+  store_view_media_page_logic.get_selected_locallist_delete_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
 async function update_lovelist_deleteMediaFile_selected(playlist_id: any)
 {
-  emits('selected_lovelist_deleteMediaFile',playlist_id)
+  store_view_media_page_logic.get_selected_lovelist_delete_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
 async function update_recentlist_deletetMediaFile_selected(playlist_id: any)
 {
-  emits('selected_recentlist_deletetMediaFile',playlist_id)
+  store_view_media_page_logic.get_selected_recentlist_deletet_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
 
 ////// bulk_operation and select_line
 const click_select_SongList_ALL_Line = () => {
-  if(props.data_temporary_selected.length == 0){
-    emits('media_Files_selected_set_all', true);
+  if(store_view_media_page_info.media_Files_selected.length == 0){
+    store_view_media_page_logic.set_media_Files_selected_all(true)
   }else{
-    emits('media_Files_selected_set_all', false);
+    store_view_media_page_logic.set_media_Files_selected_all(false)
   }
 }
 const click_open_bulk_operation = () => {
   if(bool_start_play.value == true)
   {
     bool_start_play.value = false
-    emits('media_Files_selected_set_all', false);
+    store_view_media_page_logic.set_media_Files_selected_all(false)
   }
   else{
     bool_start_play.value = true
@@ -629,7 +610,7 @@ onBeforeUnmount(() => {
       </n-dropdown>
 
       <n-button
-          v-if="props.page_songlists_selected !== 'song_list_recently'"
+          v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
           quaternary circle size="medium" style="margin-left:4px" @click="click_open_bulk_operation">
         <template #icon>
           <n-icon :size="20" :depth="2"><MultiselectLtr20Filled/></n-icon>
@@ -648,19 +629,19 @@ onBeforeUnmount(() => {
           </template>
         </n-button>
         <n-button
-          v-if="props.page_songlists_selected !== 'song_list_recently'"
+          v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
           quaternary circle size="medium" style="margin-left:4px" @click="update_button_deleteMediaFile_selected">
           <template #icon>
             <n-icon :size="20" :depth="2"><Delete20Regular/></n-icon>
           </template>
         </n-button>
-        <n-p style="margin-top: 6px;"> {{ $t('nsmusics.view_page.selectedSong') + ' ' + props.data_temporary_selected.length }} * </n-p>
+        <n-p style="margin-top: 6px;"> {{ $t('nsmusics.view_page.selectedSong') + ' ' + store_view_media_page_info.media_Files_selected.length }} * </n-p>
       </n-space>
     </n-space>
     <div class="dynamic-scroller-demo">
       <DynamicScroller
           class="table" ref="dynamicScroller" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
-          :items="props.data_temporary"
+          :items="store_view_media_page_info.media_Files_temporary"
           :minItemSize="50"
           :emit-update="true"
           @resize="onResize"
@@ -690,7 +671,7 @@ onBeforeUnmount(() => {
                   margin-left: 200px; margin-top: -300px;
                   object-fit: cover;object-position: center;
                 "
-                  :src="getAssetImage(props.page_top_album_image_url)"
+                  :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
                   @error="handleImageError"
               />
             </div>
@@ -705,7 +686,7 @@ onBeforeUnmount(() => {
               <n-grid
                   :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
                   style="margin-left: 14px;width: 370px;">
-                <n-gi v-for="songlist in props.page_songlists_statistic" :key="songlist.id">
+                <n-gi v-for="songlist in store_view_media_page_logic.page_songlists_statistic" :key="songlist.id">
                   <n-statistic :label="songlist.label" :value="songlist.song_count" />
                 </n-gi>
               </n-grid>
@@ -714,18 +695,18 @@ onBeforeUnmount(() => {
                   <n-breadcrumb separator="|">
                     <n-breadcrumb-item style="font-size: 22px">{{ $t('entity.track_other') }}</n-breadcrumb-item>
                     <n-breadcrumb-item>
-                      <n-button text @click="handleItemClick_album(props.page_top_album_id)">
+                      <n-button text @click="handleItemClick_album(store_player_audio_info.page_top_album_id)">
                         <n-ellipsis
                             style="text-align: left;font-size: 22px;width: 660px;">
-                          {{ props.page_top_album_name }}
+                          {{ store_player_audio_info.page_top_album_name }}
                         </n-ellipsis>
                       </n-button>
                     </n-breadcrumb-item>
                   </n-breadcrumb>
                   <n-space>
                     <n-select
-                      :value="props.page_songlists_selected"
-                      :options="props.page_songlists_options" style="width: 166px;"
+                      :value="store_view_media_page_logic.page_songlists_selected"
+                      :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
                       :on-update:value="page_songlists_handleselected_updatevalue" />
                     <n-button secondary strong @click="Type_Update_Playlist = !Type_Update_Playlist">
                       <template #icon>
@@ -753,7 +734,7 @@ onBeforeUnmount(() => {
                     style="
                     border-radius: 6px;border: 1.5px solid #FFFFFF20;
                     margin-left: 12px;margin-top: 20px;"
-                    :src="getAssetImage(props.page_top_album_image_url)"
+                    :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
                     fallback-src="../../../resources/img/error_album.jpg"
                     :show-toolbar="false"
                 />
@@ -786,7 +767,7 @@ onBeforeUnmount(() => {
                  v-model="item.selected"
                  @change="(event) => {
                   item.selected = event.target.checked;
-                  emits('media_Files_selected_set', item);
+                  store_view_media_page_logic.set_media_Files_selected(item)
                 }"
               />
               <div
@@ -863,7 +844,7 @@ onBeforeUnmount(() => {
                       </button>
                       <template #popper>
                         <button
-                          v-for="n in props.playlist_All_of_list"
+                          v-for="n in store_playlist_list_info.playlist_names_ALLLists"
                           :key="n.value"
                           class="songlist_more"
                           style="width: 100px;height: 24px;border: 0px; background-color: transparent;display: block;"
@@ -874,7 +855,7 @@ onBeforeUnmount(() => {
                       </template>
                     </VMenu>
                     <button class="songlist_more"
-                            v-if="props.page_songlists_selected !== 'song_list_all' && props.page_songlists_selected !== 'song_list_recently'"
+                            v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_all' && store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
                             style="width: 100px;height: 24px;border: 0px; background-color: transparent;"
                             @click="update_playlist_deleteMediaFile(item.id)"
                     >
@@ -908,7 +889,7 @@ onBeforeUnmount(() => {
           </n-button>
         </n-space>
         <n-select
-          :options="props.playlist_All_of_list" style="width: 166px;"
+          :options="store_playlist_list_info.playlist_names_ALLLists" style="width: 166px;"
           :on-update:value="update_playlist_set_of_updatePlaylist_of_playlistname" />
         <n-form>
           <n-space vertical style="margin-bottom: 10px;">
@@ -964,7 +945,7 @@ onBeforeUnmount(() => {
       <n-space
         vertical size="large" style="width: 400px;">
         <n-space justify="space-between">
-          <span style="font-size: 20px;font-weight: 600;">{{ $t('nsmusics.view_page.selectedSong') + ' ' + props.data_temporary_selected.length + ' * ' + $t('form.addToPlaylist.title')  }}</span>
+          <span style="font-size: 20px;font-weight: 600;">{{ $t('nsmusics.view_page.selectedSong') + ' ' + store_view_media_page_info.media_Files_selected.length + ' * ' + $t('form.addToPlaylist.title')  }}</span>
           <n-button tertiary size="small" @click="Type_Selected_Media_File_To_Playlist = !Type_Selected_Media_File_To_Playlist;">
             <template #icon>
               <n-icon>
@@ -983,7 +964,7 @@ onBeforeUnmount(() => {
             {{ $t('nsmusics.view_page.loveSong') }}
           </n-button>
           <n-button
-            v-for="n in props.playlist_All_of_list"
+            v-for="n in store_playlist_list_info.playlist_names_ALLLists"
             :key="n.value"
             class="songlist_more"
             style="width: 100px;height: 24px;border: 0px; background-color: transparent;display: block;"

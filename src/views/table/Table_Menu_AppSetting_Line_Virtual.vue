@@ -37,13 +37,8 @@
   ////// passed as argument
   const emits = defineEmits([
     'server_config_of_current_user_of_sqlite',
-    'update_lang','update_theme',
-    'player_fade_value','player_use_lottie_animation',
+    'update_theme',
   ]);
-  const props = defineProps<{
-    player_fade_value:number;
-    player_use_lottie_animation:Boolean;
-  }>();
 
   import { store_app_setting_configs } from '@/store/app/store_app_setting_configs'
   import { store_server_users } from '@/store/server/store_server_users'
@@ -176,6 +171,7 @@
   import {ref, onMounted, watch, onBeforeUnmount, computed, h} from 'vue';
   import {type MenuOption, NButton, NIcon,} from 'naive-ui'
   import {store_server_user_model} from "@/store/server/store_server_user_model";
+  import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
   const theme_value = ref('lightTheme')
   const theme_options = ref([
     {
@@ -284,16 +280,6 @@
       {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
     ]
   };
-
-  //////
-  const player_fade_value = ref<number>(props.player_fade_value)
-  function update_player_fade_value(value: any){
-    emits('player_fade_value',value)
-  }
-  const player_use_lottie_animation = ref<Boolean>(props.player_use_lottie_animation)
-  function update_player_use_lottie_animation(value: any){
-    emits('player_use_lottie_animation',value)
-  }
 
   ////// 设置：通用
   const languages = [
@@ -682,7 +668,7 @@
                     v-model:value="$i18n.locale"
                     :options="languages"
                     style="width: 207px;margin-top: -4px;"
-                    @update:value="emits('update_lang',$i18n.locale)"
+                    @update:value="store_app_setting_configs.update_lang = $i18n.locale"
                   />
                 </n-space>
                 <n-divider style="margin: 0;"/>
@@ -883,7 +869,7 @@
                     </div>
                   </n-space>
                   <n-switch
-                      v-model:value="player_use_lottie_animation" @update:value="update_player_use_lottie_animation">
+                      v-model:value="store_player_audio_logic.player_use_lottie_animation">
                   </n-switch>
                 </n-space>
                 <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
@@ -926,7 +912,7 @@
                     </div>
                   </n-space>
                   <n-input-group style="width: 207px;margin-top: -4px;">
-                    <n-input clearable v-model:value="player_fade_value" @update:value="update_player_fade_value"/>
+<!--                    <n-input clearable v-model:value="player_fade_value" @update:value="update_player_fade_value"/>-->
                     <n-input-group-label>ms</n-input-group-label>
                   </n-input-group>
                 </n-space>

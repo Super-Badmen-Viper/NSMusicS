@@ -1,4 +1,5 @@
 import { reactive } from 'vue'
+import crypto from "crypto";
 
 export const store_server_users = reactive({
     percentage_of_local: 0,
@@ -11,10 +12,24 @@ export const store_server_users = reactive({
     server_config_of_current_user_of_select: undefined as { label: string; value: string } | undefined,
     server_config_of_all_user_of_select: [] as { label: string; value: string }[],
 
+    get_generateEncryptedPassword(password: string): { salt: string, token: string } {
+        const saltLength = 6;
+        const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';
+        let randomString = '';
+        for (let i = 0; i < saltLength; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            randomString += characters[randomIndex];
+        }
+        const salt = randomString;
+        const crypto = require('crypto');
+        const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
+        return { salt, token };
+    },
+
     get_server_config_of_all_user_of_sqlite(value: Server_Configs_Props[]) {
         this.server_config_of_all_user_of_sqlite = value;
         this.server_config_of_all_user_of_select = [];
-        value.forEach((item) => {
+        value.forEach((item: any) => {
             this.server_config_of_all_user_of_select.push({
                 label: item.server_name,
                 value: item.id
