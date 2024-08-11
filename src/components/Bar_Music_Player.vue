@@ -267,6 +267,8 @@
 
     store_player_audio_logic.player.isPlaying = false;
     Play_Media_Order(store_player_audio_logic.play_order, -1)
+
+    store_player_appearance.player_mode_of_lock_playlist = true
   }
   const play_skip_forward_click = async () => {
     current_play_time.value = formatTime(await store_player_audio_logic.player.getDuration());
@@ -278,6 +280,8 @@
 
     store_player_audio_logic.player.isPlaying = false;
     Play_Media_Order(store_player_audio_logic.play_order, 1)
+
+    store_player_appearance.player_mode_of_lock_playlist = true
   }
   const Play_Media_Switching = async () => {
     current_play_time.value = formatTime(await store_player_audio_logic.player.getDuration());

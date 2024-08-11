@@ -18,6 +18,6 @@ interface Player_Configs_of_Audio_Info_Props {
 
   page_songlists_selected: string,
 
-  player_mode_of_audio_path_from_playlist: any,
+  player_mode_of_lock_playlist: any,
   player_mode_of_medialist_from_external_import: any,
 };

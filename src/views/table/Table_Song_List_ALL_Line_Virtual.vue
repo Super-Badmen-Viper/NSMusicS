@@ -340,6 +340,8 @@ const handleItemDbClick = (media_file:Media_File,index:number) => {
       store_player_audio_info.this_audio_album_id = media_file.album_id
       store_player_audio_info.this_audio_album_name = media_file.album
       store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
+
+      store_player_appearance.player_mode_of_lock_playlist = false
     }
   }
 }
@@ -395,6 +397,7 @@ import {store_playlist_list_info} from  "@/store/playlist/store_playlist_list_in
 import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
+import {store_player_appearance} from "@/store/player/store_player_appearance";
 let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite()
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')

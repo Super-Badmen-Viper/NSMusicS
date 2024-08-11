@@ -51,7 +51,7 @@ export class System_Configs_Read {
 
             page_songlists_selected: '',
         
-            player_mode_of_audio_path_from_playlist: null,
+            player_mode_of_lock_playlist: null,
             player_mode_of_medialist_from_external_import: null,
         }))
     public playlist_File_Configs = ref<string[]>([])

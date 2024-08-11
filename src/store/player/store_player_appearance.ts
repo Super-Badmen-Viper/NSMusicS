@@ -11,5 +11,5 @@ export const store_player_appearance = reactive({
     player_use_lottie_animation: false,
 
     player_mode_of_medialist_from_external_import: false,
-    player_mode_of_audio_path_from_playlist: false,
+    player_mode_of_lock_playlist: false,
 });

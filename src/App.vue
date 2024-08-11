@@ -213,12 +213,14 @@
   import { store_player_audio_info } from "@/store/player/store_player_audio_info";
   import { Set_MediaInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
   watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
-    if(store_view_media_page_info.media_Files_temporary != undefined && store_view_media_page_info.media_Files_temporary.length != 0) {
+    if(store_view_media_page_info.media_Files_temporary != undefined
+        && store_view_media_page_info.media_Files_temporary.length != 0
+    ) {
       store_player_audio_info.this_audio_file_path = newValue
       store_player_audio_info.this_audio_restart_play = true
       console.log('this_audio_file_path：'+newValue)
       //
-      if (store_player_appearance.player_mode_of_audio_path_from_playlist === false) {
+      if (store_player_appearance.player_mode_of_lock_playlist === false) {
         store_playlist_list_info.playlist_MediaFiles_temporary = [...store_view_media_page_info.media_Files_temporary];
         store_playlist_list_info.playlist_datas_CurrentPlayListMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
         save_system_playlist_item_id_config();
@@ -1113,7 +1115,7 @@
     router_select_model_album.value = true
 
     if(store_playlist_list_info.playlist_MediaFiles_temporary.length > 0){
-      store_player_appearance.player_mode_of_audio_path_from_playlist = false
+      store_player_appearance.player_mode_of_lock_playlist = false
       store_player_audio_info.this_audio_file_path = store_playlist_list_info.playlist_MediaFiles_temporary[0].path
       store_player_audio_info.this_audio_lyrics_string = store_playlist_list_info.playlist_MediaFiles_temporary[0].lyrics
       store_player_audio_info.this_audio_file_medium_image_url = store_playlist_list_info.playlist_MediaFiles_temporary[0].medium_image_url
@@ -1471,7 +1473,7 @@
     router_select_model_artist.value = true
     
     if(store_playlist_list_info.playlist_MediaFiles_temporary.length > 0){
-      store_player_appearance.player_mode_of_audio_path_from_playlist = false
+      store_player_appearance.player_mode_of_lock_playlist = false
       store_player_audio_info.this_audio_file_path = store_playlist_list_info.playlist_MediaFiles_temporary[0].path
       store_player_audio_info.this_audio_lyrics_string = store_playlist_list_info.playlist_MediaFiles_temporary[0].lyrics
       store_player_audio_info.this_audio_file_medium_image_url = store_playlist_list_info.playlist_MediaFiles_temporary[0].medium_image_url
@@ -1874,7 +1876,7 @@
       store_player_audio_info.page_top_album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_id']
       store_player_audio_info.page_top_album_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_name']
       //
-      store_player_appearance.player_mode_of_audio_path_from_playlist = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['player_mode_of_audio_path_from_playlist'] === 'true'
+      store_player_appearance.player_mode_of_lock_playlist = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['player_mode_of_lock_playlist'] === 'true'
       store_player_appearance.player_mode_of_medialist_from_external_import = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['player_mode_of_medialist_from_external_import'] === 'true'
       //
       store_player_audio_logic.play_order = '' + system_Configs_Read.app_Configs.value['play_order']
@@ -2012,7 +2014,7 @@
 
           page_songlists_selected: String(store_view_media_page_logic.page_songlists_selected),
 
-          player_mode_of_audio_path_from_playlist: String(store_player_appearance.player_mode_of_audio_path_from_playlist),
+          player_mode_of_lock_playlist: String(store_player_appearance.player_mode_of_lock_playlist),
           player_mode_of_medialist_from_external_import: String(store_player_appearance.player_mode_of_medialist_from_external_import),
         }));
     let system_Configs_Write = new System_Configs_Write()
