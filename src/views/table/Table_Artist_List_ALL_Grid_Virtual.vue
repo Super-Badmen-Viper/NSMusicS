@@ -22,11 +22,6 @@
     inheritLocale: true
   })
 
-  ////// passed as argument
-  const emits = defineEmits([
-    'artist_page_num',
-  ]);
-
   ////// artistlist_view page_layout gridItems
   const item_artist = ref<number>(170)
   const item_artist_image = ref<number>(item_artist.value - 20)

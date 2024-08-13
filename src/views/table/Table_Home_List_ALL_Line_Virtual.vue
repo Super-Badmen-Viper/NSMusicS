@@ -26,9 +26,6 @@ const { t } = useI18n({
 })
 
 ////// passed as argument
-const emits = defineEmits([
-  'play_this_album_song_list',
-]);
 import {store_view_home_page_info} from "@/store/view/home/store_view_home_page_info"
 
 ////// albumlist_view page_layout gridItems
@@ -107,7 +104,7 @@ const Open_this_album_SongList_click = (album_id:string) => {
 //////
 const Play_this_album_SongList_click = (album_id:string) => {
   console.log('play_this_album_click：'+album_id);
-  emits('play_this_album_song_list',album_id)
+  store_view_album_page_fetchData.fetchData_This_Album_SongList(album_id)
 }
 const Play_Next_album_SongList_click = (value: number) => {
   if(value === 1){
@@ -139,6 +136,7 @@ import {Icon} from "@vicons/utils";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_view_home_page_logic} from "@/store/view/home/store_view_home_page_logic";
 import {store_router_data_logic} from "@/store/router/store_router_data_logic";
+import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Favorite(id,favorite)

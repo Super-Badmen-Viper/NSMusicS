@@ -10,30 +10,18 @@
   import {store_player_audio_info} from "@/store/player/store_player_audio_info";
   import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
 
-  ////// passed as argument
-  const emits = defineEmits([
-    'media_file_path_from_playlist',
-    'menu_edit_this_song',
-    'menu_add_this_song',
-    'menu_delete_this_song',
-    'options_Sort_key',
-  ]);
-
   ////// scrollbar of playlist_view
   const scrollbar = ref(null as any);
-  const this_audio_Index_of_absolute_positioning_in_list = ref<number>(0)
   onMounted(() => {
-    this_audio_Index_of_absolute_positioning_in_list.value = store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list;
     if (scrollbar !== null) {
       setTimeout(() => {
-        scrollbar.value.scrollToItem(this_audio_Index_of_absolute_positioning_in_list.value);
+        scrollbar.value.scrollToItem(store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list);
       }, 100);
     }
   });
 
   /////// emits audio_info of artistlist_view_list
   const handleItemDbClick = (media_file:Media_File,index:number) => {
-    emits('media_file_path_from_playlist',true)
     store_player_audio_info.this_audio_file_path = media_file.path
     store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
     store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url

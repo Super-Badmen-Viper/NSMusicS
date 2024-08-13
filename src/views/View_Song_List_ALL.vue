@@ -3,11 +3,6 @@ import { ref,defineEmits, onBeforeUnmount, onMounted } from 'vue';
 import Table_Song_List from '../views/table/Table_Song_List_ALL_Line_Virtual.vue'
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 
-const this_audio_Index_of_absolute_positioning_in_list = ref<number>(-1)
-function get_this_audio_Index_of_absolute_positioning_in_list(value: any) {
-  this_audio_Index_of_absolute_positioning_in_list.value = value
-  emits('this_audio_Index_of_absolute_positioning_in_list',this_audio_Index_of_absolute_positioning_in_list.value)
-}
 const menu_edit_this_song = ref<Media_File>()
 function get_menu_edit_this_song(value: any) {
   menu_edit_this_song.value = value
@@ -23,34 +18,19 @@ function get_menu_delete_this_song(value: any) {
   menu_delete_this_song.value = value
   console.log('添加到：this_audio_Index_of_absolute_positioning_in_list：'+value)
 }
-function get_media_file_path_from_playlist(value: any) {
-  emits('media_file_path_from_playlist',value)
-}
 onMounted(async () => {
   store_router_data_info.router_select = 'View_Song_List_ALL'
 });
 onBeforeUnmount(() => {
-  this_audio_Index_of_absolute_positioning_in_list.value = -1;
   menu_edit_this_song.value = undefined;
   menu_add_this_song.value = undefined;
   menu_delete_this_song.value = undefined;
 });
-
-const emits = defineEmits([
-  'media_Files',
-  'media_file_path_from_playlist',
-  'this_audio_Index_of_absolute_positioning_in_list',
-  'menu_edit_this_song',
-  'menu_add_this_song',
-  'menu_delete_this_song',
-]);
 </script>
 
 <template>
   <div class="view_show">
     <Table_Song_List
-        @media_file_path_from_playlist="get_media_file_path_from_playlist"
-
         @menu_edit_this_song="get_menu_edit_this_song"
         @menu_add_this_song="get_menu_add_this_song"
         @menu_delete_this_song="get_menu_delete_this_song"

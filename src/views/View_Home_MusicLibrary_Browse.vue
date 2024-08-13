@@ -2,25 +2,15 @@
 import { defineEmits, onMounted } from 'vue';
 import Table_Home_List_ALL_Line from '../views/table/Table_Home_List_ALL_Line_Virtual.vue'
 import {store_router_data_info} from "@/store/router/store_router_data_info";
-import {store_router_data_logic} from "@/store/router/store_router_data_logic";
-
-function get_play_this_album_song_list(value: any){
-  emits('play_this_album_song_list',value)
-}
 
 onMounted(async () => {
   store_router_data_info.router_select = 'View_Home_MusicLibrary_Browse'
 });
-const emits = defineEmits([
-  'play_this_album_song_list',
-]);
 </script>
 
 <template>
   <div class="view_show">
-    <Table_Home_List_ALL_Line
-      @play_this_album_song_list="get_play_this_album_song_list"
-    />
+    <Table_Home_List_ALL_Line/>
   </div>
 </template>
 

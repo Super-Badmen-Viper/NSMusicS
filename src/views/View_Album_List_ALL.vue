@@ -7,9 +7,6 @@ onMounted(async () => {
   store_router_data_info.router_select = 'View_Album_List_ALL'
 });
 
-const emits = defineEmits([
-  'album_page_size',
-]);
 </script>
 
 <template>

@@ -348,7 +348,6 @@
   import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
   import {store_router_data_logic} from "@/store/router/store_router_data_logic";
   import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
-  import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
   import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
   let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {

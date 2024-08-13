@@ -7,10 +7,6 @@ onMounted(async () => {
   store_router_data_info.router_select = 'View_Artist_List_ALL'
 });
 
-const emits = defineEmits([
-  'artist_page_num',
-  'artist_page_size',
-]);
 </script>
 
 <template>

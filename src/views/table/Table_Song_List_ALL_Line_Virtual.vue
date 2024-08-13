@@ -25,14 +25,6 @@ const { t } = useI18n({
   inheritLocale: true
 })
 
-////// passed as argument
-const emits = defineEmits([
-  'media_file_path_from_playlist',
-  'menu_edit_this_song',
-  'menu_add_this_song',
-  'menu_delete_this_song',
-]);
-
 ////// songlist_view page_layout lineItems
 const collapsed_width = ref<number>(1090);
 const handleImageError = (event:any) => {
@@ -281,7 +273,6 @@ const stopWatching_router_history_model_of_Media_scroll = watch(() => store_rout
       }
     }
 )
-const this_audio_Index_of_absolute_positioning_in_list = ref<number>(0)
 const scrollTo = (value :number) => {
   if (dynamicScroller !== null) {
     setTimeout(() => {
@@ -323,7 +314,6 @@ const handleItemDbClick = (media_file:Media_File,index:number) => {
     if(click_count >= 2){
       click_count = 0
 
-      emits('media_file_path_from_playlist',false)
       store_player_audio_info.this_audio_file_path = media_file.path
       store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
       store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
@@ -553,7 +543,6 @@ const bool_start_play = ref<boolean>(true)
 
 ////// view songlist_view Remove data
 onBeforeUnmount(() => {
-  this_audio_Index_of_absolute_positioning_in_list.value = -1;
   stopWatching_collapsed_width()
   stopWatching_window_innerWidth()
   stopWatching_router_history_model_of_Media_scroll()

@@ -26,14 +26,6 @@ onBeforeUnmount(() => {
   menu_add_this_song.value = undefined;
   menu_delete_this_song.value = undefined;
 });
-
-const emits = defineEmits([
-  'playlist_Files',
-  'media_file_path_from_playlist',
-  'menu_edit_this_song',
-  'menu_add_this_song',
-  'menu_delete_this_song',
-]);
 </script>
 
 <template>
