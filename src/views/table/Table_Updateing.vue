@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type {MenuOption} from "naive-ui";
   import {onMounted, ref, watch, onBeforeUnmount} from "vue";
-  import { store_app_setting_configs } from '@/store/app/store_app_setting_configs'
+  import { store_app_configs_info } from '@/store/app/store_app_configs_info'
 
   ////// lineItems Re render
   let bool_watch = false;
@@ -11,10 +11,10 @@
       bool_watch = true;
     }, 1000);
   };
-  const stopWatching_collapsed_width = watch(() => store_app_setting_configs.app_left_menu_collapsed, (newValue, oldValue) => {
+  const stopWatching_collapsed_width = watch(() => store_app_configs_info.app_left_menu_collapsed, (newValue, oldValue) => {
     updateGridItems();
   });
-  const stopWatching_window_innerWidth = watch(() => store_app_setting_configs.window_innerWidth, (newValue, oldValue) => {
+  const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
     bool_watch = false;
     updateGridItems();
     if (bool_watch) {
@@ -23,7 +23,7 @@
   });
   const collapsed_width = ref<number>(1090);
   const updateGridItems = () => {
-    if (store_app_setting_configs.app_left_menu_collapsed == true) {
+    if (store_app_configs_info.app_left_menu_collapsed == true) {
       collapsed_width.value = 145;
     } else {
       collapsed_width.value = 240;

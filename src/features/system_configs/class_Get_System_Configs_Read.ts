@@ -4,7 +4,7 @@ import { Player_Configs_of_Audio_Info } from '@/models/app_Configs/class_Player_
 import { Player_Configs_of_UI } from '@/models/app_Configs/class_Player_Configs_of_UI';
 import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
 
-export class System_Configs_Read {
+export class Class_Get_System_Configs_Read {
     public app_Configs = ref(
         new App_Configs({
             theme: null,

@@ -12,31 +12,31 @@ import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
 import {store_server_users} from "@/store/server/store_server_users";
+import {store_router_data_info} from "@/store/router/store_router_data_info";
+import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media"
 
-export const ddd = reactive({
-    
-
+export const store_app_configs_logic_save = reactive({
     save_system_config_of_App_Configs(){
-    let db:any = null;
-    db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-    db.pragma('journal_mode = WAL');
-    const app_Configs = ref(
-        new App_Configs({
-            theme: store_app_configs_info.theme_name,
-            lang: store_app_configs_info.update_lang,
-            router_name: String(router_name.value),
-            app_left_menu_select_activeKey: String(store_app_configs_info.app_left_menu_select_activeKey),
-            app_left_menu_collapsed: String(store_app_configs_info.app_left_menu_collapsed),
-            model_select: String(store_server_user_model.model_select),
-            play_order: String(store_player_audio_logic.play_order)
-        }));
-    let system_Configs_Write = new Class_Set_System_Configs_Write()
-    system_Configs_Write.system_app_config(
-        db,
-        app_Configs.value)
-    console.log('save config succuessful')
-    db.close();db = null;
-},
+        let db:any = null;
+        db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+        db.pragma('journal_mode = WAL');
+        const app_Configs = ref(
+            new App_Configs({
+                theme: store_app_configs_info.theme_name,
+                lang: store_app_configs_info.update_lang,
+                router_name: String(store_router_data_info.router_name),
+                app_left_menu_select_activeKey: String(store_app_configs_info.app_left_menu_select_activeKey),
+                app_left_menu_collapsed: String(store_app_configs_info.app_left_menu_collapsed),
+                model_select: String(store_server_user_model.model_select),
+                play_order: String(store_player_audio_logic.play_order)
+            }));
+        let system_Configs_Write = new Class_Set_System_Configs_Write()
+        system_Configs_Write.system_app_config(
+            db,
+            app_Configs.value)
+        console.log('save config succuessful')
+        db.close();db = null;
+    },
     save_system_library_config(){
         let db:any = null;
         db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
@@ -128,7 +128,7 @@ export const ddd = reactive({
         let system_Configs_Write = new Class_Set_System_Configs_Write();
         system_Configs_Write.system_view_history(
             db,
-            router_select_history_date_of_Media.value,
+            store_router_history_data_of_media.router_select_history_date_of_Media,
             [],
             undefined,
             // router_select_history_date_of_Album.value,

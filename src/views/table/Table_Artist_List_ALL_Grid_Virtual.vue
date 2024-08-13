@@ -25,24 +25,7 @@
   ////// passed as argument
   const emits = defineEmits([
     'artist_page_num',
-    'options_Sort_key','page_artistlists_keyword','page_artistlists_reset_data',
-    'page_artistlists_selected',
-    'album_list_of_artist_id_artist',
-    'play_this_artist_song_list',
-    'router_history_model','router_history_model_of_Artist_scroller_value','router_history_model_of_Artist_scroll',
   ]);
-  const props = defineProps<{
-    data_temporary: Artist[];
-
-    page_artistlists:Play_List[],page_artistlists_options:{label: string;value: string}[],page_artistlists_statistic:{label: string;artist_count: number;id: string;}[],
-    page_artistlists_selected:string;
-
-    page_artistlists_keyword:string;
-
-    options_Sort_key:{ columnKey: string; order: string }[];
-
-    router_select_history_date: Interface_View_Router_Date;router_history_datas: Interface_View_Router_Date[];router_history_model_of_Artist_scroller_value: number;router_history_model_of_Artist_scroll:Boolean;
-  }>();
 
   ////// artistlist_view page_layout gridItems
   const item_artist = ref<number>(170)
@@ -72,10 +55,10 @@
       bool_watch = true;
     }, 1000);
   };
-  const stopWatching_collapsed_width = watch(() => store_app_setting_configs.app_left_menu_collapsed, (newValue, oldValue) => {
+  const stopWatching_collapsed_width = watch(() => store_app_configs_info.app_left_menu_collapsed, (newValue, oldValue) => {
     updateGridItems();
   });
-  const stopWatching_window_innerWidth = watch(() => store_app_setting_configs.window_innerWidth, (newValue, oldValue) => {
+  const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
     bool_watch = false;
     updateGridItems();
     if (bool_watch) {
@@ -83,7 +66,7 @@
     }
   });
   const updateGridItems = () => {
-    if (store_app_setting_configs.app_left_menu_collapsed == true) {
+    if (store_app_configs_info.app_left_menu_collapsed == true) {
       collapsed_width.value = 145;
       item_artist.value = 140;
       item_artist_image.value = item_artist.value - 20;
@@ -102,7 +85,7 @@
     startTimer();
     updateGridItems();
 
-    input_search_Value.value = props.page_artistlists_keyword
+    input_search_Value.value = store_view_artist_page_logic.page_artistlists_keyword
     if(input_search_Value.value.length > 0){
       bool_show_search_area.value = true
       bool_input_search = true
@@ -130,12 +113,12 @@
     // {label:'更新时间(外部信息)', key: 'external_info_updated_at', state_Sort: state_Sort.Default }
   ]);
   const options_Sort = computed(() => {
-    if(props.options_Sort_key != null && props.options_Sort_key.length > 0){
+    if(store_view_artist_page_logic.page_artistlists_options_Sort_key != null && store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0){
       options_Sort_key.value.forEach(element => {
-        if(element.key === props.options_Sort_key[0].columnKey)
-          if(props.options_Sort_key[0].order === state_Sort.Ascend)
+        if(element.key === store_view_artist_page_logic.page_artistlists_options_Sort_key[0].columnKey)
+          if(store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order === state_Sort.Ascend)
             element.state_Sort = state_Sort.Ascend
-          else if(props.options_Sort_key[0].order === state_Sort.Descend)
+          else if(store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order === state_Sort.Descend)
             element.state_Sort = state_Sort.Descend
       });
     }
@@ -194,7 +177,7 @@
     // emits('options_Sort_key',options_Sort_key.value)
     // 更新排序参数数组并执行排序操作
     const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
-    emits('options_Sort_key',sortersArray)
+    store_view_artist_page_logic.page_artistlists_options_Sort_key = sortersArray
     // sortByColumnKeys(sortersArray);
 
     scrollTo(0)
@@ -209,7 +192,7 @@
       bool_show_search_area.value = false
       input_search_InstRef.value?.clear()
       if(bool_input_search == true){
-        emits('page_artistlists_reset_data',true)
+        store_view_artist_page_logic.list_data_StartUpdate = true
         back_search_default()
         bool_input_search = false
         scrollTo(0)
@@ -232,13 +215,13 @@
   const click_search = () => {
     if (input_search_Value.value){
       const page_artistlists_keyword = input_search_Value.value.toLowerCase();
-      emits('page_artistlists_keyword',page_artistlists_keyword)
+      store_view_artist_page_logic.page_artistlists_keyword = page_artistlists_keyword;
       bool_input_search = true
       options_Sort_key.value.forEach(element => {
         element.state_Sort = state_Sort.Default
       });
     }else{
-      emits('page_artistlists_reset_data',true)
+      store_view_artist_page_logic.list_data_StartUpdate = true
       bool_input_search = false
       back_search_default()
     }
@@ -250,11 +233,11 @@
         if (options_Sort_key.value[i].key === options_Sort_key_Default_key.value) {
           const sortersArray: { columnKey: string; order: string }[] = [];
           if (options_Sort_key.value[i].state_Sort === 'default') {
-            emits('options_Sort_key', null);
+            store_view_artist_page_logic.page_artistlists_options_Sort_key = null
           } else {
             const sorter = { columnKey: options_Sort_key.value[i].key, order: options_Sort_key.value[i].state_Sort };
             sortersArray.push(sorter);
-            emits('options_Sort_key', sortersArray);
+            store_view_artist_page_logic.page_artistlists_options_Sort_key = sortersArray
           }
           break;
         }
@@ -274,9 +257,9 @@
     }
   ])
   const options_Filter_handleSelect = (key: string | number) => {
-    emits('page_artistlists_selected','artist_list_love')
+    store_view_artist_page_logic.page_artistlists_selected = 'artist_list_love'
     console.log('selected_value_for_artistlistall：'+'artist_list_love');
-    breadcrumbItems.value = props.page_artistlists_options.find(option => option.value === 'artist_list_love')?.label || '';
+    breadcrumbItems.value = store_view_artist_page_info.page_artistlists_options.find(option => option.value === 'artist_list_love')?.label || '';
   }
 
   ////// dynamicScroller of artistlist_view
@@ -290,41 +273,42 @@
     updateParts.viewEndIdx = viewEndIndex
     updateParts.visibleStartIdx = visibleStartIndex
     updateParts.visibleEndIdx = visibleEndIndex
-
-    emits('router_history_model_of_Artist_scroller_value',viewEndIndex)
+    
+    store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value = viewEndIndex
   }
-  const stopWatching_router_history_model_of_Artist_scroll = watch(() => props.router_history_model_of_Artist_scroll,(newValue) => {
+  const stopWatching_router_history_model_of_Artist_scroll = watch(() => store_router_history_data_of_artist.router_history_model_of_Artist_scroll,(newValue) => {
       if (newValue === true) {
-        scrollTo(props.router_history_model_of_Artist_scroller_value)
-        emits('router_history_model_of_Artist_scroll',false)
+        scrollTo(store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value)
+        store_router_history_data_of_artist.router_history_model_of_Artist_scroll = false
       }
     }
   )
   const scrollTo = (value :number) => {
     if (dynamicScroller !== null) {
       setTimeout(() => {
-        dynamicScroller.value.scrollToItem(value - (20 + Math.floor((window.innerHeight - 765) / 220)));// 220
+        const index = value - (20 + Math.floor((window.innerHeight - 765) / 220));
+        dynamicScroller.value.scrollToItem(index);// 220
       }, 100);
     }
   }
   onMounted(() => {
-    scrollTo(props.router_history_model_of_Artist_scroller_value)
+    scrollTo(store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value)
   });
 
   ////// select Dtatsource of artistlists
   const breadcrumbItems = ref('所有歌手');
   const page_artistlists_handleselected_updatevalue = (value: any) => {
-    emits('page_artistlists_selected',value)
+    store_view_artist_page_logic.page_artistlists_selected = value
     console.log('selected_value_for_artistlistall：'+value);
-    breadcrumbItems.value = props.page_artistlists_options.find(option => option.value === value)?.label || '';
+    breadcrumbItems.value = store_view_artist_page_info.page_artistlists_options.find(option => option.value === value)?.label || '';
   };
 
   ////// router history 
   const get_router_history_model_pervious = () => {
-    emits('router_history_model',-1)
+    store_router_history_data_of_artist.get_router_history_model_of_Artist(-1)
   }
   const get_router_history_model_next = () =>  {
-    emits('router_history_model',1)
+    store_router_history_data_of_artist.get_router_history_model_of_Artist(1)
   }
 
   ////// go to media_view
@@ -338,18 +322,25 @@
   }
   const Open_this_artist_all_artist_list_click = (artist_id:string) => {
     console.log('artist_list_of_artist_id_artist_click：'+artist_id);
-    emits('album_list_of_artist_id_artist',artist_id)
+    store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
   }
   const Play_this_artist_all_media_list_click = (artist_id:string) => {
     console.log('play_this_artist_song_list：'+artist_id);
-    emits('play_this_artist_song_list',artist_id)
+    store_view_artist_page_fetchData.fetchData_This_Artist_SongList(artist_id)
   }
 
   ////// changed_data write to sqlite
   import {Set_ArtistInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_ArtistInfo_To_LocalSqlite'
   import {Icon} from "@vicons/utils";
-  import {store_app_setting_configs} from "@/store/app/store_app_setting_configs";
+  import {store_app_configs_info} from "@/store/app/store_app_configs_info";
   import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+  import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info";
+  import {store_view_artist_page_logic} from "@/store/view/artist/store_view_artist_page_logic";
+  import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
+  import {store_router_data_logic} from "@/store/router/store_router_data_logic";
+  import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
+  import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
+  import {store_view_artist_page_fetchData} from "@/store/view/artist/store_view_artist_page_fetchData";
   let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     set_ArtistInfo_To_LocalSqlite.Set_ArtistInfo_To_Favorite(id,favorite)
@@ -383,7 +374,7 @@
         </template>
       </n-button>
       <div style="margin-top: 4px;">
-        {{ props.router_select_history_date?.id ?? '' }} / {{ props.router_history_datas?.length ?? '' }}
+        {{ store_router_history_data_of_artist.router_select_history_date_of_Artist?.id ?? '' }} / {{ store_router_history_data_of_artist.router_history_datas_of_Artist?.length ?? '' }}
       </div>
       <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_next">
         <template #icon>
@@ -431,7 +422,7 @@
     <div class="artist-wall-container">
       <DynamicScroller
         class="artist-wall" ref="dynamicScroller" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
-        :items="props.data_temporary"
+        :items="store_view_artist_page_info.artist_Files_temporary"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :grid-items="gridItems"
@@ -479,7 +470,7 @@
               <n-grid 
                 :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
                 style="margin-left: 14px;width: 370px;">
-                <n-gi v-for="artistlist in props.page_artistlists_statistic" :key="artistlist.id">
+                <n-gi v-for="artistlist in store_view_artist_page_info.page_artistlists_statistic" :key="artistlist.id">
                   <n-statistic :label="artistlist.label" :value="artistlist.artist_count" />
                 </n-gi>
               </n-grid>
@@ -497,8 +488,8 @@
                       </n-breadcrumb-item>
                   </n-breadcrumb>
                   <n-select 
-                    :value="props.page_artistlists_selected" 
-                    :options="props.page_artistlists_options" style="width: 166px;"
+                    :value="store_view_artist_page_logic.page_artistlists_selected" 
+                    :options="store_view_artist_page_info.page_artistlists_options" style="width: 166px;"
                     :on-update:value="page_artistlists_handleselected_updatevalue" />
                 </n-space>
               </template>

@@ -34,14 +34,9 @@
   const computed_i18n_Label_SidebarConfiguration_14 = computed(() => t('nsmusics.siderbar_menu.lyricsProduction'));
   const computed_i18n_Label_SidebarConfiguration_15 = computed(() => t('nsmusics.siderbar_menu.musicCommunity'));
 
-  ////// passed as argument
-  const emits = defineEmits([
-    'server_config_of_current_user_of_sqlite',
-    'update_theme',
-  ]);
-
-  import { store_app_setting_configs } from '@/store/app/store_app_setting_configs'
+  import { store_app_configs_info } from '@/store/app/store_app_configs_info'
   import { store_server_users } from '@/store/server/store_server_users'
+  const get_server_config_of_current_user_of_sqlite = inject('get_server_config_of_current_user_of_sqlite');
 
   ////// server
   const Type_Server_Kinds = [
@@ -86,7 +81,7 @@
   /// server select
   function update_server_config_of_current_user_of_sqlite(value: any){
     const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(item => item.id === value);
-    emits('server_config_of_current_user_of_sqlite',store_server_users.server_config_of_all_user_of_sqlite[index])
+    get_server_config_of_current_user_of_sqlite(store_server_users.server_config_of_all_user_of_sqlite[index])
   }
   /// server add
   import { Set_ServerInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_ServerInfo_To_LocalSqlite";
@@ -168,10 +163,11 @@
 
 
   ////// this_view components of navie ui
-  import {ref, onMounted, watch, onBeforeUnmount, computed, h} from 'vue';
+  import {ref, onMounted, watch, onBeforeUnmount, computed, h, inject} from 'vue';
   import {type MenuOption, NButton, NIcon,} from 'naive-ui'
   import {store_server_user_model} from "@/store/server/store_server_user_model";
   import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
+  import {store_app_configs_logic_theme} from "@/store/app/store_app_configs_logic_theme";
   const theme_value = ref('lightTheme')
   const theme_options = ref([
     {
@@ -184,7 +180,7 @@
     },
   ])
   onMounted(() => {
-    if(store_app_setting_configs.update_theme)
+    if(store_app_configs_info.update_theme)
       theme_value.value = theme_options.value[1].value
     else
       theme_value.value = theme_options.value[0].value
@@ -234,7 +230,7 @@
     console.log(JSON.stringify(value))
   }
   const handleUpdate_selectd_props_app_sidebar_Value = (value: number[]) => {
-    store_app_setting_configs.selectd_props_app_sidebar = value
+    store_app_configs_info.selectd_props_app_sidebar = value
     console.log(value)
     let allMenuOptions = create_menuOptions_appBar();
     let removeFlags = new Array(allMenuOptions.length).fill(true);
@@ -253,7 +249,7 @@
     let menuOptions_appBar = allMenuOptions.filter((option, index) => {
       return !removeFlags[index];
     });
-    store_app_setting_configs.menuOptions_appBar = menuOptions_appBar
+    store_app_configs_info.menuOptions_appBar = menuOptions_appBar
   }
   function renderIcon (icon: any) {
     return () => h(NIcon, null, { default: () => h(icon) })
@@ -407,10 +403,10 @@
       bool_watch = true;
     }, 1000);
   };
-  const stopWatching_collapsed_width = watch(() => store_app_setting_configs.app_left_menu_collapsed, (newValue, oldValue) => {
+  const stopWatching_collapsed_width = watch(() => store_app_configs_info.app_left_menu_collapsed, (newValue, oldValue) => {
     updateGridItems();
   });
-  const stopWatching_window_innerWidth = watch(() => store_app_setting_configs.window_innerWidth, (newValue, oldValue) => {
+  const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
     bool_watch = false;
     updateGridItems();
     if (bool_watch) {
@@ -419,7 +415,7 @@
   });
   const collapsed_width = ref<number>(1090);
   const updateGridItems = () => {
-    if (store_app_setting_configs.app_left_menu_collapsed == true) {
+    if (store_app_configs_info.app_left_menu_collapsed == true) {
       collapsed_width.value = 145;
     } else {
       collapsed_width.value = 240;
@@ -453,7 +449,7 @@
         :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)'}">
         <n-tabs
           style="margin-top: -20px;"
-          v-model:value="store_app_setting_configs.menu_app_setting_select_tab_name"
+          v-model:value="store_app_configs_info.menu_app_setting_select_tab_name"
           size="large"
           animated
           pane-wrapper-style="margin: 0 -4px"
@@ -668,7 +664,7 @@
                     v-model:value="$i18n.locale"
                     :options="languages"
                     style="width: 207px;margin-top: -4px;"
-                    @update:value="store_app_setting_configs.update_lang = $i18n.locale"
+                    @update:value="store_app_configs_info.update_lang = $i18n.locale"
                   />
                 </n-space>
                 <n-divider style="margin: 0;"/>
@@ -682,7 +678,7 @@
                   <n-select
                     v-model:value="theme_value"
                     :options="theme_options"
-                    @update:value="emits('update_theme',theme_value)"
+                    @update:value="store_app_configs_logic_theme.update_theme(theme_value)"
                     placeholder=""
                     :reset-menu-on-options-change="false"
                     style="width: 207px;margin-top: -4px;"
@@ -812,7 +808,7 @@
                       </div>
                     </n-space>
                   </n-space>
-                  <n-checkbox-group :value="store_app_setting_configs.selectd_props_app_sidebar" @update:value="handleUpdate_selectd_props_app_sidebar_Value">
+                  <n-checkbox-group :value="store_app_configs_info.selectd_props_app_sidebar" @update:value="handleUpdate_selectd_props_app_sidebar_Value">
                     <n-grid :y-gap="8" :cols="5">
                       <n-gi><n-checkbox value="2" :label="computed_i18n_Label_SidebarConfiguration_3" /></n-gi>
                       <n-gi><n-checkbox value="4" :label="computed_i18n_Label_SidebarConfiguration_5" /></n-gi>

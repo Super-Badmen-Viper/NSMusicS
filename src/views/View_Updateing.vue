@@ -1,12 +1,10 @@
 <script setup lang="ts">
   import {onMounted} from "vue";
   import Table_Updateing from '../views/table/Table_Updateing.vue'
+  import {store_router_data_info} from "@/store/router/store_router_data_info";
 
-  const emits = defineEmits([
-    'router_select'
-  ]);
   onMounted(async () => {
-    emits('router_select','View_Updateing')
+    store_router_data_info.router_select = 'View_Updateing'
   });
 </script>
 <template>

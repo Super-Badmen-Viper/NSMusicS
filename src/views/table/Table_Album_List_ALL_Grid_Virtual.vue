@@ -23,26 +23,6 @@
     inheritLocale: true
   })
 
-  ////// passed as argument
-  const emits = defineEmits([
-    'options_Sort_key','page_albumlists_keyword','page_albumlists_reset_data',
-    'page_albumlists_selected',
-    'media_list_of_album_id','play_this_album_song_list',
-    'router_history_model','router_history_model_of_Album_scroller_value','router_history_model_of_Album_scroll',
-  ]);
-  const props = defineProps<{
-    data_temporary: Album[];
-
-    page_albumlists:Play_List[],page_albumlists_options:{label: string;value: string}[],page_albumlists_statistic:{label: string;album_count: number;id: string;}[],
-    page_albumlists_selected:string;
-
-    page_albumlists_keyword:string;
-
-    options_Sort_key:{ columnKey: string; order: string }[];
-
-    router_select_history_date: Interface_View_Router_Date;router_history_datas: Interface_View_Router_Date[];router_history_model_of_Album_scroller_value:number;router_history_model_of_Album_scroll:Boolean;
-  }>();
-
   ////// albumlist_view page_layout gridItems
   const item_album = ref<number>(160)
   const item_album_image = ref<number>(item_album.value - 20)
@@ -71,10 +51,10 @@
       bool_watch = true;
     }, 1000);
   };
-  const stopWatching_collapsed_width = watch(() => store_app_setting_configs.app_left_menu_collapsed, (newValue, oldValue) => {
+  const stopWatching_collapsed_width = watch(() => store_app_configs_info.app_left_menu_collapsed, (newValue, oldValue) => {
     updateGridItems();
   });
-  const stopWatching_window_innerWidth = watch(() => store_app_setting_configs.window_innerWidth, (newValue, oldValue) => {
+  const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
     bool_watch = false;
     updateGridItems();
     if (bool_watch) {
@@ -82,7 +62,7 @@
     }
   });
   const updateGridItems = () => {
-    if (store_app_setting_configs.app_left_menu_collapsed == true) {
+    if (store_app_configs_info.app_left_menu_collapsed == true) {
       collapsed_width.value = 145;
       item_album.value = 145;
       item_album_image.value = item_album.value - 20;
@@ -101,7 +81,7 @@
     startTimer();
     updateGridItems();
 
-    input_search_Value.value = props.page_albumlists_keyword
+    input_search_Value.value = store_view_album_page_logic.page_albumlists_keyword
     if(input_search_Value.value.length > 0){
       bool_show_search_area.value = true
       bool_input_search = true
@@ -133,12 +113,12 @@
     // {label:'更新时间(外部信息)', key: 'external_info_updated_at', state_Sort: state_Sort.Default }
   ]);
   const options_Sort = computed(() => {
-    if(props.options_Sort_key != null && props.options_Sort_key.length > 0){
+    if(store_view_album_page_logic.page_albumlists_options_Sort_key != null && store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0){
       options_Sort_key.value.forEach(element => {
-        if(element.key === props.options_Sort_key[0].columnKey)
-          if(props.options_Sort_key[0].order === state_Sort.Ascend)
+        if(element.key === store_view_album_page_logic.page_albumlists_options_Sort_key[0].columnKey)
+          if(store_view_album_page_logic.page_albumlists_options_Sort_key[0].order === state_Sort.Ascend)
             element.state_Sort = state_Sort.Ascend
-          else if(props.options_Sort_key[0].order === state_Sort.Descend)
+          else if(store_view_album_page_logic.page_albumlists_options_Sort_key[0].order === state_Sort.Descend)
             element.state_Sort = state_Sort.Descend
       });
     }
@@ -194,11 +174,8 @@
         _state_Sort_ = state_Sort.Ascend;
         break;
     }
-    // emits('options_Sort_key',options_Sort_key.value)
-    // 更新排序参数数组并执行排序操作
     const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
-    emits('options_Sort_key',sortersArray)
-    // sortByColumnKeys(sortersArray);
+    store_view_album_page_logic.page_albumlists_options_Sort_key = sortersArray
 
     scrollTo(0)
   }
@@ -212,7 +189,7 @@
       bool_show_search_area.value = false
       input_search_InstRef.value?.clear()
       if(bool_input_search == true){
-        emits('page_albumlists_reset_data',true)
+        store_view_album_page_logic.list_data_StartUpdate = true
         back_search_default()
         bool_input_search = false
         scrollTo(0)
@@ -235,13 +212,13 @@
   const click_search = () => {
     if (input_search_Value.value){
       const page_albumlists_keyword = input_search_Value.value.toLowerCase();
-      emits('page_albumlists_keyword',page_albumlists_keyword)
+      store_view_album_page_logic.page_albumlists_keyword = page_albumlists_keyword
       bool_input_search = true
       options_Sort_key.value.forEach(element => {
         element.state_Sort = state_Sort.Default
       });
     }else{
-      emits('page_albumlists_reset_data',true)
+      store_view_album_page_logic.list_data_StartUpdate = true
       bool_input_search = false
       back_search_default()
     }
@@ -253,11 +230,11 @@
         if (options_Sort_key.value[i].key === options_Sort_key_Default_key.value) {
           const sortersArray: { columnKey: string; order: string }[] = [];
           if (options_Sort_key.value[i].state_Sort === 'default') {
-            emits('options_Sort_key', null);
+            store_view_album_page_logic.page_albumlists_options_Sort_key = null
           } else {
             const sorter = { columnKey: options_Sort_key.value[i].key, order: options_Sort_key.value[i].state_Sort };
             sortersArray.push(sorter);
-            emits('options_Sort_key', sortersArray);
+            store_view_album_page_logic.page_albumlists_options_Sort_key = sortersArray
           }
           break;
         }
@@ -277,9 +254,9 @@
     }
   ])
   const options_Filter_handleSelect = (key: string | number) => {
-    emits('page_albumlists_selected','album_list_love')
+    store_view_album_page_logic.page_albumlists_selected = 'album_list_love'
     console.log('selected_value_for_albumlistall：'+'album_list_love');
-    breadcrumbItems.value = props.page_albumlists_options.find(option => option.value === 'album_list_love')?.label || '';
+    breadcrumbItems.value = store_view_album_page_logic.page_albumlists_options.find(option => option.value === 'album_list_love')?.label || '';
   }
 
   ////// dynamicScroller of albumlist_view
@@ -293,40 +270,43 @@
     updateParts.viewEndIdx = viewEndIndex
     updateParts.visibleStartIdx = visibleStartIndex
     updateParts.visibleEndIdx = visibleEndIndex
-    emits('router_history_model_of_Album_scroller_value',viewEndIndex)
+    store_router_history_data_of_album.router_history_model_of_Album_scroller_value = viewEndIndex
   }
-  const stopWatching_router_history_model_of_Album_scroll = watch(() => props.router_history_model_of_Album_scroll,(newValue) => {
+  const stopWatching_router_history_model_of_Album_scroll = watch(() => store_router_history_data_of_album.router_history_model_of_Album_scroll,(newValue) => {
       if (newValue === true) {
-        scrollTo(props.router_history_model_of_Album_scroller_value)
-        emits('router_history_model_of_Album_scroll',false)
+        scrollTo(store_router_history_data_of_album.router_history_model_of_Album_scroller_value)
+        store_router_history_data_of_album.router_history_model_of_Album_scroll = false
       }
     }
   )
   const scrollTo = (value :number) => {
     if (dynamicScroller !== null) {
       setTimeout(() => {
-        dynamicScroller.value.scrollToItem(value - (20 + Math.floor((window.innerHeight - 765) / 220)));// 220
+        const index = value - (20 + Math.floor((window.innerHeight - 765) / 220));
+        dynamicScroller.value.scrollToItem(index);// 220
       }, 100);
     }
   }
   onMounted(() => {
-    scrollTo(props.router_history_model_of_Album_scroller_value)
+    scrollTo(store_router_history_data_of_album.router_history_model_of_Album_scroller_value)
   });
 
   ////// select Dtatsource of albumlists
   const breadcrumbItems = ref('所有专辑');
   const page_albumlists_handleSelected_updateValue = (value: any) => {
-    emits('page_albumlists_selected',value)
+    store_view_album_page_logic.page_albumlists_selected = value
     console.log('selected_value_for_albumlistall：'+value);
-    breadcrumbItems.value = props.page_albumlists_options.find(option => option.value === value)?.label || '';
+    breadcrumbItems.value = store_view_album_page_logic.page_albumlists_options.find(option => option.value === value)?.label || '';
   };
 
   ////// router history 
   const get_router_history_model_pervious = () => {
-    emits('router_history_model',-1)
+    store_view_album_page_logic.page_albumlists_keyword = ''
+    store_router_history_data_of_album.get_router_history_model_of_Album(-1)
   }
   const get_router_history_model_next = () =>  {
-    emits('router_history_model',1)
+    store_view_album_page_logic.page_albumlists_keyword = ''
+    store_router_history_data_of_album.get_router_history_model_of_Album(1)
   }
 
   ////// go to media_view
@@ -353,17 +333,23 @@
   }
   const Open_this_album_SongList_click = (album_id:string) => {
     console.log('media_list_of_album_id：'+album_id);
-    emits('media_list_of_album_id',album_id)
+    store_router_data_logic.get_media_list_of_album_id_by_album_info(album_id)
   }
   const Play_this_album_SongList_click = (album_id:string) => {
     console.log('play_this_album_click：'+album_id);
-    emits('play_this_album_song_list',album_id)
+    store_view_album_page_fetchData.fetchData_This_Album_SongList(album_id)
   }
 
   ////// changed_data write to sqlite
   import {Set_AlbumInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite'
-  import {store_app_setting_configs} from "@/store/app/store_app_setting_configs";
+  import {store_app_configs_info} from "@/store/app/store_app_configs_info";
   import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+  import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
+  import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
+  import {store_router_data_logic} from "@/store/router/store_router_data_logic";
+  import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
+  import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
+  import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
   let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Favorite(id,favorite)
@@ -397,7 +383,7 @@
         </template>
       </n-button>
       <div style="margin-top: 4px;">
-        {{ props.router_select_history_date?.id ?? '' }} / {{ props.router_history_datas?.length ?? '' }}
+        {{ store_router_history_data_of_album.router_select_history_date_of_Album?.id ?? '' }} / {{ store_router_history_data_of_album.router_history_datas_of_Album?.length ?? '' }}
       </div>
       <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_next">
         <template #icon>
@@ -443,7 +429,7 @@
     <div class="album-wall-container">
       <DynamicScroller
         class="album-wall" ref="dynamicScroller" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
-        :items="props.data_temporary"
+        :items="store_view_album_page_info.album_Files_temporary"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :grid-items="gridItems"
@@ -491,7 +477,7 @@
               <n-grid 
                 :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
                 style="margin-left: 14px;width: 370px;">
-                <n-gi v-for="albumlist in props.page_albumlists_statistic" :key="albumlist.id">
+                <n-gi v-for="albumlist in store_view_album_page_logic.page_albumlists_statistic" :key="albumlist.id">
                   <n-statistic :label="albumlist.label" :value="albumlist.album_count" />
                 </n-gi>
               </n-grid>
@@ -509,8 +495,8 @@
                       </n-breadcrumb-item>
                   </n-breadcrumb>
                   <n-select 
-                    :value="props.page_albumlists_selected" 
-                    :options="props.page_albumlists_options" style="width: 166px;"
+                    :value="store_view_album_page_logic.page_albumlists_selected" 
+                    :options="store_view_album_page_logic.page_albumlists_options" style="width: 166px;"
                     :on-update:value="page_albumlists_handleSelected_updateValue" />
                 </n-space>
               </template>

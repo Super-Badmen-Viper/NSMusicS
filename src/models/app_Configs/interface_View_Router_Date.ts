@@ -9,6 +9,7 @@ interface Interface_View_Router_Date {
     router_select_model_artist:boolean;
 
     page_lists_keyword:string;
+    page_songlists_keywordFilter:string;
 
     stmt_string:string;
 

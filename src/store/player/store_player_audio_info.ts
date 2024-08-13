@@ -1,4 +1,9 @@
-import { reactive } from 'vue'
+import {reactive, watch} from 'vue'
+import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
+import {store_player_appearance} from "@/store/player/store_player_appearance";
+import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
+import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {Set_MediaInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
 const path = require('path');
 
 export const store_player_audio_info = reactive({
@@ -31,4 +36,89 @@ export const store_player_audio_info = reactive({
     this_audio_lyrics_info_line: [],
     this_audio_lyrics_info_time: [],
     this_audio_lyrics_info_line_num: 28,
+});
+watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
+    console.log('this_audio_file_path：'+newValue)
+
+    if(store_view_media_page_info.media_Files_temporary != undefined
+        && store_view_media_page_info.media_Files_temporary.length != 0
+    ) {
+        store_player_audio_info.this_audio_restart_play = true
+        if (store_player_appearance.player_mode_of_lock_playlist === false) {
+            store_playlist_list_info.playlist_MediaFiles_temporary = [...store_view_media_page_info.media_Files_temporary];
+            store_playlist_list_info.playlist_datas_CurrentPlayListMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
+            store_app_configs_logic_save.save_system_playlist_item_id_config();
+        }
+    }
+    store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
+        item.playing = item.id === store_player_audio_info.this_audio_song_id;
+    });
+    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+        item.playing = item.id === store_player_audio_info.this_audio_song_id;
+    });
+});
+watch(() => store_player_audio_info.this_audio_file_medium_image_url, (newValue) => {
+    console.log('this_audio_file_medium_image_url'+newValue)
+
+    store_player_audio_info.this_audio_restart_play = true
+    store_player_audio_info.page_top_album_image_url = '';
+    store_player_audio_info.page_top_album_image_url = newValue;
+});
+watch(() => store_player_audio_info.this_audio_song_id, (newValue) => {
+    console.log('this_audio_song_id：'+newValue)
+
+    let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
+    set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_PlayCount_of_Media_File(newValue)
+});
+watch(() => store_player_audio_info.this_audio_song_rating, (newValue) => {
+    console.log('this_audio_song_rating：'+newValue)
+
+    store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
+        if(item.id === store_player_audio_info.this_audio_song_id)
+            item.rating = store_player_audio_info.this_audio_song_rating
+    });
+});
+watch(() => store_player_audio_info.this_audio_song_favorite, (newValue) => {
+    console.log('this_audio_song_favorite：'+newValue)
+
+    store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
+        if(item.id === store_player_audio_info.this_audio_song_id)
+            item.favorite = store_player_audio_info.this_audio_song_favorite
+    });
+});
+watch(() => store_player_audio_info.this_audio_album_name, (newValue) => {
+    console.log('this_audio_album_name：'+newValue)
+
+    store_player_audio_info.page_top_album_name = newValue;
+});
+watch(() => store_player_audio_info.this_audio_album_id, (newValue) => {
+    console.log('this_audio_album_id：'+newValue)
+
+    store_player_audio_info.page_top_album_id = newValue;
+});
+watch(() => store_player_audio_info.this_audio_lyrics_string, (newValue) => {
+    // split lyrics
+    store_player_audio_info.this_audio_lyrics_info_line = []
+    for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_num; i++) {
+        store_player_audio_info.this_audio_lyrics_info_line.push('')
+    }
+    store_player_audio_info.this_audio_lyrics_info_time = []
+    //
+    let line_all = newValue.split('\n')
+    let line_times = []
+    for (let i = 0; i < line_all.length; i++) {
+        let line = line_all[i].split(']')
+        if (line.length > 1) {
+            line_times.push(line[0].replace('[', ''))
+            store_player_audio_info.this_audio_lyrics_info_line.push(line[1])
+        }
+    }
+    for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_num; i++) {
+        store_player_audio_info.this_audio_lyrics_info_line.push('')
+    }
+    //
+    for (let i = 0; i < line_times.length; i++) {
+        const [minutes, seconds] = line_times[i].split(':');
+        store_player_audio_info.this_audio_lyrics_info_time[i] = (parseInt(minutes) * 60 + parseInt(seconds)) * 1000;
+    }
 });

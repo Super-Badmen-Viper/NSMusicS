@@ -2,7 +2,7 @@ import { App_Configs } from '@/models/app_Configs/class_App_Configs';
 import { Player_Configs_of_Audio_Info } from '@/models/app_Configs/class_Player_Configs_of_Audio_Info';
 import { Player_Configs_of_UI } from '@/models/app_Configs/class_Player_Configs_of_UI';
 
-export class System_Configs_Write {
+export class Class_Set_System_Configs_Write {
     system_app_config(
         db: any,
         app_Configs: App_Configs,

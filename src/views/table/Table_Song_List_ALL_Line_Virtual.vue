@@ -31,16 +31,7 @@ const emits = defineEmits([
   'menu_edit_this_song',
   'menu_add_this_song',
   'menu_delete_this_song',
-  'options_Sort_key',
-  'page_songlists_reset_data',
-  'media_Files_selected',
-  'router_history_model','router_history_model_of_Media_scroller_value','router_history_model_of_Media_scroll',
 ]);
-const props = defineProps<{
-  options_Sort_key:{ columnKey: string; order: string }[];
-
-  router_select_history_date: Interface_View_Router_Date;router_history_datas: Interface_View_Router_Date[];router_history_model_of_Media_scroller_value: number;router_history_model_of_Media_scroll: Boolean;
-}>();
 
 ////// songlist_view page_layout lineItems
 const collapsed_width = ref<number>(1090);
@@ -64,10 +55,10 @@ const startTimer = () => {
     bool_watch = true;
   }, 1000);
 };
-const stopWatching_collapsed_width = watch(() => store_app_setting_configs.app_left_menu_collapsed, (newValue, oldValue) => {
+const stopWatching_collapsed_width = watch(() => store_app_configs_info.app_left_menu_collapsed, (newValue, oldValue) => {
   updateGridItems();
 });
-const stopWatching_window_innerWidth = watch(() => store_app_setting_configs.window_innerWidth, (newValue, oldValue) => {
+const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
   bool_watch = false;
   updateGridItems();
   if (bool_watch) {
@@ -75,7 +66,7 @@ const stopWatching_window_innerWidth = watch(() => store_app_setting_configs.win
   }
 });
 const updateGridItems = () => {
-  if (store_app_setting_configs.app_left_menu_collapsed == true) {
+  if (store_app_configs_info.app_left_menu_collapsed == true) {
     collapsed_width.value = 145;
   } else {
     collapsed_width.value = 240;
@@ -106,12 +97,12 @@ const options_Sort_key = ref<SortItem[]>([
   {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
 ]);
 const options_Sort = computed(() => {
-  if(props.options_Sort_key != null && props.options_Sort_key.length > 0){
+  if(store_view_media_page_logic.page_songlists_options_Sort_key != null && store_view_media_page_logic.page_songlists_options_Sort_key.length > 0){
     options_Sort_key.value.forEach(element => {
-      if(element.key === props.options_Sort_key[0].columnKey)
-        if(props.options_Sort_key[0].order === state_Sort.Ascend)
+      if(element.key === store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey)
+        if(store_view_media_page_logic.page_songlists_options_Sort_key[0].order === state_Sort.Ascend)
           element.state_Sort = state_Sort.Ascend
-        else if(props.options_Sort_key[0].order === state_Sort.Descend)
+        else if(store_view_media_page_logic.page_songlists_options_Sort_key[0].order === state_Sort.Descend)
           element.state_Sort = state_Sort.Descend
     });
   }
@@ -169,8 +160,9 @@ const handleSelect_Sort = (key: string | number) => {
   }
   // emits('options_Sort_key',options_Sort_key.value)
   // 更新排序参数数组并执行排序操作
+  store_view_media_page_logic.list_options_Hand_Sort = true
   const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
-  emits('options_Sort_key',sortersArray)
+  store_view_media_page_logic.page_songlists_options_Sort_key = sortersArray
   // sortByColumnKeys(sortersArray);
 
   scrollTo(0)
@@ -185,7 +177,7 @@ const show_search_area = () => {
     bool_show_search_area.value = false
     input_search_InstRef.value?.clear()
     if(bool_input_search == true){
-      emits('page_songlists_reset_data',true)
+      store_view_media_page_logic.list_data_StartUpdate = true
       back_search_default()
       bool_input_search = false
       scrollTo(0)
@@ -214,7 +206,7 @@ const click_search = () => {
       element.state_Sort = state_Sort.Default
     });
   }else{
-    emits('page_songlists_reset_data',true)
+    store_view_media_page_logic.list_data_StartUpdate = true
     bool_input_search = false
     back_search_default()
   }
@@ -226,11 +218,13 @@ const back_search_default = () => {
       if (options_Sort_key.value[i].key === options_Sort_key_Default_key.value) {
         const sortersArray: { columnKey: string; order: string }[] = [];
         if (options_Sort_key.value[i].state_Sort === 'default') {
-          emits('options_Sort_key', null);
+          store_view_media_page_logic.list_options_Hand_Sort = true
+          store_view_media_page_logic.page_songlists_options_Sort_key = null
         } else {
           const sorter = { columnKey: options_Sort_key.value[i].key, order: options_Sort_key.value[i].state_Sort };
           sortersArray.push(sorter);
-          emits('options_Sort_key', sortersArray);
+          store_view_media_page_logic.list_options_Hand_Sort = true
+          store_view_media_page_logic.page_songlists_options_Sort_key = sortersArray
         }
         break;
       }
@@ -277,13 +271,13 @@ const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any
   updateParts.viewEndIdx = viewEndIndex
   updateParts.visibleStartIdx = visibleStartIndex
   updateParts.visibleEndIdx = visibleEndIndex
-
-  emits('router_history_model_of_Media_scroller_value',viewEndIndex)
+  
+  store_router_history_data_of_media.router_history_model_of_Media_scroller_value = viewEndIndex
 }
-const stopWatching_router_history_model_of_Media_scroll = watch(() => props.router_history_model_of_Media_scroll,(newValue) => {
+const stopWatching_router_history_model_of_Media_scroll = watch(() => store_router_history_data_of_media.router_history_model_of_Media_scroll,(newValue) => {
       if (newValue === true) {
-        scrollTo(props.router_history_model_of_Media_scroller_value)
-        emits('router_history_model_of_Media_scroll',false)
+        scrollTo(store_router_history_data_of_media.router_history_model_of_Media_scroller_value)
+        store_router_history_data_of_media.router_history_model_of_Media_scroll = false
       }
     }
 )
@@ -291,18 +285,20 @@ const this_audio_Index_of_absolute_positioning_in_list = ref<number>(0)
 const scrollTo = (value :number) => {
   if (dynamicScroller !== null) {
     setTimeout(() => {
-      dynamicScroller.value.scrollToItem(value - (12 + Math.floor((window.innerHeight - 765) / 75)));// 1000:15，690:11  75
+      const index = value - (12 + Math.floor((window.innerHeight - 765) / 75))
+      dynamicScroller.value.scrollToItem(index);// 1000:15，690:11  75
     }, 100);
   }
 }
 onMounted(() => {
-  scrollTo(props.router_history_model_of_Media_scroller_value)
+  scrollTo(store_router_history_data_of_media.router_history_model_of_Media_scroller_value)
 });
 
 ////// select Dtatsource of artistlists
 const breadcrumbItems = ref('所有歌曲');
 const page_songlists_handleselected_updatevalue = (value: any) => {
   store_view_media_page_logic.set_media_Files_selected_all(false)
+  store_view_media_page_logic.list_selected_Hand_click = true
   store_view_media_page_logic.page_songlists_selected = value
   console.log('selected_value_for_songlistall：'+value);
   breadcrumbItems.value = store_view_media_page_logic.page_songlists_options.find(option => option.value === value)?.label || '';
@@ -312,10 +308,10 @@ const page_songlists_handleselected_updatevalue = (value: any) => {
 
 ////// router history
 const get_router_history_model_pervious = () => {
-  emits('router_history_model',-1)
+  store_router_history_data_of_media.get_router_history_model_of_Media(-1)
 }
 const get_router_history_model_next = () =>  {
-  emits('router_history_model',1)
+  store_router_history_data_of_media.get_router_history_model_of_Media(1)
 }
 
 /////// emits audio_info of songlist_view_list
@@ -376,6 +372,10 @@ let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   click_count = 0;
   set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id, favorite)
+
+  if (id === store_player_audio_info.this_audio_song_id){
+    store_player_audio_info.this_audio_song_favorite = !favorite;
+  }
 }
 const handleItemClick_Rating = (id_rating: any) => {
   click_count = 0;
@@ -384,6 +384,10 @@ const handleItemClick_Rating = (id_rating: any) => {
     set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, 0);
   }else
     set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, rating);
+
+  if (id === store_player_audio_info.this_audio_song_id){
+    store_player_audio_info.this_audio_song_rating = rating;
+  }
 }
 
 ////// playlist
@@ -391,13 +395,14 @@ import { useMessage } from 'naive-ui'
 const message = useMessage()
 /// add playlist
 import { Set_PlaylistInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_To_LocalSqlite";
-import {store_app_setting_configs} from "@/store/app/store_app_setting_configs";
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_playlist_list_info} from  "@/store/playlist/store_playlist_list_info"
 import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {store_player_appearance} from "@/store/player/store_player_appearance";
+import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media";
 let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite()
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -569,7 +574,7 @@ onBeforeUnmount(() => {
         </template>
       </n-button>
       <div style="margin-top: 4px;">
-        {{ props.router_select_history_date?.id ?? '' }} / {{ props.router_history_datas?.length ?? '' }}
+        {{ store_router_history_data_of_media.router_select_history_date_of_Media?.id ?? '' }} / {{ store_router_history_data_of_media.router_history_datas_of_Media?.length ?? '' }}
       </div>
       <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_next">
         <template #icon>
@@ -799,7 +804,12 @@ onBeforeUnmount(() => {
                   class="viaSlot" style="margin-right: 20px;"
                   :length="6"
                   v-model="item.rating"
-                  @after-rate="(value) => { handleItemClick_Rating(item.id + '-' + value); if (item.rating == 6) { item.rating = 0; } }"
+                  @after-rate="(value) => {
+                    handleItemClick_Rating(item.id + '-' + value);
+                    if (item.rating == 6) {
+                      item.rating = 0;
+                    }
+                  }"
                 />
                 <button
                   @click="handleItemClick_Favorite(item.id, item.favorite); item.favorite = !item.favorite;"
@@ -813,10 +823,10 @@ onBeforeUnmount(() => {
                   <template v-if="item.favorite">
                     <icon :size="20" color="red" style="margin-left: -2px; margin-top: 3px;"><Heart28Filled/></icon>
                   </template>
-                  <template v-else-if="!store_app_setting_configs.update_theme">
+                  <template v-else-if="!store_app_configs_info.update_theme">
                     <icon color="#101014" :size="20" style="margin-left: -2px; margin-top: 3px;"><Heart24Regular/></icon>
                   </template>
-                  <template v-else-if="store_app_setting_configs.update_theme">
+                  <template v-else-if="store_app_configs_info.update_theme">
                     <icon color="#FAFAFC" :size="20" style="margin-left: -2px; margin-top: 3px;"><Heart24Regular/></icon>
                   </template>
                 </button>
@@ -829,7 +839,7 @@ onBeforeUnmount(() => {
                       cursor: pointer;
                     "
                   >
-                    <template v-if="!store_app_setting_configs.update_theme">
+                    <template v-if="!store_app_configs_info.update_theme">
                       <icon :size="20"><MoreCircle20Regular/></icon>
                     </template>
                     <template v-else>

@@ -27,7 +27,7 @@ const { t } = useI18n({
 
 ////// passed as argument
 const emits = defineEmits([
-  'media_list_of_album_id','play_this_album_song_list',
+  'play_this_album_song_list',
 ]);
 import {store_view_home_page_info} from "@/store/view/home/store_view_home_page_info"
 
@@ -59,10 +59,10 @@ const startTimer = () => {
     bool_watch = true;
   }, 1000);
 };
-const stopWatching_collapsed_width = watch(() => store_app_setting_configs.app_left_menu_collapsed, (newValue, oldValue) => {
+const stopWatching_collapsed_width = watch(() => store_app_configs_info.app_left_menu_collapsed, (newValue, oldValue) => {
   updateGridItems();
 });
-const stopWatching_window_innerWidth = watch(() => store_app_setting_configs.window_innerWidth, (newValue, oldValue) => {
+const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
   bool_watch = false;
   updateGridItems();
   if (bool_watch) {
@@ -70,7 +70,7 @@ const stopWatching_window_innerWidth = watch(() => store_app_setting_configs.win
   }
 });
 const updateGridItems = () => {
-  if (store_app_setting_configs.app_left_menu_collapsed == true) {
+  if (store_app_configs_info.app_left_menu_collapsed == true) {
     collapsed_width.value = 145;
     item_album.value = 190;
     item_album_image.value = item_album.value - 20;
@@ -94,7 +94,6 @@ onMounted(() => {
 
 ////// dynamicScroller of albumlist_view
 const dynamicScroller_maximum_playback = ref(null as any);
-// dynamicScroller.value.scrollToItem(value - (12 + Math.floor((window.innerHeight - 765) / 75)));// 1000:15，690:11  75
 const dynamicScroller_random_search = ref(null as any);
 const dynamicScroller_recently_added = ref(null as any);
 const dynamicScroller_recently_played = ref(null as any);
@@ -102,7 +101,7 @@ const dynamicScroller_recently_played = ref(null as any);
 ////// go to media_view
 const Open_this_album_SongList_click = (album_id:string) => {
   console.log('media_list_of_album_id：'+album_id);
-  emits('media_list_of_album_id',album_id)
+  store_router_data_logic.get_media_list_of_album_id_by_album_info(album_id)
 }
 
 //////
@@ -137,8 +136,9 @@ watch(() => store_view_home_page_info.home_selected_top_album_subscript, (newVal
 import {Set_AlbumInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite'
 import {QueueMusicRound} from "@vicons/material";
 import {Icon} from "@vicons/utils";
-import {store_app_setting_configs} from "@/store/app/store_app_setting_configs";
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_view_home_page_logic} from "@/store/view/home/store_view_home_page_logic";
+import {store_router_data_logic} from "@/store/router/store_router_data_logic";
 let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Favorite(id,favorite)

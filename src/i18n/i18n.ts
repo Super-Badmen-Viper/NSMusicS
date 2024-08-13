@@ -34,11 +34,11 @@ import sv from '@/i18n/locales_feishin/sv.json';
 import cs from '@/i18n/locales_feishin/cs.json';
 import nl from '@/i18n/locales_feishin/nl.json';
 
-import {System_Configs_Read} from "@/features/system_configs/System_Configs_Read";
+import {Class_Get_System_Configs_Read} from "@/features/system_configs/class_Get_System_Configs_Read";
 
 export class Language{
     public i18n:any;
-    public system_Configs_Read = new System_Configs_Read();
+    public system_Configs_Read = new Class_Get_System_Configs_Read();
     constructor() {
         const options: I18nOptions = {
             legacy: false,

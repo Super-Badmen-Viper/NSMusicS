@@ -1,4 +1,4 @@
-import {reactive} from 'vue'
+import {reactive, watch} from 'vue'
 import {
     Set_PlaylistInfo_To_LocalSqlite
 } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_To_LocalSqlite";
@@ -10,9 +10,17 @@ import {
     Set_LibraryInfo_To_LocalSqlite
 } from "@/features/sqlite3_local_configs/class_Set_LibraryInfo_To_LocalSqlite";
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
+import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media";
+import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+import {store_router_data_info} from "@/store/router/store_router_data_info";
+import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 
 export const store_view_media_page_logic = reactive({
     list_data_StartUpdate: false,
+    list_data_Hand_Search: false,
+    list_options_Hand_Sort: false,
+    list_selected_Hand_click: false,
 
     page_songlists_options: [],
     page_songlists_statistic: [],
@@ -23,6 +31,22 @@ export const store_view_media_page_logic = reactive({
     page_songlists_keywordFilter: '',
     page_songlists_get_keyword_model_num: 0,
     page_songlists_options_Sort_key: [],
+
+    get_duration_formatTime(currentTime: number): string {
+        const minutes = Math.floor(currentTime / 60);
+        const seconds = Math.floor(currentTime % 60);
+
+        let formattedMinutes = String(minutes);
+        let formattedSeconds = String(seconds);
+
+        if (formattedMinutes.length == 1)
+            formattedMinutes = '0' + formattedMinutes;
+
+        if (formattedSeconds.length == 1)
+            formattedSeconds = '0' + formattedSeconds;
+
+        return `${formattedMinutes}:${formattedSeconds}`;
+    },
 
     set_media_Files_selected(value: Media_File) {
         if (value.selected) {
@@ -54,6 +78,7 @@ export const store_view_media_page_logic = reactive({
         }
         console.log('media_Files_selected：'+value)
     },
+
     get_selected_playlist_add_MediaFile(value: any){
         console.log('selected_playlist_addMediaFile',value)
         let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
@@ -63,21 +88,22 @@ export const store_view_media_page_logic = reactive({
         )
         store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
     },
-    get_selected_lovelist_add_MediaFile(value: any){
-        console.log('selected_lovelist_addMediaFile',value)
-        let set_AnnotationInfo_To_LocalSqlite = new Set_AnnotationInfo_To_LocalSqlite()
-        set_AnnotationInfo_To_LocalSqlite.Set_MediaInfo_Add_Selected_Favorite(
-            store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
-            true
-        )
-        store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
-    },
     get_selected_playlist_delete_MediaFile(value: any){
         console.log('selected_playlist_deleteMediaFile',value)
         let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
         set_PlaylistInfo_From_LocalSqlite.Set_Selected_MediaInfo_Delete_Selected_Playlist(
             store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
             value
+        )
+        store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+    },
+
+    get_selected_lovelist_add_MediaFile(value: any){
+        console.log('selected_lovelist_addMediaFile',value)
+        let set_AnnotationInfo_To_LocalSqlite = new Set_AnnotationInfo_To_LocalSqlite()
+        set_AnnotationInfo_To_LocalSqlite.Set_MediaInfo_Add_Selected_Favorite(
+            store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
+            true
         )
         store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
     },
@@ -98,6 +124,7 @@ export const store_view_media_page_logic = reactive({
         )
         store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
     },
+
     get_selected_recentlist_deletet_MediaFile(value: any){
         console.log('selected_recentlist_deletetMediaFile',value)
         let set_AnnotationInfo_To_LocalSqlite = new Set_AnnotationInfo_To_LocalSqlite();
@@ -107,4 +134,65 @@ export const store_view_media_page_logic = reactive({
         )
         store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
     },
+});
+watch(() => store_view_media_page_logic.page_songlists_options_Sort_key, (newValue) => {
+    if (newValue != null && store_view_media_page_logic.list_options_Hand_Sort) {
+        store_view_media_page_logic.list_options_Hand_Sort = false
+        store_view_media_page_logic.page_songlists_options_Sort_key = newValue;
+        store_router_history_data_of_media.fix_router_history_of_Media_scroller_value(store_router_history_data_of_media.router_history_model_of_Media_scroller_value) // 保留此滚轮值(上次浏览位置)
+        store_view_media_page_fetchData.fetchData_Media()
+    }
+});
+watch(() => store_view_media_page_logic.page_songlists_keyword, (newValue) => {
+    if (newValue.indexOf('accurate_search') > 0) {
+        newValue = newValue.replace('accurate_search', '');
+        if (newValue.indexOf('__title__') > 0) {
+            newValue = newValue.replace('__title__', '');
+            store_view_media_page_logic.page_songlists_keywordFilter = `WHERE title LIKE '${newValue}'`
+        } else if (newValue.indexOf('__artist__') > 0) {
+            newValue = newValue.replace('__artist__', '');
+            store_view_media_page_logic.page_songlists_keywordFilter = `WHERE artist LIKE '${newValue}'`
+        } else if (newValue.indexOf('__album__') > 0) {
+            newValue = newValue.replace('__album__', '');
+            store_view_media_page_logic.page_songlists_keywordFilter = `WHERE album_id = '${newValue}'`
+        }
+    }else{
+        store_view_media_page_logic.page_songlists_keywordFilter = newValue.length > 0 ?
+            `WHERE title LIKE '%${newValue}%' OR artist LIKE '%${newValue}%' OR album LIKE '%${newValue}%'` :
+            '';
+    }
+    store_view_media_page_logic.page_songlists_keyword_reset = true;
+    console.log('page_songlists_keyword:' + newValue)
+
+    store_app_configs_info.app_left_menu_select_activeKey = 'go_songs_list'
+    store_router_data_info.router.push('View_Song_List_ALL')
+    store_view_media_page_fetchData.fetchData_Media()
+});
+watch(() => store_view_media_page_logic.page_songlists_selected, (newValue) => {
+    store_view_media_page_logic.page_songlists_selected = newValue
+    if(store_view_media_page_logic.list_selected_Hand_click) {
+        store_view_media_page_logic.page_songlists_keywordFilter = ""
+    }
+    store_view_media_page_logic.list_selected_Hand_click = false
+    console.log('page_songlists_selected：'+newValue)
+    store_view_media_page_fetchData.fetchData_Media()
+    store_app_configs_logic_save.save_system_config_of_Player_Configs_of_Audio_Info()
+    store_app_configs_logic_save.save_system_config_of_View_Router_History()
+});
+watch(() => store_view_media_page_logic.list_data_StartUpdate, (newValue) => {
+    if(newValue) {
+        store_view_media_page_logic.page_songlists_keyword = '';
+        store_view_media_page_logic.page_songlists_keywordFilter = '';
+        store_router_data_info.find_music_model = false;
+        store_view_media_page_fetchData.fetchData_Media()
+
+        store_router_history_data_of_media.router_history_datas_of_Media = [];
+        if(store_router_history_data_of_media.router_select_history_date_of_Media){
+            store_router_history_data_of_media.router_select_history_date_of_Media.id = 1;
+            store_router_history_data_of_media.router_history_datas_of_Media.push(store_router_history_data_of_media.router_select_history_date_of_Media);
+        }
+
+        store_view_media_page_logic.list_data_StartUpdate = false
+        console.log("store_view_media_page_logic.list_data_StartUpdate")
+    }
 });

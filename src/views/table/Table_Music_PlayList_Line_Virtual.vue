@@ -17,7 +17,6 @@
     'menu_add_this_song',
     'menu_delete_this_song',
     'options_Sort_key',
-    'page_songlists_reset_data',
   ]);
 
   ////// scrollbar of playlist_view

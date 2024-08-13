@@ -20,17 +20,12 @@
   import { NIcon, NSlider, NSpace, NText } from 'naive-ui'; 
 
   ////// this_view components of navie_ui
-  import {onMounted, ref, watch} from 'vue';
+  import {onMounted, ref, watch, inject} from 'vue';
   import { defineEmits } from 'vue';
   import { onBeforeUnmount } from 'vue';
   const { ipcRenderer } = require('electron');
-
-  ////// passed as argument
-  const emits = defineEmits([
-    'player_show_height',
-  ]);
-
   import { store_playlist_appearance } from '@/store/playlist/store_playlist_appearance'
+  const get_playerbar_to_switch_playerview = inject('get_playerbar_to_switch_playerview');
 
   //////
   const os = require('os');
@@ -66,7 +61,7 @@
       player_show_hight_animation_value.value = 
         player_show_hight_animation_value.value === 
           0 ? 670 : 0;
-          emits('player_show_height',player_show_hight_animation_value.value);
+        get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
       if(player_show_hight_animation_value.value === 0)
         svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
       else
@@ -77,7 +72,7 @@
   let unwatch_player_show_click = watch(() => store_player_appearance.player_show_click, (newValue) => {
     if (newValue === true) {
       player_show_hight_animation_value.value = 670;
-      emits('player_show_height',player_show_hight_animation_value.value)
+      get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
       if(player_show_hight_animation_value.value === 0)
         svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
       else
@@ -315,8 +310,12 @@
 
   ////// player_configs slider formatTime area
   const set_slider_singleValue = async () => {
-    if (!player_range_duration_isDragging)
-      slider_singleValue.value = (await store_player_audio_logic.player.getCurrentTime() + store_player_audio_logic.player_silder_currentTime_added_value) / await store_player_audio_logic.player.getDuration() * 100;
+    if (!player_range_duration_isDragging) {
+      const currentTime = await store_player_audio_logic.player.getCurrentTime();
+      const duration = await store_player_audio_logic.player.getDuration();
+      const calculatedValue = ((currentTime + store_player_audio_logic.player_silder_currentTime_added_value) / duration) * 100;
+      slider_singleValue.value = Number(calculatedValue.toFixed(2));
+    }
   };
   function formatTime(currentTime: number): string {
     const minutes = Math.floor(currentTime / 60);
@@ -436,7 +435,7 @@
   import {store_player_sound_more} from "@/store/player/store_player_sound_more";
   import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info"
   import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
-  import {store_app_setting_configs} from "@/store/app/store_app_setting_configs";
+  import {store_app_configs_info} from "@/store/app/store_app_configs_info";
   let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id,favorite)
@@ -451,7 +450,7 @@
   const handleItemClick_title = (title:string) => {
     store_view_media_page_logic.page_songlists_keyword = title
     player_show_hight_animation_value.value = 670;
-    emits('player_show_height',player_show_hight_animation_value.value);
+    get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
     if(player_show_hight_animation_value.value === 0)
       svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
     else
@@ -461,7 +460,7 @@
   const handleItemClick_artist = (artist:string) => {
     store_view_media_page_logic.page_songlists_keyword = artist+'accurate_search'+'__artist__'
     player_show_hight_animation_value.value = 670;
-    emits('player_show_height',player_show_hight_animation_value.value);
+    get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
     if(player_show_hight_animation_value.value === 0)
       svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
     else
@@ -471,7 +470,7 @@
   const handleItemClick_album = (album:string) => {
     store_view_media_page_logic.page_songlists_keyword = album+'accurate_search'+'__album__'
     player_show_hight_animation_value.value = 670;
-    emits('player_show_height',player_show_hight_animation_value.value);
+    get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
     if(player_show_hight_animation_value.value === 0)
       svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
     else
@@ -500,8 +499,8 @@
     <div class="layout_distribution_3"
       style="transition: margin 0.4s;"
       :style="{ 
-        marginLeft: store_player_appearance.player_show ? '0px' : (store_app_setting_configs.app_left_menu_collapsed ? '72px' : '167px'),
-        width: store_player_appearance.player_show ? '100vw' : (store_app_setting_configs.app_left_menu_collapsed ? 'calc(100vw - 72px)' : 'calc(100vw - 167px)'),
+        marginLeft: store_player_appearance.player_show ? '0px' : (store_app_configs_info.app_left_menu_collapsed ? '72px' : '167px'),
+        width: store_player_appearance.player_show ? '100vw' : (store_app_configs_info.app_left_menu_collapsed ? 'calc(100vw - 72px)' : 'calc(100vw - 167px)'),
       }">
       <div class="gird_Left">
         <div class="button_open_player_view">
