@@ -1,5 +1,8 @@
 import { reactive } from 'vue'
 import crypto from "crypto";
+import {
+    Media_Annotation_ApiService_of_ND
+} from "@/features/servers_configs/navidrome_api/services/media_annotation/index_service";
 
 export const store_server_users = reactive({
     percentage_of_local: 0,
@@ -42,5 +45,13 @@ export const store_server_users = reactive({
             this.server_config_of_current_user_of_select = undefined;
             this.server_config_of_current_user_of_select_servername = '';
         }
+    },
+
+    get_login_parms(){
+        const username = store_server_users.server_config_of_current_user_of_sqlite?.user_name
+        const {salt, token} = store_server_users.get_generateEncryptedPassword(
+            store_server_users.server_config_of_current_user_of_sqlite?.password
+        );
+        return {username, salt, token}
     },
 });

@@ -7,14 +7,16 @@ import {
     Get_PlaylistInfo_From_LocalSqlite
 } from "@/features/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
+import {
+    store_local_data_set_playlistInfo
+} from "@/store/local/local_data_synchronization/store_local_data_set_playlistInfo";
 
 export const store_playlist_list_logic = reactive({
     playlist_names_StartUpdate: false,
 
     get_playlist_tracks_temporary_add(value: any){
-        let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
         store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
-            playlist: set_PlaylistInfo_From_LocalSqlite.Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
+            playlist: store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
                 value,
                 'admin',0,0,0,'admin'
             ),
@@ -30,8 +32,7 @@ export const store_playlist_list_logic = reactive({
         })
     },
     get_playlist_tracks_temporary_update(value: any){
-        let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
-        set_PlaylistInfo_From_LocalSqlite.Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(
+        store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(
             value.id,value.name,
             'admin',0,0,0,'admin'
         )
@@ -49,8 +50,7 @@ export const store_playlist_list_logic = reactive({
         }
     },
     get_playlist_tracks_temporary_delete(value: any){
-        let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
-        set_PlaylistInfo_From_LocalSqlite.Set_PlaylistInfo_To_Update_DeletePlaylist_of_ND(value)
+        store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_DeletePlaylist_of_ND(value)
         const index = store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.findIndex((list: any) => list.playlist.id === value);
         if (index >= 0) {
             store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.splice(index,1)

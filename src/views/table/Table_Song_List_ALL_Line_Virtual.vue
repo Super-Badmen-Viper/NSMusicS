@@ -125,17 +125,14 @@ const options_Sort = computed(() => {
 const handleSelect_Sort = (key: string | number) => {
   let _state_Sort_: state_Sort = state_Sort.Default;
   let idx: number = -1;
-  // 查找当前 key 对应的状态及索引
   for (let i = 0; i < options_Sort_key.value.length; i++) {
     if (options_Sort_key.value[i].key === key) {
       _state_Sort_ = options_Sort_key.value[i].state_Sort;
       idx = i;
     } else {
-      // 将其他 key 对应的状态设置为 Default
       options_Sort_key.value[i].state_Sort = state_Sort.Default;
     }
   }
-  // 切换当前 key 对应的状态
   switch (_state_Sort_) {
     case state_Sort.Ascend:
       options_Sort_key.value[idx].state_Sort = state_Sort.Descend;
@@ -150,12 +147,9 @@ const handleSelect_Sort = (key: string | number) => {
       _state_Sort_ = state_Sort.Ascend;
       break;
   }
-  // emits('options_Sort_key',options_Sort_key.value)
-  // 更新排序参数数组并执行排序操作
   store_view_media_page_logic.list_options_Hand_Sort = true
   const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
   store_view_media_page_logic.page_songlists_options_Sort_key = sortersArray
-  // sortByColumnKeys(sortersArray);
 
   scrollTo(0)
 }
@@ -361,7 +355,7 @@ import { Set_MediaInfo_To_LocalSqlite } from '@/features/sqlite3_local_configs/c
 let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   click_count = 0;
-  set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id, favorite)
+  store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
 
   if (id === store_player_audio_info.this_audio_song_id){
     store_player_audio_info.this_audio_song_favorite = !favorite;
@@ -371,9 +365,9 @@ const handleItemClick_Rating = (id_rating: any) => {
   click_count = 0;
   const [id, rating] = id_rating.split('-');
   if(rating === '6') {
-    set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, 0);
+    store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, 0);
   }else
-    set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, rating);
+    store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating);
 
   if (id === store_player_audio_info.this_audio_song_id){
     store_player_audio_info.this_audio_song_rating = rating;
@@ -384,7 +378,6 @@ const handleItemClick_Rating = (id_rating: any) => {
 import { useMessage } from 'naive-ui'
 const message = useMessage()
 /// add playlist
-import { Set_PlaylistInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_To_LocalSqlite";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_playlist_list_info} from  "@/store/playlist/store_playlist_list_info"
@@ -393,18 +386,31 @@ import {store_view_media_page_info} from "@/store/view/media/store_view_media_pa
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media";
-let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite()
+import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
+import type {SelectBaseOption} from "naive-ui/es/select/src/interface";
+import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {
+  store_server_data_set_playlistInfo
+} from "@/store/server/server_data_synchronization/store_server_data_set_playlistInfo";
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
-// const playlist_set_of_addPlaylist_of_comment = ref('')
-// const playlist_set_of_addPlaylist_of_duration = ref(false)
-// const playlist_set_of_addPlaylist_of_song_count = ref(false)
-// const playlist_set_of_addPlaylist_of_public = ref(false)
-// const playlist_set_of_addPlaylist_of_owner_id = ref(false)
+const playlist_set_of_addPlaylist_of_comment = ref('')
+// const playlist_set_of_addPlaylist_of_duration = ref(0)
+// const playlist_set_of_addPlaylist_of_song_count = ref(0)
+const playlist_set_of_addPlaylist_of_public = ref(false)
+// const playlist_set_of_addPlaylist_of_owner_id = ref('')
 async function update_playlist_addPlaylist(){
   try{
     store_playlist_list_logic.get_playlist_tracks_temporary_add(playlist_set_of_addPlaylist_of_playlistname.value)
     Type_Add_Playlist.value = !Type_Add_Playlist.value
+
+    if(store_server_user_model.model_select === 'navidrome'){
+      await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
+        playlist_set_of_addPlaylist_of_playlistname.value,
+        playlist_set_of_addPlaylist_of_comment.value,
+        playlist_set_of_addPlaylist_of_public.value
+      )
+    }
   }catch (e) {
     console.error(e)
   }
@@ -413,6 +419,8 @@ async function update_playlist_addPlaylist(){
 const Type_Update_Playlist = ref(false)
 const playlist_update_emit_id = ref<string>()
 const playlist_set_of_updatePlaylist_of_playlistcomment = ref('')
+const playlist_set_of_updatePlaylist_of_comment = ref('')
+const playlist_set_of_updatePlaylist_of_public = ref(false)
 function update_playlist_set_of_updatePlaylist_of_playlistname(value: Array | string | number | null, option: SelectBaseOption | null | SelectBaseOption[]){
   playlist_update_emit_id.value = value
   playlist_set_of_updatePlaylist_of_playlistcomment.value = option.label
@@ -425,6 +433,15 @@ async function update_playlist_updatePlaylist(){
     }
     store_playlist_list_logic.get_playlist_tracks_temporary_update(playlist)
     Type_Update_Playlist.value = !Type_Update_Playlist.value
+
+    if(store_server_user_model.model_select === 'navidrome'){
+      await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(
+          playlist_update_emit_id.value,
+          playlist_set_of_addPlaylist_of_playlistname.value,
+          playlist_set_of_addPlaylist_of_comment.value,
+          playlist_set_of_addPlaylist_of_public.value
+      )
+    }
   }catch (e) {
     console.error(e)
   }
@@ -440,7 +457,7 @@ async function update_playlist_deletePlaylist(){
 /// update media_file
 async function update_playlist_addMediaFile(id: any, playlist_id: any){
   try{
-    const result = await set_MediaInfo_To_LocalSqlite.Set_MediaInfo_Add_Selected_Playlist(id,playlist_id)
+    const result = await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(id,playlist_id)
     if(result)
       message.success(t('common.add'))
     else
@@ -456,11 +473,11 @@ async function update_playlist_deleteMediaFile(id: any){
     if(store_view_media_page_logic.page_songlists_selected === 'song_list_all'){
 
     }else if(store_view_media_page_logic.page_songlists_selected === 'song_list_love'){
-      result = await set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id, true)
+      result = await store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, true)
     }else if(store_view_media_page_logic.page_songlists_selected === 'song_list_recently'){
 
     }else{
-      result = await set_MediaInfo_To_LocalSqlite.Set_MediaInfo_Delete_Selected_Playlist(id,store_view_media_page_logic.page_songlists_selected)
+      result = await store_local_data_set_mediaInfo.Set_MediaInfo_Delete_Selected_Playlist(id,store_view_media_page_logic.page_songlists_selected)
     }
     if(result)
       message.success(t('common.delete'))
@@ -898,6 +915,14 @@ onBeforeUnmount(() => {
             <span>{{ $t('common.name') }}</span>
             <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_playlistcomment"/>
           </n-space>
+          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">
+            <span>{{ $t('filter.comment') }}</span>
+            <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_comment"/>
+          </n-space>
+          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">
+            <span>{{ $t('form.createPlaylist.input_public') }}</span>
+            <n-switch v-model:value="playlist_set_of_updatePlaylist_of_public"/>
+          </n-space>
         </n-form>
         <n-space justify="end">
           <n-button strong secondary type="error" @click="update_playlist_deletePlaylist();Type_Update_Playlist = !Type_Update_Playlist;playlist_set_of_updatePlaylist_of_playlistcomment = ''">
@@ -930,6 +955,14 @@ onBeforeUnmount(() => {
           <n-space vertical style="margin-bottom: 10px;">
             <span>{{ $t('common.name') }}</span>
             <n-input clearable placeholder="" v-model:value="playlist_set_of_addPlaylist_of_playlistname"/>
+          </n-space>
+          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">
+            <span>{{ $t('filter.comment') }}</span>
+            <n-input clearable placeholder="" v-model:value="playlist_set_of_addPlaylist_of_comment"/>
+          </n-space>
+          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">
+            <span>{{ $t('form.createPlaylist.input_public') }}</span>
+            <n-switch v-model:value="playlist_set_of_addPlaylist_of_public" />
           </n-space>
         </n-form>
         <n-space justify="end">

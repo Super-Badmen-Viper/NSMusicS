@@ -3,6 +3,19 @@ import {Browsing_ApiService_of_ND} from "@/features/servers_configs/navidrome_ap
 import {
     Media_Retrieval_ApiService_of_ND
 } from "@/features/servers_configs/navidrome_api/services/media_retrieval/index_service";
+import {store_server_users} from "@/store/server/store_server_users";
+import {
+    Album$Songs_Lists_ApiService_of_ND
+} from "@/features/servers_configs/navidrome_api/services/album$songs_lists/index_service";
+import {Set_ArtistInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_ArtistInfo_To_LocalSqlite";
+import {Set_AlbumInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite";
+import {Set_MediaInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
+import {boolean} from "zod";
+import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
+import {
+    store_local_data_set_artistInfo
+} from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
+import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
 const path = require('path');
 
 export class Set_Navidrome_Data_To_LocalSqlite{
@@ -53,6 +66,8 @@ export class Set_Navidrome_Data_To_LocalSqlite{
     ): Promise<any> {
         const NodeCache = require('node-cache');
         const cache = new NodeCache();
+
+        store_server_users.percentage_of_nd = 0;
 
         let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
         const getArtists_ALL = await browsing_ApiService_of_ND.getArtists_ALL(username, token, salt);
@@ -125,6 +140,7 @@ export class Set_Navidrome_Data_To_LocalSqlite{
                     }
 
                     const songs = getAlbum_id["subsonic-response"]["album"]["song"];
+                    const num = 80 / songs.length / 1000
                     for (const song of songs) {
                         const getLyrics_all = await media_Retrieval_ApiService_of_ND.getLyrics_all(username, token, salt, song.id);
                         let lyrics = undefined;
@@ -183,10 +199,11 @@ export class Set_Navidrome_Data_To_LocalSqlite{
                             medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id
                         };
                         songsArray.push(sqlite_song);
+
+                        store_server_users.percentage_of_nd += num
                     }
                     return songs;
                 });
-
                 const sqlite_artist = {
                     id: artist.id,
                     name: artist.name,
@@ -275,6 +292,59 @@ export class Set_Navidrome_Data_To_LocalSqlite{
         });
         db.close();
 
+        try {
+            let album$Songs_Lists_ApiService_of_ND = new Album$Songs_Lists_ApiService_of_ND(url);
+            const getStarred2_all = await album$Songs_Lists_ApiService_of_ND.getStarred2_all(username, token, salt);
+            const starred2_artist = getStarred2_all["subsonic-response"]["starred2"]["artist"];
+            const starred2_album = getStarred2_all["subsonic-response"]["starred2"]["album"];
+            const starred2_song = getStarred2_all["subsonic-response"]["starred2"]["song"];
+
+            // Create maps for quick lookup
+            const artistMap = new Map(starred2_artist.map((artist: any) => [artist.id, artist]));
+            const albumMap = new Map(starred2_album.map((album: any) => [album.id, album]));
+            const songMap = new Map(starred2_song.map((song: any) => [song.id, song]));
+
+            // Initialize SQLite setters
+            let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite();
+            let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite();
+            let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite();
+
+            // Update resultArray with starred and userRating
+            resultArray.forEach(music => {
+                const artist: any = artistMap.get(music.artist.id);
+                if (artist) {
+                    // music.artist.starred = artist.starred || null;
+                    // music.artist.userRating = artist.userRating || 0;
+                    music.artist.album_count = artist.albumCount || 0;
+                    store_local_data_set_artistInfo.Set_ArtistInfo_To_Favorite(artist.id, !artist.starred);
+                    store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(artist.id, artist.userRating || 0);
+                }
+
+                music.artist.albums.forEach((album: any) => {
+                    const albumData: any = albumMap.get(album.id);
+                    if (albumData) {
+                        // album.starred = albumData.starred || null;
+                        // album.userRating = albumData.userRating || 0;
+                        // album.song_count = albumData.songCount || 0
+                        store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(albumData.id, !albumData.starred);
+                        store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(albumData.id, albumData.userRating || 0);
+                    }
+
+                    album.media.forEach((song: any) => {
+                        const songData: any = songMap.get(song.id);
+                        if (songData) {
+                            // song.starred = songData.starred || null;
+                            // song.userRating = songData.userRating || 0;
+                            store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(songData.id, !songData.starred);
+                            store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(songData.id, songData.userRating || 0);
+                        }
+                    });
+                });
+            });
+        } catch (error) {
+            console.error("Error fetching starred data:", error);
+        }
+
         this.Set_Read_Navidrome_Api_PlayListInfo_Add_LocalSqlite(url, username,token,salt)
     }
     private async Set_Read_Navidrome_Api_PlayListInfo_Add_LocalSqlite(
@@ -327,5 +397,6 @@ export class Set_Navidrome_Data_To_LocalSqlite{
         }
         db.close();
 
+        store_server_users.percentage_of_nd = 100;
     }
 }

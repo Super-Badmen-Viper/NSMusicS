@@ -15,6 +15,12 @@ import {store_view_media_page_fetchData} from "@/store/view/media/store_view_med
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {
+    store_local_data_set_annotionInfo
+} from "@/store/local/local_data_synchronization/store_local_data_set_annotionInfo";
+import {
+    store_local_data_set_playlistInfo
+} from "@/store/local/local_data_synchronization/store_local_data_set_playlistInfo";
 
 export const store_view_media_page_logic = reactive({
     list_data_StartUpdate: false,
@@ -81,8 +87,7 @@ export const store_view_media_page_logic = reactive({
 
     get_selected_playlist_add_MediaFile(value: any){
         console.log('selected_playlist_addMediaFile',value)
-        let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
-        set_PlaylistInfo_From_LocalSqlite.Set_Selected_MediaInfo_Add_Selected_Playlist(
+        store_local_data_set_playlistInfo.Set_Selected_MediaInfo_Add_Selected_Playlist(
             store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
             value
         )
@@ -90,8 +95,7 @@ export const store_view_media_page_logic = reactive({
     },
     get_selected_playlist_delete_MediaFile(value: any){
         console.log('selected_playlist_deleteMediaFile',value)
-        let set_PlaylistInfo_From_LocalSqlite = new Set_PlaylistInfo_To_LocalSqlite();
-        set_PlaylistInfo_From_LocalSqlite.Set_Selected_MediaInfo_Delete_Selected_Playlist(
+        store_local_data_set_playlistInfo.Set_Selected_MediaInfo_Delete_Selected_Playlist(
             store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
             value
         )
@@ -100,8 +104,7 @@ export const store_view_media_page_logic = reactive({
 
     get_selected_lovelist_add_MediaFile(value: any){
         console.log('selected_lovelist_addMediaFile',value)
-        let set_AnnotationInfo_To_LocalSqlite = new Set_AnnotationInfo_To_LocalSqlite()
-        set_AnnotationInfo_To_LocalSqlite.Set_MediaInfo_Add_Selected_Favorite(
+        store_local_data_set_annotionInfo.Set_MediaInfo_Add_Selected_Favorite(
             store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
             true
         )
@@ -117,8 +120,7 @@ export const store_view_media_page_logic = reactive({
     },
     get_selected_lovelist_delete_MediaFile(value: any){
         console.log('selected_lovelist_deleteMediaFile',value)
-        let set_AnnotationInfo_To_LocalSqlite = new Set_AnnotationInfo_To_LocalSqlite();
-        set_AnnotationInfo_To_LocalSqlite.Set_MediaInfo_Delete_Selected_Favorite(
+        store_local_data_set_annotionInfo.Set_MediaInfo_Delete_Selected_Favorite(
             store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
             value
         )
@@ -127,8 +129,7 @@ export const store_view_media_page_logic = reactive({
 
     get_selected_recentlist_deletet_MediaFile(value: any){
         console.log('selected_recentlist_deletetMediaFile',value)
-        let set_AnnotationInfo_To_LocalSqlite = new Set_AnnotationInfo_To_LocalSqlite();
-        set_AnnotationInfo_To_LocalSqlite.Set_MediaInfo_To_Selected_PlayCount_of_Delete(
+        store_local_data_set_annotionInfo.Set_MediaInfo_To_Selected_PlayCount_of_Delete(
             store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
             value
         )
@@ -138,7 +139,6 @@ export const store_view_media_page_logic = reactive({
 watch(() => store_view_media_page_logic.page_songlists_options_Sort_key, (newValue) => {
     if (newValue != null && store_view_media_page_logic.list_options_Hand_Sort) {
         store_view_media_page_logic.list_options_Hand_Sort = false
-        store_view_media_page_logic.page_songlists_options_Sort_key = newValue;
         store_router_history_data_of_media.fix_router_history_of_Media_scroller_value(store_router_history_data_of_media.router_history_model_of_Media_scroller_value) // 保留此滚轮值(上次浏览位置)
         store_view_media_page_fetchData.fetchData_Media()
     }
@@ -164,12 +164,10 @@ watch(() => store_view_media_page_logic.page_songlists_keyword, (newValue) => {
     store_view_media_page_logic.page_songlists_keyword_reset = true;
     console.log('page_songlists_keyword:' + newValue)
 
-    store_app_configs_info.app_left_menu_select_activeKey = 'go_songs_list'
     store_router_data_info.router.push('View_Song_List_ALL')
     store_view_media_page_fetchData.fetchData_Media()
 });
 watch(() => store_view_media_page_logic.page_songlists_selected, (newValue) => {
-    store_view_media_page_logic.page_songlists_selected = newValue
     if(store_view_media_page_logic.list_selected_Hand_click) {
         store_view_media_page_logic.page_songlists_keywordFilter = ""
     }

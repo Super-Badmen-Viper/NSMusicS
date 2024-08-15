@@ -72,7 +72,6 @@ export class Set_MediaInfo_To_LocalSqlite {
         db.close();
         console.log('handleItemClick_rating_id：'+id+'  _rating:'+!value + '\n: '+ann_id)
     }
-
     public Set_MediaInfo_To_PlayCount_of_Media_File(item_id: any) {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
@@ -89,7 +88,6 @@ export class Set_MediaInfo_To_LocalSqlite {
         }
         db.close();
     }
-
     public Set_MediaInfo_Add_Selected_Playlist(media_file_id: any, playlist_id: any) {
         const path = require('path');
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));

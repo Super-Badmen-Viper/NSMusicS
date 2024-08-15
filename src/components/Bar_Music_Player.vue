@@ -436,13 +436,16 @@
   import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info"
   import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
   import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+  import {
+    store_local_data_set_mediaInfo
+  } from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
   let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
-    set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Favorite(id,favorite)
+    store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id,favorite)
     store_player_audio_info.this_audio_song_favorite = !favorite
   }
   const handleItemClick_Rating = (id: any,rating: any) => {
-    set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_Rating(id, rating);
+    store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating);
     store_player_audio_info.this_audio_song_rating = rating
   }
 

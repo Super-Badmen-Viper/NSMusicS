@@ -5,5 +5,6 @@ interface App_Configs_Props {
   app_left_menu_select_activeKey: string,
   app_left_menu_collapsed: any,
   model_select: any,
+  server_select: any,
   play_order: string
 };

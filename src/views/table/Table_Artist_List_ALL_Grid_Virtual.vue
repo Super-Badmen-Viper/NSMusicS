@@ -15,6 +15,16 @@
   ////// this_view components of navie ui 
   import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
   import { type InputInst, NIcon } from 'naive-ui';
+  import {Icon} from "@vicons/utils";
+  import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+  import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info";
+  import {store_view_artist_page_logic} from "@/store/view/artist/store_view_artist_page_logic";
+  import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
+  import {store_router_data_logic} from "@/store/router/store_router_data_logic";
+  import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
+  import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
+  import {store_view_artist_page_fetchData} from "@/store/view/artist/store_view_artist_page_fetchData";
 
   ////// i18n auto lang
   import { useI18n } from 'vue-i18n'
@@ -144,17 +154,14 @@
   const handleSelect_Sort = (key: string | number) => {
     let _state_Sort_: state_Sort = state_Sort.Default;
     let idx: number = -1;
-    // 查找当前 key 对应的状态及索引
     for (let i = 0; i < options_Sort_key.value.length; i++) {
       if (options_Sort_key.value[i].key === key) {
         _state_Sort_ = options_Sort_key.value[i].state_Sort;
         idx = i;
       } else {
-        // 将其他 key 对应的状态设置为 Default
         options_Sort_key.value[i].state_Sort = state_Sort.Default;
       }
     }
-    // 切换当前 key 对应的状态
     switch (_state_Sort_) {
       case state_Sort.Ascend:
         options_Sort_key.value[idx].state_Sort = state_Sort.Descend;
@@ -169,11 +176,8 @@
         _state_Sort_ = state_Sort.Ascend;
         break;
     }
-    // emits('options_Sort_key',options_Sort_key.value)
-    // 更新排序参数数组并执行排序操作
     const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
     store_view_artist_page_logic.page_artistlists_options_Sort_key = sortersArray
-    // sortByColumnKeys(sortersArray);
 
     scrollTo(0)
   }
@@ -326,26 +330,19 @@
 
   ////// changed_data write to sqlite
   import {Set_ArtistInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_ArtistInfo_To_LocalSqlite'
-  import {Icon} from "@vicons/utils";
-  import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-  import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info";
-  import {store_view_artist_page_logic} from "@/store/view/artist/store_view_artist_page_logic";
-  import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
-  import {store_router_data_logic} from "@/store/router/store_router_data_logic";
-  import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
-  import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
-  import {store_view_artist_page_fetchData} from "@/store/view/artist/store_view_artist_page_fetchData";
+  import {
+    store_local_data_set_artistInfo
+  } from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
   let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
-    set_ArtistInfo_To_LocalSqlite.Set_ArtistInfo_To_Favorite(id,favorite)
+    store_local_data_set_artistInfo.Set_ArtistInfo_To_Favorite(id,favorite)
   }
   const handleItemClick_Rating = (id_rating: any) => {
     const [id, rating] = id_rating.split('-');
     if(rating === '6') {
-      set_ArtistInfo_To_LocalSqlite.Set_ArtistInfo_To_Rating(id, 0);
+      store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, 0);
     }else
-      set_ArtistInfo_To_LocalSqlite.Set_ArtistInfo_To_Rating(id, rating);
+      store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, rating);
   }
 
   ////// view artistlist_view Remove data

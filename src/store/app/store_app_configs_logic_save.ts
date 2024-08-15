@@ -28,6 +28,7 @@ export const store_app_configs_logic_save = reactive({
                 app_left_menu_select_activeKey: String(store_app_configs_info.app_left_menu_select_activeKey),
                 app_left_menu_collapsed: String(store_app_configs_info.app_left_menu_collapsed),
                 model_select: String(store_server_user_model.model_select),
+                server_select: String(store_server_user_model.server_select),
                 play_order: String(store_player_audio_logic.play_order)
             }));
         let system_Configs_Write = new Class_Set_System_Configs_Write()
@@ -116,7 +117,7 @@ export const store_app_configs_logic_save = reactive({
         let system_Configs_Write = new Class_Set_System_Configs_Write();
         system_Configs_Write.system_playlist_item_id_config(
             db,
-            store_playlist_list_info.playlist_datas_CurrentPlayListMediaIds
+            store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds
         )
         this.save_system_config_of_App_Configs()
         db.close();db = null;

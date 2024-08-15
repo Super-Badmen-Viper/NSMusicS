@@ -5,7 +5,7 @@ import {
 } from "@/features/sqlite3_local_configs/class_Get_HomeDataInfos_From_LocalSqlite";
 
 export const store_view_home_page_fetchData = reactive({
-    fetchData_Home(){
+    async fetchData_Home(){
         store_view_home_page_info.home_Files_temporary_maximum_playback = []
         store_view_home_page_info.home_Files_temporary_random_search = []
         store_view_home_page_info.home_Files_temporary_recently_added = []

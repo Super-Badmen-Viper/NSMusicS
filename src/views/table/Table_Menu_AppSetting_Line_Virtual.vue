@@ -81,6 +81,13 @@
   /// server select
   function update_server_config_of_current_user_of_sqlite(value: any){
     const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(item => item.id === value);
+    update_server_setUser(
+        store_server_users.server_config_of_all_user_of_sqlite[index].id,
+        store_server_users.server_config_of_all_user_of_sqlite[index].server_name,
+        store_server_users.server_config_of_all_user_of_sqlite[index].url,
+        store_server_users.server_config_of_all_user_of_sqlite[index].user_name,
+        store_server_users.server_config_of_all_user_of_sqlite[index].password
+    )
     get_server_config_of_current_user_of_sqlite(store_server_users.server_config_of_all_user_of_sqlite[index])
   }
   /// server add
@@ -161,7 +168,6 @@
     return randomString;
   }
 
-
   ////// this_view components of navie ui
   import {ref, onMounted, watch, onBeforeUnmount, computed, h, inject} from 'vue';
   import {type MenuOption, NButton, NIcon,} from 'naive-ui'
@@ -186,7 +192,7 @@
       theme_value.value = theme_options.value[0].value
   });
 
-  //////
+  ////// local
   const { ipcRenderer } = require('electron');
   const timer_percentage = ref<NodeJS.Timeout | null>(null);
   const show_selectFolder = ref(false)
@@ -217,10 +223,9 @@
       }
     }
   }
-  const percentage_of_local = ref(0)
   const library_path_search = ref(false)
   async function synchronize_percentage_of_library_path_search(){
-    percentage_of_local.value = await ipcRenderer.invoke('metadata-get-directory-filePath-duration');
+    store_server_users.percentage_of_local = await ipcRenderer.invoke('metadata-get-directory-filePath-duration');
   }
 
   //////
@@ -743,7 +748,7 @@
                     </n-popconfirm>
                     <n-progress
                       type="line" style="width: 207px;margin-bottom: 8px;"
-                      :percentage="percentage_of_local"
+                      :percentage="store_server_users.percentage_of_local"
                       :indicator-placement="'inside'"
                     />
                   </n-space>

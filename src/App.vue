@@ -63,21 +63,21 @@
     return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
   }
   store_app_configs_info.menuOptions_appBar = [
-    {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.menu'))),key: 'go_back_menu',icon: renderIcon(MenuIcon),},
+    {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.menu'))),key: 'View_Menu_AppSetting',icon: renderIcon(MenuIcon),},
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('common.home'))),key: 'go_back_home',icon: renderIcon(Home28Regular),},
+    {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('common.home'))),key: 'View_Home_MusicLibrary_Browse',icon: renderIcon(Home28Regular),},
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'go_albums_list',icon: renderIcon(AlbumFilled)},
-    {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'go_songs_list',icon: renderIcon(MusicNoteRound)},
-    {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'go_artist_list',icon: renderIcon(UserAvatarFilledAlt)},
-    {label: computed(() => renderRouterLink('View_Updateing',t('entity.genre_other'))),key: 'go_other',icon: renderIcon(Flag16Regular)},
+    {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'View_Album_List_ALL',icon: renderIcon(AlbumFilled)},
+    {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'View_Song_List_ALL',icon: renderIcon(MusicNoteRound)},
+    {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'View_Artist_List_ALL',icon: renderIcon(UserAvatarFilledAlt)},
+    {label: computed(() => renderRouterLink('View_Updateing',t('entity.genre_other'))),key: 'View_Updateing',icon: renderIcon(Flag16Regular)},
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.guessLike'))),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
-    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.karaoke'))),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
-    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.identifySong'))),key: 'go_other',icon: renderIcon(Hearing)},
-    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
-    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'go_other',icon: renderIcon(lyric)},
-    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
+    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.guessLike'))),key: 'View_Updateing',icon: renderIcon(DocumentHeart20Regular)},
+    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.karaoke'))),key: 'View_Updateing',icon: renderIcon(SlideMicrophone32Regular)},
+    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.identifySong'))),key: 'View_Updateing',icon: renderIcon(Hearing)},
+    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'View_Updateing',icon: renderIcon(LibraryMusicOutlined)},
+    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'View_Updateing',icon: renderIcon(lyric)},
+    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'View_Updateing',icon: renderIcon(PeopleCommunity16Regular)},
   ]
 
   ////// server selected get
@@ -130,20 +130,20 @@
     store_router_data_info.router_select_model_artist = false
     setTimeout(() => {
       if(value != 0){
-        if(store_app_configs_info.app_left_menu_select_activeKey === 'go_back_menu'){
+        if(store_app_configs_info.app_left_menu_select_activeKey === 'View_Menu_AppSetting'){
           store_router_data_info.router_select_model_menu = true;
-        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'go_back_home') {
+        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'View_Home_MusicLibrary_Browse') {
           store_router_data_info.router_select_model_home = true;
           store_view_home_page_fetchData.fetchData_Home()
-        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'go_other'){
+        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'View_Updateing'){
           store_router_data_info.router_select_model_updateing = true;
-        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'go_albums_list'){
+        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'View_Album_List_ALL'){
           store_router_data_info.router_select_model_album = true;
           store_view_album_page_fetchData.fetchData_Album()
-        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'go_songs_list'){
+        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'View_Song_List_ALL'){
           store_router_data_info.router_select_model_media = true;
           store_view_media_page_fetchData.fetchData_Media()
-        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'go_artist_list'){
+        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'View_Artist_List_ALL'){
           store_router_data_info.router_select_model_artist = true;
           store_view_artist_page_fetchData.fetchData_Artist()
         }
@@ -186,6 +186,7 @@
         store_router_data_info.router_select_model_artist = true
         store_router_data_info.router_name = to.name
       }
+      store_app_configs_info.app_left_menu_select_activeKey = to.name
       store_app_configs_logic_save.save_system_config_of_View_Router_History()
       ///
       try {

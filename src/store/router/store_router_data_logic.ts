@@ -27,7 +27,6 @@ export const store_router_data_logic = reactive({
 
     get_media_list_of_album_id_by_album_info(value: any) {
         store_router_data_info.router.push('View_Song_List_ALL')
-        store_app_configs_info.app_left_menu_select_activeKey = 'go_songs_list'
         store_view_media_page_logic.list_data_Hand_Search = true
         store_view_media_page_logic.page_songlists_selected = 'song_list_all'
         // open media_files model，keywords set
@@ -45,7 +44,6 @@ export const store_router_data_logic = reactive({
     },
     get_album_list_of_artist_id_by_artist_info(value: any) {
         store_router_data_info.router.push('View_Album_List_ALL')
-        store_app_configs_info.app_left_menu_select_activeKey = 'go_albums_list'
         // open album_files model，keywords set
         store_router_data_info.find_album_model = true
         store_view_album_page_logic.page_albumlists_keyword = value

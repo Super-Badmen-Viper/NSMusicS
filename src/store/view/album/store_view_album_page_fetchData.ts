@@ -5,7 +5,6 @@ import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
 import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
-import moment from "moment/moment";
 import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
 import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
@@ -15,9 +14,10 @@ import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_inf
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {Set_AlbumInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite";
+import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
 
 export const store_view_album_page_fetchData = reactive({
-    fetchData_Album(){
+    async fetchData_Album(){
         let db: any = null;
         let moment = require('moment');
         // clear RouterView of vue-virtual-scroller data
@@ -84,7 +84,6 @@ export const store_view_album_page_fetchData = reactive({
             } else {
                 if (store_router_history_data_of_album.router_select_history_date_of_Album) {
                     store_router_data_info.router.push('View_Album_List_ALL')
-                    store_app_configs_info.app_left_menu_select_activeKey = 'go_albums_list'
                     store_router_data_info.router_select_model_album = true;
                     store_view_album_page_logic.page_albumlists_keyword = store_router_history_data_of_album.router_select_history_date_of_Album.page_lists_keyword;
                     store_view_album_page_logic.page_albumlists_selected = store_router_history_data_of_album.router_select_history_date_of_Album.page_lists_selected;
@@ -125,9 +124,9 @@ export const store_view_album_page_fetchData = reactive({
             moment = null;
             ////// find favorite for album_Files_temporary
             const stmt_album_Annotation_Starred_Items = db.prepare(`
-      SELECT item_id FROM ${store_server_user_model.annotation}
-      WHERE starred = 1 AND item_type='album'
-    `);
+              SELECT item_id FROM ${store_server_user_model.annotation}
+              WHERE starred = 1 AND item_type='album'
+            `);
             const annotations = stmt_album_Annotation_Starred_Items.all();
             for (let i = 0; i < store_view_album_page_info.album_Files_temporary.length; i++) {
                 store_view_album_page_info.album_Files_temporary[i].favorite = !!annotations.some((annotation: {
@@ -136,9 +135,9 @@ export const store_view_album_page_fetchData = reactive({
             }
             ////// find rating for album_Files_temporary
             const stmt_album_Annotation_Rating_Items = db.prepare(`
-        SELECT item_id, rating FROM ${store_server_user_model.annotation}
-        WHERE rating > 0 AND item_type='album'
-    `);
+                SELECT item_id, rating FROM ${store_server_user_model.annotation}
+                WHERE rating > 0 AND item_type='album'
+            `);
             const annotations_rating = stmt_album_Annotation_Rating_Items.all();
             for (let i = 0; i < store_view_album_page_info.album_Files_temporary.length; i++) {
                 const albumFile = store_view_album_page_info.album_Files_temporary[i];
@@ -160,10 +159,10 @@ export const store_view_album_page_fetchData = reactive({
                     return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
                 } else if (store_view_album_page_logic.page_albumlists_selected === 'album_list_recently') {
                     const stmt_album_Annotation_Recently_Items = db.prepare(`
-          SELECT item_id FROM ${store_server_user_model.annotation}
-          WHERE item_type='album'
-          ORDER BY play_date DESC
-        `);
+                      SELECT item_id FROM ${store_server_user_model.annotation}
+                      WHERE item_type='album' AND play_count>0
+                      ORDER BY play_date DESC
+                    `);
                     const annotations = stmt_album_Annotation_Recently_Items.all().map((annotation: any) => annotation.item_id);
                     order_play_date = annotations;
                     return annotations.includes(item.id);
@@ -193,11 +192,11 @@ export const store_view_album_page_fetchData = reactive({
             db = null;
         }
     },
-    fetchData_This_Album_SongList(album_id:any){
+    async fetchData_This_Album_SongList(album_id:any){
         store_player_appearance.player_mode_of_medialist_from_external_import = true;
 
         store_view_media_page_logic.page_songlists_keywordFilter = `WHERE album_id = '${album_id}'`
-        store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+        // store_view_media_page_logic.page_songlists_selected = 'song_list_all'
         store_view_media_page_info.media_Files_temporary = [];
 
         store_router_data_info.find_music_model = true;
@@ -207,7 +206,7 @@ export const store_view_album_page_fetchData = reactive({
         store_router_data_info.find_music_model = false;
 
         store_playlist_list_info.playlist_MediaFiles_temporary = [...store_view_media_page_info.media_Files_temporary];
-        store_playlist_list_info.playlist_datas_CurrentPlayListMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
+        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
         store_app_configs_logic_save.save_system_playlist_item_id_config();
 
         store_router_data_info.router_select_model_album = true
@@ -229,7 +228,6 @@ export const store_view_album_page_fetchData = reactive({
             store_player_audio_info.this_audio_song_favorite = store_playlist_list_info.playlist_MediaFiles_temporary[0].favorite
         }
 
-        let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
-        set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_PlayCount_of_Album(album_id)
+        store_local_data_set_albumInfo.Set_AlbumInfo_To_PlayCount_of_Album(album_id)
     },
 });

@@ -4,6 +4,7 @@ import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {Set_MediaInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
+import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
 const path = require('path');
 
 export const store_player_audio_info = reactive({
@@ -33,8 +34,8 @@ export const store_player_audio_info = reactive({
     page_top_album_name: '',
 
     this_audio_lyrics_string: '',
-    this_audio_lyrics_info_line: [],
-    this_audio_lyrics_info_time: [],
+    this_audio_lyrics_info_line: [] as any[],
+    this_audio_lyrics_info_time: [] as any[],
     this_audio_lyrics_info_line_num: 28,
 });
 watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
@@ -46,7 +47,7 @@ watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
         store_player_audio_info.this_audio_restart_play = true
         if (store_player_appearance.player_mode_of_lock_playlist === false) {
             store_playlist_list_info.playlist_MediaFiles_temporary = [...store_view_media_page_info.media_Files_temporary];
-            store_playlist_list_info.playlist_datas_CurrentPlayListMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
+            store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
             store_app_configs_logic_save.save_system_playlist_item_id_config();
         }
     }
@@ -67,8 +68,7 @@ watch(() => store_player_audio_info.this_audio_file_medium_image_url, (newValue)
 watch(() => store_player_audio_info.this_audio_song_id, (newValue) => {
     console.log('this_audio_song_id：'+newValue)
 
-    let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
-    set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_PlayCount_of_Media_File(newValue)
+    store_local_data_set_mediaInfo.Set_MediaInfo_To_PlayCount_of_Media_File(newValue)
 });
 watch(() => store_player_audio_info.this_audio_song_rating, (newValue) => {
     console.log('this_audio_song_rating：'+newValue)

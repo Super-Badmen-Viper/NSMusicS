@@ -28,13 +28,15 @@ import {store_router_history_data_of_media} from "@/store/router/store_router_hi
 import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
 import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
 
 export const store_app_configs_logic_load = reactive({
     load_app_config(){
         /// system configs
+        let system_Configs_Read = new Class_Get_System_Configs_Read();
         try {
-            let system_Configs_Read = new Class_Get_System_Configs_Read();
             /// App_Configs load
+            store_server_user_model.server_select = '' + system_Configs_Read.app_Configs.value['server_select']
             store_server_user_model.model_select = '' + system_Configs_Read.app_Configs.value['model_select']
             store_server_user_model.model_select === 'navidrome' ?
                 store_server_user_model.switchToMode_Navidrome_Api()
@@ -51,9 +53,7 @@ export const store_app_configs_logic_load = reactive({
             }
             store_app_configs_info.theme_name = '' + system_Configs_Read.app_Configs.value['theme']
             store_app_configs_info.update_lang = '' + system_Configs_Read.app_Configs.value['lang']
-            store_app_configs_info.app_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_left_menu_select_activeKey']
             store_app_configs_info.app_left_menu_collapsed = '' + system_Configs_Read.app_Configs.value['app_left_menu_collapsed'] === 'true'
-            store_router_data_info.router_name = '' + system_Configs_Read.app_Configs.value['router_name']
             /// library_Config
             store_server_user_model.library_path = '' + system_Configs_Read.library_Configs.value['library']
             console.log(store_server_user_model.library_path)
@@ -81,6 +81,9 @@ export const store_app_configs_logic_load = reactive({
             store_player_audio_info.this_audio_album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_id']
             store_player_audio_info.this_audio_album_favorite = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_favorite']
             store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = Number('' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_Index_of_absolute_positioning_in_list'])
+            // init media page router histtory
+            store_view_media_page_logic.page_songlists_keywordFilter = ""
+            store_view_media_page_fetchData.fetchData_Media()
             store_view_media_page_logic.page_songlists_selected = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_songlists_selected']
             //
             store_player_audio_info.page_top_album_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_top_album_image_url']
@@ -115,11 +118,15 @@ export const store_app_configs_logic_load = reactive({
                 store_server_users.server_config_of_current_user_of_select_servername = store_server_users.server_config_of_current_user_of_sqlite?.server_name
             }
             store_app_configs_logic_save.save_system_config_of_Servers_Config()
+            const {username, salt, token} = store_server_users.get_login_parms();
+            store_server_user_model.username = username
+            store_server_user_model.salt = salt
+            store_server_user_model.token = token
 
             /// playlist media_file_id_of_list
-            store_playlist_list_info.playlist_datas_CurrentPlayListMediaIds = system_Configs_Read.playlist_File_Configs.value
+            store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = system_Configs_Read.playlist_File_Configs.value
             let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
-            store_playlist_list_info.playlist_MediaFiles_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(store_playlist_list_info.playlist_datas_CurrentPlayListMediaIds)
+            store_playlist_list_info.playlist_MediaFiles_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds)
         }catch (e) { console.error(e) }
 
         /// playlist configs
@@ -139,6 +146,8 @@ export const store_app_configs_logic_load = reactive({
         }catch (e) { console.error(e) }
 
         /// close
+        store_app_configs_info.app_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_left_menu_select_activeKey']
+        store_router_data_info.router_name = '' + system_Configs_Read.app_Configs.value['router_name']
         store_router_data_info.router.push(store_router_data_info.router_name)
     }
 });

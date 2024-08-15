@@ -13,6 +13,7 @@ export class Class_Get_System_Configs_Read {
             app_left_menu_select_activeKey: '',
             app_left_menu_collapsed: null,
             model_select: '',
+            server_select: '',
             play_order: ''
         }))
     public library_Configs = ref(

@@ -11,7 +11,7 @@ import {store_view_media_page_info} from "@/store/view/media/store_view_media_pa
 import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
 
 export const store_view_media_page_fetchData = reactive({
-    fetchData_Media(){
+    async fetchData_Media(){
         let db:any = null;
         // clear RouterView of vue-virtual-scroller data
         if(store_player_appearance.player_mode_of_medialist_from_external_import === true){
@@ -73,7 +73,6 @@ export const store_view_media_page_fetchData = reactive({
             else {
                 if (store_router_history_data_of_media.router_select_history_date_of_Media) {
                     store_router_data_info.router.push('View_Song_List_ALL')
-                    store_app_configs_info.app_left_menu_select_activeKey = 'go_songs_list'
                     store_router_data_info.router_select_model_media = true;
                     store_view_media_page_logic.page_songlists_keyword = store_router_history_data_of_media.router_select_history_date_of_Media.page_lists_keyword;
                     store_view_media_page_logic.page_songlists_keywordFilter = store_router_history_data_of_media.router_select_history_date_of_Media.page_songlists_keywordFilter;
@@ -145,7 +144,7 @@ export const store_view_media_page_fetchData = reactive({
                 } else if (store_view_media_page_logic.page_songlists_selected === 'song_list_recently') {
                     const stmt_media_Annotation_Recently_Items = db.prepare(`
                         SELECT item_id FROM ${store_server_user_model.annotation}
-                        WHERE item_type='media_file'
+                        WHERE item_type='media_file' AND play_count>0
                         ORDER BY play_date DESC
                     `);
                     const annotations = stmt_media_Annotation_Recently_Items.all().map((annotation: any) => annotation.item_id);

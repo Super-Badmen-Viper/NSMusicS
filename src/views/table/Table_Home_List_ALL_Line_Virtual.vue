@@ -16,8 +16,13 @@ import {
 } from '@vicons/ionicons5'
 
 ////// this_view components of navie ui
-import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import {type InputInst, NIcon, NImage} from 'naive-ui';
+import {onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import {NIcon, NImage} from 'naive-ui';
+import {Icon} from "@vicons/utils";
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+import {store_view_home_page_logic} from "@/store/view/home/store_view_home_page_logic";
+import {store_router_data_logic} from "@/store/router/store_router_data_logic";
+import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
@@ -131,22 +136,17 @@ watch(() => store_view_home_page_info.home_selected_top_album_subscript, (newVal
 
 ////// changed_data write to sqlite
 import {Set_AlbumInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite'
-import {QueueMusicRound} from "@vicons/material";
-import {Icon} from "@vicons/utils";
-import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-import {store_view_home_page_logic} from "@/store/view/home/store_view_home_page_logic";
-import {store_router_data_logic} from "@/store/router/store_router_data_logic";
-import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
+import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
 let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
-  set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Favorite(id,favorite)
+  store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id,favorite)
 }
 const handleItemClick_Rating = (id_rating: any) => {
   const [id, rating] = id_rating.split('-');
   if(rating === '6') {
-    set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Rating(id, 0);
+    store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, 0);
   }else
-    set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_Rating(id, rating);
+    store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, rating);
 }
 
 ////// view albumlist_view Remove data

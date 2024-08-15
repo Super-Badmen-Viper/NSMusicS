@@ -14,9 +14,12 @@ import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_inf
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {Set_ArtistInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_ArtistInfo_To_LocalSqlite";
+import {
+    store_local_data_set_artistInfo
+} from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
 
 export const store_view_artist_page_fetchData = reactive({
-    fetchData_Artist(){
+    async fetchData_Artist(){
         let db: any = null;
         // clear RouterView of vue-virtual-scroller data
         store_router_data_logic.clear_Files_temporary()
@@ -66,7 +69,6 @@ export const store_view_artist_page_fetchData = reactive({
             } else {
                 if (store_router_history_data_of_artist.router_select_history_date_of_Artist) {
                     store_router_data_info.router.push('View_Artist_List_ALL')
-                    store_app_configs_info.app_left_menu_select_activeKey = 'go_artist_list'
                     store_router_data_info.router_select_model_artist = true;
                     store_view_artist_page_logic.page_artistlists_keyword = store_router_history_data_of_artist.router_select_history_date_of_Artist.page_lists_keyword;
                     store_view_artist_page_logic.page_artistlists_selected = store_router_history_data_of_artist.router_select_history_date_of_Artist.page_lists_selected;
@@ -141,10 +143,10 @@ export const store_view_artist_page_fetchData = reactive({
                     return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
                 } else if (store_view_artist_page_logic.page_artistlists_selected === 'artist_list_recently') {
                     const stmt_artist_Annotation_Recently_Items = db.prepare(`
-          SELECT item_id FROM ${store_server_user_model.annotation}
-          WHERE item_type='artist'
-          ORDER BY play_date DESC
-        `);
+                      SELECT item_id FROM ${store_server_user_model.annotation}
+                      WHERE item_type='artist' AND play_count>0
+                      ORDER BY play_date DESC
+                    `);
                     const annotations = stmt_artist_Annotation_Recently_Items.all().map((annotation: any) => annotation.item_id);
                     order_play_date = annotations;
                     return annotations.includes(item.id);
@@ -174,7 +176,7 @@ export const store_view_artist_page_fetchData = reactive({
             db = null;
         }
     },
-    fetchData_This_Artist_SongList(artist_id:any){
+    async fetchData_This_Artist_SongList(artist_id:any){
         store_player_appearance.player_mode_of_medialist_from_external_import = true;
 
         store_view_media_page_logic.page_songlists_keywordFilter = `WHERE artist_id = '${artist_id}'`
@@ -188,7 +190,7 @@ export const store_view_artist_page_fetchData = reactive({
         store_router_data_info.find_artist_model = false;
 
         store_playlist_list_info.playlist_MediaFiles_temporary = [...store_view_media_page_info.media_Files_temporary];
-        store_playlist_list_info.playlist_datas_CurrentPlayListMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
+        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
         store_app_configs_logic_save.save_system_playlist_item_id_config();
 
         store_router_data_info.router_select_model_artist = true
@@ -210,7 +212,6 @@ export const store_view_artist_page_fetchData = reactive({
             store_player_audio_info.this_audio_song_favorite = store_playlist_list_info.playlist_MediaFiles_temporary[0].favorite
         }
 
-        let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite()
-        set_ArtistInfo_To_LocalSqlite.Set_ArtistInfo_To_PlayCount_of_Artist(store_playlist_list_info.playlist_MediaFiles_temporary[0].artist_id)
+        store_local_data_set_artistInfo.Set_ArtistInfo_To_PlayCount_of_Artist(store_playlist_list_info.playlist_MediaFiles_temporary[0].artist_id)
     },
 });

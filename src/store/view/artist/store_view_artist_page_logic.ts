@@ -17,7 +17,6 @@ export const store_view_artist_page_logic = reactive({
 });
 watch(() => store_view_artist_page_logic.page_artistlists_options_Sort_key, (newValue) => {
     if (newValue != null) {
-        store_view_artist_page_logic.page_artistlists_options_Sort_key = newValue;
         store_view_artist_page_logic.page_artistlists_keyword = '';
         store_router_history_data_of_artist.fix_router_history_of_Artist_scroller_value(store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value) // 保留此滚轮值(上次浏览位置)
         store_view_artist_page_fetchData.fetchData_Artist()
@@ -39,7 +38,6 @@ watch(() => store_view_artist_page_logic.page_artistlists_keyword, (newValue) =>
     }else{
         store_view_artist_page_info.page_artistlists_get_keyword_model_num = 0;
     }
-    store_view_artist_page_logic.page_artistlists_keyword = newValue;
     store_view_artist_page_info.page_artistlists_keyword_reset = true;
     console.log('page_artistlists_keyword:' + newValue)
 
