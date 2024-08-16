@@ -25,11 +25,13 @@ export const store_playlist_list_logic = reactive({
         this.playlist_names_StartUpdate = true
         store_playlist_list_info.playlist_names_ALLLists = []
         store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
-            store_playlist_list_info.playlist_names_ALLLists.push({
-                label: item.playlist.name,
-                value: item.playlist.id
-            })
-        })
+            if (item.playlist && item.playlist.name && item.playlist.id) {
+                store_playlist_list_info.playlist_names_ALLLists.push({
+                    label: item.playlist.name,
+                    value: item.playlist.id
+                });
+            }
+        });
     },
     get_playlist_tracks_temporary_update(value: any){
         store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(
@@ -42,11 +44,13 @@ export const store_playlist_list_logic = reactive({
             this.playlist_names_StartUpdate = true
             store_playlist_list_info.playlist_names_ALLLists = []
             store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
-                store_playlist_list_info.playlist_names_ALLLists.push({
-                    label: item.playlist.name,
-                    value: item.playlist.id
-                })
-            })
+                if (item.playlist && item.playlist.name && item.playlist.id) {
+                    store_playlist_list_info.playlist_names_ALLLists.push({
+                        label: item.playlist.name,
+                        value: item.playlist.id
+                    });
+                }
+            });
         }
     },
     get_playlist_tracks_temporary_delete(value: any){
@@ -57,11 +61,13 @@ export const store_playlist_list_logic = reactive({
             this.playlist_names_StartUpdate = true
             store_playlist_list_info.playlist_names_ALLLists = []
             store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
-                store_playlist_list_info.playlist_names_ALLLists.push({
-                    label: item.playlist.name,
-                    value: item.playlist.id
-                })
-            })
+                if (item.playlist && item.playlist.name && item.playlist.id) {
+                    store_playlist_list_info.playlist_names_ALLLists.push({
+                        label: item.playlist.name,
+                        value: item.playlist.id
+                    });
+                }
+            });
         }
     },
     get_playlist_tracks_temporary_update_media_file(value: any){

@@ -3,6 +3,7 @@ import crypto from "crypto";
 import {
     Media_Annotation_ApiService_of_ND
 } from "@/features/servers_configs/navidrome_api/services/media_annotation/index_service";
+import {store_server_user_model} from "@/store/server/store_server_user_model";
 
 export const store_server_users = reactive({
     percentage_of_local: 0,
@@ -48,9 +49,9 @@ export const store_server_users = reactive({
     },
 
     get_login_parms(){
-        const username = store_server_users.server_config_of_current_user_of_sqlite?.user_name
+        const username = store_server_user_model.server_select
         const {salt, token} = store_server_users.get_generateEncryptedPassword(
-            store_server_users.server_config_of_current_user_of_sqlite?.password
+            store_server_user_model.password
         );
         return {username, salt, token}
     },

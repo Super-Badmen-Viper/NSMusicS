@@ -10,20 +10,38 @@ export class Playlists_ApiService_of_ND extends Navidrome_Api_Services {
 
     public async createPlaylist_set(
         username: string,token: string,salt: string,
-        playlistId: string, name: string, songId: string,
+        name: string
     ): Promise<any> {
         return this.sendRequest(username, token, salt, 'createPlaylist', {
-            playlistId, name, songId
+            name
         });
     }
-    public async updatePlaylist_set(
+    public async updatePlaylist_infoUpdate(
         username: string, token: string, salt: string,
         playlistId: string, name: string, comment: string, isPublic: string,
-        songIdToAdd: string, songIndexToRemove: string
     ): Promise<any> {
         return this.sendRequest(username, token, salt, 'updatePlaylist', {
             playlistId, name, comment, public: isPublic,
-            songIdToAdd, songIndexToRemove
+        });
+    }
+    public async updatePlaylist_songIdToAdd(
+        username: string, token: string, salt: string,
+        playlistId: string,
+        songIdToAdd: string,
+    ): Promise<any> {
+        return this.sendRequest(username, token, salt, 'updatePlaylist', {
+            playlistId,
+            songIdToAdd,
+        });
+    }
+    public async updatePlaylist_songIndexToRemove(
+        username: string, token: string, salt: string,
+        playlistId: string,
+        songIndexToRemove: string
+    ): Promise<any> {
+        return this.sendRequest(username, token, salt, 'updatePlaylist', {
+            playlistId,
+            songIndexToRemove
         });
     }
     public async deletePlaylist_set(username: string,token: string,salt: string,id: string,): Promise<any> {

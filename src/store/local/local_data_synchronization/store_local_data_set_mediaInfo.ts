@@ -32,9 +32,15 @@ export const store_local_data_set_mediaInfo = reactive({
     Set_MediaInfo_Add_Selected_Playlist(media_file_id: any, playlist_id: any){
         const set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
         set_MediaInfo_To_LocalSqlite.Set_MediaInfo_Add_Selected_Playlist(media_file_id, playlist_id)
+        if(store_server_user_model.model_select === 'navidrome') {
+            store_server_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(media_file_id, playlist_id)
+        }
     },
     Set_MediaInfo_Delete_Selected_Playlist(media_file_id: any, playlist_id: any){
         const set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
         set_MediaInfo_To_LocalSqlite.Set_MediaInfo_Delete_Selected_Playlist(media_file_id, playlist_id)
+        if(store_server_user_model.model_select === 'navidrome') {
+            store_server_data_set_mediaInfo.Set_MediaInfo_Delete_Selected_Playlist(media_file_id, playlist_id)
+        }
     }
 });

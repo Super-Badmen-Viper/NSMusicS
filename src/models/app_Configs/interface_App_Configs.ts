@@ -6,5 +6,7 @@ interface App_Configs_Props {
   app_left_menu_collapsed: any,
   model_select: any,
   server_select: any,
+  username: any,
+  password: any,
   play_order: string
 };

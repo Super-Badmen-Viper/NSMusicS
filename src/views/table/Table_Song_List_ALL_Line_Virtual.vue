@@ -392,6 +392,21 @@ import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {
   store_server_data_set_playlistInfo
 } from "@/store/server/server_data_synchronization/store_server_data_set_playlistInfo";
+import {
+  Set_Navidrome_Data_To_LocalSqlite
+} from "@/features/servers_configs/navidrome_api/middleware/class_Set_Navidrome_Data_To_LocalSqlite";
+import {store_server_users} from "@/store/server/store_server_users";
+import {
+  store_server_data_set_mediaInfo
+} from "@/store/server/server_data_synchronization/store_server_data_set_mediaInfo";
+function getCurrentDateTime() {
+  return new Date().toLocaleString(
+      'zh-CN', {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+      }
+  ).replace(/\//g, '-');
+}
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
 const playlist_set_of_addPlaylist_of_comment = ref('')
@@ -401,16 +416,37 @@ const playlist_set_of_addPlaylist_of_public = ref(false)
 // const playlist_set_of_addPlaylist_of_owner_id = ref('')
 async function update_playlist_addPlaylist(){
   try{
-    store_playlist_list_logic.get_playlist_tracks_temporary_add(playlist_set_of_addPlaylist_of_playlistname.value)
-    Type_Add_Playlist.value = !Type_Add_Playlist.value
-
     if(store_server_user_model.model_select === 'navidrome'){
-      await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
-        playlist_set_of_addPlaylist_of_playlistname.value,
-        playlist_set_of_addPlaylist_of_comment.value,
-        playlist_set_of_addPlaylist_of_public.value
+      // send json to navidrome
+      let getCreatePlaylist_set_id = await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
+          playlist_set_of_addPlaylist_of_playlistname.value,
+          playlist_set_of_addPlaylist_of_public.value
       )
+      console.log('CreatePlaylist_of_ND: ' + store_server_user_model.username + ': ' +
+          getCreatePlaylist_set_id
+      )
+      await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(
+          getCreatePlaylist_set_id,
+          playlist_set_of_addPlaylist_of_playlistname.value,
+          playlist_set_of_addPlaylist_of_comment.value,
+          playlist_set_of_addPlaylist_of_public.value
+      )
+      console.log('SetPlaylist_of_ND: ' + store_server_user_model.username + ': ' +
+          getCreatePlaylist_set_id
+      )
+      // get server all playlist
+      await store_server_user_model.Get_UserData_Synchronize_ToLocal_of_ND()
+      //
+      console.log('SetPlaylist_of_Local: '+
+          getCreatePlaylist_set_id + ': ' +
+          playlist_set_of_addPlaylist_of_playlistname.value + ': ' +
+          playlist_set_of_addPlaylist_of_comment.value + ': ' +
+          playlist_set_of_addPlaylist_of_public.value
+      )
+    }else {
+      store_playlist_list_logic.get_playlist_tracks_temporary_add(playlist_set_of_addPlaylist_of_playlistname.value)
     }
+    Type_Add_Playlist.value = !Type_Add_Playlist.value
   }catch (e) {
     console.error(e)
   }
@@ -424,6 +460,10 @@ const playlist_set_of_updatePlaylist_of_public = ref(false)
 function update_playlist_set_of_updatePlaylist_of_playlistname(value: Array | string | number | null, option: SelectBaseOption | null | SelectBaseOption[]){
   playlist_update_emit_id.value = value
   playlist_set_of_updatePlaylist_of_playlistcomment.value = option.label
+  // if(store_server_user_model.model_select === 'navidrome'){
+  //   playlist_set_of_updatePlaylist_of_comment.value =
+  //   playlist_set_of_updatePlaylist_of_public.value =
+  // }
 }
 async function update_playlist_updatePlaylist(){
   try{
@@ -437,9 +477,9 @@ async function update_playlist_updatePlaylist(){
     if(store_server_user_model.model_select === 'navidrome'){
       await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(
           playlist_update_emit_id.value,
-          playlist_set_of_addPlaylist_of_playlistname.value,
-          playlist_set_of_addPlaylist_of_comment.value,
-          playlist_set_of_addPlaylist_of_public.value
+          playlist_set_of_updatePlaylist_of_playlistcomment.value,
+          playlist_set_of_updatePlaylist_of_comment.value,
+          playlist_set_of_updatePlaylist_of_public.value
       )
     }
   }catch (e) {
@@ -450,6 +490,12 @@ async function update_playlist_deletePlaylist(){
   try{
     store_playlist_list_logic.get_playlist_tracks_temporary_delete(playlist_update_emit_id.value)
     Type_Update_Playlist.value = !Type_Update_Playlist.value
+
+    if(store_server_user_model.model_select === 'navidrome'){
+      await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_DeletePlaylist_of_ND(
+          playlist_update_emit_id.value
+      )
+    }
   }catch (e) {
     console.error(e)
   }
@@ -457,11 +503,8 @@ async function update_playlist_deletePlaylist(){
 /// update media_file
 async function update_playlist_addMediaFile(id: any, playlist_id: any){
   try{
-    const result = await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(id,playlist_id)
-    if(result)
-      message.success(t('common.add'))
-    else
-      message.error(t('common.add'))
+    await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(id,playlist_id)
+    message.success(t('common.add'))
     store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
   }catch (e) {
     console.error(e)
@@ -492,7 +535,7 @@ async function update_playlist_deleteMediaFile(id: any){
 const Type_Selected_Media_File_To_Playlist = ref(false)
 async function update_playlist_addMediaFile_selected(playlist_id: any)
 {
-  store_view_media_page_logic.get_selected_playlist_add_MediaFile(playlist_id)
+  await store_view_media_page_logic.get_selected_playlist_add_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
@@ -513,7 +556,7 @@ async function update_button_deleteMediaFile_selected(){
 }
 async function update_playlist_deleteMediaFile_selected(playlist_id: any)
 {
-  store_view_media_page_logic.get_selected_playlist_delete_MediaFile(playlist_id)
+  await store_view_media_page_logic.get_selected_playlist_delete_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
@@ -915,14 +958,14 @@ onBeforeUnmount(() => {
             <span>{{ $t('common.name') }}</span>
             <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_playlistcomment"/>
           </n-space>
-          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">
-            <span>{{ $t('filter.comment') }}</span>
-            <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_comment"/>
-          </n-space>
-          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">
-            <span>{{ $t('form.createPlaylist.input_public') }}</span>
-            <n-switch v-model:value="playlist_set_of_updatePlaylist_of_public"/>
-          </n-space>
+<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">-->
+<!--            <span>{{ $t('filter.comment') }}</span>-->
+<!--            <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_comment"/>-->
+<!--          </n-space>-->
+<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">-->
+<!--            <span>{{ $t('form.createPlaylist.input_public') }}</span>-->
+<!--            <n-switch v-model:value="playlist_set_of_updatePlaylist_of_public"/>-->
+<!--          </n-space>-->
         </n-form>
         <n-space justify="end">
           <n-button strong secondary type="error" @click="update_playlist_deletePlaylist();Type_Update_Playlist = !Type_Update_Playlist;playlist_set_of_updatePlaylist_of_playlistcomment = ''">
@@ -956,14 +999,14 @@ onBeforeUnmount(() => {
             <span>{{ $t('common.name') }}</span>
             <n-input clearable placeholder="" v-model:value="playlist_set_of_addPlaylist_of_playlistname"/>
           </n-space>
-          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">
-            <span>{{ $t('filter.comment') }}</span>
-            <n-input clearable placeholder="" v-model:value="playlist_set_of_addPlaylist_of_comment"/>
-          </n-space>
-          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">
-            <span>{{ $t('form.createPlaylist.input_public') }}</span>
-            <n-switch v-model:value="playlist_set_of_addPlaylist_of_public" />
-          </n-space>
+<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">-->
+<!--            <span>{{ $t('filter.comment') }}</span>-->
+<!--            <n-input clearable placeholder="" v-model:value="playlist_set_of_addPlaylist_of_comment"/>-->
+<!--          </n-space>-->
+<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">-->
+<!--            <span>{{ $t('form.createPlaylist.input_public') }}</span>-->
+<!--            <n-switch v-model:value="playlist_set_of_addPlaylist_of_public" />-->
+<!--          </n-space>-->
         </n-form>
         <n-space justify="end">
           <n-button strong secondary type="info" @click="update_playlist_addPlaylist();">

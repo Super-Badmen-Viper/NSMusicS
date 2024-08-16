@@ -21,6 +21,13 @@ import {
 import {
     store_local_data_set_playlistInfo
 } from "@/store/local/local_data_synchronization/store_local_data_set_playlistInfo";
+import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {
+    store_server_data_set_playlistInfo
+} from "@/store/server/server_data_synchronization/store_server_data_set_playlistInfo";
+import {
+    store_server_data_set_mediaInfo
+} from "@/store/server/server_data_synchronization/store_server_data_set_mediaInfo";
 
 export const store_view_media_page_logic = reactive({
     list_data_StartUpdate: false,
@@ -85,21 +92,35 @@ export const store_view_media_page_logic = reactive({
         console.log('media_Files_selected：'+value)
     },
 
-    get_selected_playlist_add_MediaFile(value: any){
-        console.log('selected_playlist_addMediaFile',value)
+    async get_selected_playlist_add_MediaFile(value: any) {
+        console.log('selected_playlist_addMediaFile', value)
         store_local_data_set_playlistInfo.Set_Selected_MediaInfo_Add_Selected_Playlist(
             store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
             value
         )
         store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+
+        if (store_server_user_model.model_select === 'navidrome') {
+            await store_server_data_set_playlistInfo.Set_Selected_MediaInfo_Add_Selected_Playlist(
+                store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
+                value
+            )
+        }
     },
-    get_selected_playlist_delete_MediaFile(value: any){
-        console.log('selected_playlist_deleteMediaFile',value)
+    async get_selected_playlist_delete_MediaFile(value: any) {
+        console.log('selected_playlist_deleteMediaFile', value)
         store_local_data_set_playlistInfo.Set_Selected_MediaInfo_Delete_Selected_Playlist(
             store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
             value
         )
         store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+
+        if (store_server_user_model.model_select === 'navidrome') {
+            await store_server_data_set_playlistInfo.Set_Selected_MediaInfo_Delete_Selected_Playlist(
+                store_view_media_page_info.media_Files_selected.map((file: any) => file.id),
+                value
+            )
+        }
     },
 
     get_selected_lovelist_add_MediaFile(value: any){
@@ -109,14 +130,12 @@ export const store_view_media_page_logic = reactive({
             true
         )
         store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
-    },
-    get_selected_locallist_delete_MediaFile(value: any){
-        console.log('selected_locallist_deleteMediaFile',value)
-        let set_LibraryInfo_To_LocalSqlite = new Set_LibraryInfo_To_LocalSqlite();
-        set_LibraryInfo_To_LocalSqlite.Set_LibraryInfo_Delete_Selected_Playlist(
-            store_view_media_page_info.media_Files_selected.map((file: any) => file.id)
-        )
-        store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+
+        if (store_server_user_model.model_select === 'navidrome') {
+            store_view_media_page_info.media_Files_selected.forEach((media: any) => {
+                store_server_data_set_mediaInfo.Set_MediaInfo_To_Favorite(media.id, false);
+            })
+        }
     },
     get_selected_lovelist_delete_MediaFile(value: any){
         console.log('selected_lovelist_deleteMediaFile',value)
@@ -125,8 +144,22 @@ export const store_view_media_page_logic = reactive({
             value
         )
         store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+
+        if (store_server_user_model.model_select === 'navidrome') {
+            store_view_media_page_info.media_Files_selected.forEach((media: any) => {
+                store_server_data_set_mediaInfo.Set_MediaInfo_To_Favorite(media.id, true);
+            })
+        }
     },
 
+    get_selected_locallist_delete_MediaFile(value: any){
+        console.log('selected_locallist_deleteMediaFile',value)
+        let set_LibraryInfo_To_LocalSqlite = new Set_LibraryInfo_To_LocalSqlite();
+        set_LibraryInfo_To_LocalSqlite.Set_LibraryInfo_Delete_Selected_Playlist(
+            store_view_media_page_info.media_Files_selected.map((file: any) => file.id)
+        )
+        store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+    },
     get_selected_recentlist_deletet_MediaFile(value: any){
         console.log('selected_recentlist_deletetMediaFile',value)
         store_local_data_set_annotionInfo.Set_MediaInfo_To_Selected_PlayCount_of_Delete(

@@ -29,14 +29,22 @@ import {store_router_history_data_of_album} from "@/store/router/store_router_hi
 import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
+import {
+    Set_Navidrome_Data_To_LocalSqlite
+} from "@/features/servers_configs/navidrome_api/middleware/class_Set_Navidrome_Data_To_LocalSqlite";
+import {
+    store_server_data_set_playlistInfo
+} from "@/store/server/server_data_synchronization/store_server_data_set_playlistInfo";
 
 export const store_app_configs_logic_load = reactive({
-    load_app_config(){
+    async load_app_config() {
         /// system configs
         let system_Configs_Read = new Class_Get_System_Configs_Read();
         try {
             /// App_Configs load
             store_server_user_model.server_select = '' + system_Configs_Read.app_Configs.value['server_select']
+            store_server_user_model.username = '' + system_Configs_Read.app_Configs.value['username']
+            store_server_user_model.password = '' + system_Configs_Read.app_Configs.value['password']
             store_server_user_model.model_select = '' + system_Configs_Read.app_Configs.value['model_select']
             store_server_user_model.model_select === 'navidrome' ?
                 store_server_user_model.switchToMode_Navidrome_Api()
@@ -105,15 +113,15 @@ export const store_app_configs_logic_load = reactive({
 
             /// server
             store_server_users.server_config_of_all_user_of_sqlite = system_Configs_Read.server_Configs.value
+            store_server_users.server_config_of_all_user_of_sqlite.forEach((item: any) => {
+                store_server_users.server_config_of_all_user_of_select.push(
+                    {
+                        label: item.server_name,
+                        value: item.id
+                    });
+            });
             store_server_users.server_config_of_current_user_of_sqlite = system_Configs_Read.server_Configs_Current.value
             if (store_server_users.server_config_of_current_user_of_sqlite) {
-                store_server_users.server_config_of_all_user_of_sqlite.forEach((item: any) => {
-                    store_server_users.server_config_of_all_user_of_select.push(
-                        {
-                            label: item.server_name,
-                            value: item.id
-                        });
-                });
                 store_server_users.server_config_of_current_user_of_select = store_server_users.server_config_of_current_user_of_sqlite
                 store_server_users.server_config_of_current_user_of_select_servername = store_server_users.server_config_of_current_user_of_sqlite?.server_name
             }
@@ -127,23 +135,33 @@ export const store_app_configs_logic_load = reactive({
             store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = system_Configs_Read.playlist_File_Configs.value
             let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
             store_playlist_list_info.playlist_MediaFiles_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds)
-        }catch (e) { console.error(e) }
+        } catch (e) {
+            console.error(e)
+        }
 
         /// playlist configs
-        try{
-            let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
-            const playlist_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist()
-            playlist_temporary.forEach((item:Play_List) =>{
-                store_playlist_list_info.playlist_names_ALLLists.push({
-                    label: item.name,
-                    value: item.id
-                })
-                store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
-                    playlist: item,
-                    playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id)
-                })
-            });
-        }catch (e) { console.error(e) }
+        if(store_server_user_model.model_select === 'navidrome'){
+            // get server all playlist
+            await store_server_user_model.Get_UserData_Synchronize_ToLocal_of_ND()
+        }else {
+            try {
+                let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
+                const playlist_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist()
+                playlist_temporary.forEach((item: Play_List) => {
+                    store_playlist_list_info.playlist_names_ALLLists.push({
+                        label: item.name,
+                        value: item.id
+                    })
+                    store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
+                        playlist: item,
+                        playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id)
+                    })
+                });
+            } catch (e) {
+                console.error(e)
+            }
+        }
+
 
         /// close
         store_app_configs_info.app_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_left_menu_select_activeKey']

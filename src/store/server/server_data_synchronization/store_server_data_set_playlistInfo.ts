@@ -2,20 +2,30 @@ import {reactive} from 'vue'
 import {Playlists_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services/playlists/index_service";
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {
+    Set_Navidrome_Data_To_LocalSqlite
+} from "@/features/servers_configs/navidrome_api/middleware/class_Set_Navidrome_Data_To_LocalSqlite";
+import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
+import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
 
 export const store_server_data_set_playlistInfo = reactive({
-    async Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(name: string,comment: string, _public_: number){
-        await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
+    async Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(name: string, _public_: boolean){
+        const getCreatePlaylist_set_id = await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
             .createPlaylist_set(
                 store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
-                await getUniqueId(), name,''
+                name
             );
+        try {
+            return getCreatePlaylist_set_id["subsonic-response"]["playlist"]["id"]
+        }catch{
+            return ''
+        }
     },
-    async Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(id: string, name: string,comment: string, _public_: number,){
+    async Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(id: string, name: string,comment: string, _public_: boolean,){
         await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
-            .updatePlaylist_set(
+            .updatePlaylist_infoUpdate(
                 store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
-                id, name,comment,String(_public_),'',''
+                id, name, comment, String(_public_)
             );
     },
     async Set_PlaylistInfo_To_Update_DeletePlaylist_of_ND(id:string){
@@ -27,35 +37,43 @@ export const store_server_data_set_playlistInfo = reactive({
     },
 
     async Set_Selected_MediaInfo_Add_Selected_Playlist(ids: string[], playlist_id: string){
-        for(const id of ids){
+        for (const id of ids) {
             await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
-                .updatePlaylist_set(
+                .updatePlaylist_songIdToAdd(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
-                    playlist_id, '', '', '', id, '');
+                    playlist_id, id);
         }
     },
     async Set_Selected_MediaInfo_Delete_Selected_Playlist(ids: string[], playlist_id: string){
-        for(const id of ids){
+        const indexs = await this.Set_PlaylistInfo_To_Update_GetPlaylist_SongIndex_of_ND(
+            playlist_id, ids
+        )
+        for (const index of indexs) {
             await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
-                .updatePlaylist_set(
+                .updatePlaylist_songIndexToRemove(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
-                    playlist_id, '', '', '', '', id);
+                    playlist_id, index);
+        }
+    },
+
+    async Set_PlaylistInfo_To_Update_GetPlaylist_SongIndex_of_ND(playlist_id: string, ids: string[]) {
+        const getPlaylist_id = await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
+            .getPlaylist_id(
+                store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
+                playlist_id
+            );
+        try {
+            const songlist = getPlaylist_id["subsonic-response"]["playlist"]["entry"];
+            const result = [];
+            for (const id of ids) {
+                const index = songlist.findIndex((song: any) => song.id === id);
+                if (index !== -1) {
+                    result.push(index);
+                }
+            }
+            return result;
+        } catch {
+            return [];
         }
     }
 });
-async function getUniqueId() {
-    const { v4: uuidv4 } = require('uuid');
-    let id;
-    let exists;
-    do {
-        id = uuidv4();
-        const result = await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
-            .getPlaylist_id(
-                store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
-                id
-            );
-        exists = result["subsonic-response"]["status"] === 'ok';
-    } while (exists);
-
-    return id;
-}

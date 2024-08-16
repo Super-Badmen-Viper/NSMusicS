@@ -14,6 +14,8 @@ export class Class_Get_System_Configs_Read {
             app_left_menu_collapsed: null,
             model_select: '',
             server_select: '',
+            username: '',
+            password: '',
             play_order: ''
         }))
     public library_Configs = ref(
@@ -120,8 +122,10 @@ export class Class_Get_System_Configs_Read {
         db.prepare(`SELECT * FROM system_servers_config`).all().forEach((row: Server_Configs_Props, index: number) => {
             this.server_Configs.value.push(row);
         });
-        db.prepare(`SELECT * FROM system_servers_config ORDER BY last_login_at desc LIMIT 1`).all().forEach((row: Server_Configs_Props) => {
-            this.server_Configs_Current.value = row;
+        db.prepare(`SELECT * FROM system_servers_config`).all().forEach((row: Server_Configs_Props) => {
+            if(row.user_name === ''+this.app_Configs.value['server_select']) {
+                this.server_Configs_Current.value = row;
+            }
         });
 
         db.close();

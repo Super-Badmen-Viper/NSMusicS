@@ -16,6 +16,12 @@ import {
     store_local_data_set_artistInfo
 } from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
 import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
+import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
+import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+import {
+    store_local_data_set_annotionInfo
+} from "@/store/local/local_data_synchronization/store_local_data_set_annotionInfo";
 const path = require('path');
 
 export class Set_Navidrome_Data_To_LocalSqlite{
@@ -304,11 +310,6 @@ export class Set_Navidrome_Data_To_LocalSqlite{
             const albumMap = new Map(starred2_album.map((album: any) => [album.id, album]));
             const songMap = new Map(starred2_song.map((song: any) => [song.id, song]));
 
-            // Initialize SQLite setters
-            let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite();
-            let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite();
-            let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite();
-
             // Update resultArray with starred and userRating
             resultArray.forEach(music => {
                 const artist: any = artistMap.get(music.artist.id);
@@ -345,19 +346,23 @@ export class Set_Navidrome_Data_To_LocalSqlite{
             console.error("Error fetching starred data:", error);
         }
 
-        this.Set_Read_Navidrome_Api_PlayListInfo_Add_LocalSqlite(url, username,token,salt)
+        await this.Set_Read_Navidrome_Api_PlayListInfo_Add_LocalSqlite(url, username, token, salt)
     }
-    private async Set_Read_Navidrome_Api_PlayListInfo_Add_LocalSqlite(
+    public async Set_Read_Navidrome_Api_PlayListInfo_Add_LocalSqlite(
         url: string,
         username: string,token: string,salt: string
     ): Promise<any>{
         let playlists_ApiService_of_ND = new Playlists_ApiService_of_ND(url);
         const getPlaylists_all = await playlists_ApiService_of_ND.getPlaylists_all(username, token, salt);
         const playlists = getPlaylists_all["subsonic-response"]["playlists"]["playlist"];
+        let playlSongs = []
 
         const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
         db.pragma('journal_mode = WAL');
 
+        db.exec("DELETE FROM server_playlist");
+        db.exec("DELETE FROM server_playlist_tracks");
+        store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = [];
         if(playlists != null) {
             for (const playlist of playlists) {
                 const sqlite_playlists = {
@@ -381,21 +386,73 @@ export class Set_Navidrome_Data_To_LocalSqlite{
                 sqlite_playlists.updated_at = _playlist.changed;
                 this.insertData(db, 'server_playlist', sqlite_playlists);
 
-                const playlSongs = Array.isArray(getPlaylist_id["subsonic-response"]["playlist"]["entry"])
+                let playlist_tracks = []
+                playlSongs = Array.isArray(getPlaylist_id["subsonic-response"]["playlist"]["entry"])
                     ? getPlaylist_id["subsonic-response"]["playlist"]["entry"]
                     : [];
-
                 for (const song of playlSongs) {
                     const sqlite_song = {
                         id: this.getUniqueId(db, 'server_playlist_tracks'),
                         playlist_id: _playlist.id,
                         media_file_id: song.id
                     };
+                    playlist_tracks.push(sqlite_song)
                     this.insertData(db, 'server_playlist_tracks', sqlite_song);
                 }
+                store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
+                    playlist: {
+                        label: playlist.name,
+                        value: playlist.id,
+                        id: playlist.id,
+                        name: playlist.name,
+                        comment: playlist.comment || '',
+                        duration: playlist.duration || 0,
+                        song_count: playlist.song_count || 0,
+                        public: 0,
+                        created_at: playlist.created_at,
+                        updated_at: playlist.updated_at,
+                        path: '',
+                        sync: 0,
+                        size: 0,
+                        rules: null,
+                        evaluated_at: '',
+                        owner_id: store_server_user_model.username,
+                    },
+                    playlist_tracks: playlist_tracks
+                });
             }
         }
         db.close();
+        store_playlist_list_logic.playlist_names_StartUpdate = true;
+        store_playlist_list_info.playlist_names_ALLLists = [];
+        store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
+            if (item.playlist && item.playlist.name && item.playlist.id) {
+                store_playlist_list_info.playlist_names_ALLLists.push({
+                    label: item.playlist.name,
+                    value: item.playlist.id
+                });
+            }
+        });
+
+        try {
+            let album$Songs_Lists_ApiService_of_ND = new Album$Songs_Lists_ApiService_of_ND(url);
+            const getStarred2_all = await album$Songs_Lists_ApiService_of_ND.getStarred2_all(username, token, salt);
+            const starred2_artist = getStarred2_all["subsonic-response"]["starred2"]["artist"];
+            const starred2_album = getStarred2_all["subsonic-response"]["starred2"]["album"];
+            const starred2_song = getStarred2_all["subsonic-response"]["starred2"]["song"];
+            starred2_artist.forEach((artist: any) => {
+                store_local_data_set_artistInfo.Set_ArtistInfo_To_Favorite(artist.id, !artist.starred);
+                store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(artist.id, artist.userRating || 0);
+            });
+            starred2_album.forEach((albumData: any) => {
+                store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(albumData.id, !albumData.starred);
+                store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(albumData.id, albumData.userRating || 0);
+            });
+            starred2_song.forEach((songData: any) => {
+                store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(songData.id, !songData.starred);
+                store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(songData.id, songData.userRating || 0);
+            });
+        }catch { }
 
         store_server_users.percentage_of_nd = 100;
     }

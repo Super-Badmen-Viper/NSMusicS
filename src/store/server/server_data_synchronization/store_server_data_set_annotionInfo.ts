@@ -22,7 +22,4 @@ export const store_server_data_set_annotionInfo = reactive({
                     id,'','');
         }
     },
-    // async Set_MediaInfo_To_Selected_PlayCount_of_Delete(ids: string[], value: Boolean) {
-    //
-    // }
 });

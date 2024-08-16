@@ -86,7 +86,10 @@
     store_server_users.server_config_of_current_user_of_sqlite = value
     store_server_users.server_config_of_current_user_of_select = { label: value.server_name, value: value.id };
     store_server_users.server_config_of_current_user_of_select_servername = value.server_name
-    console.log(value)
+    store_server_user_model.server_select = value.user_name
+    store_server_user_model.username = value.user_name
+    store_server_user_model.password = value.password
+    store_app_configs_logic_save.save_system_config_of_Servers_Config()
 
     const {salt, token} = store_server_users.get_generateEncryptedPassword(
         store_server_users.server_config_of_current_user_of_sqlite?.password
@@ -546,14 +549,14 @@
     }
   });
   ////// Load Configs
-  onMounted(() => {
+  onMounted(async () => {
     let db: any = null;
     db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
     db.pragma('journal_mode = WAL');
     Init_page_albumlists_statistic_Data(db)
     Init_page_artistlists_statistic_Data(db)
 
-    store_app_configs_logic_load.load_app_config()
+    await store_app_configs_logic_load.load_app_config()
   });
 </script>
 <template>
