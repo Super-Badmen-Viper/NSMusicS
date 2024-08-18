@@ -11,15 +11,18 @@ export const store_player_audio_logic = reactive({
     player_silder_currentTime_added_value: 0,
     player_go_lyricline_index_of_audio_play_progress: 0,
 
-    player_use_lottie_animation: false,
+    player_use_lottie_animation: true,
+    player_use_background_filter_blur: true,
     player_save_new_data: false,
     this_audio_initial_trigger: false,
 });
 
 watch(() => store_player_audio_logic.player_use_lottie_animation, (newValue) => {
-    store_player_audio_logic.player_use_lottie_animation = newValue
     store_player_appearance.player_UI_Theme_State.player_use_lottie_animation = newValue
     console.log('实验性lottie动画状态：'+newValue)
+    store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
+});
+watch(() => store_player_audio_logic.player_use_background_filter_blur, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
 });
 watch(() => store_player_audio_logic.player_save_new_data, (newValue) => {

@@ -14,7 +14,8 @@ export const store_player_appearance = reactive({
 
     player_UI_Theme_State: new Player_UI_Theme_State(),
 
-    player_use_lottie_animation: false,
+    player_use_lottie_animation: true,
+    player_use_background_filter_blur: true,
 
     player_mode_of_medialist_from_external_import: false,
 

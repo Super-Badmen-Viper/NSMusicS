@@ -25,6 +25,7 @@
   import { onBeforeUnmount } from 'vue';
   const { ipcRenderer } = require('electron');
   import { store_playlist_appearance } from '@/store/playlist/store_playlist_appearance'
+  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
   const get_playerbar_to_switch_playerview = inject('get_playerbar_to_switch_playerview');
 
   //////
@@ -126,19 +127,21 @@
   function Play_This_Audio_Path(){
     clearTimeout(timer_this_audio_player.value);
     timer_this_audio_player.value = setTimeout(async () => {
-      store_player_audio_logic.player_silder_currentTime_added_value = 0;
-      // store_player_audio_logic.player.howl = new Howl();
-      store_player_audio_logic.player.load(store_player_audio_info.this_audio_file_path)
-      store_player_audio_logic.player.isPlaying = true;
-      store_player_audio_info.this_audio_is_playing = true
-      store_player_audio_logic.player_save_new_data = true
-      is_play_ended.value = false;
-      player_no_progress_jump.value = true;
-      clearInterval(timer);
-      timer = setInterval(synchronize_playback_time, 200);
-      total_play_time.value = formatTime(await store_player_audio_logic.player.getDuration());
-      store_player_audio_logic.player.setVolume(Number(slider_volume_value.value))
-      store_player_audio_logic.player.play();
+      if(store_player_audio_info.this_audio_file_path.length > 0) {
+        store_player_audio_logic.player_silder_currentTime_added_value = 0;
+        // store_player_audio_logic.player.howl = new Howl();
+        store_player_audio_logic.player.load(store_player_audio_info.this_audio_file_path)
+        store_player_audio_logic.player.isPlaying = true;
+        store_player_audio_info.this_audio_is_playing = true
+        store_player_audio_logic.player_save_new_data = true
+        is_play_ended.value = false;
+        player_no_progress_jump.value = true;
+        clearInterval(timer);
+        timer = setInterval(synchronize_playback_time, 200);
+        total_play_time.value = formatTime(await store_player_audio_logic.player.getDuration());
+        store_player_audio_logic.player.setVolume(Number(slider_volume_value.value))
+        store_player_audio_logic.player.play();
+      }
     }, 400);
   }
   ipcRenderer.on('mpv-stopped', (event, message) => {

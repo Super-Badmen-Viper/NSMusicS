@@ -25,11 +25,6 @@
   import { onBeforeUnmount } from 'vue';
   const { ipcRenderer } = require('electron');
 
-  // This lottie-web will cause memory leaks
-  // import "@lottiefiles/lottie-player";
-  // const animationInstance = ref<any>(null);
-  // const animationInstance_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715318278722.json'))
-
   ////// passed as argument
   const emits = defineEmits([
     'player_show_height',
@@ -149,7 +144,7 @@
   const this_audio_buffer_file = ref<any>()
   const is_play_ended = ref(false);
   const timer_this_audio_player = ref<NodeJS.Timeout>();// 延迟触发：接收大量数据时，仅触发最后一个值
-  const { Howl } = require('../types/howler');
+  const { Howl } = require('../../types/howler');
   let unwatch_this_audio_buffer_file =  watch(() => this_audio_buffer_file.value, (newValue, oldValue) => {
     if (newValue !== oldValue) {
       Play_This_Audio_Path()

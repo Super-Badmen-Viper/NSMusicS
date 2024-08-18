@@ -7,8 +7,25 @@ import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
+import {store_view_artist_page_logic} from "@/store/view/artist/store_view_artist_page_logic";
+import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media";
+import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
+import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
 
 export const store_router_data_logic = reactive({
+    reset_data(){
+        store_view_media_page_logic.page_songlists_keywordFilter = ""
+        store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+        store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
+        store_view_artist_page_logic.page_artistlists_selected = 'artist_list_all'
+        store_router_history_data_of_media.router_history_datas_of_Media = []
+        store_router_history_data_of_album.router_history_datas_of_Album = []
+        store_router_history_data_of_artist.router_history_datas_of_Artist = []
+        store_router_history_data_of_media.router_select_history_date_of_Media = 'song_list_all'
+        store_router_history_data_of_album.router_select_history_date_of_Album = 'album_list_all'
+        store_router_history_data_of_artist.router_select_history_date_of_Artist = 'artist_list_all'
+    },
+
     clear_Files_temporary() {
         store_router_data_info.router_select_model_menu = false
         store_router_data_info.router_select_model_home = false

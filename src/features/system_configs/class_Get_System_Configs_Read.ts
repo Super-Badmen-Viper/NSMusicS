@@ -32,6 +32,7 @@ export class Class_Get_System_Configs_Read {
             player_theme_Styles_Selected: null,
             player_background_model_num: null,
             player_use_lottie_animation: null,
+            player_use_background_filter_blur: null,
         }))
     public player_Configs_of_Audio_Info = ref(
         new Player_Configs_of_Audio_Info({

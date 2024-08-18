@@ -10,8 +10,34 @@ import {store_view_media_page_logic} from "@/store/view/media/store_view_media_p
 import {
     store_local_data_set_playlistInfo
 } from "@/store/local/local_data_synchronization/store_local_data_set_playlistInfo";
+import {store_server_user_model} from "@/store/server/store_server_user_model";
 
 export const store_playlist_list_logic = reactive({
+    async reset_data() {
+        store_playlist_list_info.playlist_names_ALLLists = []
+        store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = []
+        if (store_server_user_model.model_select === 'navidrome') {
+            await store_server_user_model.Get_UserData_Synchronize_ToLocal_of_ND()
+        } else {
+            try {
+                let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
+                const playlist_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist()
+                playlist_temporary.forEach((item: Play_List) => {
+                    store_playlist_list_info.playlist_names_ALLLists.push({
+                        label: item.name,
+                        value: item.id
+                    })
+                    store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
+                        playlist: item,
+                        playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id)
+                    })
+                });
+            } catch (e) {
+                console.error(e)
+            }
+        }
+    },
+
     playlist_names_StartUpdate: false,
 
     get_playlist_tracks_temporary_add(value: any){

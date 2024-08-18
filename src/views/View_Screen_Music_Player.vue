@@ -196,7 +196,7 @@
   const player_lyric_fontWeight = ref('800')
   const player_lyric_color = ref('#FAFAFB60')
   const player_background_model_num = ref(0)
-  const player_use_lottie_animation = ref(false)
+  const player_use_lottie_animation = ref(true)
   //
   type PlayerTheme_Style = {
     image_url: any;
@@ -462,11 +462,18 @@
         v-if="player_collapsed_skin"
         id="player_bg_zindex_0"
         style="
-          position: absolute;top: -20vw;left: -10vw;width: 120vw;height: 120vw;
-          object-fit: cover;object-position: center;
-          filter: brightness(46%) blur(60px);"
+          position: absolute;
+          top: -20vw;
+          left: -10vw;
+          width: 120vw;
+          height: 120vw;
+          object-fit: cover;
+          object-position: center;"
+        :style="{ filter: store_player_audio_logic.player_use_background_filter_blur ? 'brightness(46%) blur(60px)' : 'brightness(46%) blur(0px)' }"
         :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
-        @error="handleImageError" alt="">
+        @error="handleImageError"
+        alt=""
+      />
       <!--Skin-->
       <img
         v-else
@@ -490,7 +497,7 @@
           border: 1.5px solid #FFFFFF20;
           background-color: rgba(127, 127, 127, 0.1);
           backdrop-filter: blur(10px);
-          margin-top: calc(50vh - 190px);height: 380px;
+          margin-top: calc(50vh - 220px);height: 440px;
           ">
         <n-drawer-content v-if="isVisible_Player_theme">
           <template #default>
@@ -611,6 +618,20 @@
                   @update:value="
                     player_theme_set_theme(player_theme_Styles_Selected);
                   "
+                >
+                </n-switch>
+              </n-space>
+            </n-space>
+            <n-space style="margin-left: 12px;margin-top: 20px;" justify="space-between">
+              <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
+              <n-space style="margin-right: 32px;">
+                <n-button text style="font-size: 24px;margin-top: 2px;">
+                  <n-icon>
+                    <MotionPhotosAutoOutlined />
+                  </n-icon>
+                </n-button>
+                <n-switch
+                  v-model:value="store_player_audio_logic.player_use_background_filter_blur"
                 >
                 </n-switch>
               </n-space>
@@ -941,6 +962,7 @@
 /* filter: blur(10px) grayscale(100%); */
 #player_bg_zindex_0 {
   z-index: -2;
+  transition: filter 0.5s ease;
 }
 #player_bg_zindex_1 {
   z-index: -1;

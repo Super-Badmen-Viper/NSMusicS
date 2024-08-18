@@ -11,5 +11,6 @@ export class Player_UI_Theme_State {
   ////// config info
   player_theme_Styles_Selected = ref<number>(0);
   player_background_model_num = ref(0);
-  player_use_lottie_animation = ref(false)
+  player_use_lottie_animation = ref(true);
+  player_use_background_filter_blur = ref(true);
 }

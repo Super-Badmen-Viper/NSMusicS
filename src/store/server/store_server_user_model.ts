@@ -10,6 +10,17 @@ import {
     Get_PlaylistInfo_From_LocalSqlite
 } from "@/features/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
 import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
+import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
+import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
+import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media";
+import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
+import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
+import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
+import {store_view_artist_page_logic} from "@/store/view/artist/store_view_artist_page_logic";
+import {store_router_data_logic} from "@/store/router/store_router_data_logic";
+import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+import {store_app_configs_logic_load} from "@/store/app/store_app_configs_logic_load";
 
 export const store_server_user_model = reactive({
     model_select: 'local',
@@ -59,27 +70,21 @@ watch(() => store_server_user_model.library_path, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_View_Router_History()
 });
 watch(() => store_server_user_model.model_select, async (newValue) => {
-    // Refresh Playlist(Local / Server)
-    store_playlist_list_info.playlist_names_ALLLists = []
-    store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = []
-    if (store_server_user_model.model_select === 'navidrome') {
-        await store_server_user_model.Get_UserData_Synchronize_ToLocal_of_ND()
-    } else {
-        try {
-            let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
-            const playlist_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist()
-            playlist_temporary.forEach((item: Play_List) => {
-                store_playlist_list_info.playlist_names_ALLLists.push({
-                    label: item.name,
-                    value: item.id
-                })
-                store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
-                    playlist: item,
-                    playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id)
-                })
-            });
-        } catch (e) {
-            console.error(e)
+    if(!store_app_configs_logic_load.app_configs_loading) {
+        // Refresh Playlist(Local / Server)
+        await store_playlist_list_logic.reset_data()
+        // Refresh Router Data
+        store_router_data_logic.reset_data()
+        // Refresh Current AudioInfo
+        // await store_player_audio_info.reset_data()
+        //
+        if (store_server_user_model.model_select === 'navidrome') {
+            store_server_users.percentage_of_nd = 100
+            store_server_users.percentage_of_local = 0
+        } else {
+            store_server_users.percentage_of_nd = 0
+            store_server_users.percentage_of_local = 100
         }
+        store_app_configs_logic_save.save_system_config_of_App_Configs()
     }
 });

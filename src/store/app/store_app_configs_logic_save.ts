@@ -69,6 +69,7 @@ export const store_app_configs_logic_save = reactive({
                 player_theme_Styles_Selected: String(store_player_appearance.player_UI_Theme_State.player_theme_Styles_Selected),
                 player_background_model_num: String(store_player_appearance.player_UI_Theme_State.player_background_model_num),
                 player_use_lottie_animation: String(store_player_appearance.player_UI_Theme_State.player_use_lottie_animation),
+                player_use_background_filter_blur: String(store_player_audio_logic.player_use_background_filter_blur)
             }))
         let system_Configs_Write = new Class_Set_System_Configs_Write()
         system_Configs_Write.system_player_config_of_ui(
