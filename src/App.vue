@@ -190,6 +190,7 @@
         store_router_data_info.router_name = to.name
       }
       store_app_configs_info.app_left_menu_select_activeKey = to.name
+      console.log(to.name)
       store_app_configs_logic_save.save_system_config_of_View_Router_History()
       ///
       try {
@@ -705,7 +706,7 @@
           backdrop-filter: blur(10px);
           margin-top: 88px;margin-bottom:88px;
         ">
-        <n-drawer-content v-if="store_playlist_appearance.playlist_show">
+        <n-drawer-content>
           <template #default>
             <Bar_Music_PlayList
               v-if="store_playlist_appearance.playlist_show"

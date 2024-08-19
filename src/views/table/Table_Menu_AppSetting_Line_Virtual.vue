@@ -12,7 +12,7 @@
     SlideMicrophone32Regular,
     TextIndentIncreaseLtr20Filled as lyric
   } from "@vicons/fluent";
-  import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound} from "@vicons/material";
+  import {AlbumFilled, LibraryMusicOutlined, MotionPhotosAutoOutlined, MusicNoteRound} from "@vicons/material";
   import {RouterLink} from "vue-router";
   import { useI18n } from 'vue-i18n'
   const { t } = useI18n({
@@ -871,6 +871,16 @@
                   </n-space>
                   <n-switch
                       v-model:value="store_player_audio_logic.player_use_lottie_animation">
+                  </n-switch>
+                </n-space>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
+                    </div>
+                  </n-space>
+                  <n-switch v-model:value="store_player_audio_logic.player_use_background_filter_blur">
                   </n-switch>
                 </n-space>
                 <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">

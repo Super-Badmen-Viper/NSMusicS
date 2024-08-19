@@ -225,7 +225,7 @@
       clearInterval(timer);
       timer = setInterval(synchronize_playback_time, 200);
       total_play_time.value = formatTime(props.player.getDuration());
-      props.player.setVolume(Number(slider_volume_value.value / 100))
+      props.player.setVolume(Number(store_player_audio_logic.play_volume / 100))
       props.player.play();
       // animationInstance.value.play();
     }, 400);
@@ -362,15 +362,14 @@
       Play_Media_Order(play_order.value,1)
   };
   ////// player_configs player_button voice area
-  const slider_volume_value = ref(100)
   const drawer_volume_show = ref(false)
   const backpanel_voice_click = () => {
     drawer_volume_show.value = !drawer_volume_show.value;
   }
   let unwatch_slider_volume_value = watch(
-    slider_volume_value,
+    store_player_audio_logic.play_volume,
     (newValue) => {
-      props.player.setVolume(newValue ? Number(slider_volume_value.value / 100) : 0);
+      props.player.setVolume(newValue ? Number(store_player_audio_logic.play_volume / 100) : 0);
     },
     { immediate: true }
   );
@@ -725,10 +724,10 @@
                     margin-top: 6px;
                   "
                   vertical
-                  v-model:value="slider_volume_value"
+                  v-model:value="store_player_audio_logic.play_volume"
                   :min="0" :max="100" :keyboard="true" :tooltip="false"
                 />
-                <n-text>{{ slider_volume_value }}</n-text>
+                <n-text>{{ store_player_audio_logic.play_volume }}</n-text>
               </n-space>
             </n-drawer-content>
           </n-drawer>

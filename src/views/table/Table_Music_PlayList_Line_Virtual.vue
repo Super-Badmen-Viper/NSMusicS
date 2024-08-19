@@ -1,12 +1,6 @@
 <script setup lang="ts">
-  ////// this_view resource of vicons_svg
-  import {
-    Heart24Regular,Heart28Filled,
-  } from '@vicons/fluent'
-
   ////// this_view components of navie ui 
   import { ref, onMounted } from 'vue';
-  import { NIcon } from 'naive-ui';
   import {store_player_audio_info} from "@/store/player/store_player_audio_info";
   import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
 

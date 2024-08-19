@@ -16,7 +16,8 @@ export class Class_Get_System_Configs_Read {
             server_select: '',
             username: '',
             password: '',
-            play_order: ''
+            play_order: '',
+            play_volume: '',
         }))
     public library_Configs = ref(
         new Library_Configs({

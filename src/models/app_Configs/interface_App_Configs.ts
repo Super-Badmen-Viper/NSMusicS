@@ -8,5 +8,6 @@ interface App_Configs_Props {
   server_select: any,
   username: any,
   password: any,
-  play_order: string
+  play_order: any,
+  play_volume: number,
 };

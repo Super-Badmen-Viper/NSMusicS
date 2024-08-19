@@ -130,7 +130,7 @@
       if(store_player_audio_info.this_audio_file_path.length > 0) {
         store_player_audio_logic.player_silder_currentTime_added_value = 0;
         // store_player_audio_logic.player.howl = new Howl();
-        store_player_audio_logic.player.load(store_player_audio_info.this_audio_file_path)
+        await store_player_audio_logic.player.load(store_player_audio_info.this_audio_file_path)
         store_player_audio_logic.player.isPlaying = true;
         store_player_audio_info.this_audio_is_playing = true
         store_player_audio_logic.player_save_new_data = true
@@ -139,8 +139,8 @@
         clearInterval(timer);
         timer = setInterval(synchronize_playback_time, 200);
         total_play_time.value = formatTime(await store_player_audio_logic.player.getDuration());
-        store_player_audio_logic.player.setVolume(Number(slider_volume_value.value))
-        store_player_audio_logic.player.play();
+        await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
+        await store_player_audio_logic.player.play();
       }
     }, 400);
   }
@@ -166,6 +166,7 @@
     timer = setInterval(synchronize_playback_time, 200);
     await store_player_audio_logic.player.IsResumeing()
     await store_player_audio_logic.player.IsPlaying()
+    await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
   })
   const Init_Audio_Player = async () => {
     if(store_player_audio_info.this_audio_file_path.length > 0){
@@ -298,18 +299,10 @@
       Play_Media_Order(store_player_audio_logic.play_order, 1)
   };
   ////// player_configs player_button voice area
-  const slider_volume_value = ref(100)
   const drawer_volume_show = ref(false)
   const backpanel_voice_click = () => {
     drawer_volume_show.value = !drawer_volume_show.value;
   }
-  let unwatch_slider_volume_value = watch(
-    slider_volume_value,
-    (newValue) => {
-      store_player_audio_logic.player.setVolume(newValue ? Number(slider_volume_value.value) : 0);
-    },
-    { immediate: true }
-  );
 
   ////// player_configs slider formatTime area
   const set_slider_singleValue = async () => {
@@ -493,7 +486,6 @@
     unwatch_this_audio_restart_play()
     unwatch_this_audio_buffer_file()
     unwatch_play_go_index_time()
-    unwatch_slider_volume_value()
   });
 </script>
 
@@ -668,10 +660,10 @@
                     margin-top: 6px;
                   "
                   vertical
-                  v-model:value="slider_volume_value"
+                  v-model:value="store_player_audio_logic.play_volume"
                   :min="0" :max="100" :keyboard="true" :tooltip="false"
                 />
-                <n-text>{{ slider_volume_value }}</n-text>
+                <n-text>{{ store_player_audio_logic.play_volume }}</n-text>
               </n-space>
             </n-drawer-content>
           </n-drawer>

@@ -31,7 +31,8 @@ export const store_app_configs_logic_save = reactive({
                 server_select: String(store_server_user_model.server_select),
                 username: String(store_server_user_model.username),
                 password: String(store_server_user_model.password),
-                play_order: String(store_player_audio_logic.play_order)
+                play_order: String(store_player_audio_logic.play_order),
+                play_volume: String(store_player_audio_logic.play_volume)
             }));
         let system_Configs_Write = new Class_Set_System_Configs_Write()
         system_Configs_Write.system_app_config(

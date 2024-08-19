@@ -323,9 +323,9 @@
     console.log('artist_list_of_artist_id_artist_click：'+artist_id);
     store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
   }
-  const Play_this_artist_all_media_list_click = (artist_id:string) => {
-    console.log('play_this_artist_song_list：'+artist_id);
-    store_view_artist_page_fetchData.fetchData_This_Artist_SongList(artist_id)
+  const Play_this_artist_all_media_list_click = async (artist_id: string) => {
+    console.log('play_this_artist_song_list：' + artist_id);
+    await store_view_artist_page_fetchData.fetchData_This_Artist_SongList(artist_id)
   }
 
   ////// changed_data write to sqlite
@@ -333,16 +333,18 @@
   import {
     store_local_data_set_artistInfo
   } from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
-  let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     store_local_data_set_artistInfo.Set_ArtistInfo_To_Favorite(id,favorite)
   }
+  let before_rating = false
+  let after_rating = false;
   const handleItemClick_Rating = (id_rating: any) => {
     const [id, rating] = id_rating.split('-');
-    if(rating === '6') {
+    if(after_rating) {
       store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, 0);
-    }else
+    }else {
       store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, rating);
+    }
   }
 
   ////// view artistlist_view Remove data
@@ -542,11 +544,18 @@
                     </button>
                     <div class="hover_buttons_top">
                       <rate
-                        class="viaSlot"
-                        :length="6"
-                        v-model="item.rating"
-                        @after-rate="(value) => { handleItemClick_Rating(item.id + '-' + value); if (item.rating == 6) { item.rating = 0; } }"
-                        style="margin-right: 8px;"
+                          class="viaSlot" style="margin-right: 8px;"
+                          :length="5"
+                          v-model="item.rating"
+                          @before-rate="(value) => { if(item.rating == 1) { before_rating = true; }}"
+                          @after-rate="(value) => {
+                          if(item.rating == 1 && before_rating == true){ after_rating = true;before_rating = false}
+                          handleItemClick_Rating(item.id + '-' + value);
+                          if (after_rating) {
+                            item.rating = 0
+                            after_rating = false
+                          }
+                        }"
                       />
                     </div>
                     <div class="hover_buttons_bottom">

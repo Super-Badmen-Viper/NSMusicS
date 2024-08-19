@@ -16,6 +16,10 @@ import rate from 'vue-rate'
 import 'vue-rate/dist/vue-rate.css'
 app.use(rate)
 
+import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
+import ContextMenu from '@imengyu/vue3-context-menu'
+app.use(ContextMenu)
+
 import { Language } from "@/i18n/i18n";
 const i18n = new Language().i18n;
 console.log(i18n.locale)

@@ -186,7 +186,7 @@ export const store_view_artist_page_fetchData = reactive({
         store_router_data_info.find_music_model = false;
         store_router_data_info.find_album_model = false;
         store_router_data_info.find_artist_model = true;
-        store_view_media_page_fetchData.fetchData_Media()
+        await store_view_media_page_fetchData.fetchData_Media()
         store_router_data_info.find_artist_model = false;
 
         store_playlist_list_info.playlist_MediaFiles_temporary = [...store_view_media_page_info.media_Files_temporary];

@@ -322,14 +322,14 @@
     scrollTo(0)
   }
   const handleItemClick_artist = (artist_id:string) => {
-    input_search_Value.value = artist_id+'accurate_search'+'__artist__'
+    input_search_Value.value = artist_id
     bool_show_search_area.value = false
     show_search_area()
     click_search()
     scrollTo(0)
   }
   const handleItemClick_album_timelist = (created_at:string) => {
-    input_search_Value.value = created_at+'accurate_search'+'__title__'
+    input_search_Value.value = created_at
     bool_show_search_area.value = false
     show_search_area()
     click_search()
@@ -339,9 +339,9 @@
     console.log('media_list_of_album_id：'+album_id);
     store_router_data_logic.get_media_list_of_album_id_by_album_info(album_id)
   }
-  const Play_this_album_SongList_click = (album_id:string) => {
-    console.log('play_this_album_click：'+album_id);
-    store_view_album_page_fetchData.fetchData_This_Album_SongList(album_id)
+  const Play_this_album_SongList_click = async (album_id: string) => {
+    console.log('play_this_album_click：' + album_id);
+    await store_view_album_page_fetchData.fetchData_This_Album_SongList(album_id)
   }
 
   ////// changed_data write to sqlite
@@ -349,15 +349,22 @@
   import {
     store_local_data_set_albumInfo
   } from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
+  import {
+    store_local_data_set_mediaInfo
+  } from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
+  import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id,favorite)
   }
+  let before_rating = false
+  let after_rating = false;
   const handleItemClick_Rating = (id_rating: any) => {
     const [id, rating] = id_rating.split('-');
-    if(rating === '6') {
+    if(after_rating) {
       store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, 0);
-    }else
+    }else {
       store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, rating);
+    }
   }
 
   ////// view albumlist_view Remove data
@@ -555,11 +562,18 @@
                     </button>
                     <div class="hover_buttons_top">
                       <rate
-                        class="viaSlot"
-                        :length="6"
+                        class="viaSlot" style="margin-right: 8px;"
+                        :length="5"
                         v-model="item.rating"
-                        @after-rate="(value) => { handleItemClick_Rating(item.id + '-' + value); if (item.rating == 6) { item.rating = 0; } }"
-                        style="margin-right: 8px;"
+                        @before-rate="(value) => { if(item.rating == 1) { before_rating = true; }}"
+                        @after-rate="(value) => {
+                          if(item.rating == 1 && before_rating == true){ after_rating = true;before_rating = false}
+                          handleItemClick_Rating(item.id + '-' + value);
+                          if (after_rating) {
+                            item.rating = 0
+                            after_rating = false
+                          }
+                        }"
                       />
                     </div>
                     <div class="hover_buttons_bottom">

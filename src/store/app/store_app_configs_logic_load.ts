@@ -96,6 +96,7 @@ export const store_app_configs_logic_load = reactive({
             store_player_appearance.player_mode_of_medialist_from_external_import = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['player_mode_of_medialist_from_external_import'] === 'true'
             //
             store_player_audio_logic.play_order = '' + system_Configs_Read.app_Configs.value['play_order']
+            store_player_audio_logic.play_volume = Number('' + system_Configs_Read.app_Configs.value['play_volume'])
 
             /// view_router_history
             // init media page router histtory

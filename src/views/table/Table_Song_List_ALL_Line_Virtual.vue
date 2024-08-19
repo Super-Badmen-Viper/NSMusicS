@@ -361,18 +361,27 @@ const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     store_player_audio_info.this_audio_song_favorite = !favorite;
   }
 }
+let before_rating = false
+let after_rating = false;
 const handleItemClick_Rating = (id_rating: any) => {
   click_count = 0;
   const [id, rating] = id_rating.split('-');
-  if(rating === '6') {
+  if(after_rating) {
     store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, 0);
-  }else
+    if (id === store_player_audio_info.this_audio_song_id){
+      store_player_audio_info.this_audio_song_rating = 0;
+    }
+  }else {
     store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating);
-
-  if (id === store_player_audio_info.this_audio_song_id){
-    store_player_audio_info.this_audio_song_rating = rating;
+    if (id === store_player_audio_info.this_audio_song_id){
+      store_player_audio_info.this_audio_song_rating = rating;
+    }
   }
 }
+// const handleItemClick_Rating = (id: any,rating: any) => {
+//   store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating);
+//   store_player_audio_info.this_audio_song_rating = rating
+// }
 
 ////// playlist
 import { useMessage } from 'naive-ui'
@@ -848,15 +857,25 @@ onBeforeUnmount(() => {
               <div class="songlist_album">
                 <span @click="handleItemClick_album(item.album_id)">{{ item.album }}</span>
               </div>
-              <div style="margin-left: auto; margin-right: 80px; width: 240px; display: flex; flex-direction: row;">
+              <div style="margin-left: auto; margin-right: 0px; width: 240px; display: flex; flex-direction: row;">
                 <rate
                   class="viaSlot" style="margin-right: 20px;"
-                  :length="6"
+                  :length="5"
                   v-model="item.rating"
+                  @before-rate="(value) => {
+                    if(item.rating == 1){
+                      before_rating = true
+                    }
+                  }"
                   @after-rate="(value) => {
+                    if(item.rating == 1 && before_rating == true){
+                      after_rating = true
+                      before_rating = false
+                    }
                     handleItemClick_Rating(item.id + '-' + value);
-                    if (item.rating == 6) {
-                      item.rating = 0;
+                    if (after_rating) {
+                      item.rating = 0
+                      after_rating = false
                     }
                   }"
                 />
@@ -926,13 +945,18 @@ onBeforeUnmount(() => {
                   </template>
                 </VDropdown>
               </div>
-              <span class="duration_txt" style="margin-left: auto;margin-top: 4px;margin-right: 25px;text-align: left;font-size: 15px;">{{ item.duration_txt }}</span>
-              <span class="index" style="margin-left: auto; text-align: left;font-size: 15px;margin-top: 4px;">{{ index + 1 }}</span>
+              <span class="duration_txt" style="margin-left: auto;margin-top: 4px;margin-right: 0px;text-align: left;font-size: 15px;">
+                {{ item.duration_txt }}
+              </span>
+              <span class="index" style="margin-left: auto; text-align: left;font-size: 15px;margin-top: 4px;">
+                {{ index + 1 }}
+              </span>
             </div>
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>
     </div>
+
   </n-space>
   <!-- 管理播放列表 -->
   <n-modal
@@ -1055,7 +1079,7 @@ onBeforeUnmount(() => {
       </n-space>
     </n-card>
   </n-modal>
-
+  <!--  -->
   <div class="scorller_to_SortAZ" v-if="false">
     <n-space>
       <n-button

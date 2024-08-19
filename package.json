@@ -17,6 +17,7 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
+    "@imengyu/vue3-context-menu": "^1.4.2",
     "@lottiefiles/lottie-player": "^2.0.4",
     "@vicons/carbon": "^0.12.0",
     "@vicons/fa": "^0.12.0",
