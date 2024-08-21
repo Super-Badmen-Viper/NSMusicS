@@ -15,7 +15,7 @@ export const store_view_media_page_fetchData = reactive({
         let db:any = null;
         // clear RouterView of vue-virtual-scroller data
         if(store_player_appearance.player_mode_of_medialist_from_external_import === true){
-            store_player_appearance.player_mode_of_medialist_from_external_import = false;
+            // store_player_appearance.player_mode_of_medialist_from_external_import = false;
         }else{
             store_router_data_logic.clear_Files_temporary()
             store_router_data_info.router_select_model_media = true;

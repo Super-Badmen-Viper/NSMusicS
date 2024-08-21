@@ -75,25 +75,27 @@ export const store_player_audio_info = reactive({
     }
 });
 watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
-    console.log('this_audio_file_path：'+newValue)
+    if(newValue != undefined && newValue != 'undefined' && newValue.length > 0) {
+        console.log('this_audio_file_path：' + newValue)
 
-    if(store_view_media_page_info.media_Files_temporary != undefined
-        && store_view_media_page_info.media_Files_temporary.length != 0
-    ) {
-        store_player_audio_info.this_audio_restart_play = true
-        if (store_player_appearance.player_mode_of_lock_playlist === false) {
-            if(!store_app_configs_logic_load.app_configs_loading) {
-                store_playlist_list_info.playlist_MediaFiles_temporary = [...store_view_media_page_info.media_Files_temporary];
-                store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
+        if (store_view_media_page_info.media_Files_temporary != undefined
+            && store_view_media_page_info.media_Files_temporary.length != 0
+        ) {
+            store_player_audio_info.this_audio_restart_play = true
+            if (store_player_appearance.player_mode_of_lock_playlist === false) {
+                if (!store_app_configs_logic_load.app_configs_loading) {
+                    store_playlist_list_info.playlist_MediaFiles_temporary = [...store_view_media_page_info.media_Files_temporary];
+                    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
+                }
             }
         }
+        store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
+            item.playing = item.id === store_player_audio_info.this_audio_song_id;
+        });
+        store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+            item.playing = item.id === store_player_audio_info.this_audio_song_id;
+        });
     }
-    store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
-        item.playing = item.id === store_player_audio_info.this_audio_song_id;
-    });
-    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
-        item.playing = item.id === store_player_audio_info.this_audio_song_id;
-    });
 });
 watch(() => store_player_audio_info.this_audio_file_medium_image_url, (newValue) => {
     console.log('this_audio_file_medium_image_url'+newValue)

@@ -47,13 +47,28 @@ export const store_server_data_set_playlistInfo = reactive({
     async Set_Selected_MediaInfo_Delete_Selected_Playlist(ids: string[], playlist_id: string){
         const indexs = await this.Set_PlaylistInfo_To_Update_GetPlaylist_SongIndex_of_ND(
             playlist_id, ids
-        )
-        for (const index of indexs) {
+        );
+        for (let i = 0; i < indexs.length; i++) {
+            const index = indexs[i];
             await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
                 .updatePlaylist_songIndexToRemove(
                     store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
-                    playlist_id, index);
+                    playlist_id, index
+                );
+            /// navidrome delete logic bug, Delete based on song number, but cannot support simultaneous deletion of multiple numbers
+            for (let j = i + 1; j < indexs.length; j++) {
+                indexs[j] -= 1;
+            }
         }
+        // for (const id of ids) {
+        //     const indexs = await this.Set_PlaylistInfo_To_Update_GetPlaylist_SongIndex_of_ND(
+        //         playlist_id, [id]
+        //     )
+        //     await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
+        //         .updatePlaylist_songIndexToRemove(
+        //             store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
+        //             playlist_id, indexs[0]);
+        // }
     },
 
     async Set_PlaylistInfo_To_Update_GetPlaylist_SongIndex_of_ND(playlist_id: string, ids: string[]) {

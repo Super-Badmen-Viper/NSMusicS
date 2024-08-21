@@ -21,8 +21,12 @@ export const store_view_album_page_fetchData = reactive({
         let db: any = null;
         let moment = require('moment');
         // clear RouterView of vue-virtual-scroller data
-        store_router_data_logic.clear_Files_temporary()
-        store_router_data_info.router_select_model_album = true;
+        if(store_player_appearance.player_mode_of_medialist_from_external_import === true){
+            store_player_appearance.player_mode_of_medialist_from_external_import = false;
+        }else{
+            store_router_data_logic.clear_Files_temporary()
+            store_router_data_info.router_select_model_album = true;
+        }
 
         try {
             db = require('better-sqlite3')(store_app_configs_info.navidrome_db);

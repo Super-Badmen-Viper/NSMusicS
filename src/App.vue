@@ -242,7 +242,7 @@
     const temp_Play_List_Love: Play_List = {
       label: computed(() => t('nsmusics.view_page.loveSong')),
       value: 'song_list_love',
-      id: 'song_list_love',
+      id: '`song_list_love`',
       name: computed(() => t('nsmusics.view_page.loveSong')),
       comment: computed(() => t('nsmusics.view_page.loveSong')),
       duration: 0,

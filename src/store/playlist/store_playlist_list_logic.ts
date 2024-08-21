@@ -110,6 +110,6 @@ export const store_playlist_list_logic = reactive({
                 playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id)
             })
         });
-        store_view_media_page_logic.list_data_StartUpdate = true
+        // store_view_media_page_logic.list_data_StartUpdate = true
     },
 });

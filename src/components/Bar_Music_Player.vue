@@ -814,6 +814,7 @@
   margin-left: 30px;
   width: 120px;
   border-radius: 10px;
+  pointer-events: none;
 }
 .gird_Middle #backpanel_voice{
   position: fixed;
@@ -822,6 +823,7 @@
   width: 77px;
   height: 100px;
   border-radius: 10px;
+  pointer-events: none;
 }
 
 .gird_Right {

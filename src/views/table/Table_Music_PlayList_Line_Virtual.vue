@@ -28,6 +28,8 @@
     store_player_audio_info.this_audio_album_id = media_file.album_id
     store_player_audio_info.this_audio_album_name = media_file.album
     store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
+
+    store_player_audio_info.this_audio_restart_play = true
   }
   const handleItemClick_title = (title:string) => {
     
