@@ -218,10 +218,11 @@
           }
         } else if (model_num === 'playback-2') {
           index += increased;
-          while (index < 0) {
-            index += store_playlist_list_info.playlist_MediaFiles_temporary.length;
+          if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length) {
+            index = 0;
+          }else if(index < 0){
+            index = store_playlist_list_info.playlist_MediaFiles_temporary.length - 1;
           }
-          index %= store_playlist_list_info.playlist_MediaFiles_temporary.length;
         } else if (model_num === 'playback-3') {
           if (increased !== 0) {
             index += increased;

@@ -231,7 +231,5 @@ export const store_view_album_page_fetchData = reactive({
             store_player_audio_info.this_audio_song_rating = store_playlist_list_info.playlist_MediaFiles_temporary[0].rating
             store_player_audio_info.this_audio_song_favorite = store_playlist_list_info.playlist_MediaFiles_temporary[0].favorite
         }
-
-        store_local_data_set_albumInfo.Set_AlbumInfo_To_PlayCount_of_Album(album_id)
     },
 });

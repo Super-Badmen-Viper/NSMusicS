@@ -25,10 +25,10 @@ import {
 const path = require('path');
 
 export class Set_Navidrome_Data_To_LocalSqlite{
-    private getUniqueId(db: any,table: any) {
+    private getUniqueId(db: any,table: any,id_name: any) {
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4();
-        while (db.prepare(`SELECT COUNT(*) FROM ${table} WHERE id = ?`).pluck().get(id) > 0) {
+        while (db.prepare(`SELECT COUNT(*) FROM ${table} WHERE ${id_name} = ?`).pluck().get(id) > 0) {
             id = uuidv4();
         }
         return id;
@@ -73,11 +73,22 @@ export class Set_Navidrome_Data_To_LocalSqlite{
         const NodeCache = require('node-cache');
         const cache = new NodeCache();
 
+        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        db.pragma('journal_mode = WAL');
+        db.exec("DELETE FROM server_album");
+        db.exec("DELETE FROM server_annotation");
+        db.exec("DELETE FROM server_artist");
+        db.exec("DELETE FROM server_media_file");
+        db.exec("DELETE FROM server_playlist");
+        db.exec("DELETE FROM server_playlist_tracks");
+
         store_server_users.percentage_of_nd = 0;
 
         let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
         const getArtists_ALL = await browsing_ApiService_of_ND.getArtists_ALL(username, token, salt);
         const list = getArtists_ALL["subsonic-response"]["artists"]["index"];
+
+        let moment = require('moment');
 
         let media_Retrieval_ApiService_of_ND = new Media_Retrieval_ApiService_of_ND(url);
 
@@ -137,6 +148,20 @@ export class Set_Navidrome_Data_To_LocalSqlite{
                         external_info_updated_at: ''
                     };
                     albumsArray.push(sqlite_album);
+
+                    try {
+                        if (db.prepare(`SELECT COUNT(*) FROM ${store_server_user_model.annotation} WHERE item_id = ?`).pluck().get(album.id) === 0) {
+                            db.prepare(`INSERT INTO ${store_server_user_model.annotation} 
+                                (ann_id, item_id, item_type, play_count, play_date) VALUES (?, ?, ?, ?, ?)`)
+                                .run(
+                                    this.getUniqueId(db, 'server_annotation', 'item_id'),
+                                    album.id, 'album',
+                                    album.playCount,
+                                    moment(album.played).format('YYYY-MM-DD HH:mm:ss') || '');
+                        }
+                    } catch (error) {
+                        console.error("Error fetching starred data:", error);
+                    }
 
                     const cacheKey = `album_${album.id}`;
                     let getAlbum_id = cache.get(cacheKey);
@@ -275,16 +300,6 @@ export class Set_Navidrome_Data_To_LocalSqlite{
             };
         });
 
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
-        db.pragma('journal_mode = WAL');
-
-        db.exec("DELETE FROM server_album");
-        db.exec("DELETE FROM server_annotation");
-        db.exec("DELETE FROM server_artist");
-        db.exec("DELETE FROM server_media_file");
-        db.exec("DELETE FROM server_playlist");
-        db.exec("DELETE FROM server_playlist_tracks");
-
         resultArray.forEach(music => {
             this.insertData(db, 'server_artist', music.artist);
         });
@@ -296,7 +311,6 @@ export class Set_Navidrome_Data_To_LocalSqlite{
                 })
             });
         });
-        db.close();
 
         try {
             let album$Songs_Lists_ApiService_of_ND = new Album$Songs_Lists_ApiService_of_ND(url);
@@ -329,6 +343,23 @@ export class Set_Navidrome_Data_To_LocalSqlite{
                         // album.song_count = albumData.songCount || 0
                         store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(albumData.id, !albumData.starred);
                         store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(albumData.id, albumData.userRating || 0);
+
+                        // annotion - album
+                        try {
+                            let existingRecord = db.prepare(`SELECT item_id FROM ${store_server_user_model.annotation} WHERE item_id = ?`).get(albumData.id);
+                            if (existingRecord) {
+                                db.prepare(`UPDATE ${store_server_user_model.annotation} 
+                                    SET rating = ?, starred = ?, starred_at = ? WHERE item_id = ? AND item_type = 'album'`)
+                                    .run(
+                                        albumData.userRating || 0,
+                                        !albumData.starred ? 0 : 1,
+                                        albumData.starred || '',
+                                        albumData.id
+                                    );
+                            }
+                        } catch (error) {
+                            console.error("Error fetching starred data:", error);
+                        }
                     }
 
                     album.media.forEach((song: any) => {
@@ -345,6 +376,7 @@ export class Set_Navidrome_Data_To_LocalSqlite{
         } catch (error) {
             console.error("Error fetching starred data:", error);
         }
+        db.close();
 
         await this.Set_Read_Navidrome_Api_PlayListInfo_Add_LocalSqlite(url, username, token, salt)
     }
@@ -392,7 +424,7 @@ export class Set_Navidrome_Data_To_LocalSqlite{
                     : [];
                 for (const song of playlSongs) {
                     const sqlite_song = {
-                        id: this.getUniqueId(db, 'server_playlist_tracks'),
+                        id: this.getUniqueId(db, 'server_playlist_tracks', 'id'),
                         playlist_id: _playlist.id,
                         media_file_id: song.id
                     };

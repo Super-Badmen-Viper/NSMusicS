@@ -150,7 +150,6 @@ async function createWindow() {
     });
     ipc.handle('mpv-stopped', async (event,volume) => {
         await mpv.pause();
-        await mpv.stop();
     });
     ipc.handle('mpv-get-duration', async (event) => {
         try { return await mpv.getDuration() }catch{ return 0 }

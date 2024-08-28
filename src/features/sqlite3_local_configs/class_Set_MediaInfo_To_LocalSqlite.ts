@@ -51,7 +51,6 @@ export class Set_MediaInfo_To_LocalSqlite {
         }
 
         db.close();
-        console.log('handleItemClick_Favorite_id：'+id+'  _favorite:'+!value + '\n: '+ann_id)
         return true
     }
     public Set_MediaInfo_To_Rating(id: any, value: number) {
@@ -70,7 +69,6 @@ export class Set_MediaInfo_To_LocalSqlite {
         }
 
         db.close();
-        console.log('handleItemClick_rating_id：'+id+'  _rating:'+!value + '\n: '+ann_id)
     }
     public Set_MediaInfo_To_PlayCount_of_Media_File(item_id: any) {
         const path = require('path');
@@ -100,8 +98,8 @@ export class Set_MediaInfo_To_LocalSqlite {
             db.close();
             return true;
         }else {
-            return false;
             db.close();
+            return false;
         }
     }
     public Set_MediaInfo_Delete_Selected_Playlist(media_file_id: any, playlist_id: any) {
@@ -115,8 +113,8 @@ export class Set_MediaInfo_To_LocalSqlite {
             db.close();
             return true;
         }else {
-            return false;
             db.close();
+            return false;
         }
     }
 }

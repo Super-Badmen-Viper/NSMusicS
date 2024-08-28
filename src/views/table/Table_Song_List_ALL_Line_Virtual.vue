@@ -337,7 +337,7 @@ const handleItemClick_title = (title:string) => {
 }
 const handleItemClick_artist = (artist:string) => {
   click_count = 0;
-  input_search_Value.value = artist+'accurate_search'+'__artist__'//artist不参与精确搜索
+  input_search_Value.value = artist//+'accurate_search'+'__artist__'//artist不参与精确搜索
   bool_show_search_area.value = false
   show_search_area()
   click_search()

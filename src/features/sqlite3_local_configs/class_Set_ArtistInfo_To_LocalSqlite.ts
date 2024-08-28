@@ -51,7 +51,6 @@ export class Set_ArtistInfo_To_LocalSqlite {
         }
 
         db.close();
-        console.log('handleItemClick_Favorite_id：'+id+'  _favorite:'+!value + '\n: '+ann_id)
     }
     public Set_ArtistInfo_To_Rating(id: any, value: number) {
         let ann_id = null;
@@ -69,7 +68,6 @@ export class Set_ArtistInfo_To_LocalSqlite {
         }
 
         db.close();
-        console.log('handleItemClick_rating_id：'+id+'  _rating:'+!value + '\n: '+ann_id)
     }
     public Set_ArtistInfo_To_PlayCount_of_Artist(item_id: any) {
         const path = require('path');

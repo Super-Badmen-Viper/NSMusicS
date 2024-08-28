@@ -42,6 +42,7 @@
 
   // audio_class & player_bar
   import { Player_UI_Theme_State } from '@/features/player_configs/Player_UI_Theme_State'
+  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 
   ////// System BrowserWindow Set
   const { ipcRenderer } = require('electron');
@@ -80,21 +81,21 @@
   function begin_lyrics_animation() {
     clearInterval(lyrics_animation);
     lyrics_animation = setInterval(async () => {
-      for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_time.length; i++) {
+      for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_time.length; i++) {
         if (store_player_audio_logic.player !== null && await store_player_audio_logic.player.getCurrentTime() !== undefined && await store_player_audio_logic.player.getCurrentTime() !== null) {
           let currentTime = await store_player_audio_logic.player.getCurrentTime() * 1000;
-          if (currentTime <= store_player_audio_info.this_audio_lyrics_info_time[0]) {
+          if (currentTime <= store_player_audio_info.this_audio_lyrics_info_line_time[0]) {
             if (lyrics_list_whell.value === false) {
               scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num);
             }
             break;
-          } else if (currentTime >= store_player_audio_info.this_audio_lyrics_info_time[i]) {
-            if (i === store_player_audio_info.this_audio_lyrics_info_time.length - 1) {
+          } else if (currentTime >= store_player_audio_info.this_audio_lyrics_info_line_time[i]) {
+            if (i === store_player_audio_info.this_audio_lyrics_info_line_time.length - 1) {
               if (lyrics_list_whell.value === false) {
                 scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
               }
               break;
-            } else if (currentTime < store_player_audio_info.this_audio_lyrics_info_time[i + 1]) {
+            } else if (currentTime < store_player_audio_info.this_audio_lyrics_info_line_time[i + 1]) {
               if (lyrics_list_whell.value === false) {
                 scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
               }
@@ -103,13 +104,13 @@
           }
         }
       }
-    }, 100);
+    }, 50);
   }
   let lyrics_animation: string | number | NodeJS.Timeout | undefined;
   const handleItemDbClick = async (index: any) => {
     if (index < store_player_audio_info.this_audio_lyrics_info_line_num) return;
-    if (index > store_player_audio_info.this_audio_lyrics_info_line.length - store_player_audio_info.this_audio_lyrics_info_line_num - 1) return;
-    const time = store_player_audio_info.this_audio_lyrics_info_time[index - store_player_audio_info.this_audio_lyrics_info_line_num];
+    if (index > store_player_audio_info.this_audio_lyrics_info_line_font.length - store_player_audio_info.this_audio_lyrics_info_line_num - 1) return;
+    const time = store_player_audio_info.this_audio_lyrics_info_line_time[index - store_player_audio_info.this_audio_lyrics_info_line_num];
     if (time >= await store_player_audio_logic.player.getDuration() * 1000) return;
     if (time < 0) return;
     store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress = time;
@@ -140,7 +141,6 @@
       itemElements[index].style.transform = 'scale(1.1)  translateX(0px)';
       itemElements[index].style.transformOrigin = 'center';
     }
-    // BUG: if space-line Not fully covered at the bottom, exceeding the bottom portion , The entire page will be moved up，because block: 'center' used this page
     itemElements[index].scrollIntoView({ block: 'center', behavior: perviousIndex.value === index - 1 ? 'smooth' : 'instant' });
 
     let color_hidden = player_lyric_color.value.slice(0, -2);
@@ -158,7 +158,114 @@
       }
     }
     perviousIndex.value = index;
+
+    if(store_player_audio_info.this_audio_lyrics_info_byte_model) {
+      startByteAnimations(index, 0)
+    }
   };
+  const lastIndex = ref(-1);
+  const startByteAnimations = (index: number, num: number) => {
+    const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
+    let position_i_length = store_player_audio_info.this_audio_lyrics_info_byte_time
+        .reduce((acc: any, curr: any) => {
+          return acc + curr.length;
+        }, 0);
+    let position_i_start = store_player_audio_info.this_audio_lyrics_info_byte_time
+        .slice(0, index)
+        .reduce((acc: any, curr: any) => {
+          return acc + curr.length;
+        }, 0);
+    let position_i_end = store_player_audio_info.this_audio_lyrics_info_byte_time
+        .slice(0, index + 1)
+        .reduce((acc: any, curr: any) => {
+          return acc + curr.length;
+        }, 0);
+
+    if (index === lastIndex.value) {
+      return;
+    }
+    lastIndex.value = index;
+
+    // Clear previous intervals
+    if (intervals.length > 0) {
+      intervals.forEach(clearInterval);
+      intervals = [];
+    }
+
+    // lyric width length
+    let elementWidth = 0;
+    for (let i = position_i_start; i < position_i_end; i++) {
+      const element = itemElements_active[i];
+      const computedStyle = window.getComputedStyle(element);
+      elementWidth += parseFloat(computedStyle.width);
+
+      itemElements_active[i].style.fontSize = player_theme_0_bind_style.value.normalStyle.fontSize;
+      itemElements_active[i].style.fontWeight = player_theme_0_bind_style.value.normalStyle.fontWeight;
+
+      itemElements_active[i].style.filter = 'blur(0px)';
+      itemElements_active[i].style.transition = 'color 0.5s, transform 0.5s';
+      if (player_collapsed_album.value === false) {
+        itemElements_active[i].style.transform = 'scale(1.1) translateY(0px)';
+        itemElements_active[i].style.transformOrigin = 'left center';
+      } else {
+        itemElements_active[i].style.transform = 'scale(1.1) translateX(0px)';
+        itemElements_active[i].style.transformOrigin = 'center';
+      }
+
+      let tempwidth = parseFloat(window.getComputedStyle(itemElements_active[i]).width);
+      itemElements_active[i].style.marginRight = `${tempwidth / 10}px`;
+    }
+
+    for (let i = position_i_start; i < position_i_end; i++) {
+      const byteTime = store_player_audio_info.this_audio_lyrics_info_byte_time[index][i - position_i_start];
+      const [startMs, durationMs] = byteTime.split(',').map(Number);
+      const start = startMs / 1000;
+      const duration = durationMs / 1000;
+
+      setTimeout(() => {
+        itemElements_active[i].style.animationDuration = `${duration}s`;
+        let leftPx = 0;
+        const interval = setInterval(() => {
+          if (leftPx <= elementWidth) {
+            leftPx += 1;
+            itemElements_active[i].style.background = `linear-gradient(90deg, #FFFFFF ${leftPx}px, #FAFAFB60 0px) 0 0`;
+            itemElements_active[i].style.backgroundClip = `text`;
+            itemElements_active[i].style.color = `transparent`;
+            itemElements_active[i].style.textShadow = `0 0 2px rgba(255, 255, 255, 0.4)`;
+          } else {
+            clearInterval(interval);
+          }
+        }, (duration * 1000) / 30);
+
+        intervals.push(interval);
+      }, start * 1000);
+    }
+
+    try {
+      let color_hidden = player_lyric_color.value.slice(0, -2);
+      for (let i = 0; i < position_i_start; i++) {
+        const colorValue = Math.max(90 - (index - i) * 18, 0);
+        itemElements_active[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+        itemElements_active[i].style.transform = 'scale(1)';
+        itemElements_active[i].style.background = `linear-gradient(90deg, #FFFFFF 0px, #FAFAFB60 0px) 0 0`;
+        itemElements_active[i].style.backgroundClip = `text`;
+        itemElements_active[i].style.textShadow = `0 0 2px transparent`;
+
+        itemElements_active[i].style.marginRight = `0px`;
+      }
+      for (let i = position_i_end; i <= position_i_length; i++) {
+        const colorValue = Math.max(90 - (i - index) * 18, 0);
+        itemElements_active[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+        itemElements_active[i].style.transform = 'scale(1)';
+        itemElements_active[i].style.background = `linear-gradient(90deg, #FFFFFF 0px, #FAFAFB60 0px) 0 0`;
+        itemElements_active[i].style.backgroundClip = `text`;
+        itemElements_active[i].style.textShadow = `0 0 2px transparent`;
+
+        itemElements_active[i].style.marginRight = `0px`;
+      }
+    }catch {}
+  };
+  let intervals = [];
   const lyrics_list_whell = ref(false);
   const handleWheel = (event: any) => {
     lyrics_list_whell.value = true;
@@ -922,12 +1029,14 @@
                     align-items: center;
                   ">
                   <n-list
-                    clickable :show-divider="false"
+                    clickable
+                    :show-divider="false"
                     ref="scrollbar"
                     @wheel="handleWheel"
                     @mouseleave="handleLeave"
                     style="
-                      width: calc(40vw);max-height: calc(66vh);
+                      width: calc(40vw);
+                      max-height: calc(66vh);
                       overflow: auto;
                       background-color: #00000000;
                     ">
@@ -937,10 +1046,17 @@
                         :style="{
                           textAlign: player_collapsed_album ? 'center' : 'left',
                         }"
-                        v-for="(item: any, index: number) in store_player_audio_info.this_audio_lyrics_info_line"
+                        v-for="(item, index) in store_player_audio_info.this_audio_lyrics_info_line_font"
                         @click="handleItemDbClick(index)">
-                        <div class="lyrics_text_active">
+                        <div class="lyrics_text_active" v-if="!store_player_audio_info.this_audio_lyrics_info_byte_model">
                           {{ item }}
+                        </div>
+                        <div v-else
+                          v-for="(byte, num) in store_player_audio_info.this_audio_lyrics_info_byte_font[index]"
+                          class="lyrics_text_active"
+                          style="padding-left: 0;margin-right: 1px;"
+                        >
+                          {{ byte }}
                         </div>
                       </n-list-item>
                     </template>
@@ -984,8 +1100,13 @@
 .lyrics_text_active {
   font-size: v-bind(player_lyric_fontSize);
   font-weight: v-bind(player_lyric_fontWeight);
+  display: inline-block;
+  white-space: pre;
   max-width: calc(36vw);
-  padding-left: 20px;padding-top: 0;padding-bottom: 4px;
+  padding-left: 20px;
+  padding-top: 0;
+  padding-bottom: 0px;
+  transition: color 0.2s;
 }
 
 .animate__rotate_slower {
@@ -1014,4 +1135,4 @@
 ::-webkit-scrollbar {
   display: none;
 }
-</style>../features/player/Player_UI_Theme_State
+</style>

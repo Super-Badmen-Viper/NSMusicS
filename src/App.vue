@@ -182,6 +182,8 @@
       }else if(to.name === 'View_Song_List_ALL'){
         store_router_data_info.router_select_model_media = true
         store_router_data_info.router_name = to.name
+        store_view_media_page_logic.page_songlists_keyword = ''
+        store_view_media_page_logic.page_songlists_keywordFilter = ''
       }else if(to.name === 'View_Album_List_ALL'){
         store_router_data_info.router_select_model_album = true
         store_router_data_info.router_name = to.name
