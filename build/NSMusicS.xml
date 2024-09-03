@@ -1,0 +1,7 @@
+publish:
+  provider: github
+  owner: Super-Badmen-Viper
+  repo: NSMusicS
+releaseInfo:
+  releaseNotes: |
+    这是更新日志
