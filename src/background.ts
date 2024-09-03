@@ -20,9 +20,9 @@ async function createWindow() {
     })
     win.setMenu(null)
     win.setMaximizable(false)
-    win.webContents.openDevTools({
-        mode:'detach'
-    });
+    // win.webContents.openDevTools({
+    //     mode:'detach'
+    // });
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
     if (process.argv[2]) {
         win.loadURL(process.argv[2])
@@ -104,6 +104,70 @@ async function createWindow() {
         try { return process.memoryUsage() }catch{ return 0 }
     });
 
+    //////
+    let navidrome_db = path.resolve('resources/navidrome.db');
+    let nsmusics_db = path.resolve('resources/nsmusics.db');
+    const cDriveDbPath_1 = 'C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db';
+    const cDriveDbPath_2 = 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db';
+    const cDriveDbDir = 'C:\\Users\\Public\\Documents\\NSMusicS';
+    const ensureDirectoryExists = (dirPath: string) => {
+        return new Promise((resolve, reject) => {
+            if (!fs.existsSync(dirPath)) {
+                try {
+                    fs.mkdirSync(dirPath, { recursive: true });
+                    console.log(`目录 ${dirPath} 已创建`);
+                    resolve();
+                } catch (err) {
+                    reject(err);
+                }
+            } else {
+                resolve();
+            }
+        });
+    };
+    const copyIfNotExists = (sourcePath: string, destPath: string) => {
+        return new Promise((resolve, reject) => {
+            ensureDirectoryExists(cDriveDbDir) // 确保目标文件夹存在
+                .then(() => {
+                    fs.access(destPath, fs.constants.F_OK, (err) => {
+                        if (err) {
+                            fs.copyFile(sourcePath, destPath, (copyErr) => {
+                                if (copyErr) {
+                                    reject(copyErr);
+                                } else {
+                                    resolve(destPath);
+                                }
+                            });
+                        } else {
+                            resolve(destPath);
+                        }
+                    });
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    };
+    ensureDirectoryExists(cDriveDbDir) // 确保目标文件夹存在
+        .then(() => {
+            Promise.all([
+                copyIfNotExists(navidrome_db, cDriveDbPath_1).then((newPath) => navidrome_db = newPath),
+                copyIfNotExists(nsmusics_db, cDriveDbPath_2).then((newPath) => nsmusics_db = newPath)
+            ]).catch((err) => {
+                console.error('复制文件时出错:', err);
+            });
+        })
+        .catch((err) => {
+            console.error('创建目录时出错:', err);
+        });
+    ipc.handle('window-get-navidrome-db', async (event) => {
+        try { return navidrome_db } catch { return '' }
+    });
+    ipc.handle('window-get-nsmusics-db', async (event) => {
+        try { return nsmusics_db } catch { return '' }
+    });
+
+
     ////// mpv services for win
     const mpvAPI = require('node-mpv');
     let mpv = new mpvAPI({
@@ -172,7 +236,7 @@ async function createWindow() {
 
     ////// music-metadata
     function getUniqueId_Media() {
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(navidrome_db);
         db.pragma('journal_mode = WAL');
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4().replace(/-/g, '');
@@ -182,7 +246,7 @@ async function createWindow() {
         return id;
     }
     function getUniqueId_Album() {
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(navidrome_db);
         db.pragma('journal_mode = WAL');
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4().replace(/-/g, '');
@@ -192,7 +256,7 @@ async function createWindow() {
         return id;
     }
     function getUniqueId_Artist() {
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(navidrome_db);
         db.pragma('journal_mode = WAL');
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4().replace(/-/g, '');
@@ -661,7 +725,7 @@ async function createWindow() {
             music.artist.song_count = song_count;
         })
 
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(navidrome_db);
         db.pragma('journal_mode = WAL');
         resultArray.forEach(music => {
             if (!isArtistExists(db, music.artist.name)) {

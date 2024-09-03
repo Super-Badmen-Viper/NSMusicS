@@ -1,8 +1,9 @@
 import { store_server_user_model } from '@/store/server/store_server_user_model'
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 export class Get_PlaylistInfo_From_LocalSqlite {
     public Get_Playlist() {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         const result: any[] = []
         const stmt_playlist = db.prepare(`SELECT * FROM ${store_server_user_model.playlist}`);
@@ -15,7 +16,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
     }
     public Get_Playlist_Tracks(playlist_id: string) {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         const stmt_playlist_tracks = db.prepare(`SELECT * FROM ${store_server_user_model.playlist_tracks} WHERE playlist_id = ?`);
         const rows = stmt_playlist_tracks.all(playlist_id);
@@ -28,9 +29,9 @@ export class Get_PlaylistInfo_From_LocalSqlite {
     }
     public Get_Playlist_Media_File_Id_of_list(list_of_media_file_id: string[]){
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
-        db.exec(`ATTACH DATABASE '${path.resolve('resources/nsmusics.db')}' AS nsmusics`);
+        db.exec(`ATTACH DATABASE '${store_app_configs_info.nsmusics_db}' AS nsmusics`);
         const placeholders = list_of_media_file_id.map(() => '?').join(',');
         const stmt = db.prepare(`
             SELECT mf.*

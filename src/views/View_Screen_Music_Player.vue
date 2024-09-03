@@ -160,7 +160,9 @@
     perviousIndex.value = index;
 
     if(store_player_audio_info.this_audio_lyrics_info_byte_model) {
-      startByteAnimations(index, 0)
+      if(store_player_audio_logic.player.isPlaying) {
+        startByteAnimations(index, 0)
+      }
     }
   };
   const lastIndex = ref(-1);
@@ -1000,6 +1002,19 @@
                       "
                       :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
                       @error="handleImageError" alt="">
+<!--                    <img-->
+<!--                        style="-->
+<!--                        margin-left: calc(54vh - 14vh);height: calc(54vh - 50vh);-->
+<!--                        margin-top: calc(-4vh - 162px);-->
+<!--                        position: absolute;-->
+<!--                        border: 2px solid #FFFFFF20;-->
+<!--                        border-radius: calc(54vh - 50vh);-->
+<!--                        object-fit: cover;object-position: center;-->
+<!--                        box-shadow: 0 0 32px rgba(0, 0, 0, 1), 0 0 32px rgba(0, 0, 0, 0.20);-->
+<!--                        filter: brightness(0%) blur(0px);-->
+<!--                      "-->
+<!--                        :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"-->
+<!--                        @error="handleImageError" alt="">-->
                     <div
                       style="
                         width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;
@@ -1100,8 +1115,8 @@
 .lyrics_text_active {
   font-size: v-bind(player_lyric_fontSize);
   font-weight: v-bind(player_lyric_fontWeight);
-  display: inline-block;
-  white-space: pre;
+  //display: inline-block;
+  //white-space: pre;
   max-width: calc(36vw);
   padding-left: 20px;
   padding-top: 0;

@@ -12,7 +12,7 @@
     TextIndentIncreaseLtr20Filled as lyric,
     FullScreenMaximize16Regular,
   } from '@vicons/fluent'
-  import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound} from '@vicons/material'
+  import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound, BrowserUpdatedFilled} from '@vicons/material'
   import {Close, Hearing, Menu as MenuIcon, UserAvatarFilledAlt,Clean} from '@vicons/carbon'
 
   ////// components
@@ -161,6 +161,7 @@
   ////// router custom class
   store_router_data_info.router = useRouter();
   import routers from './router'
+  import {store_app_configs_logic_update} from "@/store/app/store_app_configs_logic_update";
   routers.beforeEach((to, from, next) => {
     if(to.name !== from.name){
       store_router_data_logic.clear_Files_temporary()
@@ -551,15 +552,35 @@
       console.log("store_playlist_list_logic.playlist_names_StartUpdate")
     }
   });
+  ////
+  const { shell } = require('electron');
+  const openLink = (url: string) => {
+    shell.openExternal(url);
+  };
+  const computed_i18n_Label_Update = computed(() => t('filter.recentlyUpdated'));
   ////// Load Configs
   onMounted(async () => {
+    store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
+    store_app_configs_info.nsmusics_db = await ipcRenderer.invoke('window-get-nsmusics-db');
+    console.log(store_app_configs_info.navidrome_db)
+    console.log(store_app_configs_info.nsmusics_db)
+
     let db: any = null;
     db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
     db.pragma('journal_mode = WAL');
     Init_page_albumlists_statistic_Data(db)
     Init_page_artistlists_statistic_Data(db)
-
     await store_app_configs_logic_load.load_app_config()
+
+    store_app_configs_info.version = '0.2.4';
+    console.log('Current Version:', store_app_configs_info.version);
+    const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
+    await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);
+    console.log('Last Version:', store_app_configs_logic_update.getVersion());
+    if (store_app_configs_info.version < store_app_configs_logic_update.getVersion()) {
+      store_app_configs_info.version_updated = 1;
+      store_app_configs_info.version_update_address = store_app_configs_logic_update.url
+    }
   });
 </script>
 <template>
@@ -632,6 +653,20 @@
             </RouterView>
             <!--Top Bar-->
             <div class="bar_top_setapp" style="background-color: transparent">
+              <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"
+                       :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
+                       style="
+                          z-index: 100;
+                          margin-top: 34.5px;margin-right:260px;
+                          -webkit-app-region: no-drag;
+                        ">
+                <n-button quaternary circle
+                          @click="store_app_configs_info.update_show = !store_app_configs_info.update_show">
+                  <template #icon>
+                    <n-icon size="20" :depth="2"><BrowserUpdatedFilled/></n-icon>
+                  </template>
+                </n-button>
+              </n-badge>
               <section
                 style="
                   -webkit-app-region: no-drag;
@@ -782,6 +817,34 @@
         </n-drawer-content>
       </n-drawer>
     </n-config-provider>
+    <!-- right drwaer of update -->
+    <n-config-provider :theme="darkTheme">
+      <n-drawer
+        v-model:show="store_app_configs_info.update_show"
+        :width="440"
+        style="
+          border-radius: 12px 0 0 12px;
+          border: 1.5px solid #FFFFFF20;
+          background-color: rgba(127, 127, 127, 0.1);
+          backdrop-filter: blur(10px);
+          margin-top: 88px;margin-bottom:88px;
+        ">
+        <n-drawer-content>
+          <template #default>
+            <n-card :title="computed_i18n_Label_Update" size="medium" style="background-color: transparent">
+              <n-space vertical style="font-size: 16px; font-weight: bolder;">
+                <div>{{$t('nsmusics.view_page.current')}}{{$t('common.version')}} : {{ store_app_configs_info.version }}</div>
+                <div>{{$t('nsmusics.view_page.last_next')}}{{$t('common.version')}} : {{ store_app_configs_logic_update.version }}</div>
+                <br>
+                NSMusicS{{$t('nsmusics.view_page.install')}}{{$t('common.description')}} : <a class="link" @click="openLink('https://github.com/Super-Badmen-Viper/NSMusicS/releases')">https://github.com/Super-Badmen-Viper/NSMusicS/releases</a>
+                <br>
+                NSMusicS{{$t('nsmusics.view_page.download')}}{{$t('common.description')}} : <a class="link" @click="openLink(store_app_configs_info.version_update_address)">{{ store_app_configs_info.version_update_address }}</a>
+              </n-space>
+            </n-card>
+          </template>
+        </n-drawer-content>
+      </n-drawer>
+    </n-config-provider>
   </n-message-provider>
 </template>
 <style scoped>
@@ -841,6 +904,15 @@ nav {
 
   padding: 1rem 0;
   margin-top: 1rem;
+}
+.link {
+  color: #FFFFFF;
+  font-size: 15px;
+  text-decoration: underline ;
+}
+.link:hover {
+  color: #3DC3FF;
+  background-color: transparent;
 }
 ::-webkit-scrollbar {
   display: none;

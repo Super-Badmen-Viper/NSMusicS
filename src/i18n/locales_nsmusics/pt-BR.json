@@ -33,7 +33,11 @@
             "modelLocal": "Modo local",
             "modelServer": "Modo do servidor",
             "modelSelect": "Seleção da fonte de música",
-            "modelSelect_explain": "Selecione a fonte de música para o NSMusicS (local/servidor)"
+            "modelSelect_explain": "Selecione a fonte de música para o NSMusicS (local/servidor)",
+            "current": "Atual",
+            "last_next": "Último",
+            "install": "Instalar",
+            "download": "Baixar"
         },
         "view_player": {
             "view_seting": {

@@ -33,7 +33,11 @@
             "modelLocal": "Tryb lokalny",
             "modelServer": "Tryb serwera",
             "modelSelect": "Wybór trybu źródła dźwięku",
-            "modelSelect_explain": "Wybierz źródło dźwięku dla NSMusicS (lokalny/serwer)"
+            "modelSelect_explain": "Wybierz źródło dźwięku dla NSMusicS (lokalny/serwer)",
+            "current": "Bieżący",
+            "last_next": "Najnowszy",
+            "install": "Zainstaluj",
+            "download": "Pobierz"
         },
         "view_player": {
             "view_seting": {

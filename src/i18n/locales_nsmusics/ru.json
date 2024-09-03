@@ -33,7 +33,11 @@
             "modelLocal": "Локальный режим",
             "modelServer": "Серверный режим",
             "modelSelect": "Выбор режима звукового источника",
-            "modelSelect_explain": "Выберите источник звука для NSMusicS (локальный/серверный)"
+            "modelSelect_explain": "Выберите источник звука для NSMusicS (локальный/серверный)",
+            "current": "Текущий",
+            "last_next": "Последний",
+            "install": "Установить",
+            "download": "Скачать"
         },
         "view_player": {
             "view_seting": {

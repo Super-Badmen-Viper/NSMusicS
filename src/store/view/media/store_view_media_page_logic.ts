@@ -218,7 +218,9 @@ watch(() => store_view_media_page_logic.page_songlists_selected, (newValue) => {
 watch(() => store_view_media_page_logic.list_data_StartUpdate, (newValue) => {
     if(newValue) {
         store_view_media_page_logic.page_songlists_keyword = '';
-        store_view_media_page_logic.page_songlists_keywordFilter = '';
+        if (store_view_media_page_logic.list_selected_Hand_click) {
+            store_view_media_page_logic.page_songlists_keywordFilter = ""
+        }
         store_router_data_info.find_music_model = false;
         store_view_media_page_fetchData.fetchData_Media()
 

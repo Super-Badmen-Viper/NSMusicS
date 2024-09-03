@@ -1,4 +1,5 @@
 import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 export class Set_PlaylistInfo_To_LocalSqlite {
     private getUniqueId(db: any) {
         const { v4: uuidv4 } = require('uuid');
@@ -26,7 +27,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
     }
     public Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(name: string,comment: string, duration: number,song_count: number, _public_: number,owner_id: string) {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         ///
         let new_id = this.getUniqueId(db);
         let new_date = this.getCurrentDateTime();
@@ -62,7 +63,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
     }
     public Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(id: string, name: string,comment: string, duration: number,song_count: number, _public_: number,owner_id: string) {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         ///
         let new_id = this.getUniqueId(db);
@@ -104,7 +105,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
     }
     public Set_PlaylistInfo_To_Update_DeletePlaylist_of_ND(id:string) {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         ///
         const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.playlist} WHERE id = ?`).get(id);
@@ -118,7 +119,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
 
     public Set_Selected_MediaInfo_Add_Selected_Playlist(ids: string[], playlist_id: string) {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
 
         const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.playlist} WHERE id = ?`).get(playlist_id);
@@ -146,7 +147,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
     }
     public Set_Selected_MediaInfo_Delete_Selected_Playlist(ids: string[], playlist_id: string) {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
 
         const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.playlist} WHERE id = ?`).get(playlist_id);

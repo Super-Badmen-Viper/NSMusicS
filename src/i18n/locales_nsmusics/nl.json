@@ -33,7 +33,11 @@
             "modelLocal": "Lokale modus",
             "modelServer": "Servermodus",
             "modelSelect": "Selectie van muziekbronmodus",
-            "modelSelect_explain": "Selecteer de muziekbron voor NSMusicS (lokaal/server)"
+            "modelSelect_explain": "Selecteer de muziekbron voor NSMusicS (lokaal/server)",
+            "current": "Huidige",
+            "last_next": "Laatste",
+            "install": "Installeren",
+            "download": "Downloaden"
         },
         "view_player": {
             "view_seting": {

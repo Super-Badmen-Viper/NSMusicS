@@ -197,8 +197,6 @@ watch(() => store_player_audio_info.this_audio_lyrics_string, (newValue) => {
                     return [time.split(',').map(Number), font];
                 });
 
-                console.log(`Processing line ${index}:`, timeFontPairs); // 打印解析结果，确保空格被保留
-
                 for (let i = 0; i < timeFontPairs.length; i++) {
                     let [startMs, durationMs, unknown] = timeFontPairs[i][0];
                     let nextStartMs = i < timeFontPairs.length - 1 ? timeFontPairs[i + 1][0][0] : Infinity;

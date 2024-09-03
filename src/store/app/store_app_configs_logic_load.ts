@@ -98,6 +98,7 @@ export const store_app_configs_logic_load = reactive({
             store_player_audio_logic.play_order = '' + system_Configs_Read.app_Configs.value['play_order']
             store_player_audio_logic.play_volume = Number('' + system_Configs_Read.app_Configs.value['play_volume'])
 
+
             /// view_router_history
             // init media page router histtory
             store_view_media_page_logic.page_songlists_keywordFilter = ""

@@ -33,7 +33,11 @@
             "modelLocal": "Локални режим",
             "modelServer": "Серверски режим",
             "modelSelect": "Одабир режима звучног извора",
-            "modelSelect_explain": "Одаберите извор звучног материјала за NSMusicS (локално/сервер)"
+            "modelSelect_explain": "Одаберите извор звучног материјала за NSMusicS (локално/сервер)",
+            "current": "Тренутни",
+            "last_next": "Последњи",
+            "install": "Инсталирај",
+            "download": "Преузми"
         },
         "view_player": {
             "view_seting": {

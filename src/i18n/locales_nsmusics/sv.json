@@ -33,7 +33,11 @@
             "modelLocal": "Lokalt läge",
             "modelServer": "Serverläge",
             "modelSelect": "Val av musikkälla",
-            "modelSelect_explain": "Välj musikkälla för NSMusicS (lokal/server)"
+            "modelSelect_explain": "Välj musikkälla för NSMusicS (lokal/server)",
+            "current": "Nuvarande",
+            "last_next": "Senaste",
+            "install": "Installera",
+            "download": "Ladda ner"
         },
         "view_player": {
             "view_seting": {

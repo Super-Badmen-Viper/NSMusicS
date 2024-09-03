@@ -33,7 +33,11 @@
             "modelLocal": "Modalità locale",
             "modelServer": "Modalità server",
             "modelSelect": "Selezione della sorgente musicale",
-            "modelSelect_explain": "Seleziona la sorgente della musica per NSMusicS (locale/server)"
+            "modelSelect_explain": "Seleziona la sorgente della musica per NSMusicS (locale/server)",
+            "current": "Attuale",
+            "last_next": "Ultimo",
+            "install": "Installa",
+            "download": "Scarica"
         },
         "view_player": {
             "view_seting": {

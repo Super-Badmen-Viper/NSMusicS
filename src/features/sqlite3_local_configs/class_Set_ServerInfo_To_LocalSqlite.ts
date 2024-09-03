@@ -1,5 +1,6 @@
 import {v4 as uuidv4} from "uuid";
 import path from "path";
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 
 export class Set_ServerInfo_To_LocalSqlite {
     private getUniqueId(db: any) {
@@ -29,7 +30,7 @@ export class Set_ServerInfo_To_LocalSqlite {
 
     public Set_ServerInfo_To_Update_CreateUser_of_ND(server_name:string,url:string, user_name:string,password:string) {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/nsmusics.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         ///
         let new_id = this.getUniqueId(db);
         let new_date = this.getCurrentDateTime();
@@ -55,7 +56,7 @@ export class Set_ServerInfo_To_LocalSqlite {
     }
     public Set_ServerInfo_To_Update_SetUser_of_ND(id:string,server_name:string,url:string, user_name:string,password:string) {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/nsmusics.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
         ///
         let new_date = this.getCurrentDateTime();
@@ -89,7 +90,7 @@ export class Set_ServerInfo_To_LocalSqlite {
     }
     public Set_ServerInfo_To_Update_DeleteUser_of_ND(id:string) {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/nsmusics.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
         ///
         const existingRecord = db.prepare('SELECT * FROM system_servers_config WHERE id = ?').get(id);

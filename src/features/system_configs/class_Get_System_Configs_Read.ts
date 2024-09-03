@@ -3,6 +3,7 @@ import { App_Configs } from '@/models/app_Configs/class_App_Configs';
 import { Player_Configs_of_Audio_Info } from '@/models/app_Configs/class_Player_Configs_of_Audio_Info';
 import { Player_Configs_of_UI } from '@/models/app_Configs/class_Player_Configs_of_UI';
 import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 
 export class Class_Get_System_Configs_Read {
     public app_Configs = ref(
@@ -17,7 +18,7 @@ export class Class_Get_System_Configs_Read {
             username: '',
             password: '',
             play_order: '',
-            play_volume: '',
+            play_volume: 0,
         }))
     public library_Configs = ref(
         new Library_Configs({
@@ -74,7 +75,7 @@ export class Class_Get_System_Configs_Read {
         const path = require('path');
         let db:any = null;
 
-        db = require('better-sqlite3')(path.resolve('resources/nsmusics.db'));
+        db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
 
         db.prepare(`SELECT * FROM system_app_config`).all().forEach((row: Config_Props, index: number) => {

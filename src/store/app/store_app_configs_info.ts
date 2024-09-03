@@ -21,7 +21,12 @@ export const store_app_configs_info = reactive({
     theme_app: null,
     update_theme: false,
 
-    window_innerWidth: window.innerWidth
+    window_innerWidth: 0,
+
+    update_show: false,
+    version: '',
+    version_updated: 0,
+    version_update_address: '',
 });
 watch(() => store_app_configs_info.update_lang, (newValue) => {
     console.log(newValue)

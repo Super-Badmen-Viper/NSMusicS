@@ -22,6 +22,7 @@ import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_lo
 import {
     store_local_data_set_annotionInfo
 } from "@/store/local/local_data_synchronization/store_local_data_set_annotionInfo";
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 const path = require('path');
 
 export class Set_Navidrome_Data_To_LocalSqlite{
@@ -73,7 +74,7 @@ export class Set_Navidrome_Data_To_LocalSqlite{
         const NodeCache = require('node-cache');
         const cache = new NodeCache();
 
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec("DELETE FROM server_album");
         db.exec("DELETE FROM server_annotation");
@@ -389,7 +390,7 @@ export class Set_Navidrome_Data_To_LocalSqlite{
         const playlists = getPlaylists_all["subsonic-response"]["playlists"]["playlist"];
         let playlSongs = []
 
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
 
         db.exec("DELETE FROM server_playlist");

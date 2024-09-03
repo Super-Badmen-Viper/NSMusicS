@@ -1,9 +1,10 @@
 import moment from "moment/moment";
 import { store_server_user_model } from '@/store/server/store_server_user_model'
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 export class Get_HomeDataInfos_From_LocalSqlite {
     public Get_Annotation_Maximum_Playback() {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         const annsMap = new Map();
         const anns = db.prepare(`SELECT * FROM ${store_server_user_model.annotation} WHERE item_type = 'album' ORDER BY play_count desc LIMIT 18`).all();
@@ -68,7 +69,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
     }
     public Get_AlbumFiles_Random_Search() {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         const rows = db.prepare(`SELECT * FROM ${store_server_user_model.album} ORDER BY RANDOM() LIMIT 18`).all();
         const result: Album[] = []
@@ -123,7 +124,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
     }
     public Get_Annotation_Recently_Added() {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         const rows = db.prepare(`SELECT * FROM ${store_server_user_model.album} ORDER BY created_at desc LIMIT 18`).all();
         const result: Album[] = []
@@ -178,7 +179,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
     }
     public Get_Annotation_Recently_Played() {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         const annsMap = new Map();
         const anns = db.prepare(`SELECT * FROM ${store_server_user_model.annotation} WHERE item_type = 'album' ORDER BY play_date desc LIMIT 18`).all();

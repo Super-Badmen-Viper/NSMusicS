@@ -1,4 +1,5 @@
 import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 export class Set_AnnotationInfo_To_LocalSqlite {
     private getUniqueId(db: any) {
         const { v4: uuidv4 } = require('uuid');
@@ -26,7 +27,7 @@ export class Set_AnnotationInfo_To_LocalSqlite {
     }
     public Set_MediaInfo_Add_Selected_Favorite(ids: string[], value: Boolean) {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
 
         const insertStmt = db.prepare(`
@@ -62,7 +63,7 @@ export class Set_AnnotationInfo_To_LocalSqlite {
     }
     public Set_MediaInfo_Delete_Selected_Favorite(ids: string[], value: Boolean) {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
 
         const updateStmt = db.prepare(`
@@ -84,7 +85,7 @@ export class Set_AnnotationInfo_To_LocalSqlite {
     }
     public Set_MediaInfo_To_Selected_PlayCount_of_Delete(ids: string[], value: Boolean) {
         const path = require('path');
-        const db = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
 
         const updateStmt = db.prepare(`

@@ -33,7 +33,11 @@
             "modelLocal": "ローカルモード",
             "modelServer": "サーバーモード",
             "modelSelect": "音楽ソースの選択",
-            "modelSelect_explain": "NSMusicSの音楽ソース（ローカル/サーバー）を選択してください"
+            "modelSelect_explain": "NSMusicSの音楽ソース（ローカル/サーバー）を選択してください",
+            "current": "現在の",
+            "last_next": "最新",
+            "install": "インストール",
+            "download": "ダウンロード"
         },
         "view_player": {
             "view_seting": {

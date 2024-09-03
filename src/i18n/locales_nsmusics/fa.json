@@ -33,7 +33,11 @@
       "modelLocal": "حالت محلی",
       "modelServer": "حالت سرور",
       "modelSelect": "انتخاب منبع موسیقی",
-      "modelSelect_explain": "منبع موسیقی NSMusicS را انتخاب کنید (محلی/سرور)"
+      "modelSelect_explain": "منبع موسیقی NSMusicS را انتخاب کنید (محلی/سرور)",
+      "current": "فعلی",
+      "last_next": "آخرین",
+      "install": "نصب",
+      "download": "دانلود"
     },
     "view_player": {
       "view_seting": {

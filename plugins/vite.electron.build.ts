@@ -43,9 +43,10 @@ export const viteElectronBuild = (): Plugin => {
                         app: path.join(process.cwd(), "dist"), //app目录
                     },
                     asar: true,
-                    win:{
-                        target:'nsis',
-                        icon: 'build/NSMusicS.ico'
+                    win: {
+                        target: 'nsis',
+                        icon: 'build/NSMusicS.ico',
+                        requestedExecutionLevel: 'requireAdministrator'
                     },
                     linux: {
                         target: 'AppImage',
@@ -67,18 +68,12 @@ export const viteElectronBuild = (): Plugin => {
                         createStartMenuShortcut: true,
                         shortcutName: 'NSMusicS'
                     },
-                    extraResources:{
-                        from:'./resources/',
-                        to:''
+                    extraResources: {
+                        from: './resources/',
+                        to: ''
                     },
-                    // publish: {
-                    //     provider: 'github',
-                    //     owner: 'Super-Badmen-Viper',
-                    //     repo: 'NSMusicS',
-                    //     releaseType: 'release',
-                    // }
                 }
-            })
+            });
         }
     }
 }

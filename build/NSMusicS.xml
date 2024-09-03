@@ -1,7 +1,7 @@
-publish:
-  provider: github
-  owner: Super-Badmen-Viper
-  repo: NSMusicS
-releaseInfo:
-  releaseNotes: |
-    这是更新日志
+<?xml version="1.0" encoding="utf-8"?>
+<item>
+<version>0.2.4</version>
+<url>https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-v0.2.4/NSMusicS.Setup.0.2.4.exe</url>
+<changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
+<mandatory>false</mandatory>
+</item>

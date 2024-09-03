@@ -33,7 +33,11 @@
             "modelLocal": "本地模式",
             "modelServer": "服务器模式",
             "modelSelect": "音源模式选择",
-            "modelSelect_explain": "选择NSMusicS的音源来源(本地/服务器)"
+            "modelSelect_explain": "选择NSMusicS的音源来源(本地/服务器)",
+            "current": "当前",
+            "last_next": "最新",
+            "install": "安装",
+            "download": "下载"
         },
         "view_player": {
             "view_seting": {

@@ -647,7 +647,7 @@
             v-model:show="drawer_volume_show"      
             placement="bottom"
             :width="77"
-            :height="226"
+            :height="236"
             to="#backpanel_voice"
             show-mask="transparent"
             style="border-radius: 10px;"

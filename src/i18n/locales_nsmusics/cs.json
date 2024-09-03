@@ -33,7 +33,11 @@
             "modelLocal": "Místní režim",
             "modelServer": "Serverový režim",
             "modelSelect": "Výběr režimu zvukového zdroje",
-            "modelSelect_explain": "Vyberte zdroj zvuku pro NSMusicS (místní/serwerový)"
+            "modelSelect_explain": "Vyberte zdroj zvuku pro NSMusicS (místní/serwerový)",
+            "current": "Aktuální",
+            "last_next": "Nejnovější",
+            "install": "Nainstalovat",
+            "download": "Stáhnout"
         },
         "view_player": {
             "view_seting": {
