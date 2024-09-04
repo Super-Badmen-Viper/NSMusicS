@@ -54,8 +54,6 @@
 #### If you would like to experience the latest development progress of NSMusicS Electron:
  - If you haven't installed Navidrome, please install and start its service, and then add your computer's music to Navidrome.
  - Copy and replace the navidrome.db file located in the resources folder of the folder where NSMusicS Electron is installed with the navidrome installation location \ navidrome installation version \ navidrome.db.
-#### Why is it necessary to install Navidrome for this test version?：
- - Because the library management module has not been written yet, Navidrome is temporarily borrowed to achieve this. After the official version is released, users can choose whether to be compatible with Navidrome (if compatibility is needed, Navidrome service must exist on your host).
 ```sh
 cd NSMusicS
 # node      -v  20.15.0
