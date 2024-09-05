@@ -11,6 +11,9 @@
         <p>
             The goal of NSMusicS is to integrate various functions (such as artificial intelligence, streaming, music library management, cross platform, etc.), which can be understood as similar to Navidrome but with more features than Navidrome. It wants to become a plugin integrated application that can almost have all music functions.
         </p>
+        <p>
+            The expectation of the NSMusicS series products is to enable people around the world to use free, open-source, and user-friendly music products
+        </p>
     </div>
 </div>
 
