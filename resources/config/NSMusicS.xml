@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<item>
+<version>0.2.6</version>
+<url>https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-v0.2.6/NSMusicS.Setup.0.2.6.exe</url>
+<changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
+<changelog_explain>
+    0.2.6&#10;
+    1.修复多屏幕下的超全屏化问题(扩大窗体4px大小，定位向左上偏移4px，用以铺满超全屏-覆盖任务栏)&#10;
+    2.修复本地模式导入文件夹歌曲问题(避免tag类库读取出现为空，并更新tag类库到最新版本(8.*更新到10.*版本)，报错会提示用户手动补全音乐文件tag，补全后重新导入一般即可正常使用本地模式)&#10;
+    3.修复了切换本地/服务器模式时，播放列表未更新而导致无法同步播放记录的问题(比如正在播放本地模式的歌单，直接切换为服务器模式，由于仍在播放本地模式的歌单，播放记录不会同步到本地/服务器模式的最近播放记录)&#10;
+    4.优化了播放器栏使用逻辑(播放顺序面板与音量控制面板的切换逻辑)&#10;
+    5.(BUG未知)尝试修复部分用户切换页面时音量控制异常问题(多重启几次NSMusicS大概率就能解决此问题，NSMusicS Electron的初次预热加载导致的)&#10;
+    6.优化了乐曲页面的使用体验(在乐曲页面添加播放按钮：1.顺序播放 2.循环播放 3.随机播放)&#10;
+    7.修复了main.ts初始化构建窗体预加载数据库问题(窗体构建预加载数据库行为进程，不应该先于nodejs服务挂载数据库行为进程，因为nodejs还未指定用户的数据库)&#10;
+    8.增加了左侧菜单栏中可选可隐藏指定菜单项&#10;
+    0.2.7&#10;
+    1.修复因0.2.6第3点更新，导致播放列表写入数据库保存出现无法保存也无法读取值为0的问题&#10;
+
+</changelog_explain>
+<mandatory>false</mandatory>
+</item>

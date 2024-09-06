@@ -9,7 +9,10 @@
             "musicCommunity": "コミュニティ"
         },
         "siderbar_player": {
-
+            "playback_1": "順序再生",
+            "playback_2": "リストループ",
+            "playback_3": "一曲ループ",
+            "playback_4": "ランダムプレイ"
         },
         "view_page": {
             "allSong": "全曲",
@@ -37,7 +40,8 @@
             "current": "現在の",
             "last_next": "最新",
             "install": "インストール",
-            "download": "ダウンロード"
+            "download": "ダウンロード",
+            "tag_error": "フォルダ内の音楽ファイルの‘タグ’が不足しています。音楽ファイルのタグ属性を補充してから、再度インポートしてください。"
         },
         "view_player": {
             "view_seting": {

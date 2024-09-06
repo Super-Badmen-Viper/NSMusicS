@@ -47,6 +47,7 @@ export const store_router_data_logic = reactive({
     get_media_list_of_album_id_by_album_info(value: any) {
         store_router_data_info.router.push('View_Song_List_ALL')
         store_view_media_page_logic.list_data_Hand_Search = true
+        store_view_media_page_logic.list_selected_Hand_click = false
         store_view_media_page_logic.page_songlists_selected = 'song_list_all'
         // open media_files model，keywords set
         store_view_media_page_logic.page_songlists_keywordFilter = `WHERE album_id = '${value}'`

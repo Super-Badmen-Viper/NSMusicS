@@ -1,4 +1,4 @@
-import {app, BrowserWindow} from 'electron'
+import {app, BrowserWindow, screen} from 'electron'
 const path = require('path');
 import fs from "fs";
 import {IAudioMetadata, IPicture, parseFile, selectCover} from 'music-metadata';
@@ -20,9 +20,9 @@ async function createWindow() {
     })
     win.setMenu(null)
     win.setMaximizable(false)
-    // win.webContents.openDevTools({
-    //     mode:'detach'
-    // });
+    win.webContents.openDevTools({
+        mode:'detach'
+    });
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
     if (process.argv[2]) {
         win.loadURL(process.argv[2])
@@ -59,14 +59,16 @@ async function createWindow() {
         } else {
             win.restore();
             originalBounds = win.getBounds();
-            const { screen } = require('electron');
-            const primaryDisplay = screen.getPrimaryDisplay();
-            const { width, height } = primaryDisplay.bounds;
+
+            const cursorScreenPoint = screen.getCursorScreenPoint();
+            const currentDisplay = screen.getDisplayNearestPoint(cursorScreenPoint);
+            const { width, height, x, y } = currentDisplay.bounds;
+
             win.setBounds({
-                x: -2,
-                y: -2,
-                width: width + 2,
-                height: height + 2,
+                x: x - 3,
+                y: y - 3,
+                width: width + 6,
+                height: height + 6,
             });
             isFullscreen = true;
         }
@@ -352,7 +354,7 @@ async function createWindow() {
         }
         return common.comment.join("");
     }
-    function getLyricsString(common:any) {
+    function getLyricsString(common) {
         if (!common) {
             throw new Error("common object is undefined");
         }
@@ -361,7 +363,7 @@ async function createWindow() {
         } else if (!Array.isArray(common.lyrics)) {
             common.lyrics = [common.lyrics];
         }
-        return common.lyrics.join("");
+        return common.lyrics.map(lyric => lyric.text).join("");
     }
     let percentage = 0;
     async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
@@ -763,8 +765,13 @@ async function createWindow() {
     }
     ipc.handle('metadata-get-directory-filePath',  async (event,directoryPath: any[]) => {
         console.log(directoryPath)
-        await Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath)
-        return false;
+        try {
+            await Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath)
+            return true;
+        }catch (e) {
+            console.error(e);
+            return false;
+        }
     });
     ipc.handle('metadata-get-directory-filePath-duration', async (event) => {
         try { return percentage }catch{ return 0 }

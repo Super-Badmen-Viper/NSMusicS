@@ -23,7 +23,7 @@ export const store_app_configs_logic_save = reactive({
         const app_Configs = ref(
             new App_Configs({
                 theme: store_app_configs_info.theme_name,
-                lang: store_app_configs_info.update_lang,
+                lang: store_app_configs_info.lang,
                 router_name: String(store_router_data_info.router_name),
                 app_left_menu_select_activeKey: String(store_app_configs_info.app_left_menu_select_activeKey),
                 app_left_menu_collapsed: String(store_app_configs_info.app_left_menu_collapsed),
@@ -33,6 +33,7 @@ export const store_app_configs_logic_save = reactive({
                 password: String(store_server_user_model.password),
                 play_order: String(store_player_audio_logic.play_order),
                 play_volume: String(store_player_audio_logic.play_volume),
+                selectd_props_app_sidebar: JSON.stringify(store_app_configs_info.selectd_props_app_sidebar)
             }));
         let system_Configs_Write = new Class_Set_System_Configs_Write()
         system_Configs_Write.system_app_config(

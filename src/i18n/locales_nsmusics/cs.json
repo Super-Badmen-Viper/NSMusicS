@@ -9,7 +9,10 @@
             "musicCommunity": "Komunita"
         },
         "siderbar_player": {
-
+            "playback_1": "Sekvenční přehrávání",
+            "playback_2": "Smyčka seznamu",
+            "playback_3": "Smyčka jedné skladby",
+            "playback_4": "Náhodné přehrávání"
         },
         "view_page": {
             "allSong": "Všechny Skvely",
@@ -37,7 +40,8 @@
             "current": "Aktuální",
             "last_next": "Nejnovější",
             "install": "Nainstalovat",
-            "download": "Stáhnout"
+            "download": "Stáhnout",
+            "tag_error": "Chybí 'značka' pro hudobní soubory ve složce. Prosím doplňte atributy značky hudobních souborů a poté je znovu naimportujte."
         },
         "view_player": {
             "view_seting": {

@@ -547,7 +547,7 @@
                   @error="handleImageError"
                   style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
                   :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
-                <div class="hover-overlay">
+                <div class="hover-overlay" @dblclick="Open_this_album_SongList_click(item.id)">
                   <div class="hover-content">
                     <button
                       class="play_this_album"

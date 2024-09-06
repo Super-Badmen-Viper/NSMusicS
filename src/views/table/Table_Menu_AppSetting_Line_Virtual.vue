@@ -174,6 +174,7 @@
   import {store_server_user_model} from "@/store/server/store_server_user_model";
   import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
   import {store_app_configs_logic_theme} from "@/store/app/store_app_configs_logic_theme";
+  import {store_local_db_info} from "@/store/local/store_local_db_info";
   const theme_value = ref('lightTheme')
   const theme_options = ref([
     {
@@ -204,13 +205,14 @@
         if (folderPath) {
           store_server_user_model.library_path = folderPath;
           clearInterval(timer_percentage.value);
-          ipcRenderer.invoke('metadata-get-directory-filePath', [folderPath])
+          store_local_db_info.result_local = await ipcRenderer.invoke('metadata-get-directory-filePath', [folderPath])
               .then(filePath => {
                 library_path_search.value = filePath;
                 ipcRenderer.send('window-reset-all');
               })
               .catch(error => {
                 console.error('Error getting directory file path:', error);
+                store_local_db_info.result_local = false
               });
           timer_percentage.value = setInterval(synchronize_percentage_of_library_path_search, 200);
           console.log(folderPath);
@@ -227,6 +229,13 @@
   async function synchronize_percentage_of_library_path_search(){
     store_server_users.percentage_of_local = await ipcRenderer.invoke('metadata-get-directory-filePath-duration');
   }
+  const stopWatching_result_local = watch(() => store_local_db_info.result_local, (newValue) => {
+    if(!newValue) {
+      store_local_db_info.result_local = true
+      message.error(t('nsmusics.view_page.selectLibrary') + t('error.genericError'))
+      message.info(store_server_user_model.library_path + ' ' + t('nsmusics.view_page.tag_error'))
+    }
+  });
 
   //////
   const selectd_props_home_page = ref<(string | number)[] | null>(null)
@@ -264,21 +273,21 @@
   }
   const create_menuOptions_appBar = (): MenuOption[] => {
     return [
-      {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.menu'))),key: 'go_back_menu',icon: renderIcon(MenuIcon),},
+      {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.menu'))),key: 'View_Menu_AppSetting',icon: renderIcon(MenuIcon),},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('common.home'))),key: 'go_back_home',icon: renderIcon(Home28Regular),},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('common.home'))),key: 'View_Home_MusicLibrary_Browse',icon: renderIcon(Home28Regular),},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'go_albums_list',icon: renderIcon(AlbumFilled)},
-      {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'go_songs_list',icon: renderIcon(MusicNoteRound)},
-      {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'go_artist_list',icon: renderIcon(UserAvatarFilledAlt)},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('entity.genre_other'))),key: 'go_other',icon: renderIcon(Flag16Regular)},
+      {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'View_Album_List_ALL',icon: renderIcon(AlbumFilled)},
+      {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'View_Song_List_ALL',icon: renderIcon(MusicNoteRound)},
+      {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'View_Artist_List_ALL',icon: renderIcon(UserAvatarFilledAlt)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('entity.genre_other'))),key: 'View_Updateing',icon: renderIcon(Flag16Regular)},
       {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.guessLike'))),key: 'go_other',icon: renderIcon(DocumentHeart20Regular)},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.karaoke'))),key: 'go_other',icon: renderIcon(SlideMicrophone32Regular)},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.identifySong'))),key: 'go_other',icon: renderIcon(Hearing)},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'go_other',icon: renderIcon(LibraryMusicOutlined)},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'go_other',icon: renderIcon(lyric)},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'go_other',icon: renderIcon(PeopleCommunity16Regular)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.guessLike'))),key: 'View_Updateing',icon: renderIcon(DocumentHeart20Regular)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.karaoke'))),key: 'View_Updateing',icon: renderIcon(SlideMicrophone32Regular)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.identifySong'))),key: 'View_Updateing',icon: renderIcon(Hearing)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'View_Updateing',icon: renderIcon(LibraryMusicOutlined)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'View_Updateing',icon: renderIcon(lyric)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'View_Updateing',icon: renderIcon(PeopleCommunity16Regular)},
     ]
   };
 
@@ -435,6 +444,7 @@
   onBeforeUnmount(() => {
     stopWatching_collapsed_width()
     stopWatching_window_innerWidth()
+    stopWatching_result_local()
     if (timer.value) {
       clearInterval(timer.value);
       timer.value = null;
@@ -669,7 +679,7 @@
                     v-model:value="$i18n.locale"
                     :options="languages"
                     style="width: 207px;margin-top: -4px;"
-                    @update:value="store_app_configs_info.update_lang = $i18n.locale"
+                    @update:value="store_app_configs_info.lang = $i18n.locale"
                   />
                 </n-space>
                 <n-divider style="margin: 0;"/>
@@ -738,12 +748,24 @@
                       </template>
                       {{ $t('nsmusics.view_page.selectLibrary') + '?' }}
                       <template #action>
-                        <n-button size="small" @click="show_selectFolder = false">
-                          {{ $t('common.cancel') }}
-                        </n-button>
-                        <n-button size="small" @click="selectFolder">
-                          {{ $t('common.confirm') }}
-                        </n-button>
+                        <n-space vertical>
+                          <n-space>
+                            <n-button size="small" @click="show_selectFolder = false">
+                              {{ $t('common.cancel') }}
+                            </n-button>
+                            <n-button size="small" @click="selectFolder">
+                              {{ $t('common.confirm') }}
+                            </n-button>
+                          </n-space>
+                          <n-button size="small"
+                                    @click="
+                                      show_selectFolder = false;
+                                      store_local_db_info.set_clear_all_local_data()
+                                    "
+                          >
+                            {{ $t('common.clear') + ' ' + $t('nsmusics.view_page.modelLocal')}}
+                          </n-button>
+                        </n-space>
                       </template>
                     </n-popconfirm>
                     <n-progress
@@ -776,7 +798,7 @@
                     />
                   </n-space>
                 </n-space>
-                <n-divider style="margin: 0;"/>
+                <n-divider v-if="false" style="margin: 0;"/>
                 <n-space v-if="false" vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space justify="space-between" align="center">
                     <n-space vertical>
@@ -803,8 +825,8 @@
                     </n-grid>
                   </n-checkbox-group>
                 </n-space>
-                <n-divider v-if="false" style="margin: 0;"/>
-                <n-space v-if="false" vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-divider style="margin: 0;"/>
+                <n-space vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space justify="space-between" align="center">
                     <n-space vertical>
                       <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sidebarConfiguration') }}</span>

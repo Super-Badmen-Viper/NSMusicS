@@ -36,18 +36,17 @@ watch(() => store_router_data_info.router_select, async (newValue) => {
         } else if (newValue === 'View_Song_List_ALL') {
             store_router_data_info.router_select_model_media = true
             store_view_media_page_fetchData.fetchData_Media()
+            /// Synchronize API data
+            if (store_server_user_model.model_select === 'navidrome') {
+                // get server all playlist
+                await store_server_user_model.Get_UserData_Synchronize_ToLocal_of_ND()
+            }
         } else if (newValue === 'View_Album_List_ALL') {
             store_router_data_info.router_select_model_album = true
             store_view_album_page_fetchData.fetchData_Album()
         } else if (newValue === 'View_Artist_List_ALL') {
             store_router_data_info.router_select_model_artist = true
             store_view_artist_page_fetchData.fetchData_Artist()
-        }
-
-        /// Synchronize API data
-        if (store_server_user_model.model_select === 'navidrome') {
-            // get server all playlist
-            await store_server_user_model.Get_UserData_Synchronize_ToLocal_of_ND()
         }
     }
 });

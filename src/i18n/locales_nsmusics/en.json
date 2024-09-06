@@ -9,7 +9,10 @@
             "musicCommunity": "colony"
         },
         "siderbar_player": {
-
+            "playback_1": "Sequential Playback",
+            "playback_2": "List Loop",
+            "playback_3": "Single Loop",
+            "playback_4": "Random Playback"
         },
         "view_page": {
             "allSong": "all Song",
@@ -37,7 +40,8 @@
             "current": "Current",
             "last_next": "Latest",
             "install": "Install",
-            "download": "Download"
+            "download": "Download",
+            "tag_error": "The ‘tag’ for music files in the folder is missing. Please complete the tag attributes for the music files and then re-import."
         },
         "view_player": {
             "view_seting": {

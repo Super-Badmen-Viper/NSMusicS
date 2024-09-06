@@ -16,6 +16,9 @@ export const store_player_audio_logic = reactive({
     player_use_background_filter_blur: true,
     player_save_new_data: false,
     this_audio_initial_trigger: false,
+
+    drawer_order_show: false,
+    drawer_volume_show: false,
 });
 
 watch(() => store_player_audio_logic.player_use_lottie_animation, (newValue) => {

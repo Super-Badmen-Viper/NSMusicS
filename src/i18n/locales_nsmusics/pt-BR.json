@@ -9,7 +9,10 @@
             "musicCommunity": "Comunidade"
         },
         "siderbar_player": {
-
+            "playback_1": "Reprodução sequencial",
+            "playback_2": "Loop da lista",
+            "playback_3": "Loop de faixa",
+            "playback_4": "Reprodução aleatória"
         },
         "view_page": {
             "allSong": "Todas as Músicas",
@@ -37,7 +40,8 @@
             "current": "Atual",
             "last_next": "Último",
             "install": "Instalar",
-            "download": "Baixar"
+            "download": "Baixar",
+            "tag_error": "A 'tag' para arquivos de música na pasta está faltando. Por favor, complete os atributos da tag para os arquivos de música e depois reimporte."
         },
         "view_player": {
             "view_seting": {

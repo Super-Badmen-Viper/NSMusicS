@@ -51,7 +51,7 @@ export const store_router_history_data_of_media = reactive({
                 }
             }
         }
-        if (this.router_history_datas_of_Media.length >= 9)
+        if (this.router_history_datas_of_Media.length >= 18)
             this.router_history_datas_of_Media.shift();
         this.router_history_datas_of_Media.push(new_Router_date);
         this.router_select_history_date_of_Media = new_Router_date;

@@ -19,6 +19,7 @@ export class Class_Get_System_Configs_Read {
             password: '',
             play_order: '',
             play_volume: 0,
+            selectd_props_app_sidebar: ''
         }))
     public library_Configs = ref(
         new Library_Configs({

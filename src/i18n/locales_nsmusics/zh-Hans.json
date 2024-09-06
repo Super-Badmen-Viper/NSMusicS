@@ -9,7 +9,10 @@
             "musicCommunity": "音乐社区"
         },
         "siderbar_player": {
-
+            "playback_1": "顺序播放",
+            "playback_2": "列表循环",
+            "playback_3": "单曲循环",
+            "playback_4": "随机播放"
         },
         "view_page": {
             "allSong": "所有歌曲",
@@ -37,7 +40,8 @@
             "current": "当前",
             "last_next": "最新",
             "install": "安装",
-            "download": "下载"
+            "download": "下载",
+            "tag_error": "文件夹内音乐文件的‘tag’缺失, 请先补全音乐文件tag属性, 然后再次重新导入"
         },
         "view_player": {
             "view_seting": {

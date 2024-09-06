@@ -10,4 +10,5 @@ interface App_Configs_Props {
   password: any,
   play_order: any,
   play_volume: number,
+  selectd_props_app_sidebar: string,
 };

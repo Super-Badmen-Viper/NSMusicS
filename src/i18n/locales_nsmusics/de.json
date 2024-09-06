@@ -9,7 +9,10 @@
             "musicCommunity": "Gemeinschaft"
         },
         "siderbar_player": {
-
+            "playback_1": "Sequenzielles Abspielen",
+            "playback_2": "Liste Wiederholen",
+            "playback_3": "Einzelschleife",
+            "playback_4": "Zufälliges Abspielen"
         },
         "view_page": {
             "allSong": "Alle Lieder",
@@ -37,7 +40,8 @@
             "current": "Aktuell",
             "last_next": "Neueste",
             "install": "Installieren",
-            "download": "Herunterladen"
+            "download": "Herunterladen",
+            "tag_error": "Die 'Tag' für Musikdateien im Ordner fehlt. Bitte vervollständigen Sie die Tag-Attribute der Musikdateien und importieren Sie sie dann erneut."
         },
         "view_player": {
             "view_seting": {

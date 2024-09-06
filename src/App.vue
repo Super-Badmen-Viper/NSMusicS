@@ -162,6 +162,8 @@
   store_router_data_info.router = useRouter();
   import routers from './router'
   import {store_app_configs_logic_update} from "@/store/app/store_app_configs_logic_update";
+  import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
+  import {store_local_db_info} from "@/store/local/store_local_db_info";
   routers.beforeEach((to, from, next) => {
     if(to.name !== from.name){
       store_router_data_logic.clear_Files_temporary()
@@ -183,8 +185,6 @@
       }else if(to.name === 'View_Song_List_ALL'){
         store_router_data_info.router_select_model_media = true
         store_router_data_info.router_name = to.name
-        store_view_media_page_logic.page_songlists_keyword = ''
-        store_view_media_page_logic.page_songlists_keywordFilter = ''
       }else if(to.name === 'View_Album_List_ALL'){
         store_router_data_info.router_select_model_album = true
         store_router_data_info.router_name = to.name
@@ -572,16 +572,30 @@
     Init_page_artistlists_statistic_Data(db)
     await store_app_configs_logic_load.load_app_config()
 
-    store_app_configs_info.version = '0.2.4';
-    console.log('Current Version:', store_app_configs_info.version);
-    const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
-    await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);
-    console.log('Last Version:', store_app_configs_logic_update.getVersion());
-    if (store_app_configs_info.version < store_app_configs_logic_update.getVersion()) {
-      store_app_configs_info.version_updated = 1;
+    try {
+      store_app_configs_info.version = '0.2.6';
+      console.log('Current Version:', store_app_configs_info.version);
+      const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
+      await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);
+      console.log('Last Version:', store_app_configs_logic_update.getVersion());
+      store_app_configs_info.version_update_explain = store_app_configs_logic_update.changelog_explain.replace(/&#10;/g, '<br>')
       store_app_configs_info.version_update_address = store_app_configs_logic_update.url
+      if (store_app_configs_info.version < store_app_configs_logic_update.getVersion()) {
+        store_app_configs_info.version_updated = 1;
+      }
+    }catch {
+      store_app_configs_info.version_updated = 0;
     }
   });
+  function drawer_close_of_player_bar(){
+    store_player_audio_logic.drawer_order_show = false;
+    store_player_audio_logic.drawer_volume_show = false;
+    // store_playlist_appearance.playlist_show = false;
+    // store_player_sound_more.player_show_sound_more = false;
+    // store_player_sound_speed.player_show_sound_speed = false;
+    // store_player_sound_effects.player_show_sound_effects = false;
+    // store_app_configs_info.update_show = false;
+  }
 </script>
 <template>
   <n-message-provider>
@@ -589,7 +603,7 @@
     <n-config-provider class="this_App" :theme="store_app_configs_info.theme">
       <n-global-style />
       <n-message-provider class="this_App">
-        <n-layout has-sider class="this_App" embedded>
+        <n-layout has-sider class="this_App" embedded @click="drawer_close_of_player_bar">
           <!--Left Router_Menu-->
           <n-layout-sider
             class="n_layout_sider"
@@ -652,7 +666,7 @@
 
             </RouterView>
             <!--Top Bar-->
-            <div class="bar_top_setapp" style="background-color: transparent">
+            <div class="bar_top_setapp" style="background-color: transparent" @click="drawer_close_of_player_bar">
               <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"
                        :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
                        style="
@@ -711,7 +725,7 @@
           </n-layout>
         </n-layout>
       </n-message-provider>
-    </n-config-provider>
+    </n-config-provider  >
     <!-- bottom PlayerBar and PlayerView -->
     <n-config-provider :theme="store_app_configs_info.theme_app">
       <!-- n-card can change Bar_Music_Player(text color) -->
@@ -821,7 +835,7 @@
     <n-config-provider :theme="darkTheme">
       <n-drawer
         v-model:show="store_app_configs_info.update_show"
-        :width="440"
+        :width="640"
         style="
           border-radius: 12px 0 0 12px;
           border: 1.5px solid #FFFFFF20;
@@ -836,9 +850,14 @@
                 <div>{{$t('nsmusics.view_page.current')}}{{$t('common.version')}} : {{ store_app_configs_info.version }}</div>
                 <div>{{$t('nsmusics.view_page.last_next')}}{{$t('common.version')}} : {{ store_app_configs_logic_update.version }}</div>
                 <br>
-                NSMusicS{{$t('nsmusics.view_page.install')}}{{$t('common.description')}} : <a class="link" @click="openLink('https://github.com/Super-Badmen-Viper/NSMusicS/releases')">https://github.com/Super-Badmen-Viper/NSMusicS/releases</a>
+                NSMusicS{{$t('nsmusics.view_page.install')}}{{$t('common.description')}} :
+                <a class="link" @click="openLink('https://github.com/Super-Badmen-Viper/NSMusicS/releases')">
+                  https://github.com/Super-Badmen-Viper/NSMusicS/releases
+                </a>
                 <br>
                 NSMusicS{{$t('nsmusics.view_page.download')}}{{$t('common.description')}} : <a class="link" @click="openLink(store_app_configs_info.version_update_address)">{{ store_app_configs_info.version_update_address }}</a>
+                <br>
+                <div v-html="store_app_configs_info.version_update_explain"></div>
               </n-space>
             </n-card>
           </template>

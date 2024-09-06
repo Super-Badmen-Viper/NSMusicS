@@ -9,7 +9,10 @@
       "musicCommunity": "جامعه"
     },
     "siderbar_player": {
-
+      "playback_1": "پخش ترتیبی",
+      "playback_2": "حلقه ای لیست",
+      "playback_3": "حلقه ای تک آهنگ",
+      "playback_4": "پخش تصادفی"
     },
     "view_page": {
       "allSong": "تمام آهنگ‌ها",
@@ -37,7 +40,8 @@
       "current": "فعلی",
       "last_next": "آخرین",
       "install": "نصب",
-      "download": "دانلود"
+      "download": "دانلود",
+      "tag_error": "تگ فایل های موسیقی در پوشه از دست رفته است. لطفاً ویژگی‌های برچسب فایل های موسیقی را کامل کنید و سپس دوباره وارد کنید."
     },
     "view_player": {
       "view_seting": {

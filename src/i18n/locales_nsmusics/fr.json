@@ -9,7 +9,10 @@
             "musicCommunity": "musicale"
         },
         "siderbar_player": {
-
+            "playback_1": "Lecture séquentielle",
+            "playback_2": "Boucle de liste",
+            "playback_3": "Boucle de piste",
+            "playback_4": "Lecture aléatoire"
         },
         "view_page": {
             "allSong": "Tous les morceaux",
@@ -37,7 +40,8 @@
             "current": "Actuel",
             "last_next": "Dernier",
             "install": "Installer",
-            "download": "Télécharger"
+            "download": "Télécharger",
+            "tag_error": "L'étiquette 'tag' des fichiers musicaux dans le dossier est manquante. Veuillez compléter les attributs de l'étiquette des fichiers musicaux, puis réimportez."
         },
         "view_player": {
             "view_seting": {

@@ -9,7 +9,10 @@
             "musicCommunity": "Społeczność"
         },
         "siderbar_player": {
-
+            "playback_1": "Odtwarzanie kolejno",
+            "playback_2": "Pętla listy",
+            "playback_3": "Pętla pojedynczego utworu",
+            "playback_4": "Odtwarzanie losowe"
         },
         "view_page": {
             "allSong": "Wszystkie utwory",
@@ -37,7 +40,8 @@
             "current": "Bieżący",
             "last_next": "Najnowszy",
             "install": "Zainstaluj",
-            "download": "Pobierz"
+            "download": "Pobierz",
+            "tag_error": "Brakuje 'tagu' plików muzycznych w folderze. Proszę uzupełnić atrybuty tagu plików muzycznych, a następnie zaimportować ponownie."
         },
         "view_player": {
             "view_seting": {

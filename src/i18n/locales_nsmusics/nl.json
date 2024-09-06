@@ -9,7 +9,10 @@
             "musicCommunity": "Muziekgemeen"
         },
         "siderbar_player": {
-
+            "playback_1": "Volgende afspelen",
+            "playback_2": "Lijst herhalen",
+            "playback_3": "Enkele herhaling",
+            "playback_4": "Willekeurig afspelen"
         },
         "view_page": {
             "allSong": "Alle nummers",
@@ -37,7 +40,8 @@
             "current": "Huidige",
             "last_next": "Laatste",
             "install": "Installeren",
-            "download": "Downloaden"
+            "download": "Downloaden",
+            "tag_error": "De 'tag' voor muziekbestanden in de map ontbreekt. Gelieve de tag-attributen voor de muziekbestanden aan te vullen en vervolgens opnieuw te importeren."
         },
         "view_player": {
             "view_seting": {

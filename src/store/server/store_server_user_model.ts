@@ -76,7 +76,7 @@ watch(() => store_server_user_model.model_select, async (newValue) => {
         // Refresh Router Data
         store_router_data_logic.reset_data()
         // Refresh Current AudioInfo
-        // await store_player_audio_info.reset_data()
+        await store_player_audio_info.reset_data()
         //
         if (store_server_user_model.model_select === 'navidrome') {
             store_server_users.percentage_of_nd = 100

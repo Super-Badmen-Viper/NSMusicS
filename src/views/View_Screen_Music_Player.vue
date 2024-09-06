@@ -134,7 +134,7 @@
     itemElements[index].style.filter = 'blur(0px)';
     itemElements[index].style.textShadow = '0 0 1px White';
     itemElements[index].style.transition = 'color 0.5s, transform 0.5s';
-    if(player_collapsed_album.value === false){
+    if(store_player_appearance.player_UI_Theme_State.player_collapsed_album === false){
       itemElements[index].style.transform = 'scale(1.1) translateY(0px)';
       itemElements[index].style.transformOrigin = 'left center';
     }else{
@@ -143,7 +143,7 @@
     }
     itemElements[index].scrollIntoView({ block: 'center', behavior: perviousIndex.value === index - 1 ? 'smooth' : 'instant' });
 
-    let color_hidden = player_lyric_color.value.slice(0, -2);
+    let color_hidden = store_player_appearance.player_UI_Theme_State.player_lyric_color.slice(0, -2);
     for (let i = index - 16; i <= index + 16; i++) {
       if (i < index) {
         const colorValue = Math.max(90 - (index - i) * 18, 0);
@@ -206,7 +206,7 @@
 
       itemElements_active[i].style.filter = 'blur(0px)';
       itemElements_active[i].style.transition = 'color 0.5s, transform 0.5s';
-      if (player_collapsed_album.value === false) {
+      if (!store_player_appearance.player_UI_Theme_State.player_collapsed_album) {
         itemElements_active[i].style.transform = 'scale(1.1) translateY(0px)';
         itemElements_active[i].style.transformOrigin = 'left center';
       } else {
@@ -244,7 +244,7 @@
     }
 
     try {
-      let color_hidden = player_lyric_color.value.slice(0, -2);
+      let color_hidden = store_player_appearance.player_UI_Theme_State.player_lyric_color.slice(0, -2);
       for (let i = 0; i < position_i_start; i++) {
         const colorValue = Math.max(90 - (index - i) * 18, 0);
         itemElements_active[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
@@ -281,7 +281,7 @@
   const handleLeave = () => {
     lyrics_list_whell.value = false;
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
-    let color_hidden = player_lyric_color.value.slice(0, -2);
+    let color_hidden = store_player_appearance.player_UI_Theme_State.player_lyric_color.slice(0, -2);
     for (let i = perviousIndex.value - 16; i <= perviousIndex.value + 16; i++) {
       if (i < perviousIndex.value) {
         const colorValue = Math.max(90 - (perviousIndex.value - i) * 18, 0);
@@ -298,15 +298,6 @@
   };
 
   ////// player_configs theme BasicInfo
-  let player_ui_theme = new Player_UI_Theme_State();
-  const player_collapsed_album = ref(false);
-  const player_collapsed_skin = ref(true)
-  const player_lyric_fontSize = ref('22px')
-  const player_lyric_fontWeight = ref('800')
-  const player_lyric_color = ref('#FAFAFB60')
-  const player_background_model_num = ref(0)
-  const player_use_lottie_animation = ref(true)
-  //
   type PlayerTheme_Style = {
     image_url: any;
 
@@ -438,35 +429,26 @@
   );
 
   ////// player_configs bind theme_all
-  const player_theme_Styles_Selected = ref<number>(0)
-  const player_theme_0_bind_style = ref<PlayerTheme_LyricItem>(player_theme_Styles.value[player_theme_Styles_Selected.value]);
+  const player_theme_0_bind_style = ref<PlayerTheme_LyricItem>(player_theme_Styles.value[
+      store_player_appearance.player_UI_Theme_State.player_theme_Styles_Selected
+      ]);
   const player_theme_set_theme = (index:number) => {
     if(index < 0 || index >= player_theme_Styles.value.length){
       return;
     }
     // set theme
     player_theme_0_bind_style.value = player_theme_Styles.value[index];
-    //
-    player_theme_Styles_Selected.value = index;
-    player_background_model_num.value = player_theme_0_bind_style.value.id;
-    player_lyric_fontSize.value = player_theme_0_bind_style.value.normalStyle.fontSize;
-    player_lyric_fontWeight.value = player_theme_0_bind_style.value.normalStyle.fontWeight;
-    player_lyric_color.value = player_theme_0_bind_style.value.normalStyle.color;
-    player_collapsed_album.value = player_theme_0_bind_style.value.normalStyle.player_collapsed_album;
-    player_collapsed_skin.value = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin;
+    player_lyric_panel_fontsize.value = Number(store_player_appearance.player_UI_Theme_State.player_lyric_fontSize.replace('px',''));
 
-    player_lyric_panel_fontsize.value = Number(player_lyric_fontSize.value.replace('px',''));
+    store_player_appearance.player_UI_Theme_State.player_theme_Styles_Selected = index;
+    store_player_appearance.player_UI_Theme_State.player_background_model_num = player_theme_0_bind_style.value.id;
+    store_player_appearance.player_UI_Theme_State.player_lyric_fontSize = player_theme_0_bind_style.value.normalStyle.fontSize;
+    store_player_appearance.player_UI_Theme_State.player_lyric_fontWeight = player_theme_0_bind_style.value.normalStyle.fontWeight;
+    store_player_appearance.player_UI_Theme_State.player_lyric_color = player_theme_0_bind_style.value.normalStyle.color;
+    store_player_appearance.player_UI_Theme_State.player_collapsed_album = player_theme_0_bind_style.value.normalStyle.player_collapsed_album;
+    store_player_appearance.player_UI_Theme_State.player_collapsed_skin = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin;
 
-    player_ui_theme.player_theme_Styles_Selected.value = index;
-    player_ui_theme.player_background_model_num.value = player_theme_0_bind_style.value.id;
-    player_ui_theme.player_lyric_fontSize.value = player_theme_0_bind_style.value.normalStyle.fontSize;
-    player_ui_theme.player_lyric_fontWeight.value = player_theme_0_bind_style.value.normalStyle.fontWeight;
-    player_ui_theme.player_lyric_color.value = player_theme_0_bind_style.value.normalStyle.color;
-    player_ui_theme.player_collapsed_album.value = player_theme_0_bind_style.value.normalStyle.player_collapsed_album;
-    player_ui_theme.player_collapsed_skin.value = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin;
-    player_ui_theme.player_use_lottie_animation.value = player_use_lottie_animation.value;
-
-    store_player_appearance.player_UI_Theme_State = player_ui_theme
+    store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
   };
 
   ////// player_configs page_ui set
@@ -501,6 +483,7 @@
   import {store_player_appearance} from "@/store/player/store_player_appearance";
   import {store_player_audio_info} from "@/store/player/store_player_audio_info";
   import {store_player_audio_logic} from "@/store/player/store_player_audio_logic"
+  import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
   const clear_lottie_animationInstance = ref(false)
   const animationInstance_model_1_spectrum = ref<any>(null);
   const animationInstance_model_1_spectrum_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715392202806.json'))
@@ -509,40 +492,25 @@
   const animationInstance_model_2_wave = ref<any>(null);
   const animationInstance_model_2_wave_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715417974362.json'))
   let unwatch_animationInstance = watch(() => store_player_audio_info.this_audio_is_playing, (newValue) => {
-    if(player_use_lottie_animation.value) {
+    if(store_player_appearance.player_UI_Theme_State.player_use_lottie_animation) {
       if (newValue === true) {
-        if (player_background_model_num.value === 1) {
+        if (store_player_appearance.player_UI_Theme_State.player_background_model_num === 1) {
           animationInstance_model_1_spectrum.value.play();
           animationInstance_model_1_wave.value.play();
         }
-        if (player_background_model_num.value === 2)
+        if (store_player_appearance.player_UI_Theme_State.player_background_model_num === 2)
           animationInstance_model_2_wave.value.play();
       } else {
-        if (player_background_model_num.value === 1) {
+        if (store_player_appearance.player_UI_Theme_State.player_background_model_num === 1) {
           animationInstance_model_1_spectrum.value.pause();
           animationInstance_model_1_wave.value.pause();
         }
-        if (player_background_model_num.value === 2)
+        if (store_player_appearance.player_UI_Theme_State.player_background_model_num === 2)
           animationInstance_model_2_wave.value.pause();
       }
     }
   });
 
-  ////// Load player_configs Configs
-  onMounted(() => {
-    player_background_model_num.value = store_player_appearance.player_UI_Theme_State.player_background_model_num;
-    //
-    player_lyric_fontSize.value = store_player_appearance.player_UI_Theme_State.player_lyric_fontSize;
-    player_lyric_fontWeight.value = store_player_appearance.player_UI_Theme_State.player_lyric_fontWeight;
-    player_lyric_color.value = store_player_appearance.player_UI_Theme_State.player_lyric_color;
-    player_collapsed_album.value = store_player_appearance.player_UI_Theme_State.player_collapsed_album;
-    player_collapsed_skin.value = store_player_appearance.player_UI_Theme_State.player_collapsed_skin;
-    player_theme_Styles_Selected.value = store_player_appearance.player_UI_Theme_State.player_theme_Styles_Selected;
-    //
-    player_lyric_panel_fontsize.value = Number(player_lyric_fontSize.value.replace('px',''));
-    //
-    player_use_lottie_animation.value = store_player_appearance.player_UI_Theme_State.player_use_lottie_animation;
-  });
   ////// player_configs Remove data
   onBeforeUnmount(() => {
     clearInterval(lyrics_animation);
@@ -550,7 +518,7 @@
     unwatch();
 
     unwatch_animationInstance();
-    if(player_use_lottie_animation.value) {
+    if(store_player_appearance.player_UI_Theme_State.player_use_lottie_animation) {
       animationInstance_model_1_spectrum.value.destroy()
       animationInstance_model_1_wave.value.destroy()
       animationInstance_model_2_wave.value.destroy()
@@ -568,7 +536,7 @@
     <div>
       <!--Album-->
       <img
-        v-if="player_collapsed_skin"
+        v-if="store_player_appearance.player_UI_Theme_State.player_collapsed_skin"
         id="player_bg_zindex_0"
         style="
           position: absolute;
@@ -611,7 +579,7 @@
         <n-drawer-content v-if="isVisible_Player_theme">
           <template #default>
             <n-radio-group
-              v-model:value="player_theme_Styles_Selected"
+              v-model:value="store_player_appearance.player_UI_Theme_State.player_theme_Styles_Selected"
               :on-update:value="player_theme_set_theme"
               name="radiogroup"
               style="
@@ -723,9 +691,9 @@
                   </n-icon>
                 </n-button>
                 <n-switch
-                  v-model:value="player_use_lottie_animation"
+                  v-model:value="store_player_appearance.player_UI_Theme_State.player_use_lottie_animation"
                   @update:value="
-                    player_theme_set_theme(player_theme_Styles_Selected);
+                    player_theme_set_theme(store_player_appearance.player_UI_Theme_State.player_theme_Styles_Selected);
                   "
                 >
                 </n-switch>
@@ -846,13 +814,11 @@
               <!-- left area --><!-- Album Cover -->
               <!-- show-trigger="bar" calc(50vw + 27vh + 8vw) :show-collapsed-content="false"-->
               <n-layout-sider
-                :collapsed="player_collapsed_album"
+                :collapsed="store_player_appearance.player_UI_Theme_State.player_collapsed_album"
                 @collapse="
-                  player_ui_theme.player_collapsed_album.value = true;
-                  store_player_appearance.player_UI_Theme_State = player_ui_theme"
+                  store_player_appearance.player_UI_Theme_State.player_collapsed_album = true;"
                 @expand="
-                  player_ui_theme.player_collapsed_album.value = false;
-                  store_player_appearance.player_UI_Theme_State = player_ui_theme
+                  store_player_appearance.player_UI_Theme_State.player_collapsed_album = false;
                 "
                 :show-collapsed-content="false"
                 position="static"
@@ -860,7 +826,7 @@
                 style="background-color: transparent;">
                 <n-space vertical align="end" style="margin-right:6vw;">
                   <!-- 1 方形封面-->
-                  <n-space vertical v-show="player_background_model_num === 0">
+                  <n-space vertical v-show="store_player_appearance.player_UI_Theme_State.player_background_model_num === 0">
                     <img
                       style="
                         width: 54vh;height: 54vh;
@@ -889,9 +855,9 @@
                     </div>
                   </n-space>
                   <!-- 2 旋转封面-->
-                  <n-space vertical v-show="player_background_model_num === 1">
+                  <n-space vertical v-show="store_player_appearance.player_UI_Theme_State.player_background_model_num === 1">
                     <lottie-player
-                      ref="animationInstance_model_1_wave" v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
+                      ref="animationInstance_model_1_wave" v-if="!clear_lottie_animationInstance && store_player_appearance.player_UI_Theme_State.player_use_lottie_animation"
                       autoplay
                       loop
                       mode="normal"
@@ -935,7 +901,7 @@
                       </div>
                     </div>
                     <lottie-player
-                      ref="animationInstance_model_1_spectrum" v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
+                      ref="animationInstance_model_1_spectrum" v-if="!clear_lottie_animationInstance && store_player_appearance.player_UI_Theme_State.player_use_lottie_animation"
                       autoplay
                       loop
                       mode="normal"
@@ -944,9 +910,9 @@
                     />
                   </n-space>
                   <!-- 3 炫胶唱片-->
-                  <n-space vertical style="margin-top: -3vh;" v-show="player_background_model_num === 2">
+                  <n-space vertical style="margin-top: -3vh;" v-show="store_player_appearance.player_UI_Theme_State.player_background_model_num === 2">
                     <lottie-player
-                      ref="animationInstance_model_2_wave" v-if="!clear_lottie_animationInstance && player_use_lottie_animation"
+                      ref="animationInstance_model_2_wave" v-if="!clear_lottie_animationInstance && store_player_appearance.player_UI_Theme_State.player_use_lottie_animation"
                       speed="0.8"
                       autoplay
                       loop
@@ -1059,7 +1025,7 @@
                       <n-list-item
                         class="lyrics_info"
                         :style="{
-                          textAlign: player_collapsed_album ? 'center' : 'left',
+                          textAlign: store_player_appearance.player_UI_Theme_State.player_collapsed_album ? 'center' : 'left',
                         }"
                         v-for="(item, index) in store_player_audio_info.this_audio_lyrics_info_line_font"
                         @click="handleItemDbClick(index)">
@@ -1113,8 +1079,8 @@
   background-color: #FFFFFF16;
 }
 .lyrics_text_active {
-  font-size: v-bind(player_lyric_fontSize);
-  font-weight: v-bind(player_lyric_fontWeight);
+  font-size: v-bind(store_player_appearance.player_UI_Theme_State.player_lyric_fontSize);
+  font-weight: v-bind(store_player_appearance.player_UI_Theme_State.player_lyric_fontWeight);
   //display: inline-block;
   //white-space: pre;
   max-width: calc(36vw);

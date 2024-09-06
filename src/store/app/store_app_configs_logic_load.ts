@@ -1,5 +1,6 @@
 import {reactive} from 'vue'
 import {darkTheme, lightTheme} from 'naive-ui'
+import { useI18n } from 'vue-i18n';
 import {Class_Get_System_Configs_Read} from '@/features/system_configs/class_Get_System_Configs_Read'
 import {Get_PlaylistInfo_From_LocalSqlite} from "@/features/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
 import {store_app_configs_info} from '@/store/app/store_app_configs_info'
@@ -56,8 +57,10 @@ export const store_app_configs_logic_load = reactive({
                 store_app_configs_info.theme_app = darkTheme;
             }
             store_app_configs_info.theme_name = '' + system_Configs_Read.app_Configs.value['theme']
-            store_app_configs_info.update_lang = '' + system_Configs_Read.app_Configs.value['lang']
+            store_app_configs_info.lang = '' + system_Configs_Read.app_Configs.value['lang']
             store_app_configs_info.app_left_menu_collapsed = '' + system_Configs_Read.app_Configs.value['app_left_menu_collapsed'] === 'true'
+            store_app_configs_info.selectd_props_app_sidebar = JSON.parse('' + system_Configs_Read.app_Configs.value['selectd_props_app_sidebar'])
+            this.handleUpdate_selectd_props_app_sidebar_Value(store_app_configs_info.selectd_props_app_sidebar)
             /// library_Config
             store_server_user_model.library_path = '' + system_Configs_Read.library_Configs.value['library']
             console.log(store_server_user_model.library_path)
@@ -145,5 +148,25 @@ export const store_app_configs_logic_load = reactive({
         store_router_data_info.router_name = '' + system_Configs_Read.app_Configs.value['router_name']
         store_router_data_info.router.push(store_router_data_info.router_name)
         this.app_configs_loading = false
+    },
+    handleUpdate_selectd_props_app_sidebar_Value(value: number[]){
+        let allMenuOptions = store_app_configs_info.menuOptions_appBar;
+        let removeFlags = new Array(allMenuOptions.length).fill(true);
+        value.forEach(index => {
+            if (index < allMenuOptions.length) {
+                removeFlags[index] = false;
+            }
+        });
+        removeFlags[0] = false;
+        removeFlags[1] = false;
+        removeFlags[3] = removeFlags[2];
+        if(removeFlags[4] && removeFlags[5] && removeFlags[6] && removeFlags[7])
+            removeFlags[8] = true;
+        else
+            removeFlags[8] = false;
+        let menuOptions_appBar = allMenuOptions.filter((option, index) => {
+            return !removeFlags[index];
+        });
+        store_app_configs_info.menuOptions_appBar = menuOptions_appBar
     }
 });

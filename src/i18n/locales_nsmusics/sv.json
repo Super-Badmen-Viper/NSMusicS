@@ -9,7 +9,10 @@
             "musicCommunity": "Gemenskap"
         },
         "siderbar_player": {
-
+            "playback_1": "Sequentiellt uppspelning",
+            "playback_2": "Listaloop",
+            "playback_3": "Enkel-lås",
+            "playback_4": "Slumpmässigt uppspelning"
         },
         "view_page": {
             "allSong": "Alla Låtar",
@@ -37,7 +40,8 @@
             "current": "Nuvarande",
             "last_next": "Senaste",
             "install": "Installera",
-            "download": "Ladda ner"
+            "download": "Ladda ner",
+            "tag_error": "‘tagg’ för musikfiler i mappen saknas. Var god fyll i taggattributen för musikfilerna och importera sedan igen."
         },
         "view_player": {
             "view_seting": {

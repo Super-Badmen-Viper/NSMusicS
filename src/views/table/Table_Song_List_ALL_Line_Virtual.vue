@@ -11,7 +11,14 @@ import {
   Heart24Regular,Heart28Filled,
   ChevronLeft16Filled,ChevronRight16Filled,
   Filter20Filled,MoreCircle20Regular,
+  ArrowRepeatAll16Regular,ArrowAutofitDown24Regular,
 } from '@vicons/fluent'
+import {
+  Random
+} from '@vicons/fa'
+import {
+  Play,
+} from '@vicons/ionicons5'
 import { Icon } from "@vicons/utils";
 import { Add, Close, Menu } from "@vicons/carbon";
 
@@ -186,7 +193,7 @@ let bool_input_search = false
 const click_search = () => {
   if (input_search_Value.value){
     const page_songlists_keyword = input_search_Value.value.toLowerCase();
-    store_view_media_page_logic.page_songlists_keyword = page_songlists_keyword
+    store_view_media_page_logic.get_page_songlists_keyword(page_songlists_keyword)
     bool_input_search = true
     options_Sort_key.value.forEach(element => {
       element.state_Sort = state_Sort.Default
@@ -284,7 +291,7 @@ const breadcrumbItems = ref('所有歌曲');
 const page_songlists_handleselected_updatevalue = (value: any) => {
   store_view_media_page_logic.set_media_Files_selected_all(false)
   store_view_media_page_logic.list_selected_Hand_click = true
-  store_view_media_page_logic.page_songlists_selected = value
+  store_view_media_page_logic.get_page_songlists_selected(value)
   console.log('selected_value_for_songlistall：'+value);
   breadcrumbItems.value = store_view_media_page_logic.page_songlists_options.find(option => option.value === value)?.label || '';
   bool_start_play.value = true
@@ -330,6 +337,7 @@ const handleItemDbClick = (media_file:Media_File,index:number) => {
 const handleItemClick_title = (title:string) => {
   click_count = 0;
   input_search_Value.value = title//+'accurate_search'+'__title__'
+  store_view_media_page_logic.get_page_songlists_keyword(title)
   bool_show_search_area.value = false
   show_search_area()
   click_search()
@@ -338,6 +346,7 @@ const handleItemClick_title = (title:string) => {
 const handleItemClick_artist = (artist:string) => {
   click_count = 0;
   input_search_Value.value = artist//+'accurate_search'+'__artist__'//artist不参与精确搜索
+  store_view_media_page_logic.get_page_songlists_keyword(artist)
   bool_show_search_area.value = false
   show_search_area()
   click_search()
@@ -346,6 +355,7 @@ const handleItemClick_artist = (artist:string) => {
 const handleItemClick_album = (album_id:string) => {
   click_count = 0;
   input_search_Value.value = album_id+'accurate_search'+'__album__'
+  store_view_media_page_logic.get_page_songlists_keyword(album_id+'accurate_search'+'__album__')
   bool_show_search_area.value = false
   show_search_area()
   click_search()
@@ -406,6 +416,7 @@ import {store_server_users} from "@/store/server/store_server_users";
 import {
   store_server_data_set_mediaInfo
 } from "@/store/server/server_data_synchronization/store_server_data_set_mediaInfo";
+import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 function getCurrentDateTime() {
   return new Date().toLocaleString(
       'zh-CN', {
@@ -615,6 +626,56 @@ const click_open_bulk_operation = () => {
 let click_count = 0
 const bool_start_play = ref<boolean>(true)
 
+const options_dropdown_play_mode = ref<any[]>([
+  {
+    label: computed(() => t('nsmusics.siderbar_player.playback_1')),
+    key: 'options_dropdown_play_mode_1',
+    icon() {
+      return h(NIcon, { size: 20 }, {
+        default: () => h(ArrowAutofitDown24Regular)
+      });
+    }
+  },
+  {
+    label: computed(() => t('nsmusics.siderbar_player.playback_2')),
+    key: 'options_dropdown_play_mode_2',
+    icon() {
+      return h(NIcon, { size: 20 }, {
+        default: () => h(ArrowRepeatAll16Regular)
+      });
+    }
+  },
+  {
+    label: computed(() => t('nsmusics.siderbar_player.playback_4')),
+    key: 'options_dropdown_play_mode_3',
+    icon() {
+      return h(NIcon, { size: 14 }, {
+        default: () => h(Random)
+      });
+    }
+  }
+]);
+const begin_select_SongList_ALL_Line_of_playback = (key: string | number) => {
+  click_count = 2;
+  if (key === 'options_dropdown_play_mode_1') {
+    store_player_audio_logic.play_order = 'playback-1';
+  } else if (key === 'options_dropdown_play_mode_2') {
+    store_player_audio_logic.play_order = 'playback-2';
+  } else {
+    store_player_audio_logic.play_order = 'playback-4';
+  }
+  const mediaFiles = store_view_media_page_info.media_Files_temporary;
+  if (mediaFiles.length > 0) {
+    let index;
+    if (key === 'options_dropdown_play_mode_1' || key === 'options_dropdown_play_mode_2') {
+      index = 0;
+    } else {
+      index = Math.floor(Math.random() * mediaFiles.length);
+    }
+    handleItemDbClick(mediaFiles[index], index);
+  }
+};
+
 ////// view songlist_view Remove data
 onBeforeUnmount(() => {
   stopWatching_collapsed_width()
@@ -711,6 +772,20 @@ onBeforeUnmount(() => {
         </n-button>
         <n-p style="margin-top: 6px;"> {{ $t('nsmusics.view_page.selectedSong') + ' ' + store_view_media_page_info.media_Files_selected.length }} * </n-p>
       </n-space>
+
+      <n-divider vertical style="width: 2px;height: 20px;margin-top: 8px;"/>
+      <n-dropdown
+        trigger="click" :show-arrow="true"
+        :options="options_dropdown_play_mode"
+        @select="begin_select_SongList_ALL_Line_of_playback"
+      >
+        <n-button
+            quaternary circle size="medium" style="margin-left:4px;" @click="begin_select_SongList_ALL_Line_of_playback_1">
+          <template #icon>
+            <n-icon :size="20" :depth="2"><Play/></n-icon>
+          </template>
+        </n-button>
+      </n-dropdown>
     </n-space>
     <div class="dynamic-scroller-demo">
       <DynamicScroller

@@ -9,7 +9,10 @@
             "musicCommunity": "音樂社區"
         },
         "siderbar_player": {
-
+            "playback_1": "順序播放",
+            "playback_2": "清單循環",
+            "playback_3": "單曲循環",
+            "playback_4": "隨機播放"
         },
         "view_page": {
             "allSong": "所有歌曲",
@@ -37,7 +40,8 @@
             "current": "目前",
             "last_next": "最新",
             "install": "安裝",
-            "download": "下載"
+            "download": "下載",
+            "tag_error": "資料夾內音樂檔案的‘tag’缺失，請先補全音樂檔案tag屬性，然後再次重新導入"
         },
         "view_player": {
             "view_seting": {

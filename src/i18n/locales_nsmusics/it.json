@@ -9,7 +9,10 @@
             "musicCommunity": "Comunità"
         },
         "siderbar_player": {
-
+            "playback_1": "Riproduzione sequenziale",
+            "playback_2": "Ciclo di elenco",
+            "playback_3": "Ciclo singolo",
+            "playback_4": "Riproduzione casuale"
         },
         "view_page": {
             "allSong": "Tutte le canzoni",
@@ -37,7 +40,8 @@
             "current": "Attuale",
             "last_next": "Ultimo",
             "install": "Installa",
-            "download": "Scarica"
+            "download": "Scarica",
+            "tag_error": "Il 'tag' per i file musicali nella cartella è mancante. Si prega di completare gli attributi del tag per i file musicali e quindi riimportarli."
         },
         "view_player": {
             "view_seting": {

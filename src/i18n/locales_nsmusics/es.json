@@ -9,7 +9,10 @@
             "musicCommunity": "Comunidad"
         },
         "siderbar_player": {
-
+            "playback_1": "Reproducción secuencial",
+            "playback_2": "Bucle de lista",
+            "playback_3": "Bucle de canción",
+            "playback_4": "Reproducción aleatoria"
         },
         "view_page": {
             "allSong": "Todas las Canciones",
@@ -37,7 +40,8 @@
             "current": "Actual",
             "last_next": "Último",
             "install": "Instalar",
-            "download": "Descargar"
+            "download": "Descargar",
+            "tag_error": "Falta la ‘etiqueta’ de los archivos de música en la carpeta. Por favor, complete los atributos de la etiqueta de los archivos de música y vuelva a importar."
         },
         "view_player": {
             "view_seting": {

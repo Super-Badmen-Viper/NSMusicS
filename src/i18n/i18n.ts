@@ -38,11 +38,11 @@ import {Class_Get_System_Configs_Read} from "@/features/system_configs/class_Get
 
 export class Language{
     public i18n:any;
-    public system_Configs_Read = new Class_Get_System_Configs_Read();
     constructor() {
+        let system_Configs_Read = new Class_Get_System_Configs_Read();
         const options: I18nOptions = {
             legacy: false,
-            locale: ''+this.system_Configs_Read.app_Configs.value['lang'],
+            locale: '' + system_Configs_Read.app_Configs.value['lang'],
             messages: {
                 'zhHans': { ...zhHans, ...zhHans_n },
                 'zhHant': { ...zhHant, ...zhHant_n },
