@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<item>
+<version>0.2.5</version>
+<url>https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-v0.2.5/NSMusicS.Setup.0.2.5.exe</url>
+<changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
+<changelog_explain>
+    0.2.5&#10;
+    1.修复多屏幕下的超全屏化问题(检测多屏幕的初始位置计算)&#10;
+    2.修复打开此专辑的逻辑问题(将专辑id字段->响应式驱动改为->事件驱动)&#10;
+    3.完善播放顺序组件与音量设置组件的自动关闭逻辑&#10;
+    4.简化播放器界面的自动配置字段读写&#10;
+    0.2.6&#10;
+    1.修复多屏幕下的超全屏化问题(扩大窗体大小，已铺满全屏)&#10;
+    2.修复本地模式导入文件夹歌曲问题(避免tag类库读取出现为空，并提示用户手动更新音乐文件tag)&#10;
+</changelog_explain>
+<mandatory>false</mandatory>
+</item>
