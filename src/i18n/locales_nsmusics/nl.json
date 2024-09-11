@@ -41,7 +41,8 @@
             "last_next": "Laatste",
             "install": "Installeren",
             "download": "Downloaden",
-            "tag_error": "De 'tag' voor muziekbestanden in de map ontbreekt. Gelieve de tag-attributen voor de muziekbestanden aan te vullen en vervolgens opnieuw te importeren."
+            "tag_error": "De 'tag' voor muziekbestanden in de map ontbreekt. Gelieve de tag-attributen voor de muziekbestanden aan te vullen en vervolgens opnieuw te importeren.",
+            "drag_sort": "Sleep om te sorteren"
         },
         "view_player": {
             "view_seting": {
@@ -52,13 +53,16 @@
                 "coverBase_4": "Basis",
                 "lyricSize": "Tekstgrootte",
                 "lyricSpeed": "Tekstsnelheid",
+                "lyricWright": "dikte van de lettertype van de lyrics",
                 "coverBaseVague": "Vage",
                 "lyricsAnimation": "Animatie",
                 "lyricsAnimation_line_1": "Regelmatig",
                 "lyricsAnimation_byte_2": "Karaktersnel",
                 "lyricsAnimation_jump_3": "Spring exact",
                 "player_use_lottie": "Animatie Afspelen",
-                "player_use_lottie_explain": "(Experimenteel) Schakel animatie in tijdens afspelen in de interface (kan leiden tot onstabiele geheugengebruik)"
+                "player_use_lottie_explain": "(Experimenteel) Schakel animatie in tijdens afspelen in de interface (kan leiden tot onstabiele geheugengebruik)",
+                "player_use_playbar_auto_hide": "Verberg automatisch de besturingsbalken van de speler",
+                "player_use_playbar_auto_hide_explain": "De besturingsbalken van de speler zal automatisch inklappen in de afspeelinterface"
             }
         }
     }

@@ -41,7 +41,8 @@
             "last_next": "最新",
             "install": "安裝",
             "download": "下載",
-            "tag_error": "資料夾內音樂檔案的‘tag’缺失，請先補全音樂檔案tag屬性，然後再次重新導入"
+            "tag_error": "資料夾內音樂檔案的‘tag’缺失，請先補全音樂檔案tag屬性，然後再次重新導入",
+            "drag_sort": "拖曳排序"
         },
         "view_player": {
             "view_seting": {
@@ -52,13 +53,16 @@
                 "coverBase_4": "專輯底圖",
                 "lyricSize": "歌詞字號",
                 "lyricSpeed": "歌詞快慢",
+                "lyricWright": "歌詞粗細",
                 "coverBaseVague": "底圖模糊",
                 "lyricsAnimation": "歌詞動效",
                 "lyricsAnimation_line_1": "逐行精準",
                 "lyricsAnimation_byte_2": "逐字精準",
                 "lyricsAnimation_jump_3": "跳躍精準",
                 "player_use_lottie": "播放動效",
-                "player_use_lottie_explain": "(實驗性)在播放界面中啟用播放動畫(會導致佔用記憶體不穩定)"
+                "player_use_lottie_explain": "(實驗性)在播放界面中啟用播放動畫(會導致佔用記憶體不穩定)",
+                "player_use_playbar_auto_hide": "自動隱藏播放器控制欄",
+                "player_use_playbar_auto_hide_explain": "播放介面中播放器控制欄會自動收起"
             }
         }
     }

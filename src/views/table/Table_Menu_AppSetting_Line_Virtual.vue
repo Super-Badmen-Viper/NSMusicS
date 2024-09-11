@@ -175,6 +175,7 @@
   import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
   import {store_app_configs_logic_theme} from "@/store/app/store_app_configs_logic_theme";
   import {store_local_db_info} from "@/store/local/store_local_db_info";
+  import {store_player_appearance} from "@/store/player/store_player_appearance";
   const theme_value = ref('lightTheme')
   const theme_options = ref([
     {
@@ -892,7 +893,7 @@
                     </div>
                   </n-space>
                   <n-switch
-                      v-model:value="store_player_audio_logic.player_use_lottie_animation">
+                      v-model:value="store_player_appearance.player_use_lottie_animation">
                   </n-switch>
                 </n-space>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
@@ -902,7 +903,17 @@
                       <span style="font-size:12px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
                     </div>
                   </n-space>
-                  <n-switch v-model:value="store_player_audio_logic.player_use_background_filter_blur">
+                  <n-switch v-model:value="store_player_appearance.player_use_background_filter_blur">
+                  </n-switch>
+                </n-space>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.player_use_playbar_auto_hide') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('nsmusics.view_player.view_seting.player_use_playbar_auto_hide_explain') }}</span>
+                    </div>
+                  </n-space>
+                  <n-switch v-model:value="store_player_appearance.player_use_playbar_auto_hide">
                   </n-switch>
                 </n-space>
                 <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">

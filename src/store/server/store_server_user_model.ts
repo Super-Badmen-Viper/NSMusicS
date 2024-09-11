@@ -73,6 +73,7 @@ watch(() => store_server_user_model.model_select, async (newValue) => {
     if(!store_app_configs_logic_load.app_configs_loading) {
         // Refresh Playlist(Local / Server)
         await store_playlist_list_logic.reset_data()
+        store_playlist_list_info.playlist_MediaFiles_temporary = []
         // Refresh Router Data
         store_router_data_logic.reset_data()
         // Refresh Current AudioInfo

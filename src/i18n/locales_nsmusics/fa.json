@@ -41,7 +41,8 @@
       "last_next": "آخرین",
       "install": "نصب",
       "download": "دانلود",
-      "tag_error": "تگ فایل های موسیقی در پوشه از دست رفته است. لطفاً ویژگی‌های برچسب فایل های موسیقی را کامل کنید و سپس دوباره وارد کنید."
+      "tag_error": "تگ فایل های موسیقی در پوشه از دست رفته است. لطفاً ویژگی‌های برچسب فایل های موسیقی را کامل کنید و سپس دوباره وارد کنید.",
+      "drag_sort": "کشیدن و مرتب کردن"
     },
     "view_player": {
       "view_seting": {
@@ -52,13 +53,16 @@
         "coverBase_4": "پایه",
         "lyricSize": "اندازه متن",
         "lyricSpeed": "سرعت متن",
+        "lyricWright": "ضخامت قلم متن اهنگ",
         "coverBaseVague": "تاری",
         "lyricsAnimation": "پویانمایی",
         "lyricsAnimation_line_1": "خطی",
         "lyricsAnimation_byte_2": "حرفی",
         "lyricsAnimation_jump_3": "پرش",
         "player_use_lottie": "پخش انیمیشن",
-        "player_use_lottie_explain": "(آزمایشی) در صفحه پخش انیمیشن را فعال کنید (ممکن است باعث ناپایداری مصرف حافظه شود)"
+        "player_use_lottie_explain": "(آزمایشی) در صفحه پخش انیمیشن را فعال کنید (ممکن است باعث ناپایداری مصرف حافظه شود)",
+        "player_use_playbar_auto_hide": "خودکار پنهان کردن نوار کنترل پخش کننده",
+        "player_use_playbar_auto_hide_explain": "نوار کنترل پخش کننده به صورت خودکار در رابطه ی پخش باز خواهد شد"
       }
     }
   }

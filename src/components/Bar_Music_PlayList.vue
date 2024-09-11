@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
 import Table_Song_List from '../views/table/Table_Music_PlayList_Line_Virtual.vue'
-import {store_router_data_info} from "@/store/router/store_router_data_info";
-
-onMounted(async () => {
-  store_router_data_info.router_select = 'View_Home_MusicLibrary_Browse'
-});
 </script>
 
 <template>
@@ -15,7 +9,6 @@ onMounted(async () => {
     </div>
   </n-space>
 </template>
-
 
 <style>
 .this_Bar_Music_PlayList {

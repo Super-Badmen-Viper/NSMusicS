@@ -20,6 +20,9 @@ export const store_app_configs_logic_save = reactive({
         let db:any = null;
         db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         const app_Configs = ref(
             new App_Configs({
                 theme: store_app_configs_info.theme_name,
@@ -46,6 +49,9 @@ export const store_app_configs_logic_save = reactive({
         let db:any = null;
         db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         const library_Configs = ref(
             new Library_Configs({
                 library: String(store_server_user_model.library_path)
@@ -61,17 +67,21 @@ export const store_app_configs_logic_save = reactive({
         let db:any = null;
         db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         const player_Configs_of_UI = ref(
             new Player_Configs_of_UI({
-                player_collapsed_album: String(store_player_appearance.player_UI_Theme_State.player_collapsed_album),
-                player_collapsed_skin: String(store_player_appearance.player_UI_Theme_State.player_collapsed_skin),
-                player_lyric_fontSize: String(store_player_appearance.player_UI_Theme_State.player_lyric_fontSize),
-                player_lyric_fontWeight: String(store_player_appearance.player_UI_Theme_State.player_lyric_fontWeight),
-                player_lyric_color: String(store_player_appearance.player_UI_Theme_State.player_lyric_color),
-                player_theme_Styles_Selected: String(store_player_appearance.player_UI_Theme_State.player_theme_Styles_Selected),
-                player_background_model_num: String(store_player_appearance.player_UI_Theme_State.player_background_model_num),
-                player_use_lottie_animation: String(store_player_appearance.player_UI_Theme_State.player_use_lottie_animation),
-                player_use_background_filter_blur: String(store_player_audio_logic.player_use_background_filter_blur)
+                player_collapsed_album: String(store_player_appearance.player_collapsed_album),
+                player_collapsed_skin: String(store_player_appearance.player_collapsed_skin),
+                player_lyric_fontSize: String(store_player_appearance.player_lyric_fontSize),
+                player_lyric_fontWeight: String(store_player_appearance.player_lyric_fontWeight),
+                player_lyric_color: String(store_player_appearance.player_lyric_color),
+                player_theme_Styles_Selected: String(store_player_appearance.player_theme_Styles_Selected),
+                player_background_model_num: String(store_player_appearance.player_background_model_num),
+                player_use_lottie_animation: String(store_player_appearance.player_use_lottie_animation),
+                player_use_background_filter_blur: String(store_player_appearance.player_use_background_filter_blur),
+                player_use_playbar_auto_hide: String(store_player_appearance.player_use_playbar_auto_hide)
             }))
         let system_Configs_Write = new Class_Set_System_Configs_Write()
         system_Configs_Write.system_player_config_of_ui(
@@ -84,6 +94,9 @@ export const store_app_configs_logic_save = reactive({
         let db:any = null;
         db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         const player_Configs_of_Audio_Info = ref(
             new Player_Configs_of_Audio_Info({
                 this_audio_file_path: String(store_player_audio_info.this_audio_file_path),
@@ -119,6 +132,8 @@ export const store_app_configs_logic_save = reactive({
         let db:any = null;
         db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
         let system_Configs_Write = new Class_Set_System_Configs_Write();
         system_Configs_Write.system_playlist_item_id_config(
             db,
@@ -131,6 +146,9 @@ export const store_app_configs_logic_save = reactive({
         let db:any = null;
         db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         let system_Configs_Write = new Class_Set_System_Configs_Write();
         system_Configs_Write.system_view_history(
             db,
@@ -150,6 +168,9 @@ export const store_app_configs_logic_save = reactive({
         let db:any = null;
         db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         let system_Configs_Write = new Class_Set_System_Configs_Write()
         system_Configs_Write.system_servers_config(
             db,

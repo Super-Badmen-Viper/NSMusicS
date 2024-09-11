@@ -41,7 +41,8 @@
             "last_next": "Ultimo",
             "install": "Installa",
             "download": "Scarica",
-            "tag_error": "Il 'tag' per i file musicali nella cartella è mancante. Si prega di completare gli attributi del tag per i file musicali e quindi riimportarli."
+            "tag_error": "Il 'tag' per i file musicali nella cartella è mancante. Si prega di completare gli attributi del tag per i file musicali e quindi riimportarli.",
+            "drag_sort": "Trascina per Ordinare"
         },
         "view_player": {
             "view_seting": {
@@ -52,13 +53,16 @@
                 "coverBase_4": "Base",
                 "lyricSize": "Dim. testo",
                 "lyricSpeed": "Velocità testo",
+                "lyricWright": "Spessore del carattere delle parole",
                 "coverBaseVague": "Sfocatura",
                 "lyricsAnimation": "Animazione",
                 "lyricsAnimation_line_1": "Per riga",
                 "lyricsAnimation_byte_2": "Per carattere",
                 "lyricsAnimation_jump_3": "Salti precisi",
                 "player_use_lottie": "Riprodurre Animazione",
-                "player_use_lottie_explain": "(Sperimentale) Abilita l'animazione di riproduzione nell'interfaccia (può causare un utilizzo di memoria instabile)"
+                "player_use_lottie_explain": "(Sperimentale) Abilita l'animazione di riproduzione nell'interfaccia (può causare un utilizzo di memoria instabile)",
+                "player_use_playbar_auto_hide": "Nascondi automaticamente la barra di controllo del player",
+                "player_use_playbar_auto_hide_explain": "La barra di controllo del player si ritorcerà automaticamente nell'interfaccia di riproduzione"
             }
         }
     }

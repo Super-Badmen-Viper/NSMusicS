@@ -59,13 +59,13 @@ export class Class_Set_System_Configs_Write {
         db: any,
         media_file_id_of_list: string[],
     ) {
-        db.exec("DELETE FROM system_playlist_file_id_config");
-        db.exec("UPDATE sqlite_sequence SET seq = 0 WHERE name = 'system_playlist_file_id_config'");
+        db.exec("DELETE FROM system_playlist_file_id");
+        db.exec("UPDATE sqlite_sequence SET seq = 0 WHERE name = 'system_playlist_file_id'");
 
         let order_index = 1;
         media_file_id_of_list.forEach((mediaFileId) => {
             db.prepare(`
-            INSERT INTO system_playlist_file_id_config (media_file_id, order_index)
+            INSERT INTO system_playlist_file_id (media_file_id, order_index)
             VALUES (?, ?)
         `).run(mediaFileId, order_index++);
         });

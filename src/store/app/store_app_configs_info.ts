@@ -21,6 +21,7 @@ export const store_app_configs_info = reactive({
     update_theme: false,
 
     window_innerWidth: 0,
+    window_innerHeight: 0,
 
     update_show: false,
     version: '',

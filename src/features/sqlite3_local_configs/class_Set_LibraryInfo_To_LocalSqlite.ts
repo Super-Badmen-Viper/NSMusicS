@@ -5,6 +5,8 @@ export class Set_LibraryInfo_To_LocalSqlite{
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
         try {
             db.exec('BEGIN TRANSACTION');
 

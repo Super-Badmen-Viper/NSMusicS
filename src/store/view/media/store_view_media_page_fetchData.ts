@@ -23,6 +23,9 @@ export const store_view_media_page_fetchData = reactive({
         try {
             db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
+            db.exec('PRAGMA foreign_keys = OFF');
+
+
             let stmt_media_file = null;
             let stmt_media_file_string = '';
 
@@ -182,5 +185,61 @@ export const store_view_media_page_fetchData = reactive({
             console.log('db.close().......');
             db = null;
         }
+    },
+    async fetchData_Media_Find_This_Album(id: string){
+        let db:any = null;
+        db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+        db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+        let stmt_media_file = null;
+        let stmt_media_file_string = '';
+        stmt_media_file_string = `SELECT * FROM ${store_server_user_model.media_file} WHERE album_id = '${id}'`;
+        stmt_media_file = db.prepare(stmt_media_file_string);
+        const rows = stmt_media_file.all();
+        rows.forEach((row: Media_File, index: number) => {
+            row.absoluteIndex = index;
+            row.selected = false;
+            row.duration_txt = store_view_media_page_logic.get_duration_formatTime(row.duration);
+            if(row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
+                if (row.path.indexOf('mp3') > 0)
+                    row.medium_image_url = row.path.replace('mp3', 'jpg');
+                else if (row.path.indexOf('flac') > 0)
+                    row.medium_image_url = row.path.replace('flac', 'jpg');
+                else
+                    row.medium_image_url = '../../../resources/img/error_album.jpg';
+            }
+            store_view_media_page_info.media_Files_temporary.push(row);
+        });
+        store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
+            item.absoluteIndex = index + 1;
+        });
+    },
+    async fetchData_Media_Find_This_Artist(id: string){
+        let db:any = null;
+        db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+        db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+        let stmt_media_file = null;
+        let stmt_media_file_string = '';
+        stmt_media_file_string = `SELECT * FROM ${store_server_user_model.media_file} WHERE artist_id = '${id}'`;
+        stmt_media_file = db.prepare(stmt_media_file_string);
+        const rows = stmt_media_file.all();
+        rows.forEach((row: Media_File, index: number) => {
+            row.absoluteIndex = index;
+            row.selected = false;
+            row.duration_txt = store_view_media_page_logic.get_duration_formatTime(row.duration);
+            if(row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
+                if (row.path.indexOf('mp3') > 0)
+                    row.medium_image_url = row.path.replace('mp3', 'jpg');
+                else if (row.path.indexOf('flac') > 0)
+                    row.medium_image_url = row.path.replace('flac', 'jpg');
+                else
+                    row.medium_image_url = '../../../resources/img/error_album.jpg';
+            }
+            store_view_media_page_info.media_Files_temporary.push(row);
+        });
+        store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
+            item.absoluteIndex = index + 1;
+        });
     },
 });

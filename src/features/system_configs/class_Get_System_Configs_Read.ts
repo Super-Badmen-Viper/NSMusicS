@@ -4,6 +4,7 @@ import { Player_Configs_of_Audio_Info } from '@/models/app_Configs/class_Player_
 import { Player_Configs_of_UI } from '@/models/app_Configs/class_Player_Configs_of_UI';
 import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+import {store_player_appearance} from "@/store/player/store_player_appearance";
 
 export class Class_Get_System_Configs_Read {
     public app_Configs = ref(
@@ -36,6 +37,7 @@ export class Class_Get_System_Configs_Read {
             player_background_model_num: null,
             player_use_lottie_animation: null,
             player_use_background_filter_blur: null,
+            player_use_playbar_auto_hide: null,
         }))
     public player_Configs_of_Audio_Info = ref(
         new Player_Configs_of_Audio_Info({
@@ -79,6 +81,25 @@ export class Class_Get_System_Configs_Read {
         db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
 
+        /// Modify user configuration
+        try {
+            db.exec('BEGIN');
+            db.exec(`CREATE TABLE IF NOT EXISTS system_playlist_file_id (
+                "media_file_id"	varchar(255) NOT NULL,
+                "order_index"	INTEGER
+            )`);
+            const hasData = db.prepare(`SELECT COUNT(*) AS count FROM system_playlist_file_id_config`).get().count || 0;
+            if (hasData > 0) {
+                db.exec(`INSERT INTO system_playlist_file_id SELECT * FROM system_playlist_file_id_config`);
+                db.exec(`DELETE FROM system_playlist_file_id_config`);
+            }
+            db.exec('COMMIT');
+        } catch (error) {
+            db.exec('ROLLBACK');
+            console.error('Error modifying user configuration:', error);
+        }
+
+        ///
         db.prepare(`SELECT * FROM system_app_config`).all().forEach((row: Config_Props, index: number) => {
             const propertyName = row.config_key;
             if (this.app_Configs.value.hasOwnProperty(propertyName))
@@ -100,7 +121,7 @@ export class Class_Get_System_Configs_Read {
                 this.player_Configs_of_UI.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
         });
         /// play_list
-        const stmt_playlist_tracks_media_file_id = db.prepare(`SELECT * FROM system_playlist_file_id_config`);
+        const stmt_playlist_tracks_media_file_id = db.prepare(`SELECT * FROM system_playlist_file_id`);
         this.playlist_File_Configs.value = stmt_playlist_tracks_media_file_id.all().map(item => item.media_file_id);
 
         /// view_router_hisotry

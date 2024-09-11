@@ -31,6 +31,8 @@ export class Set_MediaInfo_To_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
         
         const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.annotation} WHERE item_id = ?`).get(id);
         if (!existingRecord) {
@@ -59,6 +61,8 @@ export class Set_MediaInfo_To_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
 
         const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.annotation} WHERE item_id = ?`).get(id);
         if (!existingRecord) {
@@ -75,6 +79,8 @@ export class Set_MediaInfo_To_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
 
         let existingRecord = db.prepare(`SELECT play_count FROM ${store_server_user_model.annotation} WHERE item_id = ?`).get(item_id);
         if (!existingRecord) {
@@ -87,10 +93,29 @@ export class Set_MediaInfo_To_LocalSqlite {
         }
         db.close();
     }
+    public Set_MediaInfo_To_PlayCount_of_Media_File_ND(item_id: any, play_count: number, play_date: string) {
+        const path = require('path');
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+        db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
+        let existingRecord = db.prepare(`SELECT play_count FROM ${store_server_user_model.annotation} WHERE item_id = ?`).get(item_id);
+        if (!existingRecord) {
+            db.prepare(`INSERT INTO ${store_server_user_model.annotation} (ann_id, item_id, item_type, play_count, play_date) VALUES (?, ?, ?, ?, ?)`)
+                .run(this.getUniqueId(db), item_id, 'media_file', 1, play_date);
+        } else {
+            db.prepare(`UPDATE ${store_server_user_model.annotation} SET play_count = ?, play_date = ? WHERE item_id = ? AND item_type = 'media_file'`)
+                .run(play_count, play_date, item_id);
+        }
+        db.close();
+    }
     public Set_MediaInfo_Add_Selected_Playlist(media_file_id: any, playlist_id: any) {
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
 
         const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.playlist_tracks} WHERE playlist_id = ? AND media_file_id = ?`).get(playlist_id, media_file_id);
         if (!existingRecord) {
@@ -107,6 +132,8 @@ export class Set_MediaInfo_To_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
 
         const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.playlist_tracks} WHERE playlist_id = ? AND media_file_id = ?`).get(playlist_id, media_file_id);
         if (existingRecord) {

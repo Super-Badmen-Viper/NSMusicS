@@ -31,6 +31,9 @@ export const store_view_album_page_fetchData = reactive({
         try {
             db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
+            db.exec('PRAGMA foreign_keys = OFF');
+
+
             let stmt_album = null;
             let stmt_album_string = '';
 
@@ -209,7 +212,19 @@ export const store_view_album_page_fetchData = reactive({
         await store_view_media_page_fetchData.fetchData_Media()
         store_router_data_info.find_music_model = false;
 
-        store_playlist_list_info.playlist_MediaFiles_temporary = [...store_view_media_page_info.media_Files_temporary];
+        store_playlist_list_info.playlist_MediaFiles_temporary =
+            store_view_media_page_info.media_Files_temporary.map(
+                (row) => {
+                    row.play_id = row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
+                    return row;
+                });
+        const media_file = store_playlist_list_info.playlist_MediaFiles_temporary.find(
+            (row) => row.id === store_player_audio_info.this_audio_song_id
+        );
+        if (media_file) {
+            store_player_audio_info.this_audio_play_id = media_file.play_id;
+        }
+
         store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
         store_app_configs_logic_save.save_system_playlist_item_id_config();
 
@@ -217,6 +232,7 @@ export const store_view_album_page_fetchData = reactive({
 
         if(store_playlist_list_info.playlist_MediaFiles_temporary.length > 0){
             store_player_appearance.player_mode_of_lock_playlist = false
+            store_player_audio_info.this_audio_play_id = store_playlist_list_info.playlist_MediaFiles_temporary[0].play_id
             store_player_audio_info.this_audio_file_path = store_playlist_list_info.playlist_MediaFiles_temporary[0].path
             store_player_audio_info.this_audio_lyrics_string = store_playlist_list_info.playlist_MediaFiles_temporary[0].lyrics
             store_player_audio_info.this_audio_file_medium_image_url = store_playlist_list_info.playlist_MediaFiles_temporary[0].medium_image_url

@@ -41,7 +41,8 @@
             "last_next": "最新",
             "install": "安装",
             "download": "下载",
-            "tag_error": "文件夹内音乐文件的‘tag’缺失, 请先补全音乐文件tag属性, 然后再次重新导入"
+            "tag_error": "文件夹内音乐文件的‘tag’缺失, 请先补全音乐文件tag属性, 然后再次重新导入",
+            "drag_sort": "拖动排序"
         },
         "view_player": {
             "view_seting": {
@@ -52,13 +53,16 @@
                 "coverBase_4": "专辑底图",
                 "lyricSize": "歌词字号",
                 "lyricSpeed": "歌词快慢",
+                "lyricWright": "歌词粗细",
                 "coverBaseVague": "底图模糊",
                 "lyricsAnimation": "歌词动效",
                 "lyricsAnimation_line_1": "逐行精准",
                 "lyricsAnimation_byte_2": "逐字精准",
                 "lyricsAnimation_jump_3": "跳跃精准",
                 "player_use_lottie": "播放动效",
-                "player_use_lottie_explain": "(实验性)在播放界面中启用播放动画(会导致占用内存不稳定)"
+                "player_use_lottie_explain": "(实验性)在播放界面中启用播放动画(会导致占用内存不稳定)",
+                "player_use_playbar_auto_hide": "自动隐藏播放器控制栏",
+                "player_use_playbar_auto_hide_explain": "播放界面中播放器控制栏会自动收起"
             }
         }
     }

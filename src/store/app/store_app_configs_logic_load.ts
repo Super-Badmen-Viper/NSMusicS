@@ -65,17 +65,18 @@ export const store_app_configs_logic_load = reactive({
             store_server_user_model.library_path = '' + system_Configs_Read.library_Configs.value['library']
             console.log(store_server_user_model.library_path)
             /// player_Configs_For_UI
-            store_player_appearance.player_UI_Theme_State.player_collapsed_album = '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_album'] === 'true'
-            store_player_appearance.player_UI_Theme_State.player_collapsed_skin = '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_skin'] === 'true'
-            store_player_appearance.player_UI_Theme_State.player_lyric_fontSize = '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_fontSize']
-            store_player_appearance.player_UI_Theme_State.player_lyric_fontWeight = '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_fontWeight']
-            store_player_appearance.player_UI_Theme_State.player_lyric_color = '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_color']
-            store_player_appearance.player_UI_Theme_State.player_theme_Styles_Selected = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_theme_Styles_Selected'])
-            store_player_appearance.player_UI_Theme_State.player_background_model_num = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_background_model_num'])
-            store_player_appearance.player_UI_Theme_State.player_use_lottie_animation = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lottie_animation'] === 'true'
-            store_player_appearance.player_UI_Theme_State.player_use_background_filter_blur = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_background_filter_blur'] === 'true'
-            store_player_audio_logic.player_use_lottie_animation = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lottie_animation'] === 'true'
-            store_player_audio_logic.player_use_background_filter_blur = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_background_filter_blur'] === 'true'
+            store_player_appearance.player_collapsed_album = '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_album'] === 'true'
+            store_player_appearance.player_collapsed_skin = '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_skin'] === 'true'
+            store_player_appearance.player_lyric_fontSize = '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_fontSize']
+            store_player_appearance.player_lyric_fontWeight = '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_fontWeight']
+            store_player_appearance.player_lyric_color = '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_color']
+            store_player_appearance.player_theme_Styles_Selected = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_theme_Styles_Selected'])
+            store_player_appearance.player_background_model_num = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_background_model_num'])
+            store_player_appearance.player_use_lottie_animation = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lottie_animation'] === 'true'
+            store_player_appearance.player_use_background_filter_blur = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_background_filter_blur'] === 'true'
+            store_player_appearance.player_use_playbar_auto_hide =
+                '' + system_Configs_Read.player_Configs_of_UI.value['player_use_playbar_auto_hide'] === 'true' ? true :
+                    '' + system_Configs_Read.player_Configs_of_UI.value['player_use_playbar_auto_hide'] !== 'false';
             /// player_Configs_of_Audio_Info
             store_player_audio_info.this_audio_file_path = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path']
             store_player_audio_info.this_audio_file_medium_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_medium_image_url']
@@ -136,6 +137,13 @@ export const store_app_configs_logic_load = reactive({
             store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = system_Configs_Read.playlist_File_Configs.value
             let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
             store_playlist_list_info.playlist_MediaFiles_temporary = get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Media_File_Id_of_list(store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds)
+            // Get Play_Id
+            const media_file = store_playlist_list_info.playlist_MediaFiles_temporary.find(
+                (row) => row.id === store_player_audio_info.this_audio_song_id
+            );
+            if (media_file) {
+                store_player_audio_info.this_audio_play_id = media_file.play_id;
+            }
         } catch (e) {
             console.error(e)
         }
@@ -148,6 +156,8 @@ export const store_app_configs_logic_load = reactive({
         store_router_data_info.router_name = '' + system_Configs_Read.app_Configs.value['router_name']
         store_router_data_info.router.push(store_router_data_info.router_name)
         this.app_configs_loading = false
+
+        // await store_player_audio_logic.player.pause();
     },
     handleUpdate_selectd_props_app_sidebar_Value(value: number[]){
         let allMenuOptions = store_app_configs_info.menuOptions_appBar;

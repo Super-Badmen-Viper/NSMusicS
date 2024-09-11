@@ -23,6 +23,7 @@ import {
     store_local_data_set_annotionInfo
 } from "@/store/local/local_data_synchronization/store_local_data_set_annotionInfo";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+import moment from "moment/moment";
 const path = require('path');
 
 export class Set_Navidrome_Data_To_LocalSqlite{
@@ -76,6 +77,9 @@ export class Set_Navidrome_Data_To_LocalSqlite{
 
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         db.exec("DELETE FROM server_album");
         db.exec("DELETE FROM server_annotation");
         db.exec("DELETE FROM server_artist");
@@ -96,6 +100,10 @@ export class Set_Navidrome_Data_To_LocalSqlite{
         const artistsArray: any[]= [];
         const albumsArray: any[]= [];
         const songsArray: any[]= [];
+
+        const artistsAnnotionArray: any[]= [];
+        const albumsAnnotionArray: any[]= [];
+        const songsAnnotionArray: any[]= [];
 
         const artistPromises = list.flatMap((artist_list: any) =>
             artist_list.artist.map(async (artist: any) => {
@@ -149,6 +157,16 @@ export class Set_Navidrome_Data_To_LocalSqlite{
                         external_info_updated_at: ''
                     };
                     albumsArray.push(sqlite_album);
+                    if(album.playCount !== undefined && album.playCount != null) {
+                        if(album.playCount > 0) {
+                            albumsAnnotionArray.push({
+                                id: album.id,
+                                played: album.played,
+                                playCount: album.playCount,
+                            });
+                        }
+                    }
+
 
                     try {
                         if (db.prepare(`SELECT COUNT(*) FROM ${store_server_user_model.annotation} WHERE item_id = ?`).pluck().get(album.id) === 0) {
@@ -231,6 +249,15 @@ export class Set_Navidrome_Data_To_LocalSqlite{
                             medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id
                         };
                         songsArray.push(sqlite_song);
+                        if(song.playCount !== undefined && song.playCount != null) {
+                            if(song.playCount > 0) {
+                                songsAnnotionArray.push({
+                                    id: song.id,
+                                    played: song.played,
+                                    playCount: song.playCount,
+                                });
+                            }
+                        }
 
                         store_server_users.percentage_of_nd += num
                     }
@@ -255,6 +282,12 @@ export class Set_Navidrome_Data_To_LocalSqlite{
                     external_info_updated_at: '',
                 };
                 artistsArray.push(sqlite_artist);
+                // navidrome not artist_play_history
+                // artistsAnnotionArray.push({
+                //     id: artist.id,
+                //     played: artist.played,
+                //     playCount: artist.playCount,
+                // });
 
                 const albumSongs = await Promise.all(albumPromises);
                 return albumSongs.flat();
@@ -313,6 +346,7 @@ export class Set_Navidrome_Data_To_LocalSqlite{
             });
         });
 
+        /// starred2 / userRating
         try {
             let album$Songs_Lists_ApiService_of_ND = new Album$Songs_Lists_ApiService_of_ND(url);
             const getStarred2_all = await album$Songs_Lists_ApiService_of_ND.getStarred2_all(username, token, salt);
@@ -377,6 +411,32 @@ export class Set_Navidrome_Data_To_LocalSqlite{
         } catch (error) {
             console.error("Error fetching starred data:", error);
         }
+
+        /// play_count / play_history_time
+        try {
+            let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite();
+            let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite();
+            // let set_ArtistInfo_To_LocalSqlite = new Set_ArtistInfo_To_LocalSqlite();
+
+            songsAnnotionArray.forEach(annotion => {
+                set_MediaInfo_To_LocalSqlite.Set_MediaInfo_To_PlayCount_of_Media_File_ND(
+                    annotion.id,
+                    annotion.playCount,
+                    moment(annotion.played).format('YYYY-MM-DD HH:mm:ss') || ''
+                )
+            });
+            albumsAnnotionArray.forEach(annotion => {
+                set_AlbumInfo_To_LocalSqlite.Set_AlbumInfo_To_PlayCount_of_Album_ND(
+                    annotion.id,
+                    annotion.playCount,
+                    moment(annotion.played).format('YYYY-MM-DD HH:mm:ss') || ''
+                )
+            });
+        } catch (error) {
+            // 处理错误
+            console.error(error);
+        }
+
         db.close();
 
         await this.Set_Read_Navidrome_Api_PlayListInfo_Add_LocalSqlite(url, username, token, salt)
@@ -392,6 +452,8 @@ export class Set_Navidrome_Data_To_LocalSqlite{
 
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
 
         db.exec("DELETE FROM server_playlist");
         db.exec("DELETE FROM server_playlist_tracks");

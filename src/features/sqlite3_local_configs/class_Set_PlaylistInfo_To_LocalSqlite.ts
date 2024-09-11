@@ -32,6 +32,9 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         let new_id = this.getUniqueId(db);
         let new_date = this.getCurrentDateTime();
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         // comment, duration, song_count, public,path, sync, size, rules, evaluated_at, owner_id
         db.prepare(`
           INSERT INTO ${store_server_user_model.playlist} (id, name, created_at, updated_at) 
@@ -65,6 +68,9 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         ///
         let new_id = this.getUniqueId(db);
         let new_date = this.getCurrentDateTime();
@@ -107,6 +113,9 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         ///
         const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.playlist} WHERE id = ?`).get(id);
         if (existingRecord) {
@@ -121,6 +130,8 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
 
         const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.playlist} WHERE id = ?`).get(playlist_id);
         if (existingRecord) {
@@ -149,6 +160,8 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
 
         const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.playlist} WHERE id = ?`).get(playlist_id);
             if (existingRecord) {

@@ -41,7 +41,8 @@
             "last_next": "最新",
             "install": "インストール",
             "download": "ダウンロード",
-            "tag_error": "フォルダ内の音楽ファイルの‘タグ’が不足しています。音楽ファイルのタグ属性を補充してから、再度インポートしてください。"
+            "tag_error": "フォルダ内の音楽ファイルの‘タグ’が不足しています。音楽ファイルのタグ属性を補充してから、再度インポートしてください。",
+            "drag_sort": "ドラッグして並べ替え"
         },
         "view_player": {
             "view_seting": {
@@ -52,13 +53,16 @@
                 "coverBase_4": "ベース",
                 "lyricSize": "文字サイズ",
                 "lyricSpeed": "歌詞速度",
+                "lyricWright": "歌詞の太さ",
                 "coverBaseVague": "ぼやけ",
                 "lyricsAnimation": "アニメーション",
                 "lyricsAnimation_line_1": "行単位",
                 "lyricsAnimation_byte_2": "字単位",
                 "lyricsAnimation_jump_3": "ジャンプ",
                 "player_use_lottie": "アニメーション再生",
-                "player_use_lottie_explain": "(実験的)プレイヤーのインターフェースでアニメーションを有効化(メモリ使用量が不安定になる可能性があります)"
+                "player_use_lottie_explain": "(実験的)プレイヤーのインターフェースでアニメーションを有効化(メモリ使用量が不安定になる可能性があります)",
+                "player_use_playbar_auto_hide": "プレイヤーコントロールバーを自動的に非表示",
+                "player_use_playbar_auto_hide_explain": "プレイバックインターフェースでプレイヤーコントロールバーは自動的に折りたたみます"
             }
         }
     }

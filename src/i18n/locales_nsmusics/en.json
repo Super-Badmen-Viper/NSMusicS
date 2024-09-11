@@ -41,7 +41,8 @@
             "last_next": "Latest",
             "install": "Install",
             "download": "Download",
-            "tag_error": "The ‘tag’ for music files in the folder is missing. Please complete the tag attributes for the music files and then re-import."
+            "tag_error": "The ‘tag’ for music files in the folder is missing. Please complete the tag attributes for the music files and then re-import.",
+            "drag_sort": "Drag to Sort"
         },
         "view_player": {
             "view_seting": {
@@ -52,13 +53,16 @@
                 "coverBase_4": "cover Base",
                 "lyricSize": "lyric Size",
                 "lyricSpeed": "lyric Speed",
+                "lyricWright": "Lyric Font Weight",
                 "coverBaseVague": "cover Base Vague",
                 "lyricsAnimation": "lyrics Animation",
                 "lyricsAnimation_line_1": "lyrics Animation line",
                 "lyricsAnimation_byte_2": "lyrics Animation byte",
                 "lyricsAnimation_jump_3": "lyrics Animation jump",
                 "player_use_lottie": "Play Animation",
-                "player_use_lottie_explain": "(Experimental) Enable playback animation in the interface (may cause unstable memory usage)"
+                "player_use_lottie_explain": "(Experimental) Enable playback animation in the interface (may cause unstable memory usage)",
+                "player_use_playbar_auto_hide": "Automatically hide the player control bar",
+                "player_use_playbar_auto_hide_explain": "The player control bar will automatically retract in the playback interface"
             }
         }
     }

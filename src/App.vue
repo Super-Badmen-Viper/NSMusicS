@@ -49,6 +49,16 @@
   const { ipcRenderer } = require('electron');
   window.addEventListener('resize', () => {
     store_app_configs_info.window_innerWidth = window.innerWidth;
+    store_app_configs_info.window_innerHeight = window.innerHeight;
+
+    if(window.innerHeight > 900) {
+      store_player_appearance.player_lyric_color_hidden_coefficient = 12
+    }
+    else{
+      store_player_appearance.player_lyric_color_hidden_coefficient = 15
+      console.log(15)
+    }
+    console.log(store_player_appearance.player_lyric_color_hidden_coefficient)
   });
 
   ////// i18n auto lang
@@ -164,6 +174,7 @@
   import {store_app_configs_logic_update} from "@/store/app/store_app_configs_logic_update";
   import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
   import {store_local_db_info} from "@/store/local/store_local_db_info";
+  import {VueDraggable} from "vue-draggable-plus";
   routers.beforeEach((to, from, next) => {
     if(to.name !== from.name){
       store_router_data_logic.clear_Files_temporary()
@@ -172,6 +183,11 @@
   });
   routers.afterEach(async (to, from) => {
     if(to.name !== from.name){
+      let db: any = null;
+      db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+      db.pragma('journal_mode = WAL');
+      db.exec('PRAGMA foreign_keys = OFF');
+
       store_router_data_logic.clear_Files_temporary()
       if(to.name === 'View_Menu_AppSetting'){
         store_router_data_info.router_select_model_menu = true
@@ -185,12 +201,15 @@
       }else if(to.name === 'View_Song_List_ALL'){
         store_router_data_info.router_select_model_media = true
         store_router_data_info.router_name = to.name
+        Init_page_songlists_statistic_Data(db);
       }else if(to.name === 'View_Album_List_ALL'){
         store_router_data_info.router_select_model_album = true
         store_router_data_info.router_name = to.name
+        Init_page_albumlists_statistic_Data(db)
       }else if(to.name === 'View_Artist_List_ALL'){
         store_router_data_info.router_select_model_artist = true
         store_router_data_info.router_name = to.name
+        Init_page_artistlists_statistic_Data(db)
       }
       store_app_configs_info.app_left_menu_select_activeKey = to.name
       console.log(to.name)
@@ -546,6 +565,7 @@
     if(newValue) {
       let db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
       db.pragma('journal_mode = WAL');
+      db.exec('PRAGMA foreign_keys = OFF');
       Init_page_songlists_statistic_Data(db);
       db.close();
       store_playlist_list_logic.playlist_names_StartUpdate = false
@@ -565,15 +585,10 @@
     console.log(store_app_configs_info.navidrome_db)
     console.log(store_app_configs_info.nsmusics_db)
 
-    let db: any = null;
-    db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
-    db.pragma('journal_mode = WAL');
-    Init_page_albumlists_statistic_Data(db)
-    Init_page_artistlists_statistic_Data(db)
     await store_app_configs_logic_load.load_app_config()
 
     try {
-      store_app_configs_info.version = '0.2.6';
+      store_app_configs_info.version = '0.2.7';
       console.log('Current Version:', store_app_configs_info.version);
       const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
       await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);
@@ -749,7 +764,7 @@
     <n-config-provider :theme="darkTheme">
       <n-drawer
         v-model:show="store_playlist_appearance.playlist_show"
-        :width="440"
+        :width="520"
         style="
           border-radius: 12px 0 0 12px;
           border: 1.5px solid #FFFFFF20;

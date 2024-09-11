@@ -41,7 +41,8 @@
             "last_next": "Último",
             "install": "Instalar",
             "download": "Descargar",
-            "tag_error": "Falta la ‘etiqueta’ de los archivos de música en la carpeta. Por favor, complete los atributos de la etiqueta de los archivos de música y vuelva a importar."
+            "tag_error": "Falta la ‘etiqueta’ de los archivos de música en la carpeta. Por favor, complete los atributos de la etiqueta de los archivos de música y vuelva a importar.",
+            "drag_sort": "Arrastrar para Ordenar"
         },
         "view_player": {
             "view_seting": {
@@ -52,13 +53,16 @@
                 "coverBase_4": "Base",
                 "lyricSize": "Tamaño del Texto",
                 "lyricSpeed": "Velocidad del Texto",
+                "lyricWright": "Grosor de fuente de letras",
                 "coverBaseVague": "Desenfoque",
                 "lyricsAnimation": "Animación",
                 "lyricsAnimation_line_1": "Por Línea",
                 "lyricsAnimation_byte_2": "Por Carácter",
                 "lyricsAnimation_jump_3": "Salto Prec.",
                 "player_use_lottie": "Reproducir Animación",
-                "player_use_lottie_explain": "(Experimental) Habilita la animación de reproducción en la interfaz (puede causar un uso de memoria inestable)"
+                "player_use_lottie_explain": "(Experimental) Habilita la animación de reproducción en la interfaz (puede causar un uso de memoria inestable)",
+                "player_use_playbar_auto_hide": "Ocultar automáticamente la barra de control del reproductor",
+                "player_use_playbar_auto_hide_explain": "La barra de control del reproductor se retractará automáticamente en la interfaz de reproducción"
             }
         }
     }

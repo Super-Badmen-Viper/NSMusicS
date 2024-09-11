@@ -16,7 +16,6 @@ export const store_playlist_list_logic = reactive({
     async reset_data() {
         store_playlist_list_info.playlist_names_ALLLists = []
         store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = []
-        // store_playlist_list_info.playlist_MediaFiles_temporary = []
         if (store_server_user_model.model_select === 'navidrome') {
             await store_server_user_model.Get_UserData_Synchronize_ToLocal_of_ND()
         } else {

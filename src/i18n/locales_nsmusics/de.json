@@ -41,7 +41,8 @@
             "last_next": "Neueste",
             "install": "Installieren",
             "download": "Herunterladen",
-            "tag_error": "Die 'Tag' für Musikdateien im Ordner fehlt. Bitte vervollständigen Sie die Tag-Attribute der Musikdateien und importieren Sie sie dann erneut."
+            "tag_error": "Die 'Tag' für Musikdateien im Ordner fehlt. Bitte vervollständigen Sie die Tag-Attribute der Musikdateien und importieren Sie sie dann erneut.",
+            "drag_sort": "Ziehen zum Sortieren"
         },
         "view_player": {
             "view_seting": {
@@ -52,13 +53,16 @@
                 "coverBase_4": "Basis",
                 "lyricSize": "Schriftgröße",
                 "lyricSpeed": "Textgeschw.",
+                "lyricWright": "Schriftdicke der Liedtexte",
                 "coverBaseVague": "Unschärfe",
                 "lyricsAnimation": "Animation",
                 "lyricsAnimation_line_1": "Zeilenweise",
                 "lyricsAnimation_byte_2": "Zeichenweise",
                 "lyricsAnimation_jump_3": "Sprungweise",
                 "player_use_lottie": "Animation Abspielen",
-                "player_use_lottie_explain": "(Experimentell) Aktiviere die Wiedergabeanimation im Interface (kann zu instabiler Speichernutzung führen)"
+                "player_use_lottie_explain": "(Experimentell) Aktiviere die Wiedergabeanimation im Interface (kann zu instabiler Speichernutzung führen)",
+                "player_use_playbar_auto_hide": "Die Steuerleiste des Players automatisch ausblenden",
+                "player_use_playbar_auto_hide_explain": "Die Steuerleiste des Players wird automatisch im Wiedergabebereich einklappen"
             }
         }
     }

@@ -41,7 +41,8 @@
             "last_next": "Najnowszy",
             "install": "Zainstaluj",
             "download": "Pobierz",
-            "tag_error": "Brakuje 'tagu' plików muzycznych w folderze. Proszę uzupełnić atrybuty tagu plików muzycznych, a następnie zaimportować ponownie."
+            "tag_error": "Brakuje 'tagu' plików muzycznych w folderze. Proszę uzupełnić atrybuty tagu plików muzycznych, a następnie zaimportować ponownie.",
+            "drag_sort": "Przeciągnij by sortować"
         },
         "view_player": {
             "view_seting": {
@@ -52,13 +53,16 @@
                 "coverBase_4": "Podstawowy",
                 "lyricSize": "Rozmiar tekstu",
                 "lyricSpeed": "Prędkość tekstu",
+                "lyricWright": "Grubość czcionki tekstu",
                 "coverBaseVague": "Rozmycie",
                 "lyricsAnimation": "Animacja",
                 "lyricsAnimation_line_1": "Linijkowo",
                 "lyricsAnimation_byte_2": "Znak po znaku",
                 "lyricsAnimation_jump_3": "Dokładne sk",
                 "player_use_lottie": "Odtwarzanie Animacji",
-                "player_use_lottie_explain": "(Eksperymentalne) Włącz animację odtwarzania w interfejsie (może powodować niestabilne zużycie pamięci)"
+                "player_use_lottie_explain": "(Eksperymentalne) Włącz animację odtwarzania w interfejsie (może powodować niestabilne zużycie pamięci)",
+                "player_use_playbar_auto_hide": "Automatycznie ukryj pasek sterowania odtwarzaczem",
+                "player_use_playbar_auto_hide_explain": "Pasek sterowania odtwarzaczem będzie automatycznie zwijał się w interfejsie odtwarzania"
             }
         }
     }

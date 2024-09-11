@@ -16,9 +16,9 @@ import rate from 'vue-rate'
 import 'vue-rate/dist/vue-rate.css'
 app.use(rate)
 
-import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
-import ContextMenu from '@imengyu/vue3-context-menu'
-app.use(ContextMenu)
+import contextmenu from 'v-contextmenu'
+import 'v-contextmenu/dist/themes/default.css'
+app.use(contextmenu)
 
 import { Language } from "@/i18n/i18n";
 const i18n = new Language().i18n;

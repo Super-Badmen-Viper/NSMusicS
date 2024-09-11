@@ -108,10 +108,10 @@
   });
   const handleAudioFilePathChange = async () => {
     if(store_player_audio_logic.this_audio_initial_trigger) {
-      current_play_time.value = formatTime(await store_player_audio_logic.player.getDuration());
+      store_player_audio_logic.current_play_time = formatTime(await store_player_audio_logic.player.getDuration());
       store_player_audio_logic.player_silder_currentTime_added_value = 0;
       this_audio_buffer_file.value = null;
-      player_no_progress_jump.value = false;
+      store_player_audio_logic.player_no_progress_jump = false;
       store_player_audio_logic.player.isPlaying = false;
 
       await Init_Audio_Player()
@@ -141,32 +141,42 @@
         store_player_audio_info.this_audio_is_playing = true
         store_player_audio_logic.player_save_new_data = true
         is_play_ended.value = false;
-        player_no_progress_jump.value = true;
+        store_player_audio_logic.player_no_progress_jump = true;
         clearInterval(timer);
         timer = setInterval(synchronize_playback_time, 200);
-        total_play_time.value = formatTime(await store_player_audio_logic.player.getDuration());
+        store_player_audio_logic.total_play_time = formatTime(await store_player_audio_logic.player.getDuration());
         await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
         await store_player_audio_logic.player.play();
       }
     }, 400);
   }
-  ipcRenderer.on('mpv-stopped', (event, message) => {
-    store_player_audio_logic.player.isPlaying = false;
-    store_player_audio_info.this_audio_is_playing = false
-    //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
-    if(player_no_progress_jump.value == true){
-      current_play_time.value = formatTime(store_player_audio_logic.player.getDuration());
-      store_player_audio_logic.player_silder_currentTime_added_value = 0;
-      this_audio_buffer_file.value = null;
-      clearInterval(timer);
-
-      player_no_progress_jump.value = false;
-
+  ipcRenderer.on('mpv-stopped', async (event, message) => {
+    is_play_ended.value = true;
+    let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+        (item: any) =>
+            item.play_id ===
+            store_player_audio_info.this_audio_play_id
+    );
+    if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length - 1) {
+      await store_player_audio_logic.player.pause();
+      store_player_audio_info.this_audio_is_playing = false
+    }else {
       store_player_audio_logic.player.isPlaying = false;
       store_player_audio_info.this_audio_is_playing = false
-      is_play_ended.value = true;
+      //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
+      if (store_player_audio_logic.player_no_progress_jump == true) {
+        store_player_audio_logic.current_play_time = formatTime(store_player_audio_logic.player.getDuration());
+        store_player_audio_logic.player_silder_currentTime_added_value = 0;
+        this_audio_buffer_file.value = null;
+        clearInterval(timer);
+
+        store_player_audio_logic.player_no_progress_jump = false;
+
+        store_player_audio_logic.player.isPlaying = false;
+        store_player_audio_info.this_audio_is_playing = false
+      }
+      Play_Media_Switching()
     }
-    Play_Media_Switching()
   });
   onMounted(async () => {
     timer = setInterval(synchronize_playback_time, 200);
@@ -176,7 +186,7 @@
   })
   const Init_Audio_Player = async () => {
     if(store_player_audio_info.this_audio_file_path.length > 0){
-      if(store_player_audio_logic.player.isPlaying === false){
+      if(!store_player_audio_logic.player.isPlaying){
         if(this_audio_buffer_file.value === null){
           this_audio_buffer_file.value = Math.random().toString(36).substring(7);
         }else{
@@ -184,21 +194,16 @@
           if(!store_player_audio_logic.player.isResumeing)
             Play_This_Audio_Path()
           else {
-            store_player_audio_logic.player.play();
+            await store_player_audio_logic.player.play();
           }
           store_player_audio_info.this_audio_is_playing = true
         }
       }else{
-        store_player_audio_logic.player.pause();
+        await store_player_audio_logic.player.pause();
         store_player_audio_info.this_audio_is_playing = false
       }
     }
   };
-  ////// audio_player of silder
-  const total_play_time = ref('04:42');
-  const current_play_time = ref('01:36');
-  const slider_singleValue = ref(0)
-  const player_no_progress_jump = ref(true)
 
   ////// player_configs player_button order area
   import { useMessage } from 'naive-ui'
@@ -242,7 +247,11 @@
   };
   function Play_Media_Order(model_num: string, increased: number) {
     if (store_playlist_list_info.playlist_MediaFiles_temporary.length > 0) {
-      let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex((item: any) => item.path === store_player_audio_info.this_audio_file_path);
+      let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+          (item: any) =>
+              item.play_id ===
+              store_player_audio_info.this_audio_play_id
+      );
       let stop_play = false;
       if (index !== -1) {
         if (model_num === 'playback-1') {
@@ -280,6 +289,7 @@
         }
 
         if (!stop_play) {
+          store_player_audio_info.this_audio_play_id = store_playlist_list_info.playlist_MediaFiles_temporary[index].play_id
           store_player_audio_info.this_audio_file_path = store_playlist_list_info.playlist_MediaFiles_temporary[index].path;
           store_player_audio_info.this_audio_lyrics_string = store_playlist_list_info.playlist_MediaFiles_temporary[index].lyrics
           store_player_audio_info.this_audio_file_medium_image_url = store_playlist_list_info.playlist_MediaFiles_temporary[index].medium_image_url;
@@ -293,18 +303,21 @@
           store_player_audio_info.this_audio_album_name = store_playlist_list_info.playlist_MediaFiles_temporary[index].album
           store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
           console.log(store_playlist_list_info.playlist_MediaFiles_temporary[index]);
+
+          // store_player_appearance.player_mode_of_lock_playlist = false
+          store_player_audio_info.this_audio_restart_play = true
         }
       }
     }
   }
   ////// player_configs player_button middle area
   const play_skip_back_click = async () => {
-    current_play_time.value = formatTime(await store_player_audio_logic.player.getDuration());
+    store_player_audio_logic.current_play_time = formatTime(await store_player_audio_logic.player.getDuration());
     store_player_audio_logic.player_silder_currentTime_added_value = 0;
     this_audio_buffer_file.value = null;
     clearInterval(timer);
 
-    player_no_progress_jump.value = false;
+    store_player_audio_logic.player_no_progress_jump = false;
 
     store_player_audio_logic.player.isPlaying = false;
     Play_Media_Order(store_player_audio_logic.play_order, -1)
@@ -312,12 +325,12 @@
     store_player_appearance.player_mode_of_lock_playlist = true
   }
   const play_skip_forward_click = async () => {
-    current_play_time.value = formatTime(await store_player_audio_logic.player.getDuration());
+    store_player_audio_logic.current_play_time = formatTime(await store_player_audio_logic.player.getDuration());
     store_player_audio_logic.player_silder_currentTime_added_value = 0;
     this_audio_buffer_file.value = null;
     clearInterval(timer);
 
-    player_no_progress_jump.value = false;
+    store_player_audio_logic.player_no_progress_jump = false;
 
     store_player_audio_logic.player.isPlaying = false;
     Play_Media_Order(store_player_audio_logic.play_order, 1)
@@ -325,12 +338,12 @@
     store_player_appearance.player_mode_of_lock_playlist = true
   }
   const Play_Media_Switching = async () => {
-    current_play_time.value = formatTime(await store_player_audio_logic.player.getDuration());
+    store_player_audio_logic.current_play_time = formatTime(await store_player_audio_logic.player.getDuration());
     store_player_audio_logic.player_silder_currentTime_added_value = 0;
     this_audio_buffer_file.value = null;
     clearInterval(timer);
 
-    player_no_progress_jump.value = false;
+    store_player_audio_logic.player_no_progress_jump = false;
 
     store_player_audio_logic.player.isPlaying = false;
     is_play_ended.value = true;
@@ -351,7 +364,7 @@
       const currentTime = await store_player_audio_logic.player.getCurrentTime();
       const duration = await store_player_audio_logic.player.getDuration();
       const calculatedValue = ((currentTime + store_player_audio_logic.player_silder_currentTime_added_value) / duration) * 100;
-      slider_singleValue.value = Number(calculatedValue.toFixed(2));
+      store_player_audio_logic.slider_singleValue = Number(calculatedValue.toFixed(2));
     }
   };
   function formatTime(currentTime: number): string {
@@ -374,7 +387,7 @@
   }
   const get_current_play_time = async () => {
     if ((await store_player_audio_logic.player.getCurrentTime() + store_player_audio_logic.player_silder_currentTime_added_value) <= await store_player_audio_logic.player.getDuration())
-      current_play_time.value = formatTime((await store_player_audio_logic.player.getCurrentTime() + store_player_audio_logic.player_silder_currentTime_added_value));
+      store_player_audio_logic.current_play_time = formatTime((await store_player_audio_logic.player.getCurrentTime() + store_player_audio_logic.player_silder_currentTime_added_value));
   }
   const synchronize_playback_time = () => {
     set_slider_singleValue();
@@ -389,13 +402,13 @@
     player_range_duration_isDragging = false;
   };
   const player_range_duration_handleclick = async () => {
-    play_go_duration(slider_singleValue.value,true);
+    play_go_duration(store_player_audio_logic.slider_singleValue,true);
   }
   let unwatch_play_go_index_time =  watch(() => store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress, () => {
     play_go_duration(store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress,false)
   });
   const play_go_duration = async (slider_value: number, silder_path: boolean) => {
-    player_no_progress_jump.value = false;
+    store_player_audio_logic.player_no_progress_jump = false;
     store_player_audio_logic.player_silder_currentTime_added_value = 0;
     if (store_player_audio_logic.player.isPlaying === true) {
       // 注意，此时currentTime将从0开始，需要计算附加值
@@ -417,7 +430,7 @@
     }
   }
   const update_dragend_slider_singleValue = () => {
-    if(slider_singleValue.value >= 99.5 || slider_singleValue.value == 0){
+    if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
       is_play_ended.value = true;
       player_range_duration_handleclick()
     }
@@ -456,7 +469,9 @@
   };
   const handleMouseMove = () => {
     if(store_player_appearance.player_show === true){
-      store_player_appearance.player_collapsed_action_bar_of_Immersion_model = true;
+      if(store_player_appearance.player_use_playbar_auto_hide) {
+        store_player_appearance.player_collapsed_action_bar_of_Immersion_model = true
+      }
       store_player_audio_logic.drawer_order_show = false;
       store_player_audio_logic.drawer_volume_show = false;
     }
@@ -624,8 +639,9 @@
               color: #3DC3FF;
               border-radius: 10px;
             "
-            v-model:value="slider_singleValue" :on-dragend="update_dragend_slider_singleValue"
-            :min="0" :max="100" :keyboard="true" :format-tooltip="formatTime_tooltip"
+            v-model:value="store_player_audio_logic.slider_singleValue" :on-dragend="update_dragend_slider_singleValue"
+            :min="0" :max="100" :keyboard="true"
+            :format-tooltip="formatTime_tooltip"
             @mousedown="player_range_duration_handleMouseDown"
             @mouseup="player_range_duration_handleMouseUp"
             @click="player_range_duration_handleclick"

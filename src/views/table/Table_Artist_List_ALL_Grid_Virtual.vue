@@ -191,7 +191,7 @@
       bool_show_search_area.value = false
       input_search_InstRef.value?.clear()
       if(bool_input_search == true){
-        store_view_artist_page_logic.list_data_StartUpdate = true
+        // store_view_artist_page_logic.list_data_StartUpdate = true
         back_search_default()
         bool_input_search = false
         scrollTo(0)
@@ -333,6 +333,9 @@
   import {
     store_local_data_set_artistInfo
   } from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
+  import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
+  import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
+  import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     store_local_data_set_artistInfo.Set_ArtistInfo_To_Favorite(id,favorite)
   }
@@ -344,6 +347,89 @@
       store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, 0);
     }else {
       store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, rating);
+    }
+  }
+
+  ////// right menu
+  import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+  import {useMessage} from 'naive-ui'
+  import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
+  import {
+    store_local_data_set_mediaInfo
+  } from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
+  import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+  const contextmenu = ref(null as any)
+  const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
+  const message = useMessage()
+  async function update_playlist_addArtist(id: any, playlist_id: any){
+    try{
+      await store_view_media_page_fetchData.fetchData_Media_Find_This_Artist(id)
+      const matchingIds: string[] = [];
+      store_view_media_page_info.media_Files_temporary.forEach((item: Media_File) => {
+        if (item.artist_id === id) {
+          matchingIds.push(item.id);
+        }
+      });
+      store_view_media_page_info.media_Files_temporary = []
+      for (let item_id of matchingIds) {
+        ////
+        await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(item_id,playlist_id)
+      }
+      ////
+      message.success(t('common.add'))
+      store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+    }catch (e) {
+      console.error(e)
+    }
+  }
+  async function menu_item_add_to_playlist_end() {
+    await store_view_media_page_fetchData.fetchData_Media_Find_This_Artist(store_playlist_list_info.playlist_Menu_Item_Id);
+    const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+        (item: Media_File) => item.artist_id === store_playlist_list_info.playlist_Menu_Item_Id
+    );
+
+    store_view_media_page_info.media_Files_temporary = []
+
+    for (let item of matchingItems) {
+      const newItem: Media_File = JSON.parse(JSON.stringify(item));
+      newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
+      store_playlist_list_info.playlist_MediaFiles_temporary.push(newItem);
+      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id);
+    }
+
+    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+      item.absoluteIndex = index;
+    });
+    store_app_configs_logic_save.save_system_playlist_item_id_config();
+    contextmenu.value.hide()
+  }
+  async function menu_item_add_to_playlist_next() {
+    await store_view_media_page_fetchData.fetchData_Media_Find_This_Artist(store_playlist_list_info.playlist_Menu_Item_Id);
+    const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+        (item: Media_File) => item.artist_id === store_playlist_list_info.playlist_Menu_Item_Id
+    );
+
+    store_view_media_page_info.media_Files_temporary = [];
+
+    const index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+        (item: any) => item.id === store_player_audio_info.this_audio_song_id
+    );
+
+    if (index !== -1) {
+      matchingItems.forEach((item: Media_File, i: number) => {
+        const newItem = JSON.parse(JSON.stringify(item));
+        newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
+        store_playlist_list_info.playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem);
+        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(index + 1 + i, 0, newItem.id);
+      });
+
+      store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+        item.absoluteIndex = index;
+      });
+      store_app_configs_logic_save.save_system_playlist_item_id_config();
+      contextmenu.value.hide();
+    } else {
+      console.error('Current audio song not found in playlist');
     }
   }
 
@@ -518,7 +604,10 @@
             :item="item"
             :active="active"
             :data-index="index"
-            :data-active="active">
+            :data-active="active"
+            v-contextmenu:contextmenu
+            @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
+          >
             <div
               :key="item.id"
               class="artist">
@@ -622,6 +711,24 @@
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>
+      <v-contextmenu ref="contextmenu" class="v-contextmenu-item v-contextmenu-item--hover">
+        <v-contextmenu-submenu :title="menu_item_add_to_songlist">
+          <v-contextmenu-item
+              v-for="n in store_playlist_list_info.playlist_names_ALLLists"
+              :key="n.value"
+              @click="update_playlist_addArtist(store_playlist_list_info.playlist_Menu_Item_Id,n.value)"
+          >
+            {{ n.label }}
+          </v-contextmenu-item>
+        </v-contextmenu-submenu>
+        <v-contextmenu-divider />
+        <v-contextmenu-item @click="menu_item_add_to_playlist_end">
+          {{ $t('player.addLast') }}
+        </v-contextmenu-item>
+        <v-contextmenu-item @click="menu_item_add_to_playlist_next">
+          {{ $t('player.addNext') }}
+        </v-contextmenu-item>
+      </v-contextmenu>
     </div>
   </n-space>
 </template> 
@@ -731,6 +838,14 @@
 }
 .Rate.viaSlot .Rate__star:nth-child(8).filled{color: red;}
 .Rate.viaSlot .Rate__star:nth-child(8).hover{color: red;}
+
+.v-contextmenu-item{
+  margin-top: 5px;margin-bottom: 5px;
+}
+.v-contextmenu-item--hover{
+  color: #3DC3FF;
+  background-color: transparent;
+}
 
 ::-webkit-scrollbar {
   display: auto;

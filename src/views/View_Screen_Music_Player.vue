@@ -25,7 +25,7 @@
 
   ////// navie ui components
   // app theme
-  import {darkTheme, NIcon} from 'naive-ui'
+  import {darkTheme, NIcon, NSlider} from 'naive-ui'
   // vue3 function
   import { defineEmits, ref, watch, watchEffect, onMounted, computed } from 'vue';
   import { onBeforeUnmount } from 'vue';
@@ -41,7 +41,6 @@
   const computed_i18n_Label_ViewSetConfig_Cover_4 = computed(() => t('nsmusics.view_player.view_seting.coverBase_4'));
 
   // audio_class & player_bar
-  import { Player_UI_Theme_State } from '@/features/player_configs/Player_UI_Theme_State'
   import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 
   ////// System BrowserWindow Set
@@ -126,35 +125,39 @@
     }
 
     const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
-    itemElements_active[index].style.fontSize = player_theme_0_bind_style.value.normalStyle.fontSize;
-    itemElements_active[index].style.fontWeight = player_theme_0_bind_style.value.normalStyle.fontWeight;
+    itemElements_active[index].style.fontSize = store_player_appearance.player_lyric_fontSize;
+    itemElements_active[index].style.fontWeight = store_player_appearance.player_lyric_fontWeight;
 
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
-    itemElements[index].style.color = player_theme_0_bind_style.value.hoverStyle.colorHover;
+    itemElements[index].style.color = store_player_appearance.player_lyric_colorHover;
     itemElements[index].style.filter = 'blur(0px)';
     itemElements[index].style.textShadow = '0 0 1px White';
     itemElements[index].style.transition = 'color 0.5s, transform 0.5s';
-    if(store_player_appearance.player_UI_Theme_State.player_collapsed_album === false){
+    if(store_player_appearance.player_collapsed_album === false){
       itemElements[index].style.transform = 'scale(1.1) translateY(0px)';
       itemElements[index].style.transformOrigin = 'left center';
+      itemElements[index].style.width = 'calc(36.3vw)'
     }else{
-      itemElements[index].style.transform = 'scale(1.1)  translateX(0px)';
+      itemElements[index].style.transform = 'scale(1.1) translateX(0px)';
       itemElements[index].style.transformOrigin = 'center';
+      itemElements[index].style.width = 'calc(40vw)'
     }
     itemElements[index].scrollIntoView({ block: 'center', behavior: perviousIndex.value === index - 1 ? 'smooth' : 'instant' });
 
-    let color_hidden = store_player_appearance.player_UI_Theme_State.player_lyric_color.slice(0, -2);
+    let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
     for (let i = index - 16; i <= index + 16; i++) {
       if (i < index) {
-        const colorValue = Math.max(90 - (index - i) * 18, 0);
+        const colorValue = Math.max(90 - (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
         itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
         itemElements[i].style.transform = 'scale(1)';
         itemElements[i].style.textShadow = '0 0 0px transparent';
+        itemElements[i].style.width = 'calc(40vw)'
       } else if (i != index) {
-        const colorValue = Math.max(90 - (i - index) * 18, 0);
+        const colorValue = Math.max(90 - (i - index) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
         itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
         itemElements[i].style.transform = 'scale(1)';
         itemElements[i].style.textShadow = '0 0 0px transparent';
+        itemElements[i].style.width = 'calc(40vw)'
       }
     }
     perviousIndex.value = index;
@@ -201,17 +204,19 @@
       const computedStyle = window.getComputedStyle(element);
       elementWidth += parseFloat(computedStyle.width);
 
-      itemElements_active[i].style.fontSize = player_theme_0_bind_style.value.normalStyle.fontSize;
-      itemElements_active[i].style.fontWeight = player_theme_0_bind_style.value.normalStyle.fontWeight;
+      itemElements_active[i].style.fontSize = store_player_appearance.player_lyric_fontSize;
+      itemElements_active[i].style.fontWeight = store_player_appearance.player_lyric_fontWeight;
 
       itemElements_active[i].style.filter = 'blur(0px)';
       itemElements_active[i].style.transition = 'color 0.5s, transform 0.5s';
-      if (!store_player_appearance.player_UI_Theme_State.player_collapsed_album) {
+      if (!store_player_appearance.player_collapsed_album) {
         itemElements_active[i].style.transform = 'scale(1.1) translateY(0px)';
         itemElements_active[i].style.transformOrigin = 'left center';
+        itemElements_active[i].style.width = 'calc(36.3vw)'
       } else {
         itemElements_active[i].style.transform = 'scale(1.1) translateX(0px)';
         itemElements_active[i].style.transformOrigin = 'center';
+        itemElements_active[i].style.width = 'calc(40vw)'
       }
 
       let tempwidth = parseFloat(window.getComputedStyle(itemElements_active[i]).width);
@@ -244,9 +249,9 @@
     }
 
     try {
-      let color_hidden = store_player_appearance.player_UI_Theme_State.player_lyric_color.slice(0, -2);
+      let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
       for (let i = 0; i < position_i_start; i++) {
-        const colorValue = Math.max(90 - (index - i) * 18, 0);
+        const colorValue = Math.max(90 - (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
         itemElements_active[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
         itemElements_active[i].style.transform = 'scale(1)';
         itemElements_active[i].style.background = `linear-gradient(90deg, #FFFFFF 0px, #FAFAFB60 0px) 0 0`;
@@ -254,9 +259,10 @@
         itemElements_active[i].style.textShadow = `0 0 2px transparent`;
 
         itemElements_active[i].style.marginRight = `0px`;
+        itemElements_active[i].style.width = 'calc(40vw)'
       }
       for (let i = position_i_end; i <= position_i_length; i++) {
-        const colorValue = Math.max(90 - (i - index) * 18, 0);
+        const colorValue = Math.max(90 - (i - index) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
         itemElements_active[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
         itemElements_active[i].style.transform = 'scale(1)';
         itemElements_active[i].style.background = `linear-gradient(90deg, #FFFFFF 0px, #FAFAFB60 0px) 0 0`;
@@ -264,6 +270,7 @@
         itemElements_active[i].style.textShadow = `0 0 2px transparent`;
 
         itemElements_active[i].style.marginRight = `0px`;
+        itemElements_active[i].style.width = 'calc(40vw)'
       }
     }catch {}
   };
@@ -273,29 +280,39 @@
     lyrics_list_whell.value = true;
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
     for (let i = 0; i < itemElements.length; i++) {
-      itemElements[i].style.color = player_theme_0_bind_style.value.normalStyle.color;
+      itemElements[i].style.color = store_player_appearance.player_lyric_color;
       itemElements[i].style.transform = 'scale(1)';
       itemElements[i].style.filter = 'blur(0px)';
+      itemElements[i].style.width = 'calc(40vw)'
     }
   };
   const handleLeave = () => {
     lyrics_list_whell.value = false;
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
-    let color_hidden = store_player_appearance.player_UI_Theme_State.player_lyric_color.slice(0, -2);
+    let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
     for (let i = perviousIndex.value - 16; i <= perviousIndex.value + 16; i++) {
       if (i < perviousIndex.value) {
-        const colorValue = Math.max(90 - (perviousIndex.value - i) * 18, 0);
+        const colorValue = Math.max(90 - (perviousIndex.value - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
         try {
           itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
         }catch{  }
       } else {
-        const colorValue = Math.max(90 - (i - perviousIndex.value) * 18, 0);
+        const colorValue = Math.max(90 - (i - perviousIndex.value) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
         try {
           itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
         }catch{  }
       }
     }
   };
+  const handleAuto_fontSize = (value: number) =>{
+    store_player_appearance.player_lyric_fontSize_Num = value;
+    store_player_appearance.player_lyric_fontSize = value + 'px';
+    const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
+    itemElements_active.forEach((itemElement) => {
+      itemElement.style.fontSize = store_player_appearance.player_lyric_fontSize;
+      itemElement.style.fontWeight = store_player_appearance.player_lyric_fontWeight;
+    })
+  }
 
   ////// player_configs theme BasicInfo
   type PlayerTheme_Style = {
@@ -303,9 +320,6 @@
 
     textAlign: any;
 
-    color:any;
-    fontSize: any;
-    fontWeight: any;
     player_collapsed_album: any;
     player_collapsed_skin: any;
   };
@@ -316,7 +330,6 @@
     id: any;
     name: any;
     normalStyle:PlayerTheme_Style;
-    hoverStyle:PlayerTheme_HoverStyle;
   };
   const player_theme_1 = ref<PlayerTheme_LyricItem>(
     {
@@ -327,14 +340,8 @@
 
         textAlign: true,
 
-        color: '#FAFAFB60',
-        fontSize: '22px',
-        fontWeight:'800',
         player_collapsed_album: false,
         player_collapsed_skin: true,
-      },
-      hoverStyle: {
-        colorHover: '#FFFFFF'
       }
     }
   );
@@ -347,14 +354,8 @@
 
         textAlign: false,
 
-        color: '#FAFAFB60',
-        fontSize: '22px',
-        fontWeight:'800',
         player_collapsed_album: false,
         player_collapsed_skin: true,
-      },
-      hoverStyle: {
-        colorHover: '#FFFFFF'
       }
     }
   );
@@ -367,14 +368,8 @@
 
         textAlign: true,
 
-        color: '#FAFAFB60',
-        fontSize: '22px',
-        fontWeight:'800',
         player_collapsed_album: false,
         player_collapsed_skin: true,
-      },
-      hoverStyle: {
-        colorHover: '#FFFFFF'
       }
     }
   );
@@ -387,14 +382,8 @@
 
         textAlign: false,
 
-        color: '#FAFAFB60',
-        fontSize: '22px',
-        fontWeight:'800',
         player_collapsed_album: true,
         player_collapsed_skin: true,
-      },
-      hoverStyle: {
-        colorHover: '#FFFFFF'
       }
     }
   );
@@ -407,14 +396,8 @@
 
         textAlign: false,
 
-        color: '#FAFAFB60',
-        fontSize: '22px',
-        fontWeight:'800',
         player_collapsed_album: true,
         player_collapsed_skin: false,
-      },
-      hoverStyle: {
-        colorHover: '#FFFFFF'
       }
     }
   );
@@ -430,7 +413,7 @@
 
   ////// player_configs bind theme_all
   const player_theme_0_bind_style = ref<PlayerTheme_LyricItem>(player_theme_Styles.value[
-      store_player_appearance.player_UI_Theme_State.player_theme_Styles_Selected
+      store_player_appearance.player_theme_Styles_Selected
       ]);
   const player_theme_set_theme = (index:number) => {
     if(index < 0 || index >= player_theme_Styles.value.length){
@@ -438,15 +421,11 @@
     }
     // set theme
     player_theme_0_bind_style.value = player_theme_Styles.value[index];
-    player_lyric_panel_fontsize.value = Number(store_player_appearance.player_UI_Theme_State.player_lyric_fontSize.replace('px',''));
 
-    store_player_appearance.player_UI_Theme_State.player_theme_Styles_Selected = index;
-    store_player_appearance.player_UI_Theme_State.player_background_model_num = player_theme_0_bind_style.value.id;
-    store_player_appearance.player_UI_Theme_State.player_lyric_fontSize = player_theme_0_bind_style.value.normalStyle.fontSize;
-    store_player_appearance.player_UI_Theme_State.player_lyric_fontWeight = player_theme_0_bind_style.value.normalStyle.fontWeight;
-    store_player_appearance.player_UI_Theme_State.player_lyric_color = player_theme_0_bind_style.value.normalStyle.color;
-    store_player_appearance.player_UI_Theme_State.player_collapsed_album = player_theme_0_bind_style.value.normalStyle.player_collapsed_album;
-    store_player_appearance.player_UI_Theme_State.player_collapsed_skin = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin;
+    store_player_appearance.player_theme_Styles_Selected = index;
+    store_player_appearance.player_background_model_num = player_theme_0_bind_style.value.id;
+    store_player_appearance.player_collapsed_album = player_theme_0_bind_style.value.normalStyle.player_collapsed_album;
+    store_player_appearance.player_collapsed_skin = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin;
 
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
   };
@@ -458,7 +437,6 @@
   }
   enum LyricAnimation {linebyLine,linebyWord,linebyJump}
   const player_lyric_panel_checked_animation = ref<LyricAnimation>(LyricAnimation.linebyLine)
-  const player_lyric_panel_fontsize = ref(24)
 
   ////// player_configs this_audio(play_info , other_info) model check
   const checkStrategy = ref<'player' | 'related'>('player')
@@ -469,7 +447,9 @@
     store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false
     clearInterval(timer_auto_hidden);
     timer_auto_hidden = setInterval(() => {
-      store_player_appearance.player_collapsed_action_bar_of_Immersion_model = true
+      if(store_player_appearance.player_use_playbar_auto_hide) {
+        store_player_appearance.player_collapsed_action_bar_of_Immersion_model = true
+      }
     }, 3000);
   };
   const unwatch_player_collapsed = watchEffect(() => {
@@ -477,6 +457,22 @@
       clearInterval(timer_auto_hidden);
     }
   });
+
+  function formatTime(currentTime: number): string {
+    const minutes = Math.floor(currentTime / 60);
+    const seconds = Math.floor(currentTime % 60);
+
+    let formattedMinutes = String(minutes);
+    let formattedSeconds = String(seconds);
+
+    if (formattedMinutes.length == 1)
+      formattedMinutes = '0' + formattedMinutes;
+
+    if (formattedSeconds.length == 1)
+      formattedSeconds = '0' + formattedSeconds;
+
+    return `${formattedMinutes}:${formattedSeconds}`;
+  }
 
   ////// Animation lottie Load // lottie-web will cause memory leaks，so replace lottie-player_configs
   import "@lottiefiles/lottie-player";
@@ -492,20 +488,20 @@
   const animationInstance_model_2_wave = ref<any>(null);
   const animationInstance_model_2_wave_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715417974362.json'))
   let unwatch_animationInstance = watch(() => store_player_audio_info.this_audio_is_playing, (newValue) => {
-    if(store_player_appearance.player_UI_Theme_State.player_use_lottie_animation) {
+    if(store_player_appearance.player_use_lottie_animation) {
       if (newValue === true) {
-        if (store_player_appearance.player_UI_Theme_State.player_background_model_num === 1) {
+        if (store_player_appearance.player_background_model_num === 1) {
           animationInstance_model_1_spectrum.value.play();
           animationInstance_model_1_wave.value.play();
         }
-        if (store_player_appearance.player_UI_Theme_State.player_background_model_num === 2)
+        if (store_player_appearance.player_background_model_num === 2)
           animationInstance_model_2_wave.value.play();
       } else {
-        if (store_player_appearance.player_UI_Theme_State.player_background_model_num === 1) {
+        if (store_player_appearance.player_background_model_num === 1) {
           animationInstance_model_1_spectrum.value.pause();
           animationInstance_model_1_wave.value.pause();
         }
-        if (store_player_appearance.player_UI_Theme_State.player_background_model_num === 2)
+        if (store_player_appearance.player_background_model_num === 2)
           animationInstance_model_2_wave.value.pause();
       }
     }
@@ -518,7 +514,7 @@
     unwatch();
 
     unwatch_animationInstance();
-    if(store_player_appearance.player_UI_Theme_State.player_use_lottie_animation) {
+    if(store_player_appearance.player_use_lottie_animation) {
       animationInstance_model_1_spectrum.value.destroy()
       animationInstance_model_1_wave.value.destroy()
       animationInstance_model_2_wave.value.destroy()
@@ -536,7 +532,7 @@
     <div>
       <!--Album-->
       <img
-        v-if="store_player_appearance.player_UI_Theme_State.player_collapsed_skin"
+        v-if="store_player_appearance.player_collapsed_skin"
         id="player_bg_zindex_0"
         style="
           position: absolute;
@@ -546,7 +542,7 @@
           height: 120vw;
           object-fit: cover;
           object-position: center;"
-        :style="{ filter: store_player_audio_logic.player_use_background_filter_blur ? 'brightness(46%) blur(60px)' : 'brightness(46%) blur(0px)' }"
+        :style="{ filter: store_player_appearance.player_use_background_filter_blur ? 'brightness(46%) blur(60px)' : 'brightness(46%) blur(0px)' }"
         :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
         @error="handleImageError"
         alt=""
@@ -568,164 +564,183 @@
       <!-- right drwaer of Player_theme -->
       <n-drawer
         v-model:show="isVisible_Player_theme"
-        :width="430"
+        :width="420"
         style="
           border-radius: 12px 0 0 12px;
           border: 1.5px solid #FFFFFF20;
           background-color: rgba(127, 127, 127, 0.1);
           backdrop-filter: blur(10px);
-          margin-top: calc(50vh - 220px);height: 440px;
+          margin-top: calc(50vh - 290px);height: 580px;
           ">
         <n-drawer-content v-if="isVisible_Player_theme">
           <template #default>
-            <n-radio-group
-              v-model:value="store_player_appearance.player_UI_Theme_State.player_theme_Styles_Selected"
-              :on-update:value="player_theme_set_theme"
-              name="radiogroup"
-              style="
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-                align-items: center;
-                grid-gap: 0;
-                margin-left: 9px;
-                margin-top: 12px;">
-              <n-radio
-                v-for="item in player_theme_Styles"
-                :key="item.id" v-model:value="item.id"
-                style="height: 100%;z-index: 9;">
-                <n-space vertical justify="center" style="position: relative;left: -27px;z-index: -1;">
-                  <img
-                    :src="item.normalStyle.image_url"
-                    style="
-                      width: auto;height: 100px;object-fit: cover;
-                      border-radius: 8px;border: 1.5px solid #FFFFFF20;
-                    " alt="">
-                  <span style="font-size: 16px;position: relative;top: -10px;left: 6px;">
-                    {{ item.name }}
-                  </span>
+            <n-space vertical align="center">
+              <n-space vertical style="width: 380px;">
+                <n-radio-group
+                  v-model:value="store_player_appearance.player_theme_Styles_Selected"
+                  :on-update:value="player_theme_set_theme"
+                  name="radiogroup" :width="430"
+                  style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                    align-items: center;
+                    grid-gap: 0;
+                    margin-left: 9px;
+                    margin-top: 12px;">
+                <n-radio
+                  v-for="item in player_theme_Styles"
+                  :key="item.id" v-model:value="item.id"
+                  style="height: 100%;z-index: 9;">
+                  <n-space vertical justify="center" style="position: relative;left: -27px;z-index: -1;">
+                    <img
+                      :src="item.normalStyle.image_url"
+                      style="
+                        width: auto;height: 100px;object-fit: cover;
+                        border-radius: 8px;border: 1.5px solid #FFFFFF20;
+                      " alt="">
+                    <span style="font-size: 16px;position: relative;top: -10px;left: 6px;">
+                      {{ item.name }}
+                    </span>
+                  </n-space>
+                </n-radio>
+              </n-radio-group>
+              </n-space>
+              <n-space vertical align="start" style="width: 320px;margin-left: -26px;">
+                <n-space style="margin-top: 20px;" justify="space-between">
+                  <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricSize') }}</span>
+                  <n-space style="margin-right: 32px;">
+                    <n-button text style="font-size: 24px;margin-top: 2px;margin-left: 7px;"
+                              @click="handleAuto_fontSize(24)">
+                      <n-icon>
+                        <MotionPhotosAutoOutlined />
+                      </n-icon>
+                    </n-button>
+                    <n-input-number
+                      v-model:value="store_player_appearance.player_lyric_fontSize_Num"
+                      :on-update:value="handleAuto_fontSize"
+                      clearable
+                      :min="6" :max="200"
+                      style="width: 109px;margin-top: -4px;margin-left: 12px;"
+                    />
+                  </n-space>
                 </n-space>
-              </n-radio>
-            </n-radio-group>
-            <n-space style="margin-left: 12px;margin-top: 20px;" v-if="false" justify="space-between">
-              <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricSize') }}</span>
-              <n-space style="margin-right: 32px;">
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-input-number
-                  v-model:value="player_lyric_panel_fontsize"
-                  clearable
-                  style="width: 109px;margin-top: -4px;"
-                />
-              </n-space>
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 24px;" v-if="false" justify="space-between">
-              <span style="font-size:16px;">歌词颜色</span>
-              <n-space style="margin-right: 32px;">
-                <n-button text style="font-size: 24px">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-color-picker style="width: 177px;margin-top: -4px;"/>
-              </n-space>
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;" v-if="false" justify="space-between">
-              <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricSpeed') }}</span>
-              <n-space style="margin-right: 32px;">
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-input-number
-                  v-model:value="player_lyric_panel_fontsize"
-                  clearable
-                  style="width: 109px;margin-top: -4px;"
-                />
-              </n-space>
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;" v-if="false" justify="space-between">
-              <span style="font-size:16px;">歌词行距</span>
-              <n-space style="margin-right: 32px;">
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-input-number
-                  v-model:value="player_lyric_panel_fontsize"
-                  clearable
-                  style="width: 109px;margin-top: -4px;"
-                />
-              </n-space>
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;" v-if="false">
-              <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricsAnimation') }}</span>
-              <n-space style="width: 260px;margin-top: 2px;">
-                <n-radio
-                  :checked="player_lyric_panel_checked_animation === LyricAnimation.linebyLine"
-                  @click="player_lyric_panel_checked_animation = LyricAnimation.linebyLine">
-                  {{ $t('nsmusics.view_player.view_seting.lyricsAnimation_line_1') }}
-                </n-radio>
-                <n-radio
-                  :checked="player_lyric_panel_checked_animation === LyricAnimation.linebyWord"
-                  @click="player_lyric_panel_checked_animation = LyricAnimation.linebyWord">
-                  {{ $t('nsmusics.view_player.view_seting.lyricsAnimation_byte_2') }}
-                </n-radio>
-                <n-radio
-                  :checked="player_lyric_panel_checked_animation === LyricAnimation.linebyJump"
-                  @click="player_lyric_panel_checked_animation = LyricAnimation.linebyJump;">
-                  {{ $t('nsmusics.view_player.view_seting.lyricsAnimation_jump_3') }}
-                </n-radio>
-              </n-space>
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;" justify="space-between">
-              <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.player_use_lottie') }}</span>
-              <n-space style="margin-right: 32px;">
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-switch
-                  v-model:value="store_player_appearance.player_UI_Theme_State.player_use_lottie_animation"
-                  @update:value="
-                    player_theme_set_theme(store_player_appearance.player_UI_Theme_State.player_theme_Styles_Selected);
-                  "
-                >
-                </n-switch>
-              </n-space>
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;" justify="space-between">
-              <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
-              <n-space style="margin-right: 32px;">
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-switch
-                  v-model:value="store_player_audio_logic.player_use_background_filter_blur"
-                >
-                </n-switch>
-              </n-space>
-            </n-space>
-            <n-space style="margin-left: 12px;margin-top: 20px;" v-if="false" justify="space-between">
-              <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
-              <n-space style="margin-right: 32px;">
-                <n-button text style="font-size: 24px;margin-top: 2px;">
-                  <n-icon>
-                    <MotionPhotosAutoOutlined />
-                  </n-icon>
-                </n-button>
-                <n-input-number
-                  v-model:value="player_lyric_panel_fontsize"
-                  clearable
-                  style="width: 109px;margin-top: -4px;"
-                />
+                <n-space style="margin-top: 20px;" v-if="false" justify="space-between">
+                  <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricWright') }}</span>
+                  <n-space style="margin-right: 32px;">
+                    <n-button text style="font-size: 24px;margin-top: 2px;"
+                              @click="handleAuto_fontSize(24)">
+                      <n-icon>
+                        <MotionPhotosAutoOutlined />
+                      </n-icon>
+                    </n-button>
+                    <n-input-number
+                        v-model:value="store_player_appearance.player_lyric_fontSize_Num"
+                        :on-update:value="handleAuto_fontSize"
+                        clearable
+                        style="width: 109px;margin-top: -4px;"
+                    />
+                  </n-space>
+                </n-space>
+                <n-space style="margin-top: 24px;" v-if="false" justify="space-between">
+                  <span style="font-size:16px;">歌词颜色</span>
+                  <n-space style="margin-right: 32px;">
+                    <n-button text style="font-size: 24px">
+                      <n-icon>
+                        <MotionPhotosAutoOutlined />
+                      </n-icon>
+                    </n-button>
+                    <n-color-picker style="width: 177px;margin-top: -4px;"/>
+                  </n-space>
+                </n-space>
+                <n-space style="margin-top: 20px;" v-if="false" justify="space-between">
+                  <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricSpeed') }}</span>
+                  <n-space style="margin-right: 32px;">
+                    <n-button text style="font-size: 24px;margin-top: 2px;">
+                      <n-icon>
+                        <MotionPhotosAutoOutlined />
+                      </n-icon>
+                    </n-button>
+                    <n-input-number
+                      v-model:value="store_player_appearance.player_lyric_fontSize"
+                      clearable
+                      style="width: 109px;margin-top: -4px;"
+                    />
+                  </n-space>
+                </n-space>
+                <n-space style="margin-top: 20px;" v-if="false" justify="space-between">
+                  <span style="font-size:16px;">歌词行距</span>
+                  <n-space style="margin-right: 32px;">
+                    <n-button text style="font-size: 24px;margin-top: 2px;">
+                      <n-icon>
+                        <MotionPhotosAutoOutlined />
+                      </n-icon>
+                    </n-button>
+                    <n-input-number
+                      v-model:value="store_player_appearance.player_lyric_fontSize"
+                      clearable
+                      style="width: 109px;margin-top: -4px;"
+                    />
+                  </n-space>
+                </n-space>
+                <n-space style="margin-top: 20px;" v-if="false" justify="space-between">
+                  <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricsAnimation') }}</span>
+                  <n-space style="width: 260px;margin-top: 2px;">
+                    <n-radio
+                      :checked="player_lyric_panel_checked_animation === LyricAnimation.linebyLine"
+                      @click="player_lyric_panel_checked_animation = LyricAnimation.linebyLine">
+                      {{ $t('nsmusics.view_player.view_seting.lyricsAnimation_line_1') }}
+                    </n-radio>
+                    <n-radio
+                      :checked="player_lyric_panel_checked_animation === LyricAnimation.linebyWord"
+                      @click="player_lyric_panel_checked_animation = LyricAnimation.linebyWord">
+                      {{ $t('nsmusics.view_player.view_seting.lyricsAnimation_byte_2') }}
+                    </n-radio>
+                    <n-radio
+                      :checked="player_lyric_panel_checked_animation === LyricAnimation.linebyJump"
+                      @click="player_lyric_panel_checked_animation = LyricAnimation.linebyJump;">
+                      {{ $t('nsmusics.view_player.view_seting.lyricsAnimation_jump_3') }}
+                    </n-radio>
+                  </n-space>
+                </n-space>
+                <n-space style="margin-top: 20px;" justify="space-between">
+                  <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.player_use_lottie') }}</span>
+                  <n-space style="margin-right: 32px;">
+                    <n-switch
+                      v-model:value="store_player_appearance.player_use_lottie_animation"
+                      @update:value="
+                        player_theme_set_theme(store_player_appearance.player_theme_Styles_Selected);
+                      "
+                    >
+                    </n-switch>
+                  </n-space>
+                </n-space>
+                <n-space style="margin-top: 20px;" justify="space-between">
+                  <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
+                  <n-space style="margin-right: 32px;">
+                    <n-switch v-model:value="store_player_appearance.player_use_background_filter_blur"/>
+                  </n-space>
+                </n-space>
+                <n-space style="margin-top: 20px;" v-if="false" justify="space-between">
+                  <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
+                  <n-space style="margin-right: 32px;">
+                    <n-button text style="font-size: 24px;margin-top: 2px;">
+                      <n-icon>
+                        <MotionPhotosAutoOutlined />
+                      </n-icon>
+                    </n-button>
+                    <n-input-number
+                      v-model:value="store_player_appearance.player_lyric_fontSize"
+                      clearable
+                      style="width: 109px;margin-top: -4px;"
+                    />
+                  </n-space>
+                </n-space>
+                <n-space style="margin-top: 20px;" justify="space-between">
+                  <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.player_use_playbar_auto_hide') }}</span>
+                  <n-space style="margin-right: 32px;">
+                    <n-switch v-model:value="store_player_appearance.player_use_playbar_auto_hide"/>
+                  </n-space>
+                </n-space>
               </n-space>
             </n-space>
           </template>
@@ -805,7 +820,7 @@
           </n-flex>
         </n-flex>
         <!-- middle area -->
-        <n-config-provider :theme="null">
+        <n-config-provider :theme="darkTheme">
           <n-flex
             justify="center"
             style="transition: margin 0.4s;"
@@ -814,11 +829,11 @@
               <!-- left area --><!-- Album Cover -->
               <!-- show-trigger="bar" calc(50vw + 27vh + 8vw) :show-collapsed-content="false"-->
               <n-layout-sider
-                :collapsed="store_player_appearance.player_UI_Theme_State.player_collapsed_album"
+                :collapsed="store_player_appearance.player_collapsed_album"
                 @collapse="
-                  store_player_appearance.player_UI_Theme_State.player_collapsed_album = true;"
+                  store_player_appearance.player_collapsed_album = true;"
                 @expand="
-                  store_player_appearance.player_UI_Theme_State.player_collapsed_album = false;
+                  store_player_appearance.player_collapsed_album = false;
                 "
                 :show-collapsed-content="false"
                 position="static"
@@ -826,11 +841,11 @@
                 style="background-color: transparent;">
                 <n-space vertical align="end" style="margin-right:6vw;">
                   <!-- 1 方形封面-->
-                  <n-space vertical v-show="store_player_appearance.player_UI_Theme_State.player_background_model_num === 0">
+                  <n-space vertical v-show="store_player_appearance.player_background_model_num === 0">
                     <img
                       style="
                         width: 54vh;height: 54vh;
-                        margin-top: calc(28vh - 162px);
+                        margin-top: calc(28vh - 182px);
                         border: 1.5px solid #FFFFFF20;
                         border-radius: 10px;
                         object-fit: cover;object-position: center;
@@ -841,7 +856,9 @@
                       @error="handleImageError" alt="">
                     <div
                       style="
-                        width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;
+                        width: 54vh;margin-left: 2px;
+                        color: #E7E5E5;
+                        font-weight: 900;font-size: 26px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
                       {{ store_player_audio_info.this_audio_song_name }}
@@ -855,9 +872,9 @@
                     </div>
                   </n-space>
                   <!-- 2 旋转封面-->
-                  <n-space vertical v-show="store_player_appearance.player_UI_Theme_State.player_background_model_num === 1">
+                  <n-space vertical style="margin-top: -12px;" v-show="store_player_appearance.player_background_model_num === 1">
                     <lottie-player
-                      ref="animationInstance_model_1_wave" v-if="!clear_lottie_animationInstance && store_player_appearance.player_UI_Theme_State.player_use_lottie_animation"
+                      ref="animationInstance_model_1_wave" v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
                       autoplay
                       loop
                       mode="normal"
@@ -901,7 +918,7 @@
                       </div>
                     </div>
                     <lottie-player
-                      ref="animationInstance_model_1_spectrum" v-if="!clear_lottie_animationInstance && store_player_appearance.player_UI_Theme_State.player_use_lottie_animation"
+                      ref="animationInstance_model_1_spectrum" v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
                       autoplay
                       loop
                       mode="normal"
@@ -910,9 +927,9 @@
                     />
                   </n-space>
                   <!-- 3 炫胶唱片-->
-                  <n-space vertical style="margin-top: -3vh;" v-show="store_player_appearance.player_UI_Theme_State.player_background_model_num === 2">
+                  <n-space vertical style="margin-top: calc(-3vh - 18px);" v-show="store_player_appearance.player_background_model_num === 2">
                     <lottie-player
-                      ref="animationInstance_model_2_wave" v-if="!clear_lottie_animationInstance && store_player_appearance.player_UI_Theme_State.player_use_lottie_animation"
+                      ref="animationInstance_model_2_wave" v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
                       speed="0.8"
                       autoplay
                       loop
@@ -990,11 +1007,31 @@
                     </div>
                     <div
                       style="
-                        width: 54vh;margin-left: 2px;margin-top: -10px;color: #989292;font-weight: 550;font-size: 18px;
+                        width: 54vh;margin-left: 2px;margin-top: -10px;margin-bottom: 12px;
+                        color: #989292;font-weight: 550;font-size: 18px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
                       {{ store_player_audio_info.this_audio_singer_name }} -  {{ store_player_audio_info.this_audio_album_name }}
                     </div>
+                  </n-space>
+                  <!--  -->
+                  <n-space v-if="!store_player_appearance.player_collapsed_album" style="margin-top: -12px;">
+                    {{ store_player_audio_logic.current_play_time }}
+                    <n-slider
+                      style="
+                        width: calc(54vh - 96px);
+                        --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
+                        --n-rail-height: 4px;
+                        margin-top: 2px;
+                        border-radius: 10px;"
+                      :value="store_player_audio_logic.slider_singleValue"
+                      :min="0" :max="100" :tooltip="false"
+                    >
+                      <template #thumb>
+                        <n-icon-wrapper :size="0" />
+                      </template>
+                    </n-slider>
+                    {{ store_player_audio_logic.total_play_time }}
                   </n-space>
                 </n-space>
               </n-layout-sider>
@@ -1017,7 +1054,7 @@
                     @mouseleave="handleLeave"
                     style="
                       width: calc(40vw);
-                      max-height: calc(66vh);
+                      max-height: calc(68vh);
                       overflow: auto;
                       background-color: #00000000;
                     ">
@@ -1025,7 +1062,7 @@
                       <n-list-item
                         class="lyrics_info"
                         :style="{
-                          textAlign: store_player_appearance.player_UI_Theme_State.player_collapsed_album ? 'center' : 'left',
+                          textAlign: store_player_appearance.player_collapsed_album ? 'center' : 'left',
                         }"
                         v-for="(item, index) in store_player_audio_info.this_audio_lyrics_info_line_font"
                         @click="handleItemDbClick(index)">
@@ -1079,8 +1116,8 @@
   background-color: #FFFFFF16;
 }
 .lyrics_text_active {
-  font-size: v-bind(store_player_appearance.player_UI_Theme_State.player_lyric_fontSize);
-  font-weight: v-bind(store_player_appearance.player_UI_Theme_State.player_lyric_fontWeight);
+  font-size: v-bind(store_player_appearance.player_lyric_fontSize);
+  font-weight: v-bind(store_player_appearance.player_lyric_fontWeight);
   //display: inline-block;
   //white-space: pre;
   max-width: calc(36vw);

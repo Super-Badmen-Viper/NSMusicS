@@ -41,7 +41,8 @@
             "last_next": "Последњи",
             "install": "Инсталирај",
             "download": "Преузми",
-            "tag_error": "Недостаје 'ознака' за музичке датотеке у фасцикли. Молимо вас да попуните атрибуте ознака музичких датотека, а затим их поново увезете."
+            "tag_error": "Недостаје 'ознака' за музичке датотеке у фасцикли. Молимо вас да попуните атрибуте ознака музичких датотека, а затим их поново увезете.",
+            "drag_sort": "Превуци за сортирање"
         },
         "view_player": {
             "view_seting": {
@@ -52,13 +53,16 @@
                 "coverBase_4": "Основа",
                 "lyricSize": "Величина текста",
                 "lyricSpeed": "Брзина текста",
+                "lyricWright": "дебљина фонта песме",
                 "coverBaseVague": "Неоспорено",
                 "lyricsAnimation": "Анимација",
                 "lyricsAnimation_line_1": "По линији",
                 "lyricsAnimation_byte_2": "По знаку",
                 "lyricsAnimation_jump_3": "Прецизно",
                 "player_use_lottie": "Пуштање Анимације",
-                "player_use_lottie_explain": "(Eksperimentalno) Omogućite animaciju u interfejsu za reprodukovanje (može dovesti do nestabilnog korišćenja memorije)"
+                "player_use_lottie_explain": "(Eksperimentalno) Omogućite animaciju u interfejsu za reprodukovanje (može dovesti do nestabilnog korišćenja memorije)",
+                "player_use_playbar_auto_hide": "Аутоматски сакрај контролну траку плејера",
+                "player_use_playbar_auto_hide_explain": "Контролна трака плејера ће се аутоматски сажимати у интерфејсу пуштања"
             }
         }
     }

@@ -1,11 +1,12 @@
-import {app, BrowserWindow, screen} from 'electron'
+import {app, BrowserWindow, screen, globalShortcut } from 'electron'
 const path = require('path');
 import fs from "fs";
 import {IAudioMetadata, IPicture, parseFile, selectCover} from 'music-metadata';
 import { autoUpdater } from 'electron-updater';
 
+let win = null;
 async function createWindow() {
-    const win = await new BrowserWindow({
+    win = await new BrowserWindow({
         width: 1220,
         height: 765,
         minWidth: 1160,
@@ -20,9 +21,9 @@ async function createWindow() {
     })
     win.setMenu(null)
     win.setMaximizable(false)
-    win.webContents.openDevTools({
-        mode:'detach'
-    });
+    // win.webContents.openDevTools({
+    //     mode:'detach'
+    // });
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
     if (process.argv[2]) {
         win.loadURL(process.argv[2])
@@ -65,10 +66,10 @@ async function createWindow() {
             const { width, height, x, y } = currentDisplay.bounds;
 
             win.setBounds({
-                x: x - 3,
-                y: y - 3,
-                width: width + 6,
-                height: height + 6,
+                x: x - 1,
+                y: y - 1,
+                width: width + 2,
+                height: height + 2,
             });
             isFullscreen = true;
         }
@@ -240,6 +241,9 @@ async function createWindow() {
     function getUniqueId_Media() {
         const db = require('better-sqlite3')(navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4().replace(/-/g, '');
         while (db.prepare(`SELECT COUNT(*) FROM media_file WHERE id = ?`).pluck().get(id) > 0) {
@@ -250,6 +254,9 @@ async function createWindow() {
     function getUniqueId_Album() {
         const db = require('better-sqlite3')(navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4().replace(/-/g, '');
         while (db.prepare(`SELECT COUNT(*) FROM album WHERE id = ?`).pluck().get(id) > 0) {
@@ -260,6 +267,9 @@ async function createWindow() {
     function getUniqueId_Artist() {
         const db = require('better-sqlite3')(navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4().replace(/-/g, '');
         while (db.prepare(`SELECT COUNT(*) FROM artist WHERE id = ?`).pluck().get(id) > 0) {
@@ -729,6 +739,9 @@ async function createWindow() {
 
         const db = require('better-sqlite3')(navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         resultArray.forEach(music => {
             if (!isArtistExists(db, music.artist.name)) {
                 insertData(db, 'artist', music.artist);
@@ -813,6 +826,16 @@ async function createWindow() {
 }
 
 app.whenReady().then(() => {
+    globalShortcut.register('CommandOrControl+Shift+I', () => {
+        if (win.webContents.isDevToolsOpened()) {
+            win.webContents.closeDevTools();
+        } else {
+            win.webContents.openDevTools({
+                mode:'detach'
+            });
+        }
+    });
+
     createWindow(); 
 
     const devInnerHeight: number = 1080.0;

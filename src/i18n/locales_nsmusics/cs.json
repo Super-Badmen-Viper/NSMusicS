@@ -41,7 +41,8 @@
             "last_next": "Nejnovější",
             "install": "Nainstalovat",
             "download": "Stáhnout",
-            "tag_error": "Chybí 'značka' pro hudobní soubory ve složce. Prosím doplňte atributy značky hudobních souborů a poté je znovu naimportujte."
+            "tag_error": "Chybí 'značka' pro hudobní soubory ve složce. Prosím doplňte atributy značky hudobních souborů a poté je znovu naimportujte.",
+            "drag_sort": "Přetáhněte pro řazení"
         },
         "view_player": {
             "view_seting": {
@@ -52,13 +53,16 @@
                 "coverBase_4": "Základ",
                 "lyricSize": "Velikost Textu",
                 "lyricSpeed": "Rychlost Textu",
+                "lyricWright": "Tloušťka písma pro text",
                 "coverBaseVague": "Rozmazat",
                 "lyricsAnimation": "Animace",
                 "lyricsAnimation_line_1": "Pozice",
                 "lyricsAnimation_byte_2": "Znaky",
                 "lyricsAnimation_jump_3": "Přesnost",
                 "player_use_lottie": "Přehrát Animace",
-                "player_use_lottie_explain": "(Experimentální) Povolit animace při přehrávání na rozhraní (může způsobit nestabilní využití paměti)"
+                "player_use_lottie_explain": "(Experimentální) Povolit animace při přehrávání na rozhraní (může způsobit nestabilní využití paměti)",
+                "player_use_playbar_auto_hide": "Automaticky skrýt ovládací pruhu přehrávače",
+                "player_use_playbar_auto_hide_explain": "Ovládací pruh přehrávače se automaticky sbalí v přehrávacím rozhraní"
             }
         }
     }

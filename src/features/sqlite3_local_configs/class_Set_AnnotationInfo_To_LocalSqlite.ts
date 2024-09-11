@@ -29,6 +29,8 @@ export class Set_AnnotationInfo_To_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
 
         const insertStmt = db.prepare(`
             INSERT INTO ${store_server_user_model.annotation} (ann_id, item_id, item_type, starred, starred_at) 
@@ -65,6 +67,8 @@ export class Set_AnnotationInfo_To_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
 
         const updateStmt = db.prepare(`
             UPDATE ${store_server_user_model.annotation} 
@@ -87,6 +91,8 @@ export class Set_AnnotationInfo_To_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
 
         const updateStmt = db.prepare(`
             UPDATE ${store_server_user_model.annotation} 

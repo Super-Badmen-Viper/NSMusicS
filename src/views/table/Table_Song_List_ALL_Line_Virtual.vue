@@ -170,7 +170,7 @@ const show_search_area = () => {
     bool_show_search_area.value = false
     input_search_InstRef.value?.clear()
     if(bool_input_search == true){
-      store_view_media_page_logic.list_data_StartUpdate = true
+      // store_view_media_page_logic.list_data_StartUpdate = true
       back_search_default()
       bool_input_search = false
       scrollTo(0)
@@ -310,7 +310,7 @@ const get_router_history_model_next = () =>  {
 const handleItemClick = () => {
   click_count++
 }
-const handleItemDbClick = (media_file:Media_File,index:number) => {
+const handleItemDbClick = (media_file:any,index:number) => {
   if(bool_start_play.value == true){
     if(click_count >= 2){
       click_count = 0
@@ -417,6 +417,8 @@ import {
   store_server_data_set_mediaInfo
 } from "@/store/server/server_data_synchronization/store_server_data_set_mediaInfo";
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
+import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
 function getCurrentDateTime() {
   return new Date().toLocaleString(
       'zh-CN', {
@@ -625,7 +627,6 @@ const click_open_bulk_operation = () => {
 ////// Right_click_on_songline show menu
 let click_count = 0
 const bool_start_play = ref<boolean>(true)
-
 const options_dropdown_play_mode = ref<any[]>([
   {
     label: computed(() => t('nsmusics.siderbar_player.playback_1')),
@@ -675,6 +676,49 @@ const begin_select_SongList_ALL_Line_of_playback = (key: string | number) => {
     handleItemDbClick(mediaFiles[index], index);
   }
 };
+
+////// right menu
+const contextmenu = ref(null as any)
+const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
+function menu_item_add_to_playlist_end() {
+  const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
+  if (item != undefined && item != 'undefined') {
+    const newItem: Media_File = JSON.parse(JSON.stringify(item));
+    newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
+    store_playlist_list_info.playlist_MediaFiles_temporary.push(newItem);
+    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+      item.absoluteIndex = index;
+    });
+
+    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id);
+
+    store_app_configs_logic_save.save_system_playlist_item_id_config();
+
+    contextmenu.value.hide()
+  }
+}
+function menu_item_add_to_playlist_next() {
+  const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
+  if (item != undefined && item != 'undefined') {
+    let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+        (item: any) => item.id === store_player_audio_info.this_audio_song_id
+    );
+
+    const newItem: Media_File = JSON.parse(JSON.stringify(item));
+    newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
+    store_playlist_list_info.playlist_MediaFiles_temporary.splice(index + 1, 0, newItem);
+
+    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+      item.absoluteIndex = index;
+    });
+
+    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(index + 1, 0, newItem.id);
+
+    store_app_configs_logic_save.save_system_playlist_item_id_config();
+
+    contextmenu.value.hide()
+  }
+}
 
 ////// view songlist_view Remove data
 onBeforeUnmount(() => {
@@ -811,7 +855,7 @@ onBeforeUnmount(() => {
               background-color: transparent;
               ">
               <img
-                  :style="{
+                :style="{
                   width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)'
@@ -906,6 +950,7 @@ onBeforeUnmount(() => {
             :active="active"
             :data-index="index"
             :data-active="active"
+            v-contextmenu:contextmenu @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
             class="message"
             :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)'}"
             @click="handleItemClick"
@@ -981,58 +1026,6 @@ onBeforeUnmount(() => {
                     <icon color="#FAFAFC" :size="20" style="margin-left: -2px; margin-top: 3px;"><Heart24Regular/></icon>
                   </template>
                 </button>
-                <VDropdown :distance="6" v-if="active">
-                  <button
-                    style="
-                      border: 0px; background-color: transparent;
-                      width: 28px; height: 28px;
-                      margin-top: 4px;
-                      cursor: pointer;
-                    "
-                    @click="click_count = 0"
-                  >
-                    <template v-if="!store_app_configs_info.update_theme">
-                      <icon :size="20"><MoreCircle20Regular/></icon>
-                    </template>
-                    <template v-else>
-                      <icon :size="20" color="#FFFFFF"><MoreCircle20Regular/></icon>
-                    </template>
-                  </button>
-                  <template #popper>
-                    <VMenu
-                      key="001"
-                      placement="right-start"
-                      style="width:100px;"
-                      instant-move>
-                      <button class="songlist_more" style="width: 100px;height: 24px;border: 0px; background-color: transparent;">
-                        {{ $t('form.addToPlaylist.title') }}
-                      </button>
-                      <template #popper>
-                        <button
-                          v-for="n in store_playlist_list_info.playlist_names_ALLLists"
-                          :key="n.value"
-                          class="songlist_more"
-                          style="width: 100px;height: 24px;border: 0px; background-color: transparent;display: block;"
-                          @click="update_playlist_addMediaFile(item.id,n.value)"
-                        >
-                          {{ n.label }}
-                        </button>
-                      </template>
-                    </VMenu>
-                    <button
-                      class="songlist_more"
-                      v-if="
-                        store_view_media_page_logic.page_songlists_selected !== 'song_list_all' &&
-                        store_view_media_page_logic.page_songlists_selected !== 'song_list_love' &&
-                        store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'
-                      "
-                      style="width: 100px;height: 24px;border: 0px; background-color: transparent;"
-                      @click="update_playlist_deleteMediaFile(item.id)"
-                    >
-                      {{ $t('common.delete') }}
-                    </button>
-                  </template>
-                </VDropdown>
               </div>
               <span class="duration_txt" style="margin-left: auto;margin-top: 4px;margin-right: 0px;text-align: left;font-size: 15px;" @click="click_count = 0">
                 {{ item.duration_txt }}
@@ -1044,8 +1037,33 @@ onBeforeUnmount(() => {
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>
+      <v-contextmenu ref="contextmenu" class="v-contextmenu-item v-contextmenu-item--hover">
+        <v-contextmenu-submenu :title="menu_item_add_to_songlist">
+          <v-contextmenu-item
+            v-for="n in store_playlist_list_info.playlist_names_ALLLists"
+            :key="n.value"
+            @click="update_playlist_addMediaFile(store_playlist_list_info.playlist_Menu_Item_Id,n.value)"
+          >
+            {{ n.label }}
+          </v-contextmenu-item>
+        </v-contextmenu-submenu>
+        <v-contextmenu-divider />
+        <v-contextmenu-item
+          v-if="
+            store_view_media_page_logic.page_songlists_selected !== 'song_list_all' &&
+            store_view_media_page_logic.page_songlists_selected !== 'song_list_love' &&
+            store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
+          @click="update_playlist_deleteMediaFile(store_playlist_list_info.playlist_Menu_Item_Id)">
+          {{ $t('common.delete') }}
+        </v-contextmenu-item>
+        <v-contextmenu-item @click="menu_item_add_to_playlist_end">
+          {{ $t('player.addLast') }}
+        </v-contextmenu-item>
+        <v-contextmenu-item @click="menu_item_add_to_playlist_next">
+          {{ $t('player.addNext') }}
+        </v-contextmenu-item>
+      </v-contextmenu>
     </div>
-
   </n-space>
   <!-- 管理播放列表 -->
   <n-modal
@@ -1268,6 +1286,14 @@ onBeforeUnmount(() => {
 }
 .Rate.viaSlot .Rate__star:nth-child(8).filled{color: red;}
 .Rate.viaSlot .Rate__star:nth-child(8).hover{color: red;}
+
+.v-contextmenu-item{
+  margin-top: 5px;margin-bottom: 5px;
+}
+.v-contextmenu-item--hover{
+  color: #3DC3FF;
+  background-color: transparent;
+}
 
 ::-webkit-scrollbar {
   display: auto;

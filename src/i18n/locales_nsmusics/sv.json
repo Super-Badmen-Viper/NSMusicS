@@ -41,7 +41,8 @@
             "last_next": "Senaste",
             "install": "Installera",
             "download": "Ladda ner",
-            "tag_error": "‘tagg’ för musikfiler i mappen saknas. Var god fyll i taggattributen för musikfilerna och importera sedan igen."
+            "tag_error": "‘tagg’ för musikfiler i mappen saknas. Var god fyll i taggattributen för musikfilerna och importera sedan igen.",
+            "drag_sort": "Dra för att sortera"
         },
         "view_player": {
             "view_seting": {
@@ -52,13 +53,16 @@
                 "coverBase_4": "Basad",
                 "lyricSize": "Textstorlek",
                 "lyricSpeed": "Texthastighet",
+                "lyricWright": "Lirteckens tjocklek",
                 "coverBaseVague": "Oskärpa",
                 "lyricsAnimation": "Animation",
                 "lyricsAnimation_line_1": "Radvis",
                 "lyricsAnimation_byte_2": "Teckenvis",
                 "lyricsAnimation_jump_3": "Hoppvis",
                 "player_use_lottie": "Spela upp Animation",
-                "player_use_lottie_explain": "(Experimentellt) Aktivera animering vid uppspelning i gränssnittet (kan orsaka osäker minnesanvändning)"
+                "player_use_lottie_explain": "(Experimentellt) Aktivera animering vid uppspelning i gränssnittet (kan orsaka osäker minnesanvändning)",
+                "player_use_playbar_auto_hide": "Dölj automatiskt spelarens kontrollfält",
+                "player_use_playbar_auto_hide_explain": "Spelarens kontrollfält kommer att automatiskt dra ihop sig i uppspelningsgränssnittet"
             }
         }
     }

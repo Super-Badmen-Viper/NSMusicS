@@ -35,6 +35,9 @@ export class Set_ServerInfo_To_LocalSqlite {
         let new_id = this.getUniqueId(db);
         let new_date = this.getCurrentDateTime();
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         db.prepare(`
             INSERT INTO system_servers_config (id, server_name, url, user_name, password, last_login_at, type) 
             VALUES (?, ?, ?, ?, ?, ?, ?)`)
@@ -58,6 +61,9 @@ export class Set_ServerInfo_To_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         ///
         let new_date = this.getCurrentDateTime();
         const existingRecord = db.prepare(`SELECT * FROM system_servers_config WHERE id = ?`).get(id);
@@ -92,6 +98,9 @@ export class Set_ServerInfo_To_LocalSqlite {
         const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
+        db.exec('PRAGMA foreign_keys = OFF');
+
+
         ///
         const existingRecord = db.prepare('SELECT * FROM system_servers_config WHERE id = ?').get(id);
         if (existingRecord) {
