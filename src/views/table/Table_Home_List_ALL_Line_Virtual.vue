@@ -12,6 +12,7 @@ import {
   ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
 } from '@vicons/fluent'
 import {
+  Play,
   RefreshCircleOutline,
 } from '@vicons/ionicons5'
 
@@ -258,9 +259,12 @@ onBeforeUnmount(() => {
            v-contextmenu:contextmenu
            @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = store_view_home_page_info.home_selected_top_album?.id">
         <div
-          :style="{ width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)'}"
+          :style="{
+            width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
+            height: 'calc(44vh)',
+          }"
           style="
-            height: 320px;
+            min-height: 320px;
             border-radius: 10px;
             border: 1.5px solid #FFFFFF20;
             overflow: hidden;
@@ -271,17 +275,18 @@ onBeforeUnmount(() => {
           >
           <div style="filter: blur(0px);">
             <img
-                :style="{
+              :style="{
                 width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
                 height: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
-                WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)'
+                WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
+                marginTop: 'calc(-500px)'
               }"
-                style="
-                margin-top: -300px;position: absolute;
+              style="
+                position: absolute;
                 object-fit: cover;object-position: center;
               "
-                :src="getAssetImage(store_view_home_page_info.home_selected_top_album?.medium_image_url)"
-                @error="handleImageError"
+              :src="getAssetImage(store_view_home_page_info.home_selected_top_album?.medium_image_url)"
+              @error="handleImageError"
             />
           </div>
         </div>
@@ -319,16 +324,18 @@ onBeforeUnmount(() => {
             {{ store_view_home_page_info.home_selected_top_album?.artist }}
           </div>
           <n-space style="margin-top: 6px;">
-            <n-button @click="Play_Next_album_SongList_click(-1)" style="border-radius: 6px;border: 1.5px solid #FFFFFF20;">
-              <n-icon>
+            <n-button quaternary @click="Play_Next_album_SongList_click(-1)" style="margin-right: -6px;">
+              <n-icon size="20" :depth="2">
                 <ChevronLeft16Filled />
               </n-icon>
             </n-button>
-            <n-button @click="Play_this_album_SongList_click(store_view_home_page_info.home_selected_top_album?.id)" style="border-radius: 6px;border: 1.5px solid #FFFFFF20;">
-              {{ $t('player.play') }}
+            <n-button quaternary @click="Play_this_album_SongList_click(store_view_home_page_info.home_selected_top_album?.id)" style="margin-right: -6px;">
+              <template #icon>
+                <n-icon :size="26" :depth="2"><Play/></n-icon>
+              </template>
             </n-button>
-            <n-button @click="Play_Next_album_SongList_click(1)" style="border-radius: 6px;border: 1.5px solid #FFFFFF20;">
-              <n-icon>
+            <n-button quaternary @click="Play_Next_album_SongList_click(1)" style="margin-right: -6px;">
+              <n-icon size="20" :depth="2">
                 <ChevronRight16Filled />
               </n-icon>
             </n-button>
@@ -814,7 +821,7 @@ onBeforeUnmount(() => {
       </DynamicScroller>
     </n-space>
 
-    <v-contextmenu ref="contextmenu" class="v-contextmenu-item v-contextmenu-item--hover">
+    <v-contextmenu ref="contextmenu" class="v-contextmenu-item v-contextmenu-item--hover" style="z-index: 999">
       <v-contextmenu-submenu :title="menu_item_add_to_songlist">
         <v-contextmenu-item
             v-for="n in store_playlist_list_info.playlist_names_ALLLists"

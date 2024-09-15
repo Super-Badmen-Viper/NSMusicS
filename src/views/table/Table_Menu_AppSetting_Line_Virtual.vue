@@ -176,6 +176,9 @@
   import {store_app_configs_logic_theme} from "@/store/app/store_app_configs_logic_theme";
   import {store_local_db_info} from "@/store/local/store_local_db_info";
   import {store_player_appearance} from "@/store/player/store_player_appearance";
+  import {
+    Class_Get_MediaTag_Configs_Read
+  } from "@/features/sqlite3_taglib_configs/class_Get_MediaTag_Configs_Read";
   const theme_value = ref('lightTheme')
   const theme_options = ref([
     {
@@ -206,37 +209,37 @@
         if (folderPath) {
           store_server_user_model.library_path = folderPath;
           clearInterval(timer_percentage.value);
-          store_local_db_info.result_local = await ipcRenderer.invoke('metadata-get-directory-filePath', [folderPath])
-              .then(filePath => {
-                library_path_search.value = filePath;
-                ipcRenderer.send('window-reset-all');
-              })
-              .catch(error => {
-                console.error('Error getting directory file path:', error);
-                store_local_db_info.result_local = false
-              });
+          console.log('Before invoking node-taglib-sharp-get-directory-filePath');
+          store_server_users.percentage_of_local = 10;
+          const error_log = await ipcRenderer.invoke('node-taglib-sharp-get-directory-filePath', [folderPath])
+            .then(success => {
+              console.log('node-taglib-sharp-get-directory-filePath succeeded:', success);
+              library_path_search.value = success;
+              clearInterval(timer_percentage.value);
+            })
+            .catch(error => {
+              console.error('node-taglib-sharp-get-directory-filePath failed:', error);
+              store_local_db_info.result_local = false;
+            });
+          console.error(error_log)
           timer_percentage.value = setInterval(synchronize_percentage_of_library_path_search, 200);
-          console.log(folderPath);
+          console.log('Folder path selected:', folderPath);
+          store_server_users.percentage_of_local = 100;
         } else {
           library_path_search.value = false;
           show_selectFolder.value = false;
         }
       } catch (error) {
         console.error('Error selecting folder:', error);
+        clearInterval(timer_percentage.value);
+        store_server_users.percentage_of_local = 0;
       }
     }
   }
   const library_path_search = ref(false)
   async function synchronize_percentage_of_library_path_search(){
-    store_server_users.percentage_of_local = await ipcRenderer.invoke('metadata-get-directory-filePath-duration');
+    store_server_users.percentage_of_local = await ipcRenderer.invoke('node-taglib-sharp-percentage');
   }
-  const stopWatching_result_local = watch(() => store_local_db_info.result_local, (newValue) => {
-    if(!newValue) {
-      store_local_db_info.result_local = true
-      message.error(t('nsmusics.view_page.selectLibrary') + t('error.genericError'))
-      message.info(store_server_user_model.library_path + ' ' + t('nsmusics.view_page.tag_error'))
-    }
-  });
 
   //////
   const selectd_props_home_page = ref<(string | number)[] | null>(null)
@@ -445,7 +448,6 @@
   onBeforeUnmount(() => {
     stopWatching_collapsed_width()
     stopWatching_window_innerWidth()
-    stopWatching_result_local()
     if (timer.value) {
       clearInterval(timer.value);
       timer.value = null;
@@ -761,6 +763,7 @@
                           <n-button size="small"
                                     @click="
                                       show_selectFolder = false;
+                                      store_server_users.percentage_of_local = 0;
                                       store_local_db_info.set_clear_all_local_data()
                                     "
                           >

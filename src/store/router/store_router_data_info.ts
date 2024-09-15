@@ -15,7 +15,7 @@ export const store_router_data_info = reactive({
     router_name: '',
     router_select: '',
 
-    MEMORY_THRESHOLD: 240 * 1024 * 1024,
+    MEMORY_THRESHOLD: 360 * 1024 * 1024,
     
     find_music_model: false,
     find_album_model: false,

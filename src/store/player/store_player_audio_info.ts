@@ -33,7 +33,7 @@ export const store_player_audio_info = reactive({
     this_audio_Index_of_absolute_positioning_in_list: -1,
 
     this_audio_song_rating: 0,
-    this_audio_song_favorite: 0,
+    this_audio_song_favorite: false,
     this_audio_album_rating: '',
     this_audio_album_favorite: '',
     this_audio_singer_rating: 0,

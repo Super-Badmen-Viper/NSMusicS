@@ -215,12 +215,16 @@
       console.log(to.name)
       store_app_configs_logic_save.save_system_config_of_View_Router_History()
       ///
-      try {
-        const memoryUsage = await ipcRenderer.invoke('window-get-memory')
-        if (memoryUsage.rss > store_router_data_info.MEMORY_THRESHOLD) {
-          ipcRenderer.send('window-reset-data')
+      if(to.name != 'View_Song_List_ALL') {
+        try {
+          const memoryUsage = await ipcRenderer.invoke('window-get-memory')
+          if (memoryUsage.rss > store_router_data_info.MEMORY_THRESHOLD) {
+            ipcRenderer.send('window-reset-data')
+          }
+        } catch {
+
         }
-      }catch{}
+      }
     }
   });
 
@@ -588,7 +592,7 @@
     await store_app_configs_logic_load.load_app_config()
 
     try {
-      store_app_configs_info.version = '0.2.7';
+      store_app_configs_info.version = '0.7.0';
       console.log('Current Version:', store_app_configs_info.version);
       const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
       await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);

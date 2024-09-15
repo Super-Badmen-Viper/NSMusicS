@@ -85,8 +85,8 @@ export const store_app_configs_logic_load = reactive({
             store_player_audio_info.this_audio_singer_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_singer_name']
             store_player_audio_info.this_audio_song_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_name']
             store_player_audio_info.this_audio_song_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_id']
-            store_player_audio_info.this_audio_song_favorite = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_favorite']
-            store_player_audio_info.this_audio_song_rating = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_rating']
+            store_player_audio_info.this_audio_song_favorite = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_favorite'] === 'true'
+            store_player_audio_info.this_audio_song_rating = Number('' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_song_rating'])
             store_player_audio_info.this_audio_album_name = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_name']
             store_player_audio_info.this_audio_album_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_id']
             store_player_audio_info.this_audio_album_favorite = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_album_favorite']

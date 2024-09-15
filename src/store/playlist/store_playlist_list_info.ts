@@ -22,8 +22,8 @@ export const store_playlist_list_info = reactive({
         if (item != undefined && item != 'undefined') {
             const index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex((mediaFile: Media_File) => mediaFile.id === item.id);
 
-            const startIndex = Math.max(0, index - 20);
-            const endIndex = Math.min(store_playlist_list_info.playlist_MediaFiles_temporary.length - 1, index + 29);
+            const startIndex = Math.max(0, index - 4);
+            const endIndex = Math.min(store_playlist_list_info.playlist_MediaFiles_temporary.length - 1, index + 45);
 
             store_playlist_list_info.playlist_MediaFiles_temporary_Sort_Items =
                 store_playlist_list_info.playlist_MediaFiles_temporary.slice(

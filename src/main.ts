@@ -8,10 +8,6 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import VueVirtualScroller from 'vue-virtual-scroller'
 app.use(VueVirtualScroller)
 
-import 'floating-vue/dist/style.css'
-import FloatingVue from 'floating-vue'
-app.use(FloatingVue)
-
 import rate from 'vue-rate'
 import 'vue-rate/dist/vue-rate.css'
 app.use(rate)

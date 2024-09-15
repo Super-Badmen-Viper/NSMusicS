@@ -150,14 +150,14 @@
       }
     }, 400);
   }
-  ipcRenderer.on('mpv-stopped', async (event, message) => {
+  ipcRenderer.on('mpv-stopped', async (event, args) => {
     is_play_ended.value = true;
     let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
         (item: any) =>
             item.play_id ===
             store_player_audio_info.this_audio_play_id
     );
-    if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length - 1) {
+    if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length - 1 && store_player_audio_logic.play_order === 'playback-1') {
       await store_player_audio_logic.player.pause();
       store_player_audio_info.this_audio_is_playing = false
     }else {

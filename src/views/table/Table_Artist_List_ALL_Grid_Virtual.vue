@@ -711,7 +711,7 @@
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>
-      <v-contextmenu ref="contextmenu" class="v-contextmenu-item v-contextmenu-item--hover">
+      <v-contextmenu ref="contextmenu" class="v-contextmenu-item v-contextmenu-item--hover" style="z-index: 999">
         <v-contextmenu-submenu :title="menu_item_add_to_songlist">
           <v-contextmenu-item
               v-for="n in store_playlist_list_info.playlist_names_ALLLists"
