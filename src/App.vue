@@ -91,7 +91,7 @@
   ]
 
   ////// server selected get
-  import {Set_Navidrome_Data_To_LocalSqlite} from "@/features/servers_configs/navidrome_api/middleware/class_Set_Navidrome_Data_To_LocalSqlite";
+  import {Set_Navidrome_ALL_Data_To_LocalSqlite} from "@/features/servers_configs/navidrome_api/middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
   async function get_server_config_of_current_user_of_sqlite(value: Server_Configs_Props) {
     store_server_users.server_config_of_current_user_of_sqlite = value
     store_server_users.server_config_of_current_user_of_select = { label: value.server_name, value: value.id };
@@ -104,7 +104,7 @@
     const {salt, token} = store_server_users.get_generateEncryptedPassword(
         store_server_users.server_config_of_current_user_of_sqlite?.password
     );
-    let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_Data_To_LocalSqlite()
+    let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_ALL_Data_To_LocalSqlite()
     await set_Navidrome_Data_To_LocalSqlite.Set_Read_Navidrome_Api_BasicInfo_Add_LocalSqlite(
         store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
         store_server_users.server_config_of_current_user_of_sqlite?.user_name, token, salt,
@@ -592,7 +592,7 @@
     await store_app_configs_logic_load.load_app_config()
 
     try {
-      store_app_configs_info.version = '0.7.0';
+      store_app_configs_info.version = '0.7.1';
       console.log('Current Version:', store_app_configs_info.version);
       const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
       await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);

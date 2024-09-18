@@ -43,10 +43,11 @@ export const store_app_configs_logic_load = reactive({
             store_server_user_model.username = '' + system_Configs_Read.app_Configs.value['username']
             store_server_user_model.password = '' + system_Configs_Read.app_Configs.value['password']
             store_server_user_model.model_select = '' + system_Configs_Read.app_Configs.value['model_select']
-            store_server_user_model.model_select === 'navidrome' ?
+            if(store_server_user_model.model_select === 'navidrome'){
                 store_server_user_model.switchToMode_Navidrome_Api()
-                :
+            }else{
                 store_server_user_model.switchToMode_Local()
+            }
             if (('' + system_Configs_Read.app_Configs.value['theme']) === 'lightTheme') {
                 store_app_configs_info.update_theme = false;
                 store_app_configs_info.theme = lightTheme;

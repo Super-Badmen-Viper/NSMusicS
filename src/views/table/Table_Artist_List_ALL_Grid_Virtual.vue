@@ -671,17 +671,6 @@
                         <icon v-if="item.favorite" :size="20" color="red" style="margin-left: -2px;margin-top: 3px;"><Heart28Filled/></icon>
                         <icon v-else :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><Heart24Regular/></icon>
                       </button>
-                      <button
-                          class="more_this_artist"
-                          @click="Open_this_artist_all_artist_list_click(item.id)"
-                          style="
-                          border: 0px;background-color: transparent;
-                          width: 28px;height: 28px;
-                          cursor: pointer;
-                        "
-                      >
-                        <icon :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><MoreCircle32Regular/></icon>
-                      </button>
                     </div>
                   </div>
                 </div>

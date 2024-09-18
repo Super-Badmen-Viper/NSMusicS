@@ -25,7 +25,7 @@ import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import moment from "moment/moment";
 const path = require('path');
 
-export class Set_Navidrome_Data_To_LocalSqlite{
+export class Set_Navidrome_ALL_Data_To_LocalSqlite{
     private getUniqueId(db: any,table: any,id_name: any) {
         const { v4: uuidv4 } = require('uuid');
         let id = uuidv4();

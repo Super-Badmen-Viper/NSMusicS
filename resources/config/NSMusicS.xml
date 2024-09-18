@@ -1,29 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>0.7.0</version>
-<url>https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-v0.7.0/NSMusicS.Setup.0.7.0.exe</url>
+<version>0.7.1</version>
+<url>https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-v0.7.1/NSMusicS.Setup.0.7.1.exe</url>
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
-    0.7.0现已更新内容：&#10;
-    1.修复本地模式的歌曲tag读取问题(因为music-metadata存在非常严重的内存泄漏问题，换成了基于C#taglib翻译的node-taglib-sharp)&#10;
-    2.修复本地模式的数据写入数据库问题(解决了Electron渲染层与node层混用better-sqlite3的问题，通过指定nativeBinding解决)&#10;
-    3.修复用户切换页面时NSMusicS自动内存清理回收机制触发的频率过高问题(调整内存清理回收的内存阈值(由240调整到360.几乎不会再触发自动内存清理)，爆音以及切换至乐曲页面时的参数缺失问题已解决)&#10;
-    4.修复内存自动清理回收时，初始化数据重读取时this_audio_song_favorite与this_audio_song_rating的数值读取类型问题&#10;
-    5.优化页面美观程度，易操控程度，细节更细腻&#10;
-    6.修复error图片的分辨率过高而减慢加载速度的问题(error_album.jpg分辨率从6507*4338降低到1080P)&#10;
-    &#10;&#10;
-    1.0.0即将更新内容：&#10;
+    1.0.0现已更新内容：&#10;
     1.增加服务器模式(二)(即时访问API)，可访问任何NavidRome服务器(不受访问速率限制)&#10;
     2.增加快捷键操控模式(可在菜单-快捷键中，根据用户使用习惯自定义快捷键，也可使用默认的快捷键)&#10;
+    3.修复了逐字歌词读取问题(可设置是否启用逐字歌词效果，启用则开启仿AppleMusic歌词逐字效果，不启用则自动转化为逐行歌词)&#10;
+    4.修复了歌曲封面文件读取兼容性(由仅支持jpg增加到同时支持：jpg,png)&#10;
+    5.增加本地模式导入可选是否导入歌曲封面(可选择导入歌曲Tag时，是否同时也将歌曲封面写入到文件系统中)&#10;
+        注意：开启歌曲封面导入将极大减慢本地模式导入的速度，建议不使用此功能，建议使用MusicTag软件补全歌曲封面Tag&#10;
     &#10;&#10;
-    1.0.5即将更新功能：&#10;
+    1.0.5预计更新功能：&#10;
     1.增加播放器动态渐变背景，可选播放背景(动态渐变背景/专辑底图)&#10;
     2.增加歌词样式(圆点渐变动画，表示下一句歌词即将播放的进度变化)&#10;
     3.增加歌词样式(桌面歌词功能)&#10;
     4.增加歌词样式(进一步优化并完全开放歌词逐字功能。navidrome服务器模式也可使用本地模式中的逐字歌词，逐字效果与AppleMusic歌词逐字效果一致)&#10;
     5.增加本地模式中歌曲tag自定义编辑功能(可选择连锁编辑tag，自动变更相关“歌手-专辑-单曲”中关联的tag)&#10;
     &#10;&#10;
-    1.1.0即将更新功能：&#10;
+    1.1.0预计 更新功能：&#10;
     1.可选音频输出源(mpv(本地输出)/howler.js(web输出))&#10;
     2.增加音效-均衡器(简易/专业)功能(仅适用于音频输出源为howler.js(web输出))&#10;
 </changelog_explain>

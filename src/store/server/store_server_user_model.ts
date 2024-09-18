@@ -3,8 +3,8 @@ import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {
-    Set_Navidrome_Data_To_LocalSqlite
-} from "@/features/servers_configs/navidrome_api/middleware/class_Set_Navidrome_Data_To_LocalSqlite";
+    Set_Navidrome_ALL_Data_To_LocalSqlite
+} from "@/features/servers_configs/navidrome_api/middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
 import {
     Get_PlaylistInfo_From_LocalSqlite
@@ -57,7 +57,7 @@ export const store_server_user_model = reactive({
     },
 
     async Get_UserData_Synchronize_ToLocal_of_ND() {
-        let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_Data_To_LocalSqlite();
+        let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_ALL_Data_To_LocalSqlite();
         await set_Navidrome_Data_To_LocalSqlite.Set_Read_Navidrome_Api_PlayListInfo_Add_LocalSqlite(
             store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
             store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,

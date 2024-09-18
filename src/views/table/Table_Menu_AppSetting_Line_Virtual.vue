@@ -224,7 +224,9 @@
           console.error(error_log)
           timer_percentage.value = setInterval(synchronize_percentage_of_library_path_search, 200);
           console.log('Folder path selected:', folderPath);
-          store_server_users.percentage_of_local = 100;
+          // reset data
+          store_server_user_model.switchToMode_Navidrome_Api()
+          store_server_user_model.switchToMode_Local()
         } else {
           library_path_search.value = false;
           show_selectFolder.value = false;

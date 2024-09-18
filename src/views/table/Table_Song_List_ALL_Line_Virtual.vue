@@ -409,24 +409,9 @@ import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {
   store_server_data_set_playlistInfo
 } from "@/store/server/server_data_synchronization/store_server_data_set_playlistInfo";
-import {
-  Set_Navidrome_Data_To_LocalSqlite
-} from "@/features/servers_configs/navidrome_api/middleware/class_Set_Navidrome_Data_To_LocalSqlite";
-import {store_server_users} from "@/store/server/store_server_users";
-import {
-  store_server_data_set_mediaInfo
-} from "@/store/server/server_data_synchronization/store_server_data_set_mediaInfo";
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
-function getCurrentDateTime() {
-  return new Date().toLocaleString(
-      'zh-CN', {
-        year: 'numeric', month: '2-digit', day: '2-digit',
-        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
-      }
-  ).replace(/\//g, '-');
-}
+
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
 const playlist_set_of_addPlaylist_of_comment = ref('')

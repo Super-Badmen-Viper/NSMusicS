@@ -162,11 +162,11 @@
     }
     perviousIndex.value = index;
 
-    if(store_player_audio_info.this_audio_lyrics_info_byte_model) {
-      if(store_player_audio_logic.player.isPlaying) {
-        startByteAnimations(index, 0)
-      }
-    }
+    // if(store_player_audio_info.this_audio_lyrics_info_byte_model) {
+    //   if(store_player_audio_logic.player.isPlaying) {
+    //     startByteAnimations(index, 0)
+    //   }
+    // }
   };
   const lastIndex = ref(-1);
   const startByteAnimations = (index: number, num: number) => {
