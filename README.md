@@ -22,7 +22,7 @@
 ## Version：
 | Project   | Development status | Technology Framework     | Author/Copyright Owner | Operating systems         | LICENSE          |  Software positioning |
 | :-----    | ----:              | ----:                    | ----:             | :----:                    | :----:                    | :----:                    |
-| [NSMusicS (Now)](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">updateing</font>             | electron,docker,vue,nodejs,ts,vite,sqlite  [![My Skills](https://skillicons.dev/icons?i=electron,docker,vue,nodejs,ts,vite,sqlite)](https://skillicons.dev)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  | (Windows,Linux(ubuntu+,Docker),MacOS,Android11++,IOS) Based on the Chrome kernel    | A-GPL 3.0 | Open source + Commercial | 
+| [NSMusicS (Now)](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">updateing</font>             |Go,docker,MongoDB,Gin,JWT Authentication Middleware [![My Skills](https://skillicons.dev/icons?i=go,docker,mongodb)](https://skillicons.dev) electron,docker,vue,nodejs,ts,vite,sqlite [![My Skills](https://skillicons.dev/icons?i=electron,docker,vue,nodejs,ts,vite,sqlite)](https://skillicons.dev)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  | (Windows,Linux(ubuntu+,Docker),MacOS,Android11++,IOS) Based on the Chrome kernel    | A-GPL 3.0 | Open source + Commercial | 
 | [NSMusicS_WPF (Old)](https://github.com/Super-Badmen-Viper/NSMusicS_WPF)   |<font color="#00dd00">complete</font> | dotnet8(wpf),cs,window,sqlite [![My Skills](https://skillicons.dev/icons?i=dotnet,cs,windows,sqlite)](https://skillicons.dev)           | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++)             | A-GPL 3.0 | Open source + Commercial | 
 | NSMusicS_For_PythonApp_Of_AudioProcessing   |<font color="#00dd00">will developed</font>             | pytorch,py [![My Skills](https://skillicons.dev/icons?i=pytorch,py)](https://skillicons.dev)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  |    python    | Apache License 2.0 | Open source | 
 | NSMusicS_For_Knowledge_Graph   |<font color="#FF0000">Not started</font>|  NebulaGraph / Neo4j <image width="200" src="https://www-cdn.nebula-graph.io/nebula-website-5.0/images/logo.png"/>      | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | (Windows10++/Linux)             | A-GPL 3.0 | Open source + Commercial | 
@@ -90,6 +90,7 @@ npm run build-only # Package into the current system_configs's software package 
   - [howler.js](https://github.com/goldfire/howler.js)
   - [Node-MPV](https://github.com/j-holub/Node-MPV)
   - [Vue3](https://github.com/vuejs/vue)
+  - [go-backend-clean-architecture](https://github.com/amitshekhariitbhu/go-backend-clean-architecture)
   - [Naive UI](https://github.com/tusen-ai/naive-ui)
 - NSMusicS Web ImageResource Thanks:
   - <a href="https://www.freepik.com/free-photo/black-retro-vinyl-record-design-element_12189639.htm#fromView=search&page=5&position=9&uuid=c046ed77-1d8d-4858-b3d8-e8a96afa3d8d">Image by rawpixel.com on Freepik</a>
