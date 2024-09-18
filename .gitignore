@@ -28,11 +28,11 @@ coverage
 *.sw?
 
 *.tsbuildinfo
-/release
-/.VSCodeCounter
-resources/nsmusics.db-shm
-resources/nsmusics.db-wal
-resources/navidrome.db-wal
-resources/navidrome.db-shm
-resources/mpv-x86_64-20240623
-src_example
+NSMusicS-Electron/release
+NSMusicS-Electron/.VSCodeCounter
+NSMusicS-Electron/resources/nsmusics.db-shm
+NSMusicS-Electron/resources/nsmusics.db-wal
+NSMusicS-Electron/resources/navidrome.db-wal
+NSMusicS-Electron/resources/navidrome.db-shm
+NSMusicS-Electron/resources/mpv-x86_64-20240623
+NSMusicS-Electron/src_example
