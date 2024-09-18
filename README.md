@@ -53,33 +53,37 @@
     </tr>
   </table>
 
-## Using the source code of NSMusicS
-#### If you would like to experience the latest development progress of NSMusicS Electron:
- - If you haven't installed Navidrome, please install and start its service, and then add your computer's music to Navidrome.
- - Copy and replace the navidrome.db file located in the resources folder of the folder where NSMusicS Electron is installed with the navidrome installation location \ navidrome installation version \ navidrome.db.
+## Using the source code of NSMusicS-Electron
+#### If you would like to experience the latest development progress of NSMusicS-Electron:
 ```sh
-cd NSMusicS
+cd NSMusicS\NSMusicS-Electron
 # node      -v  20.15.0
 # npm       -v  10.4.0
-npm install 
+npm install  /or/  cnpm install # Recommended use cnpm install
 # Install MPV in the Windows environment (requires its executable file compressed file) 
 # https://mpv.io/installation/
-# unzip its contents to (NSMusicS\resources\mpv-x86_64-20240623)
+# unzip its contents to (NSMusicS\NSMusicS-Electron\resources\mpv-x86_64-20240623)
 ```
 ```sh
 # You need to recompile the native module better sqlite3 to allow the sqlite database to read normally
-cd NSMusicS/node_modules/better-sqlite3 
-npm install electron-rebuild -D
-# 1.open better-sqlite3/package.json 
-# 2.scripts addline: "rebuild": "electron-rebuild -f -w better-sqlite3" 
-npm run rebuild 
+# You can use either of the following two methods (Choose method A or B)
+## method A.
+    Delete the files in the following path first: NSMusicS\NSMusicS-Electron\node_modules\better-sqlite3\build\Release\better_sqlite3.node
+    Then copy the file from the following path: NSMusicS\NSMusicS-Electron\resources\better_sqlite3.node
+    Paste the copied file to the following path: NSMusicS\NSMusicS-Electron\node_modules\better-sqlite3\build\Release
+## method B.
+    cd NSMusicS/NSMusicS-Electron/node_modules/better-sqlite3 
+    npm install electron-rebuild -D
+    # 1.open better-sqlite3/package.json 
+    # 2.scripts addline: "rebuild": "electron-rebuild -f -w better-sqlite3" 
+    npm run rebuild 
 ```
 ```sh
-cd NSMusicS
-npm run dev # Direct operation NSmusicS
+cd NSMusicS\NSMusicS-Electron
+npm run dev # Direct operation NSMusicS\NSMusicS-Electron
 ```
 ```sh
-cd NSMusicS
+cd NSMusicS\NSMusicS-Electron
 npm run build-only # Package into the current system_configs's software package (such as exe)
 ```
 
