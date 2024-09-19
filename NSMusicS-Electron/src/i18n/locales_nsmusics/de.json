@@ -42,7 +42,11 @@
             "install": "Installieren",
             "download": "Herunterladen",
             "tag_error": "Die 'Tag' für Musikdateien im Ordner fehlt. Bitte vervollständigen Sie die Tag-Attribute der Musikdateien und importieren Sie sie dann erneut.",
-            "drag_sort": "Ziehen zum Sortieren"
+            "drag_sort": "Ziehen zum Sortieren",
+            "modelServer_type_one": "Sofortiger Zugriffsmodus",
+            "modelServer_type_one_explain": "Melden Sie sich beim Server an, um eine persistente Verbindung aufrechtzuerhalten, greifen Sie auf den Server zu, um Echtzeit-Zugriff auf die neuesten Daten zu erhalten, ohne sie in die lokale Datenbank zu speichern",
+            "modelServer_type_two": "Dateidownload-Modus",
+            "modelServer_type_two_explain": "Speichern Sie alle Datenzugriffslinks des Servers lokal, greifen Sie direkt auf Serverressourcen zu, indem Sie die in der lokalen Datenbank gespeicherten Datenzugriffslinks verwenden"
         },
         "view_player": {
             "view_seting": {

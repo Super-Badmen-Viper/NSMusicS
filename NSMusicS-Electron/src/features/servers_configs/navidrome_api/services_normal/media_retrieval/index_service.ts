@@ -1,6 +1,6 @@
-import {Navidrome_Api_Services} from "@/features/servers_configs/navidrome_api/services/Navidrome_Api_Services";
+import {Navidrome_Api_Services_Normal} from "@/features/servers_configs/navidrome_api/services_normal/Navidrome_Api_Services_Normal";
 
-export class Media_Retrieval_ApiService_of_ND extends Navidrome_Api_Services {
+export class Media_Retrieval_ApiService_of_ND extends Navidrome_Api_Services_Normal {
     public async getStream_id(
         username: string,token: string,salt: string,
         id: string,

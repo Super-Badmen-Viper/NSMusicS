@@ -42,7 +42,11 @@
             "install": "Installer",
             "download": "Télécharger",
             "tag_error": "L'étiquette 'tag' des fichiers musicaux dans le dossier est manquante. Veuillez compléter les attributs de l'étiquette des fichiers musicaux, puis réimportez.",
-            "drag_sort": "Faire glisser pour trier"
+            "drag_sort": "Faire glisser pour trier",
+            "modelServer_type_one": "Mode d'Accès Instantané",
+            "modelServer_type_one_explain": "Se connecter au serveur pour maintenir une connexion persistante, accéder au serveur en temps réel pour obtenir les données les plus récentes, sans les enregistrer dans la base de données locale",
+            "modelServer_type_two": "Mode de Téléchargement de Données",
+            "modelServer_type_two_explain": "Enregistrer tous les liens d'accès aux données du serveur sur l'appareil local, accéder directement aux ressources du serveur via les liens d'accès aux données stockés dans la base de données locale"
         },
         "view_player": {
             "view_seting": {

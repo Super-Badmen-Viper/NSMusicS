@@ -1,6 +1,6 @@
-import {Navidrome_Api_Services} from "@/features/servers_configs/navidrome_api/services/Navidrome_Api_Services";
+import {Navidrome_Api_Services_Normal} from "@/features/servers_configs/navidrome_api/services_normal/Navidrome_Api_Services_Normal";
 
-export class Playlists_ApiService_of_ND extends Navidrome_Api_Services {
+export class Playlists_ApiService_of_ND extends Navidrome_Api_Services_Normal {
     public async getPlaylists_all(username: string,token: string,salt: string): Promise<any> {
         return this.sendRequest(username,token,salt,'getPlaylists');
     }

@@ -1,6 +1,6 @@
-import {Navidrome_Api_Services} from "@/features/servers_configs/navidrome_api/services/Navidrome_Api_Services";
+import {Navidrome_Api_Services_Normal} from "@/features/servers_configs/navidrome_api/services_normal/Navidrome_Api_Services_Normal";
 
-export class Searching_ApiService_of_ND extends Navidrome_Api_Services {
+export class Searching_ApiService_of_ND extends Navidrome_Api_Services_Normal {
     // artistCount: artistCount.toString(),
     // artistOffset: artistOffset.toString(),
     // albumCount: albumCount.toString(),

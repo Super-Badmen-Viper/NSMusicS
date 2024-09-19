@@ -11,4 +11,11 @@ interface App_Configs_Props {
   play_order: any,
   play_volume: number,
   selectd_props_app_sidebar: string,
+  model_server_type_of_web: any,
+  model_server_type_of_local: any,
+  authorization: string,
+  client_unique_id: string,
+  media_page_sizes: number,
+  album_page_sizes: number,
+  artist_page_sizes: number
 };

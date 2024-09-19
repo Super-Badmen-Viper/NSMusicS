@@ -42,7 +42,11 @@
             "install": "Nainstalovat",
             "download": "Stáhnout",
             "tag_error": "Chybí 'značka' pro hudobní soubory ve složce. Prosím doplňte atributy značky hudobních souborů a poté je znovu naimportujte.",
-            "drag_sort": "Přetáhněte pro řazení"
+            "drag_sort": "Přetáhněte pro řazení",
+            "modelServer_type_one": "Režim okamžitého přístupu",
+            "modelServer_type_one_explain": "Přihlaste se k serveru pro udržení trvalého spojení, okamžitě přistupujte k serveru pro získání nejnovějších dat, neukládat do místní databáze",
+            "modelServer_type_two": "Režim stahování dat",
+            "modelServer_type_two_explain": "Uložte všechny místní odkazy na přístup k datům na serveru, přímo přistupujte k prostředkům serveru prostřednictvím odkazů na přístup k datům uložených v místní databázi"
         },
         "view_player": {
             "view_seting": {

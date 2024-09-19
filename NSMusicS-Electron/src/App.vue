@@ -104,10 +104,14 @@
     const {salt, token} = store_server_users.get_generateEncryptedPassword(
         store_server_users.server_config_of_current_user_of_sqlite?.password
     );
+    store_server_user_model.salt = salt
+    store_server_user_model.token = token
     let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_ALL_Data_To_LocalSqlite()
     await set_Navidrome_Data_To_LocalSqlite.Set_Read_Navidrome_Api_BasicInfo_Add_LocalSqlite(
         store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-        store_server_users.server_config_of_current_user_of_sqlite?.user_name, token, salt,
+        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+        store_server_user_model.token,
+        store_server_user_model.salt,
     )
 
     /// reset app data

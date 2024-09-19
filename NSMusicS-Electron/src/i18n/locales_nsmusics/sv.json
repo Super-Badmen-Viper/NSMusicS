@@ -42,7 +42,11 @@
             "install": "Installera",
             "download": "Ladda ner",
             "tag_error": "‘tagg’ för musikfiler i mappen saknas. Var god fyll i taggattributen för musikfilerna och importera sedan igen.",
-            "drag_sort": "Dra för att sortera"
+            "drag_sort": "Dra för att sortera",
+            "modelServer_type_one": "Direktåtkomstläge",
+            "modelServer_type_one_explain": "Logga in på servern för att upprätthålla en beständig anslutning, få omedelbar tillgång till servern för att hämta de senaste uppgifterna, utan att spara till den lokala databasen",
+            "modelServer_type_two": "Datanedladdningsläge",
+            "modelServer_type_two_explain": "Spara alla serverns dataåtkomstlänkar lokalt, få direkt tillgång till serverresurser genom dataåtkomstlänkar som lagras i den lokala databasen"
         },
         "view_player": {
             "view_seting": {

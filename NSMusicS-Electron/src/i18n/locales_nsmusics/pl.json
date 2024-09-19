@@ -42,7 +42,11 @@
             "install": "Zainstaluj",
             "download": "Pobierz",
             "tag_error": "Brakuje 'tagu' plików muzycznych w folderze. Proszę uzupełnić atrybuty tagu plików muzycznych, a następnie zaimportować ponownie.",
-            "drag_sort": "Przeciągnij by sortować"
+            "drag_sort": "Przeciągnij by sortować",
+            "modelServer_type_one": "Tryb Dostępu Natychmiastowego",
+            "modelServer_type_one_explain": "Zaloguj się do serwera, aby utrzymać trwałe połączenie, natychmiastowe dostęp do serwera w celu uzyskania najnowszych danych, bez zapisywania w lokalnej bazie danych",
+            "modelServer_type_two": "Tryb Pobierania Danych",
+            "modelServer_type_two_explain": "Zapisz wszystkie lokalne linki dostępu do danych serwera, bezpośrednio uzyskaj zasoby serwera za pośrednictwem linków dostępu do danych przechowywanych w lokalnej bazie danych"
         },
         "view_player": {
             "view_seting": {

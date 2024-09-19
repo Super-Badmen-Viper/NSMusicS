@@ -42,7 +42,11 @@
             "install": "Instalar",
             "download": "Baixar",
             "tag_error": "A 'tag' para arquivos de música na pasta está faltando. Por favor, complete os atributos da tag para os arquivos de música e depois reimporte.",
-            "drag_sort": "Arraste para Ordenar"
+            "drag_sort": "Arraste para Ordenar",
+            "modelServer_type_one": "Modo de Acesso Imediato",
+            "modelServer_type_one_explain": "Faça login no servidor para manter uma conexão persistente, acesse o servidor em tempo real para obter os dados mais recentes, sem salvá-los no banco de dados local",
+            "modelServer_type_two": "Modo de Download de Dados",
+            "modelServer_type_two_explain": "Salve todos os links de acesso a dados do servidor no dispositivo local, acesse diretamente os recursos do servidor através dos links de acesso a dados armazenados no banco de dados local"
         },
         "view_player": {
             "view_seting": {

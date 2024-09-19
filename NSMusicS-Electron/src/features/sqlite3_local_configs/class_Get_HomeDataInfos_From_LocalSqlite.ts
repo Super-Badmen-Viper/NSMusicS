@@ -76,7 +76,6 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
 
-
         const rows = db.prepare(`SELECT * FROM ${store_server_user_model.album} ORDER BY RANDOM() LIMIT 18`).all();
         const result: Album[] = []
         rows.forEach((row: Album) => {

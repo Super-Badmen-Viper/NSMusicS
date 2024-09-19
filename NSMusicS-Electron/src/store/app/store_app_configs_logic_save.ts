@@ -14,6 +14,9 @@ import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_inf
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media"
+import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
+import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
+import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info";
 
 export const store_app_configs_logic_save = reactive({
     save_system_config_of_App_Configs(){
@@ -36,7 +39,14 @@ export const store_app_configs_logic_save = reactive({
                 password: String(store_server_user_model.password),
                 play_order: String(store_player_audio_logic.play_order),
                 play_volume: String(store_player_audio_logic.play_volume),
-                selectd_props_app_sidebar: JSON.stringify(store_app_configs_info.selectd_props_app_sidebar)
+                selectd_props_app_sidebar: JSON.stringify(store_app_configs_info.selectd_props_app_sidebar),
+                model_server_type_of_web: String(store_server_user_model.model_server_type_of_web),
+                model_server_type_of_local: String(store_server_user_model.model_server_type_of_local),
+                authorization: String(store_server_user_model.authorization),
+                client_unique_id: String(store_server_user_model.client_unique_id),
+                media_page_sizes: String(store_view_media_page_info.media_page_sizes),
+                album_page_sizes: String(store_view_album_page_info.album_page_sizes),
+                artist_page_sizes: String(store_view_artist_page_info.artist_page_sizes)
             }));
         let system_Configs_Write = new Class_Set_System_Configs_Write()
         system_Configs_Write.system_app_config(

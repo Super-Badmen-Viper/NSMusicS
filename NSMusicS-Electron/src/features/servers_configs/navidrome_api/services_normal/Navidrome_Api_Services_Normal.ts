@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export class Navidrome_Api_Services {
+export class Navidrome_Api_Services_Normal {
     protected readonly baseUrl: string;
     constructor(baseUrl: string) {
         this.baseUrl = baseUrl;

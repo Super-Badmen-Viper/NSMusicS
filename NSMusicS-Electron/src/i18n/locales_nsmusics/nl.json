@@ -42,7 +42,11 @@
             "install": "Installeren",
             "download": "Downloaden",
             "tag_error": "De 'tag' voor muziekbestanden in de map ontbreekt. Gelieve de tag-attributen voor de muziekbestanden aan te vullen en vervolgens opnieuw te importeren.",
-            "drag_sort": "Sleep om te sorteren"
+            "drag_sort": "Sleep om te sorteren",
+            "modelServer_type_one": "Directe toegangsmodus",
+            "modelServer_type_one_explain": "Meld u aan bij de server om een permanente verbinding te onderhouden, haal direct toegang tot de server om de nieuwste gegevens te verkrijgen, zonder op te slaan in de lokale database",
+            "modelServer_type_two": "Gegevensdownloadmodus",
+            "modelServer_type_two_explain": "Sla alle servergegevens toegangslinks lokaal op, haal direct toegang tot serverbronnen via de gegevenstoegangslinks die zijn opgeslagen in de lokale database"
         },
         "view_player": {
             "view_seting": {

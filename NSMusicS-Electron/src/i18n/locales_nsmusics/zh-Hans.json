@@ -42,7 +42,11 @@
             "install": "安装",
             "download": "下载",
             "tag_error": "文件夹内音乐文件的‘tag’缺失, 请先补全音乐文件tag属性, 然后再次重新导入",
-            "drag_sort": "拖动排序"
+            "drag_sort": "拖动排序",
+            "modelServer_type_one": "即时访问模式",
+            "modelServer_type_one_explain": "登录服务器与服务器保持长连接，即时访问服务器获取最新数据，不保存至本地数据库",
+            "modelServer_type_two": "数据下载模式",
+            "modelServer_type_two_explain": "将服务器的数据访问链接全部保存至本地，通过本地数据库存储的数据访问链接直接获取服务器资源"
         },
         "view_player": {
             "view_seting": {

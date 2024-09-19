@@ -20,7 +20,14 @@ export class Class_Get_System_Configs_Read {
             password: '',
             play_order: '',
             play_volume: 0,
-            selectd_props_app_sidebar: ''
+            selectd_props_app_sidebar: '',
+            model_server_type_of_web: null,
+            model_server_type_of_local: null,
+            authorization: '',
+            client_unique_id: '',
+            media_page_sizes: 0,
+            album_page_sizes: 0,
+            artist_page_sizes: 0
         }))
     public library_Configs = ref(
         new Library_Configs({

@@ -2,7 +2,7 @@ import { reactive } from 'vue'
 import crypto from "crypto";
 import {
     Media_Annotation_ApiService_of_ND
-} from "@/features/servers_configs/navidrome_api/services/media_annotation/index_service";
+} from "@/features/servers_configs/navidrome_api/services_normal/media_annotation/index_service";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 
 export const store_server_users = reactive({

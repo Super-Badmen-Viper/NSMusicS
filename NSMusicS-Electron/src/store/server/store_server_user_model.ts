@@ -32,6 +32,11 @@ export const store_server_user_model = reactive({
     token: '',
     password: '',
 
+    model_server_type_of_web: true,
+    model_server_type_of_local: false,
+    authorization: '',
+    client_unique_id: '',
+
     album: 'album',
     annotation: 'annotation',
     artist: 'artist',
@@ -88,4 +93,12 @@ watch(() => store_server_user_model.model_select, async (newValue) => {
         }
         store_app_configs_logic_save.save_system_config_of_App_Configs()
     }
+});
+watch(() => store_server_user_model.model_server_type_of_web, (newValue) => {
+    store_server_user_model.model_server_type_of_local = !newValue
+    store_app_configs_logic_save.save_system_library_config()
+});
+watch(() => store_server_user_model.model_server_type_of_local, (newValue) => {
+    store_server_user_model.model_server_type_of_web = !newValue
+    store_app_configs_logic_save.save_system_library_config()
 });
