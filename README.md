@@ -1,4 +1,4 @@
-![Frame](https://github.com/Super-Badmen-Viper/NSMusicS/assets/83256054/97cd54e8-e0e4-4671-8a93-93cc94f74a91)
+![Frame 1](https://github.com/user-attachments/assets/3b36ad41-2ec4-4c17-850f-072fe309430e)
 <div style="display: flex; align-items: center;">
     <div>
         <h2>NSMusicS</h2>
