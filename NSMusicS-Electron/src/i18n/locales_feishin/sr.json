@@ -135,7 +135,7 @@
         "savePlayQueue": "sačuvaj listu za reprodukciju",
         "minimumScrobbleSeconds_description": "minimalno trajanje pesme u sekundama koje mora biti reprodukovano pre nego što se zabeleži",
         "skipPlaylistPage_description": "kada idete na plejlistu, idi na stranicu sa pesmama plejliste umesto na podrazumevanu stranicu",
-        "fontType_description": "ugrađeni font bira jedan od fontova koje pruža NSMusicS. sistemski font vam omogućava da izaberete bilo koji font koji nudi vaš operativni sistem. prilagođeni vam omogućava da koristite svoj font",
+        "fontType_description": "ugrađeni font bira jedan od fontova koje pruža Feishin. sistemski font vam omogućava da izaberete bilo koji font koji nudi vaš operativni sistem. prilagođeni vam omogućava da koristite svoj font",
         "playButtonBehavior": "ponašanje dugmeta za reprodukciju",
         "volumeWheelStep": "korak točkića za glasnoću",
         "sidebarPlaylistList_description": "prikaži ili sakrij listu plejlista na bočnoj traci",
@@ -193,17 +193,17 @@
         "useSystemTheme": "koristi sistemsku temu"
     },
     "action": {
-        "editPlaylist": "izmeni ",
+        "editPlaylist": "izmeni $t(entity.playlist_one)",
         "goToPage": "idi na stranu",
         "moveToTop": "idi na vrh",
         "clearQueue": "očisti listu",
         "addToFavorites": "dodaj u $t(entity.favorite_other)",
-        "addToPlaylist": "dodaj u ",
-        "createPlaylist": "napravi ",
-        "removeFromPlaylist": "ukloni iz ",
+        "addToPlaylist": "dodaj u $t(entity.playlist_one)",
+        "createPlaylist": "napravi $t(entity.playlist_one)",
+        "removeFromPlaylist": "ukloni iz $t(entity.playlist_one)",
         "viewPlaylists": "vidi $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
-        "deletePlaylist": "obriši ",
+        "deletePlaylist": "obriši $t(entity.playlist_one)",
         "removeFromQueue": "ukloni iz liste",
         "deselectAll": "deselektuj sve",
         "moveToBottom": "idi na dno",
@@ -533,16 +533,16 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "obriši ",
-            "success": " uspešno obrisan",
-            "input_confirm": "unesite ime  za potvrdu"
+            "title": "obriši $t(entity.playlist_one)",
+            "success": "$t(entity.playlist_one) uspešno obrisan",
+            "input_confirm": "unesite ime $t(entity.playlist_one) za potvrdu"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "kreiraj ",
+            "title": "kreiraj $t(entity.playlist_one)",
             "input_public": "javno",
             "input_name": "$t(common.name)",
-            "success": " uspešno kreiran",
+            "success": "$t(entity.playlist_one) uspešno kreiran",
             "input_owner": "$t(common.owner)"
         },
         "addServer": {
@@ -560,7 +560,7 @@
         },
         "addToPlaylist": {
             "success": "dodato {{message}} $t(entity.track_other) u {{numOfPlaylists}} $t(entity.playlist_other)",
-            "title": "dodaj u ",
+            "title": "dodaj u $t(entity.playlist_one)",
             "input_skipDuplicates": "preskoči duplikate",
             "input_playlists": "$t(entity.playlist_other)"
         },
@@ -578,7 +578,7 @@
             "title": "pretraga teksta pesme"
         },
         "editPlaylist": {
-            "title": "izmeni "
+            "title": "izmeni $t(entity.playlist_one)"
         }
     },
     "entity": {
@@ -618,7 +618,7 @@
         "folder_one": "folder",
         "folder_few": "foldera",
         "folder_other": "foldera",
-        "smartPlaylist": "pametna ",
+        "smartPlaylist": "pametna $t(entity.playlist_one)",
         "album_one": "album",
         "album_few": "albumi",
         "album_other": "albuma",

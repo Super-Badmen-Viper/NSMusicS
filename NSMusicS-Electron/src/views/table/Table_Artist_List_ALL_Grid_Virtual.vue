@@ -196,6 +196,9 @@
         bool_input_search = false
         scrollTo(0)
       }
+      input_search_InstRef.value?.clear()
+      store_view_artist_page_logic.page_artistlists_keyword = ""
+      click_search()
     }
     else
     {
@@ -291,7 +294,11 @@
     }
   }
   onMounted(() => {
-    scrollTo(store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value)
+    if (store_server_user_model.model_server_type_of_local) {
+      scrollTo(store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value)
+    }else if (store_server_user_model.model_server_type_of_web) {
+
+    }
   });
 
   ////// select Dtatsource of artistlists
@@ -311,14 +318,6 @@
   }
 
   ////// go to media_view
-  const handleItemClick_artist = (artist_id:string) => {
-    // artist model don't need search,the id is only one
-    // input_search_Value.value = artist_id+'accurate_search'+'__artist__'
-    // bool_show_search_area.value = false
-    // show_search_area()
-    // click_search()
-    // scrollTo(0)
-  }
   const Open_this_artist_all_artist_list_click = (artist_id:string) => {
     console.log('artist_list_of_artist_id_artist_click：'+artist_id);
     store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
@@ -435,6 +434,17 @@
     }
   }
 
+  //////
+  const isScrolling = ref(false);
+  const onScrollEnd = async () => {
+    if (isScrolling.value) return;
+    isScrolling.value = true;
+    if (store_server_user_model.model_server_type_of_web) {
+
+    }
+    isScrolling.value = false;
+  };
+
   ////// view artistlist_view Remove data
   onBeforeUnmount(() => {
     stopWatching_collapsed_width()
@@ -513,7 +523,9 @@
         :item-secondary-size="itemSecondarySize"
         :emit-update="true"
         @resize="onResize"
-        @update="onUpdate">
+        @update="onUpdate"
+        @scroll-end="onScrollEnd"
+      >
         <template #before>
           <div class="notice">
             <div
@@ -563,7 +575,7 @@
                   <n-breadcrumb separator="|">
                       <n-breadcrumb-item style="font-size: 22px">{{ $t('entity.artist_other') }}</n-breadcrumb-item>
                       <n-breadcrumb-item>
-                        <n-button text >
+                        <n-button text>
                           <n-ellipsis
                               style="text-align: left;font-size: 22px;width: 660px;height: 26px;">
                             {{ store_player_audio_info.page_top_album_name }}
@@ -682,20 +694,18 @@
               <div class="artist_text" :style="{ width: item_artist_image + 'px' }">
                 <div class="artist_left_text_artist_info" :style="{ width: item_artist_txt + 'px' }">
                   <div>
-                    <span id="artist_name" 
-                      :style="{ maxWidth: item_artist_txt + 'px' }"
-                      @click="handleItemClick_artist(item.id)">
+                    <span id="artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">
                       {{ item.name }}
                     </span>
                   </div>
                   <div>
                     <span id="artist_singer_name" :style="{ maxWidth: item_artist_txt + 'px' }">
-                       专辑数：{{ item.album_count }}
+                       {{ $t('entity.album_other') + ': ' + item.album_count }}
                     </span>
                   </div>
                   <div>
                     <span id="artist_artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">
-                       歌曲数：{{ item.song_count }}
+                      {{ $t('entity.track_other') + ': ' + item.song_count }}
                     </span>
                   </div>
                 </div>

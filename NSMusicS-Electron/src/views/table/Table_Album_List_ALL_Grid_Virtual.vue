@@ -26,6 +26,7 @@
 
   ////// i18n auto lang
   import { useI18n } from 'vue-i18n'
+  import {store_server_user_model} from "@/store/server/store_server_user_model";
   const { t } = useI18n({
     inheritLocale: true
   })
@@ -198,6 +199,9 @@
         bool_input_search = false
         scrollTo(0)
       }
+      input_search_InstRef.value?.clear()
+      store_view_album_page_logic.page_albumlists_keyword = ""
+      click_search()
     }
     else
     {
@@ -292,7 +296,11 @@
     }
   }
   onMounted(() => {
-    scrollTo(store_router_history_data_of_album.router_history_model_of_Album_scroller_value)
+    if (store_server_user_model.model_server_type_of_local) {
+      scrollTo(store_router_history_data_of_album.router_history_model_of_Album_scroller_value)
+    }else if (store_server_user_model.model_server_type_of_web) {
+
+    }
   });
 
   ////// select Dtatsource of albumlists
@@ -315,31 +323,42 @@
 
   ////// go to media_view
   const handleItemClick_album = (album:string) => {
-    input_search_Value.value = album
-    bool_show_search_area.value = false
-    show_search_area()
-    click_search()
-    scrollTo(0)
+    if(store_server_user_model.model_server_type_of_local) {
+      input_search_Value.value = album
+      bool_show_search_area.value = false
+      show_search_area()
+      click_search()
+      scrollTo(0)
+    }else if(store_server_user_model.model_server_type_of_web){
+      bool_show_search_area.value = true
+      input_search_Value.value = album
+      store_view_album_page_logic.page_albumlists_keyword = album
+    }
   }
   const handleItemClick_artist = (artist_id:string) => {
-    input_search_Value.value = artist_id
-    bool_show_search_area.value = false
-    show_search_area()
-    click_search()
-    scrollTo(0)
-  }
-  const handleItemClick_album_timelist = (created_at:string) => {
-    input_search_Value.value = created_at
-    bool_show_search_area.value = false
-    show_search_area()
-    click_search()
-    scrollTo(0)
+    if(store_server_user_model.model_server_type_of_local) {
+      input_search_Value.value = artist_id
+      bool_show_search_area.value = false
+      show_search_area()
+      click_search()
+      scrollTo(0)
+    }else if(store_server_user_model.model_server_type_of_web){
+      bool_show_search_area.value = true
+      input_search_Value.value = artist_id
+      store_view_album_page_logic.page_albumlists_keyword = artist_id
+    }
   }
   const Open_this_album_SongList_click = (album_id:string) => {
+    if(store_server_user_model.model_server_type_of_web){
+      store_view_media_page_fetchData._album_id = album_id
+    }
     console.log('media_list_of_album_id：'+album_id);
     store_router_data_logic.get_media_list_of_album_id_by_album_info(album_id)
   }
   const Play_this_album_SongList_click = async (album_id: string) => {
+    if(store_server_user_model.model_server_type_of_web){
+      store_view_media_page_fetchData._album_id = album_id
+    }
     console.log('play_this_album_click：' + album_id);
     await store_view_album_page_fetchData.fetchData_This_Album_SongList(album_id)
   }
@@ -376,6 +395,8 @@
   import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
   import {useMessage} from 'naive-ui'
   import {store_router_data_info} from "@/store/router/store_router_data_info";
+  import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media";
+  import {store_player_appearance} from "@/store/player/store_player_appearance";
   const contextmenu = ref(null as any)
   const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
   const message = useMessage()
@@ -450,6 +471,17 @@
       console.error('Current audio song not found in playlist');
     }
   }
+
+  //////
+  const isScrolling = ref(false);
+  const onScrollEnd = async () => {
+    if (isScrolling.value) return;
+    isScrolling.value = true;
+    if (store_server_user_model.model_server_type_of_web) {
+      await store_view_album_page_fetchData.fetchData_Album_of_server_web_end()
+    }
+    isScrolling.value = false;
+  };
 
   ////// view albumlist_view Remove data
   onBeforeUnmount(() => {
@@ -527,7 +559,9 @@
         :item-secondary-size="itemSecondarySize"
         :emit-update="true"
         @resize="onResize"
-        @update="onUpdate">
+        @update="onUpdate"
+        @scroll-end="onScrollEnd"
+      >
         <template #before>
           <div class="notice">
             <div
@@ -577,7 +611,15 @@
                   <n-breadcrumb separator="|">
                       <n-breadcrumb-item style="font-size: 22px">{{ $t('entity.album_other') }}</n-breadcrumb-item>
                       <n-breadcrumb-item>
-                        <n-button text @click="handleItemClick_album(store_player_audio_info.page_top_album_id)">
+                        <n-button text
+                          @click=" () => {
+                            if(store_server_user_model.model_server_type_of_local) {
+                              handleItemClick_album(store_player_audio_info.page_top_album_id)
+                            }else if(store_server_user_model.model_server_type_of_web) {
+                              handleItemClick_album(store_player_audio_info.page_top_album_name)
+                            }
+                          }"
+                        >
                           <n-ellipsis
                               style="text-align: left;font-size: 22px;width: 660px;height: 26px;">
                             {{ store_player_audio_info.page_top_album_name }}
@@ -704,17 +746,17 @@
                   </div>
                   <div>
                     <span id="album_singer_name" 
-                      :style="{ maxWidth: item_album_txt + 'px' }" 
-                      @click="handleItemClick_artist(item.artist_id)">
+                      :style="{ maxWidth: item_album_txt + 'px' }"
+                      @click="() => {
+                        if(store_server_user_model.model_server_type_of_local) {
+                          handleItemClick_artist(item.artist_id)
+                        }else if(store_server_user_model.model_server_type_of_web) {
+                          handleItemClick_artist(item.artist)
+                        }
+                      }"
+                    >
                       {{ item.artist }}
                     </span>
-                  </div>
-                  <div v-if="false">
-                    <span id="album_time" 
-                      :style="{ maxWidth: item_album_txt + 'px' }"
-                      @click="handleItemClick_album_timelist(item.created_at)">
-                      {{ item.created_time }}
-                    </span> 
                   </div>
                 </div>
               </div>

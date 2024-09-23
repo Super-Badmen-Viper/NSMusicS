@@ -135,7 +135,7 @@
         "savePlayQueue": "再生キューを保存",
         "minimumScrobbleSeconds_description": "Scrobbleされるために必要な最短の再生時間(秒)",
         "skipPlaylistPage_description": "プレイリストに移動するときに、デフォルトページではなくプレイリストの曲リストページに移動します",
-        "fontType_description": "組み込みフォントの場合、NSMusicS が提供するフォントから1つを選択します。 システムフォントの場合、OSにインストール済みの任意のフォントを選択できます。 カスタムフォントの場合、フォントファイルを自身で選択できます",
+        "fontType_description": "組み込みフォントの場合、Feishin が提供するフォントから1つを選択します。 システムフォントの場合、OSにインストール済みの任意のフォントを選択できます。 カスタムフォントの場合、フォントファイルを自身で選択できます",
         "playButtonBehavior": "再生ボタンの動作",
         "volumeWheelStep": "音量ホイールステップ",
         "sidebarPlaylistList_description": "サイドバーでプレイリストのリストを表示/非表示にします",
@@ -193,17 +193,17 @@
         "useSystemTheme": "システムテーマを使用"
     },
     "action": {
-        "editPlaylist": " を編集",
+        "editPlaylist": "$t(entity.playlist_one) を編集",
         "goToPage": "ページへ移動",
         "moveToTop": "先頭に移動",
         "clearQueue": "キューをクリア",
         "addToFavorites": "$t(entity.favorite_other) に追加",
-        "addToPlaylist": " に追加",
-        "createPlaylist": " を作成",
-        "removeFromPlaylist": " から削除",
+        "addToPlaylist": "$t(entity.playlist_one) に追加",
+        "createPlaylist": "$t(entity.playlist_one) を作成",
+        "removeFromPlaylist": "$t(entity.playlist_one) から削除",
         "viewPlaylists": "$t(entity.playlist_other) を表示",
         "refresh": "$t(common.refresh)",
-        "deletePlaylist": " を削除",
+        "deletePlaylist": "$t(entity.playlist_one) を削除",
         "removeFromQueue": "キューから削除",
         "deselectAll": "すべて選択解除",
         "moveToBottom": "末尾に移動",
@@ -527,16 +527,16 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": " を削除",
-            "success": " が削除されました",
-            "input_confirm": "確認のため  の名前を入力してください"
+            "title": "$t(entity.playlist_one) を削除",
+            "success": "$t(entity.playlist_one) が削除されました",
+            "input_confirm": "確認のため $t(entity.playlist_one) の名前を入力してください"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": " を作成",
+            "title": "$t(entity.playlist_one) を作成",
             "input_public": "公開",
             "input_name": "$t(common.name)",
-            "success": " を作成しました",
+            "success": "$t(entity.playlist_one) を作成しました",
             "input_owner": "$t(common.owner)"
         },
         "addServer": {
@@ -554,7 +554,7 @@
         },
         "addToPlaylist": {
             "success": "{{message}} $t(entity.track_other) を {{numOfPlaylists}} $t(entity.playlist_other) に追加しました",
-            "title": " に追加",
+            "title": "$t(entity.playlist_one) に追加",
             "input_skipDuplicates": "重複をスキップ",
             "input_playlists": "$t(entity.playlist_other)"
         },
@@ -572,7 +572,7 @@
             "title": "歌詞検索"
         },
         "editPlaylist": {
-            "title": " を編集"
+            "title": "$t(entity.playlist_one) を編集"
         }
     },
     "entity": {
@@ -588,7 +588,7 @@
         "favorite_other": "お気に入り",
         "artistWithCount_other": "{{count}} アーティスト",
         "folder_other": "フォルダ",
-        "smartPlaylist": "スマート ",
+        "smartPlaylist": "スマート $t(entity.playlist_one)",
         "album_other": "アルバム",
         "genreWithCount_other": "{{count}} ジャンル",
         "trackWithCount_other": "{{count}} トラック"

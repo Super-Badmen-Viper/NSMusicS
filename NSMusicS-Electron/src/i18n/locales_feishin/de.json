@@ -1,22 +1,26 @@
 {
     "action": {
-        "editPlaylist": "bearbeiten ",
+        "editPlaylist": "bearbeiten $t(entity.playlist_one)",
         "clearQueue": "Warteschlange löschen",
         "addToFavorites": "hinzufügen zu $t(entity.favorite_other)",
-        "addToPlaylist": "hinzufügen zu ",
-        "createPlaylist": "erstelle ",
-        "deletePlaylist": "löschen ",
+        "addToPlaylist": "hinzufügen zu $t(entity.playlist_one)",
+        "createPlaylist": "erstelle $t(entity.playlist_one)",
+        "deletePlaylist": "löschen $t(entity.playlist_one)",
         "deselectAll": "Alle abwählen",
         "goToPage": "Gehe zur Seite",
         "moveToTop": "Nach oben",
         "moveToBottom": "Nach unten",
-        "removeFromPlaylist": "Entfernen von ",
+        "removeFromPlaylist": "Entfernen von $t(entity.playlist_one)",
         "viewPlaylists": "Ansicht $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
         "removeFromQueue": "Von Warteschlange entfernen",
         "setRating": "Bewertung festlegen",
         "toggleSmartPlaylistEditor": "Editor $t(entity.smartPlaylist) umschalten",
-        "removeFromFavorites": "Entfernen von $t(entity.favorite_other)"
+        "removeFromFavorites": "Entfernen von $t(entity.favorite_other)",
+        "openIn": {
+            "lastfm": "In Last.fm öffnen",
+            "musicbrainz": "In MusicBrainz öffnen"
+        }
     },
     "common": {
         "backward": "rückwärts",
@@ -62,7 +66,7 @@
         "cancel": "Abbrechen",
         "forceRestartRequired": "Neustarten um die Änderungen zu übernehmen... Schließe die Benachrichtigung zum Neustarten",
         "setting": "Einstellungen",
-        "setting_one": "",
+        "setting_one": "Einstellung",
         "setting_other": "Einstellungen",
         "version": "Version",
         "title": "Titel",
@@ -98,7 +102,12 @@
         "random": "zufällig",
         "size": "Größe",
         "biography": "Biografie",
-        "note": "Hinweis"
+        "note": "Hinweis",
+        "preview": "Vorschau",
+        "reload": "Neu Laden",
+        "mbid": "MusicBrainz ID",
+        "close": "schliessen",
+        "share": "Teilen"
     },
     "error": {
         "remotePortWarning": "Starten Sie den Server neu, um den neuen Port anzuwenden",
@@ -119,7 +128,10 @@
         "mpvRequired": "MPV benötigt",
         "audioDeviceFetchError": "Beim Versuch, Audiogeräte abzurufen, ist ein Fehler aufgetreten",
         "invalidServer": "Ungültiger Server",
-        "loginRateError": "Zu viele Anmeldeversuche, bitte versuche es in einigen Sekunden erneut"
+        "loginRateError": "Zu viele Anmeldeversuche, bitte versuche es in einigen Sekunden erneut",
+        "badAlbum": "Sie sehen diese Seite, weil dieses Lied nicht Teil eines Albums ist. Wahrscheinlich sehen Sie dieses Problem, wenn Sie einen Song in Ihrem Musikordner auf oberster Ebene haben. Jellyfin gruppiert nur Songs, wenn sie sich in einem Ordner befinden.",
+        "networkError": "ein Netzwerkfehler ist aufgetreten",
+        "openError": "datei kann nicht geöffnet werden"
     },
     "filter": {
         "mostPlayed": "Meistgespielt",
@@ -167,15 +179,15 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "Lösche ",
-            "success": " erfolgreich gelöscht",
-            "input_confirm": "Geben Sie zur Bestätigung den Namen von  ein"
+            "title": "Lösche $t(entity.playlist_one)",
+            "success": "$t(entity.playlist_one) erfolgreich gelöscht",
+            "input_confirm": "Geben Sie zur Bestätigung den Namen von $t(entity.playlist_one) ein"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "Erstellen ",
+            "title": "Erstellen $t(entity.playlist_one)",
             "input_public": "öffentlich",
-            "success": " erfolgreich erstellt",
+            "success": "$t(entity.playlist_one) erfolgreich erstellt",
             "input_name": "$t(common.name)",
             "input_owner": "$t(common.owner)"
         },
@@ -194,7 +206,7 @@
         },
         "addToPlaylist": {
             "success": "{{message}} $t(entity.track_other) zu {{numOfPlaylists}} $t(entity.playlist_other) hinzugefügt",
-            "title": "Zu  hinzufügen",
+            "title": "Zu $t(entity.playlist_one) hinzufügen",
             "input_skipDuplicates": "Duplikate überspringen",
             "input_playlists": "$t(entity.playlist_other)"
         },
@@ -207,12 +219,19 @@
             "input_optionMatchAny": "Treffer Einige"
         },
         "editPlaylist": {
-            "title": "Bearbeite "
+            "title": "Bearbeite $t(entity.playlist_one)",
+            "success": "$t(entity.playlist_one) erfolgreich aktualisiert"
         },
         "lyricSearch": {
             "title": "Songtext Suche",
             "input_name": "$t(common.name)",
             "input_artist": "$t(entity.artist_one)"
+        },
+        "shareItem": {
+            "description": "Beschreibung",
+            "setExpiration": "Ablaufdatum setzen",
+            "expireInvalid": "Ablaufdatum muss in der Zukunft liegen",
+            "allowDownloading": "Herunterladen zulassen"
         }
     },
     "entity": {
@@ -246,7 +265,9 @@
         "genreWithCount_other": "{{count}} Genres",
         "trackWithCount_one": "{{count}} Track",
         "trackWithCount_other": "{{count}} Tracks",
-        "smartPlaylist": "Smart "
+        "smartPlaylist": "Smart $t(entity.playlist_one)",
+        "play_one": "{{count}} Wiedergabe",
+        "play_other": "{{count}} Wiedergaben"
     },
     "table": {
         "config": {
@@ -415,6 +436,12 @@
         },
         "albumList": {
             "title": "$t(entity.album_other)"
+        },
+        "albumArtistDetail": {
+            "about": "Über {{artist}}",
+            "appearsOn": "erscheint auf",
+            "recentReleases": "Kürzliche Veröffentlichungen",
+            "viewDiscography": "Diskographie ansehen"
         }
     },
     "player": {
@@ -544,7 +571,7 @@
         "savePlayQueue": "Wiedergabe-Warteschlange speichern",
         "minimumScrobbleSeconds_description": "die Mindestdauer in Sekunden, die das Lied abspielen muss, bevor es gescrobbelt wird",
         "skipPlaylistPage_description": "Gehen Sie beim Navigieren zu einer Wiedergabeliste zur Titelseite der Wiedergabeliste und nicht zur Standardseite",
-        "fontType_description": "Die integrierte Schriftart wählt eine der von NSMusicS bereitgestellten Schriftarten aus. Mit der Systemschriftart können Sie jede von Ihrem Betriebssystem bereitgestellte Schriftart auswählen. Benutzerdefiniert erlaubt es eine eigene Schriftart bereitzustellen",
+        "fontType_description": "Die integrierte Schriftart wählt eine der von Feishin bereitgestellten Schriftarten aus. Mit der Systemschriftart können Sie jede von Ihrem Betriebssystem bereitgestellte Schriftart auswählen. Benutzerdefiniert erlaubt es eine eigene Schriftart bereitzustellen",
         "playButtonBehavior": "Verhalten der Wiedergabetaste",
         "volumeWheelStep": "Lautstärkeregler Stufe",
         "sidebarPlaylistList_description": "Ein- oder Ausblenden der Playlisten-Liste in der Seitenleiste",
@@ -605,8 +632,8 @@
         "clearQueryCache_description": "\"Weiches\" Zurücksetzen. Dies wird Playlisten, Musik-Metadaten und gespeicherte Liedtexte zurücksetzen, Zugangsinformationen und zwischengespeicherte Bilder werden behalten",
         "discordRichPresence_description": "Zeige deinen Wiedergabe-Status in {{discord}} als rich presence an. Angezeigte Bilder sind: {{icon}}, {{playing}}, und {{paused}} ",
         "clearCache": "Browser-Zwischenspeicher löschen",
-        "clearQueryCache": "NSMusicSs Zwischenspeicher leeren",
-        "clearCache_description": "Hartes Zurücksetzen. Neben NSMusicSs Zwischenspeicher wird auch der des Browsers gelöscht (Bilder und andere Daten). Zugangsinformationen und Einstellungen werden behalten",
+        "clearQueryCache": "feishins Zwischenspeicher leeren",
+        "clearCache_description": "Hartes Zurücksetzen. Neben feishins Zwischenspeicher wird auch der des Browsers gelöscht (Bilder und andere Daten). Zugangsinformationen und Einstellungen werden behalten",
         "sidePlayQueueStyle": "Wiedergabelistenstil in der Seitenleiste",
         "zoom_description": "Setzt den Zoom (in %) für das Programm",
         "zoom": "Zoom"

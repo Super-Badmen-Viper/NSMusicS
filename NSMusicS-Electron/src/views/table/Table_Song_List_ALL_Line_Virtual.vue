@@ -164,11 +164,10 @@ const handleSelect_Sort = (key: string | number) => {
 const options_Sort_key_Default_key = ref<string>()
 const options_Sort_key_Default = ref<SortItem[]>()
 // lineItems Search(filter)
-const bool_show_search_area = ref<boolean>(false)
 const show_search_area = () => {
-  if(bool_show_search_area.value === true)
+  if(store_view_media_page_logic.page_songlists_bool_show_search_area)
   {
-    bool_show_search_area.value = false
+    store_view_media_page_logic.page_songlists_bool_show_search_area = false
     input_search_InstRef.value?.clear()
     if(bool_input_search == true){
       // store_view_media_page_logic.list_data_StartUpdate = true
@@ -177,14 +176,15 @@ const show_search_area = () => {
       scrollTo(0)
     }
     if(store_server_user_model.model_server_type_of_web) {
-      input_search_InstRef.value?.clear()
-      store_view_media_page_logic.page_songlists_keywordFilter = ""
-      click_search()
+      store_view_media_page_fetchData._album_id = ''
     }
+    input_search_InstRef.value?.clear()
+    store_view_media_page_logic.page_songlists_keywordFilter = ""
+    click_search()
   }
   else
   {
-    bool_show_search_area.value = true
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
     options_Sort_key_Default.value = options_Sort_key.value.slice()
     options_Sort_key.value.forEach(element => {//保存 sort key
       if(element.state_Sort != state_Sort.Default)
@@ -193,11 +193,10 @@ const show_search_area = () => {
   }
 }
 const input_search_InstRef = ref<InputInst>()
-const input_search_Value = ref<string>()
 let bool_input_search = false
 const click_search = () => {
-  if (input_search_Value.value){
-    const page_songlists_keyword = input_search_Value.value.toLowerCase();
+  if (store_view_media_page_logic.page_songlists_input_search_Value){
+    const page_songlists_keyword = store_view_media_page_logic.page_songlists_input_search_Value.toLowerCase();
     store_view_media_page_logic.get_page_songlists_keyword(page_songlists_keyword)
     bool_input_search = true
     options_Sort_key.value.forEach(element => {
@@ -208,6 +207,10 @@ const click_search = () => {
     store_view_media_page_logic.list_data_StartUpdate = true
     bool_input_search = false
     back_search_default()
+    ///
+    if(store_server_user_model.model_server_type_of_web){
+      store_view_media_page_fetchData.fetchData_Media_of_server_web_start()
+    }
   }
 };
 const back_search_default = () => {
@@ -231,14 +234,20 @@ const back_search_default = () => {
   }
 }
 onMounted(() => {
-  input_search_Value.value = store_view_media_page_logic.page_songlists_keyword
-  if(input_search_Value.value.length > 0){
-    bool_show_search_area.value = true
+  store_view_media_page_logic.page_songlists_input_search_Value = store_view_media_page_logic.page_songlists_keyword
+  if(store_view_media_page_logic.page_songlists_input_search_Value.length > 0){
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
     bool_input_search = true
   }
   else{
-    bool_show_search_area.value = false
+    store_view_media_page_logic.page_songlists_bool_show_search_area = false
     bool_input_search = false
+  }
+
+  if(store_view_media_page_fetchData._album_id.length > 0){
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    bool_input_search = true
+    store_view_media_page_logic.page_songlists_input_search_Value = store_view_media_page_fetchData._album_id
   }
 });
 // lineItems Filter To Favorite
@@ -348,45 +357,45 @@ const handleItemDbClick = (media_file:any,index:number) => {
 const handleItemClick_title = (title:string) => {
   if(store_server_user_model.model_server_type_of_local) {
     click_count = 0;
-    input_search_Value.value = title//+'accurate_search'+'__title__'
+    store_view_media_page_logic.page_songlists_input_search_Value = title//+'accurate_search'+'__title__'
     store_view_media_page_logic.get_page_songlists_keyword(title)
-    bool_show_search_area.value = false
+    store_view_media_page_logic.page_songlists_bool_show_search_area = false
     show_search_area()
     click_search()
     scrollTo(0)
   }else if(store_server_user_model.model_server_type_of_web){
-    bool_show_search_area.value = true
-    input_search_Value.value = title
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_page_logic.page_songlists_input_search_Value = title
     store_view_media_page_logic.get_page_songlists_keyword(title)
   }
 }
 const handleItemClick_artist = (artist:string) => {
   click_count = 0;
   if(store_server_user_model.model_server_type_of_local) {
-    input_search_Value.value = artist//+'accurate_search'+'__artist__'//artist不参与精确搜索
+    store_view_media_page_logic.page_songlists_input_search_Value = artist//+'accurate_search'+'__artist__'//artist不参与精确搜索
     store_view_media_page_logic.get_page_songlists_keyword(artist)
-    bool_show_search_area.value = false
+    store_view_media_page_logic.page_songlists_bool_show_search_area = false
     show_search_area()
     click_search()
     scrollTo(0)
   }else if(store_server_user_model.model_server_type_of_web){
-    bool_show_search_area.value = true
-    input_search_Value.value = artist
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_page_logic.page_songlists_input_search_Value = artist
     store_view_media_page_logic.get_page_songlists_keyword(artist)
   }
 }
 const handleItemClick_album = (album_id:string) => {
   click_count = 0;
   if(store_server_user_model.model_server_type_of_local) {
-    input_search_Value.value = album_id + 'accurate_search' + '__album__'
+    store_view_media_page_logic.page_songlists_input_search_Value = album_id + 'accurate_search' + '__album__'
     store_view_media_page_logic.get_page_songlists_keyword(album_id + 'accurate_search' + '__album__')
-    bool_show_search_area.value = false
+    store_view_media_page_logic.page_songlists_bool_show_search_area = false
     show_search_area()
     click_search()
     scrollTo(0)
   }else if(store_server_user_model.model_server_type_of_web){
-    bool_show_search_area.value = true
-    input_search_Value.value = album_id
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_page_logic.page_songlists_input_search_Value = album_id
     store_view_media_page_logic.get_page_songlists_keyword(album_id)
   }
 }
@@ -812,12 +821,12 @@ onBeforeUnmount(() => {
         </template>
       </n-button>
       <n-input-group
-          v-if="bool_show_search_area"
+          v-if="store_view_media_page_logic.page_songlists_bool_show_search_area"
           style="width: 160px;">
         <n-input
             style="width: 160px;"
             ref="input_search_InstRef"
-            v-model:value="input_search_Value"
+            v-model:value="store_view_media_page_logic.page_songlists_input_search_Value"
             @keydown.enter="click_search"/>
       </n-input-group>
 
@@ -949,15 +958,13 @@ onBeforeUnmount(() => {
                     <n-breadcrumb-item style="font-size: 22px">{{ $t('entity.track_other') }}</n-breadcrumb-item>
                     <n-breadcrumb-item>
                       <n-button text
-                        @click="
-                          () => {
-                            if(store_server_user_model.model_server_type_of_local) {
-                              handleItemClick_album(store_player_audio_info.page_top_album_id)
-                            }else if(store_server_user_model.model_server_type_of_web) {
-                              handleItemClick_album(store_player_audio_info.page_top_album_name)
-                            }
+                        @click="() => {
+                          if(store_server_user_model.model_server_type_of_local) {
+                            handleItemClick_album(store_player_audio_info.page_top_album_id)
+                          }else if(store_server_user_model.model_server_type_of_web) {
+                            handleItemClick_album(store_player_audio_info.page_top_album_name)
                           }
-                        "
+                        }"
                       >
                         <n-ellipsis
                             style="text-align: left;font-size: 22px;width: 660px;height: 26px;">
@@ -1054,14 +1061,13 @@ onBeforeUnmount(() => {
               </div>
               <div class="songlist_album">
                 <span
-                    @click="() => {
-                        if(store_server_user_model.model_server_type_of_local) {
-                          handleItemClick_album(item.album_id)
-                        }else if(store_server_user_model.model_server_type_of_web) {
-                          handleItemClick_album(item.album)
-                        }
-                      }
-                    "
+                  @click="() => {
+                    if(store_server_user_model.model_server_type_of_local) {
+                      handleItemClick_album(item.album_id)
+                    }else if(store_server_user_model.model_server_type_of_web) {
+                      handleItemClick_album(item.album)
+                    }
+                  }"
                 >{{ item.album }}</span>
               </div>
               <div style="margin-left: auto; margin-right: 0px; width: 240px; display: flex; flex-direction: row;">

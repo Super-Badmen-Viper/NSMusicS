@@ -28,6 +28,7 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+.VSCodeCounter
 NSMusicS-Electron/release
 NSMusicS-Electron/.VSCodeCounter
 NSMusicS-Electron/resources/nsmusics.db-shm

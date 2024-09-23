@@ -271,7 +271,7 @@
         "followLyric": "跟隨當前歌詞",
         "font_description": "設置應用使用的字體",
         "fontType": "字體類型",
-        "fontType_description": "內置字體可以選擇 NSMusicS 提供的字體之壹。系統字體允許您選擇操作系統提供的任何字體。自定義選項允許您使用自己的字體",
+        "fontType_description": "內置字體可以選擇 Feishin 提供的字體之壹。系統字體允許您選擇操作系統提供的任何字體。自定義選項允許您使用自己的字體",
         "fontType_optionBuiltIn": "內置字體",
         "fontType_optionCustom": "自定義字體",
         "fontType_optionSystem": "系統字體",
@@ -391,10 +391,10 @@
         "replayGainClipping_description": "自動降低增益以防止{{ReplayGain}}造成削波",
         "showSkipButtons": "顯示跳過按鈕",
         "themeDark_description": "應用將使用深色主題",
-        "clearQueryCache_description": "NSMusicS的“軟清除”。這將會刷新播放列表、元數據並重置保存的歌詞。會保留設置、服務器憑據和緩存圖像",
+        "clearQueryCache_description": "feishin的“軟清除”。這將會刷新播放列表、元數據並重置保存的歌詞。會保留設置、服務器憑據和緩存圖像",
         "clearCache": "清除浏覽器緩存",
-        "clearCache_description": "NSMusicS的“硬清除”。除了清除NSMusicS的緩存，清空浏覽器緩存（保存的圖像和其他資源）。會保留服務器憑據和設置",
-        "clearQueryCache": "清除NSMusicS緩存",
+        "clearCache_description": "feishin的“硬清除”。除了清除feishin的緩存，清空浏覽器緩存（保存的圖像和其他資源）。會保留服務器憑據和設置",
+        "clearQueryCache": "清除feishin緩存",
         "buttonSize": "播放器欄按鈕大小",
         "buttonSize_description": "播放器欄按鈕大小"
     },
@@ -470,17 +470,17 @@
     "action": {
         "addToFavorites": "添加到$t(entity.favorite_other)",
         "clearQueue": "清空播放隊列",
-        "createPlaylist": "創建",
-        "deletePlaylist": "刪除",
-        "addToPlaylist": "添加到",
+        "createPlaylist": "創建$t(entity.playlist_one)",
+        "deletePlaylist": "刪除$t(entity.playlist_one)",
+        "addToPlaylist": "添加到$t(entity.playlist_one)",
         "deselectAll": "取消全選",
-        "editPlaylist": "編輯 ",
+        "editPlaylist": "編輯 $t(entity.playlist_one)",
         "goToPage": "轉到頁面",
         "moveToBottom": "跳至底部",
         "moveToTop": "跳至頂部",
         "refresh": "$t(common.refresh)",
         "removeFromFavorites": "從$t(entity.favorite_other)移除",
-        "removeFromPlaylist": "從移除",
+        "removeFromPlaylist": "從$t(entity.playlist_one)移除",
         "removeFromQueue": "從播放隊列中移除",
         "setRating": "評分",
         "toggleSmartPlaylistEditor": "切換$t(entity.smartPlaylist)編輯器",
@@ -499,7 +499,7 @@
         "genreWithCount_other": "{{count}} 種流派",
         "playlist_other": "播放列表",
         "playlistWithCount_other": "{{count}} 個播放列表",
-        "smartPlaylist": "智能",
+        "smartPlaylist": "智能$t(entity.playlist_one)",
         "track_other": "樂曲",
         "trackWithCount_other": "{{count}} 首樂曲",
         "albumWithCount_other": "{{count}} 張專輯"
@@ -566,15 +566,15 @@
             "input_playlists": "$t(entity.playlist_other)",
             "input_skipDuplicates": "跳過重複",
             "success": "添加 $t(entity.trackWithCount, {\"count\": {{message}} }) 到 $t(entity.playlistWithCount, {\"count\": {{numOfPlaylists}} })",
-            "title": "添加到"
+            "title": "添加到$t(entity.playlist_one)"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
             "input_name": "$t(common.name)",
             "input_owner": "$t(common.owner)",
             "input_public": "公開",
-            "success": "已成功創建 ",
-            "title": "創建"
+            "success": "已成功創建 $t(entity.playlist_one)",
+            "title": "創建$t(entity.playlist_one)"
         },
         "lyricSearch": {
             "input_name": "$t(common.name)",
@@ -590,12 +590,12 @@
             "title": "更新服務器"
         },
         "deletePlaylist": {
-            "input_confirm": "輸入的名稱進行確認",
-            "title": "刪除",
-            "success": "已成功刪除"
+            "input_confirm": "輸入$t(entity.playlist_one)的名稱進行確認",
+            "title": "刪除$t(entity.playlist_one)",
+            "success": "$t(entity.playlist_one)已成功刪除"
         },
         "editPlaylist": {
-            "title": "編輯"
+            "title": "編輯$t(entity.playlist_one)"
         }
     }
 }

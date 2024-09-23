@@ -14,17 +14,17 @@
         "skip_forward": "برو جلو"
     },
     "action": {
-        "editPlaylist": "ویرایش ",
+        "editPlaylist": "ویرایش $t(entity.playlist_one)",
         "goToPage": "برو به صفحهٔ",
         "moveToTop": "انتقال به بالا",
         "clearQueue": "خالی کردن صف",
         "addToFavorites": "افزودن به $t(entity.favorite_other)",
-        "addToPlaylist": "افزودن به ",
-        "createPlaylist": "ساخت ",
-        "removeFromPlaylist": "حذف از ",
+        "addToPlaylist": "افزودن به $t(entity.playlist_one)",
+        "createPlaylist": "ساخت $t(entity.playlist_one)",
+        "removeFromPlaylist": "حذف از $t(entity.playlist_one)",
         "viewPlaylists": "نمایش $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
-        "deletePlaylist": "حذف ",
+        "deletePlaylist": "حذف $t(entity.playlist_one)",
         "removeFromQueue": "حذف از صف",
         "deselectAll": "لغو انتخاب همه",
         "moveToBottom": "انتقال به پایین",
@@ -234,16 +234,16 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "حذف ",
-            "success": " حذف شد",
-            "input_confirm": "برای تایید، نام  را وارد کنید"
+            "title": "حذف $t(entity.playlist_one)",
+            "success": "$t(entity.playlist_one) حذف شد",
+            "input_confirm": "برای تایید، نام $t(entity.playlist_one) را وارد کنید"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "ساخت ",
+            "title": "ساخت $t(entity.playlist_one)",
             "input_public": "عمومی",
             "input_name": "$t(common.name)",
-            "success": " ساخته شد",
+            "success": "$t(entity.playlist_one) ساخته شد",
             "input_owner": "$t(common.owner)"
         },
         "addServer": {
@@ -258,7 +258,7 @@
         },
         "addToPlaylist": {
             "success": "$t(entity.song_other) به {{numOfPlaylists}}$t(entity.playlist_other) اضافه شد",
-            "title": "افزودن به ",
+            "title": "افزودن به $t(entity.playlist_one)",
             "input_playlists": "$t(entity.playlist_other)"
         },
         "lyricSearch": {
@@ -266,7 +266,7 @@
             "input_artist": "$t(entity.artist_one)"
         },
         "editPlaylist": {
-            "title": "ویرایش "
+            "title": "ویرایش $t(entity.playlist_one)"
         }
     },
     "entity": {
@@ -294,7 +294,7 @@
         "artistWithCount_other": "{{count}} هنرمند",
         "folder_one": "پوشه",
         "folder_other": "پوشه",
-        "smartPlaylist": " هوشمند",
+        "smartPlaylist": "$t(entity.playlist_one) هوشمند",
         "album_one": "آلبوم",
         "album_other": "آلبوم",
         "genreWithCount_one": "{{count}} ژانر",

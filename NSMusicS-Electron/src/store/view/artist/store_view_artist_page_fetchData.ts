@@ -22,6 +22,7 @@ import {
 } from "@/features/servers_configs/navidrome_api/instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
 
 export const store_view_artist_page_fetchData = reactive({
     async fetchData_Artist(){
@@ -73,7 +74,8 @@ export const store_view_artist_page_fetchData = reactive({
                     };
                     store_router_history_data_of_artist.add_router_history_of_Artist(routerDate);// 重复路由不添加
                     //////
-                } else {
+                }
+                else {
                     if (store_router_history_data_of_artist.router_select_history_date_of_Artist) {
                         store_router_data_info.router.push('View_Artist_List_ALL')
                         store_router_data_info.router_select_model_artist = true;
@@ -115,9 +117,9 @@ export const store_view_artist_page_fetchData = reactive({
                 rows.length = 0
                 ////// find favorite for artist_Files_temporary
                 const stmt_artist_Annotation_Starred_Items = db.prepare(`
-      SELECT item_id FROM ${store_server_user_model.annotation}
-      WHERE starred = 1 AND item_type='artist'
-    `);
+                  SELECT item_id FROM ${store_server_user_model.annotation}
+                  WHERE starred = 1 AND item_type='artist'
+                `);
                 const annotations = stmt_artist_Annotation_Starred_Items.all();
                 for (let i = 0; i < store_view_artist_page_info.artist_Files_temporary.length; i++) {
                     store_view_artist_page_info.artist_Files_temporary[i].favorite = !!annotations.some((annotation: {
@@ -126,9 +128,9 @@ export const store_view_artist_page_fetchData = reactive({
                 }
                 ////// find rating for artist_Files_temporary
                 const stmt_artist_Annotation_Rating_Items = db.prepare(`
-        SELECT item_id, rating FROM ${store_server_user_model.annotation}
-        WHERE rating > 0 AND item_type='artist'
-    `);
+                    SELECT item_id, rating FROM ${store_server_user_model.annotation}
+                    WHERE rating > 0 AND item_type='artist'
+                `);
                 const annotations_rating = stmt_artist_Annotation_Rating_Items.all();
                 for (let i = 0; i < store_view_artist_page_info.artist_Files_temporary.length; i++) {
                     const artistFile = store_view_artist_page_info.artist_Files_temporary[i];
@@ -143,20 +145,20 @@ export const store_view_artist_page_fetchData = reactive({
                 }
                 ////// filter selected_list for artist_Files_temporary
                 let order_play_date: any[] = [];
+                if (store_view_artist_page_logic.page_artistlists_selected === 'artist_list_recently') {
+                    order_play_date = db.prepare(`
+                        SELECT item_id FROM ${store_server_user_model.annotation}
+                        WHERE item_type='artist' AND play_count>0
+                        ORDER BY play_date DESC
+                    `).all().map((annotation: any) => annotation.item_id);
+                }
                 store_view_artist_page_info.artist_Files_temporary = store_view_artist_page_info.artist_Files_temporary.filter((item: any) => {
                     if (store_view_artist_page_logic.page_artistlists_selected === 'artist_list_all') {
                         return true;
                     } else if (store_view_artist_page_logic.page_artistlists_selected === 'artist_list_love') {
                         return annotations.some((annotation: { item_id: string }) => annotation.item_id === item.id);
                     } else if (store_view_artist_page_logic.page_artistlists_selected === 'artist_list_recently') {
-                        const stmt_artist_Annotation_Recently_Items = db.prepare(`
-                      SELECT item_id FROM ${store_server_user_model.annotation}
-                      WHERE item_type='artist' AND play_count>0
-                      ORDER BY play_date DESC
-                    `);
-                        const annotations = stmt_artist_Annotation_Recently_Items.all().map((annotation: any) => annotation.item_id);
-                        order_play_date = annotations;
-                        return annotations.includes(item.id);
+                        return order_play_date.includes(item.id);
                     } else if (store_view_artist_page_logic.page_artistlists_selected === 'artist_list_all_PlayList') {
                         return true;
                     }
@@ -248,4 +250,6 @@ export const store_view_artist_page_fetchData = reactive({
 
         store_local_data_set_artistInfo.Set_ArtistInfo_To_PlayCount_of_Artist(store_playlist_list_info.playlist_MediaFiles_temporary[0].artist_id)
     },
+
+
 });

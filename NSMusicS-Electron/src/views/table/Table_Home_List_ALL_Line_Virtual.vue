@@ -33,6 +33,7 @@ const { t } = useI18n({
 
 ////// passed as argument
 import {store_view_home_page_info} from "@/store/view/home/store_view_home_page_info"
+import {store_server_user_model} from "@/store/server/store_server_user_model";
 
 ////// albumlist_view page_layout gridItems
 const item_album = ref<number>(160)
@@ -103,12 +104,18 @@ const dynamicScroller_recently_played = ref(null as any);
 
 ////// go to media_view
 const Open_this_album_SongList_click = (album_id:string) => {
+  if(store_server_user_model.model_server_type_of_web){
+    store_view_media_page_fetchData._album_id = album_id
+  }
   console.log('media_list_of_album_id：'+album_id);
   store_router_data_logic.get_media_list_of_album_id_by_album_info(album_id)
 }
 
 //////
 const Play_this_album_SongList_click = async (album_id: string) => {
+  if(store_server_user_model.model_server_type_of_web){
+    store_view_media_page_fetchData._album_id = album_id
+  }
   console.log('play_this_album_click：' + album_id);
   await store_view_album_page_fetchData.fetchData_This_Album_SongList(album_id)
 }
@@ -163,6 +170,8 @@ import {store_view_media_page_info} from "@/store/view/media/store_view_media_pa
 import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
 import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+import {store_player_appearance} from "@/store/player/store_player_appearance";
+import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()

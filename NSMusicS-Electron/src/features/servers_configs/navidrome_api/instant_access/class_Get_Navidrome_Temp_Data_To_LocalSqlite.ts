@@ -282,12 +282,13 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         url: string,
         username: string,token: string,salt: string,
         _end:string, _order:string, _sort:string, _start: string, _search:string, _starred:string,
-        playlist_id: string
+        playlist_id: string,
+        _album_id:string
     ){
         let songlist = []
         if(playlist_id === '') {
             songlist = await this.song_Lists_ApiWebService_of_ND.getSongList_ALL(
-                _end, _order, _sort, _start, _search, _starred
+                _end, _order, _sort, _start, _search, _starred, _album_id
             )
         }else{
             songlist = await this.song_Lists_ApiWebService_of_ND.getSongList_of_Playlist(
@@ -362,15 +363,18 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
     public async get_album_list(
         url: string,
         username: string,token: string,salt: string,
-        _end:string, _order:string, _sort:string, _start: string, _search:string
+        _end:string, _order:string, _sort:string, _start: string, _search:string, _starred:string
     ){
         const albumlist = await this.album_Lists_ApiWebService_of_ND.getAlbumList_ALL(
-            _end, _order, _sort, _start, _search
+            _end, _order, _sort, _start, _search, _starred
         )
         if (Array.isArray(albumlist) && albumlist.length > 0) {
-            albumlist.map(async (album: any) => {
+            albumlist.map(async (album: any, index: number) => {
                 store_view_album_page_info.album_Files_temporary.push(
                     {
+                        absoluteIndex: index + 1,
+                        favorite: album.starred,
+                        rating: album.rating,
                         id: album.id,
                         name: album.name,
                         artist_id: album.artistId,
@@ -416,15 +420,18 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
     public async get_artist_list(
         url: string,
         username: string,token: string,salt: string,
-        _end:string, _order:string, _sort:string, _start: string, _search:string
+        _end:string, _order:string, _sort:string, _start: string, _search:string, _starred:string,
     ){
         const artistlist = await this.artist_Lists_ApiWebService_of_ND.getArtistList_ALL(
-            _end, _order, _sort, _start, _search
+            _end, _order, _sort, _start, _search, _starred
         )
         if (Array.isArray(artistlist) && artistlist.length > 0) {
-            artistlist.map(async (artist: any) => {
+            artistlist.map(async (artist: any, index: number) => {
                 store_view_artist_page_info.artist_Files_temporary.push(
                     {
+                        absoluteIndex: index + 1,
+                        favorite: artist.starred,
+                        rating: artist.rating,
                         id: artist.id,
                         name: artist.name,
                         album_count: artist.albumCount,

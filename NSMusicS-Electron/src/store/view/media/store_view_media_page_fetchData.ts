@@ -79,7 +79,8 @@ export const store_view_media_page_fetchData = reactive({
                     };
                     store_router_history_data_of_media.add_router_history_of_Media(routerDate);// 重复路由不添加
                     //////
-                } else {
+                }
+                else {
                     if (store_router_history_data_of_media.router_select_history_date_of_Media) {
                         store_router_data_info.router.push('View_Song_List_ALL')
                         store_router_data_info.router_select_model_media = true;
@@ -258,12 +259,17 @@ export const store_view_media_page_fetchData = reactive({
 
     _start: 0,
     _end: 50,
+    _album_id: '',
     _playlist_model: false,
     async fetchData_Media_of_server_web_start(){
         store_view_media_page_info.media_Files_temporary = [];
         this._start = 0;
         this._end = 50;
         await this.fetchData_Media_of_server_web()
+
+        if(store_player_appearance.player_mode_of_medialist_from_external_import) {
+            this._album_id = ''
+        }
     },
     async fetchData_Media_of_server_web_end(){
         if(!this._playlist_model) {
@@ -275,8 +281,12 @@ export const store_view_media_page_fetchData = reactive({
     async fetchData_Media_of_server_web(){
         const _search = (store_view_media_page_logic.page_songlists_keywordFilter || '').match(/%([^%]+)%/)?.[1] || '';
         const selected = store_view_media_page_logic.page_songlists_selected;
-        let _order = 'ASC';
-        let _sort = 'id'
+        ///
+        let _sort = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
+            store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey : 'id';
+        let _order = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
+            store_view_media_page_logic.page_songlists_options_Sort_key[0].order.replace('end', '') : 'ASC';
+        ///
         let _starred = '';
         let playlist_id = '';
         this._playlist_model = false
@@ -296,7 +306,8 @@ export const store_view_media_page_fetchData = reactive({
             store_server_user_model.token,
             store_server_user_model.salt,
             String(this._end),_order,_sort,String(this._start),
-            _search,_starred,playlist_id
+            _search,_starred,playlist_id,
+            this._album_id
         )
     }
 });

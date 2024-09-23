@@ -493,6 +493,7 @@
     store_local_data_set_mediaInfo
   } from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
   import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+  import {store_server_user_model} from "@/store/server/store_server_user_model";
   let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id,favorite)
@@ -505,6 +506,8 @@
 
   /////// emits audio_info of songlist_view_list
   const handleItemClick_title = (title:string) => {
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_page_logic.page_songlists_input_search_Value = title
     store_view_media_page_logic.get_page_songlists_keyword(title)
     player_show_hight_animation_value.value = 670;
     get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
@@ -515,7 +518,13 @@
     back_ChevronDouble.value = '../../resources/svg/'+svg_shrink_up_arrow.value;
   }
   const handleItemClick_artist = (artist:string) => {
-    store_view_media_page_logic.get_page_songlists_keyword(artist+'accurate_search'+'__artist__')
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_page_logic.page_songlists_input_search_Value = artist
+    if(store_server_user_model.model_server_type_of_local) {
+      store_view_media_page_logic.get_page_songlists_keyword(artist + 'accurate_search' + '__artist__')
+    }else if(store_server_user_model.model_server_type_of_web){
+      store_view_media_page_logic.get_page_songlists_keyword(artist)
+    }
     player_show_hight_animation_value.value = 670;
     get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
     if(player_show_hight_animation_value.value === 0)
@@ -525,7 +534,13 @@
     back_ChevronDouble.value = '../../resources/svg/'+svg_shrink_up_arrow.value;
   }
   const handleItemClick_album = (album:string) => {
-    store_view_media_page_logic.get_page_songlists_keyword(album+'accurate_search'+'__album__')
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true
+    store_view_media_page_logic.page_songlists_input_search_Value = album
+    if(store_server_user_model.model_server_type_of_local) {
+      store_view_media_page_logic.get_page_songlists_keyword(album+'accurate_search'+'__album__')
+    }else if(store_server_user_model.model_server_type_of_web){
+      store_view_media_page_logic.get_page_songlists_keyword(album)
+    }
     player_show_hight_animation_value.value = 670;
     get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
     if(player_show_hight_animation_value.value === 0)
@@ -584,7 +599,15 @@
           </n-space>
           <n-space>
             <n-ellipsis>
-              <span id="bar_album_name" @click="handleItemClick_album(store_player_audio_info.this_audio_album_id)">{{ store_player_audio_info.this_audio_album_name }}</span>
+              <span id="bar_album_name"
+                    @click="() => {
+                      if(store_server_user_model.model_server_type_of_local){
+                        handleItemClick_album(store_player_audio_info.this_audio_album_id)
+                      }else if(store_server_user_model.model_server_type_of_web){
+                        handleItemClick_album(store_player_audio_info.this_audio_album_name)
+                      }
+                    }"
+              >{{ store_player_audio_info.this_audio_album_name }}</span>
             </n-ellipsis>
           </n-space>
         </div>

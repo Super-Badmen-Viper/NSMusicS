@@ -46,6 +46,9 @@ export const store_view_media_page_logic = reactive({
     page_songlists_get_keyword_model_num: 0,
     page_songlists_options_Sort_key: [],
 
+    page_songlists_bool_show_search_area: false,
+    page_songlists_input_search_Value: '',
+
     get_duration_formatTime(currentTime: number): string {
         const minutes = Math.floor(currentTime / 60);
         const seconds = Math.floor(currentTime % 60);

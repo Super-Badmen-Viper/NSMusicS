@@ -8,10 +8,10 @@
         "skip": "saltar",
         "previous": "anterior",
         "toggleFullscreenPlayer": "activar el reproductor a pantalla completa",
-        "skip_back": "saltar hacia atrás",
+        "skip_back": "retroceder",
         "favorite": "favorito",
         "next": "siguiente",
-        "shuffle": "mezclar",
+        "shuffle": "Reproducir aleatoriamente",
         "playbackFetchNoResults": "ninguna canción encontrada",
         "playbackFetchInProgress": "cargando canciones…",
         "addNext": "añadir siguiente",
@@ -28,12 +28,13 @@
         "addLast": "añadir último",
         "mute": "silencio",
         "skip_forward": "saltar hacia delante",
-        "pause": "pausa"
+        "pause": "pausa",
+        "playSimilarSongs": "Reproducir canciones similares"
     },
     "setting": {
         "crossfadeStyle_description": "selecciona el estilo de crossfade a usar por el reproductor de audio",
         "remotePort_description": "establece el puerto para el control remoto del servidor",
-        "hotkey_skipBackward": "saltar hacia atrás",
+        "hotkey_skipBackward": "retroceder",
         "replayGainMode_description": "ajusta el volumen de ganancia acorde a los valores de {{ReplayGain}} almacenados en los metadatos del archivo",
         "audioDevice_description": "selecciona el dispositivo de audio para usar en la reproducción (solo reproductor web)",
         "theme_description": "establece el tema a usar por la aplicación",
@@ -130,7 +131,7 @@
         "showSkipButton_description": "muestra o esconde los botones de saltar en la barra del reproductor",
         "savePlayQueue": "guardar cola de reproducción",
         "minimumScrobbleSeconds_description": "la duración mínima en segundos de la canción que debe ser reproducida antes de hacer scrobble",
-        "fontType_description": "fuente incorporada selecciona una de las fuentes proporcionadas por NSMusicS. fuente del sistema te permite seleccionar cualquier fuente proporcionada por tu sistema operativo. personalizada te permite proporcionar tu propia fuente",
+        "fontType_description": "fuente incorporada selecciona una de las fuentes proporcionadas por Feishin. fuente del sistema te permite seleccionar cualquier fuente proporcionada por tu sistema operativo. personalizada te permite proporcionar tu propia fuente",
         "playButtonBehavior": "comportamiento del botón de reproducción",
         "sidebarPlaylistList_description": "muestra o esconde las listas de reproducción en la barra lateral",
         "sidePlayQueueStyle_description": "establece el estilo de la cola de reproducción lateral",
@@ -159,7 +160,7 @@
         "audioPlayer": "reproductor de audio",
         "hotkey_zoomOut": "reducir",
         "hotkey_unfavoriteCurrentSong": "$t(common.currentSong) no favorito",
-        "hotkey_rate0": "limpiar calificación",
+        "hotkey_rate0": "Limpiar calificación",
         "discordApplicationId": "id de aplicación {{discord}}",
         "applicationHotkeys_description": "configura las teclas de acceso rápido de la aplicación. marca la casilla para establecerlas como teclas de acceso rápido globales (solo escritorio)",
         "floatingQueueArea_description": "muestra un icono flotante en el lado derecho de la pantalla para ver la cola de reproducción",
@@ -191,11 +192,11 @@
         "skipPlaylistPage": "saltar página de lista de reproducción",
         "hotkey_browserForward": "avance",
         "hotkey_browserBack": "retroceso",
-        "clearCache": "limpiar la caché del navegador",
-        "clearQueryCache": "limpiar la caché de NSMusicS",
-        "clearQueryCache_description": "una 'limpieza suave' de NSMusicS. esto refrescará las listas de reproducción, metadatos de pistas y restablece las letras guardadas. se mantienen los ajustes, credenciales del servidor y las imágenes en caché",
+        "clearCache": "Limpiar la caché del navegador",
+        "clearQueryCache": "Limpiar la caché de Feishin",
+        "clearQueryCache_description": "Una 'limpieza suave' de Feishin. Esto refrescará las listas de reproducción, metadatos de pistas y restablecerá las letras guardadas. Se mantienen los ajustes, credenciales del servidor y las imágenes en caché",
         "buttonSize": "tamaño del botón de la barra de reproducción",
-        "clearCache_description": "una 'limpieza fuerte' de NSMusicS. para limpiar la caché de NSMusicS, vacía la caché del navegador (imágenes guardadas y otros elementos). se mantienen las credenciales y ajustes del servidor",
+        "clearCache_description": "Una 'limpieza fuerte' de Feishin. Para limpiar la caché de Feishin, vacía la caché del navegador (imágenes guardadas y otros elementos). Se mantienen las credenciales y ajustes del servidor",
         "buttonSize_description": "el tamaño de los botones de la barra de reproducción",
         "passwordStore_description": "qué método de almacenamiento de contraseñas/claves secretas utilizar. cambie esta opción si tiene problemas para guardar contraseñas.",
         "startMinimized_description": "iniciar la aplicación en la bandeja del sistema",
@@ -210,20 +211,57 @@
         "genreBehavior_description": "Determina si al pulsar en un género se abre por defecto la lista de pistas o de álbumes",
         "homeConfiguration_description": "Configura qué elementos son mostrados y en qué orden en la página de inicio",
         "clearCacheSuccess": "Caché limpiada correctamente",
-        "externalLinks": "Mostrar enlaces externos"
+        "externalLinks": "Mostrar enlaces externos",
+        "homeFeature": "Carrusel destacado de inicio",
+        "homeFeature_description": "Controla si se muestra el gran carrusel destacado en la página de inicio",
+        "imageAspectRatio_description": "Si está habilitado, la portada será mostrada usando su relación de aspecto nativa. Para arte que no es 1:1, el espacio restante estará vacío",
+        "imageAspectRatio": "Usar relación de aspecto nativa de portada",
+        "doubleClickBehavior": "poner en cola todas las pistas buscadas al hacer doble clic",
+        "doubleClickBehavior_description": "si es true, se pondrán en cola todas las pistas que coincidan en una búsqueda de pistas. De lo contrario, solo se pondrá en cola la pista seleccionada",
+        "volumeWidth": "Ancho del deslizador de volumen",
+        "volumeWidth_description": "La anchura del deslizador de volumen",
+        "discordListening_description": "Muestra el estado como escuchando en lugar de reproduciendo. Ten en cuenta que esto actualmente rompe la barra de tiempo",
+        "discordListening": "Mostrar estado como escuchando",
+        "contextMenu": "Configuración del menú de contexto (clic derecho)",
+        "contextMenu_description": "Te permite esconder elementos que son mostrados en el menú cuando haces clic derecho en un elemento. Los elementos que no estén seleccionados serán escondidos",
+        "customCssEnable": "Habilitar CSS personalizado",
+        "customCssEnable_description": "Permite la escritura de CSS personalizado.",
+        "customCss": "CSS personalizado",
+        "customCssNotice": "Aviso: mientras hay alguna sanitización (rechazar url() y content:), usar CSS personalizado puede aún entrañar riesgos cambiando la interfaz.",
+        "customCss_description": "Content CSS personalizado. Nota: content y urls remotas son propiedades rechazadas. Una vista previa de tu content se muestra debajo. Las entradas adicionales que no estableciste están presentes debido a la sanitización.",
+        "webAudio": "usar audio web",
+        "webAudio_description": "Utilizar audio web. Esto habilita funciones avanzadas como Replaygain. Desactiva esta opción si tienes problemas",
+        "transcode": "activar la transcodificación",
+        "transcode_description": "permite la transcodificación a distintos formatos",
+        "transcodeBitrate": "tasa de bits a transcodificar",
+        "transcodeBitrate_description": "selecciona el bitrate a transcodificar. 0 significa dejar que el servidor elija",
+        "transcodeNote": "Se mostrará después de 1 (web) - 2 (mpv) pistas",
+        "transcodeFormat": "formato a transcodificar",
+        "transcodeFormat_description": "selecciona el formato a transcodificar. dejar vacío para que el servidor decida",
+        "albumBackground": "imagen de fondo del álbum",
+        "albumBackground_description": "Agregar una imagen de fondo a las páginas del álbum que contienen la carátula del álbum",
+        "albumBackgroundBlur": "Tamaño de desenfoque de la imagen de fondo del álbum",
+        "albumBackgroundBlur_description": "Ajustar el nivel de desenfoque de la imagen de fondo del álbum",
+        "playerbarOpenDrawer": "Cambiar la barra del reproductor a pantalla completa",
+        "playerbarOpenDrawer_description": "Permitir hacer clic en la barra del reproductor para abrir el reproductor en pantalla completa",
+        "artistConfiguration": "Configuración de la página del artista del álbum",
+        "artistConfiguration_description": "Configurar qué elementos se muestran y en qué orden en la página del artista del álbum",
+        "playButtonBehavior_optionPlayShuffled": "$t(player.shuffle)",
+        "trayEnabled": "Mostrar en el área de notificación",
+        "trayEnabled_description": "mostrar/ocultar el icono/menú del área de notificación. si está deshabilitado, también deshabilita minimizar/salir a la bandeja"
     },
     "action": {
-        "editPlaylist": "editar ",
+        "editPlaylist": "editar $t(entity.playlist_one)",
         "goToPage": "ir a la página",
         "moveToTop": "mover al principio",
         "clearQueue": "limpiar cola",
         "addToFavorites": "añadir a $t(entity.favorite_other)",
-        "addToPlaylist": "añadir a ",
-        "createPlaylist": "crear ",
-        "removeFromPlaylist": "eliminar de ",
+        "addToPlaylist": "añadir a $t(entity.playlist_one)",
+        "createPlaylist": "crear $t(entity.playlist_one)",
+        "removeFromPlaylist": "eliminar de $t(entity.playlist_one)",
         "viewPlaylists": "ver $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
-        "deletePlaylist": "eliminar ",
+        "deletePlaylist": "eliminar $t(entity.playlist_one)",
         "removeFromQueue": "eliminar de la cola",
         "deselectAll": "desmarcar todo",
         "moveToBottom": "mover al fondo",
@@ -239,7 +277,7 @@
         "backward": "hacia atrás",
         "increase": "aumentar",
         "rating": "calificación",
-        "bpm": "bpm",
+        "bpm": "lpm",
         "refresh": "actualizar",
         "unknown": "desconocido",
         "areYouSure": "estás seguro?",
@@ -298,7 +336,7 @@
         "previousSong": "anterior $t(entity.track_one)",
         "noResultsFromQuery": "la petición no devolvió resultados",
         "quit": "salir",
-        "expand": "ampliar",
+        "expand": "expandir",
         "search": "buscar",
         "saveAs": "guardar como",
         "disc": "disco",
@@ -372,7 +410,7 @@
         "albumArtist": "$t(entity.albumArtist_one)",
         "isRecentlyPlayed": "reproducido recientemente",
         "isFavorited": "es favorito",
-        "bpm": "bpm",
+        "bpm": "lpm",
         "releaseYear": "año de lanzamiento",
         "disc": "disco",
         "biography": "biografía",
@@ -441,7 +479,10 @@
             "numberSelected": "{{count}} seleccionado",
             "removeFromQueue": "$t(action.removeFromQueue)",
             "shareItem": "Compartir elemento",
-            "showDetails": "Obtener información"
+            "showDetails": "Obtener información",
+            "playSimilarSongs": "$t(player.playSimilarSongs)",
+            "download": "descargar",
+            "playShuffled": "$t(player.shuffle)"
         },
         "home": {
             "mostPlayed": "más reproducidos",
@@ -472,13 +513,15 @@
         },
         "albumDetail": {
             "moreFromArtist": "más de este $t(entity.artist_one)",
-            "moreFromGeneric": "más de {{item}}"
+            "moreFromGeneric": "más de {{item}}",
+            "released": "publicado"
         },
         "setting": {
             "playbackTab": "reproducción",
             "generalTab": "general",
             "hotkeysTab": "teclas de acceso rápido",
-            "windowTab": "ventana"
+            "windowTab": "ventana",
+            "advanced": "Avanzado"
         },
         "albumArtistList": {
             "title": "$t(entity.albumArtist_other)"
@@ -491,7 +534,7 @@
         "trackList": {
             "title": "$t(entity.track_other)",
             "genreTracks": "\"{{genre}}\" $t(entity.track_other)",
-            "artistTracks": "Pistas de {{artist}}"
+            "artistTracks": "pistas por {{artist}}"
         },
         "globalSearch": {
             "commands": {
@@ -507,13 +550,13 @@
         "albumList": {
             "title": "$t(entity.album_other)",
             "genreAlbums": "\"{{genre}}\" $t(entity.album_other)",
-            "artistAlbums": "Álbumes de {{artist}}"
+            "artistAlbums": "álbumes de {{artist}}"
         },
         "albumArtistDetail": {
             "viewAllTracks": "ver todo de $t(entity.track_other)",
-            "relatedArtists": "similar a $t(entity.artist_other)",
+            "relatedArtists": "$t(entity.artist_other) similar",
             "topSongs": "mejores canciones",
-            "topSongsFrom": "Las mejores canciones de {{title}}",
+            "topSongsFrom": "las mejores canciones de {{title}}",
             "viewAll": "Ver todo",
             "recentReleases": "Lanzamientos recientes",
             "viewDiscography": "Ver discografía",
@@ -524,20 +567,23 @@
             "copiedPath": "Ruta copiada correctamente",
             "openFile": "Mostrar pista en el gestor de archivos",
             "copyPath": "Copiar ruta al portapapeles"
+        },
+        "playlist": {
+            "reorder": "la reordenación solo se activa al ordenar por id"
         }
     },
     "form": {
         "deletePlaylist": {
-            "title": "eliminar ",
-            "success": " eliminado correctamente",
-            "input_confirm": "escribe el nombre de  para confirmar"
+            "title": "eliminar $t(entity.playlist_one)",
+            "success": "$t(entity.playlist_one) eliminado correctamente",
+            "input_confirm": "escribe el nombre de $t(entity.playlist_one) para confirmar"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "crear ",
+            "title": "crear $t(entity.playlist_one)",
             "input_public": "público",
             "input_name": "$t(common.name)",
-            "success": " creado correctamente",
+            "success": "$t(entity.playlist_one) creado correctamente",
             "input_owner": "$t(common.owner)"
         },
         "addServer": {
@@ -555,7 +601,7 @@
         },
         "addToPlaylist": {
             "success": "añadido $t(entity.trackWithCount, {\"count\": {{message}} }) a $t(entity.playlistWithCount, {\"count\": {{numOfPlaylists}} })",
-            "title": "añadir a ",
+            "title": "añadir a $t(entity.playlist_one)",
             "input_skipDuplicates": "saltar duplicados",
             "input_playlists": "$t(entity.playlist_other)"
         },
@@ -569,7 +615,9 @@
             "title": "buscar letras"
         },
         "editPlaylist": {
-            "title": "editar "
+            "title": "editar $t(entity.playlist_one)",
+            "success": "$t(entity.playlist_one) actualizada correctamente",
+            "publicJellyfinNote": "Jellyfin por alguna razón no expone si una lista de reproducción es pública o no. Si deseas que ésta siga siendo pública, por favor ten seleccionada la siguiente entrada"
         },
         "queryEditor": {
             "input_optionMatchAll": "coincidir todos",
@@ -598,7 +646,7 @@
             "releaseDate": "fecha de lanzamiento",
             "bitrate": "tasa de bits",
             "title": "título",
-            "bpm": "bpm",
+            "bpm": "lpm",
             "dateAdded": "fecha de adición",
             "artist": "$t(entity.artist_one)",
             "songCount": "$t(entity.track_other)",
@@ -639,7 +687,8 @@
                 "genre": "$t(entity.genre_one)",
                 "favorite": "$t(common.favorite)",
                 "year": "$t(common.year)",
-                "codec": "$t(common.codec)"
+                "codec": "$t(common.codec)",
+                "songCount": "$t(entity.track_other)"
             },
             "general": {
                 "gap": "$t(common.gap)",
@@ -658,7 +707,7 @@
         }
     },
     "entity": {
-        "smartPlaylist": " inteligente",
+        "smartPlaylist": "$t(entity.playlist_one) inteligente",
         "genre_one": "género",
         "genre_many": "géneros",
         "genre_other": "géneros",
@@ -703,6 +752,9 @@
         "genreWithCount_other": "{{count}} géneros",
         "trackWithCount_one": "{{count}} pista",
         "trackWithCount_many": "{{count}} pistas",
-        "trackWithCount_other": "{{count}} pistas"
+        "trackWithCount_other": "{{count}} pistas",
+        "play_one": "Reproducir {{count}}",
+        "play_many": "Reproducir {{count}}",
+        "play_other": "Reproducir {{count}}"
     }
 }

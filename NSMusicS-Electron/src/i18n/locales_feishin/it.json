@@ -1,15 +1,15 @@
 {
     "action": {
-        "editPlaylist": "modifica ",
+        "editPlaylist": "modifica $t(entity.playlist_one)",
         "goToPage": "vai alla pagina",
         "clearQueue": "cancella la coda",
         "addToFavorites": "aggiungi a $t(entity.favorite_other)",
-        "addToPlaylist": "aggiungi a ",
-        "createPlaylist": "crea ",
-        "removeFromPlaylist": "rimuovi da ",
+        "addToPlaylist": "aggiungi a $t(entity.playlist_one)",
+        "createPlaylist": "crea $t(entity.playlist_one)",
+        "removeFromPlaylist": "rimuovi da $t(entity.playlist_one)",
         "viewPlaylists": "visualizza $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
-        "deletePlaylist": "elimina ",
+        "deletePlaylist": "elimina $t(entity.playlist_one)",
         "removeFromQueue": "rimuovi dalla coda",
         "deselectAll": "deseleziona tutto",
         "setRating": "vota",
@@ -220,7 +220,7 @@
         "enableRemote": "abilita controllo remoto server",
         "savePlayQueue": "salva coda di riproduzione",
         "minimumScrobbleSeconds_description": "la minima durata in secondi di una canzone che deve essere riprodutta prima di eseguire lo scrobble",
-        "fontType_description": "Font built-in seleziona uno dei font forniti da NSMusicS. Font di sistema ti permette di selezionare ogni font fornito dal tuo sistema operativo. Custom ti permette di fornire il tuo font",
+        "fontType_description": "Font built-in seleziona uno dei font forniti da Feishin. Font di sistema ti permette di selezionare ogni font fornito dal tuo sistema operativo. Custom ti permette di fornire il tuo font",
         "playButtonBehavior": "comportamento pulsante riproduzione",
         "volumeWheelStep": "step rotellina volume",
         "sidebarPlaylistList_description": "mostra o nascondi la lista delle playlist nella barra laterale",
@@ -289,11 +289,11 @@
         "replayGainPreamp_description": "aggiusta la preamplificazione del gain applicato sui valori {{ReplayGain}}",
         "skipPlaylistPage": "Salta la pagina playlist",
         "sidebarCollapsedNavigation": "navigazione con barra laterale (collassata)",
-        "clearCache_description": "pulitura \"forzata\" di NSMusicS. Oltre a pulire la cache di NSMusicS, elimina la cache del browser(immagini salvate e altri elementi). credenziali e impostazioni del server saranno mantenute",
-        "clearQueryCache": "pulisci cache di NSMusicS",
+        "clearCache_description": "pulitura \"forzata\" di feishin. Oltre a pulire la cache di feishin, elimina la cache del browser(immagini salvate e altri elementi). credenziali e impostazioni del server saranno mantenute",
+        "clearQueryCache": "pulisci cache di feishin",
         "buttonSize_description": "Dimensione bottoni nella barra di riproduzione",
         "clearCache": "pulisci la cache del browser",
-        "clearQueryCache_description": "\"leggera\" pulizia di NSMusicS. verranno aggiornate le playlist, metadata delle tracce e i testi salvati. impostazioni, credenziali del server e le immagini salvate saranno mantenute"
+        "clearQueryCache_description": "\"leggera\" pulizia di feishin. verranno aggiornate le playlist, metadata delle tracce e i testi salvati. impostazioni, credenziali del server e le immagini salvate saranno mantenute"
     },
     "error": {
         "remotePortWarning": "riavvia il server per applicare la nuova porta",
@@ -465,16 +465,16 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "elimina ",
-            "success": " eliminata correttamente",
-            "input_confirm": "digita il nome della  per confermare"
+            "title": "elimina $t(entity.playlist_one)",
+            "success": "$t(entity.playlist_one) eliminata correttamente",
+            "input_confirm": "digita il nome della $t(entity.playlist_one) per confermare"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "crea ",
+            "title": "crea $t(entity.playlist_one)",
             "input_public": "publico",
             "input_name": "$t(common.name)",
-            "success": " creata con successo",
+            "success": "$t(entity.playlist_one) creata con successo",
             "input_owner": "$t(common.owner)"
         },
         "addServer": {
@@ -492,7 +492,7 @@
         },
         "addToPlaylist": {
             "success": "aggiunto {{message}} $t(entity.track_other) a {{numOfPlaylists}} $t(entity.playlist_other)",
-            "title": "aggiungi a ",
+            "title": "aggiungi a $t(entity.playlist_one)",
             "input_skipDuplicates": "salta duplicati",
             "input_playlists": "$t(entity.playlist_other)"
         },
@@ -510,7 +510,7 @@
             "title": "cerca testi"
         },
         "editPlaylist": {
-            "title": "modifica "
+            "title": "modifica $t(entity.playlist_one)"
         }
     },
     "table": {
@@ -618,7 +618,7 @@
         "folder_one": "cartella",
         "folder_many": "cartelle",
         "folder_other": "cartelle",
-        "smartPlaylist": " smart",
+        "smartPlaylist": "$t(entity.playlist_one) smart",
         "album_one": "album",
         "album_many": "album",
         "album_other": "album",

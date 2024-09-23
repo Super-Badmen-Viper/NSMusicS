@@ -97,12 +97,12 @@
         "refresh": "$t(common.refresh)",
         "removeFromQueue": "remover da fila",
         "moveToBottom": "mover para baixo",
-        "editPlaylist": "editar ",
+        "editPlaylist": "editar $t(entity.playlist_one)",
         "clearQueue": "limpar fila",
-        "addToPlaylist": "adicionar à ",
-        "createPlaylist": "criar ",
-        "removeFromPlaylist": "remover da ",
-        "deletePlaylist": "deletar ",
+        "addToPlaylist": "adicionar à $t(entity.playlist_one)",
+        "createPlaylist": "criar $t(entity.playlist_one)",
+        "removeFromPlaylist": "remover da $t(entity.playlist_one)",
+        "deletePlaylist": "deletar $t(entity.playlist_one)",
         "deselectAll": "desmarcar todos",
         "removeFromFavorites": "remover de $t(entity.favorite_other)",
         "openIn": {
@@ -112,8 +112,8 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "deletar ",
-            "input_confirm": "escreva o nome da  para confirmar"
+            "title": "deletar $t(entity.playlist_one)",
+            "input_confirm": "escreva o nome da $t(entity.playlist_one) para confirmar"
         },
         "addServer": {
             "title": "adicionar servidor",
@@ -128,19 +128,19 @@
             "input_username": "nome de usuário"
         },
         "createPlaylist": {
-            "title": "criar ",
+            "title": "criar $t(entity.playlist_one)",
             "input_public": "público",
             "input_description": "$t(common.description)",
-            "success": " criada com sucesso"
+            "success": "$t(entity.playlist_one) criada com sucesso"
         },
         "updateServer": {
             "title": "atualizar servidor"
         },
         "editPlaylist": {
-            "title": "editar "
+            "title": "editar $t(entity.playlist_one)"
         },
         "addToPlaylist": {
-            "title": "adicionar à ",
+            "title": "adicionar à $t(entity.playlist_one)",
             "input_playlists": "$t(entity.playlist_other)",
             "input_skipDuplicates": "pular duplicadas",
             "success": "adicionado $t(entity.trackWithCount, {\"count\": {{message}} }) para $t(entity.playlistWithCount, {\"count\": {{numOfPlaylists}} })"
@@ -212,7 +212,23 @@
         "songCount": "contador de músicas",
         "toYear": "até o ano",
         "random": "aleatório",
-        "search": "buscar"
+        "search": "buscar",
+        "lastPlayed": "última tocada",
+        "isCompilation": "é compilação",
+        "trackNumber": "faixa",
+        "communityRating": "Nota da comunidade",
+        "isPublic": "é público",
+        "playCount": "contador de execuções",
+        "recentlyUpdated": "atualizado recentemente",
+        "dateAdded": "data de adição",
+        "isRecentlyPlayed": "foi tocado recentemente",
+        "albumArtist": "$t(entity.albumArtist_one)",
+        "recentlyAdded": "adicionado recentemente",
+        "releaseDate": "data de lançamento",
+        "recentlyPlayed": "tocado recentemente",
+        "criticRating": "Nota da crítica",
+        "isFavorited": "é favoritado",
+        "releaseYear": "ano de lançamento"
     },
     "player": {
         "playbackFetchNoResults": "nenhuma música encontrada",
@@ -257,7 +273,13 @@
         "folderWithCount_other": "{{count}} pastas",
         "genreWithCount_one": "{{count}} gênero",
         "genreWithCount_many": "{{count}} gêneros",
-        "genreWithCount_other": "{{count}} gêneros"
+        "genreWithCount_other": "{{count}} gêneros",
+        "trackWithCount_one": "faixa",
+        "trackWithCount_many": "faixas",
+        "trackWithCount_other": "faixas",
+        "track_one": "faixa",
+        "track_many": "faixas",
+        "track_other": "faixas"
     },
     "error": {
         "remotePortWarning": "reinicie o servidor para aplicar a nova porta",
