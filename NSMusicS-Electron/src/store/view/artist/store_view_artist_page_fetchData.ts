@@ -21,6 +21,7 @@ import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "@/features/servers_configs/navidrome_api/instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
+import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
 
 export const store_view_artist_page_fetchData = reactive({
     async fetchData_Artist(){
@@ -181,13 +182,16 @@ export const store_view_artist_page_fetchData = reactive({
                 console.log('db.close().......');
                 db = null;
             }
-        }else if(store_server_user_model.model_server_type_of_web){
+        }
+        else if(store_server_user_model.model_server_type_of_web){
             let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
             await get_Navidrome_Temp_Data_To_LocalSqlite.get_artist_list(
                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
                 store_server_users.server_config_of_current_user_of_sqlite?.user_name,
                 store_server_user_model.token,
                 store_server_user_model.salt,
+                '100','ASC','name','0',
+                '',''
             )
         }
     },
@@ -238,6 +242,8 @@ export const store_view_artist_page_fetchData = reactive({
             store_player_audio_info.this_audio_song_id = store_playlist_list_info.playlist_MediaFiles_temporary[0].id
             store_player_audio_info.this_audio_song_rating = store_playlist_list_info.playlist_MediaFiles_temporary[0].rating
             store_player_audio_info.this_audio_song_favorite = store_playlist_list_info.playlist_MediaFiles_temporary[0].favorite
+
+            store_playlist_list_logic.media_page_handleItemDbClick = false
         }
 
         store_local_data_set_artistInfo.Set_ArtistInfo_To_PlayCount_of_Artist(store_playlist_list_info.playlist_MediaFiles_temporary[0].artist_id)

@@ -15,12 +15,13 @@ export const store_view_album_page_logic = reactive({
     page_albumlists_get_keyword_model_num: 0,
     page_albumlists_options_Sort_key: [],
 });
-watch(() => store_view_album_page_logic.page_albumlists_options_Sort_key, (newValue) => {
+watch(() => store_view_album_page_logic.page_albumlists_options_Sort_key, async (newValue) => {
     if (newValue != null) {
-        if(store_view_album_page_logic.page_albumlists_options_Sort_key === [])
+        if(store_view_album_page_logic.page_albumlists_options_Sort_key === undefined || store_view_album_page_logic.page_albumlists_options_Sort_key.length === 0) {
             store_view_album_page_logic.page_albumlists_keyword = '';
+        }
         store_router_history_data_of_album.fix_router_history_of_Album_scroller_value(store_router_history_data_of_album.router_history_model_of_Album_scroller_value) // 保留此滚轮值(上次浏览位置)
-        store_view_album_page_fetchData.fetchData_Album()
+        await store_view_album_page_fetchData.fetchData_Album()
     }
 });
 watch(() => store_view_album_page_logic.page_albumlists_keyword, (newValue) => {

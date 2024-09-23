@@ -1,0 +1,12 @@
+docker run -it \
+--device /dev/kvm \
+-p 50922:10022 \
+-v /tmp/.X11-unix:/tmp/.X11-unix \
+-e "DISPLAY=${DISPLAY:-:0.0}" \
+-e GENERATE_UNIQUE=true \
+-e MASTER_PLIST_URL='https://raw.githubusercontent.com/sickcodes/osx-serial-generator/master/config-custom.plist' \
+-e WIDTH=2560 \
+-e HEIGHT=1600 \
+registry.cn-hangzhou.aliyuncs.com/shrimp-images/docker-osx:ventura
+dickhub/docker-osx:big-sur
+dickhub/docker-osx:catalina

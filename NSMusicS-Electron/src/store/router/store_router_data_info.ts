@@ -9,6 +9,7 @@ import {
 } from "@/store/server/server_data_synchronization/store_server_data_set_playlistInfo";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_playlist_appearance} from "@/store/playlist/store_playlist_appearance";
+import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
 
 export const store_router_data_info = reactive({
     router: null,
@@ -20,6 +21,9 @@ export const store_router_data_info = reactive({
     find_music_model: false,
     find_album_model: false,
     find_artist_model: false,
+
+    store_router_history_data_of_local: true,
+    store_router_history_data_of_web: false,
 
     router_select_model_menu: false,
     router_select_model_home: false,
@@ -35,9 +39,9 @@ watch(() => store_router_data_info.router_select, async (newValue) => {
             store_view_home_page_fetchData.fetchData_Home()
         } else if (newValue === 'View_Song_List_ALL') {
             store_router_data_info.router_select_model_media = true
-            store_view_media_page_fetchData.fetchData_Media()
+            await store_view_media_page_fetchData.fetchData_Media()
             /// Synchronize API data
-            if (store_server_user_model.model_select === 'navidrome') {
+            if (store_server_user_model.model_select === 'server') {
                 // get server all playlist
                 await store_server_user_model.Get_UserData_Synchronize_ToLocal_of_ND()
             }

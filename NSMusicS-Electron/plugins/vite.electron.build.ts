@@ -54,7 +54,7 @@ export const viteElectronBuild = (): Plugin => {
                     },
                     mac: {
                         target: 'dmg',
-                        icon: 'resources/config/NSMusicS.ico'
+                        icon: 'resources/config/NSMusicS.png'
                     },
                     nsis: {
                         oneClick: false,

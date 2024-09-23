@@ -120,55 +120,94 @@
   provide('get_server_config_of_current_user_of_sqlite', get_server_config_of_current_user_of_sqlite);
 
   ////// player view
-  function get_playerbar_to_switch_playerview(value:any){
-    store_player_appearance.player_show_complete = false
-    store_router_data_logic.clear_Files_temporary()
-
-    if(value === 0)
-      store_player_appearance.player_show = true
+  async function get_playerbar_to_switch_playerview(value: any) {
+    store_player_appearance.player_show_complete = false;
+    if (store_router_data_logic.clear_Memory_Model) {
+      store_router_data_logic.clear_Files_temporary(); // Memory Model
+    }
+    if (value === 0) {
+      store_player_appearance.player_show = true;
+      if (store_router_data_logic.clear_Memory_Model) {
+        store_app_configs_info.menuOptions_appBar_show = false;
+      }
+    }
     setTimeout(() => {
-      store_player_appearance.player_show_hight_animation_value = value
+      store_player_appearance.player_show_hight_animation_value = value;
       setTimeout(() => {
-        if(value === 0){
-          store_app_configs_info.theme_app = darkTheme
-        }else{
-          store_app_configs_info.theme_app = store_app_configs_info.theme
-          store_player_appearance.player_show = false
+        if (value === 0) {
+          store_app_configs_info.theme_app = darkTheme;
+        } else {
+          store_app_configs_info.theme_app = store_app_configs_info.theme;
+          store_player_appearance.player_show = false;
+          if (store_router_data_logic.clear_Memory_Model) {
+            store_app_configs_info.menuOptions_appBar_show = true;
+          }
         }
       }, 200);
     }, 30);
-
-    // Vue UI WYSIWYG
-    store_router_data_info.router_select_model_menu = false
-    store_router_data_info.router_select_model_home = false
-    store_router_data_info.router_select_model_updateing = false;
-    store_router_data_info.router_select_model_media = false
-    store_router_data_info.router_select_model_album = false
-    store_router_data_info.router_select_model_artist = false
-    setTimeout(() => {
-      if(value != 0){
-        if(store_app_configs_info.app_left_menu_select_activeKey === 'View_Menu_AppSetting'){
-          store_router_data_info.router_select_model_menu = true;
-        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'View_Home_MusicLibrary_Browse') {
-          store_router_data_info.router_select_model_home = true;
-          store_view_home_page_fetchData.fetchData_Home()
-        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'View_Updateing'){
-          store_router_data_info.router_select_model_updateing = true;
-        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'View_Album_List_ALL'){
-          store_router_data_info.router_select_model_album = true;
-          store_view_album_page_fetchData.fetchData_Album()
-        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'View_Song_List_ALL'){
-          store_router_data_info.router_select_model_media = true;
-          store_view_media_page_fetchData.fetchData_Media()
-        }else if(store_app_configs_info.app_left_menu_select_activeKey === 'View_Artist_List_ALL'){
-          store_router_data_info.router_select_model_artist = true;
-          store_view_artist_page_fetchData.fetchData_Artist()
-        }
+    setTimeout(async () => {
+      if (value !== 0) {
+        await handleMenuSelection();
       }
-      store_player_appearance.player_show_complete = true
-
+      store_player_appearance.player_show_complete = true;
       ipcRenderer.send('window-gc');
     }, 600);
+  }
+  async function handleMenuSelection() {
+    const menuActions: { [key: string]: () => void } = {
+      'View_Menu_AppSetting': () => {
+        if (store_router_data_logic.clear_UserExperience_Model) {
+          store_router_data_logic.clear_Files_temporary(); // User Experience Model
+        }
+        store_router_data_info.router_select_model_menu = true;
+      },
+      'View_Home_MusicLibrary_Browse': () => {
+        if (store_router_data_logic.clear_UserExperience_Model) {
+          store_router_data_logic.clear_Files_temporary_except_home(); // User Experience Model
+        }
+        store_router_data_info.router_select_model_home = true;
+        if (store_router_data_logic.clear_Memory_Model) {
+          store_view_home_page_fetchData.fetchData_Home(); // Memory Model
+        }
+      },
+      'View_Updateing': () => {
+        if (store_router_data_logic.clear_UserExperience_Model) {
+          store_router_data_logic.clear_Files_temporary(); // User Experience Model
+        }
+        store_router_data_info.router_select_model_updateing = true;
+      },
+      'View_Album_List_ALL': () => {
+        if (store_router_data_logic.clear_UserExperience_Model) {
+          store_router_data_logic.clear_Files_temporary_except_album(); // User Experience Model
+        }
+        store_router_data_info.router_select_model_album = true;
+        if (store_router_data_logic.clear_Memory_Model) {
+          store_view_album_page_fetchData.fetchData_Album(); // Memory Model
+        }
+      },
+      'View_Song_List_ALL': async () => {
+        if (store_router_data_logic.clear_UserExperience_Model) {
+          store_router_data_logic.clear_Files_temporary_except_media(); // User Experience Model
+        }
+        store_router_data_info.router_select_model_media = true;
+        if (store_router_data_logic.clear_Memory_Model) {
+          await store_view_media_page_fetchData.fetchData_Media(); // Memory Model
+        }
+      },
+      'View_Artist_List_ALL': () => {
+        if (store_router_data_logic.clear_UserExperience_Model) {
+          store_router_data_logic.clear_Files_temporary_except_artist(); // User Experience Model
+        }
+        store_router_data_info.router_select_model_artist = true;
+        if (store_router_data_logic.clear_Memory_Model) {
+          store_view_artist_page_fetchData.fetchData_Artist(); // Memory Model
+        }
+      },
+    };
+    const selectedAction = menuActions[store_app_configs_info.app_left_menu_select_activeKey];
+    if (selectedAction) {
+      selectedAction();
+    }
   }
   provide('get_playerbar_to_switch_playerview', get_playerbar_to_switch_playerview);
 
@@ -638,7 +677,7 @@
             @collapse="store_app_configs_info.app_left_menu_collapsed = true"
             @expand="store_app_configs_info.app_left_menu_collapsed = false">
             <n-menu
-              v-if="!store_player_appearance.player_show"
+              v-if="store_app_configs_info.menuOptions_appBar_show"
               v-model:value="store_app_configs_info.app_left_menu_select_activeKey"
               :collapsed="store_app_configs_info.app_left_menu_collapsed"
               :collapsed-width="64"

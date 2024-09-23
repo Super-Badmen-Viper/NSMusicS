@@ -51,7 +51,6 @@
     "@types/node": "^20.11.8",
     "@vitejs/plugin-vue": "^4.5.2",
     "@vue/tsconfig": "^0.5.1",
-    "crypto": "^1.0.1",
     "electron": "^32.1.0",
     "electron-builder": "^24.12.0",
     "electron-store": "^8.1.0",

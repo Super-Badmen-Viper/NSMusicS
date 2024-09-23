@@ -28,6 +28,7 @@ import {type DropdownOption, NIcon, type InputInst, NImage, NButton} from 'naive
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
+import {store_server_user_model} from "@/store/server/store_server_user_model";
 const { t } = useI18n({
   inheritLocale: true
 })
@@ -175,6 +176,11 @@ const show_search_area = () => {
       bool_input_search = false
       scrollTo(0)
     }
+    if(store_server_user_model.model_server_type_of_web) {
+      input_search_InstRef.value?.clear()
+      store_view_media_page_logic.page_songlists_keywordFilter = ""
+      click_search()
+    }
   }
   else
   {
@@ -185,7 +191,6 @@ const show_search_area = () => {
         options_Sort_key_Default_key.value = element.key
     });
   }
-  // input_search_InstRef.value?.clear()
 }
 const input_search_InstRef = ref<InputInst>()
 const input_search_Value = ref<string>()
@@ -199,6 +204,7 @@ const click_search = () => {
       element.state_Sort = state_Sort.Default
     });
   }else{
+    store_view_media_page_logic.page_songlists_keywordFilter = ""
     store_view_media_page_logic.list_data_StartUpdate = true
     bool_input_search = false
     back_search_default()
@@ -249,6 +255,7 @@ const options_Filter = ref([
 ])
 const options_Filter_handleSelect = (key: string | number) => {
   store_view_media_page_logic.page_songlists_selected = 'song_list_love'
+  store_view_media_page_logic.get_page_songlists_selected('song_list_love')
   console.log('selected_value_for_songlistall：'+'song_list_love');
   breadcrumbItems.value = store_view_media_page_logic.page_songlists_options.find(option => option.value === 'song_list_love')?.label || '';
 }
@@ -283,7 +290,11 @@ const scrollTo = (value :number) => {
   }
 }
 onMounted(() => {
-  scrollTo(store_router_history_data_of_media.router_history_model_of_Media_scroller_value)
+  if (store_server_user_model.model_server_type_of_local) {
+    scrollTo(store_router_history_data_of_media.router_history_model_of_Media_scroller_value)
+  }else if (store_server_user_model.model_server_type_of_web) {
+
+  }
 });
 
 ////// select Dtatsource of artistlists
@@ -328,38 +339,56 @@ const handleItemDbClick = (media_file:any,index:number) => {
       store_player_audio_info.this_audio_album_name = media_file.album
       store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
 
+      store_playlist_list_logic.media_page_handleItemDbClick = true
       store_player_appearance.player_mode_of_lock_playlist = false
-
       store_player_audio_info.this_audio_restart_play = true
     }
   }
 }
 const handleItemClick_title = (title:string) => {
-  click_count = 0;
-  input_search_Value.value = title//+'accurate_search'+'__title__'
-  store_view_media_page_logic.get_page_songlists_keyword(title)
-  bool_show_search_area.value = false
-  show_search_area()
-  click_search()
-  scrollTo(0)
+  if(store_server_user_model.model_server_type_of_local) {
+    click_count = 0;
+    input_search_Value.value = title//+'accurate_search'+'__title__'
+    store_view_media_page_logic.get_page_songlists_keyword(title)
+    bool_show_search_area.value = false
+    show_search_area()
+    click_search()
+    scrollTo(0)
+  }else if(store_server_user_model.model_server_type_of_web){
+    bool_show_search_area.value = true
+    input_search_Value.value = title
+    store_view_media_page_logic.get_page_songlists_keyword(title)
+  }
 }
 const handleItemClick_artist = (artist:string) => {
   click_count = 0;
-  input_search_Value.value = artist//+'accurate_search'+'__artist__'//artist不参与精确搜索
-  store_view_media_page_logic.get_page_songlists_keyword(artist)
-  bool_show_search_area.value = false
-  show_search_area()
-  click_search()
-  scrollTo(0)
+  if(store_server_user_model.model_server_type_of_local) {
+    input_search_Value.value = artist//+'accurate_search'+'__artist__'//artist不参与精确搜索
+    store_view_media_page_logic.get_page_songlists_keyword(artist)
+    bool_show_search_area.value = false
+    show_search_area()
+    click_search()
+    scrollTo(0)
+  }else if(store_server_user_model.model_server_type_of_web){
+    bool_show_search_area.value = true
+    input_search_Value.value = artist
+    store_view_media_page_logic.get_page_songlists_keyword(artist)
+  }
 }
 const handleItemClick_album = (album_id:string) => {
   click_count = 0;
-  input_search_Value.value = album_id+'accurate_search'+'__album__'
-  store_view_media_page_logic.get_page_songlists_keyword(album_id+'accurate_search'+'__album__')
-  bool_show_search_area.value = false
-  show_search_area()
-  click_search()
-  scrollTo(0)
+  if(store_server_user_model.model_server_type_of_local) {
+    input_search_Value.value = album_id + 'accurate_search' + '__album__'
+    store_view_media_page_logic.get_page_songlists_keyword(album_id + 'accurate_search' + '__album__')
+    bool_show_search_area.value = false
+    show_search_area()
+    click_search()
+    scrollTo(0)
+  }else if(store_server_user_model.model_server_type_of_web){
+    bool_show_search_area.value = true
+    input_search_Value.value = album_id
+    store_view_media_page_logic.get_page_songlists_keyword(album_id)
+  }
 }
 
 ////// changed_data write to sqlite
@@ -411,6 +440,12 @@ import {
 } from "@/store/server/server_data_synchronization/store_server_data_set_playlistInfo";
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {
+  Get_Navidrome_Temp_Data_To_LocalSqlite
+} from "@/features/servers_configs/navidrome_api/instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
+import {store_server_users} from "@/store/server/store_server_users";
+import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
+import {store_router_data_info} from "@/store/router/store_router_data_info";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -421,8 +456,8 @@ const playlist_set_of_addPlaylist_of_public = ref(false)
 // const playlist_set_of_addPlaylist_of_owner_id = ref('')
 async function update_playlist_addPlaylist(){
   try{
-    if(store_server_user_model.model_select === 'navidrome'){
-      // send json to navidrome
+    if(store_server_user_model.model_select === 'server'){
+      // send json to server
       let getCreatePlaylist_set_id = await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
           playlist_set_of_addPlaylist_of_playlistname.value,
           playlist_set_of_addPlaylist_of_public.value
@@ -465,7 +500,7 @@ const playlist_set_of_updatePlaylist_of_public = ref(false)
 function update_playlist_set_of_updatePlaylist_of_playlistname(value: Array | string | number | null, option: SelectBaseOption | null | SelectBaseOption[]){
   playlist_update_emit_id.value = value
   playlist_set_of_updatePlaylist_of_playlistcomment.value = option.label
-  // if(store_server_user_model.model_select === 'navidrome'){
+  // if(store_server_user_model.model_select === 'server'){
   //   playlist_set_of_updatePlaylist_of_comment.value =
   //   playlist_set_of_updatePlaylist_of_public.value =
   // }
@@ -479,7 +514,7 @@ async function update_playlist_updatePlaylist(){
     store_playlist_list_logic.get_playlist_tracks_temporary_update(playlist)
     Type_Update_Playlist.value = !Type_Update_Playlist.value
 
-    if(store_server_user_model.model_select === 'navidrome'){
+    if(store_server_user_model.model_select === 'server'){
       await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(
           playlist_update_emit_id.value,
           playlist_set_of_updatePlaylist_of_playlistcomment.value,
@@ -496,7 +531,7 @@ async function update_playlist_deletePlaylist(){
     store_playlist_list_logic.get_playlist_tracks_temporary_delete(playlist_update_emit_id.value)
     Type_Update_Playlist.value = !Type_Update_Playlist.value
 
-    if(store_server_user_model.model_select === 'navidrome'){
+    if(store_server_user_model.model_select === 'server'){
       await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_DeletePlaylist_of_ND(
           playlist_update_emit_id.value
       )
@@ -705,6 +740,40 @@ function menu_item_add_to_playlist_next() {
   }
 }
 
+//////
+const pageCount = ref(0)
+const pageSizes = [
+  {
+    label: '15 *',
+    value: 15
+  },
+  {
+    label: '25 *',
+    value: 25
+  },
+  {
+    label: '50 *',
+    value: 50
+  },
+  {
+    label: '100 *',
+    value: 100
+  }
+]
+onMounted(()=>{
+  pageCount.value = Math.floor(store_view_media_page_info.media_item_count / store_view_media_page_info.media_page_sizes);
+})
+//////
+const isScrolling = ref(false);
+const onScrollEnd = async () => {
+  if (isScrolling.value) return;
+  isScrolling.value = true;
+  if (store_server_user_model.model_server_type_of_web) {
+    await store_view_media_page_fetchData.fetchData_Media_of_server_web_end()
+  }
+  isScrolling.value = false;
+};
+
 ////// view songlist_view Remove data
 onBeforeUnmount(() => {
   stopWatching_collapsed_width()
@@ -721,19 +790,21 @@ onBeforeUnmount(() => {
 <template>
   <n-space vertical :size="12">
     <n-space>
-      <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_pervious">
-        <template #icon>
-          <n-icon size="20" :depth="2"><ChevronLeft16Filled/></n-icon>
-        </template>
-      </n-button>
-      <div style="margin-top: 4px;">
-        {{ store_router_history_data_of_media.router_select_history_date_of_Media?.id ?? '' }} / {{ store_router_history_data_of_media.router_history_datas_of_Media?.length ?? '' }}
-      </div>
-      <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_next">
-        <template #icon>
-          <n-icon size="20" :depth="2"><ChevronRight16Filled/></n-icon>
-        </template>
-      </n-button>
+      <n-space v-if="store_router_data_info.store_router_history_data_of_local">
+        <n-button quaternary circle size="medium" style="margin-left:2px" @click="get_router_history_model_pervious">
+          <template #icon>
+            <n-icon size="20" :depth="2"><ChevronLeft16Filled/></n-icon>
+          </template>
+        </n-button>
+        <div style="margin-top: 4px;">
+          {{ store_router_history_data_of_media.router_select_history_date_of_Media?.id ?? '' }} / {{ store_router_history_data_of_media.router_history_datas_of_Media?.length ?? '' }}
+        </div>
+        <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_next">
+          <template #icon>
+            <n-icon size="20" :depth="2"><ChevronRight16Filled/></n-icon>
+          </template>
+        </n-button>
+      </n-space>
 
       <n-button quaternary circle size="medium" style="margin-left:4px" @click="show_search_area">
         <template #icon>
@@ -791,8 +862,8 @@ onBeforeUnmount(() => {
         </n-button>
         <n-button
           v-if="
-            (store_server_user_model.model_select !== 'navidrome') ||
-            (store_server_user_model.model_select === 'navidrome' && store_view_media_page_logic.page_songlists_selected !== 'song_list_all')
+            (store_server_user_model.model_select !== 'server') ||
+            (store_server_user_model.model_select === 'server' && store_view_media_page_logic.page_songlists_selected !== 'song_list_all')
           "
           quaternary circle size="medium" style="margin-left:4px" @click="update_button_deleteMediaFile_selected">
           <template #icon>
@@ -818,16 +889,20 @@ onBeforeUnmount(() => {
     </n-space>
     <div class="dynamic-scroller-demo">
       <DynamicScroller
-          class="table" ref="dynamicScroller" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
-          :items="store_view_media_page_info.media_Files_temporary"
-          :minItemSize="50"
-          :emit-update="true"
-          @resize="onResize"
-          @update="onUpdate">
+        class="table" ref="dynamicScroller"
+        :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
+        :items="store_view_media_page_info.media_Files_temporary"
+        :minItemSize="50"
+        :emit-update="true"
+        key-field="absoluteIndex"
+        @resize="onResize"
+        @update="onUpdate"
+        @scroll-end="onScrollEnd"
+      >
         <template #before>
           <div class="notice">
             <div
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 2) + 'px)'}"
+              :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
               style="
               position: absolute;
               z-index: 0;
@@ -863,7 +938,7 @@ onBeforeUnmount(() => {
                 margin-bottom: 10px;">
               <n-grid
                   :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
-                  style="margin-left: 14px;width: 370px;">
+                  style="margin-left: 4px;width: 370px;">
                 <n-gi v-for="songlist in store_view_media_page_logic.page_songlists_statistic" :key="songlist.id">
                   <n-statistic :label="songlist.label" :value="songlist.song_count" />
                 </n-gi>
@@ -873,9 +948,19 @@ onBeforeUnmount(() => {
                   <n-breadcrumb separator="|">
                     <n-breadcrumb-item style="font-size: 22px">{{ $t('entity.track_other') }}</n-breadcrumb-item>
                     <n-breadcrumb-item>
-                      <n-button text @click="handleItemClick_album(store_player_audio_info.page_top_album_id)">
+                      <n-button text
+                        @click="
+                          () => {
+                            if(store_server_user_model.model_server_type_of_local) {
+                              handleItemClick_album(store_player_audio_info.page_top_album_id)
+                            }else if(store_server_user_model.model_server_type_of_web) {
+                              handleItemClick_album(store_player_audio_info.page_top_album_name)
+                            }
+                          }
+                        "
+                      >
                         <n-ellipsis
-                            style="text-align: left;font-size: 22px;width: 660px;">
+                            style="text-align: left;font-size: 22px;width: 660px;height: 26px;">
                           {{ store_player_audio_info.page_top_album_name }}
                         </n-ellipsis>
                       </n-button>
@@ -885,7 +970,7 @@ onBeforeUnmount(() => {
                     <n-select
                       :value="store_view_media_page_logic.page_songlists_selected"
                       :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
-                      :on-update:value="page_songlists_handleselected_updatevalue" />
+                      @update:value="page_songlists_handleselected_updatevalue" />
                     <n-button secondary strong @click="Type_Update_Playlist = !Type_Update_Playlist">
                       <template #icon>
                         <n-icon>
@@ -908,13 +993,13 @@ onBeforeUnmount(() => {
               </template>
               <template #avatar>
                 <n-image
-                    width="80px" height="80px" object-fit="contain"
-                    style="
+                  width="80px" height="80px" object-fit="contain"
+                  style="
                     border-radius: 6px;border: 1.5px solid #FFFFFF20;
-                    margin-left: 12px;margin-top: 20px;"
-                    :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                    fallback-src="../../../resources/img/error_album.jpg"
-                    :show-toolbar="false"
+                    margin-left: 0px;margin-top: 20px;"
+                  :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                  fallback-src="../../../resources/img/error_album.jpg"
+                  :show-toolbar="false"
                 />
               </template>
               <template #extra>
@@ -937,10 +1022,10 @@ onBeforeUnmount(() => {
             :data-active="active"
             v-contextmenu:contextmenu @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
             class="message"
-            :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)'}"
+            :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
             @click="handleItemClick"
             @Dblclick="handleItemDbClick(item,index)">
-            <div class="media_info" :style="{ width: 'calc(100vw - ' + (collapsed_width) + 'px)'}">
+            <div class="media_info" :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}">
               <input type="checkbox" class="checkbox"
                  v-if="!bool_start_play"
                  v-model="item.selected"
@@ -968,11 +1053,21 @@ onBeforeUnmount(() => {
                 </template>
               </div>
               <div class="songlist_album">
-                <span @click="handleItemClick_album(item.album_id)">{{ item.album }}</span>
+                <span
+                    @click="() => {
+                        if(store_server_user_model.model_server_type_of_local) {
+                          handleItemClick_album(item.album_id)
+                        }else if(store_server_user_model.model_server_type_of_web) {
+                          handleItemClick_album(item.album)
+                        }
+                      }
+                    "
+                >{{ item.album }}</span>
               </div>
               <div style="margin-left: auto; margin-right: 0px; width: 240px; display: flex; flex-direction: row;">
                 <rate
-                  class="viaSlot" style="margin-right: 20px;"
+                  class="viaSlot"
+                  style="margin-left: 30px;margin-right: 20px;"
                   :length="5"
                   v-model="item.rating"
                   @before-rate="(value) => {
@@ -1016,12 +1111,26 @@ onBeforeUnmount(() => {
                 {{ item.duration_txt }}
               </span>
               <span class="index" style="margin-left: auto; text-align: left;font-size: 15px;margin-top: 4px;" @click="click_count = 0">
-                {{ index + 1 }}
+                {{ item.absoluteIndex }}
               </span>
             </div>
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>
+      <n-pagination
+        v-if="false"
+        v-model:page="page"
+        v-model:page-size="store_view_media_page_info.media_page_sizes"
+        v-model:page-count="pageCount"
+        show-size-picker show-quick-jumper
+        :display-order="['quick-jumper', 'pages', 'size-picker']"
+        size="large"
+        :page-sizes="pageSizes"
+        style="
+          position: absolute;
+          right: 32px;bottom: 10px;
+        "
+      />
       <v-contextmenu ref="contextmenu" class="v-contextmenu-item v-contextmenu-item--hover" style="z-index: 999">
         <v-contextmenu-submenu :title="menu_item_add_to_songlist">
           <v-contextmenu-item
@@ -1068,17 +1177,17 @@ onBeforeUnmount(() => {
         </n-space>
         <n-select
           :options="store_playlist_list_info.playlist_names_ALLLists" style="width: 166px;"
-          :on-update:value="update_playlist_set_of_updatePlaylist_of_playlistname" />
+          @update:value="update_playlist_set_of_updatePlaylist_of_playlistname" />
         <n-form>
           <n-space vertical style="margin-bottom: 10px;">
             <span>{{ $t('common.name') }}</span>
             <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_playlistcomment"/>
           </n-space>
-<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">-->
+<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
 <!--            <span>{{ $t('filter.comment') }}</span>-->
 <!--            <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_comment"/>-->
 <!--          </n-space>-->
-<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">-->
+<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
 <!--            <span>{{ $t('form.createPlaylist.input_public') }}</span>-->
 <!--            <n-switch v-model:value="playlist_set_of_updatePlaylist_of_public"/>-->
 <!--          </n-space>-->
@@ -1115,11 +1224,11 @@ onBeforeUnmount(() => {
             <span>{{ $t('common.name') }}</span>
             <n-input clearable placeholder="" v-model:value="playlist_set_of_addPlaylist_of_playlistname"/>
           </n-space>
-<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">-->
+<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
 <!--            <span>{{ $t('filter.comment') }}</span>-->
 <!--            <n-input clearable placeholder="" v-model:value="playlist_set_of_addPlaylist_of_comment"/>-->
 <!--          </n-space>-->
-<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'navidrome'">-->
+<!--          <n-space vertical style="margin-bottom: 10px;" v-if="store_server_user_model.model_select === 'server'">-->
 <!--            <span>{{ $t('form.createPlaylist.input_public') }}</span>-->
 <!--            <n-switch v-model:value="playlist_set_of_addPlaylist_of_public" />-->
 <!--          </n-space>-->
@@ -1223,7 +1332,7 @@ onBeforeUnmount(() => {
 .songlist_title{
   margin-left: 10px;
   text-align: left;
-  width: 240px;
+  width: 286px;
   font-size: 15px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
@@ -1235,7 +1344,7 @@ onBeforeUnmount(() => {
 .songlist_album{
   margin-left: 10px;
   text-align: left;
-  width: 180px;
+  width: 246px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
 .songlist_album :hover{

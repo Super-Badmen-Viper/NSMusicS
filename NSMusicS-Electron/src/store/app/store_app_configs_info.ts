@@ -8,6 +8,7 @@ export const store_app_configs_info = reactive({
     nsmusics_db: 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db',
     
     menuOptions_appBar: [],
+    menuOptions_appBar_show: true,
 
     selectd_props_app_sidebar: ['2', '4', '5', '6', '7', '9', '10', '11', '12', '13', '14'],
     app_left_menu_select_activeKey: '',

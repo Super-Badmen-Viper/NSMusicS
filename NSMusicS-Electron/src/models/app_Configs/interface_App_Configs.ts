@@ -18,4 +18,6 @@ interface App_Configs_Props {
   media_page_sizes: number,
   album_page_sizes: number,
   artist_page_sizes: number
+  clear_Memory_Model: any,
+  clear_UserExperience_Model: any,
 };

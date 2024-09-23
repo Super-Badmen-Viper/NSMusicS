@@ -578,7 +578,7 @@
               <n-space vertical style="width: 380px;">
                 <n-radio-group
                   v-model:value="store_player_appearance.player_theme_Styles_Selected"
-                  :on-update:value="player_theme_set_theme"
+                  @update:value="player_theme_set_theme"
                   name="radiogroup" :width="430"
                   style="
                     display: grid;
@@ -617,7 +617,7 @@
                     </n-button>
                     <n-input-number
                       v-model:value="store_player_appearance.player_lyric_fontSize_Num"
-                      :on-update:value="handleAuto_fontSize"
+                      @update:value="handleAuto_fontSize"
                       clearable
                       :min="6" :max="200"
                       style="width: 109px;margin-top: -4px;margin-left: 12px;"
@@ -635,7 +635,7 @@
                     </n-button>
                     <n-input-number
                         v-model:value="store_player_appearance.player_lyric_fontSize_Num"
-                        :on-update:value="handleAuto_fontSize"
+                        @update:value="handleAuto_fontSize"
                         clearable
                         style="width: 109px;margin-top: -4px;"
                     />

@@ -375,6 +375,7 @@
   ////// right menu
   import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
   import {useMessage} from 'naive-ui'
+  import {store_router_data_info} from "@/store/router/store_router_data_info";
   const contextmenu = ref(null as any)
   const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
   const message = useMessage()
@@ -465,19 +466,21 @@
 <template>
   <n-space vertical :size="12">
     <n-space>
-      <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_pervious">
-        <template #icon>
-          <n-icon :size="20"><ChevronLeft16Filled/></n-icon>
-        </template>
-      </n-button>
-      <div style="margin-top: 4px;">
-        {{ store_router_history_data_of_album.router_select_history_date_of_Album?.id ?? '' }} / {{ store_router_history_data_of_album.router_history_datas_of_Album?.length ?? '' }}
-      </div>
-      <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_next">
-        <template #icon>
-          <n-icon :size="20"><ChevronRight16Filled/></n-icon>
-        </template>
-      </n-button>
+      <n-space v-if="store_router_data_info.store_router_history_data_of_local">
+        <n-button quaternary circle size="medium" style="margin-left:2px" @click="get_router_history_model_pervious">
+          <template #icon>
+            <n-icon :size="20"><ChevronLeft16Filled/></n-icon>
+          </template>
+        </n-button>
+        <div style="margin-top: 4px;">
+          {{ store_router_history_data_of_album.router_select_history_date_of_Album?.id ?? '' }} / {{ store_router_history_data_of_album.router_history_datas_of_Album?.length ?? '' }}
+        </div>
+        <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_next">
+          <template #icon>
+            <n-icon :size="20"><ChevronRight16Filled/></n-icon>
+          </template>
+        </n-button>
+      </n-space>
 
       <n-button quaternary circle size="medium" style="margin-left:4px" @click="show_search_area">
         <template #icon>
@@ -528,7 +531,7 @@
         <template #before>
           <div class="notice">
             <div
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)'}"
+              :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
               style="
                 position: absolute;
                 z-index: 0;
@@ -564,7 +567,7 @@
                 margin-bottom: 10px;">
               <n-grid 
                 :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
-                style="margin-left: 14px;width: 370px;">
+                style="margin-left: 4px;width: 370px;">
                 <n-gi v-for="albumlist in store_view_album_page_logic.page_albumlists_statistic" :key="albumlist.id">
                   <n-statistic :label="albumlist.label" :value="albumlist.album_count" />
                 </n-gi>
@@ -576,7 +579,7 @@
                       <n-breadcrumb-item>
                         <n-button text @click="handleItemClick_album(store_player_audio_info.page_top_album_id)">
                           <n-ellipsis
-                              style="text-align: left;font-size: 22px;">
+                              style="text-align: left;font-size: 22px;width: 660px;height: 26px;">
                             {{ store_player_audio_info.page_top_album_name }}
                           </n-ellipsis>
                         </n-button>
@@ -585,7 +588,7 @@
                   <n-select 
                     :value="store_view_album_page_logic.page_albumlists_selected" 
                     :options="store_view_album_page_logic.page_albumlists_options" style="width: 166px;"
-                    :on-update:value="page_albumlists_handleSelected_updateValue" />
+                    @update:value="page_albumlists_handleSelected_updateValue" />
                 </n-space>
               </template>
               <template #header>
@@ -596,7 +599,7 @@
                   width="80px" height="80px" object-fit="contain"
                   style="
                     border-radius: 6px;border: 1.5px solid #FFFFFF20;
-                    margin-left: 12px;margin-top: 20px;"
+                    margin-left: 0px;margin-top: 20px;"
                   :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
                   fallback-src="../../../resources/img/error_album.jpg"
                   :show-toolbar="false"

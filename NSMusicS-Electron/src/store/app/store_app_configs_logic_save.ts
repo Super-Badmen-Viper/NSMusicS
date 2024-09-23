@@ -17,6 +17,7 @@ import {store_router_history_data_of_media} from "@/store/router/store_router_hi
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
 import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
 import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info";
+import {store_router_data_logic} from "@/store/router/store_router_data_logic";
 
 export const store_app_configs_logic_save = reactive({
     save_system_config_of_App_Configs(){
@@ -46,7 +47,9 @@ export const store_app_configs_logic_save = reactive({
                 client_unique_id: String(store_server_user_model.client_unique_id),
                 media_page_sizes: String(store_view_media_page_info.media_page_sizes),
                 album_page_sizes: String(store_view_album_page_info.album_page_sizes),
-                artist_page_sizes: String(store_view_artist_page_info.artist_page_sizes)
+                artist_page_sizes: String(store_view_artist_page_info.artist_page_sizes),
+                clear_Memory_Model: String(store_router_data_logic.clear_Memory_Model),
+                clear_UserExperience_Model: String(store_router_data_logic.clear_UserExperience_Model),
             }));
         let system_Configs_Write = new Class_Set_System_Configs_Write()
         system_Configs_Write.system_app_config(

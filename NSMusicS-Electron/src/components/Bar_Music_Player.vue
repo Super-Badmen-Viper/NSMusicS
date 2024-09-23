@@ -304,6 +304,7 @@
           store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
           console.log(store_playlist_list_info.playlist_MediaFiles_temporary[index]);
 
+          store_playlist_list_logic.media_page_handleItemDbClick = false
           // store_player_appearance.player_mode_of_lock_playlist = false
           store_player_audio_info.this_audio_restart_play = true
         }
@@ -491,6 +492,7 @@
   import {
     store_local_data_set_mediaInfo
   } from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
+  import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
   let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id,favorite)
@@ -553,7 +555,7 @@
     <div class="layout_distribution_3"
       style="transition: margin 0.4s;"
       :style="{ 
-        marginLeft: store_player_appearance.player_show ? '0px' : (store_app_configs_info.app_left_menu_collapsed ? '72px' : '167px'),
+        marginLeft: store_player_appearance.player_show ? '0px' : (store_app_configs_info.app_left_menu_collapsed ? '72px' : '166px'),
         width: store_player_appearance.player_show ? '100vw' : (store_app_configs_info.app_left_menu_collapsed ? 'calc(100vw - 72px)' : 'calc(100vw - 167px)'),
       }">
       <div class="gird_Left">

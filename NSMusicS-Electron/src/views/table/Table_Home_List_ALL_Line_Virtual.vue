@@ -349,7 +349,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.mostPlayed') }}
         </span>
-        <n-button text style="margin-top: 5px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button text style="margin-top: 8px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
             <n-icon :size="26"><RefreshCircleOutline/></n-icon>
           </template>
@@ -468,7 +468,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.explore') }}
         </span>
-        <n-button text style="margin-top: 5px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button text style="margin-top: 8px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
             <n-icon :size="26"><RefreshCircleOutline/></n-icon>
           </template>
@@ -587,7 +587,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.newlyAdded') }}
         </span>
-        <n-button text style="margin-top: 5px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button text style="margin-top: 8px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
             <n-icon :size="26"><RefreshCircleOutline/></n-icon>
           </template>
@@ -706,7 +706,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.recentlyPlayed') }}
         </span>
-        <n-button text style="margin-top: 5px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button text style="margin-top: 8px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
             <n-icon :size="26"><RefreshCircleOutline/></n-icon>
           </template>

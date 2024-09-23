@@ -8,13 +8,13 @@ const set_AnnotationInfo_To_LocalSqlite = new Set_AnnotationInfo_To_LocalSqlite(
 export const store_local_data_set_annotionInfo = reactive({
     Set_MediaInfo_Add_Selected_Favorite(ids: string[], value: Boolean) {
         set_AnnotationInfo_To_LocalSqlite.Set_MediaInfo_Add_Selected_Favorite(ids, value)
-        if(store_server_user_model.model_select === 'navidrome') {
+        if(store_server_user_model.model_select === 'server') {
             store_server_data_set_annotionInfo.Set_MediaInfo_Add_Selected_Favorite(ids, value)
         }
     },
     Set_MediaInfo_Delete_Selected_Favorite(ids: string[], value: Boolean) {
         set_AnnotationInfo_To_LocalSqlite.Set_MediaInfo_Delete_Selected_Favorite(ids, value)
-        if(store_server_user_model.model_select === 'navidrome') {
+        if(store_server_user_model.model_select === 'server') {
             store_server_data_set_annotionInfo.Set_MediaInfo_Delete_Selected_Favorite(ids, value)
         }
     },

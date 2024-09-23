@@ -26,14 +26,12 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         ).replace(/\//g, '-');
     }
     public Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(name: string,comment: string, duration: number,song_count: number, _public_: number,owner_id: string) {
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         ///
         let new_id = this.getUniqueId(db);
         let new_date = this.getCurrentDateTime();
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
-
 
         // comment, duration, song_count, public,path, sync, size, rules, evaluated_at, owner_id
         db.prepare(`

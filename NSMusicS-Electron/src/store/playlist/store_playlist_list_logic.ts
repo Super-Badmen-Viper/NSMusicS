@@ -16,7 +16,7 @@ export const store_playlist_list_logic = reactive({
     async reset_data() {
         store_playlist_list_info.playlist_names_ALLLists = []
         store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = []
-        if (store_server_user_model.model_select === 'navidrome') {
+        if (store_server_user_model.model_select === 'server') {
             await store_server_user_model.Get_UserData_Synchronize_ToLocal_of_ND()
         } else {
             try {
@@ -39,16 +39,17 @@ export const store_playlist_list_logic = reactive({
     },
 
     playlist_names_StartUpdate: false,
+    media_page_handleItemDbClick: false,
 
     get_playlist_tracks_temporary_add(value: any){
+        const playlist = store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
+            value,
+            'admin',0,0,0,'admin'
+        )
         store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
-            playlist: store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
-                value,
-                'admin',0,0,0,'admin'
-            ),
+            playlist: playlist,
             playlist_tracks: []
         })
-        this.playlist_names_StartUpdate = true
         store_playlist_list_info.playlist_names_ALLLists = []
         store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.forEach((item: any) => {
             if (item.playlist && item.playlist.name && item.playlist.id) {
@@ -58,6 +59,7 @@ export const store_playlist_list_logic = reactive({
                 });
             }
         });
+        this.playlist_names_StartUpdate = true
     },
     get_playlist_tracks_temporary_update(value: any){
         store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(

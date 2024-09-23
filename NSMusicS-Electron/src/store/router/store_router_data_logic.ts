@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import {reactive, watch} from 'vue'
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_view_home_page_info} from "@/store/view/home/store_view_home_page_info";
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
@@ -11,6 +11,8 @@ import {store_view_artist_page_logic} from "@/store/view/artist/store_view_artis
 import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media";
 import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
 import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
+import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {store_server_user_model} from "@/store/server/store_server_user_model";
 
 export const store_router_data_logic = reactive({
     reset_data(){
@@ -28,6 +30,8 @@ export const store_router_data_logic = reactive({
         store_router_history_data_of_artist.router_select_history_date_of_Artist = 'artist_list_all'
     },
 
+    clear_Memory_Model: true,
+    clear_UserExperience_Model: false,
     clear_Files_temporary() {
         store_router_data_info.router_select_model_menu = false
         store_router_data_info.router_select_model_home = false
@@ -42,6 +46,55 @@ export const store_router_data_logic = reactive({
         store_view_media_page_info.media_Files_temporary = [];
         store_view_album_page_info.album_Files_temporary = [];
         store_view_artist_page_info.artist_Files_temporary = [];
+    },
+    clear_Files_temporary_except_home() {
+        store_router_data_info.router_select_model_menu = false
+        store_router_data_info.router_select_model_updateing = false
+        store_router_data_info.router_select_model_media = false
+        store_router_data_info.router_select_model_album = false
+        store_router_data_info.router_select_model_artist = false
+        store_view_media_page_info.media_Files_temporary = [];
+        store_view_album_page_info.album_Files_temporary = [];
+        store_view_artist_page_info.artist_Files_temporary = [];
+    },
+    clear_Files_temporary_except_album() {
+        store_router_data_info.router_select_model_menu = false
+        store_router_data_info.router_select_model_home = false
+        store_router_data_info.router_select_model_updateing = false
+        store_router_data_info.router_select_model_media = false
+        store_router_data_info.router_select_model_artist = false
+        store_view_home_page_info.home_Files_temporary_maximum_playback = []
+        store_view_home_page_info.home_Files_temporary_random_search = []
+        store_view_home_page_info.home_Files_temporary_recently_added = []
+        store_view_home_page_info.home_Files_temporary_recently_played = []
+        store_view_media_page_info.media_Files_temporary = [];
+        store_view_artist_page_info.artist_Files_temporary = [];
+    },
+    clear_Files_temporary_except_media() {
+        store_router_data_info.router_select_model_menu = false
+        store_router_data_info.router_select_model_home = false
+        store_router_data_info.router_select_model_updateing = false
+        store_router_data_info.router_select_model_album = false
+        store_router_data_info.router_select_model_artist = false
+        store_view_home_page_info.home_Files_temporary_maximum_playback = []
+        store_view_home_page_info.home_Files_temporary_random_search = []
+        store_view_home_page_info.home_Files_temporary_recently_added = []
+        store_view_home_page_info.home_Files_temporary_recently_played = []
+        store_view_album_page_info.album_Files_temporary = [];
+        store_view_artist_page_info.artist_Files_temporary = [];
+    },
+    clear_Files_temporary_except_artist() {
+        store_router_data_info.router_select_model_menu = false
+        store_router_data_info.router_select_model_home = false
+        store_router_data_info.router_select_model_updateing = false
+        store_router_data_info.router_select_model_media = false
+        store_router_data_info.router_select_model_album = false
+        store_view_home_page_info.home_Files_temporary_maximum_playback = []
+        store_view_home_page_info.home_Files_temporary_random_search = []
+        store_view_home_page_info.home_Files_temporary_recently_added = []
+        store_view_home_page_info.home_Files_temporary_recently_played = []
+        store_view_media_page_info.media_Files_temporary = [];
+        store_view_album_page_info.album_Files_temporary = [];
     },
 
     get_media_list_of_album_id_by_album_info(value: any) {
@@ -71,5 +124,12 @@ export const store_router_data_logic = reactive({
         store_router_data_info.find_artist_model = false
         console.log('get_album_list_of_artist_model：'+value)
     },
-
+});
+watch(() => store_router_data_logic.clear_Memory_Model, (newValue) => {
+    store_router_data_logic.clear_UserExperience_Model = !newValue
+    store_app_configs_logic_save.save_system_library_config()
+});
+watch(() => store_router_data_logic.clear_UserExperience_Model, (newValue) => {
+    store_router_data_logic.clear_Memory_Model = !newValue
+    store_app_configs_logic_save.save_system_library_config()
 });

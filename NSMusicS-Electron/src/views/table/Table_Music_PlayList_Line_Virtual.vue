@@ -37,6 +37,7 @@ import {
     store_player_audio_info.this_audio_album_name = media_file.album
     store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
 
+    store_playlist_list_logic.media_page_handleItemDbClick = false
     store_player_audio_info.this_audio_restart_play = true
   }
   const handleItemClick_title = (title:string) => {

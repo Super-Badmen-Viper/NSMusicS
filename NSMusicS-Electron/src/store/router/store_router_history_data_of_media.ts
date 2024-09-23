@@ -11,7 +11,7 @@ export const store_router_history_data_of_media = reactive({
     router_select_history_date_of_Media: null as Interface_View_Router_Date | null,
     router_history_model_of_Media: 0,
 
-    get_router_history_model_of_Media(value: any) {
+    async get_router_history_model_of_Media(value: any) {
         if (value !== 0) {
             this.router_history_model_of_Media = value;
             const currentIndex = this.router_history_datas_of_Media.findIndex(item => item.id === (this.router_select_history_date_of_Media?.id ?? ''));
@@ -24,7 +24,7 @@ export const store_router_history_data_of_media = reactive({
                     const selectedRouterName = this.router_select_history_date_of_Media.router_name;
                     if (selectedRouterName === 'View_Song_List_ALL') {
                         store_router_data_info.router_select_model_media = true;
-                        store_view_media_page_fetchData.fetchData_Media();
+                        await store_view_media_page_fetchData.fetchData_Media();
                         this.router_history_model_of_Media_scroll = true;
                     }
                 }

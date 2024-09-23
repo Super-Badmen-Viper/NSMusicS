@@ -49,13 +49,31 @@ export const store_app_configs_logic_load = reactive({
             store_view_media_page_info.media_page_sizes = Number('' + system_Configs_Read.app_Configs.value['media_page_sizes'])
             store_view_album_page_info.album_page_sizes = Number('' + system_Configs_Read.app_Configs.value['album_page_sizes'])
             store_view_artist_page_info.artist_page_sizes = Number('' + system_Configs_Read.app_Configs.value['artist_page_sizes'])
+            store_router_data_logic.clear_UserExperience_Model = '' + system_Configs_Read.app_Configs.value['clear_UserExperience_Model'] === 'true'
+            store_router_data_logic.clear_Memory_Model = !store_router_data_logic.clear_UserExperience_Model
             //
             store_server_user_model.model_select = '' + system_Configs_Read.app_Configs.value['model_select']
             if(store_server_user_model.model_select === 'navidrome'){
+                store_server_user_model.model_select = 'server';
+            }
+            if(store_server_user_model.model_select === 'server'){
                 store_server_user_model.switchToMode_Navidrome_Api()
             }else{
                 store_server_user_model.switchToMode_Local()
             }
+            if (store_server_user_model.model_select === 'server') {
+                store_server_users.percentage_of_nd = 100
+                store_server_users.percentage_of_local = 0
+                //
+                if(store_server_user_model.model_server_type_of_local){
+                    store_router_data_info.store_router_history_data_of_local = true
+                    store_router_data_info.store_router_history_data_of_web = false
+                }else if(store_server_user_model.model_server_type_of_web){
+                    store_router_data_info.store_router_history_data_of_local = false
+                    store_router_data_info.store_router_history_data_of_web = true
+                }
+            }
+            //
             if (('' + system_Configs_Read.app_Configs.value['theme']) === 'lightTheme') {
                 store_app_configs_info.update_theme = false;
                 store_app_configs_info.theme = lightTheme;
@@ -115,7 +133,7 @@ export const store_app_configs_logic_load = reactive({
             /// view_router_history
             // init media page router histtory
             store_view_media_page_logic.page_songlists_keywordFilter = ""
-            store_view_media_page_fetchData.fetchData_Media()
+            await store_view_media_page_fetchData.fetchData_Media()
             store_view_media_page_logic.page_songlists_selected = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['page_songlists_selected']
             //
             store_router_history_data_of_media.router_select_history_date_of_Media = system_Configs_Read.view_Media_History_select_Configs.value

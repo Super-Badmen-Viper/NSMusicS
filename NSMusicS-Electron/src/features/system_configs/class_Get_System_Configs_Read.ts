@@ -27,7 +27,9 @@ export class Class_Get_System_Configs_Read {
             client_unique_id: '',
             media_page_sizes: 0,
             album_page_sizes: 0,
-            artist_page_sizes: 0
+            artist_page_sizes: 0,
+            clear_Memory_Model: null,
+            clear_UserExperience_Model: null,
         }))
     public library_Configs = ref(
         new Library_Configs({

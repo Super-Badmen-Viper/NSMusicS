@@ -67,7 +67,7 @@
     },
     {
       label: computed(() => t('nsmusics.view_page.modelServer')),
-      value: 'navidrome',
+      value: 'server',
     },
   ])
   onMounted(() => {
@@ -190,6 +190,7 @@
     User_Authorization_ApiWebService_of_ND
   } from "@/features/servers_configs/navidrome_api/services_web/user_authorization/index_service";
   import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+  import {store_router_data_logic} from "@/store/router/store_router_data_logic";
   const theme_value = ref('lightTheme')
   const theme_options = ref([
     {
@@ -716,6 +717,39 @@
                   />
                 </n-space>
                 <n-divider style="margin: 0;"/>
+                <n-space justify="space-between" align="center"
+                         :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">播放器模式</span>
+                  </n-space>
+                </n-space>
+                <n-space justify="space-between" align="center"
+                         style="margin-left: 30px;"
+                         :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">性能模式</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">打开/关闭播放界面时，清除所有页面数据，当前页面数据也会清除，内存清理回收快</span>
+                    </div>
+                  </n-space>
+                  <n-switch
+                      v-model:value="store_router_data_logic.clear_Memory_Model">
+                  </n-switch>
+                </n-space>
+                <n-space justify="space-between" align="center"
+                         style="margin-left: 30px;"
+                         :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">质量模式</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">打开/关闭播放界面时，保留当前页面数据，清除其它页面的数据，内存清理回收慢</span>
+                    </div>
+                  </n-space>
+                  <n-switch
+                      v-model:value="store_router_data_logic.clear_UserExperience_Model">
+                  </n-switch>
+                </n-space>
+                <n-divider style="margin: 0;"/>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelSelect') }}</span>
@@ -727,8 +761,8 @@
                     v-model:value="Type_Server_Model_Open_Value"
                     :options="Type_Server_Model_Open_Option"
                     @update:value="
-                      Type_Server_Model_Open_Value === 'navidrome' ?
-                      (store_server_user_model.switchToMode_Navidrome_Api(),store_server_user_model.model_select = 'navidrome')
+                      Type_Server_Model_Open_Value === 'server' ?
+                      (store_server_user_model.switchToMode_Navidrome_Api(),store_server_user_model.model_select = 'server')
                       :
                       (store_server_user_model.switchToMode_Local(),store_server_user_model.model_select = 'local')
                     "
@@ -737,8 +771,8 @@
                     style="width: 207px;margin-top: -4px;"
                   />
                 </n-space>
-                <n-divider style="margin: 0;" v-if="Type_Server_Model_Open_Value === 'navidrome'"/>
-                <n-space vertical v-if="Type_Server_Model_Open_Value === 'navidrome'">
+                <n-divider style="margin: 0;" v-if="Type_Server_Model_Open_Value === 'server'"/>
+                <n-space vertical v-if="Type_Server_Model_Open_Value === 'server'">
                   <n-space justify="space-between" align="center"
                            :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                     <n-space vertical>
@@ -749,20 +783,26 @@
                            style="margin-left: 30px;"
                            :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
                     <n-space vertical>
-                      <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer') + ' - ' + $t('nsmusics.view_page.modelServer_type_one') }}</span>
+                      <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_one') }}</span>
                       <div style="margin-top: -10px;">
                         <span style="font-size:12px;">{{ $t('nsmusics.view_page.modelServer_type_one_explain') }}</span>
                       </div>
                     </n-space>
                     <n-switch
-                        v-model:value="store_server_user_model.model_server_type_of_web">
+                        v-model:value="store_server_user_model.model_server_type_of_web"
+                        @update:value="
+                          update_server_config_of_current_user_of_sqlite(
+                            store_server_users.server_config_of_current_user_of_select_servername
+                          )
+                        "
+                    >
                     </n-switch>
                   </n-space>
                   <n-space justify="space-between" align="center"
                            style="margin-left: 30px;"
                            :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
                     <n-space vertical>
-                      <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer') + ' - ' + $t('nsmusics.view_page.modelServer_type_two') }}</span>
+                      <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_two') }}</span>
                       <div style="margin-top: -10px;">
                         <span style="font-size:12px;">{{ $t('nsmusics.view_page.modelServer_type_two_explain') }}</span>
                       </div>
@@ -806,8 +846,8 @@
                     />
                   </n-space>
                 </n-space>
-                <n-divider style="margin: 0;" v-if="Type_Server_Model_Open_Value != 'navidrome'"/>
-                <n-space vertical v-if="Type_Server_Model_Open_Value != 'navidrome'">
+                <n-divider style="margin: 0;" v-if="Type_Server_Model_Open_Value != 'server'"/>
+                <n-space vertical v-if="Type_Server_Model_Open_Value != 'server'">
                   <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical style="width: 320px;">
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.selectLibrary')}}</span>
