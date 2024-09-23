@@ -23,6 +23,7 @@ import {
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
 import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
+import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
 
 export const store_view_artist_page_fetchData = reactive({
     async fetchData_Artist(){
@@ -186,15 +187,7 @@ export const store_view_artist_page_fetchData = reactive({
             }
         }
         else if(store_server_user_model.model_server_type_of_web){
-            let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-            await get_Navidrome_Temp_Data_To_LocalSqlite.get_artist_list(
-                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                store_server_user_model.token,
-                store_server_user_model.salt,
-                '100','ASC','name','0',
-                '',''
-            )
+            await this.fetchData_Artist_of_server_web_start()
         }
     },
     async fetchData_This_Artist_SongList(artist_id:any){
@@ -251,5 +244,51 @@ export const store_view_artist_page_fetchData = reactive({
         store_local_data_set_artistInfo.Set_ArtistInfo_To_PlayCount_of_Artist(store_playlist_list_info.playlist_MediaFiles_temporary[0].artist_id)
     },
 
-
+    _start: 0,
+    _end: 50,
+    _playlist_model: false,
+    async fetchData_Artist_of_server_web_start(){
+        store_view_artist_page_info.artist_Files_temporary = [];
+        this._start = 0;
+        this._end = 50;
+        await this.fetchData_Artist_of_server_web()
+    },
+    async fetchData_Artist_of_server_web_end(){
+        if(!this._playlist_model) {
+            this._start += 50;
+            this._end += 50;
+            await this.fetchData_Artist_of_server_web()
+        }
+    },
+    async fetchData_Artist_of_server_web(){
+        const _search = store_view_artist_page_logic.page_artistlists_keyword;
+        const selected = store_view_artist_page_logic.page_artistlists_selected;
+        ///
+        let _sort = store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0 && store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order !== 'default' ?
+            store_view_artist_page_logic.page_artistlists_options_Sort_key[0].columnKey : 'id';
+        let _order = store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0 && store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order !== 'default' ?
+            store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order.replace('end', '') : 'ASC';
+        ///
+        let _starred = '';
+        let playlist_id = '';
+        this._playlist_model = false
+        if (selected === 'artist_list_love') {
+            _starred = true
+        } else if (selected === 'artist_list_recently') {
+            _order = 'DESC'
+            _sort = 'playDate'
+        } else if (selected != 'artist_list_all') {
+            playlist_id = selected
+            this._playlist_model = true
+        }
+        let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
+        await get_Navidrome_Temp_Data_To_LocalSqlite.get_artist_list(
+            store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+            store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+            store_server_user_model.token,
+            store_server_user_model.salt,
+            String(this._end),_order,_sort,String(this._start),
+            _search,_starred
+        )
+    }
 });

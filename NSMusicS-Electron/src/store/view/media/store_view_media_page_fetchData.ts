@@ -260,6 +260,7 @@ export const store_view_media_page_fetchData = reactive({
     _start: 0,
     _end: 50,
     _album_id: '',
+    _artist_id: '',
     _playlist_model: false,
     async fetchData_Media_of_server_web_start(){
         store_view_media_page_info.media_Files_temporary = [];
@@ -269,6 +270,7 @@ export const store_view_media_page_fetchData = reactive({
 
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
             this._album_id = ''
+            this._artist_id = ''
         }
     },
     async fetchData_Media_of_server_web_end(){
@@ -307,7 +309,7 @@ export const store_view_media_page_fetchData = reactive({
             store_server_user_model.salt,
             String(this._end),_order,_sort,String(this._start),
             _search,_starred,playlist_id,
-            this._album_id
+            this._album_id,this._artist_id
         )
     }
 });

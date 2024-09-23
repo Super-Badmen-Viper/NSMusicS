@@ -119,7 +119,11 @@ export const store_router_data_logic = reactive({
         store_router_data_info.router.push('View_Album_List_ALL')
         // open album_files model，keywords set
         store_router_data_info.find_album_model = true
-        store_view_album_page_logic.page_albumlists_keyword = value
+        if(store_server_user_model.model_server_type_of_local) {
+            store_view_album_page_logic.page_albumlists_keyword = value
+        }else if(store_server_user_model.model_server_type_of_web){
+            store_view_album_page_logic.page_albumlists_keyword = ''
+        }
         store_view_album_page_logic.page_albumlists_get_keyword_model_num = 2
         store_router_data_info.find_artist_model = false
         console.log('get_album_list_of_artist_model：'+value)

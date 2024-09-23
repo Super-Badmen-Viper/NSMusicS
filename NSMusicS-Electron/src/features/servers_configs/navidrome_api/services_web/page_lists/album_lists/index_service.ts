@@ -5,7 +5,8 @@ import {
 export class Album_Lists_ApiWebService_of_ND extends Navidrome_Api_Services_Web {
     public async getAlbumList_ALL(
         _end:string, _order:string, _sort:string, _start: string,
-        _search:string, _starred:string
+        _search:string, _starred:string,
+        _artist_id:string
     ): Promise<any> {
         return this.sendRequest('album', {
             _end: _end,
@@ -13,7 +14,8 @@ export class Album_Lists_ApiWebService_of_ND extends Navidrome_Api_Services_Web 
             _sort: _sort,
             _start: _start,
             name: _search,
-            starred: _starred
+            starred: _starred,
+            artist_id: _artist_id
         });
     }
 }

@@ -177,6 +177,7 @@ const show_search_area = () => {
     }
     if(store_server_user_model.model_server_type_of_web) {
       store_view_media_page_fetchData._album_id = ''
+      store_view_media_page_fetchData._artist_id = ''
     }
     input_search_InstRef.value?.clear()
     store_view_media_page_logic.page_songlists_keywordFilter = ""

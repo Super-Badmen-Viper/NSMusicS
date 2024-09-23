@@ -319,10 +319,18 @@
 
   ////// go to media_view
   const Open_this_artist_all_artist_list_click = (artist_id:string) => {
+    if(store_server_user_model.model_server_type_of_web){
+      store_view_media_page_fetchData._artist_id = artist_id
+      store_view_album_page_fetchData._artist_id = artist_id
+    }
     console.log('artist_list_of_artist_id_artist_click：'+artist_id);
     store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
   }
   const Play_this_artist_all_media_list_click = async (artist_id: string) => {
+    if(store_server_user_model.model_server_type_of_web){
+      store_view_media_page_fetchData._artist_id = artist_id
+      store_view_album_page_fetchData._artist_id = artist_id
+    }
     console.log('play_this_artist_song_list：' + artist_id);
     await store_view_artist_page_fetchData.fetchData_This_Artist_SongList(artist_id)
   }
@@ -359,6 +367,7 @@
   import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
   import {store_server_user_model} from "@/store/server/store_server_user_model";
   import {store_router_data_info} from "@/store/router/store_router_data_info";
+  import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
   const contextmenu = ref(null as any)
   const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
   const message = useMessage()
@@ -440,7 +449,7 @@
     if (isScrolling.value) return;
     isScrolling.value = true;
     if (store_server_user_model.model_server_type_of_web) {
-
+      await store_view_artist_page_fetchData.fetchData_Artist_of_server_web_end()
     }
     isScrolling.value = false;
   };

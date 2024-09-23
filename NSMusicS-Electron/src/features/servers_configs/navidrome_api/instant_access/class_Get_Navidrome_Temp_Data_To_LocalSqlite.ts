@@ -283,12 +283,13 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         username: string,token: string,salt: string,
         _end:string, _order:string, _sort:string, _start: string, _search:string, _starred:string,
         playlist_id: string,
-        _album_id:string
+        _album_id:string, _artist_id:string
     ){
         let songlist = []
         if(playlist_id === '') {
             songlist = await this.song_Lists_ApiWebService_of_ND.getSongList_ALL(
-                _end, _order, _sort, _start, _search, _starred, _album_id
+                _end, _order, _sort, _start, _search, _starred,
+                _album_id, _artist_id
             )
         }else{
             songlist = await this.song_Lists_ApiWebService_of_ND.getSongList_of_Playlist(
@@ -363,10 +364,12 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
     public async get_album_list(
         url: string,
         username: string,token: string,salt: string,
-        _end:string, _order:string, _sort:string, _start: string, _search:string, _starred:string
+        _end:string, _order:string, _sort:string, _start: string, _search:string, _starred:string,
+        _artist_id:string
     ){
         const albumlist = await this.album_Lists_ApiWebService_of_ND.getAlbumList_ALL(
-            _end, _order, _sort, _start, _search, _starred
+            _end, _order, _sort, _start, _search, _starred,
+            _artist_id
         )
         if (Array.isArray(albumlist) && albumlist.length > 0) {
             albumlist.map(async (album: any, index: number) => {

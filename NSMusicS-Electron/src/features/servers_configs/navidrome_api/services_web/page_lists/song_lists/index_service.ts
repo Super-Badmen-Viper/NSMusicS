@@ -6,7 +6,7 @@ export class Song_Lists_ApiWebService_of_ND extends Navidrome_Api_Services_Web {
     public async getSongList_ALL(
         _end:string, _order:string, _sort:string, _start: string,
         _search:string, _starred:string,
-        _album_id:string
+        _album_id:string, _artist_id:string
     ): Promise<any> {
         return this.sendRequest('song', {
             _end: _end,
@@ -15,7 +15,8 @@ export class Song_Lists_ApiWebService_of_ND extends Navidrome_Api_Services_Web {
             _start: _start,
             title: _search,
             starred: _starred,
-            album_id: _album_id
+            album_id: _album_id,
+            artist_id: _artist_id
         });
     }
     public async getSongList_of_Playlist(
