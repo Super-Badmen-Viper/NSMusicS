@@ -1,3 +1,0 @@
-interface navidrome_annotation{
-
-}
