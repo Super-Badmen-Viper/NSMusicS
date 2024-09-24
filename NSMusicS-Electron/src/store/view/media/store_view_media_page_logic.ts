@@ -29,6 +29,7 @@ import {
     store_server_data_set_mediaInfo
 } from "@/store/server/server_data_synchronization/store_server_data_set_mediaInfo";
 import {store_player_appearance} from "@/store/player/store_player_appearance";
+import {store_router_data_logic} from "@/store/router/store_router_data_logic";
 
 export const store_view_media_page_logic = reactive({
     list_data_StartUpdate: false,

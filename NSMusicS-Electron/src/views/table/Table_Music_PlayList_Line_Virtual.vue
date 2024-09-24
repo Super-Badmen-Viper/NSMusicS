@@ -23,6 +23,11 @@ import {
 
   /////// emits audio_info of artistlist_view_list
   const handleItemDbClick = (media_file:any,index:number) => {
+    if(store_server_user_model.model_server_type_of_web){
+      /// Data synchronization
+      store_playlist_list_fetchData.fetchData_PlayList_of_data_synchronization_to_Media()
+    }
+
     store_player_audio_info.this_audio_play_id = media_file.play_id
     store_player_audio_info.this_audio_file_path = media_file.path
     store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
@@ -80,6 +85,7 @@ import {
 import {BrowserUpdatedFilled} from "@vicons/material";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
   const { t } = useI18n({
     inheritLocale: true
   })

@@ -351,6 +351,7 @@
   const Open_this_album_SongList_click = (album_id:string) => {
     if(store_server_user_model.model_server_type_of_web){
       store_view_media_page_fetchData._album_id = album_id
+      store_view_media_page_logic.page_songlists_selected = 'song_list_all'
     }
     console.log('media_list_of_album_id：'+album_id);
     store_router_data_logic.get_media_list_of_album_id_by_album_info(album_id)
@@ -358,6 +359,7 @@
   const Play_this_album_SongList_click = async (album_id: string) => {
     if(store_server_user_model.model_server_type_of_web){
       store_view_media_page_fetchData._album_id = album_id
+      store_view_media_page_logic.page_songlists_selected = 'song_list_all'
     }
     console.log('play_this_album_click：' + album_id);
     await store_view_album_page_fetchData.fetchData_This_Album_SongList(album_id)
@@ -529,7 +531,8 @@
           @keydown.enter="click_search"/>
       </n-input-group>
       
-      <n-dropdown 
+      <n-dropdown
+        v-if="!(store_server_user_model.model_server_type_of_web && store_view_album_page_logic.page_albumlists_selected === 'album_list_recently')"
         trigger="click" :show-arrow="true" 
         :options="options_Sort" @select="handleSelect_Sort">
         <n-button quaternary circle size="medium" style="margin-left:4px">

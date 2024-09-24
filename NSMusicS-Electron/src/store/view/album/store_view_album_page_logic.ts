@@ -2,6 +2,7 @@ import {reactive, ref, watch} from 'vue'
 import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 import {store_router_data_info} from "@/store/router/store_router_data_info";
+import {store_router_data_logic} from "@/store/router/store_router_data_logic";
 
 export const store_view_album_page_logic = reactive({
     list_data_StartUpdate: false,

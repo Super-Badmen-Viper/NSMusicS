@@ -232,20 +232,17 @@ export const store_view_artist_page_fetchData = reactive({
     },
 
     _start: 0,
-    _end: 50,
-    _playlist_model: false,
+    _end: 15,
     async fetchData_Artist_of_server_web_start(){
         store_view_artist_page_info.artist_Files_temporary = [];
         this._start = 0;
-        this._end = 50;
+        this._end = 15;
         await this.fetchData_Artist_of_server_web()
     },
     async fetchData_Artist_of_server_web_end(){
-        if(!this._playlist_model) {
-            this._start += 50;
-            this._end += 50;
-            await this.fetchData_Artist_of_server_web()
-        }
+        this._start += 15;
+        this._end += 15;
+        await this.fetchData_Artist_of_server_web()
     },
     async fetchData_Artist_of_server_web(){
         const _search = store_view_artist_page_logic.page_artistlists_keyword;
@@ -258,7 +255,6 @@ export const store_view_artist_page_fetchData = reactive({
         ///
         let _starred = '';
         let playlist_id = '';
-        this._playlist_model = false
         if (selected === 'artist_list_love') {
             _starred = true
         } else if (selected === 'artist_list_recently') {
@@ -266,7 +262,6 @@ export const store_view_artist_page_fetchData = reactive({
             _sort = 'playDate'
         } else if (selected != 'artist_list_all') {
             playlist_id = selected
-            this._playlist_model = true
         }
         let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
         await get_Navidrome_Temp_Data_To_LocalSqlite.get_artist_list(

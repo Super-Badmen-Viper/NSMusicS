@@ -321,7 +321,9 @@
   const Open_this_artist_all_artist_list_click = (artist_id:string) => {
     if(store_server_user_model.model_server_type_of_web){
       store_view_media_page_fetchData._artist_id = artist_id
+      store_view_media_page_logic.page_songlists_selected = 'song_list_all'
       store_view_album_page_fetchData._artist_id = artist_id
+      store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
     }
     console.log('artist_list_of_artist_id_artist_click：'+artist_id);
     store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
@@ -329,7 +331,9 @@
   const Play_this_artist_all_media_list_click = async (artist_id: string) => {
     if(store_server_user_model.model_server_type_of_web){
       store_view_media_page_fetchData._artist_id = artist_id
+      store_view_media_page_logic.page_songlists_selected = 'song_list_all'
       store_view_album_page_fetchData._artist_id = artist_id
+      store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
     }
     console.log('play_this_artist_song_list：' + artist_id);
     await store_view_artist_page_fetchData.fetchData_This_Artist_SongList(artist_id)
@@ -500,7 +504,8 @@
           @keydown.enter="click_search"/>
       </n-input-group>
 
-      <n-dropdown 
+      <n-dropdown
+        v-if="!(store_server_user_model.model_server_type_of_web && store_view_artist_page_logic.page_artistlists_selected === 'artist_list_recently')"
         trigger="click" :show-arrow="true" 
         :options="options_Sort" @select="handleSelect_Sort">
         <n-button quaternary circle size="medium" style="margin-left:4px">

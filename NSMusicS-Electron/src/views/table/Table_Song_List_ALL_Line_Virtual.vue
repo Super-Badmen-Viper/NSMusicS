@@ -337,6 +337,11 @@ const handleItemDbClick = (media_file:any,index:number) => {
     if(click_count >= 2){
       click_count = 0
 
+      if(store_server_user_model.model_server_type_of_web){
+        /// Data synchronization
+        store_view_media_page_fetchData.fetchData_Media_of_data_synchronization_to_playlist()
+      }
+
       store_player_audio_info.this_audio_file_path = media_file.path
       store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
       store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
@@ -458,6 +463,7 @@ import {store_server_users} from "@/store/server/store_server_users";
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
+import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')

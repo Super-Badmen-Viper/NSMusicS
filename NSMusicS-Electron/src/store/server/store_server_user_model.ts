@@ -39,6 +39,7 @@ export const store_server_user_model = reactive({
     model_server_type_of_local: false,
     authorization: '',
     client_unique_id: '',
+    server_get_count: 15,
 
     album: 'album',
     annotation: 'annotation',

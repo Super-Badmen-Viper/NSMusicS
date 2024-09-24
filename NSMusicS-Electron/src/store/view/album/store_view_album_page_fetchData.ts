@@ -249,13 +249,12 @@ export const store_view_album_page_fetchData = reactive({
     },
 
     _start: 0,
-    _end: 50,
+    _end: 15,
     _artist_id: '',
-    _playlist_model: false,
     async fetchData_Album_of_server_web_start(){
         store_view_album_page_info.album_Files_temporary = [];
         this._start = 0;
-        this._end = 50;
+        this._end = 15;
         await this.fetchData_Album_of_server_web()
 
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
@@ -265,11 +264,9 @@ export const store_view_album_page_fetchData = reactive({
         }
     },
     async fetchData_Album_of_server_web_end(){
-        if(!this._playlist_model) {
-            this._start += 50;
-            this._end += 50;
-            await this.fetchData_Album_of_server_web()
-        }
+        this._start += 15;
+        this._end += 15;
+        await this.fetchData_Album_of_server_web()
     },
     async fetchData_Album_of_server_web(){
         const _search = store_view_album_page_logic.page_albumlists_keyword;
@@ -282,7 +279,6 @@ export const store_view_album_page_fetchData = reactive({
         ///
         let _starred = '';
         let playlist_id = '';
-        this._playlist_model = false
         if (selected === 'album_list_love') {
             _starred = true
         } else if (selected === 'album_list_recently') {
@@ -290,7 +286,6 @@ export const store_view_album_page_fetchData = reactive({
             _sort = 'playDate'
         } else if (selected != 'album_list_all') {
             playlist_id = selected
-            this._playlist_model = true
         }
         let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
         await get_Navidrome_Temp_Data_To_LocalSqlite.get_album_list(

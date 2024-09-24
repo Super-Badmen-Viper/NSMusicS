@@ -19,12 +19,12 @@ export class Navidrome_Api_Services_Web {
 
         try {
             const response = await axios.get(url, { headers });
-            if(endpoint === 'song') {
+            if (endpoint === 'song' || endpoint.indexOf('playlist/') >= 0) {
                 return {
                     data: response.data,
-                    totalCount: response.headers['x-total-count']
+                    totalCount: Number(response.headers['x-total-count'])
                 };
-            }else{
+            } else {
                 return response.data;
             }
         } catch (error: any) {
@@ -32,12 +32,12 @@ export class Navidrome_Api_Services_Web {
                 await store_server_user_model.refresh_model_server_type_of_web();
                 try {
                     const response = await axios.get(url, { headers });
-                    if(endpoint === 'song') {
+                    if (endpoint === 'song' || endpoint.indexOf('playlist/') >= 0) {
                         return {
                             data: response.data,
-                            totalCount: response.headers['x-total-count']
+                            totalCount: Number(response.headers['x-total-count'])
                         };
-                    }else{
+                    } else {
                         return response.data;
                     }
                 } catch (error: any) {

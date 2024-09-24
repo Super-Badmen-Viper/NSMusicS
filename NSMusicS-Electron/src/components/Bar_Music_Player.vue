@@ -157,7 +157,13 @@
             item.play_id ===
             store_player_audio_info.this_audio_play_id
     );
-    if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length - 1 && store_player_audio_logic.play_order === 'playback-1') {
+    let last_play = false;
+    if (store_server_user_model.model_server_type_of_local) {
+      last_play = index >= store_playlist_list_info.playlist_MediaFiles_temporary.length - 1;
+    } else if (store_server_user_model.model_server_type_of_web) {
+      last_play = index >= store_playlist_list_fetchData._totalCount - 1;
+    }
+    if (last_play && store_player_audio_logic.play_order === 'playback-1') {
       await store_player_audio_logic.player.pause();
       store_player_audio_info.this_audio_is_playing = false
     }else {
@@ -245,8 +251,14 @@
         break;
     }
   };
-  function Play_Media_Order(model_num: string, increased: number) {
-    if (store_playlist_list_info.playlist_MediaFiles_temporary.length > 0) {
+  async function Play_Media_Order(model_num: string, increased: number) {
+    let last_index = 0
+    if(store_server_user_model.model_server_type_of_local){
+      last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length
+    }else if(store_server_user_model.model_server_type_of_web){
+      last_index = store_playlist_list_fetchData._totalCount
+    }
+    if (last_index > 0) {
       let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
           (item: any) =>
               item.play_id ===
@@ -256,7 +268,7 @@
       if (index !== -1) {
         if (model_num === 'playback-1') {
           index += increased;
-          if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length) {
+          if (index >= last_index) {
             if(is_play_ended.value === true){
               stop_play = true;
               is_play_ended.value = false;
@@ -264,31 +276,36 @@
               index = 0;
             }
           }else if(index < 0){
-            index = store_playlist_list_info.playlist_MediaFiles_temporary.length - 1;
+            index = last_index - 1;
           }
         } else if (model_num === 'playback-2') {
           index += increased;
-          if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length) {
+          if (index >= last_index) {
             index = 0;
           }else if(index < 0){
-            index = store_playlist_list_info.playlist_MediaFiles_temporary.length - 1;
+            index = last_index - 1;
           }
         } else if (model_num === 'playback-3') {
           if (increased !== 0) {
             index += increased;
             if (index < 0) {
-              index = store_playlist_list_info.playlist_MediaFiles_temporary.length - 1;
-            } else if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length) {
+              index = last_index - 1;
+            } else if (index >= last_index) {
               index = 0;
             }
           }
         } else if (model_num === 'playback-4') {
-          index = Math.floor(Math.random() * store_playlist_list_info.playlist_MediaFiles_temporary.length);
+          index = Math.floor(Math.random() * last_index);
         } else {
           stop_play = true;
         }
 
         if (!stop_play) {
+          if (store_server_user_model.model_server_type_of_web) {
+            if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length) {
+              await store_playlist_list_fetchData.fetchData_PlayList_of_server_web_end();
+            }
+          }
           store_player_audio_info.this_audio_play_id = store_playlist_list_info.playlist_MediaFiles_temporary[index].play_id
           store_player_audio_info.this_audio_file_path = store_playlist_list_info.playlist_MediaFiles_temporary[index].path;
           store_player_audio_info.this_audio_lyrics_string = store_playlist_list_info.playlist_MediaFiles_temporary[index].lyrics
@@ -494,6 +511,7 @@
   } from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
   import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
   import {store_server_user_model} from "@/store/server/store_server_user_model";
+  import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
   let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id,favorite)

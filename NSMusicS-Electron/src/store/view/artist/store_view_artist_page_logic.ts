@@ -2,6 +2,7 @@ import {reactive, ref, watch} from 'vue'
 import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
 import {store_view_artist_page_fetchData} from "@/store/view/artist/store_view_artist_page_fetchData";
 import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info";
+import {store_router_data_logic} from "@/store/router/store_router_data_logic";
 
 export const store_view_artist_page_logic = reactive({
     list_data_StartUpdate: false,

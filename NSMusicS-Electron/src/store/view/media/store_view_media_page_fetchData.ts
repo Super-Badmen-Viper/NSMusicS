@@ -260,14 +260,13 @@ export const store_view_media_page_fetchData = reactive({
     },
 
     _start: 0,
-    _end: 50,
+    _end: 15,
     _album_id: '',
     _artist_id: '',
-    _playlist_model: false,
     async fetchData_Media_of_server_web_start(){
         store_view_media_page_info.media_Files_temporary = [];
         this._start = 0;
-        this._end = 50;
+        this._end = 15;
         await this.fetchData_Media_of_server_web()
 
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
@@ -275,19 +274,11 @@ export const store_view_media_page_fetchData = reactive({
             store_view_media_page_fetchData._artist_id = ''
             store_view_album_page_fetchData._artist_id = ''
         }
-
-        store_playlist_list_fetchData._start = this._start
-        store_playlist_list_fetchData._end = this._end
-        store_playlist_list_fetchData._album_id = this._album_id
-        store_playlist_list_fetchData._artist_id = this._artist_id
-        store_playlist_list_fetchData._playlist_model = this._playlist_model
     },
     async fetchData_Media_of_server_web_end(){
-        if(!this._playlist_model) {
-            this._start += 50;
-            this._end += 50;
-            await this.fetchData_Media_of_server_web()
-        }
+        this._start += 15;
+        this._end += 15;
+        await this.fetchData_Media_of_server_web()
     },
     async fetchData_Media_of_server_web(){
         const _search = (store_view_media_page_logic.page_songlists_keywordFilter || '').match(/%([^%]+)%/)?.[1] || '';
@@ -300,7 +291,6 @@ export const store_view_media_page_fetchData = reactive({
         ///
         let _starred = '';
         let playlist_id = '';
-        this._playlist_model = false
         if (selected === 'song_list_love') {
             _starred = true
         } else if (selected === 'song_list_recently') {
@@ -308,7 +298,6 @@ export const store_view_media_page_fetchData = reactive({
             _sort = 'playDate'
         } else if (selected != 'song_list_all') {
             playlist_id = selected
-            this._playlist_model = true
         }
         let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
         await get_Navidrome_Temp_Data_To_LocalSqlite.get_media_list(
@@ -320,5 +309,27 @@ export const store_view_media_page_fetchData = reactive({
             _search,_starred,playlist_id,
             this._album_id,this._artist_id
         )
+    },
+    fetchData_Media_of_data_synchronization_to_playlist(){
+        store_view_media_page_info.media_Files_temporary.forEach((row) => {
+            const existingIndex = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+                (item) => item.id === row.id
+            );
+            if (existingIndex === -1) {
+                const newRow = {
+                    ...row,
+                    play_id: row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
+                };
+                store_playlist_list_info.playlist_MediaFiles_temporary.push(newRow);
+            }
+        });
+        store_playlist_list_fetchData._start = store_view_media_page_fetchData._start
+        store_playlist_list_fetchData._end = store_view_media_page_fetchData._end
+        store_playlist_list_fetchData._album_id = store_view_media_page_fetchData._album_id
+        store_playlist_list_fetchData._artist_id = store_view_media_page_fetchData._artist_id
+        store_playlist_list_fetchData._start = store_view_media_page_fetchData._start
+        store_playlist_list_fetchData._end = store_view_media_page_fetchData._end
+        store_playlist_list_fetchData._album_id = store_view_media_page_fetchData._album_id
+        store_playlist_list_fetchData._artist_id = store_view_media_page_fetchData._artist_id
     }
 });
