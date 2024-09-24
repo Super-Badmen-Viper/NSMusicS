@@ -1,14 +1,15 @@
 import {reactive, watch} from 'vue'
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
 import {store_player_appearance} from "@/store/player/store_player_appearance";
-import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
+import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {Set_MediaInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
 import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
 import {store_app_configs_logic_load} from "@/store/app/store_app_configs_logic_load";
 import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
-import {store_playlist_appearance} from "@/store/playlist/store_playlist_appearance";
-import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+import {store_playlist_appearance} from "@/store/view/playlist/store_playlist_appearance";
+import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
+import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 const path = require('path')
 const { ipcRenderer } = require('electron');
 interface ByteTime {
@@ -105,20 +106,7 @@ watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
                 if (!store_app_configs_logic_load.app_configs_loading) {
                     if(!store_playlist_appearance.playlist_show) {
                         if (store_playlist_list_logic.media_page_handleItemDbClick) {
-                            store_playlist_list_info.playlist_MediaFiles_temporary =
-                                store_view_media_page_info.media_Files_temporary.map(
-                                    (row) => {
-                                        row.play_id = row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
-                                        return row;
-                                    });
-                            const media_file = store_playlist_list_info.playlist_MediaFiles_temporary.find(
-                                (row) => row.id === store_player_audio_info.this_audio_song_id
-                            );
-                            if (media_file) {
-                                store_player_audio_info.this_audio_play_id = media_file.play_id;
-                            }
-
-                            store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
+                            store_playlist_list_fetchData.fetchData_PlayList()
                         }
                     }
                 }

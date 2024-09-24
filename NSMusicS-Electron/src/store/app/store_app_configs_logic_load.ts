@@ -10,9 +10,9 @@ import {store_player_audio_logic} from "@/store/player/store_player_audio_logic"
 import {store_player_sound_effects} from "@/store/player/store_player_sound_effects";
 import {store_player_sound_speed} from "@/store/player/store_player_sound_speed";
 import {store_player_sound_more} from "@/store/player/store_player_sound_more";
-import {store_playlist_appearance} from '@/store/playlist/store_playlist_appearance'
-import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info"
-import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic"
+import {store_playlist_appearance} from '@/store/view/playlist/store_playlist_appearance'
+import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info"
+import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic"
 import {store_server_users} from '@/store/server/store_server_users'
 import {store_server_user_model} from '@/store/server/store_server_user_model'
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
@@ -179,6 +179,7 @@ export const store_app_configs_logic_load = reactive({
         await store_playlist_list_logic.reset_data()
 
         /// close
+        store_router_data_logic.get_page_top_info()
         store_app_configs_info.app_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_left_menu_select_activeKey']
         store_router_data_info.router_name = '' + system_Configs_Read.app_Configs.value['router_name']
         store_router_data_info.router.push(store_router_data_info.router_name)

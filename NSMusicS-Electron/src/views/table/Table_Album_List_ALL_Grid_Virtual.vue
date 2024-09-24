@@ -372,9 +372,9 @@
     store_local_data_set_mediaInfo
   } from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
   import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
-  import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
+  import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
   import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
-  import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+  import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
   import {store_server_user_model} from "@/store/server/store_server_user_model";
   import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
@@ -621,7 +621,7 @@
                           }"
                         >
                           <n-ellipsis
-                              style="text-align: left;font-size: 22px;width: 660px;height: 26px;">
+                              style="text-align: left;font-size: 22px;max-width: 660px;height: 26px;">
                             {{ store_player_audio_info.page_top_album_name }}
                           </n-ellipsis>
                         </n-button>

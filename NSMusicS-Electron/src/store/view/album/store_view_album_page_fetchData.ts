@@ -10,16 +10,17 @@ import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
-import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
+import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {Set_AlbumInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite";
 import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
-import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "@/features/servers_configs/navidrome_api/instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
+import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 
 export const store_view_album_page_fetchData = reactive({
     async fetchData_Album(){
@@ -222,21 +223,7 @@ export const store_view_album_page_fetchData = reactive({
         await store_view_media_page_fetchData.fetchData_Media()
         store_router_data_info.find_music_model = false;
 
-        store_playlist_list_info.playlist_MediaFiles_temporary =
-            store_view_media_page_info.media_Files_temporary.map(
-                (row) => {
-                    row.play_id = row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
-                    return row;
-                });
-        const media_file = store_playlist_list_info.playlist_MediaFiles_temporary.find(
-            (row) => row.id === store_player_audio_info.this_audio_song_id
-        );
-        if (media_file) {
-            store_player_audio_info.this_audio_play_id = media_file.play_id;
-        }
-
-        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
-        store_app_configs_logic_save.save_system_playlist_item_id_config();
+        store_playlist_list_fetchData.fetchData_PlayList()
 
         store_router_data_info.router_select_model_album = true
 
@@ -272,7 +259,9 @@ export const store_view_album_page_fetchData = reactive({
         await this.fetchData_Album_of_server_web()
 
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
-            this._artist_id = ''
+            store_view_media_page_fetchData._album_id = ''
+            store_view_media_page_fetchData._artist_id = ''
+            store_view_album_page_fetchData._artist_id = ''
         }
     },
     async fetchData_Album_of_server_web_end(){

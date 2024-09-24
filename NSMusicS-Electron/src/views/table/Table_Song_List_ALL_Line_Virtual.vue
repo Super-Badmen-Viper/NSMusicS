@@ -178,6 +178,7 @@ const show_search_area = () => {
     if(store_server_user_model.model_server_type_of_web) {
       store_view_media_page_fetchData._album_id = ''
       store_view_media_page_fetchData._artist_id = ''
+      store_view_album_page_fetchData._artist_id = ''
     }
     input_search_InstRef.value?.clear()
     store_view_media_page_logic.page_songlists_keywordFilter = ""
@@ -436,8 +437,8 @@ const message = useMessage()
 /// add playlist
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-import {store_playlist_list_info} from  "@/store/playlist/store_playlist_list_info"
-import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info"
+import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {store_player_appearance} from "@/store/player/store_player_appearance";
@@ -456,6 +457,7 @@ import {
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
 import {store_router_data_info} from "@/store/router/store_router_data_info";
+import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -968,7 +970,7 @@ onBeforeUnmount(() => {
                         }"
                       >
                         <n-ellipsis
-                            style="text-align: left;font-size: 22px;width: 660px;height: 26px;">
+                            style="text-align: left;font-size: 22px;max-width: 660px;height: 26px;">
                           {{ store_player_audio_info.page_top_album_name }}
                         </n-ellipsis>
                       </n-button>

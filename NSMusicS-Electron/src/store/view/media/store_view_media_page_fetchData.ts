@@ -3,12 +3,12 @@ import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_router_data_logic} from "@/store/router/store_router_data_logic";
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
-import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
+import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "@/features/servers_configs/navidrome_api/instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
@@ -16,6 +16,8 @@ import {store_server_users} from "@/store/server/store_server_users";
 import {
     Playlists_ApiService_of_ND
 } from "@/features/servers_configs/navidrome_api/services_normal/playlists/index_service";
+import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
+import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 
 export const store_view_media_page_fetchData = reactive({
     async fetchData_Media(){
@@ -269,9 +271,16 @@ export const store_view_media_page_fetchData = reactive({
         await this.fetchData_Media_of_server_web()
 
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
-            this._album_id = ''
-            this._artist_id = ''
+            store_view_media_page_fetchData._album_id = ''
+            store_view_media_page_fetchData._artist_id = ''
+            store_view_album_page_fetchData._artist_id = ''
         }
+
+        store_playlist_list_fetchData._start = this._start
+        store_playlist_list_fetchData._end = this._end
+        store_playlist_list_fetchData._album_id = this._album_id
+        store_playlist_list_fetchData._artist_id = this._artist_id
+        store_playlist_list_fetchData._playlist_model = this._playlist_model
     },
     async fetchData_Media_of_server_web_end(){
         if(!this._playlist_model) {

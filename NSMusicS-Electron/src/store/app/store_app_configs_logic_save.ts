@@ -10,7 +10,7 @@ import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {Player_Configs_of_Audio_Info} from "@/models/app_Configs/class_Player_Configs_of_Audio_Info";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
-import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
+import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media"

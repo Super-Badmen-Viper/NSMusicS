@@ -24,7 +24,7 @@
   import { defineEmits } from 'vue';
   import { onBeforeUnmount } from 'vue';
   const { ipcRenderer } = require('electron');
-  import { store_playlist_appearance } from '@/store/playlist/store_playlist_appearance'
+  import { store_playlist_appearance } from '@/store/view/playlist/store_playlist_appearance'
   import {store_player_audio_info} from "@/store/player/store_player_audio_info";
   import {store_player_appearance} from "@/store/player/store_player_appearance";
   const get_playerbar_to_switch_playerview = inject('get_playerbar_to_switch_playerview');
@@ -486,13 +486,13 @@
   import {store_player_sound_effects} from "@/store/player/store_player_sound_effects";
   import {store_player_sound_speed} from "@/store/player/store_player_sound_speed";
   import {store_player_sound_more} from "@/store/player/store_player_sound_more";
-  import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info"
+  import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info"
   import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
   import {store_app_configs_info} from "@/store/app/store_app_configs_info";
   import {
     store_local_data_set_mediaInfo
   } from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
-  import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+  import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
   import {store_server_user_model} from "@/store/server/store_server_user_model";
   let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {

@@ -41,17 +41,25 @@
   ////// server
   const Type_Server_Kinds = [
     {
+      value: "jellyfin",
+      label: "jellyfin"
+    },
+    {
+      value: "subsonic",
+      label: "subsonic"
+    },
+    {
+      value: 'navidrome',
+      label: 'navidrome'
+    },
+    {
       value: "NSMusicS",
       label: "NSMusicS"
     },
     {
-      value: "JellyFin",
-      label: "JellyFin"
-    },
-    {
-      value: 'Navidrome',
-      label: 'Navidrome'
-    },
+      value: "emby",
+      label: "emby"
+    }
   ].map((s) => {
     s.value = s.value.toLowerCase()
     return s
@@ -641,6 +649,20 @@
                           :key="Type_Server_Kinds[2].value"
                           :value="Type_Server_Kinds[2].value"
                           :label="Type_Server_Kinds[2].label"
+                      />
+                    </n-radio-group>
+                    <n-radio-group v-model:value="Type_Server_Selected">
+                      <n-radio-button
+                          style="text-align: center;width: 133px;"
+                          :key="Type_Server_Kinds[3].value"
+                          :value="Type_Server_Kinds[3].value"
+                          :label="Type_Server_Kinds[3].label"
+                      />
+                      <n-radio-button
+                          style="text-align: center;width: 133px;"
+                          :key="Type_Server_Kinds[4].value"
+                          :value="Type_Server_Kinds[4].value"
+                          :label="Type_Server_Kinds[4].label"
                       />
                     </n-radio-group>
                     <n-form inline>

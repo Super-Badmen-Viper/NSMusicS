@@ -6,7 +6,7 @@ import {
   ////// this_view components of navie ui 
   import { ref, onMounted } from 'vue';
   import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-  import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
+  import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
   import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
   import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
   import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
@@ -62,7 +62,7 @@ import {
   import {
     store_local_data_set_mediaInfo
   } from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
-  import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+  import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
   import {NIcon, useMessage} from 'naive-ui'
   const message = useMessage()
   async function update_playlist_addMediaFile(id: any, playlist_id: any){
@@ -78,6 +78,8 @@ import {
   import { useI18n } from 'vue-i18n'
   import {VueDraggable} from "vue-draggable-plus";
 import {BrowserUpdatedFilled} from "@vicons/material";
+import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+import {store_server_user_model} from "@/store/server/store_server_user_model";
   const { t } = useI18n({
     inheritLocale: true
   })
@@ -160,6 +162,17 @@ import {BrowserUpdatedFilled} from "@vicons/material";
     store_playlist_list_info.menu_item_reinsert_drag_sort()
   }
 
+//////
+const isScrolling = ref(false);
+const onScrollEnd = async () => {
+  if (isScrolling.value) return;
+  isScrolling.value = true;
+  if (store_server_user_model.model_server_type_of_web) {
+    await store_playlist_list_fetchData.fetchData_PlayList_of_server_web_end()
+  }
+  isScrolling.value = false;
+};
+
   onMounted(()=>{
     store_playlist_list_info.playlist_DragSort_Model = false
   });
@@ -172,7 +185,9 @@ import {BrowserUpdatedFilled} from "@vicons/material";
         style="width: 488px;"
         :items="store_playlist_list_info.playlist_MediaFiles_temporary"
         key-field="play_id"
-        :minItemSize="50">
+        :minItemSize="50"
+        @scroll-end="onScrollEnd"
+      >
         <template #default="{ item, index, active }">
           <DynamicScrollerItem
             :item="item"

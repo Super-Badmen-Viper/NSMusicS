@@ -8,7 +8,7 @@ import {
     store_server_data_set_playlistInfo
 } from "@/store/server/server_data_synchronization/store_server_data_set_playlistInfo";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-import {store_playlist_appearance} from "@/store/playlist/store_playlist_appearance";
+import {store_playlist_appearance} from "@/store/view/playlist/store_playlist_appearance";
 import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
 
 export const store_router_data_info = reactive({

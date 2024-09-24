@@ -164,11 +164,11 @@ const handleItemClick_Rating = (id_rating: any) => {
 ////// right menu
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {useMessage} from 'naive-ui'
-import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
+import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
 import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
-import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";

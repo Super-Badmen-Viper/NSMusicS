@@ -27,9 +27,9 @@
   import {store_player_sound_effects} from "@/store/player/store_player_sound_effects";
   import {store_player_sound_speed} from "@/store/player/store_player_sound_speed";
   import {store_player_sound_more} from "@/store/player/store_player_sound_more";
-  import {store_playlist_appearance} from '@/store/playlist/store_playlist_appearance'
-  import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info"
-  import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic"
+  import {store_playlist_appearance} from '@/store/view/playlist/store_playlist_appearance'
+  import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info"
+  import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic"
   import {store_server_users} from '@/store/server/store_server_users'
   import {store_server_user_model} from '@/store/server/store_server_user_model'
   import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
@@ -218,6 +218,11 @@
   import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
   import {store_local_db_info} from "@/store/local/store_local_db_info";
   import {VueDraggable} from "vue-draggable-plus";
+  import {
+    Get_Navidrome_Temp_Data_To_LocalSqlite
+  } from "@/features/servers_configs/navidrome_api/instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
+  import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
+  import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
   routers.beforeEach((to, from, next) => {
     if(to.name !== from.name){
       store_router_data_logic.clear_Files_temporary()
@@ -226,11 +231,7 @@
   });
   routers.afterEach(async (to, from) => {
     if(to.name !== from.name){
-      let db: any = null;
-      db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
-      db.pragma('journal_mode = WAL');
-      db.exec('PRAGMA foreign_keys = OFF');
-
+      store_router_data_logic.get_page_top_info()
       store_router_data_logic.clear_Files_temporary()
       if(to.name === 'View_Menu_AppSetting'){
         store_router_data_info.router_select_model_menu = true
@@ -244,15 +245,15 @@
       }else if(to.name === 'View_Song_List_ALL'){
         store_router_data_info.router_select_model_media = true
         store_router_data_info.router_name = to.name
-        Init_page_songlists_statistic_Data(db);
+        Init_page_songlists_statistic_Data();
       }else if(to.name === 'View_Album_List_ALL'){
         store_router_data_info.router_select_model_album = true
         store_router_data_info.router_name = to.name
-        Init_page_albumlists_statistic_Data(db)
+        Init_page_albumlists_statistic_Data()
       }else if(to.name === 'View_Artist_List_ALL'){
         store_router_data_info.router_select_model_artist = true
         store_router_data_info.router_name = to.name
-        Init_page_artistlists_statistic_Data(db)
+        Init_page_artistlists_statistic_Data()
       }
       store_app_configs_info.app_left_menu_select_activeKey = to.name
       console.log(to.name)
@@ -272,12 +273,11 @@
   });
 
   ///// view of media
-  const Init_page_songlists_statistic_Data = (db: any) => {
+  const Init_page_songlists_statistic_Data = () => {
     store_view_media_page_logic.page_songlists_options = [];
     store_view_media_page_logic.page_songlists_statistic = [];
     store_view_media_page_logic.page_songlists = []
-    //////
-    const stmt_media_file_count = db.prepare(`SELECT COUNT(*) AS count FROM ${store_server_user_model.media_file}`);
+    ///
     const temp_Play_List_ALL: Play_List = {
       label: computed(() => t('nsmusics.view_page.allSong')),
       value: 'song_list_all',
@@ -285,7 +285,7 @@
       name: computed(() => t('nsmusics.view_page.allSong')),
       comment: computed(() => t('nsmusics.view_page.allSong')),
       duration: 0,
-      song_count: stmt_media_file_count.get().count + ' *',
+      song_count: store_view_media_page_info.media_item_count + ' *',
       public: 0,
       created_at: '',
       updated_at: '',
@@ -303,11 +303,7 @@
       id: temp_Play_List_ALL.id
     });
     store_view_media_page_logic.page_songlists.push(temp_Play_List_ALL)
-    //////
-    const stmt_media_Annotation_Starred_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_server_user_model.annotation}
-      WHERE starred = 1 AND item_type='media_file'
-    `);
+    ///
     const temp_Play_List_Love: Play_List = {
       label: computed(() => t('nsmusics.view_page.loveSong')),
       value: 'song_list_love',
@@ -315,7 +311,7 @@
       name: computed(() => t('nsmusics.view_page.loveSong')),
       comment: computed(() => t('nsmusics.view_page.loveSong')),
       duration: 0,
-      song_count: stmt_media_Annotation_Starred_Count.get().count + ' *',
+      song_count: store_view_media_page_info.media_starred_count + ' *',
       public: 0,
       created_at: '',
       updated_at: '',
@@ -333,11 +329,7 @@
       id: temp_Play_List_Love.id
     });
     store_view_media_page_logic.page_songlists.push(temp_Play_List_Love)
-    //////
-    const stmt_media_Annotation_Recently_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_server_user_model.annotation}
-      WHERE item_type='media_file'
-    `);
+    ///
     const temp_Play_List_Recently: Play_List = {
       label: computed(() => t('nsmusics.view_page.recentPlay')),
       value: 'song_list_recently',
@@ -345,7 +337,7 @@
       name: computed(() => t('nsmusics.view_page.recentPlay')),
       comment: computed(() => t('nsmusics.view_page.recentPlay')),
       duration: 0,
-      song_count: stmt_media_Annotation_Recently_Count.get().count + ' *',
+      song_count: store_view_media_page_info.media_recently_count > 0 ? store_view_media_page_info.media_recently_count : '*' + ' *',
       public: 0,
       created_at: '',
       updated_at: '',
@@ -364,12 +356,9 @@
     });
     store_view_media_page_logic.page_songlists.push(temp_Play_List_Recently)
     //////
-    const stmt_media_Annotation_PlayList_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_server_user_model.playlist}
-    `);
     store_view_media_page_logic.page_songlists_statistic.push({
       label: computed(() => t('entity.playlist_other')),
-      song_count: stmt_media_Annotation_PlayList_Count.get().count + ' *',
+      song_count: store_view_media_page_info.media_playlist_count + ' *',
       id: 'song_list_all_PlayList'
     });
     //////
@@ -402,9 +391,7 @@
     });
   }
   ////// view of album
-  const Init_page_albumlists_statistic_Data = (db: any) => {
-    const stmt_album_count = db.prepare(`SELECT COUNT(*) AS count FROM ${store_server_user_model.album}`);
-    //
+  const Init_page_albumlists_statistic_Data = () => {
     store_view_album_page_logic.page_albumlists_options = [];
     store_view_album_page_logic.page_albumlists_statistic = [];
     store_view_album_page_logic.page_albumlists = []
@@ -416,7 +403,7 @@
       name: computed(() => t('nsmusics.view_page.allAlbum')),
       comment: computed(() => t('nsmusics.view_page.allAlbum')),
       duration: 0,
-      song_count: stmt_album_count.get().count + ' *',
+      song_count: store_view_album_page_info.album_item_count + ' *',
       public: 0,
       created_at: '',
       updated_at: '',
@@ -435,10 +422,6 @@
     });
     store_view_album_page_logic.page_albumlists.push(temp_Play_List_ALL)
     //////
-    const stmt_album_Annotation_Starred_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_server_user_model.annotation}
-      WHERE starred = 1 AND item_type='album'
-    `);
     const temp_Play_List_Love: Play_List = {
       label: computed(() => t('nsmusics.view_page.loveAlbum')),
       value: 'album_list_love',
@@ -446,7 +429,7 @@
       name: computed(() => t('nsmusics.view_page.loveAlbum')),
       comment: computed(() => t('nsmusics.view_page.loveAlbum')),
       duration: 0,
-      song_count: stmt_album_Annotation_Starred_Count.get().count + ' *',
+      song_count: store_view_album_page_info.album_starred_count + ' *',
       public: 0,
       created_at: '',
       updated_at: '',
@@ -465,10 +448,6 @@
     });
     store_view_album_page_logic.page_albumlists.push(temp_Play_List_Love)
     //////
-    const stmt_album_Annotation_Recently_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_server_user_model.annotation}
-      WHERE item_type='album'
-    `);
     const temp_Play_List_Recently: Play_List = {
       label: computed(() => t('nsmusics.view_page.recentPlay')),
       value: 'album_list_recently',
@@ -476,7 +455,7 @@
       name: computed(() => t('nsmusics.view_page.recentPlay')),
       comment: computed(() => t('nsmusics.view_page.recentPlay')),
       duration: 0,
-      song_count: stmt_album_Annotation_Recently_Count.get().count + ' *',
+      song_count: store_view_album_page_info.album_recently_count > 0 ? store_view_album_page_info.album_recently_count : '*' + ' *',
       public: 0,
       created_at: '',
       updated_at: '',
@@ -495,19 +474,14 @@
     });
     store_view_album_page_logic.page_albumlists.push(temp_Play_List_Recently)
     //////
-    const stmt_album_Annotation_PlayList_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_server_user_model.playlist}
-    `);
     store_view_album_page_logic.page_albumlists_statistic.push({
       label: computed(() => t('entity.playlist_other')),
-      album_count: stmt_album_Annotation_PlayList_Count.get().count + ' *',
+      album_count: store_view_media_page_info.media_playlist_count + ' *',
       id: 'album_list_all_PlayList'
     });
   }
   ////// view of artist
-  const Init_page_artistlists_statistic_Data = (db: any) => {
-    const stmt_artist_count = db.prepare(`SELECT COUNT(*) AS count FROM ${store_server_user_model.artist}`);
-    //
+  const Init_page_artistlists_statistic_Data = () => {
     store_view_artist_page_info.page_artistlists_options = [];
     store_view_artist_page_info.page_artistlists_statistic = [];
     store_view_artist_page_info.page_artistlists = []
@@ -519,7 +493,7 @@
       name: computed(() => t('nsmusics.view_page.allArtist')),
       comment: computed(() => t('nsmusics.view_page.allArtist')),
       duration: 0,
-      song_count: stmt_artist_count.get().count + ' *',
+      song_count: store_view_artist_page_info.artist_item_count + ' *',
       public: 0,
       created_at: '',
       updated_at: '',
@@ -538,10 +512,6 @@
     });
     store_view_artist_page_info.page_artistlists.push(temp_Play_List_ALL)
     //////
-    const stmt_artist_Annotation_Starred_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_server_user_model.annotation}
-      WHERE starred = 1 AND item_type='artist'
-    `);
     const temp_Play_List_Love: Play_List = {
       label: computed(() => t('nsmusics.view_page.loveArtist')),
       value: 'artist_list_love',
@@ -549,7 +519,7 @@
       name: computed(() => t('nsmusics.view_page.loveArtist')),
       comment: computed(() => t('nsmusics.view_page.loveArtist')),
       duration: 0,
-      song_count: stmt_artist_Annotation_Starred_Count.get().count + ' *',
+      song_count: store_view_artist_page_info.artist_starred_count + ' *',
       public: 0,
       created_at: '',
       updated_at: '',
@@ -568,10 +538,6 @@
     });
     store_view_artist_page_info.page_artistlists.push(temp_Play_List_Love)
     //////
-    const stmt_artist_Annotation_Recently_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_server_user_model.annotation}
-      WHERE item_type='artist'
-    `);
     const temp_Play_List_Recently: Play_List = {
       label: computed(() => t('nsmusics.view_page.recentPlay')),
       value: 'artist_list_recently',
@@ -579,7 +545,7 @@
       name: computed(() => t('nsmusics.view_page.recentPlay')),
       comment: computed(() => t('nsmusics.view_page.recentPlay')),
       duration: 0,
-      song_count: stmt_artist_Annotation_Recently_Count.get().count + ' *',
+      song_count: store_view_artist_page_info.artist_recently_count > 0 ? store_view_artist_page_info.artist_recently_count : '*' + ' *',
       public: 0,
       created_at: '',
       updated_at: '',
@@ -598,33 +564,29 @@
     });
     store_view_artist_page_info.page_artistlists.push(temp_Play_List_Recently)
     //////
-    const stmt_artist_Annotation_PlayList_Count = db.prepare(`
-      SELECT COUNT(*) AS count FROM ${store_server_user_model.playlist}
-    `);
     store_view_artist_page_info.page_artistlists_statistic.push({
       label: computed(() => t('entity.playlist_other')),
-      artist_count: stmt_artist_Annotation_PlayList_Count.get().count + ' *',
+      artist_count: store_view_media_page_info.media_playlist_count + ' *',
       id: 'artist_list_all_PlayList'
     });
   }
+
   ///// view of playlist
   watch(() => store_playlist_list_logic.playlist_names_StartUpdate, (newValue) => {
     if(newValue) {
-      let db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
-      db.pragma('journal_mode = WAL');
-      db.exec('PRAGMA foreign_keys = OFF');
-      Init_page_songlists_statistic_Data(db);
-      db.close();
+      Init_page_songlists_statistic_Data();
       store_playlist_list_logic.playlist_names_StartUpdate = false
       console.log("store_playlist_list_logic.playlist_names_StartUpdate")
     }
   });
+
   ////
   const { shell } = require('electron');
   const openLink = (url: string) => {
     shell.openExternal(url);
   };
   const computed_i18n_Label_Update = computed(() => t('filter.recentlyUpdated'));
+
   ////// Load Configs
   onMounted(async () => {
     store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');

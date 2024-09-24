@@ -16,11 +16,36 @@ export class Navidrome_Api_Services_Web {
         };
         const queryString = new URLSearchParams(params).toString();
         const url = `${this.baseUrl}/${endpoint}?${queryString}`;
+
         try {
             const response = await axios.get(url, { headers });
-            return response.data;
+            if(endpoint === 'song') {
+                return {
+                    data: response.data,
+                    totalCount: response.headers['x-total-count']
+                };
+            }else{
+                return response.data;
+            }
         } catch (error: any) {
-            return error.message;
+            if (error.message.indexOf('401') > 0) {
+                await store_server_user_model.refresh_model_server_type_of_web();
+                try {
+                    const response = await axios.get(url, { headers });
+                    if(endpoint === 'song') {
+                        return {
+                            data: response.data,
+                            totalCount: response.headers['x-total-count']
+                        };
+                    }else{
+                        return response.data;
+                    }
+                } catch (error: any) {
+                    return error.message;
+                }
+            } else {
+                return error.message;
+            }
         }
     }
 }

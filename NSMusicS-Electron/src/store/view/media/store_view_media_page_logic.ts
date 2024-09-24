@@ -2,7 +2,7 @@ import {reactive, watch} from 'vue'
 import {
     Set_PlaylistInfo_To_LocalSqlite
 } from "@/features/sqlite3_local_configs/class_Set_PlaylistInfo_To_LocalSqlite";
-import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {
     Set_AnnotationInfo_To_LocalSqlite
 } from "@/features/sqlite3_local_configs/class_Set_AnnotationInfo_To_LocalSqlite";

@@ -15,9 +15,9 @@ import {
     store_local_data_set_artistInfo
 } from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
 import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
-import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
+import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {
     store_local_data_set_annotionInfo
 } from "@/store/local/local_data_synchronization/store_local_data_set_annotionInfo";

@@ -9,7 +9,7 @@ import {store_server_users} from "@/store/server/store_server_users";
 import {
     Get_PlaylistInfo_From_LocalSqlite
 } from "@/features/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
-import {store_playlist_list_info} from "@/store/playlist/store_playlist_list_info";
+import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
 import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media";
@@ -19,8 +19,11 @@ import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
 import {store_view_artist_page_logic} from "@/store/view/artist/store_view_artist_page_logic";
 import {store_router_data_logic} from "@/store/router/store_router_data_logic";
-import {store_playlist_list_logic} from "@/store/playlist/store_playlist_list_logic";
+import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {store_app_configs_logic_load} from "@/store/app/store_app_configs_logic_load";
+import {
+    User_Authorization_ApiWebService_of_ND
+} from "@/features/servers_configs/navidrome_api/services_web/user_authorization/index_service";
 
 export const store_server_user_model = reactive({
     model_select: 'local',
@@ -59,6 +62,11 @@ export const store_server_user_model = reactive({
         this.media_file = 'server_media_file'
         this.playlist = 'server_playlist'
         this.playlist_tracks = 'server_playlist_tracks'
+    },
+    async refresh_model_server_type_of_web(){
+        let user_Authorization_ApiWebService_of_ND = new User_Authorization_ApiWebService_of_ND()
+        await user_Authorization_ApiWebService_of_ND.get_token()
+        store_app_configs_logic_save.save_system_library_config()
     },
 
     async Get_UserData_Synchronize_ToLocal_of_ND() {
