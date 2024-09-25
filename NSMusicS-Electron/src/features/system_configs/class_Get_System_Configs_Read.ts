@@ -158,7 +158,7 @@ export class Class_Get_System_Configs_Read {
             this.server_Configs.value.push(row);
         });
         db.prepare(`SELECT * FROM system_servers_config`).all().forEach((row: Server_Configs_Props) => {
-            if(row.user_name === ''+this.app_Configs.value['server_select']) {
+            if(row.id === '' + this.app_Configs.value['server_select']) {
                 this.server_Configs_Current.value = row;
             }
         });

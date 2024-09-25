@@ -88,23 +88,29 @@
   const message = useMessage()
   /// server select
   async function update_server_config_of_current_user_of_sqlite(value: any){
-    if(store_server_user_model.model_server_type_of_local) {
-      try {
-        const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(item => item.id === value);
-        update_server_setUser(
-            store_server_users.server_config_of_all_user_of_sqlite[index].id,
-            store_server_users.server_config_of_all_user_of_sqlite[index].server_name,
-            store_server_users.server_config_of_all_user_of_sqlite[index].url,
-            store_server_users.server_config_of_all_user_of_sqlite[index].user_name,
-            store_server_users.server_config_of_all_user_of_sqlite[index].password
+    try {
+      const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(item => item.id === value);
+      await update_server_setUser(
+          store_server_users.server_config_of_all_user_of_sqlite[index].id,
+          store_server_users.server_config_of_all_user_of_sqlite[index].server_name,
+          store_server_users.server_config_of_all_user_of_sqlite[index].url,
+          store_server_users.server_config_of_all_user_of_sqlite[index].user_name,
+          store_server_users.server_config_of_all_user_of_sqlite[index].password
+      )
+      get_server_config_of_current_user_of_sqlite(store_server_users.server_config_of_all_user_of_sqlite[index])
+      if(store_server_user_model.model_server_type_of_web){
+        console.log('store_server_user_model.model_server_type_of_web')
+        let user_Authorization_ApiWebService_of_ND = new User_Authorization_ApiWebService_of_ND(
+            store_server_users.server_config_of_current_user_of_sqlite?.url
         )
-        get_server_config_of_current_user_of_sqlite(store_server_users.server_config_of_all_user_of_sqlite[index])
-      }catch { console.error('error: update_server_setUser + get_server_config_of_current_user_of_sqlite') }
-    }else if(store_server_user_model.model_server_type_of_web){
-      console.log('store_server_user_model.model_server_type_of_web')
-      let user_Authorization_ApiWebService_of_ND = new User_Authorization_ApiWebService_of_ND()
-      await user_Authorization_ApiWebService_of_ND.get_token()
-      store_app_configs_logic_save.save_system_library_config()
+        await user_Authorization_ApiWebService_of_ND.get_token()
+        store_app_configs_logic_save.save_system_config_of_App_Configs()
+        store_app_configs_logic_save.save_system_config_of_Servers_Config()
+        /// reset app data
+        // ipcRenderer.send('window-reset-data');
+      }
+    }catch {
+      console.error('error: update_server_setUser + get_server_config_of_current_user_of_sqlite')
     }
   }
   /// server add

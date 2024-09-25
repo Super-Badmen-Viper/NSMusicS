@@ -67,7 +67,7 @@ export const store_server_user_model = reactive({
     async refresh_model_server_type_of_web(){
         let user_Authorization_ApiWebService_of_ND = new User_Authorization_ApiWebService_of_ND()
         await user_Authorization_ApiWebService_of_ND.get_token()
-        store_app_configs_logic_save.save_system_library_config()
+        store_app_configs_logic_save.save_system_config_of_App_Configs()
     },
 
     async Get_UserData_Synchronize_ToLocal_of_ND() {
@@ -96,14 +96,10 @@ watch(() => store_server_user_model.model_select, async (newValue) => {
         if (store_server_user_model.model_select === 'server') {
             store_server_users.percentage_of_nd = 100
             store_server_users.percentage_of_local = 0
-            //
-            if(store_server_user_model.model_server_type_of_local){
-                store_router_data_info.store_router_history_data_of_local = true
-                store_router_data_info.store_router_history_data_of_web = false
-            }else if(store_server_user_model.model_server_type_of_web){
-                store_router_data_info.store_router_history_data_of_local = false
-                store_router_data_info.store_router_history_data_of_web = true
-            }
+            // auto model_server_type_of_web
+            store_server_user_model.model_server_type_of_web = true
+            store_router_data_info.store_router_history_data_of_local = false
+            store_router_data_info.store_router_history_data_of_web = true
         } else {
             store_server_users.percentage_of_nd = 0
             store_server_users.percentage_of_local = 100
@@ -126,9 +122,9 @@ watch(() => store_server_user_model.model_server_type_of_web, (newValue) => {
         store_router_data_info.store_router_history_data_of_local = true
         store_router_data_info.store_router_history_data_of_web = false
     }
-    store_app_configs_logic_save.save_system_library_config()
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
 watch(() => store_server_user_model.model_server_type_of_local, (newValue) => {
     store_server_user_model.model_server_type_of_web = !newValue
-    store_app_configs_logic_save.save_system_library_config()
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
 });

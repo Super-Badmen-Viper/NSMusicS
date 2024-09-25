@@ -96,7 +96,7 @@
     store_server_users.server_config_of_current_user_of_sqlite = value
     store_server_users.server_config_of_current_user_of_select = { label: value.server_name, value: value.id };
     store_server_users.server_config_of_current_user_of_select_servername = value.server_name
-    store_server_user_model.server_select = value.user_name
+    store_server_user_model.server_select = value.id
     store_server_user_model.username = value.user_name
     store_server_user_model.password = value.password
     store_app_configs_logic_save.save_system_config_of_Servers_Config()
@@ -106,16 +106,18 @@
     );
     store_server_user_model.salt = salt
     store_server_user_model.token = token
-    let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_ALL_Data_To_LocalSqlite()
-    await set_Navidrome_Data_To_LocalSqlite.Set_Read_Navidrome_Api_BasicInfo_Add_LocalSqlite(
-        store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-        store_server_user_model.token,
-        store_server_user_model.salt,
-    )
 
-    /// reset app data
-    ipcRenderer.send('window-reset-data');
+    if(store_server_user_model.model_server_type_of_local) {
+      let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_ALL_Data_To_LocalSqlite()
+      await set_Navidrome_Data_To_LocalSqlite.Set_Read_Navidrome_Api_BasicInfo_Add_LocalSqlite(
+          store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+          store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+          store_server_user_model.token,
+          store_server_user_model.salt,
+      )
+      /// reset app data
+      ipcRenderer.send('window-reset-data');
+    }
   }
   provide('get_server_config_of_current_user_of_sqlite', get_server_config_of_current_user_of_sqlite);
 
@@ -605,7 +607,7 @@
     await store_app_configs_logic_load.load_app_config()
 
     try {
-      store_app_configs_info.version = '0.7.1';
+      store_app_configs_info.version = '1.0.0';
       console.log('Current Version:', store_app_configs_info.version);
       const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
       await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);

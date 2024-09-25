@@ -65,7 +65,6 @@ export const store_app_configs_logic_save = reactive({
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
 
-
         const library_Configs = ref(
             new Library_Configs({
                 library: String(store_server_user_model.library_path)

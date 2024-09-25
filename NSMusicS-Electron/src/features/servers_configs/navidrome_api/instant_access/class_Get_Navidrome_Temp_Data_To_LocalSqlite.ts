@@ -549,13 +549,17 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         return `${formattedMinutes}:${formattedSeconds}`;
     }
     private convertToLRC(lyrics: string): string {
-        const lrcLines: string[] = [];
+        let lrcLines: string[] = [];
 
         let lyricsArray;
         try {
             lyricsArray = JSON.parse(lyrics);
-        } catch (e) {
-            console.error("Failed to parse lyrics JSON:", e);
+        } catch {
+            try {
+                return lyrics;
+            } catch (e) {
+                console.error("Failed to parse lyrics JSON:", e);
+            }
             return '';
         }
 

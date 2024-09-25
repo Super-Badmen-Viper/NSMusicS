@@ -260,13 +260,13 @@ export const store_view_media_page_fetchData = reactive({
     },
 
     _start: 0,
-    _end: 15,
+    _end: 100,
     _album_id: '',
     _artist_id: '',
     async fetchData_Media_of_server_web_start(){
         store_view_media_page_info.media_Files_temporary = [];
         this._start = 0;
-        this._end = 15;
+        this._end = 100;
         await this.fetchData_Media_of_server_web()
 
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
@@ -276,8 +276,8 @@ export const store_view_media_page_fetchData = reactive({
         }
     },
     async fetchData_Media_of_server_web_end(){
-        this._start += 15;
-        this._end += 15;
+        this._start += 100;
+        this._end += 100;
         await this.fetchData_Media_of_server_web()
     },
     async fetchData_Media_of_server_web(){

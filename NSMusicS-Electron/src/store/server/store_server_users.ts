@@ -45,7 +45,7 @@ export const store_server_users = reactive({
     },
 
     get_login_parms(){
-        const username = store_server_user_model.server_select
+        const username = store_server_user_model.username
         const {salt, token} = store_server_users.get_generateEncryptedPassword(
             store_server_user_model.password
         );

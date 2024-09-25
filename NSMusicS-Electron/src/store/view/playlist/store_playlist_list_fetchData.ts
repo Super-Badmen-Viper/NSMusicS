@@ -33,12 +33,12 @@ export const store_playlist_list_fetchData = reactive({
 
     _totalCount: 0,
     _start: 0,
-    _end: 15,
+    _end: 100,
     _album_id: '',
     _artist_id: '',
     async fetchData_PlayList_of_server_web_end(){
-        this._start += 15;
-        this._end += 15;
+        this._start += 100;
+        this._end += 100;
         await this.fetchData_PlayList_of_server_web()
     },
     async fetchData_PlayList_of_server_web(){

@@ -232,16 +232,16 @@ export const store_view_artist_page_fetchData = reactive({
     },
 
     _start: 0,
-    _end: 15,
+    _end: 100,
     async fetchData_Artist_of_server_web_start(){
         store_view_artist_page_info.artist_Files_temporary = [];
         this._start = 0;
-        this._end = 15;
+        this._end = 100;
         await this.fetchData_Artist_of_server_web()
     },
     async fetchData_Artist_of_server_web_end(){
-        this._start += 15;
-        this._end += 15;
+        this._start += 100;
+        this._end += 100;
         await this.fetchData_Artist_of_server_web()
     },
     async fetchData_Artist_of_server_web(){
