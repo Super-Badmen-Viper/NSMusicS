@@ -43,10 +43,17 @@
             "download": "下载",
             "tag_error": "文件夹内音乐文件的‘tag’缺失, 请先补全音乐文件tag属性, 然后再次重新导入",
             "drag_sort": "拖动排序",
-            "modelServer_type_one": "即时访问模式",
-            "modelServer_type_one_explain": "登录服务器与服务器保持长连接，即时访问服务器获取最新数据，不保存至本地数据库",
-            "modelServer_type_two": "数据下载模式",
-            "modelServer_type_two_explain": "将服务器的数据访问链接全部保存至本地，通过本地数据库存储的数据访问链接直接获取服务器资源"
+            "modelServer_type_1": "即时访问模式",
+            "modelServer_type_1_explain": "登录服务器与服务器保持长连接，即时访问服务器获取最新数据，不保存至本地数据库",
+            "modelServer_type_2": "数据下载模式",
+            "modelServer_type_2_explain": "将服务器的数据访问链接全部保存至本地，通过本地数据库存储的数据访问链接直接获取服务器资源",
+            "routerModel": "路由模式",
+            "routerModel_type_1": "性能模式",
+            "routerModel_type_1_explain": "切换页面时，清除所有页面数据，触发自动内存清理(高频率)",
+            "routerModel_type_2": "均衡模式",
+            "routerModel_type_2_explain": "切换页面时，保留当前页面数据，清除其它页面的数据，触发自动内存清理(低频率)",
+            "routerModel_type_3": "质量模式",
+            "routerModel_type_3_explain": "切换页面时，保留当前页面数据，清除其它页面的数据，完全关闭自动内存清理"
         },
         "view_player": {
             "view_seting": {

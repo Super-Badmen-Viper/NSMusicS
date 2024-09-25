@@ -43,10 +43,17 @@
             "download": "Stáhnout",
             "tag_error": "Chybí 'značka' pro hudobní soubory ve složce. Prosím doplňte atributy značky hudobních souborů a poté je znovu naimportujte.",
             "drag_sort": "Přetáhněte pro řazení",
-            "modelServer_type_one": "Režim okamžitého přístupu",
-            "modelServer_type_one_explain": "Přihlaste se k serveru pro udržení trvalého spojení, okamžitě přistupujte k serveru pro získání nejnovějších dat, neukládat do místní databáze",
-            "modelServer_type_two": "Režim stahování dat",
-            "modelServer_type_two_explain": "Uložte všechny místní odkazy na přístup k datům na serveru, přímo přistupujte k prostředkům serveru prostřednictvím odkazů na přístup k datům uložených v místní databázi"
+            "modelServer_type_1": "Režim okamžitého přístupu",
+            "modelServer_type_1_explain": "Přihlaste se k serveru pro udržení trvalého spojení, okamžitě přistupujte k serveru pro získání nejnovějších dat, neukládat do místní databáze",
+            "modelServer_type_2": "Režim stahování dat",
+            "modelServer_type_2_explain": "Uložte všechny místní odkazy na přístup k datům na serveru, přímo přistupujte k prostředkům serveru prostřednictvím odkazů na přístup k datům uložených v místní databázi",
+            "routerModel": "Režim Směrování",
+            "routerModel_type_1": "Výkonný Režim",
+            "routerModel_type_1_explain": "Při přepnutí stránek se vymaže všechna data stránky a spustí se automatické vyčištění paměti (vysoké frekvence)",
+            "routerModel_type_2": "Vyvážený Režim",
+            "routerModel_type_2_explain": "Při přepnutí stránek se zachovají data aktuální stránky a vymaže se data ostatních stránek, spustí se automatické vyčištění paměti (nízká frekvence)",
+            "routerModel_type_3": "Kvalitní Režim",
+            "routerModel_type_3_explain": "Při přepnutí stránek se zachovají data aktuální stránky a vymaže se data ostatních stránek, automatické vyčištění paměti se úplně vypne"
         },
         "view_player": {
             "view_seting": {

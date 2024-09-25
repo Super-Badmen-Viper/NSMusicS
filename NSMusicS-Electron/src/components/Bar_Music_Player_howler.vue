@@ -65,8 +65,20 @@
     else if(os.type() || process.platform === 'linux')
       return new URL(firstImage, import.meta.url).href;
   }
-  const handleImageError = (event:any) => {
-    event.target.src = '../../resources/img/error_album.jpg'; // 设置备用图片路径
+  const path = require('path')
+  const handleImageError = (event: any) => {
+    const originalSrc = event.target.src;
+    const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
+    const img = new Image();
+    img.onload = null;
+    img.onerror = null;
+    img.onload = () => {
+      event.target.src = pngSrc;
+    };
+    img.onerror = () => {
+      event.target.src = path.resolve('resources/img/error_album.jpg');
+    };
+    img.src = pngSrc;
   };
   
 

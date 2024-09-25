@@ -43,10 +43,17 @@
             "download": "Herunterladen",
             "tag_error": "Die 'Tag' für Musikdateien im Ordner fehlt. Bitte vervollständigen Sie die Tag-Attribute der Musikdateien und importieren Sie sie dann erneut.",
             "drag_sort": "Ziehen zum Sortieren",
-            "modelServer_type_one": "Sofortiger Zugriffsmodus",
-            "modelServer_type_one_explain": "Melden Sie sich beim Server an, um eine persistente Verbindung aufrechtzuerhalten, greifen Sie auf den Server zu, um Echtzeit-Zugriff auf die neuesten Daten zu erhalten, ohne sie in die lokale Datenbank zu speichern",
-            "modelServer_type_two": "Dateidownload-Modus",
-            "modelServer_type_two_explain": "Speichern Sie alle Datenzugriffslinks des Servers lokal, greifen Sie direkt auf Serverressourcen zu, indem Sie die in der lokalen Datenbank gespeicherten Datenzugriffslinks verwenden"
+            "modelServer_type_1": "Sofortiger Zugriffsmodus",
+            "modelServer_type_1_explain": "Melden Sie sich beim Server an, um eine persistente Verbindung aufrechtzuerhalten, greifen Sie auf den Server zu, um Echtzeit-Zugriff auf die neuesten Daten zu erhalten, ohne sie in die lokale Datenbank zu speichern",
+            "modelServer_type_2": "Dateidownload-Modus",
+            "modelServer_type_2_explain": "Speichern Sie alle Datenzugriffslinks des Servers lokal, greifen Sie direkt auf Serverressourcen zu, indem Sie die in der lokalen Datenbank gespeicherten Datenzugriffslinks verwenden",
+            "routerModel": "Routing-Modus",
+            "routerModel_type_1": "Leistungsmodus",
+            "routerModel_type_1_explain": "Beim Wechsel der Seiten werden alle Seitendaten gelöscht und eine automatische Speicherbereinigung ausgelöst (hohe Frequenz)",
+            "routerModel_type_2": "Ausgeglichener Modus",
+            "routerModel_type_2_explain": "Beim Wechsel der Seiten werden die aktuellen Seitendaten beibehalten und die Daten anderer Seiten gelöscht, eine automatische Speicherbereinigung ausgelöst (niedrige Frequenz)",
+            "routerModel_type_3": "Qualitätsmodus",
+            "routerModel_type_3_explain": "Beim Wechsel der Seiten werden die aktuellen Seitendaten beibehalten und die Daten anderer Seiten gelöscht, die automatische Speicherbereinigung wird vollständig deaktiviert"
         },
         "view_player": {
             "view_seting": {

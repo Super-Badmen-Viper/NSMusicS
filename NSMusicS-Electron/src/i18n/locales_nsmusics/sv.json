@@ -43,10 +43,17 @@
             "download": "Ladda ner",
             "tag_error": "‘tagg’ för musikfiler i mappen saknas. Var god fyll i taggattributen för musikfilerna och importera sedan igen.",
             "drag_sort": "Dra för att sortera",
-            "modelServer_type_one": "Direktåtkomstläge",
-            "modelServer_type_one_explain": "Logga in på servern för att upprätthålla en beständig anslutning, få omedelbar tillgång till servern för att hämta de senaste uppgifterna, utan att spara till den lokala databasen",
-            "modelServer_type_two": "Datanedladdningsläge",
-            "modelServer_type_two_explain": "Spara alla serverns dataåtkomstlänkar lokalt, få direkt tillgång till serverresurser genom dataåtkomstlänkar som lagras i den lokala databasen"
+            "modelServer_type_1": "Direktåtkomstläge",
+            "modelServer_type_1_explain": "Logga in på servern för att upprätthålla en beständig anslutning, få omedelbar tillgång till servern för att hämta de senaste uppgifterna, utan att spara till den lokala databasen",
+            "modelServer_type_2": "Datanedladdningsläge",
+            "modelServer_type_2_explain": "Spara alla serverns dataåtkomstlänkar lokalt, få direkt tillgång till serverresurser genom dataåtkomstlänkar som lagras i den lokala databasen",
+            "routerModel": "Routningsläge",
+            "routerModel_type_1": "Prestandaläge",
+            "routerModel_type_1_explain": "När man byt page, rensas alla siddata och utlöser automatisk minnesrensning (hög frekvens)",
+            "routerModel_type_2": "Balanserat Läge",
+            "routerModel_type_2_explain": "När man byt page, behålls aktuella siddata och rensas andra sidors data, utlöser automatisk minnesrensning (låg frekvens)",
+            "routerModel_type_3": "Kvalitetsläge",
+            "routerModel_type_3_explain": "När man byt page, behålls aktuella siddata och rensas andra sidors data, stängs automatisk minnesrensning helt av"
         },
         "view_player": {
             "view_seting": {

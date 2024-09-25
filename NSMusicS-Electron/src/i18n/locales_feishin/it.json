@@ -1,15 +1,15 @@
 {
     "action": {
-        "editPlaylist": "modifica $t(entity.playlist_one)",
+        "editPlaylist": "modifica",
         "goToPage": "vai alla pagina",
         "clearQueue": "cancella la coda",
         "addToFavorites": "aggiungi a $t(entity.favorite_other)",
-        "addToPlaylist": "aggiungi a $t(entity.playlist_one)",
-        "createPlaylist": "crea $t(entity.playlist_one)",
-        "removeFromPlaylist": "rimuovi da $t(entity.playlist_one)",
+        "addToPlaylist": "aggiungi a",
+        "createPlaylist": "crea",
+        "removeFromPlaylist": "rimuovi da",
         "viewPlaylists": "visualizza $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
-        "deletePlaylist": "elimina $t(entity.playlist_one)",
+        "deletePlaylist": "elimina",
         "removeFromQueue": "rimuovi dalla coda",
         "deselectAll": "deseleziona tutto",
         "setRating": "vota",
@@ -465,16 +465,16 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "elimina $t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one) eliminata correttamente",
-            "input_confirm": "digita il nome della $t(entity.playlist_one) per confermare"
+            "title": "elimina",
+            "success": " eliminata correttamente",
+            "input_confirm": "digita il nome della per confermare"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "crea $t(entity.playlist_one)",
+            "title": "crea",
             "input_public": "publico",
             "input_name": "$t(common.name)",
-            "success": "$t(entity.playlist_one) creata con successo",
+            "success": " creata con successo",
             "input_owner": "$t(common.owner)"
         },
         "addServer": {
@@ -492,7 +492,7 @@
         },
         "addToPlaylist": {
             "success": "aggiunto {{message}} $t(entity.track_other) a {{numOfPlaylists}} $t(entity.playlist_other)",
-            "title": "aggiungi a $t(entity.playlist_one)",
+            "title": "aggiungi a",
             "input_skipDuplicates": "salta duplicati",
             "input_playlists": "$t(entity.playlist_other)"
         },
@@ -510,7 +510,7 @@
             "title": "cerca testi"
         },
         "editPlaylist": {
-            "title": "modifica $t(entity.playlist_one)"
+            "title": "modifica"
         }
     },
     "table": {
@@ -618,7 +618,7 @@
         "folder_one": "cartella",
         "folder_many": "cartelle",
         "folder_other": "cartelle",
-        "smartPlaylist": "$t(entity.playlist_one) smart",
+        "smartPlaylist": " smart",
         "album_one": "album",
         "album_many": "album",
         "album_other": "album",

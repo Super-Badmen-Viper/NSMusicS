@@ -1,16 +1,16 @@
 {
     "action": {
-        "editPlaylist": "bearbeiten $t(entity.playlist_one)",
+        "editPlaylist": "bearbeiten",
         "clearQueue": "Warteschlange löschen",
         "addToFavorites": "hinzufügen zu $t(entity.favorite_other)",
-        "addToPlaylist": "hinzufügen zu $t(entity.playlist_one)",
-        "createPlaylist": "erstelle $t(entity.playlist_one)",
-        "deletePlaylist": "löschen $t(entity.playlist_one)",
+        "addToPlaylist": "hinzufügen zu",
+        "createPlaylist": "erstelle",
+        "deletePlaylist": "löschen",
         "deselectAll": "Alle abwählen",
         "goToPage": "Gehe zur Seite",
         "moveToTop": "Nach oben",
         "moveToBottom": "Nach unten",
-        "removeFromPlaylist": "Entfernen von $t(entity.playlist_one)",
+        "removeFromPlaylist": "Entfernen von",
         "viewPlaylists": "Ansicht $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
         "removeFromQueue": "Von Warteschlange entfernen",
@@ -179,15 +179,15 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "Lösche $t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one) erfolgreich gelöscht",
-            "input_confirm": "Geben Sie zur Bestätigung den Namen von $t(entity.playlist_one) ein"
+            "title": "Lösche",
+            "success": " erfolgreich gelöscht",
+            "input_confirm": "Geben Sie zur Bestätigung den Namen von ein"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "Erstellen $t(entity.playlist_one)",
+            "title": "Erstellen",
             "input_public": "öffentlich",
-            "success": "$t(entity.playlist_one) erfolgreich erstellt",
+            "success": " erfolgreich erstellt",
             "input_name": "$t(common.name)",
             "input_owner": "$t(common.owner)"
         },
@@ -206,7 +206,7 @@
         },
         "addToPlaylist": {
             "success": "{{message}} $t(entity.track_other) zu {{numOfPlaylists}} $t(entity.playlist_other) hinzugefügt",
-            "title": "Zu $t(entity.playlist_one) hinzufügen",
+            "title": "Zu hinzufügen",
             "input_skipDuplicates": "Duplikate überspringen",
             "input_playlists": "$t(entity.playlist_other)"
         },
@@ -219,8 +219,8 @@
             "input_optionMatchAny": "Treffer Einige"
         },
         "editPlaylist": {
-            "title": "Bearbeite $t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one) erfolgreich aktualisiert"
+            "title": "Bearbeite",
+            "success": " erfolgreich aktualisiert"
         },
         "lyricSearch": {
             "title": "Songtext Suche",
@@ -265,7 +265,7 @@
         "genreWithCount_other": "{{count}} Genres",
         "trackWithCount_one": "{{count}} Track",
         "trackWithCount_other": "{{count}} Tracks",
-        "smartPlaylist": "Smart $t(entity.playlist_one)",
+        "smartPlaylist": "Smart",
         "play_one": "{{count}} Wiedergabe",
         "play_other": "{{count}} Wiedergaben"
     },

@@ -251,17 +251,17 @@
         "trayEnabled_description": "zobrazit/skrýt ikonu/nabídku v oznamovací oblasti. pokud je zakázáno, vypne také minimalizaci/ukončení do oznamovací oblasti"
     },
     "action": {
-        "editPlaylist": "upravit $t(entity.playlist_one)",
+        "editPlaylist": "upravit",
         "goToPage": "přejít na stránku",
         "moveToTop": "přesunout nahoru",
         "clearQueue": "vymazat frontu",
         "addToFavorites": "přidat do $t(entity.favorite_other)",
-        "addToPlaylist": "přidat do $t(entity.playlist_one)",
-        "createPlaylist": "vytvořit $t(entity.playlist_one)",
-        "removeFromPlaylist": "odebrat z $t(entity.playlist_one)",
+        "addToPlaylist": "přidat do",
+        "createPlaylist": "vytvořit",
+        "removeFromPlaylist": "odebrat z",
         "viewPlaylists": "zobrazit $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
-        "deletePlaylist": "odstranit $t(entity.playlist_one)",
+        "deletePlaylist": "odstranit",
         "removeFromQueue": "odebrat z fronty",
         "deselectAll": "zrušit výběr všeho",
         "moveToBottom": "přesunout dolů",
@@ -648,16 +648,16 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "odstranit $t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one) úspěšně odstraněn",
-            "input_confirm": "pro potvrzení zadejte název $t(entity.playlist_one)u"
+            "title": "odstranit",
+            "success": " úspěšně odstraněn",
+            "input_confirm": "pro potvrzení zadejte názevu"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "vytvořit $t(entity.playlist_one)",
+            "title": "vytvořit",
             "input_public": "veřejné",
             "input_name": "$t(common.name)",
-            "success": "$t(entity.playlist_one) úspěšně vytvořen",
+            "success": " úspěšně vytvořen",
             "input_owner": "$t(common.owner)"
         },
         "addServer": {
@@ -675,7 +675,7 @@
         },
         "addToPlaylist": {
             "success": "přidáno $t(entity.trackWithCount, {\"count\": {{message}} }) do $t(entity.playlistWithCount, {\"count\": {{numOfPlaylists}} })",
-            "title": "přidat do $t(entity.playlist_one)",
+            "title": "přidat do",
             "input_skipDuplicates": "přeskočit duplicity",
             "input_playlists": "$t(entity.playlist_other)"
         },
@@ -693,8 +693,8 @@
             "title": "Hledat texty"
         },
         "editPlaylist": {
-            "title": "upravit $t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one) úspěšně aktualizován",
+            "title": "upravit",
+            "success": " úspěšně aktualizován",
             "publicJellyfinNote": "Jellyfin z nějakého důvodu neukazuje, zda je seznam skladeb veřejný, nebo ne. Pokud si přejete, aby zůstal veřejný, zvolte prosím následující vstup"
         },
         "shareItem": {
@@ -743,7 +743,7 @@
         "folder_one": "složka",
         "folder_few": "složky",
         "folder_other": "složky",
-        "smartPlaylist": "chytrý $t(entity.playlist_one)",
+        "smartPlaylist": "chytrý",
         "album_one": "album",
         "album_few": "alba",
         "album_other": "alba",

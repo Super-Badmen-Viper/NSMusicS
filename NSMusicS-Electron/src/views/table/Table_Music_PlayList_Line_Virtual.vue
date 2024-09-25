@@ -59,8 +59,20 @@ import {
   const handleItemClick_Rating = (id: any,rating: number) => {
     console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
   }
-  const handleImageError = (event:any) => {
-    event.target.src = '../../../resources/img/error_album.jpg'; // 设置备用图片路径
+  const path = require('path')
+  const handleImageError = (event: any) => {
+    const originalSrc = event.target.src;
+    const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
+    const img = new Image();
+    img.onload = null;
+    img.onerror = null;
+    img.onload = () => {
+      event.target.src = pngSrc;
+    };
+    img.onerror = () => {
+      event.target.src = path.resolve('resources/img/error_album.jpg');
+    };
+    img.src = pngSrc;
   };
 
   //////
@@ -82,10 +94,10 @@ import {
   ////// i18n auto lang
   import { useI18n } from 'vue-i18n'
   import {VueDraggable} from "vue-draggable-plus";
-import {BrowserUpdatedFilled} from "@vicons/material";
-import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
-import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
+  import {BrowserUpdatedFilled} from "@vicons/material";
+  import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+  import {store_server_user_model} from "@/store/server/store_server_user_model";
+  import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
   const { t } = useI18n({
     inheritLocale: true
   })

@@ -97,12 +97,12 @@
         "refresh": "$t(common.refresh)",
         "removeFromQueue": "remover da fila",
         "moveToBottom": "mover para baixo",
-        "editPlaylist": "editar $t(entity.playlist_one)",
+        "editPlaylist": "editar",
         "clearQueue": "limpar fila",
-        "addToPlaylist": "adicionar à $t(entity.playlist_one)",
-        "createPlaylist": "criar $t(entity.playlist_one)",
-        "removeFromPlaylist": "remover da $t(entity.playlist_one)",
-        "deletePlaylist": "deletar $t(entity.playlist_one)",
+        "addToPlaylist": "adicionar à",
+        "createPlaylist": "criar",
+        "removeFromPlaylist": "remover da",
+        "deletePlaylist": "deletar",
         "deselectAll": "desmarcar todos",
         "removeFromFavorites": "remover de $t(entity.favorite_other)",
         "openIn": {
@@ -112,8 +112,8 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "deletar $t(entity.playlist_one)",
-            "input_confirm": "escreva o nome da $t(entity.playlist_one) para confirmar"
+            "title": "deletar",
+            "input_confirm": "escreva o nome da para confirmar"
         },
         "addServer": {
             "title": "adicionar servidor",
@@ -128,19 +128,19 @@
             "input_username": "nome de usuário"
         },
         "createPlaylist": {
-            "title": "criar $t(entity.playlist_one)",
+            "title": "criar",
             "input_public": "público",
             "input_description": "$t(common.description)",
-            "success": "$t(entity.playlist_one) criada com sucesso"
+            "success": " criada com sucesso"
         },
         "updateServer": {
             "title": "atualizar servidor"
         },
         "editPlaylist": {
-            "title": "editar $t(entity.playlist_one)"
+            "title": "editar"
         },
         "addToPlaylist": {
-            "title": "adicionar à $t(entity.playlist_one)",
+            "title": "adicionar à",
             "input_playlists": "$t(entity.playlist_other)",
             "input_skipDuplicates": "pular duplicadas",
             "success": "adicionado $t(entity.trackWithCount, {\"count\": {{message}} }) para $t(entity.playlistWithCount, {\"count\": {{numOfPlaylists}} })"

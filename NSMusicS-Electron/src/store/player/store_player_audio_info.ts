@@ -204,7 +204,6 @@ watch(() => store_player_audio_info.this_audio_lyrics_string, (newValue) => {
                     time = time.replace('<', '');
                     return [time.split(',').map(Number), font];
                 });
-
                 for (let i = 0; i < timeFontPairs.length; i++) {
                     let [startMs, durationMs, unknown] = timeFontPairs[i][0];
                     let nextStartMs = i < timeFontPairs.length - 1 ? timeFontPairs[i + 1][0][0] : Infinity;
@@ -219,14 +218,17 @@ watch(() => store_player_audio_info.this_audio_lyrics_string, (newValue) => {
                 }
 
                 store_player_audio_info.this_audio_lyrics_info_byte_model = true;
+                /// temp
+                store_player_audio_info.this_audio_lyrics_info_line_font[index] =
+                    store_player_audio_info.this_audio_lyrics_info_byte_font[index].join('');
+                ///
             }
         });
     }
-    //
+    ///
     for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_num; i++) {
         store_player_audio_info.this_audio_lyrics_info_line_font.push('')
     }
-
     ////// split time of line
     store_player_audio_info.this_audio_lyrics_info_line_time = []
     for (let i = 0; i < line_times.length; i++) {

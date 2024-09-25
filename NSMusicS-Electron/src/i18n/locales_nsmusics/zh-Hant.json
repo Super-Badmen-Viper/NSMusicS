@@ -43,10 +43,17 @@
             "download": "下載",
             "tag_error": "資料夾內音樂檔案的‘tag’缺失，請先補全音樂檔案tag屬性，然後再次重新導入",
             "drag_sort": "拖曳排序",
-            "modelServer_type_one": "即時訪問模式",
-            "modelServer_type_one_explain": "登入伺服器與伺服器保持長連線，即時訪問伺服器獲取最新資料，不儲存至本地資料庫",
-            "modelServer_type_two": "資料下載模式",
-            "modelServer_type_two_explain": "將伺服器的資料訪問連結全部儲存至本地，透過本地資料庫儲存的資料訪問連結直接獲取伺服器資源"
+            "modelServer_type_1": "即時訪問模式",
+            "modelServer_type_1_explain": "登入伺服器與伺服器保持長連線，即時訪問伺服器獲取最新資料，不儲存至本地資料庫",
+            "modelServer_type_2": "資料下載模式",
+            "modelServer_type_2_explain": "將伺服器的資料訪問連結全部儲存至本地，透過本地資料庫儲存的資料訪問連結直接獲取伺服器資源",
+            "routerModel": "路由模式",
+            "routerModel_type_1": "效能模式",
+            "routerModel_type_1_explain": "切換頁面時，清除所有頁面資料，觸發自動記憶體清理(高頻率)",
+            "routerModel_type_2": "平衡模式",
+            "routerModel_type_2_explain": "切換頁面時，保留當前頁面資料，清除其它頁面資料，觸發自動記憶體清理(低頻率)",
+            "routerModel_type_3": "品質模式",
+            "routerModel_type_3_explain": "切換頁面時，保留當前頁面資料，清除其它頁面資料，完全關閉自動記憶體清理"
         },
         "view_player": {
             "view_seting": {

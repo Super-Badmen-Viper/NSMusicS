@@ -44,8 +44,20 @@
     else if(os.type() || process.platform === 'linux')
       return new URL(firstImage, import.meta.url).href;
   }
-  const handleImageError = (event:any) => {
-    event.target.src = '../../resources/img/error_album.jpg'; // 设置备用图片路径
+  const path = require('path')
+  const handleImageError = (event: any) => {
+    const originalSrc = event.target.src;
+    const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
+    const img = new Image();
+    img.onload = null;
+    img.onerror = null;
+    img.onload = () => {
+      event.target.src = pngSrc;
+    };
+    img.onerror = () => {
+      event.target.src = path.resolve('resources/img/error_album.jpg');
+    };
+    img.src = pngSrc;
   };
   
 
@@ -150,7 +162,9 @@
       }
     }, 400);
   }
-  ipcRenderer.on('mpv-stopped', async (event, args) => {
+  /// Prevent 'mpv stopped' from being triggered multiple times and implement anti shake throttling measures
+  import { debounce } from 'lodash';
+  const handleMpvStopped = debounce(async (event, args) => {
     is_play_ended.value = true;
     let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
         (item: any) =>
@@ -165,12 +179,12 @@
     }
     if (last_play && store_player_audio_logic.play_order === 'playback-1') {
       await store_player_audio_logic.player.pause();
-      store_player_audio_info.this_audio_is_playing = false
-    }else {
+      store_player_audio_info.this_audio_is_playing = false;
+    } else {
       store_player_audio_logic.player.isPlaying = false;
-      store_player_audio_info.this_audio_is_playing = false
-      //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
-      if (store_player_audio_logic.player_no_progress_jump == true) {
+      store_player_audio_info.this_audio_is_playing = false;
+      // 无进度跳动: 若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
+      if (store_player_audio_logic.player_no_progress_jump) {
         store_player_audio_logic.current_play_time = formatTime(store_player_audio_logic.player.getDuration());
         store_player_audio_logic.player_silder_currentTime_added_value = 0;
         this_audio_buffer_file.value = null;
@@ -179,11 +193,13 @@
         store_player_audio_logic.player_no_progress_jump = false;
 
         store_player_audio_logic.player.isPlaying = false;
-        store_player_audio_info.this_audio_is_playing = false
+        store_player_audio_info.this_audio_is_playing = false;
       }
       Play_Media_Switching()
     }
-  });
+  }, 300);// 300ms 的防抖时间，限制node-mpv频繁触发end事件
+  ipcRenderer.on('mpv-stopped', handleMpvStopped);
+  ///
   onMounted(async () => {
     timer = setInterval(synchronize_playback_time, 200);
     await store_player_audio_logic.player.IsResumeing()
@@ -256,7 +272,7 @@
     if(store_server_user_model.model_server_type_of_local){
       last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length
     }else if(store_server_user_model.model_server_type_of_web){
-      last_index = store_playlist_list_fetchData._totalCount
+      last_index = store_playlist_list_fetchData._totalCount || store_playlist_list_info.playlist_MediaFiles_temporary.length
     }
     if (last_index > 0) {
       let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(

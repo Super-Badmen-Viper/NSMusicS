@@ -1,18 +1,18 @@
 {
     "action": {
         "addToFavorites": "add to $t(entity.favorite_other)",
-        "addToPlaylist": "add to $t(entity.playlist_one)",
+        "addToPlaylist": "add to",
         "clearQueue": "clear queue",
-        "createPlaylist": "create $t(entity.playlist_one)",
-        "deletePlaylist": "delete $t(entity.playlist_one)",
+        "createPlaylist": "create",
+        "deletePlaylist": "delete",
         "deselectAll": "deselect all",
-        "editPlaylist": "edit $t(entity.playlist_one)",
+        "editPlaylist": "edit",
         "goToPage": "go to page",
         "moveToBottom": "move to bottom",
         "moveToTop": "move to top",
         "refresh": "$t(common.refresh)",
         "removeFromFavorites": "remove from $t(entity.favorite_other)",
-        "removeFromPlaylist": "remove from $t(entity.playlist_one)",
+        "removeFromPlaylist": "remove from",
         "removeFromQueue": "remove from queue",
         "setRating": "set rating",
         "toggleSmartPlaylistEditor": "toggle $t(entity.smartPlaylist) editor",
@@ -143,7 +143,7 @@
         "play_other": "{{count}} plays",
         "playlistWithCount_one": "{{count}} playlist",
         "playlistWithCount_other": "{{count}} playlists",
-        "smartPlaylist": "smart $t(entity.playlist_one)",
+        "smartPlaylist": "smart",
         "track_one": "track",
         "track_other": "tracks",
         "trackWithCount_one": "{{count}} track",
@@ -235,25 +235,25 @@
             "input_playlists": "$t(entity.playlist_other)",
             "input_skipDuplicates": "skip duplicates",
             "success": "added $t(entity.trackWithCount, {\"count\": {{message}} }) to $t(entity.playlistWithCount, {\"count\": {{numOfPlaylists}} })",
-            "title": "add to $t(entity.playlist_one)"
+            "title": "add to"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
             "input_name": "$t(common.name)",
             "input_owner": "$t(common.owner)",
             "input_public": "public",
-            "success": "$t(entity.playlist_one) created successfully",
-            "title": "create $t(entity.playlist_one)"
+            "success": " created successfully",
+            "title": "create"
         },
         "deletePlaylist": {
-            "input_confirm": "type the name of the $t(entity.playlist_one) to confirm",
-            "success": "$t(entity.playlist_one) deleted successfully",
-            "title": "delete $t(entity.playlist_one)"
+            "input_confirm": "type the name of the to confirm",
+            "success": " deleted successfully",
+            "title": "delete"
         },
         "editPlaylist": {
             "publicJellyfinNote": "Jellyfin for some reason does not expose whether a playlist is public or not. If you wish for this to remain public, please have the following input selected",
-            "success": "$t(entity.playlist_one) updated successfully",
-            "title": "edit $t(entity.playlist_one)"
+            "success": " updated successfully",
+            "title": "edit"
         },
         "lyricSearch": {
             "input_artist": "$t(entity.artist_one)",

@@ -32,17 +32,17 @@
         "playSimilarSongs": "jouer des chansons similaires"
     },
     "action": {
-        "editPlaylist": "éditer $t(entity.playlist_one)",
+        "editPlaylist": "éditer",
         "goToPage": "aller à la page",
         "moveToTop": "déplacer en haut",
         "clearQueue": "effacer la liste de lecture",
         "addToFavorites": "ajouter aux $t(entity.favorite_other)",
-        "addToPlaylist": "ajouter à $t(entity.playlist_one)",
-        "createPlaylist": "créer $t(entity.playlist_one)",
-        "removeFromPlaylist": "supprimer des $t(entity.playlist_one)",
+        "addToPlaylist": "ajouter à",
+        "createPlaylist": "créer",
+        "removeFromPlaylist": "supprimer des",
         "viewPlaylists": "voir $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
-        "deletePlaylist": "supprimer de $t(entity.playlist_one)",
+        "deletePlaylist": "supprimer de",
         "removeFromQueue": "retirer de la file d'attente",
         "deselectAll": "désélectionner tout",
         "moveToBottom": "déplacer en bas",
@@ -550,9 +550,9 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "supprimer de $t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one) supprimée avec succès",
-            "input_confirm": "taper le nom de la $t(entity.playlist_one) pour confirmer"
+            "title": "supprimer de",
+            "success": " supprimée avec succès",
+            "input_confirm": "taper le nom de la pour confirmer"
         },
         "addServer": {
             "title": "ajouter un serveur",
@@ -569,14 +569,14 @@
         },
         "addToPlaylist": {
             "success": "$t(entity.trackWithCount, {\"count\": {{message}} }) ajouté à $t(entity.playlistWithCount, {\"count\": {{numOfPlaylists}} })",
-            "title": "ajouter à $t(entity.playlist_one)",
+            "title": "ajouter à",
             "input_skipDuplicates": "sauter les doublons",
             "input_playlists": "$t(entity.playlist_other)"
         },
         "createPlaylist": {
-            "title": "créer $t(entity.playlist_one)",
+            "title": "créer",
             "input_public": "publique",
-            "success": "$t(entity.playlist_one) créée avec succès",
+            "success": " créée avec succès",
             "input_description": "$t(common.description)",
             "input_name": "$t(common.name)",
             "input_owner": "$t(common.owner)"
@@ -590,7 +590,7 @@
             "input_optionMatchAny": "correspondre à n'importe quel"
         },
         "editPlaylist": {
-            "title": "modifier $t(entity.playlist_one)",
+            "title": "modifier",
             "publicJellyfinNote": "Jellyfin n'indique pas si une playlist est publique ou non. Si vous souhaitez que cette playlist reste publique, veuillez sélectionner l'entrée suivante"
         },
         "lyricSearch": {
@@ -644,7 +644,7 @@
         "folder_one": "dossier",
         "folder_many": "dossiers",
         "folder_other": "dossiers",
-        "smartPlaylist": "$t(entity.playlist_one) intelligente",
+        "smartPlaylist": " intelligente",
         "album_one": "album",
         "album_many": "albums",
         "album_other": "albums",

@@ -470,17 +470,17 @@
     "action": {
         "addToFavorites": "添加到$t(entity.favorite_other)",
         "clearQueue": "清空播放隊列",
-        "createPlaylist": "創建$t(entity.playlist_one)",
-        "deletePlaylist": "刪除$t(entity.playlist_one)",
-        "addToPlaylist": "添加到$t(entity.playlist_one)",
+        "createPlaylist": "創建",
+        "deletePlaylist": "刪除",
+        "addToPlaylist": "添加到",
         "deselectAll": "取消全選",
-        "editPlaylist": "編輯 $t(entity.playlist_one)",
+        "editPlaylist": "編輯",
         "goToPage": "轉到頁面",
         "moveToBottom": "跳至底部",
         "moveToTop": "跳至頂部",
         "refresh": "$t(common.refresh)",
         "removeFromFavorites": "從$t(entity.favorite_other)移除",
-        "removeFromPlaylist": "從$t(entity.playlist_one)移除",
+        "removeFromPlaylist": "從移除",
         "removeFromQueue": "從播放隊列中移除",
         "setRating": "評分",
         "toggleSmartPlaylistEditor": "切換$t(entity.smartPlaylist)編輯器",
@@ -499,7 +499,7 @@
         "genreWithCount_other": "{{count}} 種流派",
         "playlist_other": "播放列表",
         "playlistWithCount_other": "{{count}} 個播放列表",
-        "smartPlaylist": "智能$t(entity.playlist_one)",
+        "smartPlaylist": "智能",
         "track_other": "樂曲",
         "trackWithCount_other": "{{count}} 首樂曲",
         "albumWithCount_other": "{{count}} 張專輯"
@@ -566,15 +566,15 @@
             "input_playlists": "$t(entity.playlist_other)",
             "input_skipDuplicates": "跳過重複",
             "success": "添加 $t(entity.trackWithCount, {\"count\": {{message}} }) 到 $t(entity.playlistWithCount, {\"count\": {{numOfPlaylists}} })",
-            "title": "添加到$t(entity.playlist_one)"
+            "title": "添加到"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
             "input_name": "$t(common.name)",
             "input_owner": "$t(common.owner)",
             "input_public": "公開",
-            "success": "已成功創建 $t(entity.playlist_one)",
-            "title": "創建$t(entity.playlist_one)"
+            "success": "已成功創建",
+            "title": "創建"
         },
         "lyricSearch": {
             "input_name": "$t(common.name)",
@@ -590,12 +590,12 @@
             "title": "更新服務器"
         },
         "deletePlaylist": {
-            "input_confirm": "輸入$t(entity.playlist_one)的名稱進行確認",
-            "title": "刪除$t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one)已成功刪除"
+            "input_confirm": "輸入的名稱進行確認",
+            "title": "刪除",
+            "success": "已成功刪除"
         },
         "editPlaylist": {
-            "title": "編輯$t(entity.playlist_one)"
+            "title": "編輯"
         }
     }
 }

@@ -112,7 +112,7 @@
         "genre_other": "genreä",
         "genreWithCount_one": "{{count}} genre",
         "genreWithCount_other": "{{count}} genreä",
-        "smartPlaylist": "älykäs $t(entity.playlist_one)",
+        "smartPlaylist": "älykäs",
         "track_one": "raita",
         "track_other": "raitaa",
         "trackWithCount_one": "{{count}} raita",
@@ -120,9 +120,9 @@
     },
     "action": {
         "clearQueue": "tyhjennä jono",
-        "createPlaylist": "luo $t(entity.playlist_one)",
+        "createPlaylist": "luo",
         "deselectAll": "poista valinta kaikista",
-        "editPlaylist": "muokkaa $t(entity.playlist_one)",
+        "editPlaylist": "muokkaa",
         "removeFromQueue": "poista jonosta",
         "viewPlaylists": "katsele $t(entity.playlist_other)",
         "openIn": {
@@ -133,12 +133,12 @@
         "moveToBottom": "siirry pohjalle",
         "moveToTop": "siirry ylös",
         "addToFavorites": "lisää $t(entity.favorite_other)",
-        "addToPlaylist": "lisää $t(entity.playlist_one)",
+        "addToPlaylist": "lisää",
         "refresh": "$t(common.refresh)",
         "removeFromFavorites": "poista kohteesta $t(entity.favorite_other)",
         "toggleSmartPlaylistEditor": "kytke $t(entity.smartPlaylist) editori",
-        "deletePlaylist": "poista $t(entity.playlist_one)",
-        "removeFromPlaylist": "poista kohteesta $t(entity.playlist_one)",
+        "deletePlaylist": "poista",
+        "removeFromPlaylist": "poista kohteesta",
         "setRating": "aseta arvostelu"
     }
 }

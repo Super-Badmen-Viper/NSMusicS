@@ -1,15 +1,15 @@
 {
     "action": {
-        "editPlaylist": "编辑$t(entity.playlist_one)",
+        "editPlaylist": "编辑",
         "moveToTop": "移至顶部",
         "clearQueue": "清空播放队列",
         "addToFavorites": "添加到$t(entity.favorite_other)",
-        "addToPlaylist": "添加到$t(entity.playlist_one)",
-        "createPlaylist": "创建$t(entity.playlist_one)",
-        "removeFromPlaylist": "从$t(entity.playlist_one)移除",
+        "addToPlaylist": "添加到",
+        "createPlaylist": "创建",
+        "removeFromPlaylist": "从移除",
         "viewPlaylists": "查看$t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
-        "deletePlaylist": "删除$t(entity.playlist_one)",
+        "deletePlaylist": "删除",
         "removeFromQueue": "从播放队列中移除",
         "deselectAll": "取消全选",
         "moveToBottom": "移至底部",
@@ -123,7 +123,7 @@
         "favorite_other": "收藏",
         "artistWithCount_other": "{{count}} 位艺术家",
         "folder_other": "文件夹",
-        "smartPlaylist": "智能$t(entity.playlist_one)",
+        "smartPlaylist": "智能",
         "genreWithCount_other": "{{count}} 种流派",
         "trackWithCount_other": "{{count}} 首乐曲",
         "play_other": "{{count}} 次播放"
@@ -587,9 +587,9 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "删除$t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one)已成功删除",
-            "input_confirm": "输入$t(entity.playlist_one)的名称进行确认"
+            "title": "删除",
+            "success": "已成功删除",
+            "input_confirm": "输入的名称进行确认"
         },
         "addServer": {
             "title": "添加服务器",
@@ -606,14 +606,14 @@
         },
         "addToPlaylist": {
             "success": "添加$t(entity.trackWithCount, {\"count\": {{message}} })到$t(entity.playlistWithCount, {\"count\": {{numOfPlaylists}} })",
-            "title": "添加到$t(entity.playlist_one)",
+            "title": "添加到",
             "input_skipDuplicates": "跳过重复",
             "input_playlists": "$t(entity.playlist_other)"
         },
         "createPlaylist": {
-            "title": "创建$t(entity.playlist_one)",
+            "title": "创建",
             "input_public": "公开",
-            "success": "已成功创建 $t(entity.playlist_one)",
+            "success": "已成功创建",
             "input_description": "$t(common.description)",
             "input_name": "$t(common.name)",
             "input_owner": "$t(common.owner)"
@@ -627,9 +627,9 @@
             "input_optionMatchAny": "匹配任何"
         },
         "editPlaylist": {
-            "title": "编辑$t(entity.playlist_one)",
+            "title": "编辑",
             "publicJellyfinNote": "Jellyfin 出于某种原因不会显示播放列表是否公开。如果您希望保持公开，请选择以下输入",
-            "success": "$t(entity.playlist_one)更新成功"
+            "success": "更新成功"
         },
         "lyricSearch": {
             "title": "搜索歌词",

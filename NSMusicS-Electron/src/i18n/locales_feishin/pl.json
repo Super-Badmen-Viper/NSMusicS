@@ -1,10 +1,10 @@
 {
     "action": {
-        "editPlaylist": "edytuj $t(entity.playlist_one)",
+        "editPlaylist": "edytuj",
         "goToPage": "idź do strony",
         "clearQueue": "wyczyść kolejkę",
         "addToFavorites": "dodaj do $t(entity.favorite_other)",
-        "removeFromPlaylist": "usuń z $t(entity.playlist_one)",
+        "removeFromPlaylist": "usuń z",
         "viewPlaylists": "zobacz $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
         "removeFromQueue": "usuń z kolejki",
@@ -12,9 +12,9 @@
         "toggleSmartPlaylistEditor": "przełącz edytor $t(entity.smartPlaylist)",
         "removeFromFavorites": "usuń z $t(entity.favorite_other)",
         "moveToTop": "przesuń na górę",
-        "addToPlaylist": "dodaj do $t(entity.playlist_one)",
-        "createPlaylist": "utwórz $t(entity.playlist_one)",
-        "deletePlaylist": "usuń $t(entity.playlist_one)",
+        "addToPlaylist": "dodaj do",
+        "createPlaylist": "utwórz",
+        "deletePlaylist": "usuń",
         "moveToBottom": "przesuń na dół",
         "setRating": "oceń",
         "openIn": {
@@ -155,7 +155,7 @@
         "albumArtistCount_one": "{{count}} wykonawca albumu",
         "albumArtistCount_few": "{{count}} wykonawców albumu",
         "albumArtistCount_many": "{{count}} wykonawców albumu",
-        "smartPlaylist": "inteligentna $t(entity.playlist_one)",
+        "smartPlaylist": "inteligentna",
         "genreWithCount_one": "{{count}} gatunek",
         "genreWithCount_few": "{{count}} gatunki",
         "genreWithCount_many": "{{count}} gatunków",
@@ -233,16 +233,16 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "usuń $t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one) usunięto pomyślnie",
-            "input_confirm": "wpisz nazwę $t(entity.playlist_one) aby potwierdzić"
+            "title": "usuń",
+            "success": " usunięto pomyślnie",
+            "input_confirm": "wpisz nazwę aby potwierdzić"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "utwórz $t(entity.playlist_one)",
+            "title": "utwórz",
             "input_public": "publiczny",
             "input_name": "$t(common.name)",
-            "success": "$t(entity.playlist_one) utworzono pomyślnie",
+            "success": " utworzono pomyślnie",
             "input_owner": "$t(common.owner)"
         },
         "addServer": {
@@ -260,7 +260,7 @@
         },
         "addToPlaylist": {
             "success": "dodano {{message}} $t(entity.track_other) do {{numOfPlaylists}} $t(entity.playlist_other)",
-            "title": "dodano do $t(entity.playlist_one)",
+            "title": "dodano do",
             "input_skipDuplicates": "pomiń duplikaty",
             "input_playlists": "$t(entity.playlist_other)"
         },
@@ -278,7 +278,7 @@
             "title": "wyszukiwanie tekstów"
         },
         "editPlaylist": {
-            "title": "edytuj $t(entity.playlist_one)"
+            "title": "edytuj"
         },
         "shareItem": {
             "allowDownloading": "zezwól na pobieranie",

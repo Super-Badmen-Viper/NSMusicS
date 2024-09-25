@@ -35,8 +35,20 @@ const { t } = useI18n({
 
 ////// songlist_view page_layout lineItems
 const collapsed_width = ref<number>(1090);
-const handleImageError = (event:any) => {
-  event.target.src = '../../../resources/img/error_album.jpg'; // 设置备用图片路径
+const path = require('path')
+const handleImageError = (event: any) => {
+  const originalSrc = event.target.src;
+  const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
+  const img = new Image();
+  img.onload = null;
+  img.onerror = null;
+  img.onload = () => {
+    event.target.src = pngSrc;
+  };
+  img.onerror = () => {
+    event.target.src = path.resolve('resources/img/error_album.jpg');
+  };
+  img.src = pngSrc;
 };
 const os = require('os');
 function getAssetImage(firstImage: string) {
@@ -880,8 +892,14 @@ onBeforeUnmount(() => {
         </n-button>
         <n-button
           v-if="
-            (store_server_user_model.model_select !== 'server') ||
-            (store_server_user_model.model_select === 'server' && store_view_media_page_logic.page_songlists_selected !== 'song_list_all')
+            (store_server_user_model.model_select !== 'server')
+            ||
+            (store_server_user_model.model_select === 'server'
+             && store_view_media_page_logic.page_songlists_selected !== 'song_list_all')
+            ||
+            (store_server_user_model.model_select === 'server'
+              && store_view_media_page_logic.page_songlists_selected !== 'song_list_all'
+              && store_server_user_model.model_server_type_of_web === false)
           "
           quaternary circle size="medium" style="margin-left:4px" @click="update_button_deleteMediaFile_selected">
           <template #icon>

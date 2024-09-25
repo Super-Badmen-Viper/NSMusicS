@@ -251,17 +251,17 @@
         "trayEnabled_description": "mostrar/ocultar el icono/menú del área de notificación. si está deshabilitado, también deshabilita minimizar/salir a la bandeja"
     },
     "action": {
-        "editPlaylist": "editar $t(entity.playlist_one)",
+        "editPlaylist": "editar",
         "goToPage": "ir a la página",
         "moveToTop": "mover al principio",
         "clearQueue": "limpiar cola",
         "addToFavorites": "añadir a $t(entity.favorite_other)",
-        "addToPlaylist": "añadir a $t(entity.playlist_one)",
-        "createPlaylist": "crear $t(entity.playlist_one)",
-        "removeFromPlaylist": "eliminar de $t(entity.playlist_one)",
+        "addToPlaylist": "añadir a",
+        "createPlaylist": "crear",
+        "removeFromPlaylist": "eliminar de",
         "viewPlaylists": "ver $t(entity.playlist_other)",
         "refresh": "$t(common.refresh)",
-        "deletePlaylist": "eliminar $t(entity.playlist_one)",
+        "deletePlaylist": "eliminar",
         "removeFromQueue": "eliminar de la cola",
         "deselectAll": "desmarcar todo",
         "moveToBottom": "mover al fondo",
@@ -574,16 +574,16 @@
     },
     "form": {
         "deletePlaylist": {
-            "title": "eliminar $t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one) eliminado correctamente",
-            "input_confirm": "escribe el nombre de $t(entity.playlist_one) para confirmar"
+            "title": "eliminar",
+            "success": " eliminado correctamente",
+            "input_confirm": "escribe el nombre de para confirmar"
         },
         "createPlaylist": {
             "input_description": "$t(common.description)",
-            "title": "crear $t(entity.playlist_one)",
+            "title": "crear",
             "input_public": "público",
             "input_name": "$t(common.name)",
-            "success": "$t(entity.playlist_one) creado correctamente",
+            "success": " creado correctamente",
             "input_owner": "$t(common.owner)"
         },
         "addServer": {
@@ -601,7 +601,7 @@
         },
         "addToPlaylist": {
             "success": "añadido $t(entity.trackWithCount, {\"count\": {{message}} }) a $t(entity.playlistWithCount, {\"count\": {{numOfPlaylists}} })",
-            "title": "añadir a $t(entity.playlist_one)",
+            "title": "añadir a",
             "input_skipDuplicates": "saltar duplicados",
             "input_playlists": "$t(entity.playlist_other)"
         },
@@ -615,8 +615,8 @@
             "title": "buscar letras"
         },
         "editPlaylist": {
-            "title": "editar $t(entity.playlist_one)",
-            "success": "$t(entity.playlist_one) actualizada correctamente",
+            "title": "editar",
+            "success": " actualizada correctamente",
             "publicJellyfinNote": "Jellyfin por alguna razón no expone si una lista de reproducción es pública o no. Si deseas que ésta siga siendo pública, por favor ten seleccionada la siguiente entrada"
         },
         "queryEditor": {
@@ -707,7 +707,7 @@
         }
     },
     "entity": {
-        "smartPlaylist": "$t(entity.playlist_one) inteligente",
+        "smartPlaylist": " inteligente",
         "genre_one": "género",
         "genre_many": "géneros",
         "genre_other": "géneros",

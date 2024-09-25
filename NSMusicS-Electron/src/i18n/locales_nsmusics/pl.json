@@ -43,10 +43,17 @@
             "download": "Pobierz",
             "tag_error": "Brakuje 'tagu' plików muzycznych w folderze. Proszę uzupełnić atrybuty tagu plików muzycznych, a następnie zaimportować ponownie.",
             "drag_sort": "Przeciągnij by sortować",
-            "modelServer_type_one": "Tryb Dostępu Natychmiastowego",
-            "modelServer_type_one_explain": "Zaloguj się do serwera, aby utrzymać trwałe połączenie, natychmiastowe dostęp do serwera w celu uzyskania najnowszych danych, bez zapisywania w lokalnej bazie danych",
-            "modelServer_type_two": "Tryb Pobierania Danych",
-            "modelServer_type_two_explain": "Zapisz wszystkie lokalne linki dostępu do danych serwera, bezpośrednio uzyskaj zasoby serwera za pośrednictwem linków dostępu do danych przechowywanych w lokalnej bazie danych"
+            "modelServer_type_1": "Tryb Dostępu Natychmiastowego",
+            "modelServer_type_1_explain": "Zaloguj się do serwera, aby utrzymać trwałe połączenie, natychmiastowe dostęp do serwera w celu uzyskania najnowszych danych, bez zapisywania w lokalnej bazie danych",
+            "modelServer_type_2": "Tryb Pobierania Danych",
+            "modelServer_type_2_explain": "Zapisz wszystkie lokalne linki dostępu do danych serwera, bezpośrednio uzyskaj zasoby serwera za pośrednictwem linków dostępu do danych przechowywanych w lokalnej bazie danych",
+            "routerModel": "Tryb Routera",
+            "routerModel_type_1": "Tryb Wydajnościowy",
+            "routerModel_type_1_explain": "Po przejściu na inną stronę usuwane są wszystkie dane strony i wyzwalane jest czyszczenie pamięci (wysoka częstotliwość)",
+            "routerModel_type_2": "Tryb Zrównoważony",
+            "routerModel_type_2_explain": "Po przejściu na inną stronę zachowuje się bieżąca strona, a inne strony są czyszczone, wyzwalane jest czyszczenie pamięci (nizka częstotliwość)",
+            "routerModel_type_3": "Tryb Jakościowy",
+            "routerModel_type_3_explain": "Po przejściu na inną stronę zachowuje się bieżąca strona, a inne strony są czyszczone, czyszczenie pamięci jest całkowicie wyłączone"
         },
         "view_player": {
             "view_seting": {

@@ -32,6 +32,7 @@
     "fast-xml-parser": "^4.5.0",
     "file-uri-to-path": "^2.0.0",
     "howler": "^2.2.4",
+    "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "node-cache": "^5.1.2",
     "node-mpv": "beta",

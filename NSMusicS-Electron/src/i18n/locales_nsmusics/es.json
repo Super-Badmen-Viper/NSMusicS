@@ -43,10 +43,17 @@
             "download": "Descargar",
             "tag_error": "Falta la ‘etiqueta’ de los archivos de música en la carpeta. Por favor, complete los atributos de la etiqueta de los archivos de música y vuelva a importar.",
             "drag_sort": "Arrastrar para Ordenar",
-            "modelServer_type_one": "Modo de Acceso Instantáneo",
-            "modelServer_type_one_explain": "Iniciar sesión en el servidor y mantener una conexión persistente, acceder al servidor en tiempo real para obtener los datos más recientes, sin guardar en la base de datos local",
-            "modelServer_type_two": "Modo de Descarga de Datos",
-            "modelServer_type_two_explain": "Guardar todos los enlaces de acceso a datos del servidor en el dispositivo local, acceder directamente a los recursos del servidor a través de los enlaces de acceso a datos almacenados en la base de datos local"
+            "modelServer_type_1": "Modo de Acceso Instantáneo",
+            "modelServer_type_1_explain": "Iniciar sesión en el servidor y mantener una conexión persistente, acceder al servidor en tiempo real para obtener los datos más recientes, sin guardar en la base de datos local",
+            "modelServer_type_2": "Modo de Descarga de Datos",
+            "modelServer_type_2_explain": "Guardar todos los enlaces de acceso a datos del servidor en el dispositivo local, acceder directamente a los recursos del servidor a través de los enlaces de acceso a datos almacenados en la base de datos local",
+            "routerModel": "Modo de Enrutamiento",
+            "routerModel_type_1": "Modo de Rendimiento",
+            "routerModel_type_1_explain": "Al cambiar de página, se limpian todos los datos de la página y se activa la limpieza automática de memoria (alta frecuencia)",
+            "routerModel_type_2": "Modo de Equilibrio",
+            "routerModel_type_2_explain": "Al cambiar de página, se mantienen los datos de la página actual y se limpian los datos de las demás páginas, se activa la limpieza automática de memoria (baja frecuencia)",
+            "routerModel_type_3": "Modo de Calidad",
+            "routerModel_type_3_explain": "Al cambiar de página, se mantienen los datos de la página actual y se limpian los datos de las demás páginas, se desactiva completamente la limpieza automática de memoria"
         },
         "view_player": {
             "view_seting": {

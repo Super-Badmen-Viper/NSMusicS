@@ -43,10 +43,17 @@
             "download": "Scarica",
             "tag_error": "Il 'tag' per i file musicali nella cartella è mancante. Si prega di completare gli attributi del tag per i file musicali e quindi riimportarli.",
             "drag_sort": "Trascina per Ordinare",
-            "modelServer_type_one": "Modalità di Accesso Istantaneo",
-            "modelServer_type_one_explain": "Accedi al server per mantenere una connessione persistente, accedi al server in tempo reale per ottenere i dati più recenti, senza salvarli nel database locale",
-            "modelServer_type_two": "Modalità Download Dati",
-            "modelServer_type_two_explain": "Salva tutti i link di accesso ai dati del server sul dispositivo locale, accedi direttamente alle risorse del server attraverso i link di accesso ai dati memorizzati nel database locale"
+            "modelServer_type_1": "Modalità di Accesso Istantaneo",
+            "modelServer_type_1_explain": "Accedi al server per mantenere una connessione persistente, accedi al server in tempo reale per ottenere i dati più recenti, senza salvarli nel database locale",
+            "modelServer_type_2": "Modalità Download Dati",
+            "modelServer_type_2_explain": "Salva tutti i link di accesso ai dati del server sul dispositivo locale, accedi direttamente alle risorse del server attraverso i link di accesso ai dati memorizzati nel database locale",
+            "routerModel": "Modalità di Routing",
+            "routerModel_type_1": "Modalità di Prestazione",
+            "routerModel_type_1_explain": "Quando si passa a una nuova pagina, vengono cancellati tutti i dati della pagina e viene attivata la pulizia automatica della memoria (alta frequenza)",
+            "routerModel_type_2": "Modalità di Bilanciamento",
+            "routerModel_type_2_explain": "Quando si passa a una nuova pagina, vengono mantenuti i dati della pagina corrente e cancellati i dati delle altre pagine, viene attivata la pulizia automatica della memoria (bassa frequenza)",
+            "routerModel_type_3": "Modalità di Qualità",
+            "routerModel_type_3_explain": "Quando si passaa una nuova pagina, vengono mantenuti i dati della pagina corrente e cancellati i dati delle altre pagine, la pulizia automatica della memoria viene completamente disabilitata"
         },
         "view_player": {
             "view_seting": {

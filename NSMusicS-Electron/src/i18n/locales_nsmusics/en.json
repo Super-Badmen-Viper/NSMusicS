@@ -43,10 +43,17 @@
             "download": "Download",
             "tag_error": "The ‘tag’ for music files in the folder is missing. Please complete the tag attributes for the music files and then re-import.",
             "drag_sort": "Drag to Sort",
-            "modelServer_type_one": "Instant Access Mode",
-            "modelServer_type_one_explain": "Log in to the server to maintain a persistent connection, access the server in real-time to get the latest data, without saving to the local database",
-            "modelServer_type_two": "Data Download Mode",
-            "modelServer_type_two_explain": "Save all server data access links to the local device, directly access server resources through the data access links stored in the local database"
+            "modelServer_type_1": "Instant Access Mode",
+            "modelServer_type_1_explain": "Log in to the server to maintain a persistent connection, access the server in real-time to get the latest data, without saving to the local database",
+            "modelServer_type_2": "Data Download Mode",
+            "modelServer_type_2_explain": "Save all server data access links to the local device, directly access server resources through the data access links stored in the local database",
+            "routerModel": "Routing Mode",
+            "routerModel_type_1": "Performance Mode",
+            "routerModel_type_1_explain": "When switching pages, clear all page data and trigger automatic memory cleanup (high frequency)",
+            "routerModel_type_2": "Balance Mode",
+            "routerModel_type_2_explain": "When switching pages, keep the current page data and clear other page data, trigger automatic memory cleanup (low frequency)",
+            "routerModel_type_3": "Quality Mode",
+            "routerModel_type_3_explain": "When switching pages, keep the current page data and clear other page data, completely disable automatic memory cleanup"
         },
         "view_player": {
             "view_seting": {

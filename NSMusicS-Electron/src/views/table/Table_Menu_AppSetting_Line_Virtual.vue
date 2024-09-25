@@ -88,16 +88,18 @@
   const message = useMessage()
   /// server select
   async function update_server_config_of_current_user_of_sqlite(value: any){
-    const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(item => item.id === value);
-    update_server_setUser(
-        store_server_users.server_config_of_all_user_of_sqlite[index].id,
-        store_server_users.server_config_of_all_user_of_sqlite[index].server_name,
-        store_server_users.server_config_of_all_user_of_sqlite[index].url,
-        store_server_users.server_config_of_all_user_of_sqlite[index].user_name,
-        store_server_users.server_config_of_all_user_of_sqlite[index].password
-    )
     if(store_server_user_model.model_server_type_of_local) {
-      get_server_config_of_current_user_of_sqlite(store_server_users.server_config_of_all_user_of_sqlite[index])
+      try {
+        const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(item => item.id === value);
+        update_server_setUser(
+            store_server_users.server_config_of_all_user_of_sqlite[index].id,
+            store_server_users.server_config_of_all_user_of_sqlite[index].server_name,
+            store_server_users.server_config_of_all_user_of_sqlite[index].url,
+            store_server_users.server_config_of_all_user_of_sqlite[index].user_name,
+            store_server_users.server_config_of_all_user_of_sqlite[index].password
+        )
+        get_server_config_of_current_user_of_sqlite(store_server_users.server_config_of_all_user_of_sqlite[index])
+      }catch { console.error('error: update_server_setUser + get_server_config_of_current_user_of_sqlite') }
     }else if(store_server_user_model.model_server_type_of_web){
       console.log('store_server_user_model.model_server_type_of_web')
       let user_Authorization_ApiWebService_of_ND = new User_Authorization_ApiWebService_of_ND()
@@ -744,16 +746,16 @@
                 <n-space justify="space-between" align="center"
                          :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">路由模式</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.routerModel') }}</span>
                   </n-space>
                 </n-space>
                 <n-space justify="space-between" align="center"
                          style="margin-left: 30px;"
                          :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">性能模式</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.routerModel_type_1') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">切换页面时，清除所有页面数据，触发自动内存清理(高频率)</span>
+                      <span style="font-size:12px;">{{ $t('nsmusics.view_page.routerModel_type_1_explain') }}</span>
                     </div>
                   </n-space>
                   <n-switch
@@ -767,9 +769,9 @@
                          style="margin-left: 30px;"
                          :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">均衡模式</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.routerModel_type_2') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">切换页面时，保留当前页面数据，清除其它页面的数据，触发自动内存清理(低频率)</span>
+                      <span style="font-size:12px;">{{ $t('nsmusics.view_page.routerModel_type_2_explain') }}</span>
                     </div>
                   </n-space>
                   <n-switch
@@ -783,9 +785,9 @@
                          style="margin-left: 30px;"
                          :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">质量模式</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.routerModel_type_3') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">切换页面时，保留当前页面数据，清除其它页面的数据，完全关闭自动内存清理</span>
+                      <span style="font-size:12px;">{{ $t('nsmusics.view_page.routerModel_type_3_explain') }}</span>
                     </div>
                   </n-space>
                   <n-switch
@@ -828,9 +830,9 @@
                            style="margin-left: 30px;"
                            :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
                     <n-space vertical>
-                      <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_one') + ' - 质量模式' }}</span>
+                      <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_1') + ' - ' + $t('nsmusics.view_page.routerModel_type_3') }}</span>
                       <div style="margin-top: -10px;">
-                        <span style="font-size:12px;">{{ $t('nsmusics.view_page.modelServer_type_one_explain') }}</span>
+                        <span style="font-size:12px;">{{ $t('nsmusics.view_page.modelServer_type_1_explain') }}</span>
                       </div>
                     </n-space>
                     <n-switch
@@ -849,9 +851,9 @@
                            style="margin-left: 30px;"
                            :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
                     <n-space vertical>
-                      <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_two') }}</span>
+                      <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_2') }}</span>
                       <div style="margin-top: -10px;">
-                        <span style="font-size:12px;">{{ $t('nsmusics.view_page.modelServer_type_two_explain') }}</span>
+                        <span style="font-size:12px;">{{ $t('nsmusics.view_page.modelServer_type_2_explain') }}</span>
                       </div>
                     </n-space>
                     <n-switch
