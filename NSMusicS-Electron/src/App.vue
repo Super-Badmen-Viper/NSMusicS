@@ -154,59 +154,67 @@
     }, 600);
   }
   async function handleMenuSelection() {
-    const menuActions: { [key: string]: () => void } = {
+    const menuActions: { [key: string]: () => void | Promise<void> } = {
       'View_Menu_AppSetting': () => {
-        if (store_router_data_logic.clear_UserExperience_Model) {
-          store_router_data_logic.clear_Files_temporary(); // User Experience Model
-        }
+        clearFilesIfNeeded();
         store_router_data_info.router_select_model_menu = true;
       },
       'View_Home_MusicLibrary_Browse': () => {
-        if (store_router_data_logic.clear_UserExperience_Model) {
-          store_router_data_logic.clear_Files_temporary_except_home(); // User Experience Model
-        }
+        clearFilesIfNeeded('home');
         store_router_data_info.router_select_model_home = true;
-        if (store_router_data_logic.clear_Memory_Model) {
-          store_view_home_page_fetchData.fetchData_Home(); // Memory Model
-        }
+        fetchDataIfNeeded('home');
       },
       'View_Updateing': () => {
-        if (store_router_data_logic.clear_UserExperience_Model) {
-          store_router_data_logic.clear_Files_temporary(); // User Experience Model
-        }
+        clearFilesIfNeeded();
         store_router_data_info.router_select_model_updateing = true;
       },
       'View_Album_List_ALL': () => {
-        if (store_router_data_logic.clear_UserExperience_Model) {
-          store_router_data_logic.clear_Files_temporary_except_album(); // User Experience Model
-        }
+        clearFilesIfNeeded('album');
+        fetchDataIfNeeded('album');
         store_router_data_info.router_select_model_album = true;
-        if (store_router_data_logic.clear_Memory_Model) {
-          store_view_album_page_fetchData.fetchData_Album(); // Memory Model
-        }
       },
       'View_Song_List_ALL': async () => {
-        if (store_router_data_logic.clear_UserExperience_Model) {
-          store_router_data_logic.clear_Files_temporary_except_media(); // User Experience Model
-        }
+        clearFilesIfNeeded('media');
+        await fetchDataIfNeeded('media');
         store_router_data_info.router_select_model_media = true;
-        if (store_router_data_logic.clear_Memory_Model) {
-          await store_view_media_page_fetchData.fetchData_Media(); // Memory Model
-        }
       },
       'View_Artist_List_ALL': () => {
-        if (store_router_data_logic.clear_UserExperience_Model) {
-          store_router_data_logic.clear_Files_temporary_except_artist(); // User Experience Model
-        }
+        clearFilesIfNeeded('artist');
+        fetchDataIfNeeded('artist');
         store_router_data_info.router_select_model_artist = true;
-        if (store_router_data_logic.clear_Memory_Model) {
-          store_view_artist_page_fetchData.fetchData_Artist(); // Memory Model
-        }
       },
     };
     const selectedAction = menuActions[store_app_configs_info.app_left_menu_select_activeKey];
     if (selectedAction) {
-      selectedAction();
+      await selectedAction();
+    }
+  }
+  function clearFilesIfNeeded(except?: 'home' | 'album' | 'media' | 'artist') {
+    if (!store_router_data_logic.clear_Memory_Model) {
+      if (except === 'home') {
+        store_router_data_logic.clear_Files_temporary_except_home();
+      } else if (except === 'album') {
+        store_router_data_logic.clear_Files_temporary_except_album();
+      } else if (except === 'media') {
+        store_router_data_logic.clear_Files_temporary_except_media();
+      } else if (except === 'artist') {
+        store_router_data_logic.clear_Files_temporary_except_artist();
+      } else {
+        store_router_data_logic.clear_Files_temporary();
+      }
+    }
+  }
+  function fetchDataIfNeeded(type: 'home' | 'album' | 'media' | 'artist') {
+    if (store_router_data_logic.clear_Memory_Model) {
+      if (type === 'home') {
+        store_view_home_page_fetchData.fetchData_Home();
+      } else if (type === 'album') {
+        store_view_album_page_fetchData.fetchData_Album();
+      } else if (type === 'media') {
+        store_view_media_page_fetchData.fetchData_Media();
+      } else if (type === 'artist') {
+        store_view_artist_page_fetchData.fetchData_Artist();
+      }
     }
   }
   provide('get_playerbar_to_switch_playerview', get_playerbar_to_switch_playerview);
@@ -259,14 +267,14 @@
       console.log(to.name)
       store_app_configs_logic_save.save_system_config_of_View_Router_History()
       ///
-      if(to.name != 'View_Song_List_ALL') {
-        try {
-          const memoryUsage = await ipcRenderer.invoke('window-get-memory')
-          if (memoryUsage.rss > store_router_data_info.MEMORY_THRESHOLD) {
-            ipcRenderer.send('window-reset-data')
-          }
-        } catch {
-
+      if(!store_router_data_logic.clear_UserExperience_Model) {
+        if (to.name != 'View_Song_List_ALL') {
+          try {
+            const memoryUsage = await ipcRenderer.invoke('window-get-memory')
+            if (memoryUsage.rss > store_router_data_info.MEMORY_THRESHOLD) {
+              ipcRenderer.send('window-reset-data')
+            }
+          } catch { }
         }
       }
     }

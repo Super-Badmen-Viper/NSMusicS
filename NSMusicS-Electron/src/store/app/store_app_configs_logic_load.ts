@@ -49,8 +49,18 @@ export const store_app_configs_logic_load = reactive({
             store_view_media_page_info.media_page_sizes = Number('' + system_Configs_Read.app_Configs.value['media_page_sizes'])
             store_view_album_page_info.album_page_sizes = Number('' + system_Configs_Read.app_Configs.value['album_page_sizes'])
             store_view_artist_page_info.artist_page_sizes = Number('' + system_Configs_Read.app_Configs.value['artist_page_sizes'])
-            store_router_data_logic.clear_UserExperience_Model = '' + system_Configs_Read.app_Configs.value['clear_UserExperience_Model'] === 'true'
-            store_router_data_logic.clear_Memory_Model = !store_router_data_logic.clear_UserExperience_Model
+            //
+            const configKeys = ['clear_Memory_Model', 'clear_Equilibrium_Model', 'clear_UserExperience_Model'];
+            let foundTrue = false;
+            configKeys.forEach(key => {
+                const value = '' + system_Configs_Read.app_Configs.value[key] === 'true';
+                if (value && !foundTrue) {
+                    foundTrue = true;
+                    store_router_data_logic[key] = true;
+                } else {
+                    store_router_data_logic[key] = false;
+                }
+            });
             //
             store_server_user_model.model_select = '' + system_Configs_Read.app_Configs.value['model_select']
             if(store_server_user_model.model_select === 'navidrome'){

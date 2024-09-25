@@ -352,6 +352,7 @@
     if(store_server_user_model.model_server_type_of_web){
       store_view_media_page_fetchData._album_id = album_id
       store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+      store_playlist_list_fetchData._album_id = album_id
     }
     console.log('media_list_of_album_id：'+album_id);
     store_router_data_logic.get_media_list_of_album_id_by_album_info(album_id)
@@ -360,6 +361,7 @@
     if(store_server_user_model.model_server_type_of_web){
       store_view_media_page_fetchData._album_id = album_id
       store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+      store_playlist_list_fetchData._album_id = album_id
     }
     console.log('play_this_album_click：' + album_id);
     await store_view_album_page_fetchData.fetchData_This_Album_SongList(album_id)
@@ -379,6 +381,7 @@
   import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
   import {store_server_user_model} from "@/store/server/store_server_user_model";
   import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
+  import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id,favorite)
   }

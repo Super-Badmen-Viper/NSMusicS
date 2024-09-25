@@ -35,7 +35,39 @@ export const store_router_data_logic = reactive({
     },
 
     clear_Memory_Model: true,
+    get_clear_Memory_Model(value: any){
+        if(value) {
+            store_router_data_logic.clear_Equilibrium_Model = false;
+            store_router_data_logic.clear_UserExperience_Model = false;
+        }else{
+            store_router_data_logic.clear_Equilibrium_Model = false;
+            store_router_data_logic.clear_UserExperience_Model = true;
+        }
+        store_app_configs_logic_save.save_system_config_of_App_Configs()
+    },
+    clear_Equilibrium_Model: false,
+    get_clear_Equilibrium_Model(value: any){
+        if(value) {
+            store_router_data_logic.clear_Memory_Model = false;
+            store_router_data_logic.clear_UserExperience_Model = false;
+        }else{
+            store_router_data_logic.clear_Memory_Model = true;
+            store_router_data_logic.clear_UserExperience_Model = false;
+        }
+        store_app_configs_logic_save.save_system_config_of_App_Configs()
+    },
     clear_UserExperience_Model: false,
+    get_clear_UserExperience_Model(value: any){
+        if(value) {
+            store_router_data_logic.clear_Memory_Model = false;
+            store_router_data_logic.clear_Equilibrium_Model = false;
+        }else{
+            store_router_data_logic.clear_Memory_Model = true;
+            store_router_data_logic.clear_Equilibrium_Model = false;
+        }
+        store_app_configs_logic_save.save_system_config_of_App_Configs()
+    },
+
     clear_Files_temporary() {
         store_router_data_info.router_select_model_menu = false
         store_router_data_info.router_select_model_home = false
@@ -198,12 +230,4 @@ export const store_router_data_logic = reactive({
         const stmt = db.prepare(query);
         return stmt.get().count;
     }
-});
-watch(() => store_router_data_logic.clear_Memory_Model, (newValue) => {
-    store_router_data_logic.clear_UserExperience_Model = !newValue
-    store_app_configs_logic_save.save_system_library_config()
-});
-watch(() => store_router_data_logic.clear_UserExperience_Model, (newValue) => {
-    store_router_data_logic.clear_Memory_Model = !newValue
-    store_app_configs_logic_save.save_system_library_config()
 });

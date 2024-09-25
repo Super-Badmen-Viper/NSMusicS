@@ -324,6 +324,7 @@
       store_view_media_page_logic.page_songlists_selected = 'song_list_all'
       store_view_album_page_fetchData._artist_id = artist_id
       store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
+      store_playlist_list_fetchData._artist_id = artist_id
     }
     console.log('artist_list_of_artist_id_artist_click：'+artist_id);
     store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
@@ -334,6 +335,7 @@
       store_view_media_page_logic.page_songlists_selected = 'song_list_all'
       store_view_album_page_fetchData._artist_id = artist_id
       store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
+      store_playlist_list_fetchData._artist_id = artist_id
     }
     console.log('play_this_artist_song_list：' + artist_id);
     await store_view_artist_page_fetchData.fetchData_This_Artist_SongList(artist_id)
@@ -372,6 +374,7 @@
   import {store_server_user_model} from "@/store/server/store_server_user_model";
   import {store_router_data_info} from "@/store/router/store_router_data_info";
   import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
+  import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
   const contextmenu = ref(null as any)
   const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
   const message = useMessage()
