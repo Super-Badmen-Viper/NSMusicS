@@ -1,4 +1,4 @@
-![NSMusicS_Frame](https://github.com/user-attachments/assets/977d8f9e-12a9-4155-b57b-60386151120d)
+![NSMusicS_Frame](https://github.com/user-attachments/assets/be41a673-8a3d-4c88-8b44-b839b9ab660c)
 <div style="display: flex; align-items: center;">
     <div>
         <h2>NSMusicS | 九歌</h2>
