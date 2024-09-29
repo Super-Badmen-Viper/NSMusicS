@@ -1,28 +1,7 @@
-# Go Backend Clean Architecture
-
+# NSMusicS-GO Music-Server
 A Go (Golang) Backend Clean Architecture project with Gin, MongoDB, JWT Authentication Middleware, Test, and Docker.
 
 ![Go Backend Clean Architecture](https://github.com/amitshekhariitbhu/go-backend-clean-architecture/blob/main/assets/go-backend-clean-architecture.png?raw=true)
-
-**You can use this project as a template to build your Backend project in the Go language on top of this project.**
-
-Before creating this project, I have gone through more than 20 projects related to the Go(Golang) Clean Architecture on GitHub.
-
-Thanks to all those projects, I learned a lot from all of those. As I keep saying:
-
-> The best way to learn to code is to code. But, to write good code, you will also have to read good code. Make a habit of reading good code. You can find many open-source projects on GitHub and start reading.
-
-Then for the implementation part, I combined all of my ideas, experiences, and learnings from those projects to create this project.
-
-And as always I would love to get feedback on my project. This helps everyone and most importantly me.
-
-Learn about this project architecture in detail from the blogs mentioned below:
-
-- [Go Backend Clean Architecture](https://outcomeschool.com/blog/go-backend-clean-architecture)
-- [Go JWT Authentication Middleware](https://outcomeschool.com/blog/go-jwt-authentication-middleware)
-- [Configuration with Viper in Go](https://outcomeschool.com/blog/configuration-with-viper-in-go)
-- [Test with Testify and Mockery in Go](https://outcomeschool.com/blog/test-with-testify-and-mockery-in-go)
-- [Database Normalization vs Denormalization](https://outcomeschool.com/blog/database-normalization-vs-denormalization)
 
 ## Architecture Layers of the project
 
@@ -33,26 +12,6 @@ Learn about this project architecture in detail from the blogs mentioned below:
 - Domain
 
 ![Go Backend Clean Architecture Diagram](https://github.com/amitshekhariitbhu/go-backend-clean-architecture/blob/main/assets/go-backend-arch-diagram.png?raw=true)
-
-## About me
-
-Hi, I am Amit Shekhar, Co-Founder @ [Outcome School](https://outcomeschool.com) • IIT 2010-14 • I have taught and mentored many developers, and their efforts landed them high-paying tech jobs, helped many tech companies in solving their unique problems, and created many open-source libraries being used by top companies. I am passionate about sharing knowledge through open-source, blogs, and videos.
-
-You can connect with me on:
-
-- [Twitter](https://twitter.com/amitiitbhu)
-- [YouTube](https://www.youtube.com/@amitshekhar)
-- [LinkedIn](https://www.linkedin.com/in/amit-shekhar-iitbhu)
-- [GitHub](https://github.com/amitshekhariitbhu)
-
-## System Design Playlist on YouTube
-
-- [What is System Design?](https://www.youtube.com/watch?v=i4YWRY3hsdA)
-- [Twitter Timeline Design with Fanout Approach - System Design](https://www.youtube.com/watch?v=_7qHGfwgPz0)
-- [HTTP Request vs HTTP Long-Polling vs WebSocket vs Server-Sent Events](https://www.youtube.com/watch?v=8ksWRX4xV-s)
-- [YouTube Video Upload Service - System Design](https://www.youtube.com/watch?v=N0vvJTkokZc)
-- [What is Consistent Hashing?](https://www.youtube.com/watch?v=dV5cIm9T3ss)
-- [Capacity Estimation: Back-of-the-envelope calculation - Twitter](https://www.youtube.com/watch?v=yrbKxzXm6_Q)
 
 ## Major Packages used in this project
 
@@ -75,270 +34,72 @@ You can connect with me on:
 
 ![Private API Request Flow](https://github.com/amitshekhariitbhu/go-backend-clean-architecture/blob/main/assets/go-arch-private-api-request-flow.png?raw=true)
 
-### How to run this project?
-
-We can run this Go Backend Clean Architecture project with or without Docker. Here, I am providing both ways to run this project.
-
-- Clone this project
-
-```bash
-# Move to your workspace
-cd your-workspace
-
-# Clone this project into your workspace
-git clone https://github.com/amitshekhariitbhu/go-backend-clean-architecture.git
-
-# Move to the project root directory
-cd go-backend-clean-architecture
-```
-
-#### Run without Docker
-
-- Create a file `.env` similar to `.env.example` at the root directory with your configuration.
-- Install `go` if not installed on your machine.
-- Install `MongoDB` if not installed on your machine.
-- Important: Change the `DB_HOST` to `localhost` (`DB_HOST=localhost`) in `.env` configuration file. `DB_HOST=mongodb` is needed only when you run with Docker.
-- Run `go run cmd/main.go`.
-- Access API using `http://localhost:8080`
-
-#### Run with Docker
-
-- Create a file `.env` similar to `.env.example` at the root directory with your configuration.
-- Install Docker and Docker Compose.
-- Run `docker-compose up -d`.
-- Access API using `http://localhost:8080`
-
-### How to run the test?
-
-```bash
-# Run all tests
-go test ./...
-```
-
-### How to generate the mock code?
-
-In this project, to test, we need to generate mock code for the use-case, repository, and database.
-
-```bash
-# Generate mock code for the usecase and repository
-mockery --dir=domain --output=domain/mocks --outpkg=mocks --all
-
-# Generate mock code for the database
-mockery --dir=mongo --output=mongo/mocks --outpkg=mocks --all
-```
-
-Whenever you make changes in the interfaces of these use-cases, repositories, or databases, you need to run the corresponding command to regenerate the mock code for testing.
-
 ### The Complete Project Folder Structure
 
 ```
 .
-├── Dockerfile
-├── api
-│   ├── controller
-│   │   ├── login_controller.go
-│   │   ├── profile_controller.go
-│   │   ├── profile_controller_test.go
-│   │   ├── refresh_token_controller.go
-│   │   ├── signup_controller.go
-│   │   └── task_controller.go
-│   ├── middleware
-│   │   └── jwt_auth_middleware.go
-│   └── route
-│       ├── login_route.go
-│       ├── profile_route.go
-│       ├── refresh_token_route.go
-│       ├── route.go
-│       ├── signup_route.go
-│       └── task_route.go
-├── bootstrap
-│   ├── app.go
-│   ├── database.go
-│   └── env.go
-├── cmd
-│   └── main.go
-├── docker-compose.yaml
-├── domain
-│   ├── error_response.go
-│   ├── jwt_custom.go
-│   ├── login.go
-│   ├── profile.go
-│   ├── refresh_token.go
-│   ├── signup.go
-│   ├── success_response.go
-│   ├── task.go
-│   └── user.go
-├── go.mod
-├── go.sum
-├── internal
-│   └── tokenutil
-│       └── tokenutil.go
-├── mongo
-│   └── mongo.go
-├── repository
-│   ├── task_repository.go
-│   ├── user_repository.go
-│   └── user_repository_test.go
-└── usecase
-    ├── login_usecase.go
-    ├── profile_usecase.go
-    ├── refresh_token_usecase.go
-    ├── signup_usecase.go
-    ├── task_usecase.go
-    └── task_usecase_test.go
+├── Dockerfile                          # 定义如何构建 Docker 容器的文件
+│
+├── api                                 # 包含 API 相关代码的目录
+│   ├── controller                          # 包含控制器的目录，控制器处理 HTTP 请求
+│   │   ├── login_controller.go                 # 处理登录请求的控制器
+│   │   ├── profile_controller.go               # 处理用户个人资料请求的控制器
+│   │   ├── profile_controller_test.go          # 用户个人资料控制器的测试文件
+│   │   ├── refresh_token_controller.go         # 处理刷新令牌请求的控制器
+│   │   ├── signup_controller.go                # 处理用户注册请求的控制器
+│   │   └── task_controller.go                  # 处理任务请求的控制器
+│   ├── middleware                          # 包含中间件的目录，中间件用于执行请求处理前后的操作
+│   │   └── jwt_auth_middleware.go              # JWT 认证中间件
+│   └── route                               # 包含路由定义的目录，路由将 HTTP 请求映射到控制器
+│       ├── login_route.go                      # 登录功能的路由定义
+│       ├── profile_route.go                    # 用户个人资料功能的路由定义
+│       ├── refresh_token_route.go              # 刷新令牌功能的路由定义
+│       ├── route.go                            # 可能包含路由的通用配置或初始化代码
+│       ├── signup_route.go                     # 用户注册功能的路由定义
+│       └── task_route.go                       # 任务功能的路由定义
+│
+├── bootstrap                           # 包含启动应用程序所需的初始化代码的目录
+│   ├── app.go                              # 初始化 Gin Web 框架或其他服务的代码
+│   ├── database.go                         # 初始化数据库连接的代码
+│   └── env.go                              # 加载环境变量的代码
+│
+├── cmd                                 # 包含应用程序入口点的目录
+│   └── main.go                             # 应用程序的主入口文件
+│
+├── docker-compose.yaml                 # 定义多个 Docker 容器配置的 YAML 文件
+│
+├── domain                              # 包含应用程序的核心业务逻辑和数据模型的目录
+│   ├── error_response.go                   # 定义错误响应的结构体
+│   ├── jwt_custom.go                       # 定义 JWT 令牌处理的逻辑
+│   ├── login.go                            # 定义登录相关的数据模型和逻辑
+│   ├── profile.go                          # 定义用户个人资料相关的数据模型和逻辑
+│   ├── refresh_token.go                    # 定义刷新令牌相关的数据模型和逻辑
+│   ├── signup.go                           # 定义用户注册相关的数据模型和逻辑
+│   ├── success_response.go                 # 定义成功响应的结构体
+│   ├── task.go                             # 定义任务相关的数据模型和逻辑
+│   └── user.go                             # 定义用户相关的数据模型和逻辑
+│
+├── go.mod                              # Go Modules 的模块定义文件
+│
+├── go.sum                              # Go Modules 的依赖校验和版本信息文件
+│
+├── internal                            # 包含应用程序内部工具和实用程序代码的目录
+│   └── tokenutil                           # 包含与令牌生成和验证相关的工具的目录
+│       └── tokenutil.go                        # 令牌生成和验证的工具代码
+│
+├── mongo                               # 包含与 MongoDB 数据库交互的代码的目录
+│   └── mongo.go                            # MongoDB 数据库连接和操作的代码
+│
+├── repository                          # 包含数据访问层代码的目录，定义了与数据库交互的方法
+│   ├── task_repository.go                  # 与任务数据交互的方法
+│   ├── user_repository.go                  # 与用户数据交互的方法
+│   └── user_repository_test.go             # 对用户存储库进行单元测试的测试文件
+│
+└── usecase                             # 包含应用程序业务逻辑层代码的目录
+    ├── login_usecase.go                    # 处理登录逻辑的业务逻辑
+    ├── profile_usecase.go                  # 处理用户个人资料逻辑的业务逻辑
+    ├── refresh_token_usecase.go            # 处理刷新令牌逻辑的业务逻辑
+    ├── signup_usecase.go                   # 处理用户注册逻辑的业务逻辑
+    ├── task_usecase.go                     # 处理任务逻辑的业务逻辑
+    └── task_usecase_test.go                # 对任务业务逻辑进行单元测试的测试文件
 ```
-
-### API documentation of Go Backend Clean Architecture
-
-<a href="https://documenter.getpostman.com/view/391588/2s8Z75S9xy" target="_blank">
-    <img alt="View API Doc Button" src="https://github.com/amitshekhariitbhu/go-backend-clean-architecture/blob/main/assets/button-view-api-docs.png?raw=true" width="200" height="60"/>
-</a>
-
-### Example API Request and Response
-
-- signup
-
-  - Request
-
-  ```
-  curl --location --request POST 'http://localhost:8080/signup' \
-  --data-urlencode 'email=test@gmail.com' \
-  --data-urlencode 'password=test' \
-  --data-urlencode 'name=Test Name'
-  ```
-
-  - Response
-
-  ```json
-  {
-    "accessToken": "access_token",
-    "refreshToken": "refresh_token"
-  }
-  ```
-
-- login
-
-  - Request
-
-  ```
-  curl --location --request POST 'http://localhost:8080/login' \
-  --data-urlencode 'email=test@gmail.com' \
-  --data-urlencode 'password=test'
-  ```
-
-  - Response
-
-  ```json
-  {
-    "accessToken": "access_token",
-    "refreshToken": "refresh_token"
-  }
-  ```
-
-- profile
-
-  - Request
-
-  ```
-  curl --location --request GET 'http://localhost:8080/profile' \
-  --header 'Authorization: Bearer access_token'
-  ```
-
-  - Response
-
-  ```json
-  {
-    "name": "Test Name",
-    "email": "test@gmail.com"
-  }
-  ```
-
-- task create
-
-  - Request
-
-  ```
-  curl --location --request POST 'http://localhost:8080/task' \
-  --header 'Authorization: Bearer access_token' \
-  --header 'Content-Type: application/x-www-form-urlencoded' \
-  --data-urlencode 'title=Test Task'
-  ```
-
-  - Response
-
-  ```json
-  {
-    "message": "Task created successfully"
-  }
-  ```
-
-- task fetch
-
-  - Request
-
-  ```
-  curl --location --request GET 'http://localhost:8080/task' \
-  --header 'Authorization: Bearer access_token'
-  ```
-
-  - Response
-
-  ```json
-  [
-    {
-      "title": "Test Task"
-    },
-    {
-      "title": "Test Another Task"
-    }
-  ]
-  ```
-
-- refresh token
-
-  - Request
-
-  ```
-  curl --location --request POST 'http://localhost:8080/refresh' \
-  --header 'Content-Type: application/x-www-form-urlencoded' \
-  --data-urlencode 'refreshToken=refresh_token'
-  ```
-
-  - Response
-
-  ```json
-  {
-    "accessToken": "access_token",
-    "refreshToken": "refresh_token"
-  }
-  ```
-
-### TODO
-
-- Improvement based on feedback.
-- Add more test cases.
-- Always try to update with the latest version of the packages used.
-
-## If this project helps you in anyway, show your love ❤️ by putting a ⭐ on this project ✌️
-
-### License
-
-```
-   Copyright (C) 2024 Amit Shekhar
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-```
-
-### Contributing to Go Backend Clean Architecture
-
-All pull requests are welcome.
