@@ -39,7 +39,7 @@
   // app theme
   import {darkTheme, NIcon, NSlider} from 'naive-ui'
   // vue3 function
-  import { defineEmits, ref, watch, watchEffect, onMounted, computed } from 'vue';
+  import { ref, watch, watchEffect, onMounted, computed } from 'vue';
   import { onBeforeUnmount } from 'vue';
 
   ////// i18n auto lang

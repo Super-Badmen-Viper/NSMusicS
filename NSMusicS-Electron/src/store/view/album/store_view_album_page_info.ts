@@ -7,6 +7,5 @@ export const store_view_album_page_info = reactive({
 
     album_item_count: 0,
     album_starred_count: 0,
-    album_recently_count: 0,
-    album_recently_count: 0,
+    album_recently_count: 0
 });

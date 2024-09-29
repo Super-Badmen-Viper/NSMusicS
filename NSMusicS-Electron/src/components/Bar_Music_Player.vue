@@ -21,7 +21,6 @@
 
   ////// this_view components of navie_ui
   import {onMounted, ref, watch, inject} from 'vue';
-  import { defineEmits } from 'vue';
   import { onBeforeUnmount } from 'vue';
   const { ipcRenderer } = require('electron');
   import { store_playlist_appearance } from '@/store/view/playlist/store_playlist_appearance'

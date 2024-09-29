@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted,defineEmits } from 'vue';
+import { onMounted } from 'vue';
 import Table_Artist_List_ALL from '../views/table/Table_Artist_List_ALL_Grid_Virtual.vue'
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 
