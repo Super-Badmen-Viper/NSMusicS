@@ -799,6 +799,7 @@
                   <n-switch
                       v-model:value="store_router_data_logic.clear_UserExperience_Model"
                       @update:value="store_router_data_logic.get_clear_UserExperience_Model"
+                      :disabled="store_server_user_model.model_server_type_of_web"
                   >
                   </n-switch>
                 </n-space>

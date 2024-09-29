@@ -1,4 +1,6 @@
 # NSMusicS-GO Music-Server
+The goal of NSMusicS is to achieve internationalization+cloud native+streaming music services+professional audio+cross platform data interoperability, and integrate all well-known streaming media servers into NSMusicS to embrace the future of cloud native music and become a representative work in the Github cloud native music field
+
 A Go (Golang) Backend Clean Architecture project with Gin, MongoDB, JWT Authentication Middleware, Test, and Docker.
 
 ![Go Backend Clean Architecture](https://github.com/amitshekhariitbhu/go-backend-clean-architecture/blob/main/assets/go-backend-clean-architecture.png?raw=true)

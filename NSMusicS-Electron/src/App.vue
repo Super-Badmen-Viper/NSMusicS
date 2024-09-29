@@ -657,7 +657,10 @@
               :options="store_app_configs_info.menuOptions_appBar"/>
           </n-layout-sider>
           <!--Right Router_View-->
-          <n-layout embedded style="height: calc(100vh - 150px);margin-top: 70px;">
+          <n-layout
+              embedded
+              class="n_layout"
+              style="height: calc(100vh - 150px);margin-top: 70px;">
             <!--Menu View -->
             <RouterView
               class="view_show_data"
@@ -670,7 +673,6 @@
               class="view_show_data"
               v-else-if="store_router_data_info.router_select_model_home"
             >
-
             </RouterView>
             <!--Updateing View-->
             <RouterView
@@ -683,21 +685,18 @@
               class="view_show_table"
               v-else-if="store_router_data_info.router_select_model_media"
             >
-
             </RouterView>
             <!--Album View-->
             <RouterView
               class="view_show_table"
               v-else-if="store_router_data_info.router_select_model_album"
             >
-
             </RouterView>
             <!--Artist View-->
             <RouterView
               class="view_show_table"
               v-else-if="store_router_data_info.router_select_model_artist"
             >
-
             </RouterView>
             <!--Top Bar-->
             <div class="bar_top_setapp" style="background-color: transparent" @click="drawer_close_of_player_bar">
@@ -723,7 +722,12 @@
                   text-align:center;
                   z-index: 99;
                 ">
-                <n-button quaternary circle style="margin-right:4px;" @click="ipcRenderer.send('window-reset-data');">
+                <n-button quaternary circle style="margin-right:4px;" @click="async () => {
+                  if(store_server_user_model.model_server_type_of_web){
+                    await ipcRenderer.invoke('mpv-stopped');
+                  }
+                  ipcRenderer.send('window-reset-data');
+                }">
                   <template #icon>
                     <n-icon size="20" :depth="2"><clean/></n-icon>
                   </template>
@@ -790,11 +794,13 @@
           background-color: rgba(127, 127, 127, 0.1);
           backdrop-filter: blur(10px);
           margin-top: 88px;margin-bottom:88px;
+          z-index: 100;
         ">
-        <n-drawer-content>
+        <n-drawer-content style="z-index: 100;">
           <template #default>
             <Bar_Music_PlayList
               v-if="store_playlist_appearance.playlist_show"
+              style="z-index: 100;"
               >
             </Bar_Music_PlayList>
           </template>
@@ -910,8 +916,29 @@
   overflow: hidden;
 }
 .n_layout_sider {
+  //background-color: #F0F3F6;
   padding-top: 64px;
   border: 0;
+}
+.n_layout{
+  //background-color: #F7F9FC;
+}
+.bar_top_setapp{
+  width: 100vw;
+  height: 60px;
+  margin-left: 7px;
+
+  z-index: 1;
+
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  -webkit-app-region: drag;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 .view_show_table {
   width: calc(100vw - 100px);
@@ -931,33 +958,8 @@
   position: fixed;bottom: 0;left: 0;
   transition: height 0.2s;
 }
-.bar_top_setapp{
-  width: 100vw;
-  height: 60px;
-  margin-left: 7px;
 
-  z-index: 1;
 
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-
-  -webkit-app-region: drag;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-
-  background-color: #00000000;
-}
-nav {
-  text-align: center;
-  margin-left: -1rem;
-  font-size: 1rem;
-
-  padding: 1rem 0;
-  margin-top: 1rem;
-}
 .link {
   color: #FFFFFF;
   font-size: 15px;

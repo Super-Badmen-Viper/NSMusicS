@@ -202,6 +202,9 @@ export const store_app_configs_logic_load = reactive({
         this.app_configs_loading = false
 
         // await store_player_audio_logic.player.pause();
+        if(store_server_user_model.model_server_type_of_web){
+            store_player_audio_logic.this_audio_initial_trigger = true
+        }
     },
     handleUpdate_selectd_props_app_sidebar_Value(value: number[]){
         let allMenuOptions = store_app_configs_info.menuOptions_appBar;

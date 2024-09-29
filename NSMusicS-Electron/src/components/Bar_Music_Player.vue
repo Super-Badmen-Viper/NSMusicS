@@ -311,7 +311,9 @@
             }
           }
         } else if (model_num === 'playback-4') {
-          index = Math.floor(Math.random() * last_index);
+          index = Math.floor(
+              Math.random() * store_playlist_list_info.playlist_MediaFiles_temporary.length
+          );
         } else {
           stop_play = true;
         }

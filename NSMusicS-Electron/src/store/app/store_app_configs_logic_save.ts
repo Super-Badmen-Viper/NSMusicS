@@ -109,31 +109,58 @@ export const store_app_configs_logic_save = reactive({
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
 
+        let player_Configs_of_Audio_Info = null
+        if(store_server_user_model.model_server_type_of_web) {
+            player_Configs_of_Audio_Info = ref(
+                new Player_Configs_of_Audio_Info({
+                    this_audio_file_path: String(''),
+                    this_audio_file_medium_image_url: String(''),
+                    this_audio_file_lyric: String(''),
+                    this_audio_singer_name: String(''),
+                    this_audio_singer_id: String(''),
+                    this_audio_song_name: String(''),
+                    this_audio_song_id: String(''),
+                    this_audio_song_rating: String(0),
+                    this_audio_song_favorite: String(false),
+                    this_audio_album_name: String(''),
+                    this_audio_album_id: String(''),
+                    this_audio_Index_of_absolute_positioning_in_list: String(0),
 
-        const player_Configs_of_Audio_Info = ref(
-            new Player_Configs_of_Audio_Info({
-                this_audio_file_path: String(store_player_audio_info.this_audio_file_path),
-                this_audio_file_medium_image_url: String(store_player_audio_info.this_audio_file_medium_image_url),
-                this_audio_file_lyric: String(store_player_audio_info.this_audio_lyrics_string),
-                this_audio_singer_name: String(store_player_audio_info.this_audio_singer_name),
-                this_audio_singer_id: String(store_player_audio_info.this_audio_singer_id),
-                this_audio_song_name: String(store_player_audio_info.this_audio_song_name),
-                this_audio_song_id: String(store_player_audio_info.this_audio_song_id),
-                this_audio_song_rating: String(store_player_audio_info.this_audio_song_rating),
-                this_audio_song_favorite: String(store_player_audio_info.this_audio_song_favorite),
-                this_audio_album_name: String(store_player_audio_info.this_audio_album_name),
-                this_audio_album_id: String(store_player_audio_info.this_audio_album_id),
-                this_audio_Index_of_absolute_positioning_in_list: String(store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list),
-    
-                page_top_album_image_url: String(store_player_audio_info.page_top_album_image_url),
-                page_top_album_id: String(store_player_audio_info.page_top_album_id),
-                page_top_album_name: String(store_player_audio_info.page_top_album_name),
-    
-                page_songlists_selected: String(store_view_media_page_logic.page_songlists_selected),
-    
-                player_mode_of_lock_playlist: String(store_player_appearance.player_mode_of_lock_playlist),
-                player_mode_of_medialist_from_external_import: String(store_player_appearance.player_mode_of_medialist_from_external_import),
-            }));
+                    page_top_album_image_url: String(store_player_audio_info.page_top_album_image_url),
+                    page_top_album_id: String(store_player_audio_info.page_top_album_id),
+                    page_top_album_name: String(store_player_audio_info.page_top_album_name),
+
+                    page_songlists_selected: String(store_view_media_page_logic.page_songlists_selected),
+
+                    player_mode_of_lock_playlist: String(store_player_appearance.player_mode_of_lock_playlist),
+                    player_mode_of_medialist_from_external_import: String(store_player_appearance.player_mode_of_medialist_from_external_import),
+                }));
+        }else {
+            player_Configs_of_Audio_Info = ref(
+                new Player_Configs_of_Audio_Info({
+                    this_audio_file_path: String(store_player_audio_info.this_audio_file_path),
+                    this_audio_file_medium_image_url: String(store_player_audio_info.this_audio_file_medium_image_url),
+                    this_audio_file_lyric: String(store_player_audio_info.this_audio_lyrics_string),
+                    this_audio_singer_name: String(store_player_audio_info.this_audio_singer_name),
+                    this_audio_singer_id: String(store_player_audio_info.this_audio_singer_id),
+                    this_audio_song_name: String(store_player_audio_info.this_audio_song_name),
+                    this_audio_song_id: String(store_player_audio_info.this_audio_song_id),
+                    this_audio_song_rating: String(store_player_audio_info.this_audio_song_rating),
+                    this_audio_song_favorite: String(store_player_audio_info.this_audio_song_favorite),
+                    this_audio_album_name: String(store_player_audio_info.this_audio_album_name),
+                    this_audio_album_id: String(store_player_audio_info.this_audio_album_id),
+                    this_audio_Index_of_absolute_positioning_in_list: String(store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list),
+
+                    page_top_album_image_url: String(store_player_audio_info.page_top_album_image_url),
+                    page_top_album_id: String(store_player_audio_info.page_top_album_id),
+                    page_top_album_name: String(store_player_audio_info.page_top_album_name),
+
+                    page_songlists_selected: String(store_view_media_page_logic.page_songlists_selected),
+
+                    player_mode_of_lock_playlist: String(store_player_appearance.player_mode_of_lock_playlist),
+                    player_mode_of_medialist_from_external_import: String(store_player_appearance.player_mode_of_medialist_from_external_import),
+                }));
+        }
         let system_Configs_Write = new Class_Set_System_Configs_Write()
         system_Configs_Write.system_player_config_of_audio(
             db,

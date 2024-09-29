@@ -13,7 +13,7 @@ export class Home_Lists_ApiWebService_of_ND extends Navidrome_Api_Services_Web {
     }
     public async getAlbumList_Random(): Promise<any> {
         return this.sendRequest('album', {
-            _end: '15',
+            _end: '18',
             _order: 'ASC',
             _sort: 'random',
             _start: '0',
