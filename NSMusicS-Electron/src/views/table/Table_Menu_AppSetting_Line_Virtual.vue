@@ -181,11 +181,11 @@
     }
   }
   ///
+  const crypto = require('crypto');
   import { User_ApiService_of_ND } from "@/features/servers_configs/navidrome_api/services_normal/user_management/index_service";
   function generateEncryptedPassword(password: string): { salt: string, token: string } {
     const saltLength = 6;
     const salt = generateRandomString(saltLength);
-    const crypto = require('crypto');
     const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
     return { salt, token };
   }

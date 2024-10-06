@@ -888,7 +888,7 @@
     minimatch "^9.0.3"
     muggle-string "^0.3.1"
     path-browserify "^1.0.1"
-    vue-template-compiler "^2.7.14"
+    vue-template-compiler "^3.0.0"
 
 "@vue/reactivity@3.4.21":
   version "3.4.21"
@@ -3884,7 +3884,7 @@ vue-router@^4.2.5:
   dependencies:
     "@vue/devtools-api" "^6.5.1"
 
-vue-template-compiler@^2.7.14:
+vue-template-compiler@^3.0.0:
   version "2.7.16"
   resolved "https://registry.yarnpkg.com/vue-template-compiler/-/vue-template-compiler-2.7.16.tgz#c81b2d47753264c77ac03b9966a46637482bb03b"
   integrity sha512-AYbUWAJHLGGQM7+cNTELw+KsOG9nl2CnSv467WobS5Cv9uk3wFcnr1Etsz2sEIHEZvw1U+o9mRlEO6QbZvUPGQ==

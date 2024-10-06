@@ -1,5 +1,6 @@
 import { reactive } from 'vue'
 import {store_server_user_model} from "@/store/server/store_server_user_model";
+const crypto = require('crypto');
 
 export const store_server_users = reactive({
     percentage_of_local: 0,
@@ -21,7 +22,6 @@ export const store_server_users = reactive({
             randomString += characters[randomIndex];
         }
         const salt = randomString;
-        const crypto = require('crypto');
         const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
         return { salt, token };
     },
