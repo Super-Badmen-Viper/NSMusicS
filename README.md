@@ -3,13 +3,15 @@
     <div>
         <h2>NSMusicS | 九歌</h2>
         <p>
-            A local/server music software that is expected to support multiple platforms with AI capabilities and multimodal features.<br>
+            The goal of NSMusicS is to achieve (cloud native+streaming music server+music library management) + (cross platform client+professional audio+music library management) + (internationalization)<br>
         </p>
         <p>
-            The current development phase is to develop an Elecetron cross platform music software that is compatible with Navichrome and has a beautiful UI, and to simultaneously develop music artificial intelligence and streaming services as cloud services for NSMusicS
+            It should not only implement its own streaming services, but also be compatible with various mainstream open-source streaming servers, And implement cross platform professional music clients for various operating systems, ensuring data interoperability between the client and server of each operating system<br>
         </p>
         <p>
-            The goal of NSMusicS is to integrate various functions (such as artificial intelligence, streaming, music library management, cross platform, etc.), which can be understood as similar to Navidrome but with more features than Navidrome. It wants to become a plugin integrated application that can almost have all music functions.
+            The cross platform client NSMusicS Electron has been implemented, supporting the Windows platform (which will soon support Linux and MacOS) and compatible with streaming media servers Navidrome (which will soon be compatible with Subsonic, Jellyfin, and Emby)<br>
+            Cross platform server-side NSMusicS GO is currently under development<br>
+            Cross platform client NSMusicS Flutter waiting to open
         </p>
         <p>
             The expectation of the NSMusicS series products is to enable people around the world to use free, open-source, and user-friendly music products

@@ -1,7 +1,8 @@
-import {reactive} from 'vue'
+import {reactive, watch} from 'vue'
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {darkTheme, lightTheme} from "naive-ui";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+const { ipcRenderer } = require('electron');
 
 export const store_app_configs_logic_theme = reactive({
     update_theme(value:any){
@@ -31,4 +32,12 @@ export const store_app_configs_logic_theme = reactive({
         }
         store_app_configs_logic_save.save_system_config_of_App_Configs()
     },
+});
+watch(() => store_app_configs_info.theme_auto_system, async (newValue) => {
+    let sy_theme = await ipcRenderer.invoke('window-get-system-theme')
+    if(sy_theme === 'lightTheme')
+        store_app_configs_logic_theme.theme_normal_mode_click()
+    else
+        store_app_configs_logic_theme.theme_dark_mode_click()
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
 });

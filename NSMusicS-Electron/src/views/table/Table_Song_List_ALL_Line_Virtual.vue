@@ -265,15 +265,11 @@ onMounted(() => {
   }
 });
 // lineItems Filter To Favorite
+const Type_Filter_Show = ref(false)
 const options_Filter = ref([
   {
     label: t('nsmusics.view_page.loveSong'),
-    key: 'filter_favorite',
-    icon() {
-      return h(NIcon, null, {
-        default: () => h(Heart28Filled)
-      });
-    }
+    key: 'filter_favorite'
   }
 ])
 const options_Filter_handleSelect = (key: string | number) => {
@@ -370,6 +366,8 @@ const handleItemDbClick = (media_file:any,index:number) => {
       store_playlist_list_logic.media_page_handleItemDbClick = true
       store_player_appearance.player_mode_of_lock_playlist = false
       store_player_audio_info.this_audio_restart_play = true
+
+      store_playlist_list_fetchData.fetchData_PlayList()
     }
   }
 }
@@ -476,6 +474,7 @@ import {store_view_media_page_fetchData} from "@/store/view/media/store_view_med
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+import {BrowserUpdatedFilled} from "@vicons/material";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -861,15 +860,35 @@ onBeforeUnmount(() => {
         </n-button>
       </n-dropdown>
 
-      <n-dropdown
-          trigger="click" :show-arrow="true"
-          :options="options_Filter" @select="options_Filter_handleSelect">
-        <n-button quaternary circle size="medium" style="margin-left:4px">
+      <n-badge
+          :value="store_view_media_page_logic.page_songlists_filter_year" :offset="[-17, 40]">
+        <n-button quaternary circle size="medium" style="margin-left:4px" @click="Type_Filter_Show = true">
           <template #icon>
             <n-icon :size="20"><Filter20Filled/></n-icon>
           </template>
         </n-button>
-      </n-dropdown>
+      </n-badge>
+      <n-modal
+          v-model:show="Type_Filter_Show">
+        <n-card style="width: 480px;border-radius: 6px;">
+          <n-space
+              vertical size="large">
+            <n-space>
+              <span style="font-size: 20px;font-weight: 600;">{{ $t('common.filter_other')}}</span>
+            </n-space>
+            <n-space justify="space-between">
+              <n-space vertical>
+                <span style="font-size:14px;font-weight: 600;">{{ $t('common.year') }}</span>
+                <n-input clearable placeholder="" v-model:value="store_view_media_page_logic.page_songlists_filter_year"/>
+              </n-space>
+              <n-space vertical>
+                <span style="font-size:14px;font-weight: 600;">{{ $t('entity.genre_other') }}</span>
+                <n-input disabled clearable placeholder="Not open || 未开放" v-model:value="playlist_set_of_addPlaylist_of_playlistname"/>
+              </n-space>
+            </n-space>
+          </n-space>
+        </n-card>
+      </n-modal>
 
       <n-button
           v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"

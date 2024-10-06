@@ -53,7 +53,10 @@
             "routerModel_type_2": "Balance Mode",
             "routerModel_type_2_explain": "When switching pages, keep the current page data and clear other page data, trigger automatic memory cleanup (low frequency)",
             "routerModel_type_3": "Quality Mode",
-            "routerModel_type_3_explain": "When switching pages, keep the current page data and clear other page data, completely disable automatic memory cleanup"
+            "routerModel_type_3_explain": "When switching pages, keep the current page data and clear other page data, completely disable automatic memory cleanup",
+            "desktop_lyrics": "Desktop Lyrics",
+            "theme_automatic_switching": "Automatic Theme Switching",
+            "theme_automatic_switching_explain": "Whether to switch between light and dark themes following the system"
         },
         "view_player": {
             "view_seting": {

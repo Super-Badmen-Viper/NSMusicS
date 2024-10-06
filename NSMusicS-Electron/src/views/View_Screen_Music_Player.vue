@@ -767,7 +767,7 @@
           justify="space-between"
           style="transition: margin 0.4s;"
           :style="{ marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '-70px' : '0px' }">
-          <n-flex style="height: 70px;">
+          <n-flex style="width: 400px;height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-left:30px;">
               <n-button quaternary size="medium"
                 style="margin-right:4px" @click="close_media_player">
@@ -777,21 +777,42 @@
               </n-button>
             </div>
           </n-flex>
-          <div
-            v-if="false"
+          <!-- -->
+          <n-space
             style="
-              -webkit-app-region: no-drag;margin-top: 35px;margin-left:calc(50vw - 306px);
+              -webkit-app-region: no-drag;margin-top: 35px;
             ">
-            <n-radio-group size="small" v-model:value="checkStrategy">
-              <n-radio-button size="small" value="player">
-                播放
-              </n-radio-button>
-              <n-radio-button size="small" value="related">
-                相关
-              </n-radio-button>
-            </n-radio-group>
-          </div>
-          <n-flex justify="end" style="height: 70px;">
+<!--            <n-button quaternary @click="get_isVisible_Player_theme">-->
+<!--              <span style="font-weight: 500;">{{ $t('page.sidebar.nowPlaying') }}</span>-->
+<!--            </n-button>-->
+<!--            <n-button quaternary @click="get_isVisible_Player_theme">-->
+<!--              <span style="font-weight: 500;">{{ $t('page.fullscreenPlayer.related') }}</span>-->
+<!--            </n-button>-->
+<!--            <n-radio-group size="small" v-model:value="checkStrategy">-->
+<!--              <n-radio-button-->
+<!--                style="-->
+<!--                  &#45;&#45;n-button-border-color-active: #FFFFFF;-->
+<!--                  &#45;&#45;n-button-box-shadow-focus: inset 0 0 0 1px #FFFFFF, 0 0 0 2px rgba(255, 255, 255, 0.3);-->
+<!--                  &#45;&#45;n-button-box-shadow-hover: inset 0 0 0 1px #FFFFFF;-->
+<!--                  &#45;&#45;n-button-color-active: #FFFFFF;-->
+<!--                  &#45;&#45;n-button-text-color-hover: #FFFFFF;"-->
+<!--                size="small" value="player">-->
+<!--                播放-->
+<!--              </n-radio-button>-->
+<!--              <n-radio-button-->
+<!--                style="-->
+<!--                  &#45;&#45;n-button-border-color-active: #FFFFFF;-->
+<!--                  &#45;&#45;n-button-box-shadow-focus: inset 0 0 0 1px #FFFFFF, 0 0 0 2px rgba(255, 255, 255, 0.3);-->
+<!--                  &#45;&#45;n-button-box-shadow-hover: inset 0 0 0 1px #FFFFFF;-->
+<!--                  &#45;&#45;n-button-color-active: #FFFFFF;-->
+<!--                  &#45;&#45;n-button-text-color-hover: #FFFFFF;"-->
+<!--                size="small" value="related">-->
+<!--                相关-->
+<!--              </n-radio-button>-->
+<!--            </n-radio-group>-->
+          </n-space>
+          <!-- -->
+          <n-flex justify="end" style="width: 400px;height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
               <n-button quaternary circle style="margin-right:0px;" @click="ipcRenderer.send('window-reset-data');">
                 <template #icon>
@@ -1114,6 +1135,7 @@
 #player_bg_zindex_1 {
   z-index: -1;
 }
+
 .lyrics_info {
   /* color: v-bind(player_lyric_color); */
   color: transparent;

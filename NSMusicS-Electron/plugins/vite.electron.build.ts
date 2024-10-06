@@ -37,7 +37,7 @@ export const viteElectronBuild = (): Plugin => {
             electronBuilder.build({
                 config: {
                     appId: 'github.com.nsmusics.xiang.cheng',
-                    productName: 'NSMusicS-Electron',
+                    productName: 'NSMusicS',
                     directories: {
                         output: path.join(process.cwd(), "release"), //输出目录
                         app: path.join(process.cwd(), "dist"), //app目录
@@ -66,7 +66,7 @@ export const viteElectronBuild = (): Plugin => {
                         installerHeaderIcon: 'resources/config/NSMusicS.ico',
                         createDesktopShortcut: true,
                         createStartMenuShortcut: true,
-                        shortcutName: 'NSMusicS-Electron'
+                        shortcutName: 'NSMusicS'
                     },
                     extraResources: {
                         from: './resources/',

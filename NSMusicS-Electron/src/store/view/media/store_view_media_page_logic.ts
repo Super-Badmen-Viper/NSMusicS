@@ -47,6 +47,8 @@ export const store_view_media_page_logic = reactive({
     page_songlists_get_keyword_model_num: 0,
     page_songlists_options_Sort_key: [],
 
+    page_songlists_filter_year: 0,
+
     page_songlists_bool_show_search_area: false,
     page_songlists_input_search_Value: '',
 
@@ -240,4 +242,8 @@ watch(() => store_view_media_page_logic.list_data_StartUpdate, async (newValue) 
         store_view_media_page_logic.list_data_StartUpdate = false
         console.log("store_view_media_page_logic.list_data_StartUpdate")
     }
+});
+watch(() => store_view_media_page_logic.page_songlists_filter_year, async (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    await store_view_media_page_fetchData.fetchData_Media()
 });

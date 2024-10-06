@@ -20,5 +20,7 @@ interface App_Configs_Props {
   artist_page_sizes: number
   clear_Memory_Model: any,
   clear_Equilibrium_Model: any,
-  clear_UserExperience_Model: any
+  clear_UserExperience_Model: any,
+  theme_auto_system: any,
+  page_songlists_filter_year: number
 };

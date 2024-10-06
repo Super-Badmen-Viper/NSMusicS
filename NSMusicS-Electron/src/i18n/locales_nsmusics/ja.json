@@ -53,7 +53,10 @@
             "routerModel_type_2": "バランスモード",
             "routerModel_type_2_explain": "ページを切り替えた際、現在のページデータを保持し、他のページのデータをクリアし、自動メモリクリーンアップを低頻度でトリガー",
             "routerModel_type_3": "クオリティモード",
-            "routerModel_type_3_explain": "ページを切り替えた際、現在のページデータを保持し、他のページのデータをクリアし、自動メモリクリーンアップを完全に無効化"
+            "routerModel_type_3_explain": "ページを切り替えた際、現在のページデータを保持し、他のページのデータをクリアし、自動メモリクリーンアップを完全に無効化",
+            "desktop_lyrics": "デスクトップの歌詞",
+            "theme_automatic_switching": "テーマの自動切り替え",
+            "theme_automatic_switching_explain": "システムに従ってライトテーマとダークテーマを切り替えるかどうか"
         },
         "view_player": {
             "view_seting": {

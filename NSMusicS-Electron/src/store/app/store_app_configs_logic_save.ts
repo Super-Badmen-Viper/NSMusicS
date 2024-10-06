@@ -50,7 +50,9 @@ export const store_app_configs_logic_save = reactive({
                 artist_page_sizes: String(store_view_artist_page_info.artist_page_sizes),
                 clear_Memory_Model: String(store_router_data_logic.clear_Memory_Model),
                 clear_Equilibrium_Model: String(store_router_data_logic.clear_Equilibrium_Model),
-                clear_UserExperience_Model: String(store_router_data_logic.clear_UserExperience_Model)
+                clear_UserExperience_Model: String(store_router_data_logic.clear_UserExperience_Model),
+                theme_auto_system: String(store_app_configs_info.theme_auto_system),
+                page_songlists_filter_year: String(store_view_media_page_logic.page_songlists_filter_year)
             }));
         let system_Configs_Write = new Class_Set_System_Configs_Write()
         system_Configs_Write.system_app_config(

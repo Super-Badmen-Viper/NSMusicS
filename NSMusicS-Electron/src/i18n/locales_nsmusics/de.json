@@ -53,7 +53,10 @@
             "routerModel_type_2": "Ausgeglichener Modus",
             "routerModel_type_2_explain": "Beim Wechsel der Seiten werden die aktuellen Seitendaten beibehalten und die Daten anderer Seiten gelöscht, eine automatische Speicherbereinigung ausgelöst (niedrige Frequenz)",
             "routerModel_type_3": "Qualitätsmodus",
-            "routerModel_type_3_explain": "Beim Wechsel der Seiten werden die aktuellen Seitendaten beibehalten und die Daten anderer Seiten gelöscht, die automatische Speicherbereinigung wird vollständig deaktiviert"
+            "routerModel_type_3_explain": "Beim Wechsel der Seiten werden die aktuellen Seitendaten beibehalten und die Daten anderer Seiten gelöscht, die automatische Speicherbereinigung wird vollständig deaktiviert",
+            "desktop_lyrics": "Desktop-Songtexte",
+            "theme_automatic_switching": "Automatisches Ändern des Themes",
+            "theme_automatic_switching_explain": "Ob zwischen hellen und dunklen Themen gewechselt werden soll, basierend auf dem System"
         },
         "view_player": {
             "view_seting": {

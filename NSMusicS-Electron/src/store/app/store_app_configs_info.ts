@@ -20,6 +20,7 @@ export const store_app_configs_info = reactive({
     theme_name: 'lightTheme',
     theme_app: null,
     update_theme: false,
+    theme_auto_system: false,
 
     window_innerWidth: 0,
     window_innerHeight: 0,

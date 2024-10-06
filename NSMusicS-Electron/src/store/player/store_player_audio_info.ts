@@ -118,6 +118,10 @@ watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
         store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
             item.playing = item.id === store_player_audio_info.this_audio_song_id;
         });
+
+        ipcRenderer.invoke('i18n-tray-label-musicIcon',
+            String(store_player_audio_info.this_audio_song_name)//+ ' - ' + store_player_audio_info.this_audio_singer_name
+        );
     }
 });
 watch(() => store_player_audio_info.this_audio_file_medium_image_url, (newValue) => {

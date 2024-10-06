@@ -53,7 +53,10 @@
             "routerModel_type_2": "Tryb Zrównoważony",
             "routerModel_type_2_explain": "Po przejściu na inną stronę zachowuje się bieżąca strona, a inne strony są czyszczone, wyzwalane jest czyszczenie pamięci (nizka częstotliwość)",
             "routerModel_type_3": "Tryb Jakościowy",
-            "routerModel_type_3_explain": "Po przejściu na inną stronę zachowuje się bieżąca strona, a inne strony są czyszczone, czyszczenie pamięci jest całkowicie wyłączone"
+            "routerModel_type_3_explain": "Po przejściu na inną stronę zachowuje się bieżąca strona, a inne strony są czyszczone, czyszczenie pamięci jest całkowicie wyłączone",
+            "desktop_lyrics": "Teksty piosenek na pulpicie",
+            "theme_automatic_switching": "Automatyczne przełączanie motywów",
+            "theme_automatic_switching_explain": "Czy przełączać między jasnymi i ciemnymi motywami zgodnie z systemem"
         },
         "view_player": {
             "view_seting": {

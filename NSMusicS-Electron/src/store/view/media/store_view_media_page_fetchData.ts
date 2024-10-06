@@ -47,6 +47,29 @@ export const store_view_media_page_fetchData = reactive({
                         store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey : 'id';
                     const sortOrder = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
                         store_view_media_page_logic.page_songlists_options_Sort_key[0].order.replace('end', '') : '';
+                    /// year
+                    if(store_view_media_page_logic.page_songlists_keywordFilter.indexOf('WHERE year') >= 0) {
+                        store_view_media_page_logic.page_songlists_keywordFilter =
+                            store_view_media_page_logic.page_songlists_keywordFilter.substring(
+                                0,
+                                store_view_media_page_logic.page_songlists_keywordFilter.indexOf('WHERE year')
+                            )
+                    }
+                    if(store_view_media_page_logic.page_songlists_keywordFilter.indexOf('AND year') >= 0) {
+                        store_view_media_page_logic.page_songlists_keywordFilter =
+                            store_view_media_page_logic.page_songlists_keywordFilter.substring(
+                                0,
+                                store_view_media_page_logic.page_songlists_keywordFilter.indexOf('AND year')
+                            )
+                    }
+                    if(store_view_media_page_logic.page_songlists_filter_year > 0) {
+                        if (store_view_media_page_logic.page_songlists_keywordFilter.length === 0) {
+                            store_view_media_page_logic.page_songlists_keywordFilter = `WHERE year = ${store_view_media_page_logic.page_songlists_filter_year}`
+                        } else {
+                            store_view_media_page_logic.page_songlists_keywordFilter += `AND year = ${store_view_media_page_logic.page_songlists_filter_year}`
+                        }
+                    }
+                    ///
                     try {
                         stmt_media_file_string =
                             `SELECT * FROM
@@ -307,7 +330,8 @@ export const store_view_media_page_fetchData = reactive({
             store_server_user_model.salt,
             String(this._end),_order,_sort,String(this._start),
             _search,_starred,playlist_id,
-            this._album_id,this._artist_id
+            this._album_id,this._artist_id,
+            store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : ''
         )
     },
     fetchData_Media_of_data_synchronization_to_playlist(){

@@ -94,10 +94,12 @@ export const store_app_configs_logic_load = reactive({
                 store_app_configs_info.theme_app = darkTheme;
             }
             store_app_configs_info.theme_name = '' + system_Configs_Read.app_Configs.value['theme']
+            store_app_configs_info.theme_auto_system = '' + system_Configs_Read.app_Configs.value['theme_auto_system'] === 'true'
             store_app_configs_info.lang = '' + system_Configs_Read.app_Configs.value['lang']
             store_app_configs_info.app_left_menu_collapsed = '' + system_Configs_Read.app_Configs.value['app_left_menu_collapsed'] === 'true'
             store_app_configs_info.selectd_props_app_sidebar = JSON.parse('' + system_Configs_Read.app_Configs.value['selectd_props_app_sidebar'])
             this.handleUpdate_selectd_props_app_sidebar_Value(store_app_configs_info.selectd_props_app_sidebar)
+            store_view_media_page_logic.page_songlists_filter_year = Number('' + system_Configs_Read.app_Configs.value['page_songlists_filter_year'])
             /// library_Config
             store_server_user_model.library_path = '' + system_Configs_Read.library_Configs.value['library']
             console.log(store_server_user_model.library_path)

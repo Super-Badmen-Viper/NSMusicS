@@ -55,7 +55,7 @@
           class="table"
           style="overflow: hidden;border-radius: 6px;"
           :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)'}">
-        开发中，敬请期待
+        Not open || 未开放
       </n-card>
     </n-layout>
   </div>

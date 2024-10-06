@@ -53,7 +53,10 @@
             "routerModel_type_2": "Vyvážený Režim",
             "routerModel_type_2_explain": "Při přepnutí stránek se zachovají data aktuální stránky a vymaže se data ostatních stránek, spustí se automatické vyčištění paměti (nízká frekvence)",
             "routerModel_type_3": "Kvalitní Režim",
-            "routerModel_type_3_explain": "Při přepnutí stránek se zachovají data aktuální stránky a vymaže se data ostatních stránek, automatické vyčištění paměti se úplně vypne"
+            "routerModel_type_3_explain": "Při přepnutí stránek se zachovají data aktuální stránky a vymaže se data ostatních stránek, automatické vyčištění paměti se úplně vypne",
+            "desktop_lyrics": "Texty písně na ploše",
+            "theme_automatic_switching": "Automatické přepínání motivu",
+            "theme_automatic_switching_explain": "Má se přepínat mezi světlými a tmymi motivy podle systému"
         },
         "view_player": {
             "view_seting": {

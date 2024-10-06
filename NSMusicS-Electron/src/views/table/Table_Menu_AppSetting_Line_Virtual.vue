@@ -41,8 +41,8 @@
   ////// server
   const Type_Server_Kinds = [
     {
-      value: "jellyfin",
-      label: "jellyfin"
+      value: "Jellyfin",
+      label: "Jellyfin"
     },
     {
       value: "subsonic",
@@ -59,6 +59,14 @@
     {
       value: "emby",
       label: "emby"
+    },
+    {
+      value: "webdev",
+      label: "webdev"
+    },
+    {
+      value: "onedrive",
+      label: "onedrive"
     }
   ].map((s) => {
     s.value = s.value.toLowerCase()
@@ -207,6 +215,7 @@
   } from "@/features/servers_configs/navidrome_api/services_web/user_authorization/index_service";
   import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
   import {store_router_data_logic} from "@/store/router/store_router_data_logic";
+  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
   const theme_value = ref('lightTheme')
   const theme_options = ref([
     {
@@ -667,12 +676,28 @@
                           :value="Type_Server_Kinds[3].value"
                           :label="Type_Server_Kinds[3].label"
                       />
+                    </n-radio-group>
+                    <n-radio-group v-model:value="Type_Server_Selected">
                       <n-radio-button
                           style="text-align: center;width: 133px;"
                           disabled
                           :key="Type_Server_Kinds[4].value"
                           :value="Type_Server_Kinds[4].value"
                           :label="Type_Server_Kinds[4].label"
+                      />
+                      <n-radio-button
+                          style="text-align: center;width: 133px;"
+                          disabled
+                          :key="Type_Server_Kinds[5].value"
+                          :value="Type_Server_Kinds[5].value"
+                          :label="Type_Server_Kinds[5].label"
+                      />
+                      <n-radio-button
+                          style="text-align: center;width: 133px;"
+                          disabled
+                          :key="Type_Server_Kinds[6].value"
+                          :value="Type_Server_Kinds[6].value"
+                          :label="Type_Server_Kinds[6].label"
                       />
                     </n-radio-group>
                     <n-form inline>
@@ -728,7 +753,23 @@
                     v-model:value="$i18n.locale"
                     :options="languages"
                     style="width: 207px;margin-top: -4px;"
-                    @update:value="store_app_configs_info.lang = $i18n.locale"
+                    @update:value="() => {
+                      store_app_configs_info.lang = $i18n.locale;
+                      ipcRenderer.invoke('i18n-tray-label-menu',
+                        [
+                            t('player.play'),
+                            t('player.pause'),
+                            t('player.previous'),
+                            t('player.next'),
+                            '桌面歌词',
+                            t('common.quit'),
+                            t('nsmusics.siderbar_player.playback_1'),
+                            t('nsmusics.siderbar_player.playback_2'),
+                            t('nsmusics.siderbar_player.playback_3'),
+                            t('nsmusics.siderbar_player.playback_4')
+                        ]
+                      );
+                    }"
                   />
                 </n-space>
                 <n-divider style="margin: 0;"/>
@@ -747,6 +788,17 @@
                     :reset-menu-on-options-change="false"
                     style="width: 207px;margin-top: -4px;"
                   />
+                </n-space>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.theme_automatic_switching') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('nsmusics.view_page.theme_automatic_switching_explain') }}</span>
+                    </div>
+                  </n-space>
+                  <n-switch
+                      v-model:value="store_app_configs_info.theme_auto_system">
+                  </n-switch>
                 </n-space>
                 <n-divider style="margin: 0;"/>
                 <n-space justify="space-between" align="center"

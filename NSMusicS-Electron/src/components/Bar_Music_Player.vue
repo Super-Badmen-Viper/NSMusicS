@@ -225,7 +225,10 @@
       }
     }
   };
-
+  ipcRenderer.on('tray-music-pause', Init_Audio_Player);
+  ipcRenderer.on('tray-music-order', (event, order) => {
+    store_player_audio_logic.play_order = order;
+  });
   ////// player_configs player_button order area
   import { useMessage } from 'naive-ui'
   const message = useMessage()
@@ -247,6 +250,10 @@
       const nextIndex = (currentIndex + 1) % orders.length;
       store_player_audio_logic.play_order = orders[nextIndex];
     }
+
+    ipcRenderer.invoke('i18n-tray-music-order',
+        store_player_audio_logic.play_order
+    );
 
     switch (store_player_audio_logic.play_order) {
       case 'playback-1':
@@ -372,6 +379,8 @@
 
     store_player_appearance.player_mode_of_lock_playlist = true
   }
+  ipcRenderer.on('tray-music-prev', play_skip_back_click);
+  ipcRenderer.on('tray-music-next', play_skip_forward_click);
   const Play_Media_Switching = async () => {
     store_player_audio_logic.current_play_time = formatTime(await store_player_audio_logic.player.getDuration());
     store_player_audio_logic.player_silder_currentTime_added_value = 0;

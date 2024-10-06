@@ -13,6 +13,7 @@ export class Audio_node_mpv {
             await ipcRenderer.invoke('mpv-load', path)
             this.isPlaying = true;
             this.isResumeing = true;
+            await ipcRenderer.invoke('i18n-tray-music-pause', true)
         }catch{}
     }
     async IsResumeing() {
@@ -29,14 +30,17 @@ export class Audio_node_mpv {
         try {
             await ipcRenderer.invoke('mpv-play')
             this.isPlaying = true;
+            await ipcRenderer.invoke('i18n-tray-music-pause', true)
         }catch{
             this.isPlaying = false;
+            await ipcRenderer.invoke('i18n-tray-music-pause', false)
         }
     }
     async pause() {
         try {
             await ipcRenderer.invoke('mpv-pause')
             this.isPlaying = false;
+            await ipcRenderer.invoke('i18n-tray-music-pause', false)
         }catch{
             this.isPlaying = false;
         }

@@ -53,7 +53,10 @@
             "routerModel_type_2": "平衡模式",
             "routerModel_type_2_explain": "切換頁面時，保留當前頁面資料，清除其它頁面資料，觸發自動記憶體清理(低頻率)",
             "routerModel_type_3": "品質模式",
-            "routerModel_type_3_explain": "切換頁面時，保留當前頁面資料，清除其它頁面資料，完全關閉自動記憶體清理"
+            "routerModel_type_3_explain": "切換頁面時，保留當前頁面資料，清除其它頁面資料，完全關閉自動記憶體清理",
+            "desktop_lyrics": "桌面歌詞",
+            "theme_automatic_switching": "主題自動切換",
+            "theme_automatic_switching_explain": "是否跟隨系統切換淺色深色主題"
         },
         "view_player": {
             "view_seting": {

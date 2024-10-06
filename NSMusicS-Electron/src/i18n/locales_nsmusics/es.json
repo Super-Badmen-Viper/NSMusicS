@@ -53,7 +53,10 @@
             "routerModel_type_2": "Modo de Equilibrio",
             "routerModel_type_2_explain": "Al cambiar de página, se mantienen los datos de la página actual y se limpian los datos de las demás páginas, se activa la limpieza automática de memoria (baja frecuencia)",
             "routerModel_type_3": "Modo de Calidad",
-            "routerModel_type_3_explain": "Al cambiar de página, se mantienen los datos de la página actual y se limpian los datos de las demás páginas, se desactiva completamente la limpieza automática de memoria"
+            "routerModel_type_3_explain": "Al cambiar de página, se mantienen los datos de la página actual y se limpian los datos de las demás páginas, se desactiva completamente la limpieza automática de memoria",
+            "desktop_lyrics": "Letras en pantalla",
+            "theme_automatic_switching": "Cambio automático de tema",
+            "theme_automatic_switching_explain": "Si se debe cambiar entre temas claros y oscuros siguiendo el sistema"
         },
         "view_player": {
             "view_seting": {

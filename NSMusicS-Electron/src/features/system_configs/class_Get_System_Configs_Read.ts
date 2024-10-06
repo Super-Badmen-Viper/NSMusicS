@@ -30,7 +30,9 @@ export class Class_Get_System_Configs_Read {
             artist_page_sizes: 0,
             clear_Memory_Model: null,
             clear_Equilibrium_Model: null,
-            clear_UserExperience_Model: null
+            clear_UserExperience_Model: null,
+            theme_auto_system: null,
+            page_songlists_filter_year: 0,
         }))
     public library_Configs = ref(
         new Library_Configs({

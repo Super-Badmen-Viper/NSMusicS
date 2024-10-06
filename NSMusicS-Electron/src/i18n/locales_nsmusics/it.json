@@ -53,7 +53,10 @@
             "routerModel_type_2": "Modalità di Bilanciamento",
             "routerModel_type_2_explain": "Quando si passa a una nuova pagina, vengono mantenuti i dati della pagina corrente e cancellati i dati delle altre pagine, viene attivata la pulizia automatica della memoria (bassa frequenza)",
             "routerModel_type_3": "Modalità di Qualità",
-            "routerModel_type_3_explain": "Quando si passaa una nuova pagina, vengono mantenuti i dati della pagina corrente e cancellati i dati delle altre pagine, la pulizia automatica della memoria viene completamente disabilitata"
+            "routerModel_type_3_explain": "Quando si passaa una nuova pagina, vengono mantenuti i dati della pagina corrente e cancellati i dati delle altre pagine, la pulizia automatica della memoria viene completamente disabilitata",
+            "desktop_lyrics": "Testi sulle lyrics del desktop",
+            "theme_automatic_switching": "Commutazione automatica del tema",
+            "theme_automatic_switching_explain": "Se deve passare da temi chiari a temi scuri seguendo il sistema"
         },
         "view_player": {
             "view_seting": {

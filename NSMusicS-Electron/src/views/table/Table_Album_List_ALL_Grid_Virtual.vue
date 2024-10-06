@@ -694,8 +694,8 @@
                 <img
                   :src="item.medium_image_url"
                   @error="handleImageError"
-                  style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
-                  :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
+                  style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;border-radius: 6px;"
+                  :style="{ width: item_album_image + 'px', height: item_album_image + 'px'}"/>
                 <div class="hover-overlay" @dblclick="Open_this_album_SongList_click(item.id)">
                   <div class="hover-content">
                     <button

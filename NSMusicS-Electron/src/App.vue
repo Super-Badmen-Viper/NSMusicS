@@ -1,7 +1,6 @@
 <script setup lang="ts">
   ////// resource of vicons_svg
   import {
-    ArrowMinimize16Regular,
     DarkTheme24Filled,
     DocumentHeart20Regular,
     Flag16Regular,
@@ -12,7 +11,7 @@
     TextIndentIncreaseLtr20Filled as lyric,
     FullScreenMaximize16Regular,
   } from '@vicons/fluent'
-  import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound, BrowserUpdatedFilled} from '@vicons/material'
+  import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound, BrowserUpdatedFilled ,MinusRound} from '@vicons/material'
   import {Close, Hearing, Menu as MenuIcon, UserAvatarFilledAlt,Clean} from '@vicons/carbon'
 
   ////// components
@@ -605,9 +604,26 @@
     console.log(store_app_configs_info.nsmusics_db)
 
     await store_app_configs_logic_load.load_app_config()
+    await ipcRenderer.invoke('i18n-tray-label-menu',
+        [
+          t('player.play'),
+          t('player.pause'),
+          t('player.previous'),
+          t('player.next'),
+          '桌面歌词',
+          t('common.quit'),
+          t('nsmusics.siderbar_player.playback_1'),
+          t('nsmusics.siderbar_player.playback_2'),
+          t('nsmusics.siderbar_player.playback_3'),
+          t('nsmusics.siderbar_player.playback_4')
+        ]
+    );
+    await ipcRenderer.invoke('i18n-tray-music-order',
+        store_player_audio_logic.play_order
+    );
 
     try {
-      store_app_configs_info.version = '1.0.1';
+      store_app_configs_info.version = '1.0.2';
       console.log('Current Version:', store_app_configs_info.version);
       const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
       await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);
@@ -745,7 +761,7 @@
                 </n-button>
                 <n-button quaternary circle size="medium" style="margin-right:4px" @click="ipcRenderer.send('window-min');">
                   <template #icon>
-                    <n-icon size="18" :depth="2"><ArrowMinimize16Regular/></n-icon>
+                    <n-icon size="24" :depth="2"><MinusRound/></n-icon>
                   </template>
                 </n-button>
                 <n-button quaternary circle size="medium" style="margin-right:4px" @click="ipcRenderer.send('window-max');">
@@ -821,7 +837,7 @@
         ">
         <n-drawer-content v-if="store_player_sound_more.player_show_sound_more">
           <template #default>
-            更多设置：开发中
+            Not open || 未开放
           </template>
         </n-drawer-content>
       </n-drawer>
@@ -837,7 +853,7 @@
         ">
         <n-drawer-content v-if="store_player_sound_speed.player_show_sound_speed">
           <template #default>
-            播放设置：开发中
+            Not open || 未开放
           </template>
         </n-drawer-content>
       </n-drawer>
