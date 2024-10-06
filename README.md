@@ -1,33 +1,24 @@
 ![NSMusicS_Frame](https://github.com/user-attachments/assets/be41a673-8a3d-4c88-8b44-b839b9ab660c)
-<div style="display: flex; align-items: center;">
-    <div>
-        <h2>NSMusicS | 九歌</h2>
-        <p>
-            The goal of NSMusicS is to achieve (cloud native+streaming music server+music library management) + (cross platform client+professional audio+music library management) + (internationalization)<br>
-        </p>
-        <p>
-            It should not only implement its own streaming services, but also be compatible with various mainstream open-source streaming servers, And implement cross platform professional music clients for various operating systems, ensuring data interoperability between the client and server of each operating system<br>
-        </p>
-        <p>
-            The cross platform client NSMusicS Electron has been implemented, supporting the Windows platform (which will soon support Linux and MacOS) and compatible with streaming media servers Navidrome (which will soon be compatible with Subsonic, Jellyfin, and Emby)<br>
-            Cross platform server-side NSMusicS GO is currently under development<br>
-            Cross platform client NSMusicS Flutter waiting to open
-        </p>
-        <p>
-            The expectation of the NSMusicS series products is to enable people around the world to use free, open-source, and user-friendly music products
-        </p>
-    </div>
-</div>
 
-
+## NSMusicS | 九歌
+ - The goal of NSMusicS is to achieve
+   - cross platform music server + music library management + artificial intelligence + knowledge graph + internationalization
+   - cross platform music client + music library management + professional audio playback  + internationalization
+   - It should not only implement its own streaming services, but also be compatible with various mainstream open-source streaming servers, And implement cross platform professional music clients for various operating systems, ensuring data interoperability between the client and server of each operating system
+ - The cross platform client NSMusicS-Electron has been implemented: 
+   - supporting the Windows platform (which will soon support Linux、MacOS、Docker) 
+   - compatible with streaming media servers Navidrome (which will soon be compatible with Subsonic、Jellyfin、Emby、NSMusicS)
+ - Cross music platform server NSMusicS-GO is currently under development<br>
+ - Cross music platform client NSMusicS-Flutter waiting to open<br>
+ - The expectation of the NSMusicS series products is to enable people around the world to use free, open-source, and user-friendly music products
 
 ## Version：
-| Project   | Development status | Technology Framework     | Author/Copyright Owner | Operating systems         | LICENSE          |  Software positioning |
-| :-----    | ----:              | ----:                    | ----:             | :----:                    | :----:                    | :----:                    |
-| [NSMusicS (Now)](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">updateing</font>             | electron,nodejs,vue,ts,sqlite,docker [![My Skills](https://skillicons.dev/icons?i=electron,nodejs,vue,ts,sqlite,docker)](https://skillicons.dev) Go,MongoDB,Gin,JWT,docker [![My Skills](https://skillicons.dev/icons?i=go,mongodb,sqlite,docker)](https://skillicons.dev) | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  | Windows<br>Linux(ubuntu+)<br>Docker<br>MacOS | A-GPL 3.0 | Open source / Prohibition of commercial use | 
+| Project   | Development status | Technology Framework     | Author/Copyright Owner | Operating systems         | LICENSE          |
+| :-----    | :----:              | :----:                   | :----:             | :----:                    | :----:                    | 
+| [NSMusicS (Now)](https://github.com/Super-Badmen-Viper/NSMusicS)   |<font color="#00dd00">updateing</font>             | electron,nodejs,vue,ts,sqlite,docker [![My Skills](https://skillicons.dev/icons?i=electron,nodejs,vue,ts,sqlite,docker)](https://skillicons.dev) Go,MongoDB,Gin,JWT,sqlite,docker [![My Skills](https://skillicons.dev/icons?i=go,mongodb,sqlite,docker)](https://skillicons.dev) | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  | Windows<br>Linux(ubuntu+)<br>Docker<br>MacOS | A-GPL 3.0 | Open source / Prohibition of commercial use | 
 | NSMusicS_For_Flutter   |<font color="#00dd00">will developed</font> |  flutter,dart,androidstudio  [![My Skills](https://skillicons.dev/icons?i=flutter,dart,androidstudio)](https://skillicons.dev)   | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | Android11++ <br> IOS <br> HarmonyOS | A-GPL 3.0 | Open source / Prohibition of commercial use | 
-| NSMusicS_For_Audio_Process   |<font color="#00dd00">will developed</font>  | pytorch,py,jupyter,matlab ![My Skills](https://go-skill-icons.vercel.app/api/icons?i=pytorch,py,jupyter,matlab)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  |    Windows10++<br>Linux<br>Docker   | A-GPL 3.0 | Open source / Prohibition of commercial use | 
-| NSMusicS_For_Knowledge_Graph   |<font color="#00dd00">will developed</font> |  NebulaGraph / Neo4j <image width="200" src="https://www-cdn.nebula-graph.io/nebula-website-5.0/images/logo.png"/>      | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | Windows10++<br>Linux<br>Docker | A-GPL 3.0 | Open source / Prohibition of commercial use | 
+| NSMusicS_For_Audio   |<font color="#00dd00">will developed</font>  | pytorch,py,jupyter,matlab ![My Skills](https://go-skill-icons.vercel.app/api/icons?i=pytorch,py,jupyter,matlab)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  |    Windows10++<br>Linux<br>Docker   | A-GPL 3.0 | Open source / Prohibition of commercial use | 
+| NSMusicS_For_KG   |<font color="#00dd00">will developed</font> |  NebulaGraph / Neo4j <image width="200" src="https://www-cdn.nebula-graph.io/nebula-website-5.0/images/logo.png"/>      | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | Windows10++<br>Linux<br>Docker | A-GPL 3.0 | Open source / Prohibition of commercial use | 
 
 ### Downloads
   - [NSMusicS Electron Test (Now)](https://github.com/Super-Badmen-Viper/NSMusicS/releases)
@@ -99,10 +90,3 @@ npm run build-only # Package into the current system_configs's software package 
  - The expectation of the NSMusicS series products is to enable people around the world to use free, open-source, and user-friendly music products
  - The Chinese name of the project is "Nine Songs Music", abbreviated as NSMusicS<br> inspired by ["Chu Ci"], to commemorate ["Qu Yuan"]<br>
  - 项目中文名为：九歌，缩写为: NSMusicS<br> 灵感来源于：[楚辞]，谨以纪念：[屈原]，
- - 以下是此项目[九歌]为[屈原]撰写的怀人诗：
- - 思美人兮情何深，楚沉沦兮心难挨
- - 汨罗水畔美人逝，香魂袅袅映日升
- - 岁月悠悠山河在，芳草萋萋忆旧怀
- - 香草美人虽已逝，遗风遗韵长自新
- - 承卿遗志报家国，志士仁人继往开
- - 吾心虽念卿不返，壮志凌云何须哀
