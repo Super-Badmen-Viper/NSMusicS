@@ -107,3 +107,4 @@ npm run build-only # Package into the current system_configs's software package 
  - The expectation of the NSMusicS series products is to enable people around the world to use free, open-source, and user-friendly music products
  - The Chinese name of the project is "Nine Songs Music", abbreviated as NSMusicS<br> inspired by ["Chu Ci"], to commemorate ["Qu Yuan"]<br>
  - 项目中文名为：九歌，缩写为: NSMusicS<br> 灵感来源于：[楚辞]，谨以纪念：[屈原]，
+ - 大道之行也，天下为公。
