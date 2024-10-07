@@ -623,7 +623,7 @@
     );
 
     try {
-      store_app_configs_info.version = '1.0.2';
+      store_app_configs_info.version = '1.0.3';
       console.log('Current Version:', store_app_configs_info.version);
       const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
       await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);
@@ -657,20 +657,23 @@
           <!--Left Router_Menu-->
           <n-layout-sider
             class="n_layout_sider"
-            show-trigger="bar"
             collapse-mode="width"
-            :collapsed-width="64"
+            :collapsed-width="66"
             :width="160"
-            :collapsed="store_app_configs_info.app_left_menu_collapsed"
+            :collapsed="true"
             @collapse="store_app_configs_info.app_left_menu_collapsed = true"
             @expand="store_app_configs_info.app_left_menu_collapsed = false">
-            <n-menu
-              v-if="store_app_configs_info.menuOptions_appBar_show"
-              v-model:value="store_app_configs_info.app_left_menu_select_activeKey"
-              :collapsed="store_app_configs_info.app_left_menu_collapsed"
-              :collapsed-width="64"
-              :collapsed-icon-size="22"
-              :options="store_app_configs_info.menuOptions_appBar"/>
+            <n-flex vertical justify="space-between" style="height: 100vh">
+              <div></div>
+              <n-menu
+                v-if="store_app_configs_info.menuOptions_appBar_show"
+                v-model:value="store_app_configs_info.app_left_menu_select_activeKey"
+                :collapsed="store_app_configs_info.app_left_menu_collapsed"
+                :collapsed-width="66"
+                :collapsed-icon-size="22"
+                :options="store_app_configs_info.menuOptions_appBar"/>
+              <div></div>
+            </n-flex>
           </n-layout-sider>
           <!--Right Router_View-->
           <n-layout
@@ -933,12 +936,12 @@
 }
 .n_layout_sider {
   //background-color: #F0F3F6;
-  padding-top: 64px;
   border: 0;
 }
 .n_layout{
   //background-color: #F7F9FC;
 }
+
 .bar_top_setapp{
   width: 100vw;
   height: 60px;

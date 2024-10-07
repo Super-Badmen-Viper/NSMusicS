@@ -14,7 +14,7 @@
 
   ////// this_view components of navie ui 
   import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-  import { type InputInst, NIcon } from 'naive-ui';
+  import {type InputInst, NIcon, NImage} from 'naive-ui';
   import {Icon} from "@vicons/utils";
   import {store_app_configs_info} from "@/store/app/store_app_configs_info";
   import {store_player_audio_info} from "@/store/player/store_player_audio_info";
@@ -83,19 +83,24 @@
     }
   });
   const updateGridItems = () => {
-    if (store_app_configs_info.app_left_menu_collapsed == true) {
-      collapsed_width.value = 145;
-      item_artist.value = 140;
-      item_artist_image.value = item_artist.value - 20;
-      item_artist_txt.value = item_artist.value - 20;
-      itemSecondarySize.value = 135;
-    } else {
-      collapsed_width.value = 240;
-      item_artist.value = 170;
-      item_artist_image.value = item_artist.value - 20;
-      item_artist_txt.value = item_artist.value - 20;
-      itemSecondarySize.value = 164;
-    }
+    // if (store_app_configs_info.app_left_menu_collapsed == true) {
+    //   collapsed_width.value = 145;
+    //   item_artist.value = 140;
+    //   item_artist_image.value = item_artist.value - 20;
+    //   item_artist_txt.value = item_artist.value - 20;
+    //   itemSecondarySize.value = 135;
+    // } else {
+    //   collapsed_width.value = 240;
+    //   item_artist.value = 170;
+    //   item_artist_image.value = item_artist.value - 20;
+    //   item_artist_txt.value = item_artist.value - 20;
+    //   itemSecondarySize.value = 164;
+    // }
+    collapsed_width.value = 145;
+    item_artist.value = 180;
+    item_artist_image.value = item_artist.value - 20;
+    item_artist_txt.value = item_artist.value - 20;
+    itemSecondarySize.value = 174;
     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
   };
   onMounted(() => {
@@ -558,64 +563,84 @@
         <template #before>
           <div class="notice">
             <div
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
-              style="
-                position: absolute;
-                z-index: 0;
-                height: 298px;
-                border-radius: 10px;
-                overflow: hidden;
-                background-size: cover;
-                background-position: center;
-                filter: blur(0px);
-                background-color: transparent;
+                :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
+                style="
+              position: absolute;
+              z-index: 0;
+              height: 298px;
+              border-radius: 10px;
+              overflow: hidden;
+              background-size: cover;
+              background-position: center;
+              filter: blur(0px);
+              background-color: transparent;
               ">
-              <img 
-                :style="{ 
+              <img
+                  :style="{
                   width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
-                  WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)'
+                  WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%)'
                 }"
-                style="
+                  style="
                   margin-left: 200px; margin-top: -300px;
                   object-fit: cover;object-position: center;
                 "
-                :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                @error="handleImageError"
+                  :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                  @error="handleImageError"
               />
             </div>
-            <n-page-header 
-              style="
+            <n-page-header
+                style="
                 position: relative;
                 z-index: 1;
                 width: calc(100vw - 220px);height: 300px;
                 border-radius: 10px;
                 margin-left: 10px;
-                margin-bottom: 10px;">
-              <n-grid 
-                :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
-                style="margin-left: 4px;width: 370px;">
-                <n-gi v-for="artistlist in store_view_artist_page_info.page_artistlists_statistic" :key="artistlist.id">
-                  <n-statistic :label="artistlist.label" :value="artistlist.artist_count" />
-                </n-gi>
-              </n-grid>
+                margin-bottom: 20px;">
               <template #title>
-                <n-space vertical style="margin-top:14px;margin-left: 10px;">
-                  <n-breadcrumb separator="|">
-                      <n-breadcrumb-item style="font-size: 22px">{{ $t('entity.artist_other') }}</n-breadcrumb-item>
-                      <n-breadcrumb-item>
-                        <n-button text>
-                          <n-ellipsis
-                              style="text-align: left;font-size: 22px;max-width: 660px;height: 26px;">
-                            {{ store_player_audio_info.page_top_album_name }}
-                          </n-ellipsis>
-                        </n-button>
-                      </n-breadcrumb-item>
-                  </n-breadcrumb>
-                  <n-select 
-                    :value="store_view_artist_page_logic.page_artistlists_selected" 
-                    :options="store_view_artist_page_info.page_artistlists_options" style="width: 166px;"
-                    @update:value="page_artistlists_handleselected_updatevalue" />
+                <n-space vertical align="start" style="height: 280px;margin-left: 20px;">
+                  <n-space style="margin-top: 10px;margin-left: 11px;">
+                    <div style="font-size: 36px;font-weight: 600;">
+                      {{ $t('entity.artist_other')}}
+                    </div>
+                    <div style="font-size: 36px;font-weight: 600;margin-top: -2px">
+                      {{" | "}}
+                    </div>
+                    <div
+                        style="
+                        text-align: left;cursor: pointer;
+                        font-size: 36px;font-weight: 600;
+                        max-width: 520px;
+                        display: -webkit-box;
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 1;
+                        overflow: hidden;
+                        text-overflow: ellipsis;"
+                        @click="() => {
+                        if(store_server_user_model.model_server_type_of_local) {
+                          handleItemClick_album(store_player_audio_info.page_top_album_id)
+                        }else if(store_server_user_model.model_server_type_of_web) {
+                          handleItemClick_album(store_player_audio_info.page_top_album_name)
+                        }
+                      }">
+                      {{ store_player_audio_info.page_top_album_name }}
+                    </div>
+                  </n-space>
+                  <n-space style="margin-top: 4px;">
+                    <n-select
+                      :value="store_view_artist_page_logic.page_artistlists_selected"
+                      :options="store_view_artist_page_info.page_artistlists_options" style="width: 166px;"
+                      @update:value="page_artistlists_handleselected_updatevalue" />
+                  </n-space>
+                  <n-space vertical style="margin-top: 12px;margin-left: 7px;">
+                    <n-grid
+                        :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
+                        style="margin-left: 4px;width: 336px;">
+                      <n-gi v-for="artistlist in store_view_artist_page_info.page_artistlists_statistic" :key="artistlist.id">
+                        <n-statistic :label="artistlist.label" :value="artistlist.artist_count" />
+                      </n-gi>
+                    </n-grid>
+                  </n-space>
                 </n-space>
               </template>
               <template #header>
@@ -623,10 +648,11 @@
               </template>
               <template #avatar>
                 <n-image
-                  width="80px" height="80px" object-fit="contain"
                   style="
-                    border-radius: 6px;border: 1.5px solid #FFFFFF20;
-                    margin-left: 0px;margin-top: 20px;"
+                    width: 280px;height: 280px;
+                    border-radius: 12px;
+                    object-fit: cover;
+                    margin-left: -3px;"
                   :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
                   fallback-src="../../../resources/img/error_album.jpg"
                   :show-toolbar="false"
@@ -646,6 +672,7 @@
         </template>
         <template #default="{ item, index, active }">
           <DynamicScrollerItem
+            style="margin-left: 7px;"
             :item="item"
             :active="active"
             :data-index="index"
@@ -723,7 +750,7 @@
               <div class="artist_text" :style="{ width: item_artist_image + 'px' }">
                 <div class="artist_left_text_artist_info" :style="{ width: item_artist_txt + 'px' }">
                   <div>
-                    <span id="artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">
+                    <span id="artist_name" style="font-size: 14px;font-weight: 600;" :style="{ maxWidth: item_artist_txt + 'px' }">
                       {{ item.name }}
                     </span>
                   </div>

@@ -957,8 +957,8 @@ onBeforeUnmount(() => {
         <template #before>
           <div class="notice">
             <div
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
-              style="
+                :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
+                style="
               position: absolute;
               z-index: 0;
               height: 298px;
@@ -970,10 +970,10 @@ onBeforeUnmount(() => {
               background-color: transparent;
               ">
               <img
-                :style="{
+                  :style="{
                   width: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
                   height: 'calc(100vw - ' + (collapsed_width + 180) + 'px)',
-                  WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)'
+                  WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%)'
                 }"
                   style="
                   margin-left: 200px; margin-top: -300px;
@@ -984,46 +984,47 @@ onBeforeUnmount(() => {
               />
             </div>
             <n-page-header
-                style="
+              style="
                 position: relative;
                 z-index: 1;
                 width: calc(100vw - 220px);height: 300px;
                 border-radius: 10px;
                 margin-left: 10px;
-                margin-bottom: 10px;">
-              <n-grid
-                  :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
-                  style="margin-left: 4px;width: 370px;">
-                <n-gi v-for="songlist in store_view_media_page_logic.page_songlists_statistic" :key="songlist.id">
-                  <n-statistic :label="songlist.label" :value="songlist.song_count" />
-                </n-gi>
-              </n-grid>
+                margin-bottom: 20px;">
               <template #title>
-                <n-space vertical style="margin-top:14px;margin-left: 10px;">
-                  <n-breadcrumb separator="|">
-                    <n-breadcrumb-item style="font-size: 22px">{{ $t('entity.track_other') }}</n-breadcrumb-item>
-                    <n-breadcrumb-item>
-                      <n-button text
-                        @click="() => {
-                          if(store_server_user_model.model_server_type_of_local) {
-                            handleItemClick_album(store_player_audio_info.page_top_album_id)
-                          }else if(store_server_user_model.model_server_type_of_web) {
-                            handleItemClick_album(store_player_audio_info.page_top_album_name)
-                          }
-                        }"
-                      >
-                        <n-ellipsis
-                            style="text-align: left;font-size: 22px;max-width: 660px;height: 26px;">
-                          {{ store_player_audio_info.page_top_album_name }}
-                        </n-ellipsis>
-                      </n-button>
-                    </n-breadcrumb-item>
-                  </n-breadcrumb>
-                  <n-space>
+                <n-space vertical align="start" style="height: 280px;margin-left: 20px;">
+                  <n-space style="margin-top: 10px;margin-left: 11px;">
+                    <div style="font-size: 36px;font-weight: 600;">
+                      {{ $t('entity.track_other')}}
+                    </div>
+                    <div style="font-size: 36px;font-weight: 600;margin-top: -2px">
+                      {{" | "}}
+                    </div>
+                    <div
+                      style="
+                        text-align: left;cursor: pointer;
+                        font-size: 36px;font-weight: 600;
+                        max-width: 520px;
+                        display: -webkit-box;
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 1;
+                        overflow: hidden;
+                        text-overflow: ellipsis;"
+                      @click="() => {
+                        if(store_server_user_model.model_server_type_of_local) {
+                          handleItemClick_album(store_player_audio_info.page_top_album_id)
+                        }else if(store_server_user_model.model_server_type_of_web) {
+                          handleItemClick_album(store_player_audio_info.page_top_album_name)
+                        }
+                      }">
+                      {{ store_player_audio_info.page_top_album_name }}
+                    </div>
+                  </n-space>
+                  <n-space style="margin-top: 4px;">
                     <n-select
-                      :value="store_view_media_page_logic.page_songlists_selected"
-                      :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
-                      @update:value="page_songlists_handleselected_updatevalue" />
+                        :value="store_view_media_page_logic.page_songlists_selected"
+                        :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
+                        @update:value="page_songlists_handleselected_updatevalue" />
                     <n-button secondary strong @click="Type_Update_Playlist = !Type_Update_Playlist">
                       <template #icon>
                         <n-icon>
@@ -1039,6 +1040,15 @@ onBeforeUnmount(() => {
                       </template>
                     </n-button>
                   </n-space>
+                  <n-space vertical style="margin-top: 12px;margin-left: 7px;">
+                    <n-grid
+                        :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
+                        style="margin-left: 4px;width: 336px;">
+                      <n-gi v-for="songlist in store_view_media_page_logic.page_songlists_statistic" :key="songlist.id">
+                        <n-statistic :label="songlist.label" :value="songlist.song_count" />
+                      </n-gi>
+                    </n-grid>
+                  </n-space>
                 </n-space>
               </template>
               <template #header>
@@ -1046,10 +1056,11 @@ onBeforeUnmount(() => {
               </template>
               <template #avatar>
                 <n-image
-                  width="80px" height="80px" object-fit="contain"
                   style="
-                    border-radius: 6px;border: 1.5px solid #FFFFFF20;
-                    margin-left: 0px;margin-top: 20px;"
+                    width: 280px;height: 280px;
+                    border-radius: 12px;
+                    object-fit: cover;
+                    margin-left: -3px;"
                   :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
                   fallback-src="../../../resources/img/error_album.jpg"
                   :show-toolbar="false"
@@ -1099,14 +1110,23 @@ onBeforeUnmount(() => {
                     style="width: 60px; height: 60px; object-fit: cover;"/>
               </div>
               <div class="songlist_title">
-                <span @click="handleItemClick_title(item.title)">{{ item.title }}</span>
+                <span
+                  style="font-size: 18px;font-weight: 600;"
+                  @click="handleItemClick_title(item.title)">
+                  {{ item.title }}
+                </span>
                 <br>
                 <template v-for="artist in item.artist.split(/[\/|｜]/)">
-                  <span @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
+                  <span
+                    style="font-size: 14px;font-weight: 400;"
+                    @click="handleItemClick_artist(artist)">
+                    {{ artist + '&nbsp' }}
+                  </span>
                 </template>
               </div>
               <div class="songlist_album">
                 <span
+                  style="font-size: 14px;font-weight: 600;"
                   @click="() => {
                     if(store_server_user_model.model_server_type_of_local) {
                       handleItemClick_album(item.album_id)
@@ -1159,10 +1179,16 @@ onBeforeUnmount(() => {
                   </template>
                 </button>
               </div>
-              <span class="duration_txt" style="margin-left: auto;margin-top: 4px;margin-right: 0px;text-align: left;font-size: 15px;" @click="click_count = 0">
+              <span
+                  class="duration_txt"
+                  style="margin-left: auto;margin-top: 4px;margin-right: 0px;text-align: left;font-size: 14px;font-weight: 600;"
+                  @click="click_count = 0">
                 {{ item.duration_txt }}
               </span>
-              <span class="index" style="margin-left: auto; text-align: left;font-size: 15px;margin-top: 4px;" @click="click_count = 0">
+              <span
+                  class="index"
+                  style="margin-left: auto; text-align: left;margin-top: 4px;font-size: 14px;font-weight: 600;"
+                  @click="click_count = 0">
                 {{ item.absoluteIndex }}
               </span>
             </div>
@@ -1346,6 +1372,19 @@ onBeforeUnmount(() => {
 </template>
 
 <style>
+.n-base-selection .n-base-selection-label .n-base-selection-input .n-base-selection-input__content{
+  font-size: 15px;
+  font-weight: 600;
+}
+.n-statistic .n-statistic__label{
+  font-size: 15px;
+  font-weight: 600;
+}
+.n-statistic .n-statistic-value .n-statistic-value__content{
+  font-size: 24px;
+  font-weight: 600;
+}
+
 .dynamic-scroller-demo {
   height: 100%;
   overflow: auto;

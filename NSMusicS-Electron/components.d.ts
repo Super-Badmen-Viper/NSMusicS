@@ -11,8 +11,6 @@ declare module 'vue' {
     Bar_Music_Player_howler: typeof import('./src/components/Bar_Music_Player_howler.vue')['default']
     Bar_Music_PlayList: typeof import('./src/components/Bar_Music_PlayList.vue')['default']
     NBadge: typeof import('naive-ui')['NBadge']
-    NBreadcrumb: typeof import('naive-ui')['NBreadcrumb']
-    NBreadcrumbItem: typeof import('naive-ui')['NBreadcrumbItem']
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
     NCheckbox: typeof import('naive-ui')['NCheckbox']

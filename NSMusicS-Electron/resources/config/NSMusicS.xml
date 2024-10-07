@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>1.0.2</version>
-<url>https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-v1.0.2/NSMusicS.Setup.1.0.2.exe</url>
+<version>1.0.3</version>
+<url>https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-v1.0.3/NSMusicS.Setup.1.0.3.exe</url>
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
-    1.0.2现已更新内容：&#10;
-    1.增加乐曲页面中筛选指定年份的歌曲&#10;
-    2.增加本地模式导入歌曲文件封面(若是同文件夹不存在同名封面文件，则导出内嵌图片保存为.jpg封面)&#10;
-    3.修复切换歌单时，播放同一首歌曲无法刷新播放列表的问题&#10;
-    4.增加本地模式所能导入音频格式的种类:&#10;
+    1.0.3现已更新内容：&#10;
+    1.调整优化UI，进一步自定义控件库的UI样式&#10;
+    2.增加乐曲页面中筛选指定年份的歌曲&#10;
+    3.增加本地模式导入歌曲文件封面(若是同文件夹不存在同名封面文件，则导出内嵌图片保存为.jpg封面)&#10;
+    4.修复切换歌单时，播放同一首歌曲无法刷新播放列表的问题&#10;
+    5.增加本地模式所能导入音频格式的种类:&#10;
         Advanced Audio Codec (AAC): AAC&#10;
         Free Lossless Audio Codec (FLAC): FLAC&#10;
         MPEG-1/2 Audio: MP1, MP2, MP3&#10;
@@ -17,8 +18,8 @@
         Ogg: OGA, OGG, OPUS&#10;
         Resource Interchange File Format (RIFF): WAV&#10;
         WebM: WEBM&#10;
-    5.增加应用托盘，使其拥有系统通知区域的独立上下文菜单+国际化，在 Windows 上，托盘通常位于右下角。在MacOS和Ubuntu，托盘将位于屏幕右上角上靠近你的电池和wifi图标&#10;
-    6.增加设置：是否跟随系统切换浅色深色主题(不会即时监听系统设置，重新启动此应用时才会触发跟随系统切换主题)&#10;
+    6.增加应用托盘，使其拥有系统通知区域的独立上下文菜单+国际化，在 Windows 上，托盘通常位于右下角。在MacOS和Ubuntu，托盘将位于屏幕右上角上靠近你的电池和wifi图标&#10;
+    7.增加设置：是否跟随系统切换浅色深色主题(不会即时监听系统设置，重新启动此应用时才会触发跟随系统切换主题)&#10;
     &#10;&#10;
     下一个版本预计更新功能：&#10;
     1.可选音频输出源(mpv(本地输出)/howler.js(web输出))，(使用web输出将固定路由模式-质量模式，并关闭自动内存清理)&#10;
