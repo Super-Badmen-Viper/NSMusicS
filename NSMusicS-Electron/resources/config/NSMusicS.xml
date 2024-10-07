@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>1.0.3</version>
-<url>https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-v1.0.3/NSMusicS.Setup.1.0.3.exe</url>
+<version>1.0.4</version>
+<url>https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-v1.0.4/NSMusicS.Setup.1.0.4.exe</url>
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
-    1.0.3现已更新内容：&#10;
+    1.0.4现已更新内容：&#10;
     1.调整优化UI，进一步自定义控件库的UI样式&#10;
     2.增加乐曲页面中筛选指定年份的歌曲&#10;
     3.增加本地模式导入歌曲文件封面(若是同文件夹不存在同名封面文件，则导出内嵌图片保存为.jpg封面)&#10;
