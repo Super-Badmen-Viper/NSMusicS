@@ -4,7 +4,7 @@
  - The goal of NSMusicS: 
    - It should not only implement its own streaming services, but also be compatible with various mainstream open-source streaming servers, And implement cross platform professional music clients for various operating systems, ensuring data interoperability between the client and server of each operating system
    - The expectation of the NSMusicS series products is to enable people around the world to use free, open-source, and user-friendly music products
-#### NSMusicS-Electron | 九歌: Desktop-client
+### NSMusicS-Electron | 九歌: Desktop-client
  - The cross platform client NSMusicS-Electron has been implemented: 
    - supporting the Windows platform (which will soon support Linux、MacOS、Docker) 
    - compatible with streaming media servers Navidrome (which will soon be compatible with Subsonic、Jellyfin、Emby、NSMusicS)
@@ -13,7 +13,7 @@
    - professional audio playback
    - internationalization
    - various music usage scenarios(For NSMusicS-GO: Server)
-#### NSMusicS-GO | 九歌: Server
+### NSMusicS-GO | 九歌: Server
  - Cross music platform server NSMusicS-GO is currently under development<br>
  - Supported functions:
    - music library management
@@ -21,7 +21,7 @@
    - artificial intelligence(Listen to music to identify music, extract music accompaniment, and rate karaoke singing, etc.)
    - knowledge graph(Recommendation system, Graph database, etc.)
    - internationalization
-#### NSMusicS-Flutter | 九歌: Mobile-client
+### NSMusicS-Flutter | 九歌: Mobile-client
  - Cross music platform client NSMusicS-Flutter waiting to open<br>
  - Supported functions: 
    - music library management
