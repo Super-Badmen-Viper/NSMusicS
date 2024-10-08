@@ -197,6 +197,33 @@ const onScrollEnd = async () => {
 </script>
 <template>
   <n-space vertical :size="12">
+    <v-contextmenu ref="contextmenu" class="v-contextmenu-item v-contextmenu-item--hover"
+                   style="z-index: 999">
+      <v-contextmenu-submenu :title="menu_item_add_to_songlist">
+        <v-contextmenu-item
+            v-for="n in store_playlist_list_info.playlist_names_ALLLists"
+            :key="n.value"
+            @click="update_playlist_addMediaFile(store_playlist_list_info.playlist_Menu_Item_Id,n.value)"
+        >
+          {{ n.label }}
+        </v-contextmenu-item>
+      </v-contextmenu-submenu>
+      <v-contextmenu-divider />
+      <v-contextmenu-item @click="menu_item_remove_to_playlist_current()">
+        {{ $t('common.delete') }}
+      </v-contextmenu-item>
+      <v-contextmenu-divider />
+      <v-contextmenu-item @click="menu_item_move_to_playlist_start">
+        {{ $t('action.moveToTop') }}
+      </v-contextmenu-item>
+      <v-contextmenu-item @click="menu_item_move_to_playlist_end">
+        {{ $t('action.moveToBottom') }}
+      </v-contextmenu-item>
+      <v-contextmenu-divider />
+      <v-contextmenu-item @click="store_playlist_list_info.menu_item_open_drag_sort">
+        {{ $t('nsmusics.view_page.drag_sort') }}
+      </v-contextmenu-item>
+    </v-contextmenu>
     <div class="dynamic-scroller-demo">
       <DynamicScroller
         class="table" ref="scrollbar" v-if="!store_playlist_list_info.playlist_DragSort_Model"
@@ -247,33 +274,6 @@ const onScrollEnd = async () => {
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>
-      <v-contextmenu ref="contextmenu" class="v-contextmenu-item v-contextmenu-item--hover"
-                     style="z-index: 999">
-        <v-contextmenu-submenu :title="menu_item_add_to_songlist">
-          <v-contextmenu-item
-              v-for="n in store_playlist_list_info.playlist_names_ALLLists"
-              :key="n.value"
-              @click="update_playlist_addMediaFile(store_playlist_list_info.playlist_Menu_Item_Id,n.value)"
-          >
-            {{ n.label }}
-          </v-contextmenu-item>
-        </v-contextmenu-submenu>
-        <v-contextmenu-divider />
-        <v-contextmenu-item @click="menu_item_remove_to_playlist_current()">
-          {{ $t('common.delete') }}
-        </v-contextmenu-item>
-        <v-contextmenu-divider />
-        <v-contextmenu-item @click="menu_item_move_to_playlist_start">
-          {{ $t('action.moveToTop') }}
-        </v-contextmenu-item>
-        <v-contextmenu-item @click="menu_item_move_to_playlist_end">
-          {{ $t('action.moveToBottom') }}
-        </v-contextmenu-item>
-        <v-contextmenu-divider />
-        <v-contextmenu-item @click="store_playlist_list_info.menu_item_open_drag_sort">
-          {{ $t('nsmusics.view_page.drag_sort') }}
-        </v-contextmenu-item>
-      </v-contextmenu>
       <n-space v-if="store_playlist_list_info.playlist_DragSort_Model">
         <n-button
             style="margin-top: 8px;border-radius: 8px;"

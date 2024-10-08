@@ -468,7 +468,7 @@ onBeforeUnmount(() => {
               <div class="album_text" :style="{ width: item_album_image + 'px' }">
                 <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
                   <div>
-                    <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }">
+                    <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-size: 14px;font-weight: 600;">
                       {{ item.name }}
                     </span>
                   </div>
@@ -587,7 +587,7 @@ onBeforeUnmount(() => {
               <div class="album_text" :style="{ width: item_album_image + 'px' }">
                 <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
                   <div>
-                  <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }">
+                  <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-size: 14px;font-weight: 600;">
                     {{ item.name }}
                   </span>
                   </div>
@@ -706,7 +706,7 @@ onBeforeUnmount(() => {
               <div class="album_text" :style="{ width: item_album_image + 'px' }">
                 <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
                   <div>
-                  <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }">
+                  <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-size: 14px;font-weight: 600;">
                     {{ item.name }}
                   </span>
                   </div>
@@ -825,7 +825,7 @@ onBeforeUnmount(() => {
               <div class="album_text" :style="{ width: item_album_image + 'px' }">
                 <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
                   <div>
-                  <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }">
+                  <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-size: 14px;font-weight: 600;">
                     {{ item.name }}
                   </span>
                   </div>

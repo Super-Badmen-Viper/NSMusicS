@@ -4,6 +4,7 @@
  - The goal of NSMusicS: 
    - It should not only implement its own streaming services, but also be compatible with various mainstream open-source streaming servers, And implement cross platform professional music clients for various operating systems, ensuring data interoperability between the client and server of each operating system
    - The expectation of the NSMusicS series products is to enable people around the world to use free, open-source, and user-friendly music products
+   - 大道之行也，天下为公
 ### NSMusicS-Electron | 九歌: Desktop-client
  - The cross platform client NSMusicS-Electron has been implemented: 
    - supporting the Windows platform (which will soon support Linux、MacOS、Docker) 
@@ -47,6 +48,10 @@
       <tr>
         <td><img src="doc/Web (0).png" width="594"></td>
         <td><img src="doc/Web (1).png" width="594"></td>
+      </tr>
+      <tr>
+        <td><img src="doc/Web (2).png" width="594"></td>
+        <td><img src="doc/Web (3).png" width="594"></td>
       </tr>
    </table>
 
@@ -107,4 +112,3 @@ npm run build-only # Package into the current system_configs's software package 
  - The expectation of the NSMusicS series products is to enable people around the world to use free, open-source, and user-friendly music products
  - The Chinese name of the project is "Nine Songs Music", abbreviated as NSMusicS<br> inspired by ["Chu Ci"], to commemorate ["Qu Yuan"]<br>
  - 项目中文名为：九歌，缩写为: NSMusicS<br> 灵感来源于：[楚辞]，谨以纪念：[屈原]，
- - 大道之行也，天下为公。
