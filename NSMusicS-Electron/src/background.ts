@@ -1,16 +1,34 @@
-import electron, {
+/// electron
+let win = null;
+import {
     app, BrowserWindow,
     screen,
     globalShortcut,
     dialog,
     Tray, Menu, nativeImage, nativeTheme
 } from 'electron'
-const path = require('path');
-import fs from "fs";
-import {File} from "node-taglib-sharp";
+const electron = require('electron')
+const ipc = electron.ipcMain
+const { session } = require('electron');
 
-let win = null;
+/// node-system
+import { File } from "node-taglib-sharp";
+import fs from "fs";
+const path = require('path');
+
+/// node-mpv
+const mpvAPI = require('node-mpv');
+
+/// node-db
+let navidrome_db = path.resolve('resources/navidrome.db');
+let nsmusics_db = path.resolve('resources/nsmusics.db');
+const cDriveDbPath_1 = 'C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db';
+const cDriveDbPath_2 = 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db';
+const cDriveDbDir = 'C:\\Users\\Public\\Documents\\NSMusicS';
+
+///
 async function createWindow() {
+    /// init BrowserWindow
     win = await new BrowserWindow({
         width: 1220,
         height: 765,
@@ -32,10 +50,7 @@ async function createWindow() {
     } else {
         win.loadFile('index.html')
     }
-
     /// electron
-    const electron = require('electron')
-    const ipc = electron.ipcMain
     let originalBounds: any = null;
     let isFullscreen = false;
     ipc.on('window-min', function () {
@@ -82,7 +97,7 @@ async function createWindow() {
     })
     ipc.on('window-gc', function () {
         win.webContents.session.flushStorageData();
-        setTimeout(clear_session_clearCache, 5000);
+        setTimeout(clearSessionClearCache, 5000);
     })
     let lastResetTime: number | null = null;
     const RESET_DEBOUNCE_TIME = 6000;
@@ -119,214 +134,7 @@ async function createWindow() {
         }catch{ return 'lightTheme' }
     });
 
-    /// Tray
-    const tray = new Tray(path.resolve('resources/config/NSMusicS.ico'));
-    /// icon
-    const createResizedIcon = (iconPath, width, height) => {
-        if(!nativeTheme.shouldUseDarkColors){
-            return nativeImage.createFromPath(iconPath.replace(/\.png$/, '_Dark.png')).resize({width, height});
-        }else {
-            return nativeImage.createFromPath(iconPath).resize({width, height});
-        }
-    };
-    let playIcon = createResizedIcon(path.resolve('resources/icons/Play.png'), 18, 18);
-    let pauseIcon = createResizedIcon(path.resolve('resources/icons/Pause.png'), 22, 22);
-    let prevIcon = createResizedIcon(path.resolve('resources/icons/PlaySkipBack.png'), 16, 16);
-    let nextIcon = createResizedIcon(path.resolve('resources/icons/PlaySkipForward.png'), 16, 16);
-    let lyricIcon = createResizedIcon(path.resolve('resources/icons/Lyric.png'), 16, 16);
-    let musicIcon = createResizedIcon(path.resolve('resources/icons/MusicalNotes 1.png'), 16, 16);
-    let shutIcon = createResizedIcon(path.resolve('resources/icons/ShutDown.png'), 16, 16);
-    let order1Icon = createResizedIcon(path.resolve('resources/icons/ArrowAutofitDown24Regular.png'), 18, 18);
-    let order2Icon = createResizedIcon(path.resolve('resources/icons/ArrowRepeatAll16Regular.png'), 18, 18);
-    let order3Icon = createResizedIcon(path.resolve('resources/icons/SingleTuneirculation.png'), 16, 16);
-    let order4Icon = createResizedIcon(path.resolve('resources/icons/Shuffle.png'), 17, 17);
-    function get_tray_Icon(){
-        playIcon = createResizedIcon(path.resolve('resources/icons/Play.png'), 18, 18);
-        pauseIcon = createResizedIcon(path.resolve('resources/icons/Pause.png'), 22, 22);
-        prevIcon = createResizedIcon(path.resolve('resources/icons/PlaySkipBack.png'), 16, 16);
-        nextIcon = createResizedIcon(path.resolve('resources/icons/PlaySkipForward.png'), 16, 16);
-        lyricIcon = createResizedIcon(path.resolve('resources/icons/Lyric.png'), 16, 16);
-        musicIcon = createResizedIcon(path.resolve('resources/icons/MusicalNotes 1.png'), 16, 16);
-        shutIcon = createResizedIcon(path.resolve('resources/icons/ShutDown.png'), 16, 16);
-        order1Icon = createResizedIcon(path.resolve('resources/icons/ArrowAutofitDown24Regular.png'), 18, 18);
-        order2Icon = createResizedIcon(path.resolve('resources/icons/ArrowRepeatAll16Regular.png'), 18, 18);
-        order3Icon = createResizedIcon(path.resolve('resources/icons/SingleTuneirculation.png'), 16, 16);
-        order4Icon = createResizedIcon(path.resolve('resources/icons/Shuffle.png'), 17, 17);
-    }
-    /// label
-    let tray_menu_label_music = '';
-    let tray_menu_label_play = '播放';
-    let tray_menu_label_pause = '暂停';
-    let tray_menu_label_next = '下一首';
-    let tray_menu_label_prev = '上一首';
-    let tray_menu_label_lyric = '桌面歌词';
-    let tray_menu_label_shut = '退出';
-    let tray_menu_label_order1 = '顺序播放';
-    let tray_menu_label_order2 = '循环播放';
-    let tray_menu_label_order3 = '单曲播放';
-    let tray_menu_label_order4 = '随机播放';
-    let tray_music_play = false
-    let tray_music_order = 'playback-1'
-    /// tray load
-    function get_tray_template(){
-        return [
-            {
-                label: get_tray_truncateText(tray_menu_label_music, 10),
-                click: () => {
-
-                },
-                icon: musicIcon
-            },
-            { type: 'separator' },
-            {
-                label: String(tray_menu_label_prev),
-                click: () => {
-                    win.webContents.send("tray-music-prev", true);
-                },
-                icon: prevIcon
-            },
-            {
-                label: String(tray_menu_label_pause),
-                click: () => {
-                    win.webContents.send("tray-music-pause", tray_music_play);
-                },
-                icon: pauseIcon
-            },
-            {
-                label: String(tray_menu_label_next),
-                click: () => {
-                    win.webContents.send("tray-music-next", true);
-                },
-                icon: nextIcon
-            },
-            { type: 'separator' },
-            {
-                label: String(tray_menu_label_order1),
-                icon: order1Icon,
-                submenu: [
-                    {
-                        label: String(tray_menu_label_order1),
-                        click: () => {
-                            tray_template[6].icon = order1Icon;
-                            tray_music_order = 'playback-1'
-                            win.webContents.send("tray-music-order", tray_music_order);
-                        },
-                        icon: order1Icon
-                    },
-                    {
-                        label: String(tray_menu_label_order2),
-                        click: () => {
-                            tray_template[6].icon = order2Icon;
-                            tray_music_order = 'playback-2'
-                            win.webContents.send("tray-music-order", tray_music_order);
-                        },
-                        icon: order2Icon
-                    },
-                    {
-                        label: String(tray_menu_label_order3),
-                        click: () => {
-                            tray_template[6].icon = order3Icon;
-                            tray_music_order = 'playback-3'
-                            win.webContents.send("tray-music-order", tray_music_order);
-                        },
-                        icon: order3Icon
-                    },
-                    {
-                        label: String(tray_menu_label_order4),
-                        click: () => {
-                            tray_template[6].icon = order4Icon;
-                            tray_music_order = 'playback-4'
-                            win.webContents.send("tray-music-order", tray_music_order);
-                        },
-                        icon: order4Icon
-                    }
-                ]
-            },
-            { type: 'separator' },
-            // {
-            //     label: String(tray_menu_label_lyric),
-            //     click: () => {
-            //
-            //     },
-            //     icon: lyricIcon
-            // },
-            { type: 'separator' },
-            {
-                label: String(tray_menu_label_shut),
-                click: () => {
-                    app.quit();
-                },
-                icon: shutIcon
-            },
-        ]
-    }
-    function get_tray_truncateText(text, maxLength) {
-        if (text.length > maxLength) {
-            return text.substring(0, maxLength - 3) + '...';
-        }
-        return text;
-    }
-    let tray_template = get_tray_template();
-    let trayContextMenu = Menu.buildFromTemplate(tray_template);
-    tray.setToolTip('NSMusicS | 九歌');
-    tray.on('click', () => {
-        win.show();
-        win.focus();
-    });
-    tray.on('right-click', () => {
-        get_tray_Icon()
-
-        tray_template[3].icon = !tray_music_play ? playIcon : pauseIcon;
-        tray_template[3].label = !tray_music_play ? tray_menu_label_play : tray_menu_label_pause;
-        if(tray_music_order === 'playback-1')
-            tray_template[6].icon = order1Icon;
-        else if(tray_music_order === 'playback-2')
-            tray_template[6].icon = order2Icon;
-        else if(tray_music_order === 'playback-3')
-            tray_template[6].icon = order3Icon;
-        else if(tray_music_order === 'playback-4')
-            tray_template[6].icon = order4Icon;
-
-        trayContextMenu.clear()
-        trayContextMenu = Menu.buildFromTemplate(tray_template);
-        tray.popUpContextMenu(trayContextMenu);
-    });
-    ipc.handle('i18n-tray-label-musicIcon', async (event,current_music_name) => {
-        tray_menu_label_music = current_music_name
-        tray_template[0].label = String(current_music_name)
-        trayContextMenu.clear()
-        trayContextMenu = Menu.buildFromTemplate(tray_template);
-    });
-    ipc.handle('i18n-tray-music-pause', async (event,music_play) => {
-        tray_music_play = music_play
-    });
-    ipc.handle('i18n-tray-music-order', async (event,order) => {
-        tray_music_order = String(order)
-    });
-    ipc.handle('i18n-tray-label-menu', async (event,i18n_menu_label) => {
-        tray_menu_label_play = String(i18n_menu_label[0])
-        tray_menu_label_pause = String(i18n_menu_label[1])
-        tray_menu_label_prev = String(i18n_menu_label[2])
-        tray_menu_label_next = String(i18n_menu_label[3])
-        tray_menu_label_lyric = String(i18n_menu_label[4])
-        tray_menu_label_shut = String(i18n_menu_label[5])
-        tray_menu_label_order1 = String(i18n_menu_label[6])
-        tray_menu_label_order2 = String(i18n_menu_label[7])
-        tray_menu_label_order3 = String(i18n_menu_label[8])
-        tray_menu_label_order4 = String(i18n_menu_label[9])
-
-        get_tray_Icon()
-        tray_template = get_tray_template();
-        trayContextMenu.clear()
-        trayContextMenu = Menu.buildFromTemplate(tray_template);
-    });
-
-    //////
-    let navidrome_db = path.resolve('resources/navidrome.db');
-    let nsmusics_db = path.resolve('resources/nsmusics.db');
-    const cDriveDbPath_1 = 'C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db';
-    const cDriveDbPath_2 = 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db';
-    const cDriveDbDir = 'C:\\Users\\Public\\Documents\\NSMusicS';
+    /// db get
     const ensureDirectoryExists = (dirPath: string) => {
         return new Promise((resolve, reject) => {
             if (!fs.existsSync(dirPath)) {
@@ -382,76 +190,6 @@ async function createWindow() {
     });
     ipc.handle('window-get-nsmusics-db', async (event) => {
         try { return nsmusics_db } catch { return '' }
-    });
-
-    ////// mpv services for win
-    const mpvAPI = require('node-mpv');
-    let mpv = new mpvAPI({
-        audio_only: true,
-        auto_restart: true,
-        binary: path.resolve("resources/mpv-x86_64-20240623/mpv.exe"),
-        debug: true,
-        verbose: true
-    });
-    await mpv.start();
-    await mpv.pause();
-    let isPlaying = false;
-    let isResumeing = false;
-    ipc.handle('mpv-load', async (event,filePath) => {
-        try {
-            await mpv.load(filePath);
-            await mpv.play();
-            isPlaying = true;
-            isResumeing = false;
-            tray_music_play = true
-            return true;
-        } catch (error) {
-            console.error('Error loading file in mpv:', error);
-            return false;
-        }
-    });
-    ipc.handle('mpv-isRunning',  async (event) => {
-        return mpv.isRunning();
-    });
-    ipc.handle('mpv-isPlaying',  async (event) => {
-        return isPlaying;
-    });
-    ipc.handle('mpv-isResumeing',  async (event) => {
-        return isResumeing;
-    });
-    ipc.handle('mpv-play',  async (event) => {
-        await mpv.resume();
-        isPlaying = true;
-        isResumeing = false;
-        tray_music_play = true
-    });
-    ipc.handle('mpv-pause',  async (event) => {
-        await mpv.pause();
-        isPlaying = false;
-        isResumeing = true;
-        tray_music_play = false
-    });
-    ipc.handle('mpv-stopped', async (event,volume) => {
-        await mpv.pause();
-        tray_music_play = false
-    });
-    ipc.handle('mpv-get-duration', async (event) => {
-        try { return await mpv.getDuration() }catch{ return 0 }
-    });
-    ipc.handle('mpv-get-time-pos', async (event) => {
-        try { return await mpv.getTimePosition() }catch{ return 0 }
-    });
-    ipc.handle('mpv-set-time-pos', async (event,timePos) => {
-        await mpv.resume();
-        isPlaying = true;
-        isResumeing = false;
-        await mpv.seek(timePos,"absolute")
-    });
-    ipc.handle('mpv-set-volume', async (event,volume) => {
-        await mpv.volume(volume)
-    });
-    mpv.on('stopped', () => {
-        win.webContents.send("mpv-stopped", true);
     });
 
     /// local model of data
@@ -857,7 +595,290 @@ async function createWindow() {
         try { return percentage }catch{ return 0 }
     });
 }
+///
+async function createTray(){
+    /// Tray
+    const tray = new Tray(path.resolve('resources/config/NSMusicS.ico'));
+    /// icon
+    const createResizedIcon = (iconPath, width, height) => {
+        if(!nativeTheme.shouldUseDarkColors){
+            return nativeImage.createFromPath(iconPath.replace(/\.png$/, '_Dark.png')).resize({width, height});
+        }else {
+            return nativeImage.createFromPath(iconPath).resize({width, height});
+        }
+    };
+    let playIcon = createResizedIcon(path.resolve('resources/icons/Play.png'), 18, 18);
+    let pauseIcon = createResizedIcon(path.resolve('resources/icons/Pause.png'), 22, 22);
+    let prevIcon = createResizedIcon(path.resolve('resources/icons/PlaySkipBack.png'), 16, 16);
+    let nextIcon = createResizedIcon(path.resolve('resources/icons/PlaySkipForward.png'), 16, 16);
+    let lyricIcon = createResizedIcon(path.resolve('resources/icons/Lyric.png'), 16, 16);
+    let musicIcon = createResizedIcon(path.resolve('resources/icons/MusicalNotes 1.png'), 16, 16);
+    let shutIcon = createResizedIcon(path.resolve('resources/icons/ShutDown.png'), 16, 16);
+    let order1Icon = createResizedIcon(path.resolve('resources/icons/ArrowAutofitDown24Regular.png'), 18, 18);
+    let order2Icon = createResizedIcon(path.resolve('resources/icons/ArrowRepeatAll16Regular.png'), 18, 18);
+    let order3Icon = createResizedIcon(path.resolve('resources/icons/SingleTuneirculation.png'), 16, 16);
+    let order4Icon = createResizedIcon(path.resolve('resources/icons/Shuffle.png'), 17, 17);
+    function get_tray_Icon(){
+        playIcon = createResizedIcon(path.resolve('resources/icons/Play.png'), 18, 18);
+        pauseIcon = createResizedIcon(path.resolve('resources/icons/Pause.png'), 22, 22);
+        prevIcon = createResizedIcon(path.resolve('resources/icons/PlaySkipBack.png'), 16, 16);
+        nextIcon = createResizedIcon(path.resolve('resources/icons/PlaySkipForward.png'), 16, 16);
+        lyricIcon = createResizedIcon(path.resolve('resources/icons/Lyric.png'), 16, 16);
+        musicIcon = createResizedIcon(path.resolve('resources/icons/MusicalNotes 1.png'), 16, 16);
+        shutIcon = createResizedIcon(path.resolve('resources/icons/ShutDown.png'), 16, 16);
+        order1Icon = createResizedIcon(path.resolve('resources/icons/ArrowAutofitDown24Regular.png'), 18, 18);
+        order2Icon = createResizedIcon(path.resolve('resources/icons/ArrowRepeatAll16Regular.png'), 18, 18);
+        order3Icon = createResizedIcon(path.resolve('resources/icons/SingleTuneirculation.png'), 16, 16);
+        order4Icon = createResizedIcon(path.resolve('resources/icons/Shuffle.png'), 17, 17);
+    }
+    /// label
+    let tray_menu_label_music = '';
+    let tray_menu_label_play = '播放';
+    let tray_menu_label_pause = '暂停';
+    let tray_menu_label_next = '下一首';
+    let tray_menu_label_prev = '上一首';
+    let tray_menu_label_lyric = '桌面歌词';
+    let tray_menu_label_shut = '退出';
+    let tray_menu_label_order1 = '顺序播放';
+    let tray_menu_label_order2 = '循环播放';
+    let tray_menu_label_order3 = '单曲播放';
+    let tray_menu_label_order4 = '随机播放';
+    let tray_music_play = false
+    let tray_music_order = 'playback-1'
+    /// tray load
+    function get_tray_template(){
+        return [
+            {
+                label: get_tray_truncateText(tray_menu_label_music, 10),
+                click: () => {
 
+                },
+                icon: musicIcon
+            },
+            { type: 'separator' },
+            {
+                label: String(tray_menu_label_prev),
+                click: () => {
+                    win.webContents.send("tray-music-prev", true);
+                },
+                icon: prevIcon
+            },
+            {
+                label: String(tray_menu_label_pause),
+                click: () => {
+                    win.webContents.send("tray-music-pause", tray_music_play);
+                },
+                icon: pauseIcon
+            },
+            {
+                label: String(tray_menu_label_next),
+                click: () => {
+                    win.webContents.send("tray-music-next", true);
+                },
+                icon: nextIcon
+            },
+            { type: 'separator' },
+            {
+                label: String(tray_menu_label_order1),
+                icon: order1Icon,
+                submenu: [
+                    {
+                        label: String(tray_menu_label_order1),
+                        click: () => {
+                            tray_template[6].icon = order1Icon;
+                            tray_music_order = 'playback-1'
+                            win.webContents.send("tray-music-order", tray_music_order);
+                        },
+                        icon: order1Icon
+                    },
+                    {
+                        label: String(tray_menu_label_order2),
+                        click: () => {
+                            tray_template[6].icon = order2Icon;
+                            tray_music_order = 'playback-2'
+                            win.webContents.send("tray-music-order", tray_music_order);
+                        },
+                        icon: order2Icon
+                    },
+                    {
+                        label: String(tray_menu_label_order3),
+                        click: () => {
+                            tray_template[6].icon = order3Icon;
+                            tray_music_order = 'playback-3'
+                            win.webContents.send("tray-music-order", tray_music_order);
+                        },
+                        icon: order3Icon
+                    },
+                    {
+                        label: String(tray_menu_label_order4),
+                        click: () => {
+                            tray_template[6].icon = order4Icon;
+                            tray_music_order = 'playback-4'
+                            win.webContents.send("tray-music-order", tray_music_order);
+                        },
+                        icon: order4Icon
+                    }
+                ]
+            },
+            { type: 'separator' },
+            // {
+            //     label: String(tray_menu_label_lyric),
+            //     click: () => {
+            //
+            //     },
+            //     icon: lyricIcon
+            // },
+            { type: 'separator' },
+            {
+                label: String(tray_menu_label_shut),
+                click: () => {
+                    app.quit();
+                },
+                icon: shutIcon
+            },
+        ]
+    }
+    function get_tray_truncateText(text, maxLength) {
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength - 3) + '...';
+        }
+        return text;
+    }
+    let tray_template = get_tray_template();
+    let trayContextMenu = Menu.buildFromTemplate(tray_template);
+    tray.setToolTip('NSMusicS | 九歌');
+    tray.on('click', () => {
+        win.show();
+        win.focus();
+    });
+    tray.on('right-click', () => {
+        get_tray_Icon()
+
+        tray_template[3].icon = !tray_music_play ? playIcon : pauseIcon;
+        tray_template[3].label = !tray_music_play ? tray_menu_label_play : tray_menu_label_pause;
+        if(tray_music_order === 'playback-1')
+            tray_template[6].icon = order1Icon;
+        else if(tray_music_order === 'playback-2')
+            tray_template[6].icon = order2Icon;
+        else if(tray_music_order === 'playback-3')
+            tray_template[6].icon = order3Icon;
+        else if(tray_music_order === 'playback-4')
+            tray_template[6].icon = order4Icon;
+
+        trayContextMenu.clear()
+        trayContextMenu = Menu.buildFromTemplate(tray_template);
+        tray.popUpContextMenu(trayContextMenu);
+    });
+    ipc.handle('i18n-tray-label-musicIcon', async (event,current_music_name) => {
+        tray_menu_label_music = current_music_name
+        tray_template[0].label = String(current_music_name)
+        trayContextMenu.clear()
+        trayContextMenu = Menu.buildFromTemplate(tray_template);
+    });
+    ipc.handle('i18n-tray-music-pause', async (event,music_play) => {
+        tray_music_play = music_play
+    });
+    ipc.handle('i18n-tray-music-order', async (event,order) => {
+        tray_music_order = String(order)
+    });
+    ipc.handle('i18n-tray-label-menu', async (event,i18n_menu_label) => {
+        tray_menu_label_play = String(i18n_menu_label[0])
+        tray_menu_label_pause = String(i18n_menu_label[1])
+        tray_menu_label_prev = String(i18n_menu_label[2])
+        tray_menu_label_next = String(i18n_menu_label[3])
+        tray_menu_label_lyric = String(i18n_menu_label[4])
+        tray_menu_label_shut = String(i18n_menu_label[5])
+        tray_menu_label_order1 = String(i18n_menu_label[6])
+        tray_menu_label_order2 = String(i18n_menu_label[7])
+        tray_menu_label_order3 = String(i18n_menu_label[8])
+        tray_menu_label_order4 = String(i18n_menu_label[9])
+
+        get_tray_Icon()
+        tray_template = get_tray_template();
+        trayContextMenu.clear()
+        trayContextMenu = Menu.buildFromTemplate(tray_template);
+    });
+}
+///
+async function clearSessionClearCache() {
+    await session.defaultSession.clearCache();
+    require("v8").setFlagsFromString("--expose_gc");
+    global.gc = require("vm").runInNewContext("gc");
+}
+///
+async function createNodeMpv(){
+    ////// mpv services for win
+    let mpv = new mpvAPI({
+        audio_only: true,
+        auto_restart: true,
+        binary: path.resolve("resources/mpv-x86_64-20240623/mpv.exe"),
+        debug: true,
+        verbose: true
+    });
+    await mpv.start();
+    await mpv.pause();
+    let isPlaying = false;
+    let isResumeing = false;
+    ipc.handle('mpv-load', async (event,filePath) => {
+        try {
+            await mpv.load(filePath);
+            await mpv.play();
+            isPlaying = true;
+            isResumeing = false;
+            tray_music_play = true
+            return true;
+        } catch (error) {
+            console.error('Error loading file in mpv:', error);
+            return false;
+        }
+    });
+    ipc.handle('mpv-isRunning',  async (event) => {
+        return mpv.isRunning();
+    });
+    ipc.handle('mpv-isPlaying',  async (event) => {
+        return isPlaying;
+    });
+    ipc.handle('mpv-isResumeing',  async (event) => {
+        return isResumeing;
+    });
+    ipc.handle('mpv-play',  async (event) => {
+        await mpv.resume();
+        isPlaying = true;
+        isResumeing = false;
+        tray_music_play = true
+    });
+    ipc.handle('mpv-pause',  async (event) => {
+        await mpv.pause();
+        isPlaying = false;
+        isResumeing = true;
+        tray_music_play = false
+    });
+    ipc.handle('mpv-stopped', async (event,volume) => {
+        await mpv.pause();
+        tray_music_play = false
+    });
+    ipc.handle('mpv-get-duration', async (event) => {
+        try { return await mpv.getDuration() }catch{ return 0 }
+    });
+    ipc.handle('mpv-get-time-pos', async (event) => {
+        try { return await mpv.getTimePosition() }catch{ return 0 }
+    });
+    ipc.handle('mpv-set-time-pos', async (event,timePos) => {
+        await mpv.resume();
+        isPlaying = true;
+        isResumeing = false;
+        await mpv.seek(timePos,"absolute")
+    });
+    ipc.handle('mpv-set-volume', async (event,volume) => {
+        await mpv.volume(volume)
+    });
+    mpv.on('stopped', () => {
+        win.webContents.send("mpv-stopped", true);
+    });
+}
+
+
+///
 app.whenReady().then(async () => {
     globalShortcut.register('CommandOrControl+Shift+I', () => {
         if (win.webContents.isDevToolsOpened()) {
@@ -870,6 +891,8 @@ app.whenReady().then(async () => {
     });
 
     await createWindow();
+    await createTray();
+    await createNodeMpv();
 
     const devInnerHeight: number = 1080.0;
     const devDevicePixelRatio: number = 1.0;
@@ -878,18 +901,9 @@ app.whenReady().then(async () => {
     const zoomFactor: number = (window.innerHeight / devInnerHeight) * (window.devicePixelRatio / devDevicePixelRatio) * (devScaleFactor / scaleFactor);
     require('electron').webFrame.setZoomFactor(zoomFactor);
 })
-
-const { session } = require('electron');
-function clear_session_clearCache() {
-    session.defaultSession.clearCache();
-    require("v8").setFlagsFromString("--expose_gc");
-    global.gc = require("vm").runInNewContext("gc");
-}
-
 app.on('ready', () => {
-    setTimeout(clear_session_clearCache, 5000);
+    setTimeout(clearSessionClearCache, 5000);
 });
-
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit()
