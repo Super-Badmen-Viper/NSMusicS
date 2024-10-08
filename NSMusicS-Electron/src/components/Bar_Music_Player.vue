@@ -21,11 +21,8 @@
 
   ////// this_view components of navie_ui
   import {onMounted, ref, watch, inject} from 'vue';
-  import { onBeforeUnmount } from 'vue';
-  const { ipcRenderer } = require('electron');
-  import { store_playlist_appearance } from '@/store/view/playlist/store_playlist_appearance'
-  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-  import {store_player_appearance} from "@/store/player/store_player_appearance";
+  import {onBeforeUnmount} from 'vue';
+  const {ipcRenderer} = require('electron');
   const get_playerbar_to_switch_playerview = inject('get_playerbar_to_switch_playerview');
 
   import { useI18n } from 'vue-i18n'
@@ -141,7 +138,7 @@
     const { webFrame } = require('electron');
     webFrame.clearCache();
   });
-  function Play_This_Audio_Path(){
+  const Play_This_Audio_Path = () => {
     clearTimeout(timer_this_audio_player.value);
     timer_this_audio_player.value = setTimeout(async () => {
       if(store_player_audio_info.this_audio_file_path.length > 0) {
@@ -379,8 +376,12 @@
 
     store_player_appearance.player_mode_of_lock_playlist = true
   }
-  ipcRenderer.on('tray-music-prev', play_skip_back_click);
-  ipcRenderer.on('tray-music-next', play_skip_forward_click);
+  ipcRenderer.on('tray-music-prev',
+      debounce(async (event, args) => {await play_skip_back_click(), 300})
+  );
+  ipcRenderer.on('tray-music-next',
+      debounce(async (event, args) => {await play_skip_forward_click(), 300})
+  );
   const Play_Media_Switching = async () => {
     store_player_audio_logic.current_play_time = formatTime(await store_player_audio_logic.player.getDuration());
     store_player_audio_logic.player_silder_currentTime_added_value = 0;
@@ -522,23 +523,20 @@
   };
 
   ////// changed_data write to sqlite
-  import { Set_MediaInfo_To_LocalSqlite } from '@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite'
   import {store_player_appearance} from "@/store/player/store_player_appearance";
   import {store_player_audio_info} from "@/store/player/store_player_audio_info";
   import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
   import {store_player_sound_effects} from "@/store/player/store_player_sound_effects";
   import {store_player_sound_speed} from "@/store/player/store_player_sound_speed";
   import {store_player_sound_more} from "@/store/player/store_player_sound_more";
+  import {store_playlist_appearance} from '@/store/view/playlist/store_playlist_appearance'
   import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info"
   import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
   import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-  import {
-    store_local_data_set_mediaInfo
-  } from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
+  import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
   import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
   import {store_server_user_model} from "@/store/server/store_server_user_model";
   import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
-  let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id,favorite)
     store_player_audio_info.this_audio_song_favorite = !favorite
@@ -605,13 +603,14 @@
     unwatch_play_go_index_time()
   });
 </script>
-
 <template>
-  <n-space class="this_Bar_Music_Player"
+  <n-space
+    class="this_Bar_Music_Player"
     style="transition: margin 0.4s;"
     :style="{ marginBottom: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '-80px' : '0px' }"
     @mousemove="handleRefusetohide" @mouseleave="handleMouseMove" @mouseover="handleRefusetohide">
-    <div class="layout_distribution_3"
+    <div
+      class="layout_distribution_3"
       style="transition: margin 0.4s;"
       :style="{ 
         marginLeft: store_player_appearance.player_show ? '0px' : (store_app_configs_info.app_left_menu_collapsed ? '72px' : '166px'),
@@ -623,7 +622,6 @@
               :src="back_ChevronDouble"
               :style="{ display: back_display }"
               @click="click_back_svg" @mouseover="hover_back_img" @mouseout="leave_back_svg" alt=""/>
-              
           <img class="back_img" 
               :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
               @error="handleImageError"
@@ -660,8 +658,7 @@
         <!-- grid_Middle_button_area -->
         <n-space class="grid_Middle_button_area" justify="center">
           <n-button quaternary round size="small"
-                    @click="backpanel_order_click" @mouseover="backpanel_order_hover"
-          >
+                    @click="backpanel_order_click" @mouseover="backpanel_order_hover">
             <template #icon>
               <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
                 <ArrowAutofitDown24Regular/>
@@ -718,9 +715,7 @@
         </div>
         <!-- grid_Middle_drwaer_area -->
         <n-config-provider :theme="null" v-if="false">
-          <div id="backpanel_order" @mouseleave="backpanel_order_leave">
-            
-          </div>
+          <div id="backpanel_order" @mouseleave="backpanel_order_leave"></div>
           <n-drawer
             v-model:show="store_player_audio_logic.drawer_order_show"
             placement="bottom"
@@ -787,9 +782,7 @@
           </n-drawer>
         </n-config-provider>
         <n-config-provider :theme="null">
-          <div id="backpanel_voice">
-            
-          </div>
+          <div id="backpanel_voice"></div>
           <n-drawer
             v-model:show="store_player_audio_logic.drawer_volume_show"
             placement="bottom"

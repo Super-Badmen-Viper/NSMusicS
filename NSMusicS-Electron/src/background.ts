@@ -18,6 +18,7 @@ const path = require('path');
 
 /// node-mpv
 const mpvAPI = require('node-mpv');
+let mpv = null;
 
 /// node-db
 let navidrome_db = path.resolve('resources/navidrome.db');
@@ -26,7 +27,14 @@ const cDriveDbPath_1 = 'C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db';
 const cDriveDbPath_2 = 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db';
 const cDriveDbDir = 'C:\\Users\\Public\\Documents\\NSMusicS';
 
-///
+/// electron-gc
+async function clearSessionClearCache() {
+    await session.defaultSession.clearCache();
+    require("v8").setFlagsFromString("--expose_gc");
+    global.gc = require("vm").runInNewContext("gc");
+}
+
+/// electron-window
 async function createWindow() {
     /// init BrowserWindow
     win = await new BrowserWindow({
@@ -93,7 +101,7 @@ async function createWindow() {
         }
     });
     ipc.on('window-close', function () {
-        win.close();
+        win.hide();
     })
     ipc.on('window-gc', function () {
         win.webContents.session.flushStorageData();
@@ -595,7 +603,12 @@ async function createWindow() {
         try { return percentage }catch{ return 0 }
     });
 }
-///
+
+/// electron-tray
+let tray_music_play = false
+let tray_music_order = 'playback-1'
+let tray_menu_label_music = 'NSMusicS | 九歌';
+let tray_menu_label_music_check_enter = false;
 async function createTray(){
     /// Tray
     const tray = new Tray(path.resolve('resources/config/NSMusicS.ico'));
@@ -632,7 +645,6 @@ async function createTray(){
         order4Icon = createResizedIcon(path.resolve('resources/icons/Shuffle.png'), 17, 17);
     }
     /// label
-    let tray_menu_label_music = '';
     let tray_menu_label_play = '播放';
     let tray_menu_label_pause = '暂停';
     let tray_menu_label_next = '下一首';
@@ -643,15 +655,14 @@ async function createTray(){
     let tray_menu_label_order2 = '循环播放';
     let tray_menu_label_order3 = '单曲播放';
     let tray_menu_label_order4 = '随机播放';
-    let tray_music_play = false
-    let tray_music_order = 'playback-1'
     /// tray load
     function get_tray_template(){
         return [
             {
                 label: get_tray_truncateText(tray_menu_label_music, 10),
                 click: () => {
-
+                    win.show();
+                    win.focus();
                 },
                 icon: musicIcon
             },
@@ -659,6 +670,7 @@ async function createTray(){
             {
                 label: String(tray_menu_label_prev),
                 click: () => {
+                    tray_menu_label_music_check_enter = true
                     win.webContents.send("tray-music-prev", true);
                 },
                 icon: prevIcon
@@ -673,6 +685,7 @@ async function createTray(){
             {
                 label: String(tray_menu_label_next),
                 click: () => {
+                    tray_menu_label_music_check_enter = true
                     win.webContents.send("tray-music-next", true);
                 },
                 icon: nextIcon
@@ -746,7 +759,6 @@ async function createTray(){
     }
     let tray_template = get_tray_template();
     let trayContextMenu = Menu.buildFromTemplate(tray_template);
-    tray.setToolTip('NSMusicS | 九歌');
     tray.on('click', () => {
         win.show();
         win.focus();
@@ -770,10 +782,11 @@ async function createTray(){
         tray.popUpContextMenu(trayContextMenu);
     });
     ipc.handle('i18n-tray-label-musicIcon', async (event,current_music_name) => {
-        tray_menu_label_music = current_music_name
-        tray_template[0].label = String(current_music_name)
+        tray_menu_label_music = get_tray_truncateText(current_music_name, 18)
+        tray_template[0].label = tray_menu_label_music
         trayContextMenu.clear()
         trayContextMenu = Menu.buildFromTemplate(tray_template);
+        tray.setToolTip(tray_menu_label_music);
     });
     ipc.handle('i18n-tray-music-pause', async (event,music_play) => {
         tray_music_play = music_play
@@ -799,16 +812,12 @@ async function createTray(){
         trayContextMenu = Menu.buildFromTemplate(tray_template);
     });
 }
-///
-async function clearSessionClearCache() {
-    await session.defaultSession.clearCache();
-    require("v8").setFlagsFromString("--expose_gc");
-    global.gc = require("vm").runInNewContext("gc");
-}
-///
+
+/// node-mpv init
+let currentMediaPath = '';
 async function createNodeMpv(){
     ////// mpv services for win
-    let mpv = new mpvAPI({
+    mpv = new mpvAPI({
         audio_only: true,
         auto_restart: true,
         binary: path.resolve("resources/mpv-x86_64-20240623/mpv.exe"),
@@ -821,11 +830,16 @@ async function createNodeMpv(){
     let isResumeing = false;
     ipc.handle('mpv-load', async (event,filePath) => {
         try {
-            await mpv.load(filePath);
-            await mpv.play();
-            isPlaying = true;
-            isResumeing = false;
-            tray_music_play = true
+            if (currentMediaPath === filePath && tray_menu_label_music_check_enter) {
+                tray_menu_label_music_check_enter = false
+            }else {
+                currentMediaPath = filePath;
+                await mpv.load(filePath);
+                await mpv.play();
+                isPlaying = true;
+                isResumeing = false;
+                tray_music_play = true
+            }
             return true;
         } catch (error) {
             console.error('Error loading file in mpv:', error);
@@ -877,8 +891,7 @@ async function createNodeMpv(){
     });
 }
 
-
-///
+/// app
 app.whenReady().then(async () => {
     globalShortcut.register('CommandOrControl+Shift+I', () => {
         if (win.webContents.isDevToolsOpened()) {
@@ -909,5 +922,3 @@ app.on('window-all-closed', () => {
         app.quit()
     }
 })
-
-  

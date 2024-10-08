@@ -859,15 +859,11 @@
             style="transition: margin 0.4s;"
             :style="{ marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '70px' : '0px' }">
             <n-layout has-sider style="background-color: transparent;">
-              <!-- left area --><!-- Album Cover -->
-              <!-- show-trigger="bar" calc(50vw + 27vh + 8vw) :show-collapsed-content="false"-->
+              <!-- left area -->
               <n-layout-sider
                 :collapsed="store_player_appearance.player_collapsed_album"
-                @collapse="
-                  store_player_appearance.player_collapsed_album = true;"
-                @expand="
-                  store_player_appearance.player_collapsed_album = false;
-                "
+                @collapse="store_player_appearance.player_collapsed_album = true;"
+                @expand="store_player_appearance.player_collapsed_album = false;"
                 :show-collapsed-content="false"
                 position="static"
                 collapsed-width="30vw" width="53vw"
@@ -1018,19 +1014,6 @@
                       "
                       :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
                       @error="handleImageError" alt="">
-<!--                    <img-->
-<!--                        style="-->
-<!--                        margin-left: calc(54vh - 14vh);height: calc(54vh - 50vh);-->
-<!--                        margin-top: calc(-4vh - 162px);-->
-<!--                        position: absolute;-->
-<!--                        border: 2px solid #FFFFFF20;-->
-<!--                        border-radius: calc(54vh - 50vh);-->
-<!--                        object-fit: cover;object-position: center;-->
-<!--                        box-shadow: 0 0 32px rgba(0, 0, 0, 1), 0 0 32px rgba(0, 0, 0, 0.20);-->
-<!--                        filter: brightness(0%) blur(0px);-->
-<!--                      "-->
-<!--                        :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"-->
-<!--                        @error="handleImageError" alt="">-->
                     <div
                       style="
                         width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;
@@ -1068,7 +1051,7 @@
                   </n-space>
                 </n-space>
               </n-layout-sider>
-              <!-- right area --><!-- Lyics Lines List -->
+              <!-- right area -->
               <n-layout-content
                 style="background-color: transparent;margin-left:2vw;">
                 <div
@@ -1127,7 +1110,6 @@
 </template>
 
 <style scoped>
-/* filter: blur(10px) grayscale(100%); */
 #player_bg_zindex_0 {
   z-index: -2;
   transition: filter 0.5s ease;

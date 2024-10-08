@@ -1,6 +1,9 @@
+import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
+
 const { ipcRenderer } = require('electron');
 
 export class Audio_node_mpv {
+    public currentPath: string;
     public isPlaying: boolean;
     public isResumeing: boolean;
     public isDuration: number | undefined;
@@ -10,6 +13,10 @@ export class Audio_node_mpv {
     }
     async load(path: string) {
         try {
+            // if (this.currentPath === path && !store_playlist_list_logic.media_page_handleItemDbClick) {
+            //     return;
+            // }
+            this.currentPath = path;
             await ipcRenderer.invoke('mpv-load', path)
             this.isPlaying = true;
             this.isResumeing = true;

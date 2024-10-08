@@ -225,11 +225,6 @@
   import routers from './router'
   import {store_app_configs_logic_update} from "@/store/app/store_app_configs_logic_update";
   import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
-  import {store_local_db_info} from "@/store/local/store_local_db_info";
-  import {VueDraggable} from "vue-draggable-plus";
-  import {
-    Get_Navidrome_Temp_Data_To_LocalSqlite
-  } from "@/features/servers_configs/navidrome_api/instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
   import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
   import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
   routers.beforeEach((to, from, next) => {
@@ -640,11 +635,6 @@
   function drawer_close_of_player_bar(){
     store_player_audio_logic.drawer_order_show = false;
     store_player_audio_logic.drawer_volume_show = false;
-    // store_playlist_appearance.playlist_show = false;
-    // store_player_sound_more.player_show_sound_more = false;
-    // store_player_sound_speed.player_show_sound_speed = false;
-    // store_player_sound_effects.player_show_sound_effects = false;
-    // store_app_configs_info.update_show = false;
   }
 </script>
 <template>
@@ -656,7 +646,7 @@
         <n-layout has-sider class="this_App" embedded @click="drawer_close_of_player_bar">
           <!--Left Router_Menu-->
           <n-layout-sider
-            class="n_layout_sider"
+            style="border: 0;"
             collapse-mode="width"
             :collapsed-width="66"
             :width="160"
@@ -677,46 +667,25 @@
           </n-layout-sider>
           <!--Right Router_View-->
           <n-layout
-              embedded
-              class="n_layout"
-              style="height: calc(100vh - 150px);margin-top: 70px;">
+            embedded style="height: calc(100vh - 150px);margin-top: 70px;">
             <!--Menu View -->
-            <RouterView
-              class="view_show_data"
-              v-if="store_router_data_info.router_select_model_menu"
-            >
-
-            </RouterView>
+            <RouterView class="view_show_data"
+                        v-if="store_router_data_info.router_select_model_menu"></RouterView>
             <!--Home View -->
-            <RouterView
-              class="view_show_data"
-              v-else-if="store_router_data_info.router_select_model_home"
-            >
-            </RouterView>
+            <RouterView class="view_show_data"
+                        v-else-if="store_router_data_info.router_select_model_home"></RouterView>
             <!--Updateing View-->
-            <RouterView
-              class="view_show_data"
-              v-else-if="store_router_data_info.router_select_model_updateing"
-            >
-            </RouterView>
+            <RouterView class="view_show_data"
+                        v-else-if="store_router_data_info.router_select_model_updateing"></RouterView>
             <!--Media View-->
-            <RouterView
-              class="view_show_table"
-              v-else-if="store_router_data_info.router_select_model_media"
-            >
-            </RouterView>
+            <RouterView class="view_show_table"
+                        v-else-if="store_router_data_info.router_select_model_media"></RouterView>
             <!--Album View-->
-            <RouterView
-              class="view_show_table"
-              v-else-if="store_router_data_info.router_select_model_album"
-            >
-            </RouterView>
+            <RouterView class="view_show_table"
+                        v-else-if="store_router_data_info.router_select_model_album"></RouterView>
             <!--Artist View-->
-            <RouterView
-              class="view_show_table"
-              v-else-if="store_router_data_info.router_select_model_artist"
-            >
-            </RouterView>
+            <RouterView class="view_show_table"
+                        v-else-if="store_router_data_info.router_select_model_artist"></RouterView>
             <!--Top Bar-->
             <div class="bar_top_setapp" style="background-color: transparent" @click="drawer_close_of_player_bar">
               <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"
@@ -741,38 +710,46 @@
                   text-align:center;
                   z-index: 99;
                 ">
-                <n-button quaternary circle style="margin-right:4px;" @click="async () => {
-                  if(store_server_user_model.model_server_type_of_web){
-                    await ipcRenderer.invoke('mpv-stopped');
-                  }
-                  ipcRenderer.send('window-reset-data');
-                }">
+                <n-button
+                  quaternary circle
+                  style="margin-right:4px;"
+                  @click="async () => {
+                    if(store_server_user_model.model_server_type_of_web){
+                      await ipcRenderer.invoke('mpv-stopped');
+                    }
+                    ipcRenderer.send('window-reset-data');
+                  }">
                   <template #icon>
                     <n-icon size="20" :depth="2"><clean/></n-icon>
                   </template>
                   <!--<span style="font-weight: 500;">{{ $t('setting.clearQueryCache') }}</span>-->
                 </n-button>
-                <n-button quaternary circle size="medium" style="margin-right:4px" @click="store_app_configs_logic_theme.theme_mode_change_click()">
+                <n-button quaternary circle size="medium" style="margin-right:4px"
+                          @click="store_app_configs_logic_theme.theme_mode_change_click()">
                   <template #icon>
                     <n-icon size="20" :depth="2"><DarkTheme24Filled/></n-icon>
                   </template>
                 </n-button>
-                <n-button quaternary circle size="medium" style="margin-right:4px;" @click="ipcRenderer.send('window-fullscreen');">
+                <n-button quaternary circle size="medium" style="margin-right:4px;"
+                          @click="ipcRenderer.send('window-fullscreen');">
                   <template #icon>
                     <n-icon size="20" :depth="2" style="margin-top: 1px;"><FullScreenMaximize16Regular/></n-icon>
                   </template>
                 </n-button>
-                <n-button quaternary circle size="medium" style="margin-right:4px" @click="ipcRenderer.send('window-min');">
+                <n-button quaternary circle size="medium" style="margin-right:4px"
+                          @click="ipcRenderer.send('window-min');">
                   <template #icon>
                     <n-icon size="24" :depth="2"><MinusRound/></n-icon>
                   </template>
                 </n-button>
-                <n-button quaternary circle size="medium" style="margin-right:4px" @click="ipcRenderer.send('window-max');">
+                <n-button quaternary circle size="medium" style="margin-right:4px"
+                          @click="ipcRenderer.send('window-max');">
                   <template #icon>
                     <n-icon size="24" :depth="2"><Maximize16Regular/></n-icon>
                   </template>
                 </n-button>
-                <n-button quaternary circle size="medium" style="margin-right:30px" @click="ipcRenderer.send('window-close');">
+                <n-button quaternary circle size="medium" style="margin-right:30px"
+                          @click="ipcRenderer.send('window-close');">
                   <template #icon>
                     <n-icon size="28" :depth="2"><Close/></n-icon>
                   </template>
@@ -799,7 +776,6 @@
         class="view_music_player"
         v-if="store_player_appearance.player_show"
         :style="{ height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)` }">
-
       </View_Screen_Music_Player>
     </n-config-provider>
     <!-- right drwaer of music_playlist -->
@@ -819,8 +795,7 @@
           <template #default>
             <Bar_Music_PlayList
               v-if="store_playlist_appearance.playlist_show"
-              style="z-index: 100;"
-              >
+              style="z-index: 100;">
             </Bar_Music_PlayList>
           </template>
         </n-drawer-content>
@@ -934,13 +909,6 @@
   left: 0;
   overflow: hidden;
 }
-.n_layout_sider {
-  //background-color: #F0F3F6;
-  border: 0;
-}
-.n_layout{
-  //background-color: #F7F9FC;
-}
 
 .bar_top_setapp{
   width: 100vw;
@@ -977,7 +945,6 @@
   position: fixed;bottom: 0;left: 0;
   transition: height 0.2s;
 }
-
 
 .link {
   color: #FFFFFF;

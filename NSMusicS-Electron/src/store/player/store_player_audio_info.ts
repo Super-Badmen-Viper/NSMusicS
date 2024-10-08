@@ -120,7 +120,7 @@ watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
         });
 
         ipcRenderer.invoke('i18n-tray-label-musicIcon',
-            String(store_player_audio_info.this_audio_song_name)//+ ' - ' + store_player_audio_info.this_audio_singer_name
+            String(store_player_audio_info.this_audio_song_name) + ' - ' + store_player_audio_info.this_audio_singer_name
         );
     }
 });
