@@ -24,6 +24,8 @@ import {store_app_configs_logic_load} from "@/store/app/store_app_configs_logic_
 import {
     User_Authorization_ApiWebService_of_ND
 } from "@/features/servers_configs/navidrome_api/services_web/user_authorization/index_service";
+import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
+const { ipcRenderer } = require('electron');
 
 export const store_server_user_model = reactive({
     model_select: 'local',
@@ -92,6 +94,9 @@ watch(() => store_server_user_model.model_select, async (newValue) => {
         store_router_data_logic.reset_data()
         // Refresh Current AudioInfo
         await store_player_audio_info.reset_data()
+        if(store_player_audio_logic.player_select === 'mpv') {
+            await ipcRenderer.invoke('mpv-stopped');
+        }
         //
         if (store_server_user_model.model_select === 'server') {
             store_server_users.percentage_of_nd = 100

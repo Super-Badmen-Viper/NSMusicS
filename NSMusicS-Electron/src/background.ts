@@ -828,6 +828,9 @@ async function initNodeMpv(){
     });
     await mpv.start();
     await mpv.pause();
+    mpv.on('stopped', () => {
+        win.webContents.send("mpv-stopped", true);
+    });
 }
 async function createNodeMpv(){
     ////// mpv services for win
@@ -889,9 +892,6 @@ async function createNodeMpv(){
     });
     ipc.handle('mpv-set-volume', async (event,volume) => {
         await mpv.volume(volume)
-    });
-    mpv.on('stopped', () => {
-        win.webContents.send("mpv-stopped", true);
     });
 }
 

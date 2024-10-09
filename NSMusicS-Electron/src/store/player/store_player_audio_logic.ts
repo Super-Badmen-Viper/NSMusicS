@@ -2,6 +2,7 @@ import {reactive, watch} from 'vue'
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
 import {Audio_howler} from "@/models/song_Audio_Out/Audio_howler";
+import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 const { ipcRenderer } = require('electron');
 
 export const store_player_audio_logic = reactive({
@@ -29,17 +30,19 @@ export const store_player_audio_logic = reactive({
     drawer_volume_show: false,
 });
 watch(() => store_player_audio_logic.player_select, async (newValue) => {
-    if(newValue === 'mpv'){
-        if(store_player_audio_logic.player.howl != null){
-            store_player_audio_logic.player.howl.unload()
+    await store_player_audio_info.reset_data();
+
+    if (newValue === 'mpv') {
+        if (store_player_audio_logic.player.howl != null) {
+            store_player_audio_logic.player.howl.unload();
         }
-        await ipcRenderer.invoke('mpv-init')
-        store_player_audio_logic.player = null
-        store_player_audio_logic.player = new Audio_node_mpv()
-    }else if (newValue === 'web'){
-        store_player_audio_logic.player = null
-        store_player_audio_logic.player = new Audio_howler()
-        await ipcRenderer.invoke('mpv-unload')
+        await ipcRenderer.invoke('mpv-init');
+        store_player_audio_logic.player = null;
+        store_player_audio_logic.player = new Audio_node_mpv();
+    } else if (newValue === 'web') {
+        store_player_audio_logic.player = null;
+        store_player_audio_logic.player = new Audio_howler();
+        await ipcRenderer.invoke('mpv-unload');
     }
 });
 watch(() => store_player_audio_logic.play_order, (newValue) => {

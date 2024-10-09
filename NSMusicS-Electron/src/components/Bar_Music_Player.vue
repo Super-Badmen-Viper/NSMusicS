@@ -150,7 +150,7 @@
           await store_player_audio_logic.player.load(store_player_audio_info.this_audio_file_path)
         }else if(store_player_audio_logic.player_select === 'web'){
           if(store_player_audio_logic.player.howl != null){
-            store_player_audio_logic.player.howl.unload()
+            await store_player_audio_logic.player.howl.unload()
           }
           store_player_audio_logic.player = new Audio_howler()
           store_player_audio_logic.player.howl = new Howl({

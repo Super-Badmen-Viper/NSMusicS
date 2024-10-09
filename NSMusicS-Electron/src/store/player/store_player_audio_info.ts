@@ -10,6 +10,7 @@ import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchroni
 import {store_playlist_appearance} from "@/store/view/playlist/store_playlist_appearance";
 import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 const path = require('path')
 const { ipcRenderer } = require('electron');
 interface ByteTime {
@@ -56,8 +57,6 @@ export const store_player_audio_info = reactive({
     this_audio_lyrics_info_line_num: 28,
 
     async reset_data() {
-        await ipcRenderer.invoke('mpv-stopped');
-
         this.this_audio_file_path = '';
         this.this_audio_file_medium_image_url = '';
         this.this_audio_restart_play = false;
