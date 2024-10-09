@@ -82,11 +82,15 @@ npm run build-only # Package into the current system_configs's software package 
   - [Electron](https://github.com/electron/electron)
   - [better-sqlite3](https://github.com/WiseLibs/better-sqlite3)
   - [howler.js](https://github.com/goldfire/howler.js)
+  - [MPV](https://github.com/mpv-player/mpv)
   - [Node-MPV](https://github.com/j-holub/Node-MPV)
   - [Vue3](https://github.com/vuejs/vue)
   - [go-backend-clean-architecture](https://github.com/amitshekhariitbhu/go-backend-clean-architecture)
   - [node-taglib-sharp](https://github.com/benrr101/node-taglib-sharp)
   - [Naive UI](https://github.com/tusen-ai/naive-ui)
+  - [feishin](https://github.com/jeffvli/feishin)
+  - [navidrome](https://github.com/navidrome/navidrome)
+  - .......
 - NSMusicS Web ImageResource Thanks:
   - <a href="https://www.freepik.com/free-photo/black-retro-vinyl-record-design-element_12189639.htm#fromView=search&page=5&position=9&uuid=c046ed77-1d8d-4858-b3d8-e8a96afa3d8d">Image by rawpixel.com on Freepik</a>
 - NSMusicS WPF Of Thanks:
@@ -94,6 +98,7 @@ npm run build-only # Package into the current system_configs's software package 
   - [cscore](https://github.com/filoe/cscore)
   - [LottieSharp](https://github.com/quicoli/LottieSharp)
   - [AudioVisualizer](https://github.com/SlimeNull/AudioVisualizer)
+  - .......
 
 ## Author's Message
  - As this project is currently independently developed by Xiang Cheng(myself), programming standards are a personal habit of the Xiang Cheng(myself), and coding standards are not yet standardized enough. However, this project will continue to undergo self refactoring and reverse development. It can be affirmed that in the future, NSMusicS will form a standard coding specification, which will be beneficial for the community to develop third-party NSMusicS plugins, Enable NSMusicS to meet the diverse needs of more potential customers，Most importantly, NSMusicS will always be open source and continuously updated
