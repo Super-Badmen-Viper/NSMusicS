@@ -690,7 +690,7 @@
                   @error="handleImageError"
                   style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
                   :style="{ width: item_artist_image + 'px', height: item_artist_image + 'px', borderRadius: '6px' }"/>
-                <div class="hover-overlay">
+                <div class="hover-overlay" @dblclick="Open_this_artist_all_artist_list_click(item.id)">
                   <div class="hover-content">
                     <button
                         class="play_this_artist"

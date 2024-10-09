@@ -41,8 +41,8 @@
   ////// server
   const Type_Server_Kinds = [
     {
-      value: "Jellyfin",
-      label: "Jellyfin"
+      value: "NSMusicS",
+      label: "NSMusicS"
     },
     {
       value: "subsonic",
@@ -53,8 +53,8 @@
       label: 'navidrome'
     },
     {
-      value: "NSMusicS",
-      label: "NSMusicS"
+      value: "Jellyfin",
+      label: "Jellyfin"
     },
     {
       value: "emby",
@@ -676,8 +676,6 @@
                           :value="Type_Server_Kinds[3].value"
                           :label="Type_Server_Kinds[3].label"
                       />
-                    </n-radio-group>
-                    <n-radio-group v-model:value="Type_Server_Selected">
                       <n-radio-button
                           style="text-align: center;width: 133px;"
                           disabled
@@ -685,6 +683,8 @@
                           :value="Type_Server_Kinds[4].value"
                           :label="Type_Server_Kinds[4].label"
                       />
+                    </n-radio-group>
+                    <n-radio-group v-model:value="Type_Server_Selected">
                       <n-radio-button
                           style="text-align: center;width: 133px;"
                           disabled
@@ -744,7 +744,7 @@
               <n-space vertical>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.language') }}</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.language') + ' | Language' }}</span>
                     <div style="margin-top: -10px;">
                       <span style="font-size:12px;">{{ $t('setting.language_description') }}</span>
                     </div>
@@ -1099,6 +1099,93 @@
               <n-space vertical>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.audioPlayer_description') }}</span>
+                    </div>
+                  </n-space>
+                  <n-select
+                      v-model:value="store_player_audio_logic.player_select"
+                      :options="store_player_audio_logic.player_kind"
+                      placeholder="not enabled"
+                      :reset-menu-on-options-change="false"
+                      style="width: 207px;margin-top: -4px;"
+                  />
+                </n-space>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioDevice') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.audioDevice_description') }}</span>
+                    </div>
+                  </n-space>
+                  <n-select
+                      v-model:value="player_lyric_panel_fontfamily_options_selected"
+                      :options="player_lyric_panel_fontfamily_options"
+                      placeholder="not enabled"
+                      :reset-menu-on-options-change="false"
+                      style="width: 207px;margin-top: -4px;"
+                  />
+                </n-space>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.playbackStyle_description') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.playbackStyle_description') }}</span>
+                    </div>
+                  </n-space>
+                  <n-select
+                      v-model:value="player_lyric_panel_fontfamily_options_selected"
+                      :options="player_lyric_panel_fontfamily_options"
+                      placeholder="not enabled"
+                      :reset-menu-on-options-change="false"
+                      style="width: 207px;margin-top: -4px;"
+                  />
+                </n-space>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.crossfadeStyle') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.crossfadeStyle_description') }}</span>
+                    </div>
+                  </n-space>
+                  <n-input-group style="width: 207px;margin-top: -4px;">
+                    <!--                    <n-input clearable v-model:value="player_fade_value" @update:value="update_player_fade_value"/>-->
+                    <n-input-group-label>ms</n-input-group-label>
+                  </n-input-group>
+                </n-space>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sampleRate') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.sampleRate_description') }}</span>
+                    </div>
+                  </n-space>
+                  <n-space
+                      justify="end" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                    <n-input-group style="width: 207px;margin-top: -4px;">
+                      <n-input clearable default-value="48000"/>
+                      <n-input-group-label>Hz</n-input-group-label>
+                    </n-input-group>
+                  </n-space>
+                </n-space>
+                <n-divider style="margin: 0;"/>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.lyricOffset') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.lyricOffset_description') }}</span>
+                    </div>
+                  </n-space>
+                  <n-input-group
+                      style="width: 207px;margin-top: -4px;">
+                    <n-input clearable default-value="100"/>
+                    <n-input-group-label>ms</n-input-group-label>
+                  </n-input-group>
+                </n-space>
+                <n-divider style="margin: 0;"/>
+                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.player_use_lottie') }}</span>
                     <div style="margin-top: -10px;">
                       <span style="font-size:12px;">{{ $t('nsmusics.view_player.view_seting.player_use_lottie_explain') }}</span>
@@ -1127,81 +1214,6 @@
                   </n-space>
                   <n-switch v-model:value="store_player_appearance.player_use_playbar_auto_hide">
                   </n-switch>
-                </n-space>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioDevice') }}</span>
-                    <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">{{ $t('setting.audioDevice_description') }}</span>
-                    </div>
-                  </n-space>
-                  <n-select
-                      v-if="false"
-                      v-model:value="player_lyric_panel_fontfamily_options_selected"
-                      :options="player_lyric_panel_fontfamily_options"
-                      placeholder="not enabled"
-                      :reset-menu-on-options-change="false"
-                      style="width: 207px;margin-top: -4px;"
-                  />
-                </n-space>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.playbackStyle_description') }}</span>
-                    <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">{{ $t('setting.playbackStyle_description') }}</span>
-                    </div>
-                  </n-space>
-                  <n-select
-                      v-if="false"
-                      v-model:value="player_lyric_panel_fontfamily_options_selected"
-                      :options="player_lyric_panel_fontfamily_options"
-                      placeholder="not enabled"
-                      :reset-menu-on-options-change="false"
-                      style="width: 207px;margin-top: -4px;"
-                  />
-                </n-space>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.crossfadeStyle') }}</span>
-                    <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">{{ $t('setting.crossfadeStyle_description') }}</span>
-                    </div>
-                  </n-space>
-                  <n-input-group style="width: 207px;margin-top: -4px;">
-<!--                    <n-input clearable v-model:value="player_fade_value" @update:value="update_player_fade_value"/>-->
-                    <n-input-group-label>ms</n-input-group-label>
-                  </n-input-group>
-                </n-space>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sampleRate') }}</span>
-                    <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">{{ $t('setting.sampleRate_description') }}</span>
-                    </div>
-                  </n-space>
-                  <n-space
-                    v-if="false"
-                    justify="end" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                    <n-input-group style="width: 207px;margin-top: -4px;">
-                      <n-input clearable default-value="48000"/>
-                      <n-input-group-label>Hz</n-input-group-label>
-                    </n-input-group>
-                  </n-space>
-                </n-space>
-                <n-divider style="margin: 0;"/>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.lyricOffset') }}</span>
-                    <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">{{ $t('setting.lyricOffset_description') }}</span>
-                    </div>
-                  </n-space>
-                  <n-input-group
-                    v-if="false"
-                    style="width: 207px;margin-top: -4px;">
-                    <n-input clearable default-value="100"/>
-                    <n-input-group-label>ms</n-input-group-label>
-                  </n-input-group>
                 </n-space>
               </n-space>
             </n-scrollbar>

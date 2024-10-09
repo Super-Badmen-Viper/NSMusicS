@@ -623,7 +623,7 @@
       const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
       await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);
       console.log('Last Version:', store_app_configs_logic_update.getVersion());
-      store_app_configs_info.version_update_explain = store_app_configs_logic_update.changelog_explain.replace(/&#10;/g, '<br>')
+      store_app_configs_info.version_update_explain = store_app_configs_logic_update.changelog_explain.replace(/;/g, '<br>')
       store_app_configs_info.version_update_address = store_app_configs_logic_update.url
       if (store_app_configs_info.version < store_app_configs_logic_update.getVersion()) {
         store_app_configs_info.version_updated = 1;

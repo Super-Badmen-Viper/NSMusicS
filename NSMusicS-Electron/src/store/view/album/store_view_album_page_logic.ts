@@ -15,6 +15,8 @@ export const store_view_album_page_logic = reactive({
     page_albumlists_keyword: '',
     page_albumlists_get_keyword_model_num: 0,
     page_albumlists_options_Sort_key: [],
+
+    page_albumlists_input_search_Value: ''
 });
 watch(() => store_view_album_page_logic.page_albumlists_options_Sort_key, async (newValue) => {
     if (newValue != null) {

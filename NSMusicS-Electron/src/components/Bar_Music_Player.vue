@@ -143,23 +143,83 @@
     timer_this_audio_player.value = setTimeout(async () => {
       if(store_player_audio_info.this_audio_file_path.length > 0) {
         store_player_audio_logic.player_silder_currentTime_added_value = 0;
-        // store_player_audio_logic.player.howl = new Howl();
-        await store_player_audio_logic.player.load(store_player_audio_info.this_audio_file_path)
+        if(store_player_audio_logic.player_select === 'mpv'){
+          if(store_player_audio_logic.player === null){
+            store_player_audio_logic.player = new Audio_node_mpv()
+          }
+          await store_player_audio_logic.player.load(store_player_audio_info.this_audio_file_path)
+        }else if(store_player_audio_logic.player_select === 'web'){
+          if(store_player_audio_logic.player.howl != null){
+            store_player_audio_logic.player.howl.unload()
+          }
+          store_player_audio_logic.player = new Audio_howler()
+          store_player_audio_logic.player.howl = new Howl({
+            src: [store_player_audio_info.this_audio_file_path],
+            autoplay: false,
+            html5: true,
+            loop: false,
+            volume: 1.0,
+            onplay: async () => {
+              // store_player_audio_logic.player.howl.fade(0, 1, props.player_fade_value);
+              store_player_audio_logic.player.isPlaying = true;
+              await ipcRenderer.invoke('i18n-tray-music-pause', true)
+            },
+            onpause: async () => {
+              // store_player_audio_logic.player.howl.fade(1, 0, props.player_fade_value);
+              store_player_audio_logic.player.isPlaying = false;
+              await ipcRenderer.invoke('i18n-tray-music-pause', false)
+            },
+            onstop: async () => {
+              // store_player_audio_logic.player.howl.fade(1, 0, props.player_fade_value);
+              store_player_audio_logic.player.isPlaying = false;
+              await ipcRenderer.invoke('i18n-tray-music-pause', false)
+            },
+            onend: () => {
+              // store_player_audio_logic.player.howl.fade(1, 0, props.player_fade_value);
+              store_player_audio_logic.player.isPlaying = false;
+              //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
+              if(store_player_audio_logic.player_no_progress_jump){
+                store_player_audio_logic.current_play_time = formatTime(store_player_audio_logic.player.getDuration());
+                store_player_audio_logic.player_silder_currentTime_added_value = 0;
+                this_audio_buffer_file.value = null;
+                clearInterval(timer);
+
+                store_player_audio_logic.player_no_progress_jump = false;
+
+                store_player_audio_logic.player.isPlaying = false;
+                is_play_ended.value = true;
+              }
+              Play_Media_Switching()
+            },
+            onloaderror: (id: any, error: any) => {
+              // console.error('Failed to load audio:', error);
+              store_player_audio_logic.player.isPlaying = false;
+            }
+          });
+        }
         store_player_audio_logic.player.isPlaying = true;
         store_player_audio_info.this_audio_is_playing = true
         store_player_audio_logic.player_save_new_data = true
         is_play_ended.value = false;
         store_player_audio_logic.player_no_progress_jump = true;
+        //
         clearInterval(timer);
-        timer = setInterval(synchronize_playback_time, 200);
-        store_player_audio_logic.total_play_time = formatTime(await store_player_audio_logic.player.getDuration());
-        await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
+        timer = setInterval(
+            synchronize_playback_time, 200
+        );
+        await store_player_audio_logic.player.setVolume(
+            Number(store_player_audio_logic.play_volume)
+        )
         await store_player_audio_logic.player.play();
+        store_player_audio_logic.total_play_time = formatTime(
+            await store_player_audio_logic.player.getDuration()
+        );
       }
     }, 400);
   }
   /// Prevent 'mpv stopped' from being triggered multiple times and implement anti shake throttling measures
   import { debounce } from 'lodash';
+  import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
   const handleMpvStopped = debounce(async (event, args) => {
     is_play_ended.value = true;
     let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
@@ -198,7 +258,6 @@
   ///
   onMounted(async () => {
     timer = setInterval(synchronize_playback_time, 200);
-    await store_player_audio_logic.player.IsResumeing()
     await store_player_audio_logic.player.IsPlaying()
     await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
   })
@@ -208,11 +267,16 @@
         if(this_audio_buffer_file.value === null){
           this_audio_buffer_file.value = Math.random().toString(36).substring(7);
         }else{
-          await store_player_audio_logic.player.IsResumeing();
-          if(!store_player_audio_logic.player.isResumeing)
-            Play_This_Audio_Path()
-          else {
-            await store_player_audio_logic.player.play();
+          if(store_player_audio_logic.player_select === 'mpv'){
+            if(!store_player_audio_logic.player.IsPlaying)
+              Play_This_Audio_Path()
+            else
+              await store_player_audio_logic.player.play();
+          } else if(store_player_audio_logic.player_select === 'web'){
+            if(store_player_audio_logic.player.howl == null)
+              Play_This_Audio_Path()
+            else
+              await store_player_audio_logic.player.play();
           }
           store_player_audio_info.this_audio_is_playing = true
         }
@@ -435,8 +499,10 @@
       store_player_audio_logic.current_play_time = formatTime((await store_player_audio_logic.player.getCurrentTime() + store_player_audio_logic.player_silder_currentTime_added_value));
   }
   const synchronize_playback_time = () => {
-    set_slider_singleValue();
-    get_current_play_time();
+    try {
+      set_slider_singleValue();
+      get_current_play_time();
+    }catch{}
   }
   let timer: string | number | NodeJS.Timeout | undefined;
   let player_range_duration_isDragging = false;
@@ -537,6 +603,8 @@
   import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
   import {store_server_user_model} from "@/store/server/store_server_user_model";
   import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+  import {Audio_howler} from "@/models/song_Audio_Out/Audio_howler";
+  import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
   const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id,favorite)
     store_player_audio_info.this_audio_song_favorite = !favorite

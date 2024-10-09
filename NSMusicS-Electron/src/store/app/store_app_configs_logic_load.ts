@@ -197,6 +197,9 @@ export const store_app_configs_logic_load = reactive({
         /// playlist configs
         await store_playlist_list_logic.reset_data()
 
+        /// player
+        store_player_audio_logic.player_select = store_player_audio_logic.player_kind[0].value
+
         /// close
         store_router_data_logic.get_page_top_info()
         store_app_configs_info.app_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_left_menu_select_activeKey']

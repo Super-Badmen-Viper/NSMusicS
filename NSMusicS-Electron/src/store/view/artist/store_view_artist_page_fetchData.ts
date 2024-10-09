@@ -25,6 +25,7 @@ import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_li
 import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
 import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 
 export const store_view_artist_page_fetchData = reactive({
     async fetchData_Artist(){
@@ -238,6 +239,12 @@ export const store_view_artist_page_fetchData = reactive({
         this._start = 0;
         this._end = 100;
         await this.fetchData_Artist_of_server_web()
+
+        if(store_player_appearance.player_mode_of_medialist_from_external_import) {
+            store_view_media_page_fetchData._album_id = ''
+            store_view_media_page_fetchData._artist_id = ''
+            store_view_album_page_fetchData._artist_id = ''
+        }
     },
     async fetchData_Artist_of_server_web_end(){
         this._start += 100;

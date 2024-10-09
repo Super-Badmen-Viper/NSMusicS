@@ -23,7 +23,6 @@
   import { ref, watch } from 'vue';
   import { defineEmits } from 'vue';
   import { onBeforeUnmount } from 'vue';
-  const { ipcRenderer } = require('electron');
 
   ////// passed as argument
   const emits = defineEmits([

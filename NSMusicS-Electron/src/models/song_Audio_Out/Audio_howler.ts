@@ -1,36 +1,51 @@
-const { Howler } = require('howler');
+const { ipcRenderer } = require('electron');
 
 export class Audio_howler {
     public howl: any;
     public isPlaying: boolean;
+    public isDuration: number | undefined;
     constructor() {
         this.howl = null;
         this.isPlaying = false;
     }
-    unload() {
-        if (this.howl) {
-            this.howl.unload();
-        }
-    } 
-    play() {
-        if (this.howl) {
-            this.howl.play();
-            this.isPlaying = true;
+    IsPlaying() {
+        try{
+            this.isPlaying = this.howl.playing
+        }catch{
+            this.isPlaying = false
         }
     }
-    pause() {
-        if (this.howl) {
-            this.howl.pause();
-            this.isPlaying = false;
+    async play() {
+        try {
+            if (this.howl) {
+                this.howl.play();
+                this.isPlaying = true;
+                await ipcRenderer.invoke('i18n-tray-music-pause', true)
+            }
+        }catch{
+            await ipcRenderer.invoke('i18n-tray-music-pause', false)
         }
     }
-    getDuration(): number {
+    async pause() {
+        try {
+            if (this.howl) {
+                this.howl.pause();
+                this.isPlaying = false;
+            }
+        }catch{
+
+        }finally {
+            await ipcRenderer.invoke('i18n-tray-music-pause', false)
+        }
+    }
+    getDuration() {
         if (this.howl) {
-            return this.howl.duration();
+            this.isDuration = this.howl.duration();
+            return this.isDuration;
         }
         return 0;
     }
-    getCurrentTime(): number {
+    getCurrentTime() {
         if (this.howl) {
             return this.howl.seek();
         }
@@ -46,7 +61,7 @@ export class Audio_howler {
             this.howl.volume(volume);
         }
     }
-    get_fade(from: any, to: any, duration: any){
+    setFade(from: any, to: any, duration: any){
         if (this.howl) {
             this.howl.fadein(from);
             this.howl.fadeout(to)

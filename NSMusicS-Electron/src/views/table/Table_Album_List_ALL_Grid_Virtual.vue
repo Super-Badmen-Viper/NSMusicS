@@ -1,33 +1,48 @@
 <script setup lang="ts">
-  ////// this_view resource of vicons_svg
-  import {
-    MoreCircle32Regular,
-    Filter20Filled
-  } from '@vicons/fluent'
-  import {
-    ArrowSort24Regular,TextSortAscending20Regular,TextSortDescending20Regular,
-    Search20Filled,
-    PlayCircle24Regular,
-    Heart24Regular,Heart28Filled,
-    ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
-  } from '@vicons/fluent'
-  import { Icon } from '@vicons/utils'
+////// this_view resource of vicons_svg
+import {
+  ArrowSort24Regular,
+  ChevronLeft16Filled,
+  ChevronRight16Filled,
+  Filter20Filled,
+  Heart24Regular,
+  Heart28Filled,
+  Open28Filled,
+  PlayCircle24Regular,
+  Search20Filled,
+  TextSortAscending20Regular,
+  TextSortDescending20Regular
+} from '@vicons/fluent'
+import {Icon} from '@vicons/utils'
 
-  ////// this_view components of navie ui 
-  import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-  import { type InputInst, NIcon } from 'naive-ui';
-  import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-  import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
-  import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
-  import {store_router_data_logic} from "@/store/router/store_router_data_logic";
-  import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
-  import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
+////// this_view components of navie ui
+import {computed, h, onBeforeUnmount, onMounted, ref, watch} from 'vue'
+import {type InputInst, NIcon, useMessage} from 'naive-ui';
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
+import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
+import {store_router_data_logic} from "@/store/router/store_router_data_logic";
+import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
+import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 
-  ////// i18n auto lang
-  import { useI18n } from 'vue-i18n'
-  import {store_server_user_model} from "@/store/server/store_server_user_model";
-  const { t } = useI18n({
+////// i18n auto lang
+import {useI18n} from 'vue-i18n'
+import {store_server_user_model} from "@/store/server/store_server_user_model";
+////// changed_data write to sqlite
+import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
+import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
+import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
+import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
+import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
+import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
+import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
+import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+////// right menu
+import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {store_router_data_info} from "@/store/router/store_router_data_info";
+
+const { t } = useI18n({
     inheritLocale: true
   })
 
@@ -106,8 +121,7 @@
     startTimer();
     updateGridItems();
 
-    input_search_Value.value = store_view_album_page_logic.page_albumlists_keyword
-    if(input_search_Value.value.length > 0){
+    if(store_view_album_page_logic.page_albumlists_input_search_Value.length > 0){
       bool_show_search_area.value = true
       bool_input_search = true
     }
@@ -210,11 +224,16 @@
     {
       bool_show_search_area.value = false
       input_search_InstRef.value?.clear()
-      if(bool_input_search == true){
+      if(bool_input_search){
         // store_view_album_page_logic.list_data_StartUpdate = true
         back_search_default()
         bool_input_search = false
         scrollTo(0)
+      }
+      if(store_server_user_model.model_server_type_of_web) {
+        store_view_media_page_fetchData._album_id = ''
+        store_view_media_page_fetchData._artist_id = ''
+        store_view_album_page_fetchData._artist_id = ''
       }
       input_search_InstRef.value?.clear()
       store_view_album_page_logic.page_albumlists_keyword = ""
@@ -232,12 +251,11 @@
     // input_search_InstRef.value?.clear()
   }
   const input_search_InstRef = ref<InputInst>()
-  const input_search_Value = ref<string>()
   let bool_input_search = false
   const click_search = () => {
-    if (input_search_Value.value){
-      const page_albumlists_keyword = input_search_Value.value.toLowerCase();
-      store_view_album_page_logic.page_albumlists_keyword = page_albumlists_keyword
+    store_view_album_page_logic.page_albumlists_keyword =
+        store_view_album_page_logic.page_albumlists_input_search_Value.toLowerCase()
+    if (store_view_album_page_logic.page_albumlists_keyword){
       bool_input_search = true
       options_Sort_key.value.forEach(element => {
         element.state_Sort = state_Sort.Default
@@ -331,39 +349,43 @@
   ////// router history 
   const get_router_history_model_pervious = () => {
     store_view_album_page_logic.page_albumlists_keyword = ''
+    input_search_InstRef.value?.clear()
     store_router_history_data_of_album.get_router_history_model_of_Album(-1)
   }
   const get_router_history_model_next = () =>  {
     store_view_album_page_logic.page_albumlists_keyword = ''
+    input_search_InstRef.value?.clear()
     store_router_history_data_of_album.get_router_history_model_of_Album(1)
   }
 
   ////// go to media_view
   const handleItemClick_album = (album:string) => {
     if(store_server_user_model.model_server_type_of_local) {
-      input_search_Value.value = album
       bool_show_search_area.value = false
       show_search_area()
       click_search()
       scrollTo(0)
     }else if(store_server_user_model.model_server_type_of_web){
+      store_view_album_page_fetchData._artist_id = ''
       bool_show_search_area.value = true
-      input_search_Value.value = album
-      store_view_album_page_logic.page_albumlists_keyword = album
     }
+    store_view_album_page_logic.page_albumlists_keyword = album
+    store_view_album_page_logic.page_albumlists_input_search_Value = album
+    store_view_media_page_logic.page_songlists_input_search_Value = album
   }
   const handleItemClick_artist = (artist_id:string) => {
     if(store_server_user_model.model_server_type_of_local) {
-      input_search_Value.value = artist_id
       bool_show_search_area.value = false
       show_search_area()
       click_search()
       scrollTo(0)
     }else if(store_server_user_model.model_server_type_of_web){
+      store_view_album_page_fetchData._artist_id = ''
       bool_show_search_area.value = true
-      input_search_Value.value = artist_id
-      store_view_album_page_logic.page_albumlists_keyword = artist_id
     }
+    store_view_album_page_logic.page_albumlists_keyword = artist_id
+    store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
+    store_view_media_page_logic.page_songlists_input_search_Value = artist_id
   }
   const Open_this_album_SongList_click = (album_id:string) => {
     if(store_server_user_model.model_server_type_of_web){
@@ -384,22 +406,7 @@
     await store_view_album_page_fetchData.fetchData_This_Album_SongList(album_id)
   }
 
-  ////// changed_data write to sqlite
-  import {Set_AlbumInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite'
-  import {
-    store_local_data_set_albumInfo
-  } from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
-  import {
-    store_local_data_set_mediaInfo
-  } from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
-  import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
-  import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
-  import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
-  import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
-  import {store_server_user_model} from "@/store/server/store_server_user_model";
-  import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
-  import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
-  const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
+const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id,favorite)
   }
   let before_rating = false
@@ -413,13 +420,7 @@
     }
   }
 
-  ////// right menu
-  import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-  import {useMessage} from 'naive-ui'
-  import {store_router_data_info} from "@/store/router/store_router_data_info";
-  import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media";
-  import {store_player_appearance} from "@/store/player/store_player_appearance";
-  const contextmenu = ref(null as any)
+const contextmenu = ref(null as any)
   const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
   const message = useMessage()
   async function update_playlist_addAlbum(id: any, playlist_id: any){
@@ -547,7 +548,7 @@
         <n-input 
           style="width: 160px;" 
           ref="input_search_InstRef" 
-          v-model:value="input_search_Value"
+          v-model:value="store_view_album_page_logic.page_albumlists_input_search_Value"
           @keydown.enter="click_search"/>
       </n-input-group>
       

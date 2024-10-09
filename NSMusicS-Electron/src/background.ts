@@ -1,5 +1,4 @@
 /// electron
-let win = null;
 import {
     app, BrowserWindow,
     screen,
@@ -7,9 +6,13 @@ import {
     dialog,
     Tray, Menu, nativeImage, nativeTheme
 } from 'electron'
+if (!app.requestSingleInstanceLock()) {
+    app.quit();
+}
 const electron = require('electron')
 const ipc = electron.ipcMain
 const { session } = require('electron');
+let win = null;
 
 /// node-system
 import { File } from "node-taglib-sharp";
@@ -815,8 +818,7 @@ async function createTray(){
 
 /// node-mpv init
 let currentMediaPath = '';
-async function createNodeMpv(){
-    ////// mpv services for win
+async function initNodeMpv(){
     mpv = new mpvAPI({
         audio_only: true,
         auto_restart: true,
@@ -826,8 +828,13 @@ async function createNodeMpv(){
     });
     await mpv.start();
     await mpv.pause();
+}
+async function createNodeMpv(){
+    ////// mpv services for win
     let isPlaying = false;
-    let isResumeing = false;
+    ipc.handle('mpv-init', async (event,filePath) => {
+        await initNodeMpv()
+    });
     ipc.handle('mpv-load', async (event,filePath) => {
         try {
             if (currentMediaPath === filePath && tray_menu_label_music_check_enter) {
@@ -837,7 +844,6 @@ async function createNodeMpv(){
                 await mpv.load(filePath);
                 await mpv.play();
                 isPlaying = true;
-                isResumeing = false;
                 tray_music_play = true
             }
             return true;
@@ -846,25 +852,24 @@ async function createNodeMpv(){
             return false;
         }
     });
+    ipc.handle('mpv-unload', async (event,filePath) => {
+        await mpv.quit();
+        isPlaying = false
+    });
     ipc.handle('mpv-isRunning',  async (event) => {
         return mpv.isRunning();
     });
     ipc.handle('mpv-isPlaying',  async (event) => {
         return isPlaying;
     });
-    ipc.handle('mpv-isResumeing',  async (event) => {
-        return isResumeing;
-    });
     ipc.handle('mpv-play',  async (event) => {
         await mpv.resume();
         isPlaying = true;
-        isResumeing = false;
         tray_music_play = true
     });
     ipc.handle('mpv-pause',  async (event) => {
         await mpv.pause();
         isPlaying = false;
-        isResumeing = true;
         tray_music_play = false
     });
     ipc.handle('mpv-stopped', async (event,volume) => {
@@ -880,7 +885,6 @@ async function createNodeMpv(){
     ipc.handle('mpv-set-time-pos', async (event,timePos) => {
         await mpv.resume();
         isPlaying = true;
-        isResumeing = false;
         await mpv.seek(timePos,"absolute")
     });
     ipc.handle('mpv-set-volume', async (event,volume) => {
@@ -905,6 +909,7 @@ app.whenReady().then(async () => {
 
     await createWindow();
     await createTray();
+    await initNodeMpv()
     await createNodeMpv();
 
     const devInnerHeight: number = 1080.0;

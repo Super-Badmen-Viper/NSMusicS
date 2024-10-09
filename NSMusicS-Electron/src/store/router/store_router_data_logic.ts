@@ -17,6 +17,7 @@ import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "@/features/servers_configs/navidrome_api/instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
+import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 
 export const store_router_data_logic = reactive({
     reset_data(){
@@ -143,6 +144,7 @@ export const store_router_data_logic = reactive({
         store_view_media_page_logic.page_songlists_get_keyword_model_num = 3
         store_router_data_info.find_music_model = true
         console.log('get_media_list_of_album_model：'+value)
+        store_view_media_page_logic.page_songlists_input_search_Value = value
     },
     get_album_list_of_artist_id_by_artist_info(value: any) {
         store_router_data_info.router.push('View_Album_List_ALL')
@@ -156,6 +158,7 @@ export const store_router_data_logic = reactive({
         store_view_album_page_logic.page_albumlists_get_keyword_model_num = 2
         store_router_data_info.find_artist_model = false
         console.log('get_album_list_of_artist_model：'+value)
+        store_view_album_page_logic.page_albumlists_input_search_Value = value
     },
 
     get_page_top_info(){
