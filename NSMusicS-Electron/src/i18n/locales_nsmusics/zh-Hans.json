@@ -58,7 +58,8 @@
             "theme_automatic_switching": "主题自动切换",
             "theme_automatic_switching_explain": "是否跟随系统切换浅色深色主题",
             "dolby_switching": "杜比音频播放",
-            "dolby_switching_explain": "是否开启杜比音频播放"
+            "dolby_switching_explain": "是否开启杜比音频播放",
+            "audio_player_web_explain": "使用web输出将固定路由模式-质量模式"
         },
         "view_player": {
             "view_seting": {

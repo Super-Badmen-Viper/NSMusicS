@@ -887,14 +887,9 @@ async function createNodeMpv(){
         tray_music_play = true
     });
     ipc.handle('mpv-pause',  async (event) => {
-        mpv.commandJSON({
-            'command': ['af', 'add', 'afade=t=out:d=' + currentFade]
-        });
-        setTimeout(async () => {
-            await mpv.pause();
-            isPlaying = false;
-            tray_music_play = false;
-        }, currentFade);
+        await mpv.pause();
+        isPlaying = false;
+        tray_music_play = false;
     });
     ipc.handle('mpv-stopped', async (event,volume) => {
         await mpv.pause();

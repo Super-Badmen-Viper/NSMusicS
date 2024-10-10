@@ -818,7 +818,7 @@
                   <n-switch
                       v-model:value="store_router_data_logic.clear_Memory_Model"
                       @update:value="store_router_data_logic.get_clear_Memory_Model"
-                      :disabled="store_server_user_model.model_server_type_of_web"
+                      :disabled="store_server_user_model.model_server_type_of_web || store_player_audio_logic.player_select === 'web'"
                   >
                   </n-switch>
                 </n-space>
@@ -834,7 +834,7 @@
                   <n-switch
                       v-model:value="store_router_data_logic.clear_Equilibrium_Model"
                       @update:value="store_router_data_logic.get_clear_Equilibrium_Model"
-                      :disabled="store_server_user_model.model_server_type_of_web"
+                      :disabled="store_server_user_model.model_server_type_of_web || store_player_audio_logic.player_select === 'web'"
                   >
                   </n-switch>
                 </n-space>
@@ -850,7 +850,7 @@
                   <n-switch
                       v-model:value="store_router_data_logic.clear_UserExperience_Model"
                       @update:value="store_router_data_logic.get_clear_UserExperience_Model"
-                      :disabled="store_server_user_model.model_server_type_of_web"
+                      :disabled="store_server_user_model.model_server_type_of_web || store_player_audio_logic.player_select === 'web'"
                   >
                   </n-switch>
                 </n-space>
@@ -1101,12 +1101,16 @@
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') }}</span>
                     <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">{{ $t('setting.audioPlayer_description') }}</span>
+                      <span style="font-size:12px;">{{ $t('setting.audioPlayer_description') + " | " + $t('nsmusics.view_page.audio_player_web_explain') }}</span>
                     </div>
                   </n-space>
                   <n-select
                       v-model:value="store_player_audio_logic.player_select"
                       :options="store_player_audio_logic.player_kind"
+                      @update:value="() => {
+                        store_router_data_logic.clear_Memory_Model = false;
+                        store_router_data_logic.clear_Equilibrium_Model = false;
+                        store_router_data_logic.clear_UserExperience_Model = true; }"
                       placeholder="not enabled"
                       :reset-menu-on-options-change="false"
                       style="width: 207px;margin-top: -4px;"
