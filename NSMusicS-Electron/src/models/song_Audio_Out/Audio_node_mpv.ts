@@ -1,3 +1,4 @@
+import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 const { ipcRenderer } = require('electron');
 
 export class Audio_node_mpv {
@@ -8,6 +9,11 @@ export class Audio_node_mpv {
     }
     async load(path: string) {
         try {
+            await ipcRenderer.invoke('mpv-fade', store_player_audio_logic.player_fade_value)
+            if(store_player_audio_logic.player_samp_value < 8000){
+                store_player_audio_logic.player_samp_value = 48000
+            }
+            await ipcRenderer.invoke('mpv-samp', store_player_audio_logic.player_samp_value)
             await ipcRenderer.invoke('mpv-load', path)
             this.isPlaying = true;
             await ipcRenderer.invoke('i18n-tray-music-pause', true)

@@ -14,6 +14,9 @@ export const store_player_audio_logic = reactive({
     player_select: 'mpv',
     play_order: 'playback-2',
     play_volume: 100,
+    player_fade_value: 0,
+    player_dolby: false,
+    player_samp_value: 48000,
 
     total_play_time: '04:42',
     current_play_time: '01:36',
@@ -44,6 +47,17 @@ watch(() => store_player_audio_logic.player_select, async (newValue) => {
         store_player_audio_logic.player = new Audio_howler();
         await ipcRenderer.invoke('mpv-unload');
     }
+
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+});
+watch(() => store_player_audio_logic.player_fade_value,  (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+});
+watch(() => store_player_audio_logic.player_dolby,  (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+});
+watch(() => store_player_audio_logic.player_samp_value,  (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
 watch(() => store_player_audio_logic.play_order, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()

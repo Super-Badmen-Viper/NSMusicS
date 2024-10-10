@@ -406,51 +406,50 @@
     {
       label: 'Drive My Car',
       value: 'song1'
-    },
-    {
-      label: 'Norwegian Wood',
-      value: 'song2'
-    },
-    {
-      label: "You Won't See",
-      value: 'song3'
-    },
-    {
-      label: 'Nowhere Man',
-      value: 'song4'
-    },
-    {
-      label: 'Think For Yourseld',
-      value: 'song5'
-    },
-    {
-      label: 'The Word',
-      value: 'song6'
-    },
-    {
-      label: 'Michelle',
-      value: 'song7'
-    },
-    {
-      label: 'What goes on',
-      value: 'song8'
-    },
-    {
-      label: 'Girl',
-      value: 'song9'
-    },
-    {
-      label: "I'm looking through you",
-      value: 'song10'
-    },
-    {
-      label: 'In My Life',
-      value: 'song11'
-    },
-    {
-      label: 'Wait',
-      value: 'song12'
     }])
+
+  /////// 设置：播放
+  const player_fade_model_options_selected = ref<{label:any,value:any}>();
+  const player_fade_model_options = ref([
+    {
+      label: computed(() => t('setting.playbackStyle_optionNormal')),
+      value: 'playbackStyle_optionNormal',
+    },
+    {
+      label: computed(() => t('setting.playbackStyle_optionCrossFade')),
+      value: 'playbackStyle_optionCrossFade',
+    },
+  ])
+  const update_player_fade_model_options_selected = () => {
+    if(player_fade_model_options_selected.value === 'playbackStyle_optionNormal'){
+      store_player_audio_logic.player_fade_value = 0
+    }else if(player_fade_model_options_selected.value === 'playbackStyle_optionCrossFade'){
+      store_player_audio_logic.player_fade_value = 1000
+    }
+  }
+  const update_player_fade_value = () => {
+    if(store_player_audio_logic.player_fade_value != 0){
+      player_fade_model_options_selected.value = 'playbackStyle_optionCrossFade'
+    }else{
+      player_fade_model_options_selected.value = 'playbackStyle_optionNormal'
+    }
+  }
+  const update_player_dolby = () => {
+    if(store_player_audio_logic.player_dolby){
+      store_player_audio_logic.player_select = 'web'
+    }
+  }
+  const update_player_samp_value = () => {
+    if(store_player_audio_logic.player_samp_value < 8000){
+      store_player_audio_logic.player_samp_value = 48000
+    }
+  }
+  onMounted(() => {
+    if(store_player_audio_logic.player_fade_value > 0)
+      player_fade_model_options_selected.value = player_fade_model_options.value[1].value
+    else
+      player_fade_model_options_selected.value = player_fade_model_options.value[0].value
+  })
 
   ////// lineItems Re render
   let bool_watch = false;
@@ -761,7 +760,7 @@
                             t('player.pause'),
                             t('player.previous'),
                             t('player.next'),
-                            '桌面歌词',
+                            t('nsmusics.view_page.desktop_lyrics'),
                             t('common.quit'),
                             t('nsmusics.siderbar_player.playback_1'),
                             t('nsmusics.siderbar_player.playback_2'),
@@ -1048,7 +1047,8 @@
                       </div>
                     </n-space>
                   </n-space>
-                  <n-checkbox-group :value="store_app_configs_info.selectd_props_app_sidebar" @update:value="handleUpdate_selectd_props_app_sidebar_Value">
+                  <n-checkbox-group :value="store_app_configs_info.selectd_props_app_sidebar"
+                                    @update:value="handleUpdate_selectd_props_app_sidebar_Value">
                     <n-grid :y-gap="8" :cols="5">
                       <n-gi><n-checkbox value="2" :label="computed_i18n_Label_SidebarConfiguration_3" /></n-gi>
                       <n-gi><n-checkbox value="4" :label="computed_i18n_Label_SidebarConfiguration_5" /></n-gi>
@@ -1112,7 +1112,7 @@
                       style="width: 207px;margin-top: -4px;"
                   />
                 </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioDevice') }}</span>
                     <div style="margin-top: -10px;">
@@ -1135,8 +1135,9 @@
                     </div>
                   </n-space>
                   <n-select
-                      v-model:value="player_lyric_panel_fontfamily_options_selected"
-                      :options="player_lyric_panel_fontfamily_options"
+                      v-model:value="player_fade_model_options_selected"
+                      :options="player_fade_model_options"
+                      @update:value="update_player_fade_model_options_selected"
                       placeholder="not enabled"
                       :reset-menu-on-options-change="false"
                       style="width: 207px;margin-top: -4px;"
@@ -1150,13 +1151,31 @@
                     </div>
                   </n-space>
                   <n-input-group style="width: 207px;margin-top: -4px;">
-                    <!--                    <n-input clearable v-model:value="player_fade_value" @update:value="update_player_fade_value"/>-->
+                    <n-input clearable
+                             v-model:value="store_player_audio_logic.player_fade_value"
+                             @update:value="update_player_fade_value"
+                    />
                     <n-input-group-label>ms</n-input-group-label>
                   </n-input-group>
                 </n-space>
                 <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sampleRate') }}</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.dolby_switching') + ' | ' + $t('setting.webAudio')}}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('nsmusics.view_page.dolby_switching_explain') }}</span>
+                    </div>
+                  </n-space>
+                  <n-switch
+                      :disabled="store_player_audio_logic.player_select != 'web'"
+                      v-model:value="store_player_audio_logic.player_dolby"
+                      @update:value="update_player_dolby"
+                  >
+                  </n-switch>
+                </n-space>
+                <n-space
+                    justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sampleRate') + ' | ' + $t('setting.mpvExtraParameters')}}</span>
                     <div style="margin-top: -10px;">
                       <span style="font-size:12px;">{{ $t('setting.sampleRate_description') }}</span>
                     </div>
@@ -1164,13 +1183,18 @@
                   <n-space
                       justify="end" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                     <n-input-group style="width: 207px;margin-top: -4px;">
-                      <n-input clearable default-value="48000"/>
+                      <n-input clearable
+                               :disabled="store_player_audio_logic.player_select != 'mpv'"
+                               default-value="48000"
+                               v-model:value="store_player_audio_logic.player_samp_value"
+                               @update:value="update_player_samp_value"
+                      />
                       <n-input-group-label>Hz</n-input-group-label>
                     </n-input-group>
                   </n-space>
                 </n-space>
-                <n-divider style="margin: 0;"/>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-divider v-if="false" style="margin: 0;"/>
+                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.lyricOffset') }}</span>
                     <div style="margin-top: -10px;">

@@ -1,11 +1,11 @@
 import {
-    Navidrome_Api_Services_Web
-} from "@/features/servers_configs/navidrome_api/services_web/Navidrome_Api_Services_Web";
+    Subsonic_Api_Services_Web
+} from "@/features/servers_configs/subsonic_api/services_web/Subsonic_Api_Services_Web";
 import {store_server_users} from "@/store/server/store_server_users";
 import axios from "axios";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 
-export class User_Authorization_ApiWebService_of_ND extends Navidrome_Api_Services_Web {
+export class User_Authorization_ApiWebService_of_ND extends Subsonic_Api_Services_Web {
     public async get_token() {
         const url = store_server_users.server_config_of_current_user_of_sqlite?.url + '/auth/login';
         const data = {

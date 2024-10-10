@@ -605,7 +605,7 @@
           t('player.pause'),
           t('player.previous'),
           t('player.next'),
-          '桌面歌词',
+          t('nsmusics.view_page.desktop_lyrics'),
           t('common.quit'),
           t('nsmusics.siderbar_player.playback_1'),
           t('nsmusics.siderbar_player.playback_2'),

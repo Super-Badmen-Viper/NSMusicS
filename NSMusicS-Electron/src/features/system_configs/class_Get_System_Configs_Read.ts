@@ -33,6 +33,10 @@ export class Class_Get_System_Configs_Read {
             clear_UserExperience_Model: null,
             theme_auto_system: null,
             page_songlists_filter_year: 0,
+            player_select: null,
+            player_fade_value: 0,
+            player_dolby: null,
+            player_samp_value: 0,
         }))
     public library_Configs = ref(
         new Library_Configs({

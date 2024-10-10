@@ -22,5 +22,9 @@ interface App_Configs_Props {
   clear_Equilibrium_Model: any,
   clear_UserExperience_Model: any,
   theme_auto_system: any,
-  page_songlists_filter_year: number
+  page_songlists_filter_year: number,
+  player_select: any,
+  player_fade_value: number,
+  player_dolby: any,
+  player_samp_value: number,
 };

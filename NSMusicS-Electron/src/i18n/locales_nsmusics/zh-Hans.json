@@ -56,7 +56,9 @@
             "routerModel_type_3_explain": "切换页面时，保留当前页面数据，清除其它页面的数据，完全关闭自动内存清理",
             "desktop_lyrics": "桌面歌词",
             "theme_automatic_switching": "主题自动切换",
-            "theme_automatic_switching_explain": "是否跟随系统切换浅色深色主题"
+            "theme_automatic_switching_explain": "是否跟随系统切换浅色深色主题",
+            "dolby_switching": "杜比音频播放",
+            "dolby_switching_explain": "是否开启杜比音频播放"
         },
         "view_player": {
             "view_seting": {

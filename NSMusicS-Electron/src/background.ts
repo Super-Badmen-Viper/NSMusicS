@@ -838,6 +838,14 @@ async function createNodeMpv(){
     ipc.handle('mpv-init', async (event,filePath) => {
         await initNodeMpv()
     });
+    let currentFade = 0;
+    ipc.handle('mpv-fade', async (event,fade) => {
+        currentFade = fade / 1000
+    });
+    let currentAresample = 0;
+    ipc.handle('mpv-samp', async (event,samp) => {
+        currentAresample = samp
+    });
     ipc.handle('mpv-load', async (event,filePath) => {
         try {
             if (currentMediaPath === filePath && tray_menu_label_music_check_enter) {
@@ -845,6 +853,14 @@ async function createNodeMpv(){
             }else {
                 currentMediaPath = filePath;
                 await mpv.load(filePath);
+
+                mpv.commandJSON({
+                    'command': ['af', 'add', 'afade=t=in:d='+currentFade]
+                });
+                mpv.commandJSON({
+                    'command': ['af', 'add', 'aresample='+aresample]
+                });
+
                 await mpv.play();
                 isPlaying = true;
                 tray_music_play = true
@@ -871,9 +887,14 @@ async function createNodeMpv(){
         tray_music_play = true
     });
     ipc.handle('mpv-pause',  async (event) => {
-        await mpv.pause();
-        isPlaying = false;
-        tray_music_play = false
+        mpv.commandJSON({
+            'command': ['af', 'add', 'afade=t=out:d=' + currentFade]
+        });
+        setTimeout(async () => {
+            await mpv.pause();
+            isPlaying = false;
+            tray_music_play = false;
+        }, currentFade);
     });
     ipc.handle('mpv-stopped', async (event,volume) => {
         await mpv.pause();

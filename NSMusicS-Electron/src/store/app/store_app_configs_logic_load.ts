@@ -138,9 +138,6 @@ export const store_app_configs_logic_load = reactive({
             //
             store_player_appearance.player_mode_of_lock_playlist = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['player_mode_of_lock_playlist'] === 'true'
             store_player_appearance.player_mode_of_medialist_from_external_import = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['player_mode_of_medialist_from_external_import'] === 'true'
-            //
-            store_player_audio_logic.play_order = '' + system_Configs_Read.app_Configs.value['play_order']
-            store_player_audio_logic.play_volume = Number('' + system_Configs_Read.app_Configs.value['play_volume'])
 
 
             /// view_router_history
@@ -198,7 +195,20 @@ export const store_app_configs_logic_load = reactive({
         await store_playlist_list_logic.reset_data()
 
         /// player
-        store_player_audio_logic.player_select = store_player_audio_logic.player_kind[0].value
+        store_player_audio_logic.play_order = '' + system_Configs_Read.app_Configs.value['play_order']
+        store_player_audio_logic.play_volume = Number('' + system_Configs_Read.app_Configs.value['play_volume'])
+        store_player_audio_logic.player_select = '' + system_Configs_Read.app_Configs.value['player_select']
+        if(store_player_audio_logic.player_select.length < 0) {
+            store_player_audio_logic.player_select = 'mpv'
+            store_player_audio_logic.player_fade_value = 1000;
+        }else {
+            store_player_audio_logic.player_fade_value = Number('' + system_Configs_Read.app_Configs.value['player_fade_value'])
+            if (store_player_audio_logic.player_fade_value === null) {
+                store_player_audio_logic.player_fade_value = 1000;
+            }
+        }
+        store_player_audio_logic.player_dolby = '' + system_Configs_Read.app_Configs.value['player_dolby'] === 'true'
+        store_player_audio_logic.player_samp_value = Number('' + system_Configs_Read.app_Configs.value['player_samp_value'])
 
         /// close
         store_router_data_logic.get_page_top_info()

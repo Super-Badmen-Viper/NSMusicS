@@ -1,8 +1,8 @@
 import {
-    Navidrome_Api_Services_Web
-} from "@/features/servers_configs/navidrome_api/services_web/Navidrome_Api_Services_Web";
+    Subsonic_Api_Services_Web
+} from "@/features/servers_configs/subsonic_api/services_web/Subsonic_Api_Services_Web";
 
-export class Home_Lists_ApiWebService_of_ND extends Navidrome_Api_Services_Web {
+export class Home_Lists_ApiWebService_of_ND extends Subsonic_Api_Services_Web {
     public async getAlbumList_Play_Count(): Promise<any> {
         return this.sendRequest('album', {
             _end: '15',
