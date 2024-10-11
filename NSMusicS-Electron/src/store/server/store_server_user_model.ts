@@ -25,6 +25,8 @@ import {
     User_Authorization_ApiWebService_of_ND
 } from "@/features/servers_configs/navidrome_api/services_web/user_authorization/index_service";
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
+import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
+import {Audio_howler} from "@/models/song_Audio_Out/Audio_howler";
 const { ipcRenderer } = require('electron');
 
 export const store_server_user_model = reactive({
@@ -115,6 +117,20 @@ watch(() => store_server_user_model.model_select, async (newValue) => {
             store_router_data_info.store_router_history_data_of_local = true
             store_router_data_info.store_router_history_data_of_web = false
         }
+        //
+        if (store_player_audio_logic.player_select === 'mpv') {
+            await ipcRenderer.invoke('mpv-unload');
+            await ipcRenderer.invoke('mpv-init');
+            store_player_audio_logic.player = null;
+            store_player_audio_logic.player = new Audio_node_mpv();
+        } else if (store_player_audio_logic.player_select === 'web') {
+            if (store_player_audio_logic.player.howl != null) {
+                store_player_audio_logic.player.howl.unload();
+            }
+            store_player_audio_logic.player = null;
+            store_player_audio_logic.player = new Audio_howler();
+        }
+        //
         store_app_configs_logic_save.save_system_config_of_App_Configs()
     }
 });

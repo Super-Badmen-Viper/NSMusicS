@@ -56,7 +56,11 @@
             "routerModel_type_3_explain": "Lors du changement de page, conservez les données de la page actuelle et effacez les données des autres pages, désactivez complètement le nettoyage automatique de la mémoire",
             "desktop_lyrics": "Paroles sur le bureau",
             "theme_automatic_switching": "Changement automatique de thème",
-            "theme_automatic_switching_explain": "Si l'on doit basculer entre les thèmes clairs et sombres en fonction du système"
+            "theme_automatic_switching_explain": "Si l'on doit basculer entre les thèmes clairs et sombres en fonction du système",
+            "dolby_switching": "Lecture audio Dolby",
+            "dolby_switching_explain": "Si l'activation de la lecture audio Dolby est nécessaire",
+            "audio_player_web_explain": "L'utilisation de la sortie web fixera le mode de routage en Mode Qualité",
+            "selectLibrary_select_1": "Et exporter la couverture intégrée du fichier musical en tant que fichier de couverture portant le même nom (ignorer s'il existe déjà un fichier de couverture portant le même nom), enregistrer le fichier dans le même dossier que le fichier musical"
         },
         "view_player": {
             "view_seting": {

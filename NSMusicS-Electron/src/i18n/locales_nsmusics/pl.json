@@ -56,7 +56,11 @@
             "routerModel_type_3_explain": "Po przejściu na inną stronę zachowuje się bieżąca strona, a inne strony są czyszczone, czyszczenie pamięci jest całkowicie wyłączone",
             "desktop_lyrics": "Teksty piosenek na pulpicie",
             "theme_automatic_switching": "Automatyczne przełączanie motywów",
-            "theme_automatic_switching_explain": "Czy przełączać między jasnymi i ciemnymi motywami zgodnie z systemem"
+            "theme_automatic_switching_explain": "Czy przełączać między jasnymi i ciemnymi motywami zgodnie z systemem",
+            "dolby_switching": "Odtwarzanie audio Dolby",
+            "dolby_switching_explain": "Czy włączyć odtwarzanie audio Dolby",
+            "audio_player_web_explain": "Używanie wyjścia sieciowego ustawi tryb routingu na Tryb Jakościowy",
+            "selectLibrary_select_1": "I wyeksportuj osadzony okładkę pliku muzycznego do pliku okładki o tej samej nazwie (jeśli istnieje plik okładki o tej samej nazwie, pomiń), zapisz plik w tym samym folderze co plik muzyczny"
         },
         "view_player": {
             "view_seting": {

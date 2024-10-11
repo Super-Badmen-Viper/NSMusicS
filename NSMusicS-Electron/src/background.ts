@@ -17,6 +17,7 @@ let win = null;
 /// node-system
 import { File } from "node-taglib-sharp";
 import fs from "fs";
+import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 const path = require('path');
 
 /// node-mpv
@@ -129,7 +130,7 @@ async function createWindow() {
         createWindow();
     })
     ipc.on('window-reset-all', () => {
-        // app.relaunch();
+        app.relaunch();
         app.exit();
     });
     ipc.handle('window-get-memory', async (event) => {
@@ -489,21 +490,23 @@ async function createWindow() {
                         rg_track_peak: 0,
                     };
 
-                    try {
-                        if (taglibFile.tag.pictures && taglibFile.tag.pictures.length > 0) {
-                            const dirPath = path.dirname(_path);
-                            const fileName = path.basename(_path, path.extname(_path));
-                            const folderPath = path.join(dirPath, fileName);
-                            const imagePath = path.join(folderPath + '.jpg');
-                            if (!fs.existsSync(imagePath)) {
-                                fs.writeFileSync(
-                                    imagePath,
-                                    Buffer.from(taglibFile.tag.pictures[0].data)
-                                );
+                    if(cover_model) {
+                        try {
+                            if (taglibFile.tag.pictures && taglibFile.tag.pictures.length > 0) {
+                                const dirPath = path.dirname(_path);
+                                const fileName = path.basename(_path, path.extname(_path));
+                                const folderPath = path.join(dirPath, fileName);
+                                const imagePath = path.join(folderPath + '.jpg');
+                                if (!fs.existsSync(imagePath)) {
+                                    fs.writeFileSync(
+                                        imagePath,
+                                        Buffer.from(taglibFile.tag.pictures[0].data)
+                                    );
+                                }
                             }
+                        } catch (e) {
+                            console.error(e);
                         }
-                    }catch (e) {
-                        console.error(e);
                     }
 
                     albumObj.media = albumObj.media || [];
@@ -590,10 +593,13 @@ async function createWindow() {
         });
         db.close();
     }
-    ipc.handle('node-taglib-sharp-get-directory-filePath', async (event, directoryPath) => {
-        console.log('Received directoryPath:', directoryPath);
+    let cover_model = false
+    ipc.handle('node-taglib-sharp-get-directory-filePath', async (event, data:any) => {
+        cover_model = data.cover
+        let folderPaths = [data.folderPath]
+        console.log('Received directoryPath:', );
         try {
-            await Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath);
+            await Set_ReadLocalMusicInfo_Add_LocalSqlite(folderPaths);
             percentage = 100;
             return 'Processing completed, percentage set to 100';
         } catch (e) {
@@ -771,14 +777,22 @@ async function createTray(){
 
         tray_template[3].icon = !tray_music_play ? playIcon : pauseIcon;
         tray_template[3].label = !tray_music_play ? tray_menu_label_play : tray_menu_label_pause;
-        if(tray_music_order === 'playback-1')
+        if(tray_music_order === 'playback-1') {
             tray_template[6].icon = order1Icon;
-        else if(tray_music_order === 'playback-2')
+            tray_template[6].label = tray_menu_label_order1;
+        }
+        else if(tray_music_order === 'playback-2') {
             tray_template[6].icon = order2Icon;
-        else if(tray_music_order === 'playback-3')
+            tray_template[6].label = tray_menu_label_order2;
+        }
+        else if(tray_music_order === 'playback-3') {
             tray_template[6].icon = order3Icon;
-        else if(tray_music_order === 'playback-4')
+            tray_template[6].label = tray_menu_label_order3;
+        }
+        else if(tray_music_order === 'playback-4') {
             tray_template[6].icon = order4Icon;
+            tray_template[6].label = tray_menu_label_order4;
+        }
 
         trayContextMenu.clear()
         trayContextMenu = Menu.buildFromTemplate(tray_template);
@@ -818,14 +832,21 @@ async function createTray(){
 
 /// node-mpv init
 let currentMediaPath = '';
+let currentFade = 0;
+let currentAresample = 0;
+let isPlaying = false;
 async function initNodeMpv(){
-    mpv = new mpvAPI({
+    mpv = new mpvAPI(
+    {
         audio_only: true,
         auto_restart: true,
         binary: path.resolve("resources/mpv-x86_64-20240623/mpv.exe"),
         debug: true,
         verbose: true
-    });
+    },
+    [
+        '--audio-channels=5.1',
+    ]);
     await mpv.start();
     await mpv.pause();
     mpv.on('stopped', () => {
@@ -834,17 +855,17 @@ async function initNodeMpv(){
 }
 async function createNodeMpv(){
     ////// mpv services for win
-    let isPlaying = false;
     ipc.handle('mpv-init', async (event,filePath) => {
         await initNodeMpv()
     });
-    let currentFade = 0;
     ipc.handle('mpv-fade', async (event,fade) => {
         currentFade = fade / 1000
     });
-    let currentAresample = 0;
     ipc.handle('mpv-samp', async (event,samp) => {
         currentAresample = samp
+        if(currentAresample < 8000){
+            currentAresample = 48000
+        }
     });
     ipc.handle('mpv-load', async (event,filePath) => {
         try {
@@ -857,9 +878,16 @@ async function createNodeMpv(){
                 mpv.commandJSON({
                     'command': ['af', 'add', 'afade=t=in:d='+currentFade]
                 });
-                mpv.commandJSON({
-                    'command': ['af', 'add', 'aresample='+aresample]
-                });
+                const properties: Record<string, any> = {
+                    'gapless-audio': 'weak',        // no, yes, weak
+                    'audio-samplerate': currentAresample === 0 ? undefined : currentAresample,
+                    'audio-exclusive': 'no',        // no, yes
+                    'replaygain': 'no',             // "track" | "album" | "no"
+                    'replaygain-preamp': 0,
+                    'replaygain-clip': 'no',        // no, yes
+                    'replaygain-fallback': 0
+                }
+                mpv.setMultipleProperties(properties)
 
                 await mpv.play();
                 isPlaying = true;

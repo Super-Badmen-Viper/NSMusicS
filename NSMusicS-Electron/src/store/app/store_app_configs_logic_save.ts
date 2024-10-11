@@ -57,6 +57,12 @@ export const store_app_configs_logic_save = reactive({
                 player_fade_value: String(store_player_audio_logic.player_fade_value),
                 player_dolby: String(store_player_audio_logic.player_dolby),
                 player_samp_value: String(store_player_audio_logic.player_samp_value),
+                player_gaplessAudio: String(store_player_audio_logic.player_gaplessAudio),
+                player_audioExclusiveMode: String(store_player_audio_logic.player_audioExclusiveMode),
+                player_replayGainMode: String(store_player_audio_logic.player_replayGainMode),
+                player_replayGainPreamp: String(store_player_audio_logic.player_replayGainPreamp),
+                player_replayGainClip: String(store_player_audio_logic.player_replayGainClip),
+                player_replayGainFallback: String(store_player_audio_logic.player_replayGainFallback),
             }));
         let system_Configs_Write = new Class_Set_System_Configs_Write()
         system_Configs_Write.system_app_config(

@@ -14,9 +14,15 @@ export const store_player_audio_logic = reactive({
     player_select: 'mpv',
     play_order: 'playback-2',
     play_volume: 100,
-    player_fade_value: 0,
+    player_fade_value: 2000,
     player_dolby: false,
     player_samp_value: 48000,
+    player_gaplessAudio: 'weak',
+    player_audioExclusiveMode: false,
+    player_replayGainMode: 'no',
+    player_replayGainPreamp: 0,
+    player_replayGainClip: false,
+    player_replayGainFallback: 0,
 
     total_play_time: '04:42',
     current_play_time: '01:36',
@@ -35,14 +41,14 @@ export const store_player_audio_logic = reactive({
 watch(() => store_player_audio_logic.player_select, async (newValue) => {
     await store_player_audio_info.reset_data();
 
-    if (newValue === 'mpv') {
+    if (store_player_audio_logic.player_select === 'mpv') {
         if (store_player_audio_logic.player.howl != null) {
             store_player_audio_logic.player.howl.unload();
         }
         await ipcRenderer.invoke('mpv-init');
         store_player_audio_logic.player = null;
         store_player_audio_logic.player = new Audio_node_mpv();
-    } else if (newValue === 'web') {
+    } else if (store_player_audio_logic.player_select === 'web') {
         store_player_audio_logic.player = null;
         store_player_audio_logic.player = new Audio_howler();
         await ipcRenderer.invoke('mpv-unload');
@@ -57,6 +63,24 @@ watch(() => store_player_audio_logic.player_dolby,  (newValue) => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
 watch(() => store_player_audio_logic.player_samp_value,  (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+});
+watch(() => store_player_audio_logic.player_gaplessAudio,  (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+});
+watch(() => store_player_audio_logic.player_audioExclusiveMode,  (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+});
+watch(() => store_player_audio_logic.player_replayGainMode,  (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+});
+watch(() => store_player_audio_logic.player_replayGainPreamp,  (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+});
+watch(() => store_player_audio_logic.player_replayGainClip,  (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+});
+watch(() => store_player_audio_logic.player_replayGainFallback,  (newValue) => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
 watch(() => store_player_audio_logic.play_order, (newValue) => {

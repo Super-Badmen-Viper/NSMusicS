@@ -56,7 +56,11 @@
             "routerModel_type_3_explain": "Beim Wechsel der Seiten werden die aktuellen Seitendaten beibehalten und die Daten anderer Seiten gelöscht, die automatische Speicherbereinigung wird vollständig deaktiviert",
             "desktop_lyrics": "Desktop-Songtexte",
             "theme_automatic_switching": "Automatisches Ändern des Themes",
-            "theme_automatic_switching_explain": "Ob zwischen hellen und dunklen Themen gewechselt werden soll, basierend auf dem System"
+            "theme_automatic_switching_explain": "Ob zwischen hellen und dunklen Themen gewechselt werden soll, basierend auf dem System",
+            "dolby_switching": "Dolby-Audiowiedergabe",
+            "dolby_switching_explain": "Ob die Dolby-Audiowiedergabe aktiviert werden soll",
+            "audio_player_web_explain": "Die Verwendung der Webausgabe wird den Routingmodus auf Qualitätsmodus festlegen",
+            "selectLibrary_select_1": "Und exportiere den eingebetteten Cover des Musikfiles in eine Coverdatei mit dem gleichen Namen (überspringen, wenn eine Coverdatei mit dem gleichen Namen existiert), speichere die Datei im selben Ordner wie die Musikdatei"
         },
         "view_player": {
             "view_seting": {

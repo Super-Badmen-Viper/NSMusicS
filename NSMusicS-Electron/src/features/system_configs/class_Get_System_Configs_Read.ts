@@ -37,6 +37,12 @@ export class Class_Get_System_Configs_Read {
             player_fade_value: 0,
             player_dolby: null,
             player_samp_value: 0,
+            player_gaplessAudio: '',
+            player_audioExclusiveMode: null,
+            player_replayGainMode: '',
+            player_replayGainPreamp: 0,
+            player_replayGainClip: null,
+            player_replayGainFallback: 0,
         }))
     public library_Configs = ref(
         new Library_Configs({

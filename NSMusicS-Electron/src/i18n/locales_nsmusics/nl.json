@@ -56,7 +56,11 @@
             "routerModel_type_3_explain": "Bij het wisselen van pagina's behouden de huidige paginagegevens en worden de gegevens van andere pagina's gewist, automatisch geheugen opgeschoond wordt volledig uitgeschakeld",
             "desktop_lyrics": "Liedteksten op bureaublad",
             "theme_automatic_switching": "Automatisch wisselen van thema",
-            "theme_automatic_switching_explain": "Moet er worden gewisseld tussen lichte en donkere thema's gebaseerd op het systeem"
+            "theme_automatic_switching_explain": "Moet er worden gewisseld tussen lichte en donkere thema's gebaseerd op het systeem",
+            "dolby_switching": "Dolby-audioafspelen",
+            "dolby_switching_explain": "Of Dolby-audio moet worden ingeschakeld",
+            "audio_player_web_explain": "Gebruik van webuitvoer zal de routeringsmodus vastzetten op Kwaliteitsmodus",
+            "selectLibrary_select_1": "En exporteer de ingebedde cover van het muziekbestand naar een coverbestand met dezelfde naam (overslaan als een coverbestand met dezelfde naam bestaat), sla het bestand op in dezelfde map als het muziekbestand"
         },
         "view_player": {
             "view_seting": {

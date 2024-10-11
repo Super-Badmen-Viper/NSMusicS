@@ -56,7 +56,11 @@
             "routerModel_type_3_explain": "When switching pages, keep the current page data and clear other page data, completely disable automatic memory cleanup",
             "desktop_lyrics": "Desktop Lyrics",
             "theme_automatic_switching": "Automatic Theme Switching",
-            "theme_automatic_switching_explain": "Whether to switch between light and dark themes following the system"
+            "theme_automatic_switching_explain": "Whether to switch between light and dark themes following the system",
+            "dolby_switching": "Dolby Audio Playback",
+            "dolby_switching_explain": "Whether to enable Dolby audio playback",
+            "audio_player_web_explain": "Using web output will fix the routing mode to Quality Mode",
+            "selectLibrary_select_1": "And export the embedded cover of the music file to a cover file with the same name (skip if a cover file with the same name exists), save the file in the same folder as the music file"
         },
         "view_player": {
             "view_seting": {

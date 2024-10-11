@@ -207,8 +207,23 @@ export const store_app_configs_logic_load = reactive({
                 store_player_audio_logic.player_fade_value = 1000;
             }
         }
-        store_player_audio_logic.player_dolby = '' + system_Configs_Read.app_Configs.value['player_dolby'] === 'true'
-        store_player_audio_logic.player_samp_value = Number('' + system_Configs_Read.app_Configs.value['player_samp_value'])
+        try {
+            store_player_audio_logic.player_dolby = '' + system_Configs_Read.app_Configs.value['player_dolby'] === 'true'
+            store_player_audio_logic.player_samp_value = Number('' + system_Configs_Read.app_Configs.value['player_samp_value'])
+            store_player_audio_logic.player_gaplessAudio = '' + system_Configs_Read.app_Configs.value['player_gaplessAudio']
+            store_player_audio_logic.player_audioExclusiveMode = '' + system_Configs_Read.app_Configs.value['player_audioExclusiveMode'] === 'true'
+            store_player_audio_logic.player_replayGainMode = '' + system_Configs_Read.app_Configs.value['player_replayGainMode']
+            store_player_audio_logic.player_replayGainPreamp = Number('' + system_Configs_Read.app_Configs.value['player_replayGainPreamp'])
+            store_player_audio_logic.player_replayGainClip = '' + system_Configs_Read.app_Configs.value['player_replayGainClip'] === 'true'
+            store_player_audio_logic.player_replayGainFallback = Number('' + system_Configs_Read.app_Configs.value['player_replayGainFallback'])
+        }catch{
+            store_player_audio_logic.player_gaplessAudio = 'weak';
+            store_player_audio_logic.player_audioExclusiveMode = false;
+            store_player_audio_logic.player_replayGainMode = 'no';
+            store_player_audio_logic.player_replayGainPreamp = 0;
+            store_player_audio_logic.player_replayGainClip = false;
+            store_player_audio_logic.player_replayGainFallback = 0;
+        }
 
         /// close
         store_router_data_logic.get_page_top_info()

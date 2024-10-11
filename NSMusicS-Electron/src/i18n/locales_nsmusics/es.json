@@ -56,7 +56,11 @@
             "routerModel_type_3_explain": "Al cambiar de página, se mantienen los datos de la página actual y se limpian los datos de las demás páginas, se desactiva completamente la limpieza automática de memoria",
             "desktop_lyrics": "Letras en pantalla",
             "theme_automatic_switching": "Cambio automático de tema",
-            "theme_automatic_switching_explain": "Si se debe cambiar entre temas claros y oscuros siguiendo el sistema"
+            "theme_automatic_switching_explain": "Si se debe cambiar entre temas claros y oscuros siguiendo el sistema",
+            "dolby_switching": "Reproducción de audio Dolby",
+            "dolby_switching_explain": "Si se debe activar la reproducción de audio Dolby",
+            "audio_player_web_explain": "El uso de la salida web fijará el modo de enrutamiento al Modo de Calidad",
+            "selectLibrary_select_1": "Y exportar la portada incrustada del archivo de música a un archivo de portada con el mismo nombre (saltar si existe un archivo de portada con el mismo nombre), guardar el archivo en la misma carpeta que el archivo de música"
         },
         "view_player": {
             "view_seting": {

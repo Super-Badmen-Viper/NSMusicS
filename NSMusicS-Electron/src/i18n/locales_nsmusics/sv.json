@@ -56,7 +56,11 @@
             "routerModel_type_3_explain": "När man byt page, behålls aktuella siddata och rensas andra sidors data, stängs automatisk minnesrensning helt av",
             "desktop_lyrics": "Lyrik på skrivbordet",
             "theme_automatic_switching": "Automatisk ändring av tema",
-            "theme_automatic_switching_explain": "Om man ska växla mellan ljusa och mörka teman efter systemet"
+            "theme_automatic_switching_explain": "Om man ska växla mellan ljusa och mörka teman efter systemet",
+            "dolby_switching": "Dolby-ljuduppspelning",
+            "dolby_switching_explain": "Om Dolby-ljuduppspelning ska aktiveras",
+            "audio_player_web_explain": "Användning av webbutmatning kommer att låsa rutningsläget till Kvalitetsläge",
+            "selectLibrary_select_1": "Och exportera den inbäddade omslagsbilden från musikfilen till en omslagsbils med samma namn (hoppa över om det finns ett omslagsbils med samma namn), spara filen i samma mapp som musikfilen"
         },
         "view_player": {
             "view_seting": {

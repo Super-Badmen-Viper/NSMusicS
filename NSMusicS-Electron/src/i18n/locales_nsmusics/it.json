@@ -56,7 +56,11 @@
             "routerModel_type_3_explain": "Quando si passaa una nuova pagina, vengono mantenuti i dati della pagina corrente e cancellati i dati delle altre pagine, la pulizia automatica della memoria viene completamente disabilitata",
             "desktop_lyrics": "Testi sulle lyrics del desktop",
             "theme_automatic_switching": "Commutazione automatica del tema",
-            "theme_automatic_switching_explain": "Se deve passare da temi chiari a temi scuri seguendo il sistema"
+            "theme_automatic_switching_explain": "Se deve passare da temi chiari a temi scuri seguendo il sistema",
+            "dolby_switching": "Riproduzione audio Dolby",
+            "dolby_switching_explain": "Se deve attivare la riproduzione audio Dolby",
+            "audio_player_web_explain": "L'uso dell'output web fisserà la modalità di routing nella Modalità Qualità",
+            "selectLibrary_select_1": "E esporta la copertina incorporata del file musicale in un file di copertina con lo stesso nome (saltare se esiste già un file di copertina con lo stesso nome), salvare il file nella stessa cartella del file musicale"
         },
         "view_player": {
             "view_seting": {

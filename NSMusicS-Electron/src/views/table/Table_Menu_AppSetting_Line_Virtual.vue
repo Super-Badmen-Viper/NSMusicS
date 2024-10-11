@@ -238,7 +238,7 @@
   const { ipcRenderer } = require('electron');
   const timer_percentage = ref<NodeJS.Timeout | null>(null);
   const show_selectFolder = ref(false)
-  async function selectFolder() {
+  async function selectFolder(cover: boolean) {
     if (!library_path_search.value) {
       try {
         library_path_search.value = true;
@@ -248,7 +248,7 @@
           clearInterval(timer_percentage.value);
           console.log('Before invoking node-taglib-sharp-get-directory-filePath');
           store_server_users.percentage_of_local = 10;
-          const error_log = await ipcRenderer.invoke('node-taglib-sharp-get-directory-filePath', [folderPath])
+          const error_log = await ipcRenderer.invoke('node-taglib-sharp-get-directory-filePath', {folderPath, cover})
             .then(success => {
               console.log('node-taglib-sharp-get-directory-filePath succeeded:', success);
               library_path_search.value = success;
@@ -264,6 +264,8 @@
           // reset data
           store_server_user_model.switchToMode_Navidrome_Api()
           store_server_user_model.switchToMode_Local()
+          //
+          await ipcRenderer.send('window-reset-all')
         } else {
           library_path_search.value = false;
           show_selectFolder.value = false;
@@ -439,10 +441,8 @@
       store_player_audio_logic.player_select = 'web'
     }
   }
-  const update_player_samp_value = () => {
-    if(store_player_audio_logic.player_samp_value < 8000){
-      store_player_audio_logic.player_samp_value = 48000
-    }
+  const update_player_samp_value = (value: any) => {
+    store_player_audio_logic.player_samp_value = value
   }
   onMounted(() => {
     if(store_player_audio_logic.player_fade_value > 0)
@@ -968,7 +968,7 @@
                     <n-tag type="success" v-if="false">
                       {{ store_server_user_model.library_path }}
                     </n-tag>
-                    <n-popconfirm v-model:show="show_selectFolder">
+                    <n-popconfirm v-model:show="show_selectFolder" style="width: 400px">
                       <template #trigger>
                         <n-button tertiary style="width: 150px;">
                           <template #icon>
@@ -979,17 +979,22 @@
                           {{ $t('nsmusics.view_page.selectedSong') + $t('entity.folder_other')}}
                         </n-button>
                       </template>
-                      {{ $t('nsmusics.view_page.selectLibrary') + '?' }}
                       <template #action>
                         <n-space vertical>
+                          {{ $t('nsmusics.view_page.selectLibrary')  }}
                           <n-space>
-                            <n-button size="small" @click="show_selectFolder = false">
-                              {{ $t('common.cancel') }}
-                            </n-button>
-                            <n-button size="small" @click="selectFolder">
+                            <n-button size="small" @click="selectFolder(false)">
                               {{ $t('common.confirm') }}
                             </n-button>
                           </n-space>
+                          <n-divider style="margin: 0;"/>
+                          {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_1')  }}
+                          <n-space>
+                            <n-button size="small" @click="selectFolder(true)">
+                              {{ $t('common.confirm') }}
+                            </n-button>
+                          </n-space>
+                          <n-divider style="margin: 0;"/>
                           <n-button size="small"
                                     @click="
                                       show_selectFolder = false;
@@ -1162,9 +1167,169 @@
                     <n-input-group-label>ms</n-input-group-label>
                   </n-input-group>
                 </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-divider style="margin: 0;"/>
+                <n-space justify="space-between" align="center"
+                         :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.dolby_switching') + ' | ' + $t('setting.webAudio')}}</span>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') + ' | mpv' }}</span>
+                  </n-space>
+                </n-space>
+                <n-space
+                    vertical
+                    style="margin-left: 30px;"
+                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sampleRate') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.sampleRate_description') }}</span>
+                    </div>
+                  </n-space>
+                  <n-space justify="space-between" align="center">
+                    <div></div>
+                    <n-input-group style="width: 207px;margin-top: -4px;">
+                      <n-input clearable
+                               :disabled="store_player_audio_logic.player_select != 'mpv'"
+                               default-value="48000"
+                               :value="store_player_audio_logic.player_samp_value"
+                               @update:value="update_player_samp_value"
+                      />
+                      <n-input-group-label>Hz</n-input-group-label>
+                    </n-input-group>
+                  </n-space>
+                </n-space>
+                <n-space
+                    justify="space-between" align="center"
+                    style="margin-left: 30px;"
+                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.gaplessAudio') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.gaplessAudio_description') }}</span>
+                    </div>
+                  </n-space>
+                  <n-select
+                      v-model:value="store_player_audio_logic.player_select"
+                      :options="store_player_audio_logic.player_kind"
+                      @update:value="() => {
+                        store_router_data_logic.clear_Memory_Model = false;
+                        store_router_data_logic.clear_Equilibrium_Model = false;
+                        store_router_data_logic.clear_UserExperience_Model = true; }"
+                      :disabled="store_player_audio_logic.player_select != 'mpv'"
+                      placeholder="not enabled"
+                      :reset-menu-on-options-change="false"
+                      style="width: 207px;margin-top: -4px;"
+                  />
+                </n-space>
+                <n-space
+                    justify="space-between" align="center"
+                    style="margin-left: 30px;"
+                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioExclusiveMode')}}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.audioExclusiveMode_description') }}</span>
+                    </div>
+                  </n-space>
+                  <n-switch
+                      :disabled="store_player_audio_logic.player_select != 'mpv'"
+                      v-model:value="store_player_audio_logic.player_dolby"
+                      @update:value="update_player_dolby"
+                  >
+                  </n-switch>
+                </n-space>
+                <n-space
+                    justify="space-between" align="center"
+                    style="margin-left: 30px;"
+                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainMode') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.replayGainMode_description') }}</span>
+                    </div>
+                  </n-space>
+                  <n-select
+                      v-model:value="store_player_audio_logic.player_select"
+                      :options="store_player_audio_logic.player_kind"
+                      @update:value="() => {
+                        store_router_data_logic.clear_Memory_Model = false;
+                        store_router_data_logic.clear_Equilibrium_Model = false;
+                        store_router_data_logic.clear_UserExperience_Model = true; }"
+                      :disabled="store_player_audio_logic.player_select != 'mpv'"
+                      placeholder="not enabled"
+                      :reset-menu-on-options-change="false"
+                      style="width: 207px;margin-top: -4px;"
+                  />
+                </n-space>
+                <n-space
+                    justify="space-between" align="center"
+                    style="margin-left: 30px;"
+                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainPreamp') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.replayGainPreamp_description') }}</span>
+                    </div>
+                  </n-space>
+                  <n-input-group style="width: 207px;margin-top: -4px;">
+                    <n-input clearable
+                             :disabled="store_player_audio_logic.player_select != 'mpv'"
+                             default-value="48000"
+                             :value="store_player_audio_logic.player_samp_value"
+                             @update:value="update_player_samp_value"
+                    />
+                    <n-input-group-label>Hz</n-input-group-label>
+                  </n-input-group>
+                </n-space>
+                <n-space
+                    justify="space-between" align="center"
+                    style="margin-left: 30px;"
+                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainClipping')}}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.replayGainClipping_description') }}</span>
+                    </div>
+                  </n-space>
+                  <n-switch
+                      :disabled="store_player_audio_logic.player_select != 'mpv'"
+                      v-model:value="store_player_audio_logic.player_dolby"
+                      @update:value="update_player_dolby"
+                  >
+                  </n-switch>
+                </n-space>
+                <n-space
+                    justify="space-between" align="center"
+                    style="margin-left: 30px;"
+                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainFallback') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.replayGainFallback_description') }}</span>
+                    </div>
+                  </n-space>
+                  <n-input-group style="width: 207px;margin-top: -4px;">
+                    <n-input clearable
+                             :disabled="store_player_audio_logic.player_select != 'mpv'"
+                             default-value="48000"
+                             :value="store_player_audio_logic.player_samp_value"
+                             @update:value="update_player_samp_value"
+                    />
+                    <n-input-group-label>Hz</n-input-group-label>
+                  </n-input-group>
+                </n-space>
+                <n-divider style="margin: 0;"/>
+                <n-space justify="space-between" align="center"
+                         :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') + ' | web' }}</span>
+                  </n-space>
+                </n-space>
+                <n-space
+                    justify="space-between" align="center"
+                    style="margin-left: 30px;"
+                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.dolby_switching')}}</span>
                     <div style="margin-top: -10px;">
                       <span style="font-size:12px;">{{ $t('nsmusics.view_page.dolby_switching_explain') }}</span>
                     </div>
@@ -1175,27 +1340,6 @@
                       @update:value="update_player_dolby"
                   >
                   </n-switch>
-                </n-space>
-                <n-space
-                    justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sampleRate') + ' | ' + $t('setting.mpvExtraParameters')}}</span>
-                    <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">{{ $t('setting.sampleRate_description') }}</span>
-                    </div>
-                  </n-space>
-                  <n-space
-                      justify="end" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                    <n-input-group style="width: 207px;margin-top: -4px;">
-                      <n-input clearable
-                               :disabled="store_player_audio_logic.player_select != 'mpv'"
-                               default-value="48000"
-                               v-model:value="store_player_audio_logic.player_samp_value"
-                               @update:value="update_player_samp_value"
-                      />
-                      <n-input-group-label>Hz</n-input-group-label>
-                    </n-input-group>
-                  </n-space>
                 </n-space>
                 <n-divider v-if="false" style="margin: 0;"/>
                 <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">

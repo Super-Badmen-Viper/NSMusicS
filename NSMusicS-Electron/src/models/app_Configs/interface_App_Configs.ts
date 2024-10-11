@@ -27,4 +27,10 @@ interface App_Configs_Props {
   player_fade_value: number,
   player_dolby: any,
   player_samp_value: number,
+  player_gaplessAudio: any,
+  player_audioExclusiveMode: any,
+  player_replayGainMode: any,
+  player_replayGainPreamp: number,
+  player_replayGainClip: any,
+  player_replayGainFallback: number,
 };

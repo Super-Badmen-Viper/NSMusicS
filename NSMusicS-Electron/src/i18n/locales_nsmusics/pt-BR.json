@@ -56,7 +56,11 @@
             "routerModel_type_3_explain": "Ao mudar de página, os dados da página atual são mantidos e os dados das outras páginas são excluídos, o limpador de memória automático é completamente desativado",
             "desktop_lyrics": "Letras na área de trabalho",
             "theme_automatic_switching": "Mudança automática de tema",
-            "theme_automatic_switching_explain": "Se deve alternar entre temas claros e escuros seguindo o sistema"
+            "theme_automatic_switching_explain": "Se deve alternar entre temas claros e escuros seguindo o sistema",
+            "dolby_switching": "Reprodução de áudio Dolby",
+            "dolby_switching_explain": "Se deve ativar a reprodução de áudio Dolby",
+            "audio_player_web_explain": "O uso de saída na web fixará o modo de roteamento para o Modo de Qualidade",
+            "selectLibrary_select_1": "E exportar a capa incorporada do arquivo de música para um arquivo de capa com o mesmo nome (pular se houver um arquivo de capa com o mesmo nome), salvar o arquivo na mesma pasta do arquivo de música"
         },
         "view_player": {
             "view_seting": {

@@ -56,7 +56,11 @@
             "routerModel_type_3_explain": "ページを切り替えた際、現在のページデータを保持し、他のページのデータをクリアし、自動メモリクリーンアップを完全に無効化",
             "desktop_lyrics": "デスクトップの歌詞",
             "theme_automatic_switching": "テーマの自動切り替え",
-            "theme_automatic_switching_explain": "システムに従ってライトテーマとダークテーマを切り替えるかどうか"
+            "theme_automatic_switching_explain": "システムに従ってライトテーマとダークテーマを切り替えるかどうか",
+            "dolby_switching": "ドルビーオーディオ再生",
+            "dolby_switching_explain": "ドルビーオーディオ再生を有効にするかどうか",
+            "audio_player_web_explain": "ウェブ出力を使用すると、ルーティングモードは品質モードに固定されます",
+            "selectLibrary_select_1": "音楽ファイルに埋め込まれたカバーを同名のカバーファイルにエクスポートします（同名のカバーファイルが存在する場合はスキップします）。ファイルを音楽ファイルと同じフォルダに保存します"
         },
         "view_player": {
             "view_seting": {

@@ -35,20 +35,28 @@ const { t } = useI18n({
 
 ////// songlist_view page_layout lineItems
 const collapsed_width = ref<number>(1090);
-const path = require('path')
-const handleImageError = (event: any) => {
+const fs = require('fs');
+const path = require('path');
+const url = require('url');
+const handleImageError = (event) => {
   const originalSrc = event.target.src;
-  const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
-  const img = new Image();
-  img.onload = null;
-  img.onerror = null;
-  img.onload = () => {
-    event.target.src = pngSrc;
-  };
-  img.onerror = () => {
-    event.target.src = path.resolve('resources/img/error_album.jpg');
-  };
-  img.src = pngSrc;
+  const folderPath = path.dirname(url.fileURLToPath(originalSrc));
+  fs.readdir(folderPath, (err, files) => {
+    if (err) {
+      console.error('Error reading directory:', err);
+      event.target.src = path.resolve('resources/img/error_album.jpg');
+      return;
+    }
+    const imageFiles = files.filter(file => {
+      const ext = path.extname(file).toLowerCase();
+      return ['.jpg', '.jpeg', '.png'].includes(ext);
+    });
+    if (imageFiles.length > 0) {
+      event.target.src = path.join(folderPath, imageFiles[0]);
+    } else {
+      event.target.src = path.resolve('resources/img/error_album.jpg');
+    }
+  });
 };
 const os = require('os');
 function getAssetImage(firstImage: string) {
