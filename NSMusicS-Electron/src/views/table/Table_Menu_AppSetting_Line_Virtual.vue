@@ -482,6 +482,12 @@
     updateGridItems();
   });
 
+  //////
+  const { shell } = require('electron');
+  const openLink = (url: string) => {
+    shell.openExternal(url);
+  };
+
   ////// view songlist_view Remove data
   onBeforeUnmount(() => {
     stopWatching_collapsed_width()
@@ -1173,6 +1179,26 @@
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') + ' | mpv' }}</span>
                   </n-space>
+                </n-space>
+                <n-space
+                    justify="space-between" align="center"
+                    style="margin-left: 30px;"
+                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('setting.mpvExtraParameters') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('setting.mpvExtraParameters') }}</span>
+                    </div>
+                    <div style="margin-top: -10px;">
+                      <a style="font-size: 15px;cursor: pointer;" @click="openLink('https://mpv.io/manual/stable/#audio')">https://mpv.io/manual/stable/#audio</a>
+                    </div>
+                  </n-space>
+                  <n-input
+                      style="width: 207px;margin-top: -4px;"
+                      v-model:value="store_player_audio_logic.player_fade_value"
+                      type="textarea"
+                      placeholder="基本的 Textarea"
+                  />
                 </n-space>
                 <n-space
                     vertical
