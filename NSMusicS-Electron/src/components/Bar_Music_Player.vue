@@ -271,8 +271,13 @@
     await store_player_audio_logic.player.IsPlaying()
     await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
   })
+  let init_play = true;
   const Init_Audio_Player = async () => {
     if(store_player_audio_info.this_audio_file_path.length > 0){
+      if(init_play){
+        Play_This_Audio_Path()
+        init_play = false
+      }
       if(!store_player_audio_logic.player.isPlaying){
         if(this_audio_buffer_file.value === null){
           this_audio_buffer_file.value = Math.random().toString(36).substring(7);
@@ -281,7 +286,7 @@
           store_player_audio_info.this_audio_is_playing = true
           store_player_audio_logic.player.isPlaying = true;
           if(store_player_audio_logic.player_select === 'mpv'){
-            if(!store_player_audio_logic.player.IsPlaying)
+            if(!store_player_audio_logic.player.isPlaying)
               Play_This_Audio_Path()
             else {
               await ipcRenderer.invoke('mpv-startFadeIn', store_player_audio_logic.play_volume)
