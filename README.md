@@ -11,7 +11,8 @@
 - [x] supporting the Windows platform (which will soon support Linux、MacOS、Docker) 
 - [x] compatible with streaming media servers Navidrome (which will soon be compatible with Subsonic、Jellyfin、Emby、NSMusicS)
 - [x] music library management
-- [ ] professional audio playback
+- [x] professional audio playback
+- [ ] Rich sound effects playback
 - [x] internationalization
 - [ ] various music usage scenarios(For NSMusicS-GO: Server)
 ## NSMusicS-GO | 九歌 : Server
@@ -24,6 +25,7 @@
 ## NSMusicS-Flutter | 九歌 : Mobile-client
    - [ ] music library management
    - [ ] professional audio playback
+   - [ ] Rich sound effects playback
    - [ ] internationalization
    - [ ] various music usage scenarios(For NSMusicS-GO: Server)
 

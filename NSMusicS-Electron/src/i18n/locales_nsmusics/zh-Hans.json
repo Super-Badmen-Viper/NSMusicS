@@ -62,7 +62,8 @@
             "audio_player_web_explain": "使用web输出将固定路由模式-质量模式",
             "selectLibrary_select_1": "并导出音乐文件内嵌的封面转化为同名封面文件(存在同名封面文件则跳过)，文件保存至与音乐文件同一文件夹内",
             "audio_channel": "音频声道",
-            "audio_channel_explain": "设置输出的音频声道"
+            "audio_channel_explain": "设置输出的音频声道",
+            "selectLibrary_select_0": "不导出音乐文件内嵌封面，仅使用与音乐文件同级同名的封面"
         },
         "view_player": {
             "view_seting": {

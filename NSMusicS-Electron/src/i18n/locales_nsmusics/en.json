@@ -62,7 +62,8 @@
             "audio_player_web_explain": "Using web output will fix the routing mode to Quality Mode",
             "selectLibrary_select_1": "And export the embedded cover of the music file to a cover file with the same name (skip if a cover file with the same name exists), save the file in the same folder as the music file",
             "audio_channel": "Audio Channel",
-            "audio_channel_explain": "Set the output audio channel"
+            "audio_channel_explain": "Set the output audio channel",
+            "selectLibrary_select_0": "Do not export the embedded cover of the music file, only use the cover with the same name at the same level as the music file"
         },
         "view_player": {
             "view_seting": {

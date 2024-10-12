@@ -62,7 +62,8 @@
             "audio_player_web_explain": "Die Verwendung der Webausgabe wird den Routingmodus auf Qualitätsmodus festlegen",
             "selectLibrary_select_1": "Und exportiere den eingebetteten Cover des Musikfiles in eine Coverdatei mit dem gleichen Namen (überspringen, wenn eine Coverdatei mit dem gleichen Namen existiert), speichere die Datei im selben Ordner wie die Musikdatei",
             "audio_channel": "Audiokanal",
-            "audio_channel_explain": "Festlegen des Ausgangs-Audiokanals"
+            "audio_channel_explain": "Festlegen des Ausgangs-Audiokanals",
+            "selectLibrary_select_0": "Exportieren Sie nicht den eingebetteten Cover des Musikfiles, verwenden Sie nur das Cover mit dem gleichen Namen auf der gleichen Ebene wie die Musikdatei"
         },
         "view_player": {
             "view_seting": {

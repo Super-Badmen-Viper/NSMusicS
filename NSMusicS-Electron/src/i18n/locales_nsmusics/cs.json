@@ -62,7 +62,8 @@
             "audio_player_web_explain": "Použití webového výstupu uzamkne směrovací režim na Režim kvality",
             "selectLibrary_select_1": "A exportujte vložený obrázek albumu z hudby do souboru stejného jména (pokud již soubor stejného jména existuje, přeskočit), uložte soubor do stejné složky jako hudobní soubor",
             "audio_channel": "Zvukový kanál",
-            "audio_channel_explain": "Nastavte výstupní zvukový kanál"
+            "audio_channel_explain": "Nastavte výstupní zvukový kanál",
+            "selectLibrary_select_0": "Neexportujte vložený obrázek albumu z hudby, použijte pouze obrázek stejného jména na stejné úrovni jako hudobní soubor"
         },
         "view_player": {
             "view_seting": {

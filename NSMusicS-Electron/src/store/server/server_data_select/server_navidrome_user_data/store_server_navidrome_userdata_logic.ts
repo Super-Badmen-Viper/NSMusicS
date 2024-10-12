@@ -27,11 +27,12 @@ export const store_server_navidrome_userdata_logic = reactive({
             const userData = await userService.getUser(server_set_of_addUser_of_username, token, salt);
             if (userData["subsonic-response"]["status"] === 'ok'){
                 let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
-                const data:Server_Configs_Props = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_CreateUser_of_ND(
+                const data:Server_Configs_Props = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_CreateUser(
                     server_set_of_addUser_of_servername,
                     server_set_of_addUser_of_url,
                     server_set_of_addUser_of_username,
-                    server_set_of_addUser_of_password
+                    server_set_of_addUser_of_password,
+                    'navidrome'
                 );
                 const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
                 new_data.push(data)
@@ -52,7 +53,12 @@ export const store_server_navidrome_userdata_logic = reactive({
         const userData = await userService.getUser(user_name, token, salt);
         if (userData["subsonic-response"]["status"] === 'ok'){
             let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
-            const data:Server_Configs_Props = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_SetUser_of_ND(id, server_name, url, user_name, password)
+            const data:Server_Configs_Props = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_SetUser(
+                id,
+                server_name, url,
+                user_name, password,
+                'navidrome'
+            );
             const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
             const index = new_data.findIndex(item => item.id === data.id);
             if (index !== -1) {
@@ -72,7 +78,7 @@ export const store_server_navidrome_userdata_logic = reactive({
     ) {
         try {
             let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
-            set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_DeleteUser_of_ND(id);
+            set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_DeleteUser(id);
             const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
             const index = new_data.findIndex(item => item.id === id);
             new_data.splice(index, 1);

@@ -34,8 +34,35 @@
   const computed_i18n_Label_SidebarConfiguration_14 = computed(() => t('nsmusics.siderbar_menu.lyricsProduction'));
   const computed_i18n_Label_SidebarConfiguration_15 = computed(() => t('nsmusics.siderbar_menu.musicCommunity'));
 
+  ////// this_view components
   import { store_app_configs_info } from '@/store/app/store_app_configs_info'
   import { store_server_users } from '@/store/server/store_server_users'
+  import {ref, onMounted, watch, onBeforeUnmount, computed, h, inject} from 'vue';
+  import {type MenuOption, NButton, NIcon,} from 'naive-ui'
+  import {store_server_user_model} from "@/store/server/store_server_user_model";
+  import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
+  import {store_app_configs_logic_theme} from "@/store/app/store_app_configs_logic_theme";
+  import {store_local_db_info} from "@/store/local/store_local_db_info";
+  import {store_player_appearance} from "@/store/player/store_player_appearance";
+  import {store_router_data_logic} from "@/store/router/store_router_data_logic";
+  import {store_server_data_select_logic} from "@/store/server/server_data_select/store_server_data_select_logic";
+  const theme_value = ref('lightTheme')
+  const theme_options = ref([
+    {
+      label: computed(() => t('setting.themeLight')),
+      value: 'lightTheme',
+    },
+    {
+      label: computed(() => t('setting.themeDark')),
+      value: 'darkTheme',
+    },
+  ])
+  onMounted(() => {
+    if(store_app_configs_info.update_theme)
+      theme_value.value = theme_options.value[1].value
+    else
+      theme_value.value = theme_options.value[0].value
+  });
 
   import { useMessage } from 'naive-ui'
   const message = useMessage()
@@ -160,34 +187,6 @@
       message.error(t('error.invalidServer'),{ duration: 3000 })
     }
   }
-
-  ////// this_view components
-  import {ref, onMounted, watch, onBeforeUnmount, computed, h, inject} from 'vue';
-  import {type MenuOption, NButton, NIcon,} from 'naive-ui'
-  import {store_server_user_model} from "@/store/server/store_server_user_model";
-  import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
-  import {store_app_configs_logic_theme} from "@/store/app/store_app_configs_logic_theme";
-  import {store_local_db_info} from "@/store/local/store_local_db_info";
-  import {store_player_appearance} from "@/store/player/store_player_appearance";
-  import {store_router_data_logic} from "@/store/router/store_router_data_logic";
-  import {store_server_data_select_logic} from "@/store/server/server_data_select/store_server_data_select_logic";
-  const theme_value = ref('lightTheme')
-  const theme_options = ref([
-    {
-      label: computed(() => t('setting.themeLight')),
-      value: 'lightTheme',
-    },
-    {
-      label: computed(() => t('setting.themeDark')),
-      value: 'darkTheme',
-    },
-  ])
-  onMounted(() => {
-    if(store_app_configs_info.update_theme)
-      theme_value.value = theme_options.value[1].value
-    else
-      theme_value.value = theme_options.value[0].value
-  });
 
   ////// local
   const { ipcRenderer } = require('electron');
@@ -983,14 +982,14 @@
                       </template>
                       <template #action>
                         <n-space vertical>
-                          {{ $t('nsmusics.view_page.selectLibrary')  }}
+                          {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_0')}}
                           <n-space>
                             <n-button size="small" @click="selectFolder(false)">
                               {{ $t('common.confirm') }}
                             </n-button>
                           </n-space>
                           <n-divider style="margin: 0;"/>
-                          {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_1')  }}
+                          {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_1')}}
                           <n-space>
                             <n-button size="small" @click="selectFolder(true)">
                               {{ $t('common.confirm') }}

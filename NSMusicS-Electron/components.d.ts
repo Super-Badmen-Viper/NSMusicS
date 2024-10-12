@@ -8,7 +8,6 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Bar_Music_Player: typeof import('./src/components/Bar_Music_Player.vue')['default']
-    Bar_Music_Player_howler: typeof import('./src/components/Bar_Music_Player_howler.vue')['default']
     Bar_Music_PlayList: typeof import('./src/components/Bar_Music_PlayList.vue')['default']
     NBadge: typeof import('naive-ui')['NBadge']
     NButton: typeof import('naive-ui')['NButton']
@@ -43,7 +42,6 @@ declare module 'vue' {
     NModal: typeof import('naive-ui')['NModal']
     NP: typeof import('naive-ui')['NP']
     NPageHeader: typeof import('naive-ui')['NPageHeader']
-    NPagination: typeof import('naive-ui')['NPagination']
     NPopconfirm: typeof import('naive-ui')['NPopconfirm']
     NProgress: typeof import('naive-ui')['NProgress']
     NRadio: typeof import('naive-ui')['NRadio']
