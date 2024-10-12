@@ -22,6 +22,7 @@ export const store_server_navidrome_userdata_logic = reactive({
         server_set_of_addUser_of_password: string ,
     ) {
         try{
+
             const userService = new User_ApiService_of_ND(server_set_of_addUser_of_url +'/rest');
             const {salt, token} = this.navidrome_generateEncryptedPassword(server_set_of_addUser_of_password);
             const userData = await userService.getUser(server_set_of_addUser_of_username, token, salt);
@@ -157,4 +158,15 @@ export const store_server_navidrome_userdata_logic = reactive({
         }
         return randomString;
     },
+
+    fixUrlFormat(url: string): string {
+        const match = url.match(/^(https?:\/\/[^:/]+):(\d+)(.*)?$/);
+        if (match) {
+            const host = match[1];
+            const port = match[2];
+            return `${host}:${port}`;
+        } else {
+            return url;
+        }
+    }
 });

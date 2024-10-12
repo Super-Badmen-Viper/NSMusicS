@@ -958,7 +958,13 @@ async function createNodeMpv(){
     let fadeIntervalId = null;
     ipc.handle('mpv-startFadeIn', async (event,volume) => {
         try {
-            await startFadeIn(volume)
+            if(currentFade >= 1) {
+                await startFadeIn(volume)
+            }else{
+                await mpv.resume();
+                isPlaying = true;
+                tray_music_play = true
+            }
         }catch{  }
     });
     async function startFadeIn(play_volume: number) {
@@ -987,7 +993,13 @@ async function createNodeMpv(){
     }
     ipc.handle('mpv-startFadeOut', async (event,volume) => {
         try {
-            await startFadeOut(volume)
+            if(currentFade >= 1) {
+                await startFadeOut(volume)
+            }else{
+                await mpv.pause();
+                isPlaying = false;
+                tray_music_play = false;
+            }
         }catch{  }
     });
     async function startFadeOut(play_volume: number) {

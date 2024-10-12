@@ -50,7 +50,7 @@ export const store_app_configs_logic_load = reactive({
             store_view_media_page_info.media_page_sizes = Number('' + system_Configs_Read.app_Configs.value['media_page_sizes'])
             store_view_album_page_info.album_page_sizes = Number('' + system_Configs_Read.app_Configs.value['album_page_sizes'])
             store_view_artist_page_info.artist_page_sizes = Number('' + system_Configs_Read.app_Configs.value['artist_page_sizes'])
-            //
+            ////// clear_UserExperience_Model
             const configKeys = ['clear_Memory_Model', 'clear_Equilibrium_Model', 'clear_UserExperience_Model'];
             let foundTrue = false;
             configKeys.forEach(key => {
@@ -62,7 +62,14 @@ export const store_app_configs_logic_load = reactive({
                     store_router_data_logic[key] = false;
                 }
             });
-            //
+            if(
+                store_router_data_logic.clear_Memory_Model === false &&
+                store_router_data_logic.clear_UserExperience_Model === false &&
+                store_router_data_logic.clear_Equilibrium_Model === false
+            ) {
+                store_router_data_logic.clear_Equilibrium_Model = true
+            }
+            /////
             store_server_user_model.model_select = '' + system_Configs_Read.app_Configs.value['model_select']
             if(store_server_user_model.model_select === 'navidrome'){
                 store_server_user_model.model_select = 'server';
@@ -209,15 +216,25 @@ export const store_app_configs_logic_load = reactive({
         /// player
         store_player_audio_logic.play_order = '' + system_Configs_Read.app_Configs.value['play_order']
         store_player_audio_logic.play_volume = Number('' + system_Configs_Read.app_Configs.value['play_volume'])
-        store_player_audio_logic.player_select = '' + system_Configs_Read.app_Configs.value['player_select']
-        if(store_player_audio_logic.player_select === null || store_player_audio_logic.player_select.length < 0) {
-            store_player_audio_logic.player_select = 'mpv'
-            store_player_audio_logic.player_fade_value = 1000;
-        }else {
-            store_player_audio_logic.player_fade_value = Number('' + system_Configs_Read.app_Configs.value['player_fade_value'])
-            if (store_player_audio_logic.player_fade_value === null) {
-                store_player_audio_logic.player_fade_value = 1000;
+        try {
+            if ('' + system_Configs_Read.app_Configs.value['player_select'] === null || '' + system_Configs_Read.app_Configs.value['player_select'].length < 0) {
+                store_player_audio_logic.player_select = 'mpv'
+            } else {
+                if('' + system_Configs_Read.app_Configs.value['player_select'] === 'mpv'){
+                    store_player_audio_logic.player_select = 'mpv'
+                }else if('' + system_Configs_Read.app_Configs.value['player_select'] === 'web'){
+                    store_player_audio_logic.player_select = 'web'
+                }else{
+                    store_player_audio_logic.player_select = 'mpv'
+                }
             }
+        }catch {
+            store_player_audio_logic.player_select = 'mpv'
+            store_player_audio_logic.player_fade_value = 2000;
+        }
+        store_player_audio_logic.player_fade_value = Number('' + system_Configs_Read.app_Configs.value['player_fade_value'])
+        if (store_player_audio_logic.player_fade_value === null) {
+            store_player_audio_logic.player_fade_value = 2000;
         }
         try {
             store_player_audio_logic.player_dolby = '' + system_Configs_Read.app_Configs.value['player_dolby'] === 'true'
@@ -241,6 +258,9 @@ export const store_app_configs_logic_load = reactive({
             store_player_audio_logic.player_replayGainClip = false;
             store_player_audio_logic.player_replayGainFallback = 0;
             store_player_audio_logic.player_mpvExtraParameters = ''
+        }
+        if(store_player_audio_logic.player_audio_channel.length < 0){
+            store_player_audio_logic.player_audio_channel = '5.1';
         }
 
         /// close

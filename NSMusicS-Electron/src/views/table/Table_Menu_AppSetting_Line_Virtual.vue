@@ -379,7 +379,7 @@
     if(player_fade_model_options_selected.value === 'playbackStyle_optionNormal'){
       store_player_audio_logic.player_fade_value = 0
     }else if(player_fade_model_options_selected.value === 'playbackStyle_optionCrossFade'){
-      store_player_audio_logic.player_fade_value = 1000
+      store_player_audio_logic.player_fade_value = 2000
     }
   }
   const update_player_fade_value = () => {
@@ -652,6 +652,7 @@
                       />
                       <n-radio-button
                           style="text-align: center;width: 132px;"
+                          disabled
                           :key="Type_Server_Kinds[1].value"
                           :value="Type_Server_Kinds[1].value"
                           :label="Type_Server_Kinds[1].label"
@@ -698,12 +699,12 @@
                     <n-form inline>
                       <n-space vertical style="width: 150px;margin-bottom: 10px;">
                         <span>{{ $t('form.addServer.input_name') }}</span>
-                        <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_servername"/>
+                        <n-input clearable placeholder="any" v-model:value="server_set_of_addUser_of_servername"/>
                       </n-space>
                       <n-space vertical style="width: 250px;margin-bottom: 10px;">
                         <span>{{ $t('form.addServer.input_url') }}</span>
                         <n-input-group>
-                          <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_url"/>
+                          <n-input clearable placeholder="http://localhost:4533" v-model:value="server_set_of_addUser_of_url"/>
                         </n-input-group>
                       </n-space>
                     </n-form>
@@ -814,7 +815,7 @@
                   <n-switch
                       v-model:value="store_router_data_logic.clear_Memory_Model"
                       @update:value="store_router_data_logic.get_clear_Memory_Model"
-                      :disabled="store_server_user_model.model_server_type_of_web || store_player_audio_logic.player_select === 'web'"
+                      :disabled="store_player_audio_logic.player_select === 'web'"
                   >
                   </n-switch>
                 </n-space>
@@ -830,7 +831,7 @@
                   <n-switch
                       v-model:value="store_router_data_logic.clear_Equilibrium_Model"
                       @update:value="store_router_data_logic.get_clear_Equilibrium_Model"
-                      :disabled="store_server_user_model.model_server_type_of_web || store_player_audio_logic.player_select === 'web'"
+                      :disabled="store_player_audio_logic.player_select === 'web'"
                   >
                   </n-switch>
                 </n-space>
@@ -846,7 +847,6 @@
                   <n-switch
                       v-model:value="store_router_data_logic.clear_UserExperience_Model"
                       @update:value="store_router_data_logic.get_clear_UserExperience_Model"
-                      :disabled="store_server_user_model.model_server_type_of_web || store_player_audio_logic.player_select === 'web'"
                   >
                   </n-switch>
                 </n-space>

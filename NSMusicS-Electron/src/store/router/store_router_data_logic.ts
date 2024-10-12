@@ -35,7 +35,7 @@ export const store_router_data_logic = reactive({
         store_router_history_data_of_artist.router_select_history_date_of_Artist = 'artist_list_all'
     },
 
-    clear_Memory_Model: true,
+    clear_Memory_Model: false,
     get_clear_Memory_Model(value: any){
         if(value) {
             store_router_data_logic.clear_Equilibrium_Model = false;
@@ -57,7 +57,7 @@ export const store_router_data_logic = reactive({
         }
         store_app_configs_logic_save.save_system_config_of_App_Configs()
     },
-    clear_UserExperience_Model: false,
+    clear_UserExperience_Model: true,
     get_clear_UserExperience_Model(value: any){
         if(value) {
             store_router_data_logic.clear_Memory_Model = false;
