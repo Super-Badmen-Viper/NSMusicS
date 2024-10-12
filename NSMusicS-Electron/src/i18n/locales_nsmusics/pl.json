@@ -60,7 +60,9 @@
             "dolby_switching": "Odtwarzanie audio Dolby",
             "dolby_switching_explain": "Czy włączyć odtwarzanie audio Dolby",
             "audio_player_web_explain": "Używanie wyjścia sieciowego ustawi tryb routingu na Tryb Jakościowy",
-            "selectLibrary_select_1": "I wyeksportuj osadzony okładkę pliku muzycznego do pliku okładki o tej samej nazwie (jeśli istnieje plik okładki o tej samej nazwie, pomiń), zapisz plik w tym samym folderze co plik muzyczny"
+            "selectLibrary_select_1": "I wyeksportuj osadzony okładkę pliku muzycznego do pliku okładki o tej samej nazwie (jeśli istnieje plik okładki o tej samej nazwie, pomiń), zapisz plik w tym samym folderze co plik muzyczny",
+            "audio_channel": "Kanał audio",
+            "audio_channel_explain": "Ustaw kanał audio wyjściowy"
         },
         "view_player": {
             "view_seting": {

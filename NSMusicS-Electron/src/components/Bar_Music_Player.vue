@@ -284,7 +284,7 @@
             if(!store_player_audio_logic.player.IsPlaying)
               Play_This_Audio_Path()
             else {
-              await startFadeIn()
+              await ipcRenderer.invoke('mpv-startFadeIn', store_player_audio_logic.play_volume)
             }
           }
           else if(store_player_audio_logic.player_select === 'web'){
@@ -303,7 +303,7 @@
         store_player_audio_info.this_audio_is_playing = false
         store_player_audio_logic.player.isPlaying = false
         if(store_player_audio_logic.player_select === 'mpv'){
-          await startFadeOut()
+          await ipcRenderer.invoke('mpv-startFadeOut', store_player_audio_logic.play_volume)
         }
         else if(store_player_audio_logic.player_select === 'web'){
           store_player_audio_logic.player.howl.fade(1, 0, store_player_audio_logic.player_fade_value);
@@ -314,51 +314,6 @@
       }
     }
   };
-  ////// 手动实现 mpv 播放/暂停 淡入淡出效果
-  let fadeIntervalId = null;
-  async function startFadeIn() {
-    if (fadeIntervalId !== null) {
-      clearInterval(fadeIntervalId);
-    }
-    // 防止爆音
-    setTimeout(async () => {
-      await store_player_audio_logic.player.setVolume(0);
-    }, 200);
-    await store_player_audio_logic.player.play();
-    const targetVolume = Number(store_player_audio_logic.play_volume);
-    const fadeDuration = store_player_audio_logic.player_fade_value;
-    const stepVolume = targetVolume / (fadeDuration / 10);
-    let currentVolume = 0;
-    fadeIntervalId = setInterval(async () => {
-      currentVolume += stepVolume;
-      if (currentVolume >= targetVolume) {
-        currentVolume = targetVolume;
-        clearInterval(fadeIntervalId);
-        fadeIntervalId = null;
-      }
-      await store_player_audio_logic.player.setVolume(currentVolume);
-    }, 10);
-  }
-  async function startFadeOut() {
-    if (fadeIntervalId !== null) {
-      clearInterval(fadeIntervalId);
-    }
-    const currentVolume = Number(store_player_audio_logic.play_volume);
-    const fadeDuration = store_player_audio_logic.player_fade_value;
-    const stepVolume = currentVolume / (fadeDuration / 10);
-    let volume = currentVolume;
-    fadeIntervalId = setInterval(async () => {
-      volume -= stepVolume;
-      if (volume <= 0) {
-        volume = 0;
-        clearInterval(fadeIntervalId);
-        fadeIntervalId = null;
-        await store_player_audio_logic.player.pause();
-        await store_player_audio_logic.player.setVolume(store_player_audio_logic.play_volume);
-      }
-      await store_player_audio_logic.player.setVolume(volume);
-    }, 10);
-  }
   //////
   ipcRenderer.on('tray-music-pause', Init_Audio_Player);
   ipcRenderer.on('tray-music-order', (event, order) => {

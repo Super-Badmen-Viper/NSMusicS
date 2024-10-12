@@ -60,7 +60,9 @@
             "dolby_switching": "Přehrávání zvuku Dolby",
             "dolby_switching_explain": "Zda zapnout přehrávání zvuku Dolby",
             "audio_player_web_explain": "Použití webového výstupu uzamkne směrovací režim na Režim kvality",
-            "selectLibrary_select_1": "A exportujte vložený obrázek albumu z hudby do souboru stejného jména (pokud již soubor stejného jména existuje, přeskočit), uložte soubor do stejné složky jako hudobní soubor"
+            "selectLibrary_select_1": "A exportujte vložený obrázek albumu z hudby do souboru stejného jména (pokud již soubor stejného jména existuje, přeskočit), uložte soubor do stejné složky jako hudobní soubor",
+            "audio_channel": "Zvukový kanál",
+            "audio_channel_explain": "Nastavte výstupní zvukový kanál"
         },
         "view_player": {
             "view_seting": {

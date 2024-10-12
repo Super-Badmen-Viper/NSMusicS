@@ -60,7 +60,9 @@
             "dolby_switching": "Dolby-audioafspelen",
             "dolby_switching_explain": "Of Dolby-audio moet worden ingeschakeld",
             "audio_player_web_explain": "Gebruik van webuitvoer zal de routeringsmodus vastzetten op Kwaliteitsmodus",
-            "selectLibrary_select_1": "En exporteer de ingebedde cover van het muziekbestand naar een coverbestand met dezelfde naam (overslaan als een coverbestand met dezelfde naam bestaat), sla het bestand op in dezelfde map als het muziekbestand"
+            "selectLibrary_select_1": "En exporteer de ingebedde cover van het muziekbestand naar een coverbestand met dezelfde naam (overslaan als een coverbestand met dezelfde naam bestaat), sla het bestand op in dezelfde map als het muziekbestand",
+            "audio_channel": "Audiokanaal",
+            "audio_channel_explain": "Stel de uitgangsaudiokanaal in"
         },
         "view_player": {
             "view_seting": {

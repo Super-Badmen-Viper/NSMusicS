@@ -118,18 +118,22 @@ watch(() => store_server_user_model.model_select, async (newValue) => {
             store_router_data_info.store_router_history_data_of_web = false
         }
         //
-        if (store_player_audio_logic.player_select === 'mpv') {
-            await ipcRenderer.invoke('mpv-unload');
-            await ipcRenderer.invoke('mpv-init');
-            store_player_audio_logic.player = null;
-            store_player_audio_logic.player = new Audio_node_mpv();
-        } else if (store_player_audio_logic.player_select === 'web') {
-            if (store_player_audio_logic.player.howl != null) {
-                store_player_audio_logic.player.howl.unload();
+        try {
+            if (store_player_audio_logic.player_select === 'mpv') {
+                if(await ipcRenderer.invoke('mpv-isRunning')) {
+                    await ipcRenderer.invoke('mpv-unload');
+                }
+                await ipcRenderer.invoke('mpv-init');
+                store_player_audio_logic.player = null;
+                store_player_audio_logic.player = new Audio_node_mpv();
+            } else if (store_player_audio_logic.player_select === 'web') {
+                if (store_player_audio_logic.player.howl != null) {
+                    store_player_audio_logic.player.howl.unload();
+                }
+                store_player_audio_logic.player = null;
+                store_player_audio_logic.player = new Audio_howler();
             }
-            store_player_audio_logic.player = null;
-            store_player_audio_logic.player = new Audio_howler();
-        }
+        }catch{  }
         //
         store_app_configs_logic_save.save_system_config_of_App_Configs()
     }

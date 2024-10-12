@@ -17,7 +17,6 @@ let win = null;
 /// node-system
 import { File } from "node-taglib-sharp";
 import fs from "fs";
-import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 const path = require('path');
 
 /// node-mpv
@@ -833,7 +832,6 @@ async function createTray(){
 /// node-mpv init
 let currentMediaPath = '';
 let currentFade = 0;
-let currentAresample = 0;
 let currentparameters = null
 let isPlaying = false;
 async function initNodeMpv(){
@@ -942,6 +940,60 @@ async function createNodeMpv(){
     ipc.handle('mpv-set-volume', async (event,volume) => {
         await mpv.volume(volume)
     });
+
+    ////// 手动实现 mpv 播放/暂停 淡入淡出效果
+    let fadeIntervalId = null;
+    ipc.handle('mpv-startFadeIn', async (event,volume) => {
+        await startFadeIn(volume)
+    });
+    async function startFadeIn(play_volume: number) {
+        if (fadeIntervalId !== null) {
+            clearInterval(fadeIntervalId);
+        }
+        // 防止爆音
+        setTimeout(async () => {
+            await mpv.volume(0);
+        }, 200);
+        await mpv.resume();
+        isPlaying = true;
+        tray_music_play = true
+        const targetVolume = Number(play_volume);
+        const stepVolume = targetVolume / (currentFade * 1000 / 10);
+        let currentVolume = 0;
+        fadeIntervalId = setInterval(async () => {
+            currentVolume += stepVolume;
+            if (currentVolume >= targetVolume) {
+                currentVolume = targetVolume;
+                clearInterval(fadeIntervalId);
+                fadeIntervalId = null;
+            }
+            await mpv.volume(currentVolume);
+        }, 10);
+    }
+    ipc.handle('mpv-startFadeOut', async (event,volume) => {
+        await startFadeOut(volume)
+    });
+    async function startFadeOut(play_volume: number) {
+        if (fadeIntervalId !== null) {
+            clearInterval(fadeIntervalId);
+        }
+        const currentVolume = Number(play_volume);
+        const stepVolume = currentVolume / (currentFade * 1000 / 10);
+        let volume = currentVolume;
+        fadeIntervalId = setInterval(async () => {
+            volume -= stepVolume;
+            if (volume <= 0) {
+                volume = 0;
+                clearInterval(fadeIntervalId);
+                fadeIntervalId = null;
+                await mpv.pause();
+                isPlaying = false;
+                tray_music_play = false;
+                await mpv.volume(play_volume);
+            }
+            await mpv.volume(volume);
+        }, 10);
+    }
 }
 
 /// app

@@ -60,7 +60,9 @@
             "dolby_switching": "Reproducción de audio Dolby",
             "dolby_switching_explain": "Si se debe activar la reproducción de audio Dolby",
             "audio_player_web_explain": "El uso de la salida web fijará el modo de enrutamiento al Modo de Calidad",
-            "selectLibrary_select_1": "Y exportar la portada incrustada del archivo de música a un archivo de portada con el mismo nombre (saltar si existe un archivo de portada con el mismo nombre), guardar el archivo en la misma carpeta que el archivo de música"
+            "selectLibrary_select_1": "Y exportar la portada incrustada del archivo de música a un archivo de portada con el mismo nombre (saltar si existe un archivo de portada con el mismo nombre), guardar el archivo en la misma carpeta que el archivo de música",
+            "audio_channel": "Canal de audio",
+            "audio_channel_explain": "Establecer el canal de audio de salida"
         },
         "view_player": {
             "view_seting": {
