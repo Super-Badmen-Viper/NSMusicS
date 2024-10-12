@@ -854,6 +854,20 @@ async function createNodeMpv(){
     ipc.handle('mpv-init', async (event,filePath) => {
         await initNodeMpv()
     });
+    ipc.handle('mpv-quit', async (event,filePath) => {
+        try {
+            if (mpv.isRunning()) {
+                await mpv.pause();
+                isPlaying = false;
+                tray_music_play = false;
+                win.webContents.send("tray-music-pause", tray_music_play);
+                ///
+                ///
+                await mpv.quit();
+            }
+        }catch{  }
+        isPlaying = false
+    });
     ipc.handle('mpv-fade', async (event,fade) => {
         currentFade = fade / 1000
     });
@@ -902,13 +916,6 @@ async function createNodeMpv(){
             return false;
         }
     });
-    ipc.handle('mpv-unload', async (event,filePath) => {
-        await mpv.quit();
-        isPlaying = false
-    });
-    ipc.handle('mpv-isRunning',  async (event) => {
-        return mpv.isRunning();
-    });
     ipc.handle('mpv-isPlaying',  async (event) => {
         return isPlaying;
     });
@@ -927,10 +934,16 @@ async function createNodeMpv(){
         tray_music_play = false
     });
     ipc.handle('mpv-get-duration', async (event) => {
-        try { return await mpv.getDuration() }catch{ return 0 }
+        if(isPlaying) {
+            try { return await mpv.getDuration() } catch {}
+        }
+        return 0
     });
     ipc.handle('mpv-get-time-pos', async (event) => {
-        try { return await mpv.getTimePosition() }catch{ return 0 }
+        if(isPlaying) {
+            try { return await mpv.getTimePosition() } catch {}
+        }
+        return 0
     });
     ipc.handle('mpv-set-time-pos', async (event,timePos) => {
         await mpv.resume();
@@ -944,7 +957,9 @@ async function createNodeMpv(){
     ////// 手动实现 mpv 播放/暂停 淡入淡出效果
     let fadeIntervalId = null;
     ipc.handle('mpv-startFadeIn', async (event,volume) => {
-        await startFadeIn(volume)
+        try {
+            await startFadeIn(volume)
+        }catch{  }
     });
     async function startFadeIn(play_volume: number) {
         if (fadeIntervalId !== null) {
@@ -971,12 +986,15 @@ async function createNodeMpv(){
         }, 10);
     }
     ipc.handle('mpv-startFadeOut', async (event,volume) => {
-        await startFadeOut(volume)
+        try {
+            await startFadeOut(volume)
+        }catch{  }
     });
     async function startFadeOut(play_volume: number) {
         if (fadeIntervalId !== null) {
             clearInterval(fadeIntervalId);
         }
+        tray_music_play = false;
         const currentVolume = Number(play_volume);
         const stepVolume = currentVolume / (currentFade * 1000 / 10);
         let volume = currentVolume;
@@ -988,7 +1006,6 @@ async function createNodeMpv(){
                 fadeIntervalId = null;
                 await mpv.pause();
                 isPlaying = false;
-                tray_music_play = false;
                 await mpv.volume(play_volume);
             }
             await mpv.volume(volume);

@@ -1039,7 +1039,7 @@ onBeforeUnmount(() => {
               <div
                   style="margin-left: 8px;
                   width: 60px;height: 60px;
-                  border-radius: 6px;border: 1.5px solid #FFFFFF20;
+                  border-radius: 10px;border: 2px solid #FFFFFF20;
                   overflow: hidden;">
                 <img
                     :key="item.id"
@@ -1049,7 +1049,7 @@ onBeforeUnmount(() => {
               </div>
               <div class="songlist_title">
                 <span
-                  style="font-size: 18px;font-weight: 600;"
+                  style="font-size: 16px;font-weight: 550;"
                   @click="handleItemClick_title(item.title)">
                   {{ item.title }}
                 </span>

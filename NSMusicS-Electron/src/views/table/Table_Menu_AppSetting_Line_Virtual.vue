@@ -957,7 +957,12 @@
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.selectLibrary')}}</span>
                     <div style="margin-top: -10px;">
                       <span style="font-size:12px;">
-                        {{ $t('nsmusics.view_page.selectLibrary_explain') + ', ' + $t('common.restartRequired')}}
+                        {{
+                          $t('nsmusics.view_page.selectLibrary_explain') +
+                          ', ' +
+                          $t('common.restartRequired')
+                        }}
+                        <br>.mp3, .flac, .aac, .mp1, .mp2, .m4a, .ape, .oga, .ogg, .opus, .wav, .webm
                       </span>
                     </div>
                   </n-space>

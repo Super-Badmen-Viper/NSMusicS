@@ -231,7 +231,7 @@ export const store_app_configs_logic_load = reactive({
             store_player_audio_logic.player_replayGainFallback = Number('' + system_Configs_Read.app_Configs.value['player_replayGainFallback'])
             store_player_audio_logic.player_mpvExtraParameters = '' + system_Configs_Read.app_Configs.value['player_mpvExtraParameters']
         }catch{
-            store_player_audio_logic.player_dolby = false;
+            store_player_audio_logic.player_dolby = true;
             store_player_audio_logic.player_audio_channel = '5.1';
             store_player_audio_logic.player_samp_value = 48000;
             store_player_audio_logic.player_gaplessAudio = 'weak';

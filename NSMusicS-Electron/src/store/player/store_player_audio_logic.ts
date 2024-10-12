@@ -53,9 +53,7 @@ watch(() => store_player_audio_logic.player_select, async (newValue) => {
     } else if (store_player_audio_logic.player_select === 'web') {
         store_player_audio_logic.player = null;
         store_player_audio_logic.player = new Audio_howler();
-        if(await ipcRenderer.invoke('mpv-isRunning')) {
-            await ipcRenderer.invoke('mpv-unload');
-        }
+        await ipcRenderer.invoke('mpv-quit');
     }
 
     store_app_configs_logic_save.save_system_config_of_App_Configs()

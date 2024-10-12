@@ -122,9 +122,7 @@ watch(() => store_server_user_model.model_select, async (newValue) => {
         //
         try {
             if (store_player_audio_logic.player_select === 'mpv') {
-                if(await ipcRenderer.invoke('mpv-isRunning')) {
-                    await ipcRenderer.invoke('mpv-unload');
-                }
+                await ipcRenderer.invoke('mpv-quit');
                 await ipcRenderer.invoke('mpv-init');
                 store_player_audio_logic.player = null;
                 store_player_audio_logic.player = new Audio_node_mpv();

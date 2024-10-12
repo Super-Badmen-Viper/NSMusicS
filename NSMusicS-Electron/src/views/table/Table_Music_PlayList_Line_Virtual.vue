@@ -235,7 +235,11 @@ const onScrollEnd = async () => {
                   style="width: 100%; height: 100%; object-fit: cover;"/>
               </div>
               <div class="title_playlist" style="width: 240px;">
-                <span @click="handleItemClick_title(item.title)">{{ item.title }}</span>
+                <span
+                    style="font-size: 16px;font-weight: 600;"
+                    @click="handleItemClick_title(item.title)">
+                  {{ item.title }}
+                </span>
                 <br>
                 <template v-for="artist in item.artist.split('/')">
                   <span @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
@@ -281,7 +285,9 @@ const onScrollEnd = async () => {
                     style="width: 100%; height: 100%; object-fit: cover;"/>
               </div>
               <div class="title_playlist">
-                <span @click="handleItemClick_title(item.title)">{{ item.title }}</span>
+                <span @click="handleItemClick_title(item.title)">
+                  {{ item.title }}
+                </span>
                 <br>
                 <template v-for="artist in item.artist.split('/')">
                   <span @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
