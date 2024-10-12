@@ -53,7 +53,6 @@ const { t } = useI18n({
   const itemSize = ref(220);
   const gridItems = ref(5);
   const itemSecondarySize = ref(185);
-  const collapsed_width = ref<number>(1090);
   const path = require('path')
   const handleImageError = (event: any) => {
     const originalSrc = event.target.src;
@@ -79,48 +78,20 @@ const { t } = useI18n({
       return new URL(firstImage, import.meta.url).href;
   }
   // gridItems Re render
-  let bool_watch = false;
-  const timer = ref<NodeJS.Timeout | null>(null);
-  const startTimer = () => {
-    timer.value = setInterval(() => {
-      bool_watch = true;
-    }, 1000);
-  };
-  const stopWatching_collapsed_width = watch(() => store_app_configs_info.app_left_menu_collapsed, (newValue, oldValue) => {
-    updateGridItems();
-  });
+  const collapsed_width = ref<number>(1090);
   const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
-    bool_watch = false;
     updateGridItems();
-    if (bool_watch) {
-      startTimer();
-    }
   });
   const updateGridItems = () => {
-    // if (store_app_configs_info.app_left_menu_collapsed === true) {
-    //   collapsed_width.value = 145;
-    //   item_album.value = 140;
-    //   item_album_image.value = item_album.value - 20;
-    //   item_album_txt.value = item_album.value - 20;
-    //   itemSecondarySize.value = 135;
-    // } else {
-    //   collapsed_width.value = 240;
-    //   item_album.value = 170;
-    //   item_album_image.value = item_album.value - 20;
-    //   item_album_txt.value = item_album.value - 20;
-    //   itemSecondarySize.value = 164;
-    // }
     collapsed_width.value = 145;
-    item_album.value = 180;
+    item_album.value = 186;
     item_album_image.value = item_album.value - 20;
     item_album_txt.value = item_album.value - 20;
-    itemSecondarySize.value = 174;
+    itemSecondarySize.value = Math.floor(window.innerWidth / 7);
     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
   };
   onMounted(() => {
-    startTimer();
     updateGridItems();
-
     if(store_view_album_page_logic.page_albumlists_input_search_Value.length > 0){
       bool_show_search_area.value = true
       bool_input_search = true
@@ -508,13 +479,8 @@ const contextmenu = ref(null as any)
 
   ////// view albumlist_view Remove data
   onBeforeUnmount(() => {
-    stopWatching_collapsed_width()
     stopWatching_window_innerWidth()
     stopWatching_router_history_model_of_Album_scroll()
-    if (timer.value) {
-      clearInterval(timer.value);
-      timer.value = null;
-    }
     dynamicScroller.value = null;
   });
 </script>

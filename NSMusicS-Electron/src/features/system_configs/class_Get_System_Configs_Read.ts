@@ -16,6 +16,7 @@ export class Class_Get_System_Configs_Read {
             app_left_menu_collapsed: null,
             model_select: '',
             server_select: '',
+            server_select_kind: '',
             username: '',
             password: '',
             play_order: '',

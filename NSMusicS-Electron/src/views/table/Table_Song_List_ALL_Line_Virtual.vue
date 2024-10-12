@@ -34,7 +34,6 @@ const { t } = useI18n({
 })
 
 ////// songlist_view page_layout lineItems
-const collapsed_width = ref<number>(1090);
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
@@ -68,34 +67,8 @@ function getAssetImage(firstImage: string) {
     return new URL(firstImage, import.meta.url).href;
 }
 // lineItems Re render
-let bool_watch = false;
-const timer = ref<NodeJS.Timeout | null>(null);
-const startTimer = () => {
-  timer.value = setInterval(() => {
-    bool_watch = true;
-  }, 1000);
-};
-const stopWatching_collapsed_width = watch(() => store_app_configs_info.app_left_menu_collapsed, (newValue, oldValue) => {
-  updateGridItems();
-});
-const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
-  bool_watch = false;
-  updateGridItems();
-  if (bool_watch) {
-    startTimer();
-  }
-});
-const updateGridItems = () => {
-  if (store_app_configs_info.app_left_menu_collapsed == true) {
-    collapsed_width.value = 145;
-  } else {
-    collapsed_width.value = 240;
-  }
-};
-onMounted(() => {
-  startTimer();
-  updateGridItems();
-});
+const collapsed_width = ref<number>(145);
+
 // lineItems Sort
 enum state_Sort {
   Ascend = 'ascend',
@@ -274,18 +247,6 @@ onMounted(() => {
 });
 // lineItems Filter To Favorite
 const Type_Filter_Show = ref(false)
-const options_Filter = ref([
-  {
-    label: t('nsmusics.view_page.loveSong'),
-    key: 'filter_favorite'
-  }
-])
-const options_Filter_handleSelect = (key: string | number) => {
-  store_view_media_page_logic.page_songlists_selected = 'song_list_love'
-  store_view_media_page_logic.get_page_songlists_selected('song_list_love')
-  console.log('selected_value_for_songlistall：'+'song_list_love');
-  breadcrumbItems.value = store_view_media_page_logic.page_songlists_options.find(option => option.value === 'song_list_love')?.label || '';
-}
 
 ////// dynamicScroller of artistlist_view
 const dynamicScroller = ref(null as any);
@@ -614,15 +575,13 @@ async function update_playlist_deleteMediaFile(id: any){
 }
 /// update selected media_file
 const Type_Selected_Media_File_To_Playlist = ref(false)
-async function update_playlist_addMediaFile_selected(playlist_id: any)
-{
+async function update_playlist_addMediaFile_selected(playlist_id: any) {
   await store_view_media_page_logic.get_selected_playlist_add_MediaFile(playlist_id)
   message.success(t('common.add'))
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
-async function update_lovelist_addMediaFile_selected()
-{
+async function update_lovelist_addMediaFile_selected() {
   store_view_media_page_logic.get_selected_lovelist_add_MediaFile(true)
   message.success(t('common.add'))
   Type_Selected_Media_File_To_Playlist.value = false;
@@ -642,26 +601,22 @@ async function update_button_deleteMediaFile_selected(){
               selected => selected.id === file.id));
   message.success(t('common.delete'))
 }
-async function update_playlist_deleteMediaFile_selected(playlist_id: any)
-{
+async function update_playlist_deleteMediaFile_selected(playlist_id: any) {
   await store_view_media_page_logic.get_selected_playlist_delete_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
-async function update_locallist_deleteMediaFile_selected(playlist_id: any)
-{
+async function update_locallist_deleteMediaFile_selected(playlist_id: any) {
   store_view_media_page_logic.get_selected_locallist_delete_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
-async function update_lovelist_deleteMediaFile_selected(playlist_id: any)
-{
+async function update_lovelist_deleteMediaFile_selected(playlist_id: any) {
   store_view_media_page_logic.get_selected_lovelist_delete_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
 }
-async function update_recentlist_deletetMediaFile_selected(playlist_id: any)
-{
+async function update_recentlist_deletetMediaFile_selected(playlist_id: any) {
   store_view_media_page_logic.get_selected_recentlist_deletet_MediaFile(playlist_id)
   Type_Selected_Media_File_To_Playlist.value = false;
   click_open_bulk_operation()
@@ -782,29 +737,6 @@ function menu_item_add_to_playlist_next() {
 }
 
 //////
-const pageCount = ref(0)
-const pageSizes = [
-  {
-    label: '15 *',
-    value: 15
-  },
-  {
-    label: '25 *',
-    value: 25
-  },
-  {
-    label: '50 *',
-    value: 50
-  },
-  {
-    label: '100 *',
-    value: 100
-  }
-]
-onMounted(()=>{
-  pageCount.value = Math.floor(store_view_media_page_info.media_item_count / store_view_media_page_info.media_page_sizes);
-})
-//////
 const isScrolling = ref(false);
 const onScrollEnd = async () => {
   if (isScrolling.value) return;
@@ -817,13 +749,7 @@ const onScrollEnd = async () => {
 
 ////// view songlist_view Remove data
 onBeforeUnmount(() => {
-  stopWatching_collapsed_width()
-  stopWatching_window_innerWidth()
   stopWatching_router_history_model_of_Media_scroll()
-  if (timer.value) {
-    clearInterval(timer.value);
-    timer.value = null;
-  }
   dynamicScroller.value = null;
 });
 </script>
@@ -1207,20 +1133,6 @@ onBeforeUnmount(() => {
           </DynamicScrollerItem>
         </template>
       </DynamicScroller>
-      <n-pagination
-        v-if="false"
-        v-model:page="page"
-        v-model:page-size="store_view_media_page_info.media_page_sizes"
-        v-model:page-count="pageCount"
-        show-size-picker show-quick-jumper
-        :display-order="['quick-jumper', 'pages', 'size-picker']"
-        size="large"
-        :page-sizes="pageSizes"
-        style="
-          position: absolute;
-          right: 32px;bottom: 10px;
-        "
-      />
       <v-contextmenu ref="contextmenu" class="v-contextmenu-item v-contextmenu-item--hover" style="z-index: 999">
         <v-contextmenu-submenu :title="menu_item_add_to_songlist">
           <v-contextmenu-item

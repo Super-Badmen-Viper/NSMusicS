@@ -1,48 +1,8 @@
 <script setup lang="ts">
-  import type {MenuOption} from "naive-ui";
-  import {onMounted, ref, watch, onBeforeUnmount} from "vue";
-  import { store_app_configs_info } from '@/store/app/store_app_configs_info'
+  import { ref } from "vue";
 
   ////// lineItems Re render
-  let bool_watch = false;
-  let timer = ref<NodeJS.Timeout | null>(null);
-  const startTimer = () => {
-    timer.value = setInterval(() => {
-      bool_watch = true;
-    }, 1000);
-  };
-  const stopWatching_collapsed_width = watch(() => store_app_configs_info.app_left_menu_collapsed, (newValue, oldValue) => {
-    updateGridItems();
-  });
-  const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
-    bool_watch = false;
-    updateGridItems();
-    if (bool_watch) {
-      startTimer();
-    }
-  });
-  const collapsed_width = ref<number>(1090);
-  const updateGridItems = () => {
-    if (store_app_configs_info.app_left_menu_collapsed == true) {
-      collapsed_width.value = 145;
-    } else {
-      collapsed_width.value = 240;
-    }
-  };
-  onMounted(() => {
-    startTimer();
-    updateGridItems();
-  });
-
-  ////// view songlist_view Remove data
-  onBeforeUnmount(() => {
-    stopWatching_collapsed_width()
-    stopWatching_window_innerWidth()
-    if (timer.value) {
-      clearInterval(timer.value);
-      timer.value = null;
-    }
-  });
+  const collapsed_width = ref<number>(80);
 </script>
 <template>
   <div class="view">

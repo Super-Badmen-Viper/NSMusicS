@@ -39,7 +39,6 @@
   const itemSize = ref(220);
   const gridItems = ref(5);
   const itemSecondarySize = ref(185);
-  const collapsed_width = ref<number>(1090);
   const path = require('path')
   const handleImageError = (event: any) => {
     const originalSrc = event.target.src;
@@ -65,48 +64,20 @@
       return new URL(firstImage, import.meta.url).href;
   }
   // gridItems Re render
-  let bool_watch = false;
-  const timer = ref<NodeJS.Timeout | null>(null);
-  const startTimer = () => {
-    timer.value = setInterval(() => {
-      bool_watch = true;
-    }, 1000);
-  };
-  const stopWatching_collapsed_width = watch(() => store_app_configs_info.app_left_menu_collapsed, (newValue, oldValue) => {
-    updateGridItems();
-  });
+  const collapsed_width = ref<number>(1090);
   const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
-    bool_watch = false;
     updateGridItems();
-    if (bool_watch) {
-      startTimer();
-    }
   });
   const updateGridItems = () => {
-    // if (store_app_configs_info.app_left_menu_collapsed == true) {
-    //   collapsed_width.value = 145;
-    //   item_artist.value = 140;
-    //   item_artist_image.value = item_artist.value - 20;
-    //   item_artist_txt.value = item_artist.value - 20;
-    //   itemSecondarySize.value = 135;
-    // } else {
-    //   collapsed_width.value = 240;
-    //   item_artist.value = 170;
-    //   item_artist_image.value = item_artist.value - 20;
-    //   item_artist_txt.value = item_artist.value - 20;
-    //   itemSecondarySize.value = 164;
-    // }
     collapsed_width.value = 145;
     item_artist.value = 180;
     item_artist_image.value = item_artist.value - 20;
     item_artist_txt.value = item_artist.value - 20;
-    itemSecondarySize.value = 174;
+    itemSecondarySize.value = Math.floor(window.innerWidth / 7);
     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
   };
   onMounted(() => {
-    startTimer();
     updateGridItems();
-
     input_search_Value.value = store_view_artist_page_logic.page_artistlists_keyword
     if(input_search_Value.value.length > 0){
       bool_show_search_area.value = true
@@ -480,13 +451,8 @@
 
   ////// view artistlist_view Remove data
   onBeforeUnmount(() => {
-    stopWatching_collapsed_width()
     stopWatching_window_innerWidth()
     stopWatching_router_history_model_of_Artist_scroll()
-    if (timer.value) {
-      clearInterval(timer.value);
-      timer.value = null;
-    }
     dynamicScroller.value = null;
   });
 </script>
@@ -747,7 +713,9 @@
                   </div>
                 </div>
               </div>
-              <div class="artist_text" :style="{ width: item_artist_image + 'px' }">
+              <div class="artist_text"
+                   style="margin-left: 2px;"
+                   :style="{ width: item_artist_image + 'px' }">
                 <div class="artist_left_text_artist_info" :style="{ width: item_artist_txt + 'px' }">
                   <div>
                     <span id="artist_name" style="font-size: 14px;font-weight: 600;" :style="{ maxWidth: item_artist_txt + 'px' }">

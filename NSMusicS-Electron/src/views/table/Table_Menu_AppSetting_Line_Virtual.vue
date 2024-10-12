@@ -36,8 +36,9 @@
 
   import { store_app_configs_info } from '@/store/app/store_app_configs_info'
   import { store_server_users } from '@/store/server/store_server_users'
-  const get_server_config_of_current_user_of_sqlite = inject('get_server_config_of_current_user_of_sqlite');
 
+  import { useMessage } from 'naive-ui'
+  const message = useMessage()
   ////// server
   const Type_Server_Kinds = [
     {
@@ -74,7 +75,6 @@
   })
   const Type_Server_Selected = ref(Type_Server_Kinds[2].value)
   const Type_Server_Add = ref(false)
-  const Type_Server_Model_Open = ref(true)
   const Type_Server_Model_Open_Value = ref('local')
   const Type_Server_Model_Open_Option = ref([
     {
@@ -92,114 +92,76 @@
     else
       Type_Server_Model_Open_Value.value = Type_Server_Model_Open_Option.value[1].value
   });
-  import { useMessage } from 'naive-ui'
-  const message = useMessage()
-  /// server select
-  async function update_server_config_of_current_user_of_sqlite(value: any){
-    try {
-      const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(item => item.id === value);
-      await update_server_setUser(
-          store_server_users.server_config_of_all_user_of_sqlite[index].id,
-          store_server_users.server_config_of_all_user_of_sqlite[index].server_name,
-          store_server_users.server_config_of_all_user_of_sqlite[index].url,
-          store_server_users.server_config_of_all_user_of_sqlite[index].user_name,
-          store_server_users.server_config_of_all_user_of_sqlite[index].password
-      )
-      get_server_config_of_current_user_of_sqlite(store_server_users.server_config_of_all_user_of_sqlite[index])
-      if(store_server_user_model.model_server_type_of_web){
-        console.log('store_server_user_model.model_server_type_of_web')
-        let user_Authorization_ApiWebService_of_ND = new User_Authorization_ApiWebService_of_ND(
-            store_server_users.server_config_of_current_user_of_sqlite?.url
-        )
-        await user_Authorization_ApiWebService_of_ND.get_token()
-        store_app_configs_logic_save.save_system_config_of_App_Configs()
-        store_app_configs_logic_save.save_system_config_of_Servers_Config()
-        /// reset app data
-        // ipcRenderer.send('window-reset-data');
-      }
-    }catch {
-      console.error('error: update_server_setUser + get_server_config_of_current_user_of_sqlite')
-    }
-  }
-  /// server add
-  import { Set_ServerInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_ServerInfo_To_LocalSqlite";
   const server_set_of_addUser_of_type = ref('')
   const server_set_of_addUser_of_servername = ref('')
   const server_set_of_addUser_of_url = ref('')
   const server_set_of_addUser_of_username = ref('')
   const server_set_of_addUser_of_password = ref('')
-  async function update_server_setUser(id:string,server_name:string,url:string, user_name:string,password:string) {
-    const userService = new User_ApiService_of_ND(url+'/rest');
-    const {salt, token} = generateEncryptedPassword(password);
-    const userData = await userService.getUser(user_name, token, salt);
-    if (userData["subsonic-response"]["status"] === 'ok'){
-      let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
-      const data:Server_Configs_Props = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_SetUser_of_ND(id, server_name, url, user_name, password)
-      const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
-      const index = new_data.findIndex(item => item.id === data.id);
-      if (index !== -1) {
-        new_data[index] = data;
-      } else {
-        new_data.push(data);
-      }
-      store_server_users.get_server_config_of_all_user_of_sqlite(new_data)
-      message.success(t('form.updateServer.success'))
-    }else{
-      message.error(t('error.invalidServer'))
-    }
-  }
-  async function update_server_deleteUser(id: string) {
-    let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
-    set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_DeleteUser_of_ND(id);
-    const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
-    const index = new_data.findIndex(item => item.id === id);
-    new_data.splice(index, 1);
-    store_server_users.get_server_config_of_all_user_of_sqlite(new_data)
-  }
+  /// server add
   async function update_server_addUser() {
+    server_set_of_addUser_of_type.value = Type_Server_Selected.value;
     try{
-      server_set_of_addUser_of_type.value = Type_Server_Selected.value;
-      const userService = new User_ApiService_of_ND(server_set_of_addUser_of_url.value+'/rest');
-      const {salt, token} = generateEncryptedPassword(server_set_of_addUser_of_password.value);
-      const userData = await userService.getUser(server_set_of_addUser_of_username.value, token, salt);
-      if (userData["subsonic-response"]["status"] === 'ok'){
-        let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
-        const data:Server_Configs_Props = set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_CreateUser_of_ND(
+      const result = await store_server_data_select_logic.update_server_addUser(
           server_set_of_addUser_of_servername.value,
           server_set_of_addUser_of_url.value,
           server_set_of_addUser_of_username.value,
           server_set_of_addUser_of_password.value
-        );
-        const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
-        new_data.push(data)
-        store_server_users.get_server_config_of_all_user_of_sqlite(new_data)
+      )
+      if(result){
         message.success(t('form.addServer.success'))
-        Type_Server_Add.value = !Type_Server_Add.value
+      }else{
+        message.error(t('error.invalidServer'),{ duration: 3000 })
+      }
+    }catch (e) {
+      message.error(t('error.invalidServer'),{ duration: 3000 })
+    }
+    Type_Server_Add.value = !Type_Server_Add.value
+  }
+  /// server delete
+  async function update_server_deleteUser(id: string) {
+    try {
+      const result = await store_server_data_select_logic.update_server_deleteUser(id)
+      if(result){
+        message.success(t('form.updateServer.success'))
+      }else{
+        message.error(t('error.invalidServer'),{ duration: 3000 })
+      }
+    }catch{
+      message.error(t('error.invalidServer'),{ duration: 3000 })
+    }
+  }
+  /// server update
+  async function update_server_setUser(id:string, server_name:string, url:string, user_name:string, password:string) {
+    try {
+      const result = await store_server_data_select_logic.update_server_setUser(
+          id,
+          server_name, url,
+          user_name, password
+      )
+      if(result){
+        message.success(t('form.updateServer.success'))
+      }else{
+        message.error(t('error.invalidServer'),{ duration: 3000 })
+      }
+    }catch{
+      message.error(t('error.invalidServer'),{ duration: 3000 })
+    }
+  }
+  /// server select
+  async function update_server_config_of_current_user_of_sqlite(value: any){
+    try{
+      const result = await store_server_data_select_logic.update_server_config_of_current_user_of_sqlite(value)
+      if(result){
+        message.success(t('form.updateServer.success'))
+      }else{
+        message.error(t('error.invalidServer'),{ duration: 3000 })
       }
     }catch (e) {
       message.error(t('error.invalidServer'),{ duration: 3000 })
     }
   }
-  ///
-  const crypto = require('crypto');
-  import { User_ApiService_of_ND } from "@/features/servers_configs/navidrome_api/services_normal/user_management/index_service";
-  function generateEncryptedPassword(password: string): { salt: string, token: string } {
-    const saltLength = 6;
-    const salt = generateRandomString(saltLength);
-    const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
-    return { salt, token };
-  }
-  function generateRandomString(length: number): string {
-    const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';
-    let randomString = '';
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      randomString += characters[randomIndex];
-    }
-    return randomString;
-  }
 
-  ////// this_view components of navie ui
+  ////// this_view components
   import {ref, onMounted, watch, onBeforeUnmount, computed, h, inject} from 'vue';
   import {type MenuOption, NButton, NIcon,} from 'naive-ui'
   import {store_server_user_model} from "@/store/server/store_server_user_model";
@@ -207,15 +169,8 @@
   import {store_app_configs_logic_theme} from "@/store/app/store_app_configs_logic_theme";
   import {store_local_db_info} from "@/store/local/store_local_db_info";
   import {store_player_appearance} from "@/store/player/store_player_appearance";
-  import {
-    Class_Get_MediaTag_Configs_Read
-  } from "@/features/sqlite3_taglib_configs/class_Get_MediaTag_Configs_Read";
-  import {
-    User_Authorization_ApiWebService_of_ND
-  } from "@/features/servers_configs/navidrome_api/services_web/user_authorization/index_service";
-  import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
   import {store_router_data_logic} from "@/store/router/store_router_data_logic";
-  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+  import {store_server_data_select_logic} from "@/store/server/server_data_select/store_server_data_select_logic";
   const theme_value = ref('lightTheme')
   const theme_options = ref([
     {
@@ -281,60 +236,6 @@
   async function synchronize_percentage_of_library_path_search(){
     store_server_users.percentage_of_local = await ipcRenderer.invoke('node-taglib-sharp-percentage');
   }
-
-  //////
-  const selectd_props_home_page = ref<(string | number)[] | null>(null)
-  const handleUpdate_selectd_props_home_page_Value = (value: (string | number)[]) => {
-    selectd_props_home_page.value = value
-    console.log(JSON.stringify(value))
-  }
-  const handleUpdate_selectd_props_app_sidebar_Value = (value: number[]) => {
-    store_app_configs_info.selectd_props_app_sidebar = value
-    console.log(value)
-    let allMenuOptions = create_menuOptions_appBar();
-    let removeFlags = new Array(allMenuOptions.length).fill(true);
-    value.forEach(index => {
-      if (index < allMenuOptions.length) {
-        removeFlags[index] = false;
-      }
-    });
-    removeFlags[0] = false;
-    removeFlags[1] = false;
-    removeFlags[3] = removeFlags[2];
-    if(removeFlags[4] && removeFlags[5] && removeFlags[6] && removeFlags[7])
-      removeFlags[8] = true;
-    else
-      removeFlags[8] = false;
-    let menuOptions_appBar = allMenuOptions.filter((option, index) => {
-      return !removeFlags[index];
-    });
-    store_app_configs_info.menuOptions_appBar = menuOptions_appBar
-  }
-  function renderIcon (icon: any) {
-    return () => h(NIcon, null, { default: () => h(icon) })
-  }
-  function renderRouterLink (nameValue: any,defaultValue: any){
-    return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
-  }
-  const create_menuOptions_appBar = (): MenuOption[] => {
-    return [
-      {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.menu'))),key: 'View_Menu_AppSetting',icon: renderIcon(MenuIcon),},
-      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('common.home'))),key: 'View_Home_MusicLibrary_Browse',icon: renderIcon(Home28Regular),},
-      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'View_Album_List_ALL',icon: renderIcon(AlbumFilled)},
-      {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'View_Song_List_ALL',icon: renderIcon(MusicNoteRound)},
-      {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'View_Artist_List_ALL',icon: renderIcon(UserAvatarFilledAlt)},
-      {label: computed(() => renderRouterLink('View_Updateing',t('entity.genre_other'))),key: 'View_Updateing',icon: renderIcon(Flag16Regular)},
-      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.guessLike'))),key: 'View_Updateing',icon: renderIcon(DocumentHeart20Regular)},
-      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.karaoke'))),key: 'View_Updateing',icon: renderIcon(SlideMicrophone32Regular)},
-      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.identifySong'))),key: 'View_Updateing',icon: renderIcon(Hearing)},
-      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'View_Updateing',icon: renderIcon(LibraryMusicOutlined)},
-      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'View_Updateing',icon: renderIcon(lyric)},
-      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'View_Updateing',icon: renderIcon(PeopleCommunity16Regular)},
-    ]
-  };
 
   ////// 设置：通用
   const languages = [
@@ -409,6 +310,59 @@
       label: 'Drive My Car',
       value: 'song1'
     }])
+  ////// 设置：通用 - 侧边栏
+  const selectd_props_home_page = ref<(string | number)[] | null>(null)
+  const handleUpdate_selectd_props_home_page_Value = (value: (string | number)[]) => {
+    selectd_props_home_page.value = value
+    console.log(JSON.stringify(value))
+  }
+  const handleUpdate_selectd_props_app_sidebar_Value = (value: number[]) => {
+    store_app_configs_info.selectd_props_app_sidebar = value
+    console.log(value)
+    let allMenuOptions = create_menuOptions_appBar();
+    let removeFlags = new Array(allMenuOptions.length).fill(true);
+    value.forEach(index => {
+      if (index < allMenuOptions.length) {
+        removeFlags[index] = false;
+      }
+    });
+    removeFlags[0] = false;
+    removeFlags[1] = false;
+    removeFlags[3] = removeFlags[2];
+    if(removeFlags[4] && removeFlags[5] && removeFlags[6] && removeFlags[7])
+      removeFlags[8] = true;
+    else
+      removeFlags[8] = false;
+    let menuOptions_appBar = allMenuOptions.filter((option, index) => {
+      return !removeFlags[index];
+    });
+    store_app_configs_info.menuOptions_appBar = menuOptions_appBar
+  }
+  function renderIcon (icon: any) {
+    return () => h(NIcon, null, { default: () => h(icon) })
+  }
+  function renderRouterLink (nameValue: any,defaultValue: any){
+    return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
+  }
+  const create_menuOptions_appBar = (): MenuOption[] => {
+    return [
+      {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.menu'))),key: 'View_Menu_AppSetting',icon: renderIcon(MenuIcon),},
+      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('common.home'))),key: 'View_Home_MusicLibrary_Browse',icon: renderIcon(Home28Regular),},
+      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+      {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'View_Album_List_ALL',icon: renderIcon(AlbumFilled)},
+      {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'View_Song_List_ALL',icon: renderIcon(MusicNoteRound)},
+      {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'View_Artist_List_ALL',icon: renderIcon(UserAvatarFilledAlt)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('entity.genre_other'))),key: 'View_Updateing',icon: renderIcon(Flag16Regular)},
+      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.guessLike'))),key: 'View_Updateing',icon: renderIcon(DocumentHeart20Regular)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.karaoke'))),key: 'View_Updateing',icon: renderIcon(SlideMicrophone32Regular)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.identifySong'))),key: 'View_Updateing',icon: renderIcon(Hearing)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'View_Updateing',icon: renderIcon(LibraryMusicOutlined)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'View_Updateing',icon: renderIcon(lyric)},
+      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'View_Updateing',icon: renderIcon(PeopleCommunity16Regular)},
+    ]
+  };
 
   /////// 设置：播放
   const player_fade_model_options_selected = ref<{label:any,value:any}>();
@@ -528,51 +482,13 @@
   })
 
   ////// lineItems Re render
-  let bool_watch = false;
-  let timer = ref<NodeJS.Timeout | null>(null);
-  const startTimer = () => {
-    timer.value = setInterval(() => {
-      bool_watch = true;
-    }, 1000);
-  };
-  const stopWatching_collapsed_width = watch(() => store_app_configs_info.app_left_menu_collapsed, (newValue, oldValue) => {
-    updateGridItems();
-  });
-  const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
-    bool_watch = false;
-    updateGridItems();
-    if (bool_watch) {
-      startTimer();
-    }
-  });
-  const collapsed_width = ref<number>(1090);
-  const updateGridItems = () => {
-    if (store_app_configs_info.app_left_menu_collapsed == true) {
-      collapsed_width.value = 145;
-    } else {
-      collapsed_width.value = 240;
-    }
-  };
-  onMounted(() => {
-    startTimer();
-    updateGridItems();
-  });
+  const collapsed_width = ref<number>(80);
 
   //////
   const { shell } = require('electron');
   const openLink = (url: string) => {
     shell.openExternal(url);
   };
-
-  ////// view songlist_view Remove data
-  onBeforeUnmount(() => {
-    stopWatching_collapsed_width()
-    stopWatching_window_innerWidth()
-    if (timer.value) {
-      clearInterval(timer.value);
-      timer.value = null;
-    }
-  });
 </script>
 <template>
   <div class="view">
@@ -737,7 +653,6 @@
                       />
                       <n-radio-button
                           style="text-align: center;width: 132px;"
-                          disabled
                           :key="Type_Server_Kinds[1].value"
                           :value="Type_Server_Kinds[1].value"
                           :label="Type_Server_Kinds[1].label"

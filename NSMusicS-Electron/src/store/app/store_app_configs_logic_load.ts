@@ -40,6 +40,7 @@ export const store_app_configs_logic_load = reactive({
             /// App_Configs load
             this.app_configs_loading = true
             store_server_user_model.server_select = '' + system_Configs_Read.app_Configs.value['server_select']
+            store_server_user_model.server_select_kind = '' + system_Configs_Read.app_Configs.value['server_select_kind']
             store_server_user_model.username = '' + system_Configs_Read.app_Configs.value['username']
             store_server_user_model.password = '' + system_Configs_Read.app_Configs.value['password']
             store_server_user_model.model_server_type_of_web = '' + system_Configs_Read.app_Configs.value['model_server_type_of_web'] === 'true'
@@ -152,18 +153,29 @@ export const store_app_configs_logic_load = reactive({
 
             /// server
             store_server_users.server_config_of_all_user_of_sqlite = system_Configs_Read.server_Configs.value
+            store_server_users.server_config_of_all_user_of_select = [];
             store_server_users.server_config_of_all_user_of_sqlite.forEach((item: any) => {
-                store_server_users.server_config_of_all_user_of_select.push(
-                    {
-                        label: item.server_name,
-                        value: item.id
-                    });
+                store_server_users.server_config_of_all_user_of_select.push({
+                    label: item.server_name,
+                    value: item.id
+                });
             });
+            /// init server
             store_server_users.server_config_of_current_user_of_sqlite = system_Configs_Read.server_Configs_Current.value
-            if (store_server_users.server_config_of_current_user_of_sqlite) {
-                store_server_users.server_config_of_current_user_of_select = store_server_users.server_config_of_current_user_of_sqlite
-                store_server_users.server_config_of_current_user_of_select_servername = store_server_users.server_config_of_current_user_of_sqlite?.server_name
+            const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(
+                item =>
+                    item.id === store_server_users.server_config_of_current_user_of_sqlite?.id);
+            if (index >= 0) {
+                store_server_users.server_config_of_current_user_of_sqlite =
+                    store_server_users.server_config_of_all_user_of_sqlite[index]
+                store_server_users.server_config_of_current_user_of_select = {
+                    label: store_server_users.server_config_of_all_user_of_sqlite[index].server_name,
+                    value: store_server_users.server_config_of_all_user_of_sqlite[index].id
+                };
+                store_server_users.server_config_of_current_user_of_select_servername =
+                    store_server_users.server_config_of_all_user_of_sqlite[index].server_name
             }
+            ///
             store_app_configs_logic_save.save_system_config_of_Servers_Config()
             const {username, salt, token} = store_server_users.get_login_parms();
             store_server_user_model.username = username
@@ -198,7 +210,7 @@ export const store_app_configs_logic_load = reactive({
         store_player_audio_logic.play_order = '' + system_Configs_Read.app_Configs.value['play_order']
         store_player_audio_logic.play_volume = Number('' + system_Configs_Read.app_Configs.value['play_volume'])
         store_player_audio_logic.player_select = '' + system_Configs_Read.app_Configs.value['player_select']
-        if(store_player_audio_logic.player_select.length < 0) {
+        if(store_player_audio_logic.player_select === null || store_player_audio_logic.player_select.length < 0) {
             store_player_audio_logic.player_select = 'mpv'
             store_player_audio_logic.player_fade_value = 1000;
         }else {

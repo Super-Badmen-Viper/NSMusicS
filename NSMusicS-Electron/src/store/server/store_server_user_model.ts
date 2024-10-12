@@ -32,7 +32,7 @@ const { ipcRenderer } = require('electron');
 export const store_server_user_model = reactive({
     model_select: 'local',
     server_select: '',
-    library_path: '',
+    server_select_kind: '',
 
     username: '',
     salt: '',
@@ -51,6 +51,8 @@ export const store_server_user_model = reactive({
     media_file: 'media_file',
     playlist: 'playlist',
     playlist_tracks: 'playlist_tracks',
+
+    library_path: '',
 
     switchToMode_Local(){
         this.album = 'album'
