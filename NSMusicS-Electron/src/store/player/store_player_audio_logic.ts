@@ -16,6 +16,7 @@ export const store_player_audio_logic = reactive({
     play_volume: 100,
     player_fade_value: 2000,
     player_dolby: false,
+    player_audio_channel: '',
     player_samp_value: 48000,
     player_gaplessAudio: 'weak',
     player_audioExclusiveMode: false,
@@ -23,6 +24,7 @@ export const store_player_audio_logic = reactive({
     player_replayGainPreamp: 0,
     player_replayGainClip: false,
     player_replayGainFallback: 0,
+    player_mpvExtraParameters: '',
 
     total_play_time: '04:42',
     current_play_time: '01:36',
@@ -62,6 +64,9 @@ watch(() => store_player_audio_logic.player_fade_value,  (newValue) => {
 watch(() => store_player_audio_logic.player_dolby,  (newValue) => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
+watch(() => store_player_audio_logic.player_audio_channel,  (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+});
 watch(() => store_player_audio_logic.player_samp_value,  (newValue) => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
@@ -81,6 +86,9 @@ watch(() => store_player_audio_logic.player_replayGainClip,  (newValue) => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
 watch(() => store_player_audio_logic.player_replayGainFallback,  (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+});
+watch(() => store_player_audio_logic.player_mpvExtraParameters,  (newValue) => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
 watch(() => store_player_audio_logic.play_order, (newValue) => {

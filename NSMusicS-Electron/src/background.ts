@@ -834,6 +834,7 @@ async function createTray(){
 let currentMediaPath = '';
 let currentFade = 0;
 let currentAresample = 0;
+let currentparameters = null
 let isPlaying = false;
 async function initNodeMpv(){
     mpv = new mpvAPI(
@@ -843,10 +844,7 @@ async function initNodeMpv(){
         binary: path.resolve("resources/mpv-x86_64-20240623/mpv.exe"),
         debug: true,
         verbose: true
-    },
-    [
-        '--audio-channels=5.1',
-    ]);
+    });
     await mpv.start();
     await mpv.pause();
     mpv.on('stopped', () => {
@@ -861,10 +859,10 @@ async function createNodeMpv(){
     ipc.handle('mpv-fade', async (event,fade) => {
         currentFade = fade / 1000
     });
-    ipc.handle('mpv-samp', async (event,samp) => {
-        currentAresample = samp
-        if(currentAresample < 8000){
-            currentAresample = 48000
+    ipc.handle('mpv-parameters', async (event,parameters: any) => {
+        currentparameters = parameters
+        if(currentparameters.player_samp_value < 8000){
+            currentparameters.player_samp_value = 48000
         }
     });
     ipc.handle('mpv-load', async (event,filePath) => {
@@ -879,15 +877,22 @@ async function createNodeMpv(){
                     'command': ['af', 'add', 'afade=t=in:d='+currentFade]
                 });
                 const properties: Record<string, any> = {
-                    'gapless-audio': 'weak',        // no, yes, weak
-                    'audio-samplerate': currentAresample === 0 ? undefined : currentAresample,
-                    'audio-exclusive': 'no',        // no, yes
-                    'replaygain': 'no',             // "track" | "album" | "no"
-                    'replaygain-preamp': 0,
-                    'replaygain-clip': 'no',        // no, yes
-                    'replaygain-fallback': 0
-                }
-                mpv.setMultipleProperties(properties)
+                    'audio-channels': currentparameters.player_audio_channel,
+                    'gapless-audio': currentparameters.player_gaplessAudio,        // no, yes, weak
+                    'audio-samplerate': currentparameters.player_samp_value === 0 ? undefined : currentparameters.player_samp_value,
+                    'audio-exclusive': currentparameters.player_audioExclusiveMode ? 'yes' : 'no',        // no, yes
+                    'replaygain': currentparameters.player_replayGainMode,             // "track" | "album" | "no"
+                    'replaygain-preamp': currentparameters.player_replayGainPreamp,
+                    'replaygain-clip': currentparameters.player_replayGainClip ? 'yes' : 'no',        // no, yes
+                    'replaygain-fallback': currentparameters.player_replayGainFallback
+                };
+                currentparameters.player_mpvExtraParameters.split('\n').forEach((prop: string) => {
+                    const [key, value] = prop.split('=');
+                    if (key && value) {
+                        properties[key] = isNaN(Number(value)) ? value : Number(value);
+                    }
+                });
+                mpv.setMultipleProperties(properties);
 
                 await mpv.play();
                 isPlaying = true;

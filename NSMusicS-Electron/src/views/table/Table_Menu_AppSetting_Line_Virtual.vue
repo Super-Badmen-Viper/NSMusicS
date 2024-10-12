@@ -444,11 +444,87 @@
   const update_player_samp_value = (value: any) => {
     store_player_audio_logic.player_samp_value = value
   }
+  const computed_i18n_Label_mpvExtraParameters = computed(() => t('setting.mpvExtraParameters_help') + ':\n--gapless-audio=weak\n--prefetch-playlist=yes');
+  const update_player_mpvExtraParameters = (value: any) => {
+    store_player_audio_logic.player_mpvExtraParameters = value
+  }
+  const player_gaplessAudio_kind = ref([
+    { label: computed(() => t('common.no')), value: 'no' },
+    { label: computed(() => t('common.yes')), value: 'yes' },
+    { label: computed(() => t('setting.gaplessAudio_optionWeak')), value: 'weak' },
+  ])
+  const player_audio_channel_kind = ref([
+    { label: 'empty', value: 'empty' },
+    { label: 'mono', value: 'mono' },
+    { label: '1.0', value: '1.0' },
+    { label: 'stereo', value: 'stereo' },
+    { label: '2.0', value: '2.0' },
+    { label: '2.1', value: '2.1' },
+    { label: '3.0', value: '3.0' },
+    { label: '3.0(back)', value: '3.0(back)' },
+    { label: '4.0', value: '4.0' },
+    { label: 'quad', value: 'quad' },
+    { label: 'quad(side)', value: 'quad(side)' },
+    { label: '3.1', value: '3.1' },
+    { label: '3.1(back)', value: '3.1(back)' },
+    { label: '5.0', value: '5.0' },
+    { label: '5.0(alsa)', value: '5.0(alsa)' },
+    { label: '5.0(side)', value: '5.0(side)' },
+    { label: '4.1', value: '4.1' },
+    { label: '4.1(alsa)', value: '4.1(alsa)' },
+    { label: '5.1', value: '5.1' },
+    { label: '5.1(alsa)', value: '5.1(alsa)' },
+    { label: '5.1(side)', value: '5.1(side)' },
+    { label: '6.0', value: '6.0' },
+    { label: '6.0(front)', value: '6.0(front)' },
+    { label: 'hexagonal', value: 'hexagonal' },
+    { label: '6.1', value: '6.1' },
+    { label: '6.1(back)', value: '6.1(back)' },
+    { label: '6.1(top)', value: '6.1(top)' },
+    { label: '6.1(front)', value: '6.1(front)' },
+    { label: '7.0', value: '7.0' },
+    { label: '7.0(front)', value: '7.0(front)' },
+    { label: '7.0(rear)', value: '7.0(rear)' },
+    { label: '7.1', value: '7.1' },
+    { label: '7.1(alsa)', value: '7.1(alsa)' },
+    { label: '7.1(wide)', value: '7.1(wide)' },
+    { label: '7.1(wide-side)', value: '7.1(wide-side)' },
+    { label: '7.1(top)', value: '7.1(top)' },
+    { label: '7.1(rear)', value: '7.1(rear)' },
+    { label: 'octagonal', value: 'octagonal' },
+    { label: 'cube', value: 'cube' },
+    { label: 'hexadecagonal', value: 'hexadecagonal' },
+    { label: 'downmix', value: 'downmix' },
+    { label: '22.2', value: '22.2' },
+    { label: 'auto', value: 'auto' },
+  ]);
+  const player_replayGainMode_kind  = ref([
+    { label: 'Track', value: 'track' },
+    { label: 'Album', value: 'album' },
+    { label: computed(() => t('common.none')), value: 'no' },
+  ])
   onMounted(() => {
-    if(store_player_audio_logic.player_fade_value > 0)
+    if(store_player_audio_logic.player_fade_value > 0) {
       player_fade_model_options_selected.value = player_fade_model_options.value[1].value
-    else
+    }else {
       player_fade_model_options_selected.value = player_fade_model_options.value[0].value
+    }
+    //
+    if(store_player_audio_logic.player_gaplessAudio === 'no'){
+      store_player_audio_logic.player_gaplessAudio = player_gaplessAudio_kind.value[0].value
+    }else if (store_player_audio_logic.player_gaplessAudio === 'yes'){
+      store_player_audio_logic.player_gaplessAudio = player_gaplessAudio_kind.value[1].value
+    }else{
+      store_player_audio_logic.player_gaplessAudio = player_gaplessAudio_kind.value[2].value
+    }
+    //
+    if(store_player_audio_logic.player_replayGainMode === 'track'){
+      store_player_audio_logic.player_replayGainMode = player_replayGainMode_kind.value[0].value
+    }else if(store_player_audio_logic.player_replayGainMode === 'album'){
+      store_player_audio_logic.player_replayGainMode = player_replayGainMode_kind.value[1].value
+    }else{
+      store_player_audio_logic.player_replayGainMode = player_replayGainMode_kind.value[2].value
+    }
   })
 
   ////// lineItems Re render
@@ -1189,15 +1265,35 @@
                     <div style="margin-top: -10px;">
                       <span style="font-size:12px;">{{ $t('setting.mpvExtraParameters') }}</span>
                     </div>
-                    <div style="margin-top: -10px;">
+                    <div style="margin-top: -10px;margin-left: -3px;">
                       <a style="font-size: 15px;cursor: pointer;" @click="openLink('https://mpv.io/manual/stable/#audio')">https://mpv.io/manual/stable/#audio</a>
                     </div>
                   </n-space>
                   <n-input
                       style="width: 207px;margin-top: -4px;"
-                      v-model:value="store_player_audio_logic.player_fade_value"
+                      :value="store_player_audio_logic.player_mpvExtraParameters"
+                      @update:value="update_player_mpvExtraParameters"
                       type="textarea"
-                      placeholder="基本的 Textarea"
+                      :placeholder="computed_i18n_Label_mpvExtraParameters"
+                  />
+                </n-space>
+                <n-space
+                    justify="space-between" align="center"
+                    style="margin-left: 30px;"
+                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                  <n-space vertical>
+                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.audio_channel') }}</span>
+                    <div style="margin-top: -10px;">
+                      <span style="font-size:12px;">{{ $t('nsmusics.view_page.audio_channel_explain') }}</span>
+                    </div>
+                  </n-space>
+                  <n-select
+                      v-model:value="store_player_audio_logic.player_audio_channel"
+                      :options="player_audio_channel_kind"
+                      :disabled="store_player_audio_logic.player_select != 'mpv'"
+                      placeholder="not enabled"
+                      :reset-menu-on-options-change="false"
+                      style="width: 207px;margin-top: -4px;"
                   />
                 </n-space>
                 <n-space
@@ -1234,12 +1330,8 @@
                     </div>
                   </n-space>
                   <n-select
-                      v-model:value="store_player_audio_logic.player_select"
-                      :options="store_player_audio_logic.player_kind"
-                      @update:value="() => {
-                        store_router_data_logic.clear_Memory_Model = false;
-                        store_router_data_logic.clear_Equilibrium_Model = false;
-                        store_router_data_logic.clear_UserExperience_Model = true; }"
+                      v-model:value="store_player_audio_logic.player_gaplessAudio"
+                      :options="player_gaplessAudio_kind"
                       :disabled="store_player_audio_logic.player_select != 'mpv'"
                       placeholder="not enabled"
                       :reset-menu-on-options-change="false"
@@ -1258,8 +1350,7 @@
                   </n-space>
                   <n-switch
                       :disabled="store_player_audio_logic.player_select != 'mpv'"
-                      v-model:value="store_player_audio_logic.player_dolby"
-                      @update:value="update_player_dolby"
+                      v-model:value="store_player_audio_logic.player_audioExclusiveMode"
                   >
                   </n-switch>
                 </n-space>
@@ -1274,12 +1365,8 @@
                     </div>
                   </n-space>
                   <n-select
-                      v-model:value="store_player_audio_logic.player_select"
-                      :options="store_player_audio_logic.player_kind"
-                      @update:value="() => {
-                        store_router_data_logic.clear_Memory_Model = false;
-                        store_router_data_logic.clear_Equilibrium_Model = false;
-                        store_router_data_logic.clear_UserExperience_Model = true; }"
+                      v-model:value="store_player_audio_logic.player_replayGainMode"
+                      :options="player_replayGainMode_kind"
                       :disabled="store_player_audio_logic.player_select != 'mpv'"
                       placeholder="not enabled"
                       :reset-menu-on-options-change="false"
@@ -1300,10 +1387,8 @@
                     <n-input clearable
                              :disabled="store_player_audio_logic.player_select != 'mpv'"
                              default-value="48000"
-                             :value="store_player_audio_logic.player_samp_value"
-                             @update:value="update_player_samp_value"
+                             v-model:value="store_player_audio_logic.player_replayGainPreamp"
                     />
-                    <n-input-group-label>Hz</n-input-group-label>
                   </n-input-group>
                 </n-space>
                 <n-space
@@ -1318,8 +1403,7 @@
                   </n-space>
                   <n-switch
                       :disabled="store_player_audio_logic.player_select != 'mpv'"
-                      v-model:value="store_player_audio_logic.player_dolby"
-                      @update:value="update_player_dolby"
+                      v-model:value="store_player_audio_logic.player_replayGainClip"
                   >
                   </n-switch>
                 </n-space>
@@ -1337,10 +1421,8 @@
                     <n-input clearable
                              :disabled="store_player_audio_logic.player_select != 'mpv'"
                              default-value="48000"
-                             :value="store_player_audio_logic.player_samp_value"
-                             @update:value="update_player_samp_value"
+                             v-model:value="store_player_audio_logic.player_replayGainFallback"
                     />
-                    <n-input-group-label>Hz</n-input-group-label>
                   </n-input-group>
                 </n-space>
                 <n-divider style="margin: 0;"/>

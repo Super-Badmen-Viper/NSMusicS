@@ -13,7 +13,17 @@ export class Audio_node_mpv {
             if(store_player_audio_logic.player_samp_value < 8000){
                 store_player_audio_logic.player_samp_value = 48000
             }
-            await ipcRenderer.invoke('mpv-samp', store_player_audio_logic.player_samp_value)
+            await ipcRenderer.invoke('mpv-parameters', {
+                player_audio_channel: store_player_audio_logic.player_audio_channel,
+                player_samp_value: store_player_audio_logic.player_samp_value,
+                player_gaplessAudio: store_player_audio_logic.player_gaplessAudio,
+                player_audioExclusiveMode: store_player_audio_logic.player_audioExclusiveMode,
+                player_replayGainMode: store_player_audio_logic.player_replayGainMode,
+                player_replayGainPreamp: store_player_audio_logic.player_replayGainPreamp,
+                player_replayGainClip: store_player_audio_logic.player_replayGainClip,
+                player_replayGainFallback: store_player_audio_logic.player_replayGainFallback,
+                player_mpvExtraParameters: store_player_audio_logic.player_mpvExtraParameters,
+            })
             await ipcRenderer.invoke('mpv-load', path)
             this.isPlaying = true;
             await ipcRenderer.invoke('i18n-tray-music-pause', true)

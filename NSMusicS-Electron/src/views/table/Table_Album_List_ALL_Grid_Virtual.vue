@@ -636,7 +636,7 @@ const contextmenu = ref(null as any)
                         style="
                         text-align: left;cursor: pointer;
                         font-size: 36px;font-weight: 600;
-                        max-width: 520px;
+                        max-width: 450px;
                         display: -webkit-box;
                         -webkit-box-orient: vertical;
                         -webkit-line-clamp: 1;

@@ -43,6 +43,8 @@ export class Class_Get_System_Configs_Read {
             player_replayGainPreamp: 0,
             player_replayGainClip: null,
             player_replayGainFallback: 0,
+            player_mpvExtraParameters: '',
+            player_audio_channel:''
         }))
     public library_Configs = ref(
         new Library_Configs({

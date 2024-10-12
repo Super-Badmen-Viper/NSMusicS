@@ -209,6 +209,7 @@ export const store_app_configs_logic_load = reactive({
         }
         try {
             store_player_audio_logic.player_dolby = '' + system_Configs_Read.app_Configs.value['player_dolby'] === 'true'
+            store_player_audio_logic.player_audio_channel =  '' + system_Configs_Read.app_Configs.value['player_audio_channel']
             store_player_audio_logic.player_samp_value = Number('' + system_Configs_Read.app_Configs.value['player_samp_value'])
             store_player_audio_logic.player_gaplessAudio = '' + system_Configs_Read.app_Configs.value['player_gaplessAudio']
             store_player_audio_logic.player_audioExclusiveMode = '' + system_Configs_Read.app_Configs.value['player_audioExclusiveMode'] === 'true'
@@ -216,13 +217,18 @@ export const store_app_configs_logic_load = reactive({
             store_player_audio_logic.player_replayGainPreamp = Number('' + system_Configs_Read.app_Configs.value['player_replayGainPreamp'])
             store_player_audio_logic.player_replayGainClip = '' + system_Configs_Read.app_Configs.value['player_replayGainClip'] === 'true'
             store_player_audio_logic.player_replayGainFallback = Number('' + system_Configs_Read.app_Configs.value['player_replayGainFallback'])
+            store_player_audio_logic.player_mpvExtraParameters = '' + system_Configs_Read.app_Configs.value['player_mpvExtraParameters']
         }catch{
+            store_player_audio_logic.player_dolby = false;
+            store_player_audio_logic.player_audio_channel =  '';
+            store_player_audio_logic.player_samp_value = 48000;
             store_player_audio_logic.player_gaplessAudio = 'weak';
             store_player_audio_logic.player_audioExclusiveMode = false;
             store_player_audio_logic.player_replayGainMode = 'no';
             store_player_audio_logic.player_replayGainPreamp = 0;
             store_player_audio_logic.player_replayGainClip = false;
             store_player_audio_logic.player_replayGainFallback = 0;
+            store_player_audio_logic.player_mpvExtraParameters = ''
         }
 
         /// close
