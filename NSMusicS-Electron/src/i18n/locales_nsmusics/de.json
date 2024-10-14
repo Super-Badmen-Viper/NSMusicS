@@ -60,10 +60,11 @@
             "dolby_switching": "Dolby-Audiowiedergabe",
             "dolby_switching_explain": "Ob die Dolby-Audiowiedergabe aktiviert werden soll",
             "audio_player_web_explain": "Die Verwendung der Webausgabe wird den Routingmodus auf Qualitätsmodus festlegen",
-            "selectLibrary_select_1": "Und exportiere den eingebetteten Cover des Musikfiles in eine Coverdatei mit dem gleichen Namen (überspringen, wenn eine Coverdatei mit dem gleichen Namen existiert), speichere die Datei im selben Ordner wie die Musikdatei",
             "audio_channel": "Audiokanal",
             "audio_channel_explain": "Festlegen des Ausgangs-Audiokanals",
-            "selectLibrary_select_0": "Exportieren Sie nicht den eingebetteten Cover des Musikfiles, verwenden Sie nur das Cover mit dem gleichen Namen auf der gleichen Ebene wie die Musikdatei"
+            "selectLibrary_select_0": "Exportieren Sie nicht den eingebetteten Cover des Musikfiles, verwenden Sie nur das Cover mit dem gleichen Namen auf der gleichen Ebene wie die Musikdatei",
+            "selectLibrary_select_1": "Exportiere die eingebettete Cover des Musikfiles als Coverdatei mit dem gleichen Namen (überspringen, wenn eine Coverdatei mit dem gleichen Namen existiert), und speichere die Datei im selben Ordner wie die Musikdatei",
+            "mediaLibrary": "Medienbibliothek"
         },
         "view_player": {
             "view_seting": {

@@ -3,182 +3,186 @@ import {
   ChevronLeft16Filled,ChevronRight16Filled
 } from '@vicons/fluent'
 
-  ////// this_view components of navie ui 
-  import { ref, onMounted } from 'vue';
-  import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-  import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
-  import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-  import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
-  import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
+////// this_view components of navie ui
+import { ref, onMounted } from 'vue';
+import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
+import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
+import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 
-  ////// scrollbar of playlist_view
-  const scrollbar = ref(null as any);
-  onMounted(() => {
-    if (scrollbar !== null) {
-      setTimeout(() => {
-        scrollbar.value.scrollToItem(store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list);
-      }, 100);
-    }
-  });
-
-  /////// emits audio_info of artistlist_view_list
-  const handleItemDbClick = (media_file:any,index:number) => {
-    if(store_server_user_model.model_server_type_of_web){
-      /// Data synchronization
-      store_playlist_list_fetchData.fetchData_PlayList_of_data_synchronization_to_Media()
-    }
-
-    store_player_audio_info.this_audio_play_id = media_file.play_id
-    store_player_audio_info.this_audio_file_path = media_file.path
-    store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
-    store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
-    store_player_audio_info.this_audio_singer_name = media_file.artist
-    store_player_audio_info.this_audio_singer_id = media_file.artist_id
-    store_player_audio_info.this_audio_song_name = media_file.title
-    store_player_audio_info.this_audio_song_id = media_file.id
-    store_player_audio_info.this_audio_song_rating = media_file.rating
-    store_player_audio_info.this_audio_song_favorite = media_file.favorite
-    store_player_audio_info.this_audio_album_id = media_file.album_id
-    store_player_audio_info.this_audio_album_name = media_file.album
-    store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
-
-    store_playlist_list_logic.media_page_handleItemDbClick = false
-    store_player_audio_info.this_audio_restart_play = true
+////// scrollbar of playlist_view
+const scrollbar = ref(null as any);
+onMounted(() => {
+  if (scrollbar !== null) {
+    setTimeout(() => {
+      scrollbar.value.scrollToItem(store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list);
+    }, 100);
   }
-  const handleItemClick_title = (title:string) => {
-    
-  }
-  const handleItemClick_artist = (artist:string) => {
-    
+});
+
+/////// emits audio_info of artistlist_view_list
+const handleItemDbClick = (media_file:any,index:number) => {
+  if(store_server_user_model.model_server_type_of_web){
+    /// Data synchronization
+    store_playlist_list_fetchData.fetchData_PlayList_of_data_synchronization_to_Media()
   }
 
-  ////// changed_data write to sqlite
-  const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
-    console.log('handleItemClick_Favorite_id：'+id+'  _favorite:'+!favorite)
-  }
-  const handleItemClick_Rating = (id: any,rating: number) => {
-    console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
-  }
-  const path = require('path')
-  const handleImageError = (event: any) => {
-    const originalSrc = event.target.src;
-    const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
-    const img = new Image();
-    img.onload = null;
-    img.onerror = null;
-    img.onload = () => {
-      event.target.src = pngSrc;
-    };
-    img.onerror = () => {
-      event.target.src = path.resolve('resources/img/error_album.jpg');
-    };
-    img.src = pngSrc;
+  store_player_audio_info.this_audio_play_id = media_file.play_id
+  store_player_audio_info.this_audio_file_path = media_file.path
+  store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
+  store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
+  store_player_audio_info.this_audio_singer_name = media_file.artist
+  store_player_audio_info.this_audio_singer_id = media_file.artist_id
+  store_player_audio_info.this_audio_song_name = media_file.title
+  store_player_audio_info.this_audio_song_id = media_file.id
+  store_player_audio_info.this_audio_song_rating = media_file.rating
+  store_player_audio_info.this_audio_song_favorite = media_file.favorite
+  store_player_audio_info.this_audio_album_id = media_file.album_id
+  store_player_audio_info.this_audio_album_name = media_file.album
+  store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
+
+  store_playlist_list_logic.media_page_handleItemDbClick = false
+  store_player_audio_info.this_audio_restart_play = true
+}
+const handleItemClick_title = (title:string) => {
+
+}
+const handleItemClick_artist = (artist:string) => {
+
+}
+
+////// changed_data write to sqlite
+const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
+  console.log('handleItemClick_Favorite_id：'+id+'  _favorite:'+!favorite)
+}
+const handleItemClick_Rating = (id: any,rating: number) => {
+  console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
+}
+const path = require('path')
+const handleImageError = (event: any) => {
+  const originalSrc = event.target.src;
+  const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
+  const img = new Image();
+  img.onload = null;
+  img.onerror = null;
+  img.onload = () => {
+    event.target.src = pngSrc;
   };
+  img.onerror = () => {
+    event.target.src = path.resolve('resources/img/error_album.jpg');
+  };
+  img.src = pngSrc;
+};
 
-  //////
-  import {
-    store_local_data_set_mediaInfo
-  } from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
-  import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
-  import {NIcon, useMessage} from 'naive-ui'
-  const message = useMessage()
-  async function update_playlist_addMediaFile(id: any, playlist_id: any){
-    try{
-      await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(id,playlist_id)
-      message.success(t('common.add'))
-      store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
-    }catch (e) {
-      console.error(e)
-    }
+////// i18n auto lang
+import { useI18n } from 'vue-i18n'
+import {VueDraggable} from "vue-draggable-plus";
+import {BrowserUpdatedFilled} from "@vicons/material";
+import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
+const { t } = useI18n({
+  inheritLocale: true
+})
+
+//////
+import {
+  store_local_data_set_mediaInfo
+} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
+import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
+import {NIcon, useMessage} from 'naive-ui'
+const message = useMessage()
+
+////// right menu
+import { inject } from "vue";
+const contextmenu = inject("playlist_contextmenu", null);
+async function update_playlist_addMediaFile(id: any, playlist_id: any){
+  try{
+    await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(id,playlist_id)
+    message.success(t('common.add'))
+    store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+  }catch (e) {
+    console.error(e)
   }
-  ////// i18n auto lang
-  import { useI18n } from 'vue-i18n'
-  import {VueDraggable} from "vue-draggable-plus";
-  import {BrowserUpdatedFilled} from "@vicons/material";
-  import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
-  import {store_server_user_model} from "@/store/server/store_server_user_model";
-  import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
-  const { t } = useI18n({
-    inheritLocale: true
-  })
-  ////// right menu
-  const contextmenu = ref(null as any)
-  const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
-  function menu_item_remove_to_playlist_current() {
-    store_playlist_list_info.playlist_MediaFiles_temporary =
-        store_playlist_list_info.playlist_MediaFiles_temporary.filter(
-            (mediaFile: Media_File) => mediaFile.id !== store_playlist_list_info.playlist_Menu_Item_Id);
+}
+const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
+function menu_item_remove_to_playlist_current() {
+  store_playlist_list_info.playlist_MediaFiles_temporary =
+      store_playlist_list_info.playlist_MediaFiles_temporary.filter(
+          (mediaFile: Media_File) => mediaFile.id !== store_playlist_list_info.playlist_Menu_Item_Id);
 
-    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
-        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.filter(
-            (mediaId: string) => mediaId !== store_playlist_list_info.playlist_Menu_Item_Id);
+  store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds =
+      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.filter(
+          (mediaId: string) => mediaId !== store_playlist_list_info.playlist_Menu_Item_Id);
 
-    store_playlist_list_info.playlist_MediaFiles_temporary.forEach(
-        (item: any, index: number) => {
-          item.absoluteIndex = index;});
+  store_playlist_list_info.playlist_MediaFiles_temporary.forEach(
+      (item: any, index: number) => {
+        item.absoluteIndex = index;});
+
+  store_app_configs_logic_save.save_system_playlist_item_id_config();
+
+  contextmenu.value.hide()
+}
+function menu_item_move_to_playlist_start() {
+  const item: Media_File | undefined = store_playlist_list_info.playlist_MediaFiles_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
+  if (item != undefined && item != 'undefined') {
+    const index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex((mediaFile: Media_File) => mediaFile.id === item.id);
+    if (index !== -1) {
+      store_playlist_list_info.playlist_MediaFiles_temporary.splice(index, 1);
+    }
+
+    const mediaIdIndex = store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(item.id);
+    if (mediaIdIndex !== -1) {
+      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(mediaIdIndex, 1);
+    }
+
+    store_playlist_list_info.playlist_MediaFiles_temporary.unshift(item);
+
+    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.unshift(item.id);
+
+    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+      item.absoluteIndex = index;
+    });
 
     store_app_configs_logic_save.save_system_playlist_item_id_config();
 
-    contextmenu.value.hide()
+    contextmenu.value.hide();
   }
-  function menu_item_move_to_playlist_start() {
-    const item: Media_File | undefined = store_playlist_list_info.playlist_MediaFiles_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
-    if (item != undefined && item != 'undefined') {
-      const index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex((mediaFile: Media_File) => mediaFile.id === item.id);
-      if (index !== -1) {
-        store_playlist_list_info.playlist_MediaFiles_temporary.splice(index, 1);
-      }
-
-      const mediaIdIndex = store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(item.id);
-      if (mediaIdIndex !== -1) {
-        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(mediaIdIndex, 1);
-      }
-
-      store_playlist_list_info.playlist_MediaFiles_temporary.unshift(item);
-
-      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.unshift(item.id);
-
-      store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
-        item.absoluteIndex = index;
-      });
-
-      store_app_configs_logic_save.save_system_playlist_item_id_config();
-
-      contextmenu.value.hide();
+}
+function menu_item_move_to_playlist_end() {
+  const item: Media_File | undefined = store_playlist_list_info.playlist_MediaFiles_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
+  if (item != undefined && item != 'undefined') {
+    const index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex((mediaFile: Media_File) => mediaFile.id === item.id);
+    if (index !== -1) {
+      store_playlist_list_info.playlist_MediaFiles_temporary.splice(index, 1);
     }
-  }
-  function menu_item_move_to_playlist_end() {
-    const item: Media_File | undefined = store_playlist_list_info.playlist_MediaFiles_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
-    if (item != undefined && item != 'undefined') {
-      const index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex((mediaFile: Media_File) => mediaFile.id === item.id);
-      if (index !== -1) {
-        store_playlist_list_info.playlist_MediaFiles_temporary.splice(index, 1);
-      }
 
-      const mediaIdIndex = store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(item.id);
-      if (mediaIdIndex !== -1) {
-        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(mediaIdIndex, 1);
-      }
-
-      store_playlist_list_info.playlist_MediaFiles_temporary.push(item);
-
-      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(item.id);
-
-      store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
-        item.absoluteIndex = index;
-      });
-
-      store_app_configs_logic_save.save_system_playlist_item_id_config();
-
-      contextmenu.value.hide();
+    const mediaIdIndex = store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.indexOf(item.id);
+    if (mediaIdIndex !== -1) {
+      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(mediaIdIndex, 1);
     }
-  }
-  function onChange(){
-    store_playlist_list_info.playlist_MediaFiles_temporary_Sort_Items.forEach((item: any, index: number) => {
-      item.absoluteIndex = index + store_playlist_list_info.playlist_Sort_StartIndex;
+
+    store_playlist_list_info.playlist_MediaFiles_temporary.push(item);
+
+    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(item.id);
+
+    store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+      item.absoluteIndex = index;
     });
-    store_playlist_list_info.menu_item_reinsert_drag_sort()
+
+    store_app_configs_logic_save.save_system_playlist_item_id_config();
+
+    contextmenu.value.hide();
   }
+}
+//////
+function onChange(){
+  store_playlist_list_info.playlist_MediaFiles_temporary_Sort_Items.forEach((item: any, index: number) => {
+    item.absoluteIndex = index + store_playlist_list_info.playlist_Sort_StartIndex;
+  });
+  store_playlist_list_info.menu_item_reinsert_drag_sort()
+}
 
 //////
 const isScrolling = ref(false);
@@ -191,15 +195,44 @@ const onScrollEnd = async () => {
   isScrolling.value = false;
 };
 
-  onMounted(()=>{
-    store_playlist_list_info.playlist_DragSort_Model = false
-  });
+onMounted(()=>{
+  store_playlist_list_info.playlist_DragSort_Model = false
+});
 </script>
 <template>
   <n-space vertical :size="12">
     <div class="dynamic-scroller-demo">
-      <DynamicScroller
-        class="table" ref="scrollbar" v-if="!store_playlist_list_info.playlist_DragSort_Model"
+      <v-contextmenu v-if="!store_playlist_list_info.playlist_DragSort_Model"
+                     ref="contextmenu"
+                     class="v-contextmenu-item v-contextmenu-item--hover"
+                     style="z-index: 9999;">
+        <v-contextmenu-submenu :title="menu_item_add_to_songlist">
+          <v-contextmenu-item
+              v-for="n in store_playlist_list_info.playlist_names_ALLLists"
+              :key="n.value"
+              @click="update_playlist_addMediaFile(store_playlist_list_info.playlist_Menu_Item_Id,n.value)"
+          >
+            {{ n.label }}
+          </v-contextmenu-item>
+        </v-contextmenu-submenu>
+        <v-contextmenu-divider />
+        <v-contextmenu-item @click="menu_item_remove_to_playlist_current()">
+          {{ $t('common.delete') }}
+        </v-contextmenu-item>
+        <v-contextmenu-divider />
+        <v-contextmenu-item @click="menu_item_move_to_playlist_start">
+          {{ $t('action.moveToTop') }}
+        </v-contextmenu-item>
+        <v-contextmenu-item @click="menu_item_move_to_playlist_end">
+          {{ $t('action.moveToBottom') }}
+        </v-contextmenu-item>
+        <v-contextmenu-divider />
+        <v-contextmenu-item @click="store_playlist_list_info.menu_item_open_drag_sort">
+          {{ $t('nsmusics.view_page.drag_sort') }}
+        </v-contextmenu-item>
+      </v-contextmenu>
+      <DynamicScroller v-if="!store_playlist_list_info.playlist_DragSort_Model"
+        class="table" ref="scrollbar"
         style="width: 488px;z-index: 0"
         :items="store_playlist_list_info.playlist_MediaFiles_temporary"
         key-field="play_id"
@@ -252,14 +285,17 @@ const onScrollEnd = async () => {
         </template>
       </DynamicScroller>
       <n-space v-if="store_playlist_list_info.playlist_DragSort_Model">
-        <n-button
-            style="margin-top: 8px;border-radius: 8px;"
-            @click="store_playlist_list_info.playlist_DragSort_Model = false"
-        >
-          <n-icon size="20" :depth="2">
-            <ChevronLeft16Filled/>
-          </n-icon>
-        </n-button>
+        <n-space style="height: calc(100vh - 212px);" vertical justify="space-between">
+          <div></div>
+          <n-button
+            style="border-radius: 8px;"
+            @click="store_playlist_list_info.playlist_DragSort_Model = false">
+            <n-icon size="26" :depth="2">
+              <ChevronLeft16Filled/>
+            </n-icon>
+          </n-button>
+          <div></div>
+        </n-space>
         <VueDraggable
           class="table"
           :animation="150"
@@ -294,40 +330,13 @@ const onScrollEnd = async () => {
                 </template>
               </div>
               <span class="duration_txt" style="text-align: left;font-size: 15px;">{{ item.duration_txt }}</span>
-              <span class="index" style="text-align: left;font-size: 15px;">{{ item.absoluteIndex + 1 }}</span>
+              <span class="index" style="text-align: left;font-size: 15px;">{{ item.absoluteIndex }}</span>
             </div>
           </div>
         </VueDraggable>
       </n-space>
     </div>
   </n-space>
-  <v-contextmenu ref="contextmenu" class="v-contextmenu-item v-contextmenu-item--hover"
-                 style="z-index: 9999;">
-    <v-contextmenu-submenu :title="menu_item_add_to_songlist">
-      <v-contextmenu-item
-          v-for="n in store_playlist_list_info.playlist_names_ALLLists"
-          :key="n.value"
-          @click="update_playlist_addMediaFile(store_playlist_list_info.playlist_Menu_Item_Id,n.value)"
-      >
-        {{ n.label }}
-      </v-contextmenu-item>
-    </v-contextmenu-submenu>
-    <v-contextmenu-divider />
-    <v-contextmenu-item @click="menu_item_remove_to_playlist_current()">
-      {{ $t('common.delete') }}
-    </v-contextmenu-item>
-    <v-contextmenu-divider />
-    <v-contextmenu-item @click="menu_item_move_to_playlist_start">
-      {{ $t('action.moveToTop') }}
-    </v-contextmenu-item>
-    <v-contextmenu-item @click="menu_item_move_to_playlist_end">
-      {{ $t('action.moveToBottom') }}
-    </v-contextmenu-item>
-    <v-contextmenu-divider />
-    <v-contextmenu-item @click="store_playlist_list_info.menu_item_open_drag_sort">
-      {{ $t('nsmusics.view_page.drag_sort') }}
-    </v-contextmenu-item>
-  </v-contextmenu>
 </template>
 
 <style scoped>

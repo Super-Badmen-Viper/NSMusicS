@@ -114,6 +114,7 @@
     },
   ])
   onMounted(() => {
+    store_server_users.percentage_of_nd = 0
     if(store_server_user_model.model_select === 'local')
       Type_Server_Model_Open_Value.value = Type_Server_Model_Open_Option.value[0].value
     else
@@ -175,17 +176,20 @@
     }
   }
   /// server select
-  async function update_server_config_of_current_user_of_sqlite(value: any){
-    try{
-      const result = await store_server_data_select_logic.update_server_config_of_current_user_of_sqlite(value)
-      if(result){
-        message.success(t('form.updateServer.success'))
-      }else{
-        message.error(t('error.invalidServer'),{ duration: 3000 })
+  async function update_server_config_of_current_user_of_sqlite(value: any, select_change: any){
+    if(select_change) {
+      try {
+        const result = await store_server_data_select_logic.update_server_config_of_current_user_of_sqlite(value)
+        if (result) {
+          message.success(t('form.updateServer.success'))
+        } else {
+          message.error(t('error.invalidServer'), {duration: 3000})
+        }
+      } catch (e) {
+        message.error(t('error.invalidServer'), {duration: 3000})
       }
-    }catch (e) {
-      message.error(t('error.invalidServer'),{ duration: 3000 })
     }
+    store_server_users.percentage_of_nd = 0
   }
 
   ////// local
@@ -484,6 +488,21 @@
   const collapsed_width = ref<number>(80);
 
   //////
+  import type { StepsProps } from 'naive-ui'
+  const current = ref(1)
+  const currentStatus = ref<StepsProps['status']>('process')
+  const handleButtonClick = () => {
+    current.value = (current.value % 3) + 1
+  }
+  /// server model
+  const model_server_step_1 = computed(() => t('nsmusics.view_page.modelSelect'));
+  const model_server_step_2 = computed(() => t('page.appMenu.manageServers'));
+  const model_server_step_3 = computed(() => t('nsmusics.view_page.modelServer'));
+  const model_server_step_4 = computed(() => t('page.appMenu.selectServer'));
+
+  const model_local_step_1 = computed(() => t('nsmusics.view_page.selectLibrary'));
+
+  //////
   const { shell } = require('electron');
   const openLink = (url: string) => {
     shell.openExternal(url);
@@ -510,46 +529,70 @@
           <!-- 服务器 -->
           <n-tab-pane name="tab_pane_1">
             <template #tab>
-              {{ $t('page.appMenu.manageServers') }}
+              {{ $t('nsmusics.view_page.mediaLibrary') + $t('common.manage')}}
             </template>
-            <n-space style="height: calc(100vh - 230px);" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)'}">
-              <!-- 服务器管理 -->
-              <n-space vertical size="large">
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space vertical style="width: 320px;">
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('page.appMenu.manageServers') }}</span>
-                  </n-space>
-                  <n-space align="end">
-                    <n-button tertiary @click="Type_Server_Add = !Type_Server_Add">
-                      <template #icon>
-                        <n-icon>
-                          <Add />
-                        </n-icon>
-                      </template>
-                      {{ $t('form.addServer.title') }}
-                    </n-button>
-                  </n-space>
-                </n-space>
-                <DynamicScroller
-                  class="table" ref="scrollbar"
-                  style="overflow: auto;width: 785px;max-height: 62vh;"
-                  :items="store_server_users.server_config_of_all_user_of_sqlite"
-                  :itemSize="70"
-                  :grid-items="3"
-                  :item-secondary-size="260">
-                  <!-- :minItemSize="6"> -->
-                  <template #default="{ item, index, active }">
-                    <DynamicScrollerItem
-                      :item="item"
-                      :active="active"
-                      :data-index="index"
-                      :data-active="active"
-                      style="display: flex;"
-                      >
-                      <div
-                        class="server_item_info"
-                        @click="item.show = !item.show"
-                        style="
+            <n-space
+                style="max-height: 70vh;overflow-y: auto;"
+                :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)'}">
+              <!-- 媒体库管理 -->
+              <n-space vertical>
+                <n-space vertical>
+                  <n-steps vertical
+                           style="margin-left: 2px;margin-top: 2px;"
+                           :status="currentStatus">
+                    <n-step :title="model_server_step_1">
+                      <div class="n-step-description">
+                        {{ $t('nsmusics.view_page.modelSelect_explain') }}<br>
+                        <n-select
+                          v-model:value="Type_Server_Model_Open_Value"
+                          :options="Type_Server_Model_Open_Option"
+                          @update:value="
+                            Type_Server_Model_Open_Value === 'server' ?
+                            (store_server_user_model.switchToMode_Navidrome_Api(),store_server_user_model.model_select = 'server')
+                            :
+                            (store_server_user_model.switchToMode_Local(),store_server_user_model.model_select = 'local')
+                          "
+                          placeholder=""
+                          :reset-menu-on-options-change="false"
+                          style="width: 207px;margin-top: 6px;"
+                        />
+                      </div>
+                    </n-step>
+                    <!-- server model -->
+                    <n-step :title="model_server_step_2" v-if="Type_Server_Model_Open_Value === 'server'">
+                      <div class="n-step-description">
+                        <n-space vertical>
+                          <n-button
+                              tertiary
+                              @click="Type_Server_Add = !Type_Server_Add"
+                              style="margin-top: 6px;">
+                            <template #icon>
+                              <n-icon>
+                                <Add />
+                              </n-icon>
+                            </template>
+                            {{ $t('form.addServer.title') }}
+                          </n-button>
+                          <DynamicScroller v-if="Type_Server_Model_Open_Value === 'server'"
+                                           class="table" ref="scrollbar"
+                                           style="overflow: auto;width: 520px;height: 130px;margin-top: 6px;"
+                                           :items="store_server_users.server_config_of_all_user_of_sqlite"
+                                           :itemSize="70"
+                                           :grid-items="2"
+                                           :item-secondary-size="260">
+                            <!-- :minItemSize="6"> -->
+                            <template #default="{ item, index, active }">
+                              <DynamicScrollerItem
+                                  :item="item"
+                                  :active="active"
+                                  :data-index="index"
+                                  :data-active="active"
+                                  style="display: flex;"
+                              >
+                                <div
+                                    class="server_item_info"
+                                    @click="item.show = !item.show"
+                                    style="
                           width: 230px;
                           height: 54px;
                           margin-bottom: 14px;
@@ -557,74 +600,222 @@
                           padding-top: 14px;padding-left: 14px;padding-right: 14px;
                           box-shadow: #18181820 0 0 0 1px inset;
                         ">
-                        <n-space justify="space-between" style="margin-top: 2.5px;">
-                          <n-space>
-                            <n-icon size="20">
-                              <BareMetalServer />
-                            </n-icon>
-                            <div style="width: 140px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-                              {{ item.type+' - '+item.server_name }}</div>
-                          </n-space>
-                          <span style="width: 18px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ (index+1) }}</span>
-                        </n-space>
-                        <n-modal
-                          v-model:show="item.show">
-                          <n-card style="width: 450px;border-radius: 6px;">
-                            <n-space
-                              vertical size="large" style="width: 400px;">
-                              <n-space justify="space-between" style="margin-bottom: 12px;">
-                                <span style="font-size: 20px;font-weight: 600;">{{ $t('page.appMenu.manageServers') }}</span>
-                                <n-button tertiary size="small" @click="item.show = false">
-                                  <template #icon>
-                                    <n-icon>
-                                      <Close />
-                                    </n-icon>
-                                  </template>
-                                </n-button>
-                              </n-space>
-                              <n-form style="margin-top: -12px;">
-                                <n-space vertical size="small" style="margin-bottom: 10px;">
-                                  <span>{{ $t('form.addServer.input_name') }}</span>
-                                  <n-input clearable size="small" v-model:value="item.server_name" placeholder=""/>
-                                </n-space>
-                                <n-space vertical size="small" style="margin-bottom: 10px;">
-                                  <span>{{ $t('form.addServer.input_url') }}</span>
-                                  <n-input-group>
-                                    <n-input clearable size="small" v-model:value="item.url" placeholder=""/>
-                                  </n-input-group>
-                                </n-space>
-                                <n-space vertical size="small" style="margin-bottom: 10px;">
-                                  <span>{{ $t('form.addServer.input_username') }}</span>
-                                  <n-input clearable size="small" v-model:value="item.user_name" placeholder=""/>
-                                </n-space>
-                                  <n-space vertical size="small" style="margin-bottom: 10px;">
-                                  <span>{{ $t('form.addServer.input_password') }}</span>
-                                  <n-input clearable type="password" show-password-on="click" size="small"
-                                           v-model:value="item.password"
-                                           placeholder=""/>
-                                </n-space>
-                              </n-form>
-                              <n-space justify="end">
-                                <n-button strong secondary type="error"
-                                          @click="item.show = false;update_server_deleteUser(item.id);">
-                                  {{ $t('common.delete') }}
-                                </n-button>
-                                <n-button strong secondary type="info"
-                                          @click="update_server_setUser(
+                                  <n-space justify="space-between" style="margin-top: 2.5px;">
+                                    <n-space>
+                                      <n-icon size="20">
+                                        <BareMetalServer />
+                                      </n-icon>
+                                      <div style="width: 140px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                                        {{ item.type+' - '+item.server_name }}</div>
+                                    </n-space>
+                                    <span style="width: 18px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ (index+1) }}</span>
+                                  </n-space>
+                                  <n-modal
+                                      v-model:show="item.show">
+                                    <n-card style="width: 450px;border-radius: 6px;">
+                                      <n-space
+                                          vertical size="large" style="width: 400px;">
+                                        <n-space justify="space-between" style="margin-bottom: 12px;">
+                                          <span style="font-size: 20px;font-weight: 600;">{{ $t('page.appMenu.manageServers') }}</span>
+                                          <n-button tertiary size="small" @click="item.show = false">
+                                            <template #icon>
+                                              <n-icon>
+                                                <Close />
+                                              </n-icon>
+                                            </template>
+                                          </n-button>
+                                        </n-space>
+                                        <n-form style="margin-top: -12px;">
+                                          <n-space vertical size="small" style="margin-bottom: 10px;">
+                                            <span>{{ $t('form.addServer.input_name') }}</span>
+                                            <n-input clearable size="small" v-model:value="item.server_name" placeholder=""/>
+                                          </n-space>
+                                          <n-space vertical size="small" style="margin-bottom: 10px;">
+                                            <span>{{ $t('form.addServer.input_url') }}</span>
+                                            <n-input-group>
+                                              <n-input clearable size="small" v-model:value="item.url" placeholder=""/>
+                                            </n-input-group>
+                                          </n-space>
+                                          <n-space vertical size="small" style="margin-bottom: 10px;">
+                                            <span>{{ $t('form.addServer.input_username') }}</span>
+                                            <n-input clearable size="small" v-model:value="item.user_name" placeholder=""/>
+                                          </n-space>
+                                          <n-space vertical size="small" style="margin-bottom: 10px;">
+                                            <span>{{ $t('form.addServer.input_password') }}</span>
+                                            <n-input clearable type="password" show-password-on="click" size="small"
+                                                     v-model:value="item.password"
+                                                     placeholder=""/>
+                                          </n-space>
+                                        </n-form>
+                                        <n-space justify="end">
+                                          <n-button strong secondary type="error"
+                                                    @click="item.show = false;update_server_deleteUser(item.id);">
+                                            {{ $t('common.delete') }}
+                                          </n-button>
+                                          <n-button strong secondary type="info"
+                                                    @click="update_server_setUser(
                                               item.id,
                                               item.server_name,item.url,
                                               item.user_name,item.password
                                           )">
-                                  {{ $t('common.save') }}
-                                </n-button>
-                              </n-space>
-                            </n-space>
-                          </n-card>
-                        </n-modal>
+                                            {{ $t('common.save') }}
+                                          </n-button>
+                                        </n-space>
+                                      </n-space>
+                                    </n-card>
+                                  </n-modal>
+                                </div>
+                              </DynamicScrollerItem>
+                            </template>
+                          </DynamicScroller>
+                        </n-space>
                       </div>
-                    </DynamicScrollerItem>
-                  </template>
-                </DynamicScroller>
+                    </n-step>
+                    <n-step :title="model_server_step_3" v-if="Type_Server_Model_Open_Value === 'server'">
+                      <div class="n-step-description">
+                        <n-space vertical>
+                          <n-space vertical
+                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                            <n-space vertical>
+                              <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_1') + ' - ' + $t('nsmusics.view_page.routerModel_type_3') }}</span>
+                              <div style="margin-top: -10px;">
+                                <span style="font-size:12px;">{{ $t('nsmusics.view_page.modelServer_type_1_explain') }}</span>
+                              </div>
+                            </n-space>
+                            <n-switch
+                              v-model:value="store_server_user_model.model_server_type_of_web"
+                              @update:value="() => {
+                                store_router_data_logic.clear_UserExperience_Model = true;
+                                store_router_data_logic.get_clear_UserExperience_Model(true);
+                                update_server_config_of_current_user_of_sqlite(
+                                  store_server_users.server_config_of_current_user_of_select.value,
+                                  false
+                                );
+                              }"
+                            >
+                            </n-switch>
+                          </n-space>
+                          <n-space vertical
+                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                            <n-space vertical>
+                              <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_2') }}</span>
+                              <div style="margin-top: -10px;">
+                                <span style="font-size:12px;">{{ $t('nsmusics.view_page.modelServer_type_2_explain') }}</span>
+                              </div>
+                            </n-space>
+                            <n-switch
+                                v-model:value="store_server_user_model.model_server_type_of_local">
+                            </n-switch>
+                          </n-space>
+                          <n-space vertical
+                                   v-if="store_server_user_model.model_server_type_of_local"
+                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                            <n-space vertical style="width: 320px;">
+                              <span style="font-size:16px;font-weight: 600;">
+                                {{ $t('nsmusics.view_page.modelServer_type_2') + " | " + $t('nsmusics.view_page.selectServer')}}
+                              </span>
+                              <div style="margin-top: -10px;">
+                                <span style="font-size:12px;">
+                                  {{ $t('nsmusics.view_page.selectServer_explain') }}
+                                </span>
+                              </div>
+                            </n-space>
+                            <n-space align="end">
+                              <n-progress
+                                  type="line" style="width: 207px;margin-bottom: 8px;"
+                                  :percentage="store_server_users.percentage_of_nd"
+                                  :indicator-placement="'inside'"
+                              />
+                            </n-space>
+                          </n-space>
+                        </n-space>
+                      </div>
+                    </n-step>
+                    <n-step :title="model_server_step_4" v-if="Type_Server_Model_Open_Value === 'server'">
+                      <div class="n-step-description">
+                        <n-space vertical>
+                          <n-select
+                              v-model:value="store_server_users.server_config_of_current_user_of_select_servername"
+                              :options="store_server_users.server_config_of_all_user_of_select"
+                              style="width: 220px;margin-top: 6px;"
+                              @update:value="(value: number) => update_server_config_of_current_user_of_sqlite(value, true)"
+                          />
+                        </n-space>
+                      </div>
+                    </n-step>
+                    <!-- local model -->
+                    <n-step :title="model_local_step_1" v-if="Type_Server_Model_Open_Value != 'server'">
+                      <div class="n-step-description">
+                        <n-space vertical>
+                          <n-space justify="space-between" align="center"
+                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                            <n-space vertical style="width: 320px;">
+                              <div style="margin-top: -2px;">
+                              <span style="font-size:12px;">
+                                {{
+                                  $t('nsmusics.view_page.selectLibrary_explain') +
+                                  ', ' +
+                                  $t('common.restartRequired')
+                                }}
+                                <br>.mp3, .flac, .aac, .mp1, .mp2, .m4a, .ape, .oga, .ogg, .opus, .wav, .webm
+                              </span>
+                              </div>
+                            </n-space>
+                            <n-space align="end">
+                              <n-tag type="success" v-if="false">
+                                {{ store_server_user_model.library_path }}
+                              </n-tag>
+                              <n-popconfirm v-model:show="show_selectFolder" style="width: 400px">
+                                <template #trigger>
+                                  <n-button tertiary style="width: 150px;">
+                                    <template #icon>
+                                      <n-icon>
+                                        <Add />
+                                      </n-icon>
+                                    </template>
+                                    {{ $t('nsmusics.view_page.selectedSong') + $t('entity.folder_other')}}
+                                  </n-button>
+                                </template>
+                                <template #action>
+                                  <n-space vertical>
+                                    {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_0')}}
+                                    <n-space>
+                                      <n-button size="small" @click="selectFolder(false)">
+                                        {{ $t('common.confirm') }}
+                                      </n-button>
+                                    </n-space>
+                                    <n-divider style="margin: 0;"/>
+                                    {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_1')}}
+                                    <n-space>
+                                      <n-button size="small" @click="selectFolder(true)">
+                                        {{ $t('common.confirm') }}
+                                      </n-button>
+                                    </n-space>
+                                    <n-divider style="margin: 0;"/>
+                                    <n-button size="small"
+                                              @click="
+                                      show_selectFolder = false;
+                                      store_server_users.percentage_of_local = 0;
+                                      store_local_db_info.set_clear_all_local_data()
+                                    "
+                                    >
+                                      {{ $t('common.clear') + ' ' + $t('nsmusics.view_page.modelLocal')}}
+                                    </n-button>
+                                  </n-space>
+                                </template>
+                              </n-popconfirm>
+                              <n-progress
+                                  type="line" style="width: 207px;margin-bottom: 8px;"
+                                  :percentage="store_server_users.percentage_of_local"
+                                  :indicator-placement="'inside'"
+                              />
+                            </n-space>
+                          </n-space>
+                        </n-space>
+                      </div>
+                    </n-step>
+                  </n-steps>
+                </n-space>
               </n-space>
               <!-- 服务器添加 -->
               <n-modal
@@ -851,173 +1042,7 @@
                   </n-switch>
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space vertical>
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelSelect') }}</span>
-                    <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">{{ $t('nsmusics.view_page.modelSelect_explain') }}</span>
-                    </div>
-                  </n-space>
-                  <n-select
-                    v-model:value="Type_Server_Model_Open_Value"
-                    :options="Type_Server_Model_Open_Option"
-                    @update:value="
-                      Type_Server_Model_Open_Value === 'server' ?
-                      (store_server_user_model.switchToMode_Navidrome_Api(),store_server_user_model.model_select = 'server')
-                      :
-                      (store_server_user_model.switchToMode_Local(),store_server_user_model.model_select = 'local')
-                    "
-                    placeholder=""
-                    :reset-menu-on-options-change="false"
-                    style="width: 207px;margin-top: -4px;"
-                  />
-                </n-space>
-                <n-divider style="margin: 0;" v-if="Type_Server_Model_Open_Value === 'server'"/>
-                <n-space vertical v-if="Type_Server_Model_Open_Value === 'server'">
-                  <n-space justify="space-between" align="center"
-                           :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                    <n-space vertical>
-                      <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer') }}</span>
-                    </n-space>
-                  </n-space>
-                  <n-space justify="space-between" align="center"
-                           style="margin-left: 30px;"
-                           :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
-                    <n-space vertical>
-                      <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_1') + ' - ' + $t('nsmusics.view_page.routerModel_type_3') }}</span>
-                      <div style="margin-top: -10px;">
-                        <span style="font-size:12px;">{{ $t('nsmusics.view_page.modelServer_type_1_explain') }}</span>
-                      </div>
-                    </n-space>
-                    <n-switch
-                        v-model:value="store_server_user_model.model_server_type_of_web"
-                        @update:value="() => {
-                          store_router_data_logic.clear_UserExperience_Model = true;
-                          store_router_data_logic.get_clear_UserExperience_Model(true);
-                          update_server_config_of_current_user_of_sqlite(
-                            store_server_users.server_config_of_current_user_of_select_servername
-                          );
-                        }"
-                    >
-                    </n-switch>
-                  </n-space>
-                  <n-space justify="space-between" align="center"
-                           style="margin-left: 30px;"
-                           :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
-                    <n-space vertical>
-                      <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_2') }}</span>
-                      <div style="margin-top: -10px;">
-                        <span style="font-size:12px;">{{ $t('nsmusics.view_page.modelServer_type_2_explain') }}</span>
-                      </div>
-                    </n-space>
-                    <n-switch
-                        v-model:value="store_server_user_model.model_server_type_of_local">
-                    </n-switch>
-                  </n-space>
-                  <n-space justify="space-between" align="center"
-                           v-if="store_server_user_model.model_server_type_of_local"
-                           :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                    <n-space vertical style="width: 320px;">
-                      <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.selectServer')}}</span>
-                      <div style="margin-top: -10px;">
-                        <span style="font-size:12px;">
-                          {{ $t('nsmusics.view_page.selectServer_explain') }}
-                        </span>
-                      </div>
-                    </n-space>
-                    <n-space align="end">
-                      <n-progress
-                          type="line" style="width: 207px;margin-bottom: 8px;"
-                          :percentage="store_server_users.percentage_of_nd"
-                          :indicator-placement="'inside'"
-                      />
-                    </n-space>
-                  </n-space>
-                  <n-space justify="space-between" align="center"
-                           :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                    <n-space vertical>
-                      <span style="font-size:16px;font-weight: 600;">{{ $t('page.appMenu.selectServer') }}</span>
-                      <div style="margin-top: -10px;">
-                        <span style="font-size:12px;">{{ $t('page.appMenu.selectServer') }}</span>
-                      </div>
-                    </n-space>
-                    <n-select
-                        v-model:value="store_server_users.server_config_of_current_user_of_select_servername"
-                        :options="store_server_users.server_config_of_all_user_of_select"
-                        style="width: 207px;margin-top: -4px;"
-                        @update:value="(value: number) => update_server_config_of_current_user_of_sqlite(value)"
-                    />
-                  </n-space>
-                </n-space>
-                <n-divider style="margin: 0;" v-if="Type_Server_Model_Open_Value != 'server'"/>
-                <n-space vertical v-if="Type_Server_Model_Open_Value != 'server'">
-                  <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space vertical style="width: 320px;">
-                    <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.selectLibrary')}}</span>
-                    <div style="margin-top: -10px;">
-                      <span style="font-size:12px;">
-                        {{
-                          $t('nsmusics.view_page.selectLibrary_explain') +
-                          ', ' +
-                          $t('common.restartRequired')
-                        }}
-                        <br>.mp3, .flac, .aac, .mp1, .mp2, .m4a, .ape, .oga, .ogg, .opus, .wav, .webm
-                      </span>
-                    </div>
-                  </n-space>
-                  <n-space align="end">
-                    <n-tag type="success" v-if="false">
-                      {{ store_server_user_model.library_path }}
-                    </n-tag>
-                    <n-popconfirm v-model:show="show_selectFolder" style="width: 400px">
-                      <template #trigger>
-                        <n-button tertiary style="width: 150px;">
-                          <template #icon>
-                            <n-icon>
-                              <Add />
-                            </n-icon>
-                          </template>
-                          {{ $t('nsmusics.view_page.selectedSong') + $t('entity.folder_other')}}
-                        </n-button>
-                      </template>
-                      <template #action>
-                        <n-space vertical>
-                          {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_0')}}
-                          <n-space>
-                            <n-button size="small" @click="selectFolder(false)">
-                              {{ $t('common.confirm') }}
-                            </n-button>
-                          </n-space>
-                          <n-divider style="margin: 0;"/>
-                          {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_1')}}
-                          <n-space>
-                            <n-button size="small" @click="selectFolder(true)">
-                              {{ $t('common.confirm') }}
-                            </n-button>
-                          </n-space>
-                          <n-divider style="margin: 0;"/>
-                          <n-button size="small"
-                                    @click="
-                                      show_selectFolder = false;
-                                      store_server_users.percentage_of_local = 0;
-                                      store_local_db_info.set_clear_all_local_data()
-                                    "
-                          >
-                            {{ $t('common.clear') + ' ' + $t('nsmusics.view_page.modelLocal')}}
-                          </n-button>
-                        </n-space>
-                      </template>
-                    </n-popconfirm>
-                    <n-progress
-                      type="line" style="width: 207px;margin-bottom: 8px;"
-                      :percentage="store_server_users.percentage_of_local"
-                      :indicator-placement="'inside'"
-                    />
-                  </n-space>
-                </n-space>
-                </n-space>
-                <n-divider v-if="false" style="margin: 0;"/>
-                <n-space v-if="false" vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space justify="space-between" align="center">
                     <n-space vertical>
                       <span style="font-size:16px;font-weight: 600;">{{ $t('setting.homeConfiguration') }}</span>
@@ -1525,7 +1550,7 @@
 <style scoped>
 .view{
   height: calc(100vh - 160px);
-  overflow: auto;
+  overflow-y: auto;
   overflow-x:hidden;
   display: flex;
   flex-direction: column;

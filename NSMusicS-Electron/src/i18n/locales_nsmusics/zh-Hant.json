@@ -60,10 +60,11 @@
             "dolby_switching": "杜比音頻播放",
             "dolby_switching_explain": "是否開啟杜比音頻播放",
             "audio_player_web_explain": "使用web輸出將固定路由模式-品質模式",
-            "selectLibrary_select_1": "並導出音樂文件內嵌的封面轉化為同名封面文件(存在同名封面文件則跳過)，文件保存至與音樂文件同一資料夾內",
             "audio_channel": "音頻聲道",
             "audio_channel_explain": "設置輸出的音頻聲道",
-            "selectLibrary_select_0": "不導出音樂文件內嵌封面，僅使用與音樂文件同級同名的封面"
+            "selectLibrary_select_0": "不導出音樂文件內嵌封面，僅使用與音樂文件同級同名的封面",
+            "selectLibrary_select_1": "導出音樂文件内嵌的封面，轉化為同名封面檔案（存在同名封面檔案則跳過），檔案保存至與音樂檔同一資料夾內",
+            "mediaLibrary": "媒体库"
         },
         "view_player": {
             "view_seting": {

@@ -16,7 +16,7 @@
 
   ////// components
   import {darkTheme, NConfigProvider, NIcon} from 'naive-ui'
-  import {h, onMounted, computed, watch, provide} from 'vue';
+  import {h, onMounted, computed, watch, provide, ref} from 'vue';
   import {RouterLink, RouterView, useRouter} from 'vue-router';
   import Bar_Music_Player from '@/components/Bar_Music_Player.vue'
   import Bar_Music_PlayList from '@/components/Bar_Music_PlayList.vue'
@@ -559,6 +559,11 @@
     shell.openExternal(url);
   };
   const computed_i18n_Label_Update = computed(() => t('filter.recentlyUpdated'));
+
+  ////
+  import { provide } from "vue";
+  const playlist_contextmenu = ref(null as any)
+  provide("message", playlist_contextmenu);
 
   ////// Load Configs
   onMounted(async () => {

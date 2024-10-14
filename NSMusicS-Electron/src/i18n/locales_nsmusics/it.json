@@ -60,10 +60,11 @@
             "dolby_switching": "Riproduzione audio Dolby",
             "dolby_switching_explain": "Se deve attivare la riproduzione audio Dolby",
             "audio_player_web_explain": "L'uso dell'output web fisserà la modalità di routing nella Modalità Qualità",
-            "selectLibrary_select_1": "E esporta la copertina incorporata del file musicale in un file di copertina con lo stesso nome (saltare se esiste già un file di copertina con lo stesso nome), salvare il file nella stessa cartella del file musicale",
             "audio_channel": "Canale audio",
             "audio_channel_explain": "Imposta il canale audio di output",
-            "selectLibrary_select_0": "Non esportare la copertina incorporata del file musicale, utilizzare solo la copertina con lo stesso nome allo stesso livello del file musicale"
+            "selectLibrary_select_0": "Non esportare la copertina incorporata del file musicale, utilizzare solo la copertina con lo stesso nome allo stesso livello del file musicale",
+            "selectLibrary_select_1": "Esporta la copertina incorporata del file musicale come file di copertina con lo stesso nome (saltare se esiste già un file di copertina con lo stesso nome), e salva il file nella stessa cartella del file musicale",
+            "mediaLibrary": "Libreria Multimediale"
         },
         "view_player": {
             "view_seting": {

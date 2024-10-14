@@ -6,13 +6,52 @@ import {
     dialog,
     Tray, Menu, nativeImage, nativeTheme
 } from 'electron'
-if (!app.requestSingleInstanceLock()) {
-    app.quit();
-}
 const electron = require('electron')
 const ipc = electron.ipcMain
 const { session } = require('electron');
 let win = null;
+
+/// app
+if (!app.requestSingleInstanceLock()) {
+    app.quit();
+} else {
+    app.on('ready', async () => {
+        globalShortcut.register('CommandOrControl+Shift+I', () => {
+            if (win.webContents.isDevToolsOpened()) {
+                win.webContents.closeDevTools();
+            } else {
+                win.webContents.openDevTools({
+                    mode:'detach'
+                });
+            }
+        });
+
+        await createWindow();
+        await createTray();
+        await initNodeMpv()
+        await createNodeMpv();
+
+        const devInnerHeight: number = 1080.0;
+        const devDevicePixelRatio: number = 1.0;
+        const devScaleFactor: number = 1.3;
+        const scaleFactor: number = require('electron').screen.getPrimaryDisplay().scaleFactor;
+        const zoomFactor: number = (window.innerHeight / devInnerHeight) * (window.devicePixelRatio / devDevicePixelRatio) * (devScaleFactor / scaleFactor);
+        require('electron').webFrame.setZoomFactor(zoomFactor);
+
+        setTimeout(clearSessionClearCache, 5000);
+    });
+}
+app.on('second-instance', (event, commandLine, workingDirectory) => {
+    if (win) {
+        win.show();
+        win.focus();
+    }
+});
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
+})
 
 /// node-system
 import { File } from "node-taglib-sharp";
@@ -329,12 +368,10 @@ async function createWindow() {
     /// node-taglib-sharp
     let percentage = 0;
     async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
-        // const db = require('better-sqlite3')(navidrome_db);
         const Database = require('better-sqlite3');
         const db = new Database(navidrome_db, {
             nativeBinding: path.resolve('resources/better_sqlite3.node')
         });
-
         db.pragma('journal_mode = WAL');
 
         let directories: any[] = []
@@ -360,7 +397,6 @@ async function createWindow() {
         }
         percentage = 20;
 
-        // const images = require("images");
         const artistMap = new Map();
         const albumMap = new Map();
         const processChunk = (chunk) => {
@@ -1024,36 +1060,3 @@ async function createNodeMpv(){
         }, 10);
     }
 }
-
-/// app
-app.whenReady().then(async () => {
-    globalShortcut.register('CommandOrControl+Shift+I', () => {
-        if (win.webContents.isDevToolsOpened()) {
-            win.webContents.closeDevTools();
-        } else {
-            win.webContents.openDevTools({
-                mode:'detach'
-            });
-        }
-    });
-
-    await createWindow();
-    await createTray();
-    await initNodeMpv()
-    await createNodeMpv();
-
-    const devInnerHeight: number = 1080.0;
-    const devDevicePixelRatio: number = 1.0;
-    const devScaleFactor: number = 1.3;
-    const scaleFactor: number = require('electron').screen.getPrimaryDisplay().scaleFactor;
-    const zoomFactor: number = (window.innerHeight / devInnerHeight) * (window.devicePixelRatio / devDevicePixelRatio) * (devScaleFactor / scaleFactor);
-    require('electron').webFrame.setZoomFactor(zoomFactor);
-})
-app.on('ready', () => {
-    setTimeout(clearSessionClearCache, 5000);
-});
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
-})

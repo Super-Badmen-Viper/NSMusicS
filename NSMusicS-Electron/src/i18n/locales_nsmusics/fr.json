@@ -60,10 +60,11 @@
             "dolby_switching": "Lecture audio Dolby",
             "dolby_switching_explain": "Si l'activation de la lecture audio Dolby est nécessaire",
             "audio_player_web_explain": "L'utilisation de la sortie web fixera le mode de routage en Mode Qualité",
-            "selectLibrary_select_1": "Et exporter la couverture intégrée du fichier musical en tant que fichier de couverture portant le même nom (ignorer s'il existe déjà un fichier de couverture portant le même nom), enregistrer le fichier dans le même dossier que le fichier musical",
             "audio_channel": "Canal audio",
             "audio_channel_explain": "Configurer le canal audio de sortie",
-            "selectLibrary_select_0": "Ne pas exporter la couverture intégrée du fichier musical, utiliser uniquement la couverture du même nom au même niveau que le fichier musical"
+            "selectLibrary_select_0": "Ne pas exporter la couverture intégrée du fichier musical, utiliser uniquement la couverture du même nom au même niveau que le fichier musical",
+            "selectLibrary_select_1": "Exporte la couverture intégrée du fichier musical en tant que fichier de couverture portant le même nom (ignorer si un fichier de couverture portant le même nom existe), et enregistrez le fichier dans le même dossier que le fichier musical",
+            "mediaLibrary": "Bibliothèque Média"
         },
         "view_player": {
             "view_seting": {

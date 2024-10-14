@@ -60,10 +60,11 @@
             "dolby_switching": "Dolby-ljuduppspelning",
             "dolby_switching_explain": "Om Dolby-ljuduppspelning ska aktiveras",
             "audio_player_web_explain": "Användning av webbutmatning kommer att låsa rutningsläget till Kvalitetsläge",
-            "selectLibrary_select_1": "Och exportera den inbäddade omslagsbilden från musikfilen till en omslagsbils med samma namn (hoppa över om det finns ett omslagsbils med samma namn), spara filen i samma mapp som musikfilen",
             "audio_channel": "Ljudkanal",
             "audio_channel_explain": "Ställ in utgående ljudkanal",
-            "selectLibrary_select_0": "Exportera inte den inbäddade omslagsbilden från musikfilen, använd endast omslagsbilden med samma namn på samma nivå som musikfilen"
+            "selectLibrary_select_0": "Exportera inte den inbäddade omslagsbilden från musikfilen, använd endast omslagsbilden med samma namn på samma nivå som musikfilen",
+            "selectLibrary_select_1": "Exportera den inbäddade omslagsbilden från musikfilen som en omslagsbildsfil med samma namn (hoppa över om det finns en omslagsbildsfil med samma namn), och spara filen i samma mapp som musikfilen",
+            "mediaLibrary": "Mediabibliotek"
         },
         "view_player": {
             "view_seting": {

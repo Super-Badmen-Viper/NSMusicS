@@ -163,7 +163,7 @@ export const store_app_configs_logic_load = reactive({
             store_server_users.server_config_of_all_user_of_select = [];
             store_server_users.server_config_of_all_user_of_sqlite.forEach((item: any) => {
                 store_server_users.server_config_of_all_user_of_select.push({
-                    label: item.server_name,
+                    label: item.type + ' - ' + item.server_name,
                     value: item.id
                 });
             });
@@ -176,11 +176,11 @@ export const store_app_configs_logic_load = reactive({
                 store_server_users.server_config_of_current_user_of_sqlite =
                     store_server_users.server_config_of_all_user_of_sqlite[index]
                 store_server_users.server_config_of_current_user_of_select = {
-                    label: store_server_users.server_config_of_all_user_of_sqlite[index].server_name,
+                    label: store_server_users.server_config_of_all_user_of_sqlite[index].type + ' - ' + store_server_users.server_config_of_all_user_of_sqlite[index].server_name,
                     value: store_server_users.server_config_of_all_user_of_sqlite[index].id
                 };
                 store_server_users.server_config_of_current_user_of_select_servername =
-                    store_server_users.server_config_of_all_user_of_sqlite[index].server_name
+                    store_server_users.server_config_of_all_user_of_sqlite[index].type + ' - ' + store_server_users.server_config_of_all_user_of_sqlite[index].server_name
             }
             ///
             store_app_configs_logic_save.save_system_config_of_Servers_Config()
@@ -267,6 +267,10 @@ export const store_app_configs_logic_load = reactive({
         store_router_data_logic.get_page_top_info()
         store_app_configs_info.app_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_left_menu_select_activeKey']
         store_router_data_info.router_name = '' + system_Configs_Read.app_Configs.value['router_name']
+        if(store_router_data_info.router_name === ''){
+            store_app_configs_info.app_left_menu_select_activeKey = 'View_Menu_AppSetting'
+            store_router_data_info.router_name = 'View_Menu_AppSetting'
+        }
         store_router_data_info.router.push(store_router_data_info.router_name)
         this.app_configs_loading = false
 

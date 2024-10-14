@@ -45,11 +45,11 @@ export const store_server_users = reactive({
             store_server_users.server_config_of_current_user_of_sqlite =
                 this.server_config_of_all_user_of_sqlite[index]
             store_server_users.server_config_of_current_user_of_select = {
-                label: this.server_config_of_all_user_of_sqlite[index].server_name,
+                label: this.server_config_of_all_user_of_sqlite[index].type + ' - ' + this.server_config_of_all_user_of_sqlite[index].server_name,
                 value: this.server_config_of_all_user_of_sqlite[index].id
             };
             store_server_users.server_config_of_current_user_of_select_servername =
-                this.server_config_of_all_user_of_sqlite[index].server_name
+                this.server_config_of_all_user_of_sqlite[index].type + ' - ' + this.server_config_of_all_user_of_sqlite[index].server_name
         }
     },
 

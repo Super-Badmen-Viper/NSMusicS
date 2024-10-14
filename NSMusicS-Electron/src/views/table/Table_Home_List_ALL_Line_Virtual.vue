@@ -292,7 +292,6 @@ onBeforeUnmount(() => {
           style="
             min-height: 320px;
             border-radius: 10px;
-            border: 1.5px solid #FFFFFF20;
             overflow: hidden;
             background-size: cover;
             background-position: center;
@@ -317,7 +316,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
       </div>
-      <n-space style="margin-left: 22px;margin-top: calc(126px - 340px);">
+      <n-space style="margin-left: 0px;margin-top: calc(126px - 340px);">
         <n-image
           width="180px" height="180px" object-fit="contain"
           style="border-radius: 6px;border: 1.5px solid #FFFFFF20;"
@@ -375,7 +374,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.mostPlayed') }}
         </span>
-        <n-button text style="margin-top: 8px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button text style="margin-top: 6px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
             <n-icon :size="26"><RefreshCircleOutline/></n-icon>
           </template>
@@ -494,7 +493,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.explore') }}
         </span>
-        <n-button text style="margin-top: 8px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button text style="margin-top: 6px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
             <n-icon :size="26"><RefreshCircleOutline/></n-icon>
           </template>
@@ -613,7 +612,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.newlyAdded') }}
         </span>
-        <n-button text style="margin-top: 8px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button text style="margin-top: 6px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
             <n-icon :size="26"><RefreshCircleOutline/></n-icon>
           </template>
@@ -732,7 +731,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.recentlyPlayed') }}
         </span>
-        <n-button text style="margin-top: 8px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button text style="margin-top: 6px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
             <n-icon :size="26"><RefreshCircleOutline/></n-icon>
           </template>

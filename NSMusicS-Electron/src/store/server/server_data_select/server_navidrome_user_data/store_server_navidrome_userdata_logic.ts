@@ -117,8 +117,12 @@ export const store_server_navidrome_userdata_logic = reactive({
     /// server start login
     async navidrome_get_server_config_of_current_user_of_sqlite(value: Server_Configs_Props) {
         store_server_users.server_config_of_current_user_of_sqlite = value
-        store_server_users.server_config_of_current_user_of_select = { label: value.server_name, value: value.id };
-        store_server_users.server_config_of_current_user_of_select_servername = value.server_name
+        store_server_users.server_config_of_current_user_of_select =
+            {
+                label: value.type + ' - ' + value.server_name,
+                value: value.id
+            };
+        store_server_users.server_config_of_current_user_of_select_servername = value.type + ' - ' + value.server_name
         store_server_user_model.server_select = value.id
         store_server_user_model.username = value.user_name
         store_server_user_model.password = value.password
