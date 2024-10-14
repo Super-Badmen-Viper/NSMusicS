@@ -5,7 +5,9 @@
  
  The expectation of the NSMusicS series products is to enable people around the world to use free, open-source, and user-friendly music products
  
- 大道之行也，天下为公
+ 大道之行，天下为公。人神恋歌，九歌韵世。  
+ 汨罗江流，香魂袅袅。美人已逝，风韵长存。  
+ 念卿不返，壮志何哀？承卿遗志，继往开来。  
  
 ## NSMusicS-Electron | 九歌 : Desktop-client
 - [x] supporting the Windows platform (which will soon support Linux、MacOS、Docker) 
@@ -23,11 +25,11 @@
 - [ ] knowledge graph(Recommendation system, Graph database, etc.)
 - [ ] internationalization
 ## NSMusicS-Flutter | 九歌 : Mobile-client
-   - [ ] music library management
-   - [ ] professional audio playback
-   - [ ] Rich sound effects playback
-   - [ ] internationalization
-   - [ ] various music usage scenarios(For NSMusicS-GO: Server)
+- [ ] music library management
+- [ ] professional audio playback
+- [ ] Rich sound effects playback
+- [ ] internationalization
+- [ ] various music usage scenarios(For NSMusicS-GO: Server)
 
 ## Screenshots:
   - [x] NSMusicS(Electron)：Under development    
@@ -105,5 +107,5 @@ npm run build-only # Package into the current system_configs's software package 
 ## Author's Message
  - As this project is currently independently developed by Xiang Cheng(myself), programming standards are a personal habit of the Xiang Cheng(myself), and coding standards are not yet standardized enough. However, this project will continue to undergo self refactoring and reverse development. It can be affirmed that in the future, NSMusicS will form a standard coding specification, which will be beneficial for the community to develop third-party NSMusicS plugins, Enable NSMusicS to meet the diverse needs of more potential customers，Most importantly, NSMusicS will always be open source and continuously updated
  - The expectation of the NSMusicS series products is to enable people around the world to use free, open-source, and user-friendly music products
- - The Chinese name of the project is "Nine Songs Music", abbreviated as NSMusicS<br> inspired by ["Chu Ci"], to commemorate ["Qu Yuan"]<br>
+ - The Chinese name of the project is "Nine Songs Music | 九歌", abbreviated as NSMusicS<br> inspired by ["Chu Ci"], to commemorate ["Qu Yuan"]<br>
  - 项目中文名为：九歌，缩写为: NSMusicS<br> 灵感来源于：[楚辞]，谨以纪念：[屈原]，
