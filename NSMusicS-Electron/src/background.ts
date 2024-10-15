@@ -407,6 +407,17 @@ async function createWindow() {
                     const artistId = artistName;
                     const albumId = `${artistName}-${albumName}`;
 
+                    let medium_image_url_local = path.join(path.join(path.dirname(_path), 'cover') + '.jpg')
+                    if (!fs.existsSync(medium_image_url_local)) {
+                        medium_image_url_local = medium_image_url_local.replace('.jpg','.png')
+                        if (!fs.existsSync(medium_image_url_local)) {
+                            medium_image_url_local = medium_image_url_local.replace('.png','.jpeg')
+                            if (!fs.existsSync(medium_image_url_local)) {
+                                medium_image_url_local = ''
+                            }
+                        }
+                    }
+
                     if (!artistMap.has(artistId)) {
                         const artist = {
                             id: getUniqueId_Artist(db),
@@ -420,7 +431,7 @@ async function createWindow() {
                             mbz_artist_id: '',
                             biography: '',
                             small_image_url: '',
-                            medium_image_url: '',
+                            medium_image_url: medium_image_url_local,
                             large_image_url: '',
                             similar_artists: '',
                             external_url: '',
@@ -465,7 +476,7 @@ async function createWindow() {
                             paths: '',
                             description: taglibFile.tag.description || '',
                             small_image_url: '',
-                            medium_image_url: '',
+                            medium_image_url: medium_image_url_local,
                             large_image_url: '',
                             external_url: '',
                             external_info_updated_at: ''
@@ -523,6 +534,7 @@ async function createWindow() {
                         rg_album_peak: 0,
                         rg_track_gain: 0,
                         rg_track_peak: 0,
+                        medium_image_url: medium_image_url_local,
                     };
 
                     if(cover_model) {

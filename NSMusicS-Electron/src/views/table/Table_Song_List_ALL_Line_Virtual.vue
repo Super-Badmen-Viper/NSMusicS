@@ -53,7 +53,22 @@ const handleImageError = (event) => {
     if (imageFiles.length > 0) {
       event.target.src = path.join(folderPath, imageFiles[0]);
     } else {
-      event.target.src = path.resolve('resources/img/error_album.jpg');
+      const coverFiles = files.filter(file => {
+        const ext = path.extname(file).toLowerCase();
+        return ['.jpg', '.jpeg', '.png'].includes(ext);
+      });
+      let coverPath;
+      if (coverFiles.length > 0) {
+        const coverFile = coverFiles[0];
+        const newFileName = 'cover' + path.extname(coverFile);
+        const coverFolderPath = path.join(folderPath, newFileName);
+        fs.renameSync(coverFile, coverFolderPath);
+        coverPath = coverFolderPath;
+        store_player_audio_info.this_audio_file_medium_image_url = coverPath
+      } else {
+        coverPath = path.resolve('resources/img/error_album.jpg');
+      }
+      event.target.src = coverPath;
     }
   });
 };

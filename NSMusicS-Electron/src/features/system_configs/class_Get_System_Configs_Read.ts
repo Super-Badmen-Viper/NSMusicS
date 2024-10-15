@@ -100,12 +100,28 @@ export class Class_Get_System_Configs_Read {
     public server_Configs_Current = ref<Server_Configs_Props>()
 
     constructor() {
-        const path = require('path');
-        let db:any = null;
+        let db_navidrome:any = null;
+        db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+        db_navidrome.pragma('journal_mode = WAL');
+        try {
+            db_navidrome.exec('BEGIN');
+            const tableSchema = db_navidrome.prepare(`PRAGMA table_info(media_file)`).all();
+            const hasMediumImageUrlColumn = tableSchema.some(column => column.name === 'medium_image_url');
+            if (!hasMediumImageUrlColumn) {
+                db_navidrome.exec(`ALTER TABLE media_file ADD COLUMN medium_image_url TEXT`);
+            }
+            db_navidrome.exec('COMMIT');
+        } catch (error) {
+            db_navidrome.exec('ROLLBACK');
+            console.error('Error modifying media_file table:', error);
+        } finally {
+            db_navidrome.close()
+            db_navidrome = null;
+        }
 
+        let db:any = null;
         db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
-
         /// Modify user configuration
         try {
             db.exec('BEGIN');
@@ -123,7 +139,6 @@ export class Class_Get_System_Configs_Read {
             db.exec('ROLLBACK');
             console.error('Error modifying user configuration:', error);
         }
-
         ///
         db.prepare(`SELECT * FROM system_app_config`).all().forEach((row: Config_Props, index: number) => {
             const propertyName = row.config_key;
