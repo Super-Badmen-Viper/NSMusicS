@@ -46,7 +46,7 @@ export const viteElectronBuild = (): Plugin => {
                     win: {
                         target: 'nsis',
                         icon: 'resources/config/NSMusicS.ico',
-                        requestedExecutionLevel: 'requireAdministrator'
+                        // requestedExecutionLevel: 'requireAdministrator'
                     },
                     linux: {
                         target: 'AppImage',

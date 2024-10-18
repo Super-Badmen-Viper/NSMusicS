@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>1.0.7</version>
-<url>https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-v1.0.7/NSMusicS.Setup.1.0.7.exe</url>
+<version>1.0.8</version>
+<url>https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-v1.0.8/NSMusicS.Setup.1.0.8.exe</url>
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
-    1.0.7现已更新内容;
+    1.0.8现已更新内容;
+    修复了mpv手动实现淡入淡出在末尾处触发暂停的问题;
+    优化了NSMusicS-Electron与部分win系统的兼容性(取消打包中的管理员执行选项);
     修复了本地模式嵌套音乐库的封面读取逻辑;
     修复了防用户二次启动NSMusicS的机制(重复启动NSMusicS则自动跳转已启动的NSMusicS)，以免用户已经启动NSMusicS的情况下，误以为NSMusicS运行闪退;
     优化了NSMusicS媒体库导入的用户友好性;

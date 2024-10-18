@@ -884,13 +884,13 @@ let currentParameters = null
 let isPlaying = false;
 async function initNodeMpv(){
     mpv = new mpvAPI(
-    {
-        audio_only: true,
-        auto_restart: true,
-        binary: path.resolve("resources/mpv-x86_64-20240623/mpv.exe"),
-        debug: true,
-        verbose: true
-    });
+        {
+            audio_only: true,
+            auto_restart: true,
+            binary: path.resolve("resources/mpv-x86_64-20240623/mpv.exe"),
+            debug: true,
+            verbose: true
+        });
     await mpv.start();
     await mpv.pause();
     mpv.on('stopped', () => {
@@ -927,6 +927,9 @@ async function createNodeMpv(){
     });
     ipc.handle('mpv-load', async (event,filePath) => {
         try {
+            if (fadeIntervalId !== null) {
+                clearInterval(fadeIntervalId);
+            }
             if (currentMediaPath === filePath && tray_menu_label_music_check_enter) {
                 tray_menu_label_music_check_enter = false
             }else {
@@ -1028,7 +1031,7 @@ async function createNodeMpv(){
         tray_music_play = true
         const targetVolume = Number(play_volume);
         const stepVolume = targetVolume / (currentFade * 1000 / 10);
-        let currentVolume = 0;
+        let currentVolume = 20;
         fadeIntervalId = setInterval(async () => {
             currentVolume += stepVolume;
             if (currentVolume >= targetVolume) {
