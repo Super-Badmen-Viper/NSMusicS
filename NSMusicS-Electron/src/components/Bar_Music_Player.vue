@@ -898,7 +898,7 @@ onBeforeUnmount(() => {
               <n-space vertical justify="center" align="center" >
                 <n-slider
                     style="
-                    width: 18px;height: 158px;
+                    height: 158px;
                     border-radius: 10px;
                     margin-top: 6px;
                   "
