@@ -290,7 +290,7 @@ export const store_view_media_page_fetchData = reactive({
         store_view_media_page_info.media_Files_temporary = [];
         this._start = 0;
         this._end = 100;
-        await this.fetchData_Media_of_server_web()
+        this.fetchData_Media_of_server_web()
 
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
             store_view_media_page_fetchData._album_id = ''
@@ -323,7 +323,7 @@ export const store_view_media_page_fetchData = reactive({
             playlist_id = selected
         }
         let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-        await get_Navidrome_Temp_Data_To_LocalSqlite.get_media_list(
+        get_Navidrome_Temp_Data_To_LocalSqlite.get_media_list(
             store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
             store_server_users.server_config_of_current_user_of_sqlite?.user_name,
             store_server_user_model.token,
