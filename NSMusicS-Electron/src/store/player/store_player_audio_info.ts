@@ -132,8 +132,6 @@ watch(() => store_player_audio_info.this_audio_file_medium_image_url, (newValue)
 });
 watch(() => store_player_audio_info.this_audio_song_id, (newValue) => {
     console.log('this_audio_song_id：'+newValue)
-
-    store_local_data_set_mediaInfo.Set_MediaInfo_To_PlayCount_of_Media_File(newValue)
 });
 watch(() => store_player_audio_info.this_audio_song_rating, (newValue) => {
     console.log('this_audio_song_rating：'+newValue)

@@ -148,7 +148,8 @@ const Play_This_Audio_Path = () => {
           store_player_audio_logic.player = new Audio_node_mpv()
         }
         await store_player_audio_logic.player.load(store_player_audio_info.this_audio_file_path)
-      }else if(store_player_audio_logic.player_select === 'web'){
+      }
+      else if(store_player_audio_logic.player_select === 'web'){
         if(store_player_audio_logic.player.howl != null){
           await store_player_audio_logic.player.howl.unload()
         }
@@ -224,12 +225,15 @@ const Play_This_Audio_Path = () => {
       store_player_audio_logic.total_play_time = formatTime(
           await store_player_audio_logic.player.getDuration()
       );
+
+      store_local_data_set_mediaInfo.Set_MediaInfo_To_PlayCount_of_Media_File(
+          store_player_audio_info.this_audio_song_id
+      )
     }
   }, 400);
 }
 /// Prevent 'mpv stopped' from being triggered multiple times and implement anti shake throttling measures
 import { debounce } from 'lodash';
-import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 const handleMpvStopped = debounce(async (event, args) => {
   is_play_ended.value = true;
   let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
@@ -588,24 +592,15 @@ const Set_Playlist_Show = () => {
 }
 ////// open sound effects
 const Set_Player_Show_Sound_effects= () => {
-  if(store_player_sound_effects.player_show_sound_effects === false)
-    store_player_sound_effects.player_show_sound_effects = true
-  else
-    store_player_sound_effects.player_show_sound_effects = false
+  store_player_sound_effects.player_show_sound_effects = !store_player_sound_effects.player_show_sound_effects;
 }
 ////// open sound speedPlayer_Show_Sound_more
 const Set_Player_Show_Sound_speed= () => {
-  if(store_player_sound_speed.player_show_sound_speed === false)
-    store_player_sound_speed.player_show_sound_speed = true
-  else
-    store_player_sound_speed.player_show_sound_speed = false
+  store_player_sound_speed.player_show_sound_speed = store_player_sound_speed.player_show_sound_speed === false;
 }
 ////// open sound more info
 const Set_Player_Show_Sound_more= () => {
-  if(store_player_sound_more.player_show_sound_more === false)
-    store_player_sound_more.player_show_sound_more = true
-  else
-    store_player_sound_more.player_show_sound_more = false
+  store_player_sound_more.player_show_sound_more = store_player_sound_more.player_show_sound_more === false;
 }
 
 ////// auto collapse player_configs bar
