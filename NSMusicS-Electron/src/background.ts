@@ -880,6 +880,7 @@ async function createTray(){
 /// node-mpv init
 let currentMediaPath = '';
 let currentFade = 0;
+let currentVolume = 0;
 let currentParameters = null
 let isPlaying = false;
 async function initNodeMpv(){
@@ -917,7 +918,7 @@ async function createNodeMpv(){
         isPlaying = false
     });
     ipc.handle('mpv-fade', async (event,fade) => {
-        currentFade = fade / 1000
+        currentFade = fade !== 0 ? fade / 1000 : 0;
     });
     ipc.handle('mpv-parameters', async (event,parameters: any) => {
         currentParameters = parameters
@@ -936,9 +937,6 @@ async function createNodeMpv(){
                 currentMediaPath = filePath;
                 await mpv.load(filePath);
 
-                mpv.commandJSON({
-                    'command': ['af', 'add', 'afade=t=in:d='+currentFade]
-                });
                 const properties: Record<string, any> = {
                     'audio-channels': currentParameters.player_audio_channel,
                     'gapless-audio': currentParameters.player_gaplessAudio,        // no, yes, weak
@@ -960,6 +958,10 @@ async function createNodeMpv(){
                 await mpv.play();
                 isPlaying = true;
                 tray_music_play = true
+
+                if(currentFade !== 0){
+                    await startFadeIn(currentVolume)
+                }
             }
             return true;
         } catch (error) {
@@ -1003,6 +1005,7 @@ async function createNodeMpv(){
     });
     ipc.handle('mpv-set-volume', async (event,volume) => {
         await mpv.volume(volume)
+        currentVolume = volume
     });
 
     ////// 手动实现 mpv 播放/暂停 淡入淡出效果
