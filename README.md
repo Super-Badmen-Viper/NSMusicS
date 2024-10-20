@@ -3,12 +3,6 @@
 ## NSMusicS | 九歌
  It should not only implement its own streaming services, but also be compatible with various mainstream open-source streaming servers, And implement cross platform professional music clients for various operating systems, ensuring data interoperability between the client and server of each operating system
  
- The expectation of the NSMusicS series products is to enable people around the world to use free, open-source, and user-friendly music products
- 
- 大道之行，天下为公。人神恋歌，九歌韵世。  
- 汨罗江流，香魂袅袅。美人已逝，风韵长存。  
- 念卿不返，壮志何哀？承卿遗志，继往开来。  
- 
 ## NSMusicS-Electron | 九歌 : Desktop-client
 - [x] supporting the Windows platform (which will soon support Linux、MacOS、Docker) 
 - [x] compatible with streaming media servers Navidrome (which will soon be compatible with Subsonic、Jellyfin、Emby、NSMusicS)
@@ -48,8 +42,7 @@
 | NSMusicS_For_KG   |<font color="#00dd00">will developed</font> |  NebulaGraph / Neo4j <image width="200" src="https://www-cdn.nebula-graph.io/nebula-website-5.0/images/logo.png"/>      | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | Windows10++<br>Linux<br>Docker | A-GPL 3.0 | Open source / Prohibition of commercial use | 
 
 ## sponsor
-
-爱发电：https://afdian.com/a/fu_zi_qian
+爱发电：https://afdian.com/a/fu_zi_qian  
 <img src="doc/sponsor.png" width="25%">
 
 ## Using the source code of NSMusicS-Electron
@@ -112,5 +105,8 @@ npm run build-only # Package into the current system_configs's software package 
 ## Author's Message
  - As this project is currently independently developed by Xiang Cheng(myself), programming standards are a personal habit of the Xiang Cheng(myself), and coding standards are not yet standardized enough. However, this project will continue to undergo self refactoring and reverse development. It can be affirmed that in the future, NSMusicS will form a standard coding specification, which will be beneficial for the community to develop third-party NSMusicS plugins, Enable NSMusicS to meet the diverse needs of more potential customers，Most importantly, NSMusicS will always be open source and continuously updated
  - The expectation of the NSMusicS series products is to enable people around the world to use free, open-source, and user-friendly music products
+ - 大道之行，天下为公。人神恋歌，九歌韵世。  
+ - 汨罗江流，香魂袅袅。美人已逝，风韵长存。  
+ - 念卿不返，壮志何哀？承卿遗志，继往开来。
  - The Chinese name of the project is "Nine Songs Music | 九歌", abbreviated as NSMusicS<br> inspired by ["Chu Ci"], to commemorate ["Qu Yuan"]<br>
  - 项目中文名为：九歌，缩写为: NSMusicS<br> 灵感来源于：[楚辞]，谨以纪念：[屈原]，
