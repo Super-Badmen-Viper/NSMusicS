@@ -280,7 +280,7 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div class="home-wall-container">
-    <n-space vertical style="margin-top: 20px;">
+    <n-space vertical style="margin-top: 20px;margin-left: 8px;">
       <div class="notice"
            v-contextmenu:contextmenu
            @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = store_view_home_page_info.home_selected_top_album?.id">
@@ -369,7 +369,7 @@ onBeforeUnmount(() => {
       </n-space>
     </n-space>
 
-    <n-space vertical style="margin-top: 10px;">
+    <n-space vertical style="margin-top: 10px;margin-left: 8px;">
       <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.mostPlayed') }}
@@ -488,7 +488,7 @@ onBeforeUnmount(() => {
         </template>
       </DynamicScroller>
     </n-space>
-    <n-space vertical style="margin-top: 36px;">
+    <n-space vertical style="margin-top: 36px;margin-left: 8px;">
       <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.explore') }}
@@ -607,7 +607,7 @@ onBeforeUnmount(() => {
         </template>
       </DynamicScroller>
     </n-space>
-    <n-space vertical style="margin-top: 36px;">
+    <n-space vertical style="margin-top: 36px;margin-left: 8px;">
       <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.newlyAdded') }}
@@ -726,7 +726,7 @@ onBeforeUnmount(() => {
         </template>
       </DynamicScroller>
     </n-space>
-    <n-space vertical style="margin-top: 36px;">
+    <n-space vertical style="margin-top: 36px;margin-left: 8px;">
       <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.recentlyPlayed') }}

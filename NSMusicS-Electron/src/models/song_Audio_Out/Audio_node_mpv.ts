@@ -4,6 +4,7 @@ const { ipcRenderer } = require('electron');
 export class Audio_node_mpv {
     public isPlaying: boolean;
     public isDuration: number | undefined;
+    public isCurrentTime: number | undefined;
     constructor() {
         this.isPlaying = false;
     }
@@ -55,7 +56,8 @@ export class Audio_node_mpv {
     }
     async getDuration(): Promise<number | undefined> {
         try {
-            this.isDuration = await ipcRenderer.invoke('mpv-get-duration')
+            let temp = await ipcRenderer.invoke('mpv-get-duration')
+            this.isDuration = temp >= 0 ? temp : this.isDuration
             return this.isDuration;
         }catch{
             return 0
@@ -63,7 +65,9 @@ export class Audio_node_mpv {
     }
     async getCurrentTime(): Promise<number> {
         try {
-            return await ipcRenderer.invoke('mpv-get-time-pos');
+            let temp = await ipcRenderer.invoke('mpv-get-time-pos');
+            this.isCurrentTime = temp >= 0 ? temp : this.isCurrentTime
+            return this.isCurrentTime;
         }catch{
             return 0
         }

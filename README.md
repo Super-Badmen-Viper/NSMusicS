@@ -47,6 +47,11 @@
 | NSMusicS_For_Audio   |<font color="#00dd00">will developed</font>  | pytorch,py,jupyter,matlab ![My Skills](https://go-skill-icons.vercel.app/api/icons?i=pytorch,py,jupyter,matlab)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  |    Windows10++<br>Linux<br>Docker   | A-GPL 3.0 | Open source / Prohibition of commercial use | 
 | NSMusicS_For_KG   |<font color="#00dd00">will developed</font> |  NebulaGraph / Neo4j <image width="200" src="https://www-cdn.nebula-graph.io/nebula-website-5.0/images/logo.png"/>      | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | Windows10++<br>Linux<br>Docker | A-GPL 3.0 | Open source / Prohibition of commercial use | 
 
+## sponsor
+
+爱发电：https://afdian.com/a/fu_zi_qian
+<img src="doc/sponsor.png" width="25%">
+
 ## Using the source code of NSMusicS-Electron
 #### If you would like to experience the latest development progress of NSMusicS-Electron:
 ```sh

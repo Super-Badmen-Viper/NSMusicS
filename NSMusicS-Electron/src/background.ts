@@ -988,13 +988,13 @@ async function createNodeMpv(){
         if(isPlaying) {
             try { return await mpv.getDuration() } catch {}
         }
-        return 0
+        return -1
     });
     ipc.handle('mpv-get-time-pos', async (event) => {
         if(isPlaying) {
             try { return await mpv.getTimePosition() } catch {}
         }
-        return 0
+        return -1
     });
     ipc.handle('mpv-set-time-pos', async (event,timePos) => {
         await mpv.resume();

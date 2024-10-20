@@ -45,8 +45,7 @@ export const viteElectronBuild = (): Plugin => {
                     asar: true,
                     win: {
                         target: 'nsis',
-                        icon: 'resources/config/NSMusicS.ico',
-                        // requestedExecutionLevel: 'requireAdministrator'
+                        icon: 'resources/config/NSMusicS.ico'
                     },
                     linux: {
                         target: 'AppImage',
