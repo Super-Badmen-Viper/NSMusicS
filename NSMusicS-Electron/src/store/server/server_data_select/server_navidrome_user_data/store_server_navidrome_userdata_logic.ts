@@ -16,13 +16,13 @@ const { ipcRenderer } = require('electron');
 export const store_server_navidrome_userdata_logic = reactive({
     /// server add
     async navidrome_update_server_addUser(
-        server_set_of_addUser_of_servername: string ,
-        server_set_of_addUser_of_url: string ,
-        server_set_of_addUser_of_username: string ,
-        server_set_of_addUser_of_password: string ,
+        server_set_of_addUser_of_servername: string,
+        server_set_of_addUser_of_url: string,
+        server_set_of_addUser_of_username: string,
+        server_set_of_addUser_of_password: string,
+        type: string
     ) {
         try{
-
             const userService = new User_ApiService_of_ND(server_set_of_addUser_of_url +'/rest');
             const {salt, token} = this.navidrome_generateEncryptedPassword(server_set_of_addUser_of_password);
             const userData = await userService.getUser(server_set_of_addUser_of_username, token, salt);
@@ -33,7 +33,7 @@ export const store_server_navidrome_userdata_logic = reactive({
                     server_set_of_addUser_of_url,
                     server_set_of_addUser_of_username,
                     server_set_of_addUser_of_password,
-                    'navidrome'
+                    type
                 );
                 const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
                 new_data.push(data)
@@ -47,7 +47,8 @@ export const store_server_navidrome_userdata_logic = reactive({
     /// server update
     async navidrome_update_server_setUser(
         id:string, server_name:string, url:string,
-        user_name:string, password:string
+        user_name:string, password:string,
+        type: string
     ) {
         const userService = new User_ApiService_of_ND(url+'/rest');
         const {salt, token} = this.navidrome_generateEncryptedPassword(password);
@@ -58,7 +59,7 @@ export const store_server_navidrome_userdata_logic = reactive({
                 id,
                 server_name, url,
                 user_name, password,
-                'navidrome'
+                type
             );
             const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
             const index = new_data.findIndex(item => item.id === data.id);
@@ -98,9 +99,12 @@ export const store_server_navidrome_userdata_logic = reactive({
                 store_server_users.server_config_of_all_user_of_sqlite[index].server_name,
                 store_server_users.server_config_of_all_user_of_sqlite[index].url,
                 store_server_users.server_config_of_all_user_of_sqlite[index].user_name,
-                store_server_users.server_config_of_all_user_of_sqlite[index].password
+                store_server_users.server_config_of_all_user_of_sqlite[index].password,
+                store_server_users.server_config_of_all_user_of_sqlite[index].type
             )
-            await this.navidrome_get_server_config_of_current_user_of_sqlite(store_server_users.server_config_of_all_user_of_sqlite[index])
+            await this.navidrome_get_server_config_of_current_user_of_sqlite(
+                store_server_users.server_config_of_all_user_of_sqlite[index]
+            )
             if(store_server_user_model.model_server_type_of_web){
                 console.log('store_server_user_model.model_server_type_of_web')
                 let user_Authorization_ApiWebService_of_ND = new User_Authorization_ApiWebService_of_ND(

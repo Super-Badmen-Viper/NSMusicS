@@ -27,29 +27,29 @@ export const store_server_users = reactive({
     },
 
     get_server_config_of_all_user_of_sqlite(value: Server_Configs_Props[]) {
-        this.server_config_of_all_user_of_sqlite = value;
-        this.server_config_of_all_user_of_select = [];
+        store_server_users.server_config_of_all_user_of_sqlite = value;
+        store_server_users.server_config_of_all_user_of_select = [];
         value.forEach((item: any) => {
-            this.server_config_of_all_user_of_select.push({
-                label: item.server_name,
+            store_server_users.server_config_of_all_user_of_select.push({
+                label: item.type + ' - ' + item.server_name,
                 value: item.id
             });
         });
 
-        const index = this.server_config_of_all_user_of_sqlite.findIndex(item => item.id === this.server_config_of_current_user_of_select?.value);
+        const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(item => item.id === store_server_users.server_config_of_current_user_of_select?.value);
         if (index < 0) {
-            this.server_config_of_current_user_of_sqlite = undefined;
-            this.server_config_of_current_user_of_select = undefined;
-            this.server_config_of_current_user_of_select_servername = '';
+            store_server_users.server_config_of_current_user_of_sqlite = undefined;
+            store_server_users.server_config_of_current_user_of_select = undefined;
+            store_server_users.server_config_of_current_user_of_select_servername = '';
         }else{
             store_server_users.server_config_of_current_user_of_sqlite =
-                this.server_config_of_all_user_of_sqlite[index]
+                store_server_users.server_config_of_all_user_of_sqlite[index]
             store_server_users.server_config_of_current_user_of_select = {
-                label: this.server_config_of_all_user_of_sqlite[index].type + ' - ' + this.server_config_of_all_user_of_sqlite[index].server_name,
-                value: this.server_config_of_all_user_of_sqlite[index].id
+                label: store_server_users.server_config_of_all_user_of_sqlite[index].type + ' - ' + store_server_users.server_config_of_all_user_of_sqlite[index].server_name,
+                value: store_server_users.server_config_of_all_user_of_sqlite[index].id
             };
             store_server_users.server_config_of_current_user_of_select_servername =
-                this.server_config_of_all_user_of_sqlite[index].type + ' - ' + this.server_config_of_all_user_of_sqlite[index].server_name
+                store_server_users.server_config_of_all_user_of_sqlite[index].type + ' - ' + store_server_users.server_config_of_all_user_of_sqlite[index].server_name
         }
     },
 

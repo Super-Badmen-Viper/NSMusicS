@@ -133,7 +133,8 @@
           server_set_of_addUser_of_servername.value,
           server_set_of_addUser_of_url.value,
           server_set_of_addUser_of_username.value,
-          server_set_of_addUser_of_password.value
+          server_set_of_addUser_of_password.value,
+          server_set_of_addUser_of_type.value
       )
       if(result){
         message.success(t('form.addServer.success'))
@@ -146,9 +147,12 @@
     Type_Server_Add.value = !Type_Server_Add.value
   }
   /// server delete
-  async function update_server_deleteUser(id: string) {
+  async function update_server_deleteUser(id: string, type: string) {
     try {
-      const result = await store_server_data_select_logic.update_server_deleteUser(id)
+      const result = await store_server_data_select_logic.update_server_deleteUser(
+          id,
+          type
+      )
       if(result){
         message.success(t('form.updateServer.success'))
       }else{
@@ -159,12 +163,13 @@
     }
   }
   /// server update
-  async function update_server_setUser(id:string, server_name:string, url:string, user_name:string, password:string) {
+  async function update_server_setUser(id:string, server_name:string, url:string, user_name:string, password:string, type: string) {
     try {
       const result = await store_server_data_select_logic.update_server_setUser(
           id,
           server_name, url,
-          user_name, password
+          user_name, password,
+          type
       )
       if(result){
         message.success(t('form.updateServer.success'))
@@ -179,7 +184,12 @@
   async function update_server_config_of_current_user_of_sqlite(value: any, select_change: any){
     if(select_change) {
       try {
-        const result = await store_server_data_select_logic.update_server_config_of_current_user_of_sqlite(value)
+        const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(item => item.id === value);
+        const user_config = store_server_users.server_config_of_all_user_of_sqlite[index]
+        const result = await store_server_data_select_logic.update_server_config_of_current_user_of_sqlite(
+            value,
+            user_config?.type
+        )
         if (result) {
           message.success(t('form.updateServer.success'))
         } else {
@@ -649,14 +659,15 @@
                                         </n-form>
                                         <n-space justify="end">
                                           <n-button strong secondary type="error"
-                                                    @click="item.show = false;update_server_deleteUser(item.id);">
+                                                    @click="item.show = false;update_server_deleteUser(item.id, item.type);">
                                             {{ $t('common.delete') }}
                                           </n-button>
                                           <n-button strong secondary type="info"
                                                     @click="update_server_setUser(
                                               item.id,
                                               item.server_name,item.url,
-                                              item.user_name,item.password
+                                              item.user_name,item.password,
+                                              item.type
                                           )">
                                             {{ $t('common.save') }}
                                           </n-button>
@@ -843,7 +854,6 @@
                       />
                       <n-radio-button
                           style="text-align: center;width: 132px;"
-                          disabled
                           :key="Type_Server_Kinds[1].value"
                           :value="Type_Server_Kinds[1].value"
                           :label="Type_Server_Kinds[1].label"
