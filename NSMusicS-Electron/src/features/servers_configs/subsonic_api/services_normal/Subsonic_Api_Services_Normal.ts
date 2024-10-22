@@ -7,7 +7,7 @@ export class Subsonic_Api_Services_Normal {
     }
     protected getCommonParams(username: string, token: string, salt:string): Record<string, string> {
         return {
-            u: username,
+            username: username,
             t: token,
             s: salt,
             v: '1.12.0',

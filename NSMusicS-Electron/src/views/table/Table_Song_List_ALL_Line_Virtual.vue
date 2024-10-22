@@ -492,7 +492,7 @@ async function update_playlist_addPlaylist(){
           getCreatePlaylist_set_id
       )
       // get server all playlist
-      await store_server_user_model.Get_UserData_Synchronize_ToLocal_of_ND()
+      await store_server_user_model.Get_UserData_Synchronize_PlayList()
       //
       console.log('SetPlaylist_of_Local: '+
           getCreatePlaylist_set_id + ': ' +

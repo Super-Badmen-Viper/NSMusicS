@@ -74,22 +74,6 @@ export const store_server_navidrome_userdata_logic = reactive({
         return false
     },
 
-    /// server delete
-    async navidrome_update_server_deleteUser(
-        id: string
-    ) {
-        try {
-            let set_ServerInfo_To_LocalSqlite = new Set_ServerInfo_To_LocalSqlite();
-            set_ServerInfo_To_LocalSqlite.Set_ServerInfo_To_Update_DeleteUser(id);
-            const new_data: Server_Configs_Props[] = store_server_users.server_config_of_all_user_of_sqlite;
-            const index = new_data.findIndex(item => item.id === id);
-            new_data.splice(index, 1);
-            store_server_users.get_server_config_of_all_user_of_sqlite(new_data)
-            return true;
-        }catch {}
-        return false;
-    },
-
     /// server select login
     async navidrome_update_server_config_of_current_user_of_sqlite(value: any){
         try {
@@ -132,7 +116,7 @@ export const store_server_navidrome_userdata_logic = reactive({
         store_server_user_model.password = value.password
         store_app_configs_logic_save.save_system_config_of_Servers_Config()
 
-        const {salt, token} = store_server_users.get_generateEncryptedPassword(
+        const {salt, token} = store_server_users.navidrome_get_EncryptedPassword(
             store_server_users.server_config_of_current_user_of_sqlite?.password
         );
         store_server_user_model.salt = salt

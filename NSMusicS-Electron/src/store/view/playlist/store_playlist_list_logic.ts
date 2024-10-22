@@ -17,7 +17,7 @@ export const store_playlist_list_logic = reactive({
         store_playlist_list_info.playlist_names_ALLLists = []
         store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = []
         if (store_server_user_model.model_select === 'server') {
-            await store_server_user_model.Get_UserData_Synchronize_ToLocal_of_ND()
+            await store_server_user_model.Get_UserData_Synchronize_PlayList()
         } else {
             try {
                 let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()

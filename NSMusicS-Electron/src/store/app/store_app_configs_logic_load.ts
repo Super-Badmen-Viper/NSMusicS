@@ -75,7 +75,7 @@ export const store_app_configs_logic_load = reactive({
                 store_server_user_model.model_select = 'server';
             }
             if(store_server_user_model.model_select === 'server'){
-                store_server_user_model.switchToMode_Navidrome_Api()
+                store_server_user_model.switchToMode_Server()
             }else{
                 store_server_user_model.switchToMode_Local()
             }
@@ -173,8 +173,7 @@ export const store_app_configs_logic_load = reactive({
                 item =>
                     item.id === store_server_users.server_config_of_current_user_of_sqlite?.id);
             if (index >= 0) {
-                store_server_users.server_config_of_current_user_of_sqlite =
-                    store_server_users.server_config_of_all_user_of_sqlite[index]
+                store_server_users.server_config_of_current_user_of_sqlite = store_server_users.server_config_of_all_user_of_sqlite[index]
                 store_server_users.server_config_of_current_user_of_select = {
                     label: store_server_users.server_config_of_all_user_of_sqlite[index].type + ' - ' + store_server_users.server_config_of_all_user_of_sqlite[index].server_name,
                     value: store_server_users.server_config_of_all_user_of_sqlite[index].id
@@ -184,7 +183,7 @@ export const store_app_configs_logic_load = reactive({
             }
             ///
             store_app_configs_logic_save.save_system_config_of_Servers_Config()
-            const {username, salt, token} = store_server_users.get_login_parms();
+            const {username, salt, token} = store_server_users.get_init_login_parms();
             store_server_user_model.username = username
             store_server_user_model.salt = salt
             store_server_user_model.token = token

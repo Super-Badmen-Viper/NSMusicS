@@ -43,7 +43,7 @@ watch(() => store_router_data_info.router_select, async (newValue) => {
             /// Synchronize API data
             if (store_server_user_model.model_select === 'server') {
                 // get server all playlist
-                await store_server_user_model.Get_UserData_Synchronize_ToLocal_of_ND()
+                await store_server_user_model.Get_UserData_Synchronize_PlayList()
             }
         } else if (newValue === 'View_Album_List_ALL') {
             store_router_data_info.router_select_model_album = true

@@ -62,7 +62,7 @@ export const store_server_user_model = reactive({
         this.playlist = 'playlist'
         this.playlist_tracks = 'playlist_tracks'
     },
-    switchToMode_Navidrome_Api(){
+    switchToMode_Server(){
         this.album = 'server_album'
         this.annotation = 'server_annotation'
         this.artist = 'server_artist'
@@ -70,18 +70,25 @@ export const store_server_user_model = reactive({
         this.playlist = 'server_playlist'
         this.playlist_tracks = 'server_playlist_tracks'
     },
+    
     async refresh_model_server_type_of_web(){
         let user_Authorization_ApiWebService_of_ND = new User_Authorization_ApiWebService_of_ND()
         await user_Authorization_ApiWebService_of_ND.get_token()
         store_app_configs_logic_save.save_system_config_of_App_Configs()
     },
 
-    async Get_UserData_Synchronize_ToLocal_of_ND() {
-        let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_ALL_Data_To_LocalSqlite();
-        await set_Navidrome_Data_To_LocalSqlite.Set_Read_Navidrome_Api_PlayListInfo_Add_LocalSqlite(
-            store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-            store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
-        );
+    async Get_UserData_Synchronize_PlayList() {
+        const index = store_server_users.server_config_of_all_user_of_sqlite.findIndex(item => item.id === store_server_users.server_config_of_current_user_of_sqlite?.id);
+        const user_config = store_server_users.server_config_of_all_user_of_sqlite[index]
+        if(user_config?.type === 'navidrome'){
+            let set_Navidrome_Data_To_LocalSqlite = new Set_Navidrome_ALL_Data_To_LocalSqlite();
+            await set_Navidrome_Data_To_LocalSqlite.Set_Read_Navidrome_Api_PlayListInfo_Add_LocalSqlite(
+                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
+            );
+        }else if(user_config?.type === 'subsonic'){
+
+        }
     },
 })
 watch(() => store_server_user_model.library_path, (newValue) => {

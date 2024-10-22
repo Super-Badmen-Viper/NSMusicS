@@ -281,12 +281,6 @@ export class Set_Navidrome_ALL_Data_To_LocalSqlite{
                     external_info_updated_at: '',
                 };
                 artistsArray.push(sqlite_artist);
-                // navidrome not artist_play_history
-                // artistsAnnotionArray.push({
-                //     id: artist.id,
-                //     played: artist.played,
-                //     playCount: artist.playCount,
-                // });
 
                 const albumSongs = await Promise.all(albumPromises);
                 return albumSongs.flat();

@@ -74,10 +74,9 @@ export class Set_Subsonic_ALL_Data_To_LocalSqlite{
         const NodeCache = require('node-cache');
         const cache = new NodeCache();
 
-        const db = require('better-sqlite3')(store_app_configs_info.subsonic_db);
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
-
 
         db.exec("DELETE FROM server_album");
         db.exec("DELETE FROM server_annotation");
@@ -281,12 +280,6 @@ export class Set_Subsonic_ALL_Data_To_LocalSqlite{
                     external_info_updated_at: '',
                 };
                 artistsArray.push(sqlite_artist);
-                // subsonic not artist_play_history
-                // artistsAnnotionArray.push({
-                //     id: artist.id,
-                //     played: artist.played,
-                //     playCount: artist.playCount,
-                // });
 
                 const albumSongs = await Promise.all(albumPromises);
                 return albumSongs.flat();
@@ -449,7 +442,7 @@ export class Set_Subsonic_ALL_Data_To_LocalSqlite{
         const playlists = getPlaylists_all["subsonic-response"]["playlists"]["playlist"];
         let playlSongs = []
 
-        const db = require('better-sqlite3')(store_app_configs_info.subsonic_db);
+        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
 
