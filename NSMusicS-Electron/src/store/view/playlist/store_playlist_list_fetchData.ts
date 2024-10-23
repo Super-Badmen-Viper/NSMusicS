@@ -5,7 +5,7 @@ import {store_view_album_page_fetchData} from "@/store/view/album/store_view_alb
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
-} from "@/features/servers_configs/navidrome_api/instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
+} from "@/features/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";

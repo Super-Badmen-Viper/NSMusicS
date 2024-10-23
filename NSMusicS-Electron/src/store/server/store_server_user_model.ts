@@ -4,7 +4,7 @@ import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {
     Set_Navidrome_ALL_Data_To_LocalSqlite
-} from "@/features/servers_configs/navidrome_api/middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
+} from "@/features/servers_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
 import {
     Get_PlaylistInfo_From_LocalSqlite

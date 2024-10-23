@@ -18,7 +18,7 @@ import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchroni
 import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
-} from "@/features/servers_configs/navidrome_api/instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
+} from "@/features/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 

@@ -19,7 +19,7 @@ import {
 } from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
-} from "@/features/servers_configs/navidrome_api/instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
+} from "@/features/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";

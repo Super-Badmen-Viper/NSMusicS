@@ -106,14 +106,14 @@ export class Set_Subsonic_ALL_Data_To_LocalSqlite{
         const artistPromises = list.flatMap((artist_list: any) =>
             artist_list.artist.map(async (artist: any) => {
                 const cacheKey = `musicDirectory_${artist.id}`;
-                let getMusicDirectory_id = cache.get(cacheKey);
-                if (!getMusicDirectory_id) {
-                    getMusicDirectory_id = await browsing_ApiService_of_ND.getMusicDirectory_id(username, token, salt, artist.id);
-                    cache.set(cacheKey, getMusicDirectory_id, 60 * 60); // 缓存1小时
+                let getAlbum_id = cache.get(cacheKey);
+                if (!getAlbum_id) {
+                    getAlbum_id = await browsing_ApiService_of_ND.getAlbum(username, token, salt, artist.id);
+                    cache.set(cacheKey, getAlbum_id, 60 * 60); // 缓存1小时
                 }
 
-                const song_list_of_this_album = getMusicDirectory_id["subsonic-response"]["directory"]["child"];
-                const artist_song_count = getMusicDirectory_id["subsonic-response"]["directory"]["songCount"]
+                const song_list_of_this_album = getAlbum_id["subsonic-response"]["directory"]["child"];
+                const artist_song_count = getAlbum_id["subsonic-response"]["directory"]["songCount"]
                 const albumPromises = song_list_of_this_album.map(async (album: any) => {
                     const sqlite_album = {
                         id: album.id,
@@ -164,7 +164,6 @@ export class Set_Subsonic_ALL_Data_To_LocalSqlite{
                             });
                         }
                     }
-
 
                     try {
                         if (db.prepare(`SELECT COUNT(*) FROM ${store_server_user_model.annotation} WHERE item_id = ?`).pluck().get(album.id) === 0) {

@@ -121,10 +121,10 @@
       Type_Server_Model_Open_Value.value = Type_Server_Model_Open_Option.value[1].value
   });
   const server_set_of_addUser_of_type = ref('')
-  const server_set_of_addUser_of_servername = ref('honghua')
-  const server_set_of_addUser_of_url = ref('http://localhost:4040')
-  const server_set_of_addUser_of_username = ref('honghua')
-  const server_set_of_addUser_of_password = ref('qwer1234')
+  const server_set_of_addUser_of_servername = ref('')
+  const server_set_of_addUser_of_url = ref('')
+  const server_set_of_addUser_of_username = ref('')
+  const server_set_of_addUser_of_password = ref('')
   /// server add
   async function update_server_addUser() {
     server_set_of_addUser_of_type.value = Type_Server_Selected.value;

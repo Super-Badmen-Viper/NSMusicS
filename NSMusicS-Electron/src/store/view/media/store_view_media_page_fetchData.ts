@@ -11,7 +11,7 @@ import {store_view_media_page_info} from "@/store/view/media/store_view_media_pa
 import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
-} from "@/features/servers_configs/navidrome_api/instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
+} from "@/features/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
 import {
     Playlists_ApiService_of_ND

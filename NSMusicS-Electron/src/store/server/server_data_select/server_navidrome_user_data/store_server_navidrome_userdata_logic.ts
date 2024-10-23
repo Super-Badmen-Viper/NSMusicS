@@ -7,7 +7,7 @@ import {
 } from "@/features/servers_configs/navidrome_api/services_web/user_authorization/index_service";
 import {
     Set_Navidrome_ALL_Data_To_LocalSqlite
-} from "@/features/servers_configs/navidrome_api/middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
+} from "@/features/servers_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
 const crypto = require('crypto');
 import { User_ApiService_of_ND } from "@/features/servers_configs/navidrome_api/services_normal/user_management/index_service";
 import { Set_ServerInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_ServerInfo_To_LocalSqlite";

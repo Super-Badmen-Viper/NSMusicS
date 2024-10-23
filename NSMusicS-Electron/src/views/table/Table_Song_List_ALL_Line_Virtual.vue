@@ -456,7 +456,7 @@ import {store_player_audio_logic} from "@/store/player/store_player_audio_logic"
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {
   Get_Navidrome_Temp_Data_To_LocalSqlite
-} from "@/features/servers_configs/navidrome_api/instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
+} from "@/features/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
 import {store_router_data_info} from "@/store/router/store_router_data_info";
