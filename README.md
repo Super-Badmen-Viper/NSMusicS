@@ -2,9 +2,13 @@
 <img src="https://github.com/user-attachments/assets/7534a7e7-c45a-4813-9210-2fc66c686164" width="49%">
 
 ## NSMusicS | 九歌
- It should not only implement its own streaming services, but also be compatible with various mainstream open-source streaming servers, And implement cross platform professional music clients for various operating systems, ensuring data interoperability between the client and server of each operating system  
+ It should not only implement its own streaming services, but also be compatible with various mainstream open-source streaming servers, And implement cross platform professional music clients for various operating systems, ensuring data interoperability between the client and server of each operating system  (desktop：Windows，Linux，MacOs. mobile: Android, IOS. Car System: Android)  
  
  The Chinese name of the project is "Nine Songs Music | 九歌", abbreviated as NSMusicS<br> inspired by ["Chu Ci"] | 楚辞, to commemorate ["Qu Yuan"] | 屈原<br>
+
+ The NSMusicS plan supports multiple server types, such as [Navidrome](https://www.navidrome.org/), [Jellyfin](https://jellyfin.org/), [emby](https://emby.media/), [NSMusicS](https://github.com/Super-Badmen-Viper/NSMusicS). **Subsonic API is not currently supported**. This will likely be added in [later when the new Subsonic API is decided on](https://support.symfonium.app/t/subsonic-servers-participation/1233).  
+ 
+ In addition, NSMusicS also supports local mode to use local music libraries. And plan to support various types of network cloud drives，such as webdev，onedriver....
  
 ## NSMusicS-Electron | 九歌 : Desktop-client
 - [x] supporting the Windows platform (which will soon support Linux、MacOS、Docker) 
