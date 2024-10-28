@@ -854,6 +854,7 @@
                       />
                       <n-radio-button
                           style="text-align: center;width: 132px;"
+                          disabled
                           :key="Type_Server_Kinds[1].value"
                           :value="Type_Server_Kinds[1].value"
                           :label="Type_Server_Kinds[1].label"
@@ -1051,8 +1052,8 @@
                   >
                   </n-switch>
                 </n-space>
-                <n-divider style="margin: 0;"/>
-                <n-space vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-divider v-if="false" style="margin: 0;"/>
+                <n-space v-if="false" vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
                   <n-space justify="space-between" align="center">
                     <n-space vertical>
                       <span style="font-size:16px;font-weight: 600;">{{ $t('setting.homeConfiguration') }}</span>
