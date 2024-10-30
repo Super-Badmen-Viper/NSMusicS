@@ -365,6 +365,20 @@ async function createWindow() {
         const id = db.prepare(sql).get(artist_name);
         return id;
     }
+    function extractArtistAndTitle(filePath: string): { artist: string, title: string} | null {
+        const regex = /^(.*?)\\([^\\]*?)\s*-\s*(.*?)\.\w+$/;
+        const match = filePath.match(regex);
+        if (match) {
+            const artist = match[2].trim();
+            const title = match[3].trim();
+            return { artist, title };
+        }
+        return null;
+    }
+    function dir_name(filename, ds){
+        ds = ds || "/";
+        return  filename.replace(/\/|\\/g, ds).replace(new RegExp("\\"+ds+"[^\\"+ds+"]*?$"), "")
+    }
     /// node-taglib-sharp
     let percentage = 0;
     async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
@@ -401,23 +415,64 @@ async function createWindow() {
         const albumMap = new Map();
         const processChunk = (chunk) => {
             for (const { taglibFile, _path } of chunk) {
-                try {
-                    const artistName = (taglibFile.tag.performers || []).join('、') || "undefined";
-                    const albumName = taglibFile.tag.album || "undefined";
-                    const artistId = artistName;
-                    const albumId = `${artistName}-${albumName}`;
-
-                    let medium_image_url_local = path.join(path.join(path.dirname(_path), 'cover') + '.jpg')
+                // pic resource
+                let medium_image_url_local = path.join(path.join(path.dirname(_path), 'cover') + '.jpg')
+                if (!fs.existsSync(medium_image_url_local)) {
+                    medium_image_url_local = medium_image_url_local.replace('.jpg', '.png')
                     if (!fs.existsSync(medium_image_url_local)) {
-                        medium_image_url_local = medium_image_url_local.replace('.jpg','.png')
+                        medium_image_url_local = medium_image_url_local.replace('.png', '.jpeg')
                         if (!fs.existsSync(medium_image_url_local)) {
-                            medium_image_url_local = medium_image_url_local.replace('.png','.jpeg')
-                            if (!fs.existsSync(medium_image_url_local)) {
-                                medium_image_url_local = ''
-                            }
+                            medium_image_url_local = ''
                         }
                     }
-
+                }
+                // tag import
+                const result_file_name = extractArtistAndTitle(_path)
+                const artistName =
+                    (taglibFile.tag.performers || []).join('、') ||
+                    file_name_model ?
+                        (result_file_name?.artist ? result_file_name.artist.split('、') : []).join('、') || "undefined"
+                        :
+                        result_file_name?.title || "undefined"
+                const albumName = taglibFile.tag.album || "undefined"
+                const artistId = artistName;
+                const albumId = `${artistName}-${albumName}`;
+                // album
+                const album_artist =
+                    taglibFile.tag.performers ||
+                    file_name_model ?
+                        result_file_name?.artist || "undefined"
+                        :
+                        result_file_name?.title || "undefined"
+                const min_year = taglibFile.tag.year || ''
+                const max_year = taglibFile.tag.year || ''
+                const sort_album_name = taglibFile.tag.albumSort || ''
+                const sort_artist_name = taglibFile.tag.albumArtistsSort || ''
+                const sort_album_artist_name = taglibFile.tag.albumArtistsSort || ''
+                const comment = taglibFile.tag.comment || ''
+                const description = taglibFile.tag.description || ''
+                // media
+                const title = taglibFile.tag.title ||
+                    (file_name_model ?
+                        result_file_name?.title || (dir_name(_path) || "undefined")
+                        :
+                        (result_file_name?.artist ? result_file_name.artist.split('、') : []).join('、') || (_path.match(/\\(.*?)(?=\s|$)/)?.[1] || "undefined")
+                    );
+                const track_number = taglibFile.tag.track || 0
+                const disc_number = taglibFile.tag.discCount || ''
+                const year = taglibFile.tag.year || ''
+                const size = taglibFile.tag.sizeOnDisk || ''
+                const duration = taglibFile.properties.durationMilliseconds / 1000 || 0
+                const bit_rate = taglibFile.properties.audioBitrate || 0
+                const genre = taglibFile.tag.genres || ''
+                const compilation = taglibFile.tag.isCompilation || ''
+                const sort_title = taglibFile.tag.titleSort || ''
+                const disc_subtitle = taglibFile.tag.subtitle || ''
+                const lyrics = taglibFile.tag.lyrics || ''
+                const channels = taglibFile.properties.audioChannels || ''
+                /// import
+                try {
+                    /// artist
                     if (!artistMap.has(artistId)) {
                         const artist = {
                             id: getUniqueId_Artist(db),
@@ -439,7 +494,7 @@ async function createWindow() {
                         };
                         artistMap.set(artistId, artist);
                     }
-
+                    /// album
                     if (!albumMap.has(albumId)) {
                         const artistObj = artistMap.get(artistId);
                         const album = {
@@ -448,9 +503,9 @@ async function createWindow() {
                             artist_id: artistObj.id,
                             embed_art_path: _path,
                             artist: artistName,
-                            album_artist: taglibFile.tag.performers || '',
-                            min_year: taglibFile.tag.year || '',
-                            max_year: taglibFile.tag.year || '',
+                            album_artist: album_artist,
+                            min_year: min_year,
+                            max_year: max_year,
                             compilation: 0,
                             song_count: 0,
                             duration: 0,
@@ -461,20 +516,20 @@ async function createWindow() {
                             album_artist_id: '',
                             order_album_name: '',
                             order_album_artist_name: '',
-                            sort_album_name: taglibFile.tag.albumSort || '',
-                            sort_artist_name: taglibFile.tag.albumArtistsSort || '',
-                            sort_album_artist_name: taglibFile.tag.albumArtistsSort || '',
+                            sort_album_name: sort_album_name,
+                            sort_artist_name: sort_artist_name,
+                            sort_album_artist_name: sort_album_artist_name,
                             size: 0,
                             mbz_album_id: '',
                             mbz_album_artist_id: '',
                             mbz_album_type: '',
                             mbz_album_comment: '',
                             catalog_num: '',
-                            comment: taglibFile.tag.comment || '',
+                            comment: comment,
                             all_artist_ids: '',
                             image_files: '',
                             paths: '',
-                            description: taglibFile.tag.description || '',
+                            description: description,
                             small_image_url: '',
                             medium_image_url: medium_image_url_local,
                             large_image_url: '',
@@ -484,39 +539,39 @@ async function createWindow() {
                         albumMap.set(albumId, album);
                         artistObj.album_count++;
                     }
-
+                    /// media
                     const albumObj = albumMap.get(albumId);
                     const media = {
                         id: getUniqueId_Media(db),
                         path: _path,
-                        title: taglibFile.tag.title || '',
+                        title: title,
                         artist: artistName,
                         album: albumName,
                         artist_id: albumObj.artist_id,
                         album_id: albumObj.id,
                         album_artist: artistName,
                         has_cover_art: 0,
-                        track_number: taglibFile.tag.track || 0,
-                        disc_number: taglibFile.tag.discCount,
-                        year: taglibFile.tag.year || '',
-                        size: taglibFile.tag.sizeOnDisk,
+                        track_number: track_number,
+                        disc_number: disc_number,
+                        year: year,
+                        size: size,
                         suffix: '',
-                        duration: taglibFile.properties.durationMilliseconds / 1000 || 0,
-                        bit_rate: taglibFile.properties.audioBitrate || 0,
-                        genre: taglibFile.tag.genres,
-                        compilation: taglibFile.tag.isCompilation,
+                        duration: duration,
+                        bit_rate: bit_rate,
+                        genre: genre,
+                        compilation: compilation,
                         created_at: getCurrentDateTime(),
                         updated_at: getCurrentDateTime(),
-                        full_text: taglibFile.tag.title || '',
+                        full_text: title,
                         album_artist_id: '',
                         order_album_name: '',
                         order_album_artist_name: '',
                         order_artist_name: '',
-                        sort_album_name: taglibFile.tag.albumSort || '',
-                        sort_artist_name: taglibFile.tag.albumArtistsSort || '',
-                        sort_album_artist_name: taglibFile.tag.albumArtistsSort || '',
-                        sort_title: taglibFile.tag.titleSort || '',
-                        disc_subtitle: taglibFile.tag.subtitle || '',
+                        sort_album_name: sort_album_name,
+                        sort_artist_name: sort_artist_name,
+                        sort_album_artist_name: sort_album_artist_name,
+                        sort_title: sort_title,
+                        disc_subtitle: disc_subtitle,
                         mbz_track_id: '',
                         mbz_album_id: '',
                         mbz_artist_id: '',
@@ -524,10 +579,10 @@ async function createWindow() {
                         mbz_album_type: '',
                         mbz_album_comment: '',
                         catalog_num: '',
-                        comment: taglibFile.tag.comment || '',
-                        lyrics: taglibFile.tag.lyrics || '',
+                        comment: comment,
+                        lyrics: lyrics,
                         bpm: 0,
-                        channels: taglibFile.properties.audioChannels,
+                        channels: channels,
                         order_title: '',
                         mbz_release_track_id: '',
                         rg_album_gain: 0,
@@ -536,32 +591,32 @@ async function createWindow() {
                         rg_track_peak: 0,
                         medium_image_url: medium_image_url_local,
                     };
-
-                    if(cover_model) {
-                        try {
-                            if (taglibFile.tag.pictures && taglibFile.tag.pictures.length > 0) {
-                                const dirPath = path.dirname(_path);
-                                const fileName = path.basename(_path, path.extname(_path));
-                                const folderPath = path.join(dirPath, fileName);
-                                const imagePath = path.join(folderPath + '.jpg');
-                                if (!fs.existsSync(imagePath)) {
-                                    fs.writeFileSync(
-                                        imagePath,
-                                        Buffer.from(taglibFile.tag.pictures[0].data)
-                                    );
-                                }
-                            }
-                        } catch (e) {
-                            console.error(e);
-                        }
-                    }
-
+                    ///
                     albumObj.media = albumObj.media || [];
                     albumObj.media.push(media);
                     albumObj.song_count++;
                     albumObj.duration += taglibFile.properties.durationMilliseconds / 1000 || 0;
                 } catch (e) {
                     console.error(e)
+                }
+                // cover output
+                if (cover_model) {
+                    try {
+                        if (taglibFile.tag.pictures && taglibFile.tag.pictures.length > 0) {
+                            const dirPath = path.dirname(_path);
+                            const fileName = path.basename(_path, path.extname(_path));
+                            const folderPath = path.join(dirPath, fileName);
+                            const imagePath = path.join(folderPath + '.jpg');
+                            if (!fs.existsSync(imagePath)) {
+                                fs.writeFileSync(
+                                    imagePath,
+                                    Buffer.from(taglibFile.tag.pictures[0].data)
+                                );
+                            }
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
                 }
             }
         };
@@ -641,8 +696,12 @@ async function createWindow() {
         db.close();
     }
     let cover_model = false
+    let tag_model = true
+    let file_name_model = false
     ipc.handle('node-taglib-sharp-get-directory-filePath', async (event, data:any) => {
         cover_model = data.cover
+        tag_model = data.tag_model
+        file_name_model = data.file_name_model
         let folderPaths = [data.folderPath]
         console.log('Received directoryPath:', );
         try {

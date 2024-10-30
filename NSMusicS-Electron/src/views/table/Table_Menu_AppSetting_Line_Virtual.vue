@@ -1,6 +1,9 @@
 <script setup lang="ts">
   ////// this_view resource of vicons_svg
   import {
+    Delete20Regular
+  } from '@vicons/fluent'
+  import {
     BareMetalServer, Add, Close, Menu as MenuIcon, UserAvatarFilledAlt, Hearing
   } from '@vicons/carbon'
 
@@ -205,44 +208,63 @@
   ////// local
   const { ipcRenderer } = require('electron');
   const timer_percentage = ref<NodeJS.Timeout | null>(null);
-  const show_selectFolder = ref(false)
-  async function selectFolder(cover: boolean) {
+  async function select_Folder() {
     if (!library_path_search.value) {
       try {
         library_path_search.value = true;
         const folderPath = await ipcRenderer.invoke('library-select-folder');
         if (folderPath) {
           store_server_user_model.library_path = folderPath;
-          clearInterval(timer_percentage.value);
-          console.log('Before invoking node-taglib-sharp-get-directory-filePath');
-          store_server_users.percentage_of_local = 10;
-          const error_log = await ipcRenderer.invoke('node-taglib-sharp-get-directory-filePath', {folderPath, cover})
-            .then(success => {
-              console.log('node-taglib-sharp-get-directory-filePath succeeded:', success);
-              library_path_search.value = success;
-              clearInterval(timer_percentage.value);
-            })
-            .catch(error => {
-              console.error('node-taglib-sharp-get-directory-filePath failed:', error);
-              store_local_db_info.result_local = false;
-            });
-          console.error(error_log)
-          timer_percentage.value = setInterval(synchronize_percentage_of_library_path_search, 200);
-          console.log('Folder path selected:', folderPath);
-          // reset data
-          store_server_user_model.switchToMode_Server()
-          store_server_user_model.switchToMode_Local()
-          //
-          await ipcRenderer.send('window-reset-all')
         } else {
           library_path_search.value = false;
-          show_selectFolder.value = false;
         }
       } catch (error) {
         console.error('Error selecting folder:', error);
-        clearInterval(timer_percentage.value);
         store_server_users.percentage_of_local = 0;
       }
+    }
+  }
+  async function begin_import_Folder(cover: boolean) {
+    try {
+      if (store_server_user_model.library_path) {
+        clearInterval(timer_percentage.value);
+        console.log('Before invoking node-taglib-sharp-get-directory-filePath');
+        store_server_users.percentage_of_local = 10;
+        const folderPath = store_server_user_model.library_path
+        const tag_model = mediaLibrary_tag_model_1.value
+        const file_name_model = mediaLibrary_tag_model_2_select_model_1.value
+        const error_log = await ipcRenderer.invoke('node-taglib-sharp-get-directory-filePath',
+            {
+              folderPath,
+              cover,
+              tag_model,
+              file_name_model
+            }
+        )
+          .then(success => {
+            console.log('node-taglib-sharp-get-directory-filePath succeeded:', success);
+            library_path_search.value = success;
+            clearInterval(timer_percentage.value);
+          })
+          .catch(error => {
+            console.error('node-taglib-sharp-get-directory-filePath failed:', error);
+            store_local_db_info.result_local = false;
+          });
+        console.error(error_log)
+        timer_percentage.value = setInterval(synchronize_percentage_of_library_path_search, 200);
+        console.log('Folder path selected:', folderPath);
+        // reset data
+        store_server_user_model.switchToMode_Server()
+        store_server_user_model.switchToMode_Local()
+        //
+        await ipcRenderer.send('window-reset-all')
+      } else {
+        library_path_search.value = false;
+      }
+    } catch (error) {
+      console.error('Error selecting folder:', error);
+      clearInterval(timer_percentage.value);
+      store_server_users.percentage_of_local = 0;
     }
   }
   const library_path_search = ref(false)
@@ -509,8 +531,15 @@
   const model_server_step_2 = computed(() => t('page.appMenu.manageServers'));
   const model_server_step_3 = computed(() => t('nsmusics.view_page.modelServer'));
   const model_server_step_4 = computed(() => t('page.appMenu.selectServer'));
-
-  const model_local_step_1 = computed(() => t('nsmusics.view_page.selectLibrary'));
+  /// local model
+  const model_local_step_1 = computed(() => t('nsmusics.view_page.selectedSong')+t('entity.folder_other'));
+  const model_local_step_2 = computed(() => t('nsmusics.view_page.mediaLibrary_tag_model_select'));
+  const model_local_step_3 = computed(() => t('nsmusics.view_page.mediaLibrary_tag_model_2_select'));
+  const model_local_step_4 = computed(() => t('nsmusics.view_page.selectLibrary'));
+  const mediaLibrary_tag_model_1 = ref(true)
+  const mediaLibrary_tag_model_2 = ref(false)
+  const mediaLibrary_tag_model_2_select_model_1 = ref(true)
+  const mediaLibrary_tag_model_2_select_model_2 = ref(false)
 
   //////
   const { shell } = require('electron');
@@ -551,7 +580,7 @@
                            style="margin-left: 2px;margin-top: 2px;"
                            :status="currentStatus">
                     <n-step :title="model_server_step_1">
-                      <div class="n-step-description">
+                      <div class="n-step-description" style="font-size:16px;font-weight: 600;">
                         {{ $t('nsmusics.view_page.modelSelect_explain') }}<br>
                         <n-select
                           v-model:value="Type_Server_Model_Open_Value"
@@ -577,18 +606,20 @@
                               @click="Type_Server_Add = !Type_Server_Add"
                               style="margin-top: 6px;">
                             <template #icon>
-                              <n-icon>
+                              <n-icon size="24">
                                 <Add />
                               </n-icon>
                             </template>
-                            {{ $t('form.addServer.title') }}
+                            <div style="font-size:15px;font-weight: 600;">
+                              {{ $t('form.addServer.title') }}
+                            </div>
                           </n-button>
                           <DynamicScroller v-if="Type_Server_Model_Open_Value === 'server'"
                                            class="table" ref="scrollbar"
-                                           style="overflow: auto;width: 520px;height: 130px;margin-top: 6px;"
+                                           style="overflow: auto;width: 780px;height: 130px;margin-top: 6px;"
                                            :items="store_server_users.server_config_of_all_user_of_sqlite"
                                            :itemSize="70"
-                                           :grid-items="2"
+                                           :grid-items="3"
                                            :item-secondary-size="260">
                             <!-- :minItemSize="6"> -->
                             <template #default="{ item, index, active }">
@@ -760,9 +791,9 @@
                         <n-space vertical>
                           <n-space justify="space-between" align="center"
                                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
-                            <n-space vertical style="width: 320px;">
+                            <n-space vertical style="width: 620px;">
                               <div style="margin-top: -2px;">
-                              <span style="font-size:12px;">
+                              <span style="font-size:16px;font-weight: 600;">
                                 {{
                                   $t('nsmusics.view_page.selectLibrary_explain') +
                                   ', ' +
@@ -771,60 +802,215 @@
                                 <br>.mp3, .flac, .aac, .mp1, .mp2, .m4a, .ape, .oga, .ogg, .opus, .wav, .webm
                               </span>
                               </div>
-                            </n-space>
-                            <n-space align="end">
-                              <n-tag type="success" v-if="false">
-                                {{ store_server_user_model.library_path }}
-                              </n-tag>
-                              <n-popconfirm v-model:show="show_selectFolder" style="width: 400px">
-                                <template #trigger>
-                                  <n-button tertiary style="width: 150px;">
-                                    <template #icon>
-                                      <n-icon>
-                                        <Add />
-                                      </n-icon>
-                                    </template>
+                              <n-space>
+                                <n-button tertiary style="height: 36px;" @click="select_Folder">
+                                  <template #icon>
+                                    <n-icon size="24">
+                                      <Add />
+                                    </n-icon>
+                                  </template>
+                                  <div style="font-size:16px;font-weight: 600;">
                                     {{ $t('nsmusics.view_page.selectedSong') + $t('entity.folder_other')}}
-                                  </n-button>
-                                </template>
-                                <template #action>
-                                  <n-space vertical>
-                                    {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_0')}}
-                                    <n-space>
-                                      <n-button size="small" @click="selectFolder(false)">
-                                        {{ $t('common.confirm') }}
-                                      </n-button>
-                                    </n-space>
-                                    <n-divider style="margin: 0;"/>
-                                    {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_1')}}
-                                    <n-space>
-                                      <n-button size="small" @click="selectFolder(true)">
-                                        {{ $t('common.confirm') }}
-                                      </n-button>
-                                    </n-space>
-                                    <n-divider style="margin: 0;"/>
-                                    <n-button size="small"
-                                              @click="
-                                      show_selectFolder = false;
-                                      store_server_users.percentage_of_local = 0;
-                                      store_local_db_info.set_clear_all_local_data()
-                                    "
+                                  </div>
+                                </n-button>
+                                <n-tag type="success" style="height: 36px;">
+                                  <div style="font-size:16px;font-weight: 600;">
+                                    {{ store_server_user_model.library_path }}
+                                  </div>
+                                </n-tag>
+                              </n-space>
+                              <DynamicScroller v-if="false"
+                                               class="table" ref="scrollbar"
+                                               style="overflow: auto;width: 780px;height: 130px;margin-top: 6px;"
+                                               :items="store_server_user_model.library_path"
+                                               :itemSize="70"
+                                               :grid-items="3"
+                                               :item-secondary-size="260">
+                                  <!-- :minItemSize="6"> -->
+                                  <template #default="{ item, index, active }">
+                                    <DynamicScrollerItem
+                                        :item="item"
+                                        :active="active"
+                                        :data-index="index"
+                                        :data-active="active"
+                                        style="display: flex;"
                                     >
-                                      {{ $t('common.clear') + ' ' + $t('nsmusics.view_page.modelLocal')}}
-                                    </n-button>
-                                  </n-space>
-                                </template>
-                              </n-popconfirm>
-                              <n-progress
-                                  type="line" style="width: 207px;margin-bottom: 8px;"
-                                  :percentage="store_server_users.percentage_of_local"
-                                  :indicator-placement="'inside'"
-                              />
+                                      <div
+                                          class="server_item_info"
+                                          style="
+                          width: 230px;
+                          height: 54px;
+                          margin-bottom: 14px;
+                          border: 1px solid #f0f0f070;border-radius: 5px;
+                          padding-top: 14px;padding-left: 14px;padding-right: 14px;
+                          box-shadow: #18181820 0 0 0 1px inset;
+                        ">
+                                        <n-space justify="space-between" style="margin-top: 2.5px;">
+                                          <n-space>
+                                            <n-icon size="20">
+                                              <BareMetalServer />
+                                            </n-icon>
+                                            <div style="width: 140px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                                              {{ item }}
+                                            </div>
+                                          </n-space>
+                                          <span style="width: 18px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ (index+1) }}</span>
+                                        </n-space>
+                                      </div>
+                                    </DynamicScrollerItem>
+                                  </template>
+                                </DynamicScroller>
                             </n-space>
                           </n-space>
                         </n-space>
                       </div>
                     </n-step>
+                    <n-step :title="model_local_step_2" v-if="Type_Server_Model_Open_Value != 'server'">
+                      <div class="n-step-description">
+                        <n-space vertical>
+                          <n-space vertical
+                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                            <n-space vertical>
+                              <span style="font-size:16px;font-weight: 600;">
+                                {{ $t('nsmusics.view_page.mediaLibrary_tag_model_1') }}
+                              </span>
+                            </n-space>
+                            <n-switch
+                                v-model:value="mediaLibrary_tag_model_1"
+                                @update:value="() => {
+                                  mediaLibrary_tag_model_2 = !mediaLibrary_tag_model_1
+                                }"
+                            >
+                            </n-switch>
+                          </n-space>
+                          <n-space vertical
+                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                            <n-space vertical>
+                              <span style="font-size:16px;font-weight: 600;">
+                                {{ $t('nsmusics.view_page.mediaLibrary_tag_model_2') }}
+                              </span>
+                            </n-space>
+                            <n-switch
+                                v-model:value="mediaLibrary_tag_model_2"
+                                @update:value="() => {
+                                  mediaLibrary_tag_model_1 = !mediaLibrary_tag_model_2
+                                }"
+                            >
+                            </n-switch>
+                          </n-space>
+                        </n-space>
+                      </div>
+                    </n-step>
+                    <n-step :title="model_local_step_3" v-if="(Type_Server_Model_Open_Value != 'server') && (mediaLibrary_tag_model_2)">
+                      <div class="n-step-description">
+                        <n-space vertical>
+                          <n-space vertical
+                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                            <n-space vertical>
+                              <span style="font-size:16px;font-weight: 600;">
+                                {{
+                                  $t('nsmusics.view_page.singer_name') +
+                                  ' - ' +
+                                  $t('nsmusics.view_page.media_name') +
+                                  ' | 4MINUTE - Hot Issues.mp3'
+                                }}
+                              </span>
+                            </n-space>
+                            <n-switch
+                                v-model:value="mediaLibrary_tag_model_2_select_model_1"
+                                @update:value="() => {
+                                  mediaLibrary_tag_model_2_select_model_2 = !mediaLibrary_tag_model_2_select_model_1
+                                }"
+                            >
+                            </n-switch>
+                          </n-space>
+                          <n-space vertical
+                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                            <n-space vertical>
+                              <span style="font-size:16px;font-weight: 600;">
+                                {{
+                                  $t('nsmusics.view_page.media_name') +
+                                  ' - ' +
+                                  $t('nsmusics.view_page.singer_name') +
+                                  ' | Hot Issues - 4MINUTE.mp3'
+                                }}
+                              </span>
+                            </n-space>
+                            <n-switch
+                                v-model:value="mediaLibrary_tag_model_2_select_model_2"
+                                @update:value="() => {
+                                  mediaLibrary_tag_model_2_select_model_1 = !mediaLibrary_tag_model_2_select_model_2
+                                }"
+                            >
+                            </n-switch>
+                          </n-space>
+                        </n-space>
+                      </div>
+                    </n-step>
+                    <n-step :title="model_local_step_4" v-if="Type_Server_Model_Open_Value != 'server'">
+                      <div class="n-step-description">
+                        <n-space vertical>
+                          <div style="font-size:15px;font-weight: 600;">
+                            {{ $t('common.clear') + ' ' + $t('nsmusics.view_page.modelLocal')}}
+                          </div>
+                          <n-button style="margin-top: 6px;" size="small"
+                            @click="
+                              store_server_users.percentage_of_local = 0;
+                              store_local_db_info.set_clear_all_local_data()
+                            "
+                          >
+                            <template #icon>
+                              <n-icon size="16">
+                                <Delete20Regular />
+                              </n-icon>
+                            </template>
+                            <div style="font-size:15px;font-weight: 600;">
+                              {{ $t('common.clear') + ' ' + $t('nsmusics.view_page.modelLocal')}}
+                            </div>
+                          </n-button>
+                          <n-divider style="margin: 0;"/>
+                          <n-space vertical>
+                            <div style="font-size:15px;font-weight: 600;">
+                              {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_0')}}
+                            </div>
+                            <n-button size="small" @click="begin_import_Folder(false)">
+                              <template #icon>
+                                <n-icon size="24">
+                                  <Add />
+                                </n-icon>
+                              </template>
+                              <div style="font-size:15px;font-weight: 600;">
+                                {{ $t('nsmusics.view_page.mediaLibrary_begin_import') }}
+                              </div>
+                            </n-button>
+                          </n-space>
+                          <n-divider style="margin: 0;"/>
+                          <n-space vertical style="width: 600px;">
+                            <div style="font-size:15px;font-weight: 600;">
+                              {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_1')}}
+                            </div>
+                            <n-button size="small" @click="begin_import_Folder(true)">
+                              <template #icon>
+                                <n-icon size="24">
+                                  <Add />
+                                </n-icon>
+                              </template>
+                              <div style="font-size:15px;font-weight: 600;">
+                                {{ $t('nsmusics.view_page.mediaLibrary_begin_import') }}
+                              </div>
+                            </n-button>
+                          </n-space>
+                          <n-divider style="margin: 0;"/>
+                          <n-progress
+                              type="line" style="width: 207px;margin-bottom: 8px;"
+                              :percentage="store_server_users.percentage_of_local"
+                              :indicator-placement="'inside'"
+                          />
+                        </n-space>
+                      </div>
+                    </n-step>
+<!--                    ""-->
+<!--                    "4MINUTE - Hot Issues"-->
                   </n-steps>
                 </n-space>
               </n-space>

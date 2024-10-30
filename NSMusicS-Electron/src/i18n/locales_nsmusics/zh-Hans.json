@@ -64,7 +64,14 @@
             "audio_channel_explain": "设置输出的音频声道",
             "selectLibrary_select_0": "不导出音乐文件内嵌封面，仅使用与音乐文件同级同名的封面",
             "selectLibrary_select_1": "导出音乐文件内嵌的封面，转化为同名封面文件(存在同名封面文件则跳过)，文件保存至与音乐文件同一文件夹内",
-            "mediaLibrary": "媒体库"
+            "mediaLibrary": "媒体库",
+            "mediaLibrary_tag_model_select": "选择媒体信息导入方式",
+            "mediaLibrary_tag_model_1": "导入媒体文件内嵌的tag信息 (tag已补全)",
+            "mediaLibrary_tag_model_2": "导入媒体文件名的范式信息 (tag未补全)",
+            "mediaLibrary_tag_model_2_select": "选择媒体文件名的范式种类",
+            "media_name": "媒体标题名",
+            "singer_name": "艺术家名",
+            "mediaLibrary_begin_import": "开始导入"
         },
         "view_player": {
             "view_seting": {
