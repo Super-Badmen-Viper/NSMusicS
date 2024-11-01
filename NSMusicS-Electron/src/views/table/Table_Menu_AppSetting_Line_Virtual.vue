@@ -901,7 +901,7 @@
                         </n-space>
                       </div>
                     </n-step>
-                    <n-step :title="model_local_step_3" v-if="(Type_Server_Model_Open_Value != 'server') && (mediaLibrary_tag_model_2)">
+                    <n-step :title="model_local_step_3" v-if="false"><!--v-if="(Type_Server_Model_Open_Value != 'server') && (mediaLibrary_tag_model_2)"-->
                       <div class="n-step-description">
                         <n-space vertical>
                           <n-space vertical
