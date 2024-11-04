@@ -426,7 +426,7 @@ async function createWindow() {
                     // tag import
                     const result_file_name = extractArtistAndTitle(_path)
                     let artistName = ''
-                    if (tag_model) {
+                    if (taglibFile.tag != undefined && taglibFile.tag.performers != undefined) {
                         artistName =
                             (taglibFile.tag.performers || []).join('、') ||
                             file_name_model ?
@@ -444,7 +444,7 @@ async function createWindow() {
                     const albumId = `${artistName}-${albumName}`;
                     // album
                     let album_artist = ''
-                    if (tag_model) {
+                    if (taglibFile.tag != undefined && taglibFile.tag.performers != undefined) {
                         album_artist =
                             taglibFile.tag.performers ||
                             file_name_model ?
@@ -467,7 +467,7 @@ async function createWindow() {
                     const description = taglibFile.tag.description || ''
                     // media
                     let title = ''
-                    if (tag_model) {
+                    if (taglibFile.tag != undefined && taglibFile.tag.performers != undefined) {
                         title =
                             taglibFile.tag.title ||
                             (file_name_model ?
@@ -730,11 +730,9 @@ async function createWindow() {
         db.close();
     }
     let cover_model = false
-    let tag_model = true
-    let file_name_model = false
+    let file_name_model = true
     ipc.handle('node-taglib-sharp-get-directory-filePath', async (event, data:any) => {
         cover_model = data.cover
-        tag_model = data.tag_model
         file_name_model = data.file_name_model
         let folderPaths = [data.folderPath]
         console.log('Received directoryPath:', );

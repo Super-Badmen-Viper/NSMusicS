@@ -209,19 +209,14 @@
   const { ipcRenderer } = require('electron');
   const timer_percentage = ref<NodeJS.Timeout | null>(null);
   async function select_Folder() {
-    if (!library_path_search.value) {
-      try {
-        library_path_search.value = true;
-        const folderPath = await ipcRenderer.invoke('library-select-folder');
-        if (folderPath) {
-          store_server_user_model.library_path = folderPath;
-        } else {
-          library_path_search.value = false;
-        }
-      } catch (error) {
-        console.error('Error selecting folder:', error);
-        store_server_users.percentage_of_local = 0;
+    try {
+      const folderPath = await ipcRenderer.invoke('library-select-folder');
+      if (folderPath) {
+        store_server_user_model.library_path = folderPath;
       }
+    } catch (error) {
+      console.error('Error selecting folder:', error);
+      store_server_users.percentage_of_local = 0;
     }
   }
   async function begin_import_Folder(cover: boolean) {
@@ -231,19 +226,16 @@
         console.log('Before invoking node-taglib-sharp-get-directory-filePath');
         store_server_users.percentage_of_local = 10;
         const folderPath = store_server_user_model.library_path
-        const tag_model = mediaLibrary_tag_model_1.value
-        const file_name_model = mediaLibrary_tag_model_2_select_model_1.value
+        const file_name_model = true
         const error_log = await ipcRenderer.invoke('node-taglib-sharp-get-directory-filePath',
             {
               folderPath,
               cover,
-              tag_model,
               file_name_model
             }
         )
           .then(success => {
             console.log('node-taglib-sharp-get-directory-filePath succeeded:', success);
-            library_path_search.value = success;
             clearInterval(timer_percentage.value);
           })
           .catch(error => {
@@ -258,8 +250,6 @@
         store_server_user_model.switchToMode_Local()
         //
         await ipcRenderer.send('window-reset-all')
-      } else {
-        library_path_search.value = false;
       }
     } catch (error) {
       console.error('Error selecting folder:', error);
@@ -267,7 +257,6 @@
       store_server_users.percentage_of_local = 0;
     }
   }
-  const library_path_search = ref(false)
   async function synchronize_percentage_of_library_path_search(){
     store_server_users.percentage_of_local = await ipcRenderer.invoke('node-taglib-sharp-percentage');
   }
@@ -533,13 +522,7 @@
   const model_server_step_4 = computed(() => t('page.appMenu.selectServer'));
   /// local model
   const model_local_step_1 = computed(() => t('nsmusics.view_page.selectedSong')+t('entity.folder_other'));
-  const model_local_step_2 = computed(() => t('nsmusics.view_page.mediaLibrary_tag_model_select'));
-  const model_local_step_3 = computed(() => t('nsmusics.view_page.mediaLibrary_tag_model_2_select'));
-  const model_local_step_4 = computed(() => t('nsmusics.view_page.selectLibrary'));
-  const mediaLibrary_tag_model_1 = ref(true)
-  const mediaLibrary_tag_model_2 = ref(false)
-  const mediaLibrary_tag_model_2_select_model_1 = ref(true)
-  const mediaLibrary_tag_model_2_select_model_2 = ref(false)
+  const model_local_step_2 = computed(() => t('nsmusics.view_page.selectLibrary'));
 
   //////
   const { shell } = require('electron');
@@ -866,88 +849,6 @@
                       </div>
                     </n-step>
                     <n-step :title="model_local_step_2" v-if="Type_Server_Model_Open_Value != 'server'">
-                      <div class="n-step-description">
-                        <n-space vertical>
-                          <n-space vertical
-                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
-                            <n-space vertical>
-                              <span style="font-size:16px;font-weight: 600;">
-                                {{ $t('nsmusics.view_page.mediaLibrary_tag_model_1') }}
-                              </span>
-                            </n-space>
-                            <n-switch
-                                v-model:value="mediaLibrary_tag_model_1"
-                                @update:value="() => {
-                                  mediaLibrary_tag_model_2 = !mediaLibrary_tag_model_1
-                                }"
-                            >
-                            </n-switch>
-                          </n-space>
-                          <n-space vertical
-                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
-                            <n-space vertical>
-                              <span style="font-size:16px;font-weight: 600;">
-                                {{ $t('nsmusics.view_page.mediaLibrary_tag_model_2') }}
-                              </span>
-                            </n-space>
-                            <n-switch
-                                v-model:value="mediaLibrary_tag_model_2"
-                                @update:value="() => {
-                                  mediaLibrary_tag_model_1 = !mediaLibrary_tag_model_2
-                                }"
-                            >
-                            </n-switch>
-                          </n-space>
-                        </n-space>
-                      </div>
-                    </n-step>
-                    <n-step :title="model_local_step_3" v-if="false"><!--v-if="(Type_Server_Model_Open_Value != 'server') && (mediaLibrary_tag_model_2)"-->
-                      <div class="n-step-description">
-                        <n-space vertical>
-                          <n-space vertical
-                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
-                            <n-space vertical>
-                              <span style="font-size:16px;font-weight: 600;">
-                                {{
-                                  $t('nsmusics.view_page.singer_name') +
-                                  ' - ' +
-                                  $t('nsmusics.view_page.media_name') +
-                                  ' | 4MINUTE - Hot Issues.mp3'
-                                }}
-                              </span>
-                            </n-space>
-                            <n-switch
-                                v-model:value="mediaLibrary_tag_model_2_select_model_1"
-                                @update:value="() => {
-                                  mediaLibrary_tag_model_2_select_model_2 = !mediaLibrary_tag_model_2_select_model_1
-                                }"
-                            >
-                            </n-switch>
-                          </n-space>
-                          <n-space vertical
-                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
-                            <n-space vertical>
-                              <span style="font-size:16px;font-weight: 600;">
-                                {{
-                                  $t('nsmusics.view_page.media_name') +
-                                  ' - ' +
-                                  $t('nsmusics.view_page.singer_name') +
-                                  ' | Hot Issues - 4MINUTE.mp3'
-                                }}
-                              </span>
-                            </n-space>
-                            <n-switch
-                                v-model:value="mediaLibrary_tag_model_2_select_model_2"
-                                @update:value="() => {
-                                  mediaLibrary_tag_model_2_select_model_1 = !mediaLibrary_tag_model_2_select_model_2
-                                }"
-                            >
-                            </n-switch>
-                          </n-space>
-                        </n-space>
-                      </div>
-                    </n-step>
-                    <n-step :title="model_local_step_4" v-if="Type_Server_Model_Open_Value != 'server'">
                       <div class="n-step-description">
                         <n-space vertical>
                           <div style="font-size:15px;font-weight: 600;">

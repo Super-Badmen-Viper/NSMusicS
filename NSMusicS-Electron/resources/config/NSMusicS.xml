@@ -5,7 +5,7 @@
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
     1.1.0现已更新内容;
-    优化本地模式导入逻辑, 使其能够适配用户的各种音乐库管理习惯
+    优化本地模式导入逻辑, 使其能够适配用户的各种音乐库管理习惯;
     增加数据展示页面(专辑，乐曲，艺术家)左上角刷新按钮，可重置此页面的数据
     增加对Linux客户端的支持
     增加音效-均衡器(简易/专业)功能(仅适用于音频输出源为howler.js(web输出));
