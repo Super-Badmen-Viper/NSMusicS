@@ -564,8 +564,6 @@
   import { provide } from "vue";
   import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
   import View_Edit_Tag from "@/components/tag_list/View_Edit_Tag.vue";
-  import {store_player_info_modify} from "@/store/player/store_player_info_modify";
-  import View_Page_Info from "@/components/info_list/View_Page_Info.vue";
   const playlist_contextmenu = ref(null as any)
   provide("message", playlist_contextmenu);
 
@@ -628,8 +626,7 @@
             collapse-mode="width"
             :collapsed-width="66"
             :width="160"
-            show-trigger
-            :collapsed="store_app_configs_info.app_left_menu_collapsed"
+            :collapsed="true"
             @collapse="store_app_configs_info.app_left_menu_collapsed = true"
             @expand="store_app_configs_info.app_left_menu_collapsed = false">
             <n-flex vertical justify="space-between" style="height: 100vh">
@@ -840,25 +837,6 @@
                 均衡器(专业)
               </n-tab-pane>
             </n-tabs>
-          </template>
-        </n-drawer-content>
-      </n-drawer>
-    </n-config-provider>
-    <!-- right drwaer of info_modify -->
-    <n-config-provider :theme="darkTheme">
-      <n-drawer
-          v-model:show="store_player_info_modify.player_show_info_modify"
-          :width="680"
-          style="
-          border-radius: 12px 0 0 12px;
-          border: 1.5px solid #FFFFFF20;
-          background-color: rgba(127, 127, 127, 0.1);
-          backdrop-filter: blur(10px);
-          margin-top: 88px;margin-bottom:88px;
-        ">
-        <n-drawer-content>
-          <template #default>
-            <View_Page_Info></View_Page_Info>
           </template>
         </n-drawer-content>
       </n-drawer>

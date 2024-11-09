@@ -11,7 +11,7 @@ import {
   PlayCircle24Regular,
   Search20Filled,
   TextSortAscending20Regular,
-  TextSortDescending20Regular
+  TextSortDescending20Regular,ShareScreenStart48Regular
 } from '@vicons/fluent'
 import {
   RefreshSharp
@@ -485,6 +485,8 @@ const onRefreshSharp = async () => {
   if(store_server_user_model.model_server_type_of_web){
     store_view_album_page_fetchData.fetchData_Album_of_server_web_start()
   }else if(store_server_user_model.model_server_type_of_local){
+    scrollTo(0)
+    store_view_album_page_logic.page_albumlists_keyword = ""
     store_view_album_page_fetchData.fetchData_Album()
   }
 }
@@ -555,6 +557,11 @@ onBeforeUnmount(() => {
       <n-button quaternary circle size="medium" style="margin-left:4px" @click="onRefreshSharp">
         <template #icon>
           <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+        </template>
+      </n-button>
+      <n-button quaternary circle size="medium" style="margin-left:4px" @click="onRefreshSharp">
+        <template #icon>
+          <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
         </template>
       </n-button>
     </n-space>

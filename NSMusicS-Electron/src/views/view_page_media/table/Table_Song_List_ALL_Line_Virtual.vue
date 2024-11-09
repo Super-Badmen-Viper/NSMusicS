@@ -10,7 +10,7 @@ import {
   SaveEdit24Regular,
   Heart24Regular,Heart28Filled,
   ChevronLeft16Filled,ChevronRight16Filled,
-  Filter20Filled,MoreCircle20Regular,
+  Filter20Filled,ShareScreenStart48Regular,
   ArrowRepeatAll16Regular,ArrowAutofitDown24Regular,
 } from '@vicons/fluent'
 import {
@@ -177,7 +177,7 @@ const show_search_area = () => {
   {
     store_view_media_page_logic.page_songlists_bool_show_search_area = false
     input_search_InstRef.value?.clear()
-    if(bool_input_search == true){
+    if(bool_input_search){
       // store_view_media_page_logic.list_data_StartUpdate = true
       back_search_default()
       bool_input_search = false
@@ -346,6 +346,11 @@ const handleItemDbClick = (media_file:any,index:number) => {
       store_player_audio_info.this_audio_album_id = media_file.album_id
       store_player_audio_info.this_audio_album_name = media_file.album
       store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
+      //
+      store_player_tag_modify.player_current_media_starred = media_file.favorite
+      store_player_tag_modify.player_current_media_playCount = media_file.play_count
+      store_player_tag_modify.player_current_media_playDate = media_file.play_date
+      //
 
       store_playlist_list_logic.media_page_handleItemDbClick = true
       store_player_appearance.player_mode_of_lock_playlist = false
@@ -454,25 +459,16 @@ import {
 } from "@/store/server/server_data_synchronization/store_server_data_set_playlistInfo";
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-import {
-  Get_Navidrome_Temp_Data_To_LocalSqlite
-} from "@/features/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
-import {store_server_users} from "@/store/server/store_server_users";
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
-import {BrowserUpdatedFilled} from "@vicons/material";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
-import {store_player_info_modify} from "@/store/player/store_player_info_modify";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
 const playlist_set_of_addPlaylist_of_comment = ref('')
-// const playlist_set_of_addPlaylist_of_duration = ref(0)
-// const playlist_set_of_addPlaylist_of_song_count = ref(0)
 const playlist_set_of_addPlaylist_of_public = ref(false)
-// const playlist_set_of_addPlaylist_of_owner_id = ref('')
 async function update_playlist_addPlaylist(){
   try{
     if(store_server_user_model.model_select === 'server'){
@@ -756,15 +752,10 @@ function menu_item_edit_selected_media_tags(){
   const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
   if (item != undefined && item != 'undefined') {
     store_player_tag_modify.player_current_media_path = item.path
+    store_player_tag_modify.player_current_media_starred = item.favorite
+    store_player_tag_modify.player_current_media_playCount = item.play_count
+    store_player_tag_modify.player_current_media_playDate = item.play_date
     store_player_tag_modify.player_show_tag_modify = true
-    contextmenu.value.hide()
-  }
-}
-function menu_item_show_selected_media_info(){
-  const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
-  if (item != undefined && item != 'undefined') {
-    store_player_info_modify.player_current_media_path = item.path
-    store_player_info_modify.player_show_info_modify = true
     contextmenu.value.hide()
   }
 }
@@ -785,6 +776,9 @@ const onRefreshSharp = async () => {
   if(store_server_user_model.model_server_type_of_web){
     store_view_media_page_fetchData.fetchData_Media_of_server_web_start()
   }else if(store_server_user_model.model_server_type_of_local){
+    scrollTo(0)
+    store_view_media_page_logic.page_songlists_keywordFilter = ""
+    store_view_media_page_logic.list_selected_Hand_click = false
     store_view_media_page_fetchData.fetchData_Media()
   }
 }
@@ -926,6 +920,11 @@ onBeforeUnmount(() => {
       <n-button quaternary circle size="medium" style="margin-left:4px" @click="onRefreshSharp">
         <template #icon>
           <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+        </template>
+      </n-button>
+      <n-button quaternary circle size="medium" style="margin-left:4px" @click="onRefreshSharp">
+        <template #icon>
+          <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
         </template>
       </n-button>
     </n-space>
@@ -1208,9 +1207,6 @@ onBeforeUnmount(() => {
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
         <v-contextmenu-item @click="menu_item_edit_selected_media_tags">
-          {{ $t('nsmusics.view_page.mediaLibrary_selected_media_tag_edit') }}
-        </v-contextmenu-item>
-        <v-contextmenu-item @click="menu_item_show_selected_media_info">
           {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>
       </v-contextmenu>

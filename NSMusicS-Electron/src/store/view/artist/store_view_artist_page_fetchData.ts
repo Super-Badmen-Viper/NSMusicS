@@ -26,6 +26,7 @@ import {store_view_album_page_info} from "@/store/view/album/store_view_album_pa
 import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
+import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
 
 export const store_view_artist_page_fetchData = reactive({
     async fetchData_Artist(){
@@ -211,20 +212,26 @@ export const store_view_artist_page_fetchData = reactive({
 
         if(store_playlist_list_info.playlist_MediaFiles_temporary.length > 0){
             store_player_appearance.player_mode_of_lock_playlist = false
-            store_player_audio_info.this_audio_play_id = store_playlist_list_info.playlist_MediaFiles_temporary[0].play_id
-            store_player_audio_info.this_audio_file_path = store_playlist_list_info.playlist_MediaFiles_temporary[0].path
-            store_player_audio_info.this_audio_lyrics_string = store_playlist_list_info.playlist_MediaFiles_temporary[0].lyrics
-            store_player_audio_info.this_audio_file_medium_image_url = store_playlist_list_info.playlist_MediaFiles_temporary[0].medium_image_url
-            store_player_audio_info.this_audio_singer_name = store_playlist_list_info.playlist_MediaFiles_temporary[0].artist
-            store_player_audio_info.this_audio_song_name = store_playlist_list_info.playlist_MediaFiles_temporary[0].title
-            store_player_audio_info.this_audio_album_id = store_playlist_list_info.playlist_MediaFiles_temporary[0].album_id
-            store_player_audio_info.this_audio_album_favorite = store_playlist_list_info.playlist_MediaFiles_temporary[0].favorite
-            store_player_audio_info.this_audio_album_name = store_playlist_list_info.playlist_MediaFiles_temporary[0].album
-            store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = store_playlist_list_info.playlist_MediaFiles_temporary[0].absoluteIndex
+            const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[0]
+            store_player_audio_info.this_audio_play_id = media_file.play_id
+            store_player_audio_info.this_audio_file_path = media_file.path
+            store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
+            store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
+            store_player_audio_info.this_audio_singer_name = media_file.artist
+            store_player_audio_info.this_audio_song_name = media_file.title
+            store_player_audio_info.this_audio_album_id = media_file.album_id
+            store_player_audio_info.this_audio_album_favorite = media_file.favorite
+            store_player_audio_info.this_audio_album_name = media_file.album
+            store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = media_file.absoluteIndex
             ///
-            store_player_audio_info.this_audio_song_id = store_playlist_list_info.playlist_MediaFiles_temporary[0].id
-            store_player_audio_info.this_audio_song_rating = store_playlist_list_info.playlist_MediaFiles_temporary[0].rating
-            store_player_audio_info.this_audio_song_favorite = store_playlist_list_info.playlist_MediaFiles_temporary[0].favorite
+            store_player_audio_info.this_audio_song_id = media_file.id
+            store_player_audio_info.this_audio_song_rating = media_file.rating
+            store_player_audio_info.this_audio_song_favorite = media_file.favorite
+            //
+            store_player_tag_modify.player_current_media_starred = media_file.favorite
+            store_player_tag_modify.player_current_media_playCount = media_file.play_count
+            store_player_tag_modify.player_current_media_playDate = media_file.play_date
+            //
 
             store_playlist_list_logic.media_page_handleItemDbClick = false
         }

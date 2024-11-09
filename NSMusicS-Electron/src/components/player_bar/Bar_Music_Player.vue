@@ -429,20 +429,26 @@ async function Play_Media_Order(model_num: string, increased: number) {
             await store_playlist_list_fetchData.fetchData_PlayList_of_server_web_end();
           }
         }
-        store_player_audio_info.this_audio_play_id = store_playlist_list_info.playlist_MediaFiles_temporary[index].play_id
-        store_player_audio_info.this_audio_file_path = store_playlist_list_info.playlist_MediaFiles_temporary[index].path;
-        store_player_audio_info.this_audio_lyrics_string = store_playlist_list_info.playlist_MediaFiles_temporary[index].lyrics
-        store_player_audio_info.this_audio_file_medium_image_url = store_playlist_list_info.playlist_MediaFiles_temporary[index].medium_image_url;
-        store_player_audio_info.this_audio_singer_name = store_playlist_list_info.playlist_MediaFiles_temporary[index].artist;
-        store_player_audio_info.this_audio_singer_id = store_playlist_list_info.playlist_MediaFiles_temporary[index].artist_id
-        store_player_audio_info.this_audio_song_name = store_playlist_list_info.playlist_MediaFiles_temporary[index].title
-        store_player_audio_info.this_audio_song_id = store_playlist_list_info.playlist_MediaFiles_temporary[index].id
-        store_player_audio_info.this_audio_song_rating = store_playlist_list_info.playlist_MediaFiles_temporary[index].rating
-        store_player_audio_info.this_audio_song_favorite = store_playlist_list_info.playlist_MediaFiles_temporary[index].favorite
-        store_player_audio_info.this_audio_album_id = store_playlist_list_info.playlist_MediaFiles_temporary[index].album_id
-        store_player_audio_info.this_audio_album_name = store_playlist_list_info.playlist_MediaFiles_temporary[index].album
+        const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
+        store_player_audio_info.this_audio_play_id = media_file.play_id
+        store_player_audio_info.this_audio_file_path = media_file.path;
+        store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
+        store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url;
+        store_player_audio_info.this_audio_singer_name = media_file.artist;
+        store_player_audio_info.this_audio_singer_id = media_file.artist_id
+        store_player_audio_info.this_audio_song_name = media_file.title
+        store_player_audio_info.this_audio_song_id = media_file.id
+        store_player_audio_info.this_audio_song_rating = media_file.rating
+        store_player_audio_info.this_audio_song_favorite = media_file.favorite
+        store_player_audio_info.this_audio_album_id = media_file.album_id
+        store_player_audio_info.this_audio_album_name = media_file.album
+        //
+        store_player_tag_modify.player_current_media_starred = media_file.favorite
+        store_player_tag_modify.player_current_media_playCount = media_file.play_count
+        store_player_tag_modify.player_current_media_playDate = media_file.play_date
+        //
         store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
-        console.log(store_playlist_list_info.playlist_MediaFiles_temporary[index]);
+        console.log(media_file);
 
         store_playlist_list_logic.media_page_handleItemDbClick = false
         // store_player_appearance.player_mode_of_lock_playlist = false
@@ -635,7 +641,6 @@ import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlis
 import {Audio_howler} from "@/models/song_Audio_Out/Audio_howler";
 import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
-import {store_player_info_modify} from "@/store/player/store_player_info_modify";
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id,favorite)
   store_player_audio_info.this_audio_song_favorite = !favorite
@@ -926,11 +931,6 @@ onBeforeUnmount(() => {
                     @update:value="(value: number) => handleItemClick_Rating(store_player_audio_info.this_audio_song_id, value)"/>
           </n-space>
           <n-space justify="space-between" style="margin-top: 6px;">
-            <n-button size="tiny" text @click="store_player_info_modify.player_show_info_modify = !store_player_info_modify.player_show_info_modify">
-              <template #icon>
-                <n-icon :size="22"><Info16Regular/></n-icon>
-              </template>
-            </n-button>
             <n-button size="tiny" text @click="store_player_tag_modify.player_show_tag_modify = !store_player_tag_modify.player_show_tag_modify">
               <template #icon>
                 <n-icon :size="22"><Tag16Regular/></n-icon>
@@ -942,9 +942,9 @@ onBeforeUnmount(() => {
                 <n-icon v-else :size="22"><Heart24Regular/></n-icon>
               </template>
             </n-button>
-            <n-button size="tiny" text @click="Set_Player_Show_Sound_more">
+            <n-button size="tiny" text @click="Set_Player_Show_Sound_effects">
               <template #icon>
-                <n-icon :size="22"><MoreCircle32Regular/></n-icon>
+                <n-icon :size="22"><DeviceEq24Filled/></n-icon>
               </template>
             </n-button>
             <n-button size="tiny" text @click="Set_Player_Show_Sound_speed">
@@ -952,9 +952,9 @@ onBeforeUnmount(() => {
                 <n-icon :size="22"><TopSpeed20Regular/></n-icon>
               </template>
             </n-button>
-            <n-button size="tiny" text @click="Set_Player_Show_Sound_effects">
+            <n-button size="tiny" text @click="Set_Player_Show_Sound_more">
               <template #icon>
-                <n-icon :size="22"><DeviceEq24Filled/></n-icon>
+                <n-icon :size="22"><MoreCircle32Regular/></n-icon>
               </template>
             </n-button>
           </n-space>
@@ -1088,7 +1088,7 @@ onBeforeUnmount(() => {
   user-select: none;
 }
 .gird_Right .gird_Right_button_area{
-  width: 158px;
+  width: 132px;
   height: 80px;
   float: right;
   margin-right: 10px;

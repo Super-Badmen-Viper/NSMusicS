@@ -1178,14 +1178,26 @@ async function initModifyMediaTag(){
         try {
             const taglibFile = File.createFromPath(_path)
             const tag = {
+                path: _path,
+
                 title: taglibFile.tag.title,
+                albumArtists: taglibFile.tag.albumArtists,
                 artist: taglibFile.tag.performers,
                 album: taglibFile.tag.album,
-                year: taglibFile.tag.year,
-                trackCount: taglibFile.tag.trackCount,
                 discCount: taglibFile.tag.discCount,
+                trackCount: taglibFile.tag.trackCount,
+                year: taglibFile.tag.year,
                 genres: taglibFile.tag.genres,
-                albumArtists: taglibFile.tag.albumArtists,
+
+                duration: formatTime(taglibFile.properties.durationMilliseconds / 1000 || 0),
+                isCompilation: taglibFile.tag.isCompilation,
+                codec: taglibFile.properties.codecs,
+                audioBitrate: taglibFile.properties.audioBitrate,
+                audioChannels: taglibFile.properties.audioChannels,
+                sizeOnDisk: taglibFile.tag.sizeOnDisk,
+                albumPeak: taglibFile.tag.replayGainAlbumPeak || undefined,
+                trackPeak: taglibFile.tag.replayGainTrackPeak || undefined,
+
                 comment: taglibFile.tag.comment,
                 lyrics: taglibFile.tag.lyrics,
             }
@@ -1193,13 +1205,41 @@ async function initModifyMediaTag(){
             return tag
         }catch{ return '' }
     });
-    ipc.handle('node-taglib-sharp-set-media-tag', async (event, tag) => {
+    ipc.handle('node-taglib-sharp-set-media-tag', async (event, args) => {
         try {
-            const taglibFile = File.createFromPath(_path)
-            taglibFile.tag = tag
-            taglibFile.save()
+            const { _path, _tag } = args; // 解构传递的对象
+            const taglibFile = File.createFromPath(_path);
+            taglibFile.tag.title = _tag.title;
+            taglibFile.tag.albumArtists = _tag.albumArtists;
+            taglibFile.tag.performers = _tag.artist;
+            taglibFile.tag.album = _tag.album;
+            taglibFile.tag.discCount = _tag.discCount;
+            taglibFile.tag.trackCount = _tag.trackCount;
+            taglibFile.tag.year = _tag.year;
+            taglibFile.tag.genres = _tag.genres;
+            taglibFile.tag.comment = _tag.comment;
+            taglibFile.tag.lyrics = _tag.lyrics;
+            taglibFile.save();
             taglibFile.dispose();
-        }catch{ return false }
-        return true
+        } catch (error) {
+            console.error('Error setting media tag:', error);
+            return false;
+        }
+        return true;
     });
+}
+function formatTime(currentTime: number): string {
+    const minutes = Math.floor(currentTime / 60);
+    const seconds = Math.floor(currentTime % 60);
+
+    let formattedMinutes = String(minutes);
+    let formattedSeconds = String(seconds);
+
+    if (formattedMinutes.length == 1)
+        formattedMinutes = '0' + formattedMinutes;
+
+    if (formattedSeconds.length == 1)
+        formattedSeconds = '0' + formattedSeconds;
+
+    return `${formattedMinutes}:${formattedSeconds}`;
 }

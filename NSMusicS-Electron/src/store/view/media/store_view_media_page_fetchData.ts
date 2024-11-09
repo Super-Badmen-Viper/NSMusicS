@@ -167,6 +167,25 @@ export const store_view_media_page_fetchData = reactive({
                     else
                         mediaFile.rating = 0;
                 }
+                ////// find playCount for media_Files_temporary
+                const stmt_media_Annotation_playCount_Items = db.prepare(`
+                    SELECT item_id, play_count, play_date FROM ${store_server_user_model.annotation}
+                    WHERE item_type='media_file'
+                `);
+                const annotations_play_count = stmt_media_Annotation_playCount_Items.all();
+                for (let i = 0; i < store_view_media_page_info.media_Files_temporary.length; i++) {
+                    const mediaFile = store_view_media_page_info.media_Files_temporary[i];
+                    const matchingAnnotation = annotations_play_count.find((annotation: {
+                        item_id: string,
+                        play_count: number
+                    }) => annotation.item_id === mediaFile.id);
+                    if (matchingAnnotation) {
+                        mediaFile.play_count = matchingAnnotation.play_count;
+                        mediaFile.play_date = matchingAnnotation.play_date;
+                    }
+                    else
+                        mediaFile.play_count = 0;
+                }
                 ////// filter selected_list for media_Files_temporary
                 let order_play_date: any[] = [];
                 if (store_view_media_page_logic.page_songlists_selected === 'song_list_recently') {

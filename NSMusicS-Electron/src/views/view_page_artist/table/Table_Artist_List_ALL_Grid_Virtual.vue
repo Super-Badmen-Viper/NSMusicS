@@ -6,7 +6,7 @@ import {
   PlayCircle24Regular,
   Heart24Regular,Heart28Filled,
   ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
-  Filter20Filled,
+  Filter20Filled,ShareScreenStart48Regular
 } from '@vicons/fluent'
 import {
   RefreshSharp
@@ -454,6 +454,8 @@ const onRefreshSharp = async () => {
   if(store_server_user_model.model_server_type_of_web){
     store_view_artist_page_fetchData.fetchData_Artist_of_server_web_start()
   }else if(store_server_user_model.model_server_type_of_local){
+    scrollTo(0)
+    store_view_artist_page_logic.page_artistlists_keyword = ""
     store_view_artist_page_fetchData.fetchData_Artist()
   }
 }
@@ -524,6 +526,11 @@ onBeforeUnmount(() => {
       <n-button quaternary circle size="medium" style="margin-left:4px" @click="onRefreshSharp">
         <template #icon>
           <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+        </template>
+      </n-button>
+      <n-button quaternary circle size="medium" style="margin-left:4px" @click="onRefreshSharp">
+        <template #icon>
+          <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
         </template>
       </n-button>
     </n-space>

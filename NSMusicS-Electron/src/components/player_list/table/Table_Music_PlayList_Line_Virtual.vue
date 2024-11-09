@@ -40,6 +40,11 @@ const handleItemDbClick = (media_file:any,index:number) => {
   store_player_audio_info.this_audio_song_favorite = media_file.favorite
   store_player_audio_info.this_audio_album_id = media_file.album_id
   store_player_audio_info.this_audio_album_name = media_file.album
+  //
+  store_player_tag_modify.player_current_media_starred = media_file.favorite
+  store_player_tag_modify.player_current_media_playCount = media_file.play_count
+  store_player_tag_modify.player_current_media_playDate = media_file.play_date
+  //
   store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
 
   store_playlist_list_logic.media_page_handleItemDbClick = false
@@ -96,6 +101,7 @@ const message = useMessage()
 
 ////// right menu
 import { inject } from "vue";
+import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
 const contextmenu = inject("playlist_contextmenu", null);
 async function update_playlist_addMediaFile(id: any, playlist_id: any){
   try{
