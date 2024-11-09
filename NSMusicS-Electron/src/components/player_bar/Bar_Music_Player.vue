@@ -4,7 +4,7 @@ import {
   Heart24Regular,Heart28Filled,
   MoreCircle32Regular,
   ArrowRepeatAll16Regular,ArrowAutofitDown24Regular,
-  TopSpeed20Regular,DeviceEq24Filled
+  TopSpeed20Regular,DeviceEq24Filled,Tag16Regular
 } from '@vicons/fluent'
 import {
   RepeatOneRound,QueueMusicRound
@@ -634,6 +634,7 @@ import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {Audio_howler} from "@/models/song_Audio_Out/Audio_howler";
 import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
+import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id,favorite)
   store_player_audio_info.this_audio_song_favorite = !favorite
@@ -917,11 +918,18 @@ onBeforeUnmount(() => {
             </n-button>
           </n-badge>
         </n-space>
-        <div class="gird_Right_button_area">
-          <n-space justify="space-between">
+        <div class="gird_Right_button_area" style="margin-top: 16px;">
+          <n-space justify="end">
             <n-rate clearable size="small"
                     v-model:value="store_player_audio_info.this_audio_song_rating"
                     @update:value="(value: number) => handleItemClick_Rating(store_player_audio_info.this_audio_song_id, value)"/>
+          </n-space>
+          <n-space justify="space-between" style="margin-top: 6px;">
+            <n-button size="tiny" text @click="store_player_tag_modify.player_show_tag_modify = !store_player_tag_modify.player_show_tag_modify">
+              <template #icon>
+                <n-icon :size="22"><Tag16Regular/></n-icon>
+              </template>
+            </n-button>
             <n-button size="tiny" text @click="handleItemClick_Favorite(store_player_audio_info.this_audio_song_id,store_player_audio_info.this_audio_song_favorite);">
               <template #icon>
                 <n-icon v-if="store_player_audio_info.this_audio_song_favorite" :size="22" color="red"><Heart28Filled/></n-icon>
@@ -1074,10 +1082,9 @@ onBeforeUnmount(() => {
   user-select: none;
 }
 .gird_Right .gird_Right_button_area{
-  width: 105px;
+  width: 132px;
   height: 80px;
   float: right;
-  margin-top: 16px;
   margin-right: 10px;
 }
 .gird_Right .gird_Right_current_playlist_button_area{

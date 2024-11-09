@@ -17,7 +17,7 @@ import {
   Random
 } from '@vicons/fa'
 import {
-  Play,
+  Play,RefreshSharp
 } from '@vicons/ionicons5'
 import { Icon } from "@vicons/utils";
 import { Add, Close, Menu } from "@vicons/carbon";
@@ -463,6 +463,7 @@ import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {BrowserUpdatedFilled} from "@vicons/material";
+import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -750,6 +751,14 @@ function menu_item_add_to_playlist_next() {
     contextmenu.value.hide()
   }
 }
+function menu_item_edit_selected_media_tags(){
+  const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
+  if (item != undefined && item != 'undefined') {
+    store_player_tag_modify.player_current_media_path = item.path
+    store_player_tag_modify.player_show_tag_modify = true
+    contextmenu.value.hide()
+  }
+}
 
 //////
 const isScrolling = ref(false);
@@ -761,6 +770,15 @@ const onScrollEnd = async () => {
   }
   isScrolling.value = false;
 };
+
+/////
+const onRefreshSharp = async () => {
+  if(store_server_user_model.model_server_type_of_web){
+    store_view_media_page_fetchData.fetchData_Media_of_server_web_start()
+  }else if(store_server_user_model.model_server_type_of_local){
+    store_view_media_page_fetchData.fetchData_Media()
+  }
+}
 
 ////// view songlist_view Remove data
 onBeforeUnmount(() => {
@@ -894,6 +912,13 @@ onBeforeUnmount(() => {
           </template>
         </n-button>
       </n-dropdown>
+
+      <n-divider vertical style="width: 2px;height: 20px;margin-top: 8px;"/>
+      <n-button quaternary circle size="medium" style="margin-left:4px" @click="onRefreshSharp">
+        <template #icon>
+          <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+        </template>
+      </n-button>
     </n-space>
     <div class="dynamic-scroller-demo">
       <DynamicScroller
@@ -1172,6 +1197,9 @@ onBeforeUnmount(() => {
         </v-contextmenu-item>
         <v-contextmenu-item @click="menu_item_add_to_playlist_next">
           {{ $t('player.addNext') }}
+        </v-contextmenu-item>
+        <v-contextmenu-item @click="menu_item_edit_selected_media_tags">
+          {{ $t('nsmusics.view_page.mediaLibrary_selected_media_tag_edit') }}
         </v-contextmenu-item>
       </v-contextmenu>
     </div>

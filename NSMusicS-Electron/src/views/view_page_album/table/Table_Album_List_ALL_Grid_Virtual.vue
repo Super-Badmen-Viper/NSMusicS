@@ -13,11 +13,14 @@ import {
   TextSortAscending20Regular,
   TextSortDescending20Regular
 } from '@vicons/fluent'
+import {
+  RefreshSharp
+} from '@vicons/ionicons5'
 import {Icon} from '@vicons/utils'
 
 ////// this_view components of navie ui
 import {computed, h, onBeforeUnmount, onMounted, ref, watch} from 'vue'
-import {type InputInst, NIcon, useMessage} from 'naive-ui';
+import {type InputInst, NButton, NIcon, useMessage} from 'naive-ui';
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
@@ -46,336 +49,336 @@ const { t } = useI18n({
     inheritLocale: true
   })
 
-  ////// albumlist_view page_layout gridItems
-  const item_album = ref<number>(160)
-  const item_album_image = ref<number>(item_album.value - 20)
-  const item_album_txt = ref<number>(item_album.value - 20)
-  const itemSize = ref(220);
-  const gridItems = ref(5);
-  const itemSecondarySize = ref(185);
-  const path = require('path')
-  const handleImageError = (event: any) => {
-    const originalSrc = event.target.src;
-    const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
-    const img = new Image();
-    img.onload = null;
-    img.onerror = null;
-    img.onload = () => {
-      event.target.src = pngSrc;
-    };
-    img.onerror = () => {
-      event.target.src = path.resolve('resources/img/error_album.jpg');
-    };
-    img.src = pngSrc;
+////// albumlist_view page_layout gridItems
+const item_album = ref<number>(160)
+const item_album_image = ref<number>(item_album.value - 20)
+const item_album_txt = ref<number>(item_album.value - 20)
+const itemSize = ref(220);
+const gridItems = ref(5);
+const itemSecondarySize = ref(185);
+const path = require('path')
+const handleImageError = (event: any) => {
+  const originalSrc = event.target.src;
+  const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
+  const img = new Image();
+  img.onload = null;
+  img.onerror = null;
+  img.onload = () => {
+    event.target.src = pngSrc;
   };
-  const os = require('os');
-  function getAssetImage(firstImage: string) {
-    if(os.type() || process.platform === 'win32')
-      return new URL(firstImage, import.meta.url).href;
-    else if(os.type() || process.platform === 'darwin')
-      return new URL(firstImage, import.meta.url).href;
-    else if(os.type() || process.platform === 'linux')
-      return new URL(firstImage, import.meta.url).href;
+  img.onerror = () => {
+    event.target.src = path.resolve('resources/img/error_album.jpg');
+  };
+  img.src = pngSrc;
+};
+const os = require('os');
+function getAssetImage(firstImage: string) {
+  if(os.type() || process.platform === 'win32')
+    return new URL(firstImage, import.meta.url).href;
+  else if(os.type() || process.platform === 'darwin')
+    return new URL(firstImage, import.meta.url).href;
+  else if(os.type() || process.platform === 'linux')
+    return new URL(firstImage, import.meta.url).href;
+}
+// gridItems Re render
+const collapsed_width = ref<number>(1090);
+const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
+  updateGridItems();
+});
+const updateGridItems = () => {
+  collapsed_width.value = 145;
+  item_album.value = 186;
+  item_album_image.value = item_album.value - 20;
+  item_album_txt.value = item_album.value - 20;
+  itemSecondarySize.value = Math.floor(window.innerWidth / 7);
+  gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
+};
+onMounted(() => {
+  updateGridItems();
+  if(store_view_album_page_logic.page_albumlists_input_search_Value.length > 0){
+    bool_show_search_area.value = true
+    bool_input_search = true
   }
-  // gridItems Re render
-  const collapsed_width = ref<number>(1090);
-  const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
-    updateGridItems();
-  });
-  const updateGridItems = () => {
-    collapsed_width.value = 145;
-    item_album.value = 186;
-    item_album_image.value = item_album.value - 20;
-    item_album_txt.value = item_album.value - 20;
-    itemSecondarySize.value = Math.floor(window.innerWidth / 7);
-    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
-  };
-  onMounted(() => {
-    updateGridItems();
-    if(store_view_album_page_logic.page_albumlists_input_search_Value.length > 0){
-      bool_show_search_area.value = true
-      bool_input_search = true
-    }
-    else{
-      bool_show_search_area.value = false
-      bool_input_search = false
-    }
-  });
-  // gridItems Sort
-  enum state_Sort {
-    Ascend = 'ascend',
-    Descend = 'descend',
-    Default = 'default'
+  else{
+    bool_show_search_area.value = false
+    bool_input_search = false
   }
-  type SortItem = {
-    label:string;
-    key: string;
-    state_Sort: state_Sort;
-  };
-  const options_Sort_key = ref<SortItem[]>([
-    {label:computed(() => t('entity.album_other')), key: 'name', state_Sort: state_Sort.Default },
-    {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
-    {label:computed(() => t('filter.toYear')), key: 'min_year', state_Sort: state_Sort.Default },
-    // {label:computed(() => t('filter.fromYear')), key: 'max_year', state_Sort: state_Sort.Default },
-    {label:computed(() => t('common.duration')), key: 'duration', state_Sort: state_Sort.Default },
-    {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
-    {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
-    // {label:'更新时间(外部信息)', key: 'external_info_updated_at', state_Sort: state_Sort.Default }
-  ]);
-  const options_Sort = computed(() => {
-    if(store_view_album_page_logic.page_albumlists_options_Sort_key != null && store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0){
-      options_Sort_key.value.forEach(element => {
-        if(element.key === store_view_album_page_logic.page_albumlists_options_Sort_key[0].columnKey)
-          if(store_view_album_page_logic.page_albumlists_options_Sort_key[0].order === state_Sort.Ascend)
-            element.state_Sort = state_Sort.Ascend
-          else if(store_view_album_page_logic.page_albumlists_options_Sort_key[0].order === state_Sort.Descend)
-            element.state_Sort = state_Sort.Descend
-      });
-    }
-    return options_Sort_key.value.map(item => {
-      let icon: any;
-      switch (item.state_Sort) {
-        case state_Sort.Ascend:
-          icon = TextSortAscending20Regular;
-          break;
-        case state_Sort.Descend:
-          icon = TextSortDescending20Regular;
-          break;
-        case state_Sort.Default:
-          icon = ArrowSort24Regular;
-          break;
-      }
-      return {
-        label: item.label,
-        key: item.key,
-        icon() {
-          return h(NIcon, null, {
-            default: () => h(icon)
-          });
-        }
-      };
+});
+// gridItems Sort
+enum state_Sort {
+  Ascend = 'ascend',
+  Descend = 'descend',
+  Default = 'default'
+}
+type SortItem = {
+  label:string;
+  key: string;
+  state_Sort: state_Sort;
+};
+const options_Sort_key = ref<SortItem[]>([
+  {label:computed(() => t('entity.album_other')), key: 'name', state_Sort: state_Sort.Default },
+  {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
+  {label:computed(() => t('filter.toYear')), key: 'min_year', state_Sort: state_Sort.Default },
+  // {label:computed(() => t('filter.fromYear')), key: 'max_year', state_Sort: state_Sort.Default },
+  {label:computed(() => t('common.duration')), key: 'duration', state_Sort: state_Sort.Default },
+  {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
+  {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
+  // {label:'更新时间(外部信息)', key: 'external_info_updated_at', state_Sort: state_Sort.Default }
+]);
+const options_Sort = computed(() => {
+  if(store_view_album_page_logic.page_albumlists_options_Sort_key != null && store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0){
+    options_Sort_key.value.forEach(element => {
+      if(element.key === store_view_album_page_logic.page_albumlists_options_Sort_key[0].columnKey)
+        if(store_view_album_page_logic.page_albumlists_options_Sort_key[0].order === state_Sort.Ascend)
+          element.state_Sort = state_Sort.Ascend
+        else if(store_view_album_page_logic.page_albumlists_options_Sort_key[0].order === state_Sort.Descend)
+          element.state_Sort = state_Sort.Descend
     });
-  });
-  const handleSelect_Sort = (key: string | number) => {
-    let _state_Sort_: state_Sort = state_Sort.Default;
-    let idx: number = -1;
-    for (let i = 0; i < options_Sort_key.value.length; i++) {
-      if (options_Sort_key.value[i].key === key) {
-        _state_Sort_ = options_Sort_key.value[i].state_Sort;
-        idx = i;
-      } else {
-        options_Sort_key.value[i].state_Sort = state_Sort.Default;
-      }
-    }
-    switch (_state_Sort_) {
+  }
+  return options_Sort_key.value.map(item => {
+    let icon: any;
+    switch (item.state_Sort) {
       case state_Sort.Ascend:
-        options_Sort_key.value[idx].state_Sort = state_Sort.Descend;
-        _state_Sort_ = state_Sort.Descend;
+        icon = TextSortAscending20Regular;
         break;
       case state_Sort.Descend:
-        options_Sort_key.value[idx].state_Sort = state_Sort.Default;
-        _state_Sort_ = state_Sort.Default;
+        icon = TextSortDescending20Regular;
         break;
       case state_Sort.Default:
-        options_Sort_key.value[idx].state_Sort = state_Sort.Ascend;
-        _state_Sort_ = state_Sort.Ascend;
+        icon = ArrowSort24Regular;
         break;
     }
-    const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
-    store_view_album_page_logic.page_albumlists_options_Sort_key = sortersArray
-
-    scrollTo(0)
-  }
-  const options_Sort_key_Default_key = ref<string>()
-  const options_Sort_key_Default = ref<SortItem[]>()
-  // gridItems Search(filter)
-  const bool_show_search_area = ref<boolean>(false)
-  const show_search_area = () => {
-    if(bool_show_search_area.value === true)
-    {
-      bool_show_search_area.value = false
-      input_search_InstRef.value?.clear()
-      if(bool_input_search){
-        // store_view_album_page_logic.list_data_StartUpdate = true
-        back_search_default()
-        bool_input_search = false
-        scrollTo(0)
-      }
-      if(store_server_user_model.model_server_type_of_web) {
-        store_view_media_page_fetchData._album_id = ''
-        store_view_media_page_fetchData._artist_id = ''
-        store_view_album_page_fetchData._artist_id = ''
-      }
-      input_search_InstRef.value?.clear()
-      store_view_album_page_logic.page_albumlists_keyword = ""
-      click_search()
-    }
-    else
-    {
-      bool_show_search_area.value = true
-      options_Sort_key_Default.value = options_Sort_key.value.slice()
-      options_Sort_key.value.forEach(element => {//保存 sort key
-        if(element.state_Sort != state_Sort.Default)
-          options_Sort_key_Default_key.value = element.key
-      });
-    }
-    // input_search_InstRef.value?.clear()
-  }
-  const input_search_InstRef = ref<InputInst>()
-  let bool_input_search = false
-  const click_search = () => {
-    store_view_album_page_logic.page_albumlists_keyword =
-        store_view_album_page_logic.page_albumlists_input_search_Value.toLowerCase()
-    if (store_view_album_page_logic.page_albumlists_keyword){
-      bool_input_search = true
-      options_Sort_key.value.forEach(element => {
-        element.state_Sort = state_Sort.Default
-      });
-    }else{
-      store_view_album_page_logic.list_data_StartUpdate = true
-      bool_input_search = false
-      back_search_default()
-    }
-  };
-  const back_search_default = () => {
-    if(options_Sort_key_Default.value != null){
-      options_Sort_key.value = options_Sort_key_Default.value.slice()
-      for (let i = 0; i < options_Sort_key.value.length; i++) {
-        if (options_Sort_key.value[i].key === options_Sort_key_Default_key.value) {
-          const sortersArray: { columnKey: string; order: string }[] = [];
-          if (options_Sort_key.value[i].state_Sort === 'default') {
-            store_view_album_page_logic.page_albumlists_options_Sort_key = null
-          } else {
-            const sorter = { columnKey: options_Sort_key.value[i].key, order: options_Sort_key.value[i].state_Sort };
-            sortersArray.push(sorter);
-            store_view_album_page_logic.page_albumlists_options_Sort_key = sortersArray
-          }
-          break;
-        }
-      }
-    }
-  }
-  // lineItems Filter To Favorite
-  const options_Filter = ref([
-    {
-      label: t('nsmusics.view_page.loveAlbum'),
-      key: 'filter_favorite',
+    return {
+      label: item.label,
+      key: item.key,
       icon() {
         return h(NIcon, null, {
-          default: () => h(Heart28Filled)
+          default: () => h(icon)
         });
       }
+    };
+  });
+});
+const handleSelect_Sort = (key: string | number) => {
+  let _state_Sort_: state_Sort = state_Sort.Default;
+  let idx: number = -1;
+  for (let i = 0; i < options_Sort_key.value.length; i++) {
+    if (options_Sort_key.value[i].key === key) {
+      _state_Sort_ = options_Sort_key.value[i].state_Sort;
+      idx = i;
+    } else {
+      options_Sort_key.value[i].state_Sort = state_Sort.Default;
     }
-  ])
-  const options_Filter_handleSelect = (key: string | number) => {
-    store_view_album_page_logic.page_albumlists_selected = 'album_list_love'
-    console.log('selected_value_for_albumlistall：'+'album_list_love');
-    breadcrumbItems.value = store_view_album_page_logic.page_albumlists_options.find(option => option.value === 'album_list_love')?.label || '';
   }
+  switch (_state_Sort_) {
+    case state_Sort.Ascend:
+      options_Sort_key.value[idx].state_Sort = state_Sort.Descend;
+      _state_Sort_ = state_Sort.Descend;
+      break;
+    case state_Sort.Descend:
+      options_Sort_key.value[idx].state_Sort = state_Sort.Default;
+      _state_Sort_ = state_Sort.Default;
+      break;
+    case state_Sort.Default:
+      options_Sort_key.value[idx].state_Sort = state_Sort.Ascend;
+      _state_Sort_ = state_Sort.Ascend;
+      break;
+  }
+  const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
+  store_view_album_page_logic.page_albumlists_options_Sort_key = sortersArray
 
-  ////// dynamicScroller of albumlist_view
-  const dynamicScroller = ref(null as any);
-  const onResize = () => {
-    console.log('resize');
+  scrollTo(0)
+}
+const options_Sort_key_Default_key = ref<string>()
+const options_Sort_key_Default = ref<SortItem[]>()
+// gridItems Search(filter)
+const bool_show_search_area = ref<boolean>(false)
+const show_search_area = () => {
+  if(bool_show_search_area.value === true)
+  {
+    bool_show_search_area.value = false
+    input_search_InstRef.value?.clear()
+    if(bool_input_search){
+      // store_view_album_page_logic.list_data_StartUpdate = true
+      back_search_default()
+      bool_input_search = false
+      scrollTo(0)
+    }
+    if(store_server_user_model.model_server_type_of_web) {
+      store_view_media_page_fetchData._album_id = ''
+      store_view_media_page_fetchData._artist_id = ''
+      store_view_album_page_fetchData._artist_id = ''
+    }
+    input_search_InstRef.value?.clear()
+    store_view_album_page_logic.page_albumlists_keyword = ""
+    click_search()
   }
-  const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
-  const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any, visibleEndIndex: any) => {
-    updateParts.viewStartIdx = viewStartIndex
-    updateParts.viewEndIdx = viewEndIndex
-    updateParts.visibleStartIdx = visibleStartIndex
-    updateParts.visibleEndIdx = visibleEndIndex
-    store_router_history_data_of_album.router_history_model_of_Album_scroller_value = viewEndIndex
+  else
+  {
+    bool_show_search_area.value = true
+    options_Sort_key_Default.value = options_Sort_key.value.slice()
+    options_Sort_key.value.forEach(element => {//保存 sort key
+      if(element.state_Sort != state_Sort.Default)
+        options_Sort_key_Default_key.value = element.key
+    });
   }
-  const stopWatching_router_history_model_of_Album_scroll = watch(() => store_router_history_data_of_album.router_history_model_of_Album_scroll,(newValue) => {
-      if (newValue === true) {
-        scrollTo(store_router_history_data_of_album.router_history_model_of_Album_scroller_value)
-        store_router_history_data_of_album.router_history_model_of_Album_scroll = false
+  // input_search_InstRef.value?.clear()
+}
+const input_search_InstRef = ref<InputInst>()
+let bool_input_search = false
+const click_search = () => {
+  store_view_album_page_logic.page_albumlists_keyword =
+      store_view_album_page_logic.page_albumlists_input_search_Value.toLowerCase()
+  if (store_view_album_page_logic.page_albumlists_keyword){
+    bool_input_search = true
+    options_Sort_key.value.forEach(element => {
+      element.state_Sort = state_Sort.Default
+    });
+  }else{
+    store_view_album_page_logic.list_data_StartUpdate = true
+    bool_input_search = false
+    back_search_default()
+  }
+};
+const back_search_default = () => {
+  if(options_Sort_key_Default.value != null){
+    options_Sort_key.value = options_Sort_key_Default.value.slice()
+    for (let i = 0; i < options_Sort_key.value.length; i++) {
+      if (options_Sort_key.value[i].key === options_Sort_key_Default_key.value) {
+        const sortersArray: { columnKey: string; order: string }[] = [];
+        if (options_Sort_key.value[i].state_Sort === 'default') {
+          store_view_album_page_logic.page_albumlists_options_Sort_key = null
+        } else {
+          const sorter = { columnKey: options_Sort_key.value[i].key, order: options_Sort_key.value[i].state_Sort };
+          sortersArray.push(sorter);
+          store_view_album_page_logic.page_albumlists_options_Sort_key = sortersArray
+        }
+        break;
       }
     }
-  )
-  const scrollTo = (value :number) => {
-    if (dynamicScroller !== null) {
-      setTimeout(() => {
-        const index = value - (20 + Math.floor((window.innerHeight - 765) / 220));
-        dynamicScroller.value.scrollToItem(index);// 220
-      }, 100);
+  }
+}
+// lineItems Filter To Favorite
+const options_Filter = ref([
+  {
+    label: t('nsmusics.view_page.loveAlbum'),
+    key: 'filter_favorite',
+    icon() {
+      return h(NIcon, null, {
+        default: () => h(Heart28Filled)
+      });
     }
   }
-  onMounted(() => {
-    if (store_server_user_model.model_server_type_of_local) {
+])
+const options_Filter_handleSelect = (key: string | number) => {
+  store_view_album_page_logic.page_albumlists_selected = 'album_list_love'
+  console.log('selected_value_for_albumlistall：'+'album_list_love');
+  breadcrumbItems.value = store_view_album_page_logic.page_albumlists_options.find(option => option.value === 'album_list_love')?.label || '';
+}
+
+////// dynamicScroller of albumlist_view
+const dynamicScroller = ref(null as any);
+const onResize = () => {
+  console.log('resize');
+}
+const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
+const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any, visibleEndIndex: any) => {
+  updateParts.viewStartIdx = viewStartIndex
+  updateParts.viewEndIdx = viewEndIndex
+  updateParts.visibleStartIdx = visibleStartIndex
+  updateParts.visibleEndIdx = visibleEndIndex
+  store_router_history_data_of_album.router_history_model_of_Album_scroller_value = viewEndIndex
+}
+const stopWatching_router_history_model_of_Album_scroll = watch(() => store_router_history_data_of_album.router_history_model_of_Album_scroll,(newValue) => {
+    if (newValue === true) {
       scrollTo(store_router_history_data_of_album.router_history_model_of_Album_scroller_value)
-    }else if (store_server_user_model.model_server_type_of_web) {
+      store_router_history_data_of_album.router_history_model_of_Album_scroll = false
+    }
+  }
+)
+const scrollTo = (value :number) => {
+  if (dynamicScroller !== null) {
+    setTimeout(() => {
+      const index = value - (20 + Math.floor((window.innerHeight - 765) / 220));
+      dynamicScroller.value.scrollToItem(index);// 220
+    }, 100);
+  }
+}
+onMounted(() => {
+  if (store_server_user_model.model_server_type_of_local) {
+    scrollTo(store_router_history_data_of_album.router_history_model_of_Album_scroller_value)
+  }else if (store_server_user_model.model_server_type_of_web) {
 
-    }
-  });
+  }
+});
 
-  ////// select Dtatsource of albumlists
-  const breadcrumbItems = ref('所有专辑');
-  const page_albumlists_handleSelected_updateValue = (value: any) => {
-    store_view_album_page_logic.page_albumlists_selected = value
-    console.log('selected_value_for_albumlistall：'+value);
-    breadcrumbItems.value = store_view_album_page_logic.page_albumlists_options.find(option => option.value === value)?.label || '';
-  };
+////// select Dtatsource of albumlists
+const breadcrumbItems = ref('所有专辑');
+const page_albumlists_handleSelected_updateValue = (value: any) => {
+  store_view_album_page_logic.page_albumlists_selected = value
+  console.log('selected_value_for_albumlistall：'+value);
+  breadcrumbItems.value = store_view_album_page_logic.page_albumlists_options.find(option => option.value === value)?.label || '';
+};
 
-  ////// router history 
-  const get_router_history_model_pervious = () => {
-    store_view_album_page_logic.page_albumlists_keyword = ''
-    input_search_InstRef.value?.clear()
-    store_router_history_data_of_album.get_router_history_model_of_Album(-1)
-  }
-  const get_router_history_model_next = () =>  {
-    store_view_album_page_logic.page_albumlists_keyword = ''
-    input_search_InstRef.value?.clear()
-    store_router_history_data_of_album.get_router_history_model_of_Album(1)
-  }
+////// router history
+const get_router_history_model_pervious = () => {
+  store_view_album_page_logic.page_albumlists_keyword = ''
+  input_search_InstRef.value?.clear()
+  store_router_history_data_of_album.get_router_history_model_of_Album(-1)
+}
+const get_router_history_model_next = () =>  {
+  store_view_album_page_logic.page_albumlists_keyword = ''
+  input_search_InstRef.value?.clear()
+  store_router_history_data_of_album.get_router_history_model_of_Album(1)
+}
 
-  ////// go to media_view
-  const handleItemClick_album = (album:string) => {
-    if(store_server_user_model.model_server_type_of_local) {
-      bool_show_search_area.value = false
-      show_search_area()
-      click_search()
-      scrollTo(0)
-    }else if(store_server_user_model.model_server_type_of_web){
-      store_view_album_page_fetchData._artist_id = ''
-      bool_show_search_area.value = true
-    }
-    store_view_album_page_logic.page_albumlists_keyword = album
-    store_view_album_page_logic.page_albumlists_input_search_Value = album
-    store_view_media_page_logic.page_songlists_input_search_Value = album
+////// go to media_view
+const handleItemClick_album = (album:string) => {
+  if(store_server_user_model.model_server_type_of_local) {
+    bool_show_search_area.value = false
+    show_search_area()
+    click_search()
+    scrollTo(0)
+  }else if(store_server_user_model.model_server_type_of_web){
+    store_view_album_page_fetchData._artist_id = ''
+    bool_show_search_area.value = true
   }
-  const handleItemClick_artist = (artist_id:string) => {
-    if(store_server_user_model.model_server_type_of_local) {
-      bool_show_search_area.value = false
-      show_search_area()
-      click_search()
-      scrollTo(0)
-    }else if(store_server_user_model.model_server_type_of_web){
-      store_view_album_page_fetchData._artist_id = ''
-      bool_show_search_area.value = true
-    }
-    store_view_album_page_logic.page_albumlists_keyword = artist_id
-    store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
-    store_view_media_page_logic.page_songlists_input_search_Value = artist_id
+  store_view_album_page_logic.page_albumlists_keyword = album
+  store_view_album_page_logic.page_albumlists_input_search_Value = album
+  store_view_media_page_logic.page_songlists_input_search_Value = album
+}
+const handleItemClick_artist = (artist_id:string) => {
+  if(store_server_user_model.model_server_type_of_local) {
+    bool_show_search_area.value = false
+    show_search_area()
+    click_search()
+    scrollTo(0)
+  }else if(store_server_user_model.model_server_type_of_web){
+    store_view_album_page_fetchData._artist_id = ''
+    bool_show_search_area.value = true
   }
-  const Open_this_album_SongList_click = (album_id:string) => {
-    if(store_server_user_model.model_server_type_of_web){
-      store_view_media_page_fetchData._album_id = album_id
-      store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-      store_playlist_list_fetchData._album_id = album_id
-    }
-    console.log('media_list_of_album_id：'+album_id);
-    store_router_data_logic.get_media_list_of_album_id_by_album_info(album_id)
+  store_view_album_page_logic.page_albumlists_keyword = artist_id
+  store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
+  store_view_media_page_logic.page_songlists_input_search_Value = artist_id
+}
+const Open_this_album_SongList_click = (album_id:string) => {
+  if(store_server_user_model.model_server_type_of_web){
+    store_view_media_page_fetchData._album_id = album_id
+    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+    store_playlist_list_fetchData._album_id = album_id
   }
-  const Play_this_album_SongList_click = async (album_id: string) => {
-    if(store_server_user_model.model_server_type_of_web){
-      store_view_media_page_fetchData._album_id = album_id
-      store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-      store_playlist_list_fetchData._album_id = album_id
-    }
-    console.log('play_this_album_click：' + album_id);
-    await store_view_album_page_fetchData.fetchData_This_Album_SongList(album_id)
+  console.log('media_list_of_album_id：'+album_id);
+  store_router_data_logic.get_media_list_of_album_id_by_album_info(album_id)
+}
+const Play_this_album_SongList_click = async (album_id: string) => {
+  if(store_server_user_model.model_server_type_of_web){
+    store_view_media_page_fetchData._album_id = album_id
+    store_view_media_page_logic.page_songlists_selected = 'song_list_all'
+    store_playlist_list_fetchData._album_id = album_id
   }
+  console.log('play_this_album_click：' + album_id);
+  await store_view_album_page_fetchData.fetchData_This_Album_SongList(album_id)
+}
 
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
     store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id,favorite)
@@ -415,74 +418,83 @@ const contextmenu = ref(null as any)
       console.error(e)
     }
   }
-  async function menu_item_add_to_playlist_end() {
-    await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
-    const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-        (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
-    );
+async function menu_item_add_to_playlist_end() {
+  await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
+  const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+      (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
+  );
 
-    store_view_media_page_info.media_Files_temporary = []
+  store_view_media_page_info.media_Files_temporary = []
 
-    for (let item of matchingItems) {
-      const newItem: Media_File = JSON.parse(JSON.stringify(item));
+  for (let item of matchingItems) {
+    const newItem: Media_File = JSON.parse(JSON.stringify(item));
+    newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
+    store_playlist_list_info.playlist_MediaFiles_temporary.push(newItem);
+    store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id);
+  }
+
+  store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
+    item.absoluteIndex = index;
+  });
+  store_app_configs_logic_save.save_system_playlist_item_id_config();
+  contextmenu.value.hide()
+}
+async function menu_item_add_to_playlist_next() {
+  await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
+  const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
+      (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
+  );
+
+  store_view_media_page_info.media_Files_temporary = [];
+
+  const index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
+      (item: any) => item.id === store_player_audio_info.this_audio_song_id
+  );
+
+  if (index !== -1) {
+    matchingItems.forEach((item: Media_File, i: number) => {
+      const newItem = JSON.parse(JSON.stringify(item));
       newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
-      store_playlist_list_info.playlist_MediaFiles_temporary.push(newItem);
-      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id);
-    }
+      store_playlist_list_info.playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem);
+      store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(index + 1 + i, 0, newItem.id);
+    });
 
     store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
       item.absoluteIndex = index;
     });
     store_app_configs_logic_save.save_system_playlist_item_id_config();
-    contextmenu.value.hide()
+    contextmenu.value.hide();
+  } else {
+    console.error('Current audio song not found in playlist');
   }
-  async function menu_item_add_to_playlist_next() {
-    await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
-    const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-        (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
-    );
+}
 
-    store_view_media_page_info.media_Files_temporary = [];
-
-    const index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
-        (item: any) => item.id === store_player_audio_info.this_audio_song_id
-    );
-
-    if (index !== -1) {
-      matchingItems.forEach((item: Media_File, i: number) => {
-        const newItem = JSON.parse(JSON.stringify(item));
-        newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
-        store_playlist_list_info.playlist_MediaFiles_temporary.splice(index + 1 + i, 0, newItem);
-        store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.splice(index + 1 + i, 0, newItem.id);
-      });
-
-      store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
-        item.absoluteIndex = index;
-      });
-      store_app_configs_logic_save.save_system_playlist_item_id_config();
-      contextmenu.value.hide();
-    } else {
-      console.error('Current audio song not found in playlist');
-    }
+//////
+const isScrolling = ref(false);
+const onScrollEnd = async () => {
+  if (isScrolling.value) return;
+  isScrolling.value = true;
+  if (store_server_user_model.model_server_type_of_web) {
+    await store_view_album_page_fetchData.fetchData_Album_of_server_web_end()
   }
+  isScrolling.value = false;
+};
 
-  //////
-  const isScrolling = ref(false);
-  const onScrollEnd = async () => {
-    if (isScrolling.value) return;
-    isScrolling.value = true;
-    if (store_server_user_model.model_server_type_of_web) {
-      await store_view_album_page_fetchData.fetchData_Album_of_server_web_end()
-    }
-    isScrolling.value = false;
-  };
+//////
+const onRefreshSharp = async () => {
+  if(store_server_user_model.model_server_type_of_web){
+    store_view_album_page_fetchData.fetchData_Album_of_server_web_start()
+  }else if(store_server_user_model.model_server_type_of_local){
+    store_view_album_page_fetchData.fetchData_Album()
+  }
+}
 
-  ////// view albumlist_view Remove data
-  onBeforeUnmount(() => {
-    stopWatching_window_innerWidth()
-    stopWatching_router_history_model_of_Album_scroll()
-    dynamicScroller.value = null;
-  });
+////// view albumlist_view Remove data
+onBeforeUnmount(() => {
+  stopWatching_window_innerWidth()
+  stopWatching_router_history_model_of_Album_scroll()
+  dynamicScroller.value = null;
+});
 </script>
 <template>
   <n-space vertical :size="12">
@@ -538,6 +550,13 @@ const contextmenu = ref(null as any)
           </template>
         </n-button>
       </n-dropdown>
+
+      <n-divider vertical style="width: 2px;height: 20px;margin-top: 8px;"/>
+      <n-button quaternary circle size="medium" style="margin-left:4px" @click="onRefreshSharp">
+        <template #icon>
+          <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+        </template>
+      </n-button>
     </n-space>
     <div class="album-wall-container">
       <DynamicScroller

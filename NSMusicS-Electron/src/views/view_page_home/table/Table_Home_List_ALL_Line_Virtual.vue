@@ -1,24 +1,18 @@
 <script setup lang="ts">
 ////// this_view resource of vicons_svg
 import {
-  MoreCircle32Regular,
-  Filter20Filled
-} from '@vicons/fluent'
-import {
-  ArrowSort24Regular,TextSortAscending20Regular,TextSortDescending20Regular,
-  Search20Filled,
   PlayCircle24Regular,
   Heart24Regular,Heart28Filled,
   ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
 } from '@vicons/fluent'
 import {
   Play,
-  RefreshCircleOutline,
+  RefreshSharp,
 } from '@vicons/ionicons5'
 
 ////// this_view components of navie ui
 import {onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import {NIcon, NImage} from 'naive-ui';
+import {NButton, NIcon, NImage} from 'naive-ui';
 import {Icon} from "@vicons/utils";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_view_home_page_logic} from "@/store/view/home/store_view_home_page_logic";
@@ -356,7 +350,7 @@ onBeforeUnmount(() => {
             </n-button>
             <n-button quaternary @click="Play_this_album_SongList_click(store_view_home_page_info.home_selected_top_album?.id)" style="margin-right: -6px;">
               <template #icon>
-                <n-icon :size="26" :depth="2"><Play/></n-icon>
+                <n-icon :size="20" :depth="2"><Play/></n-icon>
               </template>
             </n-button>
             <n-button quaternary @click="Play_Next_album_SongList_click(1)" style="margin-right: -6px;">
@@ -374,9 +368,9 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.mostPlayed') }}
         </span>
-        <n-button text style="margin-top: 6px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button quaternary circle size="medium" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
-            <n-icon :size="26"><RefreshCircleOutline/></n-icon>
+            <n-icon :size="20"><RefreshSharp/></n-icon>
           </template>
         </n-button>
       </n-space>
@@ -493,9 +487,9 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.explore') }}
         </span>
-        <n-button text style="margin-top: 6px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button quaternary circle size="medium" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
-            <n-icon :size="26"><RefreshCircleOutline/></n-icon>
+            <n-icon :size="20"><RefreshSharp/></n-icon>
           </template>
         </n-button>
       </n-space>
@@ -612,9 +606,9 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.newlyAdded') }}
         </span>
-        <n-button text style="margin-top: 6px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button quaternary circle size="medium" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
-            <n-icon :size="26"><RefreshCircleOutline/></n-icon>
+            <n-icon :size="20"><RefreshSharp/></n-icon>
           </template>
         </n-button>
       </n-space>
@@ -731,9 +725,9 @@ onBeforeUnmount(() => {
         <span style="font-size: 20px;font-weight: 600;">
           {{ $t('page.home.recentlyPlayed') }}
         </span>
-        <n-button text style="margin-top: 6px;" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button quaternary circle size="medium" @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
-            <n-icon :size="26"><RefreshCircleOutline/></n-icon>
+            <n-icon :size="20"><RefreshSharp/></n-icon>
           </template>
         </n-button>
       </n-space>
