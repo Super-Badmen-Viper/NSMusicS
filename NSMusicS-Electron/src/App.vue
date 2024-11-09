@@ -628,7 +628,8 @@
             collapse-mode="width"
             :collapsed-width="66"
             :width="160"
-            :collapsed="true"
+            show-trigger
+            :collapsed="store_app_configs_info.app_left_menu_collapsed"
             @collapse="store_app_configs_info.app_left_menu_collapsed = true"
             @expand="store_app_configs_info.app_left_menu_collapsed = false">
             <n-flex vertical justify="space-between" style="height: 100vh">
