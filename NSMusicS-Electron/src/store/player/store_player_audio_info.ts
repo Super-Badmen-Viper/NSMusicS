@@ -11,6 +11,7 @@ import {store_playlist_appearance} from "@/store/view/playlist/store_playlist_ap
 import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
+import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
 const path = require('path')
 const { ipcRenderer } = require('electron');
 interface ByteTime {
@@ -96,12 +97,13 @@ export const store_player_audio_info = reactive({
 watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
     if(newValue != undefined && newValue != 'undefined' && newValue.length > 0) {
         console.log('this_audio_file_path：' + newValue)
+        store_player_tag_modify.player_current_media_path = newValue
 
         if (store_view_media_page_info.media_Files_temporary != undefined
             && store_view_media_page_info.media_Files_temporary.length != 0
         ) {
             store_player_audio_info.this_audio_restart_play = true
-            if (store_player_appearance.player_mode_of_lock_playlist === false) {
+            if (!store_player_appearance.player_mode_of_lock_playlist) {
                 if (!store_app_configs_logic_load.app_configs_loading) {
                     if(!store_playlist_appearance.playlist_show) {
                         if (store_playlist_list_logic.media_page_handleItemDbClick) {

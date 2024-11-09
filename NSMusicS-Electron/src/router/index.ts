@@ -6,7 +6,7 @@ const router = createRouter({
     {
       path: '/View_Home_MusicLibrary_Browse',
       name: 'View_Home_MusicLibrary_Browse',
-      component: () => import('../views/View_Home_MusicLibrary_Browse.vue'),
+      component: () => import('../views/view_page_home/View_Home_MusicLibrary_Browse.vue'),
       meta: {
         cleanup: true
       }
@@ -14,7 +14,7 @@ const router = createRouter({
     {
       path: '/View_Menu_AppSetting',
       name: 'View_Menu_AppSetting',
-      component: () => import('../views/View_Menu_AppSetting.vue'),
+      component: () => import('../views/view_page_menu/View_Menu_AppSetting.vue'),
       meta: {
         cleanup: true
       }
@@ -22,7 +22,7 @@ const router = createRouter({
     {
       path: '/View_Song_List_ALL',
       name: 'View_Song_List_ALL',
-      component: () => import('../views/View_Song_List_ALL.vue'),
+      component: () => import('../views/view_page_media/View_Song_List_ALL.vue'),
       meta: {
         cleanup: true
       }
@@ -30,7 +30,7 @@ const router = createRouter({
     {
       path: '/View_Album_List_ALL',
       name: 'View_Album_List_ALL',
-      component: () => import('../views/View_Album_List_ALL.vue'),
+      component: () => import('../views/view_page_album/View_Album_List_ALL.vue'),
       meta: {
         cleanup: true
       }
@@ -38,7 +38,7 @@ const router = createRouter({
     {
       path: '/View_Artist_List_ALL',
       name: 'View_Artist_List_ALL',
-      component: () => import('../views/View_Artist_List_ALL.vue'),
+      component: () => import('../views/view_page_artist/View_Artist_List_ALL.vue'),
       meta: {
         cleanup: true
       }
@@ -46,7 +46,7 @@ const router = createRouter({
     {
       path: '/View_Updateing',
       name: 'View_Updateing',
-      component: () => import('../views/View_Updateing.vue'),
+      component: () => import('../components/update_list/View_Updateing.vue'),
       meta: {
         cleanup: true
       }

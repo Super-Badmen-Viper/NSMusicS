@@ -1,103 +1,104 @@
 <script setup lang="ts">
 import { ref } from "vue";
+const item = ref({
+  title: "坏空空"
+})
 </script>
 <template>
   <n-space vertical :size="12">
-    <n-form>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('filter.title') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('filter.path') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('entity.albumArtist_other') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('entity.artist_other') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('entity.album_other') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('filter.disc') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('common.trackNumber') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('common.year') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('entity.genre_other') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('common.duration') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('filter.isCompilation') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('common.codec') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('common.bitrate') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('common.channel_other') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('common.size') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('common.favorite') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('filter.playCount') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('filter.lastPlayed') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('common.modified') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('common.albumPeak') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('common.trackPeak') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-      <n-space align="center" style="margin-bottom: 10px;">
-        <div style="width: 100px;">{{ $t('filter.comment') }}</div>
-        <n-input style="width: 400px;" clearable />
-      </n-space>
-    </n-form>
-    <n-space justify="start">
-      <n-button @click="update_server_addUser();">
-        {{ $t('common.save') }}
-      </n-button>
-    </n-space>
+    <n-table
+        style="width: 630px;
+          --n-td-color-modal: transparent;--n-border-color-modal: #FFFFFF80;
+          --n-td-padding:6px;" :bordered="false" :single-line="false">
+      <tr>
+        <td style="width: 160px;">{{ $t('filter.title') }}</td>
+        <td>反常的</td>
+      </tr>
+      <tr>
+        <td>{{ $t('filter.path') }}</td>
+        <td>反常的</td>
+      </tr>
+      <tr>
+        <td>{{ $t('entity.albumArtist_other') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('entity.artist_other') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('entity.album_other') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('filter.disc') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('common.trackNumber') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('common.year') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('entity.genre_other') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('common.duration') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('filter.isCompilation') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('common.codec') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('common.bitrate') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('common.channel_other') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('common.size') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('common.favorite') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('filter.playCount') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('filter.lastPlayed') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('common.modified') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('common.albumPeak') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('common.trackPeak') }}</td>
+        
+      </tr>
+      <tr>
+        <td>{{ $t('filter.comment') }}</td>
+        
+      </tr>
+    </n-table>
   </n-space>
 </template>
 <style>

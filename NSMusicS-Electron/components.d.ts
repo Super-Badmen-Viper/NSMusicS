@@ -7,8 +7,8 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    Bar_Music_Player: typeof import('./src/components/Bar_Music_Player.vue')['default']
-    Bar_Music_PlayList: typeof import('./src/components/Bar_Music_PlayList.vue')['default']
+    Bar_Music_Player: typeof import('./src/components/player_bar/Bar_Music_Player.vue')['default']
+    Bar_Music_PlayList: typeof import('./src/components/player_list/View_Player_PlayList.vue')['default']
     NBadge: typeof import('naive-ui')['NBadge']
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
@@ -55,10 +55,21 @@ declare module 'vue' {
     NStep: typeof import('naive-ui')['NStep']
     NSteps: typeof import('naive-ui')['NSteps']
     NSwitch: typeof import('naive-ui')['NSwitch']
+    NTable: typeof import('naive-ui')['NTable']
     NTabPane: typeof import('naive-ui')['NTabPane']
     NTabs: typeof import('naive-ui')['NTabs']
     NTag: typeof import('naive-ui')['NTag']
+    NText: typeof import('naive-ui')['NText']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Table_Edit_Tag: typeof import('./src/components/tag_list/table/Table_Edit_Tag.vue')['default']
+    Table_Music_PlayList_Line_Virtual: typeof import('./src/components/player_list/table/Table_Music_PlayList_Line_Virtual.vue')['default']
+    Table_Page_Info: typeof import('./src/components/info_list/table/Table_Page_Info.vue')['default']
+    Table_Updateing: typeof import('./src/components/update_list/table/Table_Updateing.vue')['default']
+    View_Edit_Tag: typeof import('./src/components/tag_list/View_Edit_Tag.vue')['default']
+    View_Page_Info: typeof import('./src/components/info_list/View_Page_Info.vue')['default']
+    View_Player_PlayList: typeof import('./src/components/player_list/View_Player_PlayList.vue')['default']
+    View_Tag: typeof import('./src/components/tag_list/View_Tag.vue')['default']
+    View_Updateing: typeof import('./src/components/update_list/View_Updateing.vue')['default']
   }
 }

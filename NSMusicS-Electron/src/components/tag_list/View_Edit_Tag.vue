@@ -1,20 +1,24 @@
 <script setup lang="ts">
-  import {onMounted} from "vue";
-  import Table_Updateing from './table/Table_Updateing.vue'
-  import {store_router_data_info} from "@/store/router/store_router_data_info";
-
-  onMounted(async () => {
-    store_router_data_info.router_select = 'View_Updateing'
-  });
+  import Table_Edit_Tag from './table/Table_Edit_Tag.vue'
 </script>
+
 <template>
-  <div class="view_show">
-    <Table_Updateing/>
-  </div>
+  <n-space class="this_Bar_Music_PlayList">
+    <div class="layout_distribution_4">
+      <Table_Edit_Tag/>
+    </div>
+  </n-space>
 </template>
+
 <style>
-.view_show {
-  width: 100vw;
-  height: calc(100vh - 200px);
+.this_Bar_Music_PlayList {
+  margin-top: 0;
+  z-index: 100;
+  border-radius: 12px 12px 0 12px;
+}
+.layout_distribution_4 {
+  display: flex;
+  justify-content: space-between;
+  z-index: 99;
 }
 </style>

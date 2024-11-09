@@ -30,6 +30,7 @@ if (!app.requestSingleInstanceLock()) {
         await createTray();
         await initNodeMpv()
         await createNodeMpv();
+        await initModifyMediaTag();
 
         const devInnerHeight: number = 1080.0;
         const devDevicePixelRatio: number = 1.0;
@@ -444,9 +445,9 @@ async function createWindow() {
                     const albumId = `${artistName}-${albumName}`;
                     // album
                     let album_artist = ''
-                    if (taglibFile.tag != undefined && taglibFile.tag.performers != undefined) {
+                    if (taglibFile.tag != undefined && taglibFile.tag.albumArtists != undefined) {
                         album_artist =
-                            taglibFile.tag.performers ||
+                            taglibFile.tag.albumArtists ||
                             file_name_model ?
                                 result_file_name?.artist || "undefined"
                                 :
@@ -649,6 +650,7 @@ async function createWindow() {
                             console.error(e);
                         }
                     }
+                    taglibFile.dispose();
                 }catch (e) {
                     console.error('_path: ' + _path + '\nerror:' + e);
                 }
@@ -1168,4 +1170,36 @@ async function createNodeMpv(){
             await mpv.volume(volume);
         }, 10);
     }
+}
+
+/// node-taglib-sharp tag
+async function initModifyMediaTag(){
+    ipc.handle('node-taglib-sharp-get-media-tag', async (event, _path) => {
+        try {
+            const taglibFile = File.createFromPath(_path)
+            const tag = {
+                title: taglibFile.tag.title,
+                artist: taglibFile.tag.performers,
+                album: taglibFile.tag.album,
+                year: taglibFile.tag.year,
+                trackCount: taglibFile.tag.trackCount,
+                discCount: taglibFile.tag.discCount,
+                genres: taglibFile.tag.genres,
+                albumArtists: taglibFile.tag.albumArtists,
+                comment: taglibFile.tag.comment,
+                lyrics: taglibFile.tag.lyrics,
+            }
+            taglibFile.dispose()
+            return tag
+        }catch{ return '' }
+    });
+    ipc.handle('node-taglib-sharp-set-media-tag', async (event, tag) => {
+        try {
+            const taglibFile = File.createFromPath(_path)
+            taglibFile.tag = tag
+            taglibFile.save()
+            taglibFile.dispose();
+        }catch{ return false }
+        return true
+    });
 }

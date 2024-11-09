@@ -18,9 +18,9 @@
   import {darkTheme, NConfigProvider, NIcon} from 'naive-ui'
   import {h, onMounted, computed, watch, provide, ref} from 'vue';
   import {RouterLink, RouterView, useRouter} from 'vue-router';
-  import Bar_Music_Player from '@/components/Bar_Music_Player.vue'
-  import Bar_Music_PlayList from '@/components/Bar_Music_PlayList.vue'
-  import View_Screen_Music_Player from '@/views/View_Screen_Music_Player.vue'
+  import Bar_Music_Player from '@/components/player_bar/Bar_Music_Player.vue'
+  import Bar_Music_PlayList from '@/components/player_list/View_Player_PlayList.vue'
+  import View_Screen_Music_Player from '@/views/view_page_player/View_Screen_Music_Player.vue'
   import {store_app_configs_info} from '@/store/app/store_app_configs_info'
   import {store_player_appearance} from "@/store/player/store_player_appearance";
   import {store_player_sound_effects} from "@/store/player/store_player_sound_effects";
@@ -562,6 +562,10 @@
 
   ////
   import { provide } from "vue";
+  import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+  import View_Edit_Tag from "@/components/tag_list/View_Edit_Tag.vue";
+  import {store_player_info_modify} from "@/store/player/store_player_info_modify";
+  import View_Page_Info from "@/components/info_list/View_Page_Info.vue";
   const playlist_contextmenu = ref(null as any)
   provide("message", playlist_contextmenu);
 
@@ -835,6 +839,44 @@
                 均衡器(专业)
               </n-tab-pane>
             </n-tabs>
+          </template>
+        </n-drawer-content>
+      </n-drawer>
+    </n-config-provider>
+    <!-- right drwaer of info_modify -->
+    <n-config-provider :theme="darkTheme">
+      <n-drawer
+          v-model:show="store_player_info_modify.player_show_info_modify"
+          :width="680"
+          style="
+          border-radius: 12px 0 0 12px;
+          border: 1.5px solid #FFFFFF20;
+          background-color: rgba(127, 127, 127, 0.1);
+          backdrop-filter: blur(10px);
+          margin-top: 88px;margin-bottom:88px;
+        ">
+        <n-drawer-content>
+          <template #default>
+            <View_Page_Info></View_Page_Info>
+          </template>
+        </n-drawer-content>
+      </n-drawer>
+    </n-config-provider>
+    <!-- right drwaer of tag_modify -->
+    <n-config-provider :theme="darkTheme">
+      <n-drawer
+          v-model:show="store_player_tag_modify.player_show_tag_modify"
+          :width="680"
+          style="
+          border-radius: 12px 0 0 12px;
+          border: 1.5px solid #FFFFFF20;
+          background-color: rgba(127, 127, 127, 0.1);
+          backdrop-filter: blur(10px);
+          margin-top: 88px;margin-bottom:88px;
+        ">
+        <n-drawer-content>
+          <template #default>
+            <View_Edit_Tag></View_Edit_Tag>
           </template>
         </n-drawer-content>
       </n-drawer>

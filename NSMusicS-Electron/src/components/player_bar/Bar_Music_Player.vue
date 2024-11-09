@@ -4,7 +4,7 @@ import {
   Heart24Regular,Heart28Filled,
   MoreCircle32Regular,
   ArrowRepeatAll16Regular,ArrowAutofitDown24Regular,
-  TopSpeed20Regular,DeviceEq24Filled,Tag16Regular
+  TopSpeed20Regular,DeviceEq24Filled,Tag16Regular,Info16Regular
 } from '@vicons/fluent'
 import {
   RepeatOneRound,QueueMusicRound
@@ -635,6 +635,7 @@ import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlis
 import {Audio_howler} from "@/models/song_Audio_Out/Audio_howler";
 import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+import {store_player_info_modify} from "@/store/player/store_player_info_modify";
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id,favorite)
   store_player_audio_info.this_audio_song_favorite = !favorite
@@ -925,6 +926,11 @@ onBeforeUnmount(() => {
                     @update:value="(value: number) => handleItemClick_Rating(store_player_audio_info.this_audio_song_id, value)"/>
           </n-space>
           <n-space justify="space-between" style="margin-top: 6px;">
+            <n-button size="tiny" text @click="store_player_info_modify.player_show_info_modify = !store_player_info_modify.player_show_info_modify">
+              <template #icon>
+                <n-icon :size="22"><Info16Regular/></n-icon>
+              </template>
+            </n-button>
             <n-button size="tiny" text @click="store_player_tag_modify.player_show_tag_modify = !store_player_tag_modify.player_show_tag_modify">
               <template #icon>
                 <n-icon :size="22"><Tag16Regular/></n-icon>
@@ -1082,7 +1088,7 @@ onBeforeUnmount(() => {
   user-select: none;
 }
 .gird_Right .gird_Right_button_area{
-  width: 132px;
+  width: 158px;
   height: 80px;
   float: right;
   margin-right: 10px;

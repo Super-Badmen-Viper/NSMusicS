@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import Table_Edit_Tag from './table/Table_Edit_Tag.vue'
+  import Table_Page_Info from './table/Table_Page_Info.vue'
 </script>
 
 <template>
   <n-space class="this_Bar_Music_PlayList">
     <div class="layout_distribution_4">
-      <Table_Edit_Tag/>
+      <Table_Page_Info/>
     </div>
   </n-space>
 </template>

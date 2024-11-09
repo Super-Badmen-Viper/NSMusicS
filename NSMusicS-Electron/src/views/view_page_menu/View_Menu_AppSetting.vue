@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import Table_Menu_AppSetting from '../views/table/Table_Menu_AppSetting_Line_Virtual.vue'
+import Table_Menu_AppSetting from './table/Table_Menu_AppSetting_Line_Virtual.vue'
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 
 onMounted(async () => {

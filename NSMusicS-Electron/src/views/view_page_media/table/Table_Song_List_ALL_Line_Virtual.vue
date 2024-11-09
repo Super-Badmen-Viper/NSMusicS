@@ -464,6 +464,7 @@ import {store_view_album_page_fetchData} from "@/store/view/album/store_view_alb
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {BrowserUpdatedFilled} from "@vicons/material";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+import {store_player_info_modify} from "@/store/player/store_player_info_modify";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -756,6 +757,14 @@ function menu_item_edit_selected_media_tags(){
   if (item != undefined && item != 'undefined') {
     store_player_tag_modify.player_current_media_path = item.path
     store_player_tag_modify.player_show_tag_modify = true
+    contextmenu.value.hide()
+  }
+}
+function menu_item_show_selected_media_info(){
+  const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
+  if (item != undefined && item != 'undefined') {
+    store_player_info_modify.player_current_media_path = item.path
+    store_player_info_modify.player_show_info_modify = true
     contextmenu.value.hide()
   }
 }
@@ -1200,6 +1209,9 @@ onBeforeUnmount(() => {
         </v-contextmenu-item>
         <v-contextmenu-item @click="menu_item_edit_selected_media_tags">
           {{ $t('nsmusics.view_page.mediaLibrary_selected_media_tag_edit') }}
+        </v-contextmenu-item>
+        <v-contextmenu-item @click="menu_item_show_selected_media_info">
+          {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>
       </v-contextmenu>
     </div>

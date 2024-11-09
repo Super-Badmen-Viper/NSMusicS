@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { ref } from "vue";
+import { ref } from "vue";
 
-  ////// lineItems Re render
-  const collapsed_width = ref<number>(80);
+////// lineItems Re render
+const collapsed_width = ref<number>(80);
 </script>
 <template>
   <div class="view">
