@@ -50,7 +50,7 @@
 
 ## sponsor
 爱发电：https://afdian.com/a/fu_zi_qian  
-<img src="doc/sponsor.png" width="20%">
+<img src="doc/sponsor.png" height="160">   <img src="doc/spomsor_weichat.jpg" height="160">   <img src="doc/spomsor_qq.jpg" height="160">
 
 ## Using the source code of NSMusicS-Electron
 #### If you would like to experience the latest development progress of NSMusicS-Electron:

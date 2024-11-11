@@ -57,7 +57,7 @@ export class Audio_node_mpv {
     async getDuration(): Promise<number | undefined> {
         try {
             let temp = await ipcRenderer.invoke('mpv-get-duration')
-            this.isDuration = temp >= 0 ? temp : this.isDuration
+            this.isDuration = temp >= 0 ? temp : 0
             return this.isDuration;
         }catch{
             return 0
