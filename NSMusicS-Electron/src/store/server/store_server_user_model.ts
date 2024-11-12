@@ -41,6 +41,7 @@ export const store_server_user_model = reactive({
 
     model_server_type_of_web: true,
     model_server_type_of_local: false,
+    model_server_type_of_local_server_download: false,
     authorization: '',
     client_unique_id: '',
     server_get_count: 15,

@@ -64,7 +64,9 @@
             "audio_channel_explain": "Definir o canal de áudio de saída",
             "selectLibrary_select_0": "Não exportar a capa incorporada do arquivo de música, use apenas a capa com o mesmo nome ao mesmo nível do arquivo de música",
             "selectLibrary_select_1": "Exporte a capa incorporada do arquivo de música como um arquivo de capa com o mesmo nome (pule se houver um arquivo de capa com o mesmo nome), e salve o arquivo na mesma pasta do arquivo de música",
-            "mediaLibrary": "Biblioteca de Mídia"
+            "mediaLibrary": "Biblioteca de Mídia",
+            "mediaLibrary_begin_import": "Iniciar Importação",
+            "mediaLibrary_media_tag_modify_local": "Atualmente, apenas o modo local de navegação|edição de informações de tags é suportado"
         },
         "view_player": {
             "view_seting": {

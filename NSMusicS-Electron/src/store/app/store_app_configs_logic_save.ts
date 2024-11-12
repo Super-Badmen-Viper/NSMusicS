@@ -44,6 +44,7 @@ export const store_app_configs_logic_save = reactive({
                 selectd_props_app_sidebar: JSON.stringify(store_app_configs_info.selectd_props_app_sidebar),
                 model_server_type_of_web: String(store_server_user_model.model_server_type_of_web),
                 model_server_type_of_local: String(store_server_user_model.model_server_type_of_local),
+                model_server_type_of_local_server_download: String(store_server_user_model.model_server_type_of_local_server_download),
                 authorization: String(store_server_user_model.authorization),
                 client_unique_id: String(store_server_user_model.client_unique_id),
                 media_page_sizes: String(store_view_media_page_info.media_page_sizes),

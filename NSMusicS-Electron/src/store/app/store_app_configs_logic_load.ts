@@ -45,6 +45,7 @@ export const store_app_configs_logic_load = reactive({
             store_server_user_model.password = '' + system_Configs_Read.app_Configs.value['password']
             store_server_user_model.model_server_type_of_web = '' + system_Configs_Read.app_Configs.value['model_server_type_of_web'] === 'true'
             store_server_user_model.model_server_type_of_local = '' + system_Configs_Read.app_Configs.value['model_server_type_of_local'] === 'true'
+            store_server_user_model.model_server_type_of_local_server_download = '' + system_Configs_Read.app_Configs.value['model_server_type_of_local_server_download'] === 'true'
             store_server_user_model.authorization = '' + system_Configs_Read.app_Configs.value['authorization']
             store_server_user_model.client_unique_id = '' + system_Configs_Read.app_Configs.value['client_unique_id']
             store_view_media_page_info.media_page_sizes = Number('' + system_Configs_Read.app_Configs.value['media_page_sizes'])

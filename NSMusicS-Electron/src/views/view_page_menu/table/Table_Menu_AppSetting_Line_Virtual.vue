@@ -195,6 +195,11 @@
         )
         if (result) {
           message.success(t('form.updateServer.success'))
+          if(user_config?.type === 'navidrome'){
+            store_server_user_model.server_select_kind = 'navidrome'
+          }else if(user_config?.type === 'subsonic'){
+            store_server_user_model.server_select_kind = 'subsonic'
+          }
         } else {
           message.error(t('error.invalidServer'), {duration: 3000})
         }
@@ -710,6 +715,7 @@
                             <n-switch
                               v-model:value="store_server_user_model.model_server_type_of_web"
                               @update:value="() => {
+                                store_server_user_model.model_server_type_of_local_server_download = false
                                 store_router_data_logic.clear_UserExperience_Model = true;
                                 store_router_data_logic.get_clear_UserExperience_Model(true);
                                 update_server_config_of_current_user_of_sqlite(
@@ -729,7 +735,11 @@
                               </div>
                             </n-space>
                             <n-switch
-                                v-model:value="store_server_user_model.model_server_type_of_local">
+                                v-model:value="store_server_user_model.model_server_type_of_local"
+                                @update:value="() => {
+                                  store_server_user_model.model_server_type_of_local_server_download = true
+                                }"
+                            >
                             </n-switch>
                           </n-space>
                           <n-space vertical

@@ -749,9 +749,11 @@ function menu_item_add_to_playlist_next() {
   }
 }
 function menu_item_edit_selected_media_tags(){
+  store_player_tag_modify.player_show_tag_kind = 'media'
   const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
   if (item != undefined && item != 'undefined') {
     store_player_tag_modify.player_current_media_path = item.path
+    store_player_tag_modify.player_current_media_id = item.id
     store_player_tag_modify.player_current_media_starred = item.favorite
     store_player_tag_modify.player_current_media_playCount = item.play_count
     store_player_tag_modify.player_current_media_playDate = item.play_date

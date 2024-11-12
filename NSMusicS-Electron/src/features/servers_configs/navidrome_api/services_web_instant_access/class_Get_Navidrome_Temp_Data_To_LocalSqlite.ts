@@ -34,6 +34,7 @@ import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_lis
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
 
 export class Get_Navidrome_Temp_Data_To_LocalSqlite{
     private home_Lists_ApiWebService_of_ND = new Home_Lists_ApiWebService_of_ND(
@@ -264,11 +265,15 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                 songlist = songlist.filter(song => song.playCount > 0)
             }
             let last_index = store_view_media_page_info.media_Files_temporary.length
+            store_view_media_page_info.media_File_metadata = [];
             songlist.map(async (song: any, index: number) => {
                 let lyrics = this.convertToLRC(song.lyrics)
                 if(playlist_id !== '') {
                     song.id = song.mediaFileId
                 }
+                store_view_media_page_info.media_File_metadata.push(
+                    song
+                )
                 store_view_media_page_info.media_Files_temporary.push(
                     {
                         absoluteIndex: index + 1 + last_index,
@@ -348,7 +353,11 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                 albumlist = albumlist.filter(album => album.playCount > 0)
             }
             let last_index = store_view_album_page_info.album_Files_temporary.length
+            store_view_album_page_info.album_File_metadata = []
             albumlist.map(async (album: any, index: number) => {
+                store_view_album_page_info.album_File_metadata.push(
+                    album
+                )
                 store_view_album_page_info.album_Files_temporary.push(
                     {
                         absoluteIndex: index + 1 + last_index,
@@ -409,7 +418,11 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                 artistlist = artistlist.filter(artist => artist.playCount > 0)
             }
             let last_index = store_view_artist_page_info.artist_Files_temporary.length
+            store_view_artist_page_info.artist_File_metadata = [];
             artistlist.map(async (artist: any, index: number) => {
+                store_view_artist_page_info.artist_File_metadata.push(
+                    artist
+                )
                 store_view_artist_page_info.artist_Files_temporary.push(
                     {
                         absoluteIndex: index + 1 + last_index,
@@ -601,6 +614,49 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                 targetArray.push(newSongData);
             }
         });
+    }
+
+    /// get tag -> getSong | getAlbum | getArtist
+    public async get_tag_info_of_media(
+        url: string,
+        username: string,token: string,salt: string,
+        id: string
+    ){
+        try {
+            /// find starred
+            // navidrome api find starred of id be slower,
+            // store_player_tag_modify.player_current_media_starred = true
+            /// find tag
+            let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
+            const getSong = await browsing_ApiService_of_ND.getSong(username, token, salt, id);
+            const song = getSong["subsonic-response"]["song"];
+            store_player_tag_modify.player_current_media_playCount = song.playCount
+            store_player_tag_modify.player_current_media_playDate = song.played
+            return {
+                title: song.title,
+                path: song.path,
+                albumArtists: undefined,
+                artist: song.artist,
+                album: song.album,
+                discCount: undefined,
+                trackCount: song.track,
+                year: song.year,
+                genres: song.genre,
+                isCompilation: undefined,
+
+                codec: song.suffix,
+                audioBitrate: song.bitRate,
+                audioChannels: song.channelCount,
+
+                sizeOnDisk: song.size,
+                albumPeak: song.replayGain.albumPeak,
+                trackPeak: song.replayGain.trackPeak,
+                comment: song.comment,
+                lyrics: undefined,
+            }
+        }catch{
+            return undefined
+        }
     }
 
     /// file count

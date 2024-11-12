@@ -1,6 +1,8 @@
 import { reactive } from 'vue'
 
 export const store_view_artist_page_info = reactive({
+    artist_File_metadata: [],
+
     artist_Files_temporary: [],
 
     artist_page_sizes: 15,

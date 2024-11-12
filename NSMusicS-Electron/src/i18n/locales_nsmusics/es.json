@@ -64,7 +64,9 @@
             "audio_channel_explain": "Establecer el canal de audio de salida",
             "selectLibrary_select_0": "No exportar la portada incrustada del archivo de música, utilizar solo la portada con el mismo nombre que el archivo de música",
             "selectLibrary_select_1": "Exporta la portada incrustada del archivo de música como un archivo de portada con el mismo nombre (omite si existe un archivo de portada con el mismo nombre), y guarda el archivo en la misma carpeta que el archivo de música",
-            "mediaLibrary": "Biblioteca de Medios"
+            "mediaLibrary": "Biblioteca de Medios",
+            "mediaLibrary_begin_import": "Comenzar a Importar",
+            "mediaLibrary_media_tag_modify_local": "Actualmente, solo se admite la exploración en modo local|modificación de información de etiquetas"
         },
         "view_player": {
             "view_seting": {

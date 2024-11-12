@@ -64,7 +64,9 @@
             "audio_channel_explain": "Stel de uitgangsaudiokanaal in",
             "selectLibrary_select_0": "Gebruik geen ingebedde cover van het muziekbestand, gebruik alleen de cover met dezelfde naam op hetzelfde niveau als het muziekbestand",
             "selectLibrary_select_1": "Exporteer de ingebedde cover van het muziekbestand als een coverbestand met dezelfde naam (overslaan als een coverbestand met dezelfde naam bestaat), en sla het bestand op in dezelfde map als het muziekbestand",
-            "mediaLibrary": "Mediatheek"
+            "mediaLibrary": "Mediatheek",
+            "mediaLibrary_begin_import": "Begin Importeren",
+            "mediaLibrary_media_tag_modify_local": "Momenteel wordt alleen lokaal modus bladeren|bewerken van tag-informatie ondersteund"
         },
         "view_player": {
             "view_seting": {

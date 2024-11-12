@@ -14,6 +14,7 @@ interface App_Configs_Props {
   selectd_props_app_sidebar: string,
   model_server_type_of_web: any,
   model_server_type_of_local: any,
+  model_server_type_of_local_server_download: any,
   authorization: string,
   client_unique_id: string,
   media_page_sizes: number,

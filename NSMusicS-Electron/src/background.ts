@@ -1207,26 +1207,67 @@ async function initModifyMediaTag(){
     });
     ipc.handle('node-taglib-sharp-set-media-tag', async (event, args) => {
         try {
-            const { _path, _tag } = args; // 解构传递的对象
-            const taglibFile = File.createFromPath(_path);
-            taglibFile.tag.title = _tag.title;
-            taglibFile.tag.albumArtists = _tag.albumArtists;
-            taglibFile.tag.performers = _tag.artist;
-            taglibFile.tag.album = _tag.album;
-            taglibFile.tag.discCount = _tag.discCount;
-            taglibFile.tag.trackCount = _tag.trackCount;
-            taglibFile.tag.year = _tag.year;
-            taglibFile.tag.genres = _tag.genres;
-            taglibFile.tag.comment = _tag.comment;
-            taglibFile.tag.lyrics = _tag.lyrics;
-            taglibFile.save();
-            taglibFile.dispose();
+            const { _path, _tag } = args;
+            if(_path != undefined && _path.length > 0) {
+                const taglibFile = File.createFromPath(_path);
+                taglibFile.tag.title = _tag.title;
+                taglibFile.tag.albumArtists = _tag.albumArtists;
+                taglibFile.tag.performers = _tag.artist;
+                taglibFile.tag.album = _tag.album;
+                taglibFile.tag.discCount = _tag.discCount;
+                taglibFile.tag.trackCount = _tag.trackCount;
+                taglibFile.tag.year = _tag.year;
+                taglibFile.tag.genres = _tag.genres;
+                taglibFile.tag.comment = _tag.comment;
+                taglibFile.tag.lyrics = _tag.lyrics;
+                taglibFile.save();
+                taglibFile.dispose();
+                //
+                const Database = require('better-sqlite3');
+                const db = new Database(navidrome_db, {
+                    nativeBinding: path.resolve('resources/better_sqlite3.node')
+                });
+                db.pragma('journal_mode = WAL');
+                // 处理 _tag.albumArtists 和 _tag.artist
+                const albumArtistsStr = Array.isArray(_tag.albumArtists) ? _tag.albumArtists.join('、') : _tag.albumArtists || '';
+                const artistStr = Array.isArray(_tag.artist) ? _tag.artist.join('、') : _tag.artist || '';
+                const genresStr = Array.isArray(_tag.genres) ? _tag.genres.join('、') : _tag.genres || '';
+                // table media_file
+                const sql_media_file = `UPDATE media_file 
+                    SET title = ?, album_artist = ?, artist = ?, album = ?, 
+                        disc_number = ?, track_number = ?, 
+                        year = ?, genre = ?, comment = ?, 
+                        lyrics = ? 
+                    WHERE path = ?`;
+                db.prepare(sql_media_file).run(
+                    _tag.title || '',
+                    albumArtistsStr,
+                    artistStr,
+                    _tag.album || '',
+                    _tag.discCount || 0,
+                    _tag.trackCount || 0,
+                    _tag.year || 0,
+                    genresStr,
+                    _tag.comment || '',
+                    _tag.lyrics || '',
+                    _path
+                );
+                db.close();
+            }
         } catch (error) {
             console.error('Error setting media tag:', error);
             return false;
         }
         return true;
     });
+    ipc.handle('node-taglib-sharp-get-media-path', async (event, _path) => {
+        try {
+            const isAbsolutePath = path.isAbsolute(_path);
+            const isValidPath = path.parse(_path).root !== '';
+            return isAbsolutePath && isValidPath;
+        }catch{ return false }
+    });
+
 }
 function formatTime(currentTime: number): string {
     const minutes = Math.floor(currentTime / 60);

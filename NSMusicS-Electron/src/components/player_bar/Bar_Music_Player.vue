@@ -931,7 +931,12 @@ onBeforeUnmount(() => {
                     @update:value="(value: number) => handleItemClick_Rating(store_player_audio_info.this_audio_song_id, value)"/>
           </n-space>
           <n-space justify="space-between" style="margin-top: 6px;">
-            <n-button size="tiny" text @click="store_player_tag_modify.player_show_tag_modify = !store_player_tag_modify.player_show_tag_modify">
+            <n-button size="tiny" text
+                      @click="() => {
+                        store_player_tag_modify.player_current_media_id = store_player_audio_info.this_audio_song_id
+                        store_player_tag_modify.player_current_media_path = store_player_audio_info.this_audio_file_path
+                        store_player_tag_modify.player_show_tag_modify = !store_player_tag_modify.player_show_tag_modify
+                      }">
               <template #icon>
                 <n-icon :size="22"><Tag16Regular/></n-icon>
               </template>

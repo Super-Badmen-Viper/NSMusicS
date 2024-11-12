@@ -24,6 +24,7 @@ export class Class_Get_System_Configs_Read {
             selectd_props_app_sidebar: '',
             model_server_type_of_web: null,
             model_server_type_of_local: null,
+            model_server_type_of_local_server_download: null,
             authorization: '',
             client_unique_id: '',
             media_page_sizes: 0,
