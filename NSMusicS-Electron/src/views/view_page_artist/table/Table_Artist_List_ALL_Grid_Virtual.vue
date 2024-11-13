@@ -363,6 +363,8 @@ import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()
@@ -435,6 +437,16 @@ async function menu_item_add_to_playlist_next() {
     contextmenu.value.hide();
   } else {
     console.error('Current audio song not found in playlist');
+  }
+}
+function menu_item_edit_selected_media_tags(){
+  store_player_tag_modify.player_show_tag_kind = 'artist'
+  const item: Album | undefined = store_view_artist_page_info.artist_Files_temporary.find(
+      (artist: Album) => artist.id === store_playlist_list_info.playlist_Menu_Item_Id);
+  if (item != undefined && item != 'undefined') {
+    store_player_tag_modify.player_current_artist_id = item.id
+    store_player_tag_modify.player_show_tag_modify = true
+    contextmenu.value.hide()
   }
 }
 
@@ -745,7 +757,7 @@ onBeforeUnmount(() => {
                     </span>
                   </div>
                   <div>
-                    <span id="artist_singer_name" :style="{ maxWidth: item_artist_txt + 'px' }">
+                    <span id="artist_artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">
                        {{ $t('entity.album_other') + ': ' + item.album_count }}
                     </span>
                   </div>
@@ -776,6 +788,9 @@ onBeforeUnmount(() => {
         </v-contextmenu-item>
         <v-contextmenu-item @click="menu_item_add_to_playlist_next">
           {{ $t('player.addNext') }}
+        </v-contextmenu-item>
+        <v-contextmenu-item @click="menu_item_edit_selected_media_tags">
+          {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>
       </v-contextmenu>
     </div>
@@ -844,7 +859,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#artist_singer_name{
+#artist_artist_name{
   font-size: 12px;
   font-weight: 500;
   display: -webkit-box;

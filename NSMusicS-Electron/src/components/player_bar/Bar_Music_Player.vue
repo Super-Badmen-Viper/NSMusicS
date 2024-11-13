@@ -434,8 +434,8 @@ async function Play_Media_Order(model_num: string, increased: number) {
         store_player_audio_info.this_audio_file_path = media_file.path;
         store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
         store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url;
-        store_player_audio_info.this_audio_singer_name = media_file.artist;
-        store_player_audio_info.this_audio_singer_id = media_file.artist_id
+        store_player_audio_info.this_audio_artist_name = media_file.artist;
+        store_player_audio_info.this_audio_artist_id = media_file.artist_id
         store_player_audio_info.this_audio_song_name = media_file.title
         store_player_audio_info.this_audio_song_id = media_file.id
         store_player_audio_info.this_audio_song_rating = media_file.rating
@@ -738,8 +738,8 @@ onBeforeUnmount(() => {
           <n-space>
             <n-ellipsis>
               <span id="bar_song_name" @click="handleItemClick_title(store_player_audio_info.this_audio_song_name)">{{ store_player_audio_info.this_audio_song_name + '&nbsp-&nbsp' }}</span>
-              <template v-for="artist in store_player_audio_info.this_audio_singer_name.split(/[\/|｜]/)">
-                <span id="bar_singer_name_part" @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
+              <template v-for="artist in store_player_audio_info.this_audio_artist_name.split(/[\/|｜]/)">
+                <span id="bar_artist_name_part" @click="handleItemClick_artist(artist)">{{ artist + '&nbsp' }}</span>
               </template>
             </n-ellipsis>
           </n-space>
@@ -933,8 +933,11 @@ onBeforeUnmount(() => {
           <n-space justify="space-between" style="margin-top: 6px;">
             <n-button size="tiny" text
                       @click="() => {
-                        store_player_tag_modify.player_current_media_id = store_player_audio_info.this_audio_song_id
                         store_player_tag_modify.player_current_media_path = store_player_audio_info.this_audio_file_path
+                        store_player_tag_modify.player_current_media_id = store_player_audio_info.this_audio_song_id
+                        store_player_tag_modify.player_current_album_id = store_player_audio_info.this_audio_album_id
+                        store_player_tag_modify.player_current_artist_id = store_player_audio_info.this_audio_artist_id
+                        //
                         store_player_tag_modify.player_show_tag_modify = !store_player_tag_modify.player_show_tag_modify
                       }">
               <template #icon>
@@ -1035,11 +1038,11 @@ onBeforeUnmount(() => {
   text-decoration: underline;
   color: #3DC3FF;
 }
-.gird_Left .bar_left_text_song_info #bar_singer_name_part {
+.gird_Left .bar_left_text_song_info #bar_artist_name_part {
   font-size: 16px;
   font-weight: 500;
 }
-.gird_Left .bar_left_text_song_info #bar_singer_name_part:hover {
+.gird_Left .bar_left_text_song_info #bar_artist_name_part:hover {
   text-decoration: underline;
   color: #3DC3FF;
 }

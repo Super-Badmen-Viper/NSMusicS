@@ -337,8 +337,8 @@ const handleItemDbClick = (media_file:any,index:number) => {
       store_player_audio_info.this_audio_file_path = media_file.path
       store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
       store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
-      store_player_audio_info.this_audio_singer_name = media_file.artist
-      store_player_audio_info.this_audio_singer_id = media_file.artist_id
+      store_player_audio_info.this_audio_artist_name = media_file.artist
+      store_player_audio_info.this_audio_artist_id = media_file.artist_id
       store_player_audio_info.this_audio_song_name = media_file.title
       store_player_audio_info.this_audio_song_id = media_file.id
       store_player_audio_info.this_audio_song_rating = media_file.rating
@@ -754,9 +754,6 @@ function menu_item_edit_selected_media_tags(){
   if (item != undefined && item != 'undefined') {
     store_player_tag_modify.player_current_media_path = item.path
     store_player_tag_modify.player_current_media_id = item.id
-    store_player_tag_modify.player_current_media_starred = item.favorite
-    store_player_tag_modify.player_current_media_playCount = item.play_count
-    store_player_tag_modify.player_current_media_playDate = item.play_date
     store_player_tag_modify.player_show_tag_modify = true
     contextmenu.value.hide()
   }

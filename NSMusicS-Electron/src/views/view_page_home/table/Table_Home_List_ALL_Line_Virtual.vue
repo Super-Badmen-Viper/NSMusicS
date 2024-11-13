@@ -466,7 +466,7 @@ onBeforeUnmount(() => {
                     </span>
                   </div>
                   <div>
-                    <span id="album_singer_name" :style="{ maxWidth: item_album_txt + 'px' }">
+                    <span id="album_artist_name" :style="{ maxWidth: item_album_txt + 'px' }">
                       {{ item.artist }}
                     </span>
                   </div>
@@ -585,7 +585,7 @@ onBeforeUnmount(() => {
                   </span>
                   </div>
                   <div>
-                  <span id="album_singer_name" :style="{ maxWidth: item_album_txt + 'px' }">
+                  <span id="album_artist_name" :style="{ maxWidth: item_album_txt + 'px' }">
                     {{ item.artist }}
                   </span>
                   </div>
@@ -704,7 +704,7 @@ onBeforeUnmount(() => {
                   </span>
                   </div>
                   <div>
-                  <span id="album_singer_name" :style="{ maxWidth: item_album_txt + 'px' }">
+                  <span id="album_artist_name" :style="{ maxWidth: item_album_txt + 'px' }">
                     {{ item.artist }}
                   </span>
                   </div>
@@ -823,7 +823,7 @@ onBeforeUnmount(() => {
                   </span>
                   </div>
                   <div>
-                  <span id="album_singer_name" :style="{ maxWidth: item_album_txt + 'px' }">
+                  <span id="album_artist_name" :style="{ maxWidth: item_album_txt + 'px' }">
                     {{ item.artist }}
                   </span>
                   </div>
@@ -923,7 +923,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#album_singer_name{
+#album_artist_name{
   font-size: 12px;
   font-weight: 500;
   display: -webkit-box;

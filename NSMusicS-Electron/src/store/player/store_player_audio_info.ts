@@ -25,8 +25,8 @@ export const store_player_audio_info = reactive({
     this_audio_restart_play: false,
     this_audio_is_playing: true,
 
-    this_audio_singer_name: '',
-    this_audio_singer_id: '',
+    this_audio_artist_name: '',
+    this_audio_artist_id: '',
     this_audio_song_name: '',
     this_audio_song_id: '',
     this_audio_album_name: '',
@@ -40,8 +40,8 @@ export const store_player_audio_info = reactive({
     this_audio_song_favorite: false,
     this_audio_album_rating: '',
     this_audio_album_favorite: '',
-    this_audio_singer_rating: 0,
-    this_audio_singer_favorite: 0,
+    this_audio_artist_rating: 0,
+    this_audio_artist_favorite: 0,
 
     page_top_album_image_url: path.resolve('resources/img/error_album.jpg'),
     page_top_album_id: '',
@@ -63,8 +63,8 @@ export const store_player_audio_info = reactive({
         this.this_audio_restart_play = false;
         this.this_audio_is_playing = true;
 
-        this.this_audio_singer_name = '';
-        this.this_audio_singer_id = '';
+        this.this_audio_artist_name = '';
+        this.this_audio_artist_id = '';
         this.this_audio_song_name = '';
         this.this_audio_song_id = '';
         this.this_audio_album_name = '';
@@ -76,8 +76,8 @@ export const store_player_audio_info = reactive({
         this.this_audio_song_favorite = 0;
         this.this_audio_album_rating = '';
         this.this_audio_album_favorite = '';
-        this.this_audio_singer_rating = 0;
-        this.this_audio_singer_favorite = 0;
+        this.this_audio_artist_rating = 0;
+        this.this_audio_artist_favorite = 0;
 
         this.page_top_album_image_url = path.resolve('resources/img/error_album.jpg');
         this.page_top_album_id = '';
@@ -97,7 +97,9 @@ export const store_player_audio_info = reactive({
 watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
     if(newValue != undefined && newValue != 'undefined' && newValue.length > 0) {
         console.log('this_audio_file_path：' + newValue)
-        store_player_tag_modify.player_current_media_path = newValue
+
+        store_player_tag_modify.player_current_media_id = store_player_audio_info.this_audio_song_id
+        store_player_tag_modify.player_current_media_path = store_player_audio_info.this_audio_file_path
 
         if (store_view_media_page_info.media_Files_temporary != undefined
             && store_view_media_page_info.media_Files_temporary.length != 0
@@ -121,7 +123,7 @@ watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
         });
 
         ipcRenderer.invoke('i18n-tray-label-musicIcon',
-            String(store_player_audio_info.this_audio_song_name) + ' - ' + store_player_audio_info.this_audio_singer_name
+            String(store_player_audio_info.this_audio_song_name) + ' - ' + store_player_audio_info.this_audio_artist_name
         );
     }
 });

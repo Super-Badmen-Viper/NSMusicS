@@ -897,7 +897,7 @@
                         width: 54vh;margin-left: 2px;margin-top: -10px;color: #989292;font-weight: 550;font-size: 18px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
-                      {{ store_player_audio_info.this_audio_singer_name }} -  {{ store_player_audio_info.this_audio_album_name }}
+                      {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
                     </div>
                   </n-space>
                   <!-- 2 旋转封面-->
@@ -943,7 +943,7 @@
                           width: 54vh;margin-left: 2px;margin-top: 0px;color: #989292;font-weight: 550;font-size: 18px;
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
-                        {{ store_player_audio_info.this_audio_singer_name }} -  {{ store_player_audio_info.this_audio_album_name }}
+                        {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
                       </div>
                     </div>
                     <lottie-player
@@ -1027,7 +1027,7 @@
                         color: #989292;font-weight: 550;font-size: 18px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
-                      {{ store_player_audio_info.this_audio_singer_name }} -  {{ store_player_audio_info.this_audio_album_name }}
+                      {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
                     </div>
                   </n-space>
                   <!--  -->

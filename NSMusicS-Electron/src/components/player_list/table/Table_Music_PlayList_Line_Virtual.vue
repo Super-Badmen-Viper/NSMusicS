@@ -32,8 +32,8 @@ const handleItemDbClick = (media_file:any,index:number) => {
   store_player_audio_info.this_audio_file_path = media_file.path
   store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
   store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
-  store_player_audio_info.this_audio_singer_name = media_file.artist
-  store_player_audio_info.this_audio_singer_id = media_file.artist_id
+  store_player_audio_info.this_audio_artist_name = media_file.artist
+  store_player_audio_info.this_audio_artist_id = media_file.artist_id
   store_player_audio_info.this_audio_song_name = media_file.title
   store_player_audio_info.this_audio_song_id = media_file.id
   store_player_audio_info.this_audio_song_rating = media_file.rating

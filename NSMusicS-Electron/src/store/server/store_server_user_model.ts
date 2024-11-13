@@ -62,6 +62,8 @@ export const store_server_user_model = reactive({
         this.media_file = 'media_file'
         this.playlist = 'playlist'
         this.playlist_tracks = 'playlist_tracks'
+
+        store_server_user_model.model_server_type_of_local_server_download = false
     },
     switchToMode_Server(){
         this.album = 'server_album'

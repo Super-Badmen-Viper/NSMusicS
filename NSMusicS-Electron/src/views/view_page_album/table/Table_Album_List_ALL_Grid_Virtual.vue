@@ -44,6 +44,7 @@ import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlis
 ////// right menu
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {store_router_data_info} from "@/store/router/store_router_data_info";
+import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
 
 const { t } = useI18n({
     inheritLocale: true
@@ -468,6 +469,16 @@ async function menu_item_add_to_playlist_next() {
     console.error('Current audio song not found in playlist');
   }
 }
+function menu_item_edit_selected_media_tags(){
+  store_player_tag_modify.player_show_tag_kind = 'album'
+  const item: Album | undefined = store_view_album_page_info.album_Files_temporary.find(
+      (album: Album) => album.id === store_playlist_list_info.playlist_Menu_Item_Id);
+  if (item != undefined && item != 'undefined') {
+    store_player_tag_modify.player_current_album_id = item.id
+    store_player_tag_modify.player_show_tag_modify = true
+    contextmenu.value.hide()
+  }
+}
 
 //////
 const isScrolling = ref(false);
@@ -776,7 +787,7 @@ onBeforeUnmount(() => {
                     </span> 
                   </div>
                   <div>
-                    <span id="album_singer_name" 
+                    <span id="album_artist_name"
                       :style="{ maxWidth: item_album_txt + 'px' }"
                       @click="() => {
                         if(store_server_user_model.model_server_type_of_local) {
@@ -811,6 +822,9 @@ onBeforeUnmount(() => {
         </v-contextmenu-item>
         <v-contextmenu-item @click="menu_item_add_to_playlist_next">
           {{ $t('player.addNext') }}
+        </v-contextmenu-item>
+        <v-contextmenu-item @click="menu_item_edit_selected_media_tags">
+          {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>
       </v-contextmenu>
     </div>
@@ -884,7 +898,7 @@ onBeforeUnmount(() => {
   cursor: pointer;
   color: #3DC3FF;
 }
-#album_singer_name{
+#album_artist_name{
   font-size: 12px;
   font-weight: 500;
   display: -webkit-box;
@@ -893,7 +907,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#album_singer_name:hover{
+#album_artist_name:hover{
   text-decoration: underline;
   cursor: pointer;
   color: #3DC3FF;
