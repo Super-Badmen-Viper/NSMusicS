@@ -44,6 +44,7 @@
     "vue-draggable-plus": "^0.5.3",
     "vue-i18n": "next",
     "vue-rate": "next",
+    "vue-template-compiler": "latest",
     "vue-virtual-scroller": "next"
   },
   "devDependencies": {
