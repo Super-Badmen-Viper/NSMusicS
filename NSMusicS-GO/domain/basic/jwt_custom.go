@@ -1,4 +1,4 @@
-package domain
+package basic
 
 import (
 	"github.com/golang-jwt/jwt/v4"

@@ -3,13 +3,14 @@ package controller_test
 import (
 	"encoding/json"
 	"errors"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/basic"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/basic_response"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/controller"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/mocks"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/basic_mocks"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -26,7 +27,7 @@ func setUserID(userID string) gin.HandlerFunc {
 func TestFetch(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
-		mockProfile := &domain.Profile{
+		mockProfile := &basic.Profile{
 			Name:  "Test Name",
 			Email: "test@gmail.com",
 		}
@@ -34,7 +35,7 @@ func TestFetch(t *testing.T) {
 		userObjectID := primitive.NewObjectID()
 		userID := userObjectID.Hex()
 
-		mockProfileUsecase := new(mocks.ProfileUsecase)
+		mockProfileUsecase := new(basic_mocks.ProfileUsecase)
 
 		mockProfileUsecase.On("GetProfileByID", mock.Anything, userID).Return(mockProfile, nil)
 
@@ -68,7 +69,7 @@ func TestFetch(t *testing.T) {
 		userObjectID := primitive.NewObjectID()
 		userID := userObjectID.Hex()
 
-		mockProfileUsecase := new(mocks.ProfileUsecase)
+		mockProfileUsecase := new(basic_mocks.ProfileUsecase)
 
 		customErr := errors.New("Unexpected")
 
@@ -85,7 +86,7 @@ func TestFetch(t *testing.T) {
 		gin.Use(setUserID(userID))
 		gin.GET("/profile", pc.Fetch)
 
-		body, err := json.Marshal(domain.ErrorResponse{Message: customErr.Error()})
+		body, err := json.Marshal(basic_response.ErrorResponse{Message: customErr.Error()})
 		assert.NoError(t, err)
 
 		bodyString := string(body)

@@ -116,7 +116,7 @@ type mockConstructorTestingTNewClient interface {
 	Cleanup(func())
 }
 
-// NewClient creates a new instance of Client. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// NewClient creates a new instance of Client. It also registers a testing interface on the mock and a cleanup function to assert the basic_mocks expectations.
 func NewClient(t mockConstructorTestingTNewClient) *Client {
 	mock := &Client{}
 	mock.Mock.Test(t)

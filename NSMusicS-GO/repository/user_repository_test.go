@@ -3,9 +3,9 @@ package repository_test
 import (
 	"context"
 	"errors"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/basic"
 	"testing"
 
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo/mocks"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/repository"
 	"github.com/stretchr/testify/assert"
@@ -21,16 +21,16 @@ func TestCreate(t *testing.T) {
 	databaseHelper = &mocks.Database{}
 	collectionHelper = &mocks.Collection{}
 
-	collectionName := domain.CollectionUser
+	collectionName := basic.CollectionUser
 
-	mockUser := &domain.User{
+	mockUser := &basic.User{
 		ID:       primitive.NewObjectID(),
 		Name:     "Test",
 		Email:    "test@gmail.com",
 		Password: "password",
 	}
 
-	mockEmptyUser := &domain.User{}
+	mockEmptyUser := &basic.User{}
 	mockUserID := primitive.NewObjectID()
 
 	t.Run("success", func(t *testing.T) {

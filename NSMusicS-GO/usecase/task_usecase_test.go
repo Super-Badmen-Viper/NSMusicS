@@ -3,11 +3,11 @@ package usecase_test
 import (
 	"context"
 	"errors"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/basic"
 	"testing"
 	"time"
 
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/mocks"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/basic_mocks"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -15,19 +15,19 @@ import (
 )
 
 func TestFetchByUserID(t *testing.T) {
-	mockTaskRepository := new(mocks.TaskRepository)
+	mockTaskRepository := new(basic_mocks.TaskRepository)
 	userObjectID := primitive.NewObjectID()
 	userID := userObjectID.Hex()
 
 	t.Run("success", func(t *testing.T) {
 
-		mockTask := domain.Task{
+		mockTask := basic.Task{
 			ID:     primitive.NewObjectID(),
 			Title:  "Test Title",
 			UserID: userObjectID,
 		}
 
-		mockListTask := make([]domain.Task, 0)
+		mockListTask := make([]basic.Task, 0)
 		mockListTask = append(mockListTask, mockTask)
 
 		mockTaskRepository.On("FetchByUserID", mock.Anything, userID).Return(mockListTask, nil).Once()
