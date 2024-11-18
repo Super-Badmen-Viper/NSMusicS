@@ -74,7 +74,7 @@ type mockConstructorTestingTNewCursor interface {
 	Cleanup(func())
 }
 
-// NewCursor creates a new instance of Cursor. It also registers a testing interface on the mock and a cleanup function to assert the basic_mocks expectations.
+// NewCursor creates a new instance of Cursor. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
 func NewCursor(t mockConstructorTestingTNewCursor) *Cursor {
 	mock := &Cursor{}
 	mock.Mock.Test(t)

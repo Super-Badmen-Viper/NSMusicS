@@ -1,4 +1,4 @@
-package basic
+package system
 
 import (
 	"github.com/golang-jwt/jwt/v4"

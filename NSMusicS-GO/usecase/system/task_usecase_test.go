@@ -1,38 +1,38 @@
-package usecase_test
+package system_test
 
 import (
 	"context"
 	"errors"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/basic"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/system"
+	system2 "github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase/system"
 	"testing"
 	"time"
 
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/basic_mocks"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func TestFetchByUserID(t *testing.T) {
-	mockTaskRepository := new(basic_mocks.TaskRepository)
+	mockTaskRepository := new(mocks.TaskRepository)
 	userObjectID := primitive.NewObjectID()
 	userID := userObjectID.Hex()
 
 	t.Run("success", func(t *testing.T) {
 
-		mockTask := basic.Task{
+		mockTask := system.Task{
 			ID:     primitive.NewObjectID(),
 			Title:  "Test Title",
 			UserID: userObjectID,
 		}
 
-		mockListTask := make([]basic.Task, 0)
+		mockListTask := make([]system.Task, 0)
 		mockListTask = append(mockListTask, mockTask)
 
 		mockTaskRepository.On("FetchByUserID", mock.Anything, userID).Return(mockListTask, nil).Once()
 
-		u := usecase.NewTaskUsecase(mockTaskRepository, time.Second*2)
+		u := system2.NewTaskUsecase(mockTaskRepository, time.Second*2)
 
 		list, err := u.FetchByUserID(context.Background(), userID)
 
@@ -46,7 +46,7 @@ func TestFetchByUserID(t *testing.T) {
 	t.Run("error", func(t *testing.T) {
 		mockTaskRepository.On("FetchByUserID", mock.Anything, userID).Return(nil, errors.New("Unexpected")).Once()
 
-		u := usecase.NewTaskUsecase(mockTaskRepository, time.Second*2)
+		u := system2.NewTaskUsecase(mockTaskRepository, time.Second*2)
 
 		list, err := u.FetchByUserID(context.Background(), userID)
 

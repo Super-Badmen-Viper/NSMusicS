@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/basic_response"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/system"
 	"net/http"
 	"strings"
 
@@ -19,7 +19,7 @@ func JwtAuthMiddleware(secret string) gin.HandlerFunc {
 			if authorized {
 				userID, err := tokenutil.ExtractIDFromToken(authToken, secret)
 				if err != nil {
-					c.JSON(http.StatusUnauthorized, basic_response.ErrorResponse{Message: err.Error()})
+					c.JSON(http.StatusUnauthorized, system.ErrorResponse{Message: err.Error()})
 					c.Abort()
 					return
 				}
@@ -27,11 +27,11 @@ func JwtAuthMiddleware(secret string) gin.HandlerFunc {
 				c.Next()
 				return
 			}
-			c.JSON(http.StatusUnauthorized, basic_response.ErrorResponse{Message: err.Error()})
+			c.JSON(http.StatusUnauthorized, system.ErrorResponse{Message: err.Error()})
 			c.Abort()
 			return
 		}
-		c.JSON(http.StatusUnauthorized, basic_response.ErrorResponse{Message: "Not authorized"})
+		c.JSON(http.StatusUnauthorized, system.ErrorResponse{Message: "Not authorized"})
 		c.Abort()
 	}
 }

@@ -1,13 +1,13 @@
-package repository_test
+package system_test
 
 import (
 	"context"
 	"errors"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/system"
+	system2 "github.com/amitshekhariitbhu/go-backend-clean-architecture/repository/system"
 	"testing"
 
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo/mocks"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/repository"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -39,7 +39,7 @@ func TestCreate(t *testing.T) {
 
 		databaseHelper.On("Collection", collectionName).Return(collectionHelper)
 
-		ur := repository.NewUserRepository(databaseHelper, collectionName)
+		ur := system2.NewUserRepository(databaseHelper, collectionName)
 
 		err := ur.Create(context.Background(), mockUser)
 
@@ -53,7 +53,7 @@ func TestCreate(t *testing.T) {
 
 		databaseHelper.On("Collection", collectionName).Return(collectionHelper)
 
-		ur := repository.NewUserRepository(databaseHelper, collectionName)
+		ur := system2.NewUserRepository(databaseHelper, collectionName)
 
 		err := ur.Create(context.Background(), mockEmptyUser)
 

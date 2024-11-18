@@ -1,8 +1,7 @@
 package controller
 
 import (
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/basic"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/basic_response"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/system"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,15 +9,15 @@ import (
 )
 
 type TaskController struct {
-	TaskUsecase basic.TaskUsecase
+	TaskUsecase system.TaskUsecase
 }
 
 func (tc *TaskController) Create(c *gin.Context) {
-	var task basic.Task
+	var task system.Task
 
 	err := c.ShouldBind(&task)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, basic_response.ErrorResponse{Message: err.Error()})
+		c.JSON(http.StatusBadRequest, system.ErrorResponse{Message: err.Error()})
 		return
 	}
 
@@ -27,17 +26,17 @@ func (tc *TaskController) Create(c *gin.Context) {
 
 	task.UserID, err = primitive.ObjectIDFromHex(userID)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, basic_response.ErrorResponse{Message: err.Error()})
+		c.JSON(http.StatusBadRequest, system.ErrorResponse{Message: err.Error()})
 		return
 	}
 
 	err = tc.TaskUsecase.Create(c, &task)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, basic_response.ErrorResponse{Message: err.Error()})
+		c.JSON(http.StatusInternalServerError, system.ErrorResponse{Message: err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, basic_response.SuccessResponse{
+	c.JSON(http.StatusOK, system.SuccessResponse{
 		Message: "Task created successfully",
 	})
 }
@@ -47,7 +46,7 @@ func (u *TaskController) Fetch(c *gin.Context) {
 
 	tasks, err := u.TaskUsecase.FetchByUserID(c, userID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, basic_response.ErrorResponse{Message: err.Error()})
+		c.JSON(http.StatusInternalServerError, system.ErrorResponse{Message: err.Error()})
 		return
 	}
 

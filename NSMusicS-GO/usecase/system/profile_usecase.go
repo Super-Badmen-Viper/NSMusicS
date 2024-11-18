@@ -1,24 +1,24 @@
-package usecase
+package system
 
 import (
 	"context"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/basic"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/system"
 	"time"
 )
 
 type profileUsecase struct {
-	userRepository basic.UserRepository
+	userRepository system.UserRepository
 	contextTimeout time.Duration
 }
 
-func NewProfileUsecase(userRepository basic.UserRepository, timeout time.Duration) basic.ProfileUsecase {
+func NewProfileUsecase(userRepository system.UserRepository, timeout time.Duration) system.ProfileUsecase {
 	return &profileUsecase{
 		userRepository: userRepository,
 		contextTimeout: timeout,
 	}
 }
 
-func (pu *profileUsecase) GetProfileByID(c context.Context, userID string) (*basic.Profile, error) {
+func (pu *profileUsecase) GetProfileByID(c context.Context, userID string) (*system.Profile, error) {
 	ctx, cancel := context.WithTimeout(c, pu.contextTimeout)
 	defer cancel()
 
@@ -27,5 +27,5 @@ func (pu *profileUsecase) GetProfileByID(c context.Context, userID string) (*bas
 		return nil, err
 	}
 
-	return &basic.Profile{Name: user.Name, Email: user.Email}, nil
+	return &system.Profile{Name: user.Name, Email: user.Email}, nil
 }

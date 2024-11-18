@@ -48,6 +48,9 @@
 | NSMusicS_For_Audio   |<font color="#00dd00">will developed</font>  | pytorch,py,jupyter,matlab ![My Skills](https://go-skill-icons.vercel.app/api/icons?i=pytorch,py,jupyter,matlab)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  |    Windows10++<br>Linux<br>Docker   | A-GPL 3.0 | Open source / Prohibition of commercial use | 
 | NSMusicS_For_KG   |<font color="#00dd00">will developed</font> |  NebulaGraph / Neo4j <image width="200" src="https://www-cdn.nebula-graph.io/nebula-website-5.0/images/logo.png"/>      | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | Windows10++<br>Linux<br>Docker | A-GPL 3.0 | Open source / Prohibition of commercial use | 
 
+## Architecture Design | 架构设计
+<img src="doc/NSMusicS-GO：服务端.png" height="460">   <img src="doc/NSMusicS：客户端.png" height="460"> 
+
 ## sponsor
 爱发电：https://afdian.com/a/fu_zi_qian  
 <img src="doc/sponsor.png" height="160">   <img src="doc/spomsor_weichat.jpg" height="160">   <img src="doc/spomsor_qq.jpg" height="160">

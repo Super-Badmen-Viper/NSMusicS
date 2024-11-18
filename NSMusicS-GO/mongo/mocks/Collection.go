@@ -247,7 +247,7 @@ type mockConstructorTestingTNewCollection interface {
 	Cleanup(func())
 }
 
-// NewCollection creates a new instance of Collection. It also registers a testing interface on the mock and a cleanup function to assert the basic_mocks expectations.
+// NewCollection creates a new instance of Collection. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
 func NewCollection(t mockConstructorTestingTNewCollection) *Collection {
 	mock := &Collection{}
 	mock.Mock.Test(t)
