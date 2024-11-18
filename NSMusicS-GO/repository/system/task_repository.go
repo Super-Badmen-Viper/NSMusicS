@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/basic"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/system"
 
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/mongo"
 	"go.mongodb.org/mongo-driver/bson"
@@ -14,14 +14,14 @@ type taskRepository struct {
 	collection string
 }
 
-func NewTaskRepository(db mongo.Database, collection string) basic.TaskRepository {
+func NewTaskRepository(db mongo.Database, collection string) system.TaskRepository {
 	return &taskRepository{
 		database:   db,
 		collection: collection,
 	}
 }
 
-func (tr *taskRepository) Create(c context.Context, task *basic.Task) error {
+func (tr *taskRepository) Create(c context.Context, task *system.Task) error {
 	collection := tr.database.Collection(tr.collection)
 
 	_, err := collection.InsertOne(c, task)
@@ -29,10 +29,10 @@ func (tr *taskRepository) Create(c context.Context, task *basic.Task) error {
 	return err
 }
 
-func (tr *taskRepository) FetchByUserID(c context.Context, userID string) ([]basic.Task, error) {
+func (tr *taskRepository) FetchByUserID(c context.Context, userID string) ([]system.Task, error) {
 	collection := tr.database.Collection(tr.collection)
 
-	var tasks []basic.Task
+	var tasks []system.Task
 
 	idHex, err := primitive.ObjectIDFromHex(userID)
 	if err != nil {
@@ -46,7 +46,7 @@ func (tr *taskRepository) FetchByUserID(c context.Context, userID string) ([]bas
 
 	err = cursor.All(c, &tasks)
 	if tasks == nil {
-		return []basic.Task{}, err
+		return []system.Task{}, err
 	}
 
 	return tasks, err
