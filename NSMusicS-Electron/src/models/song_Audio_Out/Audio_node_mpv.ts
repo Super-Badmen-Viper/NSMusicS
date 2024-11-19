@@ -60,7 +60,7 @@ export class Audio_node_mpv {
             this.isDuration = temp >= 0 ? temp : 0
             return this.isDuration;
         }catch{
-            return 0
+            return this.isDuration
         }
     }
     async getCurrentTime(): Promise<number> {
@@ -69,7 +69,7 @@ export class Audio_node_mpv {
             this.isCurrentTime = temp >= 0 ? temp : this.isCurrentTime
             return this.isCurrentTime;
         }catch{
-            return 0
+            return this.isCurrentTime
         }
     }
     async setCurrentTime(time: number) {

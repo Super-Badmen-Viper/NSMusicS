@@ -564,6 +564,7 @@
   import { provide } from "vue";
   import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
   import View_Edit_Tag from "@/components/tag_list/View_Edit_Tag.vue";
+  import View_Player_Effect from "@/components/player_effect/View_Player_Effect.vue";
   const playlist_contextmenu = ref(null as any)
   provide("message", playlist_contextmenu);
 
@@ -643,7 +644,9 @@
           </n-layout-sider>
           <!--Right Router_View-->
           <n-layout
-            embedded style="height: calc(100vh - 150px);margin-top: 70px;">
+            embedded
+            :native-scrollbar="false"
+            style="height: calc(100vh - 150px);margin-top: 70px;">
             <!--Menu View -->
             <RouterView class="view_show_data"
                         v-if="store_router_data_info.router_select_model_menu"></RouterView>
@@ -754,12 +757,12 @@
         :style="{ height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)` }">
       </View_Screen_Music_Player>
     </n-config-provider>
-    <!-- right drwaer of music_playlist -->
     <n-config-provider :theme="darkTheme">
+      <!-- right drwaer of music_playlist -->
       <n-drawer
-        v-model:show="store_playlist_appearance.playlist_show"
-        :width="520"
-        style="
+          v-model:show="store_playlist_appearance.playlist_show"
+          :width="520"
+          style="
           border-radius: 12px 0 0 12px;
           border: 1.5px solid #FFFFFF20;
           background-color: rgba(127, 127, 127, 0.1);
@@ -770,15 +773,13 @@
         <n-drawer-content style="z-index: 100;">
           <template #default>
             <Bar_Music_PlayList
-              v-if="store_playlist_appearance.playlist_show"
-              style="z-index: 100;">
+                v-if="store_playlist_appearance.playlist_show"
+                style="z-index: 100;">
             </Bar_Music_PlayList>
           </template>
         </n-drawer-content>
       </n-drawer>
-    </n-config-provider>
-    <!-- bottom drwaer of player_bar(more,sound speed,sound effect) -->
-    <n-config-provider :theme="darkTheme">
+      <!-- bottom drwaer of player_bar(more,sound speed,sound effect) -->
       <n-drawer
         v-model:show="store_player_sound_more.player_show_sound_more"
         :width="440"
@@ -813,7 +814,7 @@
       </n-drawer>
       <n-drawer
         v-model:show="store_player_sound_effects.player_show_sound_effects"
-        :width="440"
+        :width="660"
         style="
           border-radius: 12px 0 0 12px;
           border: 1.5px solid #FFFFFF20;
@@ -824,25 +825,26 @@
         <n-drawer-content v-if="store_player_sound_effects.player_show_sound_effects">
           <template #default>
             <n-tabs type="line" animated>
-              <n-tab-pane name="001" tab="九歌音效">
-                九歌音效
+              <n-tab-pane name="001">
+                <template #tab>
+                  {{ $t('page.setting.generalTab') }}
+                </template>
+                <View_Player_Effect/>
               </n-tab-pane>
               <n-tab-pane name="004" tab="多音轨">
-                多音轨
+                Not open || 未开放
               </n-tab-pane>
               <n-tab-pane name="002" tab="均衡器(简易)">
-                均衡器(简易)
+                Not open || 未开放
               </n-tab-pane>
               <n-tab-pane name="003" tab="均衡器(专业)">
-                均衡器(专业)
+                Not open || 未开放
               </n-tab-pane>
             </n-tabs>
           </template>
         </n-drawer-content>
       </n-drawer>
-    </n-config-provider>
-    <!-- right drwaer of tag_modify -->
-    <n-config-provider :theme="darkTheme">
+      <!-- right drwaer of tag_modify -->
       <n-drawer
           v-model:show="store_player_tag_modify.player_show_tag_modify"
           :width="680"
@@ -859,13 +861,11 @@
           </template>
         </n-drawer-content>
       </n-drawer>
-    </n-config-provider>
-    <!-- right drwaer of update -->
-    <n-config-provider :theme="darkTheme">
+      <!-- right drwaer of update -->
       <n-drawer
-        v-model:show="store_app_configs_info.update_show"
-        :width="640"
-        style="
+          v-model:show="store_app_configs_info.update_show"
+          :width="640"
+          style="
           border-radius: 12px 0 0 12px;
           border: 1.5px solid #FFFFFF20;
           background-color: rgba(127, 127, 127, 0.1);
@@ -892,7 +892,7 @@
           </template>
         </n-drawer-content>
       </n-drawer>
-    </n-config-provider>
+    </n-config-provider :theme="darkTheme">
   </n-message-provider>
 </template>
 <style scoped>

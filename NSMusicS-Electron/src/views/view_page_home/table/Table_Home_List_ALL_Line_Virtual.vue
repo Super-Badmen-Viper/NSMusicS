@@ -111,6 +111,7 @@ const dynamicScroller_recently_played = ref(null as any);
 ////// go to media_view
 const Open_this_album_SongList_click = (album_id:string) => {
   if(store_server_user_model.model_server_type_of_web){
+    store_player_appearance.player_mode_of_medialist_from_external_import = false
     store_view_media_page_fetchData._album_id = album_id
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
     store_playlist_list_fetchData._album_id = album_id

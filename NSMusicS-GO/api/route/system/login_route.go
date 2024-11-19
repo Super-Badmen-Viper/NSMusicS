@@ -1,4 +1,4 @@
-package route
+package system
 
 import (
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/system"

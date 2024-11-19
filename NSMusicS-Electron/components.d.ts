@@ -60,9 +60,11 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Table_Edit_Tag: typeof import('./src/components/tag_list/table/Table_Edit_Tag.vue')['default']
+    Table_Music_Effect: typeof import('./src/components/player_effect/table/Table_Music_Effect.vue')['default']
     Table_Music_PlayList_Line_Virtual: typeof import('./src/components/player_list/table/Table_Music_PlayList_Line_Virtual.vue')['default']
     Table_Updateing: typeof import('./src/components/update_list/table/Table_Updateing.vue')['default']
     View_Edit_Tag: typeof import('./src/components/tag_list/View_Edit_Tag.vue')['default']
+    View_Player_Effect: typeof import('./src/components/player_effect/View_Player_Effect.vue')['default']
     View_Player_PlayList: typeof import('./src/components/player_list/View_Player_PlayList.vue')['default']
     View_Updateing: typeof import('./src/components/update_list/View_Updateing.vue')['default']
   }
