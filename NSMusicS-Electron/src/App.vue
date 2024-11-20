@@ -9,10 +9,25 @@
     PeopleCommunity16Regular,
     SlideMicrophone32Regular,
     TextIndentIncreaseLtr20Filled as lyric,
-    FullScreenMaximize16Regular,
+    FullScreenMaximize16Regular,Settings48Regular
   } from '@vicons/fluent'
-  import {AlbumFilled, LibraryMusicOutlined, MusicNoteRound, BrowserUpdatedFilled ,MinusRound} from '@vicons/material'
-  import {Close, Hearing, Menu as MenuIcon, UserAvatarFilledAlt,Clean} from '@vicons/carbon'
+  import {
+    AlbumFilled,
+    LibraryMusicOutlined,
+    MusicNoteRound,
+    BrowserUpdatedFilled ,
+    MinusRound,
+    QueueMusicRound
+  } from '@vicons/material'
+  import {
+    Close,
+    Hearing,
+    DataBackup,
+    UserAvatarFilledAlt,
+    Clean,
+    MediaCast,
+    BareMetalServer
+  } from '@vicons/carbon'
 
   ////// components
   import {darkTheme, NConfigProvider, NIcon} from 'naive-ui'
@@ -68,25 +83,30 @@
   function renderIcon (icon: any) {
     return () => h(NIcon, null, { default: () => h(icon) })
   }
-  function renderRouterLink (nameValue: any,defaultValue: any){
+  function renderRouterLink (nameValue: any, defaultValue: any){
     return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
   }
-  store_app_configs_info.menuOptions_appBar = [
-    {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.menu'))),key: 'View_Menu_AppSetting',icon: renderIcon(MenuIcon),},
+  store_app_configs_info.player_view_menuOptions = [
+    {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.setting'))), key: 'View_Menu_AppSetting', icon: renderIcon(Settings48Regular),},
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+      
     {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('common.home'))),key: 'View_Home_MusicLibrary_Browse',icon: renderIcon(Home28Regular),},
-    {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
     {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'View_Album_List_ALL',icon: renderIcon(AlbumFilled)},
     {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'View_Song_List_ALL',icon: renderIcon(MusicNoteRound)},
     {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'View_Artist_List_ALL',icon: renderIcon(UserAvatarFilledAlt)},
-    {label: computed(() => renderRouterLink('View_Updateing',t('entity.genre_other'))),key: 'View_Updateing',icon: renderIcon(Flag16Regular)},
+    {label: computed(() => renderRouterLink('View_Updateing',t('entity.genre_other'))),key: 'View_Genre_List_ALL',icon: renderIcon(Flag16Regular)},
+
     {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.guessLike'))),key: 'View_Updateing',icon: renderIcon(DocumentHeart20Regular)},
-    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.karaoke'))),key: 'View_Updateing',icon: renderIcon(SlideMicrophone32Regular)},
-    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.identifySong'))),key: 'View_Updateing',icon: renderIcon(Hearing)},
-    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'View_Updateing',icon: renderIcon(LibraryMusicOutlined)},
-    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'View_Updateing',icon: renderIcon(lyric)},
-    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'View_Updateing',icon: renderIcon(PeopleCommunity16Regular)},
+    {label: computed(() => renderRouterLink('View_Updateing',t('page.appMenu.manageServers'))),key: 'View_NSMusicS_Server',icon: renderIcon(BareMetalServer)},
+    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.view_page.mediaLibrary'))),key: 'View_Download_List_ALL',icon: renderIcon(MediaCast)},
+
+    // {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+    // {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.guessLike'))),key: 'View_Updateing',icon: renderIcon(DocumentHeart20Regular)},
+    // {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.karaoke'))),key: 'View_Updateing',icon: renderIcon(SlideMicrophone32Regular)},
+    // {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.identifySong'))),key: 'View_Updateing',icon: renderIcon(Hearing)},
+    // {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'View_Updateing',icon: renderIcon(QueueMusicRound)},
+    // {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'View_Updateing',icon: renderIcon(lyric)},
+    // {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'View_Updateing',icon: renderIcon(PeopleCommunity16Regular)},
   ]
 
   ////// player view
@@ -98,7 +118,7 @@
     if (value === 0) {
       store_player_appearance.player_show = true;
       if (store_router_data_logic.clear_Memory_Model) {
-        store_app_configs_info.menuOptions_appBar_show = false;
+        store_app_configs_info.player_view_bar_show = false;
       }
     }
     setTimeout(() => {
@@ -110,7 +130,7 @@
           store_app_configs_info.theme_app = store_app_configs_info.theme;
           store_player_appearance.player_show = false;
           if (store_router_data_logic.clear_Memory_Model) {
-            store_app_configs_info.menuOptions_appBar_show = true;
+            store_app_configs_info.player_view_bar_show = true;
           }
         }
       }, 200);
@@ -154,7 +174,7 @@
         store_router_data_info.router_select_model_artist = true;
       },
     };
-    const selectedAction = menuActions[store_app_configs_info.app_left_menu_select_activeKey];
+    const selectedAction = menuActions[store_app_configs_info.player_view_left_menu_select_activeKey];
     if (selectedAction) {
       await selectedAction();
     }
@@ -228,7 +248,7 @@
         store_router_data_info.router_name = to.name
         Init_page_artistlists_statistic_Data()
       }
-      store_app_configs_info.app_left_menu_select_activeKey = to.name
+      store_app_configs_info.player_view_left_menu_select_activeKey = to.name
       console.log(to.name)
       store_app_configs_logic_save.save_system_config_of_View_Router_History()
       ///
@@ -244,7 +264,6 @@
       }
     }
   });
-
   ///// view of media
   const Init_page_songlists_statistic_Data = () => {
     store_view_media_page_logic.page_songlists_options = [];
@@ -543,7 +562,6 @@
       id: 'artist_list_all_PlayList'
     });
   }
-
   ///// view of playlist
   watch(() => store_playlist_list_logic.playlist_names_StartUpdate, (newValue) => {
     if(newValue) {
@@ -616,7 +634,7 @@
 </script>
 <template>
   <n-message-provider>
-    <!-- App Bady View-->
+    <!-- Player Bady View-->
     <n-config-provider class="this_App" :theme="store_app_configs_info.theme">
       <n-global-style />
       <n-message-provider class="this_App">
@@ -628,17 +646,17 @@
             :collapsed-width="66"
             :width="160"
             :collapsed="true"
-            @collapse="store_app_configs_info.app_left_menu_collapsed = true"
-            @expand="store_app_configs_info.app_left_menu_collapsed = false">
-            <n-flex vertical justify="space-between" style="height: 100vh">
+            @collapse="store_app_configs_info.player_view_left_menu_collapsed = true"
+            @expand="store_app_configs_info.player_view_left_menu_collapsed = false">
+            <n-flex vertical justify="center" style="height: 100vh">
               <div></div>
               <n-menu
-                v-if="store_app_configs_info.menuOptions_appBar_show"
-                v-model:value="store_app_configs_info.app_left_menu_select_activeKey"
-                :collapsed="store_app_configs_info.app_left_menu_collapsed"
+                v-if="store_app_configs_info.player_view_bar_show"
+                v-model:value="store_app_configs_info.player_view_left_menu_select_activeKey"
+                :collapsed="store_app_configs_info.player_view_left_menu_collapsed"
                 :collapsed-width="66"
                 :collapsed-icon-size="22"
-                :options="store_app_configs_info.menuOptions_appBar"/>
+                :options="store_app_configs_info.player_view_menuOptions"/>
               <div></div>
             </n-flex>
           </n-layout-sider>
@@ -825,19 +843,25 @@
         <n-drawer-content v-if="store_player_sound_effects.player_show_sound_effects">
           <template #default>
             <n-tabs type="line" animated>
-              <n-tab-pane name="001">
+              <n-tab-pane name="000">
                 <template #tab>
                   {{ $t('page.setting.generalTab') }}
                 </template>
                 <View_Player_Effect/>
               </n-tab-pane>
+              <n-tab-pane name="001" tab="均衡器">
+                Not open || 未开放
+              </n-tab-pane>
+              <n-tab-pane name="002" tab="九歌音效">
+                Not open || 未开放
+              </n-tab-pane>
+              <n-tab-pane name="003" tab="声学适配">
+                Not open || 未开放
+              </n-tab-pane>
               <n-tab-pane name="004" tab="多音轨">
                 Not open || 未开放
               </n-tab-pane>
-              <n-tab-pane name="002" tab="均衡器(简易)">
-                Not open || 未开放
-              </n-tab-pane>
-              <n-tab-pane name="003" tab="均衡器(专业)">
+              <n-tab-pane name="005" tab="音效制作">
                 Not open || 未开放
               </n-tab-pane>
             </n-tabs>
@@ -892,7 +916,7 @@
           </template>
         </n-drawer-content>
       </n-drawer>
-    </n-config-provider :theme="darkTheme">
+    </n-config-provider>
   </n-message-provider>
 </template>
 <style scoped>

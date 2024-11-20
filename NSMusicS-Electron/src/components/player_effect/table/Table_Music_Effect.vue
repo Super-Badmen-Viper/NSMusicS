@@ -137,7 +137,7 @@ const openLink = (url: string) => {
     <div class="dynamic-scroller-demo">
       <n-scrollbar style="max-height: 70vh;">
         <n-space vertical>
-          <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+          <n-space justify="space-between" align="center">
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') }}</span>
               <div style="margin-top: -10px;">
@@ -156,7 +156,7 @@ const openLink = (url: string) => {
                 style="width: 207px;margin-top: -4px;"
             />
           </n-space>
-          <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+          <n-space justify="space-between" align="center">
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('setting.playbackStyle_description') }}</span>
               <div style="margin-top: -10px;">
@@ -172,7 +172,7 @@ const openLink = (url: string) => {
                 style="width: 207px;margin-top: -4px;"
             />
           </n-space>
-          <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+          <n-space justify="space-between" align="center">
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('setting.crossfadeStyle') }}</span>
               <div style="margin-top: -10px;">
@@ -189,7 +189,7 @@ const openLink = (url: string) => {
           </n-space>
           <n-divider style="margin: 0;"/>
           <n-space justify="space-between" align="center"
-                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                   >
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') + ' | mpv' }}</span>
             </n-space>
@@ -197,7 +197,7 @@ const openLink = (url: string) => {
           <n-space
               justify="space-between" align="center"
               style="margin-left: 30px;"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+              >
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('setting.mpvExtraParameters') }}</span>
               <div style="margin-top: -10px;">
@@ -218,7 +218,7 @@ const openLink = (url: string) => {
           <n-space
               justify="space-between" align="center"
               style="margin-left: 30px;"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+              >
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.audio_channel') }}</span>
               <div style="margin-top: -10px;">
@@ -237,7 +237,7 @@ const openLink = (url: string) => {
           <n-space
               vertical
               style="margin-left: 30px;"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+              >
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sampleRate') }}</span>
               <div style="margin-top: -10px;">
@@ -260,7 +260,7 @@ const openLink = (url: string) => {
           <n-space
               justify="space-between" align="center"
               style="margin-left: 30px;"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+              >
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('setting.gaplessAudio') }}</span>
               <div style="margin-top: -10px;">
@@ -279,7 +279,7 @@ const openLink = (url: string) => {
           <n-space
               justify="space-between" align="center"
               style="margin-left: 30px;"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+              >
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioExclusiveMode')}}</span>
               <div style="margin-top: -10px;">
@@ -295,7 +295,7 @@ const openLink = (url: string) => {
           <n-space
               justify="space-between" align="center"
               style="margin-left: 30px;"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+              >
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainMode') }}</span>
               <div style="margin-top: -10px;">
@@ -314,7 +314,7 @@ const openLink = (url: string) => {
           <n-space
               justify="space-between" align="center"
               style="margin-left: 30px;"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+              >
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainPreamp') }}</span>
               <div style="margin-top: -10px;">
@@ -332,7 +332,7 @@ const openLink = (url: string) => {
           <n-space
               justify="space-between" align="center"
               style="margin-left: 30px;"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+              >
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainClipping')}}</span>
               <div style="margin-top: -10px;">
@@ -348,7 +348,7 @@ const openLink = (url: string) => {
           <n-space
               justify="space-between" align="center"
               style="margin-left: 30px;"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+              >
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainFallback') }}</span>
               <div style="margin-top: -10px;">
@@ -365,7 +365,7 @@ const openLink = (url: string) => {
           </n-space>
           <n-divider style="margin: 0;"/>
           <n-space justify="space-between" align="center"
-                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                   >
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') + ' | web' }}</span>
             </n-space>
@@ -373,7 +373,7 @@ const openLink = (url: string) => {
           <n-space
               justify="space-between" align="center"
               style="margin-left: 30px;"
-              :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+              >
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.dolby_switching')}}</span>
               <div style="margin-top: -10px;">
@@ -388,7 +388,7 @@ const openLink = (url: string) => {
             </n-switch>
           </n-space>
           <n-divider style="margin: 0;"/>
-          <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+          <n-space justify="space-between" align="center">
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.player_use_lottie') }}</span>
               <div style="margin-top: -10px;">
@@ -399,7 +399,7 @@ const openLink = (url: string) => {
                 v-model:value="store_player_appearance.player_use_lottie_animation">
             </n-switch>
           </n-space>
-          <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+          <n-space justify="space-between" align="center">
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
               <div style="margin-top: -10px;">
@@ -409,7 +409,7 @@ const openLink = (url: string) => {
             <n-switch v-model:value="store_player_appearance.player_use_background_filter_blur">
             </n-switch>
           </n-space>
-          <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+          <n-space justify="space-between" align="center">
             <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.player_use_playbar_auto_hide') }}</span>
               <div style="margin-top: -10px;">

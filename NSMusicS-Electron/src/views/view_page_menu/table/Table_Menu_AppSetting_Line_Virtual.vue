@@ -1,10 +1,10 @@
 <script setup lang="ts">
   ////// this_view resource of vicons_svg
   import {
-    Delete20Regular
+    Delete20Regular,Settings48Regular
   } from '@vicons/fluent'
   import {
-    BareMetalServer, Add, Close, Menu as MenuIcon, UserAvatarFilledAlt, Hearing
+    BareMetalServer, Add, Close, UserAvatarFilledAlt, Hearing
   } from '@vicons/carbon'
 
   ////// i18n auto lang
@@ -15,16 +15,12 @@
     SlideMicrophone32Regular,
     TextIndentIncreaseLtr20Filled as lyric
   } from "@vicons/fluent";
-  import {AlbumFilled, LibraryMusicOutlined, MotionPhotosAutoOutlined, MusicNoteRound} from "@vicons/material";
+  import {AlbumFilled, QueueMusicRound, MotionPhotosAutoOutlined, MusicNoteRound} from "@vicons/material";
   import {RouterLink} from "vue-router";
   import { useI18n } from 'vue-i18n'
   const { t } = useI18n({
     inheritLocale: true
   })
-  const computed_i18n_Label_HomePageConfiguration_1 = computed(() => t('page.home.mostPlayed'));
-  const computed_i18n_Label_HomePageConfiguration_2 = computed(() => t('page.home.explore'));
-  const computed_i18n_Label_HomePageConfiguration_3 = computed(() => t('page.home.newlyAdded'));
-  const computed_i18n_Label_HomePageConfiguration_4 = computed(() => t('page.home.recentlyPlayed'));
   const computed_i18n_Label_SidebarConfiguration_3 = computed(() => t('common.home'));
   const computed_i18n_Label_SidebarConfiguration_5 = computed(() => t('entity.album_other'));
   const computed_i18n_Label_SidebarConfiguration_6 = computed(() => t('entity.track_other'));
@@ -339,59 +335,6 @@
       label: 'Drive My Car',
       value: 'song1'
     }])
-  ////// 设置：通用 - 侧边栏
-  const selectd_props_home_page = ref<(string | number)[] | null>(null)
-  const handleUpdate_selectd_props_home_page_Value = (value: (string | number)[]) => {
-    selectd_props_home_page.value = value
-    console.log(JSON.stringify(value))
-  }
-  const handleUpdate_selectd_props_app_sidebar_Value = (value: number[]) => {
-    store_app_configs_info.selectd_props_app_sidebar = value
-    console.log(value)
-    let allMenuOptions = create_menuOptions_appBar();
-    let removeFlags = new Array(allMenuOptions.length).fill(true);
-    value.forEach(index => {
-      if (index < allMenuOptions.length) {
-        removeFlags[index] = false;
-      }
-    });
-    removeFlags[0] = false;
-    removeFlags[1] = false;
-    removeFlags[3] = removeFlags[2];
-    if(removeFlags[4] && removeFlags[5] && removeFlags[6] && removeFlags[7])
-      removeFlags[8] = true;
-    else
-      removeFlags[8] = false;
-    let menuOptions_appBar = allMenuOptions.filter((option, index) => {
-      return !removeFlags[index];
-    });
-    store_app_configs_info.menuOptions_appBar = menuOptions_appBar
-  }
-  function renderIcon (icon: any) {
-    return () => h(NIcon, null, { default: () => h(icon) })
-  }
-  function renderRouterLink (nameValue: any,defaultValue: any){
-    return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
-  }
-  const create_menuOptions_appBar = (): MenuOption[] => {
-    return [
-      {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.menu'))),key: 'View_Menu_AppSetting',icon: renderIcon(MenuIcon),},
-      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('common.home'))),key: 'View_Home_MusicLibrary_Browse',icon: renderIcon(Home28Regular),},
-      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'View_Album_List_ALL',icon: renderIcon(AlbumFilled)},
-      {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'View_Song_List_ALL',icon: renderIcon(MusicNoteRound)},
-      {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'View_Artist_List_ALL',icon: renderIcon(UserAvatarFilledAlt)},
-      {label: computed(() => renderRouterLink('View_Updateing',t('entity.genre_other'))),key: 'View_Updateing',icon: renderIcon(Flag16Regular)},
-      {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.guessLike'))),key: 'View_Updateing',icon: renderIcon(DocumentHeart20Regular)},
-      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.karaoke'))),key: 'View_Updateing',icon: renderIcon(SlideMicrophone32Regular)},
-      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.identifySong'))),key: 'View_Updateing',icon: renderIcon(Hearing)},
-      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'View_Updateing',icon: renderIcon(LibraryMusicOutlined)},
-      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'View_Updateing',icon: renderIcon(lyric)},
-      {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'View_Updateing',icon: renderIcon(PeopleCommunity16Regular)},
-    ]
-  };
 
   /////// 设置：播放
   const player_fade_model_options_selected = ref<{label:any,value:any}>();
@@ -510,16 +453,10 @@
     }
   })
 
-  ////// lineItems Re render
-  const collapsed_width = ref<number>(80);
-
   //////
   import type { StepsProps } from 'naive-ui'
   const current = ref(1)
   const currentStatus = ref<StepsProps['status']>('process')
-  const handleButtonClick = () => {
-    current.value = (current.value % 3) + 1
-  }
   /// server model
   const model_server_step_1 = computed(() => t('nsmusics.view_page.modelSelect'));
   const model_server_step_2 = computed(() => t('page.appMenu.manageServers'));
@@ -544,23 +481,20 @@
       :size="12" >
       <n-card
         class="table"
-        style="overflow: hidden;border-radius: 6px;"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)'}">
+        style="overflow-x: hidden;border-radius: 6px;"
+        :style="{ width: 'calc(100vw - ' + (80 - 9 + 66) + 'px)'}">
         <n-tabs
-          style="margin-top: -20px;"
+          style="margin-left: -20px;margin-top: -6px;"
           v-model:value="store_app_configs_info.menu_app_setting_select_tab_name"
-          size="large"
-          animated
-          pane-wrapper-style="margin: 0 -4px"
-          pane-style="padding-left: 4px; padding-right: 4px; box-sizing: border-box;">
+          size="large" animated
+          :bar-width="28" placement="left" type="line">
           <!-- 服务器 -->
           <n-tab-pane name="tab_pane_1">
             <template #tab>
               {{ $t('nsmusics.view_page.mediaLibrary') + $t('common.manage')}}
             </template>
             <n-space
-                style="max-height: 70vh;overflow-y: auto;"
-                :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)'}">
+                style="overflow-y: auto;margin-top: 9px;">
               <!-- 媒体库管理 -->
               <n-space vertical>
                 <n-space vertical>
@@ -705,7 +639,7 @@
                       <div class="n-step-description">
                         <n-space vertical>
                           <n-space vertical
-                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                                   >
                             <n-space vertical>
                               <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_1') + ' - ' + $t('nsmusics.view_page.routerModel_type_3') }}</span>
                               <div style="margin-top: -10px;">
@@ -727,7 +661,7 @@
                             </n-switch>
                           </n-space>
                           <n-space vertical
-                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                                   >
                             <n-space vertical>
                               <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_2') }}</span>
                               <div style="margin-top: -10px;">
@@ -744,7 +678,7 @@
                           </n-space>
                           <n-space vertical
                                    v-if="store_server_user_model.model_server_type_of_local"
-                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                                   >
                             <n-space vertical style="width: 320px;">
                               <span style="font-size:16px;font-weight: 600;">
                                 {{ $t('nsmusics.view_page.modelServer_type_2') + " | " + $t('nsmusics.view_page.selectServer')}}
@@ -783,7 +717,7 @@
                       <div class="n-step-description">
                         <n-space vertical>
                           <n-space justify="space-between" align="center"
-                                   :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                                   >
                             <n-space vertical style="width: 620px;">
                               <div style="margin-top: -2px;">
                               <span style="font-size:16px;font-weight: 600;">
@@ -1035,9 +969,9 @@
             <template #tab>
               {{ $t('page.setting.generalTab') }}
             </template>
-            <n-scrollbar style="max-height: 70vh;" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 203) + 'px)'}">
+            <n-scrollbar style="overflow-y: auto;margin-top: 9px;">
               <n-space vertical>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.language') + ' | Language' }}</span>
                     <div style="margin-top: -10px;">
@@ -1068,7 +1002,7 @@
                   />
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.theme') }}</span>
                     <div style="margin-top: -10px;">
@@ -1084,7 +1018,7 @@
                     style="width: 207px;margin-top: -4px;"
                   />
                 </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.theme_automatic_switching') }}</span>
                     <div style="margin-top: -10px;">
@@ -1096,15 +1030,13 @@
                   </n-switch>
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <n-space justify="space-between" align="center"
-                         :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.routerModel') }}</span>
                   </n-space>
                 </n-space>
                 <n-space justify="space-between" align="center"
-                         style="margin-left: 30px;"
-                         :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                         style="margin-left: 30px;">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.routerModel_type_1') }}</span>
                     <div style="margin-top: -10px;">
@@ -1120,7 +1052,7 @@
                 </n-space>
                 <n-space justify="space-between" align="center"
                          style="margin-left: 30px;"
-                         :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                         >
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.routerModel_type_2') }}</span>
                     <div style="margin-top: -10px;">
@@ -1136,7 +1068,7 @@
                 </n-space>
                 <n-space justify="space-between" align="center"
                          style="margin-left: 30px;"
-                         :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                         >
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.routerModel_type_3') }}</span>
                     <div style="margin-top: -10px;">
@@ -1150,61 +1082,7 @@
                   </n-switch>
                 </n-space>
                 <n-divider v-if="false" style="margin: 0;"/>
-                <n-space v-if="false" vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space justify="space-between" align="center">
-                    <n-space vertical>
-                      <span style="font-size:16px;font-weight: 600;">{{ $t('setting.homeConfiguration') }}</span>
-                      <div style="margin-top: -10px;">
-                        <span style="font-size:12px;">{{ $t('setting.homeConfiguration_description') }}</span>
-                      </div>
-                    </n-space>
-                  </n-space>
-                  <n-checkbox-group :value="selectd_props_home_page" @update:value="handleUpdate_selectd_props_home_page_Value">
-                    <n-grid :y-gap="8" :cols="4">
-                      <n-gi>
-                        <n-checkbox value="HomePageConfiguration_1" :label="computed_i18n_Label_HomePageConfiguration_1" />
-                      </n-gi>
-                      <n-gi>
-                        <n-checkbox value="HomePageConfiguration_2" :label="computed_i18n_Label_HomePageConfiguration_2" />
-                      </n-gi>
-                      <n-gi>
-                        <n-checkbox value="HomePageConfiguration_3" :label="computed_i18n_Label_HomePageConfiguration_3" />
-                      </n-gi>
-                      <n-gi>
-                        <n-checkbox value="HomePageConfiguration_4" :label="computed_i18n_Label_HomePageConfiguration_4" />
-                      </n-gi>
-                    </n-grid>
-                  </n-checkbox-group>
-                </n-space>
-                <n-divider style="margin: 0;"/>
-                <n-space vertical :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
-                  <n-space justify="space-between" align="center">
-                    <n-space vertical>
-                      <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sidebarConfiguration') }}</span>
-                      <div style="margin-top: -10px;">
-                        <span style="font-size:12px;">{{ $t('setting.sidebarCollapsedNavigation_description') }}</span>
-                      </div>
-                    </n-space>
-                  </n-space>
-                  <n-checkbox-group :value="store_app_configs_info.selectd_props_app_sidebar"
-                                    @update:value="handleUpdate_selectd_props_app_sidebar_Value">
-                    <n-grid :y-gap="8" :cols="5">
-                      <n-gi><n-checkbox value="2" :label="computed_i18n_Label_SidebarConfiguration_3" /></n-gi>
-                      <n-gi><n-checkbox value="4" :label="computed_i18n_Label_SidebarConfiguration_5" /></n-gi>
-                      <n-gi><n-checkbox value="5" :label="computed_i18n_Label_SidebarConfiguration_6" /></n-gi>
-                      <n-gi><n-checkbox value="6" :label="computed_i18n_Label_SidebarConfiguration_7" /></n-gi>
-                      <n-gi><n-checkbox value="7" :label="computed_i18n_Label_SidebarConfiguration_8" /></n-gi>
-                      <n-gi><n-checkbox value="9" :label="computed_i18n_Label_SidebarConfiguration_10" /></n-gi>
-                      <n-gi><n-checkbox value="10" :label="computed_i18n_Label_SidebarConfiguration_11" /></n-gi>
-                      <n-gi><n-checkbox value="11" :label="computed_i18n_Label_SidebarConfiguration_12" /></n-gi>
-                      <n-gi><n-checkbox value="12" :label="computed_i18n_Label_SidebarConfiguration_13" /></n-gi>
-                      <n-gi><n-checkbox value="13" :label="computed_i18n_Label_SidebarConfiguration_14" /></n-gi>
-                      <n-gi><n-checkbox value="14" :label="computed_i18n_Label_SidebarConfiguration_15" /></n-gi>
-                    </n-grid>
-                  </n-checkbox-group>
-                </n-space>
-                <n-divider v-if="false" style="margin: 0;"/>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.clearQueryCache') }}</span>
                     <div style="margin-top: -10px;">
@@ -1215,7 +1093,7 @@
                     {{ $t('common.clear') }}
                   </n-button>
                 </n-space>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.clearCache') }}</span>
                     <div style="margin-top: -10px;">
@@ -1234,9 +1112,9 @@
             <template #tab>
               {{ $t('page.setting.playbackTab') }}
             </template>
-            <n-scrollbar style="max-height: 70vh;" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 203) + 'px)'}">
+            <n-scrollbar style="overflow-y: auto;margin-top: 9px;" >
               <n-space vertical>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') }}</span>
                     <div style="margin-top: -10px;">
@@ -1255,7 +1133,7 @@
                       style="width: 207px;margin-top: -4px;"
                   />
                 </n-space>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioDevice') }}</span>
                     <div style="margin-top: -10px;">
@@ -1270,7 +1148,7 @@
                       style="width: 207px;margin-top: -4px;"
                   />
                 </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.playbackStyle_description') }}</span>
                     <div style="margin-top: -10px;">
@@ -1286,7 +1164,7 @@
                       style="width: 207px;margin-top: -4px;"
                   />
                 </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.crossfadeStyle') }}</span>
                     <div style="margin-top: -10px;">
@@ -1303,7 +1181,7 @@
                 </n-space>
                 <n-divider style="margin: 0;"/>
                 <n-space justify="space-between" align="center"
-                         :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                         >
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') + ' | mpv' }}</span>
                   </n-space>
@@ -1311,7 +1189,7 @@
                 <n-space
                     justify="space-between" align="center"
                     style="margin-left: 30px;"
-                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                    >
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.mpvExtraParameters') }}</span>
                     <div style="margin-top: -10px;">
@@ -1332,7 +1210,7 @@
                 <n-space
                     justify="space-between" align="center"
                     style="margin-left: 30px;"
-                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                    >
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.audio_channel') }}</span>
                     <div style="margin-top: -10px;">
@@ -1351,7 +1229,7 @@
                 <n-space
                     vertical
                     style="margin-left: 30px;"
-                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                    >
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.sampleRate') }}</span>
                     <div style="margin-top: -10px;">
@@ -1374,7 +1252,7 @@
                 <n-space
                     justify="space-between" align="center"
                     style="margin-left: 30px;"
-                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                    >
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.gaplessAudio') }}</span>
                     <div style="margin-top: -10px;">
@@ -1393,7 +1271,7 @@
                 <n-space
                     justify="space-between" align="center"
                     style="margin-left: 30px;"
-                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                    >
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioExclusiveMode')}}</span>
                     <div style="margin-top: -10px;">
@@ -1409,7 +1287,7 @@
                 <n-space
                     justify="space-between" align="center"
                     style="margin-left: 30px;"
-                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                    >
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainMode') }}</span>
                     <div style="margin-top: -10px;">
@@ -1428,7 +1306,7 @@
                 <n-space
                     justify="space-between" align="center"
                     style="margin-left: 30px;"
-                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                    >
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainPreamp') }}</span>
                     <div style="margin-top: -10px;">
@@ -1446,7 +1324,7 @@
                 <n-space
                     justify="space-between" align="center"
                     style="margin-left: 30px;"
-                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                    >
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainClipping')}}</span>
                     <div style="margin-top: -10px;">
@@ -1462,7 +1340,7 @@
                 <n-space
                     justify="space-between" align="center"
                     style="margin-left: 30px;"
-                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                    >
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.replayGainFallback') }}</span>
                     <div style="margin-top: -10px;">
@@ -1479,7 +1357,7 @@
                 </n-space>
                 <n-divider style="margin: 0;"/>
                 <n-space justify="space-between" align="center"
-                         :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                         >
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioPlayer') + ' | web' }}</span>
                   </n-space>
@@ -1487,7 +1365,7 @@
                 <n-space
                     justify="space-between" align="center"
                     style="margin-left: 30px;"
-                    :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 260) + 'px)'}">
+                    >
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.dolby_switching')}}</span>
                     <div style="margin-top: -10px;">
@@ -1502,7 +1380,7 @@
                   </n-switch>
                 </n-space>
                 <n-divider v-if="false" style="margin: 0;"/>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.lyricOffset') }}</span>
                     <div style="margin-top: -10px;">
@@ -1516,7 +1394,7 @@
                   </n-input-group>
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.player_use_lottie') }}</span>
                     <div style="margin-top: -10px;">
@@ -1527,7 +1405,7 @@
                       v-model:value="store_player_appearance.player_use_lottie_animation">
                   </n-switch>
                 </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
                     <div style="margin-top: -10px;">
@@ -1537,7 +1415,7 @@
                   <n-switch v-model:value="store_player_appearance.player_use_background_filter_blur">
                   </n-switch>
                 </n-space>
-                <n-space justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.player_use_playbar_auto_hide') }}</span>
                     <div style="margin-top: -10px;">
@@ -1555,9 +1433,9 @@
             <template #tab>
               {{ $t('page.setting.hotkeysTab') }}
             </template>
-            <n-scrollbar style="max-height: 70vh;" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 203) + 'px)'}">
+            <n-scrollbar style="overflow-y: auto;margin-top: 9px;" >
               <n-space vertical>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.globalMediaHotkeys') }}</span>
                     <div style="margin-top: -10px;">
@@ -1569,7 +1447,7 @@
                   </n-switch>
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.applicationHotkeys') }}</span>
                     <div style="margin-top: -10px;">
@@ -1585,9 +1463,9 @@
             <template #tab>
               {{ $t('page.setting.windowTab') }}
             </template>
-            <n-scrollbar style="max-height: 70vh;" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 203) + 'px)'}">
+            <n-scrollbar style="overflow-y: auto;margin-top: 9px;" >
               <n-space vertical>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.windowBarStyle') }}</span>
                     <div style="margin-top: -10px;">
@@ -1602,7 +1480,7 @@
                       style="width: 207px;margin-top: -4px;"
                   />
                 </n-space>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.minimizeToTray') }}</span>
                     <div style="margin-top: -10px;">
@@ -1613,7 +1491,7 @@
                       v-model:value="disabled">
                   </n-switch>
                 </n-space>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.exitToTray') }}</span>
                     <div style="margin-top: -10px;">
@@ -1624,7 +1502,7 @@
                       v-model:value="disabled">
                   </n-switch>
                 </n-space>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.startMinimized') }}</span>
                     <div style="margin-top: -10px;">
@@ -1636,7 +1514,7 @@
                   </n-switch>
                 </n-space>
                 <n-divider style="margin: 0;"/>
-                <n-space v-if="false" justify="space-between" align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 230) + 'px)'}">
+                <n-space v-if="false" justify="space-between" align="center">
                   <n-space vertical>
                     <span style="font-size:16px;font-weight: 600;">{{ $t('setting.disableAutomaticUpdates') }}</span>
                     <div style="margin-top: -10px;">

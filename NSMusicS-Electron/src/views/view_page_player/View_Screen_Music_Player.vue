@@ -239,7 +239,7 @@
       const byteTime = store_player_audio_info.this_audio_lyrics_info_byte_time[index][i - position_i_start];
       const [startMs, durationMs] = byteTime.split(',').map(Number);
       const start = startMs / 1000;
-      const duration = durationMs / 1000;
+      const duration = durationMs / 1000;``
 
       setTimeout(() => {
         itemElements_active[i].style.animationDuration = `${duration}s`;

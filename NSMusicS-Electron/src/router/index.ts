@@ -14,7 +14,7 @@ const router = createRouter({
     {
       path: '/View_Menu_AppSetting',
       name: 'View_Menu_AppSetting',
-      component: () => import('../views/view_page_menu/View_Menu_AppSetting.vue'),
+      component: () => import('../views/view_page_menu/View_Menu_AppSetting.vue'),// '../views/view_page_menu/View_Menu_AppSetting.vue'
       meta: {
         cleanup: true
       }

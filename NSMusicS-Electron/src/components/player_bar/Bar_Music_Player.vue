@@ -717,8 +717,8 @@ onBeforeUnmount(() => {
         class="layout_distribution_3"
         style="transition: margin 0.4s;"
         :style="{
-        marginLeft: store_player_appearance.player_show ? '0px' : (store_app_configs_info.app_left_menu_collapsed ? '72px' : '166px'),
-        width: store_player_appearance.player_show ? '100vw' : (store_app_configs_info.app_left_menu_collapsed ? 'calc(100vw - 72px)' : 'calc(100vw - 167px)'),
+        marginLeft: store_player_appearance.player_show ? '0px' : (store_app_configs_info.player_view_left_menu_collapsed ? '72px' : '166px'),
+        width: store_player_appearance.player_show ? '100vw' : (store_app_configs_info.player_view_left_menu_collapsed ? 'calc(100vw - 72px)' : 'calc(100vw - 167px)'),
       }">
       <div class="gird_Left">
         <div class="button_open_player_view">
@@ -783,12 +783,19 @@ onBeforeUnmount(() => {
               <n-icon :size="26"><PlaySkipBack/></n-icon>
             </template>
           </n-button>
-          <n-button quaternary round size="medium" @click="Init_Audio_Player">
-            <template #icon>
-              <n-icon v-if="store_player_audio_logic.player.isPlaying" :size="36"><Pause/></n-icon>
-              <n-icon v-else :size="36"><Play/></n-icon>
-            </template>
-          </n-button>
+          <n-dropdown
+              trigger="hover"
+              placement="top-center"
+              :options="[{
+              label: '播放 / 暂停',
+              key: 'marina bay sands'}]">
+            <n-button quaternary round size="medium" @click="Init_Audio_Player">
+              <template #icon>
+                <n-icon v-if="store_player_audio_logic.player.isPlaying" :size="36"><Pause/></n-icon>
+                <n-icon v-else :size="36"><Play/></n-icon>
+              </template>
+            </n-button>
+          </n-dropdown>
           <n-button quaternary round size="small" @click="play_skip_forward_click">
             <template #icon>
               <n-icon :size="26"><PlaySkipForward/></n-icon>
