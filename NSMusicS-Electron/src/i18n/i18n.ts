@@ -1,5 +1,22 @@
 import { createI18n, type I18nOptions } from 'vue-i18n'
 
+import zhHans_j from '@/i18n/locales_jellyfin/zh-cn.json';
+import zhHant_j from '@/i18n/locales_jellyfin/zh-tw.json';
+import en_j from '@/i18n/locales_jellyfin/en-us.json';
+import es_j from '@/i18n/locales_jellyfin/es.json';
+import fa_j from '@/i18n/locales_jellyfin/fa.json';
+import fr_j from '@/i18n/locales_jellyfin/fr.json';
+import ja_j from '@/i18n/locales_jellyfin/ja.json';
+import pl_j from '@/i18n/locales_jellyfin/pl.json';
+import de_j from '@/i18n/locales_jellyfin/de.json';
+import it_j from '@/i18n/locales_jellyfin/it.json';
+import ru_j from '@/i18n/locales_jellyfin/ru.json';
+import ptBr_j from '@/i18n/locales_jellyfin/pt-br.json';
+import sr_j from '@/i18n/locales_jellyfin/sr.json';
+import sv_j from '@/i18n/locales_jellyfin/sv.json';
+import cs_j from '@/i18n/locales_jellyfin/cs.json';
+import nl_j from '@/i18n/locales_jellyfin/nl.json';
+
 import zhHans_n from '@/i18n/locales_nsmusics/zh-Hans.json';
 import zhHant_n from '@/i18n/locales_nsmusics/zh-Hant.json';
 import en_n from '@/i18n/locales_nsmusics/en.json';
@@ -44,22 +61,22 @@ export class Language{
             legacy: false,
             locale: '' + system_Configs_Read.app_Configs.value['lang'],
             messages: {
-                'zhHans': { ...zhHans, ...zhHans_n },
-                'zhHant': { ...zhHant, ...zhHant_n },
-                'en': { ...en, ...en_n },
-                'es': { ...es, ...es_n },
-                'fa': { ...fa, ...fa_n },
-                'fr': { ...fr, ...fr_n },
-                'ja': { ...ja, ...ja_n },
-                'pl': { ...pl, ...pl_n },
-                'de': { ...de, ...de_n },
-                'it': { ...it, ...it_n },
-                'ru': { ...ru, ...ru_n },
-                'ptBr': { ...ptBr, ...ptBr_n },
-                'sr': { ...sr, ...sr_n },
-                'sv': { ...sv, ...sv_n },
-                'cs': { ...cs, ...cs_n },
-                'nl': { ...nl, ...nl_n }
+                'zhHans': { ...zhHans, ...zhHans_n, ...zhHans_j },
+                'zhHant': { ...zhHant, ...zhHant_n, ...zhHant_j },
+                'en': { ...en, ...en_n, ...en_j },
+                'es': { ...es, ...es_n, ...es_j },
+                'fa': { ...fa, ...fa_n, ...fa_j },
+                'fr': { ...fr, ...fr_n, ...fr_j },
+                'ja': { ...ja, ...ja_n, ...ja_j },
+                'pl': { ...pl, ...pl_n, ...pl_j },
+                'de': { ...de, ...de_n, ...de_j },
+                'it': { ...it, ...it_n, ...it_j },
+                'ru': { ...ru, ...ru_n, ...ru_j },
+                'ptBr': { ...ptBr, ...ptBr_n, ...ptBr_j },
+                'sr': { ...sr, ...sr_n, ...sr_j },
+                'sv': { ...sv, ...sv_n, ...sv_j },
+                'cs': { ...cs, ...cs_n, ...cs_j },
+                'nl': { ...nl, ...nl_n, ...nl_j }
             }
         }
         this.i18n = createI18n<false, typeof options>(options)

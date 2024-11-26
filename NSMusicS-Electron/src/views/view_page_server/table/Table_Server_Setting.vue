@@ -17,12 +17,23 @@ import {
 } from '@vicons/material'
 import {h, watch} from "vue";
 import {NIcon} from "naive-ui";
+
+//////
+import Group_1_1 from "@/views/view_page_server/table/type/group_1_1.vue";
+import Group_1_2 from "@/views/view_page_server/table/type/group_1_2.vue";
+import Group_1_3 from "@/views/view_page_server/table/type/group_1_3.vue";
+import Group_1_4_1 from "@/views/view_page_server/table/type/group_1_4_1.vue";
+import Group_1_4_2 from "@/views/view_page_server/table/type/group_1_4_2.vue";
+import Group_1_4_3 from "@/views/view_page_server/table/type/group_1_4_3.vue";
+import Group_1_4_4 from "@/views/view_page_server/table/type/group_1_4_4.vue";
+import Group_1_5_1 from "@/views/view_page_server/table/type/group_1_5_1.vue";
+import Group_1_5_2 from "@/views/view_page_server/table/type/group_1_5_2.vue";
+import Group_1_5_3 from "@/views/view_page_server/table/type/group_1_5_3.vue";
+import Group_1_5_4 from "@/views/view_page_server/table/type/group_1_5_4.vue";
 function renderIcon (icon: any) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 import { useI18n } from 'vue-i18n'
-import Table_Server_Setting_Type_group_1_1
-  from "@/views/view_page_server/table/Table_Server_Setting_Type_group_1_1.vue";
 const { t } = useI18n({
   inheritLocale: true
 })
@@ -83,9 +94,6 @@ const menuOptions: MenuOption[] = [
     ]
   }
 ]
-watch(() => store_app_configs_info.server_setting_select_tab_name, async (newValue) => {
-
-});
 </script>
 <template>
   <div class="view">
@@ -109,11 +117,41 @@ watch(() => store_app_configs_info.server_setting_select_tab_name, async (newVal
               :options="menuOptions"
             />
           </n-layout-sider>
-          <n-layout embedded style="overflow-y: auto;">
+          <n-layout embedded style="overflow-y: auto;border-radius: 6px;">
             <div style="margin-left: 20px;margin-top: 10px;">
               <!--服务器-->
-              <Table_Server_Setting_Type_group_1_1
+              <Group_1_1
                 v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-1-1'"
+              />
+              <Group_1_2
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-1-2'"
+              />
+              <Group_1_3
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-1-3'"
+              />
+              <Group_1_4_1
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-1-4-1'"
+              />
+              <Group_1_4_2
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-1-4-2'"
+              />
+              <Group_1_4_3
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-1-4-3'"
+              />
+              <Group_1_4_4
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-1-4-4'"
+              />
+              <Group_1_5_1
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-1-5-1'"
+              />
+              <Group_1_5_2
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-1-5-2'"
+              />
+              <Group_1_5_3
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-1-5-3'"
+              />
+              <Group_1_5_4
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-1-5-4'"
               />
             </div>
           </n-layout>
@@ -133,14 +171,6 @@ watch(() => store_app_configs_info.server_setting_select_tab_name, async (newVal
 .table{
   height: calc(100vh - 160px);
   overflow: auto;
-}
-
-.server_item_info {
-  transition: outline-color 0.3s ease, background-color 0.3s ease;
-}
-.server_item_info:hover {
-  outline: 0.5px solid #f0f0f090;
-  background-color: #f0f0f090;
 }
 
 ::-webkit-scrollbar {

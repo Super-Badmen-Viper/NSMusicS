@@ -102,25 +102,25 @@
       store_app_configs_info.app_view_menuOptions.push(
           {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
           {label: computed(() => renderRouterLink('View_Server_Setting',t('page.appMenu.manageServers'))),key: 'View_Server_Setting',icon: renderIcon(BareMetalServer)},
-          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.view_page.mediaLibrary'))),key: 'View_Download_List_ALL',icon: renderIcon(MediaCast)},
+          {label: computed(() => renderRouterLink('View_Updateing',t('HeaderLibraries'))),key: 'View_Updateing',icon: renderIcon(MediaCast)},
       )
     if(store_app_configs_info.menuOptions_selectd_model_2)
       store_app_configs_info.app_view_menuOptions.push(
           {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.karaoke'))),key: 'karaoke',icon: renderIcon(SlideMicrophone32Regular)},
+          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.karaoke'))),key: 'View_Updateing',icon: renderIcon(SlideMicrophone32Regular)},
       )
     if(store_app_configs_info.menuOptions_selectd_model_3)
       store_app_configs_info.app_view_menuOptions.push(
           {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
           {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.guessLike'))),key: 'View_Updateing',icon: renderIcon(DocumentHeart20Regular)},
-          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.identifySong'))),key: 'identifySong',icon: renderIcon(Hearing)},
-          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'scoreGeneration',icon: renderIcon(QueueMusicRound)},
-          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'lyricsProduction',icon: renderIcon(lyric)},
+          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.identifySong'))),key: 'View_Updateing',icon: renderIcon(Hearing)},
+          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'View_Updateing',icon: renderIcon(QueueMusicRound)},
+          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'View_Updateing',icon: renderIcon(lyric)},
       )
     if(store_app_configs_info.menuOptions_selectd_model_4)
       store_app_configs_info.app_view_menuOptions.push(
           {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'musicCommunity',icon: renderIcon(PeopleCommunity16Regular)},
+          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'View_Updateing',icon: renderIcon(PeopleCommunity16Regular)},
       )
   }
 

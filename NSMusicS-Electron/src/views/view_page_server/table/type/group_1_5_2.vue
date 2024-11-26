@@ -1,4 +1,4 @@
-<script setup lang="ts">
+group_1_5_1.vue<script setup lang="ts">
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 </script>
 
