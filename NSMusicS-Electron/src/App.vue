@@ -615,6 +615,14 @@
     console.log(store_app_configs_info.navidrome_db)
     console.log(store_app_configs_info.nsmusics_db)
 
+    try {
+      if (process.platform === 'win32') {
+        store_app_configs_info.desktop_system_kind = 'win32';
+      } else if (process.platform === 'darwin') {
+        store_app_configs_info.desktop_system_kind = 'darwin';
+      }
+    }catch{  }
+
     await store_app_configs_logic_load.load_app_config()
 
     create_menuOptions_appBar()
@@ -719,9 +727,10 @@
             <div class="bar_top_setapp" style="background-color: transparent" @click="drawer_close_of_player_bar">
               <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"
                        :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
+                       :style="{ marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '260px' : '108px' }"
                        style="
                           z-index: 100;
-                          margin-top: 34.5px;margin-right:260px;
+                          margin-top: 34.5px;
                           -webkit-app-region: no-drag;
                         ">
                 <n-button quaternary circle
@@ -753,31 +762,36 @@
                   </template>
                   <!--<span style="font-weight: 500;">{{ $t('setting.clearQueryCache') }}</span>-->
                 </n-button>
-                <n-button quaternary circle size="medium" style="margin-right:4px"
+                <n-button quaternary circle size="medium"
+                          :style="{ marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '4px' : '30px' }"
                           @click="store_app_configs_logic_theme.theme_mode_change_click()">
                   <template #icon>
                     <n-icon size="20" :depth="2"><DarkTheme24Filled/></n-icon>
                   </template>
                 </n-button>
                 <n-button quaternary circle size="medium" style="margin-right:4px;"
+                          v-if="store_app_configs_info.desktop_system_kind === 'win32'"
                           @click="ipcRenderer.send('window-fullscreen');">
                   <template #icon>
                     <n-icon size="20" :depth="2" style="margin-top: 1px;"><FullScreenMaximize16Regular/></n-icon>
                   </template>
                 </n-button>
                 <n-button quaternary circle size="medium" style="margin-right:4px"
+                          v-if="store_app_configs_info.desktop_system_kind === 'win32'"
                           @click="ipcRenderer.send('window-min');">
                   <template #icon>
                     <n-icon size="24" :depth="2"><MinusRound/></n-icon>
                   </template>
                 </n-button>
                 <n-button quaternary circle size="medium" style="margin-right:4px"
+                          v-if="store_app_configs_info.desktop_system_kind === 'win32'"
                           @click="ipcRenderer.send('window-max');">
                   <template #icon>
                     <n-icon size="24" :depth="2"><Maximize16Regular/></n-icon>
                   </template>
                 </n-button>
                 <n-button quaternary circle size="medium" style="margin-right:30px"
+                          v-if="store_app_configs_info.desktop_system_kind === 'win32'"
                           @click="ipcRenderer.send('window-close');">
                   <template #icon>
                     <n-icon size="28" :depth="2"><Close/></n-icon>
