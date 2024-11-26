@@ -22,8 +22,8 @@ export const store_app_configs_info = reactive({
     version_update_address: '',
     version_update_explain: '',
 
-    navidrome_db: 'C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db',
-    nsmusics_db: 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db',
+    navidrome_db: path.resolve('resources/navidrome.db'),
+    nsmusics_db: path.resolve('resources/nsmusics.db'),
 
     menuOptions_selectd_model_1: true,
     menuOptions_selectd_model_2: true,

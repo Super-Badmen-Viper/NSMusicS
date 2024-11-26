@@ -27,7 +27,12 @@ if (!app.requestSingleInstanceLock()) {
         });
 
         await createWindow();
-        await createTray();
+        try {
+            await createTray();
+            tray_loading_state = true;
+        }catch (e){
+            tray_loading_state = false;
+        }
         await initNodeMpv()
         await createNodeMpv();
         await initModifyMediaTag();
@@ -186,56 +191,68 @@ async function createWindow() {
     });
 
     /// db get
-    const ensureDirectoryExists = (dirPath: string) => {
-        return new Promise((resolve, reject) => {
-            if (!fs.existsSync(dirPath)) {
-                try {
-                    fs.mkdirSync(dirPath, { recursive: true });
-                    console.log(`目录 ${dirPath} 已创建`);
-                    resolve();
-                } catch (err) {
-                    reject(err);
-                }
-            } else {
-                resolve();
-            }
-        });
-    };
-    const copyIfNotExists = (sourcePath: string, destPath: string) => {
-        return new Promise((resolve, reject) => {
-            ensureDirectoryExists(cDriveDbDir) // 确保目标文件夹存在
-                .then(() => {
-                    fs.access(destPath, fs.constants.F_OK, (err) => {
-                        if (err) {
-                            fs.copyFile(sourcePath, destPath, (copyErr) => {
-                                if (copyErr) {
-                                    reject(copyErr);
+    try {
+        navidrome_db = path.resolve('resources/navidrome.db');
+        nsmusics_db = path.resolve('resources/nsmusics.db');
+        if(process.platform === 'win32') {
+            const ensureDirectoryExists = (dirPath: string) => {
+                return new Promise((resolve, reject) => {
+                    if (!fs.existsSync(dirPath)) {
+                        try {
+                            fs.mkdirSync(dirPath, {recursive: true});
+                            console.log(`目录 ${dirPath} 已创建`);
+                            resolve();
+                        } catch (err) {
+                            reject(err);
+                        }
+                    } else {
+                        resolve();
+                    }
+                });
+            };
+            const copyIfNotExists = (sourcePath: string, destPath: string) => {
+                return new Promise((resolve, reject) => {
+                    ensureDirectoryExists(cDriveDbDir) // 确保目标文件夹存在
+                        .then(() => {
+                            fs.access(destPath, fs.constants.F_OK, (err) => {
+                                if (err) {
+                                    fs.copyFile(sourcePath, destPath, (copyErr) => {
+                                        if (copyErr) {
+                                            reject(copyErr);
+                                        } else {
+                                            resolve(destPath);
+                                        }
+                                    });
                                 } else {
                                     resolve(destPath);
                                 }
                             });
-                        } else {
-                            resolve(destPath);
-                        }
+                        })
+                        .catch((err) => {
+                            reject(err);
+                        });
+                });
+            };
+            await ensureDirectoryExists(cDriveDbDir) // 确保目标文件夹存在
+                .then(() => {
+                    Promise.all([
+                        copyIfNotExists(navidrome_db, cDriveDbPath_1).then((newPath) => navidrome_db = newPath),
+                        copyIfNotExists(nsmusics_db, cDriveDbPath_2).then((newPath) => nsmusics_db = newPath)
+                    ]).catch((err) => {
+                        console.error('复制文件时出错:', err);
                     });
                 })
                 .catch((err) => {
-                    reject(err);
+                    console.error('创建目录时出错:', err);
                 });
-        });
-    };
-    ensureDirectoryExists(cDriveDbDir) // 确保目标文件夹存在
-        .then(() => {
-            Promise.all([
-                copyIfNotExists(navidrome_db, cDriveDbPath_1).then((newPath) => navidrome_db = newPath),
-                copyIfNotExists(nsmusics_db, cDriveDbPath_2).then((newPath) => nsmusics_db = newPath)
-            ]).catch((err) => {
-                console.error('复制文件时出错:', err);
-            });
-        })
-        .catch((err) => {
-            console.error('创建目录时出错:', err);
-        });
+        }
+        else if(process.platform === 'darwin'){
+
+        }
+    }catch{
+        navidrome_db = path.resolve('resources/navidrome.db');
+        nsmusics_db = path.resolve('resources/nsmusics.db');
+    }
     ipc.handle('window-get-navidrome-db', async (event) => {
         try { return navidrome_db } catch { return '' }
     });
@@ -754,6 +771,7 @@ async function createWindow() {
 }
 
 /// electron-tray
+let tray_loading_state = false
 let tray_music_play = false
 let tray_music_order = 'playback-1'
 let tray_menu_label_music = 'NSMusicS | 九歌';
@@ -819,23 +837,29 @@ async function createTray(){
             {
                 label: String(tray_menu_label_prev),
                 click: () => {
-                    tray_menu_label_music_check_enter = true
-                    win.webContents.send("tray-music-prev", true);
+                    if(tray_loading_state) {
+                        tray_menu_label_music_check_enter = true
+                        win.webContents.send("tray-music-prev", true);
+                    }
                 },
                 icon: prevIcon
             },
             {
                 label: String(tray_menu_label_pause),
                 click: () => {
-                    win.webContents.send("tray-music-pause", tray_music_play);
+                    if(tray_loading_state) {
+                        win.webContents.send("tray-music-pause", tray_music_play);
+                    }
                 },
                 icon: pauseIcon
             },
             {
                 label: String(tray_menu_label_next),
                 click: () => {
-                    tray_menu_label_music_check_enter = true
-                    win.webContents.send("tray-music-next", true);
+                    if(tray_loading_state) {
+                        tray_menu_label_music_check_enter = true
+                        win.webContents.send("tray-music-next", true);
+                    }
                 },
                 icon: nextIcon
             },
@@ -847,36 +871,44 @@ async function createTray(){
                     {
                         label: String(tray_menu_label_order1),
                         click: () => {
-                            tray_template[6].icon = order1Icon;
-                            tray_music_order = 'playback-1'
-                            win.webContents.send("tray-music-order", tray_music_order);
+                            if(tray_loading_state) {
+                                tray_template[6].icon = order1Icon;
+                                tray_music_order = 'playback-1'
+                                win.webContents.send("tray-music-order", tray_music_order);
+                            }
                         },
                         icon: order1Icon
                     },
                     {
                         label: String(tray_menu_label_order2),
                         click: () => {
-                            tray_template[6].icon = order2Icon;
-                            tray_music_order = 'playback-2'
-                            win.webContents.send("tray-music-order", tray_music_order);
+                            if(tray_loading_state) {
+                                tray_template[6].icon = order2Icon;
+                                tray_music_order = 'playback-2'
+                                win.webContents.send("tray-music-order", tray_music_order);
+                            }
                         },
                         icon: order2Icon
                     },
                     {
                         label: String(tray_menu_label_order3),
                         click: () => {
-                            tray_template[6].icon = order3Icon;
-                            tray_music_order = 'playback-3'
-                            win.webContents.send("tray-music-order", tray_music_order);
+                            if(tray_loading_state) {
+                                tray_template[6].icon = order3Icon;
+                                tray_music_order = 'playback-3'
+                                win.webContents.send("tray-music-order", tray_music_order);
+                            }
                         },
                         icon: order3Icon
                     },
                     {
                         label: String(tray_menu_label_order4),
                         click: () => {
-                            tray_template[6].icon = order4Icon;
-                            tray_music_order = 'playback-4'
-                            win.webContents.send("tray-music-order", tray_music_order);
+                            if(tray_loading_state) {
+                                tray_template[6].icon = order4Icon;
+                                tray_music_order = 'playback-4'
+                                win.webContents.send("tray-music-order", tray_music_order);
+                            }
                         },
                         icon: order4Icon
                     }
@@ -952,21 +984,25 @@ async function createTray(){
         tray_music_order = String(order)
     });
     ipc.handle('i18n-tray-label-menu', async (event,i18n_menu_label) => {
-        tray_menu_label_play = String(i18n_menu_label[0])
-        tray_menu_label_pause = String(i18n_menu_label[1])
-        tray_menu_label_prev = String(i18n_menu_label[2])
-        tray_menu_label_next = String(i18n_menu_label[3])
-        tray_menu_label_lyric = String(i18n_menu_label[4])
-        tray_menu_label_shut = String(i18n_menu_label[5])
-        tray_menu_label_order1 = String(i18n_menu_label[6])
-        tray_menu_label_order2 = String(i18n_menu_label[7])
-        tray_menu_label_order3 = String(i18n_menu_label[8])
-        tray_menu_label_order4 = String(i18n_menu_label[9])
+        try {
+            tray_menu_label_play = String(i18n_menu_label[0])
+            tray_menu_label_pause = String(i18n_menu_label[1])
+            tray_menu_label_prev = String(i18n_menu_label[2])
+            tray_menu_label_next = String(i18n_menu_label[3])
+            tray_menu_label_lyric = String(i18n_menu_label[4])
+            tray_menu_label_shut = String(i18n_menu_label[5])
+            tray_menu_label_order1 = String(i18n_menu_label[6])
+            tray_menu_label_order2 = String(i18n_menu_label[7])
+            tray_menu_label_order3 = String(i18n_menu_label[8])
+            tray_menu_label_order4 = String(i18n_menu_label[9])
 
-        get_tray_Icon()
-        tray_template = get_tray_template();
-        trayContextMenu.clear()
-        trayContextMenu = Menu.buildFromTemplate(tray_template);
+            get_tray_Icon()
+            tray_template = get_tray_template();
+            trayContextMenu.clear()
+            trayContextMenu = Menu.buildFromTemplate(tray_template);
+        }catch (e){
+            console.error(e);
+        }
     });
 }
 
@@ -977,14 +1013,25 @@ let currentVolume = 0;
 let currentParameters = null
 let isPlaying = false;
 async function initNodeMpv(){
-    mpv = new mpvAPI(
-        {
-            audio_only: true,
-            auto_restart: true,
-            binary: path.resolve("resources/mpv-x86_64-20240623/mpv.exe"),
-            debug: true,
-            verbose: true
-        });
+    if(process.platform === 'win32') {
+        mpv = new mpvAPI(
+            {
+                audio_only: true,
+                auto_restart: true,
+                binary: path.resolve("resources/mpv-x86_64-20240623/mpv.exe"),
+                debug: true,
+                verbose: true
+            });
+    }else if(process.platform === 'darwin') {
+        mpv = new mpvAPI(
+            {
+                audio_only: true,
+                auto_restart: true,
+                binary: path.resolve("resources/mpv-0.39.0/mpv.app/Contents/MacOS/mpv"),
+                debug: true,
+                verbose: true
+            });
+    }
     await mpv.start();
     await mpv.pause();
     mpv.on('stopped', () => {
@@ -1001,8 +1048,10 @@ async function createNodeMpv(){
             if (mpv.isRunning()) {
                 await mpv.pause();
                 isPlaying = false;
-                tray_music_play = false;
-                win.webContents.send("tray-music-pause", tray_music_play);
+                if(tray_loading_state) {
+                    tray_music_play = false;
+                    win.webContents.send("tray-music-pause", tray_music_play);
+                }
                 ///
                 ///
                 await mpv.quit();
