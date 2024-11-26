@@ -20,11 +20,12 @@ export class Audio_howler {
             if (this.howl) {
                 this.howl.play();
                 this.isPlaying = true;
-                await ipcRenderer.invoke('i18n-tray-music-pause', true)
             }
-        }catch{
-            await ipcRenderer.invoke('i18n-tray-music-pause', false)
-        }
+        }catch{  }
+
+        try {
+            await ipcRenderer.invoke('i18n-tray-music-pause', true)
+        }catch{  }
     }
     async pause() {
         try {
@@ -34,9 +35,11 @@ export class Audio_howler {
             }
         }catch{
 
-        }finally {
-            await ipcRenderer.invoke('i18n-tray-music-pause', false)
         }
+
+        try {
+            await ipcRenderer.invoke('i18n-tray-music-pause', false)
+        }catch{  }
     }
     getDuration() {
         if (this.howl) {

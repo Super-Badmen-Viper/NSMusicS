@@ -310,7 +310,7 @@ const Init_Audio_Player = async () => {
     }
     else{
       store_player_audio_info.this_audio_is_playing = false
-      store_player_audio_logic.player.isPlaying = false
+      store_player_audio_logic.player.isPlaying = false;
       if(store_player_audio_logic.player_select === 'mpv'){
         await ipcRenderer.invoke('mpv-startFadeOut', store_player_audio_logic.play_volume)
       }

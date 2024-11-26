@@ -5,6 +5,7 @@ import { Player_Configs_of_UI } from '@/models/app_Configs/class_Player_Configs_
 import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_player_appearance} from "@/store/player/store_player_appearance";
+const path = require('path');
 
 export class Class_Get_System_Configs_Read {
     public app_Configs = ref(
@@ -105,7 +106,11 @@ export class Class_Get_System_Configs_Read {
 
     constructor() {
         let db_navidrome:any = null;
-        db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+        try {
+            db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+        }catch{
+            db_navidrome = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+        }
         db_navidrome.pragma('journal_mode = WAL');
         try {
             db_navidrome.exec('BEGIN');
@@ -124,7 +129,11 @@ export class Class_Get_System_Configs_Read {
         }
 
         let db:any = null;
-        db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+        try {
+            db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+        }catch{
+            db = require('better-sqlite3')(path.resolve('resources/nsmusics.db'));
+        }
         db.pragma('journal_mode = WAL');
         /// Modify user configuration
         try {
