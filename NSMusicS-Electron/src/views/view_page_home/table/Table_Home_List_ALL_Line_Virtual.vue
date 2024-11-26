@@ -69,7 +69,7 @@ const startTimer = () => {
     bool_watch = true;
   }, 1000);
 };
-const stopWatching_collapsed_width = watch(() => store_app_configs_info.player_view_left_menu_collapsed, (newValue, oldValue) => {
+const stopWatching_collapsed_width = watch(() => store_app_configs_info.app_view_left_menu_collapsed, (newValue, oldValue) => {
   updateGridItems();
 });
 const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
@@ -80,7 +80,7 @@ const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window
   }
 });
 const updateGridItems = () => {
-  if (store_app_configs_info.player_view_left_menu_collapsed == true) {
+  if (store_app_configs_info.app_view_left_menu_collapsed == true) {
     collapsed_width.value = 145;
     item_album.value = 190;
     item_album_image.value = item_album.value - 20;

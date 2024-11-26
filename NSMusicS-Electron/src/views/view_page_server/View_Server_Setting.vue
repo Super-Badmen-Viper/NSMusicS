@@ -1,15 +1,21 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
+<script setup lang="ts">
+import { onMounted } from 'vue';
+import View_Server_Setting from './table/Table_Server_Setting_Line_Virtual.vue'
+import {store_router_data_info} from "@/store/router/store_router_data_info";
 
-export default defineComponent({
-name: "View_Server_Setting.vue"
-})
+onMounted(async () => {
+  store_router_data_info.router_select = 'View_Server_Setting'
+});
 </script>
-
 <template>
-  $END$
+  <div class="view_show">
+    <View_Server_Setting/>
+  </div>
 </template>
 
-<style scoped>
-
+<style>
+.view_show {
+  width: 100vw;
+  height: calc(100vh - 200px);
+}
 </style>

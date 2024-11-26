@@ -14,7 +14,7 @@ const router = createRouter({
     {
       path: '/View_Menu_AppSetting',
       name: 'View_Menu_AppSetting',
-      component: () => import('../views/view_page_menu/View_Menu_AppSetting.vue'),// '../views/view_page_menu/View_Menu_AppSetting.vue'
+      component: () => import('../views/view_page_setting/View_Menu_AppSetting.vue'),
       meta: {
         cleanup: true
       }
@@ -39,6 +39,14 @@ const router = createRouter({
       path: '/View_Artist_List_ALL',
       name: 'View_Artist_List_ALL',
       component: () => import('../views/view_page_artist/View_Artist_List_ALL.vue'),
+      meta: {
+        cleanup: true
+      }
+    },
+    {
+      path: '/View_Server_Setting',
+      name: 'View_Server_Setting',
+      component: () => import('../views/view_page_server/View_Server_Setting.vue'),
       meta: {
         cleanup: true
       }

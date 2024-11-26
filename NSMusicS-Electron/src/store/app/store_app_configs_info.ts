@@ -25,24 +25,26 @@ export const store_app_configs_info = reactive({
     navidrome_db: 'C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db',
     nsmusics_db: 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db',
 
-    menu_view_menuOptions: [],
-    menu_view_bar_show: false,
-    menu_view_left_menu_select_activeKey: '',
+    menuOptions_selectd_model_1: true,
+    menuOptions_selectd_model_2: true,
+    menuOptions_selectd_model_3: true,
+    menuOptions_selectd_model_4: true,
 
-    player_view_menuOptions: [],
-    player_view_bar_show: true,
-    player_view_left_menu_collapsed: true,
-    player_view_left_menu_select_activeKey: '',
+    app_view_menuOptions: [],
+    app_view_bar_show: true,
+    app_view_left_menu_collapsed: true,
+    app_view_left_menu_select_activeKey: '',
 
     menu_app_setting_select_tab_name: 'tab_pane_1',
+    server_setting_select_tab_name: 'tab_pane_1',
 });
 watch(() => store_app_configs_info.lang, (newValue) => {
     console.log(newValue)
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
-watch(() => store_app_configs_info.player_view_left_menu_select_activeKey, (newValue) => {
+watch(() => store_app_configs_info.app_view_left_menu_select_activeKey, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
-watch(() => store_app_configs_info.player_view_left_menu_collapsed, (newValue) => {
+watch(() => store_app_configs_info.app_view_left_menu_collapsed, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });

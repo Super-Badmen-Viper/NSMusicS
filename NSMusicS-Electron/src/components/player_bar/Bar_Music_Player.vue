@@ -717,8 +717,8 @@ onBeforeUnmount(() => {
         class="layout_distribution_3"
         style="transition: margin 0.4s;"
         :style="{
-        marginLeft: store_player_appearance.player_show ? '0px' : (store_app_configs_info.player_view_left_menu_collapsed ? '72px' : '166px'),
-        width: store_player_appearance.player_show ? '100vw' : (store_app_configs_info.player_view_left_menu_collapsed ? 'calc(100vw - 72px)' : 'calc(100vw - 167px)'),
+        marginLeft: store_player_appearance.player_show ? '0px' : (store_app_configs_info.app_view_left_menu_collapsed ? '72px' : '166px'),
+        width: store_player_appearance.player_show ? '100vw' : (store_app_configs_info.app_view_left_menu_collapsed ? 'calc(100vw - 72px)' : 'calc(100vw - 167px)'),
       }">
       <div class="gird_Left">
         <div class="button_open_player_view">

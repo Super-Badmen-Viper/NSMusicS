@@ -102,6 +102,8 @@ npm run build-only # Package into the current system_configs's software package 
   - [Naive UI](https://github.com/tusen-ai/naive-ui)
   - [feishin](https://github.com/jeffvli/feishin)
   - [navidrome](https://github.com/navidrome/navidrome)
+  - [jellyfin](https://github.com/jellyfin/jellyfin)
+  - [emby](https://github.com/MediaBrowser/Emby)
   - .......
 - NSMusicS Web ImageResource Thanks:
   - <a href="https://www.freepik.com/free-photo/black-retro-vinyl-record-design-element_12189639.htm#fromView=search&page=5&position=9&uuid=c046ed77-1d8d-4858-b3d8-e8a96afa3d8d">Image by rawpixel.com on Freepik</a>

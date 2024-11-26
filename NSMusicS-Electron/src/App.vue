@@ -44,7 +44,6 @@
   import {store_playlist_appearance} from '@/store/view/playlist/store_playlist_appearance'
   import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info"
   import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic"
-  import {store_server_users} from '@/store/server/store_server_users'
   import {store_server_user_model} from '@/store/server/store_server_user_model'
   import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
   import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic"
@@ -86,28 +85,44 @@
   function renderRouterLink (nameValue: any, defaultValue: any){
     return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
   }
-  store_app_configs_info.player_view_menuOptions = [
-    {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.setting'))), key: 'View_Menu_AppSetting', icon: renderIcon(Settings48Regular),},
-    {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-      
-    {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('common.home'))),key: 'View_Home_MusicLibrary_Browse',icon: renderIcon(Home28Regular),},
-    {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'View_Album_List_ALL',icon: renderIcon(AlbumFilled)},
-    {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'View_Song_List_ALL',icon: renderIcon(MusicNoteRound)},
-    {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'View_Artist_List_ALL',icon: renderIcon(UserAvatarFilledAlt)},
-    {label: computed(() => renderRouterLink('View_Updateing',t('entity.genre_other'))),key: 'View_Genre_List_ALL',icon: renderIcon(Flag16Regular)},
-
-    {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    {label: computed(() => renderRouterLink('View_Updateing',t('page.appMenu.manageServers'))),key: 'View_NSMusicS_Server',icon: renderIcon(BareMetalServer)},
-    {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.view_page.mediaLibrary'))),key: 'View_Download_List_ALL',icon: renderIcon(MediaCast)},
-
-    // {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    // {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.guessLike'))),key: 'View_Updateing',icon: renderIcon(DocumentHeart20Regular)},
-    // {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.karaoke'))),key: 'View_Updateing',icon: renderIcon(SlideMicrophone32Regular)},
-    // {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.identifySong'))),key: 'View_Updateing',icon: renderIcon(Hearing)},
-    // {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'View_Updateing',icon: renderIcon(QueueMusicRound)},
-    // {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'View_Updateing',icon: renderIcon(lyric)},
-    // {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'View_Updateing',icon: renderIcon(PeopleCommunity16Regular)},
-  ]
+  function create_menuOptions_appBar(){
+    store_app_configs_info.app_view_menuOptions = []
+    store_app_configs_info.app_view_menuOptions.push(
+        {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.setting'))), key: 'View_Menu_AppSetting', icon: renderIcon(Settings48Regular),},
+        {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+    )
+    store_app_configs_info.app_view_menuOptions.push(
+        {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('common.home'))),key: 'View_Home_MusicLibrary_Browse',icon: renderIcon(Home28Regular),},
+        {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'View_Album_List_ALL',icon: renderIcon(AlbumFilled)},
+        {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'View_Song_List_ALL',icon: renderIcon(MusicNoteRound)},
+        {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'View_Artist_List_ALL',icon: renderIcon(UserAvatarFilledAlt)},
+        // {label: computed(() => renderRouterLink('View_Updateing',t('entity.genre_other'))),key: 'View_Genre_List_ALL',icon: renderIcon(Flag16Regular)},
+    )
+    if(store_app_configs_info.menuOptions_selectd_model_1)
+      store_app_configs_info.app_view_menuOptions.push(
+          {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+          {label: computed(() => renderRouterLink('View_Server_Setting',t('page.appMenu.manageServers'))),key: 'View_Server_Setting',icon: renderIcon(BareMetalServer)},
+          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.view_page.mediaLibrary'))),key: 'View_Download_List_ALL',icon: renderIcon(MediaCast)},
+      )
+    if(store_app_configs_info.menuOptions_selectd_model_2)
+      store_app_configs_info.app_view_menuOptions.push(
+          {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.karaoke'))),key: 'karaoke',icon: renderIcon(SlideMicrophone32Regular)},
+      )
+    if(store_app_configs_info.menuOptions_selectd_model_3)
+      store_app_configs_info.app_view_menuOptions.push(
+          {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.guessLike'))),key: 'View_Updateing',icon: renderIcon(DocumentHeart20Regular)},
+          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.identifySong'))),key: 'identifySong',icon: renderIcon(Hearing)},
+          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'scoreGeneration',icon: renderIcon(QueueMusicRound)},
+          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'lyricsProduction',icon: renderIcon(lyric)},
+      )
+    if(store_app_configs_info.menuOptions_selectd_model_4)
+      store_app_configs_info.app_view_menuOptions.push(
+          {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'musicCommunity',icon: renderIcon(PeopleCommunity16Regular)},
+      )
+  }
 
   ////// player view
   async function get_playerbar_to_switch_playerview(value: any) {
@@ -118,7 +133,7 @@
     if (value === 0) {
       store_player_appearance.player_show = true;
       if (store_router_data_logic.clear_Memory_Model) {
-        store_app_configs_info.player_view_bar_show = false;
+        store_app_configs_info.app_view_bar_show = false;
       }
     }
     setTimeout(() => {
@@ -130,7 +145,7 @@
           store_app_configs_info.theme_app = store_app_configs_info.theme;
           store_player_appearance.player_show = false;
           if (store_router_data_logic.clear_Memory_Model) {
-            store_app_configs_info.player_view_bar_show = true;
+            store_app_configs_info.app_view_bar_show = true;
           }
         }
       }, 200);
@@ -173,8 +188,12 @@
         fetchDataIfNeeded('artist');
         store_router_data_info.router_select_model_artist = true;
       },
+      'View_Server_Setting': () => {
+        clearFilesIfNeeded();
+        store_router_data_info.router_select_model_server = true;
+      },
     };
-    const selectedAction = menuActions[store_app_configs_info.player_view_left_menu_select_activeKey];
+    const selectedAction = menuActions[store_app_configs_info.app_view_left_menu_select_activeKey];
     if (selectedAction) {
       await selectedAction();
     }
@@ -247,8 +266,11 @@
         store_router_data_info.router_select_model_artist = true
         store_router_data_info.router_name = to.name
         Init_page_artistlists_statistic_Data()
+      }else if(to.name === 'View_Server_Setting'){
+        store_router_data_info.router_select_model_server = true
+        store_router_data_info.router_name = to.name
       }
-      store_app_configs_info.player_view_left_menu_select_activeKey = to.name
+      store_app_configs_info.app_view_left_menu_select_activeKey = to.name
       console.log(to.name)
       store_app_configs_logic_save.save_system_config_of_View_Router_History()
       ///
@@ -594,6 +616,9 @@
     console.log(store_app_configs_info.nsmusics_db)
 
     await store_app_configs_logic_load.load_app_config()
+
+    create_menuOptions_appBar()
+
     await ipcRenderer.invoke('i18n-tray-label-menu',
         [
           t('player.play'),
@@ -646,17 +671,17 @@
             :collapsed-width="66"
             :width="160"
             :collapsed="true"
-            @collapse="store_app_configs_info.player_view_left_menu_collapsed = true"
-            @expand="store_app_configs_info.player_view_left_menu_collapsed = false">
+            @collapse="store_app_configs_info.app_view_left_menu_collapsed = true"
+            @expand="store_app_configs_info.app_view_left_menu_collapsed = false">
             <n-flex vertical justify="center" style="height: 100vh">
               <div></div>
               <n-menu
-                v-if="store_app_configs_info.player_view_bar_show"
-                v-model:value="store_app_configs_info.player_view_left_menu_select_activeKey"
-                :collapsed="store_app_configs_info.player_view_left_menu_collapsed"
+                v-if="store_app_configs_info.app_view_bar_show"
+                v-model:value="store_app_configs_info.app_view_left_menu_select_activeKey"
+                :collapsed="store_app_configs_info.app_view_left_menu_collapsed"
                 :collapsed-width="66"
                 :collapsed-icon-size="22"
-                :options="store_app_configs_info.player_view_menuOptions"/>
+                :options="store_app_configs_info.app_view_menuOptions"/>
               <div></div>
             </n-flex>
           </n-layout-sider>
@@ -683,6 +708,9 @@
             <!--Artist View-->
             <RouterView class="view_show_table"
                         v-else-if="store_router_data_info.router_select_model_artist"></RouterView>
+            <!--Server View-->
+            <RouterView class="view_show_table"
+                        v-else-if="store_router_data_info.router_select_model_server"></RouterView>
             <!--Top Bar-->
             <div class="bar_top_setapp" style="background-color: transparent" @click="drawer_close_of_player_bar">
               <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"

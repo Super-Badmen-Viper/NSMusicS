@@ -31,6 +31,7 @@ export const store_router_data_info = reactive({
     router_select_model_media: false,
     router_select_model_album: false,
     router_select_model_artist: false,
+    router_select_model_server: false,
 });
 watch(() => store_router_data_info.router_select, async (newValue) => {
     if(!store_playlist_appearance.playlist_show) {
@@ -55,6 +56,6 @@ watch(() => store_router_data_info.router_select, async (newValue) => {
     }
 });
 watch(() => store_router_data_info.router_name, async (newValue) => {
-    store_app_configs_info.player_view_left_menu_select_activeKey = newValue
+    store_app_configs_info.app_view_left_menu_select_activeKey = newValue
 });
 
