@@ -48,6 +48,9 @@
 | NSMusicS_For_Audio   |<font color="#00dd00">will developed</font>  | pytorch,py,jupyter,matlab ![My Skills](https://go-skill-icons.vercel.app/api/icons?i=pytorch,py,jupyter,matlab)  | [Xiang Cheng](https://github.com/Super-Badmen-Viper)  |    Windows10++<br>Linux<br>Docker   | A-GPL 3.0 | Open source / Prohibition of commercial use | 
 | NSMusicS_For_KG   |<font color="#00dd00">will developed</font> |  NebulaGraph / Neo4j <image width="200" src="https://www-cdn.nebula-graph.io/nebula-website-5.0/images/logo.png"/>      | [Xiang Cheng](https://github.com/Super-Badmen-Viper)   | Windows10++<br>Linux<br>Docker | A-GPL 3.0 | Open source / Prohibition of commercial use | 
 
+## Architecture Design | 架构设计
+<img src="doc/NSMusicS-GO：服务端.png" height="460">   <img src="doc/NSMusicS：客户端.png" height="460"> 
+
 ## sponsor
 爱发电：https://afdian.com/a/fu_zi_qian  
 <img src="doc/sponsor.png" height="160">   <img src="doc/spomsor_weichat.jpg" height="160">   <img src="doc/spomsor_qq.jpg" height="160">
@@ -99,6 +102,8 @@ npm run build-only # Package into the current system_configs's software package 
   - [Naive UI](https://github.com/tusen-ai/naive-ui)
   - [feishin](https://github.com/jeffvli/feishin)
   - [navidrome](https://github.com/navidrome/navidrome)
+  - [jellyfin](https://github.com/jellyfin/jellyfin)
+  - [emby](https://github.com/MediaBrowser/Emby)
   - .......
 - NSMusicS Web ImageResource Thanks:
   - <a href="https://www.freepik.com/free-photo/black-retro-vinyl-record-design-element_12189639.htm#fromView=search&page=5&position=9&uuid=c046ed77-1d8d-4858-b3d8-e8a96afa3d8d">Image by rawpixel.com on Freepik</a>

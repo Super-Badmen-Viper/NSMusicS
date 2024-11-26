@@ -155,6 +155,9 @@ watch(() => store_player_tag_modify.player_show_tag_modify, async (newValue) => 
                             album.id
                             ===
                             store_player_tag_modify.player_current_album_id);
+                const nameStr =
+                    Array.isArray(item.name) ?
+                        item.name.join('、') : item.name || '';
                 const albumArtistsStr =
                     Array.isArray(item.album_artist) ?
                         item.album_artist.join('、') : item.album_artist || '';
@@ -165,7 +168,7 @@ watch(() => store_player_tag_modify.player_show_tag_modify, async (newValue) => 
                     item.genre.map(genre => genre.name).join('、') :
                     item.genre || '';
                 store_player_tag_modify.player_current_album_tag = {
-                    title: item?.name,
+                    title: nameStr,
                     albumArtists: albumArtistsStr,
                     artist: artistStr,
                     year: item?.min_year,

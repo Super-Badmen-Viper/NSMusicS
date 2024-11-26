@@ -69,7 +69,7 @@ const startTimer = () => {
     bool_watch = true;
   }, 1000);
 };
-const stopWatching_collapsed_width = watch(() => store_app_configs_info.app_left_menu_collapsed, (newValue, oldValue) => {
+const stopWatching_collapsed_width = watch(() => store_app_configs_info.app_view_left_menu_collapsed, (newValue, oldValue) => {
   updateGridItems();
 });
 const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window_innerWidth, (newValue, oldValue) => {
@@ -80,7 +80,7 @@ const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window
   }
 });
 const updateGridItems = () => {
-  if (store_app_configs_info.app_left_menu_collapsed == true) {
+  if (store_app_configs_info.app_view_left_menu_collapsed == true) {
     collapsed_width.value = 145;
     item_album.value = 190;
     item_album_image.value = item_album.value - 20;
@@ -111,6 +111,7 @@ const dynamicScroller_recently_played = ref(null as any);
 ////// go to media_view
 const Open_this_album_SongList_click = (album_id:string) => {
   if(store_server_user_model.model_server_type_of_web){
+    store_player_appearance.player_mode_of_medialist_from_external_import = false
     store_view_media_page_fetchData._album_id = album_id
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
     store_playlist_list_fetchData._album_id = album_id

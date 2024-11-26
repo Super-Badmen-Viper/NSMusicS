@@ -1080,16 +1080,18 @@ async function createNodeMpv(){
         tray_music_play = false
     });
     ipc.handle('mpv-get-duration', async (event) => {
-        if(isPlaying) {
-            try { return await mpv.getDuration() } catch {}
+        try {
+            return await mpv.getDuration()
+        } catch {
+            return -1
         }
-        return -1
     });
     ipc.handle('mpv-get-time-pos', async (event) => {
-        if(isPlaying) {
-            try { return await mpv.getTimePosition() } catch {}
+        try {
+            return await mpv.getTimePosition()
+        } catch {
+            return -1
         }
-        return -1
     });
     ipc.handle('mpv-set-time-pos', async (event,timePos) => {
         await mpv.resume();

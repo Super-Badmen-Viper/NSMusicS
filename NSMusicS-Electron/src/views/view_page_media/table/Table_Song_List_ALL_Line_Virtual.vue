@@ -425,16 +425,28 @@ let before_rating = false
 let after_rating = false;
 const handleItemClick_Rating = (id_rating: any) => {
   click_count = 0;
-  const [id, rating] = id_rating.split('-');
-  if(after_rating) {
-    store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, 0);
-    if (id === store_player_audio_info.this_audio_song_id){
-      store_player_audio_info.this_audio_song_rating = 0;
-    }
-  }else {
-    store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating);
-    if (id === store_player_audio_info.this_audio_song_id){
-      store_player_audio_info.this_audio_song_rating = rating;
+  const rating_item: Media_File | undefined =
+      store_view_media_page_info.media_Files_temporary.find(
+          (mediaFile: Media_File) =>
+              mediaFile.id
+              ===
+              store_playlist_list_info.playlist_Menu_Item_Id);
+  if(rating_item != undefined) {
+    const [id, rating] = id_rating.split('-');
+    if (after_rating) {
+      store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, 0);
+      if (id === store_player_audio_info.this_audio_song_id) {
+        store_player_audio_info.this_audio_song_rating = 0;
+      }
+      rating_item.rating = 0;
+      store_playlist_list_info.playlist_Menu_Item_Rating = 0;
+    } else {
+      store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating);
+      if (id === store_player_audio_info.this_audio_song_id) {
+        store_player_audio_info.this_audio_song_rating = rating;
+      }
+      rating_item.rating = rating
+      store_playlist_list_info.playlist_Menu_Item_Rating = rating;
     }
   }
 }
@@ -1069,7 +1081,11 @@ onBeforeUnmount(() => {
             :active="active"
             :data-index="index"
             :data-active="active"
-            v-contextmenu:contextmenu @contextmenu.prevent="store_playlist_list_info.playlist_Menu_Item_Id = item.id"
+            v-contextmenu:contextmenu
+            @contextmenu.prevent="
+              store_playlist_list_info.playlist_Menu_Item_Id = item.id;
+              store_playlist_list_info.playlist_Menu_Item_Rating = item.rating;
+            "
             class="message"
             :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
             @click="handleItemClick"
@@ -1121,29 +1137,7 @@ onBeforeUnmount(() => {
                   }"
                 >{{ item.album }}</span>
               </div>
-              <div style="margin-left: auto; margin-right: 0px; width: 240px; display: flex; flex-direction: row;">
-                <rate
-                  class="viaSlot"
-                  style="margin-left: 30px;margin-right: 20px;"
-                  :length="5"
-                  v-model="item.rating"
-                  @before-rate="(value) => {
-                    if(item.rating == 1){
-                      before_rating = true
-                    }
-                  }"
-                  @after-rate="(value) => {
-                    if(item.rating == 1 && before_rating == true){
-                      after_rating = true
-                      before_rating = false
-                    }
-                    handleItemClick_Rating(item.id + '-' + value);
-                    if (after_rating) {
-                      item.rating = 0
-                      after_rating = false
-                    }
-                  }"
-                />
+              <div style="margin-left: auto; margin-right: 0px; width: 40px; display: flex; flex-direction: row;">
                 <button
                   @click="handleItemClick_Favorite(item.id, item.favorite); item.favorite = !item.favorite;"
                   style="
@@ -1207,6 +1201,34 @@ onBeforeUnmount(() => {
         </v-contextmenu-item>
         <v-contextmenu-item @click="menu_item_edit_selected_media_tags">
           {{ $t('page.contextMenu.showDetails') }}
+        </v-contextmenu-item>
+        <v-contextmenu-divider />
+        <v-contextmenu-item>
+          <rate
+            class="viaSlot"
+            style="margin-left: -12px;margin-top: -12px;height: 16px;"
+            :length="5"
+            v-model="store_playlist_list_info.playlist_Menu_Item_Rating"
+            @before-rate="(value) => {
+              if(store_playlist_list_info.playlist_Menu_Item_Rating == 1){
+                before_rating = true
+              }
+            }"
+            @after-rate="(value) => {
+              if(store_playlist_list_info.playlist_Menu_Item_Rating == 1 && before_rating == true){
+                after_rating = true
+                before_rating = false
+              }
+              handleItemClick_Rating(store_playlist_list_info.playlist_Menu_Item_Id + '-' + value);
+              if (after_rating) {
+                if (store_playlist_list_info.playlist_Menu_Item_Rating === store_player_audio_info.this_audio_song_id){
+                  store_player_audio_info.this_audio_song_rating = 0;
+                }
+                store_playlist_list_info.playlist_Menu_Item_Rating = 0
+                after_rating = false
+              }
+            }"
+          />
         </v-contextmenu-item>
       </v-contextmenu>
     </div>
@@ -1397,7 +1419,7 @@ onBeforeUnmount(() => {
 .songlist_title{
   margin-left: 10px;
   text-align: left;
-  width: 286px;
+  width: 390px;
   font-size: 15px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
@@ -1409,7 +1431,7 @@ onBeforeUnmount(() => {
 .songlist_album{
   margin-left: 10px;
   text-align: left;
-  width: 246px;
+  width: 346px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
 .songlist_album :hover{

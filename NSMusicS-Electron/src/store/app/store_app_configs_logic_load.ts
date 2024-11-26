@@ -105,10 +105,19 @@ export const store_app_configs_logic_load = reactive({
             store_app_configs_info.theme_name = '' + system_Configs_Read.app_Configs.value['theme']
             store_app_configs_info.theme_auto_system = '' + system_Configs_Read.app_Configs.value['theme_auto_system'] === 'true'
             store_app_configs_info.lang = '' + system_Configs_Read.app_Configs.value['lang']
-            // store_app_configs_info.app_left_menu_collapsed = '' + system_Configs_Read.app_Configs.value['app_left_menu_collapsed'] === 'true'
-            store_app_configs_info.app_left_menu_collapsed = true
-            store_app_configs_info.selectd_props_app_sidebar = JSON.parse('' + system_Configs_Read.app_Configs.value['selectd_props_app_sidebar'])
-            this.handleUpdate_selectd_props_app_sidebar_Value(store_app_configs_info.selectd_props_app_sidebar)
+            // store_app_configs_info.app_view_left_menu_collapsed = '' + system_Configs_Read.app_Configs.value['app_view_left_menu_collapsed'] === 'true'
+            store_app_configs_info.app_view_left_menu_collapsed = true
+            store_app_configs_info.menuOptions_selectd_model_1 = '' + system_Configs_Read.app_Configs.value['menuOptions_selectd_model_1'] === 'true'
+            store_app_configs_info.menuOptions_selectd_model_2 = '' + system_Configs_Read.app_Configs.value['menuOptions_selectd_model_2'] === 'true'
+            store_app_configs_info.menuOptions_selectd_model_3 = '' + system_Configs_Read.app_Configs.value['menuOptions_selectd_model_3'] === 'true'
+            store_app_configs_info.menuOptions_selectd_model_4 = '' + system_Configs_Read.app_Configs.value['menuOptions_selectd_model_4'] === 'true'
+            if( '' + system_Configs_Read.app_Configs.value['menuOptions_selectd_model_1'] != 'true' &&
+                '' + system_Configs_Read.app_Configs.value['menuOptions_selectd_model_1'] != 'false'){
+                store_app_configs_info.menuOptions_selectd_model_1 = true
+                store_app_configs_info.menuOptions_selectd_model_2 = true
+                store_app_configs_info.menuOptions_selectd_model_3 = true
+                store_app_configs_info.menuOptions_selectd_model_4 = true
+            }
             store_view_media_page_logic.page_songlists_filter_year = Number('' + system_Configs_Read.app_Configs.value['page_songlists_filter_year'])
             /// library_Config
             store_server_user_model.library_path = '' + system_Configs_Read.library_Configs.value['library']
@@ -265,10 +274,10 @@ export const store_app_configs_logic_load = reactive({
 
         /// close
         store_router_data_logic.get_page_top_info()
-        store_app_configs_info.app_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_left_menu_select_activeKey']
+        store_app_configs_info.app_view_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_view_left_menu_select_activeKey']
         store_router_data_info.router_name = '' + system_Configs_Read.app_Configs.value['router_name']
         if(store_router_data_info.router_name === ''){
-            store_app_configs_info.app_left_menu_select_activeKey = 'View_Menu_AppSetting'
+            store_app_configs_info.app_view_left_menu_select_activeKey = 'View_Menu_AppSetting'
             store_router_data_info.router_name = 'View_Menu_AppSetting'
         }
         store_router_data_info.router.push(store_router_data_info.router_name)
@@ -280,7 +289,7 @@ export const store_app_configs_logic_load = reactive({
         }
     },
     handleUpdate_selectd_props_app_sidebar_Value(value: number[]){
-        let allMenuOptions = store_app_configs_info.menuOptions_appBar;
+        let allMenuOptions = store_app_configs_info.app_view_menuOptions;
         let removeFlags = new Array(allMenuOptions.length).fill(true);
         value.forEach(index => {
             if (index < allMenuOptions.length) {
@@ -294,9 +303,9 @@ export const store_app_configs_logic_load = reactive({
             removeFlags[8] = true;
         else
             removeFlags[8] = false;
-        let menuOptions_appBar = allMenuOptions.filter((option, index) => {
+        let app_view_menuOptions = allMenuOptions.filter((option, index) => {
             return !removeFlags[index];
         });
-        store_app_configs_info.menuOptions_appBar = menuOptions_appBar
+        store_app_configs_info.app_view_menuOptions = app_view_menuOptions
     }
 });

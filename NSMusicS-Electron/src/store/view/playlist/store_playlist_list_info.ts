@@ -13,6 +13,7 @@ export const store_playlist_list_info = reactive({
 
     playlist_DragSort_Model: false,
     playlist_Menu_Item_Id: '',
+    playlist_Menu_Item_Rating: 0,
     playlist_MediaFiles_temporary_Sort_Items: [],
     playlist_Sort_StartIndex: 0,
     playlist_Sort_EndIndex: 0,

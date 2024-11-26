@@ -7,18 +7,6 @@ export const store_app_configs_info = reactive({
 
     lang: 'en',
 
-    navidrome_db: 'C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db',
-    nsmusics_db: 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db',
-    
-    menuOptions_appBar: [],
-    menuOptions_appBar_show: true,
-
-    selectd_props_app_sidebar: ['2', '4', '5', '6', '7', '9', '10', '11', '12', '13', '14'],
-    app_left_menu_select_activeKey: '',
-    app_left_menu_collapsed: true,
-
-    menu_app_setting_select_tab_name: 'tab_pane_1',
-
     theme: null,
     theme_name: 'lightTheme',
     theme_app: null,
@@ -32,18 +20,31 @@ export const store_app_configs_info = reactive({
     version: '',
     version_updated: 0,
     version_update_address: '',
-    version_update_explain: ''
+    version_update_explain: '',
+
+    navidrome_db: 'C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db',
+    nsmusics_db: 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db',
+
+    menuOptions_selectd_model_1: true,
+    menuOptions_selectd_model_2: true,
+    menuOptions_selectd_model_3: true,
+    menuOptions_selectd_model_4: true,
+
+    app_view_menuOptions: [],
+    app_view_bar_show: true,
+    app_view_left_menu_collapsed: true,
+    app_view_left_menu_select_activeKey: '',
+
+    menu_app_setting_select_tab_name: 'tab_pane_1',
+    server_setting_select_tab_name: 'tab_pane_1',
 });
 watch(() => store_app_configs_info.lang, (newValue) => {
     console.log(newValue)
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
-watch(() => store_app_configs_info.app_left_menu_select_activeKey, (newValue) => {
+watch(() => store_app_configs_info.app_view_left_menu_select_activeKey, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
-watch(() => store_app_configs_info.app_left_menu_collapsed, (newValue) => {
-    store_app_configs_logic_save.save_system_config_of_App_Configs()
-});
-watch(() => store_app_configs_info.selectd_props_app_sidebar, (newValue) => {
+watch(() => store_app_configs_info.app_view_left_menu_collapsed, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
