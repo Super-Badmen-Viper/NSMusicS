@@ -22,7 +22,7 @@
     inheritLocale: true
   })
   const computed_i18n_Label_SidebarConfiguration_8 = computed(() => t('page.appMenu.manageServers'));
-  const computed_i18n_Label_SidebarConfiguration_9 = computed(() => t('nsmusics.view_page.mediaLibrary'));
+  const computed_i18n_Label_SidebarConfiguration_9 = computed(() => t('HeaderLibraries'));
   const computed_i18n_Label_SidebarConfiguration_10 = computed(() => t('nsmusics.siderbar_menu.karaoke'));
   const computed_i18n_Label_SidebarConfiguration_11 = computed(() => t('nsmusics.siderbar_menu.guessLike'));
   const computed_i18n_Label_SidebarConfiguration_12 = computed(() => t('nsmusics.siderbar_menu.identifySong'));
@@ -69,7 +69,7 @@
       store_app_configs_info.app_view_menuOptions.push(
           {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
           {label: computed(() => renderRouterLink('View_Server_Setting',t('page.appMenu.manageServers'))),key: 'View_Server_Setting',icon: renderIcon(BareMetalServer)},
-          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.view_page.mediaLibrary'))),key: 'View_Download_List_ALL',icon: renderIcon(MediaCast)},
+          {label: computed(() => renderRouterLink('View_Updateing',t('HeaderLibraries'))),key: 'View_Download_List_ALL',icon: renderIcon(MediaCast)},
       )
     if(store_app_configs_info.menuOptions_selectd_model_2)
       store_app_configs_info.app_view_menuOptions.push(
@@ -555,7 +555,7 @@
             <!-- 服务器 -->
             <n-tab-pane name="tab_pane_1">
               <template #tab>
-                {{ $t('nsmusics.view_page.mediaLibrary') }}
+                {{ $t('HeaderLibraries') }}
               </template>
               <n-space
                   style="overflow-y: auto;margin-top: 9px;">
@@ -1155,11 +1155,11 @@
                         </div>
                       </n-space>
                     </n-space>
-                    <n-grid :y-gap="8" :cols="4">
-                      <n-gi><n-checkbox v-model:checked="store_app_configs_info.menuOptions_selectd_model_1" :label="computed_i18n_Label_SidebarConfiguration_8" /></n-gi>
-                      <n-gi><n-checkbox v-model:checked="store_app_configs_info.menuOptions_selectd_model_1" :label="computed_i18n_Label_SidebarConfiguration_9" /></n-gi>
-                      <n-gi></n-gi>
-                      <n-gi></n-gi>
+                    <n-grid :y-gap="8" :cols="4" style="margin-left: 2px;">
+                      <n-gi v-if="false"><n-checkbox v-model:checked="store_app_configs_info.menuOptions_selectd_model_1" :label="computed_i18n_Label_SidebarConfiguration_8" /></n-gi>
+                      <n-gi v-if="false"><n-checkbox v-model:checked="store_app_configs_info.menuOptions_selectd_model_1" :label="computed_i18n_Label_SidebarConfiguration_9" /></n-gi>
+                      <n-gi v-if="false"></n-gi>
+                      <n-gi v-if="false"></n-gi>
                       <n-gi><n-checkbox v-model:checked="store_app_configs_info.menuOptions_selectd_model_2" :label="computed_i18n_Label_SidebarConfiguration_10" /></n-gi>
                       <n-gi></n-gi>
                       <n-gi></n-gi>
