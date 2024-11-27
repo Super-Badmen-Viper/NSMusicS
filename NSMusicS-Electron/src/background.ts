@@ -14,7 +14,8 @@ let win = null;
 /// app
 if (!app.requestSingleInstanceLock()) {
     app.quit();
-} else {
+}
+else {
     app.on('ready', async () => {
         globalShortcut.register('CommandOrControl+Shift+I', () => {
             if (win.webContents.isDevToolsOpened()) {
@@ -123,7 +124,8 @@ async function createWindow() {
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
     if (process.argv[2]) {
         win.loadURL(process.argv[2])
-    } else {
+    }
+    else {
         win.loadFile('index.html')
     }
     /// electron
@@ -269,7 +271,8 @@ async function createWindow() {
         else if(process.platform === 'darwin'){
 
         }
-    }catch{
+    }
+    catch{
         navidrome_db = path.resolve('resources/navidrome.db');
         nsmusics_db = path.resolve('resources/nsmusics.db');
     }
@@ -281,6 +284,46 @@ async function createWindow() {
     });
 
     /// local model of data
+    ipc.handle('window-get-imagePath', (event, imagePath) => {
+        try {
+            // clear file://
+            const filePath = decodeURIComponent(imagePath.replace(/^file:\/\//, '').replace(/^\/+/, ''));
+            if (fs.existsSync(filePath)) {
+                return filePath;
+            }
+
+            const commonImageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg'];
+            const dir = path.dirname(filePath);
+            const baseName = path.basename(filePath, path.extname(filePath));
+            for (const ext of commonImageExtensions) {
+                const newPath = path.join(dir, `${baseName}${ext}`);
+                if (fs.existsSync(newPath)) {
+                    return newPath;
+                }
+            }
+
+            const coverFiles = ['cover.jpg', 'cover.png', 'cover.jpeg', 'cover.gif', 'cover.bmp', 'cover.svg'];
+            for (const coverFile of coverFiles) {
+                const coverPath = path.join(dir, coverFile);
+                if (fs.existsSync(coverPath)) {
+                    return coverPath;
+                }
+            }
+
+            const files = fs.readdirSync(dir);
+            for (const file of files) {
+                const filePath = path.join(dir, file);
+                const stat = fs.statSync(filePath);
+                if (stat.isFile() && commonImageExtensions.some(ext => file.toLowerCase().endsWith(ext))) {
+                    return filePath;
+                }
+            }
+            return '';
+        } catch (error) {
+            console.error('Error handling window-get-imagePath:', error);
+            return '';
+        }
+    });
     ipc.handle('library-select-folder', async (event) => {
         const { dialog } = require('electron');
         const result = await dialog.showOpenDialog({

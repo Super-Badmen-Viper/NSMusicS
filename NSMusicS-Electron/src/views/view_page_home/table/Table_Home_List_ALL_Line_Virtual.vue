@@ -38,19 +38,19 @@ const gridItems = ref(5);
 const itemSecondarySize = ref(185);
 const collapsed_width = ref<number>(1090);
 const path = require('path')
-const handleImageError = (event: any) => {
+const handleImageError = async (event) => {
   const originalSrc = event.target.src;
-  const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
-  const img = new Image();
-  img.onload = null;
-  img.onerror = null;
-  img.onload = () => {
-    event.target.src = pngSrc;
-  };
-  img.onerror = () => {
-    event.target.src = path.resolve('resources/img/error_album.jpg');
-  };
-  img.src = pngSrc;
+  try {
+    const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
+    if (newImagePath) {
+      event.target.src = newImagePath;
+    } else {
+      event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+    }
+  } catch (error) {
+    console.error('Error handling image error:', error);
+    event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+  }
 };
 const os = require('os');
 function getAssetImage(firstImage: string) {
@@ -184,6 +184,7 @@ import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+const { ipcRenderer } = require('electron');
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()
@@ -312,13 +313,11 @@ onBeforeUnmount(() => {
         </div>
       </div>
       <n-space style="margin-left: 0px;margin-top: calc(126px - 340px);">
-        <n-image
-          width="180px" height="180px" object-fit="contain"
-          style="border-radius: 6px;border: 1.5px solid #FFFFFF20;"
+        <img
           :src="getAssetImage(store_view_home_page_info.home_selected_top_album?.medium_image_url)"
-          fallback-src="../../../resources/img/error_album.jpg"
-          :show-toolbar="false"
-        />
+          @error="handleImageError"
+          style="objectFit: cover; objectPosition: center;height: 180px;border-radius: 6px;border: 1.5px solid #FFFFFF20;"
+          :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
         <n-space vertical
           style="margin-top: -2px;margin-left: 12px;"
           :style="{

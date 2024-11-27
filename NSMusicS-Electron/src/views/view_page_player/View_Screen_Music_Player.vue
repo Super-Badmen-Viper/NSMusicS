@@ -20,17 +20,19 @@
         return new URL(firstImage, import.meta.url).href;
   }
   const path = require('path')
-  const handleImageError = (event: any) => {
+  const handleImageError = async (event) => {
     const originalSrc = event.target.src;
-    const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
-    const img = new Image();
-    img.onload = () => {
-      event.target.src = pngSrc;
-    };
-    img.onerror = () => {
-      event.target.src = 'file:///'+path.resolve('resources/img/error_album.jpg');
-    };
-    img.src = 'file://' + pngSrc.replace('file://', '');
+    try {
+      const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
+      if (newImagePath) {
+        event.target.src = newImagePath;
+      } else {
+        event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+      }
+    } catch (error) {
+      console.error('Error handling image error:', error);
+      event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+    }
   };
 
   ////// navie ui components

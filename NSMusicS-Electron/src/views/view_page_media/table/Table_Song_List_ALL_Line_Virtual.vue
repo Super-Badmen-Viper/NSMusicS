@@ -34,43 +34,21 @@ const { t } = useI18n({
 })
 
 ////// songlist_view page_layout lineItems
-const fs = require('fs');
+const { ipcRenderer } = require('electron');
 const path = require('path');
-const url = require('url');
-const handleImageError = (event) => {
+const handleImageError = async (event) => {
   const originalSrc = event.target.src;
-  const folderPath = path.dirname(url.fileURLToPath(originalSrc));
-  fs.readdir(folderPath, (err, files) => {
-    if (err) {
-      console.error('Error reading directory:', err);
-      event.target.src = path.resolve('resources/img/error_album.jpg');
-      return;
-    }
-    const imageFiles = files.filter(file => {
-      const ext = path.extname(file).toLowerCase();
-      return ['.jpg', '.jpeg', '.png'].includes(ext);
-    });
-    if (imageFiles.length > 0) {
-      event.target.src = path.join(folderPath, imageFiles[0]);
+  try {
+    const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
+    if (newImagePath) {
+      event.target.src = newImagePath;
     } else {
-      const coverFiles = files.filter(file => {
-        const ext = path.extname(file).toLowerCase();
-        return ['.jpg', '.jpeg', '.png'].includes(ext);
-      });
-      let coverPath;
-      if (coverFiles.length > 0) {
-        const coverFile = coverFiles[0];
-        const newFileName = 'cover' + path.extname(coverFile);
-        const coverFolderPath = path.join(folderPath, newFileName);
-        fs.renameSync(coverFile, coverFolderPath);
-        coverPath = coverFolderPath;
-        store_player_audio_info.this_audio_file_medium_image_url = coverPath
-      } else {
-        coverPath = path.resolve('resources/img/error_album.jpg');
-      }
-      event.target.src = coverPath;
+      event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
     }
-  });
+  } catch (error) {
+    console.error('Error handling image error:', error);
+    event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+  }
 };
 const os = require('os');
 function getAssetImage(firstImage: string) {
@@ -954,8 +932,8 @@ onBeforeUnmount(() => {
         <template #before>
           <div class="notice">
             <div
-                :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
-                style="
+              :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
+              style="
               position: absolute;
               z-index: 0;
               height: 298px;
@@ -1052,15 +1030,14 @@ onBeforeUnmount(() => {
 
               </template>
               <template #avatar>
-                <n-image
+                <img
                   style="
                     width: 280px;height: 280px;
                     border-radius: 12px;
                     object-fit: cover;
                     margin-left: -3px;"
                   :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                  fallback-src="../../../resources/img/error_album.jpg"
-                  :show-toolbar="false"
+                  @error="handleImageError"
                 />
               </template>
               <template #extra>

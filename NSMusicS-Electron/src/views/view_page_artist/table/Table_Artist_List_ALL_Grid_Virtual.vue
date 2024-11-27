@@ -40,19 +40,19 @@ const itemSize = ref(220);
 const gridItems = ref(5);
 const itemSecondarySize = ref(185);
 const path = require('path')
-const handleImageError = (event: any) => {
+const handleImageError = async (event) => {
   const originalSrc = event.target.src;
-  const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
-  const img = new Image();
-  img.onload = null;
-  img.onerror = null;
-  img.onload = () => {
-    event.target.src = pngSrc;
-  };
-  img.onerror = () => {
-    event.target.src = path.resolve('resources/img/error_album.jpg');
-  };
-  img.src = pngSrc;
+  try {
+    const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
+    if (newImagePath) {
+      event.target.src = newImagePath;
+    } else {
+      event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+    }
+  } catch (error) {
+    console.error('Error handling image error:', error);
+    event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+  }
 };
 const os = require('os');
 function getAssetImage(firstImage: string) {
@@ -365,6 +365,7 @@ import {store_view_album_page_fetchData} from "@/store/view/album/store_view_alb
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
 import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
+const { ipcRenderer } = require('electron');
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()
@@ -647,15 +648,14 @@ onBeforeUnmount(() => {
                 
               </template>
               <template #avatar>
-                <n-image
+                <img
                   style="
                     width: 280px;height: 280px;
                     border-radius: 12px;
                     object-fit: cover;
                     margin-left: -3px;"
                   :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                  fallback-src="../../../resources/img/error_album.jpg"
-                  :show-toolbar="false"
+                  @error="handleImageError"
                 />
               </template>
               <template #extra>

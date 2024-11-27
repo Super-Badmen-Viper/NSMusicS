@@ -58,20 +58,21 @@ const item_album_txt = ref<number>(item_album.value - 20)
 const itemSize = ref(220);
 const gridItems = ref(5);
 const itemSecondarySize = ref(185);
-const path = require('path')
-const handleImageError = (event: any) => {
+const { ipcRenderer } = require('electron');
+const path = require('path');
+const handleImageError = async (event) => {
   const originalSrc = event.target.src;
-  const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
-  const img = new Image();
-  img.onload = null;
-  img.onerror = null;
-  img.onload = () => {
-    event.target.src = pngSrc;
-  };
-  img.onerror = () => {
-    event.target.src = path.resolve('resources/img/error_album.jpg');
-  };
-  img.src = pngSrc;
+  try {
+    const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
+    if (newImagePath) {
+      event.target.src = newImagePath;
+    } else {
+      event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+    }
+  } catch (error) {
+    console.error('Error handling image error:', error);
+    event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+  }
 };
 const os = require('os');
 function getAssetImage(firstImage: string) {
@@ -678,15 +679,14 @@ onBeforeUnmount(() => {
                 
               </template>
               <template #avatar>
-                <n-image
+                <img
                   style="
                     width: 280px;height: 280px;
                     border-radius: 12px;
                     object-fit: cover;
                     margin-left: -3px;"
                   :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                  fallback-src="../../../resources/img/error_album.jpg"
-                  :show-toolbar="false"
+                  @error="handleImageError"
                 />
               </template>
               <template #extra>

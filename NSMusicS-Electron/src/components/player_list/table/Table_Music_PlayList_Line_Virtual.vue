@@ -65,19 +65,19 @@ const handleItemClick_Rating = (id: any,rating: number) => {
   console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
 }
 const path = require('path')
-const handleImageError = (event: any) => {
+const handleImageError = async (event) => {
   const originalSrc = event.target.src;
-  const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
-  const img = new Image();
-  img.onload = null;
-  img.onerror = null;
-  img.onload = () => {
-    event.target.src = pngSrc;
-  };
-  img.onerror = () => {
-    event.target.src = path.resolve('resources/img/error_album.jpg');
-  };
-  img.src = pngSrc;
+  try {
+    const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
+    if (newImagePath) {
+      event.target.src = newImagePath;
+    } else {
+      event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+    }
+  } catch (error) {
+    console.error('Error handling image error:', error);
+    event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+  }
 };
 
 ////// i18n auto lang
@@ -102,6 +102,7 @@ const message = useMessage()
 ////// right menu
 import { inject } from "vue";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+const { ipcRenderer } = require('electron');
 const contextmenu = inject("playlist_contextmenu", null);
 async function update_playlist_addMediaFile(id: any, playlist_id: any){
   try{

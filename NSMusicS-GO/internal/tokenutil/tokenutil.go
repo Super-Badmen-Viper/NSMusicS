@@ -2,15 +2,15 @@ package tokenutil
 
 import (
 	"fmt"
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/system"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_system"
 	"time"
 
 	jwt "github.com/golang-jwt/jwt/v4"
 )
 
-func CreateAccessToken(user *system.User, secret string, expiry int) (accessToken string, err error) {
+func CreateAccessToken(user *domain_system.User, secret string, expiry int) (accessToken string, err error) {
 	exp := time.Now().Add(time.Hour * time.Duration(expiry)).Unix()
-	claims := &system.JwtCustomClaims{
+	claims := &domain_system.JwtCustomClaims{
 		Name: user.Name,
 		ID:   user.ID.Hex(),
 		StandardClaims: jwt.StandardClaims{
@@ -25,8 +25,8 @@ func CreateAccessToken(user *system.User, secret string, expiry int) (accessToke
 	return t, err
 }
 
-func CreateRefreshToken(user *system.User, secret string, expiry int) (refreshToken string, err error) {
-	claimsRefresh := &system.JwtCustomRefreshClaims{
+func CreateRefreshToken(user *domain_system.User, secret string, expiry int) (refreshToken string, err error) {
+	claimsRefresh := &domain_system.JwtCustomRefreshClaims{
 		ID: user.ID.Hex(),
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * time.Duration(expiry)).Unix(),
