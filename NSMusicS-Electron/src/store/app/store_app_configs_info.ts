@@ -5,6 +5,8 @@ const path = require('path')
 export const store_app_configs_info = reactive({
     logo: path.resolve('resources/img/NSMusicS.png'),
 
+    desktop_system_kind: 'win32',
+
     lang: 'en',
 
     theme: null,
