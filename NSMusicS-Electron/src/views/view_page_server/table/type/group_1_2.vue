@@ -7,6 +7,10 @@ import {store_app_configs_info} from "@/store/app/store_app_configs_info";
     <span style="font-weight: 600;font-size: 16px;">
       {{ $t('Settings') }} >
     </span>
+    <n-space vertical>
+      Not open || 未开放
+    </n-space>
+    <div v-if="false">
     <n-space vertical style="margin-left: 20px;">
       <!---->
       <n-space align="center">
@@ -83,6 +87,7 @@ import {store_app_configs_info} from "@/store/app/store_app_configs_info";
       <span style="font-size: 13px;margin-left: 0px;">{{ $t('LabelParallelImageEncodingLimitHelp') }}</span>
     </n-space>
     <br>
+    </div>
   </n-space>
 </template>
 <style>

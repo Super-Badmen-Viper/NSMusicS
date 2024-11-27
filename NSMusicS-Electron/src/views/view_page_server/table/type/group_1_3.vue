@@ -26,6 +26,10 @@ function getAssetImage(firstImage: string) {
       {{ $t('HeaderUser') }} >
     </span>
     <n-space vertical>
+      Not open || 未开放
+    </n-space>
+    <div v-if="false">
+    <n-space vertical>
       <!---->
       <n-button>
         {{ $t('ButtonAddUser') }}
@@ -53,6 +57,7 @@ function getAssetImage(firstImage: string) {
       </div>
     </n-space>
     <br>
+    </div>
   </n-space>
 </template>
 <style>

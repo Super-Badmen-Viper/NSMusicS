@@ -30,6 +30,20 @@ import Group_1_5_1 from "@/views/view_page_server/table/type/group_1_5_1.vue";
 import Group_1_5_2 from "@/views/view_page_server/table/type/group_1_5_2.vue";
 import Group_1_5_3 from "@/views/view_page_server/table/type/group_1_5_3.vue";
 import Group_1_5_4 from "@/views/view_page_server/table/type/group_1_5_4.vue";
+
+import Group_2_1 from "@/views/view_page_server/table/type/group_2_1.vue";
+import Group_2_2 from "@/views/view_page_server/table/type/group_2_2.vue";
+import Group_2_3 from "@/views/view_page_server/table/type/group_2_3.vue";
+import Group_3_1 from "@/views/view_page_server/table/type/group_3_1.vue";
+import Group_3_2 from "@/views/view_page_server/table/type/group_3_2.vue";
+import Group_4_1 from "@/views/view_page_server/table/type/group_4_1.vue";
+import Group_4_2 from "@/views/view_page_server/table/type/group_4_2.vue";
+import Group_4_3 from "@/views/view_page_server/table/type/group_4_3.vue";
+import Group_4_4 from "@/views/view_page_server/table/type/group_4_4.vue";
+import Group_4_5_1 from "@/views/view_page_server/table/type/group_4_5_1.vue";
+import Group_4_5_2 from "@/views/view_page_server/table/type/group_4_5_2.vue";
+import Group_4_5_3 from "@/views/view_page_server/table/type/group_4_5_3.vue";
+import Group_4_6 from "@/views/view_page_server/table/type/group_4_6.vue";
 function renderIcon (icon: any) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
@@ -152,6 +166,45 @@ const menuOptions: MenuOption[] = [
               />
               <Group_1_5_4
                   v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-1-5-4'"
+              />
+              <Group_2_1
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-2-1'"
+              />
+              <Group_2_2
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-2-2'"
+              />
+              <Group_2_3
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-2-3'"
+              />
+              <Group_3_1
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-3-1'"
+              />
+              <Group_3_2
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-3-2'"
+              />
+              <Group_4_1
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-4-1'"
+              />
+              <Group_4_2
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-4-2'"
+              />
+              <Group_4_3
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-4-3'"
+              />
+              <Group_4_4
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-4-4'"
+              />
+              <Group_4_5_1
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-4-5-1'"
+              />
+              <Group_4_5_2
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-4-5-2'"
+              />
+              <Group_4_5_3
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-4-5-3'"
+              />
+              <Group_4_6
+                  v-if="store_app_configs_info.server_setting_select_tab_name === 'type-group-4-6'"
               />
             </div>
           </n-layout>

@@ -4,7 +4,7 @@
 <template>
   <n-space vertical>
     <span style="font-weight: 600;font-size: 16px;">
-      {{ $t('TabServer') }} >
+      {{ $t('HeaderDVR') }} >
     </span>
     <n-space vertical>
       Not open || 未开放
