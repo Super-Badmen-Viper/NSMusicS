@@ -18,6 +18,7 @@ import {
 } from "@/features/servers_configs/navidrome_api/services_normal/playlists/index_service";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+const path = require('path')
 
 export const store_view_media_page_fetchData = reactive({
     async fetchData_Media(){
@@ -135,7 +136,7 @@ export const store_view_media_page_fetchData = reactive({
                         else if (row.path.indexOf('flac') > 0)
                             row.medium_image_url = row.path.replace('flac', 'jpg');
                         else
-                            row.medium_image_url = '../../../resources/img/error_album.jpg';
+                            row.medium_image_url = path.resolve('resources/img/error_album.jpg');
                     }
                     store_view_media_page_info.media_Files_temporary.push(row);
                 });
@@ -264,7 +265,7 @@ export const store_view_media_page_fetchData = reactive({
                 else if (row.path.indexOf('flac') > 0)
                     row.medium_image_url = row.path.replace('flac', 'jpg');
                 else
-                    row.medium_image_url = '../../../resources/img/error_album.jpg';
+                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
             }
             store_view_media_page_info.media_Files_temporary.push(row);
         });
@@ -292,7 +293,7 @@ export const store_view_media_page_fetchData = reactive({
                 else if (row.path.indexOf('flac') > 0)
                     row.medium_image_url = row.path.replace('flac', 'jpg');
                 else
-                    row.medium_image_url = '../../../resources/img/error_album.jpg';
+                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
             }
             store_view_media_page_info.media_Files_temporary.push(row);
         });

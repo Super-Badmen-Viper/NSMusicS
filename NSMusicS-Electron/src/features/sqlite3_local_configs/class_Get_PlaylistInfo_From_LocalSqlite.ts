@@ -1,8 +1,9 @@
 import { store_server_user_model } from '@/store/server/store_server_user_model'
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+const path = require('path')
+
 export class Get_PlaylistInfo_From_LocalSqlite {
     public Get_Playlist() {
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
@@ -18,7 +19,6 @@ export class Get_PlaylistInfo_From_LocalSqlite {
         return result
     }
     public Get_Playlist_Tracks(playlist_id: string) {
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
@@ -34,6 +34,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
         return result;
     }
     public Get_Playlist_Media_File_Id_of_list(list_of_media_file_id: string[]){
+        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
@@ -59,7 +60,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
                 else if (row.path.indexOf('flac') > 0)
                     row.medium_image_url = row.path.replace('flac', 'jpg');
                 else
-                    row.medium_image_url = '../../../resources/img/error_album.jpg';
+                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
             }
             row.play_id = row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
             result.push(row);

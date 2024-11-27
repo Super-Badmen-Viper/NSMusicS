@@ -1,9 +1,10 @@
 import moment from "moment/moment";
 import { store_server_user_model } from '@/store/server/store_server_user_model'
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+const path = require('path')
+
 export class Get_HomeDataInfos_From_LocalSqlite {
     public Get_Annotation_Maximum_Playback() {
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
@@ -28,7 +29,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
                 else if (row.embed_art_path.indexOf('flac') > 0)
                     row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
                 else
-                    row.medium_image_url = '../../../resources/img/error_album.jpg';
+                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
             }
             const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
             const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
@@ -71,7 +72,6 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         return result
     }
     public Get_AlbumFiles_Random_Search() {
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
@@ -85,7 +85,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
                 else if (row.embed_art_path.indexOf('flac') > 0)
                     row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
                 else
-                    row.medium_image_url = '../../../resources/img/error_album.jpg';
+                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
             }
             const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
             const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
@@ -128,11 +128,9 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         return result
     }
     public Get_Annotation_Recently_Added() {
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
-
 
         const rows = db.prepare(`SELECT * FROM ${store_server_user_model.album} ORDER BY created_at desc LIMIT 18`).all();
         const result: Album[] = []
@@ -143,7 +141,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
                 else if (row.embed_art_path.indexOf('flac') > 0)
                     row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
                 else
-                    row.medium_image_url = '../../../resources/img/error_album.jpg';
+                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
             }
             const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
             const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
@@ -211,7 +209,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
                 else if (row.embed_art_path.indexOf('flac') > 0)
                     row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
                 else
-                    row.medium_image_url = '../../../resources/img/error_album.jpg';
+                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
             }
             const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
             const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;

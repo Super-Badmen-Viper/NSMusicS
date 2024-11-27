@@ -24,15 +24,13 @@
     const originalSrc = event.target.src;
     const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
     const img = new Image();
-    img.onload = null;
-    img.onerror = null;
     img.onload = () => {
       event.target.src = pngSrc;
     };
     img.onerror = () => {
-      event.target.src = path.resolve('resources/img/error_album.jpg');
+      event.target.src = 'file:///'+path.resolve('resources/img/error_album.jpg');
     };
-    img.src = pngSrc;
+    img.src = 'file://' + pngSrc.replace('file://', '');
   };
 
   ////// navie ui components
@@ -492,6 +490,7 @@
   import {store_player_audio_info} from "@/store/player/store_player_audio_info";
   import {store_player_audio_logic} from "@/store/player/store_player_audio_logic"
   import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+  import {store_app_configs_info} from "@/store/app/store_app_configs_info";
   const clear_lottie_animationInstance = ref(false)
   const animationInstance_model_1_spectrum = ref<any>(null);
   const animationInstance_model_1_spectrum_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715392202806.json'))
@@ -770,7 +769,9 @@
           <n-flex style="width: 400px;height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-left:30px;">
               <n-button quaternary size="medium"
-                style="margin-right:4px" @click="close_media_player">
+                        style="margin-right:4px"
+                        v-if="store_app_configs_info.desktop_system_kind === 'win32'"
+                        @click="close_media_player">
                 <template #icon>
                   <n-icon size="30" :depth="3"><ChevronDown12Filled/></n-icon>
                 </template>
@@ -814,37 +815,50 @@
           <!-- -->
           <n-flex justify="end" style="width: 400px;height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
-              <n-button quaternary circle style="margin-right:0px;" @click="ipcRenderer.send('window-reset-data');">
-                <template #icon>
-                  <n-icon :depth="3"><Clean /></n-icon>
-                </template>
-<!--                <span style="font-weight: 500;">{{ $t('setting.clearQueryCache') }}</span>-->
-              </n-button>
-              <n-button quaternary style="margin-right:2px;" @click="get_isVisible_Player_theme">
+              <n-button quaternary
+                        style="margin-right:4px"
+                        @click="get_isVisible_Player_theme">
                 <template #icon>
                   <n-icon :depth="3"><Settings24Regular /></n-icon>
                 </template>
                 <span style="font-weight: 500;">{{ $t('nsmusics.view_player.view_seting.viewSeting') }}</span>
               </n-button>
-              <n-button quaternary circle size="medium" style="margin-right:4px;" @click="maximize_screen">
+              <n-button quaternary size="medium"
+                        :style="{ marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '2px' : '30px' }"
+                        v-if="store_app_configs_info.desktop_system_kind === 'darwin'"
+                        @click="close_media_player">
+                <template #icon>
+                  <n-icon size="30" :depth="3" style="margin-bottom: 4px;"><ChevronDown12Filled/></n-icon>
+                </template>
+              </n-button>
+              <n-button quaternary circle size="medium"
+                        style="margin-right:4px;"
+                        v-if="store_app_configs_info.desktop_system_kind === 'win32'"
+                        @click="maximize_screen">
                 <template #icon>
                   <n-icon size="20" :depth="3" style="margin-top: 1px;"><FullScreenMaximize16Regular/></n-icon>
                 </template>
               </n-button>
               <n-button quaternary circle size="medium"
-                style="margin-right:4px" @click="minimize">
+                        style="margin-right:4px"
+                        v-if="store_app_configs_info.desktop_system_kind === 'win32'"
+                        @click="minimize">
                 <template #icon>
                   <n-icon size="18" :depth="3"><ArrowMinimize16Regular/></n-icon>
                 </template>
               </n-button>
               <n-button quaternary circle size="medium"
-                style="margin-right:4px" @click="maximize">
+                        style="margin-right:4px"
+                        v-if="store_app_configs_info.desktop_system_kind === 'win32'"
+                        @click="maximize">
                 <template #icon>
                   <n-icon size="24" :depth="3"><Maximize16Regular/></n-icon>
                 </template>
               </n-button>
               <n-button quaternary circle size="medium"
-                style="margin-right:30px" @click="closeWindow">
+                        style="margin-right:30px"
+                        v-if="store_app_configs_info.desktop_system_kind === 'win32'"
+                        @click="closeWindow">
                 <template #icon>
                   <n-icon size="28" :depth="3"><Close/></n-icon>
                 </template>

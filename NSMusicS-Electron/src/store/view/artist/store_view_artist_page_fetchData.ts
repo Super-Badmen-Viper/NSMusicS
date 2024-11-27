@@ -27,6 +27,7 @@ import {store_view_album_page_logic} from "@/store/view/album/store_view_album_p
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+const path = require('path');
 
 export const store_view_artist_page_fetchData = reactive({
     async fetchData_Artist(){
@@ -108,12 +109,12 @@ export const store_view_artist_page_fetchData = reactive({
                                 else if (pathfiles[j].path.indexOf('flac') > 0)
                                     row.medium_image_url = pathfiles[j].path.replace('flac', 'jpg');
                                 else
-                                    row.medium_image_url = '../../../resources/img/error_album.jpg';
+                                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
                             }
                             break;
                         }
                         if (j === pathfiles.length - 1) {
-                            row.medium_image_url = '../../../resources/img/error_album.jpg';
+                            row.medium_image_url = path.resolve('resources/img/error_album.jpg');
                         }
                     }
                     store_view_artist_page_info.artist_Files_temporary.push(row);

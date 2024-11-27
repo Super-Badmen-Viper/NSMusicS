@@ -45,15 +45,13 @@ const handleImageError = (event: any) => {
   const originalSrc = event.target.src;
   const pngSrc = originalSrc.replace(/\.[^/.]+$/, '.png');
   const img = new Image();
-  img.onload = null;
-  img.onerror = null;
   img.onload = () => {
     event.target.src = pngSrc;
   };
   img.onerror = () => {
-    event.target.src = path.resolve('resources/img/error_album.jpg');
+    event.target.src = 'file:///'+path.resolve('resources/img/error_album.jpg');
   };
-  img.src = pngSrc;
+  img.src = 'file://' + pngSrc.replace('file://', '');
 };
 
 

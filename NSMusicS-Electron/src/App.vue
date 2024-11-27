@@ -623,7 +623,9 @@
       }
     }catch{  }
 
-    await store_app_configs_logic_load.load_app_config()
+    try {
+      await store_app_configs_logic_load.load_app_config()
+    }catch{  }
 
     create_menuOptions_appBar()
 

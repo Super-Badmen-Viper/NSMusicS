@@ -85,19 +85,39 @@ async function clearSessionClearCache() {
 /// electron-window
 async function createWindow() {
     /// init BrowserWindow
-    win = await new BrowserWindow({
-        width: 1220,
-        height: 765,
-        minWidth: 1160,
-        minHeight: 765,
-        frame:false,
-        resizable: true,
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-            webSecurity: false
-        },
-    })
+    if(process.platform === 'win32') {
+        win = await new BrowserWindow({
+            width: 1220,
+            height: 765,
+            minWidth: 1160,
+            minHeight: 765,
+            frame:false,
+            resizable: true,
+            webPreferences: {
+                nodeIntegration: true,
+                contextIsolation: false,
+                webSecurity: false
+            }
+        })
+    }
+    else if(process.platform === 'darwin'){
+        win = await new BrowserWindow({
+            width: 1220,
+            height: 765,
+            minWidth: 1160,
+            minHeight: 765,
+            frame:false,
+            resizable: true,
+            webPreferences: {
+                nodeIntegration: true,
+                contextIsolation: false,
+                webSecurity: false
+            },
+            titleBarStyle: 'hidden',
+            trafficLightPosition: { x: 6, y: 12 },
+        })
+    }
+
     win.setMenu(null)
     win.setMaximizable(false)
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'

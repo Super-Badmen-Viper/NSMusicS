@@ -22,6 +22,7 @@ import {
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+const path = require('path')
 
 export const store_view_album_page_fetchData = reactive({
     async fetchData_Album(){
@@ -121,7 +122,7 @@ export const store_view_album_page_fetchData = reactive({
                         else if (row.embed_art_path.indexOf('flac') > 0)
                             row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
                         else
-                            row.medium_image_url = '../../../resources/img/error_album.jpg';
+                            row.medium_image_url = path.resolve('resources/img/error_album.jpg');
                     }
                     const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
                     const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
