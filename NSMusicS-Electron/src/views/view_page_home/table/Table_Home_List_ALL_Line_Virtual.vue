@@ -45,11 +45,11 @@ const handleImageError = async (event) => {
     if (newImagePath) {
       event.target.src = newImagePath;
     } else {
-      event.target.src = path.resolve('resources/img/error_album.jpg');
+      event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
     }
   } catch (error) {
     console.error('Error handling image error:', error);
-    event.target.src = path.resolve('resources/img/error_album.jpg');
+    event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
   }
 };
 function getAssetImage(firstImage: string) {

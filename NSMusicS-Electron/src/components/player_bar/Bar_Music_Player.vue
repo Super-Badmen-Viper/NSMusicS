@@ -44,7 +44,7 @@ const { ipcRenderer } = require('electron');
 const path = require('path');
 const handleImageError = async (event) => {
   const originalSrc = event.target.src;
-  let result_src = path.resolve('resources/img/error_album.jpg');
+  let result_src = 'file:///' + path.resolve('resources/img/error_album.jpg');
   try {
     const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
     if (newImagePath) {

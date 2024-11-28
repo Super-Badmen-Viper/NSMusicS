@@ -571,6 +571,7 @@
                           <n-select
                             v-model:value="Type_Server_Model_Open_Value"
                             :options="Type_Server_Model_Open_Option"
+                            :disabled="store_app_configs_info.desktop_system_kind != 'win32'"
                             @update:value="
                               Type_Server_Model_Open_Value === 'server' ?
                               (store_server_user_model.switchToMode_Server(),store_server_user_model.model_select = 'server')
@@ -1212,15 +1213,16 @@
                       </div>
                     </n-space>
                     <n-select
-                        v-model:value="store_player_audio_logic.player_select"
-                        :options="store_player_audio_logic.player_kind"
-                        @update:value="() => {
-                          store_router_data_logic.clear_Memory_Model = false;
-                          store_router_data_logic.clear_Equilibrium_Model = false;
-                          store_router_data_logic.clear_UserExperience_Model = true; }"
-                        placeholder="not enabled"
-                        :reset-menu-on-options-change="false"
-                        style="width: 207px;margin-top: -4px;"
+                      v-model:value="store_player_audio_logic.player_select"
+                      :options="store_player_audio_logic.player_kind"
+                      :disabled="store_app_configs_info.desktop_system_kind != 'win32'"
+                      @update:value="() => {
+                        store_router_data_logic.clear_Memory_Model = false;
+                        store_router_data_logic.clear_Equilibrium_Model = false;
+                        store_router_data_logic.clear_UserExperience_Model = true; }"
+                      placeholder="not enabled"
+                      :reset-menu-on-options-change="false"
+                      style="width: 207px;margin-top: -4px;"
                     />
                   </n-space>
                   <n-space v-if="false" justify="space-between" align="center">

@@ -72,9 +72,13 @@ export const store_app_configs_logic_load = reactive({
                 store_router_data_logic.clear_Equilibrium_Model = true
             }
             /////
-            store_server_user_model.model_select = '' + system_Configs_Read.app_Configs.value['model_select']
-            if(store_server_user_model.model_select === 'navidrome'){
-                store_server_user_model.model_select = 'server';
+            if(process.platform === 'win32') {
+                store_server_user_model.model_select = '' + system_Configs_Read.app_Configs.value['model_select']
+                if (store_server_user_model.model_select === 'navidrome') {
+                    store_server_user_model.model_select = 'server';
+                }
+            }else{
+                store_server_user_model.model_select = 'server'
             }
             if(store_server_user_model.model_select === 'server'){
                 store_server_user_model.switchToMode_Server()
@@ -229,22 +233,29 @@ export const store_app_configs_logic_load = reactive({
         /// player
         store_player_audio_logic.play_order = '' + system_Configs_Read.app_Configs.value['play_order']
         store_player_audio_logic.play_volume = Number('' + system_Configs_Read.app_Configs.value['play_volume'])
-        try {
-            if ('' + system_Configs_Read.app_Configs.value['player_select'] === null || '' + system_Configs_Read.app_Configs.value['player_select'].length < 0) {
-                store_player_audio_logic.player_select = 'mpv'
-            } else {
-                if('' + system_Configs_Read.app_Configs.value['player_select'] === 'mpv'){
+        //
+        if(process.platform === 'win32') {
+            try {
+                if ('' + system_Configs_Read.app_Configs.value['player_select'] === null || '' + system_Configs_Read.app_Configs.value['player_select'].length < 0) {
                     store_player_audio_logic.player_select = 'mpv'
-                }else if('' + system_Configs_Read.app_Configs.value['player_select'] === 'web'){
-                    store_player_audio_logic.player_select = 'web'
-                }else{
-                    store_player_audio_logic.player_select = 'mpv'
+                } else {
+                    if('' + system_Configs_Read.app_Configs.value['player_select'] === 'mpv'){
+                        store_player_audio_logic.player_select = 'mpv'
+                    }else if('' + system_Configs_Read.app_Configs.value['player_select'] === 'web'){
+                        store_player_audio_logic.player_select = 'web'
+                    }else{
+                        store_player_audio_logic.player_select = 'mpv'
+                    }
                 }
+            }catch {
+                store_player_audio_logic.player_select = 'mpv'
+                store_player_audio_logic.player_fade_value = 2000;
             }
-        }catch {
             store_player_audio_logic.player_select = 'mpv'
-            store_player_audio_logic.player_fade_value = 2000;
+        }else{
+            store_player_audio_logic.player_select = 'web'
         }
+        //
         store_player_audio_logic.player_fade_value = Number('' + system_Configs_Read.app_Configs.value['player_fade_value'])
         if (store_player_audio_logic.player_fade_value === null) {
             store_player_audio_logic.player_fade_value = 2000;

@@ -67,11 +67,11 @@ const handleImageError = async (event) => {
     if (newImagePath) {
       event.target.src = newImagePath;
     } else {
-      event.target.src = path.resolve('resources/img/error_album.jpg');
+      event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
     }
   } catch (error) {
     console.error('Error handling image error:', error);
-    event.target.src = path.resolve('resources/img/error_album.jpg');
+    event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
   }
 };
 function getAssetImage(firstImage: string) {
@@ -93,7 +93,7 @@ const updateGridItems = () => {
   item_album_image.value = item_album.value - 20;
   item_album_txt.value = item_album.value - 20;
   itemSecondarySize.value = Math.floor(window.innerWidth / 7);
-  gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
+  gridItems.value = Math.floor(window.innerWidth / 180) - 1;//itemSecondarySize.value
 };
 onMounted(() => {
   updateGridItems();

@@ -5,6 +5,7 @@ import {store_router_data_logic} from "@/store/router/store_router_data_logic";
 import {store_player_appearance} from "@/store/player/store_player_appearance";
 
 import { useI18n } from 'vue-i18n'
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 const { t } = useI18n({
   inheritLocale: true
 })
@@ -147,6 +148,7 @@ const openLink = (url: string) => {
             <n-select
                 v-model:value="store_player_audio_logic.player_select"
                 :options="store_player_audio_logic.player_kind"
+                :disabled="store_app_configs_info.desktop_system_kind != 'win32'"
                 @update:value="() => {
                         store_router_data_logic.clear_Memory_Model = false;
                         store_router_data_logic.clear_Equilibrium_Model = false;
