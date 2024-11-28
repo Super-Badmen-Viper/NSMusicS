@@ -64,6 +64,7 @@ app.on('window-all-closed', () => {
 import { File } from "node-taglib-sharp";
 import fs from "fs";
 const path = require('path');
+const os = require('os');
 
 /// node-mpv
 const mpvAPI = require('node-mpv');
@@ -269,7 +270,66 @@ async function createWindow() {
                 });
         }
         else if(process.platform === 'darwin'){
+            const ensureDirectoryExists = (dirPath: string) => {
+                return new Promise((resolve, reject) => {
+                    if (!fs.existsSync(dirPath)) {
+                        try {
+                            fs.mkdirSync(dirPath, { recursive: true });
+                            console.log(`目录 ${dirPath} 已创建`);
+                            resolve();
+                        } catch (err) {
+                            reject(err);
+                        }
+                    } else {
+                        resolve();
+                    }
+                });
+            };
+            const copyIfNotExists = (sourcePath: string, destPath: string) => {
+                return new Promise((resolve, reject) => {
+                    ensureDirectoryExists(path.dirname(destPath)) // 确保目标文件夹存在
+                        .then(() => {
+                            fs.access(destPath, fs.constants.F_OK, (err) => {
+                                if (err) {
+                                    fs.copyFile(sourcePath, destPath, (copyErr) => {
+                                        if (copyErr) {
+                                            reject(copyErr);
+                                        } else {
+                                            resolve(destPath);
+                                        }
+                                    });
+                                } else {
+                                    resolve(destPath);
+                                }
+                            });
+                        })
+                        .catch((err) => {
+                            reject(err);
+                        });
+                });
+            };
+            const initializeSqlite = async () => {
+                try {
+                    const userHomeDir = os.homedir();
+                    const targetFolderPath = path.join(userHomeDir, 'NSMusicS');
+                    const cDriveDbDir = targetFolderPath;
 
+                    const cDriveDbPath_1 = path.join(cDriveDbDir, 'navidrome.db');
+                    const cDriveDbPath_2 = path.join(cDriveDbDir, 'nsmusics.db');
+
+                    await ensureDirectoryExists(cDriveDbDir); // 确保目标文件夹存在
+
+                    await Promise.all([
+                        copyIfNotExists(navidrome_db, cDriveDbPath_1).then((newPath) => navidrome_db = newPath),
+                        copyIfNotExists(nsmusics_db, cDriveDbPath_2).then((newPath) => nsmusics_db = newPath)
+                    ]);
+
+                    console.log('初始化完成');
+                } catch (err) {
+                    console.error('初始化时出错:', err);
+                }
+            };
+            await initializeSqlite()
         }
     }
     catch{

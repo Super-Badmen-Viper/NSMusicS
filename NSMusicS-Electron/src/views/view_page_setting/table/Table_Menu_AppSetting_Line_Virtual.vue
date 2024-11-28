@@ -192,6 +192,7 @@
   async function update_server_addUser() {
     server_set_of_addUser_of_type.value = Type_Server_Selected.value;
     try{
+      server_set_of_addUser_of_url.value = server_set_of_addUser_of_url.value.replace(/\/$/, '')
       const result = await store_server_data_select_logic.update_server_addUser(
           server_set_of_addUser_of_servername.value,
           server_set_of_addUser_of_url.value,
