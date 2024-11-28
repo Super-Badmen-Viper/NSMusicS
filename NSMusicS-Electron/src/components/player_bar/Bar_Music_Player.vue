@@ -22,7 +22,6 @@ import { NIcon, NSlider, NSpace, NText } from 'naive-ui';
 ////// this_view components of navie_ui
 import {onMounted, ref, watch, inject} from 'vue';
 import {onBeforeUnmount} from 'vue';
-const {ipcRenderer} = require('electron');
 const get_playerbar_to_switch_playerview = inject('get_playerbar_to_switch_playerview');
 
 import { useI18n } from 'vue-i18n'
@@ -31,16 +30,16 @@ const { t } = useI18n({
 })
 
 //////
-const os = require('os');
 function getAssetImage(firstImage: string) {
-  if(os.type() || process.platform === 'win32')
+  if(process.platform === 'win32')
     return new URL(firstImage, import.meta.url).href;
-  else if(os.type() || process.platform === 'darwin')
+  else if(process.platform === 'darwin')
     return new URL(firstImage, import.meta.url).href;
-  else if(os.type() || process.platform === 'linux')
+  else if(process.platform === 'linux')
     return new URL(firstImage, import.meta.url).href;
 }
-const path = require('path')
+const { ipcRenderer } = require('electron');
+const path = require('path');
 const handleImageError = async (event) => {
   const originalSrc = event.target.src;
   try {
@@ -48,11 +47,11 @@ const handleImageError = async (event) => {
     if (newImagePath) {
       event.target.src = newImagePath;
     } else {
-      event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+      event.target.src = path.resolve('resources/img/error_album.jpg');
     }
   } catch (error) {
     console.error('Error handling image error:', error);
-    event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+    event.target.src = path.resolve('resources/img/error_album.jpg');
   }
 };
 
@@ -727,12 +726,13 @@ onBeforeUnmount(() => {
                :style="{ display: back_display }"
                @click="click_back_svg" @mouseover="hover_back_img" @mouseout="leave_back_svg" alt=""/>
           <img class="back_img"
-               :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
-               @error="handleImageError"
+               style="object-fit: cover;"
                :style="{ filter: 'blur(' + back_filter_blurValue + 'px)' }"
-               style="objectFit: cover; objectPosition: center;"
+               :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+               @error="handleImageError"
                @click="click_back_svg"
-               @mouseover="hover_back_img" @mouseout="leave_back_svg" alt=""/>
+               @mouseover="hover_back_img" @mouseout="leave_back_svg"
+          />
         </div>
         <div class="bar_left_text_song_info">
           <n-space>

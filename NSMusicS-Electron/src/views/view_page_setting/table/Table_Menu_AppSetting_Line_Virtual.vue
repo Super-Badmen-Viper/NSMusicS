@@ -69,7 +69,7 @@
       store_app_configs_info.app_view_menuOptions.push(
           {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
           {label: computed(() => renderRouterLink('View_Server_Setting',t('page.appMenu.manageServers'))),key: 'View_Server_Setting',icon: renderIcon(BareMetalServer)},
-          {label: computed(() => renderRouterLink('View_Updateing',t('HeaderLibraries'))),key: 'View_Download_List_ALL',icon: renderIcon(MediaCast)},
+          {label: computed(() => renderRouterLink('View_Server_Library',t('HeaderLibraries'))),key: 'View_Server_Library',icon: renderIcon(MediaCast)},
       )
     if(store_app_configs_info.menuOptions_selectd_model_2)
       store_app_configs_info.app_view_menuOptions.push(

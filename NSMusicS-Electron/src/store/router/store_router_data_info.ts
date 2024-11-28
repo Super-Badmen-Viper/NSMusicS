@@ -31,7 +31,8 @@ export const store_router_data_info = reactive({
     router_select_model_media: false,
     router_select_model_album: false,
     router_select_model_artist: false,
-    router_select_model_server: false,
+    router_select_model_server_setting: false,
+    router_select_model_server_library: false
 });
 watch(() => store_router_data_info.router_select, async (newValue) => {
     if(!store_playlist_appearance.playlist_show) {

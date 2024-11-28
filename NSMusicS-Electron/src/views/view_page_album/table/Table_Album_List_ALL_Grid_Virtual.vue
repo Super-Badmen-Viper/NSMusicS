@@ -67,20 +67,19 @@ const handleImageError = async (event) => {
     if (newImagePath) {
       event.target.src = newImagePath;
     } else {
-      event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+      event.target.src = path.resolve('resources/img/error_album.jpg');
     }
   } catch (error) {
     console.error('Error handling image error:', error);
-    event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+    event.target.src = path.resolve('resources/img/error_album.jpg');
   }
 };
-const os = require('os');
 function getAssetImage(firstImage: string) {
-  if(os.type() || process.platform === 'win32')
+  if(process.platform === 'win32')
     return new URL(firstImage, import.meta.url).href;
-  else if(os.type() || process.platform === 'darwin')
+  else if(process.platform === 'darwin')
     return new URL(firstImage, import.meta.url).href;
-  else if(os.type() || process.platform === 'linux')
+  else if(process.platform === 'linux')
     return new URL(firstImage, import.meta.url).href;
 }
 // gridItems Re render

@@ -46,7 +46,15 @@ const router = createRouter({
     {
       path: '/View_Server_Setting',
       name: 'View_Server_Setting',
-      component: () => import('../views/view_page_server/View_Server_Setting.vue'),
+      component: () => import('../views/view_page_server_setting/View_Server_Setting.vue'),
+      meta: {
+        cleanup: true
+      }
+    },
+    {
+      path: '/View_Server_Library',
+      name: 'View_Server_Library',
+      component: () => import('../views/view_page_server_library/View_Server_Library.vue'),
       meta: {
         cleanup: true
       }

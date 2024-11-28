@@ -9,13 +9,12 @@ import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {NButton, NIcon} from "naive-ui";
 
 //////
-const os = require('os');
 function getAssetImage(firstImage: string) {
-  if(os.type() || process.platform === 'win32')
+  if(process.platform === 'win32')
     return new URL(firstImage, import.meta.url).href;
-  else if(os.type() || process.platform === 'darwin')
+  else if(process.platform === 'darwin')
     return new URL(firstImage, import.meta.url).href;
-  else if(os.type() || process.platform === 'linux')
+  else if(process.platform === 'linux')
     return new URL(firstImage, import.meta.url).href;
 }
 </script>

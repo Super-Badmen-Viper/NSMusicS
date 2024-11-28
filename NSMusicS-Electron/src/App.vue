@@ -102,7 +102,7 @@
       store_app_configs_info.app_view_menuOptions.push(
           {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
           {label: computed(() => renderRouterLink('View_Server_Setting',t('page.appMenu.manageServers'))),key: 'View_Server_Setting',icon: renderIcon(BareMetalServer)},
-          {label: computed(() => renderRouterLink('View_Updateing',t('HeaderLibraries'))),key: 'View_Updateing',icon: renderIcon(MediaCast)},
+          {label: computed(() => renderRouterLink('View_Server_Library',t('HeaderLibraries'))),key: 'View_Server_Library',icon: renderIcon(MediaCast)},
       )
     if(store_app_configs_info.menuOptions_selectd_model_2)
       store_app_configs_info.app_view_menuOptions.push(
@@ -190,7 +190,11 @@
       },
       'View_Server_Setting': () => {
         clearFilesIfNeeded();
-        store_router_data_info.router_select_model_server = true;
+        store_router_data_info.router_select_model_server_setting = true;
+      },
+      'View_Server_Library': () => {
+        clearFilesIfNeeded();
+        store_router_data_info.router_select_model_server_setting = true;
       },
     };
     const selectedAction = menuActions[store_app_configs_info.app_view_left_menu_select_activeKey];
@@ -267,7 +271,10 @@
         store_router_data_info.router_name = to.name
         Init_page_artistlists_statistic_Data()
       }else if(to.name === 'View_Server_Setting'){
-        store_router_data_info.router_select_model_server = true
+        store_router_data_info.router_select_model_server_setting = true
+        store_router_data_info.router_name = to.name
+      } else if(to.name === 'View_Server_Library'){
+        store_router_data_info.router_select_model_server_setting = true
         store_router_data_info.router_name = to.name
       }
       store_app_configs_info.app_view_left_menu_select_activeKey = to.name
@@ -722,9 +729,12 @@
             <!--Artist View-->
             <RouterView class="view_show_table"
                         v-else-if="store_router_data_info.router_select_model_artist"></RouterView>
-            <!--Server View-->
+            <!--Server_setting View-->
             <RouterView class="view_show_table"
-                        v-else-if="store_router_data_info.router_select_model_server"></RouterView>
+                        v-else-if="store_router_data_info.router_select_model_server_setting"></RouterView>
+            <!--Server_library View-->
+            <RouterView class="view_show_table"
+                        v-else-if="store_router_data_info.router_select_model_server_library"></RouterView>
             <!--Top Bar-->
             <div class="bar_top_setapp" style="background-color: transparent" @click="drawer_close_of_player_bar">
               <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"

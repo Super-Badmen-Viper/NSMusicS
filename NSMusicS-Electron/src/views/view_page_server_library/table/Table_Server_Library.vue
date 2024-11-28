@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
 </script>
-
 <template>
-  $END$
+  <span style="font-size: 66px;font-weight: 800;">
+    人机
+  </span>
 </template>
-
-<style scoped>
+<style>
 
 </style>
