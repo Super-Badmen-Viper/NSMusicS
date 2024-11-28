@@ -8,7 +8,6 @@ export class Get_PlaylistInfo_From_LocalSqlite {
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
 
-
         const result: any[] = []
         const stmt_playlist = db.prepare(`SELECT * FROM ${store_server_user_model.playlist}`);
         const rows = stmt_playlist.all();
@@ -23,7 +22,6 @@ export class Get_PlaylistInfo_From_LocalSqlite {
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
 
-
         const stmt_playlist_tracks = db.prepare(`SELECT * FROM ${store_server_user_model.playlist_tracks} WHERE playlist_id = ?`);
         const rows = stmt_playlist_tracks.all(playlist_id);
         const result: Play_list_Track[] = [];
@@ -34,7 +32,6 @@ export class Get_PlaylistInfo_From_LocalSqlite {
         return result;
     }
     public Get_Playlist_Media_File_Id_of_list(list_of_media_file_id: string[]){
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');

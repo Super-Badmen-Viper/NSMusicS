@@ -332,11 +332,6 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                 )
             })
         }
-        // if (store_view_media_page_info.media_Files_temporary.length > store_playlist_list_info.playlist_MediaFiles_temporary.length) {
-        //     this.updatePlaylistMediaFilesTemporary(true);
-        // } else {
-        //     this.updatePlaylistMediaFilesTemporary(false);
-        // }
     }
     public async get_album_list(
         url: string,
@@ -543,11 +538,6 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
             store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
             store_app_configs_logic_save.save_system_playlist_item_id_config();
         }
-        // if (store_view_media_page_info.media_Files_temporary.length > store_playlist_list_info.playlist_MediaFiles_temporary.length) {
-        //     this.updatePlaylistMediaFilesTemporary(true);
-        // } else {
-        //     this.updatePlaylistMediaFilesTemporary(false);
-        // }
     }
 
     private formatTime(currentTime: number): string {
@@ -598,65 +588,6 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         }
 
         return lrcLines.join('\n');
-    }
-    private updatePlaylistMediaFilesTemporary(isAddingNewSongs) {
-        const sourceArray = isAddingNewSongs ?
-            store_view_media_page_info.media_Files_temporary : store_playlist_list_info.playlist_MediaFiles_temporary;
-        const targetArray = isAddingNewSongs ?
-            store_playlist_list_info.playlist_MediaFiles_temporary : store_view_media_page_info.media_Files_temporary;
-        sourceArray.forEach((song) => {
-            const index = targetArray.findIndex((item) => item.id === song.id);
-            if (index < 0) {
-                const newSongData = { ...song };
-                if (isAddingNewSongs) {
-                    delete newSongData.play_id;
-                }
-                targetArray.push(newSongData);
-            }
-        });
-    }
-
-    /// get tag -> getSong | getAlbum | getArtist
-    public async get_tag_info_of_media(
-        url: string,
-        username: string,token: string,salt: string,
-        id: string
-    ){
-        try {
-            /// find starred
-            // navidrome api find starred of id be slower,
-            // store_player_tag_modify.player_current_media_starred = true
-            /// find tag
-            let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
-            const getSong = await browsing_ApiService_of_ND.getSong(username, token, salt, id);
-            const song = getSong["subsonic-response"]["song"];
-            store_player_tag_modify.player_current_media_playCount = song.playCount
-            store_player_tag_modify.player_current_media_playDate = song.played
-            return {
-                title: song.title,
-                path: song.path,
-                albumArtists: undefined,
-                artist: song.artist,
-                album: song.album,
-                discCount: undefined,
-                trackCount: song.track,
-                year: song.year,
-                genres: song.genre,
-                isCompilation: undefined,
-
-                codec: song.suffix,
-                audioBitrate: song.bitRate,
-                audioChannels: song.channelCount,
-
-                sizeOnDisk: song.size,
-                albumPeak: song.replayGain.albumPeak,
-                trackPeak: song.replayGain.trackPeak,
-                comment: song.comment,
-                lyrics: undefined,
-            }
-        }catch{
-            return undefined
-        }
     }
 
     /// file count

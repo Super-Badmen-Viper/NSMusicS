@@ -1,8 +1,8 @@
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+
 export class Set_LibraryInfo_To_LocalSqlite{
     public Set_LibraryInfo_Delete_Selected_Playlist(media_file_id: any[]) {
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');

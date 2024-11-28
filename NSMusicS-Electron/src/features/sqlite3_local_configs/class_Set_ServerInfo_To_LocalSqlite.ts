@@ -1,5 +1,3 @@
-import {v4 as uuidv4} from "uuid";
-import path from "path";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 
 export class Set_ServerInfo_To_LocalSqlite {
@@ -8,14 +6,6 @@ export class Set_ServerInfo_To_LocalSqlite {
         let id = uuidv4();
         while (db.prepare(`SELECT COUNT(*) FROM system_servers_config WHERE id = ?`).pluck().get(id) > 0) {
             id = uuidv4();
-        }
-        return id;
-    }
-    private getUniqueId_Replace(db: any) {
-        const { v4: uuidv4 } = require('uuid');
-        let id = uuidv4().replace(/-/g, '');
-        while (db.prepare(`SELECT COUNT(*) FROM system_servers_config WHERE id = ?`).pluck().get(id) > 0) {
-            id = uuidv4().replace(/-/g, '');
         }
         return id;
     }
@@ -33,7 +23,6 @@ export class Set_ServerInfo_To_LocalSqlite {
         user_name:string,password:string,
         type: string
     ) {
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         ///
         let new_id = this.getUniqueId(db);
@@ -65,7 +54,6 @@ export class Set_ServerInfo_To_LocalSqlite {
         user_name:string,password:string,
         type: string
     ) {
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
@@ -100,7 +88,6 @@ export class Set_ServerInfo_To_LocalSqlite {
         return data;
     }
     public Set_ServerInfo_To_Update_DeleteUser(id:string) {
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');

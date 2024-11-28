@@ -1,19 +1,12 @@
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+
 export class Set_AlbumInfo_To_LocalSqlite {
     private getUniqueId(db: any) {
         const { v4: uuidv4 } = require('uuid');
         let ann_id = uuidv4();
         while (db.prepare(`SELECT COUNT(*) FROM ${store_server_user_model.annotation} WHERE ann_id = ?`).pluck().get(ann_id) > 0) {
             ann_id = uuidv4();
-        }
-        return ann_id;
-    }
-    private getUniqueId_Replace(db: any) {
-        const { v4: uuidv4 } = require('uuid');
-        let ann_id = uuidv4().replace(/-/g, '');
-        while (db.prepare(`SELECT COUNT(*) FROM ${store_server_user_model.annotation} WHERE ann_id = ?`).pluck().get(ann_id) > 0) {
-            ann_id = uuidv4().replace(/-/g, '');
         }
         return ann_id;
     }
@@ -28,11 +21,9 @@ export class Set_AlbumInfo_To_LocalSqlite {
 
     public Set_AlbumInfo_To_Favorite(id: string, value: Boolean) {
         let ann_id = null;
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
-
         
         const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.annotation} WHERE item_id = ?`).get(id);
         if (!existingRecord) {
@@ -57,11 +48,9 @@ export class Set_AlbumInfo_To_LocalSqlite {
     }
     public Set_AlbumInfo_To_Rating(id: any, value: number) {
         let ann_id = null;
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
-
 
         const existingRecord = db.prepare(`SELECT * FROM ${store_server_user_model.annotation} WHERE item_id = ?`).get(id);
         if (!existingRecord) {
@@ -75,11 +64,9 @@ export class Set_AlbumInfo_To_LocalSqlite {
         db.close();
     }
     public Set_AlbumInfo_To_PlayCount_of_Album(item_id: any) {
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
-
 
         let existingRecord = db.prepare(`SELECT play_count FROM ${store_server_user_model.annotation} WHERE item_id = ?`).get(item_id);
         if (!existingRecord) {
@@ -93,11 +80,9 @@ export class Set_AlbumInfo_To_LocalSqlite {
         db.close();
     }
     public Set_AlbumInfo_To_PlayCount_of_Album_ND(item_id: any, play_count: number, play_date: string) {
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
-
 
         let existingRecord = db.prepare(`SELECT play_count FROM ${store_server_user_model.annotation} WHERE item_id = ?`).get(item_id);
         if (!existingRecord) {

@@ -9,7 +9,6 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
 
-
         const annsMap = new Map();
         const anns = db.prepare(`SELECT * FROM ${store_server_user_model.annotation} WHERE item_type = 'album' ORDER BY play_count desc LIMIT 18`).all();
         anns.forEach((ann: { item_id: any; }) => {
@@ -184,11 +183,9 @@ export class Get_HomeDataInfos_From_LocalSqlite {
         return result
     }
     public Get_Annotation_Recently_Played() {
-        const path = require('path');
         const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
-
 
         const annsMap = new Map();
         const anns = db.prepare(`SELECT * FROM ${store_server_user_model.annotation} WHERE item_type = 'album' ORDER BY play_date desc LIMIT 18`).all();
