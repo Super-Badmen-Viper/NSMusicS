@@ -4,6 +4,7 @@ import { Player_Configs_of_Audio_Info } from '@/models/app_Configs/class_Player_
 import { Player_Configs_of_UI } from '@/models/app_Configs/class_Player_Configs_of_UI';
 import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+import os from "os";
 const path = require('path');
 
 export class Class_Get_System_Configs_Read {
@@ -105,12 +106,28 @@ export class Class_Get_System_Configs_Read {
 
     constructor() {
         let db_navidrome:any = null;
+        let db:any = null;
         try {
-            db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+            if(process.platform === 'win32') {
+                db_navidrome = require('better-sqlite3')('C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db');
+                db = require('better-sqlite3')('C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db');
+            }
+            else if(process.platform === 'darwin') {
+                const os = require('os');
+                const userHomeDir = os.homedir();
+                const cDriveDbDir = path.join(userHomeDir, 'NSMusicS');
+
+                db_navidrome = require('better-sqlite3')(path.join(cDriveDbDir, 'navidrome.db'));
+                db = require('better-sqlite3')(path.join(cDriveDbDir, 'nsmusics.db'));
+            }
         }catch{
-            db_navidrome = require('better-sqlite3')(path.resolve('resources/navidrome.db'));
+            db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+            db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         }
         db_navidrome.pragma('journal_mode = WAL');
+        db.pragma('journal_mode = WAL');
+
+
         try {
             db_navidrome.exec('BEGIN');
             const tableSchema = db_navidrome.prepare(`PRAGMA table_info(media_file)`).all();
@@ -127,13 +144,7 @@ export class Class_Get_System_Configs_Read {
             db_navidrome = null;
         }
 
-        let db:any = null;
-        try {
-            db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-        }catch{
-            db = require('better-sqlite3')(path.resolve('resources/nsmusics.db'));
-        }
-        db.pragma('journal_mode = WAL');
+
         /// Modify user configuration
         try {
             db.exec('BEGIN');

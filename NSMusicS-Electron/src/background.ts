@@ -317,7 +317,7 @@ async function createWindow() {
                     const cDriveDbPath_1 = path.join(cDriveDbDir, 'navidrome.db');
                     const cDriveDbPath_2 = path.join(cDriveDbDir, 'nsmusics.db');
 
-                    await ensureDirectoryExists(cDriveDbDir); // 确保目标文件夹存在
+                    await ensureDirectoryExists(cDriveDbDir);
 
                     await Promise.all([
                         copyIfNotExists(navidrome_db, cDriveDbPath_1).then((newPath) => navidrome_db = newPath),
