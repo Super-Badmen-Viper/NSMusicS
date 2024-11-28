@@ -135,7 +135,6 @@ watch(() => store_player_audio_info.this_audio_file_medium_image_url, (newValue)
     console.log('this_audio_file_medium_image_url'+newValue)
 
     store_player_audio_info.this_audio_restart_play = true
-    store_player_audio_info.page_top_album_image_url = '';
     store_player_audio_info.page_top_album_image_url = newValue;
 });
 watch(() => store_player_audio_info.this_audio_song_id, (newValue) => {

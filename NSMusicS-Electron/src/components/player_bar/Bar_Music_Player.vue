@@ -25,6 +25,8 @@ import {onBeforeUnmount} from 'vue';
 const get_playerbar_to_switch_playerview = inject('get_playerbar_to_switch_playerview');
 
 import { useI18n } from 'vue-i18n'
+import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
+import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
 const { t } = useI18n({
   inheritLocale: true
 })
@@ -42,17 +44,28 @@ const { ipcRenderer } = require('electron');
 const path = require('path');
 const handleImageError = async (event) => {
   const originalSrc = event.target.src;
+  let result_src = path.resolve('resources/img/error_album.jpg');
   try {
     const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
     if (newImagePath) {
-      event.target.src = newImagePath;
+      result_src = newImagePath;
+      event.target.src = result_src;
     } else {
-      event.target.src = path.resolve('resources/img/error_album.jpg');
+      event.target.src = result_src;
     }
   } catch (error) {
     console.error('Error handling image error:', error);
-    event.target.src = path.resolve('resources/img/error_album.jpg');
+    event.target.src = result_src;
   }
+  ///
+  const item: Media_File | undefined =
+      store_view_media_page_info.media_Files_temporary.find(
+          (mediaFile: Media_File) =>
+              mediaFile.id === store_player_audio_info.this_audio_song_id);
+  if (item != undefined && item != 'undefined') {
+    item.medium_image_url = result_src;
+  }
+  store_player_audio_info.page_top_album_image_url = result_src;
 };
 
 

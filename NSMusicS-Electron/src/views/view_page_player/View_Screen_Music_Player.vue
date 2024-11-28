@@ -18,21 +18,6 @@
     else if(process.platform === 'linux')
         return new URL(firstImage, import.meta.url).href;
   }
-  const path = require('path')
-  const handleImageError = async (event) => {
-    const originalSrc = event.target.src;
-    try {
-      const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
-      if (newImagePath) {
-        event.target.src = newImagePath;
-      } else {
-        event.target.src = path.resolve('resources/img/error_album.jpg');
-      }
-    } catch (error) {
-      console.error('Error handling image error:', error);
-      event.target.src = path.resolve('resources/img/error_album.jpg');
-    }
-  };
 
   ////// navie ui components
   // app theme
@@ -555,10 +540,8 @@
           object-fit: cover;
           object-position: center;"
         :style="{ filter: store_player_appearance.player_use_background_filter_blur ? 'brightness(46%) blur(60px)' : 'brightness(46%) blur(0px)' }"
-        :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
-        @error="handleImageError"
-        alt=""
-      />
+        :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+        alt="">
       <!--Skin-->
       <img
         v-else
@@ -568,8 +551,8 @@
           margin-top: -20vw;
           object-fit: cover;object-position: center;
           filter: brightness(46%) blur(0px);"
-        :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
-        @error="handleImageError" alt="">
+        :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+        alt="">
     </div>
     <!-- drwaer right area -->
     <n-config-provider :theme="darkTheme">
@@ -896,8 +879,8 @@
                         filter: blur(0px);
                         box-shadow: 16px 16px 16px rgba(0, 0, 0, 0.20), 0 0 16px rgba(0, 0, 0, 0.20);
                       "
-                      :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
-                      @error="handleImageError" alt="">
+                      :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                      alt="">
                     <div
                       style="
                         width: 54vh;margin-left: 2px;
@@ -944,8 +927,8 @@
                           filter: blur(0px);
                           box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                          "
-                          :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
-                          @error="handleImageError" alt="">
+                          :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                          alt="">
                       <div
                         style="
                           width: 54vh;margin-left: 2px;margin-top: 8px;color: #E7E5E5;font-weight: 900;font-size: 26px;
@@ -1014,8 +997,8 @@
                         box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                         position: absolute;
                       "
-                      :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
-                      @error="handleImageError" alt="">
+                      :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                      alt="">
                     <img
                       style="
                         width: calc(54vh - 12vh);height: calc(54vh - 12vh);
@@ -1027,8 +1010,8 @@
                         box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                         filter: blur(0);
                       "
-                      :src="getAssetImage(store_player_audio_info.this_audio_file_medium_image_url)"
-                      @error="handleImageError" alt="">
+                      :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                      alt="">
                     <div
                       style="
                         width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;

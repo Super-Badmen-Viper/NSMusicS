@@ -292,6 +292,14 @@ async function createWindow() {
                 return filePath;
             }
 
+            const coverFiles = ['cover.jpg', 'cover.png', 'cover.jpeg', 'cover.gif', 'cover.bmp', 'cover.svg'];
+            for (const coverFile of coverFiles) {
+                const coverPath = path.join(dir, coverFile);
+                if (fs.existsSync(coverPath)) {
+                    return coverPath;
+                }
+            }
+
             const commonImageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg'];
             const dir = path.dirname(filePath);
             const baseName = path.basename(filePath, path.extname(filePath));
@@ -299,14 +307,6 @@ async function createWindow() {
                 const newPath = path.join(dir, `${baseName}${ext}`);
                 if (fs.existsSync(newPath)) {
                     return newPath;
-                }
-            }
-
-            const coverFiles = ['cover.jpg', 'cover.png', 'cover.jpeg', 'cover.gif', 'cover.bmp', 'cover.svg'];
-            for (const coverFile of coverFiles) {
-                const coverPath = path.join(dir, coverFile);
-                if (fs.existsSync(coverPath)) {
-                    return coverPath;
                 }
             }
 
