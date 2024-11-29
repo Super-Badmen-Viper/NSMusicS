@@ -73,7 +73,10 @@ const updateGridItems = () => {
   item_artist.value = 180;
   item_artist_image.value = item_artist.value - 20;
   item_artist_txt.value = item_artist.value - 20;
-  if(window.innerWidth > 1660){
+  if(window.innerWidth > 2460){
+    itemSecondarySize.value = Math.floor(window.innerWidth / 8);
+    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value + 1);
+  }else if(window.innerWidth > 1660){
     itemSecondarySize.value = Math.floor(window.innerWidth / 7.4);
     gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value);
   }else{
