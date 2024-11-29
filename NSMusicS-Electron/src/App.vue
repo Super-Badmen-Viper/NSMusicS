@@ -620,6 +620,7 @@
     inheritLocale: true,
     useScope: 'global'
   })
+  const path = require('path');
   onMounted(async () => {
     store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
     store_app_configs_info.nsmusics_db = await ipcRenderer.invoke('window-get-nsmusics-db');
@@ -637,8 +638,12 @@
     try {
       // 等待数据库初始化进程结束
       if(await ipcRenderer.invoke('window-init-db')) {
+        // init read
         await store_app_configs_logic_load.load_app_config()
+        // init lang
         locale.value = store_app_configs_info.lang
+        // init image
+        store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'shrink_up_arrow.svg')
       }
     }catch{  }
 

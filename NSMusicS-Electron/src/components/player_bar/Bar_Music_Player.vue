@@ -72,10 +72,6 @@ const handleImageError = async (event) => {
 const player_show_hight_animation_value = ref(670);
 const svg_shrink_up_arrow = ref<string>('shrink_up_arrow.svg');
 const back_display = ref('none');
-const back_ChevronDouble = ref('')
-onMounted(() => {
-  back_ChevronDouble.value = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, svg_shrink_up_arrow.value)
-})
 const back_filter_blurValue  = ref(0);
 const hover_back_img = () => {
   back_display.value = 'block';
@@ -95,7 +91,7 @@ const click_back_svg = () => {
       svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
     else
       svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
-    back_ChevronDouble.value = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, svg_shrink_up_arrow.value)
+    store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, svg_shrink_up_arrow.value)
   }
 };
 let unwatch_player_show_click = watch(() => store_player_appearance.player_show_click, (newValue) => {
@@ -106,7 +102,7 @@ let unwatch_player_show_click = watch(() => store_player_appearance.player_show_
       svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
     else
       svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
-    back_ChevronDouble.value = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, svg_shrink_up_arrow.value)
+    store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, svg_shrink_up_arrow.value)
 
     store_player_appearance.player_show_click = false
   }
@@ -676,7 +672,7 @@ const handleItemClick_title = (title:string) => {
     svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
   else
     svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
-  back_ChevronDouble.value = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, svg_shrink_up_arrow.value)
+  store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, svg_shrink_up_arrow.value)
 }
 const handleItemClick_artist = (artist:string) => {
   store_view_media_page_logic.page_songlists_bool_show_search_area = true
@@ -692,7 +688,7 @@ const handleItemClick_artist = (artist:string) => {
     svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
   else
     svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
-  back_ChevronDouble.value = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, svg_shrink_up_arrow.value)
+  store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, svg_shrink_up_arrow.value)
 }
 const handleItemClick_album = (album:string) => {
   store_view_media_page_logic.page_songlists_bool_show_search_area = true
@@ -708,7 +704,7 @@ const handleItemClick_album = (album:string) => {
     svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
   else
     svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
-  back_ChevronDouble.value = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, svg_shrink_up_arrow.value)
+  store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, svg_shrink_up_arrow.value)
 }
 
 ////// view albumlist_view Remove data
@@ -738,7 +734,7 @@ onBeforeUnmount(() => {
       <div class="gird_Left">
         <div class="button_open_player_view">
           <img class="back_svg"
-               :src="back_ChevronDouble"
+               :src="getAssetImage(store_player_audio_logic.player_back_ChevronDouble)"
                :style="{ display: back_display }"
                @click="click_back_svg" @mouseover="hover_back_img" @mouseout="leave_back_svg" alt=""/>
           <img class="back_img"

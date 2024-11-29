@@ -31,6 +31,8 @@ export const store_player_audio_logic = reactive({
     slider_singleValue: 0,
     player_no_progress_jump: true,
 
+    player_back_ChevronDouble: '',
+
     player_silder_currentTime_added_value: 0,
     player_go_lyricline_index_of_audio_play_progress: 0,
 
