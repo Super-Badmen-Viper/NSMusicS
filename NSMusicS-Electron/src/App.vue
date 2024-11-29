@@ -672,7 +672,7 @@
     }
 
     try {
-      store_app_configs_info.version = '1.0.8';
+      store_app_configs_info.version = '1.1.0';
       console.log('Current Version:', store_app_configs_info.version);
       const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
       await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);
@@ -979,8 +979,8 @@
                   https://github.com/Super-Badmen-Viper/NSMusicS/releases
                 </a>
                 <br>
-                NSMusicS{{$t('nsmusics.view_page.download')}}{{$t('common.description')}} : <a class="link" @click="openLink(store_app_configs_info.version_update_address)">{{ store_app_configs_info.version_update_address }}</a>
-                <br>
+<!--                NSMusicS{{$t('nsmusics.view_page.download')}}{{$t('common.description')}} : <a class="link" @click="openLink(store_app_configs_info.version_update_address)">{{ store_app_configs_info.version_update_address }}</a>-->
+<!--                <br>-->
                 <div v-html="store_app_configs_info.version_update_explain"></div>
               </n-space>
             </n-card>
