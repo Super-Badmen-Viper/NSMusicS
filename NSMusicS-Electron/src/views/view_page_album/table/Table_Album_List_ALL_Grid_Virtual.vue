@@ -62,16 +62,17 @@ const { ipcRenderer } = require('electron');
 const path = require('path');
 const handleImageError = async (event) => {
   const originalSrc = event.target.src;
+  let result_src = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'error_album.jpg')
   try {
     const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
     if (newImagePath) {
       event.target.src = newImagePath;
     } else {
-      event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+      event.target.src = result_src
     }
   } catch (error) {
     console.error('Error handling image error:', error);
-    event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+    event.target.src = result_src
   }
 };
 function getAssetImage(firstImage: string) {
@@ -92,8 +93,13 @@ const updateGridItems = () => {
   item_album.value = 186;
   item_album_image.value = item_album.value - 20;
   item_album_txt.value = item_album.value - 20;
-  itemSecondarySize.value = Math.floor(window.innerWidth / 7);
-  gridItems.value = Math.floor(window.innerWidth / 180) - 1;//itemSecondarySize.value
+  if(window.innerWidth > 1660){
+    itemSecondarySize.value = Math.floor(window.innerWidth / 7.4);
+    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value);
+  }else{
+    itemSecondarySize.value = Math.floor(window.innerWidth / 7);
+    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
+  }
 };
 onMounted(() => {
   updateGridItems();
@@ -617,7 +623,6 @@ onBeforeUnmount(() => {
                   object-fit: cover;object-position: center;
                 "
                   :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                  @error="handleImageError"
               />
             </div>
             <n-page-header
@@ -685,7 +690,6 @@ onBeforeUnmount(() => {
                     object-fit: cover;
                     margin-left: -3px;"
                   :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                  @error="handleImageError"
                 />
               </template>
               <template #extra>

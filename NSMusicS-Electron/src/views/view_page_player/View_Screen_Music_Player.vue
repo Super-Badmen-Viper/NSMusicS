@@ -333,7 +333,7 @@
       id: 0,
       name: computed_i18n_Label_ViewSetConfig_Cover_1.value,
       normalStyle: {
-        image_url: 'file:///' + path.resolve('resources/img/player_theme_1.png'),
+        image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_1.png'),
 
         textAlign: true,
 
@@ -347,7 +347,7 @@
       id: 1,
       name: computed_i18n_Label_ViewSetConfig_Cover_2.value,
       normalStyle: {
-        image_url: 'file:///' + path.resolve('resources/img/player_theme_2.png'),
+        image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_2.png'),
 
         textAlign: false,
 
@@ -361,7 +361,7 @@
       id: 2,
       name: computed_i18n_Label_ViewSetConfig_Cover_3.value,
       normalStyle: {
-        image_url: 'file:///' + path.resolve('resources/img/player_theme_3.png'),
+        image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_3.png'),
 
         textAlign: true,
 
@@ -375,7 +375,7 @@
       id: 3,
       name: computed_i18n_Label_ViewSetConfig_Cover_4.value,
       normalStyle: {
-        image_url: 'file:///' + path.resolve('resources/img/player_theme_4.png'),
+        image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_4.png'),
 
         textAlign: false,
 
@@ -389,7 +389,7 @@
       id: 4,
       name: '皮肤底图',
       normalStyle: {
-        image_url: 'file:///' + path.resolve('resources/img/player_theme_3.png'),
+        image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_3.png'),
 
         textAlign: false,
 

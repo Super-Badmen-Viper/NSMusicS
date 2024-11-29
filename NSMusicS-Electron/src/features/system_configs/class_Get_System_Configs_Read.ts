@@ -4,7 +4,7 @@ import { Player_Configs_of_Audio_Info } from '@/models/app_Configs/class_Player_
 import { Player_Configs_of_UI } from '@/models/app_Configs/class_Player_Configs_of_UI';
 import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-import os from "os";
+const os = require('os');
 const path = require('path');
 
 export class Class_Get_System_Configs_Read {
@@ -109,14 +109,16 @@ export class Class_Get_System_Configs_Read {
         let db:any = null;
         try {
             if(process.platform === 'win32') {
-                db_navidrome = require('better-sqlite3')('C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db');
-                db = require('better-sqlite3')('C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db');
+                store_app_configs_info.cDriveDbDir = 'C:\\Users\\Public\\Documents\\NSMusicS\\'
+            }else if(process.platform === 'darwin') {
+                store_app_configs_info.cDriveDbDir = path.join(os.homedir(), 'NSMusicS');
+            }
+
+            if(process.platform === 'win32') {
+                db_navidrome = require('better-sqlite3')(store_app_configs_info.cDriveDbDir + 'navidrome.db');
+                db = require('better-sqlite3')(store_app_configs_info.cDriveDbDir + 'nsmusics.db');
             }
             else if(process.platform === 'darwin') {
-                const os = require('os');
-                const userHomeDir = os.homedir();
-                const cDriveDbDir = path.join(userHomeDir, 'NSMusicS');
-
                 db_navidrome = require('better-sqlite3')(path.join(cDriveDbDir, 'navidrome.db'));
                 db = require('better-sqlite3')(path.join(cDriveDbDir, 'nsmusics.db'));
             }

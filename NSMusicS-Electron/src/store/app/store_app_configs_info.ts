@@ -1,5 +1,6 @@
 import {reactive, watch} from 'vue'
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import os from "os";
 const path = require('path')
 
 export const store_app_configs_info = reactive({
@@ -24,6 +25,7 @@ export const store_app_configs_info = reactive({
     version_update_address: '',
     version_update_explain: '',
 
+    cDriveDbDir: '',
     navidrome_db: path.resolve('resources/navidrome.db'),
     nsmusics_db: path.resolve('resources/nsmusics.db'),
 

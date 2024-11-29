@@ -215,8 +215,6 @@ async function createWindow() {
 
     /// db get
     try {
-        navidrome_db = path.resolve('resources/navidrome.db');
-        nsmusics_db = path.resolve('resources/nsmusics.db');
         if(process.platform === 'win32') {
             const ensureDirectoryExists = (dirPath: string) => {
                 return new Promise((resolve, reject) => {
@@ -257,13 +255,43 @@ async function createWindow() {
                 });
             };
             await ensureDirectoryExists(cDriveDbDir) // 确保目标文件夹存在
-                .then(() => {
-                    Promise.all([
-                        copyIfNotExists(navidrome_db, cDriveDbPath_1).then((newPath) => navidrome_db = newPath),
-                        copyIfNotExists(nsmusics_db, cDriveDbPath_2).then((newPath) => nsmusics_db = newPath)
+                .then(async () => {
+                    await Promise.all([
+                        copyIfNotExists(
+                            path.resolve('resources/navidrome.db'),
+                            cDriveDbPath_1).then(
+                                (newPath) => navidrome_db = newPath),
+                        copyIfNotExists(
+                            path.resolve('resources/nsmusics.db'),
+                            cDriveDbPath_2).then(
+                                (newPath) => nsmusics_db = newPath)
                     ]).catch((err) => {
                         console.error('复制文件时出错:', err);
                     });
+
+                    await Promise.all([
+                        copyIfNotExists(
+                            path.resolve('resources/svg/shrink_down_arrow.svg'),
+                            path.join(cDriveDbDir, 'shrink_down_arrow.svg')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/svg/shrink_up_arrow.svg'),
+                            path.join(cDriveDbDir, 'shrink_up_arrow.svg')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/error_album.jpg'),
+                            path.join(cDriveDbDir, 'error_album.jpg')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/player_theme_1.png'),
+                            path.join(cDriveDbDir, 'player_theme_1.png')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/player_theme_2.png'),
+                            path.join(cDriveDbDir, 'player_theme_2.png')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/player_theme_3.png'),
+                            path.join(cDriveDbDir, 'player_theme_3.png')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/player_theme_4.png'),
+                            path.join(cDriveDbDir, 'player_theme_4.png')).then((newPath) => {})
+                    ]);
                 })
                 .catch((err) => {
                     console.error('创建目录时出错:', err);
@@ -310,18 +338,40 @@ async function createWindow() {
             };
             const initializeSqlite = async () => {
                 try {
-                    const userHomeDir = os.homedir();
-                    const targetFolderPath = path.join(userHomeDir, 'NSMusicS');
-                    const cDriveDbDir = targetFolderPath;
-
-                    const cDriveDbPath_1 = path.join(cDriveDbDir, 'navidrome.db');
-                    const cDriveDbPath_2 = path.join(cDriveDbDir, 'nsmusics.db');
-
+                    const cDriveDbDir = path.join(os.homedir(), 'NSMusicS');
                     await ensureDirectoryExists(cDriveDbDir);
 
                     await Promise.all([
-                        copyIfNotExists(navidrome_db, cDriveDbPath_1).then((newPath) => navidrome_db = newPath),
-                        copyIfNotExists(nsmusics_db, cDriveDbPath_2).then((newPath) => nsmusics_db = newPath)
+                        copyIfNotExists(
+                            path.resolve('resources/navidrome.db'),
+                            path.join(cDriveDbDir, 'navidrome.db')).then((newPath) => navidrome_db = newPath),
+                        copyIfNotExists(
+                            path.resolve('resources/nsmusics.db'),
+                            path.join(cDriveDbDir, 'nsmusics.db')).then((newPath) => nsmusics_db = newPath)
+                    ]);
+
+                    await Promise.all([
+                        copyIfNotExists(
+                            path.resolve('resources/svg/shrink_down_arrow.svg'),
+                            path.join(cDriveDbDir, 'shrink_down_arrow.svg')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/svg/shrink_up_arrow.svg'),
+                            path.join(cDriveDbDir, 'shrink_up_arrow.svg')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/error_album.jpg'),
+                            path.join(cDriveDbDir, 'error_album.jpg')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/player_theme_1.png'),
+                            path.join(cDriveDbDir, 'player_theme_1.png')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/player_theme_2.png'),
+                            path.join(cDriveDbDir, 'player_theme_2.png')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/player_theme_3.png'),
+                            path.join(cDriveDbDir, 'player_theme_3.png')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/player_theme_4.png'),
+                            path.join(cDriveDbDir, 'player_theme_4.png')).then((newPath) => {})
                     ]);
 
                     console.log('初始化完成');

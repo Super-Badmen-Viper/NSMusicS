@@ -67,16 +67,17 @@ const handleItemClick_Rating = (id: any,rating: number) => {
 const path = require('path')
 const handleImageError = async (event) => {
   const originalSrc = event.target.src;
+  let result_src = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'error_album.jpg')
   try {
     const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
     if (newImagePath) {
       event.target.src = newImagePath;
     } else {
-      event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+      event.target.src = result_src
     }
   } catch (error) {
     console.error('Error handling image error:', error);
-    event.target.src = 'file:///' + path.resolve('resources/img/error_album.jpg');
+    event.target.src = result_src
   }
 };
 
@@ -102,6 +103,7 @@ const message = useMessage()
 ////// right menu
 import { inject } from "vue";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 const { ipcRenderer } = require('electron');
 const contextmenu = inject("playlist_contextmenu", null);
 async function update_playlist_addMediaFile(id: any, playlist_id: any){
