@@ -1,3 +1,9 @@
+/// node-system
+import { File } from "node-taglib-sharp";
+import fs from "fs";
+const path = require('path');
+const os = require('os');
+
 /// electron
 import {
     app, BrowserWindow,
@@ -6,6 +12,7 @@ import {
     dialog,
     Tray, Menu, nativeImage, nativeTheme
 } from 'electron'
+import {ref} from "vue";
 const electron = require('electron')
 const ipc = electron.ipcMain
 const { session } = require('electron');
@@ -34,8 +41,10 @@ else {
         }catch (e){
             tray_loading_state = false;
         }
-        await initNodeMpv()
-        await createNodeMpv();
+        if(process.platform === 'win32') {
+            await initNodeMpv()
+            await createNodeMpv();
+        }
         await initModifyMediaTag();
 
         const devInnerHeight: number = 1080.0;
@@ -55,16 +64,10 @@ app.on('second-instance', (event, commandLine, workingDirectory) => {
     }
 });
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
+    // if (process.platform !== 'darwin') {
         app.quit()
-    }
+    // }
 })
-
-/// node-system
-import { File } from "node-taglib-sharp";
-import fs from "fs";
-const path = require('path');
-const os = require('os');
 
 /// node-mpv
 const mpvAPI = require('node-mpv');
@@ -82,6 +85,201 @@ async function clearSessionClearCache() {
     await session.defaultSession.clearCache();
     require("v8").setFlagsFromString("--expose_gc");
     global.gc = require("vm").runInNewContext("gc");
+}
+
+async function initSqlite3() {
+    try {
+        if(process.platform === 'win32') {
+            const ensureDirectoryExists = (dirPath: string) => {
+                return new Promise((resolve, reject) => {
+                    if (!fs.existsSync(dirPath)) {
+                        try {
+                            fs.mkdirSync(dirPath, {recursive: true});
+                            console.log(`目录 ${dirPath} 已创建`);
+                            resolve();
+                        } catch (err) {
+                            reject(err);
+                        }
+                    } else {
+                        resolve();
+                    }
+                });
+            };
+            const copyIfNotExists = (sourcePath: string, destPath: string) => {
+                return new Promise((resolve, reject) => {
+                    ensureDirectoryExists(cDriveDbDir) // 确保目标文件夹存在
+                        .then(() => {
+                            fs.access(destPath, fs.constants.F_OK, (err) => {
+                                if (err) {
+                                    fs.copyFile(sourcePath, destPath, (copyErr) => {
+                                        if (copyErr) {
+                                            reject(copyErr);
+                                        } else {
+                                            resolve(destPath);
+                                        }
+                                    });
+                                } else {
+                                    resolve(destPath);
+                                }
+                            });
+                        })
+                        .catch((err) => {
+                            reject(err);
+                        });
+                });
+            };
+            await ensureDirectoryExists(cDriveDbDir) // 确保目标文件夹存在
+                .then(async () => {
+                    await Promise.all([
+                        copyIfNotExists(
+                            path.resolve('resources/navidrome.db'),
+                            cDriveDbPath_1).then(
+                            (newPath) => navidrome_db = newPath),
+                        copyIfNotExists(
+                            path.resolve('resources/nsmusics.db'),
+                            cDriveDbPath_2).then(
+                            (newPath) => nsmusics_db = newPath),
+
+                        copyIfNotExists(
+                            path.resolve('resources/lottie_json/Animation - 1715392202806.json'),
+                            path.join(cDriveDbDir, 'Animation - 1715392202806.json')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/lottie_json/Animation - 1715591164841.json'),
+                            path.join(cDriveDbDir, 'Animation - 1715591164841.json')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/lottie_json/Animation - 1715417974362.json'),
+                            path.join(cDriveDbDir, 'Animation - 1715417974362.json')).then((newPath) => {}),
+
+                        copyIfNotExists(
+                            path.resolve('resources/svg/shrink_down_arrow.svg'),
+                            path.join(cDriveDbDir, 'shrink_down_arrow.svg')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/svg/shrink_up_arrow.svg'),
+                            path.join(cDriveDbDir, 'shrink_up_arrow.svg')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/error_album.jpg'),
+                            path.join(cDriveDbDir, 'error_album.jpg')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/player_theme_1.png'),
+                            path.join(cDriveDbDir, 'player_theme_1.png')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/player_theme_2.png'),
+                            path.join(cDriveDbDir, 'player_theme_2.png')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/player_theme_3.png'),
+                            path.join(cDriveDbDir, 'player_theme_3.png')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/img/player_theme_4.png'),
+                            path.join(cDriveDbDir, 'player_theme_4.png')).then((newPath) => {})
+                    ]).catch((err) => {
+                        console.error('复制文件时出错:', err);
+                    });
+                })
+                .catch((err) => {
+                    console.error('创建目录时出错:', err);
+                });
+        }
+        else if(process.platform === 'darwin'){
+            const ensureDirectoryExists = (dirPath: string) => {
+                return new Promise((resolve, reject) => {
+                    if (!fs.existsSync(dirPath)) {
+                        try {
+                            fs.mkdirSync(dirPath, { recursive: true });
+                            console.log(`目录 ${dirPath} 已创建`);
+                            resolve();
+                        } catch (err) {
+                            reject(err);
+                        }
+                    } else {
+                        resolve();
+                    }
+                });
+            };
+            const copyIfNotExists = (sourcePath: string, destPath: string) => {
+                return new Promise((resolve, reject) => {
+                    ensureDirectoryExists(path.dirname(destPath)) // 确保目标文件夹存在
+                        .then(() => {
+                            fs.access(destPath, fs.constants.F_OK, (err) => {
+                                if (err) {
+                                    fs.copyFile(sourcePath, destPath, (copyErr) => {
+                                        if (copyErr) {
+                                            reject(copyErr);
+                                        } else {
+                                            resolve(destPath);
+                                        }
+                                    });
+                                } else {
+                                    resolve(destPath);
+                                }
+                            });
+                        })
+                        .catch((err) => {
+                            reject(err);
+                        });
+                });
+            };
+            const initializeSqlite = async () => {
+                try {
+                    const cDriveDbDir = path.join(os.homedir(), 'Applications', 'NSMusicS');
+                    await ensureDirectoryExists(cDriveDbDir);
+
+                    const resourcesPath = process.env.NODE_ENV === 'development'
+                        ? path.resolve('resources')
+                        : path.join(process.resourcesPath)
+
+                    await Promise.all([
+                        copyIfNotExists(
+                            path.join(resourcesPath, 'navidrome.db'),
+                            path.join(cDriveDbDir, 'navidrome.db')).then((newPath) => console.log(`navidrome.db 已复制到 ${newPath}`)),
+                        copyIfNotExists(
+                            path.join(resourcesPath, 'nsmusics.db'),
+                            path.join(cDriveDbDir, 'nsmusics.db')).then((newPath) => console.log(`nsmusics.db 已复制到 ${newPath}`)),
+
+                        copyIfNotExists(
+                            path.join(resourcesPath, 'lottie_json', 'Animation - 1715392202806.json'),
+                            path.join(cDriveDbDir, 'Animation - 1715392202806.json')).then((newPath) => console.log(`Animation - 1715392202806.json 已复制到 ${newPath}`)),
+                        copyIfNotExists(
+                            path.join(resourcesPath, 'lottie_json', 'Animation - 1715591164841.json'),
+                            path.join(cDriveDbDir, 'Animation - 1715591164841.json')).then((newPath) => console.log(`Animation - 1715591164841.json 已复制到 ${newPath}`)),
+                        copyIfNotExists(
+                            path.join(resourcesPath, 'lottie_json', 'Animation - 1715417974362.json'),
+                            path.join(cDriveDbDir, 'Animation - 1715417974362.json')).then((newPath) => console.log(`Animation - 1715417974362.json 已复制到 ${newPath}`)),
+
+                        copyIfNotExists(
+                            path.join(resourcesPath, 'svg', 'shrink_down_arrow.svg'),
+                            path.join(cDriveDbDir, 'shrink_down_arrow.svg')).then((newPath) => console.log(`shrink_down_arrow.svg 已复制到 ${newPath}`)),
+                        copyIfNotExists(
+                            path.join(resourcesPath, 'svg', 'shrink_up_arrow.svg'),
+                            path.join(cDriveDbDir, 'shrink_up_arrow.svg')).then((newPath) => console.log(`shrink_up_arrow.svg 已复制到 ${newPath}`)),
+                        copyIfNotExists(
+                            path.join(resourcesPath, 'img', 'error_album.jpg'),
+                            path.join(cDriveDbDir, 'error_album.jpg')).then((newPath) => console.log(`error_album.jpg 已复制到 ${newPath}`)),
+                        copyIfNotExists(
+                            path.join(resourcesPath, 'img', 'player_theme_1.png'),
+                            path.join(cDriveDbDir, 'player_theme_1.png')).then((newPath) => console.log(`player_theme_1.png 已复制到 ${newPath}`)),
+                        copyIfNotExists(
+                            path.join(resourcesPath, 'img', 'player_theme_2.png'),
+                            path.join(cDriveDbDir, 'player_theme_2.png')).then((newPath) => console.log(`player_theme_2.png 已复制到 ${newPath}`)),
+                        copyIfNotExists(
+                            path.join(resourcesPath, 'img', 'player_theme_3.png'),
+                            path.join(cDriveDbDir, 'player_theme_3.png')).then((newPath) => console.log(`player_theme_3.png 已复制到 ${newPath}`)),
+                        copyIfNotExists(
+                            path.join(resourcesPath, 'img', 'player_theme_4.png'),
+                            path.join(cDriveDbDir, 'player_theme_4.png')).then((newPath) => console.log(`player_theme_4.png 已复制到 ${newPath}`))
+                    ]);
+
+                    console.log('初始化完成');
+                } catch (err) {
+                    console.error('初始化时出错:', err);
+                }
+            };
+            await initializeSqlite()
+        }
+    }
+    catch{
+        navidrome_db = path.resolve('resources/navidrome.db');
+        nsmusics_db = path.resolve('resources/nsmusics.db');
+    }
 }
 
 /// electron-window
@@ -214,178 +412,12 @@ async function createWindow() {
     });
 
     /// db get
-    try {
-        if(process.platform === 'win32') {
-            const ensureDirectoryExists = (dirPath: string) => {
-                return new Promise((resolve, reject) => {
-                    if (!fs.existsSync(dirPath)) {
-                        try {
-                            fs.mkdirSync(dirPath, {recursive: true});
-                            console.log(`目录 ${dirPath} 已创建`);
-                            resolve();
-                        } catch (err) {
-                            reject(err);
-                        }
-                    } else {
-                        resolve();
-                    }
-                });
-            };
-            const copyIfNotExists = (sourcePath: string, destPath: string) => {
-                return new Promise((resolve, reject) => {
-                    ensureDirectoryExists(cDriveDbDir) // 确保目标文件夹存在
-                        .then(() => {
-                            fs.access(destPath, fs.constants.F_OK, (err) => {
-                                if (err) {
-                                    fs.copyFile(sourcePath, destPath, (copyErr) => {
-                                        if (copyErr) {
-                                            reject(copyErr);
-                                        } else {
-                                            resolve(destPath);
-                                        }
-                                    });
-                                } else {
-                                    resolve(destPath);
-                                }
-                            });
-                        })
-                        .catch((err) => {
-                            reject(err);
-                        });
-                });
-            };
-            await ensureDirectoryExists(cDriveDbDir) // 确保目标文件夹存在
-                .then(async () => {
-                    await Promise.all([
-                        copyIfNotExists(
-                            path.resolve('resources/navidrome.db'),
-                            cDriveDbPath_1).then(
-                                (newPath) => navidrome_db = newPath),
-                        copyIfNotExists(
-                            path.resolve('resources/nsmusics.db'),
-                            cDriveDbPath_2).then(
-                                (newPath) => nsmusics_db = newPath)
-                    ]).catch((err) => {
-                        console.error('复制文件时出错:', err);
-                    });
-
-                    await Promise.all([
-                        copyIfNotExists(
-                            path.resolve('resources/svg/shrink_down_arrow.svg'),
-                            path.join(cDriveDbDir, 'shrink_down_arrow.svg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.resolve('resources/svg/shrink_up_arrow.svg'),
-                            path.join(cDriveDbDir, 'shrink_up_arrow.svg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.resolve('resources/img/error_album.jpg'),
-                            path.join(cDriveDbDir, 'error_album.jpg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.resolve('resources/img/player_theme_1.png'),
-                            path.join(cDriveDbDir, 'player_theme_1.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.resolve('resources/img/player_theme_2.png'),
-                            path.join(cDriveDbDir, 'player_theme_2.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.resolve('resources/img/player_theme_3.png'),
-                            path.join(cDriveDbDir, 'player_theme_3.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.resolve('resources/img/player_theme_4.png'),
-                            path.join(cDriveDbDir, 'player_theme_4.png')).then((newPath) => {})
-                    ]);
-                })
-                .catch((err) => {
-                    console.error('创建目录时出错:', err);
-                });
-        }
-        else if(process.platform === 'darwin'){
-            const ensureDirectoryExists = (dirPath: string) => {
-                return new Promise((resolve, reject) => {
-                    if (!fs.existsSync(dirPath)) {
-                        try {
-                            fs.mkdirSync(dirPath, { recursive: true });
-                            console.log(`目录 ${dirPath} 已创建`);
-                            resolve();
-                        } catch (err) {
-                            reject(err);
-                        }
-                    } else {
-                        resolve();
-                    }
-                });
-            };
-            const copyIfNotExists = (sourcePath: string, destPath: string) => {
-                return new Promise((resolve, reject) => {
-                    ensureDirectoryExists(path.dirname(destPath)) // 确保目标文件夹存在
-                        .then(() => {
-                            fs.access(destPath, fs.constants.F_OK, (err) => {
-                                if (err) {
-                                    fs.copyFile(sourcePath, destPath, (copyErr) => {
-                                        if (copyErr) {
-                                            reject(copyErr);
-                                        } else {
-                                            resolve(destPath);
-                                        }
-                                    });
-                                } else {
-                                    resolve(destPath);
-                                }
-                            });
-                        })
-                        .catch((err) => {
-                            reject(err);
-                        });
-                });
-            };
-            const initializeSqlite = async () => {
-                try {
-                    const cDriveDbDir = path.join(os.homedir(), 'NSMusicS');
-                    await ensureDirectoryExists(cDriveDbDir);
-
-                    await Promise.all([
-                        copyIfNotExists(
-                            path.resolve('resources/navidrome.db'),
-                            path.join(cDriveDbDir, 'navidrome.db')).then((newPath) => navidrome_db = newPath),
-                        copyIfNotExists(
-                            path.resolve('resources/nsmusics.db'),
-                            path.join(cDriveDbDir, 'nsmusics.db')).then((newPath) => nsmusics_db = newPath)
-                    ]);
-
-                    await Promise.all([
-                        copyIfNotExists(
-                            path.resolve('resources/svg/shrink_down_arrow.svg'),
-                            path.join(cDriveDbDir, 'shrink_down_arrow.svg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.resolve('resources/svg/shrink_up_arrow.svg'),
-                            path.join(cDriveDbDir, 'shrink_up_arrow.svg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.resolve('resources/img/error_album.jpg'),
-                            path.join(cDriveDbDir, 'error_album.jpg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.resolve('resources/img/player_theme_1.png'),
-                            path.join(cDriveDbDir, 'player_theme_1.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.resolve('resources/img/player_theme_2.png'),
-                            path.join(cDriveDbDir, 'player_theme_2.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.resolve('resources/img/player_theme_3.png'),
-                            path.join(cDriveDbDir, 'player_theme_3.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.resolve('resources/img/player_theme_4.png'),
-                            path.join(cDriveDbDir, 'player_theme_4.png')).then((newPath) => {})
-                    ]);
-
-                    console.log('初始化完成');
-                } catch (err) {
-                    console.error('初始化时出错:', err);
-                }
-            };
-            await initializeSqlite()
-        }
-    }
-    catch{
-        navidrome_db = path.resolve('resources/navidrome.db');
-        nsmusics_db = path.resolve('resources/nsmusics.db');
-    }
+    ipc.handle('window-init-db', async (event) => {
+        try {
+            await initSqlite3();
+            return true
+        } catch { return false }
+    });
     ipc.handle('window-get-navidrome-db', async (event) => {
         try { return navidrome_db } catch { return '' }
     });

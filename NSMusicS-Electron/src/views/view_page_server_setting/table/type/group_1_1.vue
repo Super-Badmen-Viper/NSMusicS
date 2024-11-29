@@ -11,7 +11,7 @@ import {MoreCircle32Regular} from "@vicons/fluent";
       {{ $t('TabServer') }} >
     </span>
     <n-space vertical>
-      Not open || 未开放
+      <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
     </n-space>
     <div v-if="false">
     <n-card vertical style="width: 410px;margin-left: 20px;">

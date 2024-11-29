@@ -72,7 +72,10 @@ const handleImageError = async (event) => {
 const player_show_hight_animation_value = ref(670);
 const svg_shrink_up_arrow = ref<string>('shrink_up_arrow.svg');
 const back_display = ref('none');
-const back_ChevronDouble = ref('file:///' + path.join(store_app_configs_info.cDriveDbDir, svg_shrink_up_arrow.value))
+const back_ChevronDouble = ref('')
+onMounted(() => {
+  back_ChevronDouble.value = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, svg_shrink_up_arrow.value)
+})
 const back_filter_blurValue  = ref(0);
 const hover_back_img = () => {
   back_display.value = 'block';

@@ -616,6 +616,10 @@
   provide("message", playlist_contextmenu);
 
   ////// Load Configs
+  const { locale } = useI18n({
+    inheritLocale: true,
+    useScope: 'global'
+  })
   onMounted(async () => {
     store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
     store_app_configs_info.nsmusics_db = await ipcRenderer.invoke('window-get-nsmusics-db');
@@ -631,7 +635,11 @@
     }catch{  }
 
     try {
-      await store_app_configs_logic_load.load_app_config()
+      // 等待数据库初始化进程结束
+      if(await ipcRenderer.invoke('window-init-db')) {
+        await store_app_configs_logic_load.load_app_config()
+        locale.value = store_app_configs_info.lang
+      }
     }catch{  }
 
     create_menuOptions_appBar()
@@ -868,7 +876,7 @@
         ">
         <n-drawer-content v-if="store_player_sound_more.player_show_sound_more">
           <template #default>
-            Not open || 未开放
+            <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
           </template>
         </n-drawer-content>
       </n-drawer>
@@ -884,7 +892,7 @@
         ">
         <n-drawer-content v-if="store_player_sound_speed.player_show_sound_speed">
           <template #default>
-            Not open || 未开放
+            <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
           </template>
         </n-drawer-content>
       </n-drawer>
@@ -908,19 +916,19 @@
                 <View_Player_Effect/>
               </n-tab-pane>
               <n-tab-pane name="001" tab="均衡器">
-                Not open || 未开放
+                <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
               </n-tab-pane>
               <n-tab-pane name="002" tab="九歌音效">
-                Not open || 未开放
+                <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
               </n-tab-pane>
               <n-tab-pane name="003" tab="声学适配">
-                Not open || 未开放
+                <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
               </n-tab-pane>
               <n-tab-pane name="004" tab="多音轨">
-                Not open || 未开放
+                <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
               </n-tab-pane>
               <n-tab-pane name="005" tab="音效制作">
-                Not open || 未开放
+                <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
               </n-tab-pane>
             </n-tabs>
           </template>

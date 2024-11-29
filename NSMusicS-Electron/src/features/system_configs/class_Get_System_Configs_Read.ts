@@ -111,17 +111,14 @@ export class Class_Get_System_Configs_Read {
             if(process.platform === 'win32') {
                 store_app_configs_info.cDriveDbDir = 'C:\\Users\\Public\\Documents\\NSMusicS\\'
             }else if(process.platform === 'darwin') {
-                store_app_configs_info.cDriveDbDir = path.join(os.homedir(), 'NSMusicS');
+                store_app_configs_info.cDriveDbDir = path.join(os.homedir(), 'Applications', 'NSMusicS');
             }
-
-            if(process.platform === 'win32') {
-                db_navidrome = require('better-sqlite3')(store_app_configs_info.cDriveDbDir + 'navidrome.db');
-                db = require('better-sqlite3')(store_app_configs_info.cDriveDbDir + 'nsmusics.db');
-            }
-            else if(process.platform === 'darwin') {
-                db_navidrome = require('better-sqlite3')(path.join(cDriveDbDir, 'navidrome.db'));
-                db = require('better-sqlite3')(path.join(cDriveDbDir, 'nsmusics.db'));
-            }
+            //
+            store_app_configs_info.navidrome_db = path.join(store_app_configs_info.cDriveDbDir, 'navidrome.db')
+            store_app_configs_info.nsmusics_db = path.join(store_app_configs_info.cDriveDbDir, 'nsmusics.db')
+            //
+            db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+            db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         }catch{
             db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);

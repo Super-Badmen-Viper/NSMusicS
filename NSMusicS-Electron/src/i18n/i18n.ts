@@ -51,15 +51,12 @@ import sv from '@/i18n/locales_feishin/sv.json';
 import cs from '@/i18n/locales_feishin/cs.json';
 import nl from '@/i18n/locales_feishin/nl.json';
 
-import {Class_Get_System_Configs_Read} from "@/features/system_configs/class_Get_System_Configs_Read";
-
 export class Language{
     public i18n:any;
     constructor() {
-        let system_Configs_Read = new Class_Get_System_Configs_Read();
         const options: I18nOptions = {
             legacy: false,
-            locale: '' + system_Configs_Read.app_Configs.value['lang'],
+            locale: 'zhHans',
             messages: {
                 'zhHans': { ...zhHans, ...zhHans_n, ...zhHans_j },
                 'zhHant': { ...zhHant, ...zhHant_n, ...zhHant_j },

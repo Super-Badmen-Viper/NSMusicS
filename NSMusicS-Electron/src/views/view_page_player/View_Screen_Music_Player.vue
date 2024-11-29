@@ -480,11 +480,11 @@
   import {store_app_configs_info} from "@/store/app/store_app_configs_info";
   const clear_lottie_animationInstance = ref(false)
   const animationInstance_model_1_spectrum = ref<any>(null);
-  const animationInstance_model_1_spectrum_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715392202806.json'))
+  const animationInstance_model_1_spectrum_json = JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715392202806.json')))
   const animationInstance_model_1_wave = ref<any>(null);
-  const animationInstance_model_1_wave_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715591164841.json'))
+  const animationInstance_model_1_wave_json = JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715591164841.json')))
   const animationInstance_model_2_wave = ref<any>(null);
-  const animationInstance_model_2_wave_json = JSON.parse(JSON.stringify('../../resources/lottie_json/Animation - 1715417974362.json'))
+  const animationInstance_model_2_wave_json = JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715417974362.json')))
   let unwatch_animationInstance = watch(() => store_player_audio_info.this_audio_is_playing, (newValue) => {
     if(store_player_appearance.player_use_lottie_animation) {
       if (newValue === true) {

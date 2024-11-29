@@ -25,7 +25,7 @@ function getAssetImage(firstImage: string) {
       {{ $t('HeaderUser') }} >
     </span>
     <n-space vertical>
-      Not open || 未开放
+      <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
     </n-space>
     <div v-if="false">
     <n-space vertical>

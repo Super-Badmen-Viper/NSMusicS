@@ -1,7 +1,6 @@
 import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router'
 const app = createApp(App)
 
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
@@ -16,10 +15,12 @@ import contextmenu from 'v-contextmenu'
 import 'v-contextmenu/dist/themes/default.css'
 app.use(contextmenu)
 
+import router from './router'
+app.use(router)
+
 import { Language } from "@/i18n/i18n";
 const i18n = new Language().i18n;
 console.log(i18n.locale)
 app.use(i18n);
 
-app.use(router)
 app.mount('#app')

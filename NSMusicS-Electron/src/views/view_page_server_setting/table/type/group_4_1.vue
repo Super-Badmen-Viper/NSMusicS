@@ -7,7 +7,7 @@
       {{ $t('TabNetworking') }} >
     </span>
     <n-space vertical>
-      Not open || 未开放
+      <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
     </n-space>
     <br>
   </n-space>

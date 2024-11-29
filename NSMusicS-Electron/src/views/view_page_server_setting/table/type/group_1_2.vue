@@ -8,7 +8,7 @@ import {store_app_configs_info} from "@/store/app/store_app_configs_info";
       {{ $t('Settings') }} >
     </span>
     <n-space vertical>
-      Not open || 未开放
+      <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
     </n-space>
     <div v-if="false">
     <n-space vertical style="margin-left: 20px;">
