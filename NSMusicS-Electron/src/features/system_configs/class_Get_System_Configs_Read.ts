@@ -111,6 +111,9 @@ export class Class_Get_System_Configs_Read {
             if(process.platform === 'win32') {
                 store_app_configs_info.cDriveDbDir = 'C:\\Users\\Public\\Documents\\NSMusicS\\'
             }else if(process.platform === 'darwin') {
+                // const resourcesPath = process.env.NODE_ENV === 'development'
+                //     ? path.resolve('resources')
+                //     : path.join(process.resourcesPath)
                 store_app_configs_info.cDriveDbDir = path.join(os.homedir(), 'Applications', 'NSMusicS');
             }
             //

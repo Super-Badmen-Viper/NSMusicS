@@ -40,11 +40,12 @@ else {
             tray_loading_state = true;
         }catch (e){
             tray_loading_state = false;
+            console.log('托盘创建失败: '+e);
         }
-        if(process.platform === 'win32') {
-            await initNodeMpv()
-            await createNodeMpv();
-        }
+
+        await initNodeMpv()
+        await createNodeMpv();
+
         await initModifyMediaTag();
 
         const devInnerHeight: number = 1080.0;
@@ -63,9 +64,10 @@ app.on('second-instance', (event, commandLine, workingDirectory) => {
         win.focus();
     }
 });
-app.on('window-all-closed', () => {
+app.on('window-all-closed', async () => {
     // if (process.platform !== 'darwin') {
-        app.quit()
+    await mpv.quit();
+    app.quit()
     // }
 })
 
@@ -237,40 +239,40 @@ async function initSqlite3() {
 
                         copyIfNotExists(
                             path.join(resourcesPath, 'lottie_json', 'Animation - 1715392202806.json'),
-                            path.join(cDriveDbDir, 'Animation - 1715392202806.json')).then((newPath) => console.log(`Animation - 1715392202806.json 已复制到 ${newPath}`)),
+                            path.join(cDriveDbDir, 'Animation - 1715392202806.json')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'lottie_json', 'Animation - 1715591164841.json'),
-                            path.join(cDriveDbDir, 'Animation - 1715591164841.json')).then((newPath) => console.log(`Animation - 1715591164841.json 已复制到 ${newPath}`)),
+                            path.join(cDriveDbDir, 'Animation - 1715591164841.json')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'lottie_json', 'Animation - 1715417974362.json'),
-                            path.join(cDriveDbDir, 'Animation - 1715417974362.json')).then((newPath) => console.log(`Animation - 1715417974362.json 已复制到 ${newPath}`)),
+                            path.join(cDriveDbDir, 'Animation - 1715417974362.json')).then((newPath) => {}),
 
                         copyIfNotExists(
                             path.join(resourcesPath, 'svg', 'shrink_down_arrow.svg'),
-                            path.join(cDriveDbDir, 'shrink_down_arrow.svg')).then((newPath) => console.log(`shrink_down_arrow.svg 已复制到 ${newPath}`)),
+                            path.join(cDriveDbDir, 'shrink_down_arrow.svg')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'svg', 'shrink_up_arrow.svg'),
-                            path.join(cDriveDbDir, 'shrink_up_arrow.svg')).then((newPath) => console.log(`shrink_up_arrow.svg 已复制到 ${newPath}`)),
+                            path.join(cDriveDbDir, 'shrink_up_arrow.svg')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'img', 'error_album.jpg'),
-                            path.join(cDriveDbDir, 'error_album.jpg')).then((newPath) => console.log(`error_album.jpg 已复制到 ${newPath}`)),
+                            path.join(cDriveDbDir, 'error_album.jpg')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'img', 'player_theme_1.png'),
-                            path.join(cDriveDbDir, 'player_theme_1.png')).then((newPath) => console.log(`player_theme_1.png 已复制到 ${newPath}`)),
+                            path.join(cDriveDbDir, 'player_theme_1.png')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'img', 'player_theme_2.png'),
-                            path.join(cDriveDbDir, 'player_theme_2.png')).then((newPath) => console.log(`player_theme_2.png 已复制到 ${newPath}`)),
+                            path.join(cDriveDbDir, 'player_theme_2.png')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'img', 'player_theme_3.png'),
-                            path.join(cDriveDbDir, 'player_theme_3.png')).then((newPath) => console.log(`player_theme_3.png 已复制到 ${newPath}`)),
+                            path.join(cDriveDbDir, 'player_theme_3.png')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'img', 'player_theme_4.png'),
-                            path.join(cDriveDbDir, 'player_theme_4.png')).then((newPath) => console.log(`player_theme_4.png 已复制到 ${newPath}`))
+                            path.join(cDriveDbDir, 'player_theme_4.png')).then((newPath) => {})
                     ]);
 
-                    console.log('初始化完成');
+                    console.log('初始化资源完成');
                 } catch (err) {
-                    console.error('初始化时出错:', err);
+                    console.error('初始化资源出错:', err);
                 }
             };
             await initializeSqlite()
@@ -983,7 +985,12 @@ let tray_menu_label_music = 'NSMusicS | 九歌';
 let tray_menu_label_music_check_enter = false;
 async function createTray(){
     /// Tray
-    const tray = new Tray(path.resolve('resources/config/NSMusicS.ico'));
+    let tray = null;
+    if(process.platform === 'win32') {
+        tray = new Tray(path.resolve('resources/config/NSMusicS.ico'));
+    }else if(process.platform === 'darwin') {
+        tray = new Tray(path.resolve('resources/config/NSMusicS.icns'));
+    }
     /// icon
     const createResizedIcon = (iconPath, width, height) => {
         if(!nativeTheme.shouldUseDarkColors){
@@ -1228,11 +1235,14 @@ async function initNodeMpv(){
                 verbose: true
             });
     }else if(process.platform === 'darwin') {
+        const resourcesPath = process.env.NODE_ENV === 'development'
+            ? path.resolve('resources')
+            : path.join(process.resourcesPath)
         mpv = new mpvAPI(
             {
                 audio_only: true,
                 auto_restart: true,
-                binary: path.resolve("resources/mpv-0.39.0/mpv.app/Contents/MacOS/mpv"),
+                binary: path.resolve(path.join(resourcesPath, 'mpv-0.39.0/mpv.app/Contents/MacOS','mpv')),
                 debug: true,
                 verbose: true
             });

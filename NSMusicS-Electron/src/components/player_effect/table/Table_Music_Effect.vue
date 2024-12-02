@@ -148,7 +148,7 @@ const openLink = (url: string) => {
             <n-select
                 v-model:value="store_player_audio_logic.player_select"
                 :options="store_player_audio_logic.player_kind"
-                :disabled="store_app_configs_info.desktop_system_kind != 'win32'"
+
                 @update:value="() => {
                         store_router_data_logic.clear_Memory_Model = false;
                         store_router_data_logic.clear_Equilibrium_Model = false;

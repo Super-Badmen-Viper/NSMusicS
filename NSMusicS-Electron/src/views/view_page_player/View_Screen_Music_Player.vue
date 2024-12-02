@@ -455,22 +455,6 @@
     }
   });
 
-  function formatTime(currentTime: number): string {
-    const minutes = Math.floor(currentTime / 60);
-    const seconds = Math.floor(currentTime % 60);
-
-    let formattedMinutes = String(minutes);
-    let formattedSeconds = String(seconds);
-
-    if (formattedMinutes.length == 1)
-      formattedMinutes = '0' + formattedMinutes;
-
-    if (formattedSeconds.length == 1)
-      formattedSeconds = '0' + formattedSeconds;
-
-    return `${formattedMinutes}:${formattedSeconds}`;
-  }
-
   ////// Animation lottie Load // lottie-web will cause memory leaks，so replace lottie-player_configs
   import "@lottiefiles/lottie-player";
   import {store_player_appearance} from "@/store/player/store_player_appearance";
@@ -1030,11 +1014,13 @@
                     </div>
                   </n-space>
                   <!--  -->
-                  <n-space v-if="!store_player_appearance.player_collapsed_album" style="margin-top: -12px;">
-                    {{ store_player_audio_logic.current_play_time }}
+                  <n-space v-if="!store_player_appearance.player_collapsed_album" style="margin-top: -18px;">
+                    <n-space style="width: 45px;margin-right: -8px;">
+                      {{ store_player_audio_logic.current_play_time }}
+                    </n-space>
                     <n-slider
                       style="
-                        width: calc(54vh - 96px);
+                        width: calc(54vh - 106px);
                         --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
                         --n-rail-height: 4px;
                         margin-top: 2px;
@@ -1046,7 +1032,9 @@
                         <n-icon-wrapper :size="0" />
                       </template>
                     </n-slider>
-                    {{ store_player_audio_logic.total_play_time }}
+                    <n-space style="width: 45px;">
+                      {{ store_player_audio_logic.total_play_time }}
+                    </n-space>
                   </n-space>
                 </n-space>
               </n-layout-sider>

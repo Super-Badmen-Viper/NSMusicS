@@ -234,27 +234,23 @@ export const store_app_configs_logic_load = reactive({
         store_player_audio_logic.play_order = '' + system_Configs_Read.app_Configs.value['play_order']
         store_player_audio_logic.play_volume = Number('' + system_Configs_Read.app_Configs.value['play_volume'])
         //
-        if(process.platform === 'win32') {
-            try {
-                if ('' + system_Configs_Read.app_Configs.value['player_select'] === null || '' + system_Configs_Read.app_Configs.value['player_select'].length < 0) {
-                    store_player_audio_logic.player_select = 'mpv'
-                } else {
-                    if('' + system_Configs_Read.app_Configs.value['player_select'] === 'mpv'){
-                        store_player_audio_logic.player_select = 'mpv'
-                    }else if('' + system_Configs_Read.app_Configs.value['player_select'] === 'web'){
-                        store_player_audio_logic.player_select = 'web'
-                    }else{
-                        store_player_audio_logic.player_select = 'mpv'
-                    }
-                }
-            }catch {
+        try {
+            if ('' + system_Configs_Read.app_Configs.value['player_select'] === null || '' + system_Configs_Read.app_Configs.value['player_select'].length < 0) {
                 store_player_audio_logic.player_select = 'mpv'
-                store_player_audio_logic.player_fade_value = 2000;
+            } else {
+                if('' + system_Configs_Read.app_Configs.value['player_select'] === 'mpv'){
+                    store_player_audio_logic.player_select = 'mpv'
+                }else if('' + system_Configs_Read.app_Configs.value['player_select'] === 'web'){
+                    store_player_audio_logic.player_select = 'web'
+                }else{
+                    store_player_audio_logic.player_select = 'mpv'
+                }
             }
+        }catch {
             store_player_audio_logic.player_select = 'mpv'
-        }else{
-            store_player_audio_logic.player_select = 'web'
+            store_player_audio_logic.player_fade_value = 2000;
         }
+        store_player_audio_logic.player_select = 'mpv'
         //
         store_player_audio_logic.player_fade_value = Number('' + system_Configs_Read.app_Configs.value['player_fade_value'])
         if (store_player_audio_logic.player_fade_value === null) {
