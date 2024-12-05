@@ -66,6 +66,7 @@ const handleImageError = async (event) => {
   }
   store_player_audio_info.page_top_album_image_url = result_src;
 };
+import { debounce } from 'lodash';
 
 
 ////// open view musicplayer
@@ -236,14 +237,16 @@ const Play_This_Audio_Path = () => {
           await store_player_audio_logic.player.getDuration()
       );
 
-      store_local_data_set_mediaInfo.Set_MediaInfo_To_PlayCount_of_Media_File(
-          store_player_audio_info.this_audio_song_id
-      )
+      Set_MediaInfo_To_PlayCount();
     }
   }, 400);
 }
+const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
+  store_local_data_set_mediaInfo.Set_MediaInfo_To_PlayCount_of_Media_File(
+      store_player_audio_info.this_audio_song_id
+  )
+}, 1000);
 /// Prevent 'mpv stopped' from being triggered multiple times and implement anti shake throttling measures
-import { debounce } from 'lodash';
 const handleMpvStopped = debounce(async (event, args) => {
   is_play_ended.value = true;
   let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
@@ -303,7 +306,8 @@ const Init_Audio_Player = async () => {
           if(!store_player_audio_logic.player.isPlaying)
             Play_This_Audio_Path()
           else {
-            await ipcRenderer.invoke('mpv-startFadeIn', store_player_audio_logic.play_volume)
+            // await ipcRenderer.invoke('mpv-startFadeIn', store_player_audio_logic.play_volume)
+            await store_player_audio_logic.player.play();
           }
         }
         else if(store_player_audio_logic.player_select === 'web'){
@@ -322,7 +326,8 @@ const Init_Audio_Player = async () => {
       store_player_audio_info.this_audio_is_playing = false
       store_player_audio_logic.player.isPlaying = false;
       if(store_player_audio_logic.player_select === 'mpv'){
-        await ipcRenderer.invoke('mpv-startFadeOut', store_player_audio_logic.play_volume)
+        // await ipcRenderer.invoke('mpv-startFadeOut', store_player_audio_logic.play_volume)
+        await store_player_audio_logic.player.pause();
       }
       else if(store_player_audio_logic.player_select === 'web'){
         store_player_audio_logic.player.howl.fade(1, 0, store_player_audio_logic.player_fade_value);

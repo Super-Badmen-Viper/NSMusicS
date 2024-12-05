@@ -1230,7 +1230,7 @@ async function initNodeMpv(){
             {
                 audio_only: true,
                 auto_restart: true,
-                binary: path.resolve("resources/mpv-x86_64-20240623/mpv.exe"),
+                binary: path.resolve("resources/mpv-x86_64-20241124/mpv.exe"),
                 debug: true,
                 verbose: true
             });
@@ -1367,7 +1367,7 @@ async function createNodeMpv(){
         currentVolume = volume
     });
 
-    ////// 手动实现 mpv 播放/暂停 淡入淡出效果
+    ////// 进程通信BUG，已禁用此淡入淡出效果 | 手动实现 mpv 播放/暂停 淡入淡出效果
     let fadeIntervalId = null;
     ipc.handle('mpv-startFadeIn', async (event,volume) => {
         try {

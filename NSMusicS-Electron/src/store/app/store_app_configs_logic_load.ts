@@ -233,6 +233,9 @@ export const store_app_configs_logic_load = reactive({
         /// player
         store_player_audio_logic.play_order = '' + system_Configs_Read.app_Configs.value['play_order']
         store_player_audio_logic.play_volume = Number('' + system_Configs_Read.app_Configs.value['play_volume'])
+        if(store_player_audio_logic.play_volume === 0 || store_player_audio_logic.play_volume === undefined){
+            store_player_audio_logic.play_volume = 100;
+        }
         //
         try {
             if ('' + system_Configs_Read.app_Configs.value['player_select'] === null || '' + system_Configs_Read.app_Configs.value['player_select'].length < 0) {
