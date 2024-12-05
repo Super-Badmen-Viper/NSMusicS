@@ -1251,6 +1251,7 @@
                         v-model:value="player_fade_model_options_selected"
                         :options="player_fade_model_options"
                         @update:value="update_player_fade_model_options_selected"
+                        :disabled="store_player_audio_logic.player_select === 'mpv'"
                         placeholder="not enabled"
                         :reset-menu-on-options-change="false"
                         style="width: 207px;margin-top: -4px;"
@@ -1267,6 +1268,7 @@
                       <n-input clearable
                                v-model:value="store_player_audio_logic.player_fade_value"
                                @update:value="update_player_fade_value"
+                               :disabled="store_player_audio_logic.player_select === 'mpv'"
                       />
                       <n-input-group-label>ms</n-input-group-label>
                     </n-input-group>

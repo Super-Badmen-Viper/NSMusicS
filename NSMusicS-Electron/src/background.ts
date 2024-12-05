@@ -1316,9 +1316,9 @@ async function createNodeMpv(){
                 isPlaying = true;
                 tray_music_play = true
 
-                if(currentFade !== 0){
-                    await startFadeIn(currentVolume)
-                }
+                // if(currentFade !== 0){
+                //     await startFadeIn(currentVolume)
+                // }
             }
             return true;
         } catch (error) {
