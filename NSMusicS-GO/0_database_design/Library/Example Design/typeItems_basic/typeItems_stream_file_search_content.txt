@@ -1,0 +1,35 @@
+//// 基础流式文件->内容快速索引
+Name: 实体的名称，例如电影名、电视剧名等。
+Overview: 概述或简介，通常是对内容的简要描述。
+Tagline: 标语，通常用于表示内容的简短宣传语。
+OriginalTitle: 原始标题，通常用于表示内容的原始名称。
+PrimaryVersionId: 主版本ID，通常用于标识内容的主要版本。
+
+IsFolder: 布尔值，表示该实体是否为文件夹。
+IsAudio: 布尔值，表示该实体是否为音频。
+IsVideo: 布尔值，表示该实体是否为视频。
+IsMovie: 布尔值，表示该实体是否为电影。
+IsSeries: 布尔值，表示该实体是否为电视剧系列。
+IsPhoto: 布尔值，表示该实体是否为图片。
+IsText: 布尔值，表示该实体是否为文本。
+MultiMediaType: 多媒体类型，例如：Folder、Audio、Video、Movie、Series、Photo、Text。
+
+IsRepeat: 布尔值，表示该内容是否为重复播放。
+IsVirtualItem: 布尔值，表示该实体是否为虚拟项。
+
+SortName: 用于排序的名称，通常是为了避免特殊字符或前缀影响排序。
+ForcedSortName: 强制排序名称，通常用于覆盖默认的排序规则。
+CleanName: 清理后的名称，通常用于去除特殊字符或前缀的名称。
+
+DateCreated: 创建日期，通常用于表示实体的创建时间。
+DateModified: 修改日期，通常用于表示实体的最后修改时间。
+RunTimeTicks: 运行时间的刻度值，通常用于表示内容的时长。
+DateLastRefreshed: 最后刷新日期，通常用于表示元数据的最后更新时间。
+DateLastSaved: 最后保存日期，通常用于表示实体的最后保存时间。
+DateLastMediaAdded: 最后添加媒体日期，通常用于表示最后添加媒体文件的时间。
+
+IndexNumber: 索引号，通常用于排序或标识实体在集合中的位置。
+ParentIndexNumber: 父级实体的索引号，通常用于表示层级关系中的排序。
+IsInMixedFolder: 布尔值，表示该实体是否在混合文件夹中。
+ParentId: 父级实体的唯一标识符，通常用于表示层级关系。
+TopParentId: 顶级父级实体的唯一标识符，通常用于表示最高层级的父级关系。

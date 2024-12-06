@@ -1,0 +1,10 @@
+id:全局唯一标识符（GUID），通常用于唯一标识某个实体或记录。
+
+"commentAuthor" Text, -- 评论作者（适用于音乐社区评论）
+"commentRating" float, -- 评论评分（适用于音乐社区评论）
+
+"commentText" Text, -- 评论内容（适用于音乐社区评论）
+"commentDate" datetime, -- 评论日期（适用于音乐社区评论）
+
+"commentLikes" int, -- 评论点赞数（适用于音乐社区评论）
+"commentReplies" int, -- 评论回复数（适用于音乐社区评论）

@@ -1,0 +1,10 @@
+id:全局唯一标识符（GUID），通常用于唯一标识某个实体或记录。
+
+"location" Text, -- 位置（适用于照片、日记）
+"cameraModel" Text, -- 相机型号（适用于照片）
+"exposureTime" Text, -- 曝光时间（适用于照片）
+"fNumber" float, -- 光圈值（适用于照片）
+"isoSpeed" int, -- ISO速度（适用于照片）
+"focalLength" float, -- 焦距（适用于照片）
+"flash" bit, -- 是否使用闪光灯（适用于照片）
+"photoFormat" Text, -- 照片格式（适用于照片）

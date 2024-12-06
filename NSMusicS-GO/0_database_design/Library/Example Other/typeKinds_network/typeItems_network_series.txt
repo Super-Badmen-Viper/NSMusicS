@@ -1,0 +1,20 @@
+id:全局唯一标识符（GUID），通常用于唯一标识某个实体或记录。
+
+StartDate: 开始日期，通常用于表示某个事件或实体的开始时间。
+EndDate: 结束日期，通常用于表示某个事件或实体的结束时间。
+
+PremiereDate: 首映日期，通常用于表示内容的首次发布时间。
+ProductionYear: 制作年份，通常用于表示内容的制作时间。
+
+Studios: 制作工作室或公司，通常用于表示内容的制作方。
+
+TrailerTypes: 预告片类型，通常用于表示预告片的类型或格式。
+
+SeasonId: 季ID，通常用于标识电视剧季的唯一标识符。
+SeasonName: 季名称，通常用于表示电视剧季的名称。
+
+SeriesId: 系列ID，通常用于标识电视剧系列的唯一标识符。
+SeriesName: 系列名称，通常用于表示电视剧系列的名称。
+SeriesPresentationUniqueKey: 系列展示唯一键，通常用于唯一标识系列的展示形式。
+
+EpisodeTitle: 剧集标题，通常用于表示电视剧中的单集标题。
