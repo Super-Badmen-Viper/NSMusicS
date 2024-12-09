@@ -40,19 +40,26 @@ const itemSize = ref(220);
 const gridItems = ref(5);
 const itemSecondarySize = ref(185);
 const path = require('path')
-const handleImageError = async (event) => {
-  const originalSrc = event.target.src;
-  let result_src = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'error_album.jpg')
+const errorHandled = ref(new Map());
+const handleImageError = async (item: any) => {
+  let result_src = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'error_album.jpg');
+  if (errorHandled.value.has(item.id)) {
+    item.medium_image_url = result_src;
+    return;
+  }
+  errorHandled.value.set(item.id, true);
+  ///
+  const originalSrc = item.medium_image_url;
   try {
     const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
-    if (newImagePath) {
-      event.target.src = newImagePath;
+    if (newImagePath.length > 0) {
+      item.medium_image_url = 'file:///' + newImagePath;
     } else {
-      event.target.src = result_src;
+      item.medium_image_url = result_src;
     }
   } catch (error) {
     console.error('Error handling image error:', error);
-    event.target.src = result_src;
+    item.medium_image_url = result_src;
   }
 };
 function getAssetImage(firstImage: string) {
@@ -514,9 +521,9 @@ onBeforeUnmount(() => {
       </n-button>
       <n-input-group 
         v-if="bool_show_search_area"
-        style="width: 160px;">
+        style="width: 238px;">
         <n-input 
-          style="width: 160px;"
+          style="width: 238px;"
           ref="input_search_InstRef" 
           v-model:value="input_search_Value"
           @keydown.enter="click_search"/>
@@ -693,7 +700,7 @@ onBeforeUnmount(() => {
                 :style="{ width: item_artist_image + 'px', height: item_artist_image + 'px', position: 'relative' }">
                 <img
                   :src="item.medium_image_url"
-                  @error="handleImageError"
+                  @error="handleImageError(item)"
                   style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
                   :style="{ width: item_artist_image + 'px', height: item_artist_image + 'px', borderRadius: '6px' }"/>
                 <div class="hover-overlay" @dblclick="Open_this_artist_all_artist_list_click(item.id)">

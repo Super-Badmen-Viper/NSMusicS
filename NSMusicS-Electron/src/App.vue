@@ -281,6 +281,8 @@
       console.log(to.name)
       store_app_configs_logic_save.save_system_config_of_View_Router_History()
       ///
+      store_app_configs_info.app_view_left_menu_collapsed = true
+      ///
       if(!store_router_data_logic.clear_UserExperience_Model) {
         if (to.name != 'View_Song_List_ALL') {
           try {
@@ -693,37 +695,104 @@
 </script>
 <template>
   <n-message-provider>
+    <!-- bottom PlayerBar and PlayerView -->
+    <n-config-provider :theme="store_app_configs_info.theme_app">
+      <!-- n-card can change Bar_Music_Player(text color) -->
+      <n-card
+          style="
+          position: fixed;left: 0;bottom: 0;
+          width: 100vw;height: 80px;
+          background-color: #00000000;
+          z-index: 100;
+          border-radius: 12px 12px 0 0;border: 0 #00000000">
+        <Bar_Music_Player/>
+      </n-card>
+      <View_Screen_Music_Player
+          class="view_music_player"
+          v-if="store_player_appearance.player_show"
+          :style="{ height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)` }">
+      </View_Screen_Music_Player>
+    </n-config-provider>
+
     <!-- Player Bady View-->
     <n-config-provider class="this_App" :theme="store_app_configs_info.theme">
       <n-global-style />
       <n-message-provider class="this_App">
         <n-layout has-sider class="this_App" embedded @click="drawer_close_of_player_bar">
-          <!--Left Router_Menu-->
-          <n-layout-sider
-            style="border: 0;"
-            collapse-mode="width"
-            :collapsed-width="66"
-            :width="160"
-            :collapsed="true"
-            @collapse="store_app_configs_info.app_view_left_menu_collapsed = true"
-            @expand="store_app_configs_info.app_view_left_menu_collapsed = false">
-            <n-flex vertical justify="center" style="height: 100vh">
-              <div></div>
-              <n-menu
-                v-if="store_app_configs_info.app_view_bar_show"
-                v-model:value="store_app_configs_info.app_view_left_menu_select_activeKey"
-                :collapsed="store_app_configs_info.app_view_left_menu_collapsed"
-                :collapsed-width="66"
-                :collapsed-icon-size="22"
-                :options="store_app_configs_info.app_view_menuOptions"/>
-              <div></div>
-            </n-flex>
-          </n-layout-sider>
+          <!--Left Router_Menu app_view_left_menu_collapsed-->
+          <n-flex vertical justify="center" style="height: 100vh;">
+            <div></div>
+            <n-layout-sider
+              show-trigger="bar"
+              v-if="store_app_configs_info.app_view_left_menu_collapsed"
+              collapse-mode="width"
+              :collapsed-width="66"
+              :collapsed="store_app_configs_info.app_view_left_menu_collapsed"
+              @collapse="store_app_configs_info.app_view_left_menu_collapsed = true"
+              @expand="store_app_configs_info.app_view_left_menu_collapsed = false"
+              :width="166"
+              style="
+                border-radius:  0 20px 20px 0;
+                border: #f0f0f020 1px solid;
+                z-index: 200;
+              "
+            >
+              <n-flex vertical justify="center">
+                <div></div>
+                <n-menu
+                    v-if="store_app_configs_info.app_view_bar_show"
+                    v-model:value="store_app_configs_info.app_view_left_menu_select_activeKey"
+                    :collapsed="store_app_configs_info.app_view_left_menu_collapsed"
+                    :collapsed-width="66"
+                    :collapsed-icon-size="22"
+                    :icon-size="20"
+                    :options="store_app_configs_info.app_view_menuOptions"
+                />
+                <div></div>
+              </n-flex>
+            </n-layout-sider>
+            <div></div>
+          </n-flex>
+          <!--Left Router_Menu app_view_left_menu_show-->
+          <n-drawer
+            v-model:show="store_app_configs_info.app_view_left_menu_show"
+            placement="left"
+            :width="200"
+            style="border: 0;border-radius:  0 20px 20px 0;"
+          >
+            <n-layout-sider
+              v-if="store_app_configs_info.app_view_left_menu_show"
+              :width="200"
+              style="
+                border: 0;border-radius:  0 20px 20px 0;
+                z-index: 200;
+                height: 100vh;
+              "
+            >
+              <n-flex vertical justify="center" style="height: 100vh;">
+                <div></div>
+                <n-menu
+                  v-if="store_app_configs_info.app_view_bar_show"
+                  v-model:value="store_app_configs_info.app_view_left_menu_select_activeKey"
+                  :collapsed="store_app_configs_info.app_view_left_menu_collapsed"
+                  :collapsed-width="66"
+                  :collapsed-icon-size="22"
+                  :icon-size="20"
+                  :options="store_app_configs_info.app_view_menuOptions"
+                />
+                <div></div>
+              </n-flex>
+            </n-layout-sider>
+          </n-drawer>
           <!--Right Router_View-->
           <n-layout
             embedded
             :native-scrollbar="false"
-            style="height: calc(100vh - 150px);margin-top: 70px;">
+            style="
+              height: calc(100vh - 150px);margin-top: 70px;
+              position: absolute;left: 66px;
+              z-index: 0;
+            ">
             <!--Menu View -->
             <RouterView class="view_show_data"
                         v-if="store_router_data_info.router_select_model_menu"></RouterView>
@@ -752,7 +821,9 @@
             <div class="bar_top_setapp" style="background-color: transparent" @click="drawer_close_of_player_bar">
               <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"
                        :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
-                       :style="{ marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '260px' : '108px' }"
+                       :style="{
+                         marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '224px' : '108px'
+                       }"
                        style="
                           z-index: 100;
                           margin-top: 34.5px;
@@ -773,20 +844,20 @@
                   text-align:center;
                   z-index: 99;
                 ">
-                <n-button
-                  quaternary circle
-                  style="margin-right:4px;"
-                  @click="async () => {
-                    if(store_server_user_model.model_server_type_of_web){
-                      await ipcRenderer.invoke('mpv-stopped');
-                    }
-                    ipcRenderer.send('window-reset-data');
-                  }">
-                  <template #icon>
-                    <n-icon size="20" :depth="2"><clean/></n-icon>
-                  </template>
-                  <!--<span style="font-weight: 500;">{{ $t('setting.clearQueryCache') }}</span>-->
-                </n-button>
+<!--                <n-button-->
+<!--                  quaternary circle-->
+<!--                  style="margin-right:4px;"-->
+<!--                  @click="async () => {-->
+<!--                    if(store_server_user_model.model_server_type_of_web){-->
+<!--                      await ipcRenderer.invoke('mpv-stopped');-->
+<!--                    }-->
+<!--                    ipcRenderer.send('window-reset-data');-->
+<!--                  }">-->
+<!--                  <template #icon>-->
+<!--                    <n-icon size="20" :depth="2"><clean/></n-icon>-->
+<!--                  </template>-->
+<!--                  &lt;!&ndash;<span style="font-weight: 500;">{{ $t('setting.clearQueryCache') }}</span>&ndash;&gt;-->
+<!--                </n-button>-->
                 <n-button quaternary circle size="medium"
                           :style="{ marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '4px' : '30px' }"
                           @click="store_app_configs_logic_theme.theme_mode_change_click()">
@@ -828,30 +899,14 @@
         </n-layout>
       </n-message-provider>
     </n-config-provider  >
-    <!-- bottom PlayerBar and PlayerView -->
-    <n-config-provider :theme="store_app_configs_info.theme_app">
-      <!-- n-card can change Bar_Music_Player(text color) -->
-      <n-card
-        style="
-          position: fixed;left: 0;bottom: 0;
-          width: 100vw;height: 80px;
-          background-color: #00000000;
-          z-index: 100;
-          border-radius: 12px 12px 0 0;border: 0 #00000000">
-        <Bar_Music_Player/>
-      </n-card>
-      <View_Screen_Music_Player
-        class="view_music_player"
-        v-if="store_player_appearance.player_show"
-        :style="{ height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)` }">
-      </View_Screen_Music_Player>
-    </n-config-provider>
+
+    <!-- right drwaer -->
     <n-config-provider :theme="darkTheme">
       <!-- right drwaer of music_playlist -->
       <n-drawer
-          v-model:show="store_playlist_appearance.playlist_show"
-          :width="520"
-          style="
+        v-model:show="store_playlist_appearance.playlist_show"
+        :width="520"
+        style="
           border-radius: 12px 0 0 12px;
           border: 1.5px solid #FFFFFF20;
           background-color: rgba(127, 127, 127, 0.1);
@@ -1045,6 +1100,12 @@
   color: #3DC3FF;
   background-color: transparent;
 }
+
+.n-layout-sider .n-layout-toggle-button  {
+  width: 40px;
+  height: 40px;
+}
+
 ::-webkit-scrollbar {
   display: none;
 }

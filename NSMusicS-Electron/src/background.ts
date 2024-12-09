@@ -13,6 +13,7 @@ import {
     Tray, Menu, nativeImage, nativeTheme
 } from 'electron'
 import {ref} from "vue";
+import {store_app_configs_info} from "./store/app/store_app_configs_info";
 const electron = require('electron')
 const ipc = electron.ipcMain
 const { session } = require('electron');
@@ -78,9 +79,9 @@ let mpv = null;
 /// node-db
 let navidrome_db = path.resolve('resources/navidrome.db');
 let nsmusics_db = path.resolve('resources/nsmusics.db');
-const cDriveDbPath_1 = 'C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db';
-const cDriveDbPath_2 = 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db';
-const cDriveDbDir = 'C:\\Users\\Public\\Documents\\NSMusicS';
+let cDriveDbPath_1 = 'C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db';
+let cDriveDbPath_2 = 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db';
+let cDriveDbDir = 'C:\\Users\\Public\\Documents\\NSMusicS';
 
 /// electron-gc
 async function clearSessionClearCache() {
@@ -222,7 +223,7 @@ async function initSqlite3() {
             };
             const initializeSqlite = async () => {
                 try {
-                    const cDriveDbDir = path.join(os.homedir(), 'Applications', 'NSMusicS');
+                    cDriveDbDir = path.join(os.homedir(), 'Applications', 'NSMusicS');
                     await ensureDirectoryExists(cDriveDbDir);
 
                     const resourcesPath = process.env.NODE_ENV === 'development'
@@ -459,13 +460,16 @@ async function createWindow() {
                 const filePath = path.join(dir, file);
                 const stat = fs.statSync(filePath);
                 if (stat.isFile() && commonImageExtensions.some(ext => file.toLowerCase().endsWith(ext))) {
-                    return filePath;
+                    if (fs.existsSync(filePath)) {
+                        return filePath;
+                    }
                 }
             }
-            return '';
+
+            return 'file:///' + path.join(cDriveDbDir, 'error_album.jpg');
         } catch (error) {
             console.error('Error handling window-get-imagePath:', error);
-            return '';
+            return 'file:///' + path.join(cDriveDbDir, 'error_album.jpg');;
         }
     });
     ipc.handle('library-select-folder', async (event) => {
@@ -1330,41 +1334,57 @@ async function createNodeMpv(){
         return isPlaying;
     });
     ipc.handle('mpv-play',  async (event) => {
-        await mpv.resume();
-        isPlaying = true;
-        tray_music_play = true
+        if(mpv != undefined && mpv.isRunning()) {
+            await mpv.resume();
+            isPlaying = true;
+            tray_music_play = true
+        }
     });
     ipc.handle('mpv-pause',  async (event) => {
-        await mpv.pause();
-        isPlaying = false;
-        tray_music_play = false;
+        if(mpv != undefined && mpv.isRunning()) {
+            await mpv.pause();
+            isPlaying = false;
+            tray_music_play = false;
+        }
     });
     ipc.handle('mpv-stopped', async (event,volume) => {
-        await mpv.pause();
-        tray_music_play = false
+        if(mpv != undefined && mpv.isRunning()) {
+            await mpv.pause();
+            tray_music_play = false
+        }
     });
     ipc.handle('mpv-get-duration', async (event) => {
         try {
-            return await mpv.getDuration()
+            if(mpv != undefined && mpv.isRunning())
+                return await mpv.getDuration()
+            else
+                return -1
         } catch {
             return -1
         }
     });
     ipc.handle('mpv-get-time-pos', async (event) => {
         try {
-            return await mpv.getTimePosition()
+            if(mpv != undefined && mpv.isRunning())
+                return await mpv.getTimePosition()
+            else
+                return -1
         } catch {
             return -1
         }
     });
     ipc.handle('mpv-set-time-pos', async (event,timePos) => {
-        await mpv.resume();
-        isPlaying = true;
-        await mpv.seek(timePos,"absolute")
+        if(mpv != undefined && mpv.isRunning()) {
+            await mpv.resume();
+            isPlaying = true;
+            await mpv.seek(timePos, "absolute")
+        }
     });
     ipc.handle('mpv-set-volume', async (event,volume) => {
-        await mpv.volume(volume)
-        currentVolume = volume
+        if(mpv != undefined && mpv.isRunning()) {
+            await mpv.volume(volume)
+            currentVolume = volume
+        }
     });
 
     ////// 进程通信BUG，已禁用此淡入淡出效果 | 手动实现 mpv 播放/暂停 淡入淡出效果

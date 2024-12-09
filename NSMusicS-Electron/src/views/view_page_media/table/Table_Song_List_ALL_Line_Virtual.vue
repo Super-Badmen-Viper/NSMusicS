@@ -36,19 +36,26 @@ const { t } = useI18n({
 ////// songlist_view page_layout lineItems
 const { ipcRenderer } = require('electron');
 const path = require('path');
-const handleImageError = async (event) => {
-  const originalSrc = event.target.src;
-  let result_src = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'error_album.jpg')
+const errorHandled = ref(new Map());
+const handleImageError = async (item: any) => {
+  let result_src = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'error_album.jpg');
+  if (errorHandled.value.has(item.id)) {
+    item.medium_image_url = result_src;
+    return;
+  }
+  errorHandled.value.set(item.id, true);
+  ///
+  const originalSrc = item.medium_image_url;
   try {
     const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
-    if (newImagePath) {
-      event.target.src = newImagePath;
+    if (newImagePath.length > 0) {
+      item.medium_image_url = 'file:///' + newImagePath;
     } else {
-      event.target.src = result_src
+      item.medium_image_url = result_src;
     }
   } catch (error) {
     console.error('Error handling image error:', error);
-    event.target.src = result_src
+    item.medium_image_url = result_src;
   }
 };
 function getAssetImage(firstImage: string) {
@@ -805,9 +812,9 @@ onBeforeUnmount(() => {
       </n-button>
       <n-input-group
           v-if="store_view_media_page_logic.page_songlists_bool_show_search_area"
-          style="width: 160px;">
+          style="width: 238px;">
         <n-input
-            style="width: 160px;"
+            style="width: 238px;"
             ref="input_search_InstRef"
             v-model:value="store_view_media_page_logic.page_songlists_input_search_Value"
             @keydown.enter="click_search"/>
@@ -1082,7 +1089,7 @@ onBeforeUnmount(() => {
                 <img
                     :key="item.id"
                     :src="item.medium_image_url"
-                    @error="handleImageError"
+                    @error="handleImageError(item)"
                     style="width: 60px; height: 60px; object-fit: cover;"/>
               </div>
               <div class="songlist_title">

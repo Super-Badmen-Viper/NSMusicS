@@ -38,19 +38,26 @@ const gridItems = ref(5);
 const itemSecondarySize = ref(185);
 const collapsed_width = ref<number>(1090);
 const path = require('path')
-const handleImageError = async (event) => {
-  const originalSrc = event.target.src;
-  let result_src = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'error_album.jpg')
+const errorHandled = ref(new Map());
+const handleImageError = async (item: any) => {
+  let result_src = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'error_album.jpg');
+  if (errorHandled.value.has(item.id)) {
+    item.medium_image_url = result_src;
+    return;
+  }
+  errorHandled.value.set(item.id, true);
+  ///
+  const originalSrc = item.medium_image_url;
   try {
     const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
-    if (newImagePath) {
-      event.target.src = newImagePath;
+    if (newImagePath.length > 0) {
+      item.medium_image_url = 'file:///' + newImagePath;
     } else {
-      event.target.src = result_src
+      item.medium_image_url = result_src;
     }
   } catch (error) {
     console.error('Error handling image error:', error);
-    event.target.src = result_src
+    item.medium_image_url = result_src;
   }
 };
 function getAssetImage(firstImage: string) {
@@ -307,7 +314,7 @@ onBeforeUnmount(() => {
                 object-fit: cover;object-position: center;
               "
               :src="getAssetImage(store_view_home_page_info.home_selected_top_album?.medium_image_url)"
-              @error="handleImageError"
+              @error="handleImageError(store_view_home_page_info.home_selected_top_album)"
             />
           </div>
         </div>
@@ -315,7 +322,7 @@ onBeforeUnmount(() => {
       <n-space style="margin-left: 0px;margin-top: calc(126px - 340px);">
         <img
           :src="getAssetImage(store_view_home_page_info.home_selected_top_album?.medium_image_url)"
-          @error="handleImageError"
+          @error="handleImageError(store_view_home_page_info.home_selected_top_album)"
           style="objectFit: cover; objectPosition: center;height: 180px;border-radius: 6px;border: 1.5px solid #FFFFFF20;"
           :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
         <n-space vertical
@@ -398,7 +405,7 @@ onBeforeUnmount(() => {
                   :style="{ width: item_album_image + 'px', height: item_album_image + 'px', position: 'relative' }">
                 <img
                     :src="item.medium_image_url"
-                    @error="handleImageError"
+                    @error="handleImageError(item)"
                     style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
                     :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
                 <div class="hover-overlay" @dblclick="Open_this_album_SongList_click(item.id)">
@@ -517,7 +524,7 @@ onBeforeUnmount(() => {
                   :style="{ width: item_album_image + 'px', height: item_album_image + 'px', position: 'relative' }">
                 <img
                     :src="item.medium_image_url"
-                    @error="handleImageError"
+                    @error="handleImageError(item)"
                     style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
                     :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
                 <div class="hover-overlay" @dblclick="Open_this_album_SongList_click(item.id)">
@@ -636,7 +643,7 @@ onBeforeUnmount(() => {
                   :style="{ width: item_album_image + 'px', height: item_album_image + 'px', position: 'relative' }">
                 <img
                     :src="item.medium_image_url"
-                    @error="handleImageError"
+                    @error="handleImageError(item)"
                     style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
                     :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
                 <div class="hover-overlay" @dblclick="Open_this_album_SongList_click(item.id)">
@@ -755,7 +762,7 @@ onBeforeUnmount(() => {
                   :style="{ width: item_album_image + 'px', height: item_album_image + 'px', position: 'relative' }">
                 <img
                     :src="item.medium_image_url"
-                    @error="handleImageError"
+                    @error="handleImageError(item)"
                     style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
                     :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
                 <div class="hover-overlay" @dblclick="Open_this_album_SongList_click(item.id)">

@@ -65,19 +65,26 @@ const handleItemClick_Rating = (id: any,rating: number) => {
   console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
 }
 const path = require('path')
-const handleImageError = async (event) => {
-  const originalSrc = event.target.src;
-  let result_src = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'error_album.jpg')
+const errorHandled = ref(new Map());
+const handleImageError = async (item: any) => {
+  let result_src = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'error_album.jpg');
+  if (errorHandled.value.has(item.id)) {
+    item.medium_image_url = result_src;
+    return;
+  }
+  errorHandled.value.set(item.id, true);
+  ///
+  const originalSrc = item.medium_image_url;
   try {
     const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
-    if (newImagePath) {
-      event.target.src = newImagePath;
+    if (newImagePath.length > 0) {
+      item.medium_image_url = 'file:///' + newImagePath;
     } else {
-      event.target.src = result_src
+      item.medium_image_url = result_src;
     }
   } catch (error) {
     console.error('Error handling image error:', error);
-    event.target.src = result_src
+    item.medium_image_url = result_src;
   }
 };
 
@@ -273,7 +280,7 @@ onMounted(()=>{
                 <img
                   :key="item.absoluteIndex"
                   :src="item.medium_image_url"
-                  @error="handleImageError"
+                  @error="handleImageError(item)"
                   style="width: 100%; height: 100%; object-fit: cover;"/>
               </div>
               <div class="title_playlist" style="width: 240px;">
@@ -326,7 +333,7 @@ onMounted(()=>{
                 <img
                     :key="item.absoluteIndex"
                     :src="item.medium_image_url"
-                    @error="handleImageError"
+                    @error="handleImageError(item)"
                     style="width: 100%; height: 100%; object-fit: cover;"/>
               </div>
               <div class="title_playlist">

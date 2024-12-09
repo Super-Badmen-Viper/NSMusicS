@@ -37,6 +37,7 @@ export const store_app_configs_info = reactive({
     app_view_menuOptions: [],
     app_view_bar_show: true,
     app_view_left_menu_collapsed: true,
+    app_view_left_menu_show: false,
     app_view_left_menu_select_activeKey: '',
 
     menu_app_setting_select_tab_name: 'tab_pane_1',
@@ -50,5 +51,10 @@ watch(() => store_app_configs_info.app_view_left_menu_select_activeKey, (newValu
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
 watch(() => store_app_configs_info.app_view_left_menu_collapsed, (newValue) => {
+    store_app_configs_info.app_view_left_menu_show = !store_app_configs_info.app_view_left_menu_collapsed
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+});
+watch(() => store_app_configs_info.app_view_left_menu_show, (newValue) => {
+    store_app_configs_info.app_view_left_menu_collapsed = !store_app_configs_info.app_view_left_menu_show
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
