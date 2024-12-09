@@ -66,7 +66,7 @@ npm install  /or/  cnpm install # Recommended use cnpm install
 # Install MPV in the Windows environment (requires its executable file compressed file) 
 # https://mpv.io/installation/
 # [windows] unzip its contents to: NSMusicS\NSMusicS-Electron\resources\mpv-x86_64-20241124
-# [macos] please waiting....
+# [macos] unzip its contents to: NSMusicS\NSMusicS-Electron\resources\mpv-x86_64-20241124
 # [linux] please waiting....
 ```
 ```sh
