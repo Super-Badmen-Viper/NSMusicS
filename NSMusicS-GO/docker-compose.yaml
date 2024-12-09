@@ -10,9 +10,11 @@ services:
     restart: unless-stopped
     env_file: .env
     ports:
-      - "$PORT:$PORT"
+      - "${PORT}:${PORT}"
     depends_on:
       - mongodb
+    volumes:
+      - ${MUSIC_DATA_VOLUME}:/container/data
 
   mongodb:
     image: mongo:6.0
@@ -20,12 +22,12 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=$DB_USER
-      - MONGO_INITDB_ROOT_PASSWORD=$DB_PASS
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
     ports:
-      - "$DB_PORT:$DB_PORT"
+      - "${DB_PORT}:${DB_PORT}"
     volumes:
-      - dbdata:/data/db
+      - ${MongoDB_DATA_VOLUME}:/data/db
 
 volumes:
   dbdata:

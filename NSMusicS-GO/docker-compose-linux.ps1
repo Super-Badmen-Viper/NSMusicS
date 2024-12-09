@@ -1,11 +1,14 @@
-$os = $env:OS
+#!/bin/bash
+export MongoDB_DATA_VOLUME="/home/user/NSMusicS-GO"
+export SQLITE_DATA_VOLUME="/home/user/NSMusicS-GO"
 
-if ($os -eq "windows") {
-    $dataDir = "C:\Users\Public\Documents\NSMusicS-GO"
-    if (-not (Test-Path $dataDir)) {
-        New-Item -ItemType Directory -Path $dataDir
-    }
-    $env:DATA_VOLUME = $dataDir
-}
+export MUSIC_DATA_VOLUME="/home/user/0_Music"
+
+data_dirs=("$MongoDB_DATA_VOLUME" "$SQLITE_DATA_VOLUME" "$Music_DATA_VOLUME")
+for dir in "${data_dirs[@]}"; do
+if [ ! -d "$dir" ]; then
+mkdir -p "$dir"
+fi
+done
 
 docker-compose up -d

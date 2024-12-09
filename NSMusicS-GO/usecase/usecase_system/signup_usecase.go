@@ -3,9 +3,8 @@ package usecase_system
 import (
 	"context"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_system"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/internal/internal_system/token_util"
 	"time"
-
-	"github.com/amitshekhariitbhu/go-backend-clean-architecture/internal/tokenutil"
 )
 
 type signupUsecase struct {
@@ -33,9 +32,9 @@ func (su *signupUsecase) GetUserByEmail(c context.Context, email string) (domain
 }
 
 func (su *signupUsecase) CreateAccessToken(user *domain_system.User, secret string, expiry int) (accessToken string, err error) {
-	return tokenutil.CreateAccessToken(user, secret, expiry)
+	return token_util.CreateAccessToken(user, secret, expiry)
 }
 
 func (su *signupUsecase) CreateRefreshToken(user *domain_system.User, secret string, expiry int) (refreshToken string, err error) {
-	return tokenutil.CreateRefreshToken(user, secret, expiry)
+	return token_util.CreateRefreshToken(user, secret, expiry)
 }

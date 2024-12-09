@@ -14,7 +14,7 @@ services:
     depends_on:
       - mongodb
     volumes:
-      - ${MUSIC_DATA_VOLUME}:/container/data
+      - E:\0_Music:/container/data
 
   mongodb:
     image: mongo:6.0
@@ -27,7 +27,7 @@ services:
     ports:
       - "${DB_PORT}:${DB_PORT}"
     volumes:
-      - ${MongoDB_DATA_VOLUME}:/data/db
+      - C:\Users\Public\Documents\NSMusicS-GO\MongoDB:/data/db
 
 volumes:
   dbdata:
