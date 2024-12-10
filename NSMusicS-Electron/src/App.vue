@@ -821,7 +821,7 @@
               <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"
                        :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
                        :style="{
-                         marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '224px' : '108px'
+                         marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '224px' : '74px'
                        }"
                        style="
                           z-index: 100;
