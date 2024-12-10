@@ -684,10 +684,36 @@ import os from "os";
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id,favorite)
   store_player_audio_info.this_audio_song_favorite = !favorite
+
+  const item_file: Media_File | undefined =
+      store_view_media_page_info.media_Files_temporary.find(
+          (mediaFile: Media_File) =>
+              mediaFile.id === store_player_audio_info.this_audio_song_id);
+  const item_playlist: Media_File | undefined =
+      store_playlist_list_info.playlist_MediaFiles_temporary.find(
+          (mediaFile: Media_File) =>
+              mediaFile.id === store_player_audio_info.this_audio_song_id);
+  if(item_file !== undefined)
+    item_file.favorite = !favorite
+  if(item_playlist !== undefined)
+    item_playlist.favorite = !favorite
 }
 const handleItemClick_Rating = (id: any,rating: any) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating);
   store_player_audio_info.this_audio_song_rating = rating
+
+  const item_file: Media_File | undefined =
+      store_view_media_page_info.media_Files_temporary.find(
+          (mediaFile: Media_File) =>
+              mediaFile.id === store_player_audio_info.this_audio_song_id);
+  const item_playlist: Media_File | undefined =
+      store_playlist_list_info.playlist_MediaFiles_temporary.find(
+          (mediaFile: Media_File) =>
+              mediaFile.id === store_player_audio_info.this_audio_song_id);
+  if(item_file !== undefined)
+    item_file.rating = rating
+  if(item_playlist !== undefined)
+    item_playlist.rating = rating
 }
 
 /////// emits audio_info of songlist_view_list

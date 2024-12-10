@@ -404,6 +404,13 @@ const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
 
   if (id === store_player_audio_info.this_audio_song_id){
     store_player_audio_info.this_audio_song_favorite = !favorite;
+    //
+    const item_playlist: Media_File | undefined =
+        store_playlist_list_info.playlist_MediaFiles_temporary.find(
+            (mediaFile: Media_File) =>
+                mediaFile.id === store_player_audio_info.this_audio_song_id);
+    if(item_playlist !== undefined)
+      item_playlist.favorite = !favorite
   }
 }
 let before_rating = false
@@ -422,6 +429,13 @@ const handleItemClick_Rating = (id_rating: any) => {
       store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, 0);
       if (id === store_player_audio_info.this_audio_song_id) {
         store_player_audio_info.this_audio_song_rating = 0;
+        //
+        const item_playlist: Media_File | undefined =
+            store_playlist_list_info.playlist_MediaFiles_temporary.find(
+                (mediaFile: Media_File) =>
+                    mediaFile.id === store_player_audio_info.this_audio_song_id);
+        if(item_playlist !== undefined)
+          item_playlist.rating = rating
       }
       rating_item.rating = 0;
       store_playlist_list_info.playlist_Menu_Item_Rating = 0;
@@ -429,6 +443,13 @@ const handleItemClick_Rating = (id_rating: any) => {
       store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating);
       if (id === store_player_audio_info.this_audio_song_id) {
         store_player_audio_info.this_audio_song_rating = rating;
+        //
+        const item_playlist: Media_File | undefined =
+            store_playlist_list_info.playlist_MediaFiles_temporary.find(
+                (mediaFile: Media_File) =>
+                    mediaFile.id === store_player_audio_info.this_audio_song_id);
+        if(item_playlist !== undefined)
+          item_playlist.rating = rating
       }
       rating_item.rating = rating
       store_playlist_list_info.playlist_Menu_Item_Rating = rating;
