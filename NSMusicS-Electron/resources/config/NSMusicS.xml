@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>1.1.2</version>
+<version>1.1.3</version>
 <url> </url>
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
-    1.1.2更新内容;
+    1.1.3更新内容;
+    修复音频输出模式切换时出现的错误弹窗[√];
+    增加Web输出模式的自定义选择音频设备输出[√];
+    修复本地模式的封面显示逻辑[√];
     修复MPV进程通信问题，减少通信交互以防止出现问题[√];
     优化本地模式导入逻辑, 使其能够适配大部分用户的音乐库管理习惯[√];
     增加数据展示页面(专辑，乐曲，艺术家)左上角刷新按钮，可重置此页面的数据[√];
