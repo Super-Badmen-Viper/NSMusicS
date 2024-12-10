@@ -1,3 +1,5 @@
+import {store_player_audio_logic} from "../../store/player/store_player_audio_logic";
+
 const { ipcRenderer } = require('electron');
 
 export class Audio_howler {
@@ -69,5 +71,27 @@ export class Audio_howler {
             this.howl.fadein(from);
             this.howl.fadeout(to)
         }
+    }
+
+    getDevices(){
+        try {
+            const getAudioDevice = async () => {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                return (devices || []).filter((dev: MediaDeviceInfo) => dev.kind === 'audiooutput');
+            };
+            const getAudioDevices = () => {
+                getAudioDevice()
+                    .then((dev) => {
+                        store_player_audio_logic.player_device_kind = dev.map((d) => ({
+                            label: d.label,
+                            value: d.deviceId
+                        }));
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching audio devices:', error);
+                    });
+            };
+            getAudioDevices();
+        }catch (error) {console.error(error);}
     }
 }

@@ -7,7 +7,6 @@ import {store_server_users} from "@/store/server/store_server_users";
 import {
     Album$Songs_Lists_ApiService_of_ND
 } from "@/features/servers_configs/navidrome_api/services_normal/album$songs_lists/index_service";
-import {Set_ArtistInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_ArtistInfo_To_LocalSqlite";
 import {Set_AlbumInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite";
 import {Set_MediaInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
 import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
@@ -18,12 +17,7 @@ import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchroni
 import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
-import {
-    store_local_data_set_annotionInfo
-} from "@/store/local/local_data_synchronization/store_local_data_set_annotionInfo";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-import moment from "moment/moment";
-const path = require('path');
 
 export class Set_Navidrome_ALL_Data_To_LocalSqlite{
     private getUniqueId(db: any,table: any,id_name: any) {

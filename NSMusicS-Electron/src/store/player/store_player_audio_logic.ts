@@ -7,11 +7,16 @@ const { ipcRenderer } = require('electron');
 
 export const store_player_audio_logic = reactive({
     player: new Audio_node_mpv(),
+
     player_kind: [
         { label: 'mpv', value: 'mpv' },
         { label: 'web', value: 'web' },
     ],
     player_select: 'mpv',
+
+    player_device_kind: [],
+    player_device_select: 'default',
+
     play_order: 'playback-2',
     play_volume: 100,
     player_fade_value: 2000,
@@ -46,18 +51,50 @@ watch(() => store_player_audio_logic.player_select, async (newValue) => {
     await store_player_audio_info.reset_data();
 
     if (store_player_audio_logic.player_select === 'mpv') {
+        // init
         if (store_player_audio_logic.player.howl != null) {
             store_player_audio_logic.player.howl.unload();
         }
         await ipcRenderer.invoke('mpv-init');
         store_player_audio_logic.player = null;
         store_player_audio_logic.player = new Audio_node_mpv();
+        // load device
+        store_player_audio_logic.player_device_kind = []
     } else if (store_player_audio_logic.player_select === 'web') {
+        // init
         store_player_audio_logic.player = null;
         store_player_audio_logic.player = new Audio_howler();
         await ipcRenderer.invoke('mpv-quit');
+        // load device
+        store_player_audio_logic.player_device_kind = []
+        store_player_audio_logic.player.getDevices()
     }
 
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+});
+watch(() => store_player_audio_logic.player_device_select, (newValue) => {
+    if (store_player_audio_logic.player_select === 'web') {
+        if (store_player_audio_logic.player_device_select != undefined &&
+            store_player_audio_logic.player_device_select != 'default' &&
+            store_player_audio_logic.player_device_select.length > 0
+        ) {
+            if (store_player_audio_logic.player.howl != null) {
+                const audioElement = store_player_audio_logic.player.howl._sounds[0]._node;
+                if (typeof audioElement.setSinkId === 'function') {
+                    audioElement
+                        .setSinkId(store_player_audio_logic.player_device_select)
+                        .then(() => {
+                            store_player_audio_logic.player.getDevices()
+                            console.log('Audio output successfully redirected.');
+                        })
+                        .catch((error) => {
+                            console.error('Failed to redirect audio output:', error);
+                            store_player_audio_logic.player_device_select = 'default'
+                        });
+                }
+            }
+        }
+    }
     store_app_configs_logic_save.save_system_config_of_App_Configs()
 });
 watch(() => store_player_audio_logic.player_fade_value,  (newValue) => {

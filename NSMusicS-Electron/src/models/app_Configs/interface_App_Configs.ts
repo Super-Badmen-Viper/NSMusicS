@@ -39,5 +39,6 @@ interface App_Configs_Props {
   player_replayGainClip: any,
   player_replayGainFallback: number,
   player_mpvExtraParameters: any,
-  player_audio_channel:any
+  player_audio_channel:any,
+  player_device_select:any
 };

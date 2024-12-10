@@ -245,7 +245,7 @@ export const store_app_configs_logic_load = reactive({
                     store_player_audio_logic.player_select = 'mpv'
                 }else if('' + system_Configs_Read.app_Configs.value['player_select'] === 'web'){
                     store_player_audio_logic.player_select = 'web'
-                }else{
+                }else{``
                     store_player_audio_logic.player_select = 'mpv'
                 }
             }
@@ -253,7 +253,6 @@ export const store_app_configs_logic_load = reactive({
             store_player_audio_logic.player_select = 'mpv'
             store_player_audio_logic.player_fade_value = 2000;
         }
-        store_player_audio_logic.player_select = 'mpv'
         //
         store_player_audio_logic.player_fade_value = Number('' + system_Configs_Read.app_Configs.value['player_fade_value'])
         if (store_player_audio_logic.player_fade_value === null) {
@@ -270,6 +269,7 @@ export const store_app_configs_logic_load = reactive({
             store_player_audio_logic.player_replayGainClip = '' + system_Configs_Read.app_Configs.value['player_replayGainClip'] === 'true'
             store_player_audio_logic.player_replayGainFallback = Number('' + system_Configs_Read.app_Configs.value['player_replayGainFallback'])
             store_player_audio_logic.player_mpvExtraParameters = '' + system_Configs_Read.app_Configs.value['player_mpvExtraParameters']
+            store_player_audio_logic.player_device_select = '' + system_Configs_Read.app_Configs.value['player_device_select']
         }catch{
             store_player_audio_logic.player_dolby = true;
             store_player_audio_logic.player_audio_channel = '5.1';

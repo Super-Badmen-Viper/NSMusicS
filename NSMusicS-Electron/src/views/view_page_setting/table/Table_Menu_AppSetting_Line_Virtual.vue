@@ -1242,6 +1242,23 @@
                   </n-space>
                   <n-space justify="space-between" align="center">
                     <n-space vertical>
+                      <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioDevice') }}</span>
+                      <div style="margin-top: -10px;">
+                        <span style="font-size:12px;">{{ $t('setting.audioDevice_description') }}</span>
+                      </div>
+                    </n-space>
+                    <n-select
+                        v-model:value="store_player_audio_logic.player_device_select"
+                        :options="store_player_audio_logic.player_device_kind"
+                        @update:value="update_player_device_selected"
+                        :disabled="store_player_audio_logic.player_select === 'mpv'"
+                        placeholder="not enabled"
+                        :reset-menu-on-options-change="false"
+                        style="width: 207px;margin-top: -4px;"
+                    />
+                  </n-space>
+                  <n-space justify="space-between" align="center">
+                    <n-space vertical>
                       <span style="font-size:16px;font-weight: 600;">{{ $t('setting.playbackStyle_description') }}</span>
                       <div style="margin-top: -10px;">
                         <span style="font-size:12px;">{{ $t('setting.playbackStyle_description') }}</span>
@@ -1628,6 +1645,19 @@
   </div>
 </template>
 <style scoped>
+.n-base-selection .n-base-selection-label .n-base-selection-input .n-base-selection-input__content{
+  font-size: 15px;
+  font-weight: 600;
+}
+.n-statistic .n-statistic__label{
+  font-size: 15px;
+  font-weight: 600;
+}
+.n-statistic .n-statistic-value .n-statistic-value__content{
+  font-size: 24px;
+  font-weight: 600;
+}
+
 .view{
   height: calc(100vh - 160px);
   overflow-y: auto;

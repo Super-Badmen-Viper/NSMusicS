@@ -733,7 +733,6 @@
               :width="166"
               style="
                 border-radius:  0 20px 20px 0;
-                border: #f0f0f020 1px solid;
                 z-index: 200;
               "
             >
@@ -764,7 +763,7 @@
               v-if="store_app_configs_info.app_view_left_menu_show"
               :width="200"
               style="
-                border: 0;border-radius:  0 20px 20px 0;
+                border: 0;
                 z-index: 200;
                 height: 100vh;
               "
@@ -1099,11 +1098,6 @@
 .link:hover {
   color: #3DC3FF;
   background-color: transparent;
-}
-
-.n-layout-sider .n-layout-toggle-button  {
-  width: 40px;
-  height: 40px;
 }
 
 ::-webkit-scrollbar {

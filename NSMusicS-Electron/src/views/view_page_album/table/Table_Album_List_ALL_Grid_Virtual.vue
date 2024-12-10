@@ -846,6 +846,19 @@ onBeforeUnmount(() => {
   </n-space>
 </template> 
 <style>
+.n-base-selection .n-base-selection-label .n-base-selection-input .n-base-selection-input__content{
+  font-size: 15px;
+  font-weight: 600;
+}
+.n-statistic .n-statistic__label{
+  font-size: 15px;
+  font-weight: 600;
+}
+.n-statistic .n-statistic-value .n-statistic-value__content{
+  font-size: 24px;
+  font-weight: 600;
+}
+
 .album-wall-container {
   width: 100%;
   height: 100%;

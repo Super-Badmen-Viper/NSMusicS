@@ -69,7 +69,8 @@ export const store_app_configs_logic_save = reactive({
                 player_replayGainClip: String(store_player_audio_logic.player_replayGainClip),
                 player_replayGainFallback: String(store_player_audio_logic.player_replayGainFallback),
                 player_mpvExtraParameters: String(store_player_audio_logic.player_mpvExtraParameters),
-                player_audio_channel: String(store_player_audio_logic.player_audio_channel)
+                player_audio_channel: String(store_player_audio_logic.player_audio_channel),
+                player_device_select:String(store_player_audio_logic.player_device_select)
             }));
         let system_Configs_Write = new Class_Set_System_Configs_Write()
         system_Configs_Write.system_app_config(
