@@ -220,8 +220,8 @@ const init_player_howler = async () => {
         if (typeof audioElement.setSinkId === 'function') {
           audioElement
               .setSinkId(store_player_audio_logic.player_device_select)
-              .then(() => {
-                store_player_audio_logic.player.getDevices()
+              .then( async () => {
+                await store_player_audio_logic.player.getDevices()
                 console.log('Audio output successfully redirected.');
               })
               .catch((error) => {

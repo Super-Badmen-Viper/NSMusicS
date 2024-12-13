@@ -1250,7 +1250,6 @@
                     <n-select
                         v-model:value="store_player_audio_logic.player_device_select"
                         :options="store_player_audio_logic.player_device_kind"
-                        @update:value="update_player_device_selected"
                         :disabled="store_player_audio_logic.player_select === 'mpv'"
                         placeholder="not enabled"
                         :reset-menu-on-options-change="false"

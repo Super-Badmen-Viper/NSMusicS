@@ -67,7 +67,7 @@ watch(() => store_player_audio_logic.player_select, async (newValue) => {
         await ipcRenderer.invoke('mpv-quit');
         // load device
         store_player_audio_logic.player_device_kind = []
-        store_player_audio_logic.player.getDevices()
+        await store_player_audio_logic.player.getDevices()
     }
 
     store_app_configs_logic_save.save_system_config_of_App_Configs()
@@ -83,8 +83,8 @@ watch(() => store_player_audio_logic.player_device_select, (newValue) => {
                 if (typeof audioElement.setSinkId === 'function') {
                     audioElement
                         .setSinkId(store_player_audio_logic.player_device_select)
-                        .then(() => {
-                            store_player_audio_logic.player.getDevices()
+                        .then( async () => {
+                            await store_player_audio_logic.player.getDevices()
                             console.log('Audio output successfully redirected.');
                         })
                         .catch((error) => {

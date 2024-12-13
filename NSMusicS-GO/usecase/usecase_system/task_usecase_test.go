@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_system"
-	system2 "github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase/usecase_system"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/usecase/usecase_system"
 	"testing"
 	"time"
 
@@ -32,7 +32,7 @@ func TestFetchByUserID(t *testing.T) {
 
 		mockTaskRepository.On("FetchByUserID", mock.Anything, userID).Return(mockListTask, nil).Once()
 
-		u := system2.NewTaskUsecase(mockTaskRepository, time.Second*2)
+		u := usecase_system.NewTaskUsecase(mockTaskRepository, time.Second*2)
 
 		list, err := u.FetchByUserID(context.Background(), userID)
 
@@ -46,7 +46,7 @@ func TestFetchByUserID(t *testing.T) {
 	t.Run("error", func(t *testing.T) {
 		mockTaskRepository.On("FetchByUserID", mock.Anything, userID).Return(nil, errors.New("Unexpected")).Once()
 
-		u := system2.NewTaskUsecase(mockTaskRepository, time.Second*2)
+		u := usecase_system.NewTaskUsecase(mockTaskRepository, time.Second*2)
 
 		list, err := u.FetchByUserID(context.Background(), userID)
 

@@ -3,7 +3,7 @@ package controller_system_test
 import (
 	"encoding/json"
 	"errors"
-	system2 "github.com/amitshekhariitbhu/go-backend-clean-architecture/api/controller/controller_system"
+	"github.com/amitshekhariitbhu/go-backend-clean-architecture/api/controller/controller_system"
 	"github.com/amitshekhariitbhu/go-backend-clean-architecture/domain/domain_system"
 	"net/http"
 	"net/http/httptest"
@@ -42,7 +42,7 @@ func TestFetch(t *testing.T) {
 
 		rec := httptest.NewRecorder()
 
-		pc := &system2.ProfileController{
+		pc := &controller_system.ProfileController{
 			ProfileUsecase: mockProfileUsecase,
 		}
 
@@ -78,7 +78,7 @@ func TestFetch(t *testing.T) {
 
 		rec := httptest.NewRecorder()
 
-		pc := &system2.ProfileController{
+		pc := &controller_system.ProfileController{
 			ProfileUsecase: mockProfileUsecase,
 		}
 
