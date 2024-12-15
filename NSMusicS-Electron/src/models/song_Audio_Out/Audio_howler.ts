@@ -73,14 +73,14 @@ export class Audio_howler {
         }
     }
 
-    getDevices(){
+    async getDevices(){
         try {
             const getAudioDevice = async () => {
                 const devices = await navigator.mediaDevices.enumerateDevices();
                 return (devices || []).filter((dev: MediaDeviceInfo) => dev.kind === 'audiooutput');
             };
-            const getAudioDevices = () => {
-                getAudioDevice()
+            const getAudioDevices = async () => {
+                await getAudioDevice()
                     .then((dev) => {
                         store_player_audio_logic.player_device_kind = dev.map((d) => ({
                             label: d.label,
@@ -91,7 +91,7 @@ export class Audio_howler {
                         console.error('Error fetching audio devices:', error);
                     });
             };
-            getAudioDevices();
+            await getAudioDevices();
         }catch (error) {console.error(error);}
     }
 }

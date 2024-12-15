@@ -160,6 +160,22 @@ const openLink = (url: string) => {
           </n-space>
           <n-space justify="space-between" align="center">
             <n-space vertical>
+              <span style="font-size:16px;font-weight: 600;">{{ $t('setting.audioDevice') }}</span>
+              <div style="margin-top: -10px;">
+                <span style="font-size:12px;">{{ $t('setting.audioDevice_description') }}</span>
+              </div>
+            </n-space>
+            <n-select
+                v-model:value="store_player_audio_logic.player_device_select"
+                :options="store_player_audio_logic.player_device_kind"
+                :disabled="store_player_audio_logic.player_select === 'mpv'"
+                placeholder="not enabled"
+                :reset-menu-on-options-change="false"
+                style="width: 207px;margin-top: -4px;"
+            />
+          </n-space>
+          <n-space justify="space-between" align="center">
+            <n-space vertical>
               <span style="font-size:16px;font-weight: 600;">{{ $t('setting.playbackStyle_description') }}</span>
               <div style="margin-top: -10px;">
                 <span style="font-size:12px;">{{ $t('setting.playbackStyle_description') }}</span>

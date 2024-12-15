@@ -269,7 +269,25 @@ export const store_app_configs_logic_load = reactive({
             store_player_audio_logic.player_replayGainClip = '' + system_Configs_Read.app_Configs.value['player_replayGainClip'] === 'true'
             store_player_audio_logic.player_replayGainFallback = Number('' + system_Configs_Read.app_Configs.value['player_replayGainFallback'])
             store_player_audio_logic.player_mpvExtraParameters = '' + system_Configs_Read.app_Configs.value['player_mpvExtraParameters']
-            store_player_audio_logic.player_device_select = '' + system_Configs_Read.app_Configs.value['player_device_select']
+            //
+            let state_player_device_select = false
+            const player_device_select = '' + system_Configs_Read.app_Configs.value['player_device_select']
+            if(player_device_select != undefined ) {
+                if (player_device_select.trim().length > 0)
+                    store_player_audio_logic.player_device_select = player_device_select
+                else
+                    state_player_device_select = true
+            }else
+                state_player_device_select = true
+            if(state_player_device_select){
+                await store_player_audio_logic.player.getDevices()
+                if(store_player_audio_logic.player_device_kind != undefined){
+                    if(store_player_audio_logic.player_device_kind.length > 0){
+                        store_player_audio_logic.player_device_select =
+                            store_player_audio_logic.player_device_kind[0].value
+                    }
+                }
+            }
         }catch{
             store_player_audio_logic.player_dolby = true;
             store_player_audio_logic.player_audio_channel = '5.1';
