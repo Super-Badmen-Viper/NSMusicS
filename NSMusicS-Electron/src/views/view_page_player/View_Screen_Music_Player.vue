@@ -804,6 +804,7 @@
                 <template #icon>
                   <n-icon :depth="3"><Settings24Regular /></n-icon>
                 </template>
+<!--                {{ $t('nsmusics.view_player.view_seting.viewSeting') }}-->
               </n-button>
               <n-button quaternary size="medium"
                         :style="{ marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '2px' : '30px' }"
