@@ -178,9 +178,9 @@ const Play_This_Audio_Path = () => {
           Number(store_player_audio_logic.play_volume)
       )
       await store_player_audio_logic.player.play();
-      store_player_audio_logic.total_play_time = formatTime(
-          await store_player_audio_logic.player.getDuration()
-      );
+
+      const total_time = await store_player_audio_logic.player.getDuration()
+      store_player_audio_logic.total_play_time = formatTime(total_time);
 
       Set_MediaInfo_To_PlayCount();
     }
@@ -339,9 +339,7 @@ const Init_Audio_Player = async () => {
             Play_This_Audio_Path()
           else {
             store_player_audio_logic.player.howl.fade(1, 0, store_player_audio_logic.player_fade_value);
-            setTimeout(async () => {
-              await store_player_audio_logic.player.play();
-            }, 200);
+            await store_player_audio_logic.player.play();
           }
         }
       }
@@ -355,9 +353,7 @@ const Init_Audio_Player = async () => {
       }
       else if(store_player_audio_logic.player_select === 'web'){
         store_player_audio_logic.player.howl.fade(1, 0, store_player_audio_logic.player_fade_value);
-        setTimeout(async () => {
-          await store_player_audio_logic.player.pause();
-        }, store_player_audio_logic.player_fade_value);
+        await store_player_audio_logic.player.pause();
       }
     }
   }
@@ -879,18 +875,19 @@ onBeforeUnmount(() => {
         <!-- grid_Middle_slider_area -->
         <div>
           <n-slider
-              style="
-              width: 90%;
-              margin-left:5%;margin-top:8px;
-              color: #3DC3FF;
-              border-radius: 10px;
-            "
-              v-model:value="store_player_audio_logic.slider_singleValue" :on-dragend="update_dragend_slider_singleValue"
-              :min="0" :max="100" :keyboard="true"
-              :format-tooltip="formatTime_tooltip"
-              @mousedown="player_range_duration_handleMouseDown"
-              @mouseup="player_range_duration_handleMouseUp"
-              @click="player_range_duration_handleclick"
+            style="
+            width: 90%;
+            margin-left:5%;margin-top:8px;
+            color: #3DC3FF;
+            border-radius: 10px;
+          "
+            v-model:value="store_player_audio_logic.slider_singleValue"
+            :min="0" :max="100" :keyboard="true"
+            :format-tooltip="formatTime_tooltip"
+            :on-dragend="update_dragend_slider_singleValue"
+            @mousedown="player_range_duration_handleMouseDown"
+            @mouseup="player_range_duration_handleMouseUp"
+            @click="player_range_duration_handleclick"
           />
         </div>
         <!-- grid_Middle_drwaer_area -->

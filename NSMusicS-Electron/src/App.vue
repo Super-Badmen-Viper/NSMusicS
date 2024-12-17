@@ -63,15 +63,6 @@
   window.addEventListener('resize', () => {
     store_app_configs_info.window_innerWidth = window.innerWidth;
     store_app_configs_info.window_innerHeight = window.innerHeight;
-
-    if(window.innerHeight > 900) {
-      store_player_appearance.player_lyric_color_hidden_coefficient = 12
-    }
-    else{
-      store_player_appearance.player_lyric_color_hidden_coefficient = 15
-      console.log(15)
-    }
-    console.log(store_player_appearance.player_lyric_color_hidden_coefficient)
   });
 
   ////// i18n auto lang

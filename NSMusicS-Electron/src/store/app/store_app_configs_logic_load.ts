@@ -131,6 +131,9 @@ export const store_app_configs_logic_load = reactive({
             store_player_appearance.player_collapsed_album = '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_album'] === 'true'
             store_player_appearance.player_collapsed_skin = '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_skin'] === 'true'
             store_player_appearance.player_lyric_fontSize = '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_fontSize']
+            if(store_player_appearance.player_lyric_fontSize != undefined && store_player_appearance.player_lyric_fontSize.length > 0){
+                store_player_appearance.player_lyric_fontSize_Num = Number(store_player_appearance.player_lyric_fontSize.replace('px',''))
+            }
             store_player_appearance.player_lyric_fontWeight = '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_fontWeight']
             store_player_appearance.player_lyric_color = '' + system_Configs_Read.player_Configs_of_UI.value['player_lyric_color']
             store_player_appearance.player_theme_Styles_Selected = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_theme_Styles_Selected'])

@@ -14,13 +14,14 @@ export const store_player_appearance = reactive({
     player_collapsed_album: false,
     player_collapsed_skin: true,
 
-    player_lyric_fontSize: '24px',
-    player_lyric_fontSize_Num: 24,
+    player_lyric_fontSize: '28px',
+    player_lyric_fontSize_Num: 28,
 
     player_lyric_fontWeight: '600',
     player_lyric_color: '#FAFAFB60',
     player_lyric_colorHover: '#FFFFFF',
 
+    player_lyric_color_hidden_value: 90,
     player_lyric_color_hidden_coefficient: 18,
 
     player_theme_Styles_Selected: 0,
