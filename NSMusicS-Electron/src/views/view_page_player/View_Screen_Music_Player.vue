@@ -749,19 +749,6 @@
           justify="space-between"
           style="transition: margin 0.4s;"
           :style="{ marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '-70px' : '0px' }">
-          <n-flex style="width: 400px;height: 70px;">
-            <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-left:30px;">
-              <n-button quaternary size="medium"
-                        style="margin-right:4px"
-                        v-if="store_app_configs_info.desktop_system_kind === 'win32'"
-                        @click="close_media_player">
-                <template #icon>
-                  <n-icon size="30" :depth="3"><ChevronDown12Filled/></n-icon>
-                </template>
-              </n-button>
-            </div>
-          </n-flex>
-          <!-- -->
           <n-space
             style="
               -webkit-app-region: no-drag;margin-top: 35px;
@@ -808,10 +795,9 @@
               </n-button>
               <n-button quaternary size="medium"
                         :style="{ marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '2px' : '30px' }"
-                        v-if="store_app_configs_info.desktop_system_kind === 'darwin'"
                         @click="close_media_player">
                 <template #icon>
-                  <n-icon size="30" :depth="3" style="margin-bottom: 4px;"><ChevronDown12Filled/></n-icon>
+                  <n-icon size="26" :depth="3" style="margin-bottom: 2px;"><ChevronDown12Filled/></n-icon>
                 </template>
               </n-button>
               <n-button quaternary circle size="medium"
@@ -867,98 +853,119 @@
                 style="background-color: transparent;">
                 <n-space vertical align="end" style="margin-right:8vw;">
                   <!-- 1 方形封面-->
-                  <n-space vertical v-show="store_player_appearance.player_background_model_num === 0">
+                  <n-space vertical
+                           align="center"
+                           v-show="store_player_appearance.player_background_model_num === 0">
                     <img
                       style="
                         width: 50vh;height: 50vh;
                         margin-top: calc(28vh - 182px);
-                        border: 1.5px solid #FFFFFF20;
                         border-radius: 10px;
                         object-fit: cover;object-position: center;
-                        filter: blur(0px);
-                        box-shadow: 16px 16px 16px rgba(0, 0, 0, 0.20), 0 0 16px rgba(0, 0, 0, 0.20);
                       "
                       :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
                       alt="">
                     <div
                       style="
-                        width: 54vh;
+                        width: 44vh;
                         color: #E7E5E5;
-                        font-weight: 900;font-size: 26px;
+                        font-weight: 900;font-size: 22px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: center;">
                       {{ store_player_audio_info.this_audio_song_name }}
                     </div>
                     <div
                       style="
-                        width: 54vh;margin-top: -10px;margin-bottom: -6px;
+                        width: 44vh;margin-top: -6px;margin-bottom: -6px;
                         color: #989292;font-weight: 550;font-size: 18px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: center;">
                       {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
                     </div>
+                    <!--  -->
+                    <n-space
+                        v-if="!store_player_appearance.player_collapsed_album"
+                        justify="center"
+                        style="width: 450px;margin-top: 8px;">
+                      <n-space style="width: 40px;">
+                        {{ store_player_audio_logic.current_play_time }}
+                      </n-space>
+                      <n-slider
+                        style="
+                        width: 300px;
+                        --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
+                        --n-rail-height: 4px;
+                        margin-top: 3px;margin-right: 5px;
+                        border-radius: 10px;"
+                        :value="store_player_audio_logic.slider_singleValue"
+                        :min="0" :max="100" :tooltip="false"
+                      >
+                        <template #thumb>
+                          <n-icon-wrapper :size="0" />
+                        </template>
+                      </n-slider>
+                      <n-space style="width: 40px;">
+                        {{ store_player_audio_logic.total_play_time }}
+                      </n-space>
+                    </n-space>
                   </n-space>
                   <!-- 2 旋转封面-->
                   <n-space vertical
-                           style="margin-top: -12px;margin-right: 16px;"
+                           align="center"
+                           style="margin-top: -24px;margin-right: calc(-8vh);overflow: hidden"
                            v-show="store_player_appearance.player_background_model_num === 1">
                     <lottie-player
-                      ref="animationInstance_model_1_wave" v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
+                      ref="animationInstance_model_1_wave"
+                      class="animate__rotate_slower"
+                      :class="{ 'animate__rotate_slower_paused': !store_player_audio_info.this_audio_is_playing }"
+                      v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
                       autoplay
                       loop
                       mode="normal"
                       :src="animationInstance_model_1_wave_json"
+                      :style="{
+                        '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`
+                      }"
                       style="
-                        width: calc(60vh);
-                        height: calc(60vh);
-                        margin-top: calc(24vh - 162px);margin-left: calc(-2vh);
-                        position: absolute;
-                        transform: scale(1.1);
+                        width: calc(66vh);
+                        height: calc(66vh);
                       "
-                    />
-                    <div>
-                      <img
-                        class="animate__rotate_slower"
-                        :class="{ 'animate__rotate_slower_paused': !store_player_audio_info.this_audio_is_playing }"
+                    >
+                    </lottie-player>
+                    <div
                         style="
-                          width: calc(36vh);height: calc(36vh);
-                          margin-top: calc(35vh - 162px);margin-left: calc(10vh);
-                          border: 1.5px solid #FFFFFF20;
-                          border-radius: 27vh;
-                          object-fit: cover;object-position: center;
-                          filter: blur(0px);
-                          box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
-                         "
-                          :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                          alt="">
-                      <div
-                        style="
-                          width: 54vh;margin-left: 2px;margin-top: 8px;color: #E7E5E5;font-weight: 900;font-size: 26px;
+                          width: 44vh;margin-top: calc(-15vh);color: #E7E5E5;
+                          font-weight: 900;font-size: 26px;
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
-                        {{ store_player_audio_info.this_audio_song_name }}
-                      </div>
-                      <div
+                      {{ store_player_audio_info.this_audio_song_name }}
+                    </div>
+                    <div
                         style="
-                          width: 54vh;margin-left: 2px;margin-top: 0px;color: #989292;font-weight: 550;font-size: 18px;
+                          width: 44vh;margin-left: 2px;margin-top: calc(-15vh + 40px);
+                          color: #989292;font-weight: 550;font-size: 18px;
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
-                        {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
-                      </div>
+                      {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
                     </div>
                     <lottie-player
-                      ref="animationInstance_model_1_spectrum" v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
+                      ref="animationInstance_model_1_spectrum"
+                      v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
                       autoplay
                       loop
                       mode="normal"
                       :src="animationInstance_model_1_spectrum_json"
-                      style="width: 54vh;height:40px;"
+                      style="width: 54vh;height:40px;margin-top: calc(-15vh + 70px);"
                     />
                   </n-space>
                   <!-- 3 炫胶唱片-->
-                  <n-space vertical style="margin-top: calc(-3vh - 18px);" v-show="store_player_appearance.player_background_model_num === 2">
+                  <n-space vertical
+                           align="center"
+                           style="margin-top: calc(-3vh - 18px);margin-right: calc(10vh);overflow: hidden"
+                           v-show="store_player_appearance.player_background_model_num === 2">
                     <lottie-player
-                      ref="animationInstance_model_2_wave" v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
+                      ref="animationInstance_model_2_wave"
+                      v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
                       speed="0.8"
                       autoplay
                       loop
@@ -967,15 +974,15 @@
                       style="
                         width: calc(56vh);
                         height: calc(56vh);
-                        margin-top: calc(29vh - 154.5px);margin-left: calc(13.5vh);
+                        margin-top: calc(29vh - 154.5px);margin-left: calc(-6.5vh);
                         position: absolute;
                       "
                     />
                     <div
                       style="
-                        width: calc(38vh); 
+                        width: calc(38vh);
                         height: calc(38vh);
-                        margin-top: calc(38vh - 162px);margin-left: calc(54vh - 31.5vh);
+                        margin-top: calc(38vh - 162px);margin-left: calc(2.5vh);
                         border: 1.5px solid #FFFFFF20;
                         border-radius: 27vh;
                         object-fit: cover;object-position: center;
@@ -989,8 +996,8 @@
                       class="animate__rotate_fast"
                       :class="{ 'animate__rotate_fast_paused': !store_player_audio_info.this_audio_is_playing }"
                       style="
-                        width: calc(54vh - 30vh);height: calc(54vh - 30vh);
-                        margin-left: calc(54vh - 24.5vh);
+                        width: calc(24vh);height: calc(24vh);
+                        margin-left: calc(9.5vh);
                         margin-top: calc(44vh - 162px);
                         border: 1.5px solid #FFFFFF20;
                         border-radius: 27vh;
@@ -1016,44 +1023,20 @@
                       alt="">
                     <div
                       style="
-                        width: 54vh;margin-left: 2px;color: #E7E5E5;font-weight: 900;font-size: 26px;
+                        width: 44vh;margin-left: 26px;
+                        color: #E7E5E5;font-weight: 900;font-size: 26px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
                       {{ store_player_audio_info.this_audio_song_name }}
                     </div>
                     <div
                       style="
-                        width: 54vh;margin-left: 2px;margin-top: -10px;margin-bottom: 12px;
+                        width: 44vh;margin-left: 26px;margin-top: -10px;margin-bottom: 12px;
                         color: #989292;font-weight: 550;font-size: 18px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
                       {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
                     </div>
-                  </n-space>
-                  <!--  -->
-                  <n-space
-                      v-if="!store_player_appearance.player_collapsed_album"
-                      style="margin-top: -15px;">
-                    <n-space style="width: 45px;margin-right: -8px;">
-                      {{ store_player_audio_logic.current_play_time }}
-                    </n-space>
-                    <n-slider
-                      style="
-                        width: calc(54vh - 130px);
-                        --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
-                        --n-rail-height: 4px;
-                        margin-top: 2px;
-                        border-radius: 10px;"
-                      :value="store_player_audio_logic.slider_singleValue"
-                      :min="0" :max="100" :tooltip="false"
-                    >
-                      <template #thumb>
-                        <n-icon-wrapper :size="0" />
-                      </template>
-                    </n-slider>
-                    <n-space style="width: 70px;">
-                      {{ store_player_audio_logic.total_play_time }}
-                    </n-space>
                   </n-space>
                 </n-space>
               </n-layout-sider>
@@ -1159,8 +1142,8 @@
 .lyrics_text_active {
   font-size: v-bind(store_player_appearance.player_lyric_fontSize);
   font-weight: v-bind(store_player_appearance.player_lyric_fontWeight);
-  //display: inline-block;
-  //white-space: pre;
+  /* display: inline-block;
+  white-space: pre; */
   max-width: calc(36vw);
   padding-left: 20px;
   padding-top: 0;
@@ -1168,6 +1151,21 @@
   transition: color 0.2s;
 }
 
+.animate__rotate_slower::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 34vh;
+  height: 34vh;
+  border-radius: 17vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  background-image: var(--background-image);
+}
 .animate__rotate_slower {
   animation: rotate 60s linear infinite;
   animation-play-state: running;

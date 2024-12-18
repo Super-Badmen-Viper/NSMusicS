@@ -179,9 +179,6 @@ const Play_This_Audio_Path = () => {
       )
       await store_player_audio_logic.player.play();
 
-      const total_time = await store_player_audio_logic.player.getDuration()
-      store_player_audio_logic.total_play_time = formatTime(total_time);
-
       Set_MediaInfo_To_PlayCount();
     }
   }, 400);
@@ -574,8 +571,19 @@ function formatTime_tooltip(value: number){
   return formatTime((value / 100 * store_player_audio_logic.player.isDuration));
 }
 const get_current_play_time = async () => {
-  if ((await store_player_audio_logic.player.getCurrentTime() + store_player_audio_logic.player_silder_currentTime_added_value) <= await store_player_audio_logic.player.getDuration())
-    store_player_audio_logic.current_play_time = formatTime((await store_player_audio_logic.player.getCurrentTime() + store_player_audio_logic.player_silder_currentTime_added_value));
+  if (
+      (await store_player_audio_logic.player.getCurrentTime() +
+          store_player_audio_logic.player_silder_currentTime_added_value)
+      <=
+      await store_player_audio_logic.player.getDuration()
+  ) {
+    store_player_audio_logic.current_play_time =
+        formatTime(
+            (await store_player_audio_logic.player.getCurrentTime() +
+                store_player_audio_logic.player_silder_currentTime_added_value)
+        );
+    store_player_audio_logic.total_play_time = formatTime(await store_player_audio_logic.player.getDuration());
+  }
 }
 const synchronize_playback_time = () => {
   try {
