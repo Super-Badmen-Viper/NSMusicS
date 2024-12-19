@@ -7,6 +7,8 @@ export const store_player_appearance = reactive({
     player_show_complete: true,
     player_show_hight_animation_value: 100,
 
+    player_show_of_control_info: true,
+
     player_collapsed_action_bar_of_Immersion_model: false,
 
     player_show_click: false,
@@ -34,6 +36,11 @@ export const store_player_appearance = reactive({
     player_mode_of_medialist_from_external_import: false,
 
     player_mode_of_lock_playlist: false,
+});
+watch(() => store_player_appearance.player_show, (newValue) => {
+    if(!newValue) {
+        store_player_appearance.player_show_of_control_info = true
+    }
 });
 watch(() => store_player_appearance.player_collapsed_album, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()

@@ -1,11 +1,16 @@
 <script setup lang="ts">
   ////// this_view resource
   import {
-    ArrowMinimize16Regular, Maximize16Regular,
-    ChevronDown12Filled, Settings24Regular, FullScreenMaximize16Regular
+    ArrowMinimize16Regular,
+    Maximize16Regular,
+    ChevronDown12Filled,
+    Settings24Regular,
+    FullScreenMaximize16Regular,
+    ArrowAutofitDown24Regular,
+    ArrowRepeatAll16Regular
   } from '@vicons/fluent'
   import {
-    MotionPhotosAutoOutlined
+    MotionPhotosAutoOutlined, RepeatOneRound
   } from '@vicons/material'
   import {
     Close,Clean
@@ -23,7 +28,7 @@
   // app theme
   import {darkTheme, NIcon, NSlider} from 'naive-ui'
   // vue3 function
-  import { ref, watch, watchEffect, onMounted, computed } from 'vue';
+  import {ref, watch, watchEffect, onMounted, computed, inject} from 'vue';
   import { onBeforeUnmount } from 'vue';
   const path = require('path');
 
@@ -61,13 +66,17 @@
 
   ////// lyircs load
   let unwatch = watch(() => store_player_audio_info.this_audio_lyrics_string, (value) => {load_lyrics()});
-  onMounted(() => {load_lyrics()});
+  onMounted(() => {
+    load_lyrics()
+    init_player_theme()
+  });
   function load_lyrics() {
     if(store_player_audio_info.this_audio_lyrics_string.length > 0) {
+      handleAuto_fontSize(store_player_appearance.player_lyric_fontSize_Num)
       begin_lyrics_animation()
       try{
         setTimeout(() => {
-          handleLeave()
+          handleLeave_Refresh_Lyric_Style()
         }, 200);
       }catch(e){
         console.log(e)
@@ -111,7 +120,7 @@
     if (time < 0) return;
     store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress = time;
 
-    handleLeave()
+    handleLeave_Refresh_Lyric_Style()
   };
   const scrollbar = ref(null as any);
   const perviousIndex = ref(0);
@@ -142,7 +151,7 @@
       itemElements[index].style.width = 'calc(40vw)'
     }
     itemElements[index].scrollIntoView({ block: 'center', behavior: perviousIndex.value === index - 1 ? 'smooth' : 'instant' });
-    handleLeave()
+    handleLeave_Refresh_Lyric_Style()
 
     let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
     for (let i = index - 16; i <= index + 16; i++) {
@@ -154,13 +163,15 @@
         itemElements[i].style.width = 'calc(40vw)'
       } else if (i != index) {
 
-        if(window.innerHeight > 900) {
+        if(window.innerHeight < 1080) {
+          store_player_appearance.player_lyric_color_hidden_coefficient = 20
+          store_player_appearance.player_lyric_color_hidden_value = 90
+        }else if(window.innerHeight < 1280) {
           store_player_appearance.player_lyric_color_hidden_coefficient = 15
           store_player_appearance.player_lyric_color_hidden_value = 90
-        }
-        else{
-          store_player_appearance.player_lyric_color_hidden_coefficient = 20
-          store_player_appearance.player_lyric_color_hidden_value = 70
+        }else if(window.innerHeight < 1480) {
+          store_player_appearance.player_lyric_color_hidden_coefficient = 15
+          store_player_appearance.player_lyric_color_hidden_value = 90
         }
 
         const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
@@ -216,7 +227,7 @@
       elementWidth += parseFloat(computedStyle.width);
 
       itemElements_active[i].style.fontSize = store_player_appearance.player_lyric_fontSize;
-      itemElements_active[i].style.fontWeight = store_player_appearance.player_lyric_fontWeight;
+      itemElements_active[i].style.fontWeight = 400;
 
       itemElements_active[i].style.filter = 'blur(0px)';
       itemElements_active[i].style.transition = 'color 0.5s, transform 0.5s';
@@ -297,7 +308,7 @@
       itemElements[i].style.width = 'calc(40vw)'
     }
   };
-  const handleLeave = () => {
+  const handleLeave_Refresh_Lyric_Style = () => {
     lyrics_list_whell.value = false;
     const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
     let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
@@ -321,9 +332,13 @@
     const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
     itemElements_active.forEach((itemElement) => {
       itemElement.style.fontSize = store_player_appearance.player_lyric_fontSize;
-      itemElement.style.fontWeight = store_player_appearance.player_lyric_fontWeight;
+      itemElement.style.fontWeight = 400;
     })
   }
+  watch(() => store_player_appearance.player_lyric_fontSize_Num, (newValue) => {
+    handleLeave_Refresh_Lyric_Style()
+    handleAuto_fontSize(newValue)
+  });
 
   ////// player_configs theme BasicInfo
   type PlayerTheme_Style = {
@@ -438,8 +453,17 @@
     store_player_appearance.player_collapsed_album = player_theme_0_bind_style.value.normalStyle.player_collapsed_album;
     store_player_appearance.player_collapsed_skin = player_theme_0_bind_style.value.normalStyle.player_collapsed_skin;
 
+    init_player_theme()
+
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
   };
+  function init_player_theme(){
+    if(store_player_appearance.player_background_model_num === 0){
+      store_player_appearance.player_show_of_control_info = false
+    }else{
+      store_player_appearance.player_show_of_control_info = true
+    }
+  }
 
   ////// player_configs page_ui set
   const isVisible_Player_theme = ref(false);
@@ -476,13 +500,13 @@
   import {store_player_audio_logic} from "@/store/player/store_player_audio_logic"
   import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
   import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+  import {Random} from "@vicons/fa";
+  import {Pause, Play, PlayBack, PlayForward, VolumeMedium} from "@vicons/ionicons5";
+  import Table_Album_Model_1_Cover from "@/views/view_page_player/table/Table_Album_Model_1_Cover.vue";
   const clear_lottie_animationInstance = ref(false)
   const animationInstance_model_1_spectrum = ref<any>(null);
-  const animationInstance_model_1_spectrum_json = JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715392202806.json')))
   const animationInstance_model_1_wave = ref<any>(null);
-  const animationInstance_model_1_wave_json = JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715591164841.json')))
   const animationInstance_model_2_wave = ref<any>(null);
-  const animationInstance_model_2_wave_json = JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715417974362.json')))
   let unwatch_animationInstance = watch(() => store_player_audio_info.this_audio_is_playing, (newValue) => {
     if(store_player_appearance.player_use_lottie_animation) {
       if (newValue === true) {
@@ -604,7 +628,13 @@
                   <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricSize') }}</span>
                   <n-space style="margin-right: 32px;">
                     <n-button text style="font-size: 24px;margin-top: 2px;margin-left: 7px;"
-                              @click="handleAuto_fontSize(24)">
+                              @click="() => {
+                                if (store_app_configs_info.desktop_system_kind === 'win32') {
+                                  handleAuto_fontSize(28)
+                                } else if (store_app_configs_info.desktop_system_kind === 'darwin') {
+                                  handleAuto_fontSize(36)
+                                }
+                              }">
                       <n-icon>
                         <MotionPhotosAutoOutlined />
                       </n-icon>
@@ -786,18 +816,10 @@
           <n-flex justify="end" style="width: 400px;height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
               <n-button quaternary
-                        style="margin-right:4px"
+                        style="margin-right:34px"
                         @click="get_isVisible_Player_theme">
                 <template #icon>
                   <n-icon :depth="3"><Settings24Regular /></n-icon>
-                </template>
-<!--                {{ $t('nsmusics.view_player.view_seting.viewSeting') }}-->
-              </n-button>
-              <n-button quaternary size="medium"
-                        :style="{ marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '2px' : '30px' }"
-                        @click="close_media_player">
-                <template #icon>
-                  <n-icon size="26" :depth="3" style="margin-bottom: 2px;"><ChevronDown12Filled/></n-icon>
                 </template>
               </n-button>
               <n-button quaternary circle size="medium"
@@ -853,66 +875,11 @@
                 style="background-color: transparent;">
                 <n-space vertical align="end" style="margin-right:8vw;">
                   <!-- 1 方形封面-->
-                  <n-space vertical
-                           align="center"
-                           v-show="store_player_appearance.player_background_model_num === 0">
-                    <img
-                      style="
-                        width: 50vh;height: 50vh;
-                        margin-top: calc(28vh - 182px);
-                        border-radius: 10px;
-                        object-fit: cover;object-position: center;
-                      "
-                      :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                      alt="">
-                    <div
-                      style="
-                        width: 44vh;
-                        color: #E7E5E5;
-                        font-weight: 900;font-size: 22px;
-                        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
-                        text-align: center;">
-                      {{ store_player_audio_info.this_audio_song_name }}
-                    </div>
-                    <div
-                      style="
-                        width: 44vh;margin-top: -6px;margin-bottom: -6px;
-                        color: #989292;font-weight: 550;font-size: 18px;
-                        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
-                        text-align: center;">
-                      {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
-                    </div>
-                    <!--  -->
-                    <n-space
-                        v-if="!store_player_appearance.player_collapsed_album"
-                        justify="center"
-                        style="width: 450px;margin-top: 8px;">
-                      <n-space style="width: 40px;">
-                        {{ store_player_audio_logic.current_play_time }}
-                      </n-space>
-                      <n-slider
-                        style="
-                        width: 300px;
-                        --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
-                        --n-rail-height: 4px;
-                        margin-top: 3px;margin-right: 5px;
-                        border-radius: 10px;"
-                        :value="store_player_audio_logic.slider_singleValue"
-                        :min="0" :max="100" :tooltip="false"
-                      >
-                        <template #thumb>
-                          <n-icon-wrapper :size="0" />
-                        </template>
-                      </n-slider>
-                      <n-space style="width: 40px;">
-                        {{ store_player_audio_logic.total_play_time }}
-                      </n-space>
-                    </n-space>
-                  </n-space>
+                  <Table_Album_Model_1_Cover v-show="store_player_appearance.player_background_model_num === 0"/>
                   <!-- 2 旋转封面-->
                   <n-space vertical
                            align="center"
-                           style="margin-top: -24px;margin-right: calc(-8vh);overflow: hidden"
+                           style="margin-right: calc(-8vw);overflow: hidden"
                            v-show="store_player_appearance.player_background_model_num === 1">
                     <lottie-player
                       ref="animationInstance_model_1_wave"
@@ -922,11 +889,12 @@
                       autoplay
                       loop
                       mode="normal"
-                      :src="animationInstance_model_1_wave_json"
+                      :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715591164841.json')))"
                       :style="{
                         '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`
                       }"
                       style="
+                        margin-top: calc(10vh - 36px);
                         width: calc(66vh);
                         height: calc(66vh);
                       "
@@ -934,7 +902,7 @@
                     </lottie-player>
                     <div
                         style="
-                          width: 44vh;margin-top: calc(-15vh);color: #E7E5E5;
+                          width: 88vh;margin-top: calc(-15vh);color: #E7E5E5;
                           font-weight: 900;font-size: 26px;
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
@@ -942,7 +910,7 @@
                     </div>
                     <div
                         style="
-                          width: 44vh;margin-left: 2px;margin-top: calc(-15vh + 40px);
+                          width: 88vh;margin-left: 2px;margin-top: calc(-15vh + 40px);
                           color: #989292;font-weight: 550;font-size: 18px;
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
@@ -954,7 +922,7 @@
                       autoplay
                       loop
                       mode="normal"
-                      :src="animationInstance_model_1_spectrum_json"
+                      :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715392202806.json')))"
                       style="width: 54vh;height:40px;margin-top: calc(-15vh + 70px);"
                     />
                   </n-space>
@@ -970,7 +938,7 @@
                       autoplay
                       loop
                       mode="normal"
-                      :src="animationInstance_model_2_wave_json"
+                      :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715417974362.json')))"
                       style="
                         width: calc(56vh);
                         height: calc(56vh);
@@ -1042,11 +1010,13 @@
               </n-layout-sider>
               <!-- right area -->
               <n-layout-content
-                style="background-color: transparent;margin-left:0vw;">
+                style="background-color: transparent;"
+                :style="{marginLeft: store_player_appearance.player_background_model_num != 3 ? '-3vw' : '2vw'}"
+              >
                 <div
                   style="
                     width: 40vw;height: calc(100vh - 100px);
-                    margin-top: -100px;
+                    margin-top: -80px;
                     border-radius: 20px;
                     display: flex;
                     justify-content: center;
@@ -1057,10 +1027,11 @@
                     :show-divider="false"
                     ref="scrollbar"
                     @wheel="handleWheel"
-                    @mouseleave="handleLeave"
+                    @mouseleave="handleLeave_Refresh_Lyric_Style"
                     style="
                       width: calc(40vw);
                       max-height: calc(90vh);
+                      margin-top: 120px;
                       overflow: auto;
                       background-color: #00000000;
                     ">
@@ -1103,25 +1074,25 @@
 #player_bg_zindex_0 {
   z-index: -2;
   transition: filter 0.5s ease;
-  animation: moveInRectangle 60s linear infinite; /* 只使用一个动画 */
+  animation: moveInRectangle 45s linear infinite; /* 只使用一个动画 */
   transform-origin: center center; /* 设置旋转中心为元素中心 */
   position: relative; /* 设置相对定位，用于移动 */
 }
 @keyframes moveInRectangle {
   0% {
-    transform: rotate(0deg) translate(0, 0); /* 起点：左上角 */
+    transform: rotate(0deg) translate(0, 0) scale(100%); /* 起点：左上角 */
   }
   25% {
-    transform: rotate(90deg) translate(10%, 0); /* 右上角 */
+    transform: rotate(90deg) translate(80%, 0) scale(200%); /* 右上角 */
   }
   50% {
-    transform: rotate(180deg) translate(10%, 10%); /* 右下角 */
+    transform: rotate(180deg) translate(80%, 80%) scale(300%); /* 右下角 */
   }
   75% {
-    transform: rotate(270deg) translate(0, 10%); /* 左下角 */
+    transform: rotate(270deg) translate(0, 80%) scale(200%); /* 左下角 */
   }
   100% {
-    transform: rotate(360deg) translate(0, 0); /* 回到起点：左上角 */
+    transform: rotate(360deg) translate(0, 0) scale(100%); /* 回到起点：左上角 */
   }
 }
 
@@ -1141,7 +1112,6 @@
 }
 .lyrics_text_active {
   font-size: v-bind(store_player_appearance.player_lyric_fontSize);
-  font-weight: v-bind(store_player_appearance.player_lyric_fontWeight);
   /* display: inline-block;
   white-space: pre; */
   max-width: calc(36vw);

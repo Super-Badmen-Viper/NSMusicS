@@ -12,8 +12,6 @@ import {
     dialog,
     Tray, Menu, nativeImage, nativeTheme
 } from 'electron'
-import {ref} from "vue";
-import {store_app_configs_info} from "./store/app/store_app_configs_info";
 const electron = require('electron')
 const ipc = electron.ipcMain
 const { session } = require('electron');

@@ -31,6 +31,11 @@ export const store_player_audio_logic = reactive({
     player_replayGainFallback: 0,
     player_mpvExtraParameters: '',
 
+    player_click_state_of_order: false,
+    player_click_state_of_play_skip_back: false,
+    player_click_state_of_play: false,
+    player_click_state_of_play_skip_forward: false,
+
     total_play_time: '04:42',
     current_play_time: '01:36',
     slider_singleValue: 0,

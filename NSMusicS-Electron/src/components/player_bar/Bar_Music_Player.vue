@@ -1,10 +1,10 @@
 <script setup lang="ts">
 ////// this_view resource of icons_svg
 import {
-  Heart24Regular,Heart28Filled,
+  Heart24Regular, Heart28Filled,
   MoreCircle32Regular,
-  ArrowRepeatAll16Regular,ArrowAutofitDown24Regular,
-  TopSpeed20Regular,DeviceEq24Filled,Tag16Regular,Info16Regular
+  ArrowRepeatAll16Regular, ArrowAutofitDown24Regular,
+  TopSpeed20Regular, DeviceEq24Filled, Tag16Regular, Info16Regular, ChevronDown12Filled
 } from '@vicons/fluent'
 import {
   RepeatOneRound,QueueMusicRound
@@ -20,7 +20,7 @@ import {
 import { NIcon, NSlider, NSpace, NText } from 'naive-ui';
 
 ////// this_view components of navie_ui
-import {onMounted, ref, watch, inject} from 'vue';
+import {onMounted, ref, watch, inject, provide} from 'vue';
 import {onBeforeUnmount} from 'vue';
 const get_playerbar_to_switch_playerview = inject('get_playerbar_to_switch_playerview');
 
@@ -367,9 +367,6 @@ const backpanel_order_leave = () => {
   if(store_player_appearance.player_show === false) {
     store_player_audio_logic.drawer_order_show = false;
   }
-}
-const backpanel_order_hover = () => {
-  store_player_audio_logic.drawer_order_show = true;
 }
 const backpanel_order_click = () => {
   store_player_audio_logic.drawer_order_show = true;
@@ -776,6 +773,31 @@ onBeforeUnmount(() => {
   unwatch_this_audio_buffer_file()
   unwatch_play_go_index_time()
 });
+//
+watch(() => store_player_audio_logic.player_click_state_of_order, (newValue) => {
+  if(newValue){
+    backpanel_order_click()
+    store_player_audio_logic.player_click_state_of_order = false
+  }
+});
+watch(() => store_player_audio_logic.player_click_state_of_play_skip_back, (newValue) => {
+  if(newValue){
+    play_skip_back_click()
+    store_player_audio_logic.player_click_state_of_play_skip_back = false
+  }
+});
+watch(() => store_player_audio_logic.player_click_state_of_play, (newValue) => {
+  if(newValue){
+    Init_Audio_Player()
+    store_player_audio_logic.player_click_state_of_play = false
+  }
+});
+watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (newValue) => {
+  if(newValue){
+    play_skip_forward_click()
+    store_player_audio_logic.player_click_state_of_play_skip_forward = false
+  }
+});
 </script>
 <template>
   <n-space
@@ -793,7 +815,16 @@ onBeforeUnmount(() => {
         width: store_player_appearance.player_show ? '100vw' : 'calc(100vw - 72px)',
       }">
       <div class="gird_Left">
-        <div class="button_open_player_view">
+        <div class="button_open_player_view" v-if="!store_player_appearance.player_show_of_control_info">
+          <n-button quaternary size="medium"
+                    style="margin-top: 10px;margin-left: -30px;"
+                    @click="()=>{click_back_svg();leave_back_svg();}" @mouseout="leave_back_svg">
+            <template #icon>
+              <n-icon size="36" :depth="3" style="margin-bottom: 2px;"><ChevronDown12Filled/></n-icon>
+            </template>
+          </n-button>
+        </div>
+        <div class="button_open_player_view" v-if="store_player_appearance.player_show_of_control_info">
           <img class="back_svg"
                :src="getAssetImage(store_player_audio_logic.player_back_ChevronDouble)"
                :style="{ display: back_display }"
@@ -807,7 +838,7 @@ onBeforeUnmount(() => {
                @mouseover="hover_back_img" @mouseout="leave_back_svg"
           />
         </div>
-        <div class="bar_left_text_song_info">
+        <div class="bar_left_text_song_info" v-if="store_player_appearance.player_show_of_control_info">
           <n-space>
             <n-ellipsis>
               <span id="bar_song_name" @click="handleItemClick_title(store_player_audio_info.this_audio_song_name)">{{ store_player_audio_info.this_audio_song_name + '&nbsp-&nbsp' }}</span>
@@ -831,11 +862,11 @@ onBeforeUnmount(() => {
           </n-space>
         </div>
       </div>
-      <div class="gird_Middle">
+      <div class="gird_Middle" v-if="store_player_appearance.player_show_of_control_info">
         <!-- grid_Middle_button_area -->
         <n-space class="grid_Middle_button_area" justify="center">
           <n-button quaternary round size="small"
-                    @click="backpanel_order_click" @mouseover="backpanel_order_hover">
+                    @click="backpanel_order_click" @mouseover="store_player_audio_logic.drawer_order_show = true;">
             <template #icon>
               <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
                 <ArrowAutofitDown24Regular/>
