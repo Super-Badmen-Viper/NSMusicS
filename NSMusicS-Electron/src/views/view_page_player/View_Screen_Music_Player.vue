@@ -829,6 +829,9 @@
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
               <n-button quaternary
                         style="margin-right:34px"
+                        :style="{
+                          marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '0px' : '34px',
+                        }"
                         @click="get_isVisible_Player_theme">
                 <template #icon>
                   <n-icon :depth="3"><Settings24Regular /></n-icon>
@@ -916,7 +919,7 @@
                     <div
                         style="
                           width: 45vh;margin-top: calc(-14vh);color: #E7E5E5;
-                          font-weight: 900;font-size: calc(26px);
+                          font-weight: 900;font-size: calc(24px);
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
                       {{ store_player_audio_info.this_audio_song_name }}
@@ -936,8 +939,39 @@
                       loop
                       mode="normal"
                       :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715392202806.json')))"
-                      style="width: 54vh;height:calc(6vh);margin-top: calc(-6px);"
+                      style="width: 54vh;height:calc(5vh);margin-top: calc(-6px);"
                     />
+                    <n-slider
+                      style="
+                        width: 40vh;
+                        --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
+                        --n-rail-height: 4px;
+                        --n-handle-size: 20px;
+                        margin-top: -10px;
+                        border-radius: 10px;"
+                        v-model:value="store_player_audio_logic.slider_singleValue"
+                        :min="0" :max="100"
+                        :format-tooltip="(value) => {
+                        return store_player_audio_logic.formatTime(
+                          (value / 100) * store_player_audio_logic.player.isDuration
+                        );
+                      }"
+                        :on-dragend="()=>{
+                        if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
+                          store_player_audio_logic.player_is_play_ended = true;
+                          store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
+                        }
+                        store_player_audio_logic.player_range_duration_isDragging = false;
+                      }"
+                        @click="()=>{
+                        store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
+                      }"
+                        @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
+                        @mouseup="store_player_audio_logic.player_range_duration_isDragging = false">
+                      <template #thumb>
+                        <n-icon-wrapper :size="0" />
+                      </template>
+                    </n-slider>
                   </n-flex>
                   <!-- 3 炫胶唱片-->
                   <n-space vertical
@@ -957,7 +991,7 @@
                       style="
                         width: calc(56vh);
                         height: calc(56vh);
-                        margin-top: calc(19vh - 154.5px);margin-left: calc(-27.5vh);
+                        margin-top: calc(22vh - 154.5px);margin-left: calc(-28vh);
                         position: absolute;
                       "
                       :style="{
@@ -968,7 +1002,7 @@
                       style="
                         width: calc(38vh);
                         height: calc(38vh);
-                        margin-top: calc(28vh - 162px);margin-left: calc(-18.5vh);
+                        margin-top: calc(31vh - 162px);margin-left: calc(-19vh);
                         border-radius: 27vh;
                         object-fit: cover;object-position: center;
                         filter: blur(0px);
@@ -980,7 +1014,7 @@
                     </div>
                     <img
                       style="
-                        width: calc(44vh);height: calc(44vh);
+                        width: calc(40vh);height: calc(40vh);
                         WebkitMask-image: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 40%);
                         margin-top: calc(45vh - 162px);
                         border: 2px solid #FFFFFF20;
@@ -993,20 +1027,51 @@
                       alt="">
                     <div
                       style="
-                        width: 44vh;margin-top: -16px;
-                        color: #E7E5E5;font-weight: 900;font-size: 26px;
+                        width: 40vh;margin-top: -10px;
+                        color: #E7E5E5;font-weight: 900;font-size: 24px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
                       {{ store_player_audio_info.this_audio_song_name }}
                     </div>
                     <div
                       style="
-                        width: 44vh;margin-top: -10px;margin-bottom: 12px;
+                        width: 40vh;margin-top: -10px;margin-bottom: 12px;
                         color: #989292;font-weight: 550;font-size: 18px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
                       {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
                     </div>
+                    <n-slider
+                      style="
+                        width: 40vh;
+                        --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
+                        --n-rail-height: 4px;
+                        --n-handle-size: 20px;
+                        margin-top: -20px;
+                        border-radius: 10px;"
+                      v-model:value="store_player_audio_logic.slider_singleValue"
+                      :min="0" :max="100"
+                      :format-tooltip="(value) => {
+                        return store_player_audio_logic.formatTime(
+                          (value / 100) * store_player_audio_logic.player.isDuration
+                        );
+                      }"
+                      :on-dragend="()=>{
+                        if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
+                          store_player_audio_logic.player_is_play_ended = true;
+                          store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
+                        }
+                        store_player_audio_logic.player_range_duration_isDragging = false;
+                      }"
+                      @click="()=>{
+                        store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
+                      }"
+                      @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
+                      @mouseup="store_player_audio_logic.player_range_duration_isDragging = false">
+                      <template #thumb>
+                        <n-icon-wrapper :size="0" />
+                      </template>
+                    </n-slider>
                   </n-space>
                 </n-space>
               </n-layout-sider>

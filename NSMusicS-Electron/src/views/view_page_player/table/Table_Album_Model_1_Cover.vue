@@ -19,7 +19,8 @@ function getAssetImage(firstImage: string) {
 
 <template>
   <n-space vertical
-           align="center" style="margin-right: 2vw;"
+           align="center"
+           style="margin-right: 1vw;"
   >
     <img
         style="
@@ -61,33 +62,32 @@ function getAssetImage(firstImage: string) {
         </n-space>
       </n-space>
       <n-slider
-          style="
-            width: 55vh;
-            --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
-            --n-rail-height: 4px;
-            --n-handle-size: 20px;
-            margin-top: -14px;
-            border-radius: 10px;"
-          v-model:value="store_player_audio_logic.slider_singleValue"
-          :min="0" :max="100"
-          :format-tooltip="(value) => {
-            return store_player_audio_logic.formatTime(
-              (value / 100) * store_player_audio_logic.player.isDuration
-            );
-          }"
-          :on-dragend="()=>{
-            if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
-              store_player_audio_logic.player_is_play_ended = true;
-              store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
-            }
-            store_player_audio_logic.player_range_duration_isDragging = false;
-          }"
-          @click="()=>{
+        style="
+          width: 55vh;
+          --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
+          --n-rail-height: 4px;
+          --n-handle-size: 20px;
+          margin-top: -14px;
+          border-radius: 10px;"
+        v-model:value="store_player_audio_logic.slider_singleValue"
+        :min="0" :max="100"
+        :format-tooltip="(value) => {
+          return store_player_audio_logic.formatTime(
+            (value / 100) * store_player_audio_logic.player.isDuration
+          );
+        }"
+        :on-dragend="()=>{
+          if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
+            store_player_audio_logic.player_is_play_ended = true;
             store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
-          }"
-          @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
-          @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
-      >
+          }
+          store_player_audio_logic.player_range_duration_isDragging = false;
+        }"
+        @click="()=>{
+          store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
+        }"
+        @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
+        @mouseup="store_player_audio_logic.player_range_duration_isDragging = false">
         <template #thumb>
           <n-icon-wrapper :size="0" />
         </template>
@@ -165,11 +165,11 @@ function getAssetImage(firstImage: string) {
         </template>
       </n-button>
       <n-slider
-          style="
+        style="
           width: calc((55vh - 310px) / 2);
           border-radius: 10px;
           --n-fill-color: #ffffff20;--n-fill-color-hover: #ffffff20;
-          --n-rail-height: 6px;
+          --n-rail-height: 4px;
           --n-handle-size: 10px;
           margin-top: -1px;
         "
