@@ -31,6 +31,9 @@ export const store_player_audio_logic = reactive({
     player_replayGainFallback: 0,
     player_mpvExtraParameters: '',
 
+    player_is_play_ended: false,
+    player_range_duration_isDragging: false,
+
     player_click_state_of_order: false,
     player_click_state_of_play_skip_back: false,
     player_click_state_of_play: false,
@@ -51,6 +54,44 @@ export const store_player_audio_logic = reactive({
 
     drawer_order_show: false,
     drawer_volume_show: false,
+
+    formatTime(currentTime: number): string {
+        const minutes = Math.floor(currentTime / 60);
+        const seconds = Math.floor(currentTime % 60);
+
+        let formattedMinutes = String(minutes);
+        let formattedSeconds = String(seconds);
+
+        if (formattedMinutes.length == 1)
+            formattedMinutes = '0' + formattedMinutes;
+
+        if (formattedSeconds.length == 1)
+            formattedSeconds = '0' + formattedSeconds;
+
+        return `${formattedMinutes}:${formattedSeconds}`;
+    },
+    async play_go_duration(slider_value: number, silder_path: boolean) {
+        store_player_audio_logic.player_no_progress_jump = false;
+        store_player_audio_logic.player_silder_currentTime_added_value = 0;
+        if (store_player_audio_logic.player.isPlaying === true) {
+            // 注意，此时currentTime将从0开始，需要计算附加值
+            if (silder_path) {
+                let newTime = (Number(slider_value) / 100) * await store_player_audio_logic.player.getDuration();
+                if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
+                    store_player_audio_logic.player.setCurrentTime(newTime);
+                } else {
+                    store_player_audio_logic.player.setCurrentTime(0);
+                }
+            } else {
+                let newTime = Number(slider_value) / 1000;
+                if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
+                    store_player_audio_logic.player.setCurrentTime(newTime);
+                } else {
+                    store_player_audio_logic.player.setCurrentTime(0);
+                }
+            }
+        }
+    }
 });
 watch(() => store_player_audio_logic.player_select, async (newValue) => {
     await store_player_audio_info.reset_data();

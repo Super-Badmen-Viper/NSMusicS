@@ -4,7 +4,7 @@ import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 import {RepeatOneRound} from "@vicons/material";
 import {Random} from "@vicons/fa";
-import {Pause, Play, PlayBack, PlayForward, VolumeMedium} from "@vicons/ionicons5";
+import {Pause, Play, PlayBack, PlayForward, VolumeMedium, VolumeOff} from "@vicons/ionicons5";
 import {ArrowAutofitDown24Regular, ArrowRepeatAll16Regular} from "@vicons/fluent";
 import {NIcon, NSlider} from "naive-ui";
 function getAssetImage(firstImage: string) {
@@ -19,7 +19,7 @@ function getAssetImage(firstImage: string) {
 
 <template>
   <n-space vertical
-           align="center" style="margin-right: 2vw;margin-top: 30px;"
+           align="center" style="margin-right: 2vw;"
   >
     <img
         style="
@@ -32,7 +32,7 @@ function getAssetImage(firstImage: string) {
         alt="">
     <div
         style="
-          width: 50vh;
+          width: 44vh;
           color: #E7E5E5;
           font-weight: 900;font-size: 22px;
           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
@@ -52,7 +52,7 @@ function getAssetImage(firstImage: string) {
         vertical
         v-if="!store_player_appearance.player_collapsed_album"
         style="margin-top: -12px;">
-      <n-space justify="space-between" style="width: 50vh;">
+      <n-space justify="space-between" style="width: 55vh;">
         <n-space>
           {{ store_player_audio_logic.current_play_time }}
         </n-space>
@@ -62,13 +62,31 @@ function getAssetImage(firstImage: string) {
       </n-space>
       <n-slider
           style="
-                          width: 50vh;
-                          --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
-                          --n-rail-height: 4px;
-                          margin-top: -14px;
-                          border-radius: 10px;"
-          :value="store_player_audio_logic.slider_singleValue"
-          :min="0" :max="100" :tooltip="false"
+            width: 55vh;
+            --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
+            --n-rail-height: 4px;
+            --n-handle-size: 20px;
+            margin-top: -14px;
+            border-radius: 10px;"
+          v-model:value="store_player_audio_logic.slider_singleValue"
+          :min="0" :max="100"
+          :format-tooltip="(value) => {
+            return store_player_audio_logic.formatTime(
+              (value / 100) * store_player_audio_logic.player.isDuration
+            );
+          }"
+          :on-dragend="()=>{
+            if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
+              store_player_audio_logic.player_is_play_ended = true;
+              store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
+            }
+            store_player_audio_logic.player_range_duration_isDragging = false;
+          }"
+          @click="()=>{
+            store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
+          }"
+          @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
+          @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
       >
         <template #thumb>
           <n-icon-wrapper :size="0" />
@@ -79,6 +97,11 @@ function getAssetImage(firstImage: string) {
     <n-space justify="center"
              align="center"
              style="margin-top: 0px;">
+      <div
+          style="
+          width: calc((55vh - 310px) / 2);
+        "
+      />
       <n-button quaternary round size="small"
                 @click="store_player_audio_logic.player_click_state_of_order = true"
                 @mouseover="store_player_audio_logic.drawer_order_show = true;">
@@ -120,11 +143,31 @@ function getAssetImage(firstImage: string) {
           <n-icon :size="26"><PlayForward/></n-icon>
         </template>
       </n-button>
-      <n-button quaternary round size="small" @click="backpanel_voice_click">
+      <n-button quaternary round size="small"
+                @click="()=>{
+                  if(store_player_audio_logic.play_volume === 0){
+                    store_player_audio_logic.play_volume = 100;
+                  }else{
+                    store_player_audio_logic.play_volume = 0;
+                  }
+                }">
         <template #icon>
-          <n-icon :size="26"><VolumeMedium color="#989292" /></n-icon>
+          <n-icon :size="26" v-if="store_player_audio_logic.play_volume != 0"><VolumeMedium color="#989292" /></n-icon>
+          <n-icon :size="26" v-else><VolumeOff color="#989292" /></n-icon>
         </template>
       </n-button>
+      <n-slider
+          style="
+          width: calc((55vh - 310px) / 2);
+          border-radius: 10px;
+          --n-fill-color: #ffffff20;--n-fill-color-hover: #ffffff20;
+          --n-rail-height: 6px;
+          --n-handle-size: 10px;
+          margin-top: -1px;
+        "
+          v-model:value="store_player_audio_logic.play_volume"
+          :min="0" :max="100" :keyboard="true"
+      />
     </n-space>
   </n-space>
 </template>

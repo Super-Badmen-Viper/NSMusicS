@@ -128,7 +128,7 @@ let unwatch_this_audio_restart_play = watch(() => store_player_audio_info.this_a
 });
 const handleAudioFilePathChange = async () => {
   if(store_player_audio_logic.this_audio_initial_trigger) {
-    store_player_audio_logic.current_play_time = formatTime(await store_player_audio_logic.player.getDuration());
+    store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(await store_player_audio_logic.player.getDuration());
     store_player_audio_logic.player_silder_currentTime_added_value = 0;
     this_audio_buffer_file.value = null;
     store_player_audio_logic.player_no_progress_jump = false;
@@ -140,7 +140,6 @@ const handleAudioFilePathChange = async () => {
   store_player_audio_logic.this_audio_initial_trigger = true
 };
 const this_audio_buffer_file = ref<any>()
-const is_play_ended = ref(false);
 const timer_this_audio_player = ref<NodeJS.Timeout>();// 延迟触发：接收大量数据时，仅触发最后一个值
 const { Howl } = require('howler');
 let unwatch_this_audio_buffer_file =  watch(() => this_audio_buffer_file.value, (newValue, oldValue) => {
@@ -167,7 +166,7 @@ const Play_This_Audio_Path = () => {
       store_player_audio_logic.player.isPlaying = true;
       store_player_audio_info.this_audio_is_playing = true
       store_player_audio_logic.player_save_new_data = true
-      is_play_ended.value = false;
+      store_player_audio_logic.player_is_play_ended = false;
       store_player_audio_logic.player_no_progress_jump = true;
       //
       clearInterval(timer);
@@ -242,7 +241,7 @@ const init_player_howler = async () => {
         store_player_audio_logic.player.isPlaying = false;
         //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
         if(store_player_audio_logic.player_no_progress_jump){
-          store_player_audio_logic.current_play_time = formatTime(store_player_audio_logic.player.getDuration());
+          store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(store_player_audio_logic.player.getDuration());
           store_player_audio_logic.player_silder_currentTime_added_value = 0;
           this_audio_buffer_file.value = null;
           clearInterval(timer);
@@ -250,7 +249,7 @@ const init_player_howler = async () => {
           store_player_audio_logic.player_no_progress_jump = false;
 
           store_player_audio_logic.player.isPlaying = false;
-          is_play_ended.value = true;
+          store_player_audio_logic.player_is_play_ended = true;
         }
         Play_Media_Switching()
       }, store_player_audio_logic.player_fade_value);
@@ -269,7 +268,7 @@ const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
 
 /// Prevent 'mpv stopped' from being triggered multiple times and implement anti shake throttling measures
 const handleMpvStopped = debounce(async (event, args) => {
-  is_play_ended.value = true;
+  store_player_audio_logic.player_is_play_ended = true;
   let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
       (item: any) =>
           item.play_id ===
@@ -289,7 +288,7 @@ const handleMpvStopped = debounce(async (event, args) => {
     store_player_audio_info.this_audio_is_playing = false;
     // 无进度跳动: 若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
     if (store_player_audio_logic.player_no_progress_jump) {
-      store_player_audio_logic.current_play_time = formatTime(store_player_audio_logic.player.getDuration());
+      store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(store_player_audio_logic.player.getDuration());
       store_player_audio_logic.player_silder_currentTime_added_value = 0;
       this_audio_buffer_file.value = null;
       clearInterval(timer);
@@ -419,9 +418,9 @@ async function Play_Media_Order(model_num: string, increased: number) {
       if (model_num === 'playback-1') {
         index += increased;
         if (index >= last_index) {
-          if(is_play_ended.value === true){
+          if(store_player_audio_logic.player_is_play_ended === true){
             stop_play = true;
-            is_play_ended.value = false;
+            store_player_audio_logic.player_is_play_ended = false;
           }else{
             index = 0;
           }
@@ -488,7 +487,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
 }
 ////// player_configs player_button middle area
 const play_skip_back_click = async () => {
-  store_player_audio_logic.current_play_time = formatTime(await store_player_audio_logic.player.getDuration());
+  store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(await store_player_audio_logic.player.getDuration());
   store_player_audio_logic.player_silder_currentTime_added_value = 0;
   this_audio_buffer_file.value = null;
   clearInterval(timer);
@@ -501,7 +500,7 @@ const play_skip_back_click = async () => {
   store_player_appearance.player_mode_of_lock_playlist = true
 }
 const play_skip_forward_click = async () => {
-  store_player_audio_logic.current_play_time = formatTime(await store_player_audio_logic.player.getDuration());
+  store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(await store_player_audio_logic.player.getDuration());
   store_player_audio_logic.player_silder_currentTime_added_value = 0;
   this_audio_buffer_file.value = null;
   clearInterval(timer);
@@ -520,7 +519,7 @@ ipcRenderer.on('tray-music-next',
     debounce(async (event, args) => {await play_skip_forward_click(), 300})
 );
 const Play_Media_Switching = async () => {
-  store_player_audio_logic.current_play_time = formatTime(await store_player_audio_logic.player.getDuration());
+  store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(await store_player_audio_logic.player.getDuration());
   store_player_audio_logic.player_silder_currentTime_added_value = 0;
   this_audio_buffer_file.value = null;
   clearInterval(timer);
@@ -528,7 +527,7 @@ const Play_Media_Switching = async () => {
   store_player_audio_logic.player_no_progress_jump = false;
 
   store_player_audio_logic.player.isPlaying = false;
-  is_play_ended.value = true;
+  store_player_audio_logic.player_is_play_ended = true;
 
   if (store_player_audio_logic.play_order === 'playback-3')
     Play_Media_Order(store_player_audio_logic.play_order, 0)
@@ -542,31 +541,13 @@ const backpanel_voice_click = () => {
 
 ////// player_configs slider formatTime area
 const set_slider_singleValue = async () => {
-  if (!player_range_duration_isDragging) {
+  if (!store_player_audio_logic.player_range_duration_isDragging) {
     const currentTime = await store_player_audio_logic.player.getCurrentTime();
     const duration = await store_player_audio_logic.player.getDuration();
     const calculatedValue = ((currentTime + store_player_audio_logic.player_silder_currentTime_added_value) / duration) * 100;
     store_player_audio_logic.slider_singleValue = Number(calculatedValue.toFixed(2));
   }
 };
-function formatTime(currentTime: number): string {
-  const minutes = Math.floor(currentTime / 60);
-  const seconds = Math.floor(currentTime % 60);
-
-  let formattedMinutes = String(minutes);
-  let formattedSeconds = String(seconds);
-
-  if (formattedMinutes.length == 1)
-    formattedMinutes = '0' + formattedMinutes;
-
-  if (formattedSeconds.length == 1)
-    formattedSeconds = '0' + formattedSeconds;
-
-  return `${formattedMinutes}:${formattedSeconds}`;
-}
-function formatTime_tooltip(value: number){
-  return formatTime((value / 100 * store_player_audio_logic.player.isDuration));
-}
 const get_current_play_time = async () => {
   if (
       (await store_player_audio_logic.player.getCurrentTime() +
@@ -575,11 +556,11 @@ const get_current_play_time = async () => {
       await store_player_audio_logic.player.getDuration()
   ) {
     store_player_audio_logic.current_play_time =
-        formatTime(
+        store_player_audio_logic.formatTime(
             (await store_player_audio_logic.player.getCurrentTime() +
                 store_player_audio_logic.player_silder_currentTime_added_value)
         );
-    store_player_audio_logic.total_play_time = formatTime(await store_player_audio_logic.player.getDuration());
+    store_player_audio_logic.total_play_time = store_player_audio_logic.formatTime(await store_player_audio_logic.player.getDuration());
   }
 }
 const synchronize_playback_time = () => {
@@ -589,48 +570,9 @@ const synchronize_playback_time = () => {
   }catch{}
 }
 let timer: string | number | NodeJS.Timeout | undefined;
-let player_range_duration_isDragging = false;
-const player_range_duration_handleMouseDown = () => {
-  player_range_duration_isDragging = true;
-};
-const player_range_duration_handleMouseUp = () => {
-  player_range_duration_isDragging = false;
-};
-const player_range_duration_handleclick = async () => {
-  play_go_duration(store_player_audio_logic.slider_singleValue,true);
-}
 let unwatch_play_go_index_time =  watch(() => store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress, () => {
-  play_go_duration(store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress,false)
+  store_player_audio_logic.play_go_duration(store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress,false)
 });
-const play_go_duration = async (slider_value: number, silder_path: boolean) => {
-  store_player_audio_logic.player_no_progress_jump = false;
-  store_player_audio_logic.player_silder_currentTime_added_value = 0;
-  if (store_player_audio_logic.player.isPlaying === true) {
-    // 注意，此时currentTime将从0开始，需要计算附加值
-    if (silder_path) {
-      let newTime = (Number(slider_value) / 100) * await store_player_audio_logic.player.getDuration();
-      if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
-        store_player_audio_logic.player.setCurrentTime(newTime);
-      } else {
-        store_player_audio_logic.player.setCurrentTime(0);
-      }
-    } else {
-      let newTime = Number(slider_value) / 1000;
-      if (Number(slider_value) !== 0 && Number(slider_value) !== 100) {
-        store_player_audio_logic.player.setCurrentTime(newTime);
-      } else {
-        store_player_audio_logic.player.setCurrentTime(0);
-      }
-    }
-  }
-}
-const update_dragend_slider_singleValue = () => {
-  if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
-    is_play_ended.value = true;
-    player_range_duration_handleclick()
-  }
-  player_range_duration_isDragging = false;
-};
 
 ////// open playList
 const Set_Playlist_Show = () => {
@@ -804,7 +746,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
       class="this_Bar_Music_Player"
       style="transition: margin 0.4s;"
       :style="{ marginBottom: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '-80px' : '0px' }"
-      @mousemove="handleRefusetohide" @mouseleave="handleMouseMove" @mouseover="handleRefusetohide">
+      @mousemove="handleRefusetohide" @mouseleave="()=>{handleMouseMove();leave_back_svg();}" @mouseover="handleRefusetohide">
     <div
         class="layout_distribution_3"
         style="transition: margin 0.4s;"
@@ -817,7 +759,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
       <div class="gird_Left">
         <div class="button_open_player_view" v-if="!store_player_appearance.player_show_of_control_info">
           <n-button quaternary size="medium"
-                    style="margin-top: 10px;margin-left: -30px;"
+                    style="margin-top: 10px;margin-left: 0px;"
                     @click="()=>{click_back_svg();leave_back_svg();}" @mouseout="leave_back_svg">
             <template #icon>
               <n-icon size="36" :depth="3" style="margin-bottom: 2px;"><ChevronDown12Filled/></n-icon>
@@ -838,7 +780,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                @mouseover="hover_back_img" @mouseout="leave_back_svg"
           />
         </div>
-        <div class="bar_left_text_song_info" v-if="store_player_appearance.player_show_of_control_info">
+        <div class="bar_left_text_song_info">
           <n-space>
             <n-ellipsis>
               <span id="bar_song_name" @click="handleItemClick_title(store_player_audio_info.this_audio_song_name)">{{ store_player_audio_info.this_audio_song_name + '&nbsp-&nbsp' }}</span>
@@ -922,11 +864,23 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
           "
             v-model:value="store_player_audio_logic.slider_singleValue"
             :min="0" :max="100" :keyboard="true"
-            :format-tooltip="formatTime_tooltip"
-            :on-dragend="update_dragend_slider_singleValue"
-            @mousedown="player_range_duration_handleMouseDown"
-            @mouseup="player_range_duration_handleMouseUp"
-            @click="player_range_duration_handleclick"
+            :format-tooltip="(value) => {
+              return store_player_audio_logic.formatTime(
+                (value / 100) * store_player_audio_logic.player.isDuration
+              );
+            }"
+            :on-dragend="()=>{
+              if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
+                store_player_audio_logic.player_is_play_ended = true;
+                store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
+              }
+              store_player_audio_logic.player_range_duration_isDragging = false;
+            }"
+            @click="()=>{
+              store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
+            }"
+            @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
+            @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
           />
         </div>
         <!-- grid_Middle_drwaer_area -->

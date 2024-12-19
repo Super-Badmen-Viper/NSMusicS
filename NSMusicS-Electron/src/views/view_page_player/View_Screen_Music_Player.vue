@@ -463,6 +463,22 @@
     }else{
       store_player_appearance.player_show_of_control_info = true
     }
+    if(window.innerHeight < 680) {
+      store_player_appearance.player_lyric_fontSize_Num = 24;
+      store_player_appearance.player_lyric_fontSize = store_player_appearance.player_lyric_fontSize_Num + 'px';
+    }else if(window.innerHeight < 880) {
+      store_player_appearance.player_lyric_fontSize_Num = 30;
+      store_player_appearance.player_lyric_fontSize = store_player_appearance.player_lyric_fontSize_Num + 'px';
+    }else if(window.innerHeight < 1080) {
+      store_player_appearance.player_lyric_fontSize_Num = 36;
+      store_player_appearance.player_lyric_fontSize = store_player_appearance.player_lyric_fontSize_Num + 'px';
+    }else if(window.innerHeight < 1280) {
+      store_player_appearance.player_lyric_fontSize_Num = 42;
+      store_player_appearance.player_lyric_fontSize = store_player_appearance.player_lyric_fontSize_Num + 'px';
+    }else if(window.innerHeight < 1480) {
+      store_player_appearance.player_lyric_fontSize_Num = 48;
+      store_player_appearance.player_lyric_fontSize = store_player_appearance.player_lyric_fontSize_Num + 'px';
+    }
   }
 
   ////// player_configs page_ui set
@@ -863,7 +879,9 @@
             justify="center"
             style="transition: margin 0.4s;"
             :style="{ marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '70px' : '0px' }">
-            <n-layout has-sider style="background-color: transparent;">
+            <n-layout has-sider
+                      style="
+                        background-color: transparent;">
               <!-- left area -->
               <n-layout-sider
                 :collapsed="store_player_appearance.player_collapsed_album"
@@ -877,9 +895,9 @@
                   <!-- 1 方形封面-->
                   <Table_Album_Model_1_Cover v-show="store_player_appearance.player_background_model_num === 0"/>
                   <!-- 2 旋转封面-->
-                  <n-space vertical
-                           align="center"
-                           style="margin-right: calc(-8vw);overflow: hidden"
+                  <n-flex vertical
+                           align="center" justify="center"
+                           style="margin-right: calc(-2vw);margin-top: calc(-8vh - 60px);overflow: hidden;height: calc(100vh);"
                            v-show="store_player_appearance.player_background_model_num === 1">
                     <lottie-player
                       ref="animationInstance_model_1_wave"
@@ -894,7 +912,6 @@
                         '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`
                       }"
                       style="
-                        margin-top: calc(10vh - 36px);
                         width: calc(66vh);
                         height: calc(66vh);
                       "
@@ -902,7 +919,7 @@
                     </lottie-player>
                     <div
                         style="
-                          width: 88vh;margin-top: calc(-15vh);color: #E7E5E5;
+                          width: 45vh;margin-top: calc(-14vh);color: #E7E5E5;
                           font-weight: 900;font-size: 26px;
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
@@ -910,7 +927,7 @@
                     </div>
                     <div
                         style="
-                          width: 88vh;margin-left: 2px;margin-top: calc(-15vh + 40px);
+                          width: 36vh;margin-left: 2px;margin-top: calc(-8px);
                           color: #989292;font-weight: 550;font-size: 18px;
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
@@ -923,13 +940,13 @@
                       loop
                       mode="normal"
                       :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715392202806.json')))"
-                      style="width: 54vh;height:40px;margin-top: calc(-15vh + 70px);"
+                      style="width: 54vh;height:40px;margin-top: calc(-6px);"
                     />
-                  </n-space>
+                  </n-flex>
                   <!-- 3 炫胶唱片-->
                   <n-space vertical
                            align="center"
-                           style="margin-top: calc(-3vh - 18px);margin-right: calc(10vh);overflow: hidden"
+                           style="margin-top: calc(-3vh - 18px);margin-right: calc(8vw);overflow: hidden"
                            v-show="store_player_appearance.player_background_model_num === 2">
                     <lottie-player
                       ref="animationInstance_model_2_wave"
@@ -1010,7 +1027,7 @@
               </n-layout-sider>
               <!-- right area -->
               <n-layout-content
-                style="background-color: transparent;"
+                style="background-color: transparent;overflow: hidden;"
                 :style="{marginLeft: store_player_appearance.player_background_model_num != 3 ? '-3vw' : '2vw'}"
               >
                 <div
@@ -1021,6 +1038,7 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    overflow: hidden;
                   ">
                   <n-list
                     clickable
