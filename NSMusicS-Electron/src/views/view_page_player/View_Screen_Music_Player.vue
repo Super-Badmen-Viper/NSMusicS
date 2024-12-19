@@ -59,10 +59,6 @@
   function closeWindow() {
     ipcRenderer.send('window-close');
   }
-  function close_media_player() {
-    if(store_player_appearance.player_show_complete)
-      store_player_appearance.player_show_click = true
-  }
 
   ////// lyircs load
   let unwatch = watch(() => store_player_audio_info.this_audio_lyrics_string, (value) => {load_lyrics()});
@@ -897,7 +893,7 @@
                   <!-- 2 旋转封面-->
                   <n-flex vertical
                            align="center" justify="center"
-                           style="margin-right: calc(-2vw);margin-top: calc(-8vh - 60px);overflow: hidden;height: calc(100vh);"
+                           style="margin-right: calc(-2vw);overflow: hidden;"
                            v-show="store_player_appearance.player_background_model_num === 1">
                     <lottie-player
                       ref="animationInstance_model_1_wave"
@@ -912,15 +908,15 @@
                         '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`
                       }"
                       style="
-                        width: calc(66vh);
-                        height: calc(66vh);
+                        width: 66vh;height: 66vh;
+                        margin-top: calc(22vh - 182px);
                       "
                     >
                     </lottie-player>
                     <div
                         style="
                           width: 45vh;margin-top: calc(-14vh);color: #E7E5E5;
-                          font-weight: 900;font-size: 26px;
+                          font-weight: 900;font-size: calc(26px);
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
                       {{ store_player_audio_info.this_audio_song_name }}
@@ -928,7 +924,7 @@
                     <div
                         style="
                           width: 36vh;margin-left: 2px;margin-top: calc(-8px);
-                          color: #989292;font-weight: 550;font-size: 18px;
+                          color: #989292;font-weight: 550;font-size: calc(18px);
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
                       {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
@@ -940,16 +936,18 @@
                       loop
                       mode="normal"
                       :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715392202806.json')))"
-                      style="width: 54vh;height:40px;margin-top: calc(-6px);"
+                      style="width: 54vh;height:calc(6vh);margin-top: calc(-6px);"
                     />
                   </n-flex>
                   <!-- 3 炫胶唱片-->
                   <n-space vertical
                            align="center"
-                           style="margin-top: calc(-3vh - 18px);margin-right: calc(8vw);overflow: hidden"
+                           style="margin-top: calc(-6vh - 18px);margin-right: calc(6vw);overflow: hidden"
                            v-show="store_player_appearance.player_background_model_num === 2">
                     <lottie-player
                       ref="animationInstance_model_2_wave"
+                      class="animate__rotate_fast"
+                      :class="{ 'animate__rotate_fast_paused': !store_player_audio_info.this_audio_is_playing }"
                       v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
                       speed="0.8"
                       autoplay
@@ -959,45 +957,32 @@
                       style="
                         width: calc(56vh);
                         height: calc(56vh);
-                        margin-top: calc(29vh - 154.5px);margin-left: calc(-6.5vh);
+                        margin-top: calc(19vh - 154.5px);margin-left: calc(-27.5vh);
                         position: absolute;
                       "
+                      :style="{
+                        '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`
+                      }"
                     />
                     <div
                       style="
                         width: calc(38vh);
                         height: calc(38vh);
-                        margin-top: calc(38vh - 162px);margin-left: calc(2.5vh);
-                        border: 1.5px solid #FFFFFF20;
+                        margin-top: calc(28vh - 162px);margin-left: calc(-18.5vh);
                         border-radius: 27vh;
                         object-fit: cover;object-position: center;
                         filter: blur(0px);
-                        box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                         position: absolute;
+                        border: 1.5px solid #FFFFFF20;
+                        box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                         background-color: #DCDBDD10;
                       ">
                     </div>
                     <img
-                      class="animate__rotate_fast"
-                      :class="{ 'animate__rotate_fast_paused': !store_player_audio_info.this_audio_is_playing }"
                       style="
-                        width: calc(24vh);height: calc(24vh);
-                        margin-left: calc(9.5vh);
-                        margin-top: calc(44vh - 162px);
-                        border: 1.5px solid #FFFFFF20;
-                        border-radius: 27vh;
-                        object-fit: cover;object-position: center;
-                        filter: blur(0px);
-                        box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
-                        position: absolute;
-                      "
-                      :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                      alt="">
-                    <img
-                      style="
-                        width: calc(54vh - 12vh);height: calc(54vh - 12vh);
-                        WebkitMask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 25%);
-                        margin-top: calc(34vh - 162px);
+                        width: calc(44vh);height: calc(44vh);
+                        WebkitMask-image: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 40%);
+                        margin-top: calc(45vh - 162px);
                         border: 2px solid #FFFFFF20;
                         border-radius: 10px;
                         object-fit: cover;object-position: center;
@@ -1008,7 +993,7 @@
                       alt="">
                     <div
                       style="
-                        width: 44vh;margin-left: 26px;
+                        width: 44vh;margin-top: -16px;
                         color: #E7E5E5;font-weight: 900;font-size: 26px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
@@ -1016,7 +1001,7 @@
                     </div>
                     <div
                       style="
-                        width: 44vh;margin-left: 26px;margin-top: -10px;margin-bottom: 12px;
+                        width: 44vh;margin-top: -10px;margin-bottom: 12px;
                         color: #989292;font-weight: 550;font-size: 18px;
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
@@ -1160,6 +1145,24 @@
 }
 .animate__rotate_slower_paused {
   animation-play-state: paused;
+}
+
+.animate__rotate_fast::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24vh;
+  height: 24vh;
+  border-radius: 17vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1.5px solid #FFFFFF20;
+  box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  background-image: var(--background-image);
 }
 .animate__rotate_fast {
   animation: rotate 26s linear infinite;

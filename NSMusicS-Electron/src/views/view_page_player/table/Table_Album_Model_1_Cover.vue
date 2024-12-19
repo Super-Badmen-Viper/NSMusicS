@@ -5,7 +5,7 @@ import {store_player_audio_logic} from "@/store/player/store_player_audio_logic"
 import {RepeatOneRound} from "@vicons/material";
 import {Random} from "@vicons/fa";
 import {Pause, Play, PlayBack, PlayForward, VolumeMedium, VolumeOff} from "@vicons/ionicons5";
-import {ArrowAutofitDown24Regular, ArrowRepeatAll16Regular} from "@vicons/fluent";
+import {ArrowAutofitDown24Regular, ArrowRepeatAll16Regular, ChevronDown12Filled} from "@vicons/fluent";
 import {NIcon, NSlider} from "naive-ui";
 function getAssetImage(firstImage: string) {
   if(process.platform === 'win32')
@@ -97,26 +97,34 @@ function getAssetImage(firstImage: string) {
     <n-space justify="center"
              align="center"
              style="margin-top: 0px;">
-      <div
-          style="
-          width: calc((55vh - 310px) / 2);
-        "
-      />
+      <n-space style="width: calc((55vh - 310px) / 2);">
+        <n-button quaternary size="medium"
+                  style="margin-left: -12px;"
+                  @click="()=>{
+                  if(store_player_appearance.player_show_complete){
+                    store_player_appearance.player_show_click = true
+                  }
+                }">
+          <template #icon>
+            <n-icon size="30" :depth="3" style="margin-bottom: 6px;"><ChevronDown12Filled/></n-icon>
+          </template>
+        </n-button>
+      </n-space>
       <n-button quaternary round size="small"
                 @click="store_player_audio_logic.player_click_state_of_order = true"
                 @mouseover="store_player_audio_logic.drawer_order_show = true;">
         <template #icon>
           <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
-            <ArrowAutofitDown24Regular color="#989292" />
+            <ArrowAutofitDown24Regular/>
           </n-icon>
           <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-2'">
-            <ArrowRepeatAll16Regular color="#989292" />
+            <ArrowRepeatAll16Regular/>
           </n-icon>
           <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-3'">
-            <RepeatOneRound color="#989292" />
+            <RepeatOneRound/>
           </n-icon>
           <n-icon :size="20" v-else-if="store_player_audio_logic.play_order === 'playback-4'">
-            <Random color="#989292" />
+            <Random/>
           </n-icon>
         </template>
       </n-button>
@@ -152,8 +160,8 @@ function getAssetImage(firstImage: string) {
                   }
                 }">
         <template #icon>
-          <n-icon :size="26" v-if="store_player_audio_logic.play_volume != 0"><VolumeMedium color="#989292" /></n-icon>
-          <n-icon :size="26" v-else><VolumeOff color="#989292" /></n-icon>
+          <n-icon :size="26" v-if="store_player_audio_logic.play_volume != 0"><VolumeMedium/></n-icon>
+          <n-icon :size="26" v-else><VolumeOff/></n-icon>
         </template>
       </n-button>
       <n-slider

@@ -757,15 +757,6 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
         width: store_player_appearance.player_show ? '100vw' : 'calc(100vw - 72px)',
       }">
       <div class="gird_Left">
-        <div class="button_open_player_view" v-if="!store_player_appearance.player_show_of_control_info">
-          <n-button quaternary size="medium"
-                    style="margin-top: 10px;margin-left: 0px;"
-                    @click="()=>{click_back_svg();leave_back_svg();}" @mouseout="leave_back_svg">
-            <template #icon>
-              <n-icon size="36" :depth="3" style="margin-bottom: 2px;"><ChevronDown12Filled/></n-icon>
-            </template>
-          </n-button>
-        </div>
         <div class="button_open_player_view" v-if="store_player_appearance.player_show_of_control_info">
           <img class="back_svg"
                :src="getAssetImage(store_player_audio_logic.player_back_ChevronDouble)"
@@ -780,7 +771,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                @mouseover="hover_back_img" @mouseout="leave_back_svg"
           />
         </div>
-        <div class="bar_left_text_song_info">
+        <div class="bar_left_text_song_info" v-if="store_player_appearance.player_show_of_control_info">
           <n-space>
             <n-ellipsis>
               <span id="bar_song_name" @click="handleItemClick_title(store_player_audio_info.this_audio_song_name)">{{ store_player_audio_info.this_audio_song_name + '&nbsp-&nbsp' }}</span>
