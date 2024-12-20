@@ -36,7 +36,7 @@ function getAssetImage(firstImage: string) {
         style="
           width: 44vh;margin-top: -2px;
           color: #E7E5E5;
-          font-weight: 900;font-size: 22px;
+          font-weight: 900;font-size: 24px;
           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
           text-align: center;">
       {{ store_player_audio_info.this_audio_song_name }}

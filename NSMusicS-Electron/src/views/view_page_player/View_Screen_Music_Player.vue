@@ -806,7 +806,7 @@
                   }
                 }">
                 <template #icon>
-                  <n-icon size="32" :depth="3"><ChevronDown/></n-icon>
+                  <n-icon size="28" :depth="3"><ChevronDown/></n-icon>
                 </template>
               </n-button>
               <n-button quaternary circle size="medium"
@@ -890,16 +890,16 @@
                     </lottie-player>
                     <div
                         style="
-                          width: 31vh;margin-top: calc(-14vh);color: #E7E5E5;
-                          font-weight: 900;font-size: calc(24px);
+                          width: 31vh;margin-top: -14vh;color: #E7E5E5;
+                          font-weight: 900;font-size: calc(2.2vh + 4px);
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
                       {{ store_player_audio_info.this_audio_song_name }}
                     </div>
                     <div
                         style="
-                          width: 32vh;margin-left: 2px;margin-top: calc(-8px);
-                          color: #989292;font-weight: 550;font-size: calc(18px);
+                          width: 32vh;margin-left: 0.2vh;margin-top: -0.8vh;
+                          color: #989292;font-weight: 550;font-size: calc(1.8vh + 4px);
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
                       {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
@@ -999,16 +999,16 @@
                       alt="">
                     <div
                       style="
-                        width: 40vh;margin-top: -10px;
-                        color: #E7E5E5;font-weight: 900;font-size: 24px;
+                        width: 40vh;margin-top: -1vh;
+                        color: #E7E5E5;font-weight: 900;font-size: calc(2.2vh + 4px);
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
                       {{ store_player_audio_info.this_audio_song_name }}
                     </div>
                     <div
                       style="
-                        width: 40vh;margin-top: -10px;margin-bottom: 12px;
-                        color: #989292;font-weight: 550;font-size: 18px;
+                        width: 40vh;margin-top: -1vh;margin-bottom: 1vh;
+                        color: #989292;font-weight: 550;font-size: calc(1.8vh + 4px);
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
                       {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
@@ -1019,7 +1019,7 @@
                         --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
                         --n-rail-height: 4px;
                         --n-handle-size: 20px;
-                        margin-top: -20px;
+                        margin-top: -1.7vh;
                         border-radius: 10px;"
                       v-model:value="store_player_audio_logic.slider_singleValue"
                       :min="0" :max="100"
