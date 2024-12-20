@@ -61,6 +61,8 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         maximum_playback.map(async (album: any) => {
             store_view_home_page_info.home_Files_temporary_maximum_playback.push(
                 {
+                    favorite: album.starred,
+                    rating: album.rating,
                     id: album.id,
                     name: album.name,
                     artist_id: album.artistId,
@@ -105,6 +107,8 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         random_search.map(async (album: any) => {
             store_view_home_page_info.home_Files_temporary_random_search.push(
                 {
+                    favorite: album.starred,
+                    rating: album.rating,
                     id: album.id,
                     name: album.name,
                     artist_id: album.artistId,
@@ -149,6 +153,8 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         recently_added.map(async (album: any) => {
             store_view_home_page_info.home_Files_temporary_recently_added.push(
                 {
+                    favorite: album.starred,
+                    rating: album.rating,
                     id: album.id,
                     name: album.name,
                     artist_id: album.artistId,
@@ -193,6 +199,8 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         recently_played.map(async (album: any) => {
             store_view_home_page_info.home_Files_temporary_recently_played.push(
                 {
+                    favorite: album.starred,
+                    rating: album.rating,
                     id: album.id,
                     name: album.name,
                     artist_id: album.artistId,

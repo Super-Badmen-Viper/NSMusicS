@@ -150,6 +150,9 @@ async function initSqlite3() {
                         copyIfNotExists(
                             path.resolve('resources/lottie_json/Animation - 1715417974362.json'),
                             path.join(cDriveDbDir, 'Animation - 1715417974362.json')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.resolve('resources/lottie_json/Animation - 1734617399494.json'),
+                            path.join(cDriveDbDir, 'Animation - 1734617399494.json')).then((newPath) => {}),
 
                         copyIfNotExists(
                             path.resolve('resources/svg/shrink_down_arrow.svg'),
@@ -245,6 +248,9 @@ async function initSqlite3() {
                         copyIfNotExists(
                             path.join(resourcesPath, 'lottie_json', 'Animation - 1715417974362.json'),
                             path.join(cDriveDbDir, 'Animation - 1715417974362.json')).then((newPath) => {}),
+                        copyIfNotExists(
+                            path.join(resourcesPath, 'lottie_json', 'Animation - 1734617399494.json'),
+                            path.join(cDriveDbDir, 'Animation - 1734617399494.json')).then((newPath) => {}),
 
                         copyIfNotExists(
                             path.join(resourcesPath, 'svg', 'shrink_down_arrow.svg'),

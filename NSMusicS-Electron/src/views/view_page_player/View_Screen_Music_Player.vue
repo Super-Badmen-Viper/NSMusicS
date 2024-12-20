@@ -478,10 +478,6 @@
   }
 
   ////// player_configs page_ui set
-  const isVisible_Player_theme = ref(false);
-  const get_isVisible_Player_theme = () => {
-    isVisible_Player_theme.value = !isVisible_Player_theme.value;
-  }
   enum LyricAnimation {linebyLine,linebyWord,linebyJump}
   const player_lyric_panel_checked_animation = ref<LyricAnimation>(LyricAnimation.linebyLine)
 
@@ -574,7 +570,10 @@
           height: 240vw;
           object-fit: cover;
           object-position: center;"
-        :style="{ filter: store_player_appearance.player_use_background_filter_blur ? 'brightness(46%) blur(60px)' : 'brightness(46%) blur(0px)' }"
+        :style="{
+          filter: store_player_appearance.player_use_background_filter_blur ?
+            'brightness(46%) blur(60px)' : 'brightness(46%) blur(60px)'
+        }"
         :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
         alt="">
       <!--Skin-->
@@ -593,16 +592,16 @@
     <n-config-provider :theme="darkTheme">
       <!-- right drwaer of Player_theme -->
       <n-drawer
-        v-model:show="isVisible_Player_theme"
+        v-model:show="store_player_audio_logic.drawer_theme_show"
         :width="420"
         style="
           border-radius: 12px 0 0 12px;
           border: 1.5px solid #FFFFFF20;
           background-color: rgba(127, 127, 127, 0.1);
           backdrop-filter: blur(10px);
-          margin-top: calc(50vh - 290px);height: 580px;
+          margin-top: calc(50vh - 230px);height: 460px;
           ">
-        <n-drawer-content v-if="isVisible_Player_theme">
+        <n-drawer-content v-if="store_player_audio_logic.drawer_theme_show">
           <template #default>
             <n-space vertical align="center">
               <n-space vertical style="width: 380px;">
@@ -636,7 +635,7 @@
               </n-radio-group>
               </n-space>
               <n-space vertical align="start" style="width: 320px;margin-left: -26px;">
-                <n-space style="margin-top: 20px;" justify="space-between">
+                <n-space v-if="false" style="margin-top: 20px;" justify="space-between">
                   <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.lyricSize') }}</span>
                   <n-space style="margin-right: 32px;">
                     <n-button text style="font-size: 24px;margin-top: 2px;margin-left: 7px;"
@@ -750,7 +749,7 @@
                     </n-switch>
                   </n-space>
                 </n-space>
-                <n-space style="margin-top: 20px;" justify="space-between">
+                <n-space v-if="false" style="margin-top: 20px;" justify="space-between">
                   <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
                   <n-space style="margin-right: 32px;">
                     <n-switch v-model:value="store_player_appearance.player_use_background_filter_blur"/>
@@ -795,46 +794,20 @@
             style="
               -webkit-app-region: no-drag;margin-top: 35px;
             ">
-<!--            <n-button quaternary @click="get_isVisible_Player_theme">-->
-<!--              <span style="font-weight: 500;">{{ $t('page.sidebar.nowPlaying') }}</span>-->
-<!--            </n-button>-->
-<!--            <n-button quaternary @click="get_isVisible_Player_theme">-->
-<!--              <span style="font-weight: 500;">{{ $t('page.fullscreenPlayer.related') }}</span>-->
-<!--            </n-button>-->
-<!--            <n-radio-group size="small" v-model:value="checkStrategy">-->
-<!--              <n-radio-button-->
-<!--                style="-->
-<!--                  &#45;&#45;n-button-border-color-active: #FFFFFF;-->
-<!--                  &#45;&#45;n-button-box-shadow-focus: inset 0 0 0 1px #FFFFFF, 0 0 0 2px rgba(255, 255, 255, 0.3);-->
-<!--                  &#45;&#45;n-button-box-shadow-hover: inset 0 0 0 1px #FFFFFF;-->
-<!--                  &#45;&#45;n-button-color-active: #FFFFFF;-->
-<!--                  &#45;&#45;n-button-text-color-hover: #FFFFFF;"-->
-<!--                size="small" value="player">-->
-<!--                播放-->
-<!--              </n-radio-button>-->
-<!--              <n-radio-button-->
-<!--                style="-->
-<!--                  &#45;&#45;n-button-border-color-active: #FFFFFF;-->
-<!--                  &#45;&#45;n-button-box-shadow-focus: inset 0 0 0 1px #FFFFFF, 0 0 0 2px rgba(255, 255, 255, 0.3);-->
-<!--                  &#45;&#45;n-button-box-shadow-hover: inset 0 0 0 1px #FFFFFF;-->
-<!--                  &#45;&#45;n-button-color-active: #FFFFFF;-->
-<!--                  &#45;&#45;n-button-text-color-hover: #FFFFFF;"-->
-<!--                size="small" value="related">-->
-<!--                相关-->
-<!--              </n-radio-button>-->
-<!--            </n-radio-group>-->
+            <!-- -->
           </n-space>
           <!-- -->
           <n-flex justify="end" style="width: 400px;height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
-              <n-button quaternary
-                        style="margin-right:34px"
-                        :style="{
-                          marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '0px' : '34px',
-                        }"
-                        @click="get_isVisible_Player_theme">
+              <n-button quaternary circle
+                        style="margin-right:4px;"
+                        @click="()=>{
+                  if(store_player_appearance.player_show_complete){
+                    store_player_appearance.player_show_click = true
+                  }
+                }">
                 <template #icon>
-                  <n-icon :depth="3"><Settings24Regular /></n-icon>
+                  <n-icon size="22" :depth="3" style="margin-bottom: 0px;"><ChevronDown12Filled/></n-icon>
                 </template>
               </n-button>
               <n-button quaternary circle size="medium"
@@ -918,7 +891,7 @@
                     </lottie-player>
                     <div
                         style="
-                          width: 45vh;margin-top: calc(-14vh);color: #E7E5E5;
+                          width: 31vh;margin-top: calc(-14vh);color: #E7E5E5;
                           font-weight: 900;font-size: calc(24px);
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
@@ -926,7 +899,7 @@
                     </div>
                     <div
                         style="
-                          width: 36vh;margin-left: 2px;margin-top: calc(-8px);
+                          width: 32vh;margin-left: 2px;margin-top: calc(-8px);
                           color: #989292;font-weight: 550;font-size: calc(18px);
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
@@ -1142,25 +1115,25 @@
 #player_bg_zindex_0 {
   z-index: -2;
   transition: filter 0.5s ease;
-  animation: moveInRectangle 45s linear infinite; /* 只使用一个动画 */
-  transform-origin: center center; /* 设置旋转中心为元素中心 */
-  position: relative; /* 设置相对定位，用于移动 */
+  animation: moveInRectangle 45s linear infinite;
+  transform-origin: center center;
+  position: relative;
 }
 @keyframes moveInRectangle {
   0% {
-    transform: rotate(0deg) translate(0, 0) scale(100%); /* 起点：左上角 */
+    transform: rotate(0deg) translate(0, 0) scale(100%);
   }
   25% {
-    transform: rotate(90deg) translate(80%, 0) scale(200%); /* 右上角 */
+    transform: rotate(90deg) translate(80%, 0) scale(200%);
   }
   50% {
-    transform: rotate(180deg) translate(80%, 80%) scale(300%); /* 右下角 */
+    transform: rotate(180deg) translate(80%, 80%) scale(300%);
   }
   75% {
-    transform: rotate(270deg) translate(0, 80%) scale(200%); /* 左下角 */
+    transform: rotate(270deg) translate(0, 80%) scale(200%);
   }
   100% {
-    transform: rotate(360deg) translate(0, 0) scale(100%); /* 回到起点：左上角 */
+    transform: rotate(360deg) translate(0, 0) scale(100%);
   }
 }
 

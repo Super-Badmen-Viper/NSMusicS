@@ -861,7 +861,7 @@ onBeforeUnmount(() => {
       </n-badge>
       <n-modal
           v-model:show="Type_Filter_Show">
-        <n-card style="width: 480px;border-radius: 6px;">
+        <n-card style="width: 480px;border-radius: 4px;">
           <n-space
               vertical size="large">
             <n-space>
@@ -1239,7 +1239,7 @@ onBeforeUnmount(() => {
   <!-- 管理播放列表 -->
   <n-modal
     v-model:show="Type_Update_Playlist">
-    <n-card style="width: 450px;border-radius: 6px;">
+    <n-card style="width: 450px;border-radius: 4px;">
       <n-space
           vertical size="large" style="width: 400px;">
         <n-space justify="space-between">
@@ -1283,7 +1283,7 @@ onBeforeUnmount(() => {
   <!-- 添加播放列表 -->
   <n-modal
     v-model:show="Type_Add_Playlist">
-    <n-card style="width: 450px;border-radius: 6px;">
+    <n-card style="width: 450px;border-radius: 4px;">
       <n-space
           vertical size="large" style="width: 400px;">
         <n-space justify="space-between">
@@ -1321,7 +1321,7 @@ onBeforeUnmount(() => {
   <!-- 选中歌曲添加 -->
   <n-modal
     v-model:show="Type_Selected_Media_File_To_Playlist">
-    <n-card style="width: 450px;border-radius: 6px;">
+    <n-card style="width: 450px;border-radius: 4px;">
       <n-space
         vertical size="large" style="width: 400px;">
         <n-space justify="space-between">
@@ -1403,7 +1403,7 @@ onBeforeUnmount(() => {
   height: 70px;
   display: flex;
   align-items: center;
-  border-radius: 6px;
+  border-radius: 4px;
 
   transition: background-color 0.3s;
 }
@@ -1456,7 +1456,7 @@ onBeforeUnmount(() => {
   height: calc(100vh - 200px);
   position: absolute;
   top: 106px;right: 24px;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 .RateCustom.viaSlot .icon {
@@ -1485,14 +1485,14 @@ onBeforeUnmount(() => {
 }
 ::-webkit-scrollbar-thumb {
   background-color: #88888850;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-track {
   background-color: #f1f1f105;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background-color: #88888850;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 </style>

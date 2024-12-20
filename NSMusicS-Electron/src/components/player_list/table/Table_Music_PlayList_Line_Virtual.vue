@@ -275,7 +275,7 @@ onMounted(()=>{
               <div
                 style="margin-left: 10px;
                   width: 58px;height: 58px;
-                  border-radius: 6px; border: 1.5px solid #FFFFFF20;
+                  border-radius: 4px; border: 1.5px solid #FFFFFF20;
                   overflow: hidden;">
                 <img
                   :key="item.absoluteIndex"
@@ -328,7 +328,7 @@ onMounted(()=>{
             <div class="media_info">
               <div style="margin-left: 10px;
                           width: 58px;height: 58px;
-                          border-radius: 6px; border: 1.5px solid #FFFFFF20;
+                          border-radius: 4px; border: 1.5px solid #FFFFFF20;
                           overflow: hidden;">
                 <img
                     :key="item.absoluteIndex"
@@ -372,7 +372,7 @@ onMounted(()=>{
   height: 70px;
   display: flex;
   align-items: center;
-  border-radius: 6px;
+  border-radius: 4px;
 
   transition: background-color 0.3s;
 }
@@ -429,14 +429,14 @@ onMounted(()=>{
 }
 ::-webkit-scrollbar-thumb {
   background-color: #88888850;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-track {
   background-color: #f1f1f105;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background-color: #88888850;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 </style>

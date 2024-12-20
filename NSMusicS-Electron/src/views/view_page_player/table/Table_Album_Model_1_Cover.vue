@@ -28,12 +28,13 @@ function getAssetImage(firstImage: string) {
           margin-top: calc(28vh - 182px);
           border-radius: 10px;
           object-fit: cover;object-position: center;
+          box-shadow: 0 0 12px rgba(0, 0, 0, 0.20), 0 0 12px rgba(0, 0, 0, 0.20);
         "
         :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
         alt="">
     <div
         style="
-          width: 44vh;
+          width: 44vh;margin-top: -2px;
           color: #E7E5E5;
           font-weight: 900;font-size: 22px;
           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
@@ -42,7 +43,8 @@ function getAssetImage(firstImage: string) {
     </div>
     <div
         style="
-          width: 36vh;margin-top: -6px;margin-bottom: -6px;
+          width: 36vh;
+          margin-top: -6px;margin-bottom: -6px;
           color: #989292;font-weight: 550;font-size: 18px;
           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
           text-align: center;">
@@ -52,7 +54,7 @@ function getAssetImage(firstImage: string) {
     <n-space
         vertical
         v-if="!store_player_appearance.player_collapsed_album"
-        style="margin-top: -12px;">
+      style="margin-top: -16px;">
       <n-space justify="space-between" style="width: 55vh;">
         <n-space>
           {{ store_player_audio_logic.current_play_time }}
@@ -67,7 +69,7 @@ function getAssetImage(firstImage: string) {
           --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
           --n-rail-height: 4px;
           --n-handle-size: 20px;
-          margin-top: -14px;
+          margin-top: -12px;
           border-radius: 10px;"
         v-model:value="store_player_audio_logic.slider_singleValue"
         :min="0" :max="100"
@@ -99,14 +101,19 @@ function getAssetImage(firstImage: string) {
              style="margin-top: 0px;">
       <n-space style="width: calc((55vh - 310px) / 2);">
         <n-button quaternary size="medium"
-                  style="margin-left: -12px;"
+                  style="margin-left: -14px;"
+                  :style="{
+                    marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '0px' : '0px',
+                    opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 0 : 1,
+                    transition: 'margin 0.4s, opacity 0.4s'
+                 }"
                   @click="()=>{
                   if(store_player_appearance.player_show_complete){
                     store_player_appearance.player_show_click = true
                   }
                 }">
           <template #icon>
-            <n-icon size="30" :depth="3" style="margin-bottom: 6px;"><ChevronDown12Filled/></n-icon>
+            <n-icon size="26" :depth="3" style="margin-bottom: 4px;"><ChevronDown12Filled/></n-icon>
           </template>
         </n-button>
       </n-space>
@@ -164,14 +171,20 @@ function getAssetImage(firstImage: string) {
           <n-icon :size="26" v-else><VolumeOff/></n-icon>
         </template>
       </n-button>
+      <!-- -->
       <n-slider
+        :style="{
+          marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '0px' : '0px',
+          opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 0 : 1,
+          transition: 'margin 0.4s, opacity 0.4s'
+        }"
         style="
           width: calc((55vh - 310px) / 2);
           border-radius: 10px;
           --n-fill-color: #ffffff20;--n-fill-color-hover: #ffffff20;
-          --n-rail-height: 4px;
-          --n-handle-size: 10px;
-          margin-top: -1px;
+          --n-rail-height: 3px;
+          --n-handle-size: 8px;
+          margin-top: -2px;
         "
           v-model:value="store_player_audio_logic.play_volume"
           :min="0" :max="100" :keyboard="true"

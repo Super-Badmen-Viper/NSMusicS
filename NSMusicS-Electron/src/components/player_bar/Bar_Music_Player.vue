@@ -4,7 +4,7 @@ import {
   Heart24Regular, Heart28Filled,
   MoreCircle32Regular,
   ArrowRepeatAll16Regular, ArrowAutofitDown24Regular,
-  TopSpeed20Regular, DeviceEq24Filled, Tag16Regular, Info16Regular, ChevronDown12Filled
+  TopSpeed20Regular, DeviceEq24Filled, Tag16Regular, Info16Regular, ChevronDown12Filled, Settings24Regular
 } from '@vicons/fluent'
 import {
   RepeatOneRound,QueueMusicRound
@@ -981,13 +981,25 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
             </n-button>
           </n-badge>
         </n-space>
-        <div class="gird_Right_button_area" style="margin-top: 16px;">
+        <div class="gird_Right_button_area"
+             style="margin-top: 16px;"
+             :style="{
+               width: store_player_appearance.player_show ? '160px' : '132px'
+             }"
+        >
           <n-space justify="end">
             <n-rate clearable size="small"
                     v-model:value="store_player_audio_info.this_audio_song_rating"
                     @update:value="(value: number) => handleItemClick_Rating(store_player_audio_info.this_audio_song_id, value)"/>
           </n-space>
           <n-space justify="space-between" style="margin-top: 6px;">
+            <n-button size="tiny" text
+                      v-if="store_player_appearance.player_show"
+                      @click="()=>{store_player_audio_logic.drawer_theme_show ? store_player_audio_logic.drawer_theme_show = false : store_player_audio_logic.drawer_theme_show = true}">
+              <template #icon>
+                <n-icon :size="22"><Settings24Regular/></n-icon>
+              </template>
+            </n-button>
             <n-button size="tiny" text
                       @click="() => {
                         store_player_tag_modify.player_current_media_path = store_player_audio_info.this_audio_file_path
@@ -1075,7 +1087,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
 }
 .gird_Left .button_open_player_view .back_img{
   width: 60px;height: 60px;
-  border-radius: 6px;
+  border-radius: 4px;
   border: 1.5px solid #FFFFFF20;
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
   z-index: 0;
@@ -1153,7 +1165,6 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
   user-select: none;
 }
 .gird_Right .gird_Right_button_area{
-  width: 132px;
   height: 80px;
   float: right;
   margin-right: 10px;

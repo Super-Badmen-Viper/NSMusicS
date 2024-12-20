@@ -118,7 +118,7 @@ const menuOptions: MenuOption[] = [
         :size="12" >
       <n-card
           class="table"
-          style="overflow: hidden;border-radius: 6px;"
+          style="overflow: hidden;border-radius: 4px;"
           :style="{ width: 'calc(100vw - ' + (80 - 9 + 66) + 'px)'}">
         <n-layout has-sider
                   style="
@@ -131,7 +131,7 @@ const menuOptions: MenuOption[] = [
               :options="menuOptions"
             />
           </n-layout-sider>
-          <n-layout embedded style="overflow-y: auto;border-radius: 6px;">
+          <n-layout embedded style="overflow-y: auto;border-radius: 4px;">
             <div style="margin-left: 20px;margin-top: 10px;">
               <!--服务器-->
               <Group_1_1
@@ -232,14 +232,14 @@ const menuOptions: MenuOption[] = [
 }
 ::-webkit-scrollbar-thumb {
   background-color: #88888850;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-track {
   background-color: #f1f1f105;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background-color: #88888850;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 </style>

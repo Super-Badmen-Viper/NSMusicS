@@ -546,7 +546,7 @@
       :size="12" >
       <n-card
         class="table"
-        style="overflow-x: hidden;border-radius: 6px;"
+        style="overflow-x: hidden;border-radius: 4px;"
         :style="{ width: 'calc(100vw - ' + (80 - 9 + 66) + 'px)'}">
         <n-tabs
             style="margin-left: -20px;margin-top: -6px;"
@@ -641,7 +641,7 @@
                                     </n-space>
                                     <n-modal
                                         v-model:show="item.show">
-                                      <n-card style="width: 450px;border-radius: 6px;">
+                                      <n-card style="width: 450px;border-radius: 4px;">
                                         <n-space
                                             vertical size="large" style="width: 400px;">
                                           <n-space justify="space-between" style="margin-bottom: 12px;">
@@ -928,7 +928,7 @@
                 <!-- 服务器添加 -->
                 <n-modal
                   v-model:show="Type_Server_Add">
-                  <n-card style="width: 450px;border-radius: 6px;">
+                  <n-card style="width: 450px;border-radius: 4px;">
                     <n-space
                       vertical size="large" style="width: 400px;">
                       <n-space justify="space-between">
@@ -1683,14 +1683,14 @@
 }
 ::-webkit-scrollbar-thumb {
   background-color: #88888850;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-track {
   background-color: #f1f1f105;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background-color: #88888850;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 </style>

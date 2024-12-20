@@ -77,18 +77,30 @@ const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window
 });
 const updateGridItems = () => {
   collapsed_width.value = 145;
-  item_artist.value = 180;
-  item_artist_image.value = item_artist.value - 20;
-  item_artist_txt.value = item_artist.value - 20;
   if(window.innerWidth > 2460){
-    itemSecondarySize.value = Math.floor(window.innerWidth / 8);
-    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value + 1);
+    const num = window.innerWidth / 5.53
+    itemSize.value = Math.floor(num) + 40;
+    item_artist.value = Math.floor(num);
+    item_artist_image.value = item_artist.value - 20;
+    item_artist_txt.value = item_artist.value - 20;
+    gridItems.value = 7;
+    itemSecondarySize.value = Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2;
   }else if(window.innerWidth > 1660){
-    itemSecondarySize.value = Math.floor(window.innerWidth / 7.4);
-    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value);
+    const num = window.innerWidth / 6.53
+    itemSize.value = Math.floor(num) + 40;
+    item_artist.value = Math.floor(num);
+    item_artist_image.value = item_artist.value - 20;
+    item_artist_txt.value = item_artist.value - 20;
+    gridItems.value = 6;
+    itemSecondarySize.value = Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2;
   }else{
-    itemSecondarySize.value = Math.floor(window.innerWidth / 7);
-    gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
+    const num = window.innerWidth / 5.53
+    itemSize.value = Math.floor(num) + 40;
+    item_artist.value = Math.floor(num);
+    item_artist_image.value = item_artist.value - 20;
+    item_artist_txt.value = item_artist.value - 20;
+    gridItems.value = 5;
+    itemSecondarySize.value = Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2;
   }
 };
 onMounted(() => {
@@ -846,7 +858,7 @@ onBeforeUnmount(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 6px;
+  border-radius: 4px;
   background: #00000090;
   opacity: 0;
   transition: opacity 0.3s;
@@ -943,14 +955,14 @@ onBeforeUnmount(() => {
 }
 ::-webkit-scrollbar-thumb {
   background-color: #88888850;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-track {
   background-color: #f1f1f105;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background-color: #88888850;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 </style>

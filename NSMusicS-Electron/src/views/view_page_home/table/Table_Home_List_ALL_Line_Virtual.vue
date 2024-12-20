@@ -34,8 +34,6 @@ const item_album = ref<number>(160)
 const item_album_image = ref<number>(item_album.value - 20)
 const item_album_txt = ref<number>(item_album.value - 20)
 const itemSize = ref(180);
-const gridItems = ref(5);
-const itemSecondarySize = ref(185);
 const collapsed_width = ref<number>(1090);
 const path = require('path')
 const errorHandled = ref(new Map());
@@ -87,22 +85,26 @@ const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window
   }
 });
 const updateGridItems = () => {
-  if (store_app_configs_info.app_view_left_menu_collapsed == true) {
-    collapsed_width.value = 145;
-    item_album.value = 190;
+  collapsed_width.value = 145;
+  if(window.innerWidth > 2460){
+    const num = window.innerWidth / 5.53
+    itemSize.value = Math.floor(num) + 40;
+    item_album.value = Math.floor(num);
     item_album_image.value = item_album.value - 20;
     item_album_txt.value = item_album.value - 20;
-    itemSecondarySize.value = 135;
-    itemSize.value = 184;
-  } else {
-    collapsed_width.value = 240;
-    item_album.value = 180;
+  }else if(window.innerWidth > 1660){
+    const num = window.innerWidth / 6.53
+    itemSize.value = Math.floor(num) + 20;
+    item_album.value = Math.floor(num);
     item_album_image.value = item_album.value - 20;
     item_album_txt.value = item_album.value - 20;
-    itemSecondarySize.value = 170;
-    itemSize.value = 168;
+  }else{
+    const num = window.innerWidth / 5.53
+    itemSize.value = Math.floor(num) + 10;
+    item_album.value = Math.floor(num);
+    item_album_image.value = item_album.value - 20;
+    item_album_txt.value = item_album.value - 20;
   }
-  gridItems.value = Math.floor(window.innerWidth / itemSecondarySize.value) - 1;
 };
 onMounted(() => {
   startTimer();
@@ -111,9 +113,73 @@ onMounted(() => {
 
 ////// dynamicScroller of albumlist_view
 const dynamicScroller_maximum_playback = ref(null as any);
+let offset_maximum_playback = 0;
+const scrollTo_maximum_playback = (value :number) => {
+  if (dynamicScroller_maximum_playback !== null) {
+    if(value === -1){
+      offset_maximum_playback - 220 * 2 > 0 ? offset_maximum_playback -= 220 * 2 : offset_maximum_playback = 0;
+      dynamicScroller_maximum_playback.value.$el.scrollLeft = offset_maximum_playback;
+    }else if(value === 1){
+      if(offset_maximum_playback + 220 * 2 <= store_view_home_page_info.home_Files_temporary_maximum_playback.length * 224){
+        offset_maximum_playback += 220 * 2
+        dynamicScroller_maximum_playback.value.$el.scrollLeft = offset_maximum_playback
+      }else{
+        offset_maximum_playback = 0;
+      }
+    }
+  }
+}
 const dynamicScroller_random_search = ref(null as any);
+let offset_random_search = 0;
+const scrollTo_random_search = (value :number) => {
+  if (dynamicScroller_random_search !== null) {
+    if(value === -1){
+      offset_random_search - 220 * 2 > 0 ? offset_random_search -= 220 * 2 : offset_random_search = 0;
+      dynamicScroller_random_search.value.$el.scrollLeft = offset_random_search;
+    }else if(value === 1){
+      if(offset_random_search + 220 * 2 <= store_view_home_page_info.home_Files_temporary_random_search.length * 224){
+        offset_random_search += 220 * 2
+        dynamicScroller_random_search.value.$el.scrollLeft = offset_random_search
+      }else{
+        offset_random_search = 0;
+      }
+    }
+  }
+}
 const dynamicScroller_recently_added = ref(null as any);
+let offset_recently_added = 0;
+const scrollTo_recently_added = (value :number) => {
+  if (dynamicScroller_recently_added !== null) {
+    if(value === -1){
+      offset_recently_added - 220 * 2 > 0 ? offset_recently_added -= 220 * 2 : offset_recently_added = 0;
+      dynamicScroller_recently_added.value.$el.scrollLeft = offset_recently_added;
+    }else if(value === 1){
+      if(offset_recently_added + 220 * 2 <= store_view_home_page_info.home_Files_temporary_recently_added.length * 224){
+        offset_recently_added += 220 * 2
+        dynamicScroller_recently_added.value.$el.scrollLeft = offset_recently_added
+      }else{
+        offset_recently_added = 0;
+      }
+    }
+  }
+}
 const dynamicScroller_recently_played = ref(null as any);
+let offset_recently_played = 0;
+const scrollTo_recently_played = (value :number) => {
+  if (dynamicScroller_recently_played !== null) {
+    if(value === -1){
+      offset_recently_played - 220 * 2 > 0 ? offset_recently_played -= 220 * 2 : offset_recently_played = 0;
+      dynamicScroller_recently_played.value.$el.scrollLeft = offset_recently_played;
+    }else if(value === 1){
+      if(offset_recently_played + 220 * 2 <= store_view_home_page_info.home_Files_temporary_recently_played.length * 224){
+        offset_recently_played += 220 * 2
+        dynamicScroller_recently_played.value.$el.scrollLeft = offset_recently_played
+      }else{
+        offset_recently_played = 0;
+      }
+    }
+  }
+}
 
 ////// go to media_view
 const Open_this_album_SongList_click = (album_id:string) => {
@@ -163,8 +229,6 @@ watch(() => store_view_home_page_info.home_selected_top_album_subscript, (newVal
 ////// changed_data write to sqlite
 import {Set_AlbumInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite'
 import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
-import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
-let set_AlbumInfo_To_LocalSqlite = new Set_AlbumInfo_To_LocalSqlite()
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id,favorite)
 }
@@ -290,10 +354,9 @@ onBeforeUnmount(() => {
         <div
           :style="{
             width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
-            height: 'calc(44vh)',
           }"
           style="
-            min-height: 320px;
+            height: calc(40vh);
             border-radius: 10px;
             overflow: hidden;
             background-size: cover;
@@ -306,12 +369,13 @@ onBeforeUnmount(() => {
               :style="{
                 width: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
                 height: 'calc(100vw - ' + (collapsed_width - 20) + 'px)',
-                WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%)',
+                WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 100%)',
                 marginTop: 'calc(-500px)'
               }"
               style="
                 position: absolute;
                 object-fit: cover;object-position: center;
+                border: 1.5px solid #FFFFFF20;
               "
               :src="getAssetImage(store_view_home_page_info.home_selected_top_album?.medium_image_url)"
               @error="handleImageError(store_view_home_page_info.home_selected_top_album)"
@@ -319,12 +383,20 @@ onBeforeUnmount(() => {
           </div>
         </div>
       </div>
-      <n-space style="margin-left: 0px;margin-top: calc(126px - 340px);">
+<!--      :style="{-->
+<!--      transform: `scale(${store_app_configs_info.window_innerHeight / 666})`,-->
+<!--      transformOrigin: 'left center',-->
+<!--      marginTop: `calc(-20vh - 50px)`,-->
+<!--      }"-->
+      <n-space
+        style="margin-left: 0px;margin-top: -202px;">
         <img
           :src="getAssetImage(store_view_home_page_info.home_selected_top_album?.medium_image_url)"
           @error="handleImageError(store_view_home_page_info.home_selected_top_album)"
-          style="objectFit: cover; objectPosition: center;height: 180px;border-radius: 6px;border: 1.5px solid #FFFFFF20;"
-          :style="{ width: item_album_image + 'px', height: item_album_image + 'px', borderRadius: '6px' }"/>
+          style="
+            object-fit: cover; object-position: center;
+            width: 170px;height: 170px;
+            border-radius: 6px;border: 1.5px solid #FFFFFF20;"/>
         <n-space vertical
           style="margin-top: -2px;margin-left: 12px;"
           :style="{
@@ -370,20 +442,35 @@ onBeforeUnmount(() => {
       </n-space>
     </n-space>
 
-    <n-space vertical style="margin-top: 10px;margin-left: 8px;">
+    <n-space vertical
+             style="margin-top: 10px;margin-left: 8px;">
       <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
-        <span style="font-size: 20px;font-weight: 600;">
+        <span style="font-size: 16px;font-weight: 600;">
           {{ $t('page.home.mostPlayed') }}
         </span>
-        <n-button quaternary circle size="medium" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button quaternary circle @click="store_view_home_page_logic.list_data_StartUpdate = true">
           <template #icon>
             <n-icon :size="20"><RefreshSharp/></n-icon>
           </template>
         </n-button>
+        <n-button quaternary circle
+                  @click="scrollTo_maximum_playback(-1)"
+                  style="margin-left: -5px;">
+          <n-icon size="20" :depth="2">
+            <ChevronLeft16Filled />
+          </n-icon>
+        </n-button>
+        <n-button quaternary circle
+                  @click="scrollTo_maximum_playback(1)"
+                  style="margin-left: -5px;">
+          <n-icon size="20" :depth="2">
+            <ChevronRight16Filled />
+          </n-icon>
+        </n-button>
       </n-space>
       <DynamicScroller
           class="home-wall" ref="dynamicScroller_maximum_playback"
-          :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}"
+          :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + 60 + 'px'}"
           :items="store_view_home_page_info.home_Files_temporary_maximum_playback"
           :itemSize="itemSize"
           :minItemSize="itemSize"
@@ -465,7 +552,7 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
               </div>
-              <div class="album_text" :style="{ width: item_album_image + 'px' }">
+              <div :style="{ width: item_album_image + 'px' }">
                 <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
                   <div>
                     <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-size: 14px;font-weight: 600;">
@@ -489,9 +576,11 @@ onBeforeUnmount(() => {
         </template>
       </DynamicScroller>
     </n-space>
-    <n-space vertical style="margin-top: 36px;margin-left: 8px;">
+
+    <n-space vertical
+             style="margin-top: 36px;margin-left: 8px;">
       <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
-        <span style="font-size: 20px;font-weight: 600;">
+        <span style="font-size: 16px;font-weight: 600;">
           {{ $t('page.home.explore') }}
         </span>
         <n-button quaternary circle size="medium" @click="store_view_home_page_logic.list_data_StartUpdate = true">
@@ -499,10 +588,24 @@ onBeforeUnmount(() => {
             <n-icon :size="20"><RefreshSharp/></n-icon>
           </template>
         </n-button>
+        <n-button quaternary circle
+                  @click="scrollTo_random_search(-1)"
+                  style="margin-left: -5px;">
+          <n-icon size="20" :depth="2">
+            <ChevronLeft16Filled />
+          </n-icon>
+        </n-button>
+        <n-button quaternary circle
+                  @click="scrollTo_random_search(1)"
+                  style="margin-left: -5px;">
+          <n-icon size="20" :depth="2">
+            <ChevronRight16Filled />
+          </n-icon>
+        </n-button>
       </n-space>
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_random_search"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}"
+        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + 60 + 'px'}"
         :items="store_view_home_page_info.home_Files_temporary_random_search"
         :itemSize="itemSize"
         :minItemSize="itemSize"
@@ -584,7 +687,7 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
               </div>
-              <div class="album_text" :style="{ width: item_album_image + 'px' }">
+              <div :style="{ width: item_album_image + 'px' }">
                 <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
                   <div>
                   <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-size: 14px;font-weight: 600;">
@@ -608,9 +711,11 @@ onBeforeUnmount(() => {
         </template>
       </DynamicScroller>
     </n-space>
-    <n-space vertical style="margin-top: 36px;margin-left: 8px;">
+
+    <n-space vertical
+             style="margin-top: 36px;margin-left: 8px;">
       <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
-        <span style="font-size: 20px;font-weight: 600;">
+        <span style="font-size: 16px;font-weight: 600;">
           {{ $t('page.home.newlyAdded') }}
         </span>
         <n-button quaternary circle size="medium" @click="store_view_home_page_logic.list_data_StartUpdate = true">
@@ -618,10 +723,24 @@ onBeforeUnmount(() => {
             <n-icon :size="20"><RefreshSharp/></n-icon>
           </template>
         </n-button>
+        <n-button quaternary circle
+                  @click="scrollTo_recently_added(-1)"
+                  style="margin-left: -5px;">
+          <n-icon size="20" :depth="2">
+            <ChevronLeft16Filled />
+          </n-icon>
+        </n-button>
+        <n-button quaternary circle
+                  @click="scrollTo_recently_added(1)"
+                  style="margin-left: -5px;">
+          <n-icon size="20" :depth="2">
+            <ChevronRight16Filled />
+          </n-icon>
+        </n-button>
       </n-space>
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_recently_added"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}"
+        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + 60 + 'px'}"
         :items="store_view_home_page_info.home_Files_temporary_recently_added"
         :itemSize="itemSize"
         :minItemSize="itemSize"
@@ -703,7 +822,7 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
               </div>
-              <div class="album_text" :style="{ width: item_album_image + 'px' }">
+              <div :style="{ width: item_album_image + 'px' }">
                 <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
                   <div>
                   <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-size: 14px;font-weight: 600;">
@@ -727,9 +846,11 @@ onBeforeUnmount(() => {
         </template>
       </DynamicScroller>
     </n-space>
-    <n-space vertical style="margin-top: 36px;margin-left: 8px;">
+
+    <n-space vertical
+             style="margin-top: 36px;margin-left: 8px;">
       <n-space align="center" :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}">
-        <span style="font-size: 20px;font-weight: 600;">
+        <span style="font-size: 16px;font-weight: 600;">
           {{ $t('page.home.recentlyPlayed') }}
         </span>
         <n-button quaternary circle size="medium" @click="store_view_home_page_logic.list_data_StartUpdate = true">
@@ -737,10 +858,24 @@ onBeforeUnmount(() => {
             <n-icon :size="20"><RefreshSharp/></n-icon>
           </template>
         </n-button>
+        <n-button quaternary circle
+                  @click="scrollTo_recently_played(-1)"
+                  style="margin-left: -5px;">
+          <n-icon size="20" :depth="2">
+            <ChevronLeft16Filled />
+          </n-icon>
+        </n-button>
+        <n-button quaternary circle
+                  @click="scrollTo_recently_played(1)"
+                  style="margin-left: -5px;">
+          <n-icon size="20" :depth="2">
+            <ChevronRight16Filled />
+          </n-icon>
+        </n-button>
       </n-space>
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_recently_played"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)'}"
+        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + 60 + 'px'}"
         :items="store_view_home_page_info.home_Files_temporary_recently_played"
         :itemSize="itemSize"
         :minItemSize="itemSize"
@@ -822,7 +957,7 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
               </div>
-              <div class="album_text" :style="{ width: item_album_image + 'px' }">
+              <div :style="{ width: item_album_image + 'px' }">
                 <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
                   <div>
                   <span id="album_name" :style="{ maxWidth: item_album_txt + 'px' }" style="font-size: 14px;font-weight: 600;">
@@ -871,14 +1006,14 @@ onBeforeUnmount(() => {
 .home-wall-container {
   width: 100%;
   height: 100%;
+  overflow-y: scroll;
 }
 .home-wall {
-  overflow-y: auto;
   width: calc(100vw - 200px);
-  height: 246px;
   display: flex;
   flex-direction: column;
-  overflow-x:hidden;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 .album {
   float: left;
@@ -890,7 +1025,7 @@ onBeforeUnmount(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 6px;
+  border-radius: 4px;
   background: #00000090;
   opacity: 0;
   transition: opacity 0.3s;
@@ -985,14 +1120,14 @@ onBeforeUnmount(() => {
 }
 ::-webkit-scrollbar-thumb {
   background-color: #88888850;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-track {
   background-color: #f1f1f105;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background-color: #88888850;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 </style>

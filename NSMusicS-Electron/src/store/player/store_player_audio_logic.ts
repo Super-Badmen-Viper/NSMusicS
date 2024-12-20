@@ -54,6 +54,7 @@ export const store_player_audio_logic = reactive({
 
     drawer_order_show: false,
     drawer_volume_show: false,
+    drawer_theme_show: false,
 
     formatTime(currentTime: number): string {
         const minutes = Math.floor(currentTime / 60);

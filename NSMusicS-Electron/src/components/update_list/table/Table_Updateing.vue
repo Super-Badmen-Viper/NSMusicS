@@ -13,7 +13,7 @@ const collapsed_width = ref<number>(80);
         :size="12" >
       <n-card
           class="table"
-          style="overflow: hidden;border-radius: 6px;"
+          style="overflow: hidden;border-radius: 4px;"
           :style="{ width: 'calc(100vw - ' + (collapsed_width - 9 + 160) + 'px)'}">
         <span style="font-size: 30px;font-weight: 800;">Not open || 未开放</span>
       </n-card>
@@ -39,14 +39,14 @@ const collapsed_width = ref<number>(80);
 }
 ::-webkit-scrollbar-thumb {
   background-color: #88888850;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-track {
   background-color: #f1f1f105;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background-color: #88888850;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 </style>
