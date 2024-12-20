@@ -98,7 +98,7 @@ const stopWatching_window_innerWidth = watch(() => store_app_configs_info.window
 const updateGridItems = () => {
   collapsed_width.value = 145;
   if(window.innerWidth > 2460){
-    const num = window.innerWidth / 5.53
+    const num = window.innerWidth / 7.53
     itemSize.value = Math.floor(num) + 40;
     item_album.value = Math.floor(num);
     item_album_image.value = item_album.value - 20;

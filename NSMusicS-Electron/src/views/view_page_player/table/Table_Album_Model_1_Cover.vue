@@ -4,8 +4,8 @@ import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 import {RepeatOneRound} from "@vicons/material";
 import {Random} from "@vicons/fa";
-import {Pause, Play, PlayBack, PlayForward, VolumeMedium, VolumeOff} from "@vicons/ionicons5";
-import {ArrowAutofitDown24Regular, ArrowRepeatAll16Regular, ChevronDown12Filled} from "@vicons/fluent";
+import {Pause, Play, PlayBack, PlayForward, VolumeMedium, VolumeOff, ChevronDown} from "@vicons/ionicons5";
+import {ArrowAutofitDown24Regular, ArrowRepeatAll16Regular} from "@vicons/fluent";
 import {NIcon, NSlider} from "naive-ui";
 function getAssetImage(firstImage: string) {
   if(process.platform === 'win32')
@@ -26,7 +26,7 @@ function getAssetImage(firstImage: string) {
         style="
           width: 55vh;height: 55vh;
           margin-top: calc(28vh - 182px);
-          border-radius: 10px;
+          border-radius: 12px;
           object-fit: cover;object-position: center;
           box-shadow: 0 0 12px rgba(0, 0, 0, 0.20), 0 0 12px rgba(0, 0, 0, 0.20);
         "
@@ -100,8 +100,8 @@ function getAssetImage(firstImage: string) {
              align="center"
              style="margin-top: 0px;">
       <n-space style="width: calc((55vh - 310px) / 2);">
-        <n-button quaternary size="medium"
-                  style="margin-left: -14px;"
+        <n-button quaternary round size="medium"
+                  style="margin-left: -16px;"
                   :style="{
                     marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '0px' : '0px',
                     opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 0 : 1,
@@ -113,7 +113,7 @@ function getAssetImage(firstImage: string) {
                   }
                 }">
           <template #icon>
-            <n-icon size="26" :depth="3" style="margin-bottom: 4px;"><ChevronDown12Filled/></n-icon>
+            <n-icon size="32" :depth="3"><ChevronDown/></n-icon>
           </template>
         </n-button>
       </n-space>

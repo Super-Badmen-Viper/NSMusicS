@@ -3,15 +3,14 @@
   import {
     ArrowMinimize16Regular,
     Maximize16Regular,
-    ChevronDown12Filled,
-    Settings24Regular,
     FullScreenMaximize16Regular,
-    ArrowAutofitDown24Regular,
-    ArrowRepeatAll16Regular
   } from '@vicons/fluent'
   import {
-    MotionPhotosAutoOutlined, RepeatOneRound
+    MotionPhotosAutoOutlined
   } from '@vicons/material'
+  import {
+    ChevronDown
+  } from "@vicons/ionicons5";
   import {
     Close,Clean
   } from '@vicons/carbon'
@@ -799,15 +798,15 @@
           <!-- -->
           <n-flex justify="end" style="width: 400px;height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
-              <n-button quaternary circle
-                        style="margin-right:4px;"
+              <n-button quaternary round
+                        :style="{ marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '-2px' : '28px' }"
                         @click="()=>{
                   if(store_player_appearance.player_show_complete){
                     store_player_appearance.player_show_click = true
                   }
                 }">
                 <template #icon>
-                  <n-icon size="22" :depth="3" style="margin-bottom: 0px;"><ChevronDown12Filled/></n-icon>
+                  <n-icon size="32" :depth="3"><ChevronDown/></n-icon>
                 </template>
               </n-button>
               <n-button quaternary circle size="medium"
