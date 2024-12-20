@@ -383,12 +383,13 @@ onBeforeUnmount(() => {
           </div>
         </div>
       </div>
-<!--      :style="{-->
-<!--      transform: `scale(${store_app_configs_info.window_innerHeight / 666})`,-->
-<!--      transformOrigin: 'left center',-->
-<!--      marginTop: `calc(-20vh - 50px)`,-->
-<!--      }"-->
+
       <n-space
+        :style="{
+        transform: `scale(${store_app_configs_info.window_innerHeight / 760})`,
+        transformOrigin: 'left bottom',
+        marginTop: `calc(-20vh - 50px)`,
+        }"
         style="margin-left: 0px;margin-top: -202px;">
         <img
           :src="getAssetImage(store_view_home_page_info.home_selected_top_album?.medium_image_url)"
@@ -400,7 +401,7 @@ onBeforeUnmount(() => {
         <n-space vertical
           style="margin-top: -2px;margin-left: 12px;"
           :style="{
-            width: 'calc(100vw - ' + (collapsed_width + 300) + 'px)',
+            width: 'calc(' + (store_app_configs_info.window_innerWidth - (collapsed_width + 300)) / (store_app_configs_info.window_innerHeight / 500) + 'px)',
           }">
           <div style="font-size: 16px;font-weight: 600;">
             {{ $t('page.home.explore') }}

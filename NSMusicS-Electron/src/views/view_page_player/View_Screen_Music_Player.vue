@@ -899,7 +899,7 @@
                     <div
                         style="
                           width: 32vh;margin-left: 0.2vh;margin-top: -0.8vh;
-                          color: #989292;font-weight: 550;font-size: calc(1.8vh + 4px);
+                          color: #989292;font-weight: 550;font-size: calc(1.4vh + 4px);
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
                       {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
@@ -989,7 +989,7 @@
                         width: calc(40vh);height: calc(40vh);
                         WebkitMask-image: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 40%);
                         margin-top: calc(45vh - 162px);
-                        border: 2px solid #FFFFFF20;
+                        border: 1.5px solid #FFFFFF20;
                         border-radius: 10px;
                         object-fit: cover;object-position: center;
                         box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
@@ -1008,7 +1008,7 @@
                     <div
                       style="
                         width: 40vh;margin-top: -1vh;margin-bottom: 1vh;
-                        color: #989292;font-weight: 550;font-size: calc(1.8vh + 4px);
+                        color: #989292;font-weight: 550;font-size: calc(1.4vh + 4px);
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
                       {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}

@@ -1105,7 +1105,7 @@ onBeforeUnmount(() => {
               <div
                   style="margin-left: 8px;
                   width: 60px;height: 60px;
-                  border-radius: 10px;border: 2px solid #FFFFFF20;
+                  border-radius: 10px;border: 1.5px solid #FFFFFF20;
                   overflow: hidden;">
                 <img
                     :key="item.id"

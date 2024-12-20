@@ -36,7 +36,7 @@ function getAssetImage(firstImage: string) {
         style="
           width: 44vh;margin-top: -2px;
           color: #E7E5E5;
-          font-weight: 900;font-size: 24px;
+          font-weight: 900;font-size: calc(2.2vh + 4px);
           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
           text-align: center;">
       {{ store_player_audio_info.this_audio_song_name }}
@@ -44,8 +44,8 @@ function getAssetImage(firstImage: string) {
     <div
         style="
           width: 36vh;
-          margin-top: -6px;margin-bottom: -6px;
-          color: #989292;font-weight: 550;font-size: 18px;
+          margin-top: -6px;
+          color: #989292;font-weight: 550;font-size: calc(1.4vh + 4px);
           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
           text-align: center;">
       {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
@@ -54,7 +54,7 @@ function getAssetImage(firstImage: string) {
     <n-space
         vertical
         v-if="!store_player_appearance.player_collapsed_album"
-      style="margin-top: -16px;">
+      style="margin-top: -22px;">
       <n-space justify="space-between" style="width: 55vh;">
         <n-space>
           {{ store_player_audio_logic.current_play_time }}
@@ -182,7 +182,7 @@ function getAssetImage(firstImage: string) {
           width: calc((55vh - 310px) / 2);
           border-radius: 10px;
           --n-fill-color: #ffffff20;--n-fill-color-hover: #ffffff20;
-          --n-rail-height: 3px;
+          --n-rail-height: 4px;
           --n-handle-size: 8px;
           margin-top: -2px;
         "
