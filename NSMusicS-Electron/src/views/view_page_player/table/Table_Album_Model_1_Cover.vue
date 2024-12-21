@@ -31,11 +31,12 @@ function getAssetImage(firstImage: string) {
   >
     <img
         :style="{
-          marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 'calc(28vh - 182px)' : 'calc(28vh - 182px - 46px)',
-          transition: 'margin 0.4s'
+          marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 'calc(28vh - 182px)' : 'calc(28vh - 182px - 22px)',
+          height: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '55vh' : 'calc(48vh)',//55vh - 46px
+          transition: 'margin 0.4s, height 0.4s'
         }"
         style="
-          width: 55vh;height: 55vh;
+          width: 55vh;
           border-radius: 12px;
           object-fit: cover;object-position: center;
           box-shadow: 0 0 12px rgba(0, 0, 0, 0.20), 0 0 12px rgba(0, 0, 0, 0.20);
@@ -213,12 +214,13 @@ function getAssetImage(firstImage: string) {
       </n-button>
     </n-space>
     <n-space
-             align="center"
+             justify="center" align="center"
              :style="{
+               marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '0px' : '0px',
                opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 0 : 1,
                transition: 'margin 0.4s, opacity 0.4s'
              }"
-             style="width: 55vh">
+             style="width: 360px;margin-left: -60px;">
       <n-button quaternary round size="small"
                 @click="()=>{
                   if(store_player_audio_logic.play_volume === 0){
@@ -228,17 +230,17 @@ function getAssetImage(firstImage: string) {
                   }
                 }">
         <template #icon>
-          <n-icon :size="26" v-if="store_player_audio_logic.play_volume != 0"><VolumeMedium/></n-icon>
-          <n-icon :size="26" v-else><VolumeOff/></n-icon>
+          <n-icon :size="20" v-if="store_player_audio_logic.play_volume != 0"><VolumeMedium/></n-icon>
+          <n-icon :size="20" v-else><VolumeOff/></n-icon>
         </template>
       </n-button>
       <n-slider
         style="
-          width: calc(55vh - 116px);
+          width: 240px;
           border-radius: 10px;
           --n-fill-color: #ffffff60;--n-fill-color-hover: #ffffff60;
           --n-rail-height: 4px;
-          --n-handle-size: 12px;
+          --n-handle-size: 10px;
         "
           v-model:value="store_player_audio_logic.play_volume"
           :min="0" :max="100" :keyboard="true"

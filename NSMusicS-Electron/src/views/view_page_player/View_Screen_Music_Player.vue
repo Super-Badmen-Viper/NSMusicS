@@ -818,17 +818,6 @@
           <!-- -->
           <n-flex justify="end" style="width: 400px;height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
-              <n-button quaternary round
-                        :style="{ marginRight: store_app_configs_info.desktop_system_kind === 'win32' ? '-2px' : '28px' }"
-                        @click="()=>{
-                  if(store_player_appearance.player_show_complete){
-                    store_player_appearance.player_show_click = true
-                  }
-                }">
-                <template #icon>
-                  <n-icon size="28" :depth="3"><ChevronDown/></n-icon>
-                </template>
-              </n-button>
               <n-button quaternary circle size="medium"
                         style="margin-right:4px;"
                         v-if="store_app_configs_info.desktop_system_kind === 'win32'"
