@@ -592,9 +592,6 @@ const Set_Player_Show_Sound_more= () => {
 }
 
 ////// auto collapse player_configs bar
-const handleRefusetohide = () => {
-  store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
-};
 const handleMouseMove = () => {
   if(store_player_appearance.player_show === true){
     if(store_player_appearance.player_use_playbar_auto_hide) {
@@ -746,7 +743,8 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
       class="this_Bar_Music_Player"
       style="transition: margin 0.4s;"
       :style="{ marginBottom: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '-80px' : '0px' }"
-      @mousemove="handleRefusetohide" @mouseleave="()=>{handleMouseMove();leave_back_svg();}" @mouseover="handleRefusetohide">
+      @mouseleave="()=>{handleMouseMove();leave_back_svg();}"
+      >
     <div
         class="layout_distribution_3"
         style="transition: margin 0.4s;"
@@ -756,7 +754,17 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
         marginLeft: store_player_appearance.player_show ? '0px' : '72px',
         width: store_player_appearance.player_show ? '100vw' : 'calc(100vw - 72px)',
       }">
-      <div class="gird_Left">
+      <div class="gird_Left"
+           @mousemove="()=>{
+             if (store_player_appearance.player_background_model_num != 0) {
+               store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
+             }
+           }"
+           @mouseover="()=>{
+             if (store_player_appearance.player_background_model_num != 0) {
+               store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
+             }
+           }">
         <div class="button_open_player_view" v-if="store_player_appearance.player_show_of_control_info">
           <img class="back_svg"
                :src="getAssetImage(store_player_audio_logic.player_back_ChevronDouble)"
@@ -795,7 +803,18 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
           </n-space>
         </div>
       </div>
-      <div class="gird_Middle" v-if="store_player_appearance.player_show_of_control_info">
+      <div class="gird_Middle"
+           @mousemove="()=>{
+             if (store_player_appearance.player_background_model_num != 0) {
+               store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
+             }
+           }"
+           @mouseover="()=>{
+             if (store_player_appearance.player_background_model_num != 0) {
+               store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
+             }
+           }"
+           v-if="store_player_appearance.player_show_of_control_info">
         <!-- grid_Middle_button_area -->
         <n-space class="grid_Middle_button_area" justify="center">
           <n-button quaternary round size="small"
@@ -971,7 +990,13 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
           </n-drawer>
         </n-config-provider>
       </div>
-      <div class="gird_Right">
+      <div class="gird_Right"
+           @mousemove="()=>{
+             store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
+           }"
+           @mouseover="()=>{
+             store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
+           }">
         <n-space class="gird_Right_current_playlist_button_area">
           <n-badge :value="store_playlist_list_info.playlist_MediaFiles_temporary.length" show-zero :max="9999" :offset="[-7, 3]">
             <n-button strong secondary class="gird_Right_current_playlist_button_area_of_button" @click="Set_Playlist_Show">

@@ -813,7 +813,7 @@
             style="
               -webkit-app-region: no-drag;margin-top: 35px;
             ">
-            <!-- -->
+            <div style="width: 200px;"></div>
           </n-space>
           <!-- -->
           <n-flex justify="end" style="width: 400px;height: 70px;">

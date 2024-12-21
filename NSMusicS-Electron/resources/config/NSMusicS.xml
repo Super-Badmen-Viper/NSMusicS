@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>1.1.3</version>
+<version>1.1.4</version>
 <url> </url>
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
-    1.1.3更新内容;
+    1.1.4更新内容;
+    播放界面的设计元素引入apple music的设计风格，改进了各类页面的UI交互[√];
     修复音频输出模式切换时出现的错误弹窗[√];
     增加Web输出模式的自定义选择音频设备输出[√];
     修复本地模式的封面显示逻辑[√];
