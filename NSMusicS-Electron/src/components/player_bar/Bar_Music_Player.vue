@@ -754,18 +754,15 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
         marginLeft: store_player_appearance.player_show ? '0px' : '72px',
         width: store_player_appearance.player_show ? '100vw' : 'calc(100vw - 72px)',
       }">
+<!--      v-if="store_player_appearance.player_show_of_control_info"-->
       <div class="gird_Left"
            @mousemove="()=>{
-             if (store_player_appearance.player_background_model_num != 0) {
-               store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
-             }
+             store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
            }"
            @mouseover="()=>{
-             if (store_player_appearance.player_background_model_num != 0) {
-               store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
-             }
+             store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
            }">
-        <div class="button_open_player_view" v-if="store_player_appearance.player_show_of_control_info">
+        <div class="button_open_player_view">
           <img class="back_svg"
                :src="getAssetImage(store_player_audio_logic.player_back_ChevronDouble)"
                :style="{ display: back_display }"
@@ -779,7 +776,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                @mouseover="hover_back_img" @mouseout="leave_back_svg"
           />
         </div>
-        <div class="bar_left_text_song_info" v-if="store_player_appearance.player_show_of_control_info">
+        <div class="bar_left_text_song_info">
           <n-space>
             <n-ellipsis>
               <span id="bar_song_name" @click="handleItemClick_title(store_player_audio_info.this_audio_song_name)">{{ store_player_audio_info.this_audio_song_name + '&nbsp-&nbsp' }}</span>
@@ -805,16 +802,11 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
       </div>
       <div class="gird_Middle"
            @mousemove="()=>{
-             if (store_player_appearance.player_background_model_num != 0) {
-               store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
-             }
+             store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
            }"
            @mouseover="()=>{
-             if (store_player_appearance.player_background_model_num != 0) {
-               store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
-             }
-           }"
-           v-if="store_player_appearance.player_show_of_control_info">
+             store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
+           }">
         <!-- grid_Middle_button_area -->
         <n-space class="grid_Middle_button_area" justify="center">
           <n-button quaternary round size="small"
