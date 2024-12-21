@@ -65,7 +65,9 @@ app.on('second-instance', (event, commandLine, workingDirectory) => {
 });
 app.on('window-all-closed', async () => {
     // if (process.platform !== 'darwin') {
-    await mpv.quit();
+    try {
+        await mpv.quit();
+    }catch{}
     app.quit()
     // }
 })
