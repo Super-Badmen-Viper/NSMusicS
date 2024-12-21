@@ -492,7 +492,7 @@
       if(store_player_appearance.player_use_playbar_auto_hide) {
         store_player_appearance.player_collapsed_action_bar_of_Immersion_model = true
       }
-    }, 3000);
+    }, 1000);
   };
   const unwatch_player_collapsed = watchEffect(() => {
     if (store_player_appearance.player_collapsed_action_bar_of_Immersion_model === false) {
@@ -533,6 +533,22 @@
       }
     }
   });
+  let unwatch_player_background_model_num = watch(() => store_player_audio_info.player_background_model_num, (newValue) => {
+    if(store_player_appearance.player_use_lottie_animation) {
+      if (store_player_appearance.player_background_model_num === 0) {
+        animationInstance_model_1_spectrum.value.pause();
+        animationInstance_model_1_wave.value.pause();
+        animationInstance_model_2_wave.value.pause();
+      }
+      if (store_player_appearance.player_background_model_num === 1){
+        animationInstance_model_2_wave.value.pause();
+      }
+      if (store_player_appearance.player_background_model_num === 2){
+        animationInstance_model_1_spectrum.value.pause();
+        animationInstance_model_1_wave.value.pause();
+      }
+    }
+  });
 
   ////// player_configs Remove data
   onBeforeUnmount(() => {
@@ -541,6 +557,7 @@
     unwatch();
 
     unwatch_animationInstance();
+    unwatch_player_background_model_num();
     if(store_player_appearance.player_use_lottie_animation) {
       animationInstance_model_1_spectrum.value.destroy()
       animationInstance_model_1_wave.value.destroy()
@@ -578,7 +595,7 @@
       <!--Skin-->
       <img
         v-else
-        id="player_bg_zindex_1"
+        id="player_bg_zindex_0"
         style="
           position: absolute;top: 0;left: 0;width: 100vw;height: 100vw;
           margin-top: -20vw;
@@ -586,6 +603,9 @@
           filter: brightness(46%) blur(0px);"
         :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
         alt="">
+      <div style="background-color: #000000;z-index: -3;position: absolute;top: 0;left: 0;width: 100vw;height: 100vw;">
+
+      </div>
     </div>
     <!-- drwaer right area -->
     <n-config-provider :theme="darkTheme">
@@ -864,16 +884,24 @@
                 style="background-color: transparent;">
                 <n-space vertical align="end" style="margin-right:8vw;">
                   <!-- 1 方形封面-->
-                  <Table_Album_Model_1_Cover v-show="store_player_appearance.player_background_model_num === 0"/>
+                  <Table_Album_Model_1_Cover/>
                   <!-- 2 旋转封面-->
                   <n-flex vertical
-                           align="center" justify="center"
-                           style="margin-right: calc(-2vw);overflow: hidden;"
-                           v-show="store_player_appearance.player_background_model_num === 1">
+                          align="center" justify="center"
+                          style="margin-right: calc(-2vw);overflow: hidden;"
+                          :style="{
+                            marginTop: store_player_appearance.player_background_model_num === 1 ? '0px' : '100px',
+                            opacity: store_player_appearance.player_background_model_num === 1 ? 1 : 0,
+                            position: store_player_appearance.player_background_model_num === 1 ? 'relative' : 'absolute',
+                            left: store_player_appearance.player_background_model_num === 1 ? '0' : '-100%',
+                            transition: 'margin 0.4s, opacity 0.8s'
+                          }">
                     <lottie-player
                       ref="animationInstance_model_1_wave"
                       class="animate__rotate_slower"
-                      :class="{ 'animate__rotate_slower_paused': !store_player_audio_info.this_audio_is_playing }"
+                      :class="{
+                        'animate__rotate_slower_paused': store_player_appearance.player_background_model_num !== 1 || !store_player_audio_info.this_audio_is_playing
+                      }"
                       v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
                       autoplay
                       loop
@@ -911,15 +939,15 @@
                       loop
                       mode="normal"
                       :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715392202806.json')))"
-                      style="width: 54vh;height:calc(5vh);margin-top: calc(-6px);"
+                      style="width: 54vh;height:calc(5vh);"
                     />
                     <n-slider
                       style="
-                        width: 40vh;
+                        width: 45vh;
                         --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
                         --n-rail-height: 4px;
                         --n-handle-size: 20px;
-                        margin-top: -10px;
+                        margin-top: -2px;
                         border-radius: 10px;"
                         v-model:value="store_player_audio_logic.slider_singleValue"
                         :min="0" :max="100"
@@ -948,12 +976,20 @@
                   <!-- 3 炫胶唱片-->
                   <n-space vertical
                            align="center"
-                           style="margin-top: calc(-6vh - 18px);margin-right: calc(6vw);overflow: hidden"
-                           v-show="store_player_appearance.player_background_model_num === 2">
+                           style="margin-right: calc(6vw);overflow: hidden"
+                           :style="{
+                            marginTop: store_player_appearance.player_background_model_num === 2 ? 'calc(-6vh - 18px)' : '0px',
+                            opacity: store_player_appearance.player_background_model_num === 2 ? 1 : 0,
+                            position: store_player_appearance.player_background_model_num === 2 ? 'relative' : 'absolute',
+                            left: store_player_appearance.player_background_model_num === 2 ? '0' : '-100%',
+                            transition: 'margin 0.4s, opacity 0.8s'
+                          }">
                     <lottie-player
                       ref="animationInstance_model_2_wave"
                       class="animate__rotate_fast"
-                      :class="{ 'animate__rotate_fast_paused': !store_player_audio_info.this_audio_is_playing }"
+                      :class="{
+                        'animate__rotate_fast_paused': store_player_appearance.player_background_model_num !== 2 || !store_player_audio_info.this_audio_is_playing
+                      }"
                       v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
                       speed="0.8"
                       autoplay
@@ -1123,13 +1159,13 @@
     transform: rotate(0deg) translate(0, 0) scale(100%);
   }
   25% {
-    transform: rotate(90deg) translate(80%, 0) scale(200%);
+    transform: rotate(90deg) translate(40%, 0) scale(150%);
   }
   50% {
-    transform: rotate(180deg) translate(80%, 80%) scale(300%);
+    transform: rotate(180deg) translate(40%, 40%) scale(200%);
   }
   75% {
-    transform: rotate(270deg) translate(0, 80%) scale(200%);
+    transform: rotate(270deg) translate(0, 40%) scale(150%);
   }
   100% {
     transform: rotate(360deg) translate(0, 0) scale(100%);

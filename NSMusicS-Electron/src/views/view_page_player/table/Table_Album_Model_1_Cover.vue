@@ -20,41 +20,62 @@ function getAssetImage(firstImage: string) {
 <template>
   <n-space vertical
            align="center"
+           :style="{
+              marginTop: store_player_appearance.player_background_model_num === 0 ? '0px' : '100px',
+              opacity: store_player_appearance.player_background_model_num === 0 ? 1 : 0,
+              position: store_player_appearance.player_background_model_num === 0 ? 'relative' : 'absolute',
+              left: store_player_appearance.player_background_model_num === 0 ? '0' : '-100%',
+              transition: 'margin 0.4s, opacity 0.8s'
+           }"
            style="margin-right: 1vw;"
   >
     <img
+        :style="{
+          marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 'calc(28vh - 182px)' : 'calc(28vh - 182px - 46px)',
+          transition: 'margin 0.4s'
+        }"
         style="
           width: 55vh;height: 55vh;
-          margin-top: calc(28vh - 182px);
           border-radius: 12px;
           object-fit: cover;object-position: center;
           box-shadow: 0 0 12px rgba(0, 0, 0, 0.20), 0 0 12px rgba(0, 0, 0, 0.20);
         "
         :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
         alt="">
-    <div
-        style="
+    <n-space vertical align="center"
+             :style="{
+            marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model === false ? '0px' : '-100px',
+            opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model === false ? 1 : 0,
+            transition: 'margin 0.4s, opacity 0.4s'
+        }"
+             style="width: 44vh;">
+      <div
+          style="
           width: 44vh;margin-top: -2px;
           color: #E7E5E5;
           font-weight: 900;font-size: calc(2.2vh + 4px);
           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
           text-align: center;">
-      {{ store_player_audio_info.this_audio_song_name }}
-    </div>
-    <div
-        style="
+        {{ store_player_audio_info.this_audio_song_name }}
+      </div>
+      <div
+          style="
           width: 36vh;
           margin-top: -6px;
           color: #989292;font-weight: 550;font-size: calc(1.4vh + 4px);
           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
           text-align: center;">
-      {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
-    </div>
+        {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
+      </div>
+    </n-space>
     <!--  -->
     <n-space
-        vertical
-        v-if="!store_player_appearance.player_collapsed_album"
-      style="margin-top: -22px;">
+      vertical
+      v-if="!store_player_appearance.player_collapsed_album"
+      :style="{
+          marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '-16px' : '-22px',
+          transition: 'margin 0.4s'
+      }">
       <n-space justify="space-between" style="width: 55vh;">
         <n-space>
           {{ store_player_audio_logic.current_play_time }}
@@ -95,43 +116,53 @@ function getAssetImage(firstImage: string) {
         </template>
       </n-slider>
     </n-space>
+    <n-space vertical align="center"
+             :style="{
+            marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '0px' : '-100px',
+            opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 1 : 0,
+            transition: 'margin 0.4s, opacity 0.4s'
+        }"
+             style="width: 44vh;">
+      <div
+          style="
+            width: 44vh;margin-top: -2px;
+            color: #E7E5E5;
+            font-weight: 900;font-size: calc(2.2vh + 4px);
+            overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+            text-align: center;">
+        {{ store_player_audio_info.this_audio_song_name }}
+      </div>
+      <div
+          style="
+            width: 36vh;
+            margin-top: -6px;
+            color: #989292;font-weight: 550;font-size: calc(1.4vh + 4px);
+            overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+            text-align: center;">
+        {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
+      </div>
+    </n-space>
     <!--  -->
     <n-space justify="center"
              align="center"
-             style="margin-top: 0px;">
-      <n-space style="width: calc((55vh - 310px) / 2);">
-        <n-button quaternary round size="medium"
-                  style="margin-left: -16px;"
-                  :style="{
-                    marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '0px' : '0px',
-                    opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 0 : 1,
-                    transition: 'margin 0.4s, opacity 0.4s'
-                 }"
-                  @click="()=>{
-                  if(store_player_appearance.player_show_complete){
-                    store_player_appearance.player_show_click = true
-                  }
-                }">
-          <template #icon>
-            <n-icon size="32" :depth="3"><ChevronDown/></n-icon>
-          </template>
-        </n-button>
-      </n-space>
+             :style="{
+                marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '0px' : '0px',
+                opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 0 : 1,
+                transition: 'margin 0.4s, opacity 0.4s'
+             }">
       <n-button quaternary round size="small"
-                @click="store_player_audio_logic.player_click_state_of_order = true"
+                @click="()=>{
+                  if (store_player_audio_logic.play_order != 'playback-4') {
+                    store_player_audio_logic.play_order = 'playback-4';
+                  }else{
+                    store_player_audio_logic.play_order = 'playback-1';
+                  }
+                }"
                 @mouseover="store_player_audio_logic.drawer_order_show = true;">
         <template #icon>
-          <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
-            <ArrowAutofitDown24Regular/>
-          </n-icon>
-          <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-2'">
-            <ArrowRepeatAll16Regular/>
-          </n-icon>
-          <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-3'">
-            <RepeatOneRound/>
-          </n-icon>
-          <n-icon :size="20" v-else-if="store_player_audio_logic.play_order === 'playback-4'">
-            <Random/>
+          <n-icon :size="20">
+            <Random color="#42d883" v-if="store_player_audio_logic.play_order === 'playback-4'"/>
+            <Random v-else/>
           </n-icon>
         </template>
       </n-button>
@@ -160,6 +191,36 @@ function getAssetImage(firstImage: string) {
       </n-button>
       <n-button quaternary round size="small"
                 @click="()=>{
+                  const play_order = store_player_audio_logic.play_order;
+                  if (play_order === 'playback-4') {
+                    store_player_audio_logic.play_order = 'playback-1';
+                  } else if (play_order === 'playback-1') {
+                    store_player_audio_logic.play_order = 'playback-2';
+                  } else if (play_order === 'playback-2') {
+                    store_player_audio_logic.play_order = 'playback-3';
+                  } else if (play_order === 'playback-3') {
+                    store_player_audio_logic.play_order = 'playback-1';
+                  }
+                }"
+                @mouseover="store_player_audio_logic.drawer_order_show = true;">
+        <template #icon>
+          <n-icon :size="26">
+            <ArrowRepeatAll16Regular v-if="store_player_audio_logic.play_order !== 'playback-2' && store_player_audio_logic.play_order !== 'playback-3'"/>
+            <ArrowRepeatAll16Regular color="#42d883" v-else-if="store_player_audio_logic.play_order === 'playback-2'"/>
+            <RepeatOneRound color="#42d883" v-else-if="store_player_audio_logic.play_order === 'playback-3'"/>
+          </n-icon>
+        </template>
+      </n-button>
+    </n-space>
+    <n-space
+             align="center"
+             :style="{
+               opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 0 : 1,
+               transition: 'margin 0.4s, opacity 0.4s'
+             }"
+             style="width: 55vh">
+      <n-button quaternary round size="small"
+                @click="()=>{
                   if(store_player_audio_logic.play_volume === 0){
                     store_player_audio_logic.play_volume = 100;
                   }else{
@@ -171,25 +232,33 @@ function getAssetImage(firstImage: string) {
           <n-icon :size="26" v-else><VolumeOff/></n-icon>
         </template>
       </n-button>
-      <!-- -->
       <n-slider
-        :style="{
-          marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '0px' : '0px',
-          opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 0 : 1,
-          transition: 'margin 0.4s, opacity 0.4s'
-        }"
         style="
-          width: calc((55vh - 310px) / 2);
+          width: calc(55vh - 116px);
           border-radius: 10px;
-          --n-fill-color: #ffffff20;--n-fill-color-hover: #ffffff20;
+          --n-fill-color: #ffffff60;--n-fill-color-hover: #ffffff60;
           --n-rail-height: 4px;
-          --n-handle-size: 8px;
-          margin-top: -2px;
+          --n-handle-size: 12px;
         "
           v-model:value="store_player_audio_logic.play_volume"
           :min="0" :max="100" :keyboard="true"
       />
     </n-space>
+    <n-button quaternary round
+              :style="{
+                    marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '0px' : '-4px',
+                    opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 0 : 1,
+                    transition: 'margin 0.4s, opacity 0.4s'
+                 }"
+              @click="()=>{
+                  if(store_player_appearance.player_show_complete){
+                    store_player_appearance.player_show_click = true
+                  }
+                }">
+      <template #icon>
+        <n-icon size="32" :depth="3"><ChevronDown/></n-icon>
+      </template>
+    </n-button>
   </n-space>
 </template>
 

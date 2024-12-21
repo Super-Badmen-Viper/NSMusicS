@@ -60,6 +60,7 @@ export const store_player_audio_info = reactive({
     async reset_data() {
         this.this_audio_file_path = '';
         this.this_audio_file_medium_image_url = path.resolve('resources/img/error_album.jpg');
+        this.page_top_album_image_url = path.resolve('resources/img/error_album.jpg');
         this.this_audio_restart_play = false;
         this.this_audio_is_playing = true;
 

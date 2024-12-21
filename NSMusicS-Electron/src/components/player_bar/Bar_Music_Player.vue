@@ -11,7 +11,7 @@ import {
 } from '@vicons/material'
 import {
   Play,Pause,
-  PlaySkipBack,PlaySkipForward,
+  PlayBack,PlayForward,
   VolumeMedium,
 } from '@vicons/ionicons5'
 import {
@@ -817,7 +817,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
           </n-button>
           <n-button quaternary round size="small" @click="play_skip_back_click">
             <template #icon>
-              <n-icon :size="26"><PlaySkipBack/></n-icon>
+              <n-icon :size="26"><PlayBack/></n-icon>
             </template>
           </n-button>
           <n-dropdown
@@ -835,7 +835,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
           </n-dropdown>
           <n-button quaternary round size="small" @click="play_skip_forward_click">
             <template #icon>
-              <n-icon :size="26"><PlaySkipForward/></n-icon>
+              <n-icon :size="26"><PlayForward/></n-icon>
             </template>
           </n-button>
           <n-button quaternary round size="small" @click="backpanel_voice_click">
