@@ -117,6 +117,8 @@ export class Class_Get_System_Configs_Read {
                 //     ? path.resolve('resources')
                 //     : path.join(process.resourcesPath)
                 store_app_configs_info.cDriveDbDir = path.join(os.homedir(), 'Applications', 'NSMusicS');
+            }else{
+                store_app_configs_info.cDriveDbDir = path.join(os.homedir(), '.NSMusicS');
             }
             //
             store_app_configs_info.navidrome_db = path.join(store_app_configs_info.cDriveDbDir, 'navidrome.db')

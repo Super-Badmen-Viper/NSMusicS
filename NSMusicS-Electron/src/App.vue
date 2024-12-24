@@ -643,6 +643,10 @@
         store_app_configs_info.desktop_system_kind = 'darwin';
         store_player_appearance.player_lyric_fontSize = '36px';
         store_player_appearance.player_lyric_fontSize_Num = 36;
+      }else{
+        store_app_configs_info.desktop_system_kind = 'linux';
+        store_player_appearance.player_lyric_fontSize = '28px';
+        store_player_appearance.player_lyric_fontSize_Num = 28;
       }
     }catch{  }
 

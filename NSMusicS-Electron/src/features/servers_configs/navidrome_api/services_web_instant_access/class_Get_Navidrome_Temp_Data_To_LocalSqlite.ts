@@ -614,12 +614,14 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
         const getArtists_ALL = await browsing_ApiService_of_ND.getArtists_ALL(username, token, salt);
         const list = getArtists_ALL["subsonic-response"]["artists"]["index"];
-        store_view_artist_page_info.artist_item_count = list.length;
-        store_view_album_page_info.album_item_count = list.reduce((sum, index) => {
-            return sum + index.artist.reduce((artistSum, artist) => {
-                return artistSum + artist.albumCount;
+        if(list != undefined) {
+            store_view_artist_page_info.artist_item_count = list.length;
+            store_view_album_page_info.album_item_count = list.reduce((sum, index) => {
+                return sum + index.artist.reduce((artistSum, artist) => {
+                    return artistSum + artist.albumCount;
+                }, 0);
             }, 0);
-        }, 0);
+        }
     }
     /// starred count
     public async get_count_of_starred(
@@ -631,9 +633,12 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         const starred2_artist = getStarred2_all["subsonic-response"]["starred2"]["artist"];
         const starred2_album = getStarred2_all["subsonic-response"]["starred2"]["album"];
         const starred2_song = getStarred2_all["subsonic-response"]["starred2"]["song"];
-        store_view_media_page_info.media_starred_count = starred2_song.length ||0
-        store_view_album_page_info.album_starred_count = starred2_album.length ||0
-        store_view_artist_page_info.artist_starred_count = starred2_artist.length || 0
+        if(starred2_song != undefined)
+            store_view_media_page_info.media_starred_count = starred2_song.length ||0
+        if(starred2_album != undefined)
+            store_view_album_page_info.album_starred_count = starred2_album.length ||0
+        if(starred2_artist != undefined)
+            store_view_artist_page_info.artist_starred_count = starred2_artist.length || 0
     }
     /// playlist count
     public async get_count_of_playlist(
@@ -643,7 +648,8 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         let playlists_ApiService_of_ND = new Playlists_ApiService_of_ND(url);
         const getPlaylists_all = await playlists_ApiService_of_ND.getPlaylists_all(username, token, salt);
         const playlists = getPlaylists_all["subsonic-response"]["playlists"]["playlist"];
-        store_view_media_page_info.media_playlist_count = playlists.length || 0;
+        if(playlists != undefined)
+            store_view_media_page_info.media_playlist_count = playlists.length || 0;
     }
     /// recently count
     public async get_count_of_recently_media(
