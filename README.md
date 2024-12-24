@@ -40,6 +40,11 @@
   - [NSMusicS Electron Test (Now)](https://github.com/Super-Badmen-Viper/NSMusicS/releases)
   - [NSMusicS_Win(WPF)_3.1.0 (Old)](https://github.com/Super-Badmen-Viper/NSMusicS_WPF/releases/tag/NSMusicS_Win(WPF)_0.9.0)
 
+## Group Chat
+- QQ群聊
+  - NSMusicS交流群（1）：228440692
+- Other | None
+
 ## Version：
 | Project   | Development status | Technology Framework     | Author/Copyright Owner | Operating systems         | LICENSE          |
 | :-----    | :----:              | :----:                   | :----:             | :----:                    | :----:                    | 
