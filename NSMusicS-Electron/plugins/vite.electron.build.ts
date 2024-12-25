@@ -45,24 +45,24 @@ export const viteElectronBuild = (): Plugin => {
                     asar: true,
                     win: {
                         target: 'nsis',
-                        icon: 'resources/config/NSMusicS.ico'
+                        icon: 'resources/icons/win/icon.ico'
                     },
                     linux: {
                         target: 'AppImage',
-                        icon: 'resources/config/NSMusicS.png'
+                        icon: 'resources/icons/png'
                     },
                     mac: {
                         target: 'dmg',
-                        icon: 'resources/config/NSMusicS.icns'
+                        icon: 'resources/icons/mac/icon.icns'
                     },
                     nsis: {
                         oneClick: false,
                         perMachine: true,
                         allowElevation: true,
                         allowToChangeInstallationDirectory: true,
-                        installerIcon: 'resources/config/NSMusicS.ico',
-                        uninstallerIcon: 'resources/config/NSMusicS.ico',
-                        installerHeaderIcon: 'resources/config/NSMusicS.ico',
+                        installerIcon: 'resources/icons/win/icon.ico',
+                        uninstallerIcon: 'resources/icons/win/icon.ico',
+                        installerHeaderIcon: 'resources/icons/win/icon.ico',
                         createDesktopShortcut: true,
                         createStartMenuShortcut: true,
                         shortcutName: 'NSMusicS'
