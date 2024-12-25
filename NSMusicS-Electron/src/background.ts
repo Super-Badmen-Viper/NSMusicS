@@ -497,8 +497,7 @@ async function createWindow() {
         if(process.platform === 'win32'){
             win.hide();
         }else if(process.platform === 'linux'){
-            app.relaunch();
-            app.exit();
+            app.quit();
         }
     })
     ipc.on('window-gc', function () {
