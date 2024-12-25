@@ -494,7 +494,12 @@ async function createWindow() {
         }
     });
     ipc.on('window-close', function () {
-        win.hide();
+        if(process.platform === 'win32'){
+            win.hide();
+        }else if(process.platform === 'linux'){
+            app.relaunch();
+            app.exit();
+        }
     })
     ipc.on('window-gc', function () {
         win.webContents.session.flushStorageData();

@@ -663,6 +663,8 @@
                                   handleAuto_fontSize(28)
                                 } else if (store_app_configs_info.desktop_system_kind === 'darwin') {
                                   handleAuto_fontSize(36)
+                                } else {
+                                  handleAuto_fontSize(28)
                                 }
                               }">
                       <n-icon>
@@ -820,7 +822,7 @@
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
               <n-button quaternary circle size="medium"
                         style="margin-right:4px;"
-                        v-if="store_app_configs_info.desktop_system_kind === 'win32'"
+                        v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
                         @click="maximize_screen">
                 <template #icon>
                   <n-icon size="20" :depth="3" style="margin-top: 1px;"><FullScreenMaximize16Regular/></n-icon>
@@ -828,7 +830,7 @@
               </n-button>
               <n-button quaternary circle size="medium"
                         style="margin-right:4px"
-                        v-if="store_app_configs_info.desktop_system_kind === 'win32'"
+                        v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
                         @click="minimize">
                 <template #icon>
                   <n-icon size="18" :depth="3"><ArrowMinimize16Regular/></n-icon>
@@ -836,7 +838,7 @@
               </n-button>
               <n-button quaternary circle size="medium"
                         style="margin-right:4px"
-                        v-if="store_app_configs_info.desktop_system_kind === 'win32'"
+                        v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
                         @click="maximize">
                 <template #icon>
                   <n-icon size="24" :depth="3"><Maximize16Regular/></n-icon>
@@ -844,7 +846,7 @@
               </n-button>
               <n-button quaternary circle size="medium"
                         style="margin-right:30px"
-                        v-if="store_app_configs_info.desktop_system_kind === 'win32'"
+                        v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
                         @click="closeWindow">
                 <template #icon>
                   <n-icon size="28" :depth="3"><Close/></n-icon>
