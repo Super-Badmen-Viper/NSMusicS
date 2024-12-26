@@ -11,13 +11,22 @@
  In addition, NSMusicS also supports local mode to use local music libraries. And plan to support various types of network cloud drives，such as webdev，onedriver....
  
 ## NSMusicS-Electron | 九歌 : Desktop-client
-- [x] supporting the Windows、MacOS(arm) platform (which will soon support Linux、Docker) 
-- [x] compatible with streaming media servers Navidrome (which will soon be compatible with Jellyfin、Emby、NSMusicS)
+- [x] supporting the Windows10+、MacOS(arm) platform (which will soon support MacOS(x64)、Linux、Docker)
 - [x] music library management
+- [ ] network cloud drives (webdev , onedriver....)
+- [x] compatible with streaming media servers (navidrome)
+- [ ] compatible with streaming media servers (jellyfin , emby , NSMusicS-GO)
+- [x] compatible with local music libraries (win10+) 
+- [ ] compatible with local music libraries (which will soon support MacOS(arm、x64)、Linux、Docker) 
+- [x] [mpv](https://github.com/mpv-player/mpv) -play (win10+、MacOS(arm)) 
+- [ ] [mpv](https://github.com/mpv-player/mpv) -play (which will soon support MacOS(x64)、Linux、Docker) 
 - [x] professional audio playback
 - [ ] Rich sound effects playback
 - [x] internationalization
 - [ ] various music usage scenarios(For NSMusicS-GO: Server)
+- [x] System backend playback -tray (win10+)
+- [ ] System backend playback -tray (which will soon support MacOS(arm、x64)、Linux、Docker) 
+      
 ## NSMusicS-GO | 九歌 : Server
 - [ ] compatible with streaming media servers (which will soon be compatible with Navidrome、Subsonic、Jellyfin、Emby)
 - [ ] music library management
@@ -25,6 +34,7 @@
 - [ ] artificial intelligence(Listen to music to identify music, extract music accompaniment, and rate karaoke singing, etc.)
 - [ ] knowledge graph(Recommendation system, Graph database, etc.)
 - [ ] internationalization
+      
 ## NSMusicS-Flutter | 九歌 : Mobile-client
 - [ ] music library management
 - [ ] professional audio playback
