@@ -1268,7 +1268,10 @@ async function createTray(){
             { type: 'separator' },
             {
                 label: String(tray_menu_label_shut),
-                click: () => {
+                click: async() => {
+                    try {
+                        await mpv.quit();
+                    }catch{}
                     app.quit();
                 },
                 icon: shutIcon
