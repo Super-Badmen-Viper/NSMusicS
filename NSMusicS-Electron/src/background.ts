@@ -1118,7 +1118,9 @@ async function createTray(){
     if(process.platform === 'win32') {
         tray = new Tray(path.resolve('resources/config/NSMusicS.ico'));
     }else if(process.platform === 'darwin') {
-        tray = new Tray(path.resolve('resources/config/NSMusicS.icns'));
+        tray = new Tray(path.resolve('resources/config/png/256x256.png'));
+    }else if(process.platform === 'linux') {
+        tray = new Tray(path.resolve('resources/config/png/256x256.png'));
     }
     /// icon
     const createResizedIcon = (iconPath, width, height) => {

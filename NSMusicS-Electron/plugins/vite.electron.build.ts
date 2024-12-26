@@ -49,7 +49,7 @@ export const viteElectronBuild = (): Plugin => {
                     },
                     linux: {
                         target: ['AppImage','deb'],
-                        icon: 'resources/config/NSMusicS.png'
+                        icon: 'resources/config/NSMusicS.icns'
                     },
                     mac: {
                         target: 'dmg',
