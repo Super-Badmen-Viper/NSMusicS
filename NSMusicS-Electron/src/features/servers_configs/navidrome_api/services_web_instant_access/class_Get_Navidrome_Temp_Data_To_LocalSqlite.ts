@@ -603,74 +603,79 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         url: string,
         username: string,token: string,salt: string
     ){
-        let media_library_scanning_ApiService_of_ND = new Media_library_scanning_ApiService_of_ND(url);
-        const getScanStatus = await media_library_scanning_ApiService_of_ND.getScanStatus(username, token, salt);
-        store_view_media_page_info.media_item_count = Number(getScanStatus["subsonic-response"]["scanStatus"]["count"]);
+        try{
+            let media_library_scanning_ApiService_of_ND = new Media_library_scanning_ApiService_of_ND(url);
+            const getScanStatus = await media_library_scanning_ApiService_of_ND.getScanStatus(username, token, salt);
+            store_view_media_page_info.media_item_count = Number(getScanStatus["subsonic-response"]["scanStatus"]["count"]);
+        }catch{}
     }
     public async get_count_of_artist_album(
         url: string,
         username: string,token: string,salt: string
     ){
-        let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
-        const getArtists_ALL = await browsing_ApiService_of_ND.getArtists_ALL(username, token, salt);
-        const list = getArtists_ALL["subsonic-response"]["artists"]["index"];
-        if(list != undefined) {
-            store_view_artist_page_info.artist_item_count = list.length;
-            store_view_album_page_info.album_item_count = list.reduce((sum, index) => {
-                return sum + index.artist.reduce((artistSum, artist) => {
-                    return artistSum + artist.albumCount;
+        try{
+            let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
+            const getArtists_ALL = await browsing_ApiService_of_ND.getArtists_ALL(username, token, salt);
+            const list = getArtists_ALL["subsonic-response"]["artists"]["index"];
+            if(list != undefined) {
+                store_view_artist_page_info.artist_item_count = list.length;
+                store_view_album_page_info.album_item_count = list.reduce((sum, index) => {
+                    return sum + index.artist.reduce((artistSum, artist) => {
+                        return artistSum + artist.albumCount;
+                    }, 0);
                 }, 0);
-            }, 0);
-        }
+            }
+        }catch{}
     }
     /// starred count
     public async get_count_of_starred(
         url: string,
         username: string,token: string,salt: string
     ){
-        let album$Songs_Lists_ApiService_of_ND = new Album$Songs_Lists_ApiService_of_ND(url);
-        const getStarred2_all = await album$Songs_Lists_ApiService_of_ND.getStarred2_all(username, token, salt);
-        const starred2_artist = getStarred2_all["subsonic-response"]["starred2"]["artist"];
-        const starred2_album = getStarred2_all["subsonic-response"]["starred2"]["album"];
-        const starred2_song = getStarred2_all["subsonic-response"]["starred2"]["song"];
-        if(starred2_song != undefined)
-            store_view_media_page_info.media_starred_count = starred2_song.length ||0
-        if(starred2_album != undefined)
-            store_view_album_page_info.album_starred_count = starred2_album.length ||0
-        if(starred2_artist != undefined)
-            store_view_artist_page_info.artist_starred_count = starred2_artist.length || 0
+        try{
+            let album$Songs_Lists_ApiService_of_ND = new Album$Songs_Lists_ApiService_of_ND(url);
+            const getStarred2_all = await album$Songs_Lists_ApiService_of_ND.getStarred2_all(username, token, salt);
+            const starred2_artist = getStarred2_all["subsonic-response"]["starred2"]["artist"];
+            const starred2_album = getStarred2_all["subsonic-response"]["starred2"]["album"];
+            const starred2_song = getStarred2_all["subsonic-response"]["starred2"]["song"];
+            if(starred2_song != undefined)
+                store_view_media_page_info.media_starred_count = starred2_song.length ||0
+            if(starred2_album != undefined)
+                store_view_album_page_info.album_starred_count = starred2_album.length ||0
+            if(starred2_artist != undefined)
+                store_view_artist_page_info.artist_starred_count = starred2_artist.length || 0
+        }catch{}
     }
     /// playlist count
     public async get_count_of_playlist(
         url: string,
         username: string,token: string,salt: string
     ){
-        let playlists_ApiService_of_ND = new Playlists_ApiService_of_ND(url);
-        const getPlaylists_all = await playlists_ApiService_of_ND.getPlaylists_all(username, token, salt);
-        const playlists = getPlaylists_all["subsonic-response"]["playlists"]["playlist"];
-        if(playlists != undefined)
-            store_view_media_page_info.media_playlist_count = playlists.length || 0;
+        try{
+            let playlists_ApiService_of_ND = new Playlists_ApiService_of_ND(url);
+            const getPlaylists_all = await playlists_ApiService_of_ND.getPlaylists_all(username, token, salt);
+            const playlists = getPlaylists_all["subsonic-response"]["playlists"]["playlist"];
+            if(playlists != undefined)
+                store_view_media_page_info.media_playlist_count = playlists.length || 0;
+        }catch{}
     }
     /// recently count
     public async get_count_of_recently_media(
         url: string,
         username: string,token: string,salt: string
     ){
-
         store_view_media_page_info.media_recently_count = 0
     }
     public async get_count_of_recently_album(
         url: string,
         username: string,token: string,salt: string
     ){
-
         store_view_album_page_info.album_recently_count = 0
     }
     public async get_count_of_recently_artist(
         url: string,
         username: string,token: string,salt: string
     ){
-
         store_view_artist_page_info.artist_recently_count = 0
     }
 }

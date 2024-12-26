@@ -252,7 +252,9 @@
   });
   routers.afterEach(async (to, from) => {
     if(to.name !== from.name){
-      store_router_data_logic.get_page_top_info()
+      try{
+        store_router_data_logic.get_page_top_info()
+      }catch{}
       store_router_data_logic.clear_Files_temporary()
       if(to.name === 'View_Menu_AppSetting'){
         store_router_data_info.router_select_model_menu = true

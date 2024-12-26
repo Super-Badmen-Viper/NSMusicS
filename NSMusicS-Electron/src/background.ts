@@ -1394,16 +1394,18 @@ async function createNodeMpv(){
     });
     ipc.handle('mpv-quit', async (event,filePath) => {
         try {
-            if (mpv.isRunning()) {
-                await mpv.pause();
-                isPlaying = false;
-                if(tray_loading_state) {
-                    tray_music_play = false;
-                    win.webContents.send("tray-music-pause", tray_music_play);
+            if(mpv != undefined){
+                if (mpv.isRunning()) {
+                    await mpv.pause();
+                    isPlaying = false;
+                    if(tray_loading_state) {
+                        tray_music_play = false;
+                        win.webContents.send("tray-music-pause", tray_music_play);
+                    }
+                    ///
+                    ///
+                    await mpv.quit();
                 }
-                ///
-                ///
-                await mpv.quit();
             }
         }catch{  }
         isPlaying = false
