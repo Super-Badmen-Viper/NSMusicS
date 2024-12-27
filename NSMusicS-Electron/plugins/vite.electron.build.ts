@@ -49,8 +49,11 @@ export const viteElectronBuild = (): Plugin => {
                         artifactName: '${productName}-Win-${version}-${arch}.${ext}',
                     },
                     linux: {
-                        target: ['AppImage', 'deb', 'pacman'],
-                        icon: 'resources/config/png',
+                        target: ['AppImage', 'deb'],
+                        icon: 'resources/config/NSMusicS.icns',
+                        desktop:{
+                            Icon:"/usr/share/icons/hicolor/512x512/apps/nsmusics.png"
+                        },
                         category: 'Audio',
                         maintainer: 'Xiang Cheng 1774148579@qq.com',
                         artifactName: '${productName}-Linux-${version}-${arch}.${ext}',
