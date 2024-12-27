@@ -45,15 +45,20 @@ export const viteElectronBuild = (): Plugin => {
                     asar: true,
                     win: {
                         target: 'nsis',
-                        icon: 'resources/config/NSMusicS.ico'
+                        icon: 'resources/config/NSMusicS.ico',
+                        artifactName: '${productName}-Win-${version}-${arch}.${ext}',
                     },
                     linux: {
-                        target: ['AppImage','deb'],
-                        icon: 'resources/config/NSMusicS.icns'
+                        target: ['AppImage', 'deb', 'pacman'],
+                        icon: 'resources/config/png',
+                        category: 'Audio',
+                        maintainer: 'Xiang Cheng 1774148579@qq.com',
+                        artifactName: '${productName}-Linux-${version}-${arch}.${ext}',
                     },
                     mac: {
                         target: 'dmg',
-                        icon: 'resources/config/NSMusicS.icns'
+                        icon: 'resources/config/NSMusicS.icns',
+                        artifactName: '${productName}-Mac-${version}-${arch}.${ext}',
                     },
                     nsis: {
                         oneClick: false,
