@@ -64,19 +64,8 @@
     store_app_configs_info.window_innerWidth = window.innerWidth;
     store_app_configs_info.window_innerHeight = window.innerHeight;
 
-    if(window.innerHeight < 880) {
-      store_player_appearance.player_lyric_fontSize_Num = 30;
-      store_player_appearance.player_lyric_fontSize = store_player_appearance.player_lyric_fontSize_Num + 'px';
-    }else if(window.innerHeight < 1080) {
-      store_player_appearance.player_lyric_fontSize_Num = 36;
-      store_player_appearance.player_lyric_fontSize = store_player_appearance.player_lyric_fontSize_Num + 'px';
-    }else if(window.innerHeight < 1280) {
-      store_player_appearance.player_lyric_fontSize_Num = 42;
-      store_player_appearance.player_lyric_fontSize = store_player_appearance.player_lyric_fontSize_Num + 'px';
-    }else if(window.innerHeight < 1480) {
-      store_player_appearance.player_lyric_fontSize_Num = 48;
-      store_player_appearance.player_lyric_fontSize = store_player_appearance.player_lyric_fontSize_Num + 'px';
-    }
+    store_player_appearance.player_lyric_fontSize_Num = 36 + Math.floor((window.innerHeight - 880) / 200) * 6;
+    store_player_appearance.player_lyric_fontSize = `${store_player_appearance.player_lyric_fontSize_Num}px`;
   });
 
   ////// i18n auto lang

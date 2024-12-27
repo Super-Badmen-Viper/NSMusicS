@@ -140,6 +140,8 @@ export const store_app_configs_logic_load = reactive({
             store_player_appearance.player_background_model_num = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_background_model_num'])
             store_player_appearance.player_use_lottie_animation = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lottie_animation'] === 'true'
             store_player_appearance.player_use_background_filter_blur = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_background_filter_blur'] === 'true'
+            store_player_appearance.player_use_background_automatic_rotation = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_background_automatic_rotation'] === 'true'
+            store_player_appearance.player_use_background_repeat_fill = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_background_repeat_fill'] === 'true'
             store_player_appearance.player_use_playbar_auto_hide =
                 '' + system_Configs_Read.player_Configs_of_UI.value['player_use_playbar_auto_hide'] === 'true' ? true :
                     '' + system_Configs_Read.player_Configs_of_UI.value['player_use_playbar_auto_hide'] !== 'false';

@@ -35,7 +35,7 @@ function getAssetImage(firstImage: string) {
           transition: 'margin 0.4s, height 0.4s'
         }"
         style="
-          width: 55vh;
+          width: 55vh;height: 55vh;
           border-radius: 12px;
           object-fit: cover;object-position: center;
           box-shadow: 0 0 12px rgba(0, 0, 0, 0.20), 0 0 12px rgba(0, 0, 0, 0.20);

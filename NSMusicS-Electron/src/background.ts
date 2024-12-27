@@ -399,7 +399,7 @@ async function createWindow() {
         win = await new BrowserWindow({
             width: 1220,
             height: 765,
-            minWidth: 1160,
+            minWidth: 1220,
             minHeight: 765,
             frame:false,
             resizable: true,
@@ -414,7 +414,7 @@ async function createWindow() {
         win = await new BrowserWindow({
             width: 1220,
             height: 765,
-            minWidth: 1160,
+            minWidth: 1220,
             minHeight: 765,
             frame:false,
             resizable: true,
@@ -430,7 +430,7 @@ async function createWindow() {
         win = await new BrowserWindow({
             width: 1220,
             height: 765,
-            minWidth: 1160,
+            minWidth: 1220,
             minHeight: 765,
             frame:false,
             resizable: true,
@@ -1113,15 +1113,6 @@ let tray_music_order = 'playback-1'
 let tray_menu_label_music = 'NSMusicS | 九歌';
 let tray_menu_label_music_check_enter = false;
 async function createTray(){
-    /// Tray
-    let tray = null;
-    if(process.platform === 'win32') {
-        tray = new Tray(path.resolve('resources/config/NSMusicS.ico'));
-    }else if(process.platform === 'darwin') {
-        tray = new Tray(path.resolve('resources/config/png/256x256.png'));
-    }else if(process.platform === 'linux') {
-        tray = new Tray(path.resolve('resources/config/png/256x256.png'));
-    }
     /// icon
     const createResizedIcon = (iconPath, width, height) => {
         if(!nativeTheme.shouldUseDarkColors){
@@ -1130,6 +1121,15 @@ async function createTray(){
             return nativeImage.createFromPath(iconPath).resize({width, height});
         }
     };
+    /// Tray
+    let tray = null;
+    if(process.platform === 'win32') {
+        tray = new Tray(path.resolve('resources/config/NSMusicS.ico'));
+    }else if(process.platform === 'darwin') {
+        tray = new Tray(nativeImage.createFromPath(path.resolve('resources/config/png/256x256.png')).resize({ width: 16, height: 16 }));
+    }else if(process.platform === 'linux') {
+        tray = new Tray(path.resolve('resources/config/png/256x256.png'));
+    }
     let playIcon = createResizedIcon(path.resolve('resources/icons/Play.png'), 18, 18);
     let pauseIcon = createResizedIcon(path.resolve('resources/icons/Pause.png'), 22, 22);
     let prevIcon = createResizedIcon(path.resolve('resources/icons/PlaySkipBack.png'), 16, 16);

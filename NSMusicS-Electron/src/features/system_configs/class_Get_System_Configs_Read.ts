@@ -69,6 +69,8 @@ export class Class_Get_System_Configs_Read {
             player_background_model_num: null,
             player_use_lottie_animation: null,
             player_use_background_filter_blur: null,
+            player_use_background_automatic_rotation: null,
+            player_use_background_repeat_fill: null,
             player_use_playbar_auto_hide: null,
         }))
     public player_Configs_of_Audio_Info = ref(

@@ -1518,13 +1518,30 @@
                   </n-space>
                   <n-space justify="space-between" align="center">
                     <n-space vertical>
-                      <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
+                      <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') + ' ' + $t('setting.albumBackground') }}</span>
                       <div style="margin-top: -10px;">
                         <span style="font-size:12px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
                       </div>
                     </n-space>
-                    <n-switch v-model:value="store_player_appearance.player_use_background_filter_blur">
-                    </n-switch>
+                    <n-switch v-model:value="store_player_appearance.player_use_background_filter_blur"/>
+                  </n-space>
+                  <n-space justify="space-between" align="center">
+                    <n-space vertical>
+                      <span style="font-size:16px;font-weight: 600;">{{ $t('Auto') + $t('MediaInfoRotation') + ' ' + $t('setting.albumBackground') }}</span>
+                      <div style="margin-top: -10px;">
+                        <span style="font-size:12px;">{{ $t('Auto') + $t('MediaInfoRotation') + ' ' + $t('setting.albumBackground') }}</span>
+                      </div>
+                    </n-space>
+                    <n-switch v-model:value="store_player_appearance.player_use_background_automatic_rotation"/>
+                  </n-space>
+                  <n-space justify="space-between" align="center">
+                    <n-space vertical>
+                      <span style="font-size:16px;font-weight: 600;">{{ $t('Horizontal') + $t('Vertical') + $t('AspectRatioFill') + ' ' + $t('setting.albumBackground') }}</span>
+                      <div style="margin-top: -10px;">
+                        <span style="font-size:12px;">{{ $t('Horizontal') + $t('Vertical') + $t('AspectRatioFill') + ' ' + $t('setting.albumBackground') }}</span>
+                      </div>
+                    </n-space>
+                    <n-switch v-model:value="store_player_appearance.player_use_background_repeat_fill"/>
                   </n-space>
                   <n-space justify="space-between" align="center">
                     <n-space vertical>
@@ -1533,8 +1550,7 @@
                         <span style="font-size:12px;">{{ $t('nsmusics.view_player.view_seting.player_use_playbar_auto_hide_explain') }}</span>
                       </div>
                     </n-space>
-                    <n-switch v-model:value="store_player_appearance.player_use_playbar_auto_hide">
-                    </n-switch>
+                    <n-switch v-model:value="store_player_appearance.player_use_playbar_auto_hide"/>
                   </n-space>
                 </n-space>
               </n-scrollbar>

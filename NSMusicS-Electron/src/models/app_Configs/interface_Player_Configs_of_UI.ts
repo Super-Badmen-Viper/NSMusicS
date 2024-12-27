@@ -8,5 +8,7 @@ interface Player_Configs_of_UI_Props {
   player_background_model_num: any,
   player_use_lottie_animation: any,
   player_use_background_filter_blur: any,
-  player_use_playbar_auto_hide: any
+  player_use_background_automatic_rotation: any,
+  player_use_background_repeat_fill: any,
+  player_use_playbar_auto_hide: any,
 };

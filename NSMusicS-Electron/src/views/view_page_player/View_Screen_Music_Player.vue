@@ -329,6 +329,12 @@
       itemElement.style.fontSize = store_player_appearance.player_lyric_fontSize;
       itemElement.style.fontWeight = 400;
     })
+    let marginTop = 6 + Math.floor((window.innerHeight - 880) / 200) * 0.5;
+    const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
+    itemElements.forEach((itemElement) => {
+      itemElement.style.marginTop = marginTop;
+      itemElement.style.lineHeight = marginTop * 2 * 0.1;
+    })
   }
   watch(() => store_player_appearance.player_lyric_fontSize_Num, (newValue) => {
     handleLeave_Refresh_Lyric_Style()
@@ -458,22 +464,8 @@
     }else{
       store_player_appearance.player_show_of_control_info = true
     }
-    if(window.innerHeight < 680) {
-      store_player_appearance.player_lyric_fontSize_Num = 24;
-      store_player_appearance.player_lyric_fontSize = store_player_appearance.player_lyric_fontSize_Num + 'px';
-    }else if(window.innerHeight < 880) {
-      store_player_appearance.player_lyric_fontSize_Num = 30;
-      store_player_appearance.player_lyric_fontSize = store_player_appearance.player_lyric_fontSize_Num + 'px';
-    }else if(window.innerHeight < 1080) {
-      store_player_appearance.player_lyric_fontSize_Num = 36;
-      store_player_appearance.player_lyric_fontSize = store_player_appearance.player_lyric_fontSize_Num + 'px';
-    }else if(window.innerHeight < 1280) {
-      store_player_appearance.player_lyric_fontSize_Num = 42;
-      store_player_appearance.player_lyric_fontSize = store_player_appearance.player_lyric_fontSize_Num + 'px';
-    }else if(window.innerHeight < 1480) {
-      store_player_appearance.player_lyric_fontSize_Num = 48;
-      store_player_appearance.player_lyric_fontSize = store_player_appearance.player_lyric_fontSize_Num + 'px';
-    }
+    store_player_appearance.player_lyric_fontSize_Num = 36 + Math.floor((window.innerHeight - 880) / 200) * 6;
+    store_player_appearance.player_lyric_fontSize = `${store_player_appearance.player_lyric_fontSize_Num}px`;
   }
 
   ////// player_configs page_ui set
@@ -575,23 +567,22 @@
     <!-- background area -->
     <div>
       <!--Album-->
-      <img
-        v-if="store_player_appearance.player_collapsed_skin"
-        id="player_bg_zindex_0"
-        style="
-          position: absolute;
-          top: -100vw;
-          left: -100vw;
-          width: 240vw;
-          height: 240vw;
-          object-fit: cover;
-          object-position: center;"
-        :style="{
-          filter: store_player_appearance.player_use_background_filter_blur ?
-            'brightness(46%) blur(60px)' : 'brightness(46%) blur(60px)'
-        }"
-        :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-        alt="">
+      <div
+          v-if="store_player_appearance.player_collapsed_skin"
+          id="player_bg_zindex_0"
+          :style="{
+            backgroundImage: `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
+            filter: store_player_appearance.player_use_background_filter_blur ?
+              'brightness(46%) blur(60px)' : 'brightness(46%) blur(0px)',
+            backgroundSize: store_player_appearance.player_use_background_repeat_fill ? '20vw 20vw' : '150vw 150vw',
+            backgroundRepeat: store_player_appearance.player_use_background_repeat_fill ? 'repeat' : 'no-repeat',
+            backgroundPosition: 'center'
+          }"
+          :class="{
+            'player_bg_zindex_0_auto_rotateDefault': store_player_appearance.player_use_background_automatic_rotation && store_player_appearance.player_use_background_repeat_fill,
+            'player_bg_zindex_0_auto_rotateRepeat': store_player_appearance.player_use_background_automatic_rotation && !store_player_appearance.player_use_background_repeat_fill
+          }"
+      ></div>
       <!--Skin-->
       <img
         v-else
@@ -618,7 +609,7 @@
           border: 1.5px solid #FFFFFF20;
           background-color: rgba(127, 127, 127, 0.1);
           backdrop-filter: blur(10px);
-          margin-top: calc(50vh - 230px);height: 460px;
+          margin-top: calc(50vh - 310px);height: 620px;
           ">
         <n-drawer-content v-if="store_player_audio_logic.drawer_theme_show">
           <template #default>
@@ -659,13 +650,7 @@
                   <n-space style="margin-right: 32px;">
                     <n-button text style="font-size: 24px;margin-top: 2px;margin-left: 7px;"
                               @click="() => {
-                                if (store_app_configs_info.desktop_system_kind === 'win32') {
-                                  handleAuto_fontSize(28)
-                                } else if (store_app_configs_info.desktop_system_kind === 'darwin') {
-                                  handleAuto_fontSize(36)
-                                } else {
-                                  handleAuto_fontSize(28)
-                                }
+                                handleAuto_fontSize(store_player_appearance.player_lyric_fontSize_Num)
                               }">
                       <n-icon>
                         <MotionPhotosAutoOutlined />
@@ -770,10 +755,22 @@
                     </n-switch>
                   </n-space>
                 </n-space>
-                <n-space v-if="false" style="margin-top: 20px;" justify="space-between">
-                  <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
+                <n-space style="margin-top: 20px;" justify="space-between">
+                  <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') + ' ' + $t('setting.albumBackground') }}</span>
                   <n-space style="margin-right: 32px;">
                     <n-switch v-model:value="store_player_appearance.player_use_background_filter_blur"/>
+                  </n-space>
+                </n-space>
+                <n-space style="margin-top: 20px;" justify="space-between">
+                  <span style="font-size:16px;">{{ $t('Auto') + $t('MediaInfoRotation') + ' ' + $t('setting.albumBackground') }}</span>
+                  <n-space style="margin-right: 32px;">
+                    <n-switch v-model:value="store_player_appearance.player_use_background_automatic_rotation"/>
+                  </n-space>
+                </n-space>
+                <n-space style="margin-top: 20px;" justify="space-between">
+                  <span style="font-size:16px;">{{ $t('Horizontal') + $t('Vertical') + $t('AspectRatioFill') + ' ' + $t('setting.albumBackground') }}</span>
+                  <n-space style="margin-right: 32px;">
+                    <n-switch v-model:value="store_player_appearance.player_use_background_repeat_fill"/>
                   </n-space>
                 </n-space>
                 <n-space style="margin-top: 20px;" v-if="false" justify="space-between">
@@ -930,15 +927,132 @@
                       loop
                       mode="normal"
                       :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715392202806.json')))"
-                      style="width: 54vh;height:calc(5vh);"
+                      style="width: 54vh;height:calc(4.5vh);"
                     />
+                    <n-space
+                        align="center" justify="center"
+                        v-if="!store_player_appearance.player_collapsed_album">
+                      <n-space style="width: 46px;margin-right: -10px;">
+                        {{ store_player_audio_logic.current_play_time }}
+                      </n-space>
+                      <n-slider
+                        style="
+                          width: 36vh;
+                          --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
+                          --n-rail-height: 4px;
+                          --n-handle-size: 20px;
+                          border-radius: 10px;"
+                        v-model:value="store_player_audio_logic.slider_singleValue"
+                        :min="0" :max="100"
+                        :format-tooltip="(value) => {
+                          return store_player_audio_logic.formatTime(
+                            (value / 100) * store_player_audio_logic.player.isDuration
+                          );
+                        }"
+                        :on-dragend="()=>{
+                          if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
+                            store_player_audio_logic.player_is_play_ended = true;
+                            store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
+                          }
+                          store_player_audio_logic.player_range_duration_isDragging = false;
+                        }"
+                        @click="()=>{
+                          store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
+                        }"
+                        @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
+                        @mouseup="store_player_audio_logic.player_range_duration_isDragging = false">
+                        <template #thumb>
+                          <n-icon-wrapper :size="0" />
+                        </template>
+                      </n-slider>
+                      <n-space style="width: 46px;">
+                        {{ store_player_audio_logic.total_play_time }}
+                      </n-space>
+                    </n-space>
+                  </n-flex>
+                  <!-- 3 炫胶唱片-->
+                  <n-space vertical
+                           align="center"
+                           style="width: calc(60vh);overflow: hidden"
+                           :style="{
+                            marginTop: store_player_appearance.player_background_model_num === 2 ? 'calc(-6vh - 18px)' : '0px',
+                            opacity: store_player_appearance.player_background_model_num === 2 ? 1 : 0,
+                            position: store_player_appearance.player_background_model_num === 2 ? 'relative' : 'absolute',
+                            left: store_player_appearance.player_background_model_num === 2 ? '0' : '-100%',
+                            transition: 'margin 0.4s, opacity 0.8s'
+                          }">
+                    <lottie-player
+                        ref="animationInstance_model_2_wave"
+                        class="animate__rotate_fast"
+                        :class="{
+                        'animate__rotate_fast_paused': store_player_appearance.player_background_model_num !== 2 || !store_player_audio_info.this_audio_is_playing
+                      }"
+                        v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
+                        speed="0.8"
+                        autoplay
+                        loop
+                        mode="normal"
+                        :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715417974362.json')))"
+                        style="
+                        width: calc(56vh);
+                        height: calc(56vh);
+                        margin-top: calc(22vh - 154.5px);margin-left: calc(-28vh);
+                        position: absolute;
+                      "
+                        :style="{
+                        '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`
+                      }"
+                    />
+                    <div
+                        style="
+                        width: calc(38vh);
+                        height: calc(38vh);
+                        margin-top: calc(31vh - 162px);margin-left: calc(-19vh);
+                        border-radius: 27vh;
+                        object-fit: cover;object-position: center;
+                        filter: blur(0px);
+                        position: absolute;
+                        border: 1.5px solid #FFFFFF20;
+                        box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
+                        background-color: #DCDBDD10;
+                      ">
+                    </div>
+                    <img
+                        style="
+                        width: calc(40vh);height: calc(40vh);
+                        WebkitMask-image: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 40%);
+                        margin-top: calc(45vh - 162px);
+                        border: 1.5px solid #FFFFFF20;
+                        border-radius: 10px;
+                        object-fit: cover;object-position: center;
+                        box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
+                        filter: blur(0);
+                      "
+                        :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                        alt="">
+                    <div
+                        style="
+                        width: 40vh;margin-top: -1vh;
+                        color: #E7E5E5;font-weight: 900;font-size: calc(2.2vh + 4px);
+                        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+                        text-align: left;">
+                      {{ store_player_audio_info.this_audio_song_name }}
+                    </div>
+                    <div
+                        style="
+                        width: 40vh;margin-top: -1vh;
+                        color: #989292;font-weight: 550;font-size: calc(1.4vh + 4px);
+                        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+                        text-align: left;">
+                      {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
+                    </div>
                     <n-slider
-                      style="
-                        width: 45vh;
+                        style="
+                        width: 40vh;
                         --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
                         --n-rail-height: 4px;
                         --n-handle-size: 20px;
-                        margin-top: -2px;
+                        margin-top: -6px;
                         border-radius: 10px;"
                         v-model:value="store_player_audio_logic.slider_singleValue"
                         :min="0" :max="100"
@@ -963,114 +1077,9 @@
                         <n-icon-wrapper :size="0" />
                       </template>
                     </n-slider>
-                  </n-flex>
-                  <!-- 3 炫胶唱片-->
-                  <n-space vertical
-                           align="center"
-                           style="margin-right: calc(6vw);overflow: hidden"
-                           :style="{
-                            marginTop: store_player_appearance.player_background_model_num === 2 ? 'calc(-6vh - 18px)' : '0px',
-                            opacity: store_player_appearance.player_background_model_num === 2 ? 1 : 0,
-                            position: store_player_appearance.player_background_model_num === 2 ? 'relative' : 'absolute',
-                            left: store_player_appearance.player_background_model_num === 2 ? '0' : '-100%',
-                            transition: 'margin 0.4s, opacity 0.8s'
-                          }">
-                    <lottie-player
-                      ref="animationInstance_model_2_wave"
-                      class="animate__rotate_fast"
-                      :class="{
-                        'animate__rotate_fast_paused': store_player_appearance.player_background_model_num !== 2 || !store_player_audio_info.this_audio_is_playing
-                      }"
-                      v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
-                      speed="0.8"
-                      autoplay
-                      loop
-                      mode="normal"
-                      :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715417974362.json')))"
-                      style="
-                        width: calc(56vh);
-                        height: calc(56vh);
-                        margin-top: calc(22vh - 154.5px);margin-left: calc(-28vh);
-                        position: absolute;
-                      "
-                      :style="{
-                        '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`
-                      }"
-                    />
-                    <div
-                      style="
-                        width: calc(38vh);
-                        height: calc(38vh);
-                        margin-top: calc(31vh - 162px);margin-left: calc(-19vh);
-                        border-radius: 27vh;
-                        object-fit: cover;object-position: center;
-                        filter: blur(0px);
-                        position: absolute;
-                        border: 1.5px solid #FFFFFF20;
-                        box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
-                        background-color: #DCDBDD10;
-                      ">
+                    <div style="width: 40vh;text-align: left;margin-top: -4px;">
+                      {{ store_player_audio_logic.current_play_time }} &nbsp;/&nbsp; {{ store_player_audio_logic.total_play_time }}
                     </div>
-                    <img
-                      style="
-                        width: calc(40vh);height: calc(40vh);
-                        WebkitMask-image: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 40%);
-                        margin-top: calc(45vh - 162px);
-                        border: 1.5px solid #FFFFFF20;
-                        border-radius: 10px;
-                        object-fit: cover;object-position: center;
-                        box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
-                        filter: blur(0);
-                      "
-                      :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                      alt="">
-                    <div
-                      style="
-                        width: 40vh;margin-top: -1vh;
-                        color: #E7E5E5;font-weight: 900;font-size: calc(2.2vh + 4px);
-                        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
-                        text-align: left;">
-                      {{ store_player_audio_info.this_audio_song_name }}
-                    </div>
-                    <div
-                      style="
-                        width: 40vh;margin-top: -1vh;margin-bottom: 1vh;
-                        color: #989292;font-weight: 550;font-size: calc(1.4vh + 4px);
-                        overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
-                        text-align: left;">
-                      {{ store_player_audio_info.this_audio_artist_name }} -  {{ store_player_audio_info.this_audio_album_name }}
-                    </div>
-                    <n-slider
-                      style="
-                        width: 40vh;
-                        --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
-                        --n-rail-height: 4px;
-                        --n-handle-size: 20px;
-                        margin-top: -1.7vh;
-                        border-radius: 10px;"
-                      v-model:value="store_player_audio_logic.slider_singleValue"
-                      :min="0" :max="100"
-                      :format-tooltip="(value) => {
-                        return store_player_audio_logic.formatTime(
-                          (value / 100) * store_player_audio_logic.player.isDuration
-                        );
-                      }"
-                      :on-dragend="()=>{
-                        if(store_player_audio_logic.slider_singleValue >= 99.5 || store_player_audio_logic.slider_singleValue == 0){
-                          store_player_audio_logic.player_is_play_ended = true;
-                          store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
-                        }
-                        store_player_audio_logic.player_range_duration_isDragging = false;
-                      }"
-                      @click="()=>{
-                        store_player_audio_logic.play_go_duration(store_player_audio_logic.slider_singleValue,true);
-                      }"
-                      @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
-                      @mouseup="store_player_audio_logic.player_range_duration_isDragging = false">
-                      <template #thumb>
-                        <n-icon-wrapper :size="0" />
-                      </template>
-                    </n-slider>
                   </n-space>
                 </n-space>
               </n-layout-sider>
@@ -1139,27 +1148,56 @@
 
 <style scoped>
 #player_bg_zindex_0 {
+  position: absolute;
+  top: -50vw;
+  left: -25vw;
+  width: 150vw;
+  height: 150vw;
+  object-fit: cover;
+  object-position: center;
   z-index: -2;
   transition: filter 0.5s ease;
-  animation: moveInRectangle 45s linear infinite;
-  transform-origin: center center;
-  position: relative;
 }
-@keyframes moveInRectangle {
+.player_bg_zindex_0_auto_rotateDefault{
+  animation: moveInCircleDefault 60s linear infinite;
+  transform-origin: center center;
+}
+.player_bg_zindex_0_auto_rotateRepeat{
+  animation: moveInCircleRepeat 60s linear infinite;
+  transform-origin: center center;
+}
+@keyframes moveInCircleRepeat {
   0% {
-    transform: rotate(0deg) translate(0, 0) scale(100%);
+    transform: translate(calc(50px * cos(0deg)), calc(50px * sin(0deg))) rotate(0deg) scale(100%);
   }
   25% {
-    transform: rotate(90deg) translate(40%, 0) scale(150%);
+    transform: translate(calc(50px * cos(90deg)), calc(50px * sin(90deg))) rotate(90deg) scale(120%);
   }
   50% {
-    transform: rotate(180deg) translate(40%, 40%) scale(200%);
+    transform: translate(calc(50px * cos(180deg)), calc(50px * sin(180deg))) rotate(180deg) scale(150%);
   }
   75% {
-    transform: rotate(270deg) translate(0, 40%) scale(150%);
+    transform: translate(calc(50px * cos(270deg)), calc(50px * sin(270deg))) rotate(270deg) scale(120%);
   }
   100% {
-    transform: rotate(360deg) translate(0, 0) scale(100%);
+    transform: translate(calc(50px * cos(360deg)), calc(50px * sin(360deg))) rotate(360deg) scale(100%);
+  }
+}
+@keyframes moveInCircleDefault {
+  0% {
+    transform: translate(calc(50px * cos(0deg)), calc(50px * sin(0deg))) rotate(0deg) scale(80%);
+  }
+  25% {
+    transform: translate(calc(50px * cos(90deg)), calc(50px * sin(90deg))) rotate(90deg) scale(150%);
+  }
+  50% {
+    transform: translate(calc(50px * cos(180deg)), calc(50px * sin(180deg))) rotate(180deg) scale(200%);
+  }
+  75% {
+    transform: translate(calc(50px * cos(270deg)), calc(50px * sin(270deg))) rotate(270deg) scale(150%);
+  }
+  100% {
+    transform: translate(calc(50px * cos(360deg)), calc(50px * sin(360deg))) rotate(360deg) scale(80%);
   }
 }
 
@@ -1167,10 +1205,10 @@
   /* color: v-bind(player_lyric_color); */
   color: transparent;
   width: calc(40vw);
-  margin-top: 6px;min-height: 50px;
+  margin-top: 6px;line-height: 1.2;
+  min-height: 50px;
   cursor: pointer;
   border-radius: 10px;
-  line-height: 1.2;
   transition: color 0.5s, background-color 0.5s;
   filter: blur(0.07px);
 }

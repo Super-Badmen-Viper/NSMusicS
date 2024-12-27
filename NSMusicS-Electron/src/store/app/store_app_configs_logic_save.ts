@@ -114,6 +114,8 @@ export const store_app_configs_logic_save = reactive({
                 player_background_model_num: String(store_player_appearance.player_background_model_num),
                 player_use_lottie_animation: String(store_player_appearance.player_use_lottie_animation),
                 player_use_background_filter_blur: String(store_player_appearance.player_use_background_filter_blur),
+                player_use_background_automatic_rotation: String(store_player_appearance.player_use_background_automatic_rotation),
+                player_use_background_repeat_fill: String(store_player_appearance.player_use_background_repeat_fill),
                 player_use_playbar_auto_hide: String(store_player_appearance.player_use_playbar_auto_hide)
             }))
         let system_Configs_Write = new Class_Set_System_Configs_Write()

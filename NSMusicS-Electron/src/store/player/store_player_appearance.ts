@@ -31,6 +31,8 @@ export const store_player_appearance = reactive({
 
     player_use_lottie_animation: true,
     player_use_background_filter_blur: true,
+    player_use_background_automatic_rotation: true,
+    player_use_background_repeat_fill: false,
     player_use_playbar_auto_hide: true,
 
     player_mode_of_medialist_from_external_import: false,
@@ -70,6 +72,12 @@ watch(() => store_player_appearance.player_use_lottie_animation, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
 });
 watch(() => store_player_appearance.player_use_background_filter_blur, (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
+});
+watch(() => store_player_appearance.player_use_background_automatic_rotation, (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
+});
+watch(() => store_player_appearance.player_use_background_repeat_fill, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
 });
 watch(() => store_player_appearance.player_use_playbar_auto_hide, (newValue) => {
