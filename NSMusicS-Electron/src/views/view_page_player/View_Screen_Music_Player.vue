@@ -574,13 +574,13 @@
             backgroundImage: `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
             filter: store_player_appearance.player_use_background_filter_blur ?
               'brightness(46%) blur(60px)' : 'brightness(46%) blur(0px)',
-            backgroundSize: store_player_appearance.player_use_background_repeat_fill ? '20vw 20vw' : '150vw 150vw',
+            backgroundSize: store_player_appearance.player_use_background_repeat_fill ? '20vw 20vw' : 'cover',
             backgroundRepeat: store_player_appearance.player_use_background_repeat_fill ? 'repeat' : 'no-repeat',
             backgroundPosition: 'center'
           }"
           :class="{
-            'player_bg_zindex_0_auto_rotateDefault': store_player_appearance.player_use_background_automatic_rotation && store_player_appearance.player_use_background_repeat_fill,
-            'player_bg_zindex_0_auto_rotateRepeat': store_player_appearance.player_use_background_automatic_rotation && !store_player_appearance.player_use_background_repeat_fill
+            'player_bg_zindex_0_auto_rotateDefault': store_player_appearance.player_use_background_automatic_rotation && !store_player_appearance.player_use_background_repeat_fill,
+            'player_bg_zindex_0_auto_rotateRepeat': store_player_appearance.player_use_background_automatic_rotation && store_player_appearance.player_use_background_repeat_fill
           }"
       ></div>
       <!--Skin-->
@@ -1149,10 +1149,9 @@
 <style scoped>
 #player_bg_zindex_0 {
   position: absolute;
-  top: -50vw;
-  left: -25vw;
-  width: 150vw;
-  height: 150vw;
+  top: -20vw;
+  width: 100vw;
+  height: 100vw;
   object-fit: cover;
   object-position: center;
   z-index: -2;
@@ -1166,38 +1165,38 @@
   animation: moveInCircleRepeat 60s linear infinite;
   transform-origin: center center;
 }
-@keyframes moveInCircleRepeat {
-  0% {
-    transform: translate(calc(50px * cos(0deg)), calc(50px * sin(0deg))) rotate(0deg) scale(100%);
-  }
-  25% {
-    transform: translate(calc(50px * cos(90deg)), calc(50px * sin(90deg))) rotate(90deg) scale(120%);
-  }
-  50% {
-    transform: translate(calc(50px * cos(180deg)), calc(50px * sin(180deg))) rotate(180deg) scale(150%);
-  }
-  75% {
-    transform: translate(calc(50px * cos(270deg)), calc(50px * sin(270deg))) rotate(270deg) scale(120%);
-  }
-  100% {
-    transform: translate(calc(50px * cos(360deg)), calc(50px * sin(360deg))) rotate(360deg) scale(100%);
-  }
-}
 @keyframes moveInCircleDefault {
   0% {
-    transform: translate(calc(50px * cos(0deg)), calc(50px * sin(0deg))) rotate(0deg) scale(80%);
+    transform: translate(calc(50px * cos(0deg)), calc(50px * sin(0deg))) rotate(0deg) scale(120%);
   }
   25% {
-    transform: translate(calc(50px * cos(90deg)), calc(50px * sin(90deg))) rotate(90deg) scale(150%);
+    transform: translate(calc(50px * cos(90deg)), calc(50px * sin(90deg))) rotate(90deg) scale(160%);
   }
   50% {
     transform: translate(calc(50px * cos(180deg)), calc(50px * sin(180deg))) rotate(180deg) scale(200%);
   }
   75% {
-    transform: translate(calc(50px * cos(270deg)), calc(50px * sin(270deg))) rotate(270deg) scale(150%);
+    transform: translate(calc(50px * cos(270deg)), calc(50px * sin(270deg))) rotate(270deg) scale(160%);
   }
   100% {
-    transform: translate(calc(50px * cos(360deg)), calc(50px * sin(360deg))) rotate(360deg) scale(80%);
+    transform: translate(calc(50px * cos(360deg)), calc(50px * sin(360deg))) rotate(360deg) scale(120%);
+  }
+}
+@keyframes moveInCircleRepeat {
+  0% {
+    transform: translate(calc(50px * cos(0deg)), calc(50px * sin(0deg))) rotate(0deg) scale(120%);
+  }
+  25% {
+    transform: translate(calc(50px * cos(90deg)), calc(50px * sin(90deg))) rotate(90deg) scale(200%);
+  }
+  50% {
+    transform: translate(calc(50px * cos(180deg)), calc(50px * sin(180deg))) rotate(180deg) scale(280%);
+  }
+  75% {
+    transform: translate(calc(50px * cos(270deg)), calc(50px * sin(270deg))) rotate(270deg) scale(200%);
+  }
+  100% {
+    transform: translate(calc(50px * cos(360deg)), calc(50px * sin(360deg))) rotate(360deg) scale(120%);
   }
 }
 
