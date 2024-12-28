@@ -543,7 +543,7 @@ onBeforeUnmount(() => {
   <n-space vertical :size="12">
     <n-space>
       <n-space v-if="store_router_data_info.store_router_history_data_of_local">
-        <n-button quaternary circle size="medium" style="margin-left:2px" @click="get_router_history_model_pervious">
+        <n-button quaternary circle style="margin-left:2px" @click="get_router_history_model_pervious">
           <template #icon>
             <n-icon :size="20"><ChevronLeft16Filled/></n-icon>
           </template>
@@ -551,14 +551,14 @@ onBeforeUnmount(() => {
         <div style="margin-top: 4px;">
           {{ store_router_history_data_of_album.router_select_history_date_of_Album?.id ?? '' }} / {{ store_router_history_data_of_album.router_history_datas_of_Album?.length ?? '' }}
         </div>
-        <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_next">
+        <n-button quaternary circle style="margin-left:4px" @click="get_router_history_model_next">
           <template #icon>
             <n-icon :size="20"><ChevronRight16Filled/></n-icon>
           </template>
         </n-button>
       </n-space>
 
-      <n-button quaternary circle size="medium" style="margin-left:4px" @click="show_search_area">
+      <n-button quaternary circle style="margin-left:4px" @click="show_search_area">
         <template #icon>
           <n-icon :size="20"><Search20Filled/></n-icon>
         </template>
@@ -577,7 +577,7 @@ onBeforeUnmount(() => {
         v-if="!(store_server_user_model.model_server_type_of_web && store_view_album_page_logic.page_albumlists_selected === 'album_list_recently')"
         trigger="click" :show-arrow="true" 
         :options="options_Sort" @select="handleSelect_Sort">
-        <n-button quaternary circle size="medium" style="margin-left:4px">
+        <n-button quaternary circle style="margin-left:4px">
           <template #icon>
             <n-icon :size="20"><ArrowSort24Regular/></n-icon>
           </template>
@@ -587,7 +587,7 @@ onBeforeUnmount(() => {
       <n-dropdown 
         trigger="click" :show-arrow="true" 
         :options="options_Filter" @select="options_Filter_handleSelect">
-        <n-button quaternary circle size="medium" style="margin-left:4px">
+        <n-button quaternary circle style="margin-left:4px">
           <template #icon>
             <n-icon :size="20"><Filter20Filled/></n-icon>
           </template>
@@ -595,12 +595,12 @@ onBeforeUnmount(() => {
       </n-dropdown>
 
       <n-divider vertical style="width: 2px;height: 20px;margin-top: 8px;"/>
-      <n-button quaternary circle size="medium" style="margin-left:4px" @click="onRefreshSharp">
+      <n-button quaternary circle style="margin-left:4px" @click="onRefreshSharp">
         <template #icon>
           <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
         </template>
       </n-button>
-      <n-button quaternary circle size="medium" style="margin-left:4px" @click="onRefreshSharp">
+      <n-button quaternary circle style="margin-left:4px" @click="onRefreshSharp">
         <template #icon>
           <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
         </template>

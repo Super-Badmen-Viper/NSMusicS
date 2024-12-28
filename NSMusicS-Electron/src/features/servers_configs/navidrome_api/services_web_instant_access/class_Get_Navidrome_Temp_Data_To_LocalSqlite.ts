@@ -57,6 +57,15 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         url: string,
         username: string,token: string,salt: string
     ){
+        await this.get_home_list_of_maximum_playback(url, username, token, salt)
+        await this.get_home_list_of_random_search(url, username, token, salt)
+        await this.get_home_list_of_recently_added(url, username, token, salt)
+        await this.get_home_list_of_recently_played(url, username, token, salt)
+    }
+    public async get_home_list_of_maximum_playback(
+        url: string,
+        username: string,token: string,salt: string
+    ){
         const maximum_playback = await this.home_Lists_ApiWebService_of_ND.getAlbumList_Play_Count()
         maximum_playback.map(async (album: any) => {
             store_view_home_page_info.home_Files_temporary_maximum_playback.push(
@@ -103,6 +112,11 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                 }
             )
         });
+    }
+    public async get_home_list_of_random_search(
+        url: string,
+        username: string,token: string,salt: string
+    ){
         const random_search = await this.home_Lists_ApiWebService_of_ND.getAlbumList_Random()
         random_search.map(async (album: any) => {
             store_view_home_page_info.home_Files_temporary_random_search.push(
@@ -149,6 +163,11 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                 }
             )
         });
+    }
+    public async get_home_list_of_recently_added(
+        url: string,
+        username: string,token: string,salt: string
+    ){
         const recently_added = await this.home_Lists_ApiWebService_of_ND.getAlbumList_Recently_Added()
         recently_added.map(async (album: any) => {
             store_view_home_page_info.home_Files_temporary_recently_added.push(
@@ -195,6 +214,11 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                 }
             )
         });
+    }
+    public async get_home_list_of_recently_played(
+        url: string,
+        username: string,token: string,salt: string
+    ){
         const recently_played = await this.home_Lists_ApiWebService_of_ND.getAlbumList_Play_Date()
         recently_played.map(async (album: any) => {
             store_view_home_page_info.home_Files_temporary_recently_played.push(

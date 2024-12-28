@@ -147,7 +147,7 @@ function getAssetImage(firstImage: string) {
         :options="[{
           label: '播放 / 暂停',
           key: 'marina bay sands'}]">
-        <n-button quaternary round size="medium" @click="store_player_audio_logic.player_click_state_of_play = true">
+        <n-button quaternary round @click="store_player_audio_logic.player_click_state_of_play = true">
           <template #icon>
             <n-icon v-if="store_player_audio_logic.player.isPlaying" :size="36"><Pause/></n-icon>
             <n-icon v-else :size="36"><Play/></n-icon>

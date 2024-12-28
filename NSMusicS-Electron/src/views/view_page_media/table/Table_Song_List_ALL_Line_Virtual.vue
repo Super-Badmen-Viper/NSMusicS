@@ -811,7 +811,7 @@ onBeforeUnmount(() => {
   <n-space vertical :size="12">
     <n-space>
       <n-space v-if="store_router_data_info.store_router_history_data_of_local">
-        <n-button quaternary circle size="medium" style="margin-left:2px" @click="get_router_history_model_pervious">
+        <n-button quaternary circle style="margin-left:2px" @click="get_router_history_model_pervious">
           <template #icon>
             <n-icon size="20" :depth="2"><ChevronLeft16Filled/></n-icon>
           </template>
@@ -819,14 +819,14 @@ onBeforeUnmount(() => {
         <div style="margin-top: 4px;">
           {{ store_router_history_data_of_media.router_select_history_date_of_Media?.id ?? '' }} / {{ store_router_history_data_of_media.router_history_datas_of_Media?.length ?? '' }}
         </div>
-        <n-button quaternary circle size="medium" style="margin-left:4px" @click="get_router_history_model_next">
+        <n-button quaternary circle style="margin-left:4px" @click="get_router_history_model_next">
           <template #icon>
             <n-icon size="20" :depth="2"><ChevronRight16Filled/></n-icon>
           </template>
         </n-button>
       </n-space>
 
-      <n-button quaternary circle size="medium" style="margin-left:4px" @click="show_search_area">
+      <n-button quaternary circle style="margin-left:4px" @click="show_search_area">
         <template #icon>
           <n-icon :size="20" :depth="2"><Search20Filled/></n-icon>
         </template>
@@ -844,7 +844,7 @@ onBeforeUnmount(() => {
       <n-dropdown
           trigger="click" :show-arrow="true"
           :options="options_Sort" @select="handleSelect_Sort">
-        <n-button quaternary circle size="medium" style="margin-left:4px">
+        <n-button quaternary circle style="margin-left:4px">
           <template #icon>
             <n-icon :size="20" :depth="2"><ArrowSort24Regular/></n-icon>
           </template>
@@ -853,7 +853,7 @@ onBeforeUnmount(() => {
 
       <n-badge
           :value="store_view_media_page_logic.page_songlists_filter_year" :offset="[-17, 40]">
-        <n-button quaternary circle size="medium" style="margin-left:4px" @click="Type_Filter_Show = true">
+        <n-button quaternary circle style="margin-left:4px" @click="Type_Filter_Show = true">
           <template #icon>
             <n-icon :size="20"><Filter20Filled/></n-icon>
           </template>
@@ -883,19 +883,19 @@ onBeforeUnmount(() => {
 
       <n-button
           v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
-          quaternary circle size="medium" style="margin-left:4px" @click="click_open_bulk_operation">
+          quaternary circle style="margin-left:4px" @click="click_open_bulk_operation">
         <template #icon>
           <n-icon :size="20" :depth="2"><MultiselectLtr20Filled/></n-icon>
         </template>
       </n-button>
 
       <n-space v-if="!bool_start_play">
-        <n-button quaternary circle size="medium" style="margin-left:4px" @click="click_select_SongList_ALL_Line">
+        <n-button quaternary circle style="margin-left:4px" @click="click_select_SongList_ALL_Line">
           <template #icon>
             <n-icon :size="20" :depth="2"><SelectAllOn24Regular/></n-icon>
           </template>
         </n-button>
-        <n-button quaternary circle size="medium" style="margin-left:4px" @click="Type_Selected_Media_File_To_Playlist = !Type_Selected_Media_File_To_Playlist">
+        <n-button quaternary circle style="margin-left:4px" @click="Type_Selected_Media_File_To_Playlist = !Type_Selected_Media_File_To_Playlist">
           <template #icon>
             <n-icon :size="20" :depth="2"><AddCircle32Regular/></n-icon>
           </template>
@@ -911,7 +911,7 @@ onBeforeUnmount(() => {
               && store_view_media_page_logic.page_songlists_selected !== 'song_list_all'
               && store_server_user_model.model_server_type_of_web === false)
           "
-          quaternary circle size="medium" style="margin-left:4px" @click="update_button_deleteMediaFile_selected">
+          quaternary circle style="margin-left:4px" @click="update_button_deleteMediaFile_selected">
           <template #icon>
             <n-icon :size="20" :depth="2"><Delete20Regular/></n-icon>
           </template>
@@ -926,7 +926,7 @@ onBeforeUnmount(() => {
         @select="begin_select_SongList_ALL_Line_of_playback"
       >
         <n-button
-            quaternary circle size="medium" style="margin-left:4px;" @click="begin_select_SongList_ALL_Line_of_playback_1">
+            quaternary circle style="margin-left:4px;" @click="begin_select_SongList_ALL_Line_of_playback_1">
           <template #icon>
             <n-icon :size="20" :depth="2"><Play/></n-icon>
           </template>
@@ -934,12 +934,12 @@ onBeforeUnmount(() => {
       </n-dropdown>
 
       <n-divider vertical style="width: 2px;height: 20px;margin-top: 8px;"/>
-      <n-button quaternary circle size="medium" style="margin-left:4px" @click="onRefreshSharp">
+      <n-button quaternary circle style="margin-left:4px" @click="onRefreshSharp">
         <template #icon>
           <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
         </template>
       </n-button>
-      <n-button quaternary circle size="medium" style="margin-left:4px" @click="onRefreshSharp">
+      <n-button quaternary circle style="margin-left:4px" @click="onRefreshSharp">
         <template #icon>
           <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
         </template>

@@ -574,7 +574,7 @@
             backgroundImage: `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
             filter: store_player_appearance.player_use_background_filter_blur ?
               'brightness(46%) blur(60px)' : 'brightness(46%) blur(0px)',
-            backgroundSize: store_player_appearance.player_use_background_repeat_fill ? '20vw 20vw' : 'cover',
+            backgroundSize: store_player_appearance.player_use_background_repeat_fill ? '20vw auto' : 'cover',
             backgroundRepeat: store_player_appearance.player_use_background_repeat_fill ? 'repeat' : 'no-repeat',
             backgroundPosition: 'center'
           }"
@@ -817,7 +817,7 @@
           <!-- -->
           <n-flex justify="end" style="width: 400px;height: 70px;">
             <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
-              <n-button quaternary circle size="medium"
+              <n-button quaternary circle
                         style="margin-right:4px;"
                         v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
                         @click="maximize_screen">
@@ -825,7 +825,7 @@
                   <n-icon size="20" :depth="3" style="margin-top: 1px;"><FullScreenMaximize16Regular/></n-icon>
                 </template>
               </n-button>
-              <n-button quaternary circle size="medium"
+              <n-button quaternary circle
                         style="margin-right:4px"
                         v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
                         @click="minimize">
@@ -833,7 +833,7 @@
                   <n-icon size="18" :depth="3"><ArrowMinimize16Regular/></n-icon>
                 </template>
               </n-button>
-              <n-button quaternary circle size="medium"
+              <n-button quaternary circle
                         style="margin-right:4px"
                         v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
                         @click="maximize">
@@ -841,7 +841,7 @@
                   <n-icon size="24" :depth="3"><Maximize16Regular/></n-icon>
                 </template>
               </n-button>
-              <n-button quaternary circle size="medium"
+              <n-button quaternary circle
                         style="margin-right:30px"
                         v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
                         @click="closeWindow">

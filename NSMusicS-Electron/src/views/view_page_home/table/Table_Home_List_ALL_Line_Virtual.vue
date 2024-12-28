@@ -112,6 +112,7 @@ onMounted(() => {
 });
 
 ////// dynamicScroller of albumlist_view
+import {store_view_home_page_fetchData} from "@/store/view/home/store_view_home_page_fetchData";
 const dynamicScroller_maximum_playback = ref(null as any);
 let offset_maximum_playback = 0;
 const scrollTo_maximum_playback = (value :number) => {
@@ -449,7 +450,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 16px;font-weight: 600;">
           {{ $t('page.home.mostPlayed') }}
         </span>
-        <n-button quaternary circle @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_maximum_playback()">
           <template #icon>
             <n-icon :size="20"><RefreshSharp/></n-icon>
           </template>
@@ -584,7 +585,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 16px;font-weight: 600;">
           {{ $t('page.home.explore') }}
         </span>
-        <n-button quaternary circle size="medium" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_random_search()">
           <template #icon>
             <n-icon :size="20"><RefreshSharp/></n-icon>
           </template>
@@ -719,7 +720,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 16px;font-weight: 600;">
           {{ $t('page.home.newlyAdded') }}
         </span>
-        <n-button quaternary circle size="medium" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_recently_added()">
           <template #icon>
             <n-icon :size="20"><RefreshSharp/></n-icon>
           </template>
@@ -854,7 +855,7 @@ onBeforeUnmount(() => {
         <span style="font-size: 16px;font-weight: 600;">
           {{ $t('page.home.recentlyPlayed') }}
         </span>
-        <n-button quaternary circle size="medium" @click="store_view_home_page_logic.list_data_StartUpdate = true">
+        <n-button quaternary circle @click="store_view_home_page_fetchData.fetchData_Home_of_recently_played()">
           <template #icon>
             <n-icon :size="20"><RefreshSharp/></n-icon>
           </template>

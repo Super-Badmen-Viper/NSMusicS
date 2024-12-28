@@ -84,7 +84,7 @@ import {MoreCircle32Regular} from "@vicons/fluent";
             <n-space align="center" justify="space-between"
                      style="margin-left: 10px;margin-right: 4px;margin-bottom: -10px;">
               <span>xiang</span>
-              <n-button quaternary circle size="medium">
+              <n-button quaternary circle>
                 <template #icon>
                   <n-icon :size="20"><MoreCircle32Regular/></n-icon>
                 </template>

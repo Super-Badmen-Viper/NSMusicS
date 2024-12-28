@@ -861,35 +861,35 @@
 <!--                  </template>-->
 <!--                  &lt;!&ndash;<span style="font-weight: 500;">{{ $t('setting.clearQueryCache') }}</span>&ndash;&gt;-->
 <!--                </n-button>-->
-                <n-button quaternary circle size="medium"
+                <n-button quaternary circle
                           :style="{ marginRight: store_app_configs_info.desktop_system_kind != 'darwin' ? '4px' : '30px' }"
                           @click="store_app_configs_logic_theme.theme_mode_change_click()">
                   <template #icon>
                     <n-icon size="20" :depth="2"><DarkTheme24Filled/></n-icon>
                   </template>
                 </n-button>
-                <n-button quaternary circle size="medium" style="margin-right:4px;"
+                <n-button quaternary circle style="margin-right:4px;"
                           v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
                           @click="ipcRenderer.send('window-fullscreen');">
                   <template #icon>
                     <n-icon size="20" :depth="2" style="margin-top: 1px;"><FullScreenMaximize16Regular/></n-icon>
                   </template>
                 </n-button>
-                <n-button quaternary circle size="medium" style="margin-right:4px"
+                <n-button quaternary circle style="margin-right:4px"
                           v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
                           @click="ipcRenderer.send('window-min');">
                   <template #icon>
                     <n-icon size="24" :depth="2"><MinusRound/></n-icon>
                   </template>
                 </n-button>
-                <n-button quaternary circle size="medium" style="margin-right:4px"
+                <n-button quaternary circle style="margin-right:4px"
                           v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
                           @click="ipcRenderer.send('window-max');">
                   <template #icon>
                     <n-icon size="24" :depth="2"><Maximize16Regular/></n-icon>
                   </template>
                 </n-button>
-                <n-button quaternary circle size="medium" style="margin-right:30px"
+                <n-button quaternary circle style="margin-right:30px"
                           v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
                           @click="ipcRenderer.send('window-close');">
                   <template #icon>
@@ -1027,7 +1027,7 @@
         ">
         <n-drawer-content>
           <template #default>
-            <n-card :title="computed_i18n_Label_Update" size="medium" style="background-color: transparent">
+            <n-card :title="computed_i18n_Label_Update" style="background-color: transparent">
               <n-space vertical style="font-size: 16px; font-weight: bolder;">
                 <div>{{$t('nsmusics.view_page.current')}}{{$t('common.version')}} : {{ store_app_configs_info.version }}</div>
                 <div>{{$t('nsmusics.view_page.last_next')}}{{$t('common.version')}} : {{ store_app_configs_logic_update.version }}</div>

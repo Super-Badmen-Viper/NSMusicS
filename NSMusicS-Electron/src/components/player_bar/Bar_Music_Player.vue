@@ -800,7 +800,9 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
           </n-space>
         </div>
       </div>
-      <div class="gird_Middle"
+      <n-space
+          class="gird_Middle"
+          vertical align="center"
            @mousemove="()=>{
              store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
            }"
@@ -808,7 +810,14 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
              store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
            }">
         <!-- grid_Middle_button_area -->
-        <n-space class="grid_Middle_button_area" justify="center">
+        <n-space class="grid_Middle_button_area"
+                 :style="{
+                    margin: store_player_appearance.player_show === false ?
+                      '10px auto 0'
+                      :
+                      store_player_appearance.player_background_model_num === 3 ? '10px auto 0' : '22px auto 0',
+                 }"
+                 justify="center">
           <n-button quaternary round size="small"
                     @click="backpanel_order_click" @mouseover="store_player_audio_logic.drawer_order_show = true;">
             <template #icon>
@@ -837,7 +846,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
               :options="[{
               label: '播放 / 暂停',
               key: 'marina bay sands'}]">
-            <n-button quaternary round size="medium" @click="Init_Audio_Player">
+            <n-button quaternary round @click="Init_Audio_Player">
               <template #icon>
                 <n-icon v-if="store_player_audio_logic.player.isPlaying" :size="36"><Pause/></n-icon>
                 <n-icon v-else :size="36"><Play/></n-icon>
@@ -856,14 +865,25 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
           </n-button>
         </n-space>
         <!-- grid_Middle_slider_area -->
-        <div>
+        <n-space
+            style="width: 460px;"
+            :style="{
+              marginTop: store_player_appearance.player_show === false
+              ||
+              (store_player_appearance.player_show && store_player_appearance.player_background_model_num === 3)
+              ? '-2px' : '30px'
+            }"
+            align="center" justify="center">
+          <n-space style="width: 46px;" justify="end">
+            {{ store_player_audio_logic.current_play_time }}
+          </n-space>
           <n-slider
             style="
-            width: 90%;
-            margin-left:5%;margin-top:8px;
-            color: #3DC3FF;
-            border-radius: 10px;
-          "
+              width: 320px;
+              color: #3DC3FF;
+              border-radius: 10px;
+              transition: margin 0.4s;
+            "
             v-model:value="store_player_audio_logic.slider_singleValue"
             :min="0" :max="100" :keyboard="true"
             :format-tooltip="(value) => {
@@ -884,7 +904,10 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
             @mousedown="store_player_audio_logic.player_range_duration_isDragging = true"
             @mouseup="store_player_audio_logic.player_range_duration_isDragging = false"
           />
-        </div>
+          <n-space style="width: 46px;">
+            {{ store_player_audio_logic.total_play_time }}
+          </n-space>
+        </n-space>
         <!-- grid_Middle_drwaer_area -->
         <n-config-provider :theme="null" v-if="false">
           <div id="backpanel_order" @mouseleave="backpanel_order_leave"></div>
@@ -981,7 +1004,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
             </n-drawer-content>
           </n-drawer>
         </n-config-provider>
-      </div>
+      </n-space>
       <div class="gird_Right"
            @mousemove="()=>{
              store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
@@ -1144,7 +1167,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
 
 
 .gird_Middle {
-  width: 400px;
+  width: 460px;
   height: 80px;
   align-items: center;
 }
@@ -1152,7 +1175,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
   display: flex;
   align-items: center;
   width: 300px;
-  margin: 10px auto 0;
+  transition: margin 0.4s;
 }
 .gird_Middle #backpanel_order{
   position: absolute;
