@@ -370,7 +370,7 @@
     store_view_media_page_logic.page_songlists_options.push(temp_Play_List_Recently);
     store_view_media_page_logic.page_songlists_statistic.push({
       label: temp_Play_List_Recently.label,
-      song_count: temp_Play_List_Recently.song_count.toString(),
+      song_count: store_server_user_model.model_server_type_of_local ? temp_Play_List_Recently.song_count.toString() : '*' + ' *',
       id: temp_Play_List_Recently.id
     });
     store_view_media_page_logic.page_songlists.push(temp_Play_List_Recently)
