@@ -108,11 +108,15 @@ const mpvAPI = require('node-mpv');
 let mpv = null;
 
 /// node-db
-let navidrome_db = path.resolve('resources/navidrome.db');
-let nsmusics_db = path.resolve('resources/nsmusics.db');
+const resourcesPath = process.env.NODE_ENV === 'development'
+    ? path.resolve('resources')
+    : path.join(process.resourcesPath)
+let navidrome_db = path.join(resourcesPath, 'navidrome.db');
+let nsmusics_db = path.join(resourcesPath, 'nsmusics.db');
 let cDriveDbPath_1 = 'C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db';
 let cDriveDbPath_2 = 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db';
 let cDriveDbDir = 'C:\\Users\\Public\\Documents\\NSMusicS';
+
 
 /// electron-gc
 async function clearSessionClearCache() {
@@ -166,47 +170,47 @@ async function initSqlite3() {
                 .then(async () => {
                     await Promise.all([
                         copyIfNotExists(
-                            path.resolve('resources/navidrome.db'),
+                            path.join(resourcesPath, 'navidrome.db'),
                             cDriveDbPath_1).then(
                             (newPath) => navidrome_db = newPath),
                         copyIfNotExists(
-                            path.resolve('resources/nsmusics.db'),
+                            path.join(resourcesPath, 'nsmusics.db'),
                             cDriveDbPath_2).then(
                             (newPath) => nsmusics_db = newPath),
 
                         copyIfNotExists(
-                            path.resolve('resources/lottie_json/Animation - 1715392202806.json'),
+                            path.join(resourcesPath, 'lottie_json/Animation - 1715392202806.json'),
                             path.join(cDriveDbDir, 'Animation - 1715392202806.json')).then((newPath) => {}),
                         copyIfNotExists(
-                            path.resolve('resources/lottie_json/Animation - 1715591164841.json'),
+                            path.join(resourcesPath, 'lottie_json/Animation - 1715591164841.json'),
                             path.join(cDriveDbDir, 'Animation - 1715591164841.json')).then((newPath) => {}),
                         copyIfNotExists(
-                            path.resolve('resources/lottie_json/Animation - 1715417974362.json'),
+                            path.join(resourcesPath, 'lottie_json/Animation - 1715417974362.json'),
                             path.join(cDriveDbDir, 'Animation - 1715417974362.json')).then((newPath) => {}),
                         copyIfNotExists(
-                            path.resolve('resources/lottie_json/Animation - 1734617399494.json'),
+                            path.join(resourcesPath, 'lottie_json/Animation - 1734617399494.json'),
                             path.join(cDriveDbDir, 'Animation - 1734617399494.json')).then((newPath) => {}),
 
                         copyIfNotExists(
-                            path.resolve('resources/svg/shrink_down_arrow.svg'),
+                            path.join(resourcesPath, 'svg/shrink_down_arrow.svg'),
                             path.join(cDriveDbDir, 'shrink_down_arrow.svg')).then((newPath) => {}),
                         copyIfNotExists(
-                            path.resolve('resources/svg/shrink_up_arrow.svg'),
+                            path.join(resourcesPath, 'svg/shrink_up_arrow.svg'),
                             path.join(cDriveDbDir, 'shrink_up_arrow.svg')).then((newPath) => {}),
                         copyIfNotExists(
-                            path.resolve('resources/img/error_album.jpg'),
+                            path.join(resourcesPath, 'img/error_album.jpg'),
                             path.join(cDriveDbDir, 'error_album.jpg')).then((newPath) => {}),
                         copyIfNotExists(
-                            path.resolve('resources/img/player_theme_1.png'),
+                            path.join(resourcesPath, 'img/player_theme_1.png'),
                             path.join(cDriveDbDir, 'player_theme_1.png')).then((newPath) => {}),
                         copyIfNotExists(
-                            path.resolve('resources/img/player_theme_2.png'),
+                            path.join(resourcesPath, 'img/player_theme_2.png'),
                             path.join(cDriveDbDir, 'player_theme_2.png')).then((newPath) => {}),
                         copyIfNotExists(
-                            path.resolve('resources/img/player_theme_3.png'),
+                            path.join(resourcesPath, 'img/player_theme_3.png'),
                             path.join(cDriveDbDir, 'player_theme_3.png')).then((newPath) => {}),
                         copyIfNotExists(
-                            path.resolve('resources/img/player_theme_4.png'),
+                            path.join(resourcesPath, 'img/player_theme_4.png'),
                             path.join(cDriveDbDir, 'player_theme_4.png')).then((newPath) => {})
                     ]).catch((err) => {
                         console.error('复制文件时出错:', err);
@@ -418,8 +422,8 @@ async function initSqlite3() {
         }
     }
     catch{
-        navidrome_db = path.resolve('resources/navidrome.db');
-        nsmusics_db = path.resolve('resources/nsmusics.db');
+        navidrome_db = path.join(resourcesPath, 'navidrome.db');
+        nsmusics_db = path.join(resourcesPath, 'nsmusics.db');
     }
 }
 
@@ -777,7 +781,7 @@ async function createWindow() {
     async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
         const Database = require('better-sqlite3');
         const db = new Database(navidrome_db, {
-            nativeBinding: path.resolve('resources/better_sqlite3.node')
+            nativeBinding: path.join(resourcesPath, 'better_sqlite3.node')
         });
         db.pragma('journal_mode = WAL');
 
@@ -1167,35 +1171,35 @@ async function createTray(){
     /// Tray
     let tray = null;
     if(process.platform === 'win32') {
-        tray = new Tray(path.resolve('resources/config/NSMusicS.ico'));
+        tray = new Tray(path.join(resourcesPath, 'config/NSMusicS.ico'));
     }else if(process.platform === 'darwin') {
-        tray = new Tray(nativeImage.createFromPath(path.resolve('resources/config/png/256x256.png')).resize({ width: 16, height: 16 }));
+        tray = new Tray(nativeImage.createFromPath(path.join(resourcesPath, 'config/png/256x256.png')).resize({ width: 16, height: 16 }));
     }else if(process.platform === 'linux') {
-        tray = new Tray(path.resolve('resources/config/png/256x256.png'));
+        tray = new Tray(path.join(resourcesPath, 'config/png/256x256.png'));
     }
-    let playIcon = createResizedIcon(path.resolve('resources/icons/Play.png'), 18, 18);
-    let pauseIcon = createResizedIcon(path.resolve('resources/icons/Pause.png'), 22, 22);
-    let prevIcon = createResizedIcon(path.resolve('resources/icons/PlaySkipBack.png'), 16, 16);
-    let nextIcon = createResizedIcon(path.resolve('resources/icons/PlaySkipForward.png'), 16, 16);
-    let lyricIcon = createResizedIcon(path.resolve('resources/icons/Lyric.png'), 16, 16);
-    let musicIcon = createResizedIcon(path.resolve('resources/icons/MusicalNotes 1.png'), 16, 16);
-    let shutIcon = createResizedIcon(path.resolve('resources/icons/ShutDown.png'), 16, 16);
-    let order1Icon = createResizedIcon(path.resolve('resources/icons/ArrowAutofitDown24Regular.png'), 18, 18);
-    let order2Icon = createResizedIcon(path.resolve('resources/icons/ArrowRepeatAll16Regular.png'), 18, 18);
-    let order3Icon = createResizedIcon(path.resolve('resources/icons/SingleTuneirculation.png'), 16, 16);
-    let order4Icon = createResizedIcon(path.resolve('resources/icons/Shuffle.png'), 17, 17);
+    let playIcon = createResizedIcon(path.join(resourcesPath, 'icons/Play.png'), 18, 18);
+    let pauseIcon = createResizedIcon(path.join(resourcesPath, 'icons/Pause.png'), 22, 22);
+    let prevIcon = createResizedIcon(path.join(resourcesPath, 'icons/PlaySkipBack.png'), 16, 16);
+    let nextIcon = createResizedIcon(path.join(resourcesPath, 'icons/PlaySkipForward.png'), 16, 16);
+    let lyricIcon = createResizedIcon(path.join(resourcesPath, 'icons/Lyric.png'), 16, 16);
+    let musicIcon = createResizedIcon(path.join(resourcesPath, 'icons/MusicalNotes 1.png'), 16, 16);
+    let shutIcon = createResizedIcon(path.join(resourcesPath, 'icons/ShutDown.png'), 16, 16);
+    let order1Icon = createResizedIcon(path.join(resourcesPath, 'icons/ArrowAutofitDown24Regular.png'), 18, 18);
+    let order2Icon = createResizedIcon(path.join(resourcesPath, 'icons/ArrowRepeatAll16Regular.png'), 18, 18);
+    let order3Icon = createResizedIcon(path.join(resourcesPath, 'icons/SingleTuneirculation.png'), 16, 16);
+    let order4Icon = createResizedIcon(path.join(resourcesPath, 'icons/Shuffle.png'), 17, 17);
     function get_tray_Icon(){
-        playIcon = createResizedIcon(path.resolve('resources/icons/Play.png'), 18, 18);
-        pauseIcon = createResizedIcon(path.resolve('resources/icons/Pause.png'), 22, 22);
-        prevIcon = createResizedIcon(path.resolve('resources/icons/PlaySkipBack.png'), 16, 16);
-        nextIcon = createResizedIcon(path.resolve('resources/icons/PlaySkipForward.png'), 16, 16);
-        lyricIcon = createResizedIcon(path.resolve('resources/icons/Lyric.png'), 16, 16);
-        musicIcon = createResizedIcon(path.resolve('resources/icons/MusicalNotes 1.png'), 16, 16);
-        shutIcon = createResizedIcon(path.resolve('resources/icons/ShutDown.png'), 16, 16);
-        order1Icon = createResizedIcon(path.resolve('resources/icons/ArrowAutofitDown24Regular.png'), 18, 18);
-        order2Icon = createResizedIcon(path.resolve('resources/icons/ArrowRepeatAll16Regular.png'), 18, 18);
-        order3Icon = createResizedIcon(path.resolve('resources/icons/SingleTuneirculation.png'), 16, 16);
-        order4Icon = createResizedIcon(path.resolve('resources/icons/Shuffle.png'), 17, 17);
+        playIcon = createResizedIcon(path.join(resourcesPath, 'icons/Play.png'), 18, 18);
+        pauseIcon = createResizedIcon(path.join(resourcesPath, 'icons/Pause.png'), 22, 22);
+        prevIcon = createResizedIcon(path.join(resourcesPath, 'icons/PlaySkipBack.png'), 16, 16);
+        nextIcon = createResizedIcon(path.join(resourcesPath, 'icons/PlaySkipForward.png'), 16, 16);
+        lyricIcon = createResizedIcon(path.join(resourcesPath, 'icons/Lyric.png'), 16, 16);
+        musicIcon = createResizedIcon(path.join(resourcesPath, 'icons/MusicalNotes 1.png'), 16, 16);
+        shutIcon = createResizedIcon(path.join(resourcesPath, 'icons/ShutDown.png'), 16, 16);
+        order1Icon = createResizedIcon(path.join(resourcesPath, 'icons/ArrowAutofitDown24Regular.png'), 18, 18);
+        order2Icon = createResizedIcon(path.join(resourcesPath, 'icons/ArrowRepeatAll16Regular.png'), 18, 18);
+        order3Icon = createResizedIcon(path.join(resourcesPath, 'icons/SingleTuneirculation.png'), 16, 16);
+        order4Icon = createResizedIcon(path.join(resourcesPath, 'icons/Shuffle.png'), 17, 17);
     }
     /// label
     let tray_menu_label_play = '播放';
@@ -1686,7 +1690,7 @@ async function initModifyMediaTag(){
                 //
                 const Database = require('better-sqlite3');
                 const db = new Database(navidrome_db, {
-                    nativeBinding: path.resolve('resources/better_sqlite3.node')
+                    nativeBinding: path.join(resourcesPath, 'better_sqlite3.node')
                 });
                 db.pragma('journal_mode = WAL');
                 // 处理 _tag.albumArtists 和 _tag.artist
