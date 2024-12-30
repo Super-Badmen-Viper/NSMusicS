@@ -27,6 +27,7 @@ import {
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
 import {Audio_howler} from "@/models/song_Audio_Out/Audio_howler";
+import {store_view_media_page_info} from "../view/media/store_view_media_page_info";
 const { ipcRenderer } = require('electron');
 
 export const store_server_user_model = reactive({
@@ -101,11 +102,6 @@ watch(() => store_server_user_model.library_path, (newValue) => {
 });
 watch(() => store_server_user_model.model_select, async (newValue) => {
     if(!store_app_configs_logic_load.app_configs_loading) {
-        // Refresh Playlist(Local / Server)
-        await store_playlist_list_logic.reset_data()
-        store_playlist_list_info.playlist_MediaFiles_temporary = []
-        // Refresh Router Data
-        store_router_data_logic.reset_data()
         // Refresh Current AudioInfo
         await store_player_audio_info.reset_data()
         if(store_player_audio_logic.player_select === 'mpv') {
@@ -144,6 +140,11 @@ watch(() => store_server_user_model.model_select, async (newValue) => {
                 store_player_audio_logic.player = new Audio_howler();
             }
         }catch{  }
+        // Refresh Playlist(Local / Server)
+        await store_playlist_list_logic.reset_data()
+        store_playlist_list_info.playlist_MediaFiles_temporary = []
+        // Refresh Router Data
+        store_router_data_logic.reset_data()
         //
         store_app_configs_logic_save.save_system_config_of_App_Configs()
     }

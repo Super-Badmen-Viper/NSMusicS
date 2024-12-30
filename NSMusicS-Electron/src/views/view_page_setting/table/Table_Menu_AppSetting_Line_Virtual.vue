@@ -1039,7 +1039,7 @@
                 <n-space vertical>
                   <n-space justify="space-between" align="center">
                     <n-space vertical>
-                      <span style="font-size:16px;font-weight: 600;">{{ $t('setting.language') + ' | Language' }}</span>
+                      <span style="font-size:16px;font-weight: 600;">{{ $t('setting.language') }}</span>
                       <div style="margin-top: -10px;">
                         <span style="font-size:12px;">{{ $t('setting.language_description') }}</span>
                       </div>

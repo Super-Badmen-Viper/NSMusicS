@@ -5,6 +5,8 @@
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
     1.1.6更新内容;
+    增加对Linux系统客户端的支持[√];
+    增加对MacOS系统客户端的MPV兼容，完善对MPV唤起/注销的流程[√];
     播放界面的设计元素引入apple music的设计风格，改进了各类页面的UI交互[√];
     修复音频输出模式切换时出现的错误弹窗[√];
     增加Web输出模式的自定义选择音频设备输出[√];
@@ -21,10 +23,7 @@
     ;;
     后续即将更新的功能;
     初步构建Emby-Jellyfin的多媒体媒体库(仅UI界面，未开放)至当前NSMusicS-Electron版本中;
-    增加对Linux系统客户端的支持;
-    增加对MacOS系统客户端的MPV兼容，完善对MPV唤起/注销的流程;
     增加对MaxOS系统客户端的本地模式兼容，完善对MacOSX文件系统的访问兼容;
-    增加对MaxOS系统客户端的后台托盘服务的兼容，完善对MacOSX任务栏托盘以及后台管理的兼容;
     为每一个按钮都添加鼠标悬浮提示说明，更好帮助用户友好使用[进行中];
     增加音效-均衡器(简易/专业)功能(仅适用于音频输出源为howler.js(web输出));
     为专辑-乐曲-艺术家页面添加高级筛选: 年份，流派.....[任意条件];
