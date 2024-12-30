@@ -1422,7 +1422,7 @@ onBeforeUnmount(() => {
 .songlist_title{
   margin-left: 10px;
   text-align: left;
-  width: 390px;
+  width: 36vw;
   font-size: 15px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
@@ -1434,7 +1434,7 @@ onBeforeUnmount(() => {
 .songlist_album{
   margin-left: 10px;
   text-align: left;
-  width: 346px;
+  width: 22vw;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }
 .songlist_album :hover{
