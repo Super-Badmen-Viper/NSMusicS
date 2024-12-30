@@ -48,8 +48,19 @@ export const viteElectronBuild = (): Plugin => {
                         icon: 'resources/config/NSMusicS.ico',
                         artifactName: '${productName}-Win-${version}-${arch}.${ext}',
                     },
+//, 'pacman',
+
+// deb: 
+// ubuntu
+// sudo apt update
+// sudo apt install gnome-software
+// sudo apt install ruby ruby-dev build-essential
+// sudo gem install fpm
+
+// icon
+// resources/config/png: sudo chmod 0644 *
                     linux: {
-                        target: ['AppImage', 'deb'],//, 'pacman'
+                        target: ['AppImage', 'deb'],
                         icon: 'resources/config/NSMusicS.icns',
                         desktop:{
                             Icon:"/usr/share/icons/hicolor/512x512/apps/nsmusics.png"
