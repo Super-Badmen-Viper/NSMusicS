@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>1.1.6</version>
+<version>1.1.7</version>
 <url> </url>
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
-    1.1.6更新内容;
+    1.1.7更新内容;
+    修复了一些UI样式[√];
     增加对Linux系统客户端的支持[√];
     增加对MacOS系统客户端的MPV兼容，完善对MPV唤起/注销的流程[√];
     播放界面的设计元素引入apple music的设计风格，改进了各类页面的UI交互[√];
