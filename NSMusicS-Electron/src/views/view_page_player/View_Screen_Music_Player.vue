@@ -573,7 +573,7 @@
           :style="{
             backgroundImage: `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
             filter: store_player_appearance.player_use_background_filter_blur ?
-              'brightness(46%) blur(60px)' : 'brightness(46%) blur(0px)',
+              'brightness(46%) blur(40px)' : 'brightness(46%) blur(0px)',
             backgroundSize: store_player_appearance.player_use_background_repeat_fill ? '20vw auto' : 'cover',
             backgroundRepeat: store_player_appearance.player_use_background_repeat_fill ? 'repeat' : 'no-repeat',
             backgroundPosition: 'center'
@@ -906,7 +906,7 @@
                     </lottie-player>
                     <div
                         style="
-                          width: 31vh;margin-top: -14vh;color: #E7E5E5;
+                          width: 32vh;margin-top: -14vh;color: #E7E5E5;
                           font-weight: 900;font-size: calc(2.2vh + 4px);
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
@@ -914,7 +914,7 @@
                     </div>
                     <div
                         style="
-                          width: 32vh;margin-left: 0.2vh;margin-top: -0.8vh;
+                          width: 26vh;margin-left: 0.2vh;margin-top: -0.8vh;
                           color: #989292;font-weight: 550;font-size: calc(1.4vh + 4px);
                           overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                           text-align: center;">
@@ -927,7 +927,7 @@
                       loop
                       mode="normal"
                       :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715392202806.json')))"
-                      style="width: 54vh;height:calc(4.5vh);"
+                      style="width: 54vh;height:calc(4.7vh);"
                     />
                     <n-space
                         align="center" justify="center"
