@@ -648,8 +648,6 @@
         await store_app_configs_logic_load.load_app_config()
         // init lang
         locale.value = store_app_configs_info.lang
-        // init image
-        store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'shrink_up_arrow.svg')
       }
     }catch{  }
 

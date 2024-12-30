@@ -122,6 +122,8 @@ export class Class_Get_System_Configs_Read {
             }else{
                 store_app_configs_info.cDriveDbDir = path.join(os.homedir(), '.NSMusicS');
             }
+            // init image
+            store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'shrink_up_arrow.svg')
             //
             store_app_configs_info.navidrome_db = path.join(store_app_configs_info.cDriveDbDir, 'navidrome.db')
             store_app_configs_info.nsmusics_db = path.join(store_app_configs_info.cDriveDbDir, 'nsmusics.db')

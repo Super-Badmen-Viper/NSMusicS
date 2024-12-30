@@ -304,6 +304,7 @@ const handleMpvStopped = debounce(async (event, args) => {
 ipcRenderer.on('mpv-stopped', handleMpvStopped);
 ///
 onMounted(async () => {
+  console.log(store_player_audio_logic.player_back_ChevronDouble);
   timer = setInterval(synchronize_playback_time, 200);
   await store_player_audio_logic.player.IsPlaying()
   await store_player_audio_logic.player.setVolume(Number(store_player_audio_logic.play_volume))
@@ -1106,7 +1107,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
 }
 
 .gird_Left {
-  width: 300px;
+  width: 30vw;
   height: 80px;
   margin-left: 12px;
 
@@ -1133,7 +1134,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
   z-index: 0;
 }
 .gird_Left .bar_left_text_song_info{
-  width: 150px;
+  width: 15vw;
   height: 50px;
   margin-top: 12px;margin-left: 14px;
   float: left;text-align: left;
@@ -1141,7 +1142,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
 .gird_Left .bar_left_text_song_info #bar_song_name{
   font-size: 18px;
   font-weight: 600;
-  max-width: 150px;
+  max-width: 15vw;
 }
 .gird_Left .bar_left_text_song_info #bar_song_name:hover {
   text-decoration: underline;
@@ -1158,7 +1159,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
 .gird_Left .bar_left_text_song_info #bar_album_name{
   font-size: 16px;
   font-weight: 600;
-  max-width: 150px;
+  max-width: 15vw;
 }
 .gird_Left .bar_left_text_song_info #bar_album_name:hover {
   text-decoration: underline;
@@ -1189,7 +1190,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
 .gird_Middle #backpanel_voice{
   position: fixed;
   bottom: 80px;
-  margin-left: 280px;
+  margin-left: 80px;
   width: 77px;
   height: 100px;
   border-radius: 10px;
@@ -1197,7 +1198,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
 }
 
 .gird_Right {
-  width: 300px;
+  width: 30vw;
   height: 80px;
   margin-right: 12px;
 
