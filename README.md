@@ -18,14 +18,14 @@
 - [ ] compatible with streaming media servers (jellyfin , emby , NSMusicS-GO)
 - [x] compatible with local music libraries (win10+) 
 - [ ] compatible with local music libraries (which will soon support MacOS(arm、x64)、Linux、Docker) 
-- [x] [mpv](https://github.com/mpv-player/mpv) -play (win10+、MacOS(arm)) 
-- [ ] [mpv](https://github.com/mpv-player/mpv) -play (which will soon support MacOS(x64)、Linux、Docker) 
+- [x] [mpv](https://github.com/mpv-player/mpv) -play (win10+、MacOS(arm、x64)) 
+- [ ] [mpv](https://github.com/mpv-player/mpv) -play (which will soon support Linux、Docker) 
 - [x] professional audio playback
 - [ ] Rich sound effects playback
 - [x] internationalization
 - [ ] various music usage scenarios(For NSMusicS-GO: Server)
-- [x] System backend playback -tray (win10+)
-- [ ] System backend playback -tray (which will soon support MacOS(arm、x64)、Linux、Docker) 
+- [x] System backend playback -tray (win10+、MacOS(arm、x64))
+- [ ] System backend playback -tray (which will soon support Linux) 
       
 ## NSMusicS-GO | 九歌 : Server
 - [ ] compatible with streaming media servers (which will soon be compatible with Navidrome、Subsonic、Jellyfin、Emby)
