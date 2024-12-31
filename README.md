@@ -11,7 +11,7 @@
  In addition, NSMusicS also supports local mode to use local music libraries. And plan to support various types of network cloud drives，such as webdev，onedriver....
  
 ## NSMusicS-Electron | 九歌 : Desktop-client
-- [x] supporting the Windows10+、MacOS(arm) platform (which will soon support MacOS(x64)、Linux、Docker)
+- [x] supporting the Windows10+、MacOS(arm、x64)、Linux platform (which will soon support Docker)
 - [x] music library management
 - [ ] network cloud drives (webdev , onedriver....)
 - [x] compatible with streaming media servers (navidrome)
