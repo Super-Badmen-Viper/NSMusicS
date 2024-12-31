@@ -69,6 +69,16 @@ export const viteElectronBuild = (): Plugin => {
                         maintainer: 'Xiang Cheng 1774148579@qq.com',
                         artifactName: '${productName}-Linux-${version}-${arch}.${ext}',
                     },
+// arch -x86_64 zsh
+// arch -arm64 zsh
+// node -p "process.arch"
+// 如需在arm架构上编译 arch -x86_64 
+// -> ’arch -x86_64 zsh‘ + 重新创建拉取新项目(可命名为_x64) + 在新项目重新下载所有开发环境 
+// -> 所有指令前加sudo 
+// -> npm i
+// -> npm rebuild:手动原生编译node组件 
+// -> npm run dev
+// -> npm run build
                     mac: {
                         target: 'dmg',
                         icon: 'resources/config/NSMusicS.icns',
