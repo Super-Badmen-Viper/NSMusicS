@@ -355,7 +355,7 @@ async function createTray(){
 /// electron-window
 async function createWindow() {
     /// init BrowserWindow
-    if(process.platform === 'win32') {
+    if(process.platform != 'darwin') {
         context.mainWindow = await new BrowserWindow({
             width: 1220,
             height: 765,
@@ -370,7 +370,7 @@ async function createWindow() {
             }
         })
     }
-    else if(process.platform === 'darwin'){
+    else{
         context.mainWindow = await new BrowserWindow({
             width: 1220,
             height: 765,
@@ -385,21 +385,6 @@ async function createWindow() {
             },
             titleBarStyle: 'hidden',
             trafficLightPosition: { x: 6, y: 12 },
-        })
-    }
-    else if(process.platform === 'linux'){
-        context.mainWindow = await new BrowserWindow({
-            width: 1220,
-            height: 765,
-            minWidth: 1220,
-            minHeight: 765,
-            frame:false,
-            resizable: true,
-            webPreferences: {
-                nodeIntegration: true,
-                contextIsolation: false,
-                webSecurity: false
-            }
         })
     }
 

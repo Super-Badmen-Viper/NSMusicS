@@ -1047,6 +1047,8 @@
   </n-message-provider>
 </template>
 <style scoped>
+html, body { scroll-behavior:smooth; }
+
 .this_App {
   width: 100vw;
   height: 100vh;

@@ -895,8 +895,8 @@
                                 </div>
                               </n-button>
                             </n-space>
-                            <n-divider style="margin: 0;"/>
-                            <n-space vertical style="width: 600px;">
+                            <n-divider v-if="false" style="margin: 0;"/>
+                            <n-space v-if="false" vertical style="width: 600px;">
                               <div style="font-size:15px;font-weight: 600;">
                                 {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_1')}}
                               </div>

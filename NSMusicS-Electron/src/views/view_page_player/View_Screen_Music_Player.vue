@@ -59,6 +59,30 @@
     ipcRenderer.send('window-close');
   }
 
+  //////
+  const errorHandled = ref(new Map());
+  const handleImageError = async (item: any) => {
+    let result_src = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'error_album.jpg');
+    if (errorHandled.value.has(item.id)) {
+      item.medium_image_url = result_src;
+      return;
+    }
+    errorHandled.value.set(item.id, true);
+    ///
+    const originalSrc = item.medium_image_url;
+    try {
+      const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
+      if (newImagePath.length > 0) {
+        item.medium_image_url = 'file:///' + newImagePath;
+      } else {
+        item.medium_image_url = result_src;
+      }
+    } catch (error) {
+      console.error('Error handling image error:', error);
+      item.medium_image_url = result_src;
+    }
+  };
+
   ////// lyircs load
   let unwatch = watch(() => store_player_audio_info.this_audio_lyrics_string, (value) => {load_lyrics()});
   onMounted(() => {
@@ -79,11 +103,16 @@
     }
   }
   function begin_lyrics_animation() {
-    clearInterval(lyrics_animation);
-    lyrics_animation = setInterval(async () => {
+    let animationFrameId;
+
+    const animateLyrics = async () => {
       for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_time.length; i++) {
-        if (store_player_audio_logic.player !== null && await store_player_audio_logic.player.getCurrentTime() !== undefined && await store_player_audio_logic.player.getCurrentTime() !== null) {
-          let currentTime = await store_player_audio_logic.player.getCurrentTime() * 1000;
+        if (
+            store_player_audio_logic.player !== null &&
+            (await store_player_audio_logic.player.getCurrentTime()) !== undefined &&
+            (await store_player_audio_logic.player.getCurrentTime()) !== null
+        ) {
+          let currentTime = (await store_player_audio_logic.player.getCurrentTime()) * 1000;
           if (currentTime <= store_player_audio_info.this_audio_lyrics_info_line_time[0]) {
             if (lyrics_list_whell.value === false) {
               scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num);
@@ -104,7 +133,10 @@
           }
         }
       }
-    }, 50);
+      animationFrameId = requestAnimationFrame(animateLyrics);
+    };
+    animationFrameId = requestAnimationFrame(animateLyrics);
+    return animationFrameId;
   }
   let lyrics_animation: string | number | NodeJS.Timeout | undefined;
   const handleItemDbClick = async (index: any) => {
@@ -120,10 +152,7 @@
   const scrollbar = ref(null as any);
   const perviousIndex = ref(0);
   const scrollToItem = (index: number) => {
-    if (!scrollbar.value) {
-      return;
-    }
-    if(lyrics_list_whell.value){
+    if (!scrollbar.value || lyrics_list_whell.value) {
       return;
     }
 
@@ -136,54 +165,78 @@
     itemElements[index].style.filter = 'blur(0px)';
     itemElements[index].style.textShadow = '0 0 1px White';
     itemElements[index].style.transition = 'color 0.5s, transform 0.5s';
-    if(store_player_appearance.player_collapsed_album === false){
+
+    if (store_player_appearance.player_collapsed_album === false) {
       itemElements[index].style.transform = 'scale(1.1) translateY(0px)';
       itemElements[index].style.transformOrigin = 'left center';
-      itemElements[index].style.width = 'calc(36.3vw)'
-    }else{
+      itemElements[index].style.width = 'calc(36.3vw)';
+    } else {
       itemElements[index].style.transform = 'scale(1.1) translateX(0px)';
       itemElements[index].style.transformOrigin = 'center';
-      itemElements[index].style.width = 'calc(40vw)'
+      itemElements[index].style.width = 'calc(40vw)';
     }
+
+    // 使用 scrollIntoView 实现平滑滚动
     itemElements[index].scrollIntoView({ block: 'center', behavior: perviousIndex.value === index - 1 ? 'smooth' : 'instant' });
-    handleLeave_Refresh_Lyric_Style()
+    // 使用 requestAnimationFrame + 手动js 实现平滑滚动
+    // smoothScrollTo(itemElements[index], 1000);
+
+    handleLeave_Refresh_Lyric_Style();
 
     let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
     for (let i = index - 16; i <= index + 16; i++) {
       if (i < index) {
-        // const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
-        itemElements[i].style.color = 'transparent' // colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+        itemElements[i].style.color = 'transparent';
         itemElements[i].style.transform = 'scale(1)';
         itemElements[i].style.textShadow = '0 0 0px transparent';
-        itemElements[i].style.width = 'calc(40vw)'
+        itemElements[i].style.width = 'calc(40vw)';
       } else if (i != index) {
-
-        if(window.innerHeight < 1080) {
-          store_player_appearance.player_lyric_color_hidden_coefficient = 20
-          store_player_appearance.player_lyric_color_hidden_value = 90
-        }else if(window.innerHeight < 1280) {
-          store_player_appearance.player_lyric_color_hidden_coefficient = 15
-          store_player_appearance.player_lyric_color_hidden_value = 90
-        }else if(window.innerHeight < 1480) {
-          store_player_appearance.player_lyric_color_hidden_coefficient = 15
-          store_player_appearance.player_lyric_color_hidden_value = 90
+        if (window.innerHeight < 1080) {
+          store_player_appearance.player_lyric_color_hidden_coefficient = 20;
+          store_player_appearance.player_lyric_color_hidden_value = 90;
+        } else if (window.innerHeight < 1280) {
+          store_player_appearance.player_lyric_color_hidden_coefficient = 15;
+          store_player_appearance.player_lyric_color_hidden_value = 90;
+        } else if (window.innerHeight < 1480) {
+          store_player_appearance.player_lyric_color_hidden_coefficient = 15;
+          store_player_appearance.player_lyric_color_hidden_value = 90;
         }
 
-        const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
+        const colorValue = Math.max(
+            store_player_appearance.player_lyric_color_hidden_value -
+            (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
+            0
+        );
         itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
         itemElements[i].style.transform = 'scale(1)';
         itemElements[i].style.textShadow = '0 0 0px transparent';
-        itemElements[i].style.width = 'calc(40vw)'
+        itemElements[i].style.width = 'calc(40vw)';
       }
     }
     perviousIndex.value = index;
-
     // if(store_player_audio_info.this_audio_lyrics_info_byte_model) {
     //   if(store_player_audio_logic.player.isPlaying) {
     //     startByteAnimations(index, 0)
     //   }
     // }
   };
+  function smoothScrollTo(element, duration) {
+    const container = scrollbar.value.$el; // 获取滚动容器
+    const start = container.scrollTop; // 当前滚动位置
+    const target = element.offsetTop - (container.clientHeight - element.offsetHeight) / 2; // 目标滚动位置（居中）
+    const startTime = performance.now(); // 开始时间
+
+    function scrollStep(timestamp) {
+      const elapsed = timestamp - startTime; // 已用时间
+      const progress = Math.min(elapsed / duration, 1); // 滚动进度（0 到 1）
+      container.scrollTop = start + (target - start) * progress + 80; // 更新滚动位置
+
+      if (progress < 1) {
+        requestAnimationFrame(scrollStep); // 继续滚动
+      }
+    }
+    requestAnimationFrame(scrollStep); // 启动滚动
+  }
 
   const lastIndex = ref(-1);
   const startByteAnimations = (index: number, num: number) => {
@@ -342,31 +395,13 @@
   });
 
   ////// player_configs theme BasicInfo
-  type PlayerTheme_Style = {
-    image_url: any;
-
-    textAlign: any;
-
-    player_collapsed_album: any;
-    player_collapsed_skin: any;
-  };
-  type PlayerTheme_HoverStyle = {
-    colorHover:any;
-  };
-  type PlayerTheme_LyricItem = {
-    id: any;
-    name: any;
-    normalStyle:PlayerTheme_Style;
-  };
   const player_theme_1 = ref<PlayerTheme_LyricItem>(
     {
       id: 0,
       name: computed_i18n_Label_ViewSetConfig_Cover_1.value,
       normalStyle: {
         image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_1.png'),
-
         textAlign: true,
-
         player_collapsed_album: false,
         player_collapsed_skin: true,
       }
@@ -378,9 +413,7 @@
       name: computed_i18n_Label_ViewSetConfig_Cover_2.value,
       normalStyle: {
         image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_2.png'),
-
         textAlign: false,
-
         player_collapsed_album: false,
         player_collapsed_skin: true,
       }
@@ -392,9 +425,7 @@
       name: computed_i18n_Label_ViewSetConfig_Cover_3.value,
       normalStyle: {
         image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_3.png'),
-
         textAlign: true,
-
         player_collapsed_album: false,
         player_collapsed_skin: true,
       }
@@ -406,9 +437,7 @@
       name: computed_i18n_Label_ViewSetConfig_Cover_4.value,
       normalStyle: {
         image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_4.png'),
-
         textAlign: false,
-
         player_collapsed_album: true,
         player_collapsed_skin: true,
       }
@@ -420,20 +449,14 @@
       name: '皮肤底图',
       normalStyle: {
         image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_3.png'),
-
         textAlign: false,
-
         player_collapsed_album: true,
         player_collapsed_skin: false,
       }
     }
   );
   const player_theme_Styles = ref<PlayerTheme_LyricItem[]>(
-    [
-      player_theme_1.value,// play model 1 ：方形封面
-      player_theme_2.value,// play model 2 ：旋转封面
-      player_theme_3.value,// play model 3 ：炫胶唱片
-      player_theme_4.value,// play model 4 ：专辑底图
+    [player_theme_1.value, player_theme_2.value, player_theme_3.value, player_theme_4.value,
       // player_theme_5.value, // play model 5 ：皮肤底图  :disabled
     ]
   );
@@ -985,8 +1008,8 @@
                         ref="animationInstance_model_2_wave"
                         class="animate__rotate_fast"
                         :class="{
-                        'animate__rotate_fast_paused': store_player_appearance.player_background_model_num !== 2 || !store_player_audio_info.this_audio_is_playing
-                      }"
+                          'animate__rotate_fast_paused': store_player_appearance.player_background_model_num !== 2 || !store_player_audio_info.this_audio_is_playing
+                        }"
                         v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
                         speed="0.8"
                         autoplay
@@ -999,7 +1022,7 @@
                         margin-top: calc(22vh - 154.5px);margin-left: calc(-28vh);
                         position: absolute;
                       "
-                        :style="{
+                      :style="{
                         '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`
                       }"
                     />
@@ -1110,6 +1133,7 @@
                       margin-top: 120px;
                       overflow: auto;
                       background-color: #00000000;
+                      scroll-snap-type: y mandatory;
                     ">
                     <template #default>
                       <n-list-item
@@ -1210,6 +1234,7 @@
   border-radius: 10px;
   transition: color 0.5s, background-color 0.5s;
   filter: blur(0.07px);
+  scroll-snap-align: center;
 }
 .lyrics_info:hover {
   background-color: #FFFFFF16;
