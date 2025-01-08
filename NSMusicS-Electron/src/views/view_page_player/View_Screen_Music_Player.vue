@@ -85,69 +85,70 @@ function load_lyrics() {
 }
 let isFirstRun = true;
 function begin_lyrics_animation() {
-  clearInterval(lyrics_animation);
-
-  lyrics_animation = setInterval(async () => {
-    for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_time.length; i++) {
-      if (store_player_audio_logic.player !== null && await store_player_audio_logic.player.getCurrentTime() !== undefined && await store_player_audio_logic.player.getCurrentTime() !== null) {
-        let currentTime = await store_player_audio_logic.player.getCurrentTime() * 1000;
-        if (currentTime <= store_player_audio_info.this_audio_lyrics_info_line_time[0]) {
-          if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== 0)) {
-            store_player_view.currentScrollIndex = 0;
-            scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num);
-          }
-          break;
-        } else if (currentTime >= store_player_audio_info.this_audio_lyrics_info_line_time[i]) {
-          if (i === store_player_audio_info.this_audio_lyrics_info_line_time.length - 1) {
-            if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== i)) {
-              store_player_view.currentScrollIndex = i;
-              scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
+  setTimeout(() => {
+    clearInterval(lyrics_animation);
+    lyrics_animation = setInterval(async () => {
+      for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_time.length; i++) {
+        if (store_player_audio_logic.player !== null && await store_player_audio_logic.player.getCurrentTime() !== undefined && await store_player_audio_logic.player.getCurrentTime() !== null) {
+          let currentTime = await store_player_audio_logic.player.getCurrentTime() * 1000;
+          if (currentTime <= store_player_audio_info.this_audio_lyrics_info_line_time[0]) {
+            if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== 0)) {
+              store_player_view.currentScrollIndex = 0;
+              scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num);
             }
             break;
-          } else if (currentTime < store_player_audio_info.this_audio_lyrics_info_line_time[i + 1]) {
-            if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== i)) {
-              store_player_view.currentScrollIndex = i;
-              scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
+          } else if (currentTime >= store_player_audio_info.this_audio_lyrics_info_line_time[i]) {
+            if (i === store_player_audio_info.this_audio_lyrics_info_line_time.length - 1) {
+              if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== i)) {
+                store_player_view.currentScrollIndex = i;
+                scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
+              }
+              break;
+            } else if (currentTime < store_player_audio_info.this_audio_lyrics_info_line_time[i + 1]) {
+              if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== i)) {
+                store_player_view.currentScrollIndex = i;
+                scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
+              }
+              break;
             }
-            break;
           }
         }
       }
-    }
-    if (isFirstRun) {
-      isFirstRun = false;
-    }
-    if(store_player_audio_logic.player_slider_click){
-      handleWheel();
-      lyrics_list_whell.value = false;
-      store_player_audio_logic.player_slider_click = false;
+      if (isFirstRun) {
+        isFirstRun = false;
+      }
+      if (store_player_audio_logic.player_slider_click) {
+        handleWheel();
+        lyrics_list_whell.value = false;
+        store_player_audio_logic.player_slider_click = false;
 
-      const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
-      const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
-      let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
-      const index = store_player_view.currentScrollIndex + store_player_audio_info.this_audio_lyrics_info_line_num
-      scrollToItem(index);
-      for (let i = index - 16; i <= index + 16; i++) {
-        if (i < index) {
-          itemElements[i].style.color = 'transparent';
-          itemElements[i].style.transform = 'scale(1)';
-          itemElements[i].style.textShadow = '0 0 0px transparent';
-          itemElements[i].style.width = 'calc(40vw)';
-        } else if (i !== index) {
-          const colorValue = Math.max(
-              store_player_appearance.player_lyric_color_hidden_value -
-              (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
-              0
-          );
-          itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
-          itemElements[i].style.transform = 'scale(1)';
-          itemElements[i].style.textShadow = '0 0 0px transparent';
-          itemElements[i].style.width = 'calc(40vw)';
-          itemElements_active[i].style.fontWeight = 400;
+        const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
+        const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
+        let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
+        const index = store_player_view.currentScrollIndex + store_player_audio_info.this_audio_lyrics_info_line_num
+        scrollToItem(index);
+        for (let i = index - 16; i <= index + 16; i++) {
+          if (i < index) {
+            itemElements[i].style.color = 'transparent';
+            itemElements[i].style.transform = 'scale(1)';
+            itemElements[i].style.textShadow = '0 0 0px transparent';
+            itemElements[i].style.width = 'calc(40vw)';
+          } else if (i !== index) {
+            const colorValue = Math.max(
+                store_player_appearance.player_lyric_color_hidden_value -
+                (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
+                0
+            );
+            itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+            itemElements[i].style.transform = 'scale(1)';
+            itemElements[i].style.textShadow = '0 0 0px transparent';
+            itemElements[i].style.width = 'calc(40vw)';
+            itemElements_active[i].style.fontWeight = 400;
+          }
         }
       }
-    }
-  }, 50);
+    }, 50);
+  }, 500);// 防止在歌词列表数据未刷新显示完全而执行歌词项跳转，而导致的面板上移
 }
 let lyrics_animation: string | number | NodeJS.Timeout | undefined;
 const handleItemDbClick = async (index: any) => {
@@ -172,6 +173,9 @@ const scrollToItem = (index: number) => {
     return;
   }
   if(lyrics_list_whell.value){
+    return;
+  }
+  if(index === 0){
     return;
   }
 
