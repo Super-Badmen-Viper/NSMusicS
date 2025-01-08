@@ -41,8 +41,9 @@ const computed_i18n_Label_ViewSetConfig_Cover_2 = computed(() => t('nsmusics.vie
 const computed_i18n_Label_ViewSetConfig_Cover_3 = computed(() => t('nsmusics.view_player.view_seting.coverBeaut_3'));
 const computed_i18n_Label_ViewSetConfig_Cover_4 = computed(() => t('nsmusics.view_player.view_seting.coverBase_4'));
 
-// audio_class & player_bar
+// audio_class & player_bar & player_view
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+import {store_player_view} from "@/store/player/store_player_view";
 
 ////// System BrowserWindow Set
 const { ipcRenderer } = require('electron');
@@ -60,7 +61,11 @@ function closeWindow() {
 }
 
 ////// lyircs load
-let unwatch = watch(() => store_player_audio_info.this_audio_lyrics_string, (value) => {load_lyrics()});
+let unwatch = watch(() => store_player_audio_info.this_audio_lyrics_string, (value) => {
+  load_lyrics();
+  store_player_audio_logic.player_slider_click = true;
+  scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num);
+});
 onMounted(() => {
   load_lyrics()
   init_player_theme()
@@ -78,25 +83,30 @@ function load_lyrics() {
     }
   }
 }
+let isFirstRun = true;
 function begin_lyrics_animation() {
   clearInterval(lyrics_animation);
+
   lyrics_animation = setInterval(async () => {
     for (let i = 0; i < store_player_audio_info.this_audio_lyrics_info_line_time.length; i++) {
       if (store_player_audio_logic.player !== null && await store_player_audio_logic.player.getCurrentTime() !== undefined && await store_player_audio_logic.player.getCurrentTime() !== null) {
         let currentTime = await store_player_audio_logic.player.getCurrentTime() * 1000;
         if (currentTime <= store_player_audio_info.this_audio_lyrics_info_line_time[0]) {
-          if (lyrics_list_whell.value === false) {
+          if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== 0)) {
+            store_player_view.currentScrollIndex = 0;
             scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num);
           }
           break;
         } else if (currentTime >= store_player_audio_info.this_audio_lyrics_info_line_time[i]) {
           if (i === store_player_audio_info.this_audio_lyrics_info_line_time.length - 1) {
-            if (lyrics_list_whell.value === false) {
+            if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== i)) {
+              store_player_view.currentScrollIndex = i;
               scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
             }
             break;
           } else if (currentTime < store_player_audio_info.this_audio_lyrics_info_line_time[i + 1]) {
-            if (lyrics_list_whell.value === false) {
+            if (lyrics_list_whell.value === false && (isFirstRun || store_player_view.currentScrollIndex !== i)) {
+              store_player_view.currentScrollIndex = i;
               scrollToItem(i + store_player_audio_info.this_audio_lyrics_info_line_num);
             }
             break;
@@ -104,16 +114,54 @@ function begin_lyrics_animation() {
         }
       }
     }
+    if (isFirstRun) {
+      isFirstRun = false;
+    }
+    if(store_player_audio_logic.player_slider_click){
+      handleWheel();
+      lyrics_list_whell.value = false;
+      store_player_audio_logic.player_slider_click = false;
+
+      const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
+      const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
+      let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
+      const index = store_player_view.currentScrollIndex + store_player_audio_info.this_audio_lyrics_info_line_num
+      scrollToItem(index);
+      for (let i = index - 16; i <= index + 16; i++) {
+        if (i < index) {
+          itemElements[i].style.color = 'transparent';
+          itemElements[i].style.transform = 'scale(1)';
+          itemElements[i].style.textShadow = '0 0 0px transparent';
+          itemElements[i].style.width = 'calc(40vw)';
+        } else if (i !== index) {
+          const colorValue = Math.max(
+              store_player_appearance.player_lyric_color_hidden_value -
+              (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
+              0
+          );
+          itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+          itemElements[i].style.transform = 'scale(1)';
+          itemElements[i].style.textShadow = '0 0 0px transparent';
+          itemElements[i].style.width = 'calc(40vw)';
+          itemElements_active[i].style.fontWeight = 400;
+        }
+      }
+    }
   }, 50);
 }
 let lyrics_animation: string | number | NodeJS.Timeout | undefined;
 const handleItemDbClick = async (index: any) => {
-  if (index < store_player_audio_info.this_audio_lyrics_info_line_num) return;
-  if (index > store_player_audio_info.this_audio_lyrics_info_line_font.length - store_player_audio_info.this_audio_lyrics_info_line_num - 1) return;
+  if (index < store_player_audio_info.this_audio_lyrics_info_line_num)
+    return;
+  if (index > store_player_audio_info.this_audio_lyrics_info_line_font.length - store_player_audio_info.this_audio_lyrics_info_line_num - 1)
+    return;
   const time = store_player_audio_info.this_audio_lyrics_info_line_time[index - store_player_audio_info.this_audio_lyrics_info_line_num];
-  if (time >= await store_player_audio_logic.player.getDuration() * 1000) return;
-  if (time < 0) return;
-  store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress = time;
+  if (time >= await store_player_audio_logic.player.getDuration() * 1000)
+    return;
+  if (time < 0)
+    return;
+  store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress = time;
+  store_player_view.currentScrollIndex = index;
 
   handleLeave_Refresh_Lyric_Style()
 };
@@ -145,7 +193,10 @@ const scrollToItem = (index: number) => {
     itemElements[index].style.transformOrigin = 'center';
     itemElements[index].style.width = 'calc(40vw)'
   }
-  itemElements[index].scrollIntoView({ block: 'center', behavior: perviousIndex.value === index - 1 ? 'smooth' : 'instant' });
+  if(store_player_view.currentScrollIndex === 0)
+    itemElements[index].scrollIntoView({ block: 'center', behavior: 'instant'});
+  else
+    itemElements[index].scrollIntoView({ block: 'center', behavior: 'smooth'});
   handleLeave_Refresh_Lyric_Style()
 
   let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
@@ -157,26 +208,19 @@ const scrollToItem = (index: number) => {
       itemElements[i].style.textShadow = '0 0 0px transparent';
       itemElements[i].style.width = 'calc(40vw)'
     } else if (i != index) {
-
-      if(window.innerHeight < 1080) {
-        store_player_appearance.player_lyric_color_hidden_coefficient = 20
-        store_player_appearance.player_lyric_color_hidden_value = 90
-      }else if(window.innerHeight < 1280) {
-        store_player_appearance.player_lyric_color_hidden_coefficient = 15
-        store_player_appearance.player_lyric_color_hidden_value = 90
-      }else if(window.innerHeight < 1480) {
-        store_player_appearance.player_lyric_color_hidden_coefficient = 15
-        store_player_appearance.player_lyric_color_hidden_value = 90
-      }
-
       const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
       itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
       itemElements[i].style.transform = 'scale(1)';
       itemElements[i].style.textShadow = '0 0 0px transparent';
-      itemElements[i].style.width = 'calc(40vw)'
+      itemElements[i].style.width = 'calc(40vw)';
+      itemElements_active[i].style.fontWeight = 400;
     }
   }
   perviousIndex.value = index;
+
+  if(isFirstRun) {
+    store_player_audio_logic.player_slider_click = true
+  }
 
   // if(store_player_audio_info.this_audio_lyrics_info_byte_model) {
   //   if(store_player_audio_logic.player.isPlaying) {
@@ -297,10 +341,10 @@ const handleWheel = (event: any) => {
   lyrics_list_whell.value = true;
   const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
   for (let i = 0; i < itemElements.length; i++) {
-    itemElements[i].style.color = store_player_appearance.player_lyric_color;
+    itemElements[i].style.color = '#FFFFFF99';
     itemElements[i].style.transform = 'scale(1)';
     itemElements[i].style.filter = 'blur(0px)';
-    itemElements[i].style.width = 'calc(40vw)'
+    itemElements[i].style.width = 'calc(40vw)';
   }
 };
 const handleLeave_Refresh_Lyric_Style = () => {
@@ -1104,7 +1148,11 @@ onBeforeUnmount(() => {
                       :show-divider="false"
                       ref="scrollbar"
                       @wheel="handleWheel"
-                      @mouseleave="handleLeave_Refresh_Lyric_Style"
+                      @mouseleave="() => {
+                        handleLeave_Refresh_Lyric_Style();
+                        store_player_view.currentScrollIndex = 0;
+                        begin_lyrics_animation();
+                      }"
                       style="
                       width: calc(40vw);
                       max-height: calc(90vh);

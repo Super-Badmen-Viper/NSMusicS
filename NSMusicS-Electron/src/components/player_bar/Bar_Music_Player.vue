@@ -129,7 +129,7 @@ let unwatch_this_audio_restart_play = watch(() => store_player_audio_info.this_a
 const handleAudioFilePathChange = async () => {
   if(store_player_audio_logic.this_audio_initial_trigger) {
     store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(await store_player_audio_logic.player.getDuration());
-    store_player_audio_logic.player_silder_currentTime_added_value = 0;
+    store_player_audio_logic.player_slider_currentTime_added_value = 0;
     this_audio_buffer_file.value = null;
     store_player_audio_logic.player_no_progress_jump = false;
     store_player_audio_logic.player.isPlaying = false;
@@ -153,7 +153,7 @@ const Play_This_Audio_Path = () => {
   clearTimeout(timer_this_audio_player.value);
   timer_this_audio_player.value = setTimeout(async () => {
     if(store_player_audio_info.this_audio_file_path.length > 0) {
-      store_player_audio_logic.player_silder_currentTime_added_value = 0;
+      store_player_audio_logic.player_slider_currentTime_added_value = 0;
       if(store_player_audio_logic.player_select === 'mpv'){
         if(store_player_audio_logic.player === null){
           store_player_audio_logic.player = new Audio_node_mpv()
@@ -242,7 +242,7 @@ const init_player_howler = async () => {
         //无进度跳动:若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
         if(store_player_audio_logic.player_no_progress_jump){
           store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(store_player_audio_logic.player.getDuration());
-          store_player_audio_logic.player_silder_currentTime_added_value = 0;
+          store_player_audio_logic.player_slider_currentTime_added_value = 0;
           this_audio_buffer_file.value = null;
           clearInterval(timer);
 
@@ -289,7 +289,7 @@ const handleMpvStopped = debounce(async (event, args) => {
     // 无进度跳动: 若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
     if (store_player_audio_logic.player_no_progress_jump) {
       store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(store_player_audio_logic.player.getDuration());
-      store_player_audio_logic.player_silder_currentTime_added_value = 0;
+      store_player_audio_logic.player_slider_currentTime_added_value = 0;
       this_audio_buffer_file.value = null;
       clearInterval(timer);
 
@@ -489,7 +489,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
 ////// player_configs player_button middle area
 const play_skip_back_click = async () => {
   store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(await store_player_audio_logic.player.getDuration());
-  store_player_audio_logic.player_silder_currentTime_added_value = 0;
+  store_player_audio_logic.player_slider_currentTime_added_value = 0;
   this_audio_buffer_file.value = null;
   clearInterval(timer);
 
@@ -502,7 +502,7 @@ const play_skip_back_click = async () => {
 }
 const play_skip_forward_click = async () => {
   store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(await store_player_audio_logic.player.getDuration());
-  store_player_audio_logic.player_silder_currentTime_added_value = 0;
+  store_player_audio_logic.player_slider_currentTime_added_value = 0;
   this_audio_buffer_file.value = null;
   clearInterval(timer);
 
@@ -521,7 +521,7 @@ ipcRenderer.on('tray-music-next',
 );
 const Play_Media_Switching = async () => {
   store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(await store_player_audio_logic.player.getDuration());
-  store_player_audio_logic.player_silder_currentTime_added_value = 0;
+  store_player_audio_logic.player_slider_currentTime_added_value = 0;
   this_audio_buffer_file.value = null;
   clearInterval(timer);
 
@@ -545,21 +545,21 @@ const set_slider_singleValue = async () => {
   if (!store_player_audio_logic.player_range_duration_isDragging) {
     const currentTime = await store_player_audio_logic.player.getCurrentTime();
     const duration = await store_player_audio_logic.player.getDuration();
-    const calculatedValue = ((currentTime + store_player_audio_logic.player_silder_currentTime_added_value) / duration) * 100;
+    const calculatedValue = ((currentTime + store_player_audio_logic.player_slider_currentTime_added_value) / duration) * 100;
     store_player_audio_logic.slider_singleValue = Number(calculatedValue.toFixed(2));
   }
 };
 const get_current_play_time = async () => {
   if (
       (await store_player_audio_logic.player.getCurrentTime() +
-          store_player_audio_logic.player_silder_currentTime_added_value)
+          store_player_audio_logic.player_slider_currentTime_added_value)
       <=
       await store_player_audio_logic.player.getDuration()
   ) {
     store_player_audio_logic.current_play_time =
         store_player_audio_logic.formatTime(
             (await store_player_audio_logic.player.getCurrentTime() +
-                store_player_audio_logic.player_silder_currentTime_added_value)
+                store_player_audio_logic.player_slider_currentTime_added_value)
         );
     store_player_audio_logic.total_play_time = store_player_audio_logic.formatTime(await store_player_audio_logic.player.getDuration());
   }
@@ -571,8 +571,8 @@ const synchronize_playback_time = () => {
   }catch{}
 }
 let timer: string | number | NodeJS.Timeout | undefined;
-let unwatch_play_go_index_time =  watch(() => store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress, () => {
-  store_player_audio_logic.play_go_duration(store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress,false)
+let unwatch_play_go_index_time =  watch(() => store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress, () => {
+  store_player_audio_logic.play_go_duration(store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress,false)
 });
 
 ////// open playList

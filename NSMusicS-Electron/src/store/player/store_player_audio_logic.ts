@@ -3,6 +3,7 @@ import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_
 import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
 import {Audio_howler} from "@/models/song_Audio_Out/Audio_howler";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+import {store_player_view} from "./store_player_view";
 const { ipcRenderer } = require('electron');
 
 export const store_player_audio_logic = reactive({
@@ -45,9 +46,10 @@ export const store_player_audio_logic = reactive({
     player_no_progress_jump: true,
 
     player_back_ChevronDouble: '',
-
-    player_silder_currentTime_added_value: 0,
-    player_go_lyricline_index_of_audio_play_progress: 0,
+    
+    player_slider_click: false,
+    player_slider_currentTime_added_value: 0,
+    player_go_lyric_line_index_of_audio_play_progress: 0,
 
     player_save_new_data: false,
     this_audio_initial_trigger: false,
@@ -72,8 +74,10 @@ export const store_player_audio_logic = reactive({
         return `${formattedMinutes}:${formattedSeconds}`;
     },
     async play_go_duration(slider_value: number, silder_path: boolean) {
+        store_player_audio_logic.player_slider_click = true;
         store_player_audio_logic.player_no_progress_jump = false;
-        store_player_audio_logic.player_silder_currentTime_added_value = 0;
+        store_player_audio_logic.player_slider_currentTime_added_value = 0;
+        store_player_view.currentScrollIndex = 0;
         if (store_player_audio_logic.player.isPlaying === true) {
             // 注意，此时currentTime将从0开始，需要计算附加值
             if (silder_path) {
@@ -188,11 +192,11 @@ watch(() => store_player_audio_logic.player_save_new_data, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_Audio_Info()
     store_player_audio_logic.player_save_new_data = false
 });
-watch(() => store_player_audio_logic.player_silder_currentTime_added_value, (newValue) => {
-    store_player_audio_logic.player_silder_currentTime_added_value = newValue
-    console.log('player_silder_currentTime_added_value：'+newValue)
+watch(() => store_player_audio_logic.player_slider_currentTime_added_value, (newValue) => {
+    store_player_audio_logic.player_slider_currentTime_added_value = newValue
+    console.log('player_slider_currentTime_added_value：'+newValue)
 });
-watch(() => store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress, (newValue) => {
-    store_player_audio_logic.player_go_lyricline_index_of_audio_play_progress = newValue
+watch(() => store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress, (newValue) => {
+    store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress = newValue
     console.log('get_play_go_index_time：'+newValue)
 });

@@ -24,7 +24,7 @@ export const store_player_appearance = reactive({
     player_lyric_colorHover: '#FFFFFF',
 
     player_lyric_color_hidden_value: 90,
-    player_lyric_color_hidden_coefficient: 18,
+    player_lyric_color_hidden_coefficient: 15,
 
     player_theme_Styles_Selected: 0,
     player_background_model_num: 0,
