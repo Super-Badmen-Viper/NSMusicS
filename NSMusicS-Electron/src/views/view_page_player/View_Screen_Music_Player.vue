@@ -177,7 +177,7 @@
     }
 
     // 使用 scrollIntoView 实现平滑滚动
-    itemElements[index].scrollIntoView({ block: 'center', behavior: perviousIndex.value === index - 1 ? 'smooth' : 'instant' });
+    itemElements[index].scrollIntoView({ block: 'center', behavior: 'smooth' });
     // 使用 requestAnimationFrame + 手动js 实现平滑滚动
     // smoothScrollTo(itemElements[index], 1000);
 
