@@ -676,7 +676,7 @@
     }
 
     try {
-      store_app_configs_info.version = '1.1.7';
+      store_app_configs_info.version = '1.1.8';
       console.log('Current Version:', store_app_configs_info.version);
       const xmlUrl = 'https://github.com/Super-Badmen-Viper/NSMusicS/releases/download/NSMusicS-Win-Update/NSMusicS.xml';
       await store_app_configs_logic_update.fetchAndParseXML(xmlUrl);

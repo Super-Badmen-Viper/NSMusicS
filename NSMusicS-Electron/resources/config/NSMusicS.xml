@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>1.1.7</version>
+<version>1.1.8</version>
 <url> </url>
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
-    1.1.7更新内容;
+    1.1.8更新内容;
+    修复了歌词滚动样式，优化了歌词数据响应性能，使其显示效果更加平滑[√];
     修复了一些UI样式[√];
     增加对Linux系统客户端的支持[√];
     增加对MacOS系统客户端的MPV兼容，完善对MPV唤起/注销的流程[√];
