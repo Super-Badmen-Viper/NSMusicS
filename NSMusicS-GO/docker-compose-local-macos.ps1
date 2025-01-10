@@ -11,4 +11,4 @@ mkdir -p "$dir"
 fi
 done
 
-docker-compose up -d
+docker-compose -f docker-compose-base.yaml up -d

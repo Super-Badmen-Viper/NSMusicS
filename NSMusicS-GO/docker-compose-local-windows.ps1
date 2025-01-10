@@ -10,4 +10,4 @@ foreach ($dir in $dataDirs) {
     }
 }
 
-docker-compose up -d
+docker-compose -f docker-compose-base.yaml up -d
