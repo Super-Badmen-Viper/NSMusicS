@@ -251,6 +251,7 @@ const Type_Filter_Show = ref(false)
 ////// dynamicScroller of artistlist_view
 const dynamicScroller = ref(null as any);
 const onResize = () => {
+  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
   console.log('resize');
 }
 const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
@@ -781,6 +782,9 @@ function menu_item_edit_selected_media_tags(){
 
 //////
 const isScrolling = ref(false);
+const onScrollStart = () => {
+  show_top_selectedlist.value = false;
+};
 const onScrollEnd = async () => {
   if (isScrolling.value) return;
   isScrolling.value = true;
@@ -954,6 +958,20 @@ onBeforeUnmount(() => {
             :value="store_view_media_page_logic.page_songlists_selected"
             :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
             @update:value="page_songlists_handleselected_updatevalue" />
+        <n-button size="small" secondary strong @click="Type_Update_Playlist = !Type_Update_Playlist">
+          <template #icon>
+            <n-icon>
+              <Menu />
+            </n-icon>
+          </template>
+        </n-button>
+        <n-button size="small" secondary strong @click="Type_Add_Playlist = !Type_Add_Playlist">
+          <template #icon>
+            <n-icon>
+              <Add />
+            </n-icon>
+          </template>
+        </n-button>
       </n-space>
 
     </n-space>
@@ -967,6 +985,7 @@ onBeforeUnmount(() => {
         key-field="absoluteIndex"
         @resize="onResize"
         @update="onUpdate"
+        @scroll-start="onScrollStart"
         @scroll-end="onScrollEnd"
       >
         <template #before>

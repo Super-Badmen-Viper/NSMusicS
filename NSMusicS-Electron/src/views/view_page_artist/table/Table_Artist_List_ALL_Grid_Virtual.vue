@@ -282,6 +282,7 @@ const options_Filter_handleSelect = (key: string | number) => {
 ////// dynamicScroller of artistlist_view
 const dynamicScroller = ref(null as any);
 const onResize = () => {
+  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
   console.log('resize');
 }
 const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
@@ -292,7 +293,10 @@ const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any
   updateParts.visibleEndIdx = visibleEndIndex
 
   store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value = viewEndIndex
+
+  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
 }
+const show_top_selectedlist = ref(false)
 const stopWatching_router_history_model_of_Artist_scroll = watch(() => store_router_history_data_of_artist.router_history_model_of_Artist_scroll,(newValue) => {
     if (newValue === true) {
       scrollTo(store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value)
@@ -480,6 +484,9 @@ function menu_item_edit_selected_media_tags(){
 
 //////
 const isScrolling = ref(false);
+const onScrollStart = () => {
+  show_top_selectedlist.value = false;
+};
 const onScrollEnd = async () => {
   if (isScrolling.value) return;
   isScrolling.value = true;
@@ -577,6 +584,7 @@ onBeforeUnmount(() => {
       <n-space v-if="show_top_selectedlist">
         <n-divider vertical style="width: 2px;height: 20px;margin-top: 8px;"/>
         <n-select
+            size="small"
             :value="store_view_artist_page_logic.page_artistlists_selected"
             :options="store_view_artist_page_logic.page_artistlists_options" style="width: 166px;"
             @update:value="page_artistlists_handleselected_updatevalue" />
@@ -594,6 +602,7 @@ onBeforeUnmount(() => {
         :emit-update="true"
         @resize="onResize"
         @update="onUpdate"
+        @scroll-start="onScrollStart"
         @scroll-end="onScrollEnd"
       >
         <template #before>
