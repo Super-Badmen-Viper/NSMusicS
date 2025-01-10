@@ -276,7 +276,7 @@ const options_Filter = ref([
 const options_Filter_handleSelect = (key: string | number) => {
   store_view_artist_page_logic.page_artistlists_selected = 'artist_list_love'
   console.log('selected_value_for_artistlistall：'+'artist_list_love');
-  breadcrumbItems.value = store_view_artist_page_info.page_artistlists_options.find(option => option.value === 'artist_list_love')?.label || '';
+  breadcrumbItems.value = store_view_artist_page_logic.page_artistlists_options.find(option => option.value === 'artist_list_love')?.label || '';
 }
 
 ////// dynamicScroller of artistlist_view
@@ -321,7 +321,7 @@ const breadcrumbItems = ref('所有歌手');
 const page_artistlists_handleselected_updatevalue = (value: any) => {
   store_view_artist_page_logic.page_artistlists_selected = value
   console.log('selected_value_for_artistlistall：'+value);
-  breadcrumbItems.value = store_view_artist_page_info.page_artistlists_options.find(option => option.value === value)?.label || '';
+  breadcrumbItems.value = store_view_artist_page_logic.page_artistlists_options.find(option => option.value === value)?.label || '';
 };
 
 ////// router history
@@ -509,7 +509,7 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <n-space vertical :size="12">
-    <n-space>
+    <n-space align="center">
       <n-space v-if="store_router_data_info.store_router_history_data_of_local">
         <n-button quaternary circle style="margin-left:2px" @click="get_router_history_model_pervious">
           <template #icon>
@@ -573,6 +573,14 @@ onBeforeUnmount(() => {
           <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
         </template>
       </n-button>
+
+      <n-space v-if="show_top_selectedlist">
+        <n-divider vertical style="width: 2px;height: 20px;margin-top: 8px;"/>
+        <n-select
+            :value="store_view_artist_page_logic.page_artistlists_selected"
+            :options="store_view_artist_page_logic.page_artistlists_options" style="width: 166px;"
+            @update:value="page_artistlists_handleselected_updatevalue" />
+      </n-space>
     </n-space>
 
     <div class="artist-wall-container">
@@ -656,14 +664,14 @@ onBeforeUnmount(() => {
                   <n-space style="margin-top: 4px;">
                     <n-select
                       :value="store_view_artist_page_logic.page_artistlists_selected"
-                      :options="store_view_artist_page_info.page_artistlists_options" style="width: 166px;"
+                      :options="store_view_artist_page_logic.page_artistlists_options" style="width: 166px;"
                       @update:value="page_artistlists_handleselected_updatevalue" />
                   </n-space>
                   <n-space vertical style="margin-top: 12px;margin-left: 7px;">
                     <n-grid
                         :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
                         style="margin-left: 4px;width: 336px;">
-                      <n-gi v-for="artistlist in store_view_artist_page_info.page_artistlists_statistic" :key="artistlist.id">
+                      <n-gi v-for="artistlist in store_view_artist_page_logic.page_artistlists_statistic" :key="artistlist.id">
                         <n-statistic :label="artistlist.label" :value="artistlist.artist_count" />
                       </n-gi>
                     </n-grid>

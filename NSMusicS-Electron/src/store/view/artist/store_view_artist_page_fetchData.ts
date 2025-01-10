@@ -57,9 +57,9 @@ export const store_view_artist_page_fetchData = reactive({
                     stmt_artist_string = `SELECT * FROM ${store_server_user_model.artist} ${keywordFilter} ORDER BY ${sortKey} ${sortOrder}`;
                     stmt_artist = db.prepare(stmt_artist_string);
                     //////
-                    if (store_router_history_data_of_artist.router_select_history_date_of_Artist && store_view_artist_page_info.page_artistlists_keyword_reset === true) {
+                    if (store_router_history_data_of_artist.router_select_history_date_of_Artist && store_view_artist_page_logic.page_artistlists_keyword_reset === true) {
                         store_router_history_data_of_artist.remove_router_history_of_Artist(store_router_history_data_of_artist.router_select_history_date_of_Artist.id);// 若存在新操作，则覆盖后续的路由
-                        store_view_artist_page_info.page_artistlists_keyword_reset = false;
+                        store_view_artist_page_logic.page_artistlists_keyword_reset = false;
                     }
                     const routerDate: Interface_View_Router_Date = {
                         id: store_router_history_data_of_artist.router_history_datas_of_Artist ? store_router_history_data_of_artist.router_history_datas_of_Artist.length + 1 : 1,

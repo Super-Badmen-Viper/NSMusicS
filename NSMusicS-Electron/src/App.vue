@@ -48,6 +48,7 @@
   import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
   import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic"
   import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info"
+  import {store_view_artist_page_logic} from "@/store/view/artist/store_view_artist_page_logic"
   import {store_router_data_info} from "@/store/router/store_router_data_info";
   import {store_router_data_logic} from "@/store/router/store_router_data_logic";
   import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
@@ -501,9 +502,9 @@
   }
   ////// view of artist
   const Init_page_artistlists_statistic_Data = () => {
-    store_view_artist_page_info.page_artistlists_options = [];
-    store_view_artist_page_info.page_artistlists_statistic = [];
-    store_view_artist_page_info.page_artistlists = []
+    store_view_artist_page_logic.page_artistlists_options = [];
+    store_view_artist_page_logic.page_artistlists_statistic = [];
+    store_view_artist_page_logic.page_artistlists = []
     //////
     const temp_Play_List_ALL: Play_List = {
       label: computed(() => t('nsmusics.view_page.allArtist')),
@@ -523,13 +524,13 @@
       evaluated_at: '',
       owner_id: ''
     }
-    store_view_artist_page_info.page_artistlists_options.push(temp_Play_List_ALL);
-    store_view_artist_page_info.page_artistlists_statistic.push({
+    store_view_artist_page_logic.page_artistlists_options.push(temp_Play_List_ALL);
+    store_view_artist_page_logic.page_artistlists_statistic.push({
       label: temp_Play_List_ALL.label,
       artist_count: temp_Play_List_ALL.song_count.toString(),
       id: temp_Play_List_ALL.id
     });
-    store_view_artist_page_info.page_artistlists.push(temp_Play_List_ALL)
+    store_view_artist_page_logic.page_artistlists.push(temp_Play_List_ALL)
     //////
     const temp_Play_List_Love: Play_List = {
       label: computed(() => t('nsmusics.view_page.loveArtist')),
@@ -549,13 +550,13 @@
       evaluated_at: '',
       owner_id: ''
     }
-    store_view_artist_page_info.page_artistlists_options.push(temp_Play_List_Love);
-    store_view_artist_page_info.page_artistlists_statistic.push({
+    store_view_artist_page_logic.page_artistlists_options.push(temp_Play_List_Love);
+    store_view_artist_page_logic.page_artistlists_statistic.push({
       label: temp_Play_List_Love.label,
       artist_count: temp_Play_List_Love.song_count.toString(),
       id: temp_Play_List_Love.id
     });
-    store_view_artist_page_info.page_artistlists.push(temp_Play_List_Love)
+    store_view_artist_page_logic.page_artistlists.push(temp_Play_List_Love)
     //////
     const temp_Play_List_Recently: Play_List = {
       label: computed(() => t('nsmusics.view_page.recentPlay')),
@@ -575,15 +576,15 @@
       evaluated_at: '',
       owner_id: ''
     }
-    store_view_artist_page_info.page_artistlists_options.push(temp_Play_List_Recently);
-    store_view_artist_page_info.page_artistlists_statistic.push({
+    store_view_artist_page_logic.page_artistlists_options.push(temp_Play_List_Recently);
+    store_view_artist_page_logic.page_artistlists_statistic.push({
       label: temp_Play_List_Recently.label,
       artist_count: temp_Play_List_Recently.song_count.toString(),
       id: temp_Play_List_Recently.id
     });
-    store_view_artist_page_info.page_artistlists.push(temp_Play_List_Recently)
+    store_view_artist_page_logic.page_artistlists.push(temp_Play_List_Recently)
     //////
-    store_view_artist_page_info.page_artistlists_statistic.push({
+    store_view_artist_page_logic.page_artistlists_statistic.push({
       label: computed(() => t('entity.playlist_other')),
       artist_count: store_view_media_page_info.media_playlist_count + ' *',
       id: 'artist_list_all_PlayList'

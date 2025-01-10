@@ -642,7 +642,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
             const getArtists_ALL = await browsing_ApiService_of_ND.getArtists_ALL(username, token, salt);
             const list = getArtists_ALL["subsonic-response"]["artists"]["index"];
             if(list != undefined) {
-                store_view_artist_page_info.artist_item_count = list.length;
+                store_view_artist_page_info.artist_item_count = list.reduce((total, item) => total + item.artist.length, 0);
                 store_view_album_page_info.album_item_count = list.reduce((sum, index) => {
                     return sum + index.artist.reduce((artistSum, artist) => {
                         return artistSum + artist.albumCount;

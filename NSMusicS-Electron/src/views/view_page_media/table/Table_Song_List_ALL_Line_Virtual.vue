@@ -261,14 +261,16 @@ const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any
   updateParts.visibleEndIdx = visibleEndIndex
   
   store_router_history_data_of_media.router_history_model_of_Media_scroller_value = viewEndIndex
+
+  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
 }
+const show_top_selectedlist = ref(false)
 const stopWatching_router_history_model_of_Media_scroll = watch(() => store_router_history_data_of_media.router_history_model_of_Media_scroll,(newValue) => {
-      if (newValue === true) {
-        scrollTo(store_router_history_data_of_media.router_history_model_of_Media_scroller_value)
-        store_router_history_data_of_media.router_history_model_of_Media_scroll = false
-      }
+    if (newValue === true) {
+      scrollTo(store_router_history_data_of_media.router_history_model_of_Media_scroller_value)
+      store_router_history_data_of_media.router_history_model_of_Media_scroll = false
     }
-)
+})
 const scrollTo = (value :number) => {
   if (dynamicScroller !== null) {
     setTimeout(() => {
@@ -809,7 +811,7 @@ onBeforeUnmount(() => {
 
 <template>
   <n-space vertical :size="12">
-    <n-space>
+    <n-space align="center">
       <n-space v-if="store_router_data_info.store_router_history_data_of_local">
         <n-button quaternary circle style="margin-left:2px" @click="get_router_history_model_pervious">
           <template #icon>
@@ -944,6 +946,16 @@ onBeforeUnmount(() => {
           <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
         </template>
       </n-button>
+
+      <n-space v-if="show_top_selectedlist">
+        <n-divider vertical style="width: 2px;height: 20px;margin-top: 8px;"/>
+        <n-select
+            size="small"
+            :value="store_view_media_page_logic.page_songlists_selected"
+            :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
+            @update:value="page_songlists_handleselected_updatevalue" />
+      </n-space>
+
     </n-space>
     <div class="dynamic-scroller-demo">
       <DynamicScroller

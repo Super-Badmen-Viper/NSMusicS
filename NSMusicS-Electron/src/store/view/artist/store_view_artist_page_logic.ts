@@ -28,18 +28,18 @@ watch(() => store_view_artist_page_logic.page_artistlists_keyword, (newValue) =>
         newValue = newValue.replace('accurate_search','');
         if(newValue.indexOf('__title__') > 0){
             newValue = newValue.replace('__title__','');
-            store_view_artist_page_info.page_artistlists_get_keyword_model_num = 1;
+            store_view_artist_page_logic.page_artistlists_get_keyword_model_num = 1;
         }else if(newValue.indexOf('__artist__') > 0){
             newValue = newValue.replace('__artist__','');
-            store_view_artist_page_info.page_artistlists_get_keyword_model_num = 2;
+            store_view_artist_page_logic.page_artistlists_get_keyword_model_num = 2;
         }else if(newValue.indexOf('__album__') > 0){
             newValue = newValue.replace('__album__','');
-            store_view_artist_page_info.page_artistlists_get_keyword_model_num = 3;
+            store_view_artist_page_logic.page_artistlists_get_keyword_model_num = 3;
         }
     }else{
-        store_view_artist_page_info.page_artistlists_get_keyword_model_num = 0;
+        store_view_artist_page_logic.page_artistlists_get_keyword_model_num = 0;
     }
-    store_view_artist_page_info.page_artistlists_keyword_reset = true;
+    store_view_artist_page_logic.page_artistlists_keyword_reset = true;
     console.log('page_artistlists_keyword:' + newValue)
 
     store_view_artist_page_fetchData.fetchData_Artist()

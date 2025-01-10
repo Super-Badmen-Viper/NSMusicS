@@ -541,7 +541,7 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <n-space vertical :size="12">
-    <n-space>
+    <n-space align="center">
       <n-space v-if="store_router_data_info.store_router_history_data_of_local">
         <n-button quaternary circle style="margin-left:2px" @click="get_router_history_model_pervious">
           <template #icon>
@@ -605,6 +605,14 @@ onBeforeUnmount(() => {
           <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
         </template>
       </n-button>
+
+      <n-space v-if="show_top_selectedlist">
+        <n-divider vertical style="width: 2px;height: 20px;margin-top: 8px;"/>
+        <n-select
+            :value="store_view_album_page_logic.page_albumlists_selected"
+            :options="store_view_album_page_logic.page_albumlists_options" style="width: 166px;"
+            @update:value="page_albumlists_handleSelected_updateValue" />
+      </n-space>
     </n-space>
     <div class="album-wall-container">
       <DynamicScroller
