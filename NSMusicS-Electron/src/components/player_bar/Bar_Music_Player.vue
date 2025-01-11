@@ -70,10 +70,10 @@ const handleImageError = async (event) => {
 import { debounce } from 'lodash';
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 
-
 ////// open view musicplayer
+import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'
+import shrink_down_arrow from '@/assets/svg/shrink_down_arrow.svg'
 const player_show_hight_animation_value = ref(670);
-const svg_shrink_up_arrow = ref<string>('shrink_up_arrow.svg');
 const back_display = ref('none');
 const back_filter_blurValue  = ref(0);
 const hover_back_img = () => {
@@ -90,22 +90,14 @@ const click_back_svg = () => {
         player_show_hight_animation_value.value ===
         0 ? 670 : 0;
     get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
-    if(player_show_hight_animation_value.value === 0)
-      svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
-    else
-      svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
-    store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.resourcesPath, 'svg/' + svg_shrink_up_arrow.value)
+    store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
   }
 };
 let unwatch_player_show_click = watch(() => store_player_appearance.player_show_click, (newValue) => {
   if (newValue === true) {
     player_show_hight_animation_value.value = 670;
     get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
-    if(player_show_hight_animation_value.value === 0)
-      svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
-    else
-      svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
-    store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.resourcesPath, 'svg/' + svg_shrink_up_arrow.value)
+    store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
 
     store_player_appearance.player_show_click = false
   }
@@ -665,11 +657,7 @@ const handleItemClick_title = (title:string) => {
   store_view_media_page_logic.get_page_songlists_keyword(title)
   player_show_hight_animation_value.value = 670;
   get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
-  if(player_show_hight_animation_value.value === 0)
-    svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
-  else
-    svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
-  store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.resourcesPath, 'svg/' + svg_shrink_up_arrow.value)
+  store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
 }
 const handleItemClick_artist = (artist:string) => {
   store_view_media_page_logic.page_songlists_bool_show_search_area = true
@@ -681,11 +669,7 @@ const handleItemClick_artist = (artist:string) => {
   }
   player_show_hight_animation_value.value = 670;
   get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
-  if(player_show_hight_animation_value.value === 0)
-    svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
-  else
-    svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
-  store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.resourcesPath, 'svg/' + svg_shrink_up_arrow.value)
+  store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
 }
 const handleItemClick_album = (album:string) => {
   store_view_media_page_logic.page_songlists_bool_show_search_area = true
@@ -697,11 +681,7 @@ const handleItemClick_album = (album:string) => {
   }
   player_show_hight_animation_value.value = 670;
   get_playerbar_to_switch_playerview(player_show_hight_animation_value.value);
-  if(player_show_hight_animation_value.value === 0)
-    svg_shrink_up_arrow.value = 'shrink_down_arrow.svg';
-  else
-    svg_shrink_up_arrow.value = 'shrink_up_arrow.svg';
-  store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.resourcesPath, 'svg/' + svg_shrink_up_arrow.value)
+  store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
 }
 
 ////// view albumlist_view Remove data

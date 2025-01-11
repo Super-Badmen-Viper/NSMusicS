@@ -25,8 +25,6 @@ export const store_app_configs_logic_save = reactive({
         db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
-
-
         const app_Configs = ref(
             new App_Configs({
                 theme: store_app_configs_info.theme_name,
@@ -101,7 +99,6 @@ export const store_app_configs_logic_save = reactive({
         db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
-
 
         const player_Configs_of_UI = ref(
             new Player_Configs_of_UI({
@@ -210,7 +207,6 @@ export const store_app_configs_logic_save = reactive({
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
 
-
         let system_Configs_Write = new Class_Set_System_Configs_Write();
         system_Configs_Write.system_view_history(
             db,
@@ -231,7 +227,6 @@ export const store_app_configs_logic_save = reactive({
         db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
         db.pragma('journal_mode = WAL');
         db.exec('PRAGMA foreign_keys = OFF');
-
 
         let system_Configs_Write = new Class_Set_System_Configs_Write()
         system_Configs_Write.system_servers_config(

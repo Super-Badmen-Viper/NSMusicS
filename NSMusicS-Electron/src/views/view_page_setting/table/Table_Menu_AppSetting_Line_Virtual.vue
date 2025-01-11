@@ -314,6 +314,8 @@
         // reset data
         store_server_user_model.switchToMode_Server()
         store_server_user_model.switchToMode_Local()
+        store_server_user_model.model_select = 'local'
+        store_app_configs_logic_save.save_system_config_of_App_Configs()
         //
         await ipcRenderer.send('window-reset-all')
       }

@@ -7,6 +7,7 @@ import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_player_audio_logic} from "../../store/player/store_player_audio_logic";
 const os = require('os');
 const path = require('path');
+import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'
 
 export class Class_Get_System_Configs_Read {
     public app_Configs = ref(
@@ -124,7 +125,7 @@ export class Class_Get_System_Configs_Read {
                 store_app_configs_info.driveDbPath = path.join(os.homedir(), '.NSMusicS');
             }
             // init image
-            store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.resourcesPath, 'svg/shrink_up_arrow.svg')
+            store_player_audio_logic.player_back_ChevronDouble = shrink_up_arrow
             //
             store_app_configs_info.navidrome_db = path.join(store_app_configs_info.driveDbPath, 'navidrome.db')
             store_app_configs_info.nsmusics_db = path.join(store_app_configs_info.driveDbPath, 'nsmusics.db')

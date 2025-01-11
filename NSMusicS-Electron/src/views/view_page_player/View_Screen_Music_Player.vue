@@ -9,10 +9,7 @@ import {
   MotionPhotosAutoOutlined
 } from '@vicons/material'
 import {
-  ChevronDown
-} from "@vicons/ionicons5";
-import {
-  Close,Clean
+  Close
 } from '@vicons/carbon'
 function getAssetImage(firstImage: string) {
   if(process.platform === 'win32')
@@ -27,9 +24,8 @@ function getAssetImage(firstImage: string) {
 // app theme
 import {darkTheme, NIcon, NSlider} from 'naive-ui'
 // vue3 function
-import {ref, watch, watchEffect, onMounted, computed, inject} from 'vue';
+import {ref, watch, watchEffect, onMounted, computed} from 'vue';
 import { onBeforeUnmount } from 'vue';
-const path = require('path');
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
@@ -406,12 +402,19 @@ type PlayerTheme_LyricItem = {
   name: any;
   normalStyle:PlayerTheme_Style;
 };
+import player_theme_1_png from '@/assets/img/player_theme_1.png'
+import player_theme_2_png from '@/assets/img/player_theme_2.png'
+import player_theme_3_png from '@/assets/img/player_theme_3.png'
+import player_theme_4_png from '@/assets/img/player_theme_4.png'
+import Animation_1715591164841 from '@/assets/lottie_json/Animation - 1715591164841.json'
+import Animation_1715392202806 from '@/assets/lottie_json/Animation - 1715392202806.json'
+import Animation_1715417974362 from '@/assets/lottie_json/Animation - 1715417974362.json'
 const player_theme_1 = ref<PlayerTheme_LyricItem>(
     {
       id: 0,
       name: computed_i18n_Label_ViewSetConfig_Cover_1.value,
       normalStyle: {
-        image_url: 'file:///' + path.join(store_app_configs_info.resourcesPath, 'img/player_theme_1.png'),
+        image_url: player_theme_1_png,
 
         textAlign: true,
 
@@ -425,7 +428,7 @@ const player_theme_2 = ref<PlayerTheme_LyricItem>(
       id: 1,
       name: computed_i18n_Label_ViewSetConfig_Cover_2.value,
       normalStyle: {
-        image_url: 'file:///' + path.join(store_app_configs_info.resourcesPath, 'img/player_theme_2.png'),
+        image_url: player_theme_2_png,
 
         textAlign: false,
 
@@ -439,7 +442,7 @@ const player_theme_3 = ref<PlayerTheme_LyricItem>(
       id: 2,
       name: computed_i18n_Label_ViewSetConfig_Cover_3.value,
       normalStyle: {
-        image_url: 'file:///' + path.join(store_app_configs_info.resourcesPath, 'img/player_theme_3.png'),
+        image_url: player_theme_3_png,
 
         textAlign: true,
 
@@ -453,7 +456,7 @@ const player_theme_4 = ref<PlayerTheme_LyricItem>(
       id: 3,
       name: computed_i18n_Label_ViewSetConfig_Cover_4.value,
       normalStyle: {
-        image_url: 'file:///' + path.join(store_app_configs_info.resourcesPath, 'img/player_theme_4.png'),
+        image_url: player_theme_4_png,
 
         textAlign: false,
 
@@ -467,7 +470,7 @@ const player_theme_5 = ref<PlayerTheme_LyricItem>(
       id: 4,
       name: '皮肤底图',
       normalStyle: {
-        image_url: 'file:///' + path.join(store_app_configs_info.resourcesPath, 'img/player_theme_3.png'),
+        image_url: player_theme_3_png,
 
         textAlign: false,
 
@@ -943,7 +946,7 @@ onBeforeUnmount(() => {
                         autoplay
                         loop
                         mode="normal"
-                        :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.resourcesPath, 'lottie_json/Animation - 1715591164841.json')))"
+                        :src="JSON.parse(JSON.stringify(Animation_1715591164841))"
                         :style="{
                         '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`
                       }"
@@ -975,7 +978,7 @@ onBeforeUnmount(() => {
                         autoplay
                         loop
                         mode="normal"
-                        :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.resourcesPath, 'lottie_json/Animation - 1715392202806.json')))"
+                        :src="JSON.parse(JSON.stringify(Animation_1715392202806))"
                         style="width: 54vh;height:calc(4.7vh);"
                     />
                     <n-space
@@ -1041,7 +1044,7 @@ onBeforeUnmount(() => {
                         autoplay
                         loop
                         mode="normal"
-                        :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.resourcesPath, 'lottie_json/Animation - 1715417974362.json')))"
+                        :src="JSON.parse(JSON.stringify(Animation_1715417974362))"
                         style="
                         width: calc(56vh);
                         height: calc(56vh);

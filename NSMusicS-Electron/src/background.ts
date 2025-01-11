@@ -713,41 +713,6 @@ async function initSqlite3() {
                         copyIfNotExists(
                             path.join(resourcesPath, 'nsmusics.db'),
                             path.join(driveDbPath, 'nsmusics.db')).then((newPath) => console.log(`nsmusics.db 已复制到 ${newPath}`)),
-
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'lottie_json', 'Animation - 1715392202806.json'),
-                            path.join(driveDbPath, 'Animation - 1715392202806.json')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'lottie_json', 'Animation - 1715591164841.json'),
-                            path.join(driveDbPath, 'Animation - 1715591164841.json')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'lottie_json', 'Animation - 1715417974362.json'),
-                            path.join(driveDbPath, 'Animation - 1715417974362.json')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'lottie_json', 'Animation - 1734617399494.json'),
-                            path.join(driveDbPath, 'Animation - 1734617399494.json')).then((newPath) => {}),
-
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'svg', 'shrink_down_arrow.svg'),
-                            path.join(driveDbPath, 'shrink_down_arrow.svg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'svg', 'shrink_up_arrow.svg'),
-                            path.join(driveDbPath, 'shrink_up_arrow.svg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img', 'error_album.jpg'),
-                            path.join(driveDbPath, 'error_album.jpg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img', 'player_theme_1.png'),
-                            path.join(driveDbPath, 'player_theme_1.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img', 'player_theme_2.png'),
-                            path.join(driveDbPath, 'player_theme_2.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img', 'player_theme_3.png'),
-                            path.join(driveDbPath, 'player_theme_3.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img', 'player_theme_4.png'),
-                            path.join(driveDbPath, 'player_theme_4.png')).then((newPath) => {})
                     ]);
 
                     console.log('初始化资源完成');
@@ -813,41 +778,6 @@ async function initSqlite3() {
                         copyIfNotExists(
                             path.join(resourcesPath, 'nsmusics.db'),
                             path.join(linuxDbDir, 'nsmusics.db')).then((newPath) => console.log(`nsmusics.db 已复制到 ${newPath}`)),
-
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'lottie_json', 'Animation - 1715392202806.json'),
-                            path.join(linuxDbDir, 'Animation - 1715392202806.json')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'lottie_json', 'Animation - 1715591164841.json'),
-                            path.join(linuxDbDir, 'Animation - 1715591164841.json')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'lottie_json', 'Animation - 1715417974362.json'),
-                            path.join(linuxDbDir, 'Animation - 1715417974362.json')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'lottie_json', 'Animation - 1734617399494.json'),
-                            path.join(linuxDbDir, 'Animation - 1734617399494.json')).then((newPath) => {}),
-
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'svg', 'shrink_down_arrow.svg'),
-                            path.join(linuxDbDir, 'shrink_down_arrow.svg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'svg', 'shrink_up_arrow.svg'),
-                            path.join(linuxDbDir, 'shrink_up_arrow.svg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img', 'error_album.jpg'),
-                            path.join(linuxDbDir, 'error_album.jpg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img', 'player_theme_1.png'),
-                            path.join(linuxDbDir, 'player_theme_1.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img', 'player_theme_2.png'),
-                            path.join(linuxDbDir, 'player_theme_2.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img', 'player_theme_3.png'),
-                            path.join(linuxDbDir, 'player_theme_3.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img', 'player_theme_4.png'),
-                            path.join(linuxDbDir, 'player_theme_4.png')).then((newPath) => {})
                     ]);
 
                     console.log('Linux 资源初始化完成');
