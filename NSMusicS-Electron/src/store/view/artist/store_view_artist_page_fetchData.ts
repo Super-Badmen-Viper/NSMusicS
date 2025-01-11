@@ -64,7 +64,7 @@ export const store_view_artist_page_fetchData = reactive({
                         const routerDate: Interface_View_Router_Date = {
                             id: store_router_history_data_of_artist.router_history_datas_of_Artist ? store_router_history_data_of_artist.router_history_datas_of_Artist.length + 1 : 1,
                             menu_select_active_key: 'go_artist_list',
-                            router_name: 'View_Artist_List_ALL',
+                            router_name: 'artist',
                             router_select_model_media: false,
                             router_select_model_album: false,
                             router_select_model_artist: true,
@@ -81,7 +81,7 @@ export const store_view_artist_page_fetchData = reactive({
                         //////
                     } else {
                         if (store_router_history_data_of_artist.router_select_history_date_of_Artist) {
-                            store_router_data_info.router.push('View_Artist_List_ALL')
+                            store_router_data_info.router.push('artist')
                             store_router_data_info.router_select_model_artist = true;
                             store_view_artist_page_logic.page_artistlists_keyword = store_router_history_data_of_artist.router_select_history_date_of_Artist.page_lists_keyword;
                             store_view_artist_page_logic.page_artistlists_selected = store_router_history_data_of_artist.router_select_history_date_of_Artist.page_lists_selected;

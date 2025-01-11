@@ -22,7 +22,7 @@ export const store_router_history_data_of_media = reactive({
                     this.router_select_history_date_of_Media = this.router_history_datas_of_Media[newIndex];
                     store_router_data_logic.clear_Files_temporary();
                     const selectedRouterName = this.router_select_history_date_of_Media.router_name;
-                    if (selectedRouterName === 'View_Song_List_ALL') {
+                    if (selectedRouterName === 'song') {
                         store_router_data_info.router_select_model_media = true;
                         await store_view_media_page_fetchData.fetchData_Media();
                         this.router_history_model_of_Media_scroll = true;

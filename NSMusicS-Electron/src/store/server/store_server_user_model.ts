@@ -96,7 +96,7 @@ export const store_server_user_model = reactive({
 })
 watch(() => store_server_user_model.library_path, (newValue) => {
     store_app_configs_logic_save.save_system_library_config()
-    store_router_data_info.router_name = 'View_Song_List_ALL';
+    store_router_data_info.router_name = 'song';
     store_app_configs_logic_save.save_system_config_of_View_Router_History()
 });
 watch(() => store_server_user_model.model_select, async (newValue) => {

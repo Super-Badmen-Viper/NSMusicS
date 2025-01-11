@@ -87,7 +87,7 @@ export const store_view_media_page_fetchData = reactive({
                         const routerDate: Interface_View_Router_Date = {
                             id: store_router_history_data_of_media.router_history_datas_of_Media ? store_router_history_data_of_media.router_history_datas_of_Media.length + 1 : 1,
                             menu_select_active_key: 'go_songs_list',
-                            router_name: 'View_Song_List_ALL',
+                            router_name: 'song',
                             router_select_model_media: true,
                             router_select_model_album: false,
                             router_select_model_artist: false,
@@ -105,7 +105,7 @@ export const store_view_media_page_fetchData = reactive({
                         //////
                     } else {
                         if (store_router_history_data_of_media.router_select_history_date_of_Media) {
-                            store_router_data_info.router.push('View_Song_List_ALL')
+                            store_router_data_info.router.push('song')
                             store_router_data_info.router_select_model_media = true;
                             store_view_media_page_logic.page_songlists_keyword = store_router_history_data_of_media.router_select_history_date_of_Media.page_lists_keyword;
                             store_view_media_page_logic.page_songlists_keywordFilter = store_router_history_data_of_media.router_select_history_date_of_Media.page_songlists_keywordFilter;

@@ -325,8 +325,8 @@ export const store_app_configs_logic_load = reactive({
         store_app_configs_info.app_view_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_view_left_menu_select_activeKey']
         store_router_data_info.router_name = '' + system_Configs_Read.app_Configs.value['router_name']
         if(store_router_data_info.router_name === ''){
-            store_app_configs_info.app_view_left_menu_select_activeKey = 'View_Menu_AppSetting'
-            store_router_data_info.router_name = 'View_Menu_AppSetting'
+            store_app_configs_info.app_view_left_menu_select_activeKey = 'apps'
+            store_router_data_info.router_name = 'apps'
         }
         store_router_data_info.router.push(store_router_data_info.router_name)
         this.app_configs_loading = false

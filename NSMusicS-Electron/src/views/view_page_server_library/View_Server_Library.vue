@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import View_Server_Library from './table/Table_Server_Library.vue'
+import library from './table/Table_Server_Library.vue'
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 
 onMounted(async () => {
-  store_router_data_info.router_select = 'View_Server_Library'
+  store_router_data_info.router_select = 'library'
 });
 </script>
 <template>
   <div class="view_show">
-    <View_Server_Library/>
+    <library/>
   </div>
 </template>
 

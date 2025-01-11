@@ -82,7 +82,7 @@ export const store_view_album_page_fetchData = reactive({
                         const routerDate: Interface_View_Router_Date = {
                             id: store_router_history_data_of_album.router_history_datas_of_Album ? store_router_history_data_of_album.router_history_datas_of_Album.length + 1 : 1,
                             menu_select_active_key: 'go_albums_list',
-                            router_name: 'View_Album_List_ALL',
+                            router_name: 'album',
                             router_select_model_media: false,
                             router_select_model_album: true,
                             router_select_model_artist: false,
@@ -99,7 +99,7 @@ export const store_view_album_page_fetchData = reactive({
                         //////
                     } else {
                         if (store_router_history_data_of_album.router_select_history_date_of_Album) {
-                            store_router_data_info.router.push('View_Album_List_ALL')
+                            store_router_data_info.router.push('album')
                             store_router_data_info.router_select_model_album = true;
                             store_view_album_page_logic.page_albumlists_keyword = store_router_history_data_of_album.router_select_history_date_of_Album.page_lists_keyword;
                             store_view_album_page_logic.page_albumlists_selected = store_router_history_data_of_album.router_select_history_date_of_Album.page_lists_selected;

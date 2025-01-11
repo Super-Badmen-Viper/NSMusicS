@@ -4,7 +4,7 @@
   import {store_router_data_info} from "@/store/router/store_router_data_info";
 
   onMounted(async () => {
-    store_router_data_info.router_select = 'View_Updateing'
+    store_router_data_info.router_select = 'update'
   });
 </script>
 <template>

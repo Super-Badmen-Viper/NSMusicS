@@ -198,7 +198,7 @@ export const store_view_media_page_logic = reactive({
         store_view_media_page_logic.page_songlists_keyword_reset = true;
         console.log('page_songlists_keyword:' + newValue)
 
-        store_router_data_info.router.push('View_Song_List_ALL')
+        store_router_data_info.router.push('song')
         store_view_media_page_fetchData.fetchData_Media()
     },
     async get_page_songlists_selected(newValue: any){

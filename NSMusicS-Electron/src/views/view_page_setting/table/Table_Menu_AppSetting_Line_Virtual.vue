@@ -55,39 +55,39 @@
   function create_menuOptions_appBar(){
     store_app_configs_info.app_view_menuOptions = []
     store_app_configs_info.app_view_menuOptions.push(
-        {label: computed(() => renderRouterLink('View_Menu_AppSetting',t('common.setting'))), key: 'View_Menu_AppSetting', icon: renderIcon(Settings48Regular),},
+        {label: computed(() => renderRouterLink('apps',t('common.setting'))), key: 'apps', icon: renderIcon(Settings48Regular),},
         {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
     )
     store_app_configs_info.app_view_menuOptions.push(
-        {label: computed(() => renderRouterLink('View_Home_MusicLibrary_Browse',t('common.home'))),key: 'View_Home_MusicLibrary_Browse',icon: renderIcon(Home28Regular),},
-        {label: computed(() => renderRouterLink('View_Album_List_ALL',t('entity.album_other'))),key: 'View_Album_List_ALL',icon: renderIcon(AlbumFilled)},
-        {label: computed(() => renderRouterLink('View_Song_List_ALL',t('entity.track_other'))),key: 'View_Song_List_ALL',icon: renderIcon(MusicNoteRound)},
-        {label: computed(() => renderRouterLink('View_Artist_List_ALL',t('entity.artist_other'))),key: 'View_Artist_List_ALL',icon: renderIcon(UserAvatarFilledAlt)},
-        // {label: computed(() => renderRouterLink('View_Updateing',t('entity.genre_other'))),key: 'View_Genre_List_ALL',icon: renderIcon(Flag16Regular)},
+        {label: computed(() => renderRouterLink('home',t('common.home'))),key: 'home',icon: renderIcon(Home28Regular),},
+        {label: computed(() => renderRouterLink('album',t('entity.album_other'))),key: 'album',icon: renderIcon(AlbumFilled)},
+        {label: computed(() => renderRouterLink('song',t('entity.track_other'))),key: 'song',icon: renderIcon(MusicNoteRound)},
+        {label: computed(() => renderRouterLink('artist',t('entity.artist_other'))),key: 'artist',icon: renderIcon(UserAvatarFilledAlt)},
+        // {label: computed(() => renderRouterLink('update',t('entity.genre_other'))),key: 'View_Genre_List_ALL',icon: renderIcon(Flag16Regular)},
     )
     if(store_app_configs_info.menuOptions_selectd_model_1)
       store_app_configs_info.app_view_menuOptions.push(
           {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-          {label: computed(() => renderRouterLink('View_Server_Setting',t('page.appMenu.manageServers'))),key: 'View_Server_Setting',icon: renderIcon(BareMetalServer)},
-          {label: computed(() => renderRouterLink('View_Server_Library',t('HeaderLibraries'))),key: 'View_Server_Library',icon: renderIcon(MediaCast)},
+          {label: computed(() => renderRouterLink('servers',t('page.appMenu.manageServers'))),key: 'servers',icon: renderIcon(BareMetalServer)},
+          {label: computed(() => renderRouterLink('library',t('HeaderLibraries'))),key: 'library',icon: renderIcon(MediaCast)},
       )
     if(store_app_configs_info.menuOptions_selectd_model_2)
       store_app_configs_info.app_view_menuOptions.push(
           {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.karaoke'))),key: 'karaoke',icon: renderIcon(SlideMicrophone32Regular)},
+          {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.karaoke'))),key: 'karaoke',icon: renderIcon(SlideMicrophone32Regular)},
       )
     if(store_app_configs_info.menuOptions_selectd_model_3)
       store_app_configs_info.app_view_menuOptions.push(
           {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.guessLike'))),key: 'View_Updateing',icon: renderIcon(DocumentHeart20Regular)},
-          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.identifySong'))),key: 'identifySong',icon: renderIcon(Hearing)},
-          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'scoreGeneration',icon: renderIcon(QueueMusicRound)},
-          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'lyricsProduction',icon: renderIcon(lyric)},
+          {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.guessLike'))),key: 'update',icon: renderIcon(DocumentHeart20Regular)},
+          {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.identifySong'))),key: 'identifySong',icon: renderIcon(Hearing)},
+          {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'scoreGeneration',icon: renderIcon(QueueMusicRound)},
+          {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'lyricsProduction',icon: renderIcon(lyric)},
       )
     if(store_app_configs_info.menuOptions_selectd_model_4)
       store_app_configs_info.app_view_menuOptions.push(
           {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-          {label: computed(() => renderRouterLink('View_Updateing',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'musicCommunity',icon: renderIcon(PeopleCommunity16Regular)},
+          {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'musicCommunity',icon: renderIcon(PeopleCommunity16Regular)},
       )
   }
   onBeforeUnmount(() => {

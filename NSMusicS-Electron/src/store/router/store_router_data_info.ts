@@ -36,10 +36,10 @@ export const store_router_data_info = reactive({
 });
 watch(() => store_router_data_info.router_select, async (newValue) => {
     if(!store_playlist_appearance.playlist_show) {
-        if (newValue === 'View_Home_MusicLibrary_Browse') {
+        if (newValue === 'home') {
             store_router_data_info.router_select_model_home = true
             store_view_home_page_fetchData.fetchData_Home()
-        } else if (newValue === 'View_Song_List_ALL') {
+        } else if (newValue === 'song') {
             store_router_data_info.router_select_model_media = true
             await store_view_media_page_fetchData.fetchData_Media()
             /// Synchronize API data
@@ -47,10 +47,10 @@ watch(() => store_router_data_info.router_select, async (newValue) => {
                 // get server all playlist
                 await store_server_user_model.Get_UserData_Synchronize_PlayList()
             }
-        } else if (newValue === 'View_Album_List_ALL') {
+        } else if (newValue === 'album') {
             store_router_data_info.router_select_model_album = true
             store_view_album_page_fetchData.fetchData_Album()
-        } else if (newValue === 'View_Artist_List_ALL') {
+        } else if (newValue === 'artist') {
             store_router_data_info.router_select_model_artist = true
             store_view_artist_page_fetchData.fetchData_Artist()
         }

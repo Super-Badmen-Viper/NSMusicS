@@ -4,7 +4,7 @@ import Table_Menu_AppSetting from './table/Table_Menu_AppSetting_Line_Virtual.vu
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 
 onMounted(async () => {
-  store_router_data_info.router_select = 'View_Menu_AppSetting'
+  store_router_data_info.router_select = 'apps'
 });
 </script>
 <template>

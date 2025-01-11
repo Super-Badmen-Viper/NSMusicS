@@ -4,7 +4,7 @@ import Table_Artist_List_ALL from './table/Table_Artist_List_ALL_Grid_Virtual.vu
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 
 onMounted(async () => {
-  store_router_data_info.router_select = 'View_Artist_List_ALL'
+  store_router_data_info.router_select = 'artist'
 });
 
 </script>

@@ -4,7 +4,7 @@ import Table_Home_List_ALL_Line from './table/Table_Home_List_ALL_Line_Virtual.v
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 
 onMounted(async () => {
-  store_router_data_info.router_select = 'View_Home_MusicLibrary_Browse'
+  store_router_data_info.router_select = 'home'
 });
 </script>
 

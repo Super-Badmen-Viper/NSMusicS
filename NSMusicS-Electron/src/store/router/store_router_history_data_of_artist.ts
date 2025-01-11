@@ -22,7 +22,7 @@ export const store_router_history_data_of_artist = reactive({
                     this.router_select_history_date_of_Artist = this.router_history_datas_of_Artist[newIndex];
                     store_router_data_logic.clear_Files_temporary();
                     const selectedRouterName = this.router_select_history_date_of_Artist.router_name;
-                    if (selectedRouterName === 'View_Artist_List_ALL') {
+                    if (selectedRouterName === 'artist') {
                         store_router_data_info.router_select_model_artist = true;
                         store_view_artist_page_fetchData.fetchData_Artist();
                         this.router_history_model_of_Artist_scroll = true;
