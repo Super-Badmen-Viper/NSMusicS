@@ -1,13 +1,21 @@
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+import { isElectron } from '@/utils/electron/isElectron';
 
 export class Set_ServerInfo_To_LocalSqlite {
     private getUniqueId(db: any) {
-        const { v4: uuidv4 } = require('uuid');
-        let id = uuidv4();
-        while (db.prepare(`SELECT COUNT(*) FROM system_servers_config WHERE id = ?`).pluck().get(id) > 0) {
-            id = uuidv4();
+        if(isElectron) {
+            const {v4: uuidv4} = require('uuid');
+            let id = uuidv4();
+            while (db.prepare(`SELECT COUNT(*)
+                               FROM system_servers_config
+                               WHERE id = ?`).pluck().get(id) > 0) {
+                id = uuidv4();
+            }
+            return id;
+        } else {
+            // other
         }
-        return id;
+        return undefined
     }
     private getCurrentDateTime() {
         return new Date().toLocaleString(
@@ -23,30 +31,35 @@ export class Set_ServerInfo_To_LocalSqlite {
         user_name:string,password:string,
         type: string
     ) {
-        const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-        ///
-        let new_id = this.getUniqueId(db);
-        let new_date = this.getCurrentDateTime();
-        db.pragma('journal_mode = WAL');
-        db.exec('PRAGMA foreign_keys = OFF');
-        db.prepare(`
-            INSERT INTO system_servers_config (id, server_name, url, user_name, password, last_login_at, type) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)`)
-        .run(new_id, server_name, url,user_name,password, new_date,type);
-        ///
-        db.close();
-        ///
-        const data:Server_Configs_Props = {
-            show: false,
-            type: type,
-            id: new_id,
-            server_name: server_name,
-            url: url,
-            user_name: user_name,
-            password: password,
-            last_login_at: new_date,
-        };
-        return data;
+        if(isElectron) {
+            const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+            ///
+            let new_id = this.getUniqueId(db);
+            let new_date = this.getCurrentDateTime();
+            db.pragma('journal_mode = WAL');
+            db.exec('PRAGMA foreign_keys = OFF');
+            db.prepare(`
+                INSERT INTO system_servers_config (id, server_name, url, user_name, password, last_login_at, type)
+                VALUES (?, ?, ?, ?, ?, ?, ?)`)
+                .run(new_id, server_name, url, user_name, password, new_date, type);
+            ///
+            db.close();
+            ///
+            const data: Server_Configs_Props = {
+                show: false,
+                type: type,
+                id: new_id,
+                server_name: server_name,
+                url: url,
+                user_name: user_name,
+                password: password,
+                last_login_at: new_date,
+            };
+            return data;
+        } else {
+            // other
+        }
+        return undefined
     }
     public Set_ServerInfo_To_Update_SetUser(
         id:string,
@@ -54,49 +67,65 @@ export class Set_ServerInfo_To_LocalSqlite {
         user_name:string,password:string,
         type: string
     ) {
-        const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-        db.pragma('journal_mode = WAL');
-        db.exec('PRAGMA foreign_keys = OFF');
-        ///
-        let new_date = this.getCurrentDateTime();
-        const existingRecord = db.prepare(`SELECT * FROM system_servers_config WHERE id = ?`).get(id);
-        if (!existingRecord) {
-            db.prepare(`
-                INSERT INTO system_servers_config (id, server_name, url, user_name, password, last_login_at, type) 
-                VALUES (?, ?, ?, ?, ?, ?, ?)`)
-                .run(this.getUniqueId(db), server_name, url,user_name,password, new_date,type);
+        if(isElectron) {
+            const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+            db.pragma('journal_mode = WAL');
+            db.exec('PRAGMA foreign_keys = OFF');
+            ///
+            let new_date = this.getCurrentDateTime();
+            const existingRecord = db.prepare(`SELECT *
+                                               FROM system_servers_config
+                                               WHERE id = ?`).get(id);
+            if (!existingRecord) {
+                db.prepare(`
+                    INSERT INTO system_servers_config (id, server_name, url, user_name, password, last_login_at, type)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)`)
+                    .run(this.getUniqueId(db), server_name, url, user_name, password, new_date, type);
+            } else {
+                db.prepare(`
+                    UPDATE system_servers_config
+                    SET server_name   = ?,
+                        url           = ?,
+                        user_name     = ?,
+                        password      = ?,
+                        last_login_at = ?
+                    WHERE id = ?
+                      AND type = type`)
+                    .run(server_name, url, user_name, password, new_date, id,);
+            }
+            ///
+            db.close();
+            ///
+            const data: Server_Configs_Props = {
+                show: false,
+                type: type,
+                id: id,
+                server_name: server_name,
+                url: url,
+                user_name: user_name,
+                password: password,
+                last_login_at: new_date,
+            };
+            return data;
         } else {
-            db.prepare(`
-                UPDATE system_servers_config 
-                SET server_name = ?, url = ? , user_name = ? , password = ? , last_login_at = ? 
-                WHERE id = ? AND type = type`)
-                .run(server_name, url, user_name, password, new_date, id,);
+            // other
         }
-        ///
-        db.close();
-        ///
-        const data:Server_Configs_Props = {
-            show: false,
-            type: type,
-            id: id,
-            server_name: server_name,
-            url: url,
-            user_name: user_name,
-            password: password,
-            last_login_at: new_date,
-        };
-        return data;
+        return undefined
     }
     public Set_ServerInfo_To_Update_DeleteUser(id:string) {
-        const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-        db.pragma('journal_mode = WAL');
-        db.exec('PRAGMA foreign_keys = OFF');
-        ///
-        const existingRecord = db.prepare('SELECT * FROM system_servers_config WHERE id = ?').get(id);
-        if (existingRecord) {
-            db.prepare('DELETE FROM system_servers_config WHERE id = ?').run(id);
+        if(isElectron) {
+            const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+            db.pragma('journal_mode = WAL');
+            db.exec('PRAGMA foreign_keys = OFF');
+            ///
+            const existingRecord = db.prepare('SELECT * FROM system_servers_config WHERE id = ?').get(id);
+            if (existingRecord) {
+                db.prepare('DELETE FROM system_servers_config WHERE id = ?').run(id);
+            }
+            ///
+            db.close();
+        } else {
+            // other
         }
-        ///
-        db.close();
     }
 }

@@ -1,40 +1,19 @@
-import axios from "axios";
 import {store_server_users} from "@/store/server/store_server_users";
-import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {store_view_home_page_info} from "@/store/view/home/store_view_home_page_info";
-import {
-    Home_Lists_ApiWebService_of_ND
-} from "@/features/servers_configs/navidrome_api/services_web/page_lists/home_lists/index_service";
+import {Home_Lists_ApiWebService_of_ND} from "@/features/servers_configs/navidrome_api/services_web/page_lists/home_lists/index_service";
 import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info";
 import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
-import {
-    Media_library_scanning_ApiService_of_ND
-} from "@/features/servers_configs/navidrome_api/services_normal/media_library_scanning/index_service";
+import {Media_library_scanning_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services_normal/media_library_scanning/index_service";
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
-import {
-    Artist_Lists_ApiWebService_of_ND
-} from "@/features/servers_configs/navidrome_api/services_web/page_lists/artist_lists/index_service";
-import {
-    Album_Lists_ApiWebService_of_ND
-} from "@/features/servers_configs/navidrome_api/services_web/page_lists/album_lists/index_service";
-import {
-    Song_Lists_ApiWebService_of_ND
-} from "@/features/servers_configs/navidrome_api/services_web/page_lists/song_lists/index_service";
-import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
-import {
-    Playlists_ApiService_of_ND
-} from "@/features/servers_configs/navidrome_api/services_normal/playlists/index_service";
-import {
-    Album$Songs_Lists_ApiService_of_ND
-} from "@/features/servers_configs/navidrome_api/services_normal/album$songs_lists/index_service";
-import {
-    Browsing_ApiService_of_ND
-} from "@/features/servers_configs/navidrome_api/services_normal/browsing/index_service";
+import {Artist_Lists_ApiWebService_of_ND} from "@/features/servers_configs/navidrome_api/services_web/page_lists/artist_lists/index_service";
+import {Album_Lists_ApiWebService_of_ND} from "@/features/servers_configs/navidrome_api/services_web/page_lists/album_lists/index_service";
+import {Song_Lists_ApiWebService_of_ND} from "@/features/servers_configs/navidrome_api/services_web/page_lists/song_lists/index_service";
+import {Playlists_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services_normal/playlists/index_service";
+import {Album$Songs_Lists_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services_normal/album$songs_lists/index_service";
+import {Browsing_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services_normal/browsing/index_service";
 import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
-import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
-import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
 
 export class Get_Navidrome_Temp_Data_To_LocalSqlite{
     private home_Lists_ApiWebService_of_ND = new Home_Lists_ApiWebService_of_ND(
@@ -67,204 +46,212 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         username: string,token: string,salt: string
     ){
         const maximum_playback = await this.home_Lists_ApiWebService_of_ND.getAlbumList_Play_Count()
-        maximum_playback.map(async (album: any) => {
-            store_view_home_page_info.home_Files_temporary_maximum_playback.push(
-                {
-                    favorite: album.starred,
-                    rating: album.rating,
-                    id: album.id,
-                    name: album.name,
-                    artist_id: album.artistId,
-                    embed_art_path: '',
-                    artist: album.artist,
-                    album_artist: '',
-                    min_year: album.year,
-                    max_year: album.year,
-                    compilation: 0,
-                    song_count: album.songCount,
-                    duration: album.duration,
-                    genre: '',
-                    created_at: album.created,
-                    updated_at: '',
-                    full_text: '',
-                    album_artist_id: '',
-                    order_album_name: '',
-                    order_album_artist_name: '',
-                    sort_album_name: '',
-                    sort_artist_name: '',
-                    sort_album_artist_name: '',
-                    size: 0,
-                    mbz_album_id: '',
-                    mbz_album_artist_id: '',
-                    mbz_album_type: '',
-                    mbz_album_comment: '',
-                    catalog_num: '',
-                    comment: '',
-                    all_artist_ids: '',
-                    image_files: '',
-                    paths: '',
-                    description: '',
-                    small_image_url: '',
-                    medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + album.id,
-                    large_image_url: '',
-                    external_url: '',
-                    external_info_updated_at: ''
-                }
-            )
-        });
+        if(maximum_playback != undefined && Array.isArray(maximum_playback)) {
+            maximum_playback.map(async (album: any) => {
+                store_view_home_page_info.home_Files_temporary_maximum_playback.push(
+                    {
+                        favorite: album.starred,
+                        rating: album.rating,
+                        id: album.id,
+                        name: album.name,
+                        artist_id: album.artistId,
+                        embed_art_path: '',
+                        artist: album.artist,
+                        album_artist: '',
+                        min_year: album.year,
+                        max_year: album.year,
+                        compilation: 0,
+                        song_count: album.songCount,
+                        duration: album.duration,
+                        genre: '',
+                        created_at: album.created,
+                        updated_at: '',
+                        full_text: '',
+                        album_artist_id: '',
+                        order_album_name: '',
+                        order_album_artist_name: '',
+                        sort_album_name: '',
+                        sort_artist_name: '',
+                        sort_album_artist_name: '',
+                        size: 0,
+                        mbz_album_id: '',
+                        mbz_album_artist_id: '',
+                        mbz_album_type: '',
+                        mbz_album_comment: '',
+                        catalog_num: '',
+                        comment: '',
+                        all_artist_ids: '',
+                        image_files: '',
+                        paths: '',
+                        description: '',
+                        small_image_url: '',
+                        medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + album.id,
+                        large_image_url: '',
+                        external_url: '',
+                        external_info_updated_at: ''
+                    }
+                )
+            });
+        }
     }
     public async get_home_list_of_random_search(
         url: string,
         username: string,token: string,salt: string
     ){
         const random_search = await this.home_Lists_ApiWebService_of_ND.getAlbumList_Random()
-        random_search.map(async (album: any) => {
-            store_view_home_page_info.home_Files_temporary_random_search.push(
-                {
-                    favorite: album.starred,
-                    rating: album.rating,
-                    id: album.id,
-                    name: album.name,
-                    artist_id: album.artistId,
-                    embed_art_path: '',
-                    artist: album.artist,
-                    album_artist: '',
-                    min_year: album.year,
-                    max_year: album.year,
-                    compilation: 0,
-                    song_count: album.songCount,
-                    duration: album.duration,
-                    genre: '',
-                    created_at: album.created,
-                    updated_at: '',
-                    full_text: '',
-                    album_artist_id: '',
-                    order_album_name: '',
-                    order_album_artist_name: '',
-                    sort_album_name: '',
-                    sort_artist_name: '',
-                    sort_album_artist_name: '',
-                    size: 0,
-                    mbz_album_id: '',
-                    mbz_album_artist_id: '',
-                    mbz_album_type: '',
-                    mbz_album_comment: '',
-                    catalog_num: '',
-                    comment: '',
-                    all_artist_ids: '',
-                    image_files: '',
-                    paths: '',
-                    description: '',
-                    small_image_url: '',
-                    medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + album.id,
-                    large_image_url: '',
-                    external_url: '',
-                    external_info_updated_at: ''
-                }
-            )
-        });
+        if(random_search != undefined && Array.isArray(random_search)) {
+            random_search.map(async (album: any) => {
+                store_view_home_page_info.home_Files_temporary_random_search.push(
+                    {
+                        favorite: album.starred,
+                        rating: album.rating,
+                        id: album.id,
+                        name: album.name,
+                        artist_id: album.artistId,
+                        embed_art_path: '',
+                        artist: album.artist,
+                        album_artist: '',
+                        min_year: album.year,
+                        max_year: album.year,
+                        compilation: 0,
+                        song_count: album.songCount,
+                        duration: album.duration,
+                        genre: '',
+                        created_at: album.created,
+                        updated_at: '',
+                        full_text: '',
+                        album_artist_id: '',
+                        order_album_name: '',
+                        order_album_artist_name: '',
+                        sort_album_name: '',
+                        sort_artist_name: '',
+                        sort_album_artist_name: '',
+                        size: 0,
+                        mbz_album_id: '',
+                        mbz_album_artist_id: '',
+                        mbz_album_type: '',
+                        mbz_album_comment: '',
+                        catalog_num: '',
+                        comment: '',
+                        all_artist_ids: '',
+                        image_files: '',
+                        paths: '',
+                        description: '',
+                        small_image_url: '',
+                        medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + album.id,
+                        large_image_url: '',
+                        external_url: '',
+                        external_info_updated_at: ''
+                    }
+                )
+            });
+        }
     }
     public async get_home_list_of_recently_added(
         url: string,
         username: string,token: string,salt: string
     ){
         const recently_added = await this.home_Lists_ApiWebService_of_ND.getAlbumList_Recently_Added()
-        recently_added.map(async (album: any) => {
-            store_view_home_page_info.home_Files_temporary_recently_added.push(
-                {
-                    favorite: album.starred,
-                    rating: album.rating,
-                    id: album.id,
-                    name: album.name,
-                    artist_id: album.artistId,
-                    embed_art_path: '',
-                    artist: album.artist,
-                    album_artist: '',
-                    min_year: album.year,
-                    max_year: album.year,
-                    compilation: 0,
-                    song_count: album.songCount,
-                    duration: album.duration,
-                    genre: '',
-                    created_at: album.created,
-                    updated_at: '',
-                    full_text: '',
-                    album_artist_id: '',
-                    order_album_name: '',
-                    order_album_artist_name: '',
-                    sort_album_name: '',
-                    sort_artist_name: '',
-                    sort_album_artist_name: '',
-                    size: 0,
-                    mbz_album_id: '',
-                    mbz_album_artist_id: '',
-                    mbz_album_type: '',
-                    mbz_album_comment: '',
-                    catalog_num: '',
-                    comment: '',
-                    all_artist_ids: '',
-                    image_files: '',
-                    paths: '',
-                    description: '',
-                    small_image_url: '',
-                    medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + album.id,
-                    large_image_url: '',
-                    external_url: '',
-                    external_info_updated_at: ''
-                }
-            )
-        });
+        if(recently_added != undefined && Array.isArray(recently_added)) {
+            recently_added.map(async (album: any) => {
+                store_view_home_page_info.home_Files_temporary_recently_added.push(
+                    {
+                        favorite: album.starred,
+                        rating: album.rating,
+                        id: album.id,
+                        name: album.name,
+                        artist_id: album.artistId,
+                        embed_art_path: '',
+                        artist: album.artist,
+                        album_artist: '',
+                        min_year: album.year,
+                        max_year: album.year,
+                        compilation: 0,
+                        song_count: album.songCount,
+                        duration: album.duration,
+                        genre: '',
+                        created_at: album.created,
+                        updated_at: '',
+                        full_text: '',
+                        album_artist_id: '',
+                        order_album_name: '',
+                        order_album_artist_name: '',
+                        sort_album_name: '',
+                        sort_artist_name: '',
+                        sort_album_artist_name: '',
+                        size: 0,
+                        mbz_album_id: '',
+                        mbz_album_artist_id: '',
+                        mbz_album_type: '',
+                        mbz_album_comment: '',
+                        catalog_num: '',
+                        comment: '',
+                        all_artist_ids: '',
+                        image_files: '',
+                        paths: '',
+                        description: '',
+                        small_image_url: '',
+                        medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + album.id,
+                        large_image_url: '',
+                        external_url: '',
+                        external_info_updated_at: ''
+                    }
+                )
+            });
+        }
     }
     public async get_home_list_of_recently_played(
         url: string,
         username: string,token: string,salt: string
     ){
         const recently_played = await this.home_Lists_ApiWebService_of_ND.getAlbumList_Play_Date()
-        recently_played.map(async (album: any) => {
-            store_view_home_page_info.home_Files_temporary_recently_played.push(
-                {
-                    favorite: album.starred,
-                    rating: album.rating,
-                    id: album.id,
-                    name: album.name,
-                    artist_id: album.artistId,
-                    embed_art_path: '',
-                    artist: album.artist,
-                    album_artist: '',
-                    min_year: album.year,
-                    max_year: album.year,
-                    compilation: 0,
-                    song_count: album.songCount,
-                    duration: album.duration,
-                    genre: '',
-                    created_at: album.created,
-                    updated_at: '',
-                    full_text: '',
-                    album_artist_id: '',
-                    order_album_name: '',
-                    order_album_artist_name: '',
-                    sort_album_name: '',
-                    sort_artist_name: '',
-                    sort_album_artist_name: '',
-                    size: 0,
-                    mbz_album_id: '',
-                    mbz_album_artist_id: '',
-                    mbz_album_type: '',
-                    mbz_album_comment: '',
-                    catalog_num: '',
-                    comment: '',
-                    all_artist_ids: '',
-                    image_files: '',
-                    paths: '',
-                    description: '',
-                    small_image_url: '',
-                    medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + album.id,
-                    large_image_url: '',
-                    external_url: '',
-                    external_info_updated_at: ''
-                }
-            )
-        });
+        if(recently_played != undefined && Array.isArray(recently_played)) {
+            recently_played.map(async (album: any) => {
+                store_view_home_page_info.home_Files_temporary_recently_played.push(
+                    {
+                        favorite: album.starred,
+                        rating: album.rating,
+                        id: album.id,
+                        name: album.name,
+                        artist_id: album.artistId,
+                        embed_art_path: '',
+                        artist: album.artist,
+                        album_artist: '',
+                        min_year: album.year,
+                        max_year: album.year,
+                        compilation: 0,
+                        song_count: album.songCount,
+                        duration: album.duration,
+                        genre: '',
+                        created_at: album.created,
+                        updated_at: '',
+                        full_text: '',
+                        album_artist_id: '',
+                        order_album_name: '',
+                        order_album_artist_name: '',
+                        sort_album_name: '',
+                        sort_artist_name: '',
+                        sort_album_artist_name: '',
+                        size: 0,
+                        mbz_album_id: '',
+                        mbz_album_artist_id: '',
+                        mbz_album_type: '',
+                        mbz_album_comment: '',
+                        catalog_num: '',
+                        comment: '',
+                        all_artist_ids: '',
+                        image_files: '',
+                        paths: '',
+                        description: '',
+                        small_image_url: '',
+                        medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + album.id,
+                        large_image_url: '',
+                        external_url: '',
+                        external_info_updated_at: ''
+                    }
+                )
+            });
+        }
     }
     public async get_media_list(
         url: string,
@@ -641,7 +628,7 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
             let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
             const getArtists_ALL = await browsing_ApiService_of_ND.getArtists_ALL(username, token, salt);
             const list = getArtists_ALL["subsonic-response"]["artists"]["index"];
-            if(list != undefined) {
+            if(list != undefined && Array.isArray(list)) {
                 store_view_artist_page_info.artist_item_count = list.reduce((total, item) => total + item.artist.length, 0);
                 store_view_album_page_info.album_item_count = list.reduce((sum, index) => {
                     return sum + index.artist.reduce((artistSum, artist) => {

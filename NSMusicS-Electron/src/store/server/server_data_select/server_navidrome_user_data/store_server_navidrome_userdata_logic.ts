@@ -137,11 +137,16 @@ export const store_server_navidrome_userdata_logic = reactive({
     },
     /// server get token
     navidrome_generateEncryptedPassword(password: string): { salt: string, token: string } {
-        const saltLength = 6;
-        const salt = this.navidrome_generateRandomString(saltLength);
-        const crypto = require('crypto');
-        const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
-        return { salt, token };
+        if(isElectron) {
+            const saltLength = 6;
+            const salt = this.navidrome_generateRandomString(saltLength);
+            const crypto = require('crypto');
+            const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
+            return {salt, token};
+        } else {
+            // other
+        }
+        return undefined
     },
     navidrome_generateRandomString(length: number): string {
         const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';

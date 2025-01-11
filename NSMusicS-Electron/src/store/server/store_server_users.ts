@@ -1,5 +1,6 @@
 import { reactive } from 'vue'
 import {store_server_user_model} from "@/store/server/store_server_user_model";
+import { isElectron } from '@/utils/electron/isElectron';
 
 export const store_server_users = reactive({
     percentage_of_local: 0,
@@ -49,29 +50,38 @@ export const store_server_users = reactive({
         return false
     },
     navidrome_get_EncryptedPassword(password: string): { salt: string, token: string } {
-        const saltLength = 6;
-        const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';
-        let randomString = '';
-        for (let i = 0; i < saltLength; i++) {
-            const randomIndex = Math.floor(Math.random() * characters.length);
-            randomString += characters[randomIndex];
+        if(isElectron) {
+            const saltLength = 6;
+            const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';
+            let randomString = '';
+            for (let i = 0; i < saltLength; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                randomString += characters[randomIndex];
+            }
+            const salt = randomString;
+            const crypto = require('crypto');
+            const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
+            return {salt, token};
+        } else {
+            // other
         }
-        const salt = randomString;
-        const crypto = require('crypto');
-        const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
-        return { salt, token };
+        return undefined
     },
     subsonic_get_EncryptedPassword(password: string): { salt: string, token: string } {
-        const saltLength = 6;
-        const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';
-        let randomString = '';
-        for (let i = 0; i < saltLength; i++) {
-            const randomIndex = Math.floor(Math.random() * characters.length);
-            randomString += characters[randomIndex];
+        if(isElectron) {
+            const saltLength = 6;
+            const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';
+            let randomString = '';
+            for (let i = 0; i < saltLength; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                randomString += characters[randomIndex];
+            }
+            const salt = randomString;
+            const crypto = require('crypto');
+            const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
+            return {salt, token};
+        } else {
+            // other
         }
-        const salt = randomString;
-        const crypto = require('crypto');
-        const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
-        return { salt, token };
     },
 });

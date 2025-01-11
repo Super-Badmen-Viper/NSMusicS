@@ -6,6 +6,7 @@ import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_player_audio_logic} from "../../store/player/store_player_audio_logic";
 import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'
+import { isElectron } from '@/utils/electron/isElectron';
 
 export class Class_Get_System_Configs_Read {
     public app_Configs = ref(
@@ -108,125 +109,152 @@ export class Class_Get_System_Configs_Read {
     public server_Configs_Current = ref<Server_Configs_Props>()
 
     constructor() {
-        const os = require('os');
-        const path = require('path');
-        let db_navidrome:any = null;
-        let db:any = null;
-        try {
-            store_app_configs_info.resourcesPath = process.env.NODE_ENV === 'development'
-                ? path.resolve('resources')
-                : path.join(process.resourcesPath)
-            if(process.platform === 'win32') {
-                store_app_configs_info.driveDbPath = 'C:\\Users\\Public\\Documents\\NSMusicS\\'
-            }else if(process.platform === 'darwin') {
-                store_app_configs_info.driveDbPath = path.join(os.homedir(), 'Applications', 'NSMusicS');
-            }else{
-                store_app_configs_info.driveDbPath = path.join(os.homedir(), '.NSMusicS');
+        if(isElectron) {
+            const os = require('os');
+            const path = require('path');
+            let db_navidrome: any = null;
+            let db: any = null;
+            try {
+                store_app_configs_info.resourcesPath = process.env.NODE_ENV === 'development'
+                    ? path.resolve('resources')
+                    : path.join(process.resourcesPath)
+                if (process.platform === 'win32') {
+                    store_app_configs_info.driveDbPath = 'C:\\Users\\Public\\Documents\\NSMusicS\\'
+                } else if (process.platform === 'darwin') {
+                    store_app_configs_info.driveDbPath = path.join(os.homedir(), 'Applications', 'NSMusicS');
+                } else {
+                    store_app_configs_info.driveDbPath = path.join(os.homedir(), '.NSMusicS');
+                }
+                // init image
+                store_player_audio_logic.player_back_ChevronDouble = shrink_up_arrow
+                //
+                store_app_configs_info.navidrome_db = path.join(store_app_configs_info.driveDbPath, 'navidrome.db')
+                store_app_configs_info.nsmusics_db = path.join(store_app_configs_info.driveDbPath, 'nsmusics.db')
+                //
+                db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db)
+                db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+            } catch {
+                db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+                db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
             }
-            // init image
-            store_player_audio_logic.player_back_ChevronDouble = shrink_up_arrow
-            //
-            store_app_configs_info.navidrome_db = path.join(store_app_configs_info.driveDbPath, 'navidrome.db')
-            store_app_configs_info.nsmusics_db = path.join(store_app_configs_info.driveDbPath, 'nsmusics.db')
-            //
-            db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db)
-            db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
-        }catch{
-            db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db);
-            db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+            db_navidrome.pragma('journal_mode = WAL');
+            db.pragma('journal_mode = WAL');
+
+
+            try {
+                db_navidrome.exec('BEGIN');
+                const tableSchema = db_navidrome.prepare(`PRAGMA table_info(media_file)`).all();
+                const hasMediumImageUrlColumn = tableSchema.some(column => column.name === 'medium_image_url');
+                if (!hasMediumImageUrlColumn) {
+                    db_navidrome.exec(`ALTER TABLE media_file
+                        ADD COLUMN medium_image_url TEXT`);
+                }
+                db_navidrome.exec('COMMIT');
+            } catch (error) {
+                db_navidrome.exec('ROLLBACK');
+                console.error('Error modifying media_file table:', error);
+            } finally {
+                db_navidrome.close()
+                db_navidrome = null;
+            }
+
+            /// Modify user configuration
+            try {
+                db.exec('BEGIN');
+                db.exec(`CREATE TABLE IF NOT EXISTS system_playlist_file_id
+                (
+                    "media_file_id"
+                    varchar
+                         (
+                    255
+                         ) NOT NULL,
+                    "order_index" INTEGER
+                    )`);
+                const hasData = db.prepare(`SELECT COUNT(*) AS count
+                                            FROM system_playlist_file_id_config`).get().count || 0;
+                if (hasData > 0) {
+                    db.exec(`INSERT INTO system_playlist_file_id
+                             SELECT *
+                             FROM system_playlist_file_id_config`);
+                    db.exec(`DELETE
+                             FROM system_playlist_file_id_config`);
+                }
+                db.exec('COMMIT');
+            } catch (error) {
+                db.exec('ROLLBACK');
+                console.error('Error modifying user configuration:', error);
+            }
+            ///
+            db.prepare(`SELECT *
+                        FROM system_app_config`).all().forEach((row: Config_Props, index: number) => {
+                const propertyName = row.config_key;
+                if (this.app_Configs.value.hasOwnProperty(propertyName))
+                    this.app_Configs.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
+            });
+            db.prepare(`SELECT *
+                        FROM system_library_config`).all().forEach((row: Config_Props, index: number) => {
+                const propertyName = row.config_key;
+                if (this.library_Configs.value.hasOwnProperty(propertyName))
+                    this.library_Configs.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
+            });
+            db.prepare(`SELECT *
+                        FROM system_player_config_of_audio`).all().forEach((row: Config_Props, index: number) => {
+                const propertyName = row.config_key;
+                if (this.player_Configs_of_Audio_Info.value.hasOwnProperty(propertyName))
+                    this.player_Configs_of_Audio_Info.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
+            });
+            db.prepare(`SELECT *
+                        FROM system_player_config_of_ui`).all().forEach((row: Config_Props, index: number) => {
+                const propertyName = row.config_key;
+                if (this.player_Configs_of_UI.value.hasOwnProperty(propertyName))
+                    this.player_Configs_of_UI.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
+            });
+            /// play_list
+            const stmt_playlist_tracks_media_file_id = db.prepare(`SELECT *
+                                                                   FROM system_playlist_file_id`);
+            this.playlist_File_Configs.value = stmt_playlist_tracks_media_file_id.all().map(item => item.media_file_id);
+
+            /// view_router_hisotry
+            db.prepare(`SELECT *
+                        FROM system_view_media_history`).all().forEach((row: Interface_View_Router_Date) => {
+                this.view_Media_History_Configs.value.push(row);
+            });
+            db.prepare(`SELECT *
+                        FROM system_view_album_history`).all().forEach((row: Interface_View_Router_Date) => {
+                this.view_Album_History_Configs.value.push(row);
+            });
+            db.prepare(`SELECT *
+                        FROM system_view_artist_history`).all().forEach((row: Interface_View_Router_Date) => {
+                this.view_Artist_History_Configs.value.push(row);
+            });
+            db.prepare(`SELECT *
+                        FROM system_view_media_select_history`).all().forEach((row: Interface_View_Router_Date) => {
+                this.view_Media_History_select_Configs.value = row;
+            });
+            db.prepare(`SELECT *
+                        FROM system_view_album_select_history`).all().forEach((row: Interface_View_Router_Date) => {
+                this.view_Album_History_select_Configs.value = row;
+            });
+            db.prepare(`SELECT *
+                        FROM system_view_artist_select_history`).all().forEach((row: Interface_View_Router_Date) => {
+                this.view_Artist_History_select_Configs.value = row;
+            });
+            ///
+            db.prepare(`SELECT *
+                        FROM system_servers_config`).all().forEach((row: Server_Configs_Props, index: number) => {
+                this.server_Configs.value.push(row);
+            });
+            db.prepare(`SELECT *
+                        FROM system_servers_config`).all().forEach((row: Server_Configs_Props) => {
+                if (row.id === '' + this.app_Configs.value['server_select']) {
+                    this.server_Configs_Current.value = row;
+                }
+            });
+
+            db.close();
+            db = null;
+        } else {
+            // other
         }
-        db_navidrome.pragma('journal_mode = WAL');
-        db.pragma('journal_mode = WAL');
-
-
-        try {
-            db_navidrome.exec('BEGIN');
-            const tableSchema = db_navidrome.prepare(`PRAGMA table_info(media_file)`).all();
-            const hasMediumImageUrlColumn = tableSchema.some(column => column.name === 'medium_image_url');
-            if (!hasMediumImageUrlColumn) {
-                db_navidrome.exec(`ALTER TABLE media_file ADD COLUMN medium_image_url TEXT`);
-            }
-            db_navidrome.exec('COMMIT');
-        } catch (error) {
-            db_navidrome.exec('ROLLBACK');
-            console.error('Error modifying media_file table:', error);
-        } finally {
-            db_navidrome.close()
-            db_navidrome = null;
-        }
-
-        /// Modify user configuration
-        try {
-            db.exec('BEGIN');
-            db.exec(`CREATE TABLE IF NOT EXISTS system_playlist_file_id (
-                "media_file_id"	varchar(255) NOT NULL,
-                "order_index"	INTEGER
-            )`);
-            const hasData = db.prepare(`SELECT COUNT(*) AS count FROM system_playlist_file_id_config`).get().count || 0;
-            if (hasData > 0) {
-                db.exec(`INSERT INTO system_playlist_file_id SELECT * FROM system_playlist_file_id_config`);
-                db.exec(`DELETE FROM system_playlist_file_id_config`);
-            }
-            db.exec('COMMIT');
-        } catch (error) {
-            db.exec('ROLLBACK');
-            console.error('Error modifying user configuration:', error);
-        }
-        ///
-        db.prepare(`SELECT * FROM system_app_config`).all().forEach((row: Config_Props, index: number) => {
-            const propertyName = row.config_key;
-            if (this.app_Configs.value.hasOwnProperty(propertyName))
-                this.app_Configs.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
-        });
-        db.prepare(`SELECT * FROM system_library_config`).all().forEach((row: Config_Props, index: number) => {
-            const propertyName = row.config_key;
-            if (this.library_Configs.value.hasOwnProperty(propertyName))
-                this.library_Configs.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
-        });
-        db.prepare(`SELECT * FROM system_player_config_of_audio`).all().forEach((row: Config_Props, index: number) => {
-            const propertyName = row.config_key;
-            if (this.player_Configs_of_Audio_Info.value.hasOwnProperty(propertyName)) 
-                this.player_Configs_of_Audio_Info.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
-        });
-        db.prepare(`SELECT * FROM system_player_config_of_ui`).all().forEach((row: Config_Props, index: number) => {
-            const propertyName = row.config_key;
-            if (this.player_Configs_of_UI.value.hasOwnProperty(propertyName))
-                this.player_Configs_of_UI.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
-        });
-        /// play_list
-        const stmt_playlist_tracks_media_file_id = db.prepare(`SELECT * FROM system_playlist_file_id`);
-        this.playlist_File_Configs.value = stmt_playlist_tracks_media_file_id.all().map(item => item.media_file_id);
-
-        /// view_router_hisotry
-        db.prepare(`SELECT * FROM system_view_media_history`).all().forEach((row: Interface_View_Router_Date) => {
-            this.view_Media_History_Configs.value.push(row);
-        });
-        db.prepare(`SELECT * FROM system_view_album_history`).all().forEach((row: Interface_View_Router_Date) => {
-            this.view_Album_History_Configs.value.push(row);
-        });
-        db.prepare(`SELECT * FROM system_view_artist_history`).all().forEach((row: Interface_View_Router_Date) => {
-            this.view_Artist_History_Configs.value.push(row);
-        });
-        db.prepare(`SELECT * FROM system_view_media_select_history`).all().forEach((row: Interface_View_Router_Date) => {
-            this.view_Media_History_select_Configs.value = row;
-        });
-        db.prepare(`SELECT * FROM system_view_album_select_history`).all().forEach((row: Interface_View_Router_Date) => {
-            this.view_Album_History_select_Configs.value = row;
-        });
-        db.prepare(`SELECT * FROM system_view_artist_select_history`).all().forEach((row: Interface_View_Router_Date) => {
-            this.view_Artist_History_select_Configs.value = row;
-        });
-        ///
-        db.prepare(`SELECT * FROM system_servers_config`).all().forEach((row: Server_Configs_Props, index: number) => {
-            this.server_Configs.value.push(row);
-        });
-        db.prepare(`SELECT * FROM system_servers_config`).all().forEach((row: Server_Configs_Props) => {
-            if(row.id === '' + this.app_Configs.value['server_select']) {
-                this.server_Configs_Current.value = row;
-            }
-        });
-
-        db.close();
-        db = null;
     }
 }

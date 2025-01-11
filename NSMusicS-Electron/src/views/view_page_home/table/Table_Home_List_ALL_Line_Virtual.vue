@@ -39,6 +39,8 @@ import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
+  if(item == undefined)
+    return;
   let result_src = error_album
   if (errorHandled.value.has(item.id)) {
     item.medium_image_url = result_src;

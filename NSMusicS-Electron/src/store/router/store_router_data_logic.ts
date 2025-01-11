@@ -1,4 +1,4 @@
-import {reactive, watch} from 'vue'
+import {reactive} from 'vue'
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_view_home_page_info} from "@/store/view/home/store_view_home_page_info";
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
@@ -17,7 +17,7 @@ import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "@/features/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
-import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
+import { isElectron } from '@/utils/electron/isElectron';
 
 export const store_router_data_logic = reactive({
     reset_data(){
@@ -162,71 +162,91 @@ export const store_router_data_logic = reactive({
     },
 
     get_page_top_info(){
-        if(store_server_user_model.model_server_type_of_local){
-            const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
-            db.pragma('journal_mode = WAL');
-            db.exec('PRAGMA foreign_keys = OFF');
-            store_view_media_page_info.media_item_count = this.getCount(
-                db,
-                `SELECT COUNT(*) AS count FROM ${store_server_user_model.media_file}`);
-            store_view_media_page_info.media_starred_count = this.getCount(
-                db,
-                `SELECT COUNT(*) AS count FROM ${store_server_user_model.annotation} WHERE starred = 1 AND item_type='media_file'`);
-            store_view_media_page_info.media_recently_count = this.getCount(
-                db,
-                `SELECT COUNT(*) AS count FROM ${store_server_user_model.annotation} WHERE item_type='media_file' AND play_count > 0`);
-            ///
-            store_view_album_page_info.album_item_count = this.getCount(
-                db,
-                `SELECT COUNT(*) AS count FROM ${store_server_user_model.album}`);
-            store_view_album_page_info.album_starred_count = this.getCount(
-                db,
-                `SELECT COUNT(*) AS count FROM ${store_server_user_model.annotation} WHERE starred = 1 AND item_type='album'`);
-            store_view_album_page_info.album_recently_count = this.getCount(
-                db,
-                `SELECT COUNT(*) AS count FROM ${store_server_user_model.annotation} WHERE item_type='album' AND play_count > 0`);
-            ///
-            store_view_artist_page_info.artist_item_count = this.getCount(
-                db,
-                `SELECT COUNT(*) AS count FROM ${store_server_user_model.artist}`);
-            store_view_artist_page_info.artist_starred_count = this.getCount(
-                db,
-                `SELECT COUNT(*) AS count FROM ${store_server_user_model.annotation} WHERE starred = 1 AND item_type='artist'`);
-            store_view_artist_page_info.artist_recently_count = this.getCount(
-                db,
-                `SELECT COUNT(*) AS count FROM ${store_server_user_model.annotation} WHERE item_type='artist' AND play_count > 0`);
-            ///
-            store_view_media_page_info.media_playlist_count = this.getCount(
-                db,
-                `SELECT COUNT(*) AS count FROM ${store_server_user_model.playlist}`);
-            ///
-            db.close()
-        }else if(store_server_user_model.model_server_type_of_web){
-            let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-            get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_media_file(
-                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                store_server_user_model.token,
-                store_server_user_model.salt,
-            )
-            get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_artist_album(
-                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                store_server_user_model.token,
-                store_server_user_model.salt,
-            )
-            get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_starred(
-                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                store_server_user_model.token,
-                store_server_user_model.salt,
-            )
-            get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_playlist(
-                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                store_server_user_model.token,
-                store_server_user_model.salt,
-            )
+        if(isElectron) {
+            if (store_server_user_model.model_server_type_of_local) {
+                const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+                db.pragma('journal_mode = WAL');
+                db.exec('PRAGMA foreign_keys = OFF');
+                store_view_media_page_info.media_item_count = this.getCount(
+                    db,
+                    `SELECT COUNT(*) AS count
+                     FROM ${store_server_user_model.media_file}`);
+                store_view_media_page_info.media_starred_count = this.getCount(
+                    db,
+                    `SELECT COUNT(*) AS count
+                     FROM ${store_server_user_model.annotation}
+                     WHERE starred = 1 AND item_type='media_file'`);
+                store_view_media_page_info.media_recently_count = this.getCount(
+                    db,
+                    `SELECT COUNT(*) AS count
+                     FROM ${store_server_user_model.annotation}
+                     WHERE item_type='media_file' AND play_count > 0`);
+                ///
+                store_view_album_page_info.album_item_count = this.getCount(
+                    db,
+                    `SELECT COUNT(*) AS count
+                     FROM ${store_server_user_model.album}`);
+                store_view_album_page_info.album_starred_count = this.getCount(
+                    db,
+                    `SELECT COUNT(*) AS count
+                     FROM ${store_server_user_model.annotation}
+                     WHERE starred = 1 AND item_type='album'`);
+                store_view_album_page_info.album_recently_count = this.getCount(
+                    db,
+                    `SELECT COUNT(*) AS count
+                     FROM ${store_server_user_model.annotation}
+                     WHERE item_type='album' AND play_count > 0`);
+                ///
+                store_view_artist_page_info.artist_item_count = this.getCount(
+                    db,
+                    `SELECT COUNT(*) AS count
+                     FROM ${store_server_user_model.artist}`);
+                store_view_artist_page_info.artist_starred_count = this.getCount(
+                    db,
+                    `SELECT COUNT(*) AS count
+                     FROM ${store_server_user_model.annotation}
+                     WHERE starred = 1 AND item_type='artist'`);
+                store_view_artist_page_info.artist_recently_count = this.getCount(
+                    db,
+                    `SELECT COUNT(*) AS count
+                     FROM ${store_server_user_model.annotation}
+                     WHERE item_type='artist' AND play_count > 0`);
+                ///
+                store_view_media_page_info.media_playlist_count = this.getCount(
+                    db,
+                    `SELECT COUNT(*) AS count
+                     FROM ${store_server_user_model.playlist}`);
+                ///
+                db.close()
+            } else if (store_server_user_model.model_server_type_of_web) {
+                let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
+                get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_media_file(
+                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                    store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                    store_server_user_model.token,
+                    store_server_user_model.salt,
+                )
+                get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_artist_album(
+                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                    store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                    store_server_user_model.token,
+                    store_server_user_model.salt,
+                )
+                get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_starred(
+                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                    store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                    store_server_user_model.token,
+                    store_server_user_model.salt,
+                )
+                get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_playlist(
+                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                    store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                    store_server_user_model.token,
+                    store_server_user_model.salt,
+                )
+            }
+        } else {
+            // other
         }
     },
     getCount(db:any, query:any) {

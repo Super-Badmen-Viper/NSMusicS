@@ -8,7 +8,6 @@ import {
 import {
     Set_Subsonic_ALL_Data_To_LocalSqlite
 } from "@/features/servers_configs/subsonic_api/services_normal_middleware/class_Set_Subsonic_ALL_Data_To_LocalSqlite";
-const crypto = require('crypto');
 import { User_ApiService_of_ND } from "@/features/servers_configs/subsonic_api/services_normal/user_management/index_service";
 import { Set_ServerInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_ServerInfo_To_LocalSqlite";
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
@@ -138,10 +137,16 @@ export const store_server_subsonic_userdata_logic = reactive({
     },
     /// server get token
     subsonic_generateEncryptedPassword(password: string): { salt: string, token: string } {
-        const saltLength = 6;
-        const salt = this.subsonic_generateRandomString(saltLength);
-        const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
-        return { salt, token };
+        if(isElectron) {
+            const saltLength = 6;
+            const salt = this.subsonic_generateRandomString(saltLength);
+            const crypto = require('crypto');
+            const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
+            return {salt, token};
+        } else {
+            // other
+        }
+        return undefined
     },
     subsonic_generateRandomString(length: number): string {
         const characters = 'dfeVYUY9iu239iBUYHuji46h39BHUJ8u42nmrfhDD3r4ouj123890fvn48u95h';

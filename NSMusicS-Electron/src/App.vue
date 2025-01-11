@@ -834,7 +834,9 @@
               <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"
                        :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
                        :style="{
-                         marginRight: store_app_configs_info.desktop_system_kind != 'darwin' ? '224px' : '74px'
+                          marginRight: isElectron
+                            ? (store_app_configs_info.desktop_system_kind !== 'darwin' ? '224px' : '74px')
+                            : '46px'
                        }"
                        style="
                           z-index: 100;
@@ -878,7 +880,7 @@
                   </template>
                 </n-button>
                 <n-button quaternary circle style="margin-right:4px;"
-                          v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
+                          v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
                           @click="() => {
                             if(isElectron) {
                               ipcRenderer.send('window-fullscreen');
@@ -889,7 +891,7 @@
                   </template>
                 </n-button>
                 <n-button quaternary circle style="margin-right:4px"
-                          v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
+                          v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
                           @click="() => {
                             if(isElectron) {
                               ipcRenderer.send('window-min');
@@ -900,7 +902,7 @@
                   </template>
                 </n-button>
                 <n-button quaternary circle style="margin-right:4px"
-                          v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
+                          v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
                           @click="() => {
                             if(isElectron) {
                               ipcRenderer.send('window-max');
@@ -911,7 +913,7 @@
                   </template>
                 </n-button>
                 <n-button quaternary circle style="margin-right:30px"
-                          v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
+                          v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
                           @click="() => {
                             if(isElectron) {
                               ipcRenderer.send('window-close');
