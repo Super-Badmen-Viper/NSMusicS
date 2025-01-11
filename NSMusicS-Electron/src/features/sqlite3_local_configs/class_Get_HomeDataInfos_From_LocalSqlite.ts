@@ -1,7 +1,7 @@
 import moment from "moment/moment";
 import { store_server_user_model } from '@/store/server/store_server_user_model'
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-const path = require('path')
+import error_album from '@/assets/img/error_album.jpg'
 
 export class Get_HomeDataInfos_From_LocalSqlite {
     public Get_Annotation_Maximum_Playback() {
@@ -28,7 +28,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
                 else if (row.embed_art_path.indexOf('flac') > 0)
                     row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
                 else
-                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
+                    row.medium_image_url = error_album;
             }
             const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
             const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
@@ -84,7 +84,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
                 else if (row.embed_art_path.indexOf('flac') > 0)
                     row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
                 else
-                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
+                    row.medium_image_url = error_album;
             }
             const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
             const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
@@ -140,7 +140,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
                 else if (row.embed_art_path.indexOf('flac') > 0)
                     row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
                 else
-                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
+                    row.medium_image_url = error_album;
             }
             const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
             const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;
@@ -206,7 +206,7 @@ export class Get_HomeDataInfos_From_LocalSqlite {
                 else if (row.embed_art_path.indexOf('flac') > 0)
                     row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
                 else
-                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
+                    row.medium_image_url = error_album;
             }
             const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
             const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;

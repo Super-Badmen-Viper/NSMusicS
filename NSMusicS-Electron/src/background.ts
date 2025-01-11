@@ -9,10 +9,8 @@ import {
     app, BrowserWindow,
     screen,
     globalShortcut,
-    dialog,
     Tray, Menu, nativeImage, nativeTheme
 } from 'electron'
-import {v4 as uuidv4} from "uuid";
 const electron = require('electron')
 const ipc = electron.ipcMain
 const { session } = require('electron');
@@ -101,12 +99,14 @@ app.on('window-all-closed', async () => {
         app.quit();
     }
 })
+
 /// electron-gc
 async function clearSessionClearCache() {
     await session.defaultSession.clearCache();
     require("v8").setFlagsFromString("--expose_gc");
     global.gc = require("vm").runInNewContext("gc");
 }
+
 /// electron-tray
 let tray_loading_state = false
 let tray_music_play = false
@@ -548,10 +548,10 @@ async function createWindow() {
                 }
             }
 
-            return 'file:///' + path.join(cDriveDbDir, 'error_album.jpg');
+            return 'file:///' + path.join(driveDbPath, 'error_album.jpg');
         } catch (error) {
             console.error('Error handling window-get-imagePath:', error);
-            return 'file:///' + path.join(cDriveDbDir, 'error_album.jpg');;
+            return 'file:///' + path.join(driveDbPath, 'error_album.jpg');;
         }
     });
     ipc.handle('library-select-folder', async (event) => {
@@ -589,17 +589,15 @@ async function createWindow() {
 const mpvAPI = require('node-mpv');
 let mpv = null;
 
-/// node-db
+/// node-db-sqlite3
 const resourcesPath = process.env.NODE_ENV === 'development'
     ? path.resolve('resources')
     : path.join(process.resourcesPath)
 let navidrome_db = path.join(resourcesPath, 'navidrome.db');
 let nsmusics_db = path.join(resourcesPath, 'nsmusics.db');
-let cDriveDbPath_1 = 'C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db';
-let cDriveDbPath_2 = 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db';
-let cDriveDbDir = 'C:\\Users\\Public\\Documents\\NSMusicS';
-
-/// node-sqlite3
+let driveDbPath_1 = 'C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db';
+let driveDbPath_2 = 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db';
+let driveDbPath = 'C:\\Users\\Public\\Documents\\NSMusicS';
 async function initSqlite3() {
     try {
         if(process.platform === 'win32') {
@@ -620,7 +618,7 @@ async function initSqlite3() {
             };
             const copyIfNotExists = (sourcePath: string, destPath: string) => {
                 return new Promise((resolve, reject) => {
-                    ensureDirectoryExists(cDriveDbDir) // 确保目标文件夹存在
+                    ensureDirectoryExists(driveDbPath) // 确保目标文件夹存在
                         .then(() => {
                             fs.access(destPath, fs.constants.F_OK, (err) => {
                                 if (err) {
@@ -641,52 +639,17 @@ async function initSqlite3() {
                         });
                 });
             };
-            await ensureDirectoryExists(cDriveDbDir) // 确保目标文件夹存在
+            await ensureDirectoryExists(driveDbPath) // 确保目标文件夹存在
                 .then(async () => {
                     await Promise.all([
                         copyIfNotExists(
                             path.join(resourcesPath, 'navidrome.db'),
-                            cDriveDbPath_1).then(
+                            driveDbPath_1).then(
                             (newPath) => navidrome_db = newPath),
                         copyIfNotExists(
                             path.join(resourcesPath, 'nsmusics.db'),
-                            cDriveDbPath_2).then(
+                            driveDbPath_2).then(
                             (newPath) => nsmusics_db = newPath),
-
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'lottie_json/Animation - 1715392202806.json'),
-                            path.join(cDriveDbDir, 'Animation - 1715392202806.json')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'lottie_json/Animation - 1715591164841.json'),
-                            path.join(cDriveDbDir, 'Animation - 1715591164841.json')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'lottie_json/Animation - 1715417974362.json'),
-                            path.join(cDriveDbDir, 'Animation - 1715417974362.json')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'lottie_json/Animation - 1734617399494.json'),
-                            path.join(cDriveDbDir, 'Animation - 1734617399494.json')).then((newPath) => {}),
-
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'svg/shrink_down_arrow.svg'),
-                            path.join(cDriveDbDir, 'shrink_down_arrow.svg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'svg/shrink_up_arrow.svg'),
-                            path.join(cDriveDbDir, 'shrink_up_arrow.svg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img/error_album.jpg'),
-                            path.join(cDriveDbDir, 'error_album.jpg')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img/player_theme_1.png'),
-                            path.join(cDriveDbDir, 'player_theme_1.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img/player_theme_2.png'),
-                            path.join(cDriveDbDir, 'player_theme_2.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img/player_theme_3.png'),
-                            path.join(cDriveDbDir, 'player_theme_3.png')).then((newPath) => {}),
-                        copyIfNotExists(
-                            path.join(resourcesPath, 'img/player_theme_4.png'),
-                            path.join(cDriveDbDir, 'player_theme_4.png')).then((newPath) => {})
                     ]).catch((err) => {
                         console.error('复制文件时出错:', err);
                     });
@@ -736,8 +699,8 @@ async function initSqlite3() {
             };
             const initializeSqlite = async () => {
                 try {
-                    cDriveDbDir = path.join(os.homedir(), 'Applications', 'NSMusicS');
-                    await ensureDirectoryExists(cDriveDbDir);
+                    driveDbPath = path.join(os.homedir(), 'Applications', 'NSMusicS');
+                    await ensureDirectoryExists(driveDbPath);
 
                     const resourcesPath = process.env.NODE_ENV === 'development'
                         ? path.resolve('resources')
@@ -746,45 +709,45 @@ async function initSqlite3() {
                     await Promise.all([
                         copyIfNotExists(
                             path.join(resourcesPath, 'navidrome.db'),
-                            path.join(cDriveDbDir, 'navidrome.db')).then((newPath) => console.log(`navidrome.db 已复制到 ${newPath}`)),
+                            path.join(driveDbPath, 'navidrome.db')).then((newPath) => console.log(`navidrome.db 已复制到 ${newPath}`)),
                         copyIfNotExists(
                             path.join(resourcesPath, 'nsmusics.db'),
-                            path.join(cDriveDbDir, 'nsmusics.db')).then((newPath) => console.log(`nsmusics.db 已复制到 ${newPath}`)),
+                            path.join(driveDbPath, 'nsmusics.db')).then((newPath) => console.log(`nsmusics.db 已复制到 ${newPath}`)),
 
                         copyIfNotExists(
                             path.join(resourcesPath, 'lottie_json', 'Animation - 1715392202806.json'),
-                            path.join(cDriveDbDir, 'Animation - 1715392202806.json')).then((newPath) => {}),
+                            path.join(driveDbPath, 'Animation - 1715392202806.json')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'lottie_json', 'Animation - 1715591164841.json'),
-                            path.join(cDriveDbDir, 'Animation - 1715591164841.json')).then((newPath) => {}),
+                            path.join(driveDbPath, 'Animation - 1715591164841.json')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'lottie_json', 'Animation - 1715417974362.json'),
-                            path.join(cDriveDbDir, 'Animation - 1715417974362.json')).then((newPath) => {}),
+                            path.join(driveDbPath, 'Animation - 1715417974362.json')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'lottie_json', 'Animation - 1734617399494.json'),
-                            path.join(cDriveDbDir, 'Animation - 1734617399494.json')).then((newPath) => {}),
+                            path.join(driveDbPath, 'Animation - 1734617399494.json')).then((newPath) => {}),
 
                         copyIfNotExists(
                             path.join(resourcesPath, 'svg', 'shrink_down_arrow.svg'),
-                            path.join(cDriveDbDir, 'shrink_down_arrow.svg')).then((newPath) => {}),
+                            path.join(driveDbPath, 'shrink_down_arrow.svg')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'svg', 'shrink_up_arrow.svg'),
-                            path.join(cDriveDbDir, 'shrink_up_arrow.svg')).then((newPath) => {}),
+                            path.join(driveDbPath, 'shrink_up_arrow.svg')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'img', 'error_album.jpg'),
-                            path.join(cDriveDbDir, 'error_album.jpg')).then((newPath) => {}),
+                            path.join(driveDbPath, 'error_album.jpg')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'img', 'player_theme_1.png'),
-                            path.join(cDriveDbDir, 'player_theme_1.png')).then((newPath) => {}),
+                            path.join(driveDbPath, 'player_theme_1.png')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'img', 'player_theme_2.png'),
-                            path.join(cDriveDbDir, 'player_theme_2.png')).then((newPath) => {}),
+                            path.join(driveDbPath, 'player_theme_2.png')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'img', 'player_theme_3.png'),
-                            path.join(cDriveDbDir, 'player_theme_3.png')).then((newPath) => {}),
+                            path.join(driveDbPath, 'player_theme_3.png')).then((newPath) => {}),
                         copyIfNotExists(
                             path.join(resourcesPath, 'img', 'player_theme_4.png'),
-                            path.join(cDriveDbDir, 'player_theme_4.png')).then((newPath) => {})
+                            path.join(driveDbPath, 'player_theme_4.png')).then((newPath) => {})
                     ]);
 
                     console.log('初始化资源完成');
@@ -1256,8 +1219,10 @@ function formatTime(currentTime: number): string {
 
     return `${formattedMinutes}:${formattedSeconds}`;
 }
-/// node-taglib-sharp
+/// node-local-media-library
 let percentage = 0;
+let cover_model = false;
+let file_name_model = true;
 async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
     const Database = require('better-sqlite3');
     const db = new Database(navidrome_db, {
@@ -1611,9 +1576,7 @@ async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
     });
     db.close();
 }
-let cover_model = false
-let file_name_model = true
-/// node-local-media-library
+/// node-better-sqlite r/w
 function getUniqueId_Media(db:any) {
     const { v4: uuidv4 } = require('uuid');
     let id = uuidv4().replace(/-/g, '');

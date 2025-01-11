@@ -1,4 +1,4 @@
-import {reactive, ref} from 'vue'
+import {reactive} from 'vue'
 import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_router_data_logic} from "@/store/router/store_router_data_logic";
 import {store_router_data_info} from "@/store/router/store_router_data_info";
@@ -13,12 +13,9 @@ import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "@/features/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
-import {
-    Playlists_ApiService_of_ND
-} from "@/features/servers_configs/navidrome_api/services_normal/playlists/index_service";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
-const path = require('path')
+import error_album from '@/assets/img/error_album.jpg'
 
 export const store_view_media_page_fetchData = reactive({
     async fetchData_Media(){
@@ -136,7 +133,7 @@ export const store_view_media_page_fetchData = reactive({
                         else if (row.path.indexOf('flac') > 0)
                             row.medium_image_url = row.path.replace('flac', 'jpg');
                         else
-                            row.medium_image_url = path.resolve('resources/img/error_album.jpg');
+                            row.medium_image_url = error_album;
                     }
                     store_view_media_page_info.media_Files_temporary.push(row);
                 });
@@ -265,7 +262,7 @@ export const store_view_media_page_fetchData = reactive({
                 else if (row.path.indexOf('flac') > 0)
                     row.medium_image_url = row.path.replace('flac', 'jpg');
                 else
-                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
+                    row.medium_image_url = error_album;
             }
             store_view_media_page_info.media_Files_temporary.push(row);
         });
@@ -293,7 +290,7 @@ export const store_view_media_page_fetchData = reactive({
                 else if (row.path.indexOf('flac') > 0)
                     row.medium_image_url = row.path.replace('flac', 'jpg');
                 else
-                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
+                    row.medium_image_url = error_album;
             }
             store_view_media_page_info.media_Files_temporary.push(row);
         });

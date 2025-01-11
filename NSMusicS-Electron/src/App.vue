@@ -619,7 +619,6 @@
     inheritLocale: true,
     useScope: 'global'
   })
-  const path = require('path');
   onMounted(async () => {
     store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
     store_app_configs_info.nsmusics_db = await ipcRenderer.invoke('window-get-nsmusics-db');

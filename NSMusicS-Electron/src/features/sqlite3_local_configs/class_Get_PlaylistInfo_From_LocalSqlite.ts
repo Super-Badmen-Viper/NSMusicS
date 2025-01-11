@@ -1,6 +1,6 @@
 import { store_server_user_model } from '@/store/server/store_server_user_model'
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-const path = require('path')
+import error_album from '@/assets/img/error_album.jpg'
 
 export class Get_PlaylistInfo_From_LocalSqlite {
     public Get_Playlist() {
@@ -57,7 +57,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
                 else if (row.path.indexOf('flac') > 0)
                     row.medium_image_url = row.path.replace('flac', 'jpg');
                 else
-                    row.medium_image_url = path.resolve('resources/img/error_album.jpg');
+                    row.medium_image_url = error_album;
             }
             row.play_id = row.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
             result.push(row);

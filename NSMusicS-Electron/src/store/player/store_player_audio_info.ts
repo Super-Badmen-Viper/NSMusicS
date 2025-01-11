@@ -2,22 +2,14 @@ import {reactive, watch} from 'vue'
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
 import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
-import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-import {Set_MediaInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
-import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
 import {store_app_configs_logic_load} from "@/store/app/store_app_configs_logic_load";
 import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
 import {store_playlist_appearance} from "@/store/view/playlist/store_playlist_appearance";
 import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
-import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
-const path = require('path')
 const { ipcRenderer } = require('electron');
-interface ByteTime {
-    start: number;
-    duration: number;
-}
+import error_album from '@/assets/img/error_album.jpg'
 
 export const store_player_audio_info = reactive({
     this_audio_file_path: '',
@@ -43,7 +35,7 @@ export const store_player_audio_info = reactive({
     this_audio_artist_rating: 0,
     this_audio_artist_favorite: 0,
 
-    page_top_album_image_url: path.resolve('resources/img/error_album.jpg'),
+    page_top_album_image_url: error_album,
     page_top_album_id: '',
     page_top_album_name: '',
 
@@ -59,8 +51,8 @@ export const store_player_audio_info = reactive({
 
     async reset_data() {
         this.this_audio_file_path = '';
-        this.this_audio_file_medium_image_url = path.resolve('resources/img/error_album.jpg');
-        this.page_top_album_image_url = path.resolve('resources/img/error_album.jpg');
+        this.this_audio_file_medium_image_url = error_album;
+        this.page_top_album_image_url = error_album;
         this.this_audio_restart_play = false;
         this.this_audio_is_playing = true;
 
@@ -80,7 +72,7 @@ export const store_player_audio_info = reactive({
         this.this_audio_artist_rating = 0;
         this.this_audio_artist_favorite = 0;
 
-        this.page_top_album_image_url = path.resolve('resources/img/error_album.jpg');
+        this.page_top_album_image_url = error_album;
         this.page_top_album_id = '';
         this.page_top_album_name = '';
 

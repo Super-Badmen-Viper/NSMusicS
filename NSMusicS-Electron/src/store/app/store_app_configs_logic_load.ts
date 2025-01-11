@@ -30,7 +30,7 @@ import {store_router_history_data_of_album} from "@/store/router/store_router_hi
 import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
-const path = require('path')
+import error_album from '@/assets/img/error_album.jpg'
 
 export const store_app_configs_logic_load = reactive({
     app_configs_loading: false,
@@ -149,7 +149,7 @@ export const store_app_configs_logic_load = reactive({
             store_player_audio_info.this_audio_file_path = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_path']
             store_player_audio_info.this_audio_file_medium_image_url = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_medium_image_url']
             if(store_player_audio_info.this_audio_file_medium_image_url === undefined || store_player_audio_info.this_audio_file_medium_image_url.length === 0){
-                store_player_audio_info.this_audio_file_medium_image_url = path.resolve('resources/img/error_album.jpg');
+                store_player_audio_info.this_audio_file_medium_image_url = error_album;
             }
             store_player_audio_info.this_audio_lyrics_string = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_file_lyric']
             store_player_audio_info.this_audio_artist_id = '' + system_Configs_Read.player_Configs_of_Audio_Info.value['this_audio_artist_id']

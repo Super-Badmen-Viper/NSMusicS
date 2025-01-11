@@ -35,10 +35,10 @@ const { t } = useI18n({
 
 ////// songlist_view page_layout lineItems
 const { ipcRenderer } = require('electron');
-const path = require('path');
+import error_album from '@/assets/img/error_album.jpg'
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
-  let result_src = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'error_album.jpg');
+  let result_src = error_album
   if (errorHandled.value.has(item.id)) {
     item.medium_image_url = result_src;
     return;

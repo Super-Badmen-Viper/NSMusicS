@@ -8,8 +8,6 @@ import { ref, onMounted } from 'vue';
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
-import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 
 ////// scrollbar of playlist_view
 const scrollbar = ref(null as any);
@@ -64,10 +62,10 @@ const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
 const handleItemClick_Rating = (id: any,rating: number) => {
   console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
 }
-const path = require('path')
+import error_album from '@/assets/img/error_album.jpg'
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
-  let result_src = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'error_album.jpg');
+  let result_src = error_album
   if (errorHandled.value.has(item.id)) {
     item.medium_image_url = result_src;
     return;
@@ -91,10 +89,8 @@ const handleImageError = async (item: any) => {
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
 import {VueDraggable} from "vue-draggable-plus";
-import {BrowserUpdatedFilled} from "@vicons/material";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
 const { t } = useI18n({
   inheritLocale: true
 })

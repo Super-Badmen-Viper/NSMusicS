@@ -411,7 +411,7 @@ const player_theme_1 = ref<PlayerTheme_LyricItem>(
       id: 0,
       name: computed_i18n_Label_ViewSetConfig_Cover_1.value,
       normalStyle: {
-        image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_1.png'),
+        image_url: 'file:///' + path.join(store_app_configs_info.resourcesPath, 'img/player_theme_1.png'),
 
         textAlign: true,
 
@@ -425,7 +425,7 @@ const player_theme_2 = ref<PlayerTheme_LyricItem>(
       id: 1,
       name: computed_i18n_Label_ViewSetConfig_Cover_2.value,
       normalStyle: {
-        image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_2.png'),
+        image_url: 'file:///' + path.join(store_app_configs_info.resourcesPath, 'img/player_theme_2.png'),
 
         textAlign: false,
 
@@ -439,7 +439,7 @@ const player_theme_3 = ref<PlayerTheme_LyricItem>(
       id: 2,
       name: computed_i18n_Label_ViewSetConfig_Cover_3.value,
       normalStyle: {
-        image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_3.png'),
+        image_url: 'file:///' + path.join(store_app_configs_info.resourcesPath, 'img/player_theme_3.png'),
 
         textAlign: true,
 
@@ -453,7 +453,7 @@ const player_theme_4 = ref<PlayerTheme_LyricItem>(
       id: 3,
       name: computed_i18n_Label_ViewSetConfig_Cover_4.value,
       normalStyle: {
-        image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_4.png'),
+        image_url: 'file:///' + path.join(store_app_configs_info.resourcesPath, 'img/player_theme_4.png'),
 
         textAlign: false,
 
@@ -467,7 +467,7 @@ const player_theme_5 = ref<PlayerTheme_LyricItem>(
       id: 4,
       name: '皮肤底图',
       normalStyle: {
-        image_url: 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'player_theme_3.png'),
+        image_url: 'file:///' + path.join(store_app_configs_info.resourcesPath, 'img/player_theme_3.png'),
 
         textAlign: false,
 
@@ -943,7 +943,7 @@ onBeforeUnmount(() => {
                         autoplay
                         loop
                         mode="normal"
-                        :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715591164841.json')))"
+                        :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.resourcesPath, 'lottie_json/Animation - 1715591164841.json')))"
                         :style="{
                         '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`
                       }"
@@ -975,7 +975,7 @@ onBeforeUnmount(() => {
                         autoplay
                         loop
                         mode="normal"
-                        :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715392202806.json')))"
+                        :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.resourcesPath, 'lottie_json/Animation - 1715392202806.json')))"
                         style="width: 54vh;height:calc(4.7vh);"
                     />
                     <n-space
@@ -1041,7 +1041,7 @@ onBeforeUnmount(() => {
                         autoplay
                         loop
                         mode="normal"
-                        :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.cDriveDbDir, 'Animation - 1715417974362.json')))"
+                        :src="JSON.parse(JSON.stringify('file:///' + path.join(store_app_configs_info.resourcesPath, 'lottie_json/Animation - 1715417974362.json')))"
                         style="
                         width: calc(56vh);
                         height: calc(56vh);

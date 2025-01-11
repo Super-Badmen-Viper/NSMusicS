@@ -112,21 +112,22 @@ export class Class_Get_System_Configs_Read {
         let db_navidrome:any = null;
         let db:any = null;
         try {
+            store_app_configs_info.resourcesPath = process.env.NODE_ENV === 'development'
+                ? path.resolve('resources')
+                : path.join(process.resourcesPath)
             if(process.platform === 'win32') {
-                store_app_configs_info.cDriveDbDir = 'C:\\Users\\Public\\Documents\\NSMusicS\\'
+                store_app_configs_info.driveDbPath = 'C:\\Users\\Public\\Documents\\NSMusicS\\'
             }else if(process.platform === 'darwin') {
-                // const resourcesPath = process.env.NODE_ENV === 'development'
-                //     ? path.resolve('resources')
-                //     : path.join(process.resourcesPath)
-                store_app_configs_info.cDriveDbDir = path.join(os.homedir(), 'Applications', 'NSMusicS');
+
+                store_app_configs_info.driveDbPath = path.join(os.homedir(), 'Applications', 'NSMusicS');
             }else{
-                store_app_configs_info.cDriveDbDir = path.join(os.homedir(), '.NSMusicS');
+                store_app_configs_info.driveDbPath = path.join(os.homedir(), '.NSMusicS');
             }
             // init image
-            store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.cDriveDbDir, 'shrink_up_arrow.svg')
+            store_player_audio_logic.player_back_ChevronDouble = 'file:///' + path.join(store_app_configs_info.resourcesPath, 'svg/shrink_up_arrow.svg')
             //
-            store_app_configs_info.navidrome_db = path.join(store_app_configs_info.cDriveDbDir, 'navidrome.db')
-            store_app_configs_info.nsmusics_db = path.join(store_app_configs_info.cDriveDbDir, 'nsmusics.db')
+            store_app_configs_info.navidrome_db = path.join(store_app_configs_info.driveDbPath, 'navidrome.db')
+            store_app_configs_info.nsmusics_db = path.join(store_app_configs_info.driveDbPath, 'nsmusics.db')
             //
             db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db)
             db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
