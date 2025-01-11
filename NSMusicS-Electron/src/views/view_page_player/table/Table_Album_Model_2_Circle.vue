@@ -2,12 +2,7 @@
 import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 function getAssetImage(firstImage: string) {
-  if(process.platform === 'win32')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'darwin')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'linux')
-    return new URL(firstImage, import.meta.url).href;
+  return new URL(firstImage, import.meta.url).href;
 }
 </script>
 

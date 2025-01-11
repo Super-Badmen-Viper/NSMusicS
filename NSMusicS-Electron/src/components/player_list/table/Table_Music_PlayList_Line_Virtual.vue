@@ -63,6 +63,7 @@ const handleItemClick_Rating = (id: any,rating: number) => {
   console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
 }
 import error_album from '@/assets/img/error_album.jpg'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
   let result_src = error_album
@@ -72,17 +73,21 @@ const handleImageError = async (item: any) => {
   }
   errorHandled.value.set(item.id, true);
   ///
-  const originalSrc = item.medium_image_url;
-  try {
-    const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
-    if (newImagePath.length > 0) {
-      item.medium_image_url = 'file:///' + newImagePath;
-    } else {
+  if(isElectron) {
+    const originalSrc = item.medium_image_url;
+    try {
+      const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
+      if (newImagePath.length > 0) {
+        item.medium_image_url = 'file:///' + newImagePath;
+      } else {
+        item.medium_image_url = result_src;
+      }
+    } catch (error) {
+      console.error('Error handling image error:', error);
       item.medium_image_url = result_src;
     }
-  } catch (error) {
-    console.error('Error handling image error:', error);
-    item.medium_image_url = result_src;
+  } else {
+    // other
   }
 };
 
@@ -106,8 +111,6 @@ const message = useMessage()
 ////// right menu
 import { inject } from "vue";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
-import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-const { ipcRenderer } = require('electron');
 const contextmenu = inject("playlist_contextmenu", null);
 async function update_playlist_addMediaFile(id: any, playlist_id: any){
   try{

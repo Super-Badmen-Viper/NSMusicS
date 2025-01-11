@@ -10,12 +10,7 @@ import {NButton, NIcon} from "naive-ui";
 
 //////
 function getAssetImage(firstImage: string) {
-  if(process.platform === 'win32')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'darwin')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'linux')
-    return new URL(firstImage, import.meta.url).href;
+  return new URL(firstImage, import.meta.url).href;
 }
 </script>
 

@@ -128,6 +128,7 @@
   });
 
   import { useMessage } from 'naive-ui'
+  import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
   const message = useMessage()
   ////// server
   const Type_Server_Kinds = [
@@ -272,13 +273,16 @@
   }
 
   ////// local
-  const { ipcRenderer } = require('electron');
   const timer_percentage = ref<NodeJS.Timeout | null>(null);
   async function select_Folder() {
     try {
-      const folderPath = await ipcRenderer.invoke('library-select-folder');
-      if (folderPath) {
-        store_server_user_model.library_path = folderPath;
+      if(isElectron) {
+        const folderPath = await ipcRenderer.invoke('library-select-folder');
+        if (folderPath) {
+          store_server_user_model.library_path = folderPath;
+        }
+      } else {
+        // other
       }
     } catch (error) {
       console.error('Error selecting folder:', error);
@@ -287,37 +291,41 @@
   }
   async function begin_import_Folder(cover: boolean) {
     try {
-      if (store_server_user_model.library_path) {
-        clearInterval(timer_percentage.value);
-        console.log('Before invoking node-taglib-sharp-get-directory-filePath');
-        store_server_users.percentage_of_local = 10;
-        const folderPath = store_server_user_model.library_path
-        const file_name_model = true
-        const error_log = await ipcRenderer.invoke('node-taglib-sharp-get-directory-filePath',
-            {
-              folderPath,
-              cover,
-              file_name_model
-            }
-        )
-          .then(success => {
-            console.log('node-taglib-sharp-get-directory-filePath succeeded:', success);
-            clearInterval(timer_percentage.value);
-          })
-          .catch(error => {
-            console.error('node-taglib-sharp-get-directory-filePath failed:', error);
-            store_local_db_info.result_local = false;
-          });
-        console.error(error_log)
-        timer_percentage.value = setInterval(synchronize_percentage_of_library_path_search, 200);
-        console.log('Folder path selected:', folderPath);
-        // reset data
-        store_server_user_model.switchToMode_Server()
-        store_server_user_model.switchToMode_Local()
-        store_server_user_model.model_select = 'local'
-        store_app_configs_logic_save.save_system_config_of_App_Configs()
-        //
-        await ipcRenderer.send('window-reset-all')
+      if(isElectron) {
+        if (store_server_user_model.library_path) {
+          clearInterval(timer_percentage.value);
+          console.log('Before invoking node-taglib-sharp-get-directory-filePath');
+          store_server_users.percentage_of_local = 10;
+          const folderPath = store_server_user_model.library_path
+          const file_name_model = true
+          const error_log = await ipcRenderer.invoke('node-taglib-sharp-get-directory-filePath',
+              {
+                folderPath,
+                cover,
+                file_name_model
+              }
+          )
+              .then(success => {
+                console.log('node-taglib-sharp-get-directory-filePath succeeded:', success);
+                clearInterval(timer_percentage.value);
+              })
+              .catch(error => {
+                console.error('node-taglib-sharp-get-directory-filePath failed:', error);
+                store_local_db_info.result_local = false;
+              });
+          console.error(error_log)
+          timer_percentage.value = setInterval(synchronize_percentage_of_library_path_search, 200);
+          console.log('Folder path selected:', folderPath);
+          // reset data
+          store_server_user_model.switchToMode_Server()
+          store_server_user_model.switchToMode_Local()
+          store_server_user_model.model_select = 'local'
+          store_app_configs_logic_save.save_system_config_of_App_Configs()
+          //
+          await ipcRenderer.send('window-reset-all')
+        }
+      } else {
+        // other
       }
     } catch (error) {
       console.error('Error selecting folder:', error);
@@ -326,7 +334,9 @@
     }
   }
   async function synchronize_percentage_of_library_path_search(){
-    store_server_users.percentage_of_local = await ipcRenderer.invoke('node-taglib-sharp-percentage');
+    if(isElectron) {
+      store_server_users.percentage_of_local = await ipcRenderer.invoke('node-taglib-sharp-percentage');
+    }
   }
 
   ////// 设置：通用
@@ -534,10 +544,7 @@
   const model_local_step_2 = computed(() => t('nsmusics.view_page.selectLibrary'));
 
   //////
-  const { shell } = require('electron');
-  const openLink = (url: string) => {
-    shell.openExternal(url);
-  };
+  import { openLink } from '@/utils/electron/openLink';
 </script>
 <template>
   <div class="view">
@@ -1052,20 +1059,22 @@
                       style="width: 207px;margin-top: -4px;"
                       @update:value="() => {
                         store_app_configs_info.lang = $i18n.locale;
-                        ipcRenderer.invoke('i18n-tray-label-menu',
-                          [
-                              t('player.play'),
-                              t('player.pause'),
-                              t('player.previous'),
-                              t('player.next'),
-                              t('nsmusics.view_page.desktop_lyrics'),
-                              t('common.quit'),
-                              t('nsmusics.siderbar_player.playback_1'),
-                              t('nsmusics.siderbar_player.playback_2'),
-                              t('nsmusics.siderbar_player.playback_3'),
-                              t('nsmusics.siderbar_player.playback_4')
-                          ]
-                        );
+                        if(isElectron) {
+                          ipcRenderer.invoke('i18n-tray-label-menu',
+                            [
+                                t('player.play'),
+                                t('player.pause'),
+                                t('player.previous'),
+                                t('player.next'),
+                                t('nsmusics.view_page.desktop_lyrics'),
+                                t('common.quit'),
+                                t('nsmusics.siderbar_player.playback_1'),
+                                t('nsmusics.siderbar_player.playback_2'),
+                                t('nsmusics.siderbar_player.playback_3'),
+                                t('nsmusics.siderbar_player.playback_4')
+                            ]
+                          );
+                        }
                       }"
                     />
                   </n-space>

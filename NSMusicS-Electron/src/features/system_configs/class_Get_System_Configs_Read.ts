@@ -5,8 +5,6 @@ import { Player_Configs_of_UI } from '@/models/app_Configs/class_Player_Configs_
 import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_player_audio_logic} from "../../store/player/store_player_audio_logic";
-const os = require('os');
-const path = require('path');
 import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'
 
 export class Class_Get_System_Configs_Read {
@@ -110,6 +108,8 @@ export class Class_Get_System_Configs_Read {
     public server_Configs_Current = ref<Server_Configs_Props>()
 
     constructor() {
+        const os = require('os');
+        const path = require('path');
         let db_navidrome:any = null;
         let db:any = null;
         try {
@@ -119,7 +119,6 @@ export class Class_Get_System_Configs_Read {
             if(process.platform === 'win32') {
                 store_app_configs_info.driveDbPath = 'C:\\Users\\Public\\Documents\\NSMusicS\\'
             }else if(process.platform === 'darwin') {
-
                 store_app_configs_info.driveDbPath = path.join(os.homedir(), 'Applications', 'NSMusicS');
             }else{
                 store_app_configs_info.driveDbPath = path.join(os.homedir(), '.NSMusicS');
@@ -155,7 +154,6 @@ export class Class_Get_System_Configs_Read {
             db_navidrome.close()
             db_navidrome = null;
         }
-
 
         /// Modify user configuration
         try {

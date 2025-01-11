@@ -60,7 +60,7 @@
   import {store_view_artist_page_fetchData} from "@/store/view/artist/store_view_artist_page_fetchData";
 
   ////// BrowserWindow
-  const { ipcRenderer } = require('electron');
+  import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
   window.addEventListener('resize', () => {
     store_app_configs_info.window_innerWidth = window.innerWidth;
     store_app_configs_info.window_innerHeight = window.innerHeight;
@@ -150,7 +150,9 @@
         await handleMenuSelection();
       }
       store_player_appearance.player_show_complete = true;
-      ipcRenderer.send('window-gc');
+      if(isElectron) {
+        ipcRenderer.send('window-gc');
+      }
     }, 600);
   }
   async function handleMenuSelection() {
@@ -283,9 +285,13 @@
       if(!store_router_data_logic.clear_UserExperience_Model) {
         if (to.name != 'View_Song_List_ALL') {
           try {
-            const memoryUsage = await ipcRenderer.invoke('window-get-memory')
-            if (memoryUsage.rss > store_router_data_info.MEMORY_THRESHOLD) {
-              ipcRenderer.send('window-reset-data')
+            if(isElectron) {
+              const memoryUsage = await ipcRenderer.invoke('window-get-memory')
+              if (memoryUsage.rss > store_router_data_info.MEMORY_THRESHOLD) {
+                ipcRenderer.send('window-reset-data')
+              }
+            }else{
+              // other
             }
           } catch { }
         }
@@ -600,10 +606,7 @@
   });
 
   ////
-  const { shell } = require('electron');
-  const openLink = (url: string) => {
-    shell.openExternal(url);
-  };
+  import { openLink } from '@/utils/electron/openLink';
   const computed_i18n_Label_Update = computed(() => t('filter.recentlyUpdated'));
 
   ////
@@ -620,10 +623,12 @@
     useScope: 'global'
   })
   onMounted(async () => {
-    store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
-    store_app_configs_info.nsmusics_db = await ipcRenderer.invoke('window-get-nsmusics-db');
-    console.log(store_app_configs_info.navidrome_db)
-    console.log(store_app_configs_info.nsmusics_db)
+    if(isElectron) {
+      store_app_configs_info.navidrome_db = await ipcRenderer.invoke('window-get-navidrome-db');
+      store_app_configs_info.nsmusics_db = await ipcRenderer.invoke('window-get-nsmusics-db');
+      console.log(store_app_configs_info.navidrome_db)
+      console.log(store_app_configs_info.nsmusics_db)
+    }
 
     try {
       if (process.platform === 'win32') {
@@ -634,7 +639,7 @@
         store_app_configs_info.desktop_system_kind = 'darwin';
         store_player_appearance.player_lyric_fontSize = '36px';
         store_player_appearance.player_lyric_fontSize_Num = 36;
-      }else{
+      } else {
         store_app_configs_info.desktop_system_kind = 'linux';
         store_player_appearance.player_lyric_fontSize = '28px';
         store_player_appearance.player_lyric_fontSize_Num = 28;
@@ -642,37 +647,43 @@
     }catch{  }
 
     try {
-      // 等待数据库初始化进程结束
-      if(await ipcRenderer.invoke('window-init-db')) {
-        // init read
-        await store_app_configs_logic_load.load_app_config()
-        // init lang
-        locale.value = store_app_configs_info.lang
+      if(isElectron) {
+        // 等待数据库初始化进程结束
+        if (await ipcRenderer.invoke('window-init-db')) {
+          // init read
+          await store_app_configs_logic_load.load_app_config()
+          // init lang
+          locale.value = store_app_configs_info.lang
+        }
+      }else{
+        // other
       }
     }catch{  }
 
     create_menuOptions_appBar()
 
-    try {
-      await ipcRenderer.invoke('i18n-tray-label-menu',
-          [
-            t('player.play'),
-            t('player.pause'),
-            t('player.previous'),
-            t('player.next'),
-            t('nsmusics.view_page.desktop_lyrics'),
-            t('common.quit'),
-            t('nsmusics.siderbar_player.playback_1'),
-            t('nsmusics.siderbar_player.playback_2'),
-            t('nsmusics.siderbar_player.playback_3'),
-            t('nsmusics.siderbar_player.playback_4')
-          ]
-      );
-      await ipcRenderer.invoke('i18n-tray-music-order',
-          store_player_audio_logic.play_order
-      );
-    }catch (e) {
-      console.log(e);
+    if(isElectron) {
+      try {
+        await ipcRenderer.invoke('i18n-tray-label-menu',
+            [
+              t('player.play'),
+              t('player.pause'),
+              t('player.previous'),
+              t('player.next'),
+              t('nsmusics.view_page.desktop_lyrics'),
+              t('common.quit'),
+              t('nsmusics.siderbar_player.playback_1'),
+              t('nsmusics.siderbar_player.playback_2'),
+              t('nsmusics.siderbar_player.playback_3'),
+              t('nsmusics.siderbar_player.playback_4')
+            ]
+        );
+        await ipcRenderer.invoke('i18n-tray-music-order',
+            store_player_audio_logic.play_order
+        );
+      } catch (e) {
+        console.log(e);
+      }
     }
 
     try {
@@ -868,28 +879,44 @@
                 </n-button>
                 <n-button quaternary circle style="margin-right:4px;"
                           v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                          @click="ipcRenderer.send('window-fullscreen');">
+                          @click="() => {
+                            if(isElectron) {
+                              ipcRenderer.send('window-fullscreen');
+                            }
+                          }">
                   <template #icon>
                     <n-icon size="20" :depth="2" style="margin-top: 1px;"><FullScreenMaximize16Regular/></n-icon>
                   </template>
                 </n-button>
                 <n-button quaternary circle style="margin-right:4px"
                           v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                          @click="ipcRenderer.send('window-min');">
+                          @click="() => {
+                            if(isElectron) {
+                              ipcRenderer.send('window-min');
+                            }
+                          }">
                   <template #icon>
                     <n-icon size="24" :depth="2"><MinusRound/></n-icon>
                   </template>
                 </n-button>
                 <n-button quaternary circle style="margin-right:4px"
                           v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                          @click="ipcRenderer.send('window-max');">
+                          @click="() => {
+                            if(isElectron) {
+                              ipcRenderer.send('window-max');
+                            }
+                          }">
                   <template #icon>
                     <n-icon size="24" :depth="2"><Maximize16Regular/></n-icon>
                   </template>
                 </n-button>
                 <n-button quaternary circle style="margin-right:30px"
                           v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                          @click="ipcRenderer.send('window-close');">
+                          @click="() => {
+                            if(isElectron) {
+                              ipcRenderer.send('window-close');
+                            }
+                          }">
                   <template #icon>
                     <n-icon size="28" :depth="2"><Close/></n-icon>
                   </template>

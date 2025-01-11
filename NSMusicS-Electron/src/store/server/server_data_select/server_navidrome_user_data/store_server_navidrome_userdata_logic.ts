@@ -8,10 +8,9 @@ import {
 import {
     Set_Navidrome_ALL_Data_To_LocalSqlite
 } from "@/features/servers_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
-const crypto = require('crypto');
 import { User_ApiService_of_ND } from "@/features/servers_configs/navidrome_api/services_normal/user_management/index_service";
 import { Set_ServerInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_ServerInfo_To_LocalSqlite";
-const { ipcRenderer } = require('electron');
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 
 export const store_server_navidrome_userdata_logic = reactive({
     /// server add
@@ -131,13 +130,16 @@ export const store_server_navidrome_userdata_logic = reactive({
                 store_server_user_model.salt,
             )
             /// reset app data
-            ipcRenderer.send('window-reset-data');
+            if(isElectron) {
+                ipcRenderer.send('window-reset-data');
+            }
         }
     },
     /// server get token
     navidrome_generateEncryptedPassword(password: string): { salt: string, token: string } {
         const saltLength = 6;
         const salt = this.navidrome_generateRandomString(saltLength);
+        const crypto = require('crypto');
         const token = crypto.createHash('md5').update(password + salt, 'utf8').digest('hex');
         return { salt, token };
     },

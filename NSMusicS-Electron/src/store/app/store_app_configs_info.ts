@@ -1,6 +1,5 @@
 import {reactive, watch} from 'vue'
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-const path = require('path');
 
 export const store_app_configs_info = reactive({
     desktop_system_kind: 'win32',
@@ -24,8 +23,8 @@ export const store_app_configs_info = reactive({
 
     driveDbPath: '',
     resourcesPath: '',
-    navidrome_db: path.resolve('resources/navidrome.db'),
-    nsmusics_db: path.resolve('resources/nsmusics.db'),
+    navidrome_db: null,// path.resolve('resources/navidrome.db'),
+    nsmusics_db: null,// path.resolve('resources/nsmusics.db'),
 
     menuOptions_selectd_model_1: true,
     menuOptions_selectd_model_2: true,

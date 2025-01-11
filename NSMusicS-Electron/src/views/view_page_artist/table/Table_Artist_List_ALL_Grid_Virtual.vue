@@ -40,6 +40,7 @@ const itemSize = ref(220);
 const gridItems = ref(5);
 const itemSecondarySize = ref(185);
 import error_album from '@/assets/img/error_album.jpg'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
   let result_src = error_album;
@@ -49,26 +50,25 @@ const handleImageError = async (item: any) => {
   }
   errorHandled.value.set(item.id, true);
   ///
-  const originalSrc = item.medium_image_url;
-  try {
-    const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
-    if (newImagePath.length > 0) {
-      item.medium_image_url = 'file:///' + newImagePath;
-    } else {
+  if(isElectron) {
+    const originalSrc = item.medium_image_url;
+    try {
+      const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
+      if (newImagePath.length > 0) {
+        item.medium_image_url = 'file:///' + newImagePath;
+      } else {
+        item.medium_image_url = result_src;
+      }
+    } catch (error) {
+      console.error('Error handling image error:', error);
       item.medium_image_url = result_src;
     }
-  } catch (error) {
-    console.error('Error handling image error:', error);
-    item.medium_image_url = result_src;
+  } else {
+    // other
   }
 };
 function getAssetImage(firstImage: string) {
-  if(process.platform === 'win32')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'darwin')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'linux')
-    return new URL(firstImage, import.meta.url).href;
+  return new URL(firstImage, import.meta.url).href;
 }
 // gridItems Re render
 const collapsed_width = ref<number>(1090);
@@ -395,8 +395,6 @@ import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
-import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
-const { ipcRenderer } = require('electron');
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()

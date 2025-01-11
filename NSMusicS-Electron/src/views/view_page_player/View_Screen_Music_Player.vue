@@ -12,12 +12,7 @@ import {
   Close
 } from '@vicons/carbon'
 function getAssetImage(firstImage: string) {
-  if(process.platform === 'win32')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'darwin')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'linux')
-    return new URL(firstImage, import.meta.url).href;
+  return new URL(firstImage, import.meta.url).href;
 }
 
 ////// navie ui components
@@ -40,20 +35,28 @@ const computed_i18n_Label_ViewSetConfig_Cover_4 = computed(() => t('nsmusics.vie
 // audio_class & player_bar & player_view
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_player_view} from "@/store/player/store_player_view";
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 
 ////// System BrowserWindow Set
-const { ipcRenderer } = require('electron');
 function minimize() {
-  ipcRenderer.send('window-min');
+  if(isElectron) {
+    ipcRenderer.send('window-min');
+  }
 }
 function maximize() {
-  ipcRenderer.send('window-max');
+  if(isElectron) {
+    ipcRenderer.send('window-max');
+  }
 }
 function maximize_screen() {
-  ipcRenderer.send('window-fullscreen');
+  if(isElectron) {
+    ipcRenderer.send('window-fullscreen');
+  }
 }
 function closeWindow() {
-  ipcRenderer.send('window-close');
+  if(isElectron) {
+    ipcRenderer.send('window-close');
+  }
 }
 
 ////// lyircs load

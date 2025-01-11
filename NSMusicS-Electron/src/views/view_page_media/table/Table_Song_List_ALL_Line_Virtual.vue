@@ -34,8 +34,8 @@ const { t } = useI18n({
 })
 
 ////// songlist_view page_layout lineItems
-const { ipcRenderer } = require('electron');
 import error_album from '@/assets/img/error_album.jpg'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
   let result_src = error_album
@@ -45,26 +45,25 @@ const handleImageError = async (item: any) => {
   }
   errorHandled.value.set(item.id, true);
   ///
-  const originalSrc = item.medium_image_url;
-  try {
-    const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
-    if (newImagePath.length > 0) {
-      item.medium_image_url = 'file:///' + newImagePath;
-    } else {
+  if(isElectron) {
+    const originalSrc = item.medium_image_url;
+    try {
+      const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
+      if (newImagePath.length > 0) {
+        item.medium_image_url = 'file:///' + newImagePath;
+      } else {
+        item.medium_image_url = result_src;
+      }
+    } catch (error) {
+      console.error('Error handling image error:', error);
       item.medium_image_url = result_src;
     }
-  } catch (error) {
-    console.error('Error handling image error:', error);
-    item.medium_image_url = result_src;
+  } else {
+    // other
   }
 };
 function getAssetImage(firstImage: string) {
-  if(process.platform === 'win32')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'darwin')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'linux')
-    return new URL(firstImage, import.meta.url).href;
+  return new URL(firstImage, import.meta.url).href;
 }
 // lineItems Re render
 const collapsed_width = ref<number>(145);

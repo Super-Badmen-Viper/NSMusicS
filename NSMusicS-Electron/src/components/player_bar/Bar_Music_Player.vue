@@ -33,39 +33,37 @@ const { t } = useI18n({
 
 //////
 function getAssetImage(firstImage: string) {
-  if(process.platform === 'win32')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'darwin')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'linux')
-    return new URL(firstImage, import.meta.url).href;
+  return new URL(firstImage, import.meta.url).href;
 }
-const { ipcRenderer } = require('electron');
-const path = require('path');
 import error_album from '@/assets/img/error_album.jpg'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 const handleImageError = async (event) => {
   const originalSrc = event.target.src;
   let result_src = error_album
-  try {
-    const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
-    if (newImagePath.length > 0) {
-      event.target.src = newImagePath;
-    } else {
+  if(isElectron) {
+    try {
+      const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
+      if (newImagePath.length > 0) {
+        event.target.src = newImagePath;
+      } else {
+        event.target.src = result_src;
+      }
+    } catch (error) {
+      console.error('Error handling image error:', error);
       event.target.src = result_src;
     }
-  } catch (error) {
-    console.error('Error handling image error:', error);
-    event.target.src = result_src;
+    ///
+    const item: Media_File | undefined =
+        store_view_media_page_info.media_Files_temporary.find(
+            (mediaFile: Media_File) =>
+                mediaFile.id === store_player_audio_info.this_audio_song_id);
+    if (item != undefined && item != 'undefined') {
+      item.medium_image_url = result_src;
+    }
+    store_player_audio_info.page_top_album_image_url = result_src;
+  } else {
+    // other
   }
-  ///
-  const item: Media_File | undefined =
-      store_view_media_page_info.media_Files_temporary.find(
-          (mediaFile: Media_File) =>
-              mediaFile.id === store_player_audio_info.this_audio_song_id);
-  if (item != undefined && item != 'undefined') {
-    item.medium_image_url = result_src;
-  }
-  store_player_audio_info.page_top_album_image_url = result_src;
 };
 import { debounce } from 'lodash';
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
@@ -134,13 +132,13 @@ const handleAudioFilePathChange = async () => {
 };
 const this_audio_buffer_file = ref<any>()
 const timer_this_audio_player = ref<NodeJS.Timeout>();// 延迟触发：接收大量数据时，仅触发最后一个值
-const { Howl } = require('howler');
+import { Howl } from '@/utils/howler/howlerLoader';
+import { clearCache } from '@/utils/electron/webFrame';
 let unwatch_this_audio_buffer_file =  watch(() => this_audio_buffer_file.value, (newValue, oldValue) => {
   if (newValue !== oldValue) {
     Play_This_Audio_Path()
   }
-  const { webFrame } = require('electron');
-  webFrame.clearCache();
+  clearCache();
 });
 const Play_This_Audio_Path = () => {
   clearTimeout(timer_this_audio_player.value);
@@ -199,7 +197,9 @@ const init_player_howler = async () => {
     onplay: async () => {
       store_player_audio_logic.player.howl.fade(0, 1, store_player_audio_logic.player_fade_value);
       store_player_audio_logic.player.isPlaying = true;
-      await ipcRenderer.invoke('i18n-tray-music-pause', true);
+      if(isElectron) {
+        await ipcRenderer.invoke('i18n-tray-music-pause', true);
+      }
 
       if( store_player_audio_logic.player_device_select != undefined &&
           store_player_audio_logic.player_device_select != 'default' &&
@@ -222,11 +222,15 @@ const init_player_howler = async () => {
     },
     onpause: async () => {
       store_player_audio_logic.player.isPlaying = false;
-      await ipcRenderer.invoke('i18n-tray-music-pause', false)
+      if(isElectron) {
+        await ipcRenderer.invoke('i18n-tray-music-pause', false)
+      }
     },
     onstop: async () => {
       store_player_audio_logic.player.isPlaying = false;
-      await ipcRenderer.invoke('i18n-tray-music-pause', false)
+      if(isElectron) {
+        await ipcRenderer.invoke('i18n-tray-music-pause', false)
+      }
     },
     onend: () => {
       store_player_audio_logic.player.howl.fade(1, 0, store_player_audio_logic.player_fade_value);
@@ -294,7 +298,9 @@ const handleMpvStopped = debounce(async (event, args) => {
     Play_Media_Switching()
   }
 }, 300);// 300ms 的防抖时间，限制node-mpv频繁触发end事件
-ipcRenderer.on('mpv-stopped', handleMpvStopped);
+if(isElectron) {
+  ipcRenderer.on('mpv-stopped', handleMpvStopped);
+}
 ///
 onMounted(async () => {
   console.log(store_player_audio_logic.player_back_ChevronDouble);
@@ -320,7 +326,9 @@ const Init_Audio_Player = async () => {
           if(!store_player_audio_logic.player.isPlaying)
             Play_This_Audio_Path()
           else {
-            // await ipcRenderer.invoke('mpv-startFadeIn', store_player_audio_logic.play_volume)
+            // if(isElectron) {
+            //   await ipcRenderer.invoke('mpv-startFadeIn', store_player_audio_logic.play_volume)
+            // }
             await store_player_audio_logic.player.play();
           }
         }
@@ -338,7 +346,9 @@ const Init_Audio_Player = async () => {
       store_player_audio_info.this_audio_is_playing = false
       store_player_audio_logic.player.isPlaying = false;
       if(store_player_audio_logic.player_select === 'mpv'){
-        // await ipcRenderer.invoke('mpv-startFadeOut', store_player_audio_logic.play_volume)
+        // if(isElectron) {
+        //   await ipcRenderer.invoke('mpv-startFadeOut', store_player_audio_logic.play_volume)
+        // }
         await store_player_audio_logic.player.pause();
       }
       else if(store_player_audio_logic.player_select === 'web'){
@@ -349,10 +359,12 @@ const Init_Audio_Player = async () => {
   }
 };
 //////
-ipcRenderer.on('tray-music-pause', Init_Audio_Player);
-ipcRenderer.on('tray-music-order', (event, order) => {
-  store_player_audio_logic.play_order = order;
-});
+if(isElectron) {
+  ipcRenderer.on('tray-music-pause', Init_Audio_Player);
+  ipcRenderer.on('tray-music-order', (event, order) => {
+    store_player_audio_logic.play_order = order;
+  });
+}
 ////// player_configs player_button order area
 import { useMessage } from 'naive-ui'
 const message = useMessage()
@@ -371,11 +383,11 @@ const backpanel_order_click = () => {
     const nextIndex = (currentIndex + 1) % orders.length;
     store_player_audio_logic.play_order = orders[nextIndex];
   }
-
-  ipcRenderer.invoke('i18n-tray-music-order',
-      store_player_audio_logic.play_order
-  );
-
+  if(isElectron) {
+    ipcRenderer.invoke('i18n-tray-music-order',
+        store_player_audio_logic.play_order
+    );
+  }
   switch (store_player_audio_logic.play_order) {
     case 'playback-1':
       message.success(t('nsmusics.siderbar_player.playback_1'));
@@ -506,12 +518,18 @@ const play_skip_forward_click = async () => {
 
   store_player_appearance.player_mode_of_lock_playlist = true
 }
-ipcRenderer.on('tray-music-prev',
-    debounce(async (event, args) => {await play_skip_back_click(), 300})
-);
-ipcRenderer.on('tray-music-next',
-    debounce(async (event, args) => {await play_skip_forward_click(), 300})
-);
+if(isElectron) {
+  ipcRenderer.on('tray-music-prev',
+      debounce(async (event, args) => {
+        await play_skip_back_click(), 300
+      })
+  );
+  ipcRenderer.on('tray-music-next',
+      debounce(async (event, args) => {
+        await play_skip_forward_click(), 300
+      })
+  );
+}
 const Play_Media_Switching = async () => {
   store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(await store_player_audio_logic.player.getDuration());
   store_player_audio_logic.player_slider_currentTime_added_value = 0;

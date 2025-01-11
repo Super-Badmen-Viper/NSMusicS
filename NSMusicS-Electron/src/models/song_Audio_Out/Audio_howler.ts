@@ -1,6 +1,5 @@
 import {store_player_audio_logic} from "../../store/player/store_player_audio_logic";
-
-const { ipcRenderer } = require('electron');
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 
 export class Audio_howler {
     public howl: any;
@@ -26,7 +25,9 @@ export class Audio_howler {
         }catch{  }
 
         try {
-            await ipcRenderer.invoke('i18n-tray-music-pause', true)
+            if(isElectron) {
+                await ipcRenderer.invoke('i18n-tray-music-pause', true)
+            }
         }catch{  }
     }
     async pause() {
@@ -40,7 +41,9 @@ export class Audio_howler {
         }
 
         try {
-            await ipcRenderer.invoke('i18n-tray-music-pause', false)
+            if(isElectron) {
+                await ipcRenderer.invoke('i18n-tray-music-pause', false)
+            }
         }catch{  }
     }
     getDuration() {

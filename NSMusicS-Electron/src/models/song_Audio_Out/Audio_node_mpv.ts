@@ -1,5 +1,5 @@
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
-const { ipcRenderer } = require('electron');
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 
 export class Audio_node_mpv {
     public isPlaying: boolean;
@@ -10,62 +10,82 @@ export class Audio_node_mpv {
     }
     async load(path: string) {
         try {
-            await ipcRenderer.invoke('mpv-fade', store_player_audio_logic.player_fade_value)
-            if(store_player_audio_logic.player_samp_value < 8000){
-                store_player_audio_logic.player_samp_value = 48000
+            if(isElectron) {
+                await ipcRenderer.invoke('mpv-fade', store_player_audio_logic.player_fade_value)
+                if (store_player_audio_logic.player_samp_value < 8000) {
+                    store_player_audio_logic.player_samp_value = 48000
+                }
+                await ipcRenderer.invoke('mpv-parameters', {
+                    player_audio_channel: store_player_audio_logic.player_audio_channel,
+                    player_samp_value: store_player_audio_logic.player_samp_value,
+                    player_gaplessAudio: store_player_audio_logic.player_gaplessAudio,
+                    player_audioExclusiveMode: store_player_audio_logic.player_audioExclusiveMode,
+                    player_replayGainMode: store_player_audio_logic.player_replayGainMode,
+                    player_replayGainPreamp: store_player_audio_logic.player_replayGainPreamp,
+                    player_replayGainClip: store_player_audio_logic.player_replayGainClip,
+                    player_replayGainFallback: store_player_audio_logic.player_replayGainFallback,
+                    player_mpvExtraParameters: store_player_audio_logic.player_mpvExtraParameters,
+                })
+                await ipcRenderer.invoke('mpv-load', path)
+            } else {
+                // other
             }
-            await ipcRenderer.invoke('mpv-parameters', {
-                player_audio_channel: store_player_audio_logic.player_audio_channel,
-                player_samp_value: store_player_audio_logic.player_samp_value,
-                player_gaplessAudio: store_player_audio_logic.player_gaplessAudio,
-                player_audioExclusiveMode: store_player_audio_logic.player_audioExclusiveMode,
-                player_replayGainMode: store_player_audio_logic.player_replayGainMode,
-                player_replayGainPreamp: store_player_audio_logic.player_replayGainPreamp,
-                player_replayGainClip: store_player_audio_logic.player_replayGainClip,
-                player_replayGainFallback: store_player_audio_logic.player_replayGainFallback,
-                player_mpvExtraParameters: store_player_audio_logic.player_mpvExtraParameters,
-            })
-            await ipcRenderer.invoke('mpv-load', path)
             this.isPlaying = true;
         }catch{}
 
         try {
-            await ipcRenderer.invoke('i18n-tray-music-pause', true)
+            if(isElectron) {
+                await ipcRenderer.invoke('i18n-tray-music-pause', true)
+            }
         }catch{  }
     }
     async IsPlaying() {
         try {
-            this.isPlaying = await ipcRenderer.invoke('mpv-isPlaying');
+            if(isElectron) {
+                this.isPlaying = await ipcRenderer.invoke('mpv-isPlaying');
+            }
         }catch{}
     }
     async play() {
         try {
-            await ipcRenderer.invoke('mpv-play')
+            if(isElectron) {
+                await ipcRenderer.invoke('mpv-play')
+            }
             this.isPlaying = true;
         }catch{
             this.isPlaying = false;
         }
 
         try {
-            await ipcRenderer.invoke('i18n-tray-music-pause', true)
+            if(isElectron) {
+                await ipcRenderer.invoke('i18n-tray-music-pause', true)
+            }
         }catch{  }
     }
     async pause() {
         try {
-            await ipcRenderer.invoke('mpv-pause')
+            if(isElectron) {
+                await ipcRenderer.invoke('mpv-pause')
+            }
             this.isPlaying = false;
         }catch{
             this.isPlaying = false;
         }
 
         try {
-            await ipcRenderer.invoke('i18n-tray-music-pause', false)
+            if(isElectron) {
+                await ipcRenderer.invoke('i18n-tray-music-pause', false)
+            }
         }catch{  }
     }
     async getDuration(): Promise<number | undefined> {
         try {
-            let temp = await ipcRenderer.invoke('mpv-get-duration')
-            this.isDuration = temp >= 0 ? temp : 0
+            if(isElectron) {
+                let temp = await ipcRenderer.invoke('mpv-get-duration')
+                this.isDuration = temp >= 0 ? temp : 0
+            } else {
+                // other
+            }
             return this.isDuration;
         }catch{
             return this.isDuration
@@ -73,8 +93,12 @@ export class Audio_node_mpv {
     }
     async getCurrentTime(): Promise<number> {
         try {
-            let temp = await ipcRenderer.invoke('mpv-get-time-pos');
-            this.isCurrentTime = temp >= 0 ? temp : this.isCurrentTime
+            if(isElectron) {
+                let temp = await ipcRenderer.invoke('mpv-get-time-pos');
+                this.isCurrentTime = temp >= 0 ? temp : this.isCurrentTime
+            } else {
+                // other
+            }
             return this.isCurrentTime;
         }catch{
             return this.isCurrentTime
@@ -82,12 +106,16 @@ export class Audio_node_mpv {
     }
     async setCurrentTime(time: number) {
         try{
-            await ipcRenderer.invoke('mpv-set-time-pos',time)
+            if(isElectron) {
+                await ipcRenderer.invoke('mpv-set-time-pos', time)
+            }
         }catch {}
     }
     async setVolume(volume: number) {
         try{
-            await ipcRenderer.invoke('mpv-set-volume',volume)
+            if(isElectron) {
+                await ipcRenderer.invoke('mpv-set-volume', volume)
+            }
         }catch {}
     }
 }

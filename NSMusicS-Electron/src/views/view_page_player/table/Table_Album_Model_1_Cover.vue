@@ -5,15 +5,10 @@ import {store_player_audio_logic} from "@/store/player/store_player_audio_logic"
 import {RepeatOneRound} from "@vicons/material";
 import {Random} from "@vicons/fa";
 import {Pause, Play, PlayBack, PlayForward, VolumeMedium, VolumeOff, ChevronDown} from "@vicons/ionicons5";
-import {ArrowAutofitDown24Regular, ArrowRepeatAll16Regular} from "@vicons/fluent";
+import {ArrowRepeatAll16Regular} from "@vicons/fluent";
 import {NIcon, NSlider} from "naive-ui";
 function getAssetImage(firstImage: string) {
-  if(process.platform === 'win32')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'darwin')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'linux')
-    return new URL(firstImage, import.meta.url).href;
+  return new URL(firstImage, import.meta.url).href;
 }
 </script>
 

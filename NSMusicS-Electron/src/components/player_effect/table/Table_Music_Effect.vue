@@ -128,10 +128,7 @@ onMounted(() => {
 })
 
 //////
-const { shell } = require('electron');
-const openLink = (url: string) => {
-  shell.openExternal(url);
-};
+import { openLink } from '@/utils/electron/openLink';
 </script>
 <template>
   <n-space vertical :size="12">

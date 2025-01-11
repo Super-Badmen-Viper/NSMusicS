@@ -27,11 +27,10 @@ import {
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
 import {Audio_howler} from "@/models/song_Audio_Out/Audio_howler";
-import {store_view_media_page_info} from "../view/media/store_view_media_page_info";
-const { ipcRenderer } = require('electron');
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 
 export const store_server_user_model = reactive({
-    model_select: 'local',
+    model_select: 'server',
     server_select: '',
     server_select_kind: '',
 
@@ -105,7 +104,11 @@ watch(() => store_server_user_model.model_select, async (newValue) => {
         // Refresh Current AudioInfo
         await store_player_audio_info.reset_data()
         if(store_player_audio_logic.player_select === 'mpv') {
-            await ipcRenderer.invoke('mpv-stopped');
+            if(isElectron) {
+                await ipcRenderer.invoke('mpv-stopped');
+            } else {
+                // other
+            }
         }
         //
         if (store_server_user_model.model_select === 'server') {
@@ -128,10 +131,14 @@ watch(() => store_server_user_model.model_select, async (newValue) => {
         //
         try {
             if (store_player_audio_logic.player_select === 'mpv') {
-                await ipcRenderer.invoke('mpv-quit');
-                await ipcRenderer.invoke('mpv-init');
-                store_player_audio_logic.player = null;
-                store_player_audio_logic.player = new Audio_node_mpv();
+                if(isElectron) {
+                    await ipcRenderer.invoke('mpv-quit');
+                    await ipcRenderer.invoke('mpv-init');
+                    store_player_audio_logic.player = null;
+                    store_player_audio_logic.player = new Audio_node_mpv();
+                } else {
+                    // other
+                }
             } else if (store_player_audio_logic.player_select === 'web') {
                 if (store_player_audio_logic.player.howl != null) {
                     store_player_audio_logic.player.howl.unload();

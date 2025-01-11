@@ -11,7 +11,7 @@ import {
 } from '@vicons/ionicons5'
 
 ////// this_view components of navie ui
-import {onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import {onBeforeUnmount, onMounted, ref, watch, computed } from 'vue'
 import {NButton, NIcon, NImage} from 'naive-ui';
 import {Icon} from "@vicons/utils";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
@@ -36,6 +36,7 @@ const item_album_txt = ref<number>(item_album.value - 20)
 const itemSize = ref(180);
 const collapsed_width = ref<number>(1090);
 import error_album from '@/assets/img/error_album.jpg'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
   let result_src = error_album
@@ -45,26 +46,25 @@ const handleImageError = async (item: any) => {
   }
   errorHandled.value.set(item.id, true);
   ///
-  const originalSrc = item.medium_image_url;
-  try {
-    const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
-    if (newImagePath.length > 0) {
-      item.medium_image_url = 'file:///' + newImagePath;
-    } else {
+  if(isElectron) {
+    const originalSrc = item.medium_image_url;
+    try {
+      const newImagePath = await ipcRenderer.invoke('window-get-imagePath', originalSrc);
+      if (newImagePath.length > 0) {
+        item.medium_image_url = 'file:///' + newImagePath;
+      } else {
+        item.medium_image_url = result_src;
+      }
+    } catch (error) {
+      console.error('Error handling image error:', error);
       item.medium_image_url = result_src;
     }
-  } catch (error) {
-    console.error('Error handling image error:', error);
-    item.medium_image_url = result_src;
+  } else {
+    // other
   }
 };
 function getAssetImage(firstImage: string) {
-  if(process.platform === 'win32')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'darwin')
-    return new URL(firstImage, import.meta.url).href;
-  else if(process.platform === 'linux')
-    return new URL(firstImage, import.meta.url).href;
+  return new URL(firstImage, import.meta.url).href;
 }
 // gridItems Re render
 let bool_watch = false;
@@ -256,7 +256,6 @@ import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
-const { ipcRenderer } = require('electron');
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()

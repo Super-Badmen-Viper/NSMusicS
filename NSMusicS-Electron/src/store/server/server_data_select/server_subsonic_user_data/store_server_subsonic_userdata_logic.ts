@@ -11,7 +11,7 @@ import {
 const crypto = require('crypto');
 import { User_ApiService_of_ND } from "@/features/servers_configs/subsonic_api/services_normal/user_management/index_service";
 import { Set_ServerInfo_To_LocalSqlite } from "@/features/sqlite3_local_configs/class_Set_ServerInfo_To_LocalSqlite";
-const { ipcRenderer } = require('electron');
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 
 export const store_server_subsonic_userdata_logic = reactive({
     /// server add
@@ -131,7 +131,9 @@ export const store_server_subsonic_userdata_logic = reactive({
                 store_server_user_model.salt,
             )
             /// reset app data
-            ipcRenderer.send('window-reset-data');
+            if(isElectron) {
+                ipcRenderer.send('window-reset-data');
+            }
         }
     },
     /// server get token

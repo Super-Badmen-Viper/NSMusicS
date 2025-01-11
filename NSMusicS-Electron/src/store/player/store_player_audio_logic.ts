@@ -4,7 +4,7 @@ import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
 import {Audio_howler} from "@/models/song_Audio_Out/Audio_howler";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_player_view} from "./store_player_view";
-const { ipcRenderer } = require('electron');
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 
 export const store_player_audio_logic = reactive({
     player: new Audio_node_mpv(),
@@ -100,25 +100,28 @@ export const store_player_audio_logic = reactive({
 });
 watch(() => store_player_audio_logic.player_select, async (newValue) => {
     await store_player_audio_info.reset_data();
-
-    if (store_player_audio_logic.player_select === 'mpv') {
-        // init
-        if (store_player_audio_logic.player.howl != null) {
-            store_player_audio_logic.player.howl.unload();
+    if(isElectron) {
+        if (store_player_audio_logic.player_select === 'mpv') {
+            // init
+            if (store_player_audio_logic.player.howl != null) {
+                store_player_audio_logic.player.howl.unload();
+            }
+            await ipcRenderer.invoke('mpv-init');
+            store_player_audio_logic.player = null;
+            store_player_audio_logic.player = new Audio_node_mpv();
+            // load device
+            store_player_audio_logic.player_device_kind = []
+        } else if (store_player_audio_logic.player_select === 'web') {
+            // init
+            store_player_audio_logic.player = null;
+            store_player_audio_logic.player = new Audio_howler();
+            await ipcRenderer.invoke('mpv-quit');
+            // load device
+            store_player_audio_logic.player_device_kind = []
+            await store_player_audio_logic.player.getDevices()
         }
-        await ipcRenderer.invoke('mpv-init');
-        store_player_audio_logic.player = null;
-        store_player_audio_logic.player = new Audio_node_mpv();
-        // load device
-        store_player_audio_logic.player_device_kind = []
-    } else if (store_player_audio_logic.player_select === 'web') {
-        // init
-        store_player_audio_logic.player = null;
-        store_player_audio_logic.player = new Audio_howler();
-        await ipcRenderer.invoke('mpv-quit');
-        // load device
-        store_player_audio_logic.player_device_kind = []
-        await store_player_audio_logic.player.getDevices()
+    } else {
+        // other
     }
 
     store_app_configs_logic_save.save_system_config_of_App_Configs()

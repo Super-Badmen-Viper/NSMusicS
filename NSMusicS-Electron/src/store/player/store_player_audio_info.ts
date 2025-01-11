@@ -8,8 +8,8 @@ import {store_playlist_appearance} from "@/store/view/playlist/store_playlist_ap
 import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
-const { ipcRenderer } = require('electron');
 import error_album from '@/assets/img/error_album.jpg'
+import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 
 export const store_player_audio_info = reactive({
     this_audio_file_path: '',
@@ -116,9 +116,11 @@ watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
         });
 
         try {
-            ipcRenderer.invoke('i18n-tray-label-musicIcon',
-                String(store_player_audio_info.this_audio_song_name) + ' - ' + store_player_audio_info.this_audio_artist_name
-            );
+            if(isElectron) {
+                ipcRenderer.invoke('i18n-tray-label-musicIcon',
+                    String(store_player_audio_info.this_audio_song_name) + ' - ' + store_player_audio_info.this_audio_artist_name
+                );
+            }
         }catch (e) {
             console.log(e)
         }
