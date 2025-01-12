@@ -24,19 +24,19 @@ function getAssetImage(firstImage: string) {
            }"
            style="margin-right: 1vw;"
   >
-    <img
-        :style="{
-          marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 'calc(28vh - 182px)' : 'calc(28vh - 182px)',
-          transition: 'margin 0.4s, height 0.4s'
-        }"
-        style="
-          width: 55vh;height: 55vh;
-          border-radius: 12px;
-          object-fit: cover;object-position: center;
-          box-shadow: 0 0 12px rgba(0, 0, 0, 0.20), 0 0 12px rgba(0, 0, 0, 0.20);
-        "
-        :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-        alt="">
+    <n-image
+      :style="{
+        marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 'calc(28vh - 182px)' : 'calc(28vh - 182px)',
+        transition: 'margin 0.4s, height 0.4s'
+      }"
+      style="
+        width: 55vh;height: 55vh;
+        border-radius: 12px;
+        object-fit: cover;object-position: center;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.20), 0 0 12px rgba(0, 0, 0, 0.20);
+      "
+      :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+      alt=""/>
     <n-space vertical align="center"
              style="width: 44vh;">
       <div

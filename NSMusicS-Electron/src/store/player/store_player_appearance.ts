@@ -30,6 +30,7 @@ export const store_player_appearance = reactive({
     player_background_model_num: 0,
 
     player_use_lottie_animation: true,
+    player_use_lyric_skip_forward: true,
     player_use_background_filter_blur: true,
     player_use_background_automatic_rotation: true,
     player_use_background_repeat_fill: false,
@@ -69,6 +70,9 @@ watch(() => store_player_appearance.player_background_model_num, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
 });
 watch(() => store_player_appearance.player_use_lottie_animation, (newValue) => {
+    store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
+});
+watch(() => store_player_appearance.player_use_lyric_skip_forward, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
 });
 watch(() => store_player_appearance.player_use_background_filter_blur, (newValue) => {

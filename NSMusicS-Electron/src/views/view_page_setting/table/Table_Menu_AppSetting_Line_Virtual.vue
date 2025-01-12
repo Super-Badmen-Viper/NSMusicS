@@ -567,7 +567,7 @@
                 {{ $t('HeaderLibraries') }}
               </template>
               <n-space
-                  style="overflow-y: auto;margin-top: 9px;">
+                  style="overflow-y: auto;overflow-x:hidden;margin-top: 9px;">
                 <!-- 媒体库管理 -->
                 <n-space vertical>
                   <n-space vertical>
@@ -874,7 +874,7 @@
                             <div style="font-size:15px;font-weight: 600;">
                               {{ $t('common.clear') + ' ' + $t('nsmusics.view_page.modelLocal')}}
                             </div>
-                            <n-button style="margin-top: 6px;" size="small"
+                            <n-button size="small"
                               @click="
                                 store_server_users.percentage_of_local = 0;
                                 store_local_db_info.set_clear_all_local_data()
@@ -890,10 +890,29 @@
                               </div>
                             </n-button>
                             <n-divider style="margin: 0;"/>
+                            <div style="font-size:15px;font-weight: 600;">
+                              {{ $t('setting.clearCache_description')}}
+                            </div>
+                            <n-button size="small"
+                                      @click="async () => {
+                                        if(isElectron){
+                                          message.success(t('ButtonStart') + t('setting.clearQueryCache'))
+                                          await ipcRenderer.invoke('node-taglib-sharp-clear')
+                                        }
+                                      }">
+                              <template #icon>
+                                <n-icon size="16">
+                                  <Delete20Regular />
+                                </n-icon>
+                              </template>
+                              <div style="font-size:15px;font-weight: 600;">
+                                {{ $t('common.clear') + ' ' + $t('LabelCache')}}
+                              </div>
+                            </n-button>
+                            <n-divider style="margin: 0;"/>
                             <n-space vertical>
                               <div style="font-size:15px;font-weight: 600;">
-                                {{ $t('nsmusics.view_page.selectLibrary') }}
-                                <!-- + ', ' + $t('nsmusics.view_page.selectLibrary_select_0') -->
+                                {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_0')}}
                               </div>
                               <n-button size="small" @click="begin_import_Folder(false)">
                                 <template #icon>
@@ -907,7 +926,7 @@
                               </n-button>
                             </n-space>
                             <n-divider v-if="false" style="margin: 0;"/>
-                            <n-space v-if="false" vertical style="width: 600px;">
+                            <n-space vertical style="width: 600px;">
                               <div style="font-size:15px;font-weight: 600;">
                                 {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_1')}}
                               </div>

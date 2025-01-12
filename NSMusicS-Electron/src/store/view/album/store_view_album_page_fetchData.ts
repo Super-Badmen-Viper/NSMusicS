@@ -120,7 +120,7 @@ export const store_view_album_page_fetchData = reactive({
                             if(row.embed_art_path) {
                                 const fileName = row.embed_art_path.split(/[\\/]/).pop(); // 兼容 Windows 和 Unix 路径分隔符
                                 const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg');
-                                row.medium_image_url = `${store_app_configs_info.driveTempPath}/${newFileName}`;
+                                row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`;
                             }else{
                                 row.medium_image_url = error_album
                             }

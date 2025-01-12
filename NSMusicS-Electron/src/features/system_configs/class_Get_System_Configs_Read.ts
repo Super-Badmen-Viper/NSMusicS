@@ -68,6 +68,7 @@ export class Class_Get_System_Configs_Read {
             player_theme_Styles_Selected: null,
             player_background_model_num: null,
             player_use_lottie_animation: null,
+            player_use_lyric_skip_forward: null,
             player_use_background_filter_blur: null,
             player_use_background_automatic_rotation: null,
             player_use_background_repeat_fill: null,

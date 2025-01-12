@@ -632,8 +632,8 @@
         "clearQueryCache_description": "\"Weiches\" Zurücksetzen. Dies wird Playlisten, Musik-Metadaten und gespeicherte Liedtexte zurücksetzen, Zugangsinformationen und zwischengespeicherte Bilder werden behalten",
         "discordRichPresence_description": "Zeige deinen Wiedergabe-Status in {{discord}} als rich presence an. Angezeigte Bilder sind: {{icon}}, {{playing}}, und {{paused}} ",
         "clearCache": "Browser-Zwischenspeicher löschen",
-        "clearQueryCache": "feishins Zwischenspeicher leeren",
-        "clearCache_description": "Hartes Zurücksetzen. Neben feishins Zwischenspeicher wird auch der des Browsers gelöscht (Bilder und andere Daten). Zugangsinformationen und Einstellungen werden behalten",
+        "clearQueryCache": "NSMusicS Zwischenspeicher leeren",
+        "clearCache_description": "Hartes Zurücksetzen. Neben NSMusicS Zwischenspeicher wird auch der des Browsers gelöscht (Bilder und andere Daten). Zugangsinformationen und Einstellungen werden behalten",
         "sidePlayQueueStyle": "Wiedergabelistenstil in der Seitenleiste",
         "zoom_description": "Setzt den Zoom (in %) für das Programm",
         "zoom": "Zoom"

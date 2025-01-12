@@ -126,11 +126,25 @@ watch(() => store_player_audio_info.this_audio_file_path, (newValue) => {
         }
     }
 });
-watch(() => store_player_audio_info.this_audio_file_medium_image_url, (newValue) => {
-    console.log('this_audio_file_medium_image_url'+newValue)
+watch(() => store_player_audio_info.this_audio_file_medium_image_url, async (newValue) => {
+    console.log('this_audio_file_medium_image_url', newValue);
 
-    store_player_audio_info.this_audio_restart_play = true
-    store_player_audio_info.page_top_album_image_url = newValue;
+    if (newValue) {
+        try {
+            const response = await fetch(newValue);
+            const blob = await response.blob();
+            const reader = new FileReader();
+            reader.onload = () => {
+                store_player_audio_info.page_top_album_image_url = reader.result; // Base64 URL
+                store_player_audio_info.this_audio_restart_play = true;
+            };
+            reader.readAsDataURL(blob);
+        } catch (error) {
+            console.error('Failed to load image:', error);
+        }
+    } else {
+        store_player_audio_info.page_top_album_image_url = error_album;
+    }
 });
 watch(() => store_player_audio_info.this_audio_song_id, (newValue) => {
     console.log('this_audio_song_id：'+newValue)

@@ -63,7 +63,7 @@
             "audio_channel": "Canal audio",
             "audio_channel_explain": "Configurer le canal audio de sortie",
             "selectLibrary_select_0": "Ne pas exporter la couverture intégrée du fichier musical, utiliser uniquement la couverture du même nom au même niveau que le fichier musical",
-            "selectLibrary_select_1": "Exporte la couverture intégrée du fichier musical en tant que fichier de couverture portant le même nom (ignorer si un fichier de couverture portant le même nom existe), et enregistrez le fichier dans le même dossier que le fichier musical",
+            "selectLibrary_select_1": "Exporter la pochette intégrée du fichier audio en tant que fichier de pochette portant le même nom (sauter si un fichier de pochette portant le même nom existe déjà) et enregistrer le fichier dans le cache de l'application",
             "mediaLibrary": "Bibliothèque Média",
             "mediaLibrary_begin_import": "Commencer l'Importation",
             "mediaLibrary_media_tag_modify_local": "Actuellement, seul le mode local de navigation|modification des informations des balises est pris en charge"

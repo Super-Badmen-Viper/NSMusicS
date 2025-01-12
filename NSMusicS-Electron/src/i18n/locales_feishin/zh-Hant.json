@@ -391,10 +391,10 @@
         "replayGainClipping_description": "自動降低增益以防止ReplayGain造成削波",
         "showSkipButtons": "顯示跳過按鈕",
         "themeDark_description": "應用將使用深色主題",
-        "clearQueryCache_description": "feishin的“軟清除”。這將會刷新播放列表、元數據並重置保存的歌詞。會保留設置、服務器憑據和緩存圖像",
+        "clearQueryCache_description": "NSMusicS的“軟清除”。這將會刷新播放列表、元數據並重置保存的歌詞。會保留設置、服務器憑據和緩存圖像",
         "clearCache": "清除浏覽器緩存",
-        "clearCache_description": "feishin的“硬清除”。除了清除feishin的緩存，清空浏覽器緩存（保存的圖像和其他資源）。會保留服務器憑據和設置",
-        "clearQueryCache": "清除feishin緩存",
+        "clearCache_description": "NSMusicS的“硬清除”。除了清除NSMusicS的緩存，清空浏覽器緩存（保存的圖像和其他資源）。會保留服務器憑據和設置",
+        "clearQueryCache": "清除NSMusicS緩存",
         "buttonSize": "播放器欄按鈕大小",
         "buttonSize_description": "播放器欄按鈕大小"
     },

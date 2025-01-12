@@ -622,20 +622,20 @@ onBeforeUnmount(() => {
     <div>
       <!--Album-->
       <div
-          v-if="store_player_appearance.player_collapsed_skin"
-          id="player_bg_zindex_0"
-          :style="{
-            backgroundImage: `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
-            filter: store_player_appearance.player_use_background_filter_blur ?
-              'brightness(46%) blur(40px)' : 'brightness(46%) blur(0px)',
-            backgroundSize: store_player_appearance.player_use_background_repeat_fill ? '20vw auto' : 'cover',
-            backgroundRepeat: store_player_appearance.player_use_background_repeat_fill ? 'repeat' : 'no-repeat',
-            backgroundPosition: 'center'
-          }"
-          :class="{
-            'player_bg_zindex_0_auto_rotateDefault': store_player_appearance.player_use_background_automatic_rotation && !store_player_appearance.player_use_background_repeat_fill,
-            'player_bg_zindex_0_auto_rotateRepeat': store_player_appearance.player_use_background_automatic_rotation && store_player_appearance.player_use_background_repeat_fill
-          }"
+        v-if="store_player_appearance.player_collapsed_skin"
+        id="player_bg_zindex_0"
+        :style="{
+          backgroundImage: `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
+          filter: store_player_appearance.player_use_background_filter_blur ?
+            'brightness(46%) blur(40px)' : 'brightness(46%) blur(0px)',
+          backgroundSize: store_player_appearance.player_use_background_repeat_fill ? '20vw auto' : 'cover',
+          backgroundRepeat: store_player_appearance.player_use_background_repeat_fill ? 'repeat' : 'no-repeat',
+          backgroundPosition: 'center'
+        }"
+        :class="{
+          'player_bg_zindex_0_auto_rotateDefault': store_player_appearance.player_use_background_automatic_rotation && !store_player_appearance.player_use_background_repeat_fill,
+          'player_bg_zindex_0_auto_rotateRepeat': store_player_appearance.player_use_background_automatic_rotation && store_player_appearance.player_use_background_repeat_fill
+        }"
       ></div>
       <!--Skin-->
       <img
@@ -659,11 +659,11 @@ onBeforeUnmount(() => {
           v-model:show="store_player_audio_logic.drawer_theme_show"
           :width="420"
           style="
-          border-radius: 12px 0 0 12px;
-          border: 1.5px solid #FFFFFF20;
-          background-color: rgba(127, 127, 127, 0.1);
-          backdrop-filter: blur(10px);
-          margin-top: calc(50vh - 310px);height: 620px;
+            border-radius: 12px 0 0 12px;
+            border: 1.5px solid #FFFFFF20;
+            background-color: rgba(127, 127, 127, 0.1);
+            backdrop-filter: blur(10px);
+            margin-top: calc(50vh - 340px);height: 680px;
           ">
         <n-drawer-content v-if="store_player_audio_logic.drawer_theme_show">
           <template #default>
@@ -809,7 +809,21 @@ onBeforeUnmount(() => {
                     </n-switch>
                   </n-space>
                 </n-space>
-                <n-space style="margin-top: 20px;" justify="space-between">
+                <n-divider style="margin: 8px 0;width: 336px;"/>
+                <n-space justify="space-between">
+                  <span style="font-size:16px;">{{
+                      $t('Hide')
+                      + ' ' + $t('player.skip_forward')
+                      + ' ' + $t('page.fullscreenPlayer.lyrics')
+                    }}</span>
+                  <n-space style="margin-right: 32px;">
+                    <n-switch
+                      v-model:value="store_player_appearance.player_use_lyric_skip_forward">
+                    </n-switch>
+                  </n-space>
+                </n-space>
+                <n-divider style="margin: 8px 0;width: 336px;"/>
+                <n-space justify="space-between">
                   <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') + ' ' + $t('setting.albumBackground') }}</span>
                   <n-space style="margin-right: 32px;">
                     <n-switch v-model:value="store_player_appearance.player_use_background_filter_blur"/>
@@ -827,6 +841,7 @@ onBeforeUnmount(() => {
                     <n-switch v-model:value="store_player_appearance.player_use_background_repeat_fill"/>
                   </n-space>
                 </n-space>
+                <n-divider style="margin: 8px 0;width: 336px;"/>
                 <n-space style="margin-top: 20px;" v-if="false" justify="space-between">
                   <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.coverBaseVague') }}</span>
                   <n-space style="margin-right: 32px;">
@@ -842,7 +857,7 @@ onBeforeUnmount(() => {
                     />
                   </n-space>
                 </n-space>
-                <n-space style="margin-top: 20px;" justify="space-between">
+                <n-space justify="space-between">
                   <span style="font-size:16px;">{{ $t('nsmusics.view_player.view_seting.player_use_playbar_auto_hide') }}</span>
                   <n-space style="margin-right: 32px;">
                     <n-switch v-model:value="store_player_appearance.player_use_playbar_auto_hide"/>
@@ -940,20 +955,20 @@ onBeforeUnmount(() => {
                             transition: 'margin 0.4s, opacity 0.8s'
                           }">
                     <lottie-player
-                        ref="animationInstance_model_1_wave"
-                        class="animate__rotate_slower"
-                        :class="{
+                      ref="animationInstance_model_1_wave"
+                      class="animate__rotate_slower"
+                      :class="{
                         'animate__rotate_slower_paused': store_player_appearance.player_background_model_num !== 1 || !store_player_audio_info.this_audio_is_playing
                       }"
-                        v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
-                        autoplay
-                        loop
-                        mode="normal"
-                        :src="JSON.parse(JSON.stringify(Animation_1715591164841))"
-                        :style="{
+                      v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
+                      autoplay
+                      loop
+                      mode="normal"
+                      :src="JSON.parse(JSON.stringify(Animation_1715591164841))"
+                      :style="{
                         '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`
                       }"
-                        style="
+                      style="
                         width: 66vh;height: 66vh;
                         margin-top: calc(22vh - 182px);
                       "

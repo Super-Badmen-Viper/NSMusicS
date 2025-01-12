@@ -122,6 +122,7 @@ export const store_app_configs_logic_save = reactive({
                     player_theme_Styles_Selected: String(store_player_appearance.player_theme_Styles_Selected),
                     player_background_model_num: String(store_player_appearance.player_background_model_num),
                     player_use_lottie_animation: String(store_player_appearance.player_use_lottie_animation),
+                    player_use_lyric_skip_forward: String(store_player_appearance.player_use_lyric_skip_forward),
                     player_use_background_filter_blur: String(store_player_appearance.player_use_background_filter_blur),
                     player_use_background_automatic_rotation: String(store_player_appearance.player_use_background_automatic_rotation),
                     player_use_background_repeat_fill: String(store_player_appearance.player_use_background_repeat_fill),

@@ -74,7 +74,7 @@ export const store_app_configs_logic_load = reactive({
             /////
             if(process.platform === 'win32') {
                 store_server_user_model.model_select = '' + system_Configs_Read.app_Configs.value['model_select']
-                if (store_server_user_model.model_select === 'navidrome') {
+                if (store_server_user_model.model_select === 'server') {
                     await store_server_user_model.switchToMode_Server()
                 }else{
                     await store_server_user_model.switchToMode_Local()
@@ -137,6 +137,14 @@ export const store_app_configs_logic_load = reactive({
             store_player_appearance.player_theme_Styles_Selected = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_theme_Styles_Selected'])
             store_player_appearance.player_background_model_num = Number('' + system_Configs_Read.player_Configs_of_UI.value['player_background_model_num'])
             store_player_appearance.player_use_lottie_animation = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lottie_animation'] === 'true'
+            if(
+                '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lyric_skip_forward'] === 'true' ||
+                '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lyric_skip_forward'] === 'false'
+            ) {
+                store_player_appearance.player_use_lyric_skip_forward = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_lyric_skip_forward'] === 'true'
+            }else{
+                store_player_appearance.player_use_lyric_skip_forward = true
+            }
             store_player_appearance.player_use_background_filter_blur = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_background_filter_blur'] === 'true'
             store_player_appearance.player_use_background_automatic_rotation = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_background_automatic_rotation'] === 'true'
             store_player_appearance.player_use_background_repeat_fill = '' + system_Configs_Read.player_Configs_of_UI.value['player_use_background_repeat_fill'] === 'true'

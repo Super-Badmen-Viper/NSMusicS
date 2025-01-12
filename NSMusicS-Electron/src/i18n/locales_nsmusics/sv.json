@@ -63,7 +63,7 @@
             "audio_channel": "Ljudkanal",
             "audio_channel_explain": "Ställ in utgående ljudkanal",
             "selectLibrary_select_0": "Exportera inte den inbäddade omslagsbilden från musikfilen, använd endast omslagsbilden med samma namn på samma nivå som musikfilen",
-            "selectLibrary_select_1": "Exportera den inbäddade omslagsbilden från musikfilen som en omslagsbildsfil med samma namn (hoppa över om det finns en omslagsbildsfil med samma namn), och spara filen i samma mapp som musikfilen",
+            "selectLibrary_select_1": "Exportera den inbäddade omslaget för musikfilen som ett omslagsfil med samma namn (hoppa över om ett omslagsfil med samma namn redan finns) och spara filen i appens cacheminne",
             "mediaLibrary": "Mediabibliotek",
             "mediaLibrary_begin_import": "Börja Importera",
             "mediaLibrary_media_tag_modify_local": "För närvarande stöds endast lokalt läge för bläddra|ändra tagginformation"

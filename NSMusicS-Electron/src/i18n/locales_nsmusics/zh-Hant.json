@@ -63,7 +63,7 @@
             "audio_channel": "音頻聲道",
             "audio_channel_explain": "設置輸出的音頻聲道",
             "selectLibrary_select_0": "不導出音樂文件內嵌封面，僅使用與音樂文件同級同名的封面",
-            "selectLibrary_select_1": "導出音樂文件内嵌的封面，轉化為同名封面檔案（存在同名封面檔案則跳過），檔案保存至與音樂檔同一資料夾內",
+            "selectLibrary_select_1": "匯出音樂文件內嵌的封面，轉化為同名封面文件（存在同名封面文件則跳過），文件保存至應用緩存中",
             "mediaLibrary": "媒体库",
             "mediaLibrary_begin_import": "开始导入",
             "mediaLibrary_media_tag_modify_local": "目前只能在本地模式浏览|修改标签信息"

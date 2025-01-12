@@ -70,7 +70,7 @@ export class Get_PlaylistInfo_From_LocalSqlite {
                     if(row.medium_image_url) {
                         const fileName = row.medium_image_url.split(/[\\/]/).pop(); // 兼容 Windows 和 Unix 路径分隔符
                         const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg');
-                        row.medium_image_url = `${store_app_configs_info.driveTempPath}/${newFileName}`;
+                        row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`;
                     }else{
                         row.medium_image_url = error_album
                     }

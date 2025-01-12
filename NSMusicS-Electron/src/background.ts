@@ -360,7 +360,7 @@ async function createWindow() {
             width: 1220,
             height: 765,
             minWidth: 1220,
-            minHeight: 765,
+            minHeight: 660,
             frame:false,
             resizable: true,
             webPreferences: {
@@ -375,7 +375,7 @@ async function createWindow() {
             width: 1220,
             height: 765,
             minWidth: 1220,
-            minHeight: 765,
+            minHeight: 660,
             frame:false,
             resizable: true,
             webPreferences: {
@@ -582,6 +582,23 @@ async function createWindow() {
     });
     ipc.handle('node-taglib-sharp-percentage', async (event) => {
         try { return percentage }catch{ return 0 }
+    });
+    ipc.handle('node-taglib-sharp-clear', async (event) => {
+        try {
+            async function deleteFolder() {
+                const files = fs.readdirSync(driveTempPath);
+                for (const file of files) {
+                    const filePath = path.join(driveTempPath, file);
+                    fs.unlinkSync(filePath);
+                    await new Promise((resolve) => setTimeout(resolve, 0)); // 让出事件循环
+                }
+                fs.rmdirSync(driveTempPath);
+                console.log('文件夹删除成功:', driveTempPath);
+            }
+            deleteFolder().catch((err) => {
+                console.error('删除文件夹失败:', err);
+            });
+        }catch{ return false }
     });
 }
 
@@ -1428,19 +1445,16 @@ async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
                 }
                 // cover output driveDbPath
                 try {
-                    if (taglibFile.tag.pictures && taglibFile.tag.pictures.length > 0) {
-                        const fileName = path.basename(_path, path.extname(_path)) + '.jpg'; // 生成文件名
-                        const imagePath = path.join(driveTempPath, fileName); // 完整路径
-
-                        if (!fs.existsSync(driveTempPath)) {
-                            fs.mkdirSync(driveTempPath, { recursive: true });
-                        }
-
-                        if (!fs.existsSync(imagePath)) {
-                            fs.writeFileSync(
-                                imagePath,
-                                Buffer.from(taglibFile.tag.pictures[0].data)
-                            );
+                    if(cover_model) {
+                        if (taglibFile.tag.pictures && taglibFile.tag.pictures.length > 0) {
+                            const fileName = path.basename(_path, path.extname(_path)) + '.jpg'; // 生成文件名
+                            const imagePath = path.join(driveTempPath, fileName); // 完整路径
+                            if (!fs.existsSync(imagePath)) {
+                                fs.writeFileSync(
+                                    imagePath,
+                                    Buffer.from(taglibFile.tag.pictures[0].data)
+                                );
+                            }
                         }
                     }
                 } catch (e) {
