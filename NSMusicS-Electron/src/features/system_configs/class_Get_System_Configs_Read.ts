@@ -120,6 +120,7 @@ export class Class_Get_System_Configs_Read {
                     : path.join(process.resourcesPath)
                 if (process.platform === 'win32') {
                     store_app_configs_info.driveDbPath = 'C:\\Users\\Public\\Documents\\NSMusicS\\'
+                    store_app_configs_info.driveTempPath = 'C:\\Users\\Public\\Documents\\NSMusicS\\temp';
                 } else if (process.platform === 'darwin') {
                     store_app_configs_info.driveDbPath = path.join(os.homedir(), 'Applications', 'NSMusicS');
                 } else {

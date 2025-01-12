@@ -317,8 +317,7 @@
           timer_percentage.value = setInterval(synchronize_percentage_of_library_path_search, 200);
           console.log('Folder path selected:', folderPath);
           // reset data
-          store_server_user_model.switchToMode_Server()
-          store_server_user_model.switchToMode_Local()
+          await store_server_user_model.switchToMode_Local()
           store_server_user_model.model_select = 'local'
           store_app_configs_logic_save.save_system_config_of_App_Configs()
           //
@@ -583,10 +582,12 @@
                             :options="Type_Server_Model_Open_Option"
                             :disabled="store_app_configs_info.desktop_system_kind != 'win32'"
                             @update:value="
-                              Type_Server_Model_Open_Value === 'server' ?
-                              (store_server_user_model.switchToMode_Server(),store_server_user_model.model_select = 'server')
-                              :
-                              (store_server_user_model.switchToMode_Local(),store_server_user_model.model_select = 'local')
+                              async () => {
+                                Type_Server_Model_Open_Value === 'server' ?
+                                await store_server_user_model.switchToMode_Server()
+                                :
+                                await store_server_user_model.switchToMode_Local()
+                              }
                             "
                             placeholder=""
                             :reset-menu-on-options-change="false"
@@ -891,7 +892,8 @@
                             <n-divider style="margin: 0;"/>
                             <n-space vertical>
                               <div style="font-size:15px;font-weight: 600;">
-                                {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_0')}}
+                                {{ $t('nsmusics.view_page.selectLibrary') }}
+                                <!-- + ', ' + $t('nsmusics.view_page.selectLibrary_select_0') -->
                               </div>
                               <n-button size="small" @click="begin_import_Folder(false)">
                                 <template #icon>

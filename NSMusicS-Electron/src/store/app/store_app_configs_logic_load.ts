@@ -75,16 +75,14 @@ export const store_app_configs_logic_load = reactive({
             if(process.platform === 'win32') {
                 store_server_user_model.model_select = '' + system_Configs_Read.app_Configs.value['model_select']
                 if (store_server_user_model.model_select === 'navidrome') {
-                    store_server_user_model.model_select = 'server';
+                    await store_server_user_model.switchToMode_Server()
+                }else{
+                    await store_server_user_model.switchToMode_Local()
                 }
             }else{
-                store_server_user_model.model_select = 'server'
+                await store_server_user_model.switchToMode_Server()
             }
-            if(store_server_user_model.model_select === 'server'){
-                store_server_user_model.switchToMode_Server()
-            }else{
-                store_server_user_model.switchToMode_Local()
-            }
+            //
             if (store_server_user_model.model_select === 'server') {
                 store_server_users.percentage_of_nd = 100
                 store_server_users.percentage_of_local = 0

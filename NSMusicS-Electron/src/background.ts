@@ -598,6 +598,7 @@ let nsmusics_db = path.join(resourcesPath, 'nsmusics.db');
 let driveDbPath_1 = 'C:\\Users\\Public\\Documents\\NSMusicS\\navidrome.db';
 let driveDbPath_2 = 'C:\\Users\\Public\\Documents\\NSMusicS\\nsmusics.db';
 let driveDbPath = 'C:\\Users\\Public\\Documents\\NSMusicS';
+let driveTempPath = 'C:\\Users\\Public\\Documents\\NSMusicS\\temp';
 async function initSqlite3() {
     try {
         if(process.platform === 'win32') {
@@ -619,6 +620,25 @@ async function initSqlite3() {
             const copyIfNotExists = (sourcePath: string, destPath: string) => {
                 return new Promise((resolve, reject) => {
                     ensureDirectoryExists(driveDbPath) // 确保目标文件夹存在
+                        .then(() => {
+                            fs.access(destPath, fs.constants.F_OK, (err) => {
+                                if (err) {
+                                    fs.copyFile(sourcePath, destPath, (copyErr) => {
+                                        if (copyErr) {
+                                            reject(copyErr);
+                                        } else {
+                                            resolve(destPath);
+                                        }
+                                    });
+                                } else {
+                                    resolve(destPath);
+                                }
+                            });
+                        })
+                        .catch((err) => {
+                            reject(err);
+                        });
+                    ensureDirectoryExists(driveTempPath) // 确保目标文件夹存在
                         .then(() => {
                             fs.access(destPath, fs.constants.F_OK, (err) => {
                                 if (err) {
@@ -1406,24 +1426,25 @@ async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
                 } catch (e) {
                     console.error(e)
                 }
-                // cover output
-                if (cover_model) {
-                    try {
-                        if (taglibFile.tag.pictures && taglibFile.tag.pictures.length > 0) {
-                            const dirPath = path.dirname(_path);
-                            const fileName = path.basename(_path, path.extname(_path));
-                            const folderPath = path.join(dirPath, fileName);
-                            const imagePath = path.join(folderPath + '.jpg');
-                            if (!fs.existsSync(imagePath)) {
-                                fs.writeFileSync(
-                                    imagePath,
-                                    Buffer.from(taglibFile.tag.pictures[0].data)
-                                );
-                            }
+                // cover output driveDbPath
+                try {
+                    if (taglibFile.tag.pictures && taglibFile.tag.pictures.length > 0) {
+                        const fileName = path.basename(_path, path.extname(_path)) + '.jpg'; // 生成文件名
+                        const imagePath = path.join(driveTempPath, fileName); // 完整路径
+
+                        if (!fs.existsSync(driveTempPath)) {
+                            fs.mkdirSync(driveTempPath, { recursive: true });
                         }
-                    } catch (e) {
-                        console.error(e);
+
+                        if (!fs.existsSync(imagePath)) {
+                            fs.writeFileSync(
+                                imagePath,
+                                Buffer.from(taglibFile.tag.pictures[0].data)
+                            );
+                        }
                     }
+                } catch (e) {
+                    console.error(e);
                 }
                 taglibFile.dispose();
             }catch (e) {

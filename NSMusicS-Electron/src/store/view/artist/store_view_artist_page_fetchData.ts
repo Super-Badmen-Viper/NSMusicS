@@ -104,12 +104,13 @@ export const store_view_artist_page_fetchData = reactive({
                         for (let j = 0; j < pathfiles.length; j++) {
                             if (pathfiles[j].artist_id === row.id) {
                                 if (row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
-                                    if (pathfiles[j].path.indexOf('mp3') > 0)
-                                        row.medium_image_url = pathfiles[j].path.replace('mp3', 'jpg');
-                                    else if (pathfiles[j].path.indexOf('flac') > 0)
-                                        row.medium_image_url = pathfiles[j].path.replace('flac', 'jpg');
-                                    else
-                                        row.medium_image_url = error_album;
+                                    if(pathfiles[j].path) {
+                                        const fileName = pathfiles[j].path.split(/[\\/]/).pop(); // 兼容 Windows 和 Unix 路径分隔符
+                                        const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg');
+                                        row.medium_image_url = `${store_app_configs_info.driveTempPath}/${newFileName}`;
+                                    }else{
+                                        row.medium_image_url = error_album
+                                    }
                                 }
                                 break;
                             }

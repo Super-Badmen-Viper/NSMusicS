@@ -117,12 +117,13 @@ export const store_view_album_page_fetchData = reactive({
                     let rows = stmt_album.all();
                     rows.forEach((row: Album) => {
                         if (row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
-                            if (row.embed_art_path.indexOf('mp3') > 0)
-                                row.medium_image_url = row.embed_art_path.replace('mp3', 'jpg');
-                            else if (row.embed_art_path.indexOf('flac') > 0)
-                                row.medium_image_url = row.embed_art_path.replace('flac', 'jpg');
-                            else
-                                row.medium_image_url = error_album;
+                            if(row.embed_art_path) {
+                                const fileName = row.embed_art_path.split(/[\\/]/).pop(); // 兼容 Windows 和 Unix 路径分隔符
+                                const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg');
+                                row.medium_image_url = `${store_app_configs_info.driveTempPath}/${newFileName}`;
+                            }else{
+                                row.medium_image_url = error_album
+                            }
                         }
                         const fileNameMatch = row.embed_art_path.match(/[^\\\/]+$/);
                         const fileNameWithExtension = fileNameMatch ? fileNameMatch[0] : null;

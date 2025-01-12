@@ -22,6 +22,7 @@ export const store_app_configs_info = reactive({
     version_update_explain: '',
 
     driveDbPath: '',
+    driveTempPath: '',
     resourcesPath: '',
     navidrome_db: null,// path.resolve('resources/navidrome.db'),
     nsmusics_db: null,// path.resolve('resources/nsmusics.db'),
