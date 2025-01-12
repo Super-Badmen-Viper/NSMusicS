@@ -66,7 +66,8 @@
             "selectLibrary_select_1": "Export the embedded cover of the music file as a cover file with the same name (skip if a cover file with the same name already exists), and save the file to the app cache",
             "mediaLibrary": "Media Library",
             "mediaLibrary_begin_import": "Begin Import",
-            "mediaLibrary_media_tag_modify_local": "Currently, only local mode browsing|editing tag information is supported"
+            "mediaLibrary_media_tag_modify_local": "Currently, only local mode browsing|editing tag information is supported",
+            "hideHalfLyric": "Hide the lyrics before the current followed lyrics"
         },
         "view_player": {
             "view_seting": {

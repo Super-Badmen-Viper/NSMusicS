@@ -24,7 +24,7 @@ function getAssetImage(firstImage: string) {
            }"
            style="margin-right: 1vw;"
   >
-    <n-image
+    <img
       :style="{
         marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? 'calc(28vh - 182px)' : 'calc(28vh - 182px)',
         transition: 'margin 0.4s, height 0.4s'

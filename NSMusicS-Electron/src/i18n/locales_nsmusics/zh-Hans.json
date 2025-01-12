@@ -66,7 +66,8 @@
             "selectLibrary_select_1": "导出音乐文件内嵌的封面，转化为同名封面文件(存在同名封面文件则跳过)，文件保存至应用缓存中",
             "mediaLibrary": "媒体库",
             "mediaLibrary_begin_import": "开始导入",
-            "mediaLibrary_media_tag_modify_local": "目前仅能在本地模式浏览|修改tag信息"
+            "mediaLibrary_media_tag_modify_local": "目前仅能在本地模式浏览|修改tag信息",
+            "hideHalfLyric": "隐藏当前跟随的歌词之前的歌词"
         },
         "view_player": {
             "view_seting": {

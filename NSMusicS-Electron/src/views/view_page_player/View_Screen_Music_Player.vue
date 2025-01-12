@@ -36,6 +36,7 @@ const computed_i18n_Label_ViewSetConfig_Cover_4 = computed(() => t('nsmusics.vie
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_player_view} from "@/store/player/store_player_view";
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
+import {store_player_appearance} from "@/store/player/store_player_appearance";
 
 ////// System BrowserWindow Set
 function minimize() {
@@ -75,7 +76,7 @@ function load_lyrics() {
     begin_lyrics_animation()
     try{
       setTimeout(() => {
-        handleLeave_Refresh_Lyric_Style()
+        handleLeave_Refresh_Lyric_Color()
       }, 200);
     }catch(e){
       console.log(e)
@@ -127,17 +128,21 @@ function begin_lyrics_animation() {
         const index = store_player_view.currentScrollIndex + store_player_audio_info.this_audio_lyrics_info_line_num
         scrollToItem(index);
         for (let i = index - 16; i <= index + 16; i++) {
+          const colorValue = Math.max(
+              store_player_appearance.player_lyric_color_hidden_value -
+              (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
+              0
+          );
           if (i < index) {
-            itemElements[i].style.color = 'transparent';
+            if(store_player_appearance.player_use_lyric_skip_forward){
+              itemElements[i].style.color = 'transparent'
+            }else{
+              itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+            }
             itemElements[i].style.transform = 'scale(1)';
             itemElements[i].style.textShadow = '0 0 0px transparent';
             itemElements[i].style.width = 'calc(40vw)';
           } else if (i !== index) {
-            const colorValue = Math.max(
-                store_player_appearance.player_lyric_color_hidden_value -
-                (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient,
-                0
-            );
             itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
             itemElements[i].style.transform = 'scale(1)';
             itemElements[i].style.textShadow = '0 0 0px transparent';
@@ -163,7 +168,7 @@ const handleItemDbClick = async (index: any) => {
   store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress = time;
   store_player_view.currentScrollIndex = index;
 
-  handleLeave_Refresh_Lyric_Style()
+  handleLeave_Refresh_Lyric_Color()
 };
 const scrollbar = ref(null as any);
 const perviousIndex = ref(0);
@@ -200,16 +205,22 @@ const scrollToItem = (index: number) => {
     itemElements[index].scrollIntoView({ block: 'center', behavior: 'instant'});
   else
     itemElements[index].scrollIntoView({ block: 'center', behavior: 'smooth'});
-  handleLeave_Refresh_Lyric_Style()
-
+  // 设置前后16列的颜色
+  handleLeave_Refresh_Lyric_Color()
+  // 设置perviousIndex.value列的颜色
   let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
   for (let i = index - 16; i <= index + 16; i++) {
     if (i < index) {
-      // const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
-      itemElements[i].style.color = 'transparent' // colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+      if(store_player_appearance.player_use_lyric_skip_forward) {
+        itemElements[i].style.color = 'transparent'
+      }else {
+        const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
+        itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+      }
       itemElements[i].style.transform = 'scale(1)';
       itemElements[i].style.textShadow = '0 0 0px transparent';
       itemElements[i].style.width = 'calc(40vw)'
+      itemElements_active[i].style.fontWeight = 400;
     } else if (i != index) {
       const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (index - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
       itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
@@ -350,18 +361,30 @@ const handleWheel = (event: any) => {
     itemElements[i].style.width = 'calc(40vw)';
   }
 };
-const handleLeave_Refresh_Lyric_Style = () => {
+const handleLeave_Refresh_Lyric_Color = () => {
   lyrics_list_whell.value = false;
   const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
+  let lyric_bottom_hidden_num = store_player_appearance.player_use_lyric_skip_forward
+  ? 0 : 10
   let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
   for (let i = perviousIndex.value - 16; i <= perviousIndex.value + 16; i++) {
     if (i < perviousIndex.value) {
-      const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (perviousIndex.value - i) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
+      const colorValue =
+          Math.max(store_player_appearance.player_lyric_color_hidden_value + lyric_bottom_hidden_num
+              - (perviousIndex.value - i)
+              * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
       try {
-        itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+        if(store_player_appearance.player_use_lyric_skip_forward){
+          itemElements[i].style.color = 'transparent'
+        }else{
+          itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
+        }
       }catch{  }
     } else {
-      const colorValue = Math.max(store_player_appearance.player_lyric_color_hidden_value - (i - perviousIndex.value) * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
+      const colorValue =
+          Math.max(store_player_appearance.player_lyric_color_hidden_value + lyric_bottom_hidden_num
+              - (i - perviousIndex.value)
+              * store_player_appearance.player_lyric_color_hidden_coefficient, 0);
       try {
         itemElements[i].style.color = colorValue === 0 ? 'transparent' : `${color_hidden}${colorValue}`;
       }catch{  }
@@ -384,7 +407,7 @@ const handleAuto_fontSize = (value: number) =>{
   })
 }
 watch(() => store_player_appearance.player_lyric_fontSize_Num, (newValue) => {
-  handleLeave_Refresh_Lyric_Style()
+  handleLeave_Refresh_Lyric_Color()
   handleAuto_fontSize(newValue)
 });
 
@@ -812,13 +835,15 @@ onBeforeUnmount(() => {
                 <n-divider style="margin: 8px 0;width: 336px;"/>
                 <n-space justify="space-between">
                   <span style="font-size:16px;">{{
-                      $t('Hide')
-                      + ' ' + $t('player.skip_forward')
-                      + ' ' + $t('page.fullscreenPlayer.lyrics')
+                      $t('nsmusics.view_page.hideHalfLyric')
                     }}</span>
                   <n-space style="margin-right: 32px;">
                     <n-switch
-                      v-model:value="store_player_appearance.player_use_lyric_skip_forward">
+                      v-model:value="store_player_appearance.player_use_lyric_skip_forward"
+                      @update:value="() => {
+                        store_player_audio_logic.player_slider_click = true;
+                      }"
+                    >
                     </n-switch>
                   </n-space>
                 </n-space>
@@ -871,66 +896,82 @@ onBeforeUnmount(() => {
     </n-config-provider>
     <!-- body -->
     <n-space vertical :size="12" style="z-index: 99;overflow: hidden;">
-      <n-space vertical>
-        <!-- top bar -->
-        <n-flex
-            justify="space-between"
-            style="transition: margin 0.4s;"
-            :style="{ marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '-70px' : '0px' }">
-          <n-space
-              style="
-              -webkit-app-region: no-drag;margin-top: 35px;
+      <!-- top bar -->
+      <n-flex
+          justify="space-between"
+          :style="{
+            opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model
+            ? 0 : 1,
+            top: store_player_appearance.player_use_lyric_skip_forward
+            ? '0' : '32px',
+            transition: 'margin 0.4s, opacity 0.4s',
+          }"
+          style="
+            width: 100vw;
+            z-index: 10;
+            position: absolute;">
+        <n-space
+            style="
+              -webkit-app-region: no-drag;margin-top: 35px;width: 200px;
             ">
-            <div style="width: 200px;"></div>
-          </n-space>
-          <!-- -->
-          <n-flex justify="end" style="width: 400px;height: 70px;">
-            <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
-              <n-button quaternary circle
-                        style="margin-right:4px;"
-                        v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                        @click="maximize_screen">
-                <template #icon>
-                  <n-icon size="20" :depth="3" style="margin-top: 1px;"><FullScreenMaximize16Regular/></n-icon>
-                </template>
-              </n-button>
-              <n-button quaternary circle
-                        style="margin-right:4px"
-                        v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                        @click="minimize">
-                <template #icon>
-                  <n-icon size="18" :depth="3"><ArrowMinimize16Regular/></n-icon>
-                </template>
-              </n-button>
-              <n-button quaternary circle
-                        style="margin-right:4px"
-                        v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                        @click="maximize">
-                <template #icon>
-                  <n-icon size="24" :depth="3"><Maximize16Regular/></n-icon>
-                </template>
-              </n-button>
-              <n-button quaternary circle
-                        style="margin-right:30px"
-                        v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                        @click="closeWindow">
-                <template #icon>
-                  <n-icon size="28" :depth="3"><Close/></n-icon>
-                </template>
-              </n-button>
-            </div>
-          </n-flex>
+          <div style="width: 200px;"></div>
+        </n-space>
+        <!-- -->
+        <n-flex justify="end" style="width: 400px;height: 70px;">
+          <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
+            <n-button quaternary circle
+                      style="margin-right:4px;"
+                      v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
+                      @click="maximize_screen">
+              <template #icon>
+                <n-icon size="20" :depth="3" style="margin-top: 1px;"><FullScreenMaximize16Regular/></n-icon>
+              </template>
+            </n-button>
+            <n-button quaternary circle
+                      style="margin-right:4px"
+                      v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
+                      @click="minimize">
+              <template #icon>
+                <n-icon size="18" :depth="3"><ArrowMinimize16Regular/></n-icon>
+              </template>
+            </n-button>
+            <n-button quaternary circle
+                      style="margin-right:4px"
+                      v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
+                      @click="maximize">
+              <template #icon>
+                <n-icon size="24" :depth="3"><Maximize16Regular/></n-icon>
+              </template>
+            </n-button>
+            <n-button quaternary circle
+                      style="margin-right:30px"
+                      v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
+                      @click="closeWindow">
+              <template #icon>
+                <n-icon size="28" :depth="3"><Close/></n-icon>
+              </template>
+            </n-button>
+          </div>
         </n-flex>
+      </n-flex>
+      <n-space vertical>
         <!-- middle area -->
         <n-config-provider :theme="darkTheme">
           <n-flex
               justify="center"
               style="transition: margin 0.4s;overflow: hidden;"
-              :style="{ marginTop: store_player_appearance.player_collapsed_action_bar_of_Immersion_model ? '70px' : '0px' }">
-            <n-layout has-sider
-                      style="
-                        overflow: hidden;
-                        background-color: transparent;">
+              :style="{
+                marginTop: store_player_appearance.player_use_lyric_skip_forward ? '70px' : '0px'
+              }">
+            <n-layout
+                has-sider
+                :style="{
+                  marginTop: store_player_appearance.player_use_lyric_skip_forward ? '0px' : '16px'
+                }"
+                style="
+                  transition: margin 0.4s;
+                  overflow: hidden;
+                  background-color: transparent;">
               <!-- left area -->
               <n-layout-sider
                   :collapsed="store_player_appearance.player_collapsed_album"
@@ -940,7 +981,13 @@ onBeforeUnmount(() => {
                   position="static"
                   collapsed-width="30vw" width="53vw"
                   style="background-color: transparent;overflow-y: hidden;">
-                <n-space vertical align="end" style="margin-right:8vw;">
+                <n-space
+                    vertical align="end"
+                    :style="{
+                      marginTop: store_player_appearance.player_use_lyric_skip_forward ? '0px' : '100px',
+                      transition: 'margin 0.4s'
+                    }"
+                    style="margin-right:8vw;">
                   <!-- 1 方形封面-->
                   <Table_Album_Model_1_Cover/>
                   <!-- 2 旋转封面-->
@@ -1156,11 +1203,20 @@ onBeforeUnmount(() => {
               <!-- right area -->
               <n-layout-content
                   style="background-color: transparent;overflow: hidden;"
-                  :style="{marginLeft: store_player_appearance.player_background_model_num != 3 ? '-3vw' : '2vw'}"
+                  :style="{
+                    marginLeft: store_player_appearance.player_background_model_num != 3
+                    ? '-3vw' : '2vw',
+                    marginTop: store_player_appearance.player_use_lyric_skip_forward
+                    ? '0px' : '46px'
+                  }"
               >
                 <div
-                    style="
-                    width: 40vw;height: calc(100vh - 100px);
+                  :style="{
+                    height: store_player_appearance.player_use_lyric_skip_forward
+                    ? 'calc(100vh - 100px)' : 'calc(100vh)',
+                  }"
+                  style="
+                    width: 40vw;
                     margin-top: -80px;
                     border-radius: 20px;
                     display: flex;
@@ -1174,7 +1230,7 @@ onBeforeUnmount(() => {
                       ref="scrollbar"
                       @wheel="handleWheel"
                       @mouseleave="() => {
-                        handleLeave_Refresh_Lyric_Style();
+                        handleLeave_Refresh_Lyric_Color();
                         store_player_view.currentScrollIndex = 0;
                         begin_lyrics_animation();
                       }"

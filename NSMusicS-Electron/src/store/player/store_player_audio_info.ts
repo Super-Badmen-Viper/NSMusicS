@@ -133,14 +133,11 @@ watch(() => store_player_audio_info.this_audio_file_medium_image_url, async (new
         try {
             const response = await fetch(newValue);
             const blob = await response.blob();
-            const reader = new FileReader();
-            reader.onload = () => {
-                store_player_audio_info.page_top_album_image_url = reader.result; // Base64 URL
-                store_player_audio_info.this_audio_restart_play = true;
-            };
-            reader.readAsDataURL(blob);
+            store_player_audio_info.page_top_album_image_url = URL.createObjectURL(blob); // 使用 Object URL
+            store_player_audio_info.this_audio_restart_play = true;
         } catch (error) {
             console.error('Failed to load image:', error);
+            store_player_audio_info.page_top_album_image_url = error_album
         }
     } else {
         store_player_audio_info.page_top_album_image_url = error_album;
