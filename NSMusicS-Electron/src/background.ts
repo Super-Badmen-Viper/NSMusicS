@@ -357,10 +357,10 @@ async function createWindow() {
     /// init BrowserWindow
     if(process.platform != 'darwin') {
         context.mainWindow = await new BrowserWindow({
-            width: 1220,
-            height: 765,
-            minWidth: 1220,
-            minHeight: 660,
+            width: 1100,
+            height: 700,
+            minWidth: 1100,
+            minHeight: 700,
             frame:false,
             resizable: true,
             webPreferences: {
@@ -372,10 +372,10 @@ async function createWindow() {
     }
     else{
         context.mainWindow = await new BrowserWindow({
-            width: 1220,
-            height: 765,
-            minWidth: 1220,
-            minHeight: 660,
+            width: 1100,
+            height: 700,
+            minWidth: 1100,
+            minHeight: 700,
             frame:false,
             resizable: true,
             webPreferences: {

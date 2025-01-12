@@ -903,7 +903,7 @@ onBeforeUnmount(() => {
             opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model
             ? 0 : 1,
             top: store_player_appearance.player_use_lyric_skip_forward
-            ? '0' : '32px',
+            ? '0' : '4vh',
             transition: 'margin 0.4s, opacity 0.4s',
           }"
           style="
@@ -1225,16 +1225,16 @@ onBeforeUnmount(() => {
                     overflow: hidden;
                   ">
                   <n-list
-                      clickable
-                      :show-divider="false"
-                      ref="scrollbar"
-                      @wheel="handleWheel"
-                      @mouseleave="() => {
-                        handleLeave_Refresh_Lyric_Color();
-                        store_player_view.currentScrollIndex = 0;
-                        begin_lyrics_animation();
-                      }"
-                      style="
+                    clickable
+                    :show-divider="false"
+                    ref="scrollbar"
+                    @wheel="handleWheel"
+                    @mouseleave="() => {
+                      handleLeave_Refresh_Lyric_Color();
+                      store_player_view.currentScrollIndex = 0;
+                      begin_lyrics_animation();
+                    }"
+                    style="
                       width: calc(40vw);
                       max-height: calc(90vh);
                       margin-top: 120px;
