@@ -548,7 +548,14 @@ async function createWindow() {
                 }
             }
 
-            return 'file:///' + path.join(driveDbPath, 'error_album.jpg');
+            const medium_image_url = `${driveTempPath}/${encodeURIComponent(
+                imagePath.split(/[\\/]/).pop().replace(/\.(mp3|flac)$/i, '.jpg'))
+            }`
+            console.log(medium_image_url)
+            if (fs.existsSync(medium_image_url))
+                return filePath;
+            else
+                return 'file:///' + path.join(driveDbPath, 'error_album.jpg');
         } catch (error) {
             console.error('Error handling window-get-imagePath:', error);
             return 'file:///' + path.join(driveDbPath, 'error_album.jpg');;
@@ -1449,6 +1456,10 @@ async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
                         if (taglibFile.tag.pictures && taglibFile.tag.pictures.length > 0) {
                             const fileName = path.basename(_path, path.extname(_path)) + '.jpg'; // 生成文件名
                             const imagePath = path.join(driveTempPath, fileName); // 完整路径
+
+                            if (!fs.existsSync(driveTempPath)) {
+                                fs.mkdirSync(driveTempPath, { recursive: true });
+                            }
                             if (!fs.existsSync(imagePath)) {
                                 fs.writeFileSync(
                                     imagePath,

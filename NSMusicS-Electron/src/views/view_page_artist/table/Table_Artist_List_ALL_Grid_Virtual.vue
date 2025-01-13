@@ -514,82 +514,85 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <n-space vertical :size="12">
-    <n-space align="center">
-      <n-space v-if="store_router_data_info.store_router_history_data_of_local">
-        <n-button quaternary circle style="margin-left:2px" @click="get_router_history_model_pervious">
-          <template #icon>
-            <n-icon :size="20"><ChevronLeft16Filled/></n-icon>
-          </template>
-        </n-button>
-        <div style="margin-top: 4px;">
-          {{ store_router_history_data_of_artist.router_select_history_date_of_Artist?.id ?? '' }} / {{ store_router_history_data_of_artist.router_history_datas_of_Artist?.length ?? '' }}
-        </div>
-        <n-button quaternary circle style="margin-left:4px" @click="get_router_history_model_next">
-          <template #icon>
-            <n-icon :size="20"><ChevronRight16Filled/></n-icon>
-          </template>
-        </n-button>
-      </n-space>
-
-      <n-button quaternary circle style="margin-left:4px" @click="show_search_area">
-        <template #icon>
-          <n-icon :size="20"><Search20Filled/></n-icon>
-        </template>
-      </n-button>
-      <n-input-group 
-        v-if="bool_show_search_area"
-        style="width: 238px;">
-        <n-input 
-          style="width: 238px;"
-          ref="input_search_InstRef" 
-          v-model:value="input_search_Value"
-          @keydown.enter="click_search"/>
-      </n-input-group>
-
-      <n-dropdown
-        v-if="!(store_server_user_model.model_server_type_of_web && store_view_artist_page_logic.page_artistlists_selected === 'artist_list_recently')"
-        trigger="click" :show-arrow="true" 
-        :options="options_Sort" @select="handleSelect_Sort">
-        <n-button quaternary circle style="margin-left:4px">
-          <template #icon>
-            <n-icon :size="20"><ArrowSort24Regular/></n-icon>
-          </template>
-        </n-button>
-      </n-dropdown>
-
-      <n-dropdown 
-        trigger="click" :show-arrow="true" 
-        :options="options_Filter" @select="options_Filter_handleSelect">
-        <n-button quaternary circle style="margin-left:4px">
-          <template #icon>
-            <n-icon :size="20"><Filter20Filled/></n-icon>
-          </template>
-        </n-button>
-      </n-dropdown>
-
-      <n-divider vertical style="width: 2px;height: 20px;margin-top: 8px;"/>
-      <n-button quaternary circle style="margin-left:4px" @click="onRefreshSharp">
-        <template #icon>
-          <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
-        </template>
-      </n-button>
-      <n-button quaternary circle style="margin-left:4px" @click="onRefreshSharp">
-        <template #icon>
-          <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
-        </template>
-      </n-button>
-
-      <n-space v-if="show_top_selectedlist">
-        <n-divider vertical style="width: 2px;height: 20px;margin-top: 8px;"/>
-        <n-select
-            size="small"
-            :value="store_view_artist_page_logic.page_artistlists_selected"
-            :options="store_view_artist_page_logic.page_artistlists_options" style="width: 166px;"
-            @update:value="page_artistlists_handleselected_updatevalue" />
-      </n-space>
-    </n-space>
-
     <div class="artist-wall-container">
+      <n-space align="center">
+        <n-space v-if="store_router_data_info.store_router_history_data_of_local">
+          <n-button quaternary circle style="margin-left:2px" @click="get_router_history_model_pervious">
+            <template #icon>
+              <n-icon :size="20"><ChevronLeft16Filled/></n-icon>
+            </template>
+          </n-button>
+          <div style="margin-top: 4px;">
+            {{ store_router_history_data_of_artist.router_select_history_date_of_Artist?.id ?? '' }} / {{ store_router_history_data_of_artist.router_history_datas_of_Artist?.length ?? '' }}
+          </div>
+          <n-button quaternary circle style="margin-left:4px" @click="get_router_history_model_next">
+            <template #icon>
+              <n-icon :size="20"><ChevronRight16Filled/></n-icon>
+            </template>
+          </n-button>
+        </n-space>
+
+        <n-button quaternary circle style="margin-left:4px" @click="show_search_area">
+          <template #icon>
+            <n-icon :size="20"><Search20Filled/></n-icon>
+          </template>
+        </n-button>
+        <n-input-group
+            v-if="bool_show_search_area"
+            style="width: 238px;">
+          <n-input
+              style="width: 238px;"
+              ref="input_search_InstRef"
+              v-model:value="input_search_Value"
+              @keydown.enter="click_search"/>
+        </n-input-group>
+
+        <n-dropdown
+            v-if="!(store_server_user_model.model_server_type_of_web && store_view_artist_page_logic.page_artistlists_selected === 'artist_list_recently')"
+            trigger="click" :show-arrow="true"
+            :options="options_Sort" @select="handleSelect_Sort">
+          <n-button quaternary circle style="margin-left:4px">
+            <template #icon>
+              <n-icon :size="20"><ArrowSort24Regular/></n-icon>
+            </template>
+          </n-button>
+        </n-dropdown>
+
+        <n-dropdown
+            trigger="click" :show-arrow="true"
+            :options="options_Filter" @select="options_Filter_handleSelect">
+          <n-button quaternary circle style="margin-left:4px">
+            <template #icon>
+              <n-icon :size="20"><Filter20Filled/></n-icon>
+            </template>
+          </n-button>
+        </n-dropdown>
+
+        <n-divider vertical style="width: 2px;height: 20px;margin-top: -2px;"/>
+        <n-button quaternary circle style="margin-left:4px"
+                  @click="onRefreshSharp">
+          <template #icon>
+            <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+          </template>
+        </n-button>
+        <n-button quaternary circle style="margin-left:4px"
+                  @click="dynamicScroller.$el.scrollTop = 0;">
+          <template #icon>
+            <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
+          </template>
+        </n-button>
+
+      </n-space>
+      <n-space align="center">
+        <n-space v-if="show_top_selectedlist"
+                 style="margin-left: 7px;margin-top: 10px;margin-bottom: 10px;">
+          <n-select
+              size="small"
+              :value="store_view_artist_page_logic.page_artistlists_selected"
+              :options="store_view_artist_page_logic.page_artistlists_options" style="width: 166px;"
+              @update:value="page_artistlists_handleselected_updatevalue" />
+        </n-space>
+      </n-space>
       <DynamicScroller
         class="artist-wall" ref="dynamicScroller" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
         :items="store_view_artist_page_info.artist_Files_temporary"
@@ -652,7 +655,7 @@ onBeforeUnmount(() => {
                         style="
                         text-align: left;cursor: pointer;
                         font-size: 36px;font-weight: 600;
-                        max-width: 450px;
+                        max-width: 380px;
                         display: -webkit-box;
                         -webkit-box-orient: vertical;
                         -webkit-line-clamp: 1;

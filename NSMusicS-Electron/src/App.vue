@@ -708,30 +708,15 @@
 </script>
 <template>
   <n-message-provider>
-    <!-- bottom PlayerBar and PlayerView -->
-    <n-config-provider :theme="store_app_configs_info.theme_app">
-      <!-- n-card can change Bar_Music_Player(text color) -->
-      <n-card
-          style="
-          position: fixed;left: 0;bottom: 0;
-          width: 100vw;height: 80px;
-          background-color: #00000000;
-          z-index: 100;
-          border-radius: 12px 12px 0 0;border: 0 #00000000">
-        <Bar_Music_Player/>
-      </n-card>
-      <View_Screen_Music_Player
-          class="view_music_player"
-          v-if="store_player_appearance.player_show"
-          :style="{ height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)` }">
-      </View_Screen_Music_Player>
-    </n-config-provider>
-
     <!-- Player Bady View-->
     <n-config-provider class="this_App" :theme="store_app_configs_info.theme">
       <n-global-style />
       <n-message-provider class="this_App">
-        <n-layout has-sider class="this_App" embedded @click="drawer_close_of_player_bar">
+        <n-layout
+            has-sider
+            class="this_App"
+            embedded
+            @click="drawer_close_of_player_bar">
           <!--Left Router_Menu app_view_left_menu_collapsed-->
           <n-flex vertical justify="center" style="height: 100vh;">
             <div></div>
@@ -746,19 +731,21 @@
               :width="166"
               style="
                 border-radius:  0 20px 20px 0;
-                z-index: 200;
               "
+              :style="{
+                zIndex: store_player_appearance.player_show ? 200 : 208,
+              }"
             >
               <n-flex vertical justify="center">
                 <div></div>
                 <n-menu
-                    v-if="store_app_configs_info.app_view_bar_show"
-                    v-model:value="store_app_configs_info.app_view_left_menu_select_activeKey"
-                    :collapsed="store_app_configs_info.app_view_left_menu_collapsed"
-                    :collapsed-width="66"
-                    :collapsed-icon-size="22"
-                    :icon-size="20"
-                    :options="store_app_configs_info.app_view_menuOptions"
+                  v-if="store_app_configs_info.app_view_bar_show"
+                  v-model:value="store_app_configs_info.app_view_left_menu_select_activeKey"
+                  :collapsed="store_app_configs_info.app_view_left_menu_collapsed"
+                  :collapsed-width="66"
+                  :collapsed-icon-size="22"
+                  :icon-size="20"
+                  :options="store_app_configs_info.app_view_menuOptions"
                 />
                 <div></div>
               </n-flex>
@@ -830,7 +817,9 @@
             <RouterView class="view_show_table"
                         v-else-if="store_router_data_info.router_select_model_server_library"></RouterView>
             <!--Top Bar-->
-            <div class="bar_top_setapp" style="background-color: transparent" @click="drawer_close_of_player_bar">
+            <div class="bar_top_setapp"
+                 style="background-color: transparent"
+                 @click="drawer_close_of_player_bar">
               <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"
                        :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
                        :style="{
@@ -926,6 +915,31 @@
               </section>
             </div>
           </n-layout>
+          <!-- bottom PlayerBar and PlayerView -->
+          <n-config-provider
+              :theme="store_app_configs_info.theme_app"
+              style="z-index: 205;">
+            <!-- n-card can change Bar_Music_Player(text color) -->
+            <n-card
+              style="
+                position: fixed;left: 0;bottom: 0;
+                width: 100vw;
+                height: 80px;
+                background-color: #00000000;
+                border-radius: 12px 12px 0 0;border: 0 #00000000">
+              <Bar_Music_Player/>
+            </n-card>
+          </n-config-provider>
+          <!-- bottom PlayerBar and PlayerView -->
+          <n-config-provider
+              :theme="store_app_configs_info.theme_app"
+              style="z-index: 203;">
+            <View_Screen_Music_Player
+                class="view_music_player"
+                v-if="store_player_appearance.player_show"
+                :style="{ height: `calc(100vh - ${store_player_appearance.player_show_hight_animation_value}vh)` }">
+            </View_Screen_Music_Player>
+          </n-config-provider>
         </n-layout>
       </n-message-provider>
     </n-config-provider  >
@@ -1088,9 +1102,9 @@ html, body { scroll-behavior:smooth; }
 }
 
 .bar_top_setapp{
-  width: 100vw;
+  width: calc(100vw - 60px);
   height: 60px;
-  margin-left: 7px;
+  margin-left: 37px;
 
   z-index: 1;
 
