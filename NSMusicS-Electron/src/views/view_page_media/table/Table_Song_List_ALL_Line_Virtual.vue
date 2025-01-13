@@ -297,6 +297,7 @@ const page_songlists_handleselected_updatevalue = (value: any) => {
   breadcrumbItems.value = store_view_media_page_logic.page_songlists_options.find(option => option.value === value)?.label || '';
   bool_start_play.value = true
   store_view_media_page_logic.set_media_Files_selected_all(false)
+  dynamicScroller.$el.scrollTop = 0;
 };
 
 ////// router history
@@ -815,173 +816,175 @@ onBeforeUnmount(() => {
 <template>
   <n-space vertical :size="12">
     <div class="dynamic-scroller-demo">
-      <n-space align="center">
-        <n-space v-if="store_router_data_info.store_router_history_data_of_local">
-          <n-button quaternary circle style="margin-left:2px" @click="get_router_history_model_pervious">
-            <template #icon>
-              <n-icon size="20" :depth="2"><ChevronLeft16Filled/></n-icon>
-            </template>
-          </n-button>
-          <div style="margin-top: 4px;">
-            {{ store_router_history_data_of_media.router_select_history_date_of_Media?.id ?? '' }} / {{ store_router_history_data_of_media.router_history_datas_of_Media?.length ?? '' }}
-          </div>
-          <n-button quaternary circle style="margin-left:4px" @click="get_router_history_model_next">
-            <template #icon>
-              <n-icon size="20" :depth="2"><ChevronRight16Filled/></n-icon>
-            </template>
-          </n-button>
-        </n-space>
+      <n-space vertical @wheel.prevent style="overflow: hidden;">
+        <n-space align="center">
+          <n-space v-if="store_router_data_info.store_router_history_data_of_local">
+            <n-button quaternary circle style="margin-left:2px" @click="get_router_history_model_pervious">
+              <template #icon>
+                <n-icon size="20" :depth="2"><ChevronLeft16Filled/></n-icon>
+              </template>
+            </n-button>
+            <div style="margin-top: 4px;">
+              {{ store_router_history_data_of_media.router_select_history_date_of_Media?.id ?? '' }} / {{ store_router_history_data_of_media.router_history_datas_of_Media?.length ?? '' }}
+            </div>
+            <n-button quaternary circle style="margin-left:4px" @click="get_router_history_model_next">
+              <template #icon>
+                <n-icon size="20" :depth="2"><ChevronRight16Filled/></n-icon>
+              </template>
+            </n-button>
+          </n-space>
 
-        <n-button quaternary circle
-                  style="margin-left:4px"
-                  @click="show_search_area">
-          <template #icon>
-            <n-icon :size="20" :depth="2"><Search20Filled/></n-icon>
-          </template>
-        </n-button>
-        <n-input-group
-            v-if="store_view_media_page_logic.page_songlists_bool_show_search_area"
-            style="width: 144px;">
-          <n-input
-              style="width: 238px;"
-              ref="input_search_InstRef"
-              v-model:value="store_view_media_page_logic.page_songlists_input_search_Value"
-              @keydown.enter="click_search"/>
-        </n-input-group>
-
-        <n-dropdown
-            trigger="click" :show-arrow="true"
-            :options="options_Sort" @select="handleSelect_Sort">
-          <n-button quaternary circle style="margin-left:4px">
+          <n-button quaternary circle
+                    style="margin-left:4px"
+                    @click="show_search_area">
             <template #icon>
-              <n-icon :size="20" :depth="2"><ArrowSort24Regular/></n-icon>
+              <n-icon :size="20" :depth="2"><Search20Filled/></n-icon>
             </template>
           </n-button>
-        </n-dropdown>
+          <n-input-group
+              v-if="store_view_media_page_logic.page_songlists_bool_show_search_area"
+              style="width: 144px;">
+            <n-input
+                style="width: 238px;"
+                ref="input_search_InstRef"
+                v-model:value="store_view_media_page_logic.page_songlists_input_search_Value"
+                @keydown.enter="click_search"/>
+          </n-input-group>
 
-        <n-badge
-            :value="store_view_media_page_logic.page_songlists_filter_year" :offset="[-17, 40]">
-          <n-button quaternary circle style="margin-left:4px" @click="Type_Filter_Show = true">
-            <template #icon>
-              <n-icon :size="20"><Filter20Filled/></n-icon>
-            </template>
-          </n-button>
-        </n-badge>
-        <n-modal
-            v-model:show="Type_Filter_Show">
-          <n-card style="width: 480px;border-radius: 4px;">
-            <n-space
-                vertical size="large">
-              <n-space>
-                <span style="font-size: 20px;font-weight: 600;">{{ $t('common.filter_other')}}</span>
-              </n-space>
-              <n-space justify="space-between">
-                <n-space vertical>
-                  <span style="font-size:14px;font-weight: 600;">{{ $t('common.year') }}</span>
-                  <n-input clearable placeholder="" v-model:value="store_view_media_page_logic.page_songlists_filter_year"/>
+          <n-dropdown
+              trigger="click" :show-arrow="true"
+              :options="options_Sort" @select="handleSelect_Sort">
+            <n-button quaternary circle style="margin-left:4px">
+              <template #icon>
+                <n-icon :size="20" :depth="2"><ArrowSort24Regular/></n-icon>
+              </template>
+            </n-button>
+          </n-dropdown>
+
+          <n-badge
+              :value="store_view_media_page_logic.page_songlists_filter_year" :offset="[-17, 40]">
+            <n-button quaternary circle style="margin-left:4px" @click="Type_Filter_Show = true">
+              <template #icon>
+                <n-icon :size="20"><Filter20Filled/></n-icon>
+              </template>
+            </n-button>
+          </n-badge>
+          <n-modal
+              v-model:show="Type_Filter_Show">
+            <n-card style="width: 480px;border-radius: 4px;">
+              <n-space
+                  vertical size="large">
+                <n-space>
+                  <span style="font-size: 20px;font-weight: 600;">{{ $t('common.filter_other')}}</span>
                 </n-space>
-                <n-space vertical>
-                  <span style="font-size:14px;font-weight: 600;">{{ $t('entity.genre_other') }}</span>
-                  <n-input disabled clearable placeholder="Not open || 未开放" v-model:value="playlist_set_of_addPlaylist_of_playlistname"/>
+                <n-space justify="space-between">
+                  <n-space vertical>
+                    <span style="font-size:14px;font-weight: 600;">{{ $t('common.year') }}</span>
+                    <n-input clearable placeholder="" v-model:value="store_view_media_page_logic.page_songlists_filter_year"/>
+                  </n-space>
+                  <n-space vertical>
+                    <span style="font-size:14px;font-weight: 600;">{{ $t('entity.genre_other') }}</span>
+                    <n-input disabled clearable placeholder="Not open || 未开放" v-model:value="playlist_set_of_addPlaylist_of_playlistname"/>
+                  </n-space>
                 </n-space>
               </n-space>
-            </n-space>
-          </n-card>
-        </n-modal>
+            </n-card>
+          </n-modal>
 
-        <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
-        <n-button
-            v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
-            quaternary circle style="margin-left:4px" @click="click_open_bulk_operation">
-          <template #icon>
-            <n-icon :size="20" :depth="2"><MultiselectLtr20Filled/></n-icon>
-          </template>
-        </n-button>
-        <n-space v-if="!bool_start_play">
-          <n-button quaternary circle style="margin-left:4px" @click="click_select_SongList_ALL_Line">
-            <template #icon>
-              <n-icon :size="20" :depth="2"><SelectAllOn24Regular/></n-icon>
-            </template>
-          </n-button>
-          <n-button quaternary circle style="margin-left:4px" @click="Type_Selected_Media_File_To_Playlist = !Type_Selected_Media_File_To_Playlist">
-            <template #icon>
-              <n-icon :size="20" :depth="2"><AddCircle32Regular/></n-icon>
-            </template>
-          </n-button>
+          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
           <n-button
-              v-if="
-            (store_server_user_model.model_select !== 'server')
-            ||
-            (store_server_user_model.model_select === 'server'
-             && store_view_media_page_logic.page_songlists_selected !== 'song_list_all')
-            ||
-            (store_server_user_model.model_select === 'server'
-              && store_view_media_page_logic.page_songlists_selected !== 'song_list_all'
-              && store_server_user_model.model_server_type_of_web === false)
-          "
-              quaternary circle style="margin-left:4px" @click="update_button_deleteMediaFile_selected">
+              v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
+              quaternary circle style="margin-left:4px" @click="click_open_bulk_operation">
             <template #icon>
-              <n-icon :size="20" :depth="2"><Delete20Regular/></n-icon>
+              <n-icon :size="20" :depth="2"><MultiselectLtr20Filled/></n-icon>
             </template>
           </n-button>
-          <n-p style="margin-top: 6px;"> {{ $t('nsmusics.view_page.selectedSong') + ' ' + store_view_media_page_info.media_Files_selected.length }} * </n-p>
+          <n-space v-if="!bool_start_play">
+            <n-button quaternary circle style="margin-left:4px" @click="click_select_SongList_ALL_Line">
+              <template #icon>
+                <n-icon :size="20" :depth="2"><SelectAllOn24Regular/></n-icon>
+              </template>
+            </n-button>
+            <n-button quaternary circle style="margin-left:4px" @click="Type_Selected_Media_File_To_Playlist = !Type_Selected_Media_File_To_Playlist">
+              <template #icon>
+                <n-icon :size="20" :depth="2"><AddCircle32Regular/></n-icon>
+              </template>
+            </n-button>
+            <n-button
+                v-if="
+              (store_server_user_model.model_select !== 'server')
+              ||
+              (store_server_user_model.model_select === 'server'
+               && store_view_media_page_logic.page_songlists_selected !== 'song_list_all')
+              ||
+              (store_server_user_model.model_select === 'server'
+                && store_view_media_page_logic.page_songlists_selected !== 'song_list_all'
+                && store_server_user_model.model_server_type_of_web === false)
+            "
+                quaternary circle style="margin-left:4px" @click="update_button_deleteMediaFile_selected">
+              <template #icon>
+                <n-icon :size="20" :depth="2"><Delete20Regular/></n-icon>
+              </template>
+            </n-button>
+            <n-p style="margin-top: 6px;"> {{ $t('nsmusics.view_page.selectedSong') + ' ' + store_view_media_page_info.media_Files_selected.length }} * </n-p>
+          </n-space>
+
+          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
+          <n-dropdown
+              trigger="click" :show-arrow="true"
+              :options="options_dropdown_play_mode"
+              @select="begin_select_SongList_ALL_Line_of_playback"
+          >
+            <n-button
+                quaternary circle style="margin-left:4px;">
+              <template #icon>
+                <n-icon :size="20" :depth="2"><Play/></n-icon>
+              </template>
+            </n-button>
+          </n-dropdown>
+
+          <n-button quaternary circle style="margin-left:4px"
+                    @click="onRefreshSharp">
+            <template #icon>
+              <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+            </template>
+          </n-button>
+          <n-button quaternary circle style="margin-left:4px"
+                    @click="dynamicScroller.$el.scrollTop = 0;">
+            <template #icon>
+              <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
+            </template>
+          </n-button>
+
         </n-space>
-
-        <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
-        <n-dropdown
-            trigger="click" :show-arrow="true"
-            :options="options_dropdown_play_mode"
-            @select="begin_select_SongList_ALL_Line_of_playback"
-        >
-          <n-button
-              quaternary circle style="margin-left:4px;">
-            <template #icon>
-              <n-icon :size="20" :depth="2"><Play/></n-icon>
-            </template>
-          </n-button>
-        </n-dropdown>
-
-        <n-button quaternary circle style="margin-left:4px"
-                  @click="onRefreshSharp">
-          <template #icon>
-            <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
-          </template>
-        </n-button>
-        <n-button quaternary circle style="margin-left:4px"
-                  @click="dynamicScroller.$el.scrollTop = 0;">
-          <template #icon>
-            <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
-          </template>
-        </n-button>
-
-      </n-space>
-      <n-space align="center">
-        <n-space v-if="show_top_selectedlist"
-                 style="margin-left: 7px;margin-top: 10px;margin-bottom: 10px;">
-          <n-select
-              size="small"
-              :value="store_view_media_page_logic.page_songlists_selected"
-              :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
-              @update:value="page_songlists_handleselected_updatevalue" />
-          <n-button
-              style="margin-left: 7px;"
-              size="small" secondary strong
-              @click="Type_Update_Playlist = !Type_Update_Playlist">
-            <template #icon>
-              <n-icon>
-                <Menu />
-              </n-icon>
-            </template>
-          </n-button>
-          <n-button
-              size="small" secondary strong
-              @click="Type_Add_Playlist = !Type_Add_Playlist">
-            <template #icon>
-              <n-icon>
-                <Add />
-              </n-icon>
-            </template>
-          </n-button>
+        <n-space align="center">
+          <n-space v-if="show_top_selectedlist"
+                   style="margin-left: 7px;margin-bottom: 14px;">
+            <n-select
+                size="small"
+                :value="store_view_media_page_logic.page_songlists_selected"
+                :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
+                @update:value="page_songlists_handleselected_updatevalue" />
+            <n-button
+                style="margin-left: 7px;"
+                size="small" secondary strong
+                @click="Type_Update_Playlist = !Type_Update_Playlist">
+              <template #icon>
+                <n-icon>
+                  <Menu />
+                </n-icon>
+              </template>
+            </n-button>
+            <n-button
+                size="small" secondary strong
+                @click="Type_Add_Playlist = !Type_Add_Playlist">
+              <template #icon>
+                <n-icon>
+                  <Add />
+                </n-icon>
+              </template>
+            </n-button>
+          </n-space>
         </n-space>
       </n-space>
       <DynamicScroller
@@ -1042,10 +1045,12 @@ onBeforeUnmount(() => {
                       {{" | "}}
                     </div>
                     <div
+                      :style="{
+                        maxWidth: 'calc(100vw - ' + (collapsed_width + 540) + 'px)'
+                      }"
                       style="
                         text-align: left;cursor: pointer;
                         font-size: 36px;font-weight: 600;
-                        max-width: 430px;
                         display: -webkit-box;
                         -webkit-box-orient: vertical;
                         -webkit-line-clamp: 1;

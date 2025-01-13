@@ -473,7 +473,7 @@ onBeforeUnmount(() => {
       </n-space>
       <DynamicScroller
           class="home-wall" ref="dynamicScroller_maximum_playback"
-          :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + 60 + 'px'}"
+          :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + (store_server_user_model.model_select === 'local' ? 70 : 60) + 'px'}"
           :items="store_view_home_page_info.home_Files_temporary_maximum_playback"
           :itemSize="itemSize"
           :minItemSize="itemSize"
@@ -608,7 +608,7 @@ onBeforeUnmount(() => {
       </n-space>
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_random_search"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + 60 + 'px'}"
+        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + (store_server_user_model.model_select === 'local' ? 70 : 60) + 'px'}"
         :items="store_view_home_page_info.home_Files_temporary_random_search"
         :itemSize="itemSize"
         :minItemSize="itemSize"
@@ -743,7 +743,7 @@ onBeforeUnmount(() => {
       </n-space>
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_recently_added"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + 60 + 'px'}"
+        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + (store_server_user_model.model_select === 'local' ? 70 : 60) + 'px'}"
         :items="store_view_home_page_info.home_Files_temporary_recently_added"
         :itemSize="itemSize"
         :minItemSize="itemSize"
@@ -878,7 +878,7 @@ onBeforeUnmount(() => {
       </n-space>
       <DynamicScroller
         class="home-wall" ref="dynamicScroller_recently_played"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + 60 + 'px'}"
+        :style="{ width: 'calc(100vw - ' + (collapsed_width - 18) + 'px)', height: item_album_image + (store_server_user_model.model_select === 'local' ? 70 : 60) + 'px'}"
         :items="store_view_home_page_info.home_Files_temporary_recently_played"
         :itemSize="itemSize"
         :minItemSize="itemSize"
