@@ -51,7 +51,24 @@ else {
             }
         });
 
+        const scaleFactor = screen.getPrimaryDisplay().scaleFactor;
+        // 定义开发时的基准值
+        const devInnerHeight = 1080.0; // 开发时窗口的高度
+        const devDevicePixelRatio = 1.0; // 开发时的设备像素比
+        const devScaleFactor = 1.3; // 开发时的缩放因子
         await createWindow();
+        // 当窗口加载完成后设置缩放比例
+        context.mainWindow.webContents.on('did-finish-load', () => {
+            // 获取当前窗口的高度和设备像素比
+            const currentHeight = context.mainWindow.getBounds().height;
+            const currentDevicePixelRatio = context.mainWindow.webContents.getZoomFactor();
+            // 计算缩放比例
+            const zoomFactor = (currentHeight / devInnerHeight) * (currentDevicePixelRatio / devDevicePixelRatio) * (devScaleFactor / scaleFactor);
+            // 设置缩放比例
+            context.mainWindow.webContents.setZoomFactor(zoomFactor);
+            console.log(`当前缩放比例已设置为: ${zoomFactor}`);
+        });
+
         try {
             await createTray();
             tray_loading_state = true;
@@ -72,13 +89,6 @@ else {
         await createNodeMpv();
 
         await initModifyMediaTag();
-
-        const devInnerHeight: number = 1080.0;
-        const devDevicePixelRatio: number = 1.0;
-        const devScaleFactor: number = 1.3;
-        const scaleFactor: number = require('electron').screen.getPrimaryDisplay().scaleFactor;
-        const zoomFactor: number = (window.innerHeight / devInnerHeight) * (window.devicePixelRatio / devDevicePixelRatio) * (devScaleFactor / scaleFactor);
-        require('electron').webFrame.setZoomFactor(zoomFactor);
 
         setTimeout(clearSessionClearCache, 5000);
     });
@@ -358,9 +368,9 @@ async function createWindow() {
     if(process.platform != 'darwin') {
         context.mainWindow = await new BrowserWindow({
             width: 1100,
-            height: 700,
+            height: 720,
             minWidth: 1100,
-            minHeight: 700,
+            minHeight: 720,
             frame:false,
             resizable: true,
             webPreferences: {
@@ -373,9 +383,9 @@ async function createWindow() {
     else{
         context.mainWindow = await new BrowserWindow({
             width: 1100,
-            height: 700,
+            height: 720,
             minWidth: 1100,
-            minHeight: 700,
+            minHeight: 720,
             frame:false,
             resizable: true,
             webPreferences: {
@@ -743,7 +753,37 @@ async function initSqlite3() {
             };
             const initializeSqlite = async () => {
                 try {
-                    driveDbPath = path.join(os.homedir(), 'Applications', 'NSMusicS');
+                    const targetDir = path.join(os.homedir(), 'Library', 'Application Scripts', 'NSMusicS');
+                    const sourceDir = path.join(os.homedir(), 'Applications', 'NSMusicS');
+                    if (!fs.existsSync(targetDir)) {
+                        fs.mkdirSync(targetDir, { recursive: true, mode: 0o755 }); // 设置文件夹权限为 755
+                        console.log(`目标文件夹已创建: ${targetDir}`);
+                    } else {
+                        console.log(`目标文件夹已存在: ${targetDir}`);
+                    }
+                    if (fs.existsSync(sourceDir)) {
+                        const files = fs.readdirSync(sourceDir);
+                        if (files.length > 0) {
+                            console.log(`原文件夹中有文件，开始迁移...`);
+                            files.forEach((file) => {
+                                const sourceFile = path.join(sourceDir, file);
+                                const targetFile = path.join(targetDir, file);
+                                fs.renameSync(sourceFile, targetFile);
+                                console.log(`已移动文件: ${file}`);
+                                fs.chmodSync(targetFile, 0o666);
+                                console.log(`已设置文件权限: ${file}`);
+                            });
+                            fs.rmdirSync(sourceDir);
+                            console.log(`原文件夹已删除: ${sourceDir}`);
+                        } else {
+                            console.log(`原文件夹为空，无需迁移。`);
+                        }
+                    } else {
+                        console.log(`原文件夹不存在: ${sourceDir}`);
+                    }
+                    driveDbPath = targetDir;
+                    console.log(`最终路径: ${driveDbPath}`);
+
                     await ensureDirectoryExists(driveDbPath);
 
                     const resourcesPath = process.env.NODE_ENV === 'development'

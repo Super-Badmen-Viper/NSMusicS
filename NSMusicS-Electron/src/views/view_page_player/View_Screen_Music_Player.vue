@@ -842,6 +842,9 @@ onBeforeUnmount(() => {
                       v-model:value="store_player_appearance.player_use_lyric_skip_forward"
                       @update:value="() => {
                         store_player_audio_logic.player_slider_click = true;
+                        const index = store_player_view.currentScrollIndex + store_player_audio_info.this_audio_lyrics_info_line_num
+                        scrollToItem(index - 3);
+                        scrollToItem(index);
                       }"
                     >
                     </n-switch>
