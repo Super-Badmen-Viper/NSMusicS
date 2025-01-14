@@ -7,7 +7,7 @@ const os = require('os');
 /// electron
 import {
     app, BrowserWindow,
-    screen,
+    screen, webFrame,
     globalShortcut,
     Tray, Menu, nativeImage, nativeTheme
 } from 'electron'
@@ -51,22 +51,19 @@ else {
             }
         });
 
-        const scaleFactor = screen.getPrimaryDisplay().scaleFactor;
-        // 定义开发时的基准值
-        const devInnerHeight = 1080.0; // 开发时窗口的高度
-        const devDevicePixelRatio = 1.0; // 开发时的设备像素比
-        const devScaleFactor = 1.3; // 开发时的缩放因子
         await createWindow();
-        // 当窗口加载完成后设置缩放比例
         context.mainWindow.webContents.on('did-finish-load', () => {
-            // 获取当前窗口的高度和设备像素比
-            const currentHeight = context.mainWindow.getBounds().height;
-            const currentDevicePixelRatio = context.mainWindow.webContents.getZoomFactor();
-            // 计算缩放比例
-            const zoomFactor = (currentHeight / devInnerHeight) * (currentDevicePixelRatio / devDevicePixelRatio) * (devScaleFactor / scaleFactor);
-            // 设置缩放比例
-            context.mainWindow.webContents.setZoomFactor(zoomFactor);
-            console.log(`当前缩放比例已设置为: ${zoomFactor}`);
+            const currentScreenHeight = screen.getPrimaryDisplay().size.height;
+            const devDevicePixelRatio: number = 1.0;
+            const devScaleFactor: number = 1.3;
+            const scaleFactor: number = require('electron').screen.getPrimaryDisplay().scaleFactor;
+            const zoomFactor: number =
+                (window.innerHeight / devInnerHeight) *
+                (window.devicePixelRatio / devDevicePixelRatio) *
+                (devScaleFactor / scaleFactor) *
+                (currentScreenHeight / 1600)
+            ;
+            require('electron').webFrame.setZoomFactor(zoomFactor);
         });
 
         try {
