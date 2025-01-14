@@ -79,6 +79,31 @@ export const viteElectronBuild = (): Plugin => {
 // -> npm rebuild:手动原生编译node组件 
 // -> npm run dev
 // -> npm run build
+//
+// node环境管理混乱，使用nvm管理nodejs版本与对应的架构
+// arch -x86_64 zsh
+// arch -arm64 zsh
+// nvm安装脚本下载，给该文件权限
+// chmod +x nvm.sh
+// 然后在下载目录执行以下命令
+// sh nvm.sh
+// 加载激活nvm环境设置
+// export NVM_DIR="$HOME/.nvm"
+// [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+// [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+// 安装一个临时版本，切换到临时版本
+// nvm install 18 --arch=x64
+// nvm use 18
+// 2. 卸载当前版本，切换到其他版本后，可以卸载当前版本：
+// nvm uninstall 22.13.0
+// 或者卸载所有 LTS 版本：
+// nvm uninstall --lts
+// 3.手动指定架构，重装是最方便快捷的办法
+// NVM_ARCH=x64 nvm install --lts
+// NVM_ARCH=arm64 nvm install --lts
+// 4.安装完成后，运行以下命令验证 Node.js 的架构：
+// node -p "process.arch"
+// 5.再次打包，很显然这没有github工作流方便，但是涉及到原生编译的情况，github工作流可能并非好使
                     mac: {
                         target: 'dmg',
                         icon: 'resources/config/NSMusicS.icns',
