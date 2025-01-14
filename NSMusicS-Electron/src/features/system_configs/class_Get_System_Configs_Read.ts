@@ -6,8 +6,7 @@ import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_player_audio_logic} from "../../store/player/store_player_audio_logic";
 import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'
-import { isElectron } from '@/utils/electron/isElectron';
-import os from "os";
+import { isElectron } from '@/utils/electron/isElectron';``
 
 export class Class_Get_System_Configs_Read {
     public app_Configs = ref(

@@ -64,7 +64,7 @@ else {
         app.on('activate', () => {
             if (context.mainWindow === undefined) {
                 createWindow()
-            } else {------
+            } else {
                 showWindow()
             }
         })
