@@ -52,19 +52,6 @@ else {
         });
 
         await createWindow();
-        context.mainWindow.webContents.on('did-finish-load', () => {
-            const currentScreenHeight = screen.getPrimaryDisplay().size.height;
-            const devDevicePixelRatio: number = 1.0;
-            const devScaleFactor: number = 1.3;
-            const scaleFactor: number = require('electron').screen.getPrimaryDisplay().scaleFactor;
-            const zoomFactor: number =
-                (window.innerHeight / devInnerHeight) *
-                (window.devicePixelRatio / devDevicePixelRatio) *
-                (devScaleFactor / scaleFactor) *
-                (currentScreenHeight / 1600)
-            ;
-            require('electron').webFrame.setZoomFactor(zoomFactor);
-        });
 
         try {
             await createTray();
@@ -86,6 +73,13 @@ else {
         await createNodeMpv();
 
         await initModifyMediaTag();
+
+        const devInnerHeight: number = 1080.0;
+        const devDevicePixelRatio: number = 1.0;
+        const devScaleFactor: number = 1.3;
+        const scaleFactor: number = require('electron').screen.getPrimaryDisplay().scaleFactor;
+        const zoomFactor: number = (window.innerHeight / devInnerHeight) * (window.devicePixelRatio / devDevicePixelRatio) * (devScaleFactor / scaleFactor);
+        require('electron').webFrame.setZoomFactor(zoomFactor);
 
         setTimeout(clearSessionClearCache, 5000);
     });
