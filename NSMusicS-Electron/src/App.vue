@@ -702,8 +702,8 @@
     }
   });
   function drawer_close_of_player_bar(){
-    store_player_audio_logic.drawer_order_show = false;
-    store_player_audio_logic.drawer_volume_show = false;
+    // store_player_audio_logic.drawer_order_show = false;
+    // store_player_audio_logic.drawer_volume_show = false;
   }
 </script>
 <template>
