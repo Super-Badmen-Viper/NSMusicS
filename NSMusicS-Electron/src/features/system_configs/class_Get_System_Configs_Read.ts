@@ -7,6 +7,7 @@ import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_player_audio_logic} from "../../store/player/store_player_audio_logic";
 import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'
 import { isElectron } from '@/utils/electron/isElectron';
+import os from "os";
 
 export class Class_Get_System_Configs_Read {
     public app_Configs = ref(
@@ -123,7 +124,8 @@ export class Class_Get_System_Configs_Read {
                     store_app_configs_info.driveDbPath = 'C:\\Users\\Public\\Documents\\NSMusicS\\'
                     store_app_configs_info.driveTempPath = 'C:\\Users\\Public\\Documents\\NSMusicS\\temp';
                 } else if (process.platform === 'darwin') {
-                    store_app_configs_info.driveDbPath = path.join(os.homedir(), 'Library', 'Application Scripts', 'NSMusicS');
+                    // store_app_configs_info.driveDbPath = path.join(os.homedir(), 'Library', 'Application Scripts', 'NSMusicS');
+                    store_app_configs_info.driveDbPath = path.join(os.homedir(), 'Applications', 'NSMusicS');
                 } else {
                     store_app_configs_info.driveDbPath = path.join(os.homedir(), '.NSMusicS');
                 }

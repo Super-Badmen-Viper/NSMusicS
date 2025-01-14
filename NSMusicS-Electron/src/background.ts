@@ -64,7 +64,7 @@ else {
         app.on('activate', () => {
             if (context.mainWindow === undefined) {
                 createWindow()
-            } else {
+            } else {------
                 showWindow()
             }
         })
@@ -744,36 +744,37 @@ async function initSqlite3() {
             };
             const initializeSqlite = async () => {
                 try {
-                    const targetDir = path.join(os.homedir(), 'Library', 'Application Scripts', 'NSMusicS');
-                    const sourceDir = path.join(os.homedir(), 'Applications', 'NSMusicS');
-                    if (!fs.existsSync(targetDir)) {
-                        fs.mkdirSync(targetDir, { recursive: true, mode: 0o755 }); // 设置文件夹权限为 755
-                        console.log(`目标文件夹已创建: ${targetDir}`);
-                    } else {
-                        console.log(`目标文件夹已存在: ${targetDir}`);
-                    }
-                    if (fs.existsSync(sourceDir)) {
-                        const files = fs.readdirSync(sourceDir);
-                        if (files.length > 0) {
-                            console.log(`原文件夹中有文件，开始迁移...`);
-                            files.forEach((file) => {
-                                const sourceFile = path.join(sourceDir, file);
-                                const targetFile = path.join(targetDir, file);
-                                fs.renameSync(sourceFile, targetFile);
-                                console.log(`已移动文件: ${file}`);
-                                fs.chmodSync(targetFile, 0o666);
-                                console.log(`已设置文件权限: ${file}`);
-                            });
-                            fs.rmdirSync(sourceDir);
-                            console.log(`原文件夹已删除: ${sourceDir}`);
-                        } else {
-                            console.log(`原文件夹为空，无需迁移。`);
-                        }
-                    } else {
-                        console.log(`原文件夹不存在: ${sourceDir}`);
-                    }
-                    driveDbPath = targetDir;
-                    console.log(`最终路径: ${driveDbPath}`);
+                    // const targetDir = path.join(os.homedir(), 'Library', 'Application Scripts', 'NSMusicS');
+                    // const sourceDir = path.join(os.homedir(), 'Applications', 'NSMusicS');
+                    // if (!fs.existsSync(targetDir)) {
+                    //     fs.mkdirSync(targetDir, { recursive: true, mode: 0o755 }); // 设置文件夹权限为 755
+                    //     console.log(`目标文件夹已创建: ${targetDir}`);
+                    // } else {
+                    //     console.log(`目标文件夹已存在: ${targetDir}`);
+                    // }
+                    // if (fs.existsSync(sourceDir)) {
+                    //     const files = fs.readdirSync(sourceDir);
+                    //     if (files.length > 0) {
+                    //         console.log(`原文件夹中有文件，开始迁移...`);
+                    //         files.forEach((file) => {
+                    //             const sourceFile = path.join(sourceDir, file);
+                    //             const targetFile = path.join(targetDir, file);
+                    //             fs.renameSync(sourceFile, targetFile);
+                    //             console.log(`已移动文件: ${file}`);
+                    //             fs.chmodSync(targetFile, 0o666);
+                    //             console.log(`已设置文件权限: ${file}`);
+                    //         });
+                    //         fs.rmdirSync(sourceDir);
+                    //         console.log(`原文件夹已删除: ${sourceDir}`);
+                    //     } else {
+                    //         console.log(`原文件夹为空，无需迁移。`);
+                    //     }
+                    // } else {
+                    //     console.log(`原文件夹不存在: ${sourceDir}`);
+                    // }
+                    // driveDbPath = targetDir;
+                    // console.log(`最终路径: ${driveDbPath}`);
+                    driveDbPath = path.join(os.homedir(), 'Applications', 'NSMusicS');
 
                     await ensureDirectoryExists(driveDbPath);
 
