@@ -24,7 +24,8 @@
       "@/components/*": ["src/components/*"],
       "@/features/*": ["src/features/*"],
       "@/models/*": ["src/models/*"],
-      "@/views/*": ["src/views/*"]
+      "@/views/*": ["src/views/*"],
+      "@/views_router/*": ["src/views_router/*"]
     }
   }
 }

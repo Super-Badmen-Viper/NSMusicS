@@ -4,9 +4,12 @@ import {
   ArrowMinimize16Regular,
   Maximize16Regular,
   FullScreenMaximize16Regular,
+  FullScreenMaximize24Filled,
+  FullScreenMinimize24Filled,
 } from '@vicons/fluent'
 import {
-  MotionPhotosAutoOutlined
+  MotionPhotosAutoOutlined,
+  MinusRound
 } from '@vicons/material'
 import {
   Close
@@ -37,28 +40,6 @@ import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_player_view} from "@/store/player/store_player_view";
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 import {store_player_appearance} from "@/store/player/store_player_appearance";
-
-////// System BrowserWindow Set
-function minimize() {
-  if(isElectron) {
-    ipcRenderer.send('window-min');
-  }
-}
-function maximize() {
-  if(isElectron) {
-    ipcRenderer.send('window-max');
-  }
-}
-function maximize_screen() {
-  if(isElectron) {
-    ipcRenderer.send('window-fullscreen');
-  }
-}
-function closeWindow() {
-  if(isElectron) {
-    ipcRenderer.send('window-close');
-  }
-}
 
 ////// lyircs load
 let unwatch = watch(() => store_player_audio_info.this_audio_lyrics_string, (value) => {
@@ -578,7 +559,8 @@ import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {Random} from "@vicons/fa";
 import {Pause, Play, PlayBack, PlayForward, VolumeMedium} from "@vicons/ionicons5";
-import Table_Album_Model_1_Cover from "@/views/view_page_player/table/Table_Album_Model_1_Cover.vue";
+import Table_Album_Model_1_Cover from "@/views/view_page_player/components/Table_Album_Model_1_Cover.vue";
+import {ArrowsMaximize, ArrowsMinimize} from "@vicons/tabler";
 const clear_lottie_animationInstance = ref(false)
 const animationInstance_model_1_spectrum = ref<any>(null);
 const animationInstance_model_1_wave = ref<any>(null);
@@ -922,34 +904,63 @@ onBeforeUnmount(() => {
         <!-- -->
         <n-flex justify="end" style="width: 400px;height: 70px;">
           <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
-            <n-button quaternary circle
-                      style="margin-right:4px;"
-                      v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                      @click="maximize_screen">
+            <n-button
+                quaternary circle
+                style="margin-right:4px;"
+                v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
+                @click="() => {
+                  if(isElectron) {
+                    ipcRenderer.send('window-fullscreen');
+                  }
+                  store_app_configs_info.window_full = !store_app_configs_info.window_full;
+                  store_app_configs_info.window_max = store_app_configs_info.window_full;
+                }">
               <template #icon>
-                <n-icon size="20" :depth="3" style="margin-top: 1px;"><FullScreenMaximize16Regular/></n-icon>
+                <n-icon size="19" :depth="3"
+                        v-if="store_app_configs_info.window_full">
+                  <ArrowsMinimize/>
+                </n-icon>
+                <n-icon size="19" :depth="3"
+                        v-else>
+                  <ArrowsMaximize/>
+                </n-icon>
               </template>
             </n-button>
             <n-button quaternary circle
                       style="margin-right:4px"
                       v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                      @click="minimize">
+                      @click="() => {
+                        if(isElectron) {
+                          ipcRenderer.send('window-min');
+                        }
+                      }">
               <template #icon>
-                <n-icon size="18" :depth="3"><ArrowMinimize16Regular/></n-icon>
+                <n-icon size="24" :depth="3"><MinusRound/></n-icon>
               </template>
             </n-button>
             <n-button quaternary circle
                       style="margin-right:4px"
                       v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                      @click="maximize">
+                      @click="() => {
+                        if(isElectron) {
+                          ipcRenderer.send('window-max');
+                          }
+                        store_app_configs_info.window_max = !store_app_configs_info.window_max;
+                        store_app_configs_info.window_full = false;
+                      }">
               <template #icon>
-                <n-icon size="24" :depth="3"><Maximize16Regular/></n-icon>
+                <n-icon size="20" :depth="3" v-if="store_app_configs_info.window_max"><FullScreenMinimize24Filled/></n-icon>
+                <n-icon size="20" :depth="3" v-else><FullScreenMaximize24Filled/></n-icon>
               </template>
             </n-button>
             <n-button quaternary circle
                       style="margin-right:30px"
                       v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                      @click="closeWindow">
+                      @click="() => {
+                        if(isElectron) {
+                          ipcRenderer.send('window-close');
+                        }
+                      }">
               <template #icon>
                 <n-icon size="28" :depth="3"><Close/></n-icon>
               </template>
@@ -964,7 +975,10 @@ onBeforeUnmount(() => {
               justify="center"
               style="transition: margin 0.4s;overflow: hidden;"
               :style="{
-                marginTop: store_player_appearance.player_use_lyric_skip_forward ? '70px' : '0px'
+                marginTop: store_player_appearance.player_use_lyric_skip_forward
+                ? '70px' : '0px',
+                marginLeft: store_player_appearance.player_background_model_num === 2
+                ? '36px' : '0px'
               }">
             <n-layout
                 has-sider
@@ -982,12 +996,13 @@ onBeforeUnmount(() => {
                   @expand="store_player_appearance.player_collapsed_album = false;"
                   :show-collapsed-content="false"
                   position="static"
-                  collapsed-width="30vw" width="53vw"
+                  collapsed-width="30vw" width="54vw"
                   style="background-color: transparent;overflow-y: hidden;">
                 <n-space
                     vertical align="end"
                     :style="{
-                      marginTop: store_player_appearance.player_use_lyric_skip_forward ? '0px' : '100px',
+                      marginTop: store_player_appearance.player_use_lyric_skip_forward
+                      ? '0px' : '100px',
                       transition: 'margin 0.4s'
                     }"
                     style="margin-right:8vw;">
@@ -1092,13 +1107,18 @@ onBeforeUnmount(() => {
                   </n-flex>
                   <!-- 3 炫胶唱片-->
                   <n-space vertical
-                           align="center"
-                           style="width: calc(60vh);overflow: hidden"
+                           align="end" justify="center"
+                           style="
+                            min-width: calc(54vw);overflow: hidden;"
                            :style="{
-                            marginTop: store_player_appearance.player_background_model_num === 2 ? 'calc(-6vh - 18px)' : '0px',
-                            opacity: store_player_appearance.player_background_model_num === 2 ? 1 : 0,
-                            position: store_player_appearance.player_background_model_num === 2 ? 'relative' : 'absolute',
-                            left: store_player_appearance.player_background_model_num === 2 ? '0' : '-100%',
+                            marginTop: store_player_appearance.player_background_model_num === 2
+                            ? 'calc(-6vh - 18px)' : '0px',
+                            opacity: store_player_appearance.player_background_model_num === 2
+                            ? 1 : 0,
+                            position: store_player_appearance.player_background_model_num === 2
+                            ? 'relative' : 'absolute',
+                            left: store_player_appearance.player_background_model_num === 2
+                            ? '0' : '-100%',
                             transition: 'margin 0.4s, opacity 0.8s'
                           }">
                     <lottie-player
@@ -1116,7 +1136,7 @@ onBeforeUnmount(() => {
                         style="
                         width: calc(56vh);
                         height: calc(56vh);
-                        margin-top: calc(22vh - 154.5px);margin-left: calc(-28vh);
+                        margin-top: calc(32vh - 154.5px);margin-left: calc(-56vh);
                         position: absolute;
                       "
                         :style="{
@@ -1127,7 +1147,7 @@ onBeforeUnmount(() => {
                         style="
                         width: calc(38vh);
                         height: calc(38vh);
-                        margin-top: calc(31vh - 162px);margin-left: calc(-19vh);
+                        margin-top: calc(41vh - 162px);margin-left: calc(-47vh);
                         border-radius: 27vh;
                         object-fit: cover;object-position: center;
                         filter: blur(0px);
@@ -1137,22 +1157,39 @@ onBeforeUnmount(() => {
                         background-color: #DCDBDD10;
                       ">
                     </div>
-                    <img
-                        style="
-                        width: calc(40vh);height: calc(40vh);
-                        WebkitMask-image: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 40%);
-                        margin-top: calc(45vh - 162px);
-                        border: 1.5px solid #FFFFFF20;
-                        border-radius: 10px;
-                        object-fit: cover;object-position: center;
-                        box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
-                        filter: blur(0);
-                      "
-                        :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                        alt="">
                     <div
                         style="
-                        width: 40vh;margin-top: -1vh;
+                        position: relative;
+                        margin-top: calc(36vh - 162px);margin-left: calc(-73vh);
+                        box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
+                        width: calc(46vh); height: calc(46vh);">
+                      <!-- 图片 -->
+                      <img
+                          style="
+                          width: 100%;
+                          height: 100%;
+                          border: 1.5px solid #FFFFFF20;
+                          border-radius: 10px;
+                          object-fit: cover;
+                          object-position: center;
+                          filter: blur(0);
+                          -webkit-mask-image: radial-gradient(
+                            circle at 100% 50%, /* 圆形洞的位置（右侧居中） */
+                            transparent 7.5%,   /* 圆形洞的大小 */
+                            black 10%          /* 遮罩其余部分 */
+                          );
+                          mask-image: radial-gradient(
+                            circle at 100% 50%, /* 圆形洞的位置（右侧居中） */
+                            transparent 7.5%,   /* 圆形洞的大小 */
+                            black 10%          /* 遮罩其余部分 */
+                          );"
+                          :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                          alt=""
+                      />
+                    </div>
+                    <div
+                        style="
+                        width: 46vh;margin-top: 0vh;margin-left: calc(-73vh);
                         color: #E7E5E5;font-weight: 900;font-size: calc(2.2vh + 4px);
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
@@ -1160,7 +1197,7 @@ onBeforeUnmount(() => {
                     </div>
                     <div
                         style="
-                        width: 40vh;margin-top: -1vh;
+                        width: 46vh;margin-top: -1vh;margin-left: calc(-73vh);
                         color: #989292;font-weight: 550;font-size: calc(1.4vh + 4px);
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
@@ -1168,11 +1205,11 @@ onBeforeUnmount(() => {
                     </div>
                     <n-slider
                         style="
-                        width: 40vh;
+                        width: 46vh;
                         --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
                         --n-rail-height: 4px;
                         --n-handle-size: 20px;
-                        margin-top: -6px;
+                        margin-top: -6px;margin-left: calc(-73vh);
                         border-radius: 10px;"
                         v-model:value="store_player_audio_logic.slider_singleValue"
                         :min="0" :max="100"
@@ -1197,7 +1234,7 @@ onBeforeUnmount(() => {
                         <n-icon-wrapper :size="0" />
                       </template>
                     </n-slider>
-                    <div style="width: 40vh;text-align: left;margin-top: -4px;">
+                    <div style="width: 46vh;text-align: left;margin-top: -4px;margin-left: calc(-73vh);">
                       {{ store_player_audio_logic.current_play_time }} &nbsp;/&nbsp; {{ store_player_audio_logic.total_play_time }}
                     </div>
                   </n-space>

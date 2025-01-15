@@ -11,7 +11,7 @@ import {
   PlayCircle24Regular,
   Search20Filled,
   TextSortAscending20Regular,
-  TextSortDescending20Regular,ShareScreenStart48Regular
+  TextSortDescending20Regular, PaddingTop20Filled, PaddingDown20Filled
 } from '@vicons/fluent'
 import {
   RefreshSharp
@@ -613,10 +613,15 @@ onBeforeUnmount(() => {
           <n-button quaternary circle style="margin-left:4px"
                     @click="dynamicScroller.$el.scrollTop = 0;">
             <template #icon>
-              <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
+              <n-icon :size="20" :depth="2"><PaddingTop20Filled/></n-icon>
             </template>
           </n-button>
-
+          <n-button quaternary circle style="margin-left:4px"
+                    @click="dynamicScroller.$el.scrollTop = dynamicScroller.$el.scrollHeight;">
+            <template #icon>
+              <n-icon :size="20" :depth="2"><PaddingDown20Filled/></n-icon>
+            </template>
+          </n-button>
         </n-space>
         <n-space align="center">
           <n-space v-if="show_top_selectedlist"
@@ -631,7 +636,10 @@ onBeforeUnmount(() => {
       </n-space>
       <DynamicScroller
         class="album-wall" ref="dynamicScroller"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
+        :style="{
+          width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)',
+          height: show_top_selectedlist ? 'calc(100vh - 236px)' : 'calc(100vh - 194px)'
+        }"
         :items="store_view_album_page_info.album_Files_temporary"
         :itemSize="itemSize"
         :minItemSize="itemSize"
@@ -904,7 +912,6 @@ onBeforeUnmount(() => {
 .album-wall {
   overflow-y: auto;
   width: calc(100vw - 200px);
-  height: calc(100vh - 194px);
   display: flex;
   flex-direction: column;
   overflow-x:hidden;

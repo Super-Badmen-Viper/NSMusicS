@@ -10,7 +10,7 @@ import {
   SaveEdit24Regular,
   Heart24Regular,Heart28Filled,
   ChevronLeft16Filled,ChevronRight16Filled,
-  Filter20Filled,ShareScreenStart48Regular,
+  Filter20Filled,PaddingTop20Filled,PaddingDown20Filled,
   ArrowRepeatAll16Regular,ArrowAutofitDown24Regular,
 } from '@vicons/fluent'
 import {
@@ -942,6 +942,7 @@ onBeforeUnmount(() => {
               </template>
             </n-button>
           </n-dropdown>
+          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
 
           <n-button quaternary circle style="margin-left:4px"
                     @click="onRefreshSharp">
@@ -952,13 +953,18 @@ onBeforeUnmount(() => {
           <n-button quaternary circle style="margin-left:4px"
                     @click="dynamicScroller.$el.scrollTop = 0;">
             <template #icon>
-              <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
+              <n-icon :size="20" :depth="2"><PaddingTop20Filled/></n-icon>
             </template>
           </n-button>
-
+          <n-button quaternary circle style="margin-left:4px"
+                    @click="dynamicScroller.$el.scrollTop = dynamicScroller.$el.scrollHeight;">
+            <template #icon>
+              <n-icon :size="20" :depth="2"><PaddingDown20Filled/></n-icon>
+            </template>
+          </n-button>
         </n-space>
         <n-space align="center">
-          <n-space v-if="show_top_selectedlist"
+          <n-space v-if="show_top_selectedlist && bool_start_play"
                    style="margin-left: 7px;margin-bottom: 14px;">
             <n-select
                 size="small"
@@ -989,7 +995,10 @@ onBeforeUnmount(() => {
       </n-space>
       <DynamicScroller
         class="table" ref="dynamicScroller"
-        :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
+        :style="{
+          width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)',
+          height: show_top_selectedlist ? 'calc(100vh - 236px)' : 'calc(100vh - 194px)'
+        }"
         :items="store_view_media_page_info.media_Files_temporary"
         :minItemSize="50"
         :emit-update="true"
@@ -1437,7 +1446,6 @@ onBeforeUnmount(() => {
 }
 .table {
   width: calc(100vw - 200px);
-  height: calc(100vh - 194px);
 }
 .message {
   width: calc(100vw - 230px);
@@ -1460,13 +1468,13 @@ onBeforeUnmount(() => {
   margin-left: 12px;
 }
 .index{
-  width: 40px;
+  width: calc(6vw);
   margin-left: 12px;
 }
 .songlist_title{
   margin-left: 10px;
   text-align: left;
-  width: 36vw;
+  width: 34vw;
   font-size: 15px;
   overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
 }

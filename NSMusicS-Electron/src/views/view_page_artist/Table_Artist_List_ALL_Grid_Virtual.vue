@@ -1,12 +1,12 @@
 <script setup lang="ts">
 ////// this_view resource of vicons_svg
 import {
-  ArrowSort24Regular,TextSortAscending20Regular,TextSortDescending20Regular,
+  ArrowSort24Regular, TextSortAscending20Regular, TextSortDescending20Regular,
   Search20Filled,
   PlayCircle24Regular,
-  Heart24Regular,Heart28Filled,
-  ChevronLeft16Filled,ChevronRight16Filled,Open28Filled,
-  Filter20Filled,ShareScreenStart48Regular
+  Heart24Regular, Heart28Filled,
+  ChevronLeft16Filled, ChevronRight16Filled, Open28Filled,
+  Filter20Filled, PaddingTop20Filled, PaddingDown20Filled
 } from '@vicons/fluent'
 import {
   RefreshSharp
@@ -580,10 +580,15 @@ onBeforeUnmount(() => {
           <n-button quaternary circle style="margin-left:4px"
                     @click="dynamicScroller.$el.scrollTop = 0;">
             <template #icon>
-              <n-icon :size="20" :depth="2"><ShareScreenStart48Regular/></n-icon>
+              <n-icon :size="20" :depth="2"><PaddingTop20Filled/></n-icon>
             </template>
           </n-button>
-
+          <n-button quaternary circle style="margin-left:4px"
+                    @click="dynamicScroller.$el.scrollTop = dynamicScroller.$el.scrollHeight;">
+            <template #icon>
+              <n-icon :size="20" :depth="2"><PaddingDown20Filled/></n-icon>
+            </template>
+          </n-button>
         </n-space>
         <n-space align="center">
           <n-space v-if="show_top_selectedlist"
@@ -597,7 +602,11 @@ onBeforeUnmount(() => {
         </n-space>
       </n-space>
       <DynamicScroller
-        class="artist-wall" ref="dynamicScroller" :style="{ width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)'}"
+        class="artist-wall" ref="dynamicScroller"
+        :style="{
+          width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)',
+          height: show_top_selectedlist ? 'calc(100vh - 236px)' : 'calc(100vh - 194px)'
+        }"
         :items="store_view_artist_page_info.artist_Files_temporary"
         :itemSize="itemSize"
         :minItemSize="itemSize"
@@ -865,7 +874,6 @@ onBeforeUnmount(() => {
 .artist-wall {
   overflow-y: auto;
   width: calc(100vw - 200px);
-  height: calc(100vh - 194px);
   display: flex;
   flex-direction: column;
   overflow-x:hidden;

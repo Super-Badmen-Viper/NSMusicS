@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Table_Music_Effect from '@/components/player_effect/table/Table_Music_Effect.vue'
+import Table_Music_Effect from '@/components/player_effect/components/Table_Music_Effect.vue'
 </script>
 
 <template>

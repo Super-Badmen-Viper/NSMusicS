@@ -14,6 +14,8 @@ export const store_app_configs_info = reactive({
 
     window_innerWidth: 1220,
     window_innerHeight: 765,
+    window_max: false,
+    window_full: false,
 
     update_show: false,
     version: '',

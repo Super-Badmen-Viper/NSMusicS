@@ -370,11 +370,10 @@ import { useMessage } from 'naive-ui'
 const message = useMessage()
 const backpanel_order_leave = () => {
   if(store_player_appearance.player_show === false) {
-    store_player_audio_logic.drawer_order_show = false;
+    // store_player_audio_logic.drawer_order_show = false;
   }
 }
 const backpanel_order_click = () => {
-  store_player_audio_logic.drawer_order_show = true;
   const orders = ['playback-1', 'playback-2', 'playback-3', 'playback-4'];
   if (!store_player_audio_logic.play_order) {
     store_player_audio_logic.play_order = orders[0];
@@ -819,7 +818,10 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                  }"
                  justify="center">
           <n-button quaternary round size="small"
-                    @click="backpanel_order_click" @mouseover="store_player_audio_logic.drawer_order_show = true;">
+                    @click="() => {
+                      store_player_audio_logic.drawer_order_show = !store_player_audio_logic.drawer_order_show;
+                      // backpanel_order_click
+                    }">
             <template #icon>
               <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
                 <ArrowAutofitDown24Regular/>
@@ -909,7 +911,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
           </n-space>
         </n-space>
         <!-- grid_Middle_drwaer_area -->
-        <n-config-provider :theme="null" v-if="false">
+        <n-config-provider :theme="null">
           <div id="backpanel_order" @mouseleave="backpanel_order_leave"></div>
           <n-drawer
               v-model:show="store_player_audio_logic.drawer_order_show"
@@ -920,58 +922,62 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
               style="border-radius: 10px;">
             <n-drawer-content>
               <n-space vertical style="height: 100px;">
-                <n-radio-group v-model:value="store_player_audio_logic.play_order" name="play_order_group">
-                  <n-space style="margin-left: -10px;">
-                    <n-radio value="playback-1">
-                      <template #default>
-                        <n-button quaternary style="margin-left: -16px; margin-top: -6px;width: 100px;">
-                          <template #icon>
-                            <n-icon>
-                              <ArrowAutofitDown24Regular />
-                            </n-icon>
-                          </template>
-                          {{$t('nsmusics.siderbar_player.playback_1')}}
-                        </n-button>
-                      </template>
-                    </n-radio>
-                    <n-radio value="playback-2">
-                      <template #default>
-                        <n-button quaternary style="margin-left: -16px; margin-top: -6px;">
-                          <template #icon>
-                            <n-icon>
-                              <ArrowRepeatAll16Regular />
-                            </n-icon>
-                          </template>
-                          {{$t('nsmusics.siderbar_player.playback_2')}}
-                        </n-button>
-                      </template>
-                    </n-radio>
-                    <n-radio value="playback-3">
-                      <template #default>
-                        <n-button quaternary style="margin-left: -16px; margin-top: -6px;">
-                          <template #icon>
-                            <n-icon>
-                              <RepeatOneRound />
-                            </n-icon>
-                          </template>
-                          {{$t('nsmusics.siderbar_player.playback_3')}}
-                        </n-button>
-                      </template>
-                    </n-radio>
-                    <n-radio value="playback-4">
-                      <template #default>
-                        <n-button quaternary style="margin-left: -16px; margin-top: -6px;">
-                          <template #icon>
-                            <n-icon :size="12">
-                              <Random />
-                            </n-icon>
-                          </template>
-                          {{$t('nsmusics.siderbar_player.playback_4')}}
-                        </n-button>
-                      </template>
-                    </n-radio>
-                  </n-space>
-                </n-radio-group>
+                <n-button
+                    quaternary
+                    @click="() => {
+                      store_player_audio_logic.play_order = 'playback-1';
+                      store_player_audio_logic.drawer_order_show = false;
+                    }"
+                    style="margin-left: -16px; margin-top: -6px;">
+                  <template #icon>
+                    <n-icon>
+                      <ArrowAutofitDown24Regular />
+                    </n-icon>
+                  </template>
+                  {{$t('nsmusics.siderbar_player.playback_1')}}
+                </n-button>
+                <n-button
+                    quaternary
+                    @click="() => {
+                      store_player_audio_logic.play_order = 'playback-2';
+                      store_player_audio_logic.drawer_order_show = false;
+                    }"
+                    style="margin-left: -16px; margin-top: -6px;">
+                  <template #icon>
+                    <n-icon>
+                      <ArrowRepeatAll16Regular />
+                    </n-icon>
+                  </template>
+                  {{$t('nsmusics.siderbar_player.playback_2')}}
+                </n-button>
+                <n-button
+                    quaternary
+                    @click="() => {
+                      store_player_audio_logic.play_order = 'playback-3';
+                      store_player_audio_logic.drawer_order_show = false;
+                    }"
+                    style="margin-left: -16px; margin-top: -6px;">
+                  <template #icon>
+                    <n-icon>
+                      <RepeatOneRound />
+                    </n-icon>
+                  </template>
+                  {{$t('nsmusics.siderbar_player.playback_3')}}
+                </n-button>
+                <n-button
+                    quaternary
+                    @click="() => {
+                      store_player_audio_logic.play_order = 'playback-4';
+                      store_player_audio_logic.drawer_order_show = false;
+                    }"
+                    style="margin-left: -16px; margin-top: -6px;">
+                  <template #icon>
+                    <n-icon :size="12">
+                      <Random />
+                    </n-icon>
+                  </template>
+                  {{$t('nsmusics.siderbar_player.playback_4')}}
+                </n-button>
               </n-space>
             </n-drawer-content>
           </n-drawer>
@@ -1180,8 +1186,8 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
 .gird_Middle #backpanel_order{
   position: absolute;
   bottom: 80px;
-  margin-left: 30px;
-  min-width: 142px;
+  margin-left: -190px;
+  min-width: 122px;
   width: auto;
   border-radius: 10px;
   pointer-events: none;

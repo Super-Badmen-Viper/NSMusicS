@@ -5,7 +5,8 @@
     DocumentHeart20Regular,
     Flag16Regular,
     Home28Regular,
-    Maximize16Regular,
+    FullScreenMaximize24Filled,
+    FullScreenMinimize24Filled,
     PeopleCommunity16Regular,
     SlideMicrophone32Regular,
     TextIndentIncreaseLtr20Filled as lyric,
@@ -28,6 +29,11 @@
     MediaCast,
     BareMetalServer
   } from '@vicons/carbon'
+  import {
+    ArrowsMaximize,
+    ArrowsMinimize,
+    Minus
+  } from '@vicons/tabler'
 
   ////// components
   import {darkTheme, NConfigProvider, NIcon} from 'naive-ui'
@@ -701,10 +707,6 @@
       store_app_configs_info.version_updated = 0;
     }
   });
-  function drawer_close_of_player_bar(){
-    // store_player_audio_logic.drawer_order_show = false;
-    // store_player_audio_logic.drawer_volume_show = false;
-  }
 </script>
 <template>
   <n-message-provider>
@@ -715,8 +717,7 @@
         <n-layout
             has-sider
             class="this_App"
-            embedded
-            @click="drawer_close_of_player_bar">
+            embedded>
           <!--Left Router_Menu app_view_left_menu_collapsed-->
           <n-flex vertical justify="center" style="height: 100vh;">
             <div></div>
@@ -818,18 +819,17 @@
                         v-else-if="store_router_data_info.router_select_model_server_library"></RouterView>
             <!--Top Bar-->
             <div class="bar_top_setapp"
-                 style="background-color: transparent"
-                 @click="drawer_close_of_player_bar">
+                 style="background-color: transparent">
               <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"
                        :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
                        :style="{
                           marginRight: isElectron
-                            ? (store_app_configs_info.desktop_system_kind !== 'darwin' ? '224px' : '74px')
+                            ? (store_app_configs_info.desktop_system_kind !== 'darwin' ? '222px' : '74px')
                             : '46px'
                        }"
                        style="
                           z-index: 100;
-                          margin-top: 34.5px;
+                          margin-top: 34px;
                           -webkit-app-region: no-drag;
                         ">
                 <n-button quaternary circle
@@ -874,9 +874,18 @@
                             if(isElectron) {
                               ipcRenderer.send('window-fullscreen');
                             }
+                            store_app_configs_info.window_full = !store_app_configs_info.window_full;
+                            store_app_configs_info.window_max = store_app_configs_info.window_full;
                           }">
                   <template #icon>
-                    <n-icon size="20" :depth="2" style="margin-top: 1px;"><FullScreenMaximize16Regular/></n-icon>
+                    <n-icon size="19" :depth="2"
+                            v-if="store_app_configs_info.window_full">
+                      <ArrowsMinimize/>
+                    </n-icon>
+                    <n-icon size="19" :depth="2"
+                            v-else>
+                      <ArrowsMaximize/>
+                    </n-icon>
                   </template>
                 </n-button>
                 <n-button quaternary circle style="margin-right:4px"
@@ -896,9 +905,12 @@
                             if(isElectron) {
                               ipcRenderer.send('window-max');
                             }
+                            store_app_configs_info.window_max = !store_app_configs_info.window_max;
+                            store_app_configs_info.window_full = false;
                           }">
                   <template #icon>
-                    <n-icon size="24" :depth="2"><Maximize16Regular/></n-icon>
+                    <n-icon size="20" :depth="2" v-if="store_app_configs_info.window_max"><FullScreenMinimize24Filled/></n-icon>
+                    <n-icon size="20" :depth="2" v-else><FullScreenMaximize24Filled/></n-icon>
                   </template>
                 </n-button>
                 <n-button quaternary circle style="margin-right:30px"
