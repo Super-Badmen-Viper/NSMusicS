@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import servers from './table/Table_Server_Setting.vue'
+import Table_Album_List_ALL from './components/Table_Album_List_ALL_Grid_Virtual.vue'
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 
 onMounted(async () => {
-  store_router_data_info.router_select = 'servers'
+  store_router_data_info.router_select = 'album'
 });
+
 </script>
+
 <template>
   <div class="view_show">
-    <servers/>
+    <Table_Album_List_ALL/>
   </div>
 </template>
 

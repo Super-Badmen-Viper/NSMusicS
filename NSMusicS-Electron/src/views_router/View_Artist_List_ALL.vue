@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import Table_Song_List from './table/Table_Song_List_ALL_Line_Virtual.vue'
+import Table_Artist_List_ALL from './components/Table_Artist_List_ALL_Grid_Virtual.vue'
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 
 onMounted(async () => {
-  store_router_data_info.router_select = 'song'
+  store_router_data_info.router_select = 'artist'
 });
+
 </script>
 
 <template>
   <div class="view_show">
-    <Table_Song_List/>
+    <Table_Artist_List_ALL/>
   </div>
 </template>
 

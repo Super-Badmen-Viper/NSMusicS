@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import Table_Artist_List_ALL from './table/Table_Artist_List_ALL_Grid_Virtual.vue'
+import Table_Menu_AppSetting from './components/Table_Menu_AppSetting_Line_Virtual.vue'
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 
 onMounted(async () => {
-  store_router_data_info.router_select = 'artist'
+  store_router_data_info.router_select = 'apps'
 });
-
 </script>
-
 <template>
   <div class="view_show">
-    <Table_Artist_List_ALL/>
+    <Table_Menu_AppSetting/>
   </div>
 </template>
 

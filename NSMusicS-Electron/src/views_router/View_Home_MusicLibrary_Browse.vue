@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import Table_Home_List_ALL_Line from './table/Table_Home_List_ALL_Line_Virtual.vue'
+import Table_Home_List_ALL_Line from './components/Table_Home_List_ALL_Line_Virtual.vue'
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 
 onMounted(async () => {
