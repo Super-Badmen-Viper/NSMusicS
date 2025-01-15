@@ -620,6 +620,7 @@
   import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
   import View_Edit_Tag from "@/components/tag_list/View_Edit_Tag.vue";
   import View_Player_Effect from "@/components/player_effect/View_Player_Effect.vue";
+  import {PlayBack} from "@vicons/ionicons5";
   const playlist_contextmenu = ref(null as any)
   provide("message", playlist_contextmenu);
 
@@ -820,25 +821,30 @@
             <!--Top Bar-->
             <div class="bar_top_setapp"
                  style="background-color: transparent">
-              <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"
-                       :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
-                       :style="{
+              <n-tooltip trigger="hover" placement="top">
+                <template #trigger>
+                  <n-badge :value="store_app_configs_info.version_updated" :offset="[-17, -4]"
+                           :type="store_app_configs_info.version_updated === 1 ? 'error' : 'info'"
+                           :style="{
                           marginRight: isElectron
                             ? (store_app_configs_info.desktop_system_kind !== 'darwin' ? '222px' : '74px')
                             : '46px'
                        }"
-                       style="
+                           style="
                           z-index: 100;
                           margin-top: 34px;
                           -webkit-app-region: no-drag;
                         ">
-                <n-button quaternary circle
-                          @click="store_app_configs_info.update_show = !store_app_configs_info.update_show">
-                  <template #icon>
-                    <n-icon size="20" :depth="2"><BrowserUpdatedFilled/></n-icon>
-                  </template>
-                </n-button>
-              </n-badge>
+                    <n-button quaternary circle
+                              @click="store_app_configs_info.update_show = !store_app_configs_info.update_show">
+                      <template #icon>
+                        <n-icon size="20" :depth="2"><BrowserUpdatedFilled/></n-icon>
+                      </template>
+                    </n-button>
+                  </n-badge>
+                </template>
+                {{ $t('filter.recentlyUpdated') }}
+              </n-tooltip>
               <section
                 style="
                   -webkit-app-region: no-drag;
@@ -861,46 +867,63 @@
 <!--                  </template>-->
 <!--                  &lt;!&ndash;<span style="font-weight: 500;">{{ $t('setting.clearQueryCache') }}</span>&ndash;&gt;-->
 <!--                </n-button>-->
-                <n-button quaternary circle
-                          :style="{ marginRight: store_app_configs_info.desktop_system_kind != 'darwin' ? '4px' : '30px' }"
-                          @click="store_app_configs_logic_theme.theme_mode_change_click()">
-                  <template #icon>
-                    <n-icon size="20" :depth="2"><DarkTheme24Filled/></n-icon>
+                <n-tooltip trigger="hover" placement="top">
+                  <template #trigger>
+                    <n-button quaternary circle
+                              :style="{ marginRight: store_app_configs_info.desktop_system_kind != 'darwin' ? '4px' : '30px' }"
+                              @click="store_app_configs_logic_theme.theme_mode_change_click()">
+                      <template #icon>
+                        <n-icon size="20" :depth="2"><DarkTheme24Filled/></n-icon>
+                      </template>
+                    </n-button>
                   </template>
-                </n-button>
-                <n-button quaternary circle style="margin-right:4px;"
-                          v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
-                          @click="() => {
+                  {{ $t('LabelDashboardTheme') }}
+                </n-tooltip>
+                <n-tooltip trigger="hover" placement="top"
+                           v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
+                  <template #trigger>
+                    <n-button quaternary circle style="margin-right:4px;"
+                              @click="() => {
                             if(isElectron) {
                               ipcRenderer.send('window-fullscreen');
                             }
                             store_app_configs_info.window_full = !store_app_configs_info.window_full;
                             store_app_configs_info.window_max = store_app_configs_info.window_full;
                           }">
-                  <template #icon>
-                    <n-icon size="19" :depth="2"
-                            v-if="store_app_configs_info.window_full">
-                      <ArrowsMinimize/>
-                    </n-icon>
-                    <n-icon size="19" :depth="2"
-                            v-else>
-                      <ArrowsMaximize/>
-                    </n-icon>
+                      <template #icon>
+                        <n-icon size="19" :depth="2"
+                                v-if="store_app_configs_info.window_full">
+                          <ArrowsMinimize/>
+                        </n-icon>
+                        <n-icon size="19" :depth="2"
+                                v-else>
+                          <ArrowsMaximize/>
+                        </n-icon>
+                      </template>
+                    </n-button>
                   </template>
-                </n-button>
-                <n-button quaternary circle style="margin-right:4px"
-                          v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
+                  {{ $t('ButtonFullscreen') }}
+                </n-tooltip>
+                <n-tooltip trigger="hover" placement="top"
+                           v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
+                  <template #trigger>
+                    <n-button quaternary circle style="margin-right:4px"
                           @click="() => {
                             if(isElectron) {
                               ipcRenderer.send('window-min');
                             }
                           }">
-                  <template #icon>
-                    <n-icon size="24" :depth="2"><MinusRound/></n-icon>
+                      <template #icon>
+                        <n-icon size="24" :depth="2"><MinusRound/></n-icon>
+                      </template>
+                    </n-button>
                   </template>
-                </n-button>
-                <n-button quaternary circle style="margin-right:4px"
-                          v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
+                  {{ $t('common.minimize') }}
+                </n-tooltip>
+                <n-tooltip trigger="hover" placement="top"
+                           v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
+                  <template #trigger>
+                    <n-button quaternary circle style="margin-right:4px"
                           @click="() => {
                             if(isElectron) {
                               ipcRenderer.send('window-max');
@@ -908,22 +931,30 @@
                             store_app_configs_info.window_max = !store_app_configs_info.window_max;
                             store_app_configs_info.window_full = false;
                           }">
-                  <template #icon>
-                    <n-icon size="20" :depth="2" v-if="store_app_configs_info.window_max"><FullScreenMinimize24Filled/></n-icon>
-                    <n-icon size="20" :depth="2" v-else><FullScreenMaximize24Filled/></n-icon>
+                      <template #icon>
+                        <n-icon size="20" :depth="2" v-if="store_app_configs_info.window_max"><FullScreenMinimize24Filled/></n-icon>
+                        <n-icon size="20" :depth="2" v-else><FullScreenMaximize24Filled/></n-icon>
+                      </template>
+                    </n-button>
                   </template>
-                </n-button>
-                <n-button quaternary circle style="margin-right:30px"
-                          v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'"
+                  {{ $t('common.maximize') }}
+                </n-tooltip>
+                <n-tooltip trigger="hover" placement="top"
+                           v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
+                  <template #trigger>
+                    <n-button quaternary circle style="margin-right:30px"
                           @click="() => {
                             if(isElectron) {
                               ipcRenderer.send('window-close');
                             }
                           }">
-                  <template #icon>
-                    <n-icon size="28" :depth="2"><Close/></n-icon>
+                      <template #icon>
+                        <n-icon size="28" :depth="2"><Close/></n-icon>
+                      </template>
+                    </n-button>
                   </template>
-                </n-button>
+                  {{ $t('Off') }}
+                </n-tooltip>
               </section>
             </div>
           </n-layout>

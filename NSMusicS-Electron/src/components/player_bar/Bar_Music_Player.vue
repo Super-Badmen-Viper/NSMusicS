@@ -761,20 +761,25 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
            @mouseover="()=>{
              store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
            }">
-        <div class="button_open_player_view">
-          <img class="back_svg"
-               :src="getAssetImage(store_player_audio_logic.player_back_ChevronDouble)"
-               :style="{ display: back_display }"
-               @click="click_back_svg" @mouseover="hover_back_img" @mouseout="leave_back_svg" alt=""/>
-          <img class="back_img"
-               style="object-fit: cover;"
-               :style="{ filter: 'blur(' + back_filter_blurValue + 'px)' }"
-               :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-               @error="handleImageError"
-               @click="click_back_svg"
-               @mouseover="hover_back_img" @mouseout="leave_back_svg"
-          />
-        </div>
+        <n-tooltip trigger="hover" placement="top">
+          <template #trigger>
+            <div class="button_open_player_view">
+              <img class="back_svg"
+                   :src="getAssetImage(store_player_audio_logic.player_back_ChevronDouble)"
+                   :style="{ display: back_display }"
+                   @click="click_back_svg" @mouseover="hover_back_img" @mouseout="leave_back_svg" alt=""/>
+              <img class="back_img"
+                   style="object-fit: cover;"
+                   :style="{ filter: 'blur(' + back_filter_blurValue + 'px)' }"
+                   :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                   @error="handleImageError"
+                   @click="click_back_svg"
+                   @mouseover="hover_back_img" @mouseout="leave_back_svg"
+              />
+            </div>
+          </template>
+          {{ $t('setting.hotkey_toggleFullScreenPlayer') }}
+        </n-tooltip>
         <div class="bar_left_text_song_info">
           <n-space>
             <n-ellipsis>
@@ -817,54 +822,73 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                       store_player_appearance.player_background_model_num === 3 ? '10px auto 0' : '22px auto 0',
                  }"
                  justify="center">
-          <n-button quaternary round size="small"
-                    @click="() => {
+
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary round size="small"
+                        @click="() => {
                       store_player_audio_logic.drawer_order_show = !store_player_audio_logic.drawer_order_show;
                       // backpanel_order_click
                     }">
-            <template #icon>
-              <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
-                <ArrowAutofitDown24Regular/>
-              </n-icon>
-              <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-2'">
-                <ArrowRepeatAll16Regular/>
-              </n-icon>
-              <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-3'">
-                <RepeatOneRound/>
-              </n-icon>
-              <n-icon :size="20" v-else-if="store_player_audio_logic.play_order === 'playback-4'">
-                <Random/>
-              </n-icon>
+                <template #icon>
+                  <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
+                    <ArrowAutofitDown24Regular/>
+                  </n-icon>
+                  <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-2'">
+                    <ArrowRepeatAll16Regular/>
+                  </n-icon>
+                  <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-3'">
+                    <RepeatOneRound/>
+                  </n-icon>
+                  <n-icon :size="20" v-else-if="store_player_audio_logic.play_order === 'playback-4'">
+                    <Random/>
+                  </n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
-          <n-button quaternary round size="small" @click="play_skip_back_click">
-            <template #icon>
-              <n-icon :size="26"><PlayBack/></n-icon>
+            {{ $t('Play') + $t('common.sortOrder') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary round size="small" @click="play_skip_back_click">
+                <template #icon>
+                  <n-icon :size="26"><PlayBack/></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
-          <n-dropdown
-              trigger="hover"
-              placement="top-center"
-              :options="[{
-              label: '播放 / 暂停',
-              key: 'marina bay sands'}]">
-            <n-button quaternary round @click="Init_Audio_Player">
-              <template #icon>
-                <n-icon v-if="store_player_audio_logic.player.isPlaying" :size="36"><Pause/></n-icon>
-                <n-icon v-else :size="36"><Play/></n-icon>
-              </template>
-            </n-button>
-          </n-dropdown>
-          <n-button quaternary round size="small" @click="play_skip_forward_click">
-            <template #icon>
-              <n-icon :size="26"><PlayForward/></n-icon>
+            {{ $t('player.previous') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary round @click="Init_Audio_Player">
+                <template #icon>
+                  <n-icon v-if="store_player_audio_logic.player.isPlaying" :size="36"><Pause/></n-icon>
+                  <n-icon v-else :size="36"><Play/></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
-          <n-button quaternary round size="small" @click="backpanel_voice_click">
-            <template #icon>
-              <n-icon :size="26"><VolumeMedium/></n-icon>
+            {{ $t('Play') + ' | ' + $t('ButtonPause') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary round size="small" @click="play_skip_forward_click">
+                <template #icon>
+                  <n-icon :size="26"><PlayForward/></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
+            {{ $t('player.next') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary round size="small" @click="backpanel_voice_click">
+                <template #icon>
+                  <n-icon :size="26"><VolumeMedium/></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('HeaderAudioSettings') }}
+          </n-tooltip>
         </n-space>
         <!-- grid_Middle_slider_area -->
         <n-space
@@ -1019,13 +1043,18 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
              store_player_appearance.player_collapsed_action_bar_of_Immersion_model = false;
            }">
         <n-space class="gird_Right_current_playlist_button_area">
-          <n-badge :value="store_playlist_list_info.playlist_MediaFiles_temporary.length" show-zero :max="9999" :offset="[-7, 3]">
-            <n-button strong secondary class="gird_Right_current_playlist_button_area_of_button" @click="Set_Playlist_Show">
-              <template #icon>
-                <n-icon :size="42"><QueueMusicRound/></n-icon>
-              </template>
-            </n-button>
-          </n-badge>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-badge :value="store_playlist_list_info.playlist_MediaFiles_temporary.length" show-zero :max="9999" :offset="[-7, 3]">
+                <n-button strong secondary class="gird_Right_current_playlist_button_area_of_button" @click="Set_Playlist_Show">
+                  <template #icon>
+                    <n-icon :size="42"><QueueMusicRound/></n-icon>
+                  </template>
+                </n-button>
+              </n-badge>
+            </template>
+            {{ $t('Playlists') }}
+          </n-tooltip>
         </n-space>
         <div class="gird_Right_button_area"
              style="margin-top: 16px;"
@@ -1034,20 +1063,33 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
              }"
         >
           <n-space justify="end">
-            <n-rate clearable size="small"
-                    v-model:value="store_player_audio_info.this_audio_song_rating"
-                    @update:value="(value: number) => handleItemClick_Rating(store_player_audio_info.this_audio_song_id, value)"/>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-rate clearable size="small"
+                        v-model:value="store_player_audio_info.this_audio_song_rating"
+                        @update:value="(value: number) => handleItemClick_Rating(store_player_audio_info.this_audio_song_id, value)"/>
+              </template>
+              {{ $t('filter.rating') }}
+            </n-tooltip>
           </n-space>
           <n-space justify="space-between" style="margin-top: 6px;">
-            <n-button size="tiny" text
-                      v-if="store_player_appearance.player_show"
-                      @click="()=>{store_player_audio_logic.drawer_theme_show ? store_player_audio_logic.drawer_theme_show = false : store_player_audio_logic.drawer_theme_show = true}">
-              <template #icon>
-                <n-icon :size="22"><Settings24Regular/></n-icon>
+            <n-tooltip trigger="hover" placement="top"
+                       v-if="store_player_appearance.player_show">
+              <template #trigger>
+                <n-button
+                  size="tiny" text
+                  @click="store_player_audio_logic.drawer_theme_show = !store_player_audio_logic.drawer_theme_show">
+                  <template #icon>
+                    <n-icon :size="22"><Settings24Regular /></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
-            <n-button size="tiny" text
-                      @click="() => {
+              {{ $t('Play') + $t('nsmusics.view_player.view_seting.viewSeting')}}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button size="tiny" text
+                          @click="() => {
                         store_player_tag_modify.player_current_media_path = store_player_audio_info.this_audio_file_path
                         store_player_tag_modify.player_current_media_id = store_player_audio_info.this_audio_song_id
                         store_player_tag_modify.player_current_album_id = store_player_audio_info.this_audio_album_id
@@ -1055,31 +1097,54 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                         //
                         store_player_tag_modify.player_show_tag_modify = !store_player_tag_modify.player_show_tag_modify
                       }">
-              <template #icon>
-                <n-icon :size="22"><Tag16Regular/></n-icon>
+                  <template #icon>
+                    <n-icon :size="22"><Tag16Regular/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
-            <n-button size="tiny" text @click="handleItemClick_Favorite(store_player_audio_info.this_audio_song_id,store_player_audio_info.this_audio_song_favorite);">
-              <template #icon>
-                <n-icon v-if="store_player_audio_info.this_audio_song_favorite" :size="22" color="red"><Heart28Filled/></n-icon>
-                <n-icon v-else :size="22"><Heart24Regular/></n-icon>
+              {{ $t('LabelAudioTagSettings') }}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button size="tiny" text @click="handleItemClick_Favorite(store_player_audio_info.this_audio_song_id,store_player_audio_info.this_audio_song_favorite);">
+                  <template #icon>
+                    <n-icon v-if="store_player_audio_info.this_audio_song_favorite" :size="22" color="red"><Heart28Filled/></n-icon>
+                    <n-icon v-else :size="22"><Heart24Regular/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
-            <n-button size="tiny" text @click="Set_Player_Show_Sound_effects">
-              <template #icon>
-                <n-icon :size="22"><DeviceEq24Filled/></n-icon>
+              {{ $t('common.favorite') }}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button size="tiny" text @click="Set_Player_Show_Sound_effects">
+                  <template #icon>
+                    <n-icon :size="22"><DeviceEq24Filled/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
-            <n-button size="tiny" text @click="Set_Player_Show_Sound_speed">
-              <template #icon>
-                <n-icon :size="22"><TopSpeed20Regular/></n-icon>
+              {{ $t('HeaderAudioAdvanced') }}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button size="tiny" text @click="Set_Player_Show_Sound_speed">
+                  <template #icon>
+                    <n-icon :size="22"><TopSpeed20Regular/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
-            <n-button size="tiny" text @click="Set_Player_Show_Sound_more">
-              <template #icon>
-                <n-icon :size="22"><MoreCircle32Regular/></n-icon>
+              {{ $t('PlaybackRate') }}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button size="tiny" text @click="Set_Player_Show_Sound_more">
+                  <template #icon>
+                    <n-icon :size="22"><MoreCircle32Regular/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
+              {{ $t('ButtonMore') }}
+            </n-tooltip>
           </n-space>
         </div>
       </div>

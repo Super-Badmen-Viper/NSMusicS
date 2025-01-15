@@ -904,67 +904,87 @@ onBeforeUnmount(() => {
         <!-- -->
         <n-flex justify="end" style="width: 400px;height: 70px;">
           <div style="-webkit-app-region: no-drag;margin-top: 30px;margin-right: -8px;">
-            <n-button
-                quaternary circle
-                style="margin-right:4px;"
-                v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                @click="() => {
-                  if(isElectron) {
-                    ipcRenderer.send('window-fullscreen');
-                  }
-                  store_app_configs_info.window_full = !store_app_configs_info.window_full;
-                  store_app_configs_info.window_max = store_app_configs_info.window_full;
-                }">
-              <template #icon>
-                <n-icon size="19" :depth="3"
-                        v-if="store_app_configs_info.window_full">
-                  <ArrowsMinimize/>
-                </n-icon>
-                <n-icon size="19" :depth="3"
-                        v-else>
-                  <ArrowsMaximize/>
-                </n-icon>
+            <n-tooltip trigger="hover" placement="top"
+                       v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
+              <template #trigger>
+                <n-button
+                    quaternary circle
+                    style="margin-right:4px;"
+                    @click="() => {
+                      if(isElectron) {
+                        ipcRenderer.send('window-fullscreen');
+                      }
+                      store_app_configs_info.window_full = !store_app_configs_info.window_full;
+                      store_app_configs_info.window_max = store_app_configs_info.window_full;
+                    }">
+                  <template #icon>
+                    <n-icon size="19" :depth="3"
+                            v-if="store_app_configs_info.window_full">
+                      <ArrowsMinimize/>
+                    </n-icon>
+                    <n-icon size="19" :depth="3"
+                            v-else>
+                      <ArrowsMaximize/>
+                    </n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
-            <n-button quaternary circle
-                      style="margin-right:4px"
-                      v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                      @click="() => {
-                        if(isElectron) {
-                          ipcRenderer.send('window-min');
-                        }
-                      }">
-              <template #icon>
-                <n-icon size="24" :depth="3"><MinusRound/></n-icon>
+              {{ $t('ButtonFullscreen') }}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top"
+                       v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
+              <template #trigger>
+                <n-button quaternary circle
+                          style="margin-right:4px"
+                          @click="() => {
+                            if(isElectron) {
+                              ipcRenderer.send('window-min');
+                            }
+                          }">
+                  <template #icon>
+                    <n-icon size="24" :depth="3"><MinusRound/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
-            <n-button quaternary circle
-                      style="margin-right:4px"
-                      v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                      @click="() => {
-                        if(isElectron) {
-                          ipcRenderer.send('window-max');
-                          }
-                        store_app_configs_info.window_max = !store_app_configs_info.window_max;
-                        store_app_configs_info.window_full = false;
-                      }">
-              <template #icon>
-                <n-icon size="20" :depth="3" v-if="store_app_configs_info.window_max"><FullScreenMinimize24Filled/></n-icon>
-                <n-icon size="20" :depth="3" v-else><FullScreenMaximize24Filled/></n-icon>
+              {{ $t('common.minimize') }}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top"
+                       v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
+              <template #trigger>
+                <n-button quaternary circle
+                          style="margin-right:4px"
+                          @click="() => {
+                            if(isElectron) {
+                              ipcRenderer.send('window-max');
+                              }
+                            store_app_configs_info.window_max = !store_app_configs_info.window_max;
+                            store_app_configs_info.window_full = false;
+                          }">
+                  <template #icon>
+                    <n-icon size="20" :depth="3" v-if="store_app_configs_info.window_max"><FullScreenMinimize24Filled/></n-icon>
+                    <n-icon size="20" :depth="3" v-else><FullScreenMaximize24Filled/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
-            <n-button quaternary circle
-                      style="margin-right:30px"
-                      v-if="store_app_configs_info.desktop_system_kind != 'darwin'"
-                      @click="() => {
-                        if(isElectron) {
-                          ipcRenderer.send('window-close');
-                        }
-                      }">
-              <template #icon>
-                <n-icon size="28" :depth="3"><Close/></n-icon>
+              {{ $t('common.maximize') }}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top"
+                       v-if="isElectron && store_app_configs_info.desktop_system_kind != 'darwin'">
+              <template #trigger>
+                <n-button quaternary circle
+                          style="margin-right:30px"
+                          @click="() => {
+                            if(isElectron) {
+                              ipcRenderer.send('window-close');
+                            }
+                          }">
+                  <template #icon>
+                    <n-icon size="28" :depth="3"><Close/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
+              {{ $t('Off') }}
+            </n-tooltip>
           </div>
         </n-flex>
       </n-flex>
@@ -1175,13 +1195,13 @@ onBeforeUnmount(() => {
                           filter: blur(0);
                           -webkit-mask-image: radial-gradient(
                             circle at 100% 50%, /* 圆形洞的位置（右侧居中） */
-                            transparent 7.5%,   /* 圆形洞的大小 */
-                            black 10%          /* 遮罩其余部分 */
+                            transparent 5%,   /* 圆形洞的大小 */
+                            black 5.2%          /* 遮罩其余部分 */
                           );
                           mask-image: radial-gradient(
                             circle at 100% 50%, /* 圆形洞的位置（右侧居中） */
-                            transparent 7.5%,   /* 圆形洞的大小 */
-                            black 10%          /* 遮罩其余部分 */
+                            transparent 5%,   /* 圆形洞的大小 */
+                            black 5.2%          /* 遮罩其余部分 */
                           );"
                           :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
                           alt=""
@@ -1429,7 +1449,6 @@ onBeforeUnmount(() => {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border: 1.5px solid #FFFFFF20;
   box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
   transform: translate(-50%, -50%);
   z-index: 2;
