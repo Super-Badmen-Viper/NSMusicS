@@ -1180,7 +1180,7 @@ onBeforeUnmount(() => {
                     <div
                         style="
                         position: relative;
-                        margin-top: calc(36vh - 162px);margin-left: calc(-73vh);
+                        margin-top: calc(36vh - 162px);margin-left: calc(-74vh);
                         box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                         width: calc(46vh); height: calc(46vh);">
                       <!-- 图片 -->
@@ -1195,21 +1195,33 @@ onBeforeUnmount(() => {
                           filter: blur(0);
                           -webkit-mask-image: radial-gradient(
                             circle at 100% 50%, /* 圆形洞的位置（右侧居中） */
-                            transparent 5%,   /* 圆形洞的大小 */
-                            black 5.2%          /* 遮罩其余部分 */
+                            transparent 6%,   /* 圆形洞的大小 */
+                            black 6.2%          /* 遮罩其余部分 */
                           );
                           mask-image: radial-gradient(
                             circle at 100% 50%, /* 圆形洞的位置（右侧居中） */
-                            transparent 5%,   /* 圆形洞的大小 */
-                            black 5.2%          /* 遮罩其余部分 */
+                            transparent 6%,   /* 圆形洞的大小 */
+                            black 6.2%          /* 遮罩其余部分 */
                           );"
                           :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
                           alt=""
                       />
+                      <div style="
+                      width: 5vh;height: 5vh;border-radius: 6vh;
+                      position: absolute;top: calc(50% - 2.5vh);right: calc(-2.5vh);
+                      background-color: #DCDBDD50">
+
+                      </div>
+                      <div style="
+                      width: 2vh;height: 2vh;border-radius: 2vh;
+                      position: absolute;top: calc(50% - 1vh);right: calc(-1vh);
+                      background-color: #181818">
+
+                      </div>
                     </div>
                     <div
                         style="
-                        width: 46vh;margin-top: 0vh;margin-left: calc(-73vh);
+                        width: 46vh;margin-top: 0vh;margin-left: calc(-74vh);
                         color: #E7E5E5;font-weight: 900;font-size: calc(2.2vh + 4px);
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
@@ -1217,7 +1229,7 @@ onBeforeUnmount(() => {
                     </div>
                     <div
                         style="
-                        width: 46vh;margin-top: -1vh;margin-left: calc(-73vh);
+                        width: 46vh;margin-top: -1vh;margin-left: calc(-74vh);
                         color: #989292;font-weight: 550;font-size: calc(1.4vh + 4px);
                         overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                         text-align: left;">
@@ -1229,7 +1241,7 @@ onBeforeUnmount(() => {
                         --n-fill-color: #ffffff;--n-fill-color-hover: #ffffff;
                         --n-rail-height: 4px;
                         --n-handle-size: 20px;
-                        margin-top: -6px;margin-left: calc(-73vh);
+                        margin-top: -6px;margin-left: calc(-74vh);
                         border-radius: 10px;"
                         v-model:value="store_player_audio_logic.slider_singleValue"
                         :min="0" :max="100"
@@ -1254,7 +1266,7 @@ onBeforeUnmount(() => {
                         <n-icon-wrapper :size="0" />
                       </template>
                     </n-slider>
-                    <div style="width: 46vh;text-align: left;margin-top: -4px;margin-left: calc(-73vh);">
+                    <div style="width: 46vh;text-align: left;margin-top: -4px;margin-left: calc(-74vh);">
                       {{ store_player_audio_logic.current_play_time }} &nbsp;/&nbsp; {{ store_player_audio_logic.total_play_time }}
                     </div>
                   </n-space>
