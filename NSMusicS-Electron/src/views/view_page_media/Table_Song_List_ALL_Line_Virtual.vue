@@ -485,6 +485,7 @@ import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+import {MinusRound} from "@vicons/material";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -834,41 +835,60 @@ onBeforeUnmount(() => {
             </n-button>
           </n-space>
 
-          <n-button quaternary circle
-                    style="margin-left:4px"
-                    @click="show_search_area">
-            <template #icon>
-              <n-icon :size="20" :depth="2"><Search20Filled/></n-icon>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary circle
+                        style="margin-left:4px"
+                        @click="show_search_area">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><Search20Filled/></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
-          <n-input-group
-              v-if="store_view_media_page_logic.page_songlists_bool_show_search_area"
-              style="width: 144px;">
-            <n-input
-                style="width: 238px;"
-                ref="input_search_InstRef"
-                v-model:value="store_view_media_page_logic.page_songlists_input_search_Value"
-                @keydown.enter="click_search"/>
-          </n-input-group>
+            {{ $t('Search') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top"
+                     v-if="store_view_media_page_logic.page_songlists_bool_show_search_area">
+            <template #trigger>
+              <n-input-group style="width: 144px;">
+                <n-input
+                    style="width: 238px;"
+                    ref="input_search_InstRef"
+                    v-model:value="store_view_media_page_logic.page_songlists_input_search_Value"
+                    @keydown.enter="click_search"/>
+              </n-input-group>
+            </template>
+            {{ $t('setting.hotkey_localSearch') }}
+          </n-tooltip>
 
           <n-dropdown
               trigger="click" :show-arrow="true"
               :options="options_Sort" @select="handleSelect_Sort">
-            <n-button quaternary circle style="margin-left:4px">
-              <template #icon>
-                <n-icon :size="20" :depth="2"><ArrowSort24Regular/></n-icon>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button quaternary circle style="margin-left:4px">
+                  <template #icon>
+                    <n-icon :size="20" :depth="2"><ArrowSort24Regular/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
+              {{ $t('LabelSortOrder') }}
+            </n-tooltip>
           </n-dropdown>
 
-          <n-badge
-              :value="store_view_media_page_logic.page_songlists_filter_year" :offset="[-17, 40]">
-            <n-button quaternary circle style="margin-left:4px" @click="Type_Filter_Show = true">
-              <template #icon>
-                <n-icon :size="20"><Filter20Filled/></n-icon>
-              </template>
-            </n-button>
-          </n-badge>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-badge
+                  :value="store_view_media_page_logic.page_songlists_filter_year" :offset="[-17, 40]">
+                <n-button quaternary circle style="margin-left:4px" @click="Type_Filter_Show = true">
+                  <template #icon>
+                    <n-icon :size="20"><Filter20Filled/></n-icon>
+                  </template>
+                </n-button>
+              </n-badge>
+            </template>
+            {{ $t('Filters') }}
+          </n-tooltip>
           <n-modal
               v-model:show="Type_Filter_Show">
             <n-card style="width: 480px;border-radius: 4px;">
@@ -892,26 +912,41 @@ onBeforeUnmount(() => {
           </n-modal>
 
           <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
-          <n-button
-              v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
-              quaternary circle style="margin-left:4px" @click="click_open_bulk_operation">
-            <template #icon>
-              <n-icon :size="20" :depth="2"><MultiselectLtr20Filled/></n-icon>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button
+                  v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
+                  quaternary circle style="margin-left:4px" @click="click_open_bulk_operation">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><MultiselectLtr20Filled/></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
+            {{ $t('Select') }}
+          </n-tooltip>
           <n-space v-if="!bool_start_play">
-            <n-button quaternary circle style="margin-left:4px" @click="click_select_SongList_ALL_Line">
-              <template #icon>
-                <n-icon :size="20" :depth="2"><SelectAllOn24Regular/></n-icon>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button quaternary circle style="margin-left:4px" @click="click_select_SongList_ALL_Line">
+                  <template #icon>
+                    <n-icon :size="20" :depth="2"><SelectAllOn24Regular/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
-            <n-button quaternary circle style="margin-left:4px" @click="Type_Selected_Media_File_To_Playlist = !Type_Selected_Media_File_To_Playlist">
-              <template #icon>
-                <n-icon :size="20" :depth="2"><AddCircle32Regular/></n-icon>
+              {{ $t('SelectAll') }}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button quaternary circle style="margin-left:4px" @click="Type_Selected_Media_File_To_Playlist = !Type_Selected_Media_File_To_Playlist">
+                  <template #icon>
+                    <n-icon :size="20" :depth="2"><AddCircle32Regular/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
-            <n-button
-                v-if="
+              {{ $t('action.addToPlaylist') }}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top"
+             v-if="
               (store_server_user_model.model_select !== 'server')
               ||
               (store_server_user_model.model_select === 'server'
@@ -920,12 +955,16 @@ onBeforeUnmount(() => {
               (store_server_user_model.model_select === 'server'
                 && store_view_media_page_logic.page_songlists_selected !== 'song_list_all'
                 && store_server_user_model.model_server_type_of_web === false)
-            "
-                quaternary circle style="margin-left:4px" @click="update_button_deleteMediaFile_selected">
-              <template #icon>
-                <n-icon :size="20" :depth="2"><Delete20Regular/></n-icon>
+             ">
+              <template #trigger>
+                <n-button quaternary circle style="margin-left:4px" @click="update_button_deleteMediaFile_selected">
+                  <template #icon>
+                    <n-icon :size="20" :depth="2"><Delete20Regular/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
+              {{ $t('Delete') }}
+            </n-tooltip>
             <n-p style="margin-top: 6px;"> {{ $t('nsmusics.view_page.selectedSong') + ' ' + store_view_media_page_info.media_Files_selected.length }} * </n-p>
           </n-space>
 
@@ -935,61 +974,92 @@ onBeforeUnmount(() => {
               :options="options_dropdown_play_mode"
               @select="begin_select_SongList_ALL_Line_of_playback"
           >
-            <n-button
-                quaternary circle style="margin-left:4px;">
-              <template #icon>
-                <n-icon :size="20" :depth="2"><Play/></n-icon>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button
+                    quaternary circle style="margin-left:4px;">
+                  <template #icon>
+                    <n-icon :size="20" :depth="2"><Play/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
+              {{ $t('Play') }}
+            </n-tooltip>
           </n-dropdown>
           <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
 
-          <n-button quaternary circle style="margin-left:4px"
-                    @click="onRefreshSharp">
-            <template #icon>
-              <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary circle style="margin-left:4px"
+                        @click="onRefreshSharp">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
-          <n-button quaternary circle style="margin-left:4px"
-                    @click="dynamicScroller.$el.scrollTop = 0;">
-            <template #icon>
-              <n-icon :size="20" :depth="2"><PaddingTop20Filled/></n-icon>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary circle style="margin-left:4px"
+                        @click="dynamicScroller.$el.scrollTop = 0;">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><PaddingTop20Filled/></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
-          <n-button quaternary circle style="margin-left:4px"
-                    @click="dynamicScroller.$el.scrollTop = dynamicScroller.$el.scrollHeight;">
-            <template #icon>
-              <n-icon :size="20" :depth="2"><PaddingDown20Filled/></n-icon>
+            {{ $t('action.moveToTop') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary circle style="margin-left:4px"
+                        @click="dynamicScroller.$el.scrollTop = dynamicScroller.$el.scrollHeight;">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><PaddingDown20Filled/></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
+            {{ $t('action.moveToBottom') }}
+          </n-tooltip>
         </n-space>
         <n-space align="center">
           <n-space v-if="show_top_selectedlist && bool_start_play"
                    style="margin-left: 7px;margin-bottom: 14px;">
-            <n-select
-                size="small"
-                :value="store_view_media_page_logic.page_songlists_selected"
-                :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
-                @update:value="page_songlists_handleselected_updatevalue" />
-            <n-button
-                style="margin-left: 7px;"
-                size="small" secondary strong
-                @click="Type_Update_Playlist = !Type_Update_Playlist">
-              <template #icon>
-                <n-icon>
-                  <Menu />
-                </n-icon>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-select size="small"
+                    :value="store_view_media_page_logic.page_songlists_selected"
+                    :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
+                    @update:value="page_songlists_handleselected_updatevalue" />
               </template>
-            </n-button>
-            <n-button
-                size="small" secondary strong
-                @click="Type_Add_Playlist = !Type_Add_Playlist">
-              <template #icon>
-                <n-icon>
-                  <Add />
-                </n-icon>
+              {{ $t('LabelPlaylist') }}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button size="small" style="margin-left: 12px;"
+                          secondary strong @click="Type_Update_Playlist = !Type_Update_Playlist">
+                  <template #icon>
+                    <n-icon>
+                      <Menu />
+                    </n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
+              {{ $t('HeaderAdmin') + $t('LabelPlaylist') }}
+            </n-tooltip>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button size="small" style="margin-left: 2px;"
+                          secondary strong @click="Type_Add_Playlist = !Type_Add_Playlist">
+                  <template #icon>
+                    <n-icon>
+                      <Add />
+                    </n-icon>
+                  </template>
+                </n-button>
+              </template>
+              {{ $t('Add') +  $t('LabelPlaylist') }}
+            </n-tooltip>
           </n-space>
         </n-space>
       </n-space>
@@ -1076,24 +1146,39 @@ onBeforeUnmount(() => {
                     </div>
                   </n-space>
                   <n-space style="margin-top: 4px;">
-                    <n-select
-                        :value="store_view_media_page_logic.page_songlists_selected"
-                        :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
-                        @update:value="page_songlists_handleselected_updatevalue" />
-                    <n-button secondary strong @click="Type_Update_Playlist = !Type_Update_Playlist">
-                      <template #icon>
-                        <n-icon>
-                          <Menu />
-                        </n-icon>
+                    <n-tooltip trigger="hover" placement="top">
+                      <template #trigger>
+                        <n-select
+                            :value="store_view_media_page_logic.page_songlists_selected"
+                            :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
+                            @update:value="page_songlists_handleselected_updatevalue" />
                       </template>
-                    </n-button>
-                    <n-button secondary strong @click="Type_Add_Playlist = !Type_Add_Playlist">
-                      <template #icon>
-                        <n-icon>
-                          <Add />
-                        </n-icon>
+                      {{ $t('LabelPlaylist') }}
+                    </n-tooltip>
+                    <n-tooltip trigger="hover" placement="top">
+                      <template #trigger>
+                        <n-button secondary strong @click="Type_Update_Playlist = !Type_Update_Playlist">
+                          <template #icon>
+                            <n-icon>
+                              <Menu />
+                            </n-icon>
+                          </template>
+                        </n-button>
                       </template>
-                    </n-button>
+                      {{ $t('HeaderAdmin') + $t('LabelPlaylist') }}
+                    </n-tooltip>
+                    <n-tooltip trigger="hover" placement="top">
+                      <template #trigger>
+                        <n-button secondary strong @click="Type_Add_Playlist = !Type_Add_Playlist">
+                          <template #icon>
+                            <n-icon>
+                              <Add />
+                            </n-icon>
+                          </template>
+                        </n-button>
+                      </template>
+                      {{ $t('Add') +  $t('LabelPlaylist') }}
+                    </n-tooltip>
                   </n-space>
                   <n-space vertical style="margin-top: 12px;margin-left: 7px;">
                     <n-grid

@@ -214,6 +214,7 @@ export const store_view_media_page_logic = reactive({
             store_view_media_page_fetchData.fetchData_Media()
             store_app_configs_logic_save.save_system_config_of_Player_Configs_of_Audio_Info()
             store_app_configs_logic_save.save_system_config_of_View_Router_History()
+            store_view_media_page_logic.page_songlists_keyword = '';
         }
     }
 });
