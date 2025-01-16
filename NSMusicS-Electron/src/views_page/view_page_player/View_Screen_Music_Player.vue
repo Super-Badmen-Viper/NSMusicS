@@ -1022,7 +1022,7 @@ onBeforeUnmount(() => {
                     vertical align="end"
                     :style="{
                       marginTop: store_player_appearance.player_use_lyric_skip_forward
-                      ? '0px' : '100px',
+                      ? '0px' : '92px',
                       transition: 'margin 0.4s'
                     }"
                     style="margin-right:8vw;">
@@ -1284,7 +1284,7 @@ onBeforeUnmount(() => {
                 <div
                   :style="{
                     height: store_player_appearance.player_use_lyric_skip_forward
-                    ? 'calc(100vh - 100px)' : 'calc(100vh)',
+                    ? 'calc(100vh - 100px)' : 'calc(100vh + 12px)',
                   }"
                   style="
                     width: 40vw;
