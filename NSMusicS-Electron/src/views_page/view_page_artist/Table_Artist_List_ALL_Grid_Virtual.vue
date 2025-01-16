@@ -1,60 +1,41 @@
 <script setup lang="ts">
 ////// this_view resource of vicons_svg
 import {
-  ArrowSort24Regular,
-  ChevronLeft16Filled,
-  ChevronRight16Filled,
-  Filter20Filled,
-  Heart24Regular,
-  Heart28Filled,
-  Open28Filled,
-  PlayCircle24Regular,
+  ArrowSort24Regular, TextSortAscending20Regular, TextSortDescending20Regular,
   Search20Filled,
-  TextSortAscending20Regular,
-  TextSortDescending20Regular, PaddingTop20Filled, PaddingDown20Filled
+  PlayCircle24Regular,
+  Heart24Regular, Heart28Filled,
+  ChevronLeft16Filled, ChevronRight16Filled, Open28Filled,
+  Filter20Filled, PaddingTop20Filled, PaddingDown20Filled
 } from '@vicons/fluent'
 import {
   RefreshSharp
 } from '@vicons/ionicons5'
-import {Icon} from '@vicons/utils'
 
 ////// this_view components of navie ui
-import {computed, h, onBeforeUnmount, onMounted, ref, watch} from 'vue'
-import {type InputInst, NButton, NIcon, useMessage} from 'naive-ui';
+import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import {type InputInst, NButton, NIcon, NImage} from 'naive-ui';
+import {Icon} from "@vicons/utils";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
+import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info";
+import {store_view_artist_page_logic} from "@/store/view/artist/store_view_artist_page_logic";
 import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
 import {store_router_data_logic} from "@/store/router/store_router_data_logic";
+import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
 import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
-import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
+import {store_view_artist_page_fetchData} from "@/store/view/artist/store_view_artist_page_fetchData";
 
 ////// i18n auto lang
-import {useI18n} from 'vue-i18n'
-import {store_server_user_model} from "@/store/server/store_server_user_model";
-////// changed_data write to sqlite
-import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
-import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
-import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
-import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
-import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
-import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
-import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
-import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
-import {store_player_appearance} from "@/store/player/store_player_appearance";
-////// right menu
-import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-import {store_router_data_info} from "@/store/router/store_router_data_info";
-import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
-
+import { useI18n } from 'vue-i18n'
 const { t } = useI18n({
-    inheritLocale: true
-  })
+  inheritLocale: true
+})
 
-////// albumlist_view page_layout gridItems
-const item_album = ref<number>(160)
-const item_album_image = ref<number>(item_album.value - 20)
-const item_album_txt = ref<number>(item_album.value - 20)
+////// artistlist_view page_layout gridItems
+const item_artist = ref<number>(170)
+const item_artist_image = ref<number>(item_artist.value - 20)
+const item_artist_txt = ref<number>(item_artist.value - 20)
 const itemSize = ref(220);
 const gridItems = ref(5);
 const itemSecondarySize = ref(185);
@@ -62,7 +43,7 @@ import error_album from '@/assets/img/error_album.jpg'
 import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
-  let result_src = error_album
+  let result_src = error_album;
   if (errorHandled.value.has(item.id)) {
     item.medium_image_url = result_src;
     return;
@@ -99,32 +80,33 @@ const updateGridItems = () => {
   if(window.innerWidth > 2460){
     const num = window.innerWidth / 7.53
     itemSize.value = Math.floor(num) + 40;
-    item_album.value = Math.floor(num);
-    item_album_image.value = item_album.value - 20;
-    item_album_txt.value = item_album.value - 20;
+    item_artist.value = Math.floor(num);
+    item_artist_image.value = item_artist.value - 20;
+    item_artist_txt.value = item_artist.value - 20;
     gridItems.value = 7;
     itemSecondarySize.value = Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2;
   }else if(window.innerWidth > 1660){
     const num = window.innerWidth / 6.53
     itemSize.value = Math.floor(num) + 40;
-    item_album.value = Math.floor(num);
-    item_album_image.value = item_album.value - 20;
-    item_album_txt.value = item_album.value - 20;
+    item_artist.value = Math.floor(num);
+    item_artist_image.value = item_artist.value - 20;
+    item_artist_txt.value = item_artist.value - 20;
     gridItems.value = 6;
     itemSecondarySize.value = Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2;
   }else{
     const num = window.innerWidth / 5.53
     itemSize.value = Math.floor(num) + 40;
-    item_album.value = Math.floor(num);
-    item_album_image.value = item_album.value - 20;
-    item_album_txt.value = item_album.value - 20;
+    item_artist.value = Math.floor(num);
+    item_artist_image.value = item_artist.value - 20;
+    item_artist_txt.value = item_artist.value - 20;
     gridItems.value = 5;
     itemSecondarySize.value = Math.floor(window.innerWidth - (collapsed_width.value - 40)) / gridItems.value - 2;
   }
 };
 onMounted(() => {
   updateGridItems();
-  if(store_view_album_page_logic.page_albumlists_input_search_Value.length > 0){
+  input_search_Value.value = store_view_artist_page_logic.page_artistlists_keyword
+  if(input_search_Value.value.length > 0){
     bool_show_search_area.value = true
     bool_input_search = true
   }
@@ -145,22 +127,18 @@ type SortItem = {
   state_Sort: state_Sort;
 };
 const options_Sort_key = ref<SortItem[]>([
-  {label:computed(() => t('entity.album_other')), key: 'name', state_Sort: state_Sort.Default },
-  {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
-  {label:computed(() => t('filter.toYear')), key: 'min_year', state_Sort: state_Sort.Default },
-  // {label:computed(() => t('filter.fromYear')), key: 'max_year', state_Sort: state_Sort.Default },
-  {label:computed(() => t('common.duration')), key: 'duration', state_Sort: state_Sort.Default },
-  {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
-  {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
+  {label:computed(() => t('entity.artist_other')), key: 'name', state_Sort: state_Sort.Default },
+  {label:computed(() => t('entity.album_other')), key: 'album_count', state_Sort: state_Sort.Default },
+  {label:computed(() => t('filter.songCount')), key: 'song_count', state_Sort: state_Sort.Default },
   // {label:'更新时间(外部信息)', key: 'external_info_updated_at', state_Sort: state_Sort.Default }
 ]);
 const options_Sort = computed(() => {
-  if(store_view_album_page_logic.page_albumlists_options_Sort_key != null && store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0){
+  if(store_view_artist_page_logic.page_artistlists_options_Sort_key != null && store_view_artist_page_logic.page_artistlists_options_Sort_key.length > 0){
     options_Sort_key.value.forEach(element => {
-      if(element.key === store_view_album_page_logic.page_albumlists_options_Sort_key[0].columnKey)
-        if(store_view_album_page_logic.page_albumlists_options_Sort_key[0].order === state_Sort.Ascend)
+      if(element.key === store_view_artist_page_logic.page_artistlists_options_Sort_key[0].columnKey)
+        if(store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order === state_Sort.Ascend)
           element.state_Sort = state_Sort.Ascend
-        else if(store_view_album_page_logic.page_albumlists_options_Sort_key[0].order === state_Sort.Descend)
+        else if(store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order === state_Sort.Descend)
           element.state_Sort = state_Sort.Descend
     });
   }
@@ -214,7 +192,7 @@ const handleSelect_Sort = (key: string | number) => {
       break;
   }
   const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
-  store_view_album_page_logic.page_albumlists_options_Sort_key = sortersArray
+  store_view_artist_page_logic.page_artistlists_options_Sort_key = sortersArray
 
   scrollTo(0)
 }
@@ -227,19 +205,14 @@ const show_search_area = () => {
   {
     bool_show_search_area.value = false
     input_search_InstRef.value?.clear()
-    if(bool_input_search){
-      // store_view_album_page_logic.list_data_StartUpdate = true
+    if(bool_input_search == true){
+      // store_view_artist_page_logic.list_data_StartUpdate = true
       back_search_default()
       bool_input_search = false
       scrollTo(0)
     }
-    if(store_server_user_model.model_server_type_of_web) {
-      store_view_media_page_fetchData._album_id = ''
-      store_view_media_page_fetchData._artist_id = ''
-      store_view_album_page_fetchData._artist_id = ''
-    }
     input_search_InstRef.value?.clear()
-    store_view_album_page_logic.page_albumlists_keyword = ""
+    store_view_artist_page_logic.page_artistlists_keyword = ""
     click_search()
   }
   else
@@ -254,17 +227,18 @@ const show_search_area = () => {
   // input_search_InstRef.value?.clear()
 }
 const input_search_InstRef = ref<InputInst>()
+const input_search_Value = ref<string>()
 let bool_input_search = false
 const click_search = () => {
-  store_view_album_page_logic.page_albumlists_keyword =
-      store_view_album_page_logic.page_albumlists_input_search_Value.toLowerCase()
-  if (store_view_album_page_logic.page_albumlists_keyword){
+  if (input_search_Value.value){
+    const page_artistlists_keyword = input_search_Value.value.toLowerCase();
+    store_view_artist_page_logic.page_artistlists_keyword = page_artistlists_keyword;
     bool_input_search = true
     options_Sort_key.value.forEach(element => {
       element.state_Sort = state_Sort.Default
     });
   }else{
-    store_view_album_page_logic.list_data_StartUpdate = true
+    store_view_artist_page_logic.list_data_StartUpdate = true
     bool_input_search = false
     back_search_default()
   }
@@ -276,11 +250,11 @@ const back_search_default = () => {
       if (options_Sort_key.value[i].key === options_Sort_key_Default_key.value) {
         const sortersArray: { columnKey: string; order: string }[] = [];
         if (options_Sort_key.value[i].state_Sort === 'default') {
-          store_view_album_page_logic.page_albumlists_options_Sort_key = null
+          store_view_artist_page_logic.page_artistlists_options_Sort_key = null
         } else {
           const sorter = { columnKey: options_Sort_key.value[i].key, order: options_Sort_key.value[i].state_Sort };
           sortersArray.push(sorter);
-          store_view_album_page_logic.page_albumlists_options_Sort_key = sortersArray
+          store_view_artist_page_logic.page_artistlists_options_Sort_key = sortersArray
         }
         break;
       }
@@ -290,7 +264,7 @@ const back_search_default = () => {
 // lineItems Filter To Favorite
 const options_Filter = ref([
   {
-    label: t('nsmusics.view_page.loveAlbum'),
+    label: t('nsmusics.view_page.loveArtist'),
     key: 'filter_favorite',
     icon() {
       return h(NIcon, null, {
@@ -300,12 +274,12 @@ const options_Filter = ref([
   }
 ])
 const options_Filter_handleSelect = (key: string | number) => {
-  store_view_album_page_logic.page_albumlists_selected = 'album_list_love'
-  console.log('selected_value_for_albumlistall：'+'album_list_love');
-  breadcrumbItems.value = store_view_album_page_logic.page_albumlists_options.find(option => option.value === 'album_list_love')?.label || '';
+  store_view_artist_page_logic.page_artistlists_selected = 'artist_list_love'
+  console.log('selected_value_for_artistlistall：'+'artist_list_love');
+  breadcrumbItems.value = store_view_artist_page_logic.page_artistlists_options.find(option => option.value === 'artist_list_love')?.label || '';
 }
 
-////// dynamicScroller of albumlist_view
+////// dynamicScroller of artistlist_view
 const dynamicScroller = ref(null as any);
 const onResize = () => {
   show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
@@ -317,15 +291,16 @@ const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any
   updateParts.viewEndIdx = viewEndIndex
   updateParts.visibleStartIdx = visibleStartIndex
   updateParts.visibleEndIdx = visibleEndIndex
-  store_router_history_data_of_album.router_history_model_of_Album_scroller_value = viewEndIndex
+
+  store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value = viewEndIndex
 
   show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
 }
 const show_top_selectedlist = ref(false)
-const stopWatching_router_history_model_of_Album_scroll = watch(() => store_router_history_data_of_album.router_history_model_of_Album_scroll,(newValue) => {
-    if (newValue) {
-      scrollTo(store_router_history_data_of_album.router_history_model_of_Album_scroller_value)
-      store_router_history_data_of_album.router_history_model_of_Album_scroll = false
+const stopWatching_router_history_model_of_Artist_scroll = watch(() => store_router_history_data_of_artist.router_history_model_of_Artist_scroll,(newValue) => {
+    if (newValue === true) {
+      scrollTo(store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value)
+      store_router_history_data_of_artist.router_history_model_of_Artist_scroll = false
     }
   }
 )
@@ -339,124 +314,116 @@ const scrollTo = (value :number) => {
 }
 onMounted(() => {
   if (store_server_user_model.model_server_type_of_local) {
-    scrollTo(store_router_history_data_of_album.router_history_model_of_Album_scroller_value)
+    scrollTo(store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value)
   }else if (store_server_user_model.model_server_type_of_web) {
 
   }
 });
 
-////// select Dtatsource of albumlists
-const breadcrumbItems = ref('所有专辑');
-const page_albumlists_handleSelected_updateValue = (value: any) => {
-  store_view_album_page_logic.page_albumlists_selected = value
-  console.log('selected_value_for_albumlistall：'+value);
-  breadcrumbItems.value = store_view_album_page_logic.page_albumlists_options.find(option => option.value === value)?.label || '';
+////// select Dtatsource of artistlists
+const breadcrumbItems = ref('所有歌手');
+const page_artistlists_handleselected_updatevalue = (value: any) => {
+  store_view_artist_page_logic.page_artistlists_selected = value
+  console.log('selected_value_for_artistlistall：'+value);
+  breadcrumbItems.value = store_view_artist_page_logic.page_artistlists_options.find(option => option.value === value)?.label || '';
   dynamicScroller.$el.scrollTop = 0;
 };
 
 ////// router history
 const get_router_history_model_pervious = () => {
-  store_view_album_page_logic.page_albumlists_keyword = ''
-  input_search_InstRef.value?.clear()
-  store_router_history_data_of_album.get_router_history_model_of_Album(-1)
+  store_router_history_data_of_artist.get_router_history_model_of_Artist(-1)
 }
 const get_router_history_model_next = () =>  {
-  store_view_album_page_logic.page_albumlists_keyword = ''
-  input_search_InstRef.value?.clear()
-  store_router_history_data_of_album.get_router_history_model_of_Album(1)
+  store_router_history_data_of_artist.get_router_history_model_of_Artist(1)
 }
 
 ////// go to media_view
-const handleItemClick_album = (album:string) => {
-  if(store_server_user_model.model_server_type_of_local) {
-    bool_show_search_area.value = false
-    show_search_area()
-    click_search()
-    scrollTo(0)
-  }else if(store_server_user_model.model_server_type_of_web){
-    store_view_album_page_fetchData._artist_id = ''
-    bool_show_search_area.value = true
-  }
-  store_view_album_page_logic.page_albumlists_keyword = album
-  store_view_album_page_logic.page_albumlists_input_search_Value = album
-  store_view_media_page_logic.page_songlists_input_search_Value = album
-}
-const handleItemClick_artist = (artist_id:string) => {
-  if(store_server_user_model.model_server_type_of_local) {
-    bool_show_search_area.value = false
-    show_search_area()
-    click_search()
-    scrollTo(0)
-  }else if(store_server_user_model.model_server_type_of_web){
-    store_view_album_page_fetchData._artist_id = ''
-    bool_show_search_area.value = true
-  }
-  store_view_album_page_logic.page_albumlists_keyword = artist_id
-  store_view_album_page_logic.page_albumlists_input_search_Value = artist_id
-  store_view_media_page_logic.page_songlists_input_search_Value = artist_id
-}
-const Open_this_album_SongList_click = (album_id:string) => {
+const Open_this_artist_all_artist_list_click = (artist_id:string) => {
   if(store_server_user_model.model_server_type_of_web){
-    store_player_appearance.player_mode_of_medialist_from_external_import = false
-    store_view_media_page_fetchData._album_id = album_id
+    store_view_media_page_fetchData._artist_id = artist_id
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-    store_playlist_list_fetchData._album_id = album_id
+    store_view_album_page_fetchData._artist_id = artist_id
+    store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
+    store_playlist_list_fetchData._artist_id = artist_id
   }
-  console.log('media_list_of_album_id：'+album_id);
-  store_router_data_logic.get_media_list_of_album_id_by_album_info(album_id)
+  console.log('artist_list_of_artist_id_artist_click：'+artist_id);
+  store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
 }
-const Play_this_album_SongList_click = async (album_id: string) => {
+const Play_this_artist_all_media_list_click = async (artist_id: string) => {
   if(store_server_user_model.model_server_type_of_web){
-    store_view_media_page_fetchData._album_id = album_id
+    store_view_media_page_fetchData._artist_id = artist_id
     store_view_media_page_logic.page_songlists_selected = 'song_list_all'
-    store_playlist_list_fetchData._album_id = album_id
+    store_view_album_page_fetchData._artist_id = artist_id
+    store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
+    store_playlist_list_fetchData._artist_id = artist_id
   }
-  console.log('play_this_album_click：' + album_id);
-  await store_view_album_page_fetchData.fetchData_This_Album_SongList(album_id)
+  console.log('play_this_artist_song_list：' + artist_id);
+  await store_view_artist_page_fetchData.fetchData_This_Artist_SongList(artist_id)
 }
 
+////// changed_data write to sqlite
+import {Set_ArtistInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_ArtistInfo_To_LocalSqlite'
+import {
+  store_local_data_set_artistInfo
+} from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
+import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
+import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
+import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
-    store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id,favorite)
+  store_local_data_set_artistInfo.Set_ArtistInfo_To_Favorite(id,favorite)
+}
+let before_rating = false
+let after_rating = false;
+const handleItemClick_Rating = (id_rating: any) => {
+  const [id, rating] = id_rating.split('-');
+  if(after_rating) {
+    store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, 0);
+  }else {
+    store_local_data_set_artistInfo.Set_ArtistInfo_To_Rating(id, rating);
   }
-  let before_rating = false
-  let after_rating = false;
-  const handleItemClick_Rating = (id_rating: any) => {
-    const [id, rating] = id_rating.split('-');
-    if(after_rating) {
-      store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, 0);
-    }else {
-      store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, rating);
-    }
-  }
+}
 
+////// right menu
+import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {useMessage} from 'naive-ui'
+import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
+import {
+  store_local_data_set_mediaInfo
+} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
+import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
+import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {store_router_data_info} from "@/store/router/store_router_data_info";
+import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
+import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
 const contextmenu = ref(null as any)
-  const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
-  const message = useMessage()
-  async function update_playlist_addAlbum(id: any, playlist_id: any){
-    try{
-      await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(id)
-      const matchingIds: string[] = [];
-      store_view_media_page_info.media_Files_temporary.forEach((item: Media_File) => {
-        if (item.album_id === id) {
-          matchingIds.push(item.id);
-        }
-      });
-      store_view_media_page_info.media_Files_temporary = []
-      for (let item_id of matchingIds) {
-        ////
-        await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(item_id,playlist_id)
+const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
+const message = useMessage()
+async function update_playlist_addArtist(id: any, playlist_id: any){
+  try{
+    await store_view_media_page_fetchData.fetchData_Media_Find_This_Artist(id)
+    const matchingIds: string[] = [];
+    store_view_media_page_info.media_Files_temporary.forEach((item: Media_File) => {
+      if (item.artist_id === id) {
+        matchingIds.push(item.id);
       }
+    });
+    store_view_media_page_info.media_Files_temporary = []
+    for (let item_id of matchingIds) {
       ////
-      message.success(t('common.add'))
-      store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
-    }catch (e) {
-      console.error(e)
+      await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(item_id,playlist_id)
     }
+    ////
+    message.success(t('common.add'))
+    store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+  }catch (e) {
+    console.error(e)
   }
+}
 async function menu_item_add_to_playlist_end() {
-  await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
+  await store_view_media_page_fetchData.fetchData_Media_Find_This_Artist(store_playlist_list_info.playlist_Menu_Item_Id);
   const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
+      (item: Media_File) => item.artist_id === store_playlist_list_info.playlist_Menu_Item_Id
   );
 
   store_view_media_page_info.media_Files_temporary = []
@@ -475,9 +442,9 @@ async function menu_item_add_to_playlist_end() {
   contextmenu.value.hide()
 }
 async function menu_item_add_to_playlist_next() {
-  await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
+  await store_view_media_page_fetchData.fetchData_Media_Find_This_Artist(store_playlist_list_info.playlist_Menu_Item_Id);
   const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
-      (item: Media_File) => item.album_id === store_playlist_list_info.playlist_Menu_Item_Id
+      (item: Media_File) => item.artist_id === store_playlist_list_info.playlist_Menu_Item_Id
   );
 
   store_view_media_page_info.media_Files_temporary = [];
@@ -504,11 +471,11 @@ async function menu_item_add_to_playlist_next() {
   }
 }
 function menu_item_edit_selected_media_tags(){
-  store_player_tag_modify.player_show_tag_kind = 'album'
-  const item: Album | undefined = store_view_album_page_info.album_Files_temporary.find(
-      (album: Album) => album.id === store_playlist_list_info.playlist_Menu_Item_Id);
+  store_player_tag_modify.player_show_tag_kind = 'artist'
+  const item: Album | undefined = store_view_artist_page_info.artist_Files_temporary.find(
+      (artist: Album) => artist.id === store_playlist_list_info.playlist_Menu_Item_Id);
   if (item != undefined && item != 'undefined') {
-    store_player_tag_modify.player_current_album_id = item.id
+    store_player_tag_modify.player_current_artist_id = item.id
     store_player_tag_modify.player_show_tag_modify = true
     contextmenu.value.hide()
   }
@@ -523,7 +490,7 @@ const onScrollEnd = async () => {
   if (isScrolling.value) return;
   isScrolling.value = true;
   if (store_server_user_model.model_server_type_of_web) {
-    await store_view_album_page_fetchData.fetchData_Album_of_server_web_end()
+    await store_view_artist_page_fetchData.fetchData_Artist_of_server_web_end()
   }
   isScrolling.value = false;
 };
@@ -531,24 +498,24 @@ const onScrollEnd = async () => {
 //////
 const onRefreshSharp = async () => {
   if(store_server_user_model.model_server_type_of_web){
-    store_view_album_page_fetchData.fetchData_Album_of_server_web_start()
+    store_view_artist_page_fetchData.fetchData_Artist_of_server_web_start()
   }else if(store_server_user_model.model_server_type_of_local){
     scrollTo(0)
-    store_view_album_page_logic.page_albumlists_keyword = ""
-    store_view_album_page_fetchData.fetchData_Album()
+    store_view_artist_page_logic.page_artistlists_keyword = ""
+    store_view_artist_page_fetchData.fetchData_Artist()
   }
 }
 
-////// view albumlist_view Remove data
+////// view artistlist_view Remove data
 onBeforeUnmount(() => {
   stopWatching_window_innerWidth()
-  stopWatching_router_history_model_of_Album_scroll()
+  stopWatching_router_history_model_of_Artist_scroll()
   dynamicScroller.value = null;
 });
 </script>
 <template>
   <n-space vertical :size="12">
-    <div class="album-wall-container">
+    <div class="artist-wall-container">
       <n-space vertical @wheel.prevent style="overflow: hidden;">
         <n-space align="center">
           <n-space v-if="store_router_data_info.store_router_history_data_of_local">
@@ -558,7 +525,7 @@ onBeforeUnmount(() => {
               </template>
             </n-button>
             <div style="margin-top: 4px;">
-              {{ store_router_history_data_of_album.router_select_history_date_of_Album?.id ?? '' }} / {{ store_router_history_data_of_album.router_history_datas_of_Album?.length ?? '' }}
+              {{ store_router_history_data_of_artist.router_select_history_date_of_Artist?.id ?? '' }} / {{ store_router_history_data_of_artist.router_history_datas_of_Artist?.length ?? '' }}
             </div>
             <n-button quaternary circle style="margin-left:4px" @click="get_router_history_model_next">
               <template #icon>
@@ -567,80 +534,121 @@ onBeforeUnmount(() => {
             </n-button>
           </n-space>
 
-          <n-button quaternary circle style="margin-left:4px" @click="show_search_area">
-            <template #icon>
-              <n-icon :size="20"><Search20Filled/></n-icon>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary circle style="margin-left:4px" @click="show_search_area">
+                <template #icon>
+                  <n-icon :size="20"><Search20Filled/></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
-          <n-input-group
-              v-if="bool_show_search_area"
-              style="width: 238px;">
-            <n-input
-                style="width: 238px;"
-                ref="input_search_InstRef"
-                v-model:value="store_view_album_page_logic.page_albumlists_input_search_Value"
-                @keydown.enter="click_search"/>
-          </n-input-group>
+            {{ $t('Search') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top"
+                     v-if="bool_show_search_area">
+            <template #trigger>
+              <n-input-group
+                  style="width: 238px;">
+                <n-input
+                    style="width: 238px;"
+                    ref="input_search_InstRef"
+                    v-model:value="input_search_Value"
+                    @keydown.enter="click_search"/>
+              </n-input-group>
+            </template>
+            {{ $t('setting.hotkey_localSearch') }}
+          </n-tooltip>
 
           <n-dropdown
-              v-if="!(store_server_user_model.model_server_type_of_web && store_view_album_page_logic.page_albumlists_selected === 'album_list_recently')"
+              v-if="!(store_server_user_model.model_server_type_of_web && store_view_artist_page_logic.page_artistlists_selected === 'artist_list_recently')"
               trigger="click" :show-arrow="true"
               :options="options_Sort" @select="handleSelect_Sort">
-            <n-button quaternary circle style="margin-left:4px">
-              <template #icon>
-                <n-icon :size="20"><ArrowSort24Regular/></n-icon>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button quaternary circle style="margin-left:4px">
+                  <template #icon>
+                    <n-icon :size="20"><ArrowSort24Regular/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
+              {{ $t('LabelSortOrder') }}
+            </n-tooltip>
           </n-dropdown>
 
           <n-dropdown
               trigger="click" :show-arrow="true"
               :options="options_Filter" @select="options_Filter_handleSelect">
-            <n-button quaternary circle style="margin-left:4px">
-              <template #icon>
-                <n-icon :size="20"><Filter20Filled/></n-icon>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button quaternary circle style="margin-left:4px">
+                  <template #icon>
+                    <n-icon :size="20"><Filter20Filled/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
+              {{ $t('Filters') }}
+            </n-tooltip>
           </n-dropdown>
 
           <n-divider vertical style="width: 2px;height: 20px;margin-top: -2px;"/>
-          <n-button quaternary circle style="margin-left:4px"
-                    @click="onRefreshSharp">
-            <template #icon>
-              <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary circle style="margin-left:4px"
+                        @click="onRefreshSharp">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
-          <n-button quaternary circle style="margin-left:4px"
-                    @click="dynamicScroller.$el.scrollTop = 0;">
-            <template #icon>
-              <n-icon :size="20" :depth="2"><PaddingTop20Filled/></n-icon>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary circle style="margin-left:4px"
+                        @click="dynamicScroller.$el.scrollTop = 0;">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><PaddingTop20Filled/></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
-          <n-button quaternary circle style="margin-left:4px"
-                    @click="dynamicScroller.$el.scrollTop = dynamicScroller.$el.scrollHeight;">
-            <template #icon>
-              <n-icon :size="20" :depth="2"><PaddingDown20Filled/></n-icon>
+            {{ $t('action.moveToTop') }}
+          </n-tooltip>
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary circle style="margin-left:4px"
+                        @click="dynamicScroller.$el.scrollTop = dynamicScroller.$el.scrollHeight;">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><PaddingDown20Filled/></n-icon>
+                </template>
+              </n-button>
             </template>
-          </n-button>
+            {{ $t('action.moveToBottom') }}
+          </n-tooltip>
+
         </n-space>
         <n-space align="center">
           <n-space v-if="show_top_selectedlist"
                    style="margin-left: 7px;margin-bottom: 14px;">
-            <n-select
-                size="small"
-                :value="store_view_album_page_logic.page_albumlists_selected"
-                :options="store_view_album_page_logic.page_albumlists_options" style="width: 166px;"
-                @update:value="page_albumlists_handleSelected_updateValue" />
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-select
+                    size="small"
+                    :value="store_view_artist_page_logic.page_artistlists_selected"
+                    :options="store_view_artist_page_logic.page_artistlists_options" style="width: 166px;"
+                    @update:value="page_artistlists_handleselected_updatevalue" />
+              </template>
+              {{ $t('Select') + $t('LabelPlaylist') }}
+            </n-tooltip>
           </n-space>
         </n-space>
       </n-space>
       <DynamicScroller
-        class="album-wall" ref="dynamicScroller"
+        class="artist-wall" ref="dynamicScroller"
         :style="{
           width: 'calc(100vw - ' + (collapsed_width - 40) + 'px)',
           height: show_top_selectedlist ? 'calc(100vh - 236px)' : 'calc(100vh - 194px)'
         }"
-        :items="store_view_album_page_info.album_Files_temporary"
+        :items="store_view_artist_page_info.artist_Files_temporary"
         :itemSize="itemSize"
         :minItemSize="itemSize"
         :grid-items="gridItems"
@@ -654,17 +662,17 @@ onBeforeUnmount(() => {
         <template #before>
           <div class="notice">
             <div
-                :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
-                style="
-              position: absolute;
-              z-index: 0;
-              height: 298px;
-              border-radius: 10px;
-              overflow: hidden;
-              background-size: cover;
-              background-position: center;
-              filter: blur(0px);
-              background-color: transparent;
+              :style="{ width: 'calc(100vw - ' + (collapsed_width - 17) + 'px)'}"
+              style="
+                position: absolute;
+                z-index: 0;
+                height: 298px;
+                border-radius: 10px;
+                overflow: hidden;
+                background-size: cover;
+                background-position: center;
+                filter: blur(0px);
+                background-color: transparent;
               ">
               <img
                   :style="{
@@ -691,14 +699,14 @@ onBeforeUnmount(() => {
                 <n-space vertical align="start" style="height: 280px;margin-left: 20px;">
                   <n-space style="margin-top: 10px;margin-left: 11px;">
                     <div style="font-size: 36px;font-weight: 600;">
-                      {{ $t('entity.album_other')}}
+                      {{ $t('entity.artist_other')}}
                     </div>
                     <div style="font-size: 36px;font-weight: 600;margin-top: -2px">
                       {{" | "}}
                     </div>
                     <div
                       :style="{
-                        maxWidth: 'calc(100vw - ' + (collapsed_width + 540) + 'px)'
+                        maxWidth: 'calc(100vw - ' + (collapsed_width + 570) + 'px)'
                       }"
                       style="
                         text-align: left;cursor: pointer;
@@ -719,17 +727,22 @@ onBeforeUnmount(() => {
                     </div>
                   </n-space>
                   <n-space style="margin-top: 4px;">
-                    <n-select
-                        :value="store_view_album_page_logic.page_albumlists_selected"
-                        :options="store_view_album_page_logic.page_albumlists_options" style="width: 166px;"
-                        @update:value="page_albumlists_handleSelected_updateValue" />
+                    <n-tooltip trigger="hover" placement="top">
+                      <template #trigger>
+                        <n-select
+                            :value="store_view_artist_page_logic.page_artistlists_selected"
+                            :options="store_view_artist_page_logic.page_artistlists_options" style="width: 166px;"
+                            @update:value="page_artistlists_handleselected_updatevalue" />
+                      </template>
+                      {{ $t('Select') + $t('LabelPlaylist') }}
+                    </n-tooltip>
                   </n-space>
                   <n-space vertical style="margin-top: 12px;margin-left: 7px;">
                     <n-grid
                         :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
                         style="margin-left: 4px;width: 336px;">
-                      <n-gi v-for="albumlist in store_view_album_page_logic.page_albumlists_statistic" :key="albumlist.id">
-                        <n-statistic :label="albumlist.label" :value="albumlist.album_count" />
+                      <n-gi v-for="artistlist in store_view_artist_page_logic.page_artistlists_statistic" :key="artistlist.id">
+                        <n-statistic :label="artistlist.label" :value="artistlist.artist_count" />
                       </n-gi>
                     </n-grid>
                   </n-space>
@@ -749,7 +762,7 @@ onBeforeUnmount(() => {
                 />
               </template>
               <template #extra>
-
+                
               </template>
               <template #footer>
 
@@ -772,20 +785,20 @@ onBeforeUnmount(() => {
           >
             <div
               :key="item.id"
-              class="album">
+              class="artist">
               <div
-                :style="{ width: item_album_image + 'px', height: item_album_image + 'px', position: 'relative' }">
+                :style="{ width: item_artist_image + 'px', height: item_artist_image + 'px', position: 'relative' }">
                 <img
                   :src="item.medium_image_url"
                   @error="handleImageError(item)"
-                  style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;border-radius: 4px;"
-                  :style="{ width: item_album_image + 'px', height: item_album_image + 'px'}"/>
-                <div class="hover-overlay" @dblclick="Open_this_album_SongList_click(item.id)">
+                  style="objectFit: cover; objectPosition: center;border: 1.5px solid #FFFFFF20;"
+                  :style="{ width: item_artist_image + 'px', height: item_artist_image + 'px', borderRadius: '6px' }"/>
+                <div class="hover-overlay" @dblclick="Open_this_artist_all_artist_list_click(item.id)">
                   <div class="hover-content">
                     <button
-                      class="play_this_album"
-                      @click="Play_this_album_SongList_click(item.id)"
-                      style="
+                        class="play_this_artist"
+                        @click="Play_this_artist_all_media_list_click(item.id)"
+                        style="
                         border: 0px;background-color: transparent;
                         width: 50px;height: 50px;
                         cursor: pointer;
@@ -795,11 +808,11 @@ onBeforeUnmount(() => {
                     </button>
                     <div class="hover_buttons_top">
                       <rate
-                        class="viaSlot" style="margin-right: 8px;"
-                        :length="5"
-                        v-model="item.rating"
-                        @before-rate="(value) => { if(item.rating == 1) { before_rating = true; }}"
-                        @after-rate="(value) => {
+                          class="viaSlot" style="margin-right: 8px;"
+                          :length="5"
+                          v-model="item.rating"
+                          @before-rate="(value) => { if(item.rating == 1) { before_rating = true; }}"
+                          @after-rate="(value) => {
                           if(item.rating == 1 && before_rating == true){ after_rating = true;before_rating = false}
                           handleItemClick_Rating(item.id + '-' + value);
                           if (after_rating) {
@@ -811,9 +824,9 @@ onBeforeUnmount(() => {
                     </div>
                     <div class="hover_buttons_bottom">
                       <button
-                        class="open_this_artist"
-                        @click="Open_this_album_SongList_click(item.id)"
-                        style="
+                          class="open_this_artist"
+                          @click="Open_this_artist_all_artist_list_click(item.id)"
+                          style="
                           border: 0px;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
@@ -822,9 +835,9 @@ onBeforeUnmount(() => {
                         <icon :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><Open28Filled/></icon>
                       </button>
                       <button
-                        class="love_this_album"
-                        @click="handleItemClick_Favorite(item.id,item.favorite);item.favorite = !item.favorite;"
-                        style="
+                          class="love_this_artist"
+                          @click="handleItemClick_Favorite(item.id,item.favorite);item.favorite = !item.favorite;"
+                          style="
                           border: 0px;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
@@ -837,28 +850,23 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
               </div>
-              <div :style="{ width: item_album_image + 'px' }">
-                <div class="album_left_text_album_info" :style="{ width: item_album_txt + 'px' }">
+              <div class="artist_text"
+                   style="margin-left: 2px;"
+                   :style="{ width: item_artist_image + 'px' }">
+                <div class="artist_left_text_artist_info" :style="{ width: item_artist_txt + 'px' }">
                   <div>
-                    <span id="album_name"
-                      style="font-size: 14px;font-weight: 600;"
-                      :style="{ maxWidth: item_album_txt + 'px' }" 
-                      @click="handleItemClick_album(item.name)">
+                    <span id="artist_name" style="font-size: 14px;font-weight: 600;" :style="{ maxWidth: item_artist_txt + 'px' }">
                       {{ item.name }}
-                    </span> 
+                    </span>
                   </div>
                   <div>
-                    <span id="album_artist_name"
-                      :style="{ maxWidth: item_album_txt + 'px' }"
-                      @click="() => {
-                        if(store_server_user_model.model_server_type_of_local) {
-                          handleItemClick_artist(item.artist_id)
-                        }else if(store_server_user_model.model_server_type_of_web) {
-                          handleItemClick_artist(item.artist)
-                        }
-                      }"
-                    >
-                      {{ item.artist }}
+                    <span id="artist_artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">
+                       {{ $t('entity.album_other') + ': ' + item.album_count }}
+                    </span>
+                  </div>
+                  <div>
+                    <span id="artist_artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">
+                      {{ $t('entity.track_other') + ': ' + item.song_count }}
                     </span>
                   </div>
                 </div>
@@ -872,7 +880,7 @@ onBeforeUnmount(() => {
           <v-contextmenu-item
               v-for="n in store_playlist_list_info.playlist_names_ALLLists"
               :key="n.value"
-              @click="update_playlist_addAlbum(store_playlist_list_info.playlist_Menu_Item_Id,n.value)"
+              @click="update_playlist_addArtist(store_playlist_list_info.playlist_Menu_Item_Id,n.value)"
           >
             {{ n.label }}
           </v-contextmenu-item>
@@ -905,23 +913,23 @@ onBeforeUnmount(() => {
   font-weight: 600;
 }
 
-.album-wall-container {
+.artist-wall-container {
   width: 100%;
   height: 100%;
 }
-.album-wall {
+.artist-wall {
   overflow-y: auto;
   width: calc(100vw - 200px);
   display: flex;
   flex-direction: column;
   overflow-x:hidden;
 }
-.album {
+.artist {
   float: left;
   flex-direction: column;
   align-items: left;
 }
-.album .hover-overlay {
+.artist .hover-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -932,31 +940,31 @@ onBeforeUnmount(() => {
   opacity: 0;
   transition: opacity 0.3s;
 }
-.album:hover .hover-overlay {
+.artist:hover .hover-overlay {
   opacity: 1;
 }
-.album .hover-content {
+.artist .hover-content {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
 }
-.album .hover_buttons_top {
+.artist .hover_buttons_top {
   position: absolute;
   top: 2px;
   left: 0;
 }
-.album .hover_buttons_bottom {
+.artist .hover_buttons_bottom {
   position: absolute;
   bottom: 3px;
   right: 3px;
 }
 
-.album_left_text_album_info{
+.artist_left_text_artist_info{
   float: left;
   text-align: left;
 }
-#album_name{
+#artist_name{
   margin-top: 2px;
   font-size: 15px;
   font-weight: 500;
@@ -966,12 +974,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#album_name:hover {
-  text-decoration: underline;
-  cursor: pointer;
-  color: #3DC3FF;
-}
-#album_artist_name{
+#artist_artist_name{
   font-size: 12px;
   font-weight: 500;
   display: -webkit-box;
@@ -980,12 +983,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#album_artist_name:hover{
-  text-decoration: underline;
-  cursor: pointer;
-  color: #3DC3FF;
-}
-#album_time{
+#artist_artist_name{
   font-size: 12px;
   font-weight: 500;
   display: -webkit-box;
@@ -993,20 +991,18 @@ onBeforeUnmount(() => {
   -webkit-line-clamp: 1; 
   overflow: hidden;
   text-overflow: ellipsis;
-}
-#album_time:hover{
-  text-decoration: underline;
-  cursor: pointer;
-  color: #3DC3FF;
 }
 
-.play_this_album:hover{
+.play_this_artist:hover{
   color: #3DC3FF;
 }
 .open_this_artist:hover{
   color: #3DC3FF;
 }
-.love_this_album:hover{
+.love_this_artist:hover{
+  color: #3DC3FF;
+}
+.more_this_artist:hover{
   color: #3DC3FF;
 }
 

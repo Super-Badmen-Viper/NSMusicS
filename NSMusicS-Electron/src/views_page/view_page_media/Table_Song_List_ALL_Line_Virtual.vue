@@ -1032,7 +1032,7 @@ onBeforeUnmount(() => {
                     :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
                     @update:value="page_songlists_handleselected_updatevalue" />
               </template>
-              {{ $t('LabelPlaylist') }}
+              {{ $t('Select') + $t('LabelPlaylist') }}
             </n-tooltip>
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
@@ -1153,7 +1153,7 @@ onBeforeUnmount(() => {
                             :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
                             @update:value="page_songlists_handleselected_updatevalue" />
                       </template>
-                      {{ $t('LabelPlaylist') }}
+                      {{ $t('Select') + $t('LabelPlaylist') }}
                     </n-tooltip>
                     <n-tooltip trigger="hover" placement="top">
                       <template #trigger>

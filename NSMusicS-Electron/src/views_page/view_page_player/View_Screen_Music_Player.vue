@@ -1186,8 +1186,7 @@ onBeforeUnmount(() => {
                       <!-- 图片 -->
                       <img
                           style="
-                          width: 100%;
-                          height: 100%;
+                          width: 100%;height: 100%;
                           border: 1.5px solid #FFFFFF20;
                           border-radius: 10px;
                           object-fit: cover;
@@ -1195,21 +1194,21 @@ onBeforeUnmount(() => {
                           filter: blur(0);
                           -webkit-mask-image: radial-gradient(
                             circle at 100% 50%, /* 圆形洞的位置（右侧居中） */
-                            transparent 6%,   /* 圆形洞的大小 */
-                            black 6.2%          /* 遮罩其余部分 */
+                            transparent 4%,   /* 圆形洞的大小 */
+                            black 4.2%          /* 遮罩其余部分 */
                           );
                           mask-image: radial-gradient(
                             circle at 100% 50%, /* 圆形洞的位置（右侧居中） */
-                            transparent 6%,   /* 圆形洞的大小 */
-                            black 6.2%          /* 遮罩其余部分 */
+                            transparent 4%,   /* 圆形洞的大小 */
+                            black 4.2%          /* 遮罩其余部分 */
                           );"
                           :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
                           alt=""
                       />
                       <div style="
-                      width: 5vh;height: 5vh;border-radius: 6vh;
-                      position: absolute;top: calc(50% - 2.5vh);right: calc(-2.5vh);
-                      background-color: #DCDBDD50">
+                      width: 4vh;height: 4vh;border-radius: 6vh;
+                      position: absolute;top: calc(50% - 2vh);right: calc(-2vh);
+                      background-color: #DCDBDD20">
 
                       </div>
                       <div style="
