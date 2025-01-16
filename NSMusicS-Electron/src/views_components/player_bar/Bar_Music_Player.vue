@@ -735,7 +735,24 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
     play_skip_forward_click()
     store_player_audio_logic.player_click_state_of_play_skip_forward = false
   }
+})
+watch(() => store_app_configs_info.lang, (newValue) => {
+  if(newValue){
+    orderPanelWidath.value = langWidths.value[store_app_configs_info.lang.toString()];
+    orderButonWidath.value = orderPanelWidath.value - 14;
+  }
+})
+const langWidths = ref({
+  zhHans: '122', zhHant: '122', en: '202',
+  cs: '211',es: '233', de: '228',
+  fr: '202', it: '240',
+  ja: '166', nl: '206',
+  fa: '169', ptBr: '224',
+  pl: '252', ru: '330',
+  sr: '232', sv: '242',
 });
+const orderPanelWidath = ref('202')
+const orderButonWidath = ref('202')
 </script>
 <template>
   <n-space
@@ -936,7 +953,11 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
         </n-space>
         <!-- grid_Middle_drwaer_area -->
         <n-config-provider :theme="null">
-          <div id="backpanel_order" @mouseleave="backpanel_order_leave"></div>
+          <div id="backpanel_order"
+               :style="{
+                  minWidth: orderPanelWidath + 'px'
+               }"
+               @mouseleave="backpanel_order_leave"></div>
           <n-drawer
               v-model:show="store_player_audio_logic.drawer_order_show"
               placement="bottom"
@@ -945,12 +966,17 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
               show-mask="transparent"
               style="border-radius: 10px;">
             <n-drawer-content>
-              <n-space vertical style="height: 100px;">
+              <n-space vertical align="flex-start" style="height: 100px;">
                 <n-button
                     quaternary
                     @click="() => {
                       store_player_audio_logic.play_order = 'playback-1';
                       store_player_audio_logic.drawer_order_show = false;
+                    }"
+                    :style="{
+                      minWidth: orderButonWidath + 'px',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
                     }"
                     style="margin-left: -16px; margin-top: -6px;">
                   <template #icon>
@@ -966,6 +992,11 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                       store_player_audio_logic.play_order = 'playback-2';
                       store_player_audio_logic.drawer_order_show = false;
                     }"
+                    :style="{
+                      minWidth: orderButonWidath + 'px',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                    }"
                     style="margin-left: -16px; margin-top: -6px;">
                   <template #icon>
                     <n-icon>
@@ -980,6 +1011,11 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                       store_player_audio_logic.play_order = 'playback-3';
                       store_player_audio_logic.drawer_order_show = false;
                     }"
+                    :style="{
+                      minWidth: orderButonWidath + 'px',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                    }"
                     style="margin-left: -16px; margin-top: -6px;">
                   <template #icon>
                     <n-icon>
@@ -993,6 +1029,11 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                     @click="() => {
                       store_player_audio_logic.play_order = 'playback-4';
                       store_player_audio_logic.drawer_order_show = false;
+                    }"
+                    :style="{
+                      minWidth: orderButonWidath + 'px',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
                     }"
                     style="margin-left: -16px; margin-top: -6px;">
                   <template #icon>
@@ -1251,9 +1292,8 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
 .gird_Middle #backpanel_order{
   position: absolute;
   bottom: 80px;
-  margin-left: -190px;
-  min-width: 122px;
   width: auto;
+  margin-left: -190px;
   border-radius: 10px;
   pointer-events: none;
 }
