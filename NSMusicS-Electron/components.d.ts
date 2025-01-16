@@ -7,7 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    Bar_Music_Player: typeof import('./src/components/player_bar/Bar_Music_Player.vue')['default']
+    Bar_Music_Player: typeof import('./src/views_components/player_bar/Bar_Music_Player.vue')['default']
     NBadge: typeof import('naive-ui')['NBadge']
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
@@ -59,13 +59,13 @@ declare module 'vue' {
     NTooltip: typeof import('naive-ui')['NTooltip']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Table_Edit_Tag: typeof import('./src/components/tag_list/components/Table_Edit_Tag.vue')['default']
-    Table_Music_Effect: typeof import('./src/components/player_effect/components/Table_Music_Effect.vue')['default']
-    Table_Music_PlayList_Line_Virtual: typeof import('./src/components/player_list/components/Table_Music_PlayList_Line_Virtual.vue')['default']
-    Table_Updateing: typeof import('./src/components/update_list/components/Table_Updateing.vue')['default']
-    View_Edit_Tag: typeof import('./src/components/tag_list/View_Edit_Tag.vue')['default']
-    View_Player_Effect: typeof import('./src/components/player_effect/View_Player_Effect.vue')['default']
-    View_Player_PlayList: typeof import('./src/components/player_list/View_Player_PlayList.vue')['default']
-    View_Updateing: typeof import('./src/components/update_list/View_Updateing.vue')['default']
+    Table_Edit_Tag: typeof import('./src/views_components/tag_list/Table_Edit_Tag.vue')['default']
+    Table_Music_Effect: typeof import('./src/views_components/player_effect/Table_Music_Effect.vue')['default']
+    Table_Music_PlayList_Line_Virtual: typeof import('./src/views_components/player_list/Table_Music_PlayList_Line_Virtual.vue')['default']
+    Table_Updateing: typeof import('./src/views_components/update_list/Table_Updateing.vue')['default']
+    View_Edit_Tag: typeof import('./src/views_components/tag_list/View_Edit_Tag.vue')['default']
+    View_Player_Effect: typeof import('./src/views_components/player_effect/View_Player_Effect.vue')['default']
+    View_Player_PlayList: typeof import('./src/views_components/player_list/View_Player_PlayList.vue')['default']
+    View_Updateing: typeof import('./src/views_components/update_list/View_Updateing.vue')['default']
   }
 }

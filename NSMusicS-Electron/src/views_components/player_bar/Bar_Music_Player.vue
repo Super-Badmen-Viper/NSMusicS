@@ -19,7 +19,7 @@ import {
 } from '@vicons/fa'
 import { NIcon, NSlider, NSpace, NText } from 'naive-ui';
 
-////// this_view components of navie_ui
+////// this_view views_components of navie_ui
 import {onMounted, ref, watch, inject, provide} from 'vue';
 import {onBeforeUnmount} from 'vue';
 const get_playerbar_to_switch_playerview = inject('get_playerbar_to_switch_playerview');

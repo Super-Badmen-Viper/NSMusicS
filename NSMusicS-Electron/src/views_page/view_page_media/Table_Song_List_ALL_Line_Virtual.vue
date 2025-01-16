@@ -22,7 +22,7 @@ import {
 import { Icon } from "@vicons/utils";
 import { Add, Close, Menu } from "@vicons/carbon";
 
-////// this_view components of navie ui
+////// this_view views_components of navie ui
 import { ref, onMounted, h, computed, watch, onBeforeUnmount } from 'vue';
 import {type DropdownOption, NIcon, type InputInst, NImage, NButton} from 'naive-ui';
 

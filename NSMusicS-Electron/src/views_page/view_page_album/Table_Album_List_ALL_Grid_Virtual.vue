@@ -18,7 +18,7 @@ import {
 } from '@vicons/ionicons5'
 import {Icon} from '@vicons/utils'
 
-////// this_view components of navie ui
+////// this_view views_components of navie ui
 import {computed, h, onBeforeUnmount, onMounted, ref, watch} from 'vue'
 import {type InputInst, NButton, NIcon, useMessage} from 'naive-ui';
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";

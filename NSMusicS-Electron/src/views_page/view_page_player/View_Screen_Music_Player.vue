@@ -18,7 +18,7 @@ function getAssetImage(firstImage: string) {
   return new URL(firstImage, import.meta.url).href;
 }
 
-////// navie ui components
+////// navie ui views_components
 // app theme
 import {darkTheme, NIcon, NSlider} from 'naive-ui'
 // vue3 function
@@ -559,7 +559,7 @@ import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {Random} from "@vicons/fa";
 import {Pause, Play, PlayBack, PlayForward, VolumeMedium} from "@vicons/ionicons5";
-import Table_Album_Model_1_Cover from "@/views/view_page_player/components/Table_Album_Model_1_Cover.vue";
+import Table_Album_Model_1_Cover from "@/views_page/view_page_player/components/Table_Album_Model_1_Cover.vue";
 import {ArrowsMaximize, ArrowsMinimize} from "@vicons/tabler";
 const clear_lottie_animationInstance = ref(false)
 const animationInstance_model_1_spectrum = ref<any>(null);

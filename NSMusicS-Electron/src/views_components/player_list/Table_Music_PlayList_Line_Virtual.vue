@@ -3,7 +3,7 @@ import {
   ChevronLeft16Filled,ChevronRight16Filled
 } from '@vicons/fluent'
 
-////// this_view components of navie ui
+////// this_view views_components of navie ui
 import { ref, onMounted } from 'vue';
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";

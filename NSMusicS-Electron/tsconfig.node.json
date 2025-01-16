@@ -21,10 +21,11 @@
     "types": ["naive-ui/volar"],
     "baseUrl": "./",
     "paths": {
-      "@/components/*": ["src/components/*"],
       "@/features/*": ["src/features/*"],
       "@/models/*": ["src/models/*"],
-      "@/views/*": ["src/views/*"],
+      "@/views_components/*": ["src/views_components/*"],
+      "@/views_drawer/*": ["src/views_drawer/*"],
+      "@/views_page/*": ["src/views_page/*"],
       "@/views_router/*": ["src/views_router/*"]
     }
   }

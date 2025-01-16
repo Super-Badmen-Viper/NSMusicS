@@ -62,7 +62,7 @@ const router = createRouter({
     {
       path: '/update',
       name: 'update',
-      component: () => import('../components/update_list/View_Updateing.vue'),
+      component: () => import('../views_router/View_Updateing.vue'),
       meta: {
         cleanup: true
       }

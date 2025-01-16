@@ -10,7 +10,7 @@ import {
   RefreshSharp,
 } from '@vicons/ionicons5'
 
-////// this_view components of navie ui
+////// this_view views_components of navie ui
 import {onBeforeUnmount, onMounted, ref, watch, computed } from 'vue'
 import {NButton, NIcon, NImage} from 'naive-ui';
 import {Icon} from "@vicons/utils";

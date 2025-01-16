@@ -198,8 +198,9 @@ export const store_view_artist_page_fetchData = reactive({
                     console.log('db.close().......');
                     db = null;
                 }
-            } else if (store_server_user_model.model_server_type_of_web) {
-                await this.fetchData_Artist_of_server_web_start()
+            }
+            else if (store_server_user_model.model_server_type_of_web) {
+                this.fetchData_Artist_of_server_web_start()
             }
         } else {
             // other
