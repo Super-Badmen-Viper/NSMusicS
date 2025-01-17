@@ -18,14 +18,46 @@ export class Class_Set_System_Configs_Write {
 
     system_library_config(
         db: any,
-        app_Configs: App_Configs,
+        local_Configs: Local_Configs_Props[],
     ){
         /// system_library_config
         db.exec("DELETE FROM system_library_config");
         db.exec("UPDATE sqlite_sequence SET seq = 0 WHERE name = 'system_library_config'");
-        const appConfigStmt = db.prepare(`INSERT INTO system_library_config (config_key, config_value) VALUES (?, ?)`);
-        Object.entries(app_Configs).forEach(([propertyName, value]) => {
-            appConfigStmt.run(propertyName, value);
+        const local_library_config = db.prepare(`
+            INSERT INTO system_library_config
+                (id,config_key,config_value)
+            VALUES (?, ?, ?)
+        `);
+        local_Configs.forEach((local_Configs_Props) => {
+            local_library_config.run(
+                local_Configs_Props.id,
+                local_Configs_Props.config_key,
+                local_Configs_Props.config_value,
+            );
+        });
+    }
+    system_servers_config(
+        db: any,
+        server_Configs: Server_Configs_Props[],
+    ){
+        /// system_servers_config
+        db.exec("DELETE FROM system_servers_config");
+        db.exec("UPDATE sqlite_sequence SET seq = 0 WHERE name = 'system_servers_config'");
+        const server_ConfigsStmt = db.prepare(`
+            INSERT INTO system_servers_config 
+            (id,server_name,url,user_name,password,last_login_at,type)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        `);
+        server_Configs.forEach((server_Configs_Props) => {
+            server_ConfigsStmt.run(
+                server_Configs_Props.id,
+                server_Configs_Props.server_name,
+                server_Configs_Props.url,
+                server_Configs_Props.user_name,
+                server_Configs_Props.password,
+                server_Configs_Props.last_login_at,
+                server_Configs_Props.type
+            );
         });
     }
 
@@ -241,28 +273,5 @@ export class Class_Set_System_Configs_Write {
         });
     }
 
-    system_servers_config(
-        db: any,
-        server_Configs: Server_Configs_Props[],
-    ){
-        /// system_servers_config
-        db.exec("DELETE FROM system_servers_config");
-        db.exec("UPDATE sqlite_sequence SET seq = 0 WHERE name = 'system_servers_config'");
-        const server_ConfigsStmt = db.prepare(`
-            INSERT INTO system_servers_config 
-            (id,server_name,url,user_name,password,last_login_at,type)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        `);
-        server_Configs.forEach((server_Configs_Props) => {
-            server_ConfigsStmt.run(
-                server_Configs_Props.id,
-                server_Configs_Props.server_name,
-                server_Configs_Props.url,
-                server_Configs_Props.user_name,
-                server_Configs_Props.password,
-                server_Configs_Props.last_login_at,
-                server_Configs_Props.type
-            );
-        });
-    }
+
 }

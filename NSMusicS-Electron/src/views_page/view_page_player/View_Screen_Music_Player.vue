@@ -348,7 +348,7 @@ const handleLeave_Refresh_Lyric_Color = () => {
   lyrics_list_whell.value = false;
   const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
   let lyric_bottom_hidden_num = store_player_appearance.player_use_lyric_skip_forward
-  ? 0 : 10
+      ? 0 : 10
   let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
   for (let i = perviousIndex.value - 16; i <= perviousIndex.value + 16; i++) {
     if (i < perviousIndex.value) {
@@ -637,9 +637,9 @@ onBeforeUnmount(() => {
     <div>
       <!--Album-->
       <div
-        v-if="store_player_appearance.player_collapsed_skin"
-        id="player_bg_zindex_0"
-        :style="{
+          v-if="store_player_appearance.player_collapsed_skin"
+          id="player_bg_zindex_0"
+          :style="{
           backgroundImage: `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
           filter: store_player_appearance.player_use_background_filter_blur ?
             'brightness(46%) blur(40px)' : 'brightness(46%) blur(0px)',
@@ -647,7 +647,7 @@ onBeforeUnmount(() => {
           backgroundRepeat: store_player_appearance.player_use_background_repeat_fill ? 'repeat' : 'no-repeat',
           backgroundPosition: 'center'
         }"
-        :class="{
+          :class="{
           'player_bg_zindex_0_auto_rotateDefault': store_player_appearance.player_use_background_automatic_rotation && !store_player_appearance.player_use_background_repeat_fill,
           'player_bg_zindex_0_auto_rotateRepeat': store_player_appearance.player_use_background_automatic_rotation && store_player_appearance.player_use_background_repeat_fill
         }"
@@ -831,8 +831,8 @@ onBeforeUnmount(() => {
                     }}</span>
                   <n-space style="margin-right: 32px;">
                     <n-switch
-                      v-model:value="store_player_appearance.player_use_lyric_skip_forward"
-                      @update:value="() => {
+                        v-model:value="store_player_appearance.player_use_lyric_skip_forward"
+                        @update:value="() => {
                         store_player_audio_logic.player_slider_click = true;
                         const index = store_player_view.currentScrollIndex + store_player_audio_info.this_audio_lyrics_info_line_num
                         scrollToItem(index - 3);
@@ -1053,20 +1053,20 @@ onBeforeUnmount(() => {
                             transition: 'margin 0.4s, opacity 0.8s'
                           }">
                     <lottie-player
-                      ref="animationInstance_model_1_wave"
-                      class="animate__rotate_slower"
-                      :class="{
+                        ref="animationInstance_model_1_wave"
+                        class="animate__rotate_slower"
+                        :class="{
                         'animate__rotate_slower_paused': store_player_appearance.player_background_model_num !== 1 || !store_player_audio_info.this_audio_is_playing
                       }"
-                      v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
-                      autoplay
-                      loop
-                      mode="normal"
-                      :src="JSON.parse(JSON.stringify(Animation_1715591164841))"
-                      :style="{
+                        v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
+                        autoplay
+                        loop
+                        mode="normal"
+                        :src="JSON.parse(JSON.stringify(Animation_1715591164841))"
+                        :style="{
                         '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`
                       }"
-                      style="
+                        style="
                         width: 66vh;height: 66vh;
                         margin-top: calc(22vh - 182px);
                       "
@@ -1148,7 +1148,8 @@ onBeforeUnmount(() => {
                         overflow: hidden;"
                       :style="{
                         marginTop: store_player_appearance.player_background_model_num === 2
-                        ? 'calc(-6vh - 18px)' : '0px',
+                        ? (store_player_appearance.player_use_lyric_skip_forward
+                        ? 'calc(-6vh - 30px)' : 'calc(-6vh - 25px)') : '0px',
                         opacity: store_player_appearance.player_background_model_num === 2
                         ? 1 : 0,
                         left: store_player_appearance.player_background_model_num === 2
@@ -1157,25 +1158,25 @@ onBeforeUnmount(() => {
                         transition: 'margin 0.4s, left 0.4s, opacity 0.8s'
                       }">
                     <lottie-player
-                      ref="animationInstance_model_2_wave"
-                      class="animate__rotate_fast"
-                      :class="{
+                        ref="animationInstance_model_2_wave"
+                        class="animate__rotate_fast"
+                        :class="{
                         'animate__rotate_fast_paused': store_player_appearance.player_background_model_num !== 2 || !store_player_audio_info.this_audio_is_playing
                       }"
-                      v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
-                      speed="0.8"
-                      autoplay
-                      loop
-                      mode="normal"
-                      :src="JSON.parse(JSON.stringify(Animation_1715417974362))"
-                      style="
+                        v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
+                        speed="0.8"
+                        autoplay
+                        loop
+                        mode="normal"
+                        :src="JSON.parse(JSON.stringify(Animation_1715417974362))"
+                        style="
                         width: calc(56vh);
                         height: calc(56vh);
                         margin-top: calc(32vh - 154px);
                         position: absolute;
                         transition: margin 0.4s, opacity 0.4s;;
                       "
-                      :style="{
+                        :style="{
                         '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
                         marginLeft: store_player_audio_info.this_audio_is_playing
                         ? 'calc(-56vh)' : 'calc(-70vh)',
@@ -1184,7 +1185,7 @@ onBeforeUnmount(() => {
                       }"
                     />
                     <div
-                      style="
+                        style="
                         width: calc(38vh);
                         height: calc(38vh);
                         margin-top: calc(41vh - 162px);
@@ -1197,7 +1198,7 @@ onBeforeUnmount(() => {
                         background-color: #DCDBDD10;
                         transition: margin 0.4s;
                       "
-                      :style="{
+                        :style="{
                         marginLeft: store_player_audio_info.this_audio_is_playing
                         ? 'calc(-47vh)' : 'calc(-61vh)'
                       }">
@@ -1206,17 +1207,17 @@ onBeforeUnmount(() => {
                         style="
                         position: relative;
                         margin-top: calc(36vh - 162px);margin-left: calc(-74vh);
-                        box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                         width: calc(46vh); height: calc(46vh);">
                       <!-- 图片 -->
                       <img
-                        style="
+                          style="
                           width: 100%;height: 100%;
                           border: 1.5px solid #FFFFFF20;
                           border-radius: 10px;
                           object-fit: cover;
                           object-position: center;
                           filter: blur(0);
+                          box-shadow: 0 0 32px rgba(0, 0, 0, 0.20), 0 0 32px rgba(0, 0, 0, 0.20);
                           -webkit-mask-image: radial-gradient(
                             circle at 100% 50%, /* 圆形洞的位置（右侧居中） */
                             transparent 4%,   /* 圆形洞的大小 */
@@ -1228,18 +1229,18 @@ onBeforeUnmount(() => {
                             black 4.2%          /* 遮罩其余部分 */
                           );
                         "
-                        :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
-                        alt=""
+                          :src="getAssetImage(store_player_audio_info.page_top_album_image_url)"
+                          alt=""
                       />
                       <div
-                        style="
+                          style="
                           width: 4vh;height: 4vh;
                           border-radius: 6vh;border: 1.5px solid #FFFFFF40;
                           position: absolute;top: calc(50% - 2vh);right: calc(-2vh);
                           background-color: #DCDBDD20;
                           transition: right 0.4s, opacity 0.4s;
                         "
-                        :style="{
+                          :style="{
                           right: store_player_audio_info.this_audio_is_playing
                           ? 'calc(-2vh)' : 'calc(12vh)',
                           opacity: store_player_audio_info.this_audio_is_playing
@@ -1249,14 +1250,14 @@ onBeforeUnmount(() => {
 
                       </div>
                       <div
-                        style="
+                          style="
                           width: 2vh;height: 2vh;
                           border-radius: 2vh;border: 1.5px solid #FFFFFF40;
                           position: absolute;top: calc(50% - 1vh);right: calc(-1vh);
                           background-color: #181818;
                           transition: right 0.4s, opacity 0.4s;
                         "
-                        :style="{
+                          :style="{
                           right: store_player_audio_info.this_audio_is_playing
                           ? 'calc(-1vh)' : 'calc(13vh)',
                           opacity: store_player_audio_info.this_audio_is_playing
@@ -1330,11 +1331,11 @@ onBeforeUnmount(() => {
                   }"
               >
                 <div
-                  :style="{
+                    :style="{
                     height: store_player_appearance.player_use_lyric_skip_forward
                     ? 'calc(100vh - 100px)' : 'calc(100vh + 12px)',
                   }"
-                  style="
+                    style="
                     width: 40vw;
                     margin-top: -80px;
                     border-radius: 20px;
@@ -1344,16 +1345,16 @@ onBeforeUnmount(() => {
                     overflow: hidden;
                   ">
                   <n-list
-                    clickable
-                    :show-divider="false"
-                    ref="scrollbar"
-                    @wheel="handleWheel"
-                    @mouseleave="() => {
+                      clickable
+                      :show-divider="false"
+                      ref="scrollbar"
+                      @wheel="handleWheel"
+                      @mouseleave="() => {
                       handleLeave_Refresh_Lyric_Color();
                       store_player_view.currentScrollIndex = 0;
                       begin_lyrics_animation();
                     }"
-                    style="
+                      style="
                       width: calc(40vw);
                       max-height: calc(90vh);
                       margin-top: 120px;
@@ -1362,12 +1363,12 @@ onBeforeUnmount(() => {
                     ">
                     <template #default>
                       <n-list-item
-                        class="lyrics_info"
-                        :style="{
+                          class="lyrics_info"
+                          :style="{
                           textAlign: store_player_appearance.player_collapsed_album ? 'center' : 'left',
                         }"
-                        v-for="(item, index) in store_player_audio_info.this_audio_lyrics_info_line_font"
-                        @click="handleItemDbClick(index)">
+                          v-for="(item, index) in store_player_audio_info.this_audio_lyrics_info_line_font"
+                          @click="handleItemDbClick(index)">
                         <div class="lyrics_text_active">
                           {{ item }}
                         </div>

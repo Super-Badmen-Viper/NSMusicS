@@ -7,7 +7,6 @@ import {
   SelectAllOn24Regular,
   ArrowSort24Regular,TextSortAscending20Regular,TextSortDescending20Regular,
   Search20Filled,
-  SaveEdit24Regular,
   Heart24Regular,Heart28Filled,
   ChevronLeft16Filled,ChevronRight16Filled,
   Filter20Filled,PaddingTop20Filled,PaddingDown20Filled,
@@ -24,7 +23,7 @@ import { Add, Close, Menu } from "@vicons/carbon";
 
 ////// this_view views_components of navie ui
 import { ref, onMounted, h, computed, watch, onBeforeUnmount } from 'vue';
-import {type DropdownOption, NIcon, type InputInst, NImage, NButton} from 'naive-ui';
+import {NIcon, type InputInst, NButton} from 'naive-ui';
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
@@ -250,7 +249,7 @@ const Type_Filter_Show = ref(false)
 ////// dynamicScroller of artistlist_view
 const dynamicScroller = ref(null as any);
 const onResize = () => {
-  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
+  // show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
   console.log('resize');
 }
 const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
@@ -262,7 +261,7 @@ const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any
   
   store_router_history_data_of_media.router_history_model_of_Media_scroller_value = viewEndIndex
 
-  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
+  // show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
 }
 const show_top_selectedlist = ref(false)
 const stopWatching_router_history_model_of_Media_scroll = watch(() => store_router_history_data_of_media.router_history_model_of_Media_scroll,(newValue) => {
@@ -297,7 +296,6 @@ const page_songlists_handleselected_updatevalue = (value: any) => {
   breadcrumbItems.value = store_view_media_page_logic.page_songlists_options.find(option => option.value === value)?.label || '';
   bool_start_play.value = true
   store_view_media_page_logic.set_media_Files_selected_all(false)
-  dynamicScroller.$el.scrollTop = 0;
 };
 
 ////// router history
@@ -795,7 +793,7 @@ const onScrollEnd = async () => {
   isScrolling.value = false;
 };
 const onScroll = async () => {
-  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
+  // show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
 };
 
 /////
@@ -925,10 +923,11 @@ onBeforeUnmount(() => {
           </n-modal>
 
           <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
-          <n-tooltip trigger="hover" placement="top">
+          <n-tooltip
+              v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
+              trigger="hover" placement="top">
             <template #trigger>
               <n-button
-                  v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
                   quaternary circle style="margin-left:4px" @click="click_open_bulk_operation">
                 <template #icon>
                   <n-icon :size="20" :depth="2"><MultiselectLtr20Filled/></n-icon>
@@ -1015,7 +1014,9 @@ onBeforeUnmount(() => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle style="margin-left:4px"
-                        @click="dynamicScroller.$el.scrollTop = 0;">
+                        @click="() =>{
+                          dynamicScroller.$el.scrollTop = 0;
+                        }">
                 <template #icon>
                   <n-icon :size="20" :depth="2"><PaddingTop20Filled/></n-icon>
                 </template>
@@ -1026,7 +1027,9 @@ onBeforeUnmount(() => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle style="margin-left:4px"
-                        @click="dynamicScroller.$el.scrollTop = dynamicScroller.$el.scrollHeight;">
+                        @click="() => {
+                          dynamicScroller.$el.scrollTop = dynamicScroller.$el.scrollHeight;
+                        }">
                 <template #icon>
                   <n-icon :size="20" :depth="2"><PaddingDown20Filled/></n-icon>
                 </template>
@@ -1042,7 +1045,8 @@ onBeforeUnmount(() => {
               <template #trigger>
                 <n-select size="small"
                     :value="store_view_media_page_logic.page_songlists_selected"
-                    :options="store_view_media_page_logic.page_songlists_options" style="width: 166px;"
+                    :options="store_view_media_page_logic.page_songlists_options"
+                    style="width: 181px;"
                     @update:value="page_songlists_handleselected_updatevalue" />
               </template>
               {{ $t('Select') + $t('LabelPlaylist') }}

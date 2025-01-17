@@ -4,7 +4,7 @@ import { Player_Configs_of_Audio_Info } from '@/data_models/app_Configs/class_Pl
 import { Player_Configs_of_UI } from '@/data_models/app_Configs/class_Player_Configs_of_UI';
 import {Library_Configs} from "@/data_models/app_Configs/class_Library_Configs";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-import {store_player_audio_logic} from "../../store/player/store_player_audio_logic";
+import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'
 import { isElectron } from '@/utils/electron/isElectron';``
 
@@ -54,10 +54,11 @@ export class Class_Get_System_Configs_Read {
             player_audio_channel:'',
             player_device_select:''
         }))
-    public library_Configs = ref(
-        new Library_Configs({
-            library: ''
-        }))
+    ///
+    public library_Configs = ref<Local_Configs_Props[]>([])
+    public server_Configs = ref<Server_Configs_Props[]>([])
+    public server_Configs_Current = ref<Server_Configs_Props>()
+    ///
     public player_Configs_of_UI = ref(
         new Player_Configs_of_UI({
             player_collapsed_album: null,
@@ -105,9 +106,6 @@ export class Class_Get_System_Configs_Read {
     public view_Media_History_select_Configs = ref<Interface_View_Router_Date>()
     public view_Album_History_select_Configs = ref<Interface_View_Router_Date>()
     public view_Artist_History_select_Configs = ref<Interface_View_Router_Date>()
-    ///
-    public server_Configs = ref<Server_Configs_Props[]>([])
-    public server_Configs_Current = ref<Server_Configs_Props>()
 
     constructor() {
         if(isElectron) {
@@ -194,12 +192,22 @@ export class Class_Get_System_Configs_Read {
                 if (this.app_Configs.value.hasOwnProperty(propertyName))
                     this.app_Configs.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
             });
+            ///
             db.prepare(`SELECT *
-                        FROM system_library_config`).all().forEach((row: Config_Props, index: number) => {
-                const propertyName = row.config_key;
-                if (this.library_Configs.value.hasOwnProperty(propertyName))
-                    this.library_Configs.value[propertyName] = row.config_value;// If this line of code ide displays an error, please ignore error
+                        FROM system_library_config`).all().forEach((row: Local_Configs_Props, index: number) => {
+                this.library_Configs.value.push(row);
             });
+            db.prepare(`SELECT *
+                        FROM system_servers_config`).all().forEach((row: Server_Configs_Props, index: number) => {
+                this.server_Configs.value.push(row);
+            });
+            db.prepare(`SELECT *
+                        FROM system_servers_config`).all().forEach((row: Server_Configs_Props) => {
+                if (row.id === '' + this.app_Configs.value['server_select']) {
+                    this.server_Configs_Current.value = row;
+                }
+            });
+            ///
             db.prepare(`SELECT *
                         FROM system_player_config_of_audio`).all().forEach((row: Config_Props, index: number) => {
                 const propertyName = row.config_key;
@@ -241,17 +249,6 @@ export class Class_Get_System_Configs_Read {
             db.prepare(`SELECT *
                         FROM system_view_artist_select_history`).all().forEach((row: Interface_View_Router_Date) => {
                 this.view_Artist_History_select_Configs.value = row;
-            });
-            ///
-            db.prepare(`SELECT *
-                        FROM system_servers_config`).all().forEach((row: Server_Configs_Props, index: number) => {
-                this.server_Configs.value.push(row);
-            });
-            db.prepare(`SELECT *
-                        FROM system_servers_config`).all().forEach((row: Server_Configs_Props) => {
-                if (row.id === '' + this.app_Configs.value['server_select']) {
-                    this.server_Configs_Current.value = row;
-                }
             });
 
             db.close();

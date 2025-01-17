@@ -326,7 +326,6 @@ const page_artistlists_handleselected_updatevalue = (value: any) => {
   store_view_artist_page_logic.page_artistlists_selected = value
   console.log('selected_value_for_artistlistall：'+value);
   breadcrumbItems.value = store_view_artist_page_logic.page_artistlists_options.find(option => option.value === value)?.label || '';
-  dynamicScroller.$el.scrollTop = 0;
 };
 
 ////// router history
@@ -624,7 +623,8 @@ onBeforeUnmount(() => {
                 <n-select
                     size="small"
                     :value="store_view_artist_page_logic.page_artistlists_selected"
-                    :options="store_view_artist_page_logic.page_artistlists_options" style="width: 166px;"
+                    :options="store_view_artist_page_logic.page_artistlists_options"
+                    style="width: 181px;"
                     @update:value="page_artistlists_handleselected_updatevalue" />
               </template>
               {{ $t('Select') + $t('LabelPlaylist') }}

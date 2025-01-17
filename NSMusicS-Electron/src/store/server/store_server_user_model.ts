@@ -157,11 +157,6 @@ export const store_server_user_model = reactive({
         }
     },
 })
-watch(() => store_server_user_model.library_path, (newValue) => {
-    store_app_configs_logic_save.save_system_library_config()
-    store_router_data_info.router_name = 'song';
-    store_app_configs_logic_save.save_system_config_of_View_Router_History()
-});
 watch(() => store_server_user_model.model_server_type_of_web, (newValue) => {
     store_server_user_model.model_server_type_of_local = !newValue
     if(store_server_user_model.model_server_type_of_web) {

@@ -19,6 +19,7 @@ import {store_view_album_page_info} from "@/store/view/album/store_view_album_pa
 import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info";
 import {store_router_data_logic} from "@/store/router/store_router_data_logic";
 import { isElectron } from '@/utils/electron/isElectron';
+import {store_local_db_info} from "../local/store_local_db_info";
 
 export const store_app_configs_logic_save = reactive({
     save_system_config_of_App_Configs(){
@@ -90,14 +91,10 @@ export const store_app_configs_logic_save = reactive({
             db.pragma('journal_mode = WAL');
             db.exec('PRAGMA foreign_keys = OFF');
 
-            const library_Configs = ref(
-                new Library_Configs({
-                    library: String(store_server_user_model.library_path)
-                }))
             let system_Configs_Write = new Class_Set_System_Configs_Write()
             system_Configs_Write.system_library_config(
                 db,
-                library_Configs.value)
+                store_local_db_info.local_config_of_all_user_of_sqlite)
             this.save_system_config_of_App_Configs()
             db.close();
             db = null;

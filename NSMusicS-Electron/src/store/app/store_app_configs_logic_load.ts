@@ -22,6 +22,8 @@ import {store_router_history_data_of_artist} from "@/store/router/store_router_h
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
 import error_album from '@/assets/img/error_album.jpg'
+import {store_local_db_info} from "@/store/local/store_local_db_info";
+import {isElectron} from "@/utils/electron/isElectron";
 
 export const store_app_configs_logic_load = reactive({
     app_configs_loading: false,
@@ -114,8 +116,53 @@ export const store_app_configs_logic_load = reactive({
             }
             store_view_media_page_logic.page_songlists_filter_year = Number('' + system_Configs_Read.app_Configs.value['page_songlists_filter_year'])
             /// library_Config
-            store_server_user_model.library_path = '' + system_Configs_Read.library_Configs.value['library']
-            console.log(store_server_user_model.library_path)
+            // store_server_user_model.library_path = '' + system_Configs_Read.library_Configs.value['library']
+            // console.log(store_server_user_model.library_path)
+            store_local_db_info.local_config_of_all_user_of_sqlite = system_Configs_Read.library_Configs.value
+            if(store_local_db_info.local_config_of_all_user_of_sqlite === null || store_local_db_info.local_config_of_all_user_of_sqlite.length === 0){
+                if(isElectron) {
+                    try {
+                        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+                        db.pragma('journal_mode = WAL');
+                        db.exec('PRAGMA foreign_keys = OFF');
+                        const stmt_paths = db.prepare(
+                            `SELECT path
+                            FROM ${store_server_user_model.media_file}`
+                        );
+                        const paths = stmt_paths.all() as { path: string }[];
+                        const rootPaths = new Set<string>();
+                        const folderNames = new Set<string>();
+                        paths.forEach((row) => {
+                            const path = row.path;
+                            const rootPath = this.extractRootPath(path);
+                            if (rootPath) {
+                                rootPaths.add(rootPath);
+                            }
+                            const folderName = this.extractFolderName(path);
+                            if (folderName) {
+                                folderNames.add(folderName);
+                            }
+                        });
+                        console.log(`音乐库根目录路径数量: ${rootPaths.size}`);
+                        console.log(`音乐库文件夹名数量: ${folderNames.size}`);
+                        Array.from(rootPaths).forEach((rootPath, index) => {
+                            store_local_db_info.local_config_of_all_user_of_sqlite.push({
+                                id: index + 1, // 使用索引作为 ID
+                                config_key: Array.from(folderNames)[index], // 文件夹名作为 config_key
+                                config_value: rootPath, // 根目录路径作为 config_value
+                            });
+                            store_local_db_info.local_config_of_all_user_of_select.push({
+                                label: `${Array.from(folderNames)[index]} - ${rootPath}`, // 标签格式：文件夹名 - 根目录路径
+                                value: rootPath, // 值：根目录路径
+                            });
+                            console.log(`根目录路径 ${index + 1}: ${rootPath} (文件夹名: ${Array.from(folderNames)[index]})`);
+                            console.log(row)
+                        });
+                    }catch (e) {
+                        console.error(e)
+                    }
+                }
+            }
             /// player_Configs_For_UI
             store_player_appearance.player_collapsed_album = '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_album'] === 'true'
             store_player_appearance.player_collapsed_skin = '' + system_Configs_Read.player_Configs_of_UI.value['player_collapsed_skin'] === 'true'
@@ -352,5 +399,26 @@ export const store_app_configs_logic_load = reactive({
             return !removeFlags[index];
         });
         store_app_configs_info.app_view_menuOptions = app_view_menuOptions
+    },
+    // 提取根目录路径的辅助函数
+    extractRootPath(fullPath: string): string | null {
+        if (!fullPath) return null;
+
+        // 假设路径格式为 驱动器盘符:\文件夹名\子文件夹\文件名
+        const parts = fullPath.split('\\');
+        if (parts.length > 1) {
+            return `${parts[0]}\\${parts[1]}`; // 返回根目录部分（如 E:\0_Music）
+        }
+        return null;
+    },
+    extractFolderName(fullPath: string): string | null {
+        if (!fullPath) return null;
+
+        // 假设路径格式为 驱动器盘符:\文件夹名\子文件夹\文件名
+        const parts = fullPath.split('\\');
+        if (parts.length > 1) {
+            return parts[1]; // 返回文件夹名部分（如 0_Music）
+        }
+        return null;
     }
 });

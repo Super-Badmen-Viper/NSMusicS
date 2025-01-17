@@ -822,13 +822,13 @@
                                     </div>
                                   </n-tag>
                                 </n-space>
-                                <DynamicScroller v-if="false"
-                                                 class="table" ref="scrollbar"
-                                                 style="overflow: auto;width: 780px;height: 130px;margin-top: 6px;"
-                                                 :items="store_server_user_model.library_path"
-                                                 :itemSize="70"
-                                                 :grid-items="3"
-                                                 :item-secondary-size="260">
+                                <DynamicScroller
+                                   class="table" ref="scrollbar"
+                                   style="overflow: auto;width: 780px;height: 130px;margin-top: 6px;"
+                                   :items="store_local_db_info.local_config_of_all_user_of_sqlite"
+                                   :itemSize="70"
+                                   :grid-items="3"
+                                   :item-secondary-size="260">
                                     <!-- :minItemSize="6"> -->
                                     <template #default="{ item, index, active }">
                                       <DynamicScrollerItem
@@ -950,8 +950,6 @@
                           </n-space>
                         </div>
                       </n-step>
-  <!--                    ""-->
-  <!--                    "4MINUTE - Hot Issues"-->
                     </n-steps>
                   </n-space>
                 </n-space>

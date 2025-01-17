@@ -352,7 +352,6 @@ const page_albumlists_handleSelected_updateValue = (value: any) => {
   store_view_album_page_logic.page_albumlists_selected = value
   console.log('selected_value_for_albumlistall：'+value);
   breadcrumbItems.value = store_view_album_page_logic.page_albumlists_options.find(option => option.value === value)?.label || '';
-  dynamicScroller.$el.scrollTop = 0;
 };
 
 ////// router history
@@ -679,7 +678,8 @@ onBeforeUnmount(() => {
                 <n-select
                     size="small"
                     :value="store_view_album_page_logic.page_albumlists_selected"
-                    :options="store_view_album_page_logic.page_albumlists_options" style="width: 166px;"
+                    :options="store_view_album_page_logic.page_albumlists_options"
+                    style="width: 181px;"
                     @update:value="page_albumlists_handleSelected_updateValue" />
               </template>
               {{ $t('Select') + $t('LabelPlaylist') }}
