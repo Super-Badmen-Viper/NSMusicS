@@ -36,7 +36,7 @@ const item_album_txt = ref<number>(item_album.value - 20)
 const itemSize = ref(180);
 const collapsed_width = ref<number>(1090);
 import error_album from '@/assets/img/error_album.jpg'
-import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
+import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
   if(item == undefined)
@@ -230,7 +230,7 @@ watch(() => store_view_home_page_info.home_selected_top_album_subscript, (newVal
 });
 
 ////// changed_data write to sqlite
-import {Set_AlbumInfo_To_LocalSqlite} from '@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite'
+import {Set_AlbumInfo_To_LocalSqlite} from '@/data_access/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite'
 import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id,favorite)

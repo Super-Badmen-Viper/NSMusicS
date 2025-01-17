@@ -2,7 +2,7 @@ import {reactive, watch} from 'vue'
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {darkTheme, lightTheme} from "naive-ui";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
+import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 
 export const store_app_configs_logic_theme = reactive({
     update_theme(value:any){

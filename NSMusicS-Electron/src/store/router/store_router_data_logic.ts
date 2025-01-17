@@ -15,7 +15,7 @@ import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
-} from "@/features/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
+} from "@/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
 import { isElectron } from '@/utils/electron/isElectron';
 

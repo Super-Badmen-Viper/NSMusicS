@@ -4,11 +4,11 @@ import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {
     Set_Navidrome_ALL_Data_To_LocalSqlite
-} from "@/features/servers_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
+} from "@/data_access/servers_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
 import {
     Get_PlaylistInfo_From_LocalSqlite
-} from "@/features/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
+} from "@/data_access/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
 import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
@@ -23,11 +23,11 @@ import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_li
 import {store_app_configs_logic_load} from "@/store/app/store_app_configs_logic_load";
 import {
     User_Authorization_ApiWebService_of_ND
-} from "@/features/servers_configs/navidrome_api/services_web/user_authorization/index_service";
+} from "@/data_access/servers_configs/navidrome_api/services_web/user_authorization/index_service";
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
-import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
-import {Audio_howler} from "@/models/song_Audio_Out/Audio_howler";
-import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
+import {Audio_node_mpv} from "@/data_models/song_Audio_Out/Audio_node_mpv";
+import {Audio_howler} from "@/data_models/song_Audio_Out/Audio_howler";
+import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 
 export const store_server_user_model = reactive({
     model_select: 'server',

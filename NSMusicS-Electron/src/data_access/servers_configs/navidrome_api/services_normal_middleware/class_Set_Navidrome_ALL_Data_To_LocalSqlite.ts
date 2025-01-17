@@ -1,14 +1,14 @@
-import {Playlists_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services_normal/playlists/index_service";
-import {Browsing_ApiService_of_ND} from "@/features/servers_configs/navidrome_api/services_normal/browsing/index_service";
+import {Playlists_ApiService_of_ND} from "../../../servers_configs/navidrome_api/services_normal/playlists/index_service";
+import {Browsing_ApiService_of_ND} from "../../../servers_configs/navidrome_api/services_normal/browsing/index_service";
 import {
     Media_Retrieval_ApiService_of_ND
-} from "@/features/servers_configs/navidrome_api/services_normal/media_retrieval/index_service";
+} from "../../../servers_configs/navidrome_api/services_normal/media_retrieval/index_service";
 import {store_server_users} from "@/store/server/store_server_users";
 import {
     Album$Songs_Lists_ApiService_of_ND
-} from "@/features/servers_configs/navidrome_api/services_normal/album$songs_lists/index_service";
-import {Set_AlbumInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite";
-import {Set_MediaInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
+} from "../../../servers_configs/navidrome_api/services_normal/album$songs_lists/index_service";
+import {Set_AlbumInfo_To_LocalSqlite} from "../../../sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite";
+import {Set_MediaInfo_To_LocalSqlite} from "../../../sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
 import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
 import {
     store_local_data_set_artistInfo

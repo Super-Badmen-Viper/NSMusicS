@@ -1,5 +1,5 @@
 import {reactive} from 'vue'
-import {Set_AlbumInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite";
+import {Set_AlbumInfo_To_LocalSqlite} from "@/data_access/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite";
 import {
     store_server_data_set_albumInfo
 } from "@/store/server/server_data_synchronization/store_server_data_set_albumInfo";

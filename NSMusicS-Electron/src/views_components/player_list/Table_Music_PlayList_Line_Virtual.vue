@@ -63,7 +63,7 @@ const handleItemClick_Rating = (id: any,rating: number) => {
   console.log('handleItemClick_Rating_id：'+id+'  _rating:'+rating)
 }
 import error_album from '@/assets/img/error_album.jpg'
-import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
+import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
   let result_src = error_album

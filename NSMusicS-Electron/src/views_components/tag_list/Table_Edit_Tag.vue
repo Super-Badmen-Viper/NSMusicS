@@ -11,7 +11,7 @@ import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
 import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
 import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info";
-import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
+import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 const message = useMessage()
 
 async function save_edit_tag() {

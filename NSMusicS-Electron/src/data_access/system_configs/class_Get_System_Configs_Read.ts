@@ -1,8 +1,8 @@
 import { ref } from 'vue'
-import { App_Configs } from '@/models/app_Configs/class_App_Configs';
-import { Player_Configs_of_Audio_Info } from '@/models/app_Configs/class_Player_Configs_of_Audio_Info';
-import { Player_Configs_of_UI } from '@/models/app_Configs/class_Player_Configs_of_UI';
-import {Library_Configs} from "@/models/app_Configs/class_Library_Configs";
+import { App_Configs } from '@/data_models/app_Configs/class_App_Configs';
+import { Player_Configs_of_Audio_Info } from '@/data_models/app_Configs/class_Player_Configs_of_Audio_Info';
+import { Player_Configs_of_UI } from '@/data_models/app_Configs/class_Player_Configs_of_UI';
+import {Library_Configs} from "@/data_models/app_Configs/class_Library_Configs";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_player_audio_logic} from "../../store/player/store_player_audio_logic";
 import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'

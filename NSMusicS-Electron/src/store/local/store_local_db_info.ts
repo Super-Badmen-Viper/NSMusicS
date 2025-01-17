@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import {Set_ALL_LocalData} from "@/features/sqlite3_local_configs/class_Set_ALL_LocalData";
+import {Set_ALL_LocalData} from "@/data_access/sqlite3_local_configs/class_Set_ALL_LocalData";
 
 export const store_local_db_info = reactive({
     result_local: true,

@@ -36,7 +36,7 @@ function getAssetImage(firstImage: string) {
   return new URL(firstImage, import.meta.url).href;
 }
 import error_album from '@/assets/img/error_album.jpg'
-import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
+import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 const handleImageError = async (event) => {
   const originalSrc = event.target.src;
   let result_src = error_album
@@ -628,10 +628,10 @@ import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchroni
 import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
-import {Audio_howler} from "@/models/song_Audio_Out/Audio_howler";
-import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
+import {Audio_howler} from "@/data_models/song_Audio_Out/Audio_howler";
+import {Audio_node_mpv} from "@/data_models/song_Audio_Out/Audio_node_mpv";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
-import os from "os";
+
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id,favorite)
   store_player_audio_info.this_audio_song_favorite = !favorite
@@ -840,13 +840,16 @@ const orderButonWidath = ref('202')
                  }"
                  justify="center">
 
-          <n-tooltip trigger="hover" placement="top">
+          <n-tooltip
+              v-if="!store_player_appearance.player_show"
+              trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary round size="small"
-                        @click="() => {
-                      store_player_audio_logic.drawer_order_show = !store_player_audio_logic.drawer_order_show;
-                      // backpanel_order_click
-                    }">
+              <n-button
+                  quaternary round size="small"
+                  @click="() => {
+                    store_player_audio_logic.drawer_order_show = !store_player_audio_logic.drawer_order_show;
+                    // backpanel_order_click
+                  }">
                 <template #icon>
                   <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
                     <ArrowAutofitDown24Regular/>
@@ -865,6 +868,28 @@ const orderButonWidath = ref('202')
             </template>
             {{ $t('Play') + $t('common.sortOrder') }}
           </n-tooltip>
+          <n-button
+              v-if="store_player_appearance.player_show"
+              quaternary round size="small"
+              @click="() => {
+                store_player_audio_logic.drawer_order_show = !store_player_audio_logic.drawer_order_show;
+                // backpanel_order_click
+              }">
+            <template #icon>
+              <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
+                <ArrowAutofitDown24Regular/>
+              </n-icon>
+              <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-2'">
+                <ArrowRepeatAll16Regular/>
+              </n-icon>
+              <n-icon :size="26" v-else-if="store_player_audio_logic.play_order === 'playback-3'">
+                <RepeatOneRound/>
+              </n-icon>
+              <n-icon :size="20" v-else-if="store_player_audio_logic.play_order === 'playback-4'">
+                <Random/>
+              </n-icon>
+            </template>
+          </n-button>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary round size="small" @click="play_skip_back_click">
@@ -896,7 +921,9 @@ const orderButonWidath = ref('202')
             </template>
             {{ $t('player.next') }}
           </n-tooltip>
-          <n-tooltip trigger="hover" placement="top">
+          <n-tooltip
+              v-if="!store_player_appearance.player_show"
+              trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary round size="small" @click="backpanel_voice_click">
                 <template #icon>
@@ -906,6 +933,13 @@ const orderButonWidath = ref('202')
             </template>
             {{ $t('HeaderAudioSettings') }}
           </n-tooltip>
+          <n-button
+              v-if="store_player_appearance.player_show"
+              quaternary round size="small" @click="backpanel_voice_click">
+            <template #icon>
+              <n-icon :size="26"><VolumeMedium/></n-icon>
+            </template>
+          </n-button>
         </n-space>
         <!-- grid_Middle_slider_area -->
         <n-space
@@ -1293,7 +1327,7 @@ const orderButonWidath = ref('202')
   position: absolute;
   bottom: 80px;
   width: auto;
-  margin-left: -190px;
+  margin-left: -180px;
   border-radius: 10px;
   pointer-events: none;
 }

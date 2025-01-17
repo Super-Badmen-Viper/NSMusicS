@@ -35,7 +35,7 @@ const { t } = useI18n({
 
 ////// songlist_view page_layout lineItems
 import error_album from '@/assets/img/error_album.jpg'
-import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
+import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
   let result_src = error_album
@@ -399,7 +399,7 @@ const handleItemClick_album = (album_id:string) => {
 }
 
 ////// changed_data write to sqlite
-import { Set_MediaInfo_To_LocalSqlite } from '@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite'
+import { Set_MediaInfo_To_LocalSqlite } from '@/data_access/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite'
 let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   click_count = 0;
@@ -794,6 +794,9 @@ const onScrollEnd = async () => {
   }
   isScrolling.value = false;
 };
+const onScroll = async () => {
+  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
+};
 
 /////
 const onRefreshSharp = async () => {
@@ -835,7 +838,7 @@ onBeforeUnmount(() => {
             </n-button>
           </n-space>
           <n-space v-if="store_router_data_info.store_router_history_data_of_web">
-            <n-button quaternary circle style="margin-left:2px"
+            <n-button quaternary circle style="margin-left:4px"
                       @click="() => {
                         store_view_media_page_logic.page_songlists_bool_show_search_area = true;
                         show_search_area();
@@ -849,7 +852,6 @@ onBeforeUnmount(() => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle
-                        style="margin-left:4px"
                         @click="show_search_area">
                 <template #icon>
                   <n-icon :size="20" :depth="2"><Search20Filled/></n-icon>
@@ -1088,6 +1090,7 @@ onBeforeUnmount(() => {
         @update="onUpdate"
         @scroll-start="onScrollStart"
         @scroll-end="onScrollEnd"
+        @scroll="onScroll"
       >
         <template #before>
           <div class="notice">

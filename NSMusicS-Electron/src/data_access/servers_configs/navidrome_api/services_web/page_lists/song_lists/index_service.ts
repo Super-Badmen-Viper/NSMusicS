@@ -1,6 +1,6 @@
 import {
     Navidrome_Api_Services_Web
-} from "@/features/servers_configs/navidrome_api/services_web/Navidrome_Api_Services_Web";
+} from "../../../../../servers_configs/navidrome_api/services_web/Navidrome_Api_Services_Web";
 
 export class Song_Lists_ApiWebService_of_ND extends Navidrome_Api_Services_Web {
     public async getSongList_ALL(

@@ -8,4 +8,4 @@ if (isElectron) {
     ipcRenderer = electronIpcRenderer;
 }
 
-export { ipcRenderer, isElectron };
+export {ipcRenderer, isElectron};

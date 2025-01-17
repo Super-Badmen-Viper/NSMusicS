@@ -59,7 +59,7 @@ const itemSize = ref(220);
 const gridItems = ref(5);
 const itemSecondarySize = ref(185);
 import error_album from '@/assets/img/error_album.jpg'
-import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
+import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 import {store_view_artist_page_logic} from "@/store/view/artist/store_view_artist_page_logic";
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
@@ -528,6 +528,9 @@ const onScrollEnd = async () => {
   }
   isScrolling.value = false;
 };
+const onScroll = async () => {
+  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
+};
 
 //////
 const onRefreshSharp = async () => {
@@ -567,10 +570,18 @@ onBeforeUnmount(() => {
               </template>
             </n-button>
           </n-space>
+          <n-space v-if="store_router_data_info.store_router_history_data_of_web">
+            <n-button quaternary circle style="margin-left:4px"
+                      @click="show_search_area">
+              <template #icon>
+                <n-icon size="20" :depth="2"><ChevronLeft16Filled/></n-icon>
+              </template>
+            </n-button>
+          </n-space>
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary circle style="margin-left:4px" @click="show_search_area">
+              <n-button quaternary circle @click="show_search_area">
                 <template #icon>
                   <n-icon :size="20"><Search20Filled/></n-icon>
                 </template>
@@ -692,6 +703,7 @@ onBeforeUnmount(() => {
         @update="onUpdate"
         @scroll-start="onScrollStart"
         @scroll-end="onScrollEnd"
+        @scroll="onScroll"
       >
         <template #before>
           <div class="notice">

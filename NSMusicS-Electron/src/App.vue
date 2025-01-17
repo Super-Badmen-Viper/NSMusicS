@@ -3,18 +3,16 @@
   import {
     DarkTheme24Filled,
     DocumentHeart20Regular,
-    Flag16Regular,
     Home28Regular,
     FullScreenMaximize24Filled,
     FullScreenMinimize24Filled,
     PeopleCommunity16Regular,
     SlideMicrophone32Regular,
-    TextIndentIncreaseLtr20Filled as lyric,
-    FullScreenMaximize16Regular,Settings48Regular
+    TextIndentIncreaseLtr20Filled,
+    Settings48Regular
   } from '@vicons/fluent'
   import {
     AlbumFilled,
-    LibraryMusicOutlined,
     MusicNoteRound,
     BrowserUpdatedFilled ,
     MinusRound,
@@ -23,16 +21,13 @@
   import {
     Close,
     Hearing,
-    DataBackup,
     UserAvatarFilledAlt,
-    Clean,
     MediaCast,
     BareMetalServer
   } from '@vicons/carbon'
   import {
     ArrowsMaximize,
     ArrowsMinimize,
-    Minus
   } from '@vicons/tabler'
 
   ////// views_components
@@ -66,7 +61,7 @@
   import {store_view_artist_page_fetchData} from "@/store/view/artist/store_view_artist_page_fetchData";
 
   ////// BrowserWindow
-  import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
+  import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
   window.addEventListener('resize', () => {
     store_app_configs_info.window_innerWidth = window.innerWidth;
     store_app_configs_info.window_innerHeight = window.innerHeight;
@@ -116,7 +111,7 @@
           {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.guessLike'))),key: 'update',icon: renderIcon(DocumentHeart20Regular)},
           {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.identifySong'))),key: 'update',icon: renderIcon(Hearing)},
           {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'update',icon: renderIcon(QueueMusicRound)},
-          {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'update',icon: renderIcon(lyric)},
+          {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'update',icon: renderIcon(TextIndentIncreaseLtr20Filled)},
       )
     if(store_app_configs_info.menuOptions_selectd_model_4)
       store_app_configs_info.app_view_menuOptions.push(
@@ -616,7 +611,6 @@
   const computed_i18n_Label_Update = computed(() => t('filter.recentlyUpdated'));
 
   ////
-  import { provide } from "vue";
   import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
   import View_Edit_Tag from "@/views_drawer/View_Edit_Tag.vue";
   import View_Player_Effect from "@/views_drawer/View_Player_Effect.vue";

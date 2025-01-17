@@ -38,7 +38,7 @@ const computed_i18n_Label_ViewSetConfig_Cover_4 = computed(() => t('nsmusics.vie
 // audio_class & player_bar & player_view
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_player_view} from "@/store/player/store_player_view";
-import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
+import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 import {store_player_appearance} from "@/store/player/store_player_appearance";
 
 ////// lyircs load

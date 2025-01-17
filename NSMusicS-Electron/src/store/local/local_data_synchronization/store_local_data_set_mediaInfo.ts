@@ -1,5 +1,5 @@
 import {reactive} from 'vue'
-import {Set_MediaInfo_To_LocalSqlite} from "@/features/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
+import {Set_MediaInfo_To_LocalSqlite} from "@/data_access/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {
     store_server_data_set_artistInfo

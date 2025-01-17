@@ -1,10 +1,10 @@
 import {reactive, watch} from 'vue'
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-import {Audio_node_mpv} from "@/models/song_Audio_Out/Audio_node_mpv";
-import {Audio_howler} from "@/models/song_Audio_Out/Audio_howler";
+import {Audio_node_mpv} from "@/data_models/song_Audio_Out/Audio_node_mpv";
+import {Audio_howler} from "@/data_models/song_Audio_Out/Audio_howler";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_player_view} from "./store_player_view";
-import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
+import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 
 export const store_player_audio_logic = reactive({
     player: new Audio_node_mpv(),

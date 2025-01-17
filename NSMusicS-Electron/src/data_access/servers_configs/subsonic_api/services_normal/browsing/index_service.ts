@@ -1,4 +1,4 @@
-import {Subsonic_Api_Services_Normal} from "@/features/servers_configs/subsonic_api/services_normal/Subsonic_Api_Services_Normal";
+import {Subsonic_Api_Services_Normal} from "../../../../servers_configs/subsonic_api/services_normal/Subsonic_Api_Services_Normal";
 
 export class Browsing_ApiService_of_ND extends Subsonic_Api_Services_Normal {
     public async getMusicFolders(username: string,token: string,salt: string): Promise<any> {

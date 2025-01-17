@@ -4,32 +4,32 @@ import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {store_view_home_page_info} from "@/store/view/home/store_view_home_page_info";
 import {
     Home_Lists_ApiWebService_of_ND
-} from "@/features/servers_configs/subsonic_api/services_web/page_lists/home_lists/index_service";
+} from "../../../servers_configs/subsonic_api/services_web/page_lists/home_lists/index_service";
 import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info";
 import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
 import {
     Media_library_scanning_ApiService_of_ND
-} from "@/features/servers_configs/subsonic_api/services_normal/media_library_scanning/index_service";
+} from "../../../servers_configs/subsonic_api/services_normal/media_library_scanning/index_service";
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
 import {
     Artist_Lists_ApiWebService_of_ND
-} from "@/features/servers_configs/subsonic_api/services_web/page_lists/artist_lists/index_service";
+} from "../../../servers_configs/subsonic_api/services_web/page_lists/artist_lists/index_service";
 import {
     Album_Lists_ApiWebService_of_ND
-} from "@/features/servers_configs/subsonic_api/services_web/page_lists/album_lists/index_service";
+} from "../../../servers_configs/subsonic_api/services_web/page_lists/album_lists/index_service";
 import {
     Song_Lists_ApiWebService_of_ND
-} from "@/features/servers_configs/subsonic_api/services_web/page_lists/song_lists/index_service";
+} from "../../../servers_configs/subsonic_api/services_web/page_lists/song_lists/index_service";
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {
     Playlists_ApiService_of_ND
-} from "@/features/servers_configs/subsonic_api/services_normal/playlists/index_service";
+} from "../../../servers_configs/subsonic_api/services_normal/playlists/index_service";
 import {
     Album$Songs_Lists_ApiService_of_ND
-} from "@/features/servers_configs/subsonic_api/services_normal/album$songs_lists/index_service";
+} from "../../../servers_configs/subsonic_api/services_normal/album$songs_lists/index_service";
 import {
     Browsing_ApiService_of_ND
-} from "@/features/servers_configs/subsonic_api/services_normal/browsing/index_service";
+} from "../../../servers_configs/subsonic_api/services_normal/browsing/index_service";
 import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";

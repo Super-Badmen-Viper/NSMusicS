@@ -128,7 +128,7 @@
   });
 
   import { useMessage } from 'naive-ui'
-  import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
+  import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
   const message = useMessage()
   ////// server
   const Type_Server_Kinds = [

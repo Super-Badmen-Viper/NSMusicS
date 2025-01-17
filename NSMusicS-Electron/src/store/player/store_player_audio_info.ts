@@ -9,7 +9,7 @@ import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_li
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
 import error_album from '@/assets/img/error_album.jpg'
-import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
+import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 
 export const store_player_audio_info = reactive({
     this_audio_file_path: '',

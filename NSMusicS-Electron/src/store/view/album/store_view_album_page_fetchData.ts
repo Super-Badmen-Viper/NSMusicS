@@ -15,7 +15,7 @@ import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
-} from "@/features/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
+} from "@/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
