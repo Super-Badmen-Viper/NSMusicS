@@ -834,6 +834,17 @@ onBeforeUnmount(() => {
               </template>
             </n-button>
           </n-space>
+          <n-space v-if="store_router_data_info.store_router_history_data_of_web">
+            <n-button quaternary circle style="margin-left:2px"
+                      @click="() => {
+                        store_view_media_page_logic.page_songlists_bool_show_search_area = true;
+                        show_search_area();
+                      }">
+              <template #icon>
+                <n-icon size="20" :depth="2"><ChevronLeft16Filled/></n-icon>
+              </template>
+            </n-button>
+          </n-space>
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
@@ -852,7 +863,7 @@ onBeforeUnmount(() => {
             <template #trigger>
               <n-input-group style="width: 144px;">
                 <n-input
-                    style="width: 238px;"
+                    style="width: 144px;"
                     ref="input_search_InstRef"
                     v-model:value="store_view_media_page_logic.page_songlists_input_search_Value"
                     @keydown.enter="click_search"/>
@@ -1023,7 +1034,7 @@ onBeforeUnmount(() => {
           </n-tooltip>
         </n-space>
         <n-space align="center">
-          <n-space v-if="show_top_selectedlist && bool_start_play"
+          <n-space v-if="show_top_selectedlist"
                    style="margin-left: 7px;margin-bottom: 14px;">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>

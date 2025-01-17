@@ -582,9 +582,9 @@ onBeforeUnmount(() => {
                      v-if="bool_show_search_area">
             <template #trigger>
               <n-input-group
-                  style="width: 238px;">
+                  style="width: 144px;">
                 <n-input
-                    style="width: 238px;"
+                    style="width: 144px;"
                     ref="input_search_InstRef"
                     v-model:value="store_view_album_page_logic.page_albumlists_input_search_Value"
                     @keydown.enter="click_search"/>

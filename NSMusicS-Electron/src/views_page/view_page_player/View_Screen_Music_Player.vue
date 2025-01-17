@@ -42,10 +42,12 @@ import { ipcRenderer, isElectron } from '@/utils/electron/isElectron';
 import {store_player_appearance} from "@/store/player/store_player_appearance";
 
 ////// lyircs load
-let unwatch = watch(() => store_player_audio_info.this_audio_lyrics_string, (value) => {
-  load_lyrics();
-  store_player_audio_logic.player_slider_click = true;
-  scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num);
+let unwatch = watch(() => store_player_audio_info.this_audio_lyrics_loaded_complete, (newValue) => {
+  if(newValue) {
+    load_lyrics();
+    store_player_audio_logic.player_slider_click = true;
+    scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num);
+  }
 });
 onMounted(() => {
   load_lyrics()
@@ -173,7 +175,7 @@ const scrollToItem = (index: number) => {
   itemElements[index].style.filter = 'blur(0px)';
   itemElements[index].style.textShadow = '0 0 1px White';
   itemElements[index].style.transition = 'color 0.5s, transform 0.5s';
-  if(store_player_appearance.player_collapsed_album === false){
+  if(!store_player_appearance.player_collapsed_album){
     itemElements[index].style.transform = 'scale(1.1) translateY(0px)';
     itemElements[index].style.transformOrigin = 'left center';
     itemElements[index].style.width = 'calc(36.3vw)'
@@ -514,7 +516,7 @@ const player_theme_set_theme = (index:number) => {
 
   const index_lyric = store_player_view.currentScrollIndex + store_player_audio_info.this_audio_lyrics_info_line_num
   const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
-  if(store_player_appearance.player_collapsed_album === false){
+  if(!store_player_appearance.player_collapsed_album){
     itemElements[index_lyric].style.transformOrigin = 'left center';
   }else{
     itemElements[index_lyric].style.transformOrigin = 'center';

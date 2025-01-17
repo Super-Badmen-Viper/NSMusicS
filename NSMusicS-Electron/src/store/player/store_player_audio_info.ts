@@ -40,6 +40,7 @@ export const store_player_audio_info = reactive({
     page_top_album_name: '',
 
     this_audio_lyrics_string: '',
+    this_audio_lyrics_loaded_complete: false,
     this_audio_lyrics_info_line_font: [] as any[],
     this_audio_lyrics_info_line_time: [] as any[],
 
@@ -174,6 +175,7 @@ watch(() => store_player_audio_info.this_audio_album_id, (newValue) => {
     store_local_data_set_albumInfo.Set_AlbumInfo_To_PlayCount_of_Album(newValue)
 });
 watch(() => store_player_audio_info.this_audio_lyrics_string, (newValue) => {
+    store_player_audio_info.this_audio_lyrics_loaded_complete = false
     if(newValue === undefined || newValue === 'undefined' || newValue.length === 0){
         store_player_audio_info.this_audio_lyrics_string =
             '[00:01.00]未找到可用歌词\n'
@@ -249,4 +251,5 @@ watch(() => store_player_audio_info.this_audio_lyrics_string, (newValue) => {
         const [minutes, seconds] = line_times[i].split(':');
         store_player_audio_info.this_audio_lyrics_info_line_time[i] = (parseInt(minutes) * 60 + parseInt(seconds)) * 1000;
     }
+    store_player_audio_info.this_audio_lyrics_loaded_complete = true
 });
