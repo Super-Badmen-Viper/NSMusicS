@@ -117,14 +117,18 @@ export const store_app_configs_logic_load = reactive({
             store_view_media_page_logic.page_songlists_filter_year = Number('' + system_Configs_Read.app_Configs.value['page_songlists_filter_year'])
             /// library_Config
             store_server_user_model.library_path = '' + system_Configs_Read.library_Configs.value['library']
-            if(store_server_user_model.library_path.length === 0) {
+            if(
+                store_server_user_model.library_path === undefined ||
+                store_server_user_model.library_path === 'undefined' ||
+                store_server_user_model.library_path.length === 0
+            ) {
                 store_local_db_info.local_config_of_all_user_of_sqlite = system_Configs_Read.library_Configs.value
             }
             if(store_local_db_info.local_config_of_all_user_of_sqlite === null || store_local_db_info.local_config_of_all_user_of_sqlite.length === 0){
                 if(isElectron) {
                     try {
                         let rootPath = store_server_user_model.library_path;
-                        if(rootPath === undefined || rootPath === 'undefined' || rootPath.length === 0){
+                        if(rootPath != undefined && rootPath != 'undefined' && rootPath.length > 0){
                             const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
                             db.pragma('journal_mode = WAL');
                             db.exec('PRAGMA foreign_keys = OFF');
@@ -137,23 +141,23 @@ export const store_app_configs_logic_load = reactive({
                             } finally {
                                 db.close();
                             }
-                        }
-                        if(rootPath) {
-                            const folderName = this.extractFolderName(rootPath);
-                            if (rootPath && folderName) {
-                                store_local_db_info.local_config_of_all_user_of_sqlite.push({
-                                    id: store_local_db_info.local_config_of_all_user_of_sqlite.length + 1, // 使用当前长度 + 1 作为 ID
-                                    config_key: folderName,
-                                    config_value: rootPath,
-                                });
-                                store_local_db_info.local_config_of_all_user_of_select.push({
-                                    label: `${folderName} - ${rootPath}`,
-                                    value: rootPath,
-                                });
-                                console.log(`添加根目录路径: ${rootPath} (文件夹名: ${folderName})`);
-                                store_app_configs_logic_save.save_system_library_config()
-                            } else {
-                                console.error('无法提取根目录路径或文件夹名称');
+                            if(rootPath) {
+                                const folderName = this.extractFolderName(rootPath);
+                                if (rootPath && folderName) {
+                                    store_local_db_info.local_config_of_all_user_of_sqlite.push({
+                                        id: store_local_db_info.local_config_of_all_user_of_sqlite.length + 1, // 使用当前长度 + 1 作为 ID
+                                        config_key: folderName,
+                                        config_value: rootPath,
+                                    });
+                                    store_local_db_info.local_config_of_all_user_of_select.push({
+                                        label: `${folderName} - ${rootPath}`,
+                                        value: rootPath,
+                                    });
+                                    console.log(`添加根目录路径: ${rootPath} (文件夹名: ${folderName})`);
+                                    store_app_configs_logic_save.save_system_library_config()
+                                } else {
+                                    console.error('无法提取根目录路径或文件夹名称');
+                                }
                             }
                         }
                     }catch (e) {

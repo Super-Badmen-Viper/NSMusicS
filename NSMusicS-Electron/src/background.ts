@@ -7,7 +7,7 @@ const os = require('os');
 /// electron
 import {
     app, BrowserWindow,
-    screen, webFrame,
+    screen,
     globalShortcut,
     Tray, Menu, nativeImage, nativeTheme
 } from 'electron'
@@ -1542,42 +1542,61 @@ async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
             }
         };
     });
+
+// 计算每个艺术家的歌曲总数和专辑总数
     resultArray.forEach(music => {
         let song_count = 0;
-        music.artist.albums.forEach((album: any) => {
+        music.artist.albums.forEach(album => {
             song_count += album.media.length;
         });
         music.artist.song_count = song_count;
         music.artist.album_count = music.artist.albums.length;
     });
+
+// 处理艺术家
     resultArray.forEach(music => {
         if (!isArtistExists(db, music.artist.name)) {
+            // 如果艺术家不存在，插入艺术家
             insertData(db, 'artist', music.artist);
         } else {
+            // 如果艺术家已存在，获取其 ID 并更新关联关系
             music.artist.id = getArtistExists(db, music.artist.name);
-            music.artist.albums.forEach((album: any) => {
+            music.artist.albums.forEach(album => {
                 album.artist_id = music.artist.id;
-                album.media.forEach((media: any) => {
+                album.media.forEach(media => {
                     media.artist_id = music.artist.id;
                 });
             });
         }
     });
+
+// 处理专辑和歌曲
     resultArray.forEach(music => {
-        music.artist.albums.forEach((album: any) => {
+        music.artist.albums.forEach(album => {
             if (!isAlbumExists(db, album.name, album.artist)) {
+                // 如果专辑不存在，插入专辑
                 insertData(db, 'album', album);
-                album.media.forEach((media: any) => {
+                album.media.forEach(media => {
                     if (!isMediaExists(db, media.path)) {
+                        // 如果歌曲不存在，插入歌曲
                         insertData(db, 'media_file', media);
                     } else {
+                        // 如果歌曲已存在，获取其 ID
                         media.id = getMediaExists(db, media.path);
                     }
                 });
             } else {
+                // 如果专辑已存在，获取其 ID 并更新关联关系
                 album.id = getAlbumExists(db, album.name, album.artist);
-                album.media.forEach((media: any) => {
+                album.media.forEach(media => {
                     media.album_id = album.id;
+                    if (!isMediaExists(db, media.path)) {
+                        // 如果歌曲不存在，插入歌曲
+                        insertData(db, 'media_file', media);
+                    } else {
+                        // 如果歌曲已存在，获取其 ID
+                        media.id = getMediaExists(db, media.path);
+                    }
                 });
             }
         });
