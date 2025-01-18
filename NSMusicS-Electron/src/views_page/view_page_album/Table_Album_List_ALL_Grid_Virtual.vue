@@ -555,27 +555,42 @@ onBeforeUnmount(() => {
       <n-space vertical @wheel.prevent style="overflow: hidden;">
         <n-space align="center">
           <n-space v-if="store_router_data_info.store_router_history_data_of_local">
-            <n-button quaternary circle style="margin-left:2px" @click="get_router_history_model_pervious">
-              <template #icon>
-                <n-icon :size="20"><ChevronLeft16Filled/></n-icon>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button quaternary circle style="margin-left:2px" @click="get_router_history_model_pervious">
+                  <template #icon>
+                    <n-icon :size="20"><ChevronLeft16Filled/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
+              {{ $t('common.backward') }}
+            </n-tooltip>
             <div style="margin-top: 4px;">
               {{ store_router_history_data_of_album.router_select_history_date_of_Album?.id ?? '' }} / {{ store_router_history_data_of_album.router_history_datas_of_Album?.length ?? '' }}
             </div>
-            <n-button quaternary circle style="margin-left:4px" @click="get_router_history_model_next">
-              <template #icon>
-                <n-icon :size="20"><ChevronRight16Filled/></n-icon>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button quaternary circle style="margin-left:4px" @click="get_router_history_model_next">
+                  <template #icon>
+                    <n-icon :size="20"><ChevronRight16Filled/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
+              {{ $t('common.forward') }}
+            </n-tooltip>
           </n-space>
           <n-space v-if="store_router_data_info.store_router_history_data_of_web">
-            <n-button quaternary circle style="margin-left:4px"
-                      @click="show_search_area">
-              <template #icon>
-                <n-icon size="20" :depth="2"><ChevronLeft16Filled/></n-icon>
+            <n-tooltip trigger="hover" placement="top">
+              <template #trigger>
+                <n-button quaternary circle style="margin-left:4px"
+                          @click="show_search_area">
+                  <template #icon>
+                    <n-icon size="20" :depth="2"><ChevronLeft16Filled/></n-icon>
+                  </template>
+                </n-button>
               </template>
-            </n-button>
+              {{ $t('common.backward') }}
+            </n-tooltip>
           </n-space>
 
           <n-tooltip trigger="hover" placement="top">

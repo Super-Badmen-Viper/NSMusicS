@@ -1296,7 +1296,7 @@ async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
                 const albumId = `${artistName}-${albumName}`;
                 // album
                 let album_artist = ''
-                if (taglibFile.tag != undefined && taglibFile.tag.albumArtists != undefined) {
+                if (taglibFile.tag.albumArtists != undefined) {
                     album_artist =
                         taglibFile.tag.albumArtists ||
                         file_name_model ?
@@ -1319,7 +1319,7 @@ async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
                 const description = taglibFile.tag.description || ''
                 // media
                 let title = ''
-                if (taglibFile.tag != undefined && taglibFile.tag.performers != undefined) {
+                if (taglibFile.tag.performers != undefined) {
                     title =
                         taglibFile.tag.title ||
                         (file_name_model ?

@@ -13,8 +13,3 @@ export const store_local_db_info = reactive({
         set_ALL_LocalData.Set_ALL_LocalData_To_Delete()
     }
 });
-watch(() => store_local_db_info.local_config_of_all_user_of_sqlite, (newValue) => {
-    store_app_configs_logic_save.save_system_library_config()
-    store_router_data_info.router_name = 'song';
-    store_app_configs_logic_save.save_system_config_of_View_Router_History()
-});

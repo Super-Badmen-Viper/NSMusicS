@@ -173,14 +173,15 @@ export const store_router_data_logic = reactive({
                      FROM ${store_server_user_model.media_file}`);
                 store_view_media_page_info.media_starred_count = this.getCount(
                     db,
-                    `SELECT COUNT(*) AS count
+                    `SELECT COUNT(DISTINCT item_id) AS count
                      FROM ${store_server_user_model.annotation}
-                     WHERE starred = 1 AND item_type='media_file'`);
+                     WHERE starred = 1 AND item_type='media_file' AND play_date IS NOT NULL`
+                );
                 store_view_media_page_info.media_recently_count = this.getCount(
                     db,
                     `SELECT COUNT(*) AS count
                      FROM ${store_server_user_model.annotation}
-                     WHERE item_type='media_file' AND play_count > 0`);
+                     WHERE item_type='media_file' AND play_count > 0 AND play_date IS NOT NULL`);
                 ///
                 store_view_album_page_info.album_item_count = this.getCount(
                     db,
@@ -190,12 +191,12 @@ export const store_router_data_logic = reactive({
                     db,
                     `SELECT COUNT(*) AS count
                      FROM ${store_server_user_model.annotation}
-                     WHERE starred = 1 AND item_type='album'`);
+                     WHERE starred = 1 AND item_type='album' AND play_date IS NOT NULL`);
                 store_view_album_page_info.album_recently_count = this.getCount(
                     db,
                     `SELECT COUNT(*) AS count
                      FROM ${store_server_user_model.annotation}
-                     WHERE item_type='album' AND play_count > 0`);
+                     WHERE item_type='album' AND play_count > 0 AND play_date IS NOT NULL`);
                 ///
                 store_view_artist_page_info.artist_item_count = this.getCount(
                     db,
@@ -205,12 +206,12 @@ export const store_router_data_logic = reactive({
                     db,
                     `SELECT COUNT(*) AS count
                      FROM ${store_server_user_model.annotation}
-                     WHERE starred = 1 AND item_type='artist'`);
+                     WHERE starred = 1 AND item_type='artist' AND play_date IS NOT NULL`);
                 store_view_artist_page_info.artist_recently_count = this.getCount(
                     db,
                     `SELECT COUNT(*) AS count
                      FROM ${store_server_user_model.annotation}
-                     WHERE item_type='artist' AND play_count > 0`);
+                     WHERE item_type='artist' AND play_count > 0 AND play_date IS NOT NULL`);
                 ///
                 store_view_media_page_info.media_playlist_count = this.getCount(
                     db,

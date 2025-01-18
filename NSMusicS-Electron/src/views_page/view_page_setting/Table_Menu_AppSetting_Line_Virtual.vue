@@ -273,13 +273,31 @@
   }
 
   ////// local
-  const timer_percentage = ref<NodeJS.Timeout | null>(null);
   async function select_Folder() {
     try {
       if(isElectron) {
         const folderPath = await ipcRenderer.invoke('library-select-folder');
         if (folderPath) {
-          store_server_user_model.library_path = folderPath;
+          const folderName = folderPath.split('\\').pop(); // 提取文件夹名
+          const rootPath = folderPath; // 根目录路径
+          const isConfigExists = store_local_db_info.local_config_of_all_user_of_sqlite.some(
+              config => config.config_value === rootPath
+          );
+          if (!isConfigExists && folderName) {
+            const index = store_local_db_info.local_config_of_all_user_of_sqlite.length;
+            store_local_db_info.local_config_of_all_user_of_sqlite.push({
+              id: index + 1, // 使用索引作为 ID
+              config_key: folderName, // 使用提取的文件夹名作为 config_key
+              config_value: rootPath, // 根目录路径作为 config_value
+            });
+            store_local_db_info.local_config_of_all_user_of_select.push({
+              label: `${folderName} - ${rootPath}`, // 标签格式：文件夹名 - 根目录路径
+              value: rootPath, // 值：根目录路径
+            });
+            store_app_configs_logic_save.save_system_library_config()
+          } else {
+            console.error('文件夹名为空或配置已存在，无法添加');
+          }
         }
       } else {
         // other
@@ -292,34 +310,38 @@
   async function begin_import_Folder(cover: boolean) {
     try {
       if(isElectron) {
-        if (store_server_user_model.library_path) {
-          clearInterval(timer_percentage.value);
+        if (store_local_db_info.local_config_of_all_user_of_sqlite) {
           console.log('Before invoking node-taglib-sharp-get-directory-filePath');
           store_server_users.percentage_of_local = 10;
-          const folderPath = store_server_user_model.library_path
-          const file_name_model = true
-          const error_log = await ipcRenderer.invoke('node-taglib-sharp-get-directory-filePath',
-              {
+          const totalTasks = store_local_db_info.local_config_of_all_user_of_sqlite.length;
+          const progressIncrement = (100 - store_server_users.percentage_of_local) / totalTasks;
+          for (const config of store_local_db_info.local_config_of_all_user_of_sqlite) {
+            const folderPath = config.config_value;
+            const file_name_model = true;
+            try {
+              console.log(`Processing folder path: ${folderPath}`);
+              const success = await ipcRenderer.invoke('node-taglib-sharp-get-directory-filePath', {
                 folderPath,
                 cover,
-                file_name_model
-              }
-          )
-              .then(success => {
-                console.log('node-taglib-sharp-get-directory-filePath succeeded:', success);
-                clearInterval(timer_percentage.value);
-              })
-              .catch(error => {
-                console.error('node-taglib-sharp-get-directory-filePath failed:', error);
-                store_local_db_info.result_local = false;
+                file_name_model,
               });
-          console.error(error_log)
-          timer_percentage.value = setInterval(synchronize_percentage_of_library_path_search, 200);
-          console.log('Folder path selected:', folderPath);
+              console.log('node-taglib-sharp-get-directory-filePath succeeded:', success);
+              store_server_users.percentage_of_local += progressIncrement;
+              console.log(`Current progress: ${store_server_users.percentage_of_local}%`);
+            } catch (error) {
+              console.error('node-taglib-sharp-get-directory-filePath failed:', error);
+              store_local_db_info.result_local = false;
+              store_server_users.percentage_of_local += progressIncrement;
+              console.log(`Current progress: ${store_server_users.percentage_of_local}%`);
+            }
+          }
+          store_server_users.percentage_of_local = 100;
+          console.log('All tasks completed. Final progress: 100%');
+          console.log('All folder paths processed');
           // reset data
-          await store_server_user_model.switchToMode_Local()
-          store_server_user_model.model_select = 'local'
-          store_app_configs_logic_save.save_system_config_of_App_Configs()
+          await store_server_user_model.switchToMode_Local();
+          store_server_user_model.model_select = 'local';
+          store_app_configs_logic_save.save_system_config_of_App_Configs();
           //
           await ipcRenderer.send('window-reset-all')
         }
@@ -328,13 +350,70 @@
       }
     } catch (error) {
       console.error('Error selecting folder:', error);
-      clearInterval(timer_percentage.value);
       store_server_users.percentage_of_local = 0;
     }
   }
-  async function synchronize_percentage_of_library_path_search(){
-    if(isElectron) {
-      store_server_users.percentage_of_local = await ipcRenderer.invoke('node-taglib-sharp-percentage');
+  /// server delete
+  async function update_local_deleteFolder(id: string) {
+    try {
+      const result = await store_local_data_select_logic.update_local_deleteFolder(id);
+      if (result) {
+        message.success(t('form.editPlaylist.success'));
+        const deletedConfig = store_local_db_info.local_config_of_all_user_of_sqlite.find(
+            (config) => config.id === id
+        );
+        if (deletedConfig) {
+          store_local_db_info.local_config_of_all_user_of_sqlite =
+              store_local_db_info.local_config_of_all_user_of_sqlite.filter(
+                  (config) => config.id !== id
+              );
+          store_local_db_info.local_config_of_all_user_of_select =
+              store_local_db_info.local_config_of_all_user_of_select.filter(
+                  (item) => item.value !== deletedConfig.config_value
+              );
+        }
+      } else {
+        message.error(t('LibraryInvalidItemIdError'), { duration: 3000 });
+      }
+    } catch {
+      message.error(t('LibraryInvalidItemIdError'), { duration: 3000 });
+    }
+  }
+  /// server update
+  async function update_local_setFolder(id: string, local_name: string, local_url: string) {
+    try {
+      const result = await store_local_data_select_logic.update_local_setFolder(
+          id,
+          local_name,
+          local_url
+      );
+      if (result) {
+        message.success(t('form.editPlaylist.success'));
+        const sqliteIndex = store_local_db_info.local_config_of_all_user_of_sqlite.findIndex(
+            (config) => config.id === id
+        );
+        if (sqliteIndex !== -1) {
+          store_local_db_info.local_config_of_all_user_of_sqlite[sqliteIndex] = {
+            ...store_local_db_info.local_config_of_all_user_of_sqlite[sqliteIndex],
+            config_key: local_name,
+            config_value: local_url,
+          };
+        }
+        const selectIndex = store_local_db_info.local_config_of_all_user_of_select.findIndex(
+            (item) => item.value === local_url
+        );
+        if (selectIndex !== -1) {
+          store_local_db_info.local_config_of_all_user_of_select[selectIndex] = {
+            ...store_local_db_info.local_config_of_all_user_of_select[selectIndex],
+            label: `${local_name} - ${local_url}`,
+            value: local_url,
+          };
+        }
+      } else {
+        message.error(t('LibraryInvalidItemIdError'), { duration: 3000 });
+      }
+    } catch {
+      message.error(t('LibraryInvalidItemIdError'), { duration: 3000 });
     }
   }
 
@@ -539,11 +618,12 @@
   const model_server_step_3 = computed(() => t('nsmusics.view_page.modelServer'));
   const model_server_step_4 = computed(() => t('page.appMenu.selectServer'));
   /// local model
-  const model_local_step_1 = computed(() => t('nsmusics.view_page.selectedSong')+t('entity.folder_other'));
+  const model_local_step_1 = computed(() => t('Add') + t('HeaderMediaFolders'));
   const model_local_step_2 = computed(() => t('nsmusics.view_page.selectLibrary'));
 
   //////
   import { openLink } from '@/utils/electron/openLink';
+  import {store_local_data_select_logic} from "@/store/local/local_data_select/store_local_data_select_logic";
 </script>
 <template>
   <div class="view">
@@ -555,7 +635,7 @@
       <n-card
         class="table"
         style="overflow-x: hidden;border-radius: 4px;"
-        :style="{ width: 'calc(100vw - ' + (80 - 9 + 66) + 'px)'}">
+        :style="{ width: 'calc(100vw - ' + (80 - 9 + 86) + 'px)'}">
         <n-tabs
             style="margin-left: -20px;margin-top: -6px;"
             v-model:value="store_app_configs_info.menu_app_setting_select_tab_name"
@@ -714,8 +794,7 @@
                       <n-step :title="model_server_step_3" v-if="Type_Server_Model_Open_Value === 'server'">
                         <div class="n-step-description">
                           <n-space vertical>
-                            <n-space vertical
-                                     >
+                            <n-space vertical>
                               <n-space vertical>
                                 <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_1') + ' - ' + $t('nsmusics.view_page.routerModel_type_3') }}</span>
                                 <div style="margin-top: -10px;">
@@ -792,77 +871,113 @@
                       <n-step :title="model_local_step_1" v-if="Type_Server_Model_Open_Value != 'server'">
                         <div class="n-step-description">
                           <n-space vertical>
-                            <n-space justify="space-between" align="center"
-                                     >
+                            <n-space justify="space-between" align="center">
                               <n-space vertical style="width: 620px;">
                                 <div style="margin-top: -2px;">
                                 <span style="font-size:16px;font-weight: 600;">
-                                  {{
-                                    $t('nsmusics.view_page.selectLibrary_explain') +
-                                    ', ' +
-                                    $t('common.restartRequired')
-                                  }}
-                                  <br>.mp3, .flac, .aac, .mp1, .mp2, .m4a, .ape, .oga, .ogg, .opus, .wav, .webm
+                                  .mp3, .flac, .aac, .mp1, .mp2, .m4a, .ape, .oga, .ogg, .opus, .wav, .webm
                                 </span>
                                 </div>
-                                <n-space>
-                                  <n-button tertiary style="height: 36px;" @click="select_Folder">
-                                    <template #icon>
-                                      <n-icon size="24">
-                                        <Add />
-                                      </n-icon>
-                                    </template>
-                                    <div style="font-size:16px;font-weight: 600;">
-                                      {{ $t('nsmusics.view_page.selectedSong') + $t('entity.folder_other')}}
-                                    </div>
-                                  </n-button>
-                                  <n-tag type="success" style="height: 36px;">
-                                    <div style="font-size:16px;font-weight: 600;">
-                                      {{ store_server_user_model.library_path }}
-                                    </div>
-                                  </n-tag>
-                                </n-space>
-                                <DynamicScroller
-                                   class="table" ref="scrollbar"
-                                   style="overflow: auto;width: 780px;height: 130px;margin-top: 6px;"
-                                   :items="store_local_db_info.local_config_of_all_user_of_sqlite"
-                                   :itemSize="70"
-                                   :grid-items="3"
-                                   :item-secondary-size="260">
-                                    <!-- :minItemSize="6"> -->
-                                    <template #default="{ item, index, active }">
-                                      <DynamicScrollerItem
-                                          :item="item"
-                                          :active="active"
-                                          :data-index="index"
-                                          :data-active="active"
-                                          style="display: flex;"
-                                      >
-                                        <div
-                                            class="server_item_info"
-                                            style="
-                            width: 230px;
-                            height: 54px;
-                            margin-bottom: 14px;
-                            border: 1px solid #f0f0f070;border-radius: 5px;
-                            padding-top: 14px;padding-left: 14px;padding-right: 14px;
-                            box-shadow: #18181820 0 0 0 1px inset;
-                          ">
-                                          <n-space justify="space-between" style="margin-top: 2.5px;">
-                                            <n-space>
-                                              <n-icon size="20">
-                                                <BareMetalServer />
-                                              </n-icon>
-                                              <div style="width: 140px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-                                                {{ item }}
-                                              </div>
-                                            </n-space>
-                                            <span style="width: 18px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ (index+1) }}</span>
+                                <n-button tertiary style="height: 36px;"
+                                          @click="() => {
+                                            select_Folder()
+                                          }">
+                                  <template #icon>
+                                    <n-icon size="24">
+                                      <Add />
+                                    </n-icon>
+                                  </template>
+                                  <div style="font-size:16px;font-weight: 600;">
+                                    {{ $t('Add') + $t('entity.folder_other')}}
+                                  </div>
+                                </n-button>
+                                <DynamicScroller v-if="Type_Server_Model_Open_Value === 'local'"
+                                                 class="table" ref="scrollbar"
+                                                 style="overflow: auto;width: 780px;height: 130px;margin-top: 6px;"
+                                                 :items="store_local_db_info.local_config_of_all_user_of_sqlite"
+                                                 :itemSize="70"
+                                                 :grid-items="3"
+                                                 :item-secondary-size="260">
+                                  <!-- :minItemSize="6"> -->
+                                  <template #default="{ item, index, active }">
+                                    <DynamicScrollerItem
+                                        :item="item"
+                                        :active="active"
+                                        :data-index="index"
+                                        :data-active="active"
+                                        style="display: flex;"
+                                    >
+                                      <div
+                                        class="server_item_info"
+                                        @click="item.show = !item.show"
+                                        style="
+                                          width: 230px;
+                                          height: 54px;
+                                          margin-bottom: 14px;
+                                          border: 1px solid #f0f0f070;border-radius: 5px;
+                                          padding-top: 14px;padding-left: 14px;padding-right: 14px;
+                                          box-shadow: #18181820 0 0 0 1px inset;
+                                        ">
+                                        <n-space justify="space-between" style="margin-top: 2.5px;">
+                                          <n-space>
+                                            <n-icon size="20">
+                                              <BareMetalServer />
+                                            </n-icon>
+                                            <div style="width: 140px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                                              {{ item.config_value }}</div>
                                           </n-space>
-                                        </div>
-                                      </DynamicScrollerItem>
-                                    </template>
-                                  </DynamicScroller>
+                                          <span style="width: 18px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ (index+1) }}</span>
+                                        </n-space>
+                                        <n-modal
+                                            v-model:show="item.show">
+                                          <n-card style="width: 450px;border-radius: 4px;">
+                                            <n-space
+                                                vertical size="large" style="width: 400px;">
+                                              <n-space justify="space-between" style="margin-bottom: 12px;">
+                                                <span style="font-size: 20px;font-weight: 600;">{{ $t('HeaderAdmin') + $t('Folders') }}</span>
+                                                <n-button tertiary size="small" @click="item.show = false">
+                                                  <template #icon>
+                                                    <n-icon>
+                                                      <Close />
+                                                    </n-icon>
+                                                  </template>
+                                                </n-button>
+                                              </n-space>
+                                              <n-form style="margin-top: -12px;">
+                                                <n-space vertical size="small" style="margin-bottom: 10px;">
+                                                  <span>{{ $t('Folders') + $t('LabelName') }}</span>
+                                                  <n-input clearable size="small" v-model:value="item.config_key" placeholder=""/>
+                                                </n-space>
+                                                <n-space vertical size="small" style="margin-bottom: 10px;">
+                                                  <span>{{ $t('Folders') + $t('HeaderPaths') }}</span>
+                                                  <n-input-group>
+                                                    <n-input clearable size="small" v-model:value="item.config_value" placeholder=""/>
+                                                  </n-input-group>
+                                                </n-space>
+                                              </n-form>
+                                              <n-space justify="end">
+                                                <n-button strong secondary type="error"
+                                                          @click="() => {
+                                                            item.show = false;
+                                                            update_local_deleteFolder(item.id);
+                                                          }">
+                                                  {{ $t('common.delete') }}
+                                                </n-button>
+                                                <n-button strong secondary type="info"
+                                                          @click="update_local_setFolder(
+                                                              item.id,
+                                                              item.config_key,item.config_value,
+                                                          )">
+                                                  {{ $t('common.save') }}
+                                                </n-button>
+                                              </n-space>
+                                            </n-space>
+                                          </n-card>
+                                        </n-modal>
+                                      </div>
+                                    </DynamicScrollerItem>
+                                  </template>
+                                </DynamicScroller>
                               </n-space>
                             </n-space>
                           </n-space>
@@ -871,25 +986,36 @@
                       <n-step :title="model_local_step_2" v-if="Type_Server_Model_Open_Value != 'server'">
                         <div class="n-step-description">
                           <n-space vertical>
-                            <div style="font-size:15px;font-weight: 600;">
-                              {{ $t('common.clear') + ' ' + $t('nsmusics.view_page.modelLocal')}}
-                            </div>
-                            <n-button size="small"
-                              @click="
+                            <n-space vertical>
+                              <div style="font-size:15px;font-weight: 600;">
+                                {{
+                                  $t('common.clear')
+                                  + ' '
+                                  + $t('nsmusics.view_page.modelLocal')
+                                  + ', '
+                                  + $t('DeleteAll')
+                                  + ' '
+                                  + $t('HeaderLibraries')
+                                  + $t('Data')
+                                }}
+                              </div>
+                              <n-button size="small"
+                                        @click="
                                 store_server_users.percentage_of_local = 0;
                                 store_local_db_info.set_clear_all_local_data()
                               "
-                            >
-                              <template #icon>
-                                <n-icon size="16">
-                                  <Delete20Regular />
-                                </n-icon>
-                              </template>
-                              <div style="font-size:15px;font-weight: 600;">
-                                {{ $t('common.clear') + ' ' + $t('nsmusics.view_page.modelLocal')}}
-                              </div>
-                            </n-button>
-                            <n-divider style="margin: 0;"/>
+                              >
+                                <template #icon>
+                                  <n-icon size="16">
+                                    <Delete20Regular />
+                                  </n-icon>
+                                </template>
+                                <div style="font-size:15px;font-weight: 600;">
+                                  {{ $t('common.clear') + ' ' + $t('nsmusics.view_page.modelLocal')}}
+                                </div>
+                              </n-button>
+                              <n-divider style="margin: 0;"/>
+                            </n-space>
                             <div style="font-size:15px;font-weight: 600;">
                               {{ $t('setting.clearCache_description')}}
                             </div>
@@ -912,7 +1038,16 @@
                             <n-divider style="margin: 0;"/>
                             <n-space vertical>
                               <div style="font-size:15px;font-weight: 600;">
-                                {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_0')}}
+                                {{
+                                  $t('form.queryEditor.input_optionMatchAll')
+                                  + $t('HeaderMediaFolders')
+                                  + ', '
+                                  + $t('nsmusics.view_page.selectLibrary')
+                                  + ', '
+                                  + $t('nsmusics.view_page.selectLibrary_select_0')
+                                  + ', '
+                                  + $t('common.restartRequired')
+                                }}
                               </div>
                               <n-button size="small" @click="begin_import_Folder(false)">
                                 <template #icon>
@@ -928,7 +1063,16 @@
                             <n-divider v-if="false" style="margin: 0;"/>
                             <n-space vertical style="width: 600px;">
                               <div style="font-size:15px;font-weight: 600;">
-                                {{ $t('nsmusics.view_page.selectLibrary') + ', ' + $t('nsmusics.view_page.selectLibrary_select_1')}}
+                                {{
+                                  $t('form.queryEditor.input_optionMatchAll')
+                                  + $t('HeaderMediaFolders')
+                                  + ', '
+                                  + $t('nsmusics.view_page.selectLibrary')
+                                  + ', '
+                                  + $t('nsmusics.view_page.selectLibrary_select_1')
+                                  + ', '
+                                  + $t('common.restartRequired')
+                                }}
                               </div>
                               <n-button size="small" @click="begin_import_Folder(true)">
                                 <template #icon>

@@ -545,10 +545,6 @@ const Play_Media_Switching = async () => {
   else
     Play_Media_Order(store_player_audio_logic.play_order, 1)
 };
-////// player_configs player_button voice area
-const backpanel_voice_click = () => {
-  store_player_audio_logic.drawer_volume_show = !store_player_audio_logic.drawer_volume_show;
-}
 
 ////// player_configs slider formatTime area
 const set_slider_singleValue = async () => {
@@ -841,14 +837,13 @@ const orderButonWidath = ref('202')
                  justify="center">
 
           <n-tooltip
-              v-if="!store_player_appearance.player_show"
+              v-if="store_player_audio_logic.orderToolShow"
               trigger="hover" placement="top">
             <template #trigger>
               <n-button
                   quaternary round size="small"
                   @click="() => {
                     store_player_audio_logic.drawer_order_show = !store_player_audio_logic.drawer_order_show;
-                    // backpanel_order_click
                   }">
                 <template #icon>
                   <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
@@ -869,11 +864,10 @@ const orderButonWidath = ref('202')
             {{ $t('Play') + $t('common.sortOrder') }}
           </n-tooltip>
           <n-button
-              v-if="store_player_appearance.player_show"
+              v-if="!store_player_audio_logic.orderToolShow"
               quaternary round size="small"
               @click="() => {
                 store_player_audio_logic.drawer_order_show = !store_player_audio_logic.drawer_order_show;
-                // backpanel_order_click
               }">
             <template #icon>
               <n-icon :size="26" v-if="store_player_audio_logic.play_order === 'playback-1'">
@@ -922,10 +916,13 @@ const orderButonWidath = ref('202')
             {{ $t('player.next') }}
           </n-tooltip>
           <n-tooltip
-              v-if="!store_player_appearance.player_show"
+              v-if="store_player_audio_logic.voiceToolShow"
               trigger="hover" placement="top">
             <template #trigger>
-              <n-button quaternary round size="small" @click="backpanel_voice_click">
+              <n-button quaternary round size="small"
+                        @click="() => {
+                          store_player_audio_logic.drawer_volume_show = !store_player_audio_logic.drawer_volume_show;
+                        }">
                 <template #icon>
                   <n-icon :size="26"><VolumeMedium/></n-icon>
                 </template>
@@ -934,8 +931,11 @@ const orderButonWidath = ref('202')
             {{ $t('HeaderAudioSettings') }}
           </n-tooltip>
           <n-button
-              v-if="store_player_appearance.player_show"
-              quaternary round size="small" @click="backpanel_voice_click">
+              v-if="!store_player_audio_logic.voiceToolShow"
+              quaternary round size="small"
+              @click="() => {
+                store_player_audio_logic.drawer_volume_show = !store_player_audio_logic.drawer_volume_show;
+              }">
             <template #icon>
               <n-icon :size="26"><VolumeMedium/></n-icon>
             </template>

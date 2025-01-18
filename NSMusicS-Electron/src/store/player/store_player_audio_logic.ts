@@ -58,6 +58,9 @@ export const store_player_audio_logic = reactive({
     drawer_volume_show: false,
     drawer_theme_show: false,
 
+    orderToolShow: true,
+    voiceToolShow: true,
+
     formatTime(currentTime: number): string {
         const minutes = Math.floor(currentTime / 60);
         const seconds = Math.floor(currentTime % 60);
@@ -202,4 +205,10 @@ watch(() => store_player_audio_logic.player_slider_currentTime_added_value, (new
 watch(() => store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress, (newValue) => {
     store_player_audio_logic.player_go_lyric_line_index_of_audio_play_progress = newValue
     console.log('get_play_go_index_time：'+newValue)
+});
+watch(() => store_player_audio_logic.drawer_order_show, (newValue) => {
+    store_player_audio_logic.orderToolShow = !store_player_audio_logic.drawer_order_show;
+});
+watch(() => store_player_audio_logic.drawer_volume_show, (newValue) => {
+    store_player_audio_logic.voiceToolShow = !store_player_audio_logic.drawer_volume_show;
 });

@@ -3,6 +3,135 @@ import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import { isElectron } from '@/utils/electron/isElectron';
 
 export class Set_LibraryInfo_To_LocalSqlite{
+    public Set_LibraryInfo_Update_Folder(
+        id: string,
+        local_name: string,
+        local_url: string
+    ): boolean {
+        if (isElectron) {
+            const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+            db.pragma('journal_mode = WAL');
+            db.exec('PRAGMA foreign_keys = OFF');
+            db.exec('BEGIN TRANSACTION');
+            try {
+                const checkQuery = db.prepare(`SELECT id FROM system_library_config WHERE id = ?`);
+                const existingRecord = checkQuery.get(id);
+                if (existingRecord) {
+                    const updateQuery = db.prepare(`
+                        UPDATE system_library_config
+                        SET config_key = ?, config_value = ?
+                        WHERE id = ?
+                    `);
+                    updateQuery.run(local_name, local_url, id);
+                } else {
+                    const insertQuery = db.prepare(`
+                        INSERT INTO system_library_config (config_key, config_value)
+                        VALUES (?, ?)
+                    `);
+                    insertQuery.run(local_name, local_url);
+                }
+                db.exec('COMMIT');
+                return true;
+            } catch (error) {
+                db.exec('ROLLBACK');
+                throw error;
+            } finally {
+                db.exec('PRAGMA foreign_keys = ON');
+                db.close();
+            }
+        } else {
+            // other
+        }
+        return false;
+    }
+    public Set_LibraryInfo_Delete_Folder(
+        id: string
+    ): boolean {
+        if (isElectron) {
+            const db_nsmusics = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+            db_nsmusics.pragma('journal_mode = WAL');
+            db_nsmusics.exec('PRAGMA foreign_keys = OFF');
+            db_nsmusics.exec('BEGIN TRANSACTION');
+            try {
+                // 从 system_library_config 表中获取与 id 对应的 config_value
+                const configQuery = db_nsmusics.prepare('SELECT config_value FROM system_library_config WHERE id = ?');
+                const configResult = configQuery.get(id); // 假设 id 是已知的
+                const rootPath = configResult ? configResult.config_value : null;
+                if (!rootPath) {
+                    throw new Error('未找到与 id 对应的 config_value，无法确定根目录路径');
+                }
+                // 删除 system_library_config 表中与 id 对应的记录
+                const deleteQuery = db_nsmusics.prepare('DELETE FROM system_library_config WHERE id = ?');
+                deleteQuery.run(id);
+                db_nsmusics.exec('COMMIT');
+
+                // 接下来处理 navidrome 数据库的删除逻辑
+                const db_navidrome = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+                db_navidrome.pragma('journal_mode = WAL');
+                db_navidrome.exec('PRAGMA foreign_keys = OFF');
+                db_navidrome.exec('BEGIN TRANSACTION');
+                try {
+                    // 1. 根据根目录路径，找出要删除的 media_file 表对应的所有 id
+                    const mediaFileIdsToDelete = db_navidrome
+                        .prepare('SELECT id FROM media_file WHERE path LIKE ?')
+                        .all(`%${rootPath}%`) // 使用 % 前后包裹，实现相似匹配
+                        .map(row => row.id);
+                    // 2. 用这些 id 数组，先删除 playlist_tracks 表中对应相同 media_file_id 的记录
+                    if (mediaFileIdsToDelete.length > 0) {
+                        const deletePlaylistTracks = db_navidrome.prepare('DELETE FROM playlist_tracks WHERE media_file_id = ?');
+                        mediaFileIdsToDelete.forEach(id => deletePlaylistTracks.run(id));
+                    }
+                    // 3. 用这些 id 数组，删除 annotation 表中对应相同 item_id 的记录
+                    if (mediaFileIdsToDelete.length > 0) {
+                        const deleteAnnotations = db_navidrome.prepare('DELETE FROM annotation WHERE item_id = ?');
+                        mediaFileIdsToDelete.forEach(id => deleteAnnotations.run(id));
+                    }
+                    // 4. 根据根目录路径，找出要删除的 media_file 表对应的所有 artist_id
+                    const artistIdsToDelete = db_navidrome
+                        .prepare('SELECT DISTINCT artist_id FROM media_file WHERE id IN (' + mediaFileIdsToDelete.map(() => '?').join(',') + ')')
+                        .all(...mediaFileIdsToDelete)
+                        .map(row => row.artist_id);
+                    // 5. 判断 media_file 表中要删除的 media_file 表中对应的所有 id 除外的数据中，是否有相同的 artist_id，如果没有，删除 artist 表中与 media_file:artist_id 对应的 artist:id 的项
+                    if (artistIdsToDelete.length > 0) {
+                        const deleteArtists = db_navidrome.prepare('DELETE FROM artist WHERE id = ? AND NOT EXISTS (SELECT 1 FROM media_file WHERE artist_id = ? AND id NOT IN (' + mediaFileIdsToDelete.map(() => '?').join(',') + '))');
+                        artistIdsToDelete.forEach(id => deleteArtists.run(id, id, ...mediaFileIdsToDelete));
+                    }
+                    // 6. 判断 media_file 表中要删除的 media_file 表中对应的所有 id 除外的数据中，是否有相同的 album_id，如果没有，删除 album 表中与 media_file:album_id 对应的 album:id 的项
+                    const albumIdsToDelete = db_navidrome
+                        .prepare('SELECT DISTINCT album_id FROM media_file WHERE id IN (' + mediaFileIdsToDelete.map(() => '?').join(',') + ')')
+                        .all(...mediaFileIdsToDelete)
+                        .map(row => row.album_id);
+                    if (albumIdsToDelete.length > 0) {
+                        const deleteAlbums = db_navidrome.prepare('DELETE FROM album WHERE id = ? AND NOT EXISTS (SELECT 1 FROM media_file WHERE album_id = ? AND id NOT IN (' + mediaFileIdsToDelete.map(() => '?').join(',') + '))');
+                        albumIdsToDelete.forEach(id => deleteAlbums.run(id, id, ...mediaFileIdsToDelete));
+                    }
+                    // 7. 用这些 id 数组，删除 media_file 表中对应 id 的记录
+                    if (mediaFileIdsToDelete.length > 0) {
+                        const deleteMediaFiles = db_navidrome.prepare('DELETE FROM media_file WHERE id = ?');
+                        mediaFileIdsToDelete.forEach(id => deleteMediaFiles.run(id));
+                    }
+                    db_navidrome.exec('COMMIT');
+                } catch (error) {
+                    db_navidrome.exec('ROLLBACK');
+                    throw error;
+                } finally {
+                    db_navidrome.exec('PRAGMA foreign_keys = ON');
+                    db_navidrome.close();
+                }
+
+                return true;
+            } catch (error) {
+                db_nsmusics.exec('ROLLBACK');
+                throw error;
+            } finally {
+                db_nsmusics.exec('PRAGMA foreign_keys = ON');
+                db_nsmusics.close();
+            }
+        } else {
+            // other
+        }
+        return false;
+    }
     public Set_LibraryInfo_Delete_Selected_Playlist(media_file_id: any[]) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);

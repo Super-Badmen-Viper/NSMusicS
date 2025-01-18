@@ -116,48 +116,46 @@ export const store_app_configs_logic_load = reactive({
             }
             store_view_media_page_logic.page_songlists_filter_year = Number('' + system_Configs_Read.app_Configs.value['page_songlists_filter_year'])
             /// library_Config
-            // store_server_user_model.library_path = '' + system_Configs_Read.library_Configs.value['library']
-            // console.log(store_server_user_model.library_path)
-            store_local_db_info.local_config_of_all_user_of_sqlite = system_Configs_Read.library_Configs.value
+            store_server_user_model.library_path = '' + system_Configs_Read.library_Configs.value['library']
+            if(store_server_user_model.library_path.length === 0) {
+                store_local_db_info.local_config_of_all_user_of_sqlite = system_Configs_Read.library_Configs.value
+            }
             if(store_local_db_info.local_config_of_all_user_of_sqlite === null || store_local_db_info.local_config_of_all_user_of_sqlite.length === 0){
                 if(isElectron) {
                     try {
-                        const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
-                        db.pragma('journal_mode = WAL');
-                        db.exec('PRAGMA foreign_keys = OFF');
-                        const stmt_paths = db.prepare(
-                            `SELECT path
-                            FROM ${store_server_user_model.media_file}`
-                        );
-                        const paths = stmt_paths.all() as { path: string }[];
-                        const rootPaths = new Set<string>();
-                        const folderNames = new Set<string>();
-                        paths.forEach((row) => {
-                            const path = row.path;
-                            const rootPath = this.extractRootPath(path);
-                            if (rootPath) {
-                                rootPaths.add(rootPath);
+                        let rootPath = store_server_user_model.library_path;
+                        if(rootPath === undefined || rootPath === 'undefined' || rootPath.length === 0){
+                            const db = require('better-sqlite3')(store_app_configs_info.nsmusics_db);
+                            db.pragma('journal_mode = WAL');
+                            db.exec('PRAGMA foreign_keys = OFF');
+                            try {
+                                const stmt_paths = db.prepare(`SELECT config_value FROM system_library_config LIMIT 1`);
+                                const row = stmt_paths.get() as { config_value: string } | undefined;
+                                if (row) {rootPath = row.config_value;}
+                            } catch (error) {
+                                console.error('Database error:', error);
+                            } finally {
+                                db.close();
                             }
-                            const folderName = this.extractFolderName(path);
-                            if (folderName) {
-                                folderNames.add(folderName);
+                        }
+                        if(rootPath) {
+                            const folderName = this.extractFolderName(rootPath);
+                            if (rootPath && folderName) {
+                                store_local_db_info.local_config_of_all_user_of_sqlite.push({
+                                    id: store_local_db_info.local_config_of_all_user_of_sqlite.length + 1, // 使用当前长度 + 1 作为 ID
+                                    config_key: folderName,
+                                    config_value: rootPath,
+                                });
+                                store_local_db_info.local_config_of_all_user_of_select.push({
+                                    label: `${folderName} - ${rootPath}`,
+                                    value: rootPath,
+                                });
+                                console.log(`添加根目录路径: ${rootPath} (文件夹名: ${folderName})`);
+                                store_app_configs_logic_save.save_system_library_config()
+                            } else {
+                                console.error('无法提取根目录路径或文件夹名称');
                             }
-                        });
-                        console.log(`音乐库根目录路径数量: ${rootPaths.size}`);
-                        console.log(`音乐库文件夹名数量: ${folderNames.size}`);
-                        Array.from(rootPaths).forEach((rootPath, index) => {
-                            store_local_db_info.local_config_of_all_user_of_sqlite.push({
-                                id: index + 1, // 使用索引作为 ID
-                                config_key: Array.from(folderNames)[index], // 文件夹名作为 config_key
-                                config_value: rootPath, // 根目录路径作为 config_value
-                            });
-                            store_local_db_info.local_config_of_all_user_of_select.push({
-                                label: `${Array.from(folderNames)[index]} - ${rootPath}`, // 标签格式：文件夹名 - 根目录路径
-                                value: rootPath, // 值：根目录路径
-                            });
-                            console.log(`根目录路径 ${index + 1}: ${rootPath} (文件夹名: ${Array.from(folderNames)[index]})`);
-                            console.log(row)
-                        });
+                        }
                     }catch (e) {
                         console.error(e)
                     }
@@ -400,25 +398,9 @@ export const store_app_configs_logic_load = reactive({
         });
         store_app_configs_info.app_view_menuOptions = app_view_menuOptions
     },
-    // 提取根目录路径的辅助函数
-    extractRootPath(fullPath: string): string | null {
-        if (!fullPath) return null;
-
-        // 假设路径格式为 驱动器盘符:\文件夹名\子文件夹\文件名
-        const parts = fullPath.split('\\');
-        if (parts.length > 1) {
-            return `${parts[0]}\\${parts[1]}`; // 返回根目录部分（如 E:\0_Music）
-        }
-        return null;
-    },
     extractFolderName(fullPath: string): string | null {
         if (!fullPath) return null;
-
-        // 假设路径格式为 驱动器盘符:\文件夹名\子文件夹\文件名
         const parts = fullPath.split('\\');
-        if (parts.length > 1) {
-            return parts[1]; // 返回文件夹名部分（如 0_Music）
-        }
-        return null;
+        return parts[parts.length - 1];
     }
 });

@@ -520,7 +520,6 @@ onBeforeUnmount(() => {
     <div class="artist-wall-container">
       <n-space vertical @wheel.prevent style="overflow: hidden;">
         <n-space align="center">
-
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle
