@@ -155,8 +155,7 @@ const Play_This_Audio_Path = () => {
         await init_player_howler()
       }
       store_player_audio_logic.player.isPlaying = true;
-      store_player_audio_info.this_audio_is_playing = true
-      store_player_audio_logic.player_save_new_data = true
+      store_player_audio_logic.player_save_new_data = true;
       store_player_audio_logic.player_is_play_ended = false;
       store_player_audio_logic.player_no_progress_jump = true;
       //
@@ -279,10 +278,8 @@ const handleMpvStopped = debounce(async (event, args) => {
   }
   if (last_play && store_player_audio_logic.play_order === 'playback-1') {
     await store_player_audio_logic.player.pause();
-    store_player_audio_info.this_audio_is_playing = false;
   } else {
     store_player_audio_logic.player.isPlaying = false;
-    store_player_audio_info.this_audio_is_playing = false;
     // 无进度跳动: 若调整进度，则会误触发end此事件，加player_no_progress_jump判断解决
     if (store_player_audio_logic.player_no_progress_jump) {
       store_player_audio_logic.current_play_time = store_player_audio_logic.formatTime(store_player_audio_logic.player.getDuration());
@@ -293,7 +290,6 @@ const handleMpvStopped = debounce(async (event, args) => {
       store_player_audio_logic.player_no_progress_jump = false;
 
       store_player_audio_logic.player.isPlaying = false;
-      store_player_audio_info.this_audio_is_playing = false;
     }
     Play_Media_Switching()
   }
@@ -320,7 +316,6 @@ const Init_Audio_Player = async () => {
         this_audio_buffer_file.value = Math.random().toString(36).substring(7);
       }
       else{
-        store_player_audio_info.this_audio_is_playing = true
         store_player_audio_logic.player.isPlaying = true;
         if(store_player_audio_logic.player_select === 'mpv'){
           if(!store_player_audio_logic.player.isPlaying)
@@ -343,7 +338,6 @@ const Init_Audio_Player = async () => {
       }
     }
     else{
-      store_player_audio_info.this_audio_is_playing = false
       store_player_audio_logic.player.isPlaying = false;
       if(store_player_audio_logic.player_select === 'mpv'){
         // if(isElectron) {

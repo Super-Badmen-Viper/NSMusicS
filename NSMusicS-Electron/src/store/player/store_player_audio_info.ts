@@ -15,7 +15,6 @@ export const store_player_audio_info = reactive({
     this_audio_file_path: '',
     this_audio_file_medium_image_url: '',
     this_audio_restart_play: false,
-    this_audio_is_playing: true,
 
     this_audio_artist_name: '',
     this_audio_artist_id: '',
@@ -55,7 +54,6 @@ export const store_player_audio_info = reactive({
         this.this_audio_file_medium_image_url = error_album;
         this.page_top_album_image_url = error_album;
         this.this_audio_restart_play = false;
-        this.this_audio_is_playing = true;
 
         this.this_audio_artist_name = '';
         this.this_audio_artist_id = '';

@@ -1,9 +1,6 @@
 <script setup lang="ts">
 ////// this_view resource
 import {
-  ArrowMinimize16Regular,
-  Maximize16Regular,
-  FullScreenMaximize16Regular,
   FullScreenMaximize24Filled,
   FullScreenMinimize24Filled,
 } from '@vicons/fluent'
@@ -36,10 +33,8 @@ const computed_i18n_Label_ViewSetConfig_Cover_3 = computed(() => t('nsmusics.vie
 const computed_i18n_Label_ViewSetConfig_Cover_4 = computed(() => t('nsmusics.view_player.view_seting.coverBase_4'));
 
 // audio_class & player_bar & player_view
-import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_player_view} from "@/store/player/store_player_view";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
-import {store_player_appearance} from "@/store/player/store_player_appearance";
 
 ////// lyircs load
 let unwatch = watch(() => store_player_audio_info.this_audio_lyrics_loaded_complete, (newValue) => {
@@ -567,17 +562,15 @@ import {store_player_audio_info} from "@/store/player/store_player_audio_info";
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic"
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-import {Random} from "@vicons/fa";
-import {Pause, Play, PlayBack, PlayForward, VolumeMedium} from "@vicons/ionicons5";
 import Table_Album_Model_1_Cover from "@/views_page/view_page_player/components/Table_Album_Model_1_Cover.vue";
 import {ArrowsMaximize, ArrowsMinimize} from "@vicons/tabler";
 const clear_lottie_animationInstance = ref(false)
 const animationInstance_model_1_spectrum = ref<any>(null);
 const animationInstance_model_1_wave = ref<any>(null);
 const animationInstance_model_2_wave = ref<any>(null);
-let unwatch_animationInstance = watch(() => store_player_audio_info.this_audio_is_playing, (newValue) => {
+let unwatch_animationInstance = watch(() => store_player_audio_logic.player.isPlaying, (newValue) => {
   if(store_player_appearance.player_use_lottie_animation) {
-    if (newValue === true) {
+    if (newValue) {
       if (store_player_appearance.player_background_model_num === 1) {
         animationInstance_model_1_spectrum.value.play();
         animationInstance_model_1_wave.value.play();
@@ -1031,7 +1024,7 @@ onBeforeUnmount(() => {
                 <n-space
                     vertical align="end"
                     :class="{
-                      'scroll-enabled': store_player_audio_info.this_audio_is_playing
+                      'scroll-enabled': store_player_audio_logic.player.isPlaying
                     }"
                     :style="{
                       marginTop: store_player_appearance.player_use_lyric_skip_forward
@@ -1056,7 +1049,7 @@ onBeforeUnmount(() => {
                         ref="animationInstance_model_1_wave"
                         class="animate__rotate_slower"
                         :class="{
-                        'animate__rotate_slower_paused': store_player_appearance.player_background_model_num !== 1 || !store_player_audio_info.this_audio_is_playing
+                        'animate__rotate_slower_paused': store_player_appearance.player_background_model_num !== 1 || !store_player_audio_logic.player.isPlaying
                       }"
                         v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
                         autoplay
@@ -1153,7 +1146,7 @@ onBeforeUnmount(() => {
                         opacity: store_player_appearance.player_background_model_num === 2
                         ? 1 : 0,
                         left: store_player_appearance.player_background_model_num === 2
-                        ? (store_player_audio_info.this_audio_is_playing
+                        ? (store_player_audio_logic.player.isPlaying
                            ? '0' : '10%') : '-100%',
                         transition: 'margin 0.4s, left 0.4s, opacity 0.8s'
                       }">
@@ -1161,7 +1154,7 @@ onBeforeUnmount(() => {
                         ref="animationInstance_model_2_wave"
                         class="animate__rotate_fast"
                         :class="{
-                        'animate__rotate_fast_paused': store_player_appearance.player_background_model_num !== 2 || !store_player_audio_info.this_audio_is_playing
+                        'animate__rotate_fast_paused': store_player_appearance.player_background_model_num !== 2 || !store_player_audio_logic.player.isPlaying
                       }"
                         v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
                         speed="0.8"
@@ -1178,9 +1171,9 @@ onBeforeUnmount(() => {
                       "
                         :style="{
                         '--background-image': `url(${getAssetImage(store_player_audio_info.page_top_album_image_url)})`,
-                        marginLeft: store_player_audio_info.this_audio_is_playing
+                        marginLeft: store_player_audio_logic.player.isPlaying
                         ? 'calc(-56vh)' : 'calc(-70vh)',
-                        opacity: store_player_audio_info.this_audio_is_playing
+                        opacity: store_player_audio_logic.player.isPlaying
                           ? 1 : 0,
                       }"
                     />
@@ -1199,7 +1192,7 @@ onBeforeUnmount(() => {
                         transition: margin 0.4s;
                       "
                         :style="{
-                        marginLeft: store_player_audio_info.this_audio_is_playing
+                        marginLeft: store_player_audio_logic.player.isPlaying
                         ? 'calc(-47vh)' : 'calc(-61vh)'
                       }">
                     </div>
@@ -1241,9 +1234,9 @@ onBeforeUnmount(() => {
                           transition: right 0.4s, opacity 0.4s;
                         "
                           :style="{
-                          right: store_player_audio_info.this_audio_is_playing
+                          right: store_player_audio_logic.player.isPlaying
                           ? 'calc(-2vh)' : 'calc(12vh)',
-                          opacity: store_player_audio_info.this_audio_is_playing
+                          opacity: store_player_audio_logic.player.isPlaying
                           ? 1 : 0,
                         }"
                       >
@@ -1258,9 +1251,9 @@ onBeforeUnmount(() => {
                           transition: right 0.4s, opacity 0.4s;
                         "
                           :style="{
-                          right: store_player_audio_info.this_audio_is_playing
+                          right: store_player_audio_logic.player.isPlaying
                           ? 'calc(-1vh)' : 'calc(13vh)',
-                          opacity: store_player_audio_info.this_audio_is_playing
+                          opacity: store_player_audio_logic.player.isPlaying
                           ? 1 : 0,
                         }"
                       >

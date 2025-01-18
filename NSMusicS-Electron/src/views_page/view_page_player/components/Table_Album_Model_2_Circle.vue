@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+import {store_player_audio_logic} from "@/store/player/store_player_audio_logic"
 function getAssetImage(firstImage: string) {
   return new URL(firstImage, import.meta.url).href;
 }
@@ -20,7 +21,7 @@ function getAssetImage(firstImage: string) {
     <lottie-player
       ref="animationInstance_model_1_wave"
       class="animate__rotate_slower"
-      :class="{ 'animate__rotate_slower_paused': !store_player_audio_info.this_audio_is_playing }"
+      :class="{ 'animate__rotate_slower_paused': !store_player_audio_logic.player.isPlaying }"
       v-if="!clear_lottie_animationInstance && store_player_appearance.player_use_lottie_animation"
       autoplay
       loop
