@@ -96,10 +96,9 @@ function begin_lyrics_animation() {
         isFirstRun = false;
       }
       if (store_player_audio_logic.player_slider_click) {
-        handleWheel();
+        handleClear_Lyric_Color();
         lyrics_list_whell.value = false;
         store_player_audio_logic.player_slider_click = false;
-
         const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
         const itemElements_active = scrollbar.value.$el.querySelectorAll('.lyrics_text_active');
         let color_hidden = store_player_appearance.player_lyric_color.slice(0, -2);
@@ -330,6 +329,9 @@ const startByteAnimations = (index: number, num: number) => {
 let intervals = [];
 const lyrics_list_whell = ref(false);
 const handleWheel = (event: any) => {
+  handleClear_Lyric_Color()
+};
+function handleClear_Lyric_Color (){
   lyrics_list_whell.value = true;
   const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
   for (let i = 0; i < itemElements.length; i++) {
@@ -338,7 +340,7 @@ const handleWheel = (event: any) => {
     itemElements[i].style.filter = 'blur(0px)';
     itemElements[i].style.width = 'calc(40vw)';
   }
-};
+}
 const handleLeave_Refresh_Lyric_Color = () => {
   lyrics_list_whell.value = false;
   const itemElements = scrollbar.value.$el.querySelectorAll('.lyrics_info');
@@ -527,7 +529,10 @@ function init_player_theme(){
   }else{
     store_player_appearance.player_show_of_control_info = true
   }
-  store_player_appearance.player_lyric_fontSize_Num = 36 + Math.floor((window.innerHeight - 880) / 200) * 6;
+  store_player_appearance.player_lyric_fontSize_Num =
+      store_player_appearance.player_use_lyric_skip_forward ?
+          36 + Math.floor((window.innerHeight - 880) / 200) * 6 :
+          33 + Math.floor((window.innerHeight - 880) / 200) * 6;
   store_player_appearance.player_lyric_fontSize = `${store_player_appearance.player_lyric_fontSize_Num}px`;
 }
 
@@ -890,9 +895,7 @@ onBeforeUnmount(() => {
           :style="{
             opacity: store_player_appearance.player_collapsed_action_bar_of_Immersion_model
             ? 0 : 1,
-            top: store_player_appearance.player_use_lyric_skip_forward
-            ? '0' : '4vh',
-            transition: 'margin 0.4s, opacity 0.4s',
+            transition: 'opacity 0.4s',
           }"
           style="
             width: 100vw;
@@ -999,15 +1002,12 @@ onBeforeUnmount(() => {
               style="transition: margin 0.4s;overflow: hidden;"
               :style="{
                 marginTop: store_player_appearance.player_use_lyric_skip_forward
-                ? '70px' : '0px',
+                ? '70px' : '50px',
                 marginLeft: store_player_appearance.player_background_model_num === 2
                 ? '36px' : '0px'
               }">
             <n-layout
                 has-sider
-                :style="{
-                  marginTop: store_player_appearance.player_use_lyric_skip_forward ? '0px' : '16px'
-                }"
                 style="
                   transition: margin 0.4s;
                   overflow: hidden;
@@ -1028,7 +1028,7 @@ onBeforeUnmount(() => {
                     }"
                     :style="{
                       marginTop: store_player_appearance.player_use_lyric_skip_forward
-                      ? '0px' : '92px',
+                      ? '0px' : '40px',
                       transition: 'margin 0.4s',
                     }"
                     style="margin-right:8vw;">
@@ -1142,7 +1142,7 @@ onBeforeUnmount(() => {
                       :style="{
                         marginTop: store_player_appearance.player_background_model_num === 2
                         ? (store_player_appearance.player_use_lyric_skip_forward
-                        ? 'calc(-6vh - 30px)' : 'calc(-6vh - 25px)') : '0px',
+                        ? 'calc(-6vh - 30px)' : 'calc(-6vh - 30px)') : '0px',
                         opacity: store_player_appearance.player_background_model_num === 2
                         ? 1 : 0,
                         left: store_player_appearance.player_background_model_num === 2
@@ -1319,14 +1319,12 @@ onBeforeUnmount(() => {
                   :style="{
                     marginLeft: store_player_appearance.player_background_model_num != 3
                     ? '-3vw' : '2vw',
-                    marginTop: store_player_appearance.player_use_lyric_skip_forward
-                    ? '0px' : '46px'
                   }"
               >
                 <div
                     :style="{
                     height: store_player_appearance.player_use_lyric_skip_forward
-                    ? 'calc(100vh - 100px)' : 'calc(100vh + 12px)',
+                    ? 'calc(100vh - 100px)' : 'calc(100vh - 50px)',
                   }"
                     style="
                     width: 40vw;

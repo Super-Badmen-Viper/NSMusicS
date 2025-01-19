@@ -52,10 +52,10 @@ export const store_view_album_page_fetchData = reactive({
                             store_view_album_page_logic.page_albumlists_options_Sort_key[0].order.replace('end', '') : '';
                         let keywordFilter = store_view_album_page_logic.page_albumlists_keyword.length > 0 ?
                             `WHERE id LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
-                    OR name LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
-                    OR artist LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
-                    OR artist_id LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
-                    OR created_at LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%'` :
+                            OR name LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
+                            OR artist LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
+                            OR artist_id LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
+                            OR created_at LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%'` :
                             '';
                         if (store_router_data_info.find_album_model === true) {
                             if (store_view_album_page_logic.page_albumlists_get_keyword_model_num != 1)
@@ -70,32 +70,44 @@ export const store_view_album_page_fetchData = reactive({
                                 }
                             }
                         }
+                        if (
+                            store_view_album_page_logic.page_albumlists_filter_year != 0 &&
+                            store_view_album_page_logic.page_albumlists_filter_year != undefined &&
+                            store_view_album_page_logic.page_albumlists_filter_year != 'undefined'
+                        ) {
+                            keywordFilter = this.addCondition(
+                                keywordFilter,
+                                `min_year = ${store_view_album_page_logic.page_albumlists_filter_year}`
+                            );
+                        }
                         stmt_album_string = `SELECT *
                                              FROM ${store_server_user_model.album} ${keywordFilter}
                                              ORDER BY ${sortKey} ${sortOrder}`;
                         stmt_album = db.prepare(stmt_album_string);
                         //////
-                        if (store_router_history_data_of_album.router_select_history_date_of_Album && store_view_album_page_logic.page_albumlists_keyword_reset === true) {
-                            store_router_history_data_of_album.remove_router_history_of_Album(store_router_history_data_of_album.router_select_history_date_of_Album.id);// 若存在新操作，则覆盖后续的路由
-                            store_view_album_page_logic.page_albumlists_keyword_reset = false;
-                        }
-                        const routerDate: Interface_View_Router_Date = {
-                            id: store_router_history_data_of_album.router_history_datas_of_Album ? store_router_history_data_of_album.router_history_datas_of_Album.length + 1 : 1,
-                            menu_select_active_key: 'go_albums_list',
-                            router_name: 'album',
-                            router_select_model_media: false,
-                            router_select_model_album: true,
-                            router_select_model_artist: false,
-                            page_lists_keyword: store_view_album_page_logic.page_albumlists_keyword,
-                            stmt_string: stmt_album_string,
-                            page_lists_selected: store_view_album_page_logic.page_albumlists_selected,
-                            columnKey: store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0 && store_view_album_page_logic.page_albumlists_options_Sort_key[0].order !== 'default' ?
-                                store_view_album_page_logic.page_albumlists_options_Sort_key[0].columnKey : 'id',
-                            order: store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0 && store_view_album_page_logic.page_albumlists_options_Sort_key[0].order !== 'default' ?
-                                store_view_album_page_logic.page_albumlists_options_Sort_key[0].order.replace('end', '') : '',
-                            page_lists_scrollindex: store_router_history_data_of_album.router_history_model_of_Album_scroller_value,
-                        };
-                        store_router_history_data_of_album.add_router_history_of_Album(routerDate);// 重复路由不添加
+                        if(!store_view_album_page_logic.page_albumlists_filter_model) {
+                            if (store_router_history_data_of_album.router_select_history_date_of_Album && store_view_album_page_logic.page_albumlists_keyword_reset === true) {
+                                store_router_history_data_of_album.remove_router_history_of_Album(store_router_history_data_of_album.router_select_history_date_of_Album.id);// 若存在新操作，则覆盖后续的路由
+                                store_view_album_page_logic.page_albumlists_keyword_reset = false;
+                            }
+                            const routerDate: Interface_View_Router_Date = {
+                                id: 0,
+                                menu_select_active_key: 'album',
+                                router_name: 'album',
+                                router_select_model_media: false,
+                                router_select_model_album: true,
+                                router_select_model_artist: false,
+                                page_lists_keyword: store_view_album_page_logic.page_albumlists_keyword,
+                                stmt_string: stmt_album_string,
+                                page_lists_selected: store_view_album_page_logic.page_albumlists_selected,
+                                columnKey: store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0 && store_view_album_page_logic.page_albumlists_options_Sort_key[0].order !== 'default' ?
+                                    store_view_album_page_logic.page_albumlists_options_Sort_key[0].columnKey : 'id',
+                                order: store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0 && store_view_album_page_logic.page_albumlists_options_Sort_key[0].order !== 'default' ?
+                                    store_view_album_page_logic.page_albumlists_options_Sort_key[0].order.replace('end', '') : '',
+                                page_lists_scrollindex: store_router_history_data_of_album.router_history_model_of_Album_scroller_value,
+                            };
+                            store_router_history_data_of_album.add_router_history_of_Album(routerDate);
+                        }// 添加新记录
                         //////
                     } else {
                         if (store_router_history_data_of_album.router_select_history_date_of_Album) {
@@ -265,6 +277,28 @@ export const store_view_album_page_fetchData = reactive({
             //
 
             store_playlist_list_logic.media_page_handleItemDbClick = false
+        }
+    },
+    removeCondition(filter, condition) {
+        if (filter.indexOf(`WHERE ${condition}`) >= 0) {
+            filter = filter.substring(0, filter.indexOf(`WHERE ${condition}`)).trim();
+            if (filter.endsWith('AND')) {
+                filter = filter.substring(0, filter.lastIndexOf('AND')).trim();
+            }
+        }
+        if (filter.indexOf(`AND ${condition}`) >= 0) {
+            filter = filter.substring(0, filter.indexOf(`AND ${condition}`)).trim();
+            if (filter.endsWith('AND')) {
+                filter = filter.substring(0, filter.lastIndexOf('AND')).trim();
+            }
+        }
+        return filter;
+    },
+    addCondition(filter, condition) {
+        if (filter.length === 0) {
+            return `WHERE ${condition}`;
+        } else {
+            return `${filter} AND ${condition}`;
         }
     },
 

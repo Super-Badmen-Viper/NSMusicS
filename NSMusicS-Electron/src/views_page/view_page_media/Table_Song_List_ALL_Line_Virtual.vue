@@ -27,7 +27,6 @@ import {NIcon, type InputInst, NButton} from 'naive-ui';
 
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
-import {store_server_user_model} from "@/store/server/store_server_user_model";
 const { t } = useI18n({
   inheritLocale: true
 })
@@ -249,7 +248,7 @@ const Type_Filter_Show = ref(false)
 ////// dynamicScroller of artistlist_view
 const dynamicScroller = ref(null as any);
 const onResize = () => {
-  // show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
+  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
   console.log('resize');
 }
 const updateParts = { viewStartIdx: 0, viewEndIdx: 0, visibleStartIdx: 0, visibleEndIdx: 0 } // 输出渲染范围updateParts
@@ -261,7 +260,7 @@ const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any
   
   store_router_history_data_of_media.router_history_model_of_Media_scroller_value = viewEndIndex
 
-  // show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
+  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
 }
 const show_top_selectedlist = ref(false)
 const stopWatching_router_history_model_of_Media_scroll = watch(() => store_router_history_data_of_media.router_history_model_of_Media_scroll,(newValue) => {
@@ -397,8 +396,6 @@ const handleItemClick_album = (album_id:string) => {
 }
 
 ////// changed_data write to sqlite
-import { Set_MediaInfo_To_LocalSqlite } from '@/data_access/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite'
-let set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   click_count = 0;
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
@@ -472,10 +469,9 @@ import {store_player_appearance} from "@/store/player/store_player_appearance";
 import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media";
 import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
 import type {SelectBaseOption} from "naive-ui/es/select/src/interface";
+import {store_local_db_info} from "@/store/local/store_local_db_info";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {
-  store_server_data_set_playlistInfo
-} from "@/store/server/server_data_synchronization/store_server_data_set_playlistInfo";
+import {store_server_data_set_playlistInfo} from "@/store/server/server_data_synchronization/store_server_data_set_playlistInfo";
 import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
@@ -793,7 +789,7 @@ const onScrollEnd = async () => {
   isScrolling.value = false;
 };
 const onScroll = async () => {
-  // show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
+  show_top_selectedlist.value = dynamicScroller.value.$el.scrollTop > 150;
 };
 
 /////
@@ -801,6 +797,8 @@ const onRefreshSharp = async () => {
   if(store_server_user_model.model_server_type_of_web){
     store_view_media_page_fetchData.fetchData_Media_of_server_web_start()
   }else if(store_server_user_model.model_server_type_of_local){
+    store_view_media_page_logic.page_songlists_bool_show_search_area = true;
+    show_search_area();
     scrollTo(0)
     store_view_media_page_logic.page_songlists_keywordFilter = ""
     store_view_media_page_logic.list_selected_Hand_click = false
@@ -865,6 +863,19 @@ onBeforeUnmount(() => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle
+                        @click="onRefreshSharp">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
+
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary circle
                         @click="show_search_area">
                 <template #icon>
                   <n-icon :size="20" :depth="2"><Search20Filled/></n-icon>
@@ -905,7 +916,8 @@ onBeforeUnmount(() => {
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-badge
-                  :value="store_view_media_page_logic.page_songlists_filter_year" :offset="[-17, 40]">
+                  :value="store_view_media_page_logic.page_songlists_filter_year"
+                  :offset="[22, 17]">
                 <n-button quaternary circle style="margin-left:4px" @click="Type_Filter_Show = true">
                   <template #icon>
                     <n-icon :size="20"><Filter20Filled/></n-icon>
@@ -926,11 +938,37 @@ onBeforeUnmount(() => {
                 <n-space justify="space-between">
                   <n-space vertical>
                     <span style="font-size:14px;font-weight: 600;">{{ $t('common.year') }}</span>
-                    <n-input clearable placeholder="" v-model:value="store_view_media_page_logic.page_songlists_filter_year"/>
+                    <n-space vertical>
+                      <n-input clearable placeholder=""
+                               style="width: 200px;"
+                               v-model:value="store_view_media_page_logic.page_songlists_filter_year"/>
+                      <n-button strong secondary
+                                @click="store_view_media_page_logic.page_songlists_filter_year = 0">
+                        {{ $t('common.clear') }}
+                      </n-button>
+                    </n-space>
                   </n-space>
                   <n-space vertical>
                     <span style="font-size:14px;font-weight: 600;">{{ $t('entity.genre_other') }}</span>
-                    <n-input disabled clearable placeholder="Not open || 未开放" v-model:value="playlist_set_of_addPlaylist_of_playlistname"/>
+                    <n-input disabled clearable placeholder="Not open || 未开放"
+                             style="width: 200px;"
+                             v-model:value="playlist_set_of_addPlaylist_of_playlistname"/>
+                  </n-space>
+                  <n-space vertical v-if="!store_server_user_model.model_server_type_of_web">
+                    <span style="font-size:14px;font-weight: 600;">{{ $t('HeaderLibraries') }}</span>
+                    <n-space vertical>
+                      <n-select
+                          :value="store_view_media_page_logic.page_songlists_filter_path_folder"
+                          :options="store_local_db_info.local_config_of_all_user_of_select"
+                          style="width: 200px;"
+                          @update:value="(value: any) => {
+                        store_view_media_page_logic.page_songlists_filter_path_folder = value
+                      }"/>
+                      <n-button strong secondary
+                                @click="store_view_media_page_logic.page_songlists_filter_path_folder = ''">
+                        {{ $t('common.clear') }}
+                      </n-button>
+                    </n-space>
                   </n-space>
                 </n-space>
               </n-space>
@@ -1015,17 +1053,6 @@ onBeforeUnmount(() => {
           </n-dropdown>
           <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
 
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary circle style="margin-left:4px"
-                        @click="onRefreshSharp">
-                <template #icon>
-                  <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
-                </template>
-              </n-button>
-            </template>
-            {{ $t('common.refresh') }}
-          </n-tooltip>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle style="margin-left:4px"

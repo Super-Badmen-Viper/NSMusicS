@@ -1,4 +1,4 @@
-import {store_player_audio_logic} from "../../store/player/store_player_audio_logic";
+import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 
 export class Audio_howler {

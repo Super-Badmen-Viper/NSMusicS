@@ -60,7 +60,6 @@ const gridItems = ref(5);
 const itemSecondarySize = ref(185);
 import error_album from '@/assets/img/error_album.jpg'
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
-import {store_view_artist_page_logic} from "@/store/view/artist/store_view_artist_page_logic";
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
   let result_src = error_album
@@ -288,23 +287,8 @@ const back_search_default = () => {
     }
   }
 }
-// lineItems Filter To Favorite
-const options_Filter = ref([
-  {
-    label: t('nsmusics.view_page.loveAlbum'),
-    key: 'filter_favorite',
-    icon() {
-      return h(NIcon, null, {
-        default: () => h(Heart28Filled)
-      });
-    }
-  }
-])
-const options_Filter_handleSelect = (key: string | number) => {
-  store_view_album_page_logic.page_albumlists_selected = 'album_list_love'
-  console.log('selected_value_for_albumlistall：'+'album_list_love');
-  breadcrumbItems.value = store_view_album_page_logic.page_albumlists_options.find(option => option.value === 'album_list_love')?.label || '';
-}
+// lineItems Filter
+const Type_Filter_Show = ref(false)
 
 ////// dynamicScroller of albumlist_view
 const dynamicScroller = ref(null as any);
@@ -595,6 +579,19 @@ onBeforeUnmount(() => {
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
+              <n-button quaternary circle
+                        @click="onRefreshSharp">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
+
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
               <n-button quaternary circle @click="show_search_area">
                 <template #icon>
                   <n-icon :size="20"><Search20Filled/></n-icon>
@@ -634,33 +631,52 @@ onBeforeUnmount(() => {
             </n-tooltip>
           </n-dropdown>
 
-          <n-dropdown
-              trigger="click" :show-arrow="true"
-              :options="options_Filter" @select="options_Filter_handleSelect">
-            <n-tooltip trigger="hover" placement="top">
-              <template #trigger>
-                <n-button quaternary circle style="margin-left:4px">
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-badge
+                  :value="store_view_album_page_logic.page_albumlists_filter_year"
+                  :offset="[22, 17]">
+                <n-button quaternary circle style="margin-left:4px" @click="Type_Filter_Show = true">
                   <template #icon>
                     <n-icon :size="20"><Filter20Filled/></n-icon>
                   </template>
                 </n-button>
-              </template>
-              {{ $t('Filters') }}
-            </n-tooltip>
-          </n-dropdown>
+              </n-badge>
+            </template>
+            {{ $t('Filters') }}
+          </n-tooltip>
+          <n-modal
+              v-model:show="Type_Filter_Show">
+            <n-card style="width: 480px;border-radius: 4px;">
+              <n-space
+                  vertical size="large">
+                <n-space>
+                  <span style="font-size: 20px;font-weight: 600;">{{ $t('common.filter_other')}}</span>
+                </n-space>
+                <n-space justify="space-between">
+                  <n-space vertical>
+                    <span style="font-size:14px;font-weight: 600;">{{ $t('common.year') }}</span>
+                    <n-space vertical>
+                      <n-input clearable placeholder=""
+                               style="width: 200px;"
+                               v-model:value="store_view_album_page_logic.page_albumlists_filter_year"/>
+                      <n-button strong secondary
+                                @click="store_view_album_page_logic.page_albumlists_filter_year = 0">
+                        {{ $t('common.clear') }}
+                      </n-button>
+                    </n-space>
+                  </n-space>
+                  <n-space vertical>
+                    <span style="font-size:14px;font-weight: 600;">{{ $t('entity.genre_other') }}</span>
+                    <n-input disabled clearable placeholder="Not open || 未开放"
+                             style="width: 200px;"/>
+                  </n-space>
+                </n-space>
+              </n-space>
+            </n-card>
+          </n-modal>
 
           <n-divider vertical style="width: 2px;height: 20px;margin-top: -2px;"/>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary circle style="margin-left:4px"
-                        @click="onRefreshSharp">
-                <template #icon>
-                  <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
-                </template>
-              </n-button>
-            </template>
-            {{ $t('common.refresh') }}
-          </n-tooltip>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle style="margin-left:4px"

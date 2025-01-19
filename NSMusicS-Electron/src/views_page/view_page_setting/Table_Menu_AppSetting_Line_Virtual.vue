@@ -694,10 +694,10 @@
                             </n-button>
                             <DynamicScroller v-if="Type_Server_Model_Open_Value === 'server'"
                                              class="table" ref="scrollbar"
-                                             style="overflow: auto;width: 780px;height: 130px;margin-top: 6px;"
+                                             style="overflow: auto;width: 580px;height: 130px;margin-top: 6px;"
                                              :items="store_server_users.server_config_of_all_user_of_sqlite"
                                              :itemSize="70"
-                                             :grid-items="3"
+                                             :grid-items="2"
                                              :item-secondary-size="260">
                               <!-- :minItemSize="6"> -->
                               <template #default="{ item, index, active }">
@@ -893,10 +893,10 @@
                                 </n-button>
                                 <DynamicScroller v-if="Type_Server_Model_Open_Value === 'local'"
                                                  class="table" ref="scrollbar"
-                                                 style="overflow: auto;width: 780px;height: 130px;margin-top: 6px;"
+                                                 style="overflow: auto;width: 580px;height: 130px;margin-top: 6px;"
                                                  :items="store_local_db_info.local_config_of_all_user_of_sqlite"
                                                  :itemSize="70"
-                                                 :grid-items="3"
+                                                 :grid-items="2"
                                                  :item-secondary-size="260">
                                   <!-- :minItemSize="6"> -->
                                   <template #default="{ item, index, active }">

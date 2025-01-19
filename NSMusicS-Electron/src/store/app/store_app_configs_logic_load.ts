@@ -114,7 +114,7 @@ export const store_app_configs_logic_load = reactive({
                 store_app_configs_info.menuOptions_selectd_model_3 = true
                 store_app_configs_info.menuOptions_selectd_model_4 = true
             }
-            store_view_media_page_logic.page_songlists_filter_year = Number('' + system_Configs_Read.app_Configs.value['page_songlists_filter_year'])
+            // store_view_media_page_logic.page_songlists_filter_year = Number('' + system_Configs_Read.app_Configs.value['page_songlists_filter_year'])
             /// library_Config
             store_server_user_model.library_path = '' + system_Configs_Read.library_Configs.value['library']
             if(
@@ -122,7 +122,13 @@ export const store_app_configs_logic_load = reactive({
                 store_server_user_model.library_path === 'undefined' ||
                 store_server_user_model.library_path.length === 0
             ) {
-                store_local_db_info.local_config_of_all_user_of_sqlite = system_Configs_Read.library_Configs.value
+                store_local_db_info.local_config_of_all_user_of_sqlite = system_Configs_Read.library_Configs.value;
+                store_local_db_info.local_config_of_all_user_of_sqlite.forEach(config => {
+                    store_local_db_info.local_config_of_all_user_of_select.push({
+                        label: config.config_key,
+                        value: config.config_value,
+                    });
+                });
             }
             if(store_local_db_info.local_config_of_all_user_of_sqlite === null || store_local_db_info.local_config_of_all_user_of_sqlite.length === 0){
                 if(isElectron) {
@@ -367,7 +373,9 @@ export const store_app_configs_logic_load = reactive({
         }
 
         /// close
-        store_router_data_logic.get_page_top_info()
+        try {
+            store_router_data_logic.get_page_top_info()
+        }catch{ }
         store_app_configs_info.app_view_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_view_left_menu_select_activeKey']
         store_router_data_info.router_name = '' + system_Configs_Read.app_Configs.value['router_name']
         if(store_router_data_info.router_name === ''){

@@ -62,8 +62,8 @@ export const store_view_artist_page_fetchData = reactive({
                             store_view_artist_page_logic.page_artistlists_keyword_reset = false;
                         }
                         const routerDate: Interface_View_Router_Date = {
-                            id: store_router_history_data_of_artist.router_history_datas_of_Artist ? store_router_history_data_of_artist.router_history_datas_of_Artist.length + 1 : 1,
-                            menu_select_active_key: 'go_artist_list',
+                            id: 0,
+                            menu_select_active_key: 'artist',
                             router_name: 'artist',
                             router_select_model_media: false,
                             router_select_model_album: false,
@@ -77,7 +77,7 @@ export const store_view_artist_page_fetchData = reactive({
                                 store_view_artist_page_logic.page_artistlists_options_Sort_key[0].order.replace('end', '') : '',
                             page_lists_scrollindex: store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value,
                         };
-                        store_router_history_data_of_artist.add_router_history_of_Artist(routerDate);// 重复路由不添加
+                        store_router_history_data_of_artist.add_router_history_of_Artist(routerDate);
                         //////
                     } else {
                         if (store_router_history_data_of_artist.router_select_history_date_of_Artist) {

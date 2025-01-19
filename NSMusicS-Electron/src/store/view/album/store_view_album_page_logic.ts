@@ -1,8 +1,8 @@
-import {reactive, ref, watch} from 'vue'
+import {reactive, watch} from 'vue'
 import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 import {store_router_data_info} from "@/store/router/store_router_data_info";
-import {store_router_data_logic} from "@/store/router/store_router_data_logic";
+import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 
 export const store_view_album_page_logic = reactive({
     list_data_StartUpdate: false,
@@ -16,7 +16,10 @@ export const store_view_album_page_logic = reactive({
     page_albumlists_get_keyword_model_num: 0,
     page_albumlists_options_Sort_key: [],
 
-    page_albumlists_input_search_Value: ''
+    page_albumlists_input_search_Value: '',
+
+    page_albumlists_filter_model: false,
+    page_albumlists_filter_year: 0,
 });
 watch(() => store_view_album_page_logic.page_albumlists_options_Sort_key, async (newValue) => {
     if (newValue != null) {
@@ -67,4 +70,10 @@ watch(() => store_view_album_page_logic.list_data_StartUpdate, (newValue) => {
         store_view_album_page_logic.list_data_StartUpdate = false
         console.log('page_albumlists_reset_data?:' + newValue)
     }
+});
+watch(() => store_view_album_page_logic.page_albumlists_filter_year, async (newValue) => {
+    store_view_album_page_logic.page_albumlists_filter_model = newValue !== 0
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_view_album_page_logic.page_albumlists_keyword = ""
+    await store_view_album_page_fetchData.fetchData_Album()
 });

@@ -66,7 +66,10 @@
     store_app_configs_info.window_innerWidth = window.innerWidth;
     store_app_configs_info.window_innerHeight = window.innerHeight;
 
-    store_player_appearance.player_lyric_fontSize_Num = 36 + Math.floor((window.innerHeight - 880) / 200) * 6;
+    store_player_appearance.player_lyric_fontSize_Num =
+        store_player_appearance.player_use_lyric_skip_forward ?
+            36 + Math.floor((window.innerHeight - 880) / 200) * 6 :
+            33 + Math.floor((window.innerHeight - 880) / 200) * 6;
     store_player_appearance.player_lyric_fontSize = `${store_player_appearance.player_lyric_fontSize_Num}px`;
   });
 
@@ -629,22 +632,6 @@
       console.log(store_app_configs_info.navidrome_db)
       console.log(store_app_configs_info.nsmusics_db)
     }
-
-    try {
-      if (process.platform === 'win32') {
-        store_app_configs_info.desktop_system_kind = 'win32';
-        store_player_appearance.player_lyric_fontSize = '28px';
-        store_player_appearance.player_lyric_fontSize_Num = 28;
-      } else if (process.platform === 'darwin') {
-        store_app_configs_info.desktop_system_kind = 'darwin';
-        store_player_appearance.player_lyric_fontSize = '36px';
-        store_player_appearance.player_lyric_fontSize_Num = 36;
-      } else {
-        store_app_configs_info.desktop_system_kind = 'linux';
-        store_player_appearance.player_lyric_fontSize = '28px';
-        store_player_appearance.player_lyric_fontSize_Num = 28;
-      }
-    }catch{  }
 
     try {
       if(isElectron) {

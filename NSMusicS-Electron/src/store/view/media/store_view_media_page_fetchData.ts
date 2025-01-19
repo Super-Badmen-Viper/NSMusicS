@@ -45,26 +45,29 @@ export const store_view_media_page_fetchData = reactive({
                             store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey : 'id';
                         const sortOrder = store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
                             store_view_media_page_logic.page_songlists_options_Sort_key[0].order.replace('end', '') : '';
-                        /// year
-                        if (store_view_media_page_logic.page_songlists_keywordFilter.indexOf('WHERE year') >= 0) {
-                            store_view_media_page_logic.page_songlists_keywordFilter =
-                                store_view_media_page_logic.page_songlists_keywordFilter.substring(
-                                    0,
-                                    store_view_media_page_logic.page_songlists_keywordFilter.indexOf('WHERE year')
-                                )
-                        }
-                        if (store_view_media_page_logic.page_songlists_keywordFilter.indexOf('AND year') >= 0) {
-                            store_view_media_page_logic.page_songlists_keywordFilter =
-                                store_view_media_page_logic.page_songlists_keywordFilter.substring(
-                                    0,
-                                    store_view_media_page_logic.page_songlists_keywordFilter.indexOf('AND year')
-                                )
-                        }
-                        if (store_view_media_page_logic.page_songlists_filter_year > 0) {
-                            if (store_view_media_page_logic.page_songlists_keywordFilter.length === 0) {
-                                store_view_media_page_logic.page_songlists_keywordFilter = `WHERE year = ${store_view_media_page_logic.page_songlists_filter_year}`
-                            } else {
-                                store_view_media_page_logic.page_songlists_keywordFilter += `AND year = ${store_view_media_page_logic.page_songlists_filter_year}`
+                        if(store_view_media_page_logic.page_songlists_keywordFilter.length === 0) {
+                            // 1. 处理 year 条件
+                            store_view_media_page_logic.page_songlists_keywordFilter = this.removeCondition(
+                                store_view_media_page_logic.page_songlists_keywordFilter,
+                                'year'
+                            );
+                            if (store_view_media_page_logic.page_songlists_filter_year > 0) {
+                                store_view_media_page_logic.page_songlists_keywordFilter = this.addCondition(
+                                    store_view_media_page_logic.page_songlists_keywordFilter,
+                                    `year = ${store_view_media_page_logic.page_songlists_filter_year}`
+                                );
+                            }
+                            // 2. 处理 path 条件
+                            store_view_media_page_logic.page_songlists_keywordFilter = this.removeCondition(
+                                store_view_media_page_logic.page_songlists_keywordFilter,
+                                'path'
+                            );
+                            if (store_view_media_page_logic.page_songlists_filter_path_folder.length > 0) {
+                                const pathFilter = `path LIKE '${store_view_media_page_logic.page_songlists_filter_path_folder}%'`;
+                                store_view_media_page_logic.page_songlists_keywordFilter = this.addCondition(
+                                    store_view_media_page_logic.page_songlists_keywordFilter,
+                                    pathFilter
+                                );
                             }
                         }
                         ///
@@ -78,30 +81,33 @@ export const store_view_media_page_fetchData = reactive({
                             console.error(err);
                         }
                         //////
-                        if (store_router_history_data_of_media.router_select_history_date_of_Media && store_view_media_page_logic.page_songlists_keyword_reset === true) {
-                            store_router_history_data_of_media.remove_router_history_of_Media(store_router_history_data_of_media.router_select_history_date_of_Media.id);// 若存在新操作，则覆盖后续的路由
-                            store_view_media_page_logic.page_songlists_keyword_reset = false;
+                        if(!store_view_media_page_logic.page_songlists_filter_model) {
+                            if (store_router_history_data_of_media.router_select_history_date_of_Media && store_view_media_page_logic.page_songlists_keyword_reset === true) {
+                                store_router_history_data_of_media.remove_router_history_of_Media(store_router_history_data_of_media.router_select_history_date_of_Media.id);// 若存在新操作，则覆盖后续的路由
+                                store_view_media_page_logic.page_songlists_keyword_reset = false;
+                            }
+                            const routerDate: Interface_View_Router_Date = {
+                                id: 0,
+                                menu_select_active_key: 'song',
+                                router_name: 'song',
+                                router_select_model_media: true,
+                                router_select_model_album: false,
+                                router_select_model_artist: false,
+                                page_lists_keyword: store_view_media_page_logic.page_songlists_keyword,
+                                page_songlists_keywordFilter: store_view_media_page_logic.page_songlists_keywordFilter,
+                                stmt_string: stmt_media_file_string,
+                                page_lists_selected: store_view_media_page_logic.page_songlists_selected,
+                                columnKey: store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
+                                    store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey : 'id',
+                                order: store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
+                                    store_view_media_page_logic.page_songlists_options_Sort_key[0].order.replace('end', '') : '',
+                                page_lists_scrollindex: store_router_history_data_of_media.router_history_model_of_Media_scroller_value,
+                            };
+                            store_router_history_data_of_media.add_router_history_of_Media(routerDate); // 添加新记录
                         }
-                        const routerDate: Interface_View_Router_Date = {
-                            id: store_router_history_data_of_media.router_history_datas_of_Media ? store_router_history_data_of_media.router_history_datas_of_Media.length + 1 : 1,
-                            menu_select_active_key: 'go_songs_list',
-                            router_name: 'song',
-                            router_select_model_media: true,
-                            router_select_model_album: false,
-                            router_select_model_artist: false,
-                            page_lists_keyword: store_view_media_page_logic.page_songlists_keyword,
-                            page_songlists_keywordFilter: store_view_media_page_logic.page_songlists_keywordFilter,
-                            stmt_string: stmt_media_file_string,
-                            page_lists_selected: store_view_media_page_logic.page_songlists_selected,
-                            columnKey: store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
-                                store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey : 'id',
-                            order: store_view_media_page_logic.page_songlists_options_Sort_key.length > 0 && store_view_media_page_logic.page_songlists_options_Sort_key[0].order !== 'default' ?
-                                store_view_media_page_logic.page_songlists_options_Sort_key[0].order.replace('end', '') : '',
-                            page_lists_scrollindex: store_router_history_data_of_media.router_history_model_of_Media_scroller_value,
-                        };
-                        store_router_history_data_of_media.add_router_history_of_Media(routerDate);// 重复路由不添加
                         //////
-                    } else {
+                    }
+                    else {
                         if (store_router_history_data_of_media.router_select_history_date_of_Media) {
                             store_router_data_info.router.push('song')
                             store_router_data_info.router_select_model_media = true;
@@ -318,6 +324,28 @@ export const store_view_media_page_fetchData = reactive({
             });
         } else {
             // other
+        }
+    },
+    removeCondition(filter, condition) {
+        if (filter.indexOf(`WHERE ${condition}`) >= 0) {
+            filter = filter.substring(0, filter.indexOf(`WHERE ${condition}`)).trim();
+            if (filter.endsWith('AND')) {
+                filter = filter.substring(0, filter.lastIndexOf('AND')).trim();
+            }
+        }
+        if (filter.indexOf(`AND ${condition}`) >= 0) {
+            filter = filter.substring(0, filter.indexOf(`AND ${condition}`)).trim();
+            if (filter.endsWith('AND')) {
+                filter = filter.substring(0, filter.lastIndexOf('AND')).trim();
+            }
+        }
+        return filter;
+    },
+    addCondition(filter, condition) {
+        if (filter.length === 0) {
+            return `WHERE ${condition}`;
+        } else {
+            return `${filter} AND ${condition}`;
         }
     },
 

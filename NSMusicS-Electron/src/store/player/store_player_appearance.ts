@@ -73,6 +73,10 @@ watch(() => store_player_appearance.player_use_lottie_animation, (newValue) => {
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
 });
 watch(() => store_player_appearance.player_use_lyric_skip_forward, (newValue) => {
+    store_player_appearance.player_lyric_fontSize_Num =
+        store_player_appearance.player_use_lyric_skip_forward ?
+            36 + Math.floor((window.innerHeight - 880) / 200) * 6 :
+            33 + Math.floor((window.innerHeight - 880) / 200) * 6;
     store_app_configs_logic_save.save_system_config_of_Player_Configs_of_UI()
 });
 watch(() => store_player_appearance.player_use_background_filter_blur, (newValue) => {

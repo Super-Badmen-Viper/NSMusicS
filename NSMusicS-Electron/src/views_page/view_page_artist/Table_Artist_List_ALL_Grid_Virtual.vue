@@ -524,6 +524,19 @@ onBeforeUnmount(() => {
             <template #trigger>
               <n-button quaternary circle
                         style="margin-left:4px"
+                        @click="onRefreshSharp">
+                <template #icon>
+                  <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('common.refresh') }}
+          </n-tooltip>
+          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
+
+          <n-tooltip trigger="hover" placement="top">
+            <template #trigger>
+              <n-button quaternary circle
                         @click="show_search_area">
                 <template #icon>
                   <n-icon :size="20"><Search20Filled/></n-icon>
@@ -564,6 +577,7 @@ onBeforeUnmount(() => {
           </n-dropdown>
 
           <n-dropdown
+              v-if="false"
               trigger="click" :show-arrow="true"
               :options="options_Filter" @select="options_Filter_handleSelect">
             <n-tooltip trigger="hover" placement="top">
@@ -579,17 +593,6 @@ onBeforeUnmount(() => {
           </n-dropdown>
 
           <n-divider vertical style="width: 2px;height: 20px;margin-top: -2px;"/>
-          <n-tooltip trigger="hover" placement="top">
-            <template #trigger>
-              <n-button quaternary circle style="margin-left:4px"
-                        @click="onRefreshSharp">
-                <template #icon>
-                  <n-icon :size="20" :depth="2"><RefreshSharp/></n-icon>
-                </template>
-              </n-button>
-            </template>
-            {{ $t('common.refresh') }}
-          </n-tooltip>
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>
               <n-button quaternary circle style="margin-left:4px"

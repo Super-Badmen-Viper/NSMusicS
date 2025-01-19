@@ -29,7 +29,9 @@ export const store_view_media_page_logic = reactive({
     page_songlists_get_keyword_model_num: 0,
     page_songlists_options_Sort_key: [],
 
+    page_songlists_filter_model: false,
     page_songlists_filter_year: 0,
+    page_songlists_filter_path_folder: '',
 
     page_songlists_bool_show_search_area: false,
     page_songlists_input_search_Value: '',
@@ -227,6 +229,16 @@ watch(() => store_view_media_page_logic.list_data_StartUpdate, async (newValue) 
     }
 });
 watch(() => store_view_media_page_logic.page_songlists_filter_year, async (newValue) => {
+    store_view_media_page_logic.page_songlists_filter_model = newValue !== 0
     store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_view_media_page_logic.page_songlists_keywordFilter = ""
+    store_view_media_page_logic.list_selected_Hand_click = false
+    await store_view_media_page_fetchData.fetchData_Media()
+});
+watch(() => store_view_media_page_logic.page_songlists_filter_path_folder, async (newValue) => {
+    store_view_media_page_logic.page_songlists_filter_model = newValue !== ''
+    store_app_configs_logic_save.save_system_config_of_App_Configs()
+    store_view_media_page_logic.page_songlists_keywordFilter = ""
+    store_view_media_page_logic.list_selected_Hand_click = false
     await store_view_media_page_fetchData.fetchData_Media()
 });

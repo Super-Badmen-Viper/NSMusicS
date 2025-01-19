@@ -1,6 +1,4 @@
-import {reactive, watch} from 'vue'
-import {store_router_data_info} from "@/store/router/store_router_data_info";
-import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {reactive} from 'vue'
 import {Set_ALL_LocalData} from "@/data_access/sqlite3_local_configs/class_Set_ALL_LocalData";
 
 export const store_local_db_info = reactive({
