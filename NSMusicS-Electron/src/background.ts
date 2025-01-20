@@ -562,6 +562,32 @@ async function createWindow() {
             return 'file:///' + path.join(driveDbPath, 'error_album.jpg');;
         }
     });
+    ipc.handle('window-get-LyricPath', (event, mediaPath) => {
+        try {
+            const filePath = decodeURIComponent(mediaPath.replace(/^file:\/\//, '').replace(/^\/+/, ''));
+            const dir = path.dirname(filePath);
+            const baseName = path.basename(filePath, path.extname(filePath));
+            const lrcPath = path.join(dir, `${baseName}.lrc`);
+            if (fs.existsSync(lrcPath)) {
+                const lrcContent = fs.readFileSync(lrcPath, 'utf-8');
+                return lrcContent;
+            }
+            const files = fs.readdirSync(dir);
+            for (const file of files) {
+                if (file.toLowerCase().endsWith('.lrc')) {
+                    const filePath = path.join(dir, file);
+                    if (fs.existsSync(filePath)) {
+                        const lrcContent = fs.readFileSync(filePath, 'utf-8');
+                        return lrcContent;
+                    }
+                }
+            }
+            return '';
+        } catch (error) {
+            console.error('Error handling window-get-LyricPath:', error);
+            return '';
+        }
+    });
     ipc.handle('library-select-folder', async (event) => {
         const { dialog } = require('electron');
         const result = await dialog.showOpenDialog({

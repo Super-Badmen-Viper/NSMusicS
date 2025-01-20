@@ -31,6 +31,7 @@ const computed_i18n_Label_ViewSetConfig_Cover_1 = computed(() => t('nsmusics.vie
 const computed_i18n_Label_ViewSetConfig_Cover_2 = computed(() => t('nsmusics.view_player.view_seting.coverRotate_2'));
 const computed_i18n_Label_ViewSetConfig_Cover_3 = computed(() => t('nsmusics.view_player.view_seting.coverBeaut_3'));
 const computed_i18n_Label_ViewSetConfig_Cover_4 = computed(() => t('nsmusics.view_player.view_seting.coverBase_4'));
+const computed_i18n_Label_Lyric_Not_Find = computed(() => t('HeaderNoLyrics'));
 
 // audio_class & player_bar & player_view
 import {store_player_view} from "@/store/player/store_player_view";
@@ -41,7 +42,7 @@ let unwatch = watch(() => store_player_audio_info.this_audio_lyrics_loaded_compl
   if(newValue) {
     load_lyrics();
     store_player_audio_logic.player_slider_click = true;
-    scrollToItem(store_player_audio_info.this_audio_lyrics_info_line_num);
+    scrollToItem(0);
   }
 });
 onMounted(() => {
@@ -50,6 +51,13 @@ onMounted(() => {
 });
 function load_lyrics() {
   if(store_player_audio_info.this_audio_lyrics_string.length > 0) {
+    if(store_player_audio_info.this_audio_lyrics_null){
+      store_player_audio_info.this_audio_lyrics_info_line_font.forEach((item: any, index: number) => {
+        if ((item != null || item != 'undefined' || item != '') && item === '未找到可用歌词') {
+          store_player_audio_info.this_audio_lyrics_info_line_font[index] = computed_i18n_Label_Lyric_Not_Find.value;
+        }
+      });
+    }
     handleAuto_fontSize(store_player_appearance.player_lyric_fontSize_Num)
     begin_lyrics_animation()
     try{
