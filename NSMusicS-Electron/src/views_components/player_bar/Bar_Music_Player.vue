@@ -259,7 +259,18 @@ const init_player_howler = async () => {
 const Set_MediaInfo_To_PlayCount = debounce(async (event, args) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_PlayCount_of_Media_File(
       store_player_audio_info.this_audio_song_id
-  )
+  );
+  if(store_server_user_model.model_server_type_of_local){
+    let get_AnnotationInfo_To_LocalSqlite = new Get_AnnotationInfo_To_LocalSqlite();
+    store_view_media_page_info.media_recently_count =
+        get_AnnotationInfo_To_LocalSqlite.Get_Annotation_ItemInfo_Play_Count('media_file')
+    store_view_media_page_logic.page_songlists_statistic.forEach((item: any) => {
+      if (item.id === 'song_list_recently') {
+        item.song_count = store_view_media_page_info.media_recently_count + ' *';
+      }
+    });
+    store_player_audio_logic.boolHandleItemClick_Played = true
+  }
 }, 1000);
 
 /// Prevent 'mpv stopped' from being triggered multiple times and implement anti shake throttling measures
@@ -613,7 +624,6 @@ import {store_player_sound_more} from "@/store/player/store_player_sound_more";
 import {store_playlist_appearance} from '@/store/view/playlist/store_playlist_appearance'
 import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info"
 import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
-import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
 import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
@@ -621,23 +631,35 @@ import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlis
 import {Audio_howler} from "@/data_models/song_Audio_Out/Audio_howler";
 import {Audio_node_mpv} from "@/data_models/song_Audio_Out/Audio_node_mpv";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+import {Get_AnnotationInfo_To_LocalSqlite} from "@/data_access/sqlite3_local_configs/class_Get_AnnotationInfo_To_LocalSqlite";
+import {store_local_data_set_artistInfo} from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
 
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
-  store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id,favorite)
-  store_player_audio_info.this_audio_song_favorite = !favorite
+  if(id != null && id.length > 0 && id != 'undefined') {
+    store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
+    store_player_audio_info.this_audio_song_favorite = !favorite
 
-  const item_file: Media_File | undefined =
-      store_view_media_page_info.media_Files_temporary.find(
-          (mediaFile: Media_File) =>
-              mediaFile.id === store_player_audio_info.this_audio_song_id);
-  const item_playlist: Media_File | undefined =
-      store_playlist_list_info.playlist_MediaFiles_temporary.find(
-          (mediaFile: Media_File) =>
-              mediaFile.id === store_player_audio_info.this_audio_song_id);
-  if(item_file !== undefined)
-    item_file.favorite = !favorite
-  if(item_playlist !== undefined)
-    item_playlist.favorite = !favorite
+    store_view_media_page_logic.page_songlists_statistic.forEach((item: any) => {
+      if (item.id === 'song_list_love') {
+        store_view_media_page_info.media_starred_count += !favorite ? 1 : -1;
+        item.song_count = store_view_media_page_info.media_starred_count + ' *';
+      }
+    });
+    store_player_audio_logic.boolHandleItemClick_Favorite = true
+
+    const item_file: Media_File | undefined =
+        store_view_media_page_info.media_Files_temporary.find(
+            (mediaFile: Media_File) =>
+                mediaFile.id === store_player_audio_info.this_audio_song_id);
+    const item_playlist: Media_File | undefined =
+        store_playlist_list_info.playlist_MediaFiles_temporary.find(
+            (mediaFile: Media_File) =>
+                mediaFile.id === store_player_audio_info.this_audio_song_id);
+    if (item_file !== undefined)
+      item_file.favorite = !favorite
+    if (item_playlist !== undefined)
+      item_playlist.favorite = !favorite
+  }
 }
 const handleItemClick_Rating = (id: any,rating: any) => {
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Rating(id, rating);
@@ -726,23 +748,6 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
     store_player_audio_logic.player_click_state_of_play_skip_forward = false
   }
 })
-watch(() => store_app_configs_info.lang, (newValue) => {
-  if(newValue){
-    orderPanelWidath.value = langWidths.value[store_app_configs_info.lang.toString()];
-    orderButonWidath.value = orderPanelWidath.value - 14;
-  }
-})
-const langWidths = ref({
-  zhHans: '122', zhHant: '122', en: '202',
-  cs: '211',es: '233', de: '228',
-  fr: '202', it: '240',
-  ja: '166', nl: '206',
-  fa: '169', ptBr: '224',
-  pl: '252', ru: '330',
-  sr: '232', sv: '242',
-});
-const orderPanelWidath = ref('202')
-const orderButonWidath = ref('202')
 </script>
 <template>
   <n-space
@@ -983,7 +988,7 @@ const orderButonWidath = ref('202')
         <n-config-provider :theme="null">
           <div id="backpanel_order"
                :style="{
-                  minWidth: orderPanelWidath + 'px'
+                  minWidth: store_player_audio_logic.orderPanelWidath + 'px'
                }"
                @mouseleave="backpanel_order_leave"></div>
           <n-drawer
@@ -1002,7 +1007,7 @@ const orderButonWidath = ref('202')
                       store_player_audio_logic.drawer_order_show = false;
                     }"
                     :style="{
-                      minWidth: orderButonWidath + 'px',
+                      minWidth: store_player_audio_logic.orderButonWidath + 'px',
                       display: 'flex',
                       justifyContent: 'flex-start',
                     }"
@@ -1021,7 +1026,7 @@ const orderButonWidath = ref('202')
                       store_player_audio_logic.drawer_order_show = false;
                     }"
                     :style="{
-                      minWidth: orderButonWidath + 'px',
+                      minWidth: store_player_audio_logic.orderButonWidath + 'px',
                       display: 'flex',
                       justifyContent: 'flex-start',
                     }"
@@ -1040,7 +1045,7 @@ const orderButonWidath = ref('202')
                       store_player_audio_logic.drawer_order_show = false;
                     }"
                     :style="{
-                      minWidth: orderButonWidath + 'px',
+                      minWidth: store_player_audio_logic.orderButonWidath + 'px',
                       display: 'flex',
                       justifyContent: 'flex-start',
                     }"
@@ -1059,7 +1064,7 @@ const orderButonWidath = ref('202')
                       store_player_audio_logic.drawer_order_show = false;
                     }"
                     :style="{
-                      minWidth: orderButonWidath + 'px',
+                      minWidth: store_player_audio_logic.orderButonWidath + 'px',
                       display: 'flex',
                       justifyContent: 'flex-start',
                     }"

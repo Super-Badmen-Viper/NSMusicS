@@ -399,7 +399,12 @@ const handleItemClick_album = (album_id:string) => {
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   click_count = 0;
   store_local_data_set_mediaInfo.Set_MediaInfo_To_Favorite(id, favorite)
-
+  page_songlists_statistic.value.forEach((item: any) => {
+    if(item.id === 'song_list_love') {
+      store_view_media_page_info.media_starred_count += !favorite ? 1 : -1;
+      item.song_count = store_view_media_page_info.media_starred_count + ' *';
+    }
+  });
   if (id === store_player_audio_info.this_audio_song_id){
     store_player_audio_info.this_audio_song_favorite = !favorite;
     //
@@ -407,8 +412,9 @@ const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
         store_playlist_list_info.playlist_MediaFiles_temporary.find(
             (mediaFile: Media_File) =>
                 mediaFile.id === store_player_audio_info.this_audio_song_id);
-    if(item_playlist !== undefined)
+    if(item_playlist !== undefined) {
       item_playlist.favorite = !favorite
+    }
   }
 }
 let before_rating = false
@@ -479,7 +485,9 @@ import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
-import {MinusRound} from "@vicons/material";
+import {
+  Get_PlaylistInfo_From_LocalSqlite
+} from "@/data_access/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -514,10 +522,18 @@ async function update_playlist_addPlaylist(){
           playlist_set_of_addPlaylist_of_comment.value + ': ' +
           playlist_set_of_addPlaylist_of_public.value
       )
-    }else {
+    }
+    else {
       store_playlist_list_logic.get_playlist_tracks_temporary_add(playlist_set_of_addPlaylist_of_playlistname.value)
     }
     Type_Add_Playlist.value = !Type_Add_Playlist.value
+
+    store_view_media_page_info.media_playlist_count++;
+    page_songlists_statistic.value.forEach((item: any) => {
+      if(item.id === 'song_list_all_PlayList') {
+        item.song_count = store_view_media_page_info.media_playlist_count + ' *';
+      }
+    });
   }catch (e) {
     console.error(e)
   }
@@ -567,6 +583,13 @@ async function update_playlist_deletePlaylist(){
           playlist_update_emit_id.value
       )
     }
+
+    store_view_media_page_info.media_playlist_count--;
+    page_songlists_statistic.value.forEach((item: any) => {
+      if(item.id === 'song_list_all_PlayList') {
+        item.song_count = store_view_media_page_info.media_playlist_count + ' *';
+      }
+    });
   }catch (e) {
     console.error(e)
   }
@@ -806,8 +829,41 @@ const onRefreshSharp = async () => {
   }
 }
 
+const page_songlists_statistic = ref<{
+  label: '',
+  song_count: '',
+  id: ''
+}[]>([])
+function Refresh_page_songlists_statistic(){
+  page_songlists_statistic.value = []
+  store_view_media_page_logic.page_songlists_statistic.forEach((item: any, index: number) => {
+    page_songlists_statistic.value.push({
+      label: store_view_media_page_logic.page_songlists_statistic[index].label,
+      song_count: store_view_media_page_logic.page_songlists_statistic[index].song_count,
+      id: store_view_media_page_logic.page_songlists_statistic[index].id,
+    });
+  });
+}
+onMounted(() => {
+  Refresh_page_songlists_statistic();
+})
+const stopWatching_boolHandleItemClick_Favorite = watch(() => store_player_audio_logic.boolHandleItemClick_Favorite, (newValue) => {
+  if(newValue) {
+    Refresh_page_songlists_statistic();
+    store_player_audio_logic.boolHandleItemClick_Favorite = false
+  }
+});
+const stopWatching_boolHandleItemClick_Played = watch(() => store_player_audio_logic.boolHandleItemClick_Played, (newValue, oldValue) => {
+  if (newValue === true && newValue !== oldValue) {
+    Refresh_page_songlists_statistic();
+    store_player_audio_logic.boolHandleItemClick_Played = false;
+  }
+}, { immediate: true });
+
 ////// view songlist_view Remove data
 onBeforeUnmount(() => {
+  stopWatching_boolHandleItemClick_Favorite()
+  stopWatching_boolHandleItemClick_Played()
   stopWatching_router_history_model_of_Media_scroll()
   dynamicScroller.value = null;
 });
@@ -1244,7 +1300,7 @@ onBeforeUnmount(() => {
                     <n-grid
                         :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
                         style="margin-left: 4px;width: 336px;">
-                      <n-gi v-for="songlist in store_view_media_page_logic.page_songlists_statistic" :key="songlist.id">
+                      <n-gi v-for="songlist in page_songlists_statistic" :key="songlist.id">
                         <n-statistic :label="songlist.label" :value="songlist.song_count" />
                       </n-gi>
                     </n-grid>
@@ -1468,10 +1524,16 @@ onBeforeUnmount(() => {
 <!--          </n-space>-->
         </n-form>
         <n-space justify="end">
-          <n-button strong secondary type="error" @click="update_playlist_deletePlaylist();Type_Update_Playlist = !Type_Update_Playlist;playlist_set_of_updatePlaylist_of_playlistcomment = ''">
+          <n-button strong secondary type="error"
+                    @click="() => {
+                      update_playlist_deletePlaylist();
+                      Type_Update_Playlist = !Type_Update_Playlist;
+                      playlist_set_of_updatePlaylist_of_playlistcomment = '';
+                    }">
             {{ $t('common.delete') }}
           </n-button>
-          <n-button strong secondary type="info" @click="update_playlist_updatePlaylist();">
+          <n-button strong secondary type="info"
+                    @click="update_playlist_updatePlaylist();">
             {{ $t('common.save') }}
           </n-button>
         </n-space>

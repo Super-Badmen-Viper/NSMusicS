@@ -1222,6 +1222,8 @@
                       style="width: 207px;margin-top: -4px;"
                       @update:value="() => {
                         store_app_configs_info.lang = $i18n.locale;
+                        store_player_audio_logic.orderPanelWidath = store_player_audio_logic.langWidths[store_app_configs_info.lang.toString()];
+                        store_player_audio_logic.orderButonWidath = store_player_audio_logic.orderPanelWidath - 14;
                         if(isElectron) {
                           ipcRenderer.invoke('i18n-tray-label-menu',
                             [

@@ -1236,7 +1236,7 @@ onBeforeUnmount(() => {
                       <div
                           style="
                           width: 4vh;height: 4vh;
-                          border-radius: 6vh;border: 1.5px solid #FFFFFF40;
+                          border-radius: 6vh;border: 2px solid #FFFFFF40;
                           position: absolute;top: calc(50% - 2vh);right: calc(-2vh);
                           background-color: #DCDBDD20;
                           transition: right 0.4s, opacity 0.4s;

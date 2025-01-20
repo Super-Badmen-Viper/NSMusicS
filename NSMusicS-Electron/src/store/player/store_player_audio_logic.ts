@@ -1,4 +1,4 @@
-import {reactive, watch} from 'vue'
+import {reactive, ref, watch} from 'vue'
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {Audio_node_mpv} from "@/data_models/song_Audio_Out/Audio_node_mpv";
 import {Audio_howler} from "@/data_models/song_Audio_Out/Audio_howler";
@@ -60,6 +60,20 @@ export const store_player_audio_logic = reactive({
 
     orderToolShow: true,
     voiceToolShow: true,
+    langWidths: {
+        zhHans: '122', zhHant: '122', en: '202',
+        cs: '211',es: '233', de: '228',
+        fr: '202', it: '240',
+        ja: '166', nl: '206',
+        fa: '169', ptBr: '224',
+        pl: '252', ru: '330',
+        sr: '232', sv: '242',
+    },
+    orderPanelWidath: '202',
+    orderButonWidath: '202',
+
+    boolHandleItemClick_Favorite: false,
+    boolHandleItemClick_Played: false,
 
     formatTime(currentTime: number): string {
         const minutes = Math.floor(currentTime / 60);

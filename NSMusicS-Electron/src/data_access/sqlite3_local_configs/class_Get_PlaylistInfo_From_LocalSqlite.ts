@@ -4,6 +4,27 @@ import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron';
 
 export class Get_PlaylistInfo_From_LocalSqlite {
+    public Get_Playlist_Count(): number {
+        if(isElectron) {
+            let db;
+            try {
+                db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+                db.pragma('journal_mode = WAL');
+                db.pragma('foreign_keys = OFF');
+                const stmt_playlist = db.prepare(`SELECT COUNT(*) AS count FROM ${store_server_user_model.playlist}`);
+                const result = stmt_playlist.get();
+                return result?.count || 0;
+            } catch (error) {
+                console.error('获取歌单数量时出错:', error);
+                return 0;
+            } finally {
+                db.close();
+            }
+        } else {
+            // other
+        }
+        return 0
+    }
     public Get_Playlist() {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);

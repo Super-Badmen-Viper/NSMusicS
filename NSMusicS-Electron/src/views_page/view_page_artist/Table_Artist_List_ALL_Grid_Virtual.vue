@@ -370,6 +370,12 @@ import {store_view_media_page_logic} from "@/store/view/media/store_view_media_p
 import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   store_local_data_set_artistInfo.Set_ArtistInfo_To_Favorite(id,favorite)
+  page_artistlists_statistic.value.forEach((item: any) => {
+    if(item.id === 'artist_list_love') {
+      store_view_artist_page_info.artist_starred_count += !favorite ? 1 : -1;
+      item.artist_count = store_view_artist_page_info.artist_starred_count + ' *';
+    }
+  });
 }
 let before_rating = false
 let after_rating = false;
@@ -386,15 +392,13 @@ const handleItemClick_Rating = (id_rating: any) => {
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {useMessage} from 'naive-ui'
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
-import {
-  store_local_data_set_mediaInfo
-} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
+import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
 import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {store_router_data_info} from "@/store/router/store_router_data_info";
 import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
 import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()
@@ -508,8 +512,34 @@ const onRefreshSharp = async () => {
   }
 }
 
+const page_artistlists_statistic = ref<{
+  label: '',
+  artist_count: '',
+  id: ''
+}[]>([])
+function Refresh_page_artistlists_statistic(){
+  page_artistlists_statistic.value = []
+  store_view_artist_page_logic.page_artistlists_statistic.forEach((item: any, index: number) => {
+    page_artistlists_statistic.value.push({
+      label: store_view_artist_page_logic.page_artistlists_statistic[index].label,
+      artist_count: store_view_artist_page_logic.page_artistlists_statistic[index].artist_count,
+      id: store_view_artist_page_logic.page_artistlists_statistic[index].id,
+    });
+  });
+}
+onMounted(() => {
+  Refresh_page_artistlists_statistic();
+})
+const stopWatching_boolHandleItemClick_Played = watch(() => store_player_audio_logic.boolHandleItemClick_Played, (newValue, oldValue) => {
+  if (newValue === true && newValue !== oldValue) {
+    Refresh_page_artistlists_statistic();
+    store_player_audio_logic.boolHandleItemClick_Played = false;
+  }
+}, { immediate: true });
+
 ////// view artistlist_view Remove data
 onBeforeUnmount(() => {
+  stopWatching_boolHandleItemClick_Played()
   stopWatching_window_innerWidth()
   stopWatching_router_history_model_of_Artist_scroll()
   dynamicScroller.value = null;
@@ -734,7 +764,7 @@ onBeforeUnmount(() => {
                     <n-grid
                         :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
                         style="margin-left: 4px;width: 336px;">
-                      <n-gi v-for="artistlist in store_view_artist_page_logic.page_artistlists_statistic" :key="artistlist.id">
+                      <n-gi v-for="artistlist in page_artistlists_statistic" :key="artistlist.id">
                         <n-statistic :label="artistlist.label" :value="artistlist.artist_count" />
                       </n-gi>
                     </n-grid>

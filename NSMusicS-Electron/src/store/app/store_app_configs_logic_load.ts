@@ -101,6 +101,8 @@ export const store_app_configs_logic_load = reactive({
             store_app_configs_info.theme_name = '' + system_Configs_Read.app_Configs.value['theme']
             store_app_configs_info.theme_auto_system = '' + system_Configs_Read.app_Configs.value['theme_auto_system'] === 'true'
             store_app_configs_info.lang = '' + system_Configs_Read.app_Configs.value['lang']
+            store_player_audio_logic.orderPanelWidath = store_player_audio_logic.langWidths[store_app_configs_info.lang.toString()];
+            store_player_audio_logic.orderButonWidath = store_player_audio_logic.orderPanelWidath - 14;
             // store_app_configs_info.app_view_left_menu_collapsed = '' + system_Configs_Read.app_Configs.value['app_view_left_menu_collapsed'] === 'true'
             store_app_configs_info.app_view_left_menu_collapsed = true
             store_app_configs_info.menuOptions_selectd_model_1 = '' + system_Configs_Read.app_Configs.value['menuOptions_selectd_model_1'] === 'true'

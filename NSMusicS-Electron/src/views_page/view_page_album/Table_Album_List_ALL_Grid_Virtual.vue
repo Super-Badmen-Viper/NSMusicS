@@ -60,6 +60,7 @@ const gridItems = ref(5);
 const itemSecondarySize = ref(185);
 import error_album from '@/assets/img/error_album.jpg'
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
+import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
   let result_src = error_album
@@ -400,18 +401,24 @@ const Play_this_album_SongList_click = async (album_id: string) => {
 }
 
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
-    store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id,favorite)
-  }
-  let before_rating = false
-  let after_rating = false;
-  const handleItemClick_Rating = (id_rating: any) => {
-    const [id, rating] = id_rating.split('-');
-    if(after_rating) {
-      store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, 0);
-    }else {
-      store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, rating);
+  store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id,favorite);
+  page_albumlists_statistic.value.forEach((item: any) => {
+    if(item.id === 'album_list_love') {
+      store_view_album_page_info.album_starred_count += !favorite ? 1 : -1;
+      item.album_count = store_view_album_page_info.album_starred_count + ' *';
     }
+  });
+}
+let before_rating = false
+let after_rating = false;
+const handleItemClick_Rating = (id_rating: any) => {
+  const [id, rating] = id_rating.split('-');
+  if(after_rating) {
+    store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, 0);
+  }else {
+    store_local_data_set_albumInfo.Set_AlbumInfo_To_Rating(id, rating);
   }
+}
 
 const contextmenu = ref(null as any)
   const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
@@ -526,8 +533,39 @@ const onRefreshSharp = async () => {
   }
 }
 
+const page_albumlists_statistic = ref<{
+  label: '',
+  album_count: '',
+  id: ''
+}[]>([])
+function Refresh_page_albumlists_statistic(){
+  store_view_album_page_logic.page_albumlists_statistic.forEach((item: any) => {
+    if (item.id === 'album_list_recently') {
+      item.album_count = store_view_album_page_info.album_recently_count + ' *';
+    }
+  });
+  page_albumlists_statistic.value = []
+  store_view_album_page_logic.page_albumlists_statistic.forEach((item: any, index: number) => {
+    page_albumlists_statistic.value.push({
+      label: store_view_album_page_logic.page_albumlists_statistic[index].label,
+      album_count: store_view_album_page_logic.page_albumlists_statistic[index].album_count,
+      id: store_view_album_page_logic.page_albumlists_statistic[index].id,
+    });
+  });
+}
+onMounted(() => {
+  Refresh_page_albumlists_statistic();
+})
+const stopWatching_boolHandleItemClick_Played = watch(() => store_player_audio_logic.boolHandleItemClick_Played, (newValue, oldValue) => {
+  if (newValue === true && newValue !== oldValue) {
+    Refresh_page_albumlists_statistic();
+    store_player_audio_logic.boolHandleItemClick_Played = false;
+  }
+}, { immediate: true });
+
 ////// view albumlist_view Remove data
 onBeforeUnmount(() => {
+  stopWatching_boolHandleItemClick_Played()
   stopWatching_window_innerWidth()
   stopWatching_router_history_model_of_Album_scroll()
   dynamicScroller.value = null;
@@ -818,7 +856,7 @@ onBeforeUnmount(() => {
                     <n-grid
                         :cols="2" :x-gap="0" :y-gap="10" layout-shift-disabled
                         style="margin-left: 4px;width: 336px;">
-                      <n-gi v-for="albumlist in store_view_album_page_logic.page_albumlists_statistic" :key="albumlist.id">
+                      <n-gi v-for="albumlist in page_albumlists_statistic" :key="albumlist.id">
                         <n-statistic :label="albumlist.label" :value="albumlist.album_count" />
                       </n-gi>
                     </n-grid>
@@ -874,7 +912,10 @@ onBeforeUnmount(() => {
                   <div class="hover-content">
                     <button
                       class="play_this_album"
-                      @click="Play_this_album_SongList_click(item.id)"
+                      @click="() => {
+                        Play_this_album_SongList_click(item.id);
+                        store_player_audio_info.this_audio_artist_id = item.artist_id;
+                      }"
                       style="
                         border: 0px;background-color: transparent;
                         width: 50px;height: 50px;

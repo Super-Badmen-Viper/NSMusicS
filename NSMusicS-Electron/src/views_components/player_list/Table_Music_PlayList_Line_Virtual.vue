@@ -111,6 +111,7 @@ const message = useMessage()
 ////// right menu
 import { inject } from "vue";
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+import {store_router_data_logic} from "@/store/router/store_router_data_logic";
 const contextmenu = inject("playlist_contextmenu", null);
 async function update_playlist_addMediaFile(id: any, playlist_id: any){
   try{

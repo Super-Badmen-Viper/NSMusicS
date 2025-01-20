@@ -12,9 +12,7 @@ import {store_view_media_page_info} from "@/store/view/media/store_view_media_pa
 import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
 import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-import {
-    store_local_data_set_artistInfo
-} from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
+import {store_local_data_set_artistInfo} from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "@/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
@@ -25,6 +23,11 @@ import {store_view_album_page_fetchData} from "@/store/view/album/store_view_alb
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron';
+import {
+    Get_AnnotationInfo_To_LocalSqlite
+} from "@/data_access/sqlite3_local_configs/class_Get_AnnotationInfo_To_LocalSqlite";
+import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
+import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
 
 export const store_view_artist_page_fetchData = reactive({
     async fetchData_Artist(){
@@ -249,7 +252,14 @@ export const store_view_artist_page_fetchData = reactive({
             store_playlist_list_logic.media_page_handleItemDbClick = false
         }
 
-        store_local_data_set_artistInfo.Set_ArtistInfo_To_PlayCount_of_Artist(store_playlist_list_info.playlist_MediaFiles_temporary[0].artist_id)
+        if(store_server_user_model.model_server_type_of_local){
+            store_local_data_set_artistInfo.Set_ArtistInfo_To_PlayCount_of_Artist(store_playlist_list_info.playlist_MediaFiles_temporary[0].artist_id)
+            //
+            let get_AnnotationInfo_To_LocalSqlite = new Get_AnnotationInfo_To_LocalSqlite();
+            store_view_artist_page_info.artist_recently_count =
+                get_AnnotationInfo_To_LocalSqlite.Get_Annotation_ItemInfo_Play_Count('artist')
+            store_player_audio_logic.boolHandleItemClick_Played = true
+        }
     },
 
     _start: 0,

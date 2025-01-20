@@ -10,6 +10,13 @@ import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlis
 import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
 import error_album from '@/assets/img/error_album.jpg'
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
+import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {Get_AnnotationInfo_To_LocalSqlite} from "@/data_access/sqlite3_local_configs/class_Get_AnnotationInfo_To_LocalSqlite";
+import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
+import {store_player_audio_logic} from "./store_player_audio_logic";
+import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
+import {store_local_data_set_artistInfo} from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
+import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info"
 
 export const store_player_audio_info = reactive({
     this_audio_file_path: '',
@@ -172,6 +179,32 @@ watch(() => store_player_audio_info.this_audio_album_id, (newValue) => {
 
     store_player_audio_info.page_top_album_id = newValue;
     store_local_data_set_albumInfo.Set_AlbumInfo_To_PlayCount_of_Album(newValue)
+
+    if(store_server_user_model.model_server_type_of_local){
+        let get_AnnotationInfo_To_LocalSqlite = new Get_AnnotationInfo_To_LocalSqlite();
+        store_view_album_page_info.album_recently_count =
+            get_AnnotationInfo_To_LocalSqlite.Get_Annotation_ItemInfo_Play_Count('album')
+        store_view_album_page_logic.page_albumlists_statistic.forEach((item: any) => {
+            if (item.id === 'album_list_recently') {
+                item.song_count = store_view_album_page_info.album_recently_count + ' *';
+            }
+        });
+        store_player_audio_logic.boolHandleItemClick_Played = true
+    }else{
+
+    }
+});
+watch(() => store_player_audio_info.this_audio_artist_id, (newValue) => {
+    if(store_server_user_model.model_server_type_of_local){
+        store_local_data_set_artistInfo.Set_ArtistInfo_To_PlayCount_of_Artist(
+            store_player_audio_info.this_audio_artist_id
+        )
+        //
+        let get_AnnotationInfo_To_LocalSqlite = new Get_AnnotationInfo_To_LocalSqlite();
+        store_view_artist_page_info.artist_recently_count =
+            get_AnnotationInfo_To_LocalSqlite.Get_Annotation_ItemInfo_Play_Count('artist')
+        store_player_audio_logic.boolHandleItemClick_Played = true
+    }
 });
 watch(() => store_player_audio_info.this_audio_lyrics_string, async (newValue) => {
     store_player_audio_info.this_audio_lyrics_loaded_complete = false

@@ -230,7 +230,6 @@ watch(() => store_view_home_page_info.home_selected_top_album_subscript, (newVal
 });
 
 ////// changed_data write to sqlite
-import {Set_AlbumInfo_To_LocalSqlite} from '@/data_access/sqlite3_local_configs/class_Set_AlbumInfo_To_LocalSqlite'
 import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   store_local_data_set_albumInfo.Set_AlbumInfo_To_Favorite(id,favorite)

@@ -1,12 +1,7 @@
 import {reactive} from 'vue'
 import {Set_MediaInfo_To_LocalSqlite} from "@/data_access/sqlite3_local_configs/class_Set_MediaInfo_To_LocalSqlite";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {
-    store_server_data_set_artistInfo
-} from "@/store/server/server_data_synchronization/store_server_data_set_artistInfo";
-import {
-    store_server_data_set_mediaInfo
-} from "@/store/server/server_data_synchronization/store_server_data_set_mediaInfo";
+import {store_server_data_set_mediaInfo} from "@/store/server/server_data_synchronization/store_server_data_set_mediaInfo";
 export const store_local_data_set_mediaInfo = reactive({
     Set_MediaInfo_To_Favorite(id: string, value: Boolean){
         const set_MediaInfo_To_LocalSqlite = new Set_MediaInfo_To_LocalSqlite()

@@ -16,7 +16,6 @@ import {store_router_history_data_of_media} from "@/store/router/store_router_hi
 import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
 import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
 import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
 import {store_view_artist_page_logic} from "@/store/view/artist/store_view_artist_page_logic";
 import {store_router_data_logic} from "@/store/router/store_router_data_logic";
 import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
