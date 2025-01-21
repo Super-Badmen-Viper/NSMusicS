@@ -22,7 +22,7 @@ export const store_view_media_page_fetchData = reactive({
             if (store_server_user_model.model_server_type_of_local) {
                 let db: any = null;
                 // clear RouterView of vue-virtual-scroller data
-                if (store_player_appearance.player_mode_of_medialist_from_external_import === true) {
+                if (store_player_appearance.player_mode_of_medialist_from_external_import) {
                     // store_player_appearance.player_mode_of_medialist_from_external_import = false;
                 } else {
                     store_router_data_logic.clear_Files_temporary()
@@ -82,7 +82,7 @@ export const store_view_media_page_fetchData = reactive({
                         }
                         //////
                         if(!store_view_media_page_logic.page_songlists_filter_model) {
-                            if (store_router_history_data_of_media.router_select_history_date_of_Media && store_view_media_page_logic.page_songlists_keyword_reset === true) {
+                            if (store_router_history_data_of_media.router_select_history_date_of_Media && store_view_media_page_logic.page_songlists_keyword_reset) {
                                 store_router_history_data_of_media.remove_router_history_of_Media(store_router_history_data_of_media.router_select_history_date_of_Media.id);// 若存在新操作，则覆盖后续的路由
                                 store_view_media_page_logic.page_songlists_keyword_reset = false;
                             }
@@ -126,6 +126,7 @@ export const store_view_media_page_fetchData = reactive({
                         }
                         store_router_history_data_of_media.router_history_model_of_Media = 0;
                     }
+                    store_view_media_page_info.media_Files_temporary = []
                     const rows = stmt_media_file.all();
                     rows.forEach((row: Media_File, index: number) => {
                         row.absoluteIndex = index;

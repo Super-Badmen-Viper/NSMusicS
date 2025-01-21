@@ -4,7 +4,8 @@ import {
   Heart24Regular, Heart28Filled,
   MoreCircle32Regular,
   ArrowRepeatAll16Regular, ArrowAutofitDown24Regular,
-  TopSpeed20Regular, DeviceEq24Filled, Tag16Regular, Info16Regular, ChevronDown12Filled, Settings24Regular
+  TopSpeed20Regular, DeviceEq24Filled, Tag16Regular,
+  Settings24Regular
 } from '@vicons/fluent'
 import {
   RepeatOneRound,QueueMusicRound
@@ -92,7 +93,7 @@ const click_back_svg = () => {
   }
 };
 let unwatch_player_show_click = watch(() => store_player_appearance.player_show_click, (newValue) => {
-  if (newValue === true) {
+  if (newValue) {
     player_show_hight_animation_value.value = 670;
     get_playerbar_to_switch_playerview(player_show_hight_animation_value.value)
     store_player_audio_logic.player_back_ChevronDouble = player_show_hight_animation_value.value === 0 ? shrink_down_arrow : shrink_up_arrow;
@@ -105,7 +106,7 @@ let unwatch_player_show_click = watch(() => store_player_appearance.player_show_
 const timer_this_audio_restart_play = ref<NodeJS.Timeout>();
 const lastTriggerValue = ref<any>(null);// 延迟触发：接收大量数据时，仅触发最后一个值
 let unwatch_this_audio_restart_play = watch(() => store_player_audio_info.this_audio_restart_play, (newValue) => {
-  if (newValue === true) {
+  if (newValue) {
     lastTriggerValue.value = newValue; // 更新最后一个触发的值
     clearTimeout(timer_this_audio_restart_play.value);
     // 延迟触发
@@ -629,7 +630,7 @@ const Set_Player_Show_Sound_more= () => {
 
 ////// auto collapse player_configs bar
 const handleMouseMove = () => {
-  if(store_player_appearance.player_show === true){
+  if(store_player_appearance.player_show){
     if(store_player_appearance.player_use_playbar_auto_hide) {
       store_player_appearance.player_collapsed_action_bar_of_Immersion_model = true
     }

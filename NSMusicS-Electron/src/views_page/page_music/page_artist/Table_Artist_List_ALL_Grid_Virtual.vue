@@ -201,7 +201,7 @@ const options_Sort_key_Default = ref<SortItem[]>()
 // gridItems Search(filter)
 const bool_show_search_area = ref<boolean>(false)
 const show_search_area = () => {
-  if(bool_show_search_area.value === true)
+  if(bool_show_search_area.value)
   {
     bool_show_search_area.value = false
     input_search_InstRef.value?.clear()
@@ -298,7 +298,7 @@ const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any
 }
 const show_top_selectedlist = ref(false)
 const stopWatching_router_history_model_of_Artist_scroll = watch(() => store_router_history_data_of_artist.router_history_model_of_Artist_scroll,(newValue) => {
-    if (newValue === true) {
+    if (newValue) {
       scrollTo(store_router_history_data_of_artist.router_history_model_of_Artist_scroller_value)
       store_router_history_data_of_artist.router_history_model_of_Artist_scroll = false
     }
@@ -532,7 +532,7 @@ onMounted(() => {
   Refresh_page_artistlists_statistic();
 })
 const stopWatching_boolHandleItemClick_Played = watch(() => store_player_audio_logic.boolHandleItemClick_Played, (newValue, oldValue) => {
-  if (newValue === true && newValue !== oldValue) {
+  if (newValue && newValue !== oldValue) {
     Refresh_page_artistlists_statistic();
     store_player_audio_logic.boolHandleItemClick_Played = false;
   }

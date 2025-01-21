@@ -264,7 +264,7 @@ const onUpdate = (viewStartIndex: any, viewEndIndex: any, visibleStartIndex: any
 }
 const show_top_selectedlist = ref(false)
 const stopWatching_router_history_model_of_Media_scroll = watch(() => store_router_history_data_of_media.router_history_model_of_Media_scroll,(newValue) => {
-    if (newValue === true) {
+    if (newValue) {
       scrollTo(store_router_history_data_of_media.router_history_model_of_Media_scroller_value)
       store_router_history_data_of_media.router_history_model_of_Media_scroll = false
     }
@@ -857,7 +857,7 @@ const stopWatching_boolHandleItemClick_Favorite = watch(() => store_player_audio
   }
 });
 const stopWatching_boolHandleItemClick_Played = watch(() => store_player_audio_logic.boolHandleItemClick_Played, (newValue, oldValue) => {
-  if (newValue === true && newValue !== oldValue) {
+  if (newValue && newValue !== oldValue) {
     Refresh_page_songlists_statistic();
     store_player_audio_logic.boolHandleItemClick_Played = false;
   }
@@ -1115,14 +1115,31 @@ onBeforeUnmount(() => {
               v-if="store_server_user_model.model_server_type_of_web"
               trigger="hover" placement="top">
             <template #trigger>
-              <n-button
-                  quaternary circle 
-                  @click="begin_random_play_model"
-                  style="margin-left:4px;">
-                <template #icon>
-                  <n-icon :size="18" :depth="2"><Random/></n-icon>
-                </template>
-              </n-button>
+              <div>
+                <n-badge
+                    v-if="store_server_user_model.random_play_model"
+                    dot
+                    :value="store_server_user_model.random_play_model"
+                    :offset="[-18, 6]">
+                  <n-button
+                      quaternary circle
+                      @click="begin_random_play_model"
+                      style="margin-left:4px;">
+                    <template #icon>
+                      <n-icon :size="18" :depth="2"><Random/></n-icon>
+                    </template>
+                  </n-button>
+                </n-badge>
+                <n-button
+                    v-else
+                    quaternary circle
+                    @click="begin_random_play_model"
+                    style="margin-left:4px;">
+                  <template #icon>
+                    <n-icon :size="18" :depth="2"><Random/></n-icon>
+                  </template>
+                </n-button>
+              </div>
             </template>
             {{ $t('Shuffle') + ' ' + $t('HeaderLibraries') + ' ' + $t('nsmusics.view_page.allSong') }}
           </n-tooltip>
@@ -1385,6 +1402,18 @@ onBeforeUnmount(() => {
                     :src="item.medium_image_url"
                     @error="handleImageError(item)"
                     style="width: 60px; height: 60px; object-fit: cover;"/>
+<!--                <button-->
+<!--                    @click="handleItemDbClick(item,index)"-->
+<!--                    style="-->
+<!--                      border: 0px; background-color: transparent;-->
+<!--                      width: 28px; height: 28px;-->
+
+<!--                      cursor: pointer;-->
+<!--                    ">-->
+<!--                  <template>-->
+<!--                    <icon :size="20" color="red"><Play/></icon>-->
+<!--                  </template>-->
+<!--                </button>-->
               </div>
               <div class="songlist_title">
                 <span

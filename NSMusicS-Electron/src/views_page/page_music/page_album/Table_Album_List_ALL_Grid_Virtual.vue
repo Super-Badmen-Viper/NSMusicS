@@ -224,7 +224,7 @@ const options_Sort_key_Default = ref<SortItem[]>()
 // gridItems Search(filter)
 const bool_show_search_area = ref<boolean>(false)
 const show_search_area = () => {
-  if(bool_show_search_area.value === true)
+  if(bool_show_search_area.value)
   {
     bool_show_search_area.value = false
     input_search_InstRef.value?.clear()
@@ -558,7 +558,7 @@ onMounted(() => {
   Refresh_page_albumlists_statistic();
 })
 const stopWatching_boolHandleItemClick_Played = watch(() => store_player_audio_logic.boolHandleItemClick_Played, (newValue, oldValue) => {
-  if (newValue === true && newValue !== oldValue) {
+  if (newValue && newValue !== oldValue) {
     Refresh_page_albumlists_statistic();
     store_player_audio_logic.boolHandleItemClick_Played = false;
   }

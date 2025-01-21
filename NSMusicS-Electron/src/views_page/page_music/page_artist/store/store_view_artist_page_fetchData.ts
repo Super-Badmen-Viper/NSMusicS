@@ -57,7 +57,7 @@ export const store_view_artist_page_fetchData = reactive({
                                               ORDER BY ${sortKey} ${sortOrder}`;
                         stmt_artist = db.prepare(stmt_artist_string);
                         //////
-                        if (store_router_history_data_of_artist.router_select_history_date_of_Artist && store_view_artist_page_logic.page_artistlists_keyword_reset === true) {
+                        if (store_router_history_data_of_artist.router_select_history_date_of_Artist && store_view_artist_page_logic.page_artistlists_keyword_reset) {
                             store_router_history_data_of_artist.remove_router_history_of_Artist(store_router_history_data_of_artist.router_select_history_date_of_Artist.id);// 若存在新操作，则覆盖后续的路由
                             store_view_artist_page_logic.page_artistlists_keyword_reset = false;
                         }
@@ -99,6 +99,7 @@ export const store_view_artist_page_fetchData = reactive({
                     const stmt_media_file = db.prepare(`SELECT *
                                                         FROM ${store_server_user_model.media_file}`);
                     const pathfiles = stmt_media_file.all();
+                    store_view_artist_page_info.artist_Files_temporary = []
                     let rows = stmt_artist.all();
                     rows.forEach((row: Artist) => {
                         for (let j = 0; j < pathfiles.length; j++) {

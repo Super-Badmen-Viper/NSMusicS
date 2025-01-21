@@ -29,7 +29,7 @@ export const store_view_album_page_fetchData = reactive({
                 let db: any = null;
                 let moment = require('moment');
                 // clear RouterView of vue-virtual-scroller data
-                if (store_player_appearance.player_mode_of_medialist_from_external_import === true) {
+                if (store_player_appearance.player_mode_of_medialist_from_external_import) {
                     store_player_appearance.player_mode_of_medialist_from_external_import = false;
                 } else {
                     store_router_data_logic.clear_Files_temporary()
@@ -57,7 +57,7 @@ export const store_view_album_page_fetchData = reactive({
                             OR artist_id LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%' 
                             OR created_at LIKE '%${store_view_album_page_logic.page_albumlists_keyword}%'` :
                             '';
-                        if (store_router_data_info.find_album_model === true) {
+                        if (store_router_data_info.find_album_model) {
                             if (store_view_album_page_logic.page_albumlists_get_keyword_model_num != 1)
                                 keywordFilter = `WHERE artist_id = '${store_view_album_page_logic.page_albumlists_keyword}'`
                             else
@@ -86,7 +86,7 @@ export const store_view_album_page_fetchData = reactive({
                         stmt_album = db.prepare(stmt_album_string);
                         //////
                         if(!store_view_album_page_logic.page_albumlists_filter_model) {
-                            if (store_router_history_data_of_album.router_select_history_date_of_Album && store_view_album_page_logic.page_albumlists_keyword_reset === true) {
+                            if (store_router_history_data_of_album.router_select_history_date_of_Album && store_view_album_page_logic.page_albumlists_keyword_reset) {
                                 store_router_history_data_of_album.remove_router_history_of_Album(store_router_history_data_of_album.router_select_history_date_of_Album.id);// 若存在新操作，则覆盖后续的路由
                                 store_view_album_page_logic.page_albumlists_keyword_reset = false;
                             }
@@ -126,6 +126,7 @@ export const store_view_album_page_fetchData = reactive({
                         }
                         store_router_history_data_of_album.router_history_model_of_Album = 0;
                     }
+                    store_view_album_page_info.album_Files_temporary = []
                     let rows = stmt_album.all();
                     rows.forEach((row: Album) => {
                         if (row.medium_image_url == null || row.medium_image_url == undefined || row.medium_image_url.length == 0) {
