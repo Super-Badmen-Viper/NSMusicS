@@ -870,6 +870,16 @@ onBeforeUnmount(() => {
   stopWatching_router_history_model_of_Media_scroll()
   dynamicScroller.value = null;
 });
+
+const back_filter_blurValue  = ref(0);
+const hover_back_img = () => {
+  back_display.value = 'block';
+  back_filter_blurValue.value = 3;
+};
+const leave_back_svg = () => {
+  back_display.value = 'none';
+  back_filter_blurValue.value = 0;
+};
 </script>
 
 <template>
@@ -1393,27 +1403,46 @@ onBeforeUnmount(() => {
                 }"
               />
               <div
-                  style="margin-left: 8px;
+                style="margin-left: 8px;
                   width: 60px;height: 60px;
                   border-radius: 10px;border: 1.5px solid #FFFFFF20;
                   overflow: hidden;">
-                <img
+                <div style="position: relative; display: inline-block;">
+                  <img
                     :key="item.id"
                     :src="item.medium_image_url"
                     @error="handleImageError(item)"
-                    style="width: 60px; height: 60px; object-fit: cover;"/>
-<!--                <button-->
-<!--                    @click="handleItemDbClick(item,index)"-->
-<!--                    style="-->
-<!--                      border: 0px; background-color: transparent;-->
-<!--                      width: 28px; height: 28px;-->
+                    style="width: 60px; height: 60px; object-fit: cover;"
+                  />
+                  <div
+                    class="hover-overlay"
+                    style="
+                      width: 70px; height: 70px;
+                      position: absolute;
+                      top: 50%;left: 50%;
+                      transform: translate(-50%, -60%);
+                      filter: blur(3px);
+                      cursor: pointer;
+                    ">
 
-<!--                      cursor: pointer;-->
-<!--                    ">-->
-<!--                  <template>-->
-<!--                    <icon :size="20" color="red"><Play/></icon>-->
-<!--                  </template>-->
-<!--                </button>-->
+                  </div>
+                  <icon
+                    class="hover-overlay"
+                    color="#FFFFFF"
+                    size="28"
+                    style="
+                      position: absolute;
+                      top: 50%;left: 50%;
+                      transform: translate(-50%, -60%);
+                      cursor: pointer;
+                    "
+                    @click="() => {
+                      click_count = 2;
+                      handleItemDbClick(item, index);
+                    }">
+                    <Play />
+                  </icon>
+                </div>
               </div>
               <div class="songlist_title">
                 <span
@@ -1690,6 +1719,14 @@ onBeforeUnmount(() => {
 .n-statistic .n-statistic-value .n-statistic-value__content{
   font-size: 24px;
   font-weight: 600;
+}
+
+.media_info .hover-overlay {
+  border-radius: 4px;
+  opacity: 0;
+}
+.media_info:hover .hover-overlay {
+  opacity: 1;
 }
 
 .dynamic-scroller-demo {
