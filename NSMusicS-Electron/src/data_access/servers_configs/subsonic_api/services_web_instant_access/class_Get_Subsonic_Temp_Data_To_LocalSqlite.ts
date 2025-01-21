@@ -1,16 +1,16 @@
 import axios from "axios";
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {store_view_home_page_info} from "@/store/view/home/store_view_home_page_info";
+import {store_view_home_page_info} from "@/views_page/page_music/page_home/store/store_view_home_page_info";
 import {
     Home_Lists_ApiWebService_of_ND
 } from "../../../servers_configs/subsonic_api/services_web/page_lists/home_lists/index_service";
-import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info";
-import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
+import {store_view_artist_page_info} from "@/views_page/page_music/page_artist/store/store_view_artist_page_info"
+import {store_view_album_page_info} from "@/views_page/page_music/page_album/store/store_view_album_page_info";
 import {
     Media_library_scanning_ApiService_of_ND
 } from "../../../servers_configs/subsonic_api/services_normal/media_library_scanning/index_service";
-import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
+import {store_view_media_page_info} from "@/views_page/page_music/page_media/store/store_view_media_page_info";
 import {
     Artist_Lists_ApiWebService_of_ND
 } from "../../../servers_configs/subsonic_api/services_web/page_lists/artist_lists/index_service";
@@ -20,7 +20,6 @@ import {
 import {
     Song_Lists_ApiWebService_of_ND
 } from "../../../servers_configs/subsonic_api/services_web/page_lists/song_lists/index_service";
-import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {
     Playlists_ApiService_of_ND
 } from "../../../servers_configs/subsonic_api/services_normal/playlists/index_service";
@@ -30,10 +29,10 @@ import {
 import {
     Browsing_ApiService_of_ND
 } from "../../../servers_configs/subsonic_api/services_normal/browsing/index_service";
-import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
-import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+import {store_playlist_list_info} from "@/views_components/components_music/player_list/store/store_playlist_list_info"
+import {store_player_audio_info} from "@/views_page/page_music/page_player/store/store_player_audio_info";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+import {store_playlist_list_fetchData} from "@/views_components/components_music/player_list/store/store_playlist_list_fetchData";
 
 export class Get_Subsonic_Temp_Data_To_LocalSqlite{
     private home_Lists_ApiWebService_of_ND = new Home_Lists_ApiWebService_of_ND(

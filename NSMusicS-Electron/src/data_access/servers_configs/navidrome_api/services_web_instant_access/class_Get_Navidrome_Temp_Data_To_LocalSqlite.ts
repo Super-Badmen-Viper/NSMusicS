@@ -1,19 +1,28 @@
 import {store_server_users} from "@/store/server/store_server_users";
-import {store_view_home_page_info} from "@/store/view/home/store_view_home_page_info";
+import {store_view_home_page_info} from "@/views_page/page_music/page_home/store/store_view_home_page_info";
 import {Home_Lists_ApiWebService_of_ND} from "../../../servers_configs/navidrome_api/services_web/page_lists/home_lists/index_service";
-import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info";
-import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
+import {store_view_artist_page_info} from "@/views_page/page_music/page_artist/store/store_view_artist_page_info"
+import {store_view_album_page_info} from "@/views_page/page_music/page_album/store/store_view_album_page_info";
 import {Media_library_scanning_ApiService_of_ND} from "../../../servers_configs/navidrome_api/services_normal/media_library_scanning/index_service";
-import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
+import {store_view_media_page_info} from "@/views_page/page_music/page_media/store/store_view_media_page_info";
 import {Artist_Lists_ApiWebService_of_ND} from "../../../servers_configs/navidrome_api/services_web/page_lists/artist_lists/index_service";
 import {Album_Lists_ApiWebService_of_ND} from "../../../servers_configs/navidrome_api/services_web/page_lists/album_lists/index_service";
 import {Song_Lists_ApiWebService_of_ND} from "../../../servers_configs/navidrome_api/services_web/page_lists/song_lists/index_service";
 import {Playlists_ApiService_of_ND} from "../../../servers_configs/navidrome_api/services_normal/playlists/index_service";
 import {Album$Songs_Lists_ApiService_of_ND} from "../../../servers_configs/navidrome_api/services_normal/album$songs_lists/index_service";
 import {Browsing_ApiService_of_ND} from "../../../servers_configs/navidrome_api/services_normal/browsing/index_service";
-import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
+import {store_playlist_list_info} from "@/views_components/components_music/player_list/store/store_playlist_list_info"
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+import {store_playlist_list_fetchData} from "@/views_components/components_music/player_list/store/store_playlist_list_fetchData";
+import {
+    Media_Retrieval_ApiService_of_ND
+} from "../../../servers_configs/navidrome_api/services_normal/media_retrieval/index_service";
+import {store_player_audio_logic} from "@/views_page/page_music/page_player/store/store_player_audio_logic";
+import {store_server_user_model} from "../../../../store/server/store_server_user_model";
+import {
+    store_playlist_list_logic
+} from "@/views_components/components_music/player_list/store/store_playlist_list_logic";
+import {store_player_audio_info} from "@/views_page/page_music/page_player/store/store_player_audio_info";
 
 export class Get_Navidrome_Temp_Data_To_LocalSqlite{
     private home_Lists_ApiWebService_of_ND = new Home_Lists_ApiWebService_of_ND(
@@ -558,6 +567,104 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
             store_app_configs_logic_save.save_system_playlist_item_id_config();
         }
     }
+    public async get_random_song_list(
+        url: string,
+        username: string,token: string,salt: string,
+        size: string,
+        fromYear: string, toYear: string
+    ){
+        let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
+        const getRandomSongs = await browsing_ApiService_of_ND.getRandomSongs(
+            username, token, salt,
+            size,
+            fromYear, toYear
+        );
+        let media_Retrieval_ApiService_of_ND = new Media_Retrieval_ApiService_of_ND(url);
+        let songlist = getRandomSongs["subsonic-response"]["randomSongs"]["song"];
+        if (Array.isArray(songlist) && songlist.length > 0) {
+            let last_index = 0
+            songlist.map(async (song: any, index: number) => {
+                const getLyrics_all = await media_Retrieval_ApiService_of_ND.getLyrics_all(username, token, salt, song.id);
+                let lyrics = undefined;
+                try {
+                    lyrics = this.convertToLRC_Array(getLyrics_all["subsonic-response"]["lyricsList"]["structuredLyrics"][0]["line"]);
+                } catch {
+                }
+                const new_song = {
+                    absoluteIndex: index + 1 + last_index,
+                    favorite: song.starred,
+                    rating: song.rating,
+                    duration_txt: this.formatTime(song.duration),
+                    id: song.id,
+                    title: song.title,
+                    path: url + '/stream?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id,
+                    artist: song.artist,
+                    album: song.album,
+                    artist_id: song.artistId,
+                    album_id: song.albumId,
+                    album_artist: '',
+                    has_cover_art: 0,
+                    track_number: song.track,
+                    disc_number: 0,
+                    year: song.year,
+                    size: song.size,
+                    suffix: song.suffix,
+                    duration: song.duration,
+                    bit_rate: song.bitRate,
+                    genre: '',
+                    compilation: 0,
+                    created_at: song.created,
+                    updated_at: '',
+                    full_text: '',
+                    album_artist_id: '',
+                    order_album_name: '',
+                    order_album_artist_name: '',
+                    order_artist_name: '',
+                    sort_album_name: '',
+                    sort_artist_name: '',
+                    sort_album_artist_name: '',
+                    sort_title: '',
+                    disc_subtitle: '',
+                    mbz_track_id: '',
+                    mbz_album_id: '',
+                    mbz_artist_id: '',
+                    mbz_album_artist_id: '',
+                    mbz_album_type: '',
+                    mbz_album_comment: '',
+                    catalog_num: '',
+                    comment: '',
+                    lyrics: lyrics,
+                    bpm: 0,
+                    channels: 0,
+                    order_title: '',
+                    mbz_release_track_id: '',
+                    rg_album_gain: 0,
+                    rg_album_peak: 0,
+                    rg_track_gain: 0,
+                    rg_track_peak: 0,
+                    medium_image_url: url + '/getCoverArt?u=' + username + '&t=' + token + '&s=' + salt + '&v=1.12.0&c=nsmusics&f=json&id=' + song.id
+                }
+                store_playlist_list_info.playlist_MediaFiles_temporary.push({
+                    ...new_song,
+                    play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
+                });
+                if(index === songlist.length - 1){
+                    if(store_server_user_model.model_server_type_of_web){
+                        /// Data synchronization
+                        store_playlist_list_fetchData.fetchData_PlayList_of_data_synchronization_to_Media()
+                    }
+                    store_player_audio_logic.update_current_media_info(
+                        store_playlist_list_info.playlist_MediaFiles_temporary[0],
+                        0
+                    )
+                    store_playlist_list_logic.media_page_handleItemDbClick = false
+                    store_player_audio_info.this_audio_restart_play = true
+                }
+            })
+            store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
+            store_app_configs_logic_save.save_system_playlist_item_id_config();
+        }
+    }
 
     private formatTime(currentTime: number): string {
         const minutes = Math.floor(currentTime / 60);
@@ -607,6 +714,23 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         }
 
         return lrcLines.join('\n');
+    }
+    private convertToLRC_Array(lyrics: {
+        start: number;
+        value: string;
+    }[]): string {
+        return lyrics
+            .map((item) => {
+                // 将毫秒转换为 [mm:ss.xx] 格式
+                const minutes = Math.floor(item.start / 60000);
+                const seconds = Math.floor((item.start % 60000) / 1000);
+                const milliseconds = Math.floor((item.start % 1000) / 10);
+                const time = `[${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(2, '0')}]`;
+
+                // 返回 LRC 格式的行
+                return `${time}${item.value}`;
+            })
+            .join('\n'); // 每行用换行符分隔
     }
 
     /// file count

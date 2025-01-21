@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import {store_view_home_page_info} from "@/store/view/home/store_view_home_page_info";
+import {store_view_home_page_info} from "@/views_page/page_music/page_home/store/store_view_home_page_info";
 import {
     Get_HomeDataInfos_From_LocalSqlite
 } from "@/data_access/sqlite3_local_configs/class_Get_HomeDataInfos_From_LocalSqlite";

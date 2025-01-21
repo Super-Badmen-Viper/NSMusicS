@@ -313,30 +313,16 @@ const handleItemDbClick = (media_file:any,index:number) => {
   if(bool_start_play.value == true){
     if(click_count >= 2){
       click_count = 0
-
       if(store_server_user_model.model_server_type_of_web){
         /// Data synchronization
         store_view_media_page_fetchData.fetchData_Media_of_data_synchronization_to_playlist()
+        store_server_user_model.random_play_model = false
       }
-
-      store_player_audio_info.this_audio_file_path = media_file.path
-      store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
-      store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
-      store_player_audio_info.this_audio_artist_name = media_file.artist
-      store_player_audio_info.this_audio_artist_id = media_file.artist_id
-      store_player_audio_info.this_audio_song_name = media_file.title
-      store_player_audio_info.this_audio_song_id = media_file.id
-      store_player_audio_info.this_audio_song_rating = media_file.rating
-      store_player_audio_info.this_audio_song_favorite = media_file.favorite
-      store_player_audio_info.this_audio_album_id = media_file.album_id
-      store_player_audio_info.this_audio_album_name = media_file.album
-      store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
       //
-      store_player_tag_modify.player_current_media_starred = media_file.favorite
-      store_player_tag_modify.player_current_media_playCount = media_file.play_count
-      store_player_tag_modify.player_current_media_playDate = media_file.play_date
-      //
-
+      store_player_audio_logic.update_current_media_info(
+          media_file,
+          index
+      )
       store_playlist_list_logic.media_page_handleItemDbClick = true
       store_player_appearance.player_mode_of_lock_playlist = false
       store_player_audio_info.this_audio_restart_play = true
@@ -466,28 +452,32 @@ import { useMessage } from 'naive-ui'
 const message = useMessage()
 /// add playlist
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info"
-import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
-import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
-import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
-import {store_player_appearance} from "@/store/player/store_player_appearance";
-import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media";
+import {store_player_audio_info} from "@/views_page/page_music/page_player/store/store_player_audio_info";
+import {store_playlist_list_info} from "@/views_components/components_music/player_list/store/store_playlist_list_info"
+import {store_playlist_list_logic} from "@/views_components/components_music/player_list/store/store_playlist_list_logic";
+import {store_view_media_page_info} from "@/views_page/page_music/page_media/store/store_view_media_page_info";
+import {store_view_media_page_logic} from "@/views_page/page_music/page_media/store/store_view_media_page_logic";
+import {store_player_appearance} from "@/views_page/page_music/page_player/store/store_player_appearance";
+import {store_router_history_data_of_media} from "@/router/store/store_router_history_data_of_media";
 import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
 import type {SelectBaseOption} from "naive-ui/es/select/src/interface";
 import {store_local_db_info} from "@/store/local/store_local_db_info";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {store_server_data_set_playlistInfo} from "@/store/server/server_data_synchronization/store_server_data_set_playlistInfo";
-import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
+import {store_player_audio_logic} from "@/views_page/page_music/page_player/store/store_player_audio_logic";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
-import {store_router_data_info} from "@/store/router/store_router_data_info";
-import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
-import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
-import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+import {store_view_media_page_fetchData} from "@/views_page/page_music/page_media/store/store_view_media_page_fetchData";
+import {store_router_data_info} from "@/router/store/store_router_data_info";
+import {store_view_album_page_fetchData} from "@/views_page/page_music/page_album/store/store_view_album_page_fetchData";
+import {store_playlist_list_fetchData} from "@/views_components/components_music/player_list/store/store_playlist_list_fetchData";
+import {store_player_tag_modify} from "@/views_page/page_music/page_player/store/store_player_tag_modify";
 import {
   Get_PlaylistInfo_From_LocalSqlite
 } from "@/data_access/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
+import {
+  Get_Navidrome_Temp_Data_To_LocalSqlite
+} from "@/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
+import {store_server_users} from "@/store/server/store_server_users";
 
 const Type_Add_Playlist = ref(false)
 const playlist_set_of_addPlaylist_of_playlistname = ref('')
@@ -744,6 +734,19 @@ const begin_select_SongList_ALL_Line_of_playback = (key: string | number) => {
     handleItemDbClick(mediaFiles[index], index);
   }
 };
+async function begin_random_play_model() {
+  click_count = 2;
+  store_playlist_list_info.playlist_MediaFiles_temporary = []
+  let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
+  await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
+      store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+      store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+      store_server_user_model.token,
+      store_server_user_model.salt,
+      10, '', ''
+  )
+  store_server_user_model.random_play_model = true;
+}
 
 ////// right menu
 const contextmenu = ref(null as any)
@@ -1091,6 +1094,7 @@ onBeforeUnmount(() => {
 
           <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
           <n-dropdown
+              v-if="store_server_user_model.model_server_type_of_local"
               trigger="click" :show-arrow="true"
               :options="options_dropdown_play_mode"
               @select="begin_select_SongList_ALL_Line_of_playback"
@@ -1107,6 +1111,21 @@ onBeforeUnmount(() => {
               {{ $t('Play') }}
             </n-tooltip>
           </n-dropdown>
+          <n-tooltip
+              v-if="store_server_user_model.model_server_type_of_web"
+              trigger="hover" placement="top">
+            <template #trigger>
+              <n-button
+                  quaternary circle 
+                  @click="begin_random_play_model"
+                  style="margin-left:4px;">
+                <template #icon>
+                  <n-icon :size="18" :depth="2"><Random/></n-icon>
+                </template>
+              </n-button>
+            </template>
+            {{ $t('Shuffle') + ' ' + $t('HeaderLibraries') + ' ' + $t('nsmusics.view_page.allSong') }}
+          </n-tooltip>
           <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
 
           <n-tooltip trigger="hover" placement="top">

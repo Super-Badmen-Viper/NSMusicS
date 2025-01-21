@@ -1,24 +1,24 @@
 import { reactive } from 'vue'
-import {store_router_data_logic} from "@/store/router/store_router_data_logic";
-import {store_router_data_info} from "@/store/router/store_router_data_info";
+import {store_router_data_logic} from "@/router/store/store_router_data_logic";
+import {store_router_data_info} from "@/router/store/store_router_data_info";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
-import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic";
+import {store_router_history_data_of_album} from "@/router/store/store_router_history_data_of_album";
+import {store_view_album_page_logic} from "@/views_page/page_music/page_album/store/store_view_album_page_logic"
 import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
-import {store_player_appearance} from "@/store/player/store_player_appearance";
-import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
-import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
-import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
-import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
-import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
+import {store_view_album_page_info} from "@/views_page/page_music/page_album/store/store_view_album_page_info";
+import {store_player_appearance} from "@/views_page/page_music/page_player/store/store_player_appearance";
+import {store_view_media_page_logic} from "@/views_page/page_music/page_media/store/store_view_media_page_logic";
+import {store_view_media_page_info} from "@/views_page/page_music/page_media/store/store_view_media_page_info";
+import {store_view_media_page_fetchData} from "@/views_page/page_music/page_media/store/store_view_media_page_fetchData";
+import {store_playlist_list_info} from "@/views_components/components_music/player_list/store/store_playlist_list_info"
+import {store_player_audio_info} from "@/views_page/page_music/page_player/store/store_player_audio_info";
+import {store_playlist_list_logic} from "@/views_components/components_music/player_list/store/store_playlist_list_logic"
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "@/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
-import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
-import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+import {store_playlist_list_fetchData} from "@/views_components/components_music/player_list/store/store_playlist_list_fetchData";
+import {store_player_tag_modify} from "@/views_page/page_music/page_player/store/store_player_tag_modify";
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron';
 

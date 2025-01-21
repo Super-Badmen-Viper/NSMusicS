@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import servers from '@/views_page/page_server/page_setting/Table_Server_Setting.vue'
-import {store_router_data_info} from "@/store/router/store_router_data_info";
+import {store_router_data_info} from "@/router/store/store_router_data_info";
 
 onMounted(async () => {
   store_router_data_info.router_select = 'servers'

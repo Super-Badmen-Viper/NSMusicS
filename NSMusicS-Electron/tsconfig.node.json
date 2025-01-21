@@ -23,6 +23,7 @@
     "paths": {
       "@/data_access/*": ["src/data_access/*"],
       "@/data_models/*": ["src/data_models/*"],
+      "@/router/*": ["src/router/*"],
       "@/views_components/*": ["src/views_components/*"],
       "@/views_drawer/*": ["src/views_drawer/*"],
       "@/views_page/*": ["src/views_page/*"],

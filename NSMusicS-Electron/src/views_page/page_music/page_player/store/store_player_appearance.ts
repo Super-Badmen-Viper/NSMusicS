@@ -1,5 +1,5 @@
 import {reactive, ref, watch} from 'vue'
-import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
+import {store_player_audio_logic} from "@/views_page/page_music/page_player/store/store_player_audio_logic";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 
 export const store_player_appearance = reactive({

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-import {store_player_appearance} from "@/store/player/store_player_appearance";
-import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
+import {store_player_audio_info} from "@/views_page/page_music/page_player/store/store_player_audio_info";
+import {store_player_appearance} from "@/views_page/page_music/page_player/store/store_player_appearance";
+import {store_player_audio_logic} from "@/views_page/page_music/page_player/store/store_player_audio_logic";
 import {RepeatOneRound} from "@vicons/material";
 import {Random} from "@vicons/fa";
 import {Pause, Play, PlayBack, PlayForward, VolumeMedium, VolumeOff, ChevronDown} from "@vicons/ionicons5";

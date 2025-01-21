@@ -25,8 +25,8 @@ import {onBeforeUnmount} from 'vue';
 const get_playerbar_to_switch_playerview = inject('get_playerbar_to_switch_playerview');
 
 import { useI18n } from 'vue-i18n'
-import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
-import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
+import {store_view_media_page_info} from "@/views_page/page_music/page_media/store/store_view_media_page_info";
+import {store_playlist_list_info} from "@/views_components/components_music/player_list/store/store_playlist_list_info";
 const { t } = useI18n({
   inheritLocale: true
 })
@@ -66,7 +66,7 @@ const handleImageError = async (event) => {
   }
 };
 import { debounce } from 'lodash';
-import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
+import {store_player_audio_logic} from "@/views_page/page_music/page_player/store/store_player_audio_logic";
 
 ////// open view musicplayer
 import shrink_up_arrow from '@/assets/svg/shrink_up_arrow.svg'
@@ -454,9 +454,27 @@ async function Play_Media_Order(model_num: string, increased: number) {
           }
         }
       } else if (model_num === 'playback-4') {
-        index = Math.floor(
-            Math.random() * store_playlist_list_info.playlist_MediaFiles_temporary.length
-        );
+        if(!store_server_user_model.random_play_model) {
+          index = Math.floor(
+              Math.random() * store_playlist_list_info.playlist_MediaFiles_temporary.length
+          );
+        }else{
+          index += increased;
+          if (index >= last_index) {
+            if(index === store_playlist_list_info.playlist_MediaFiles_temporary.length){
+              let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
+              await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
+                  store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                  store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                  store_server_user_model.token,
+                  store_server_user_model.salt,
+                  10, '', ''
+              )
+            }
+          }else if(index < 0){
+            index = last_index - 1;
+          }
+        }
       } else {
         stop_play = true;
       }
@@ -615,24 +633,27 @@ const handleMouseMove = () => {
 };
 
 ////// changed_data write to sqlite
-import {store_player_appearance} from "@/store/player/store_player_appearance";
-import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
-import {store_player_sound_effects} from "@/store/player/store_player_sound_effects";
-import {store_player_sound_speed} from "@/store/player/store_player_sound_speed";
-import {store_player_sound_more} from "@/store/player/store_player_sound_more";
-import {store_playlist_appearance} from '@/store/view/playlist/store_playlist_appearance'
-import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info"
-import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
+import {store_player_appearance} from "@/views_page/page_music/page_player/store/store_player_appearance";
+import {store_player_audio_info} from "@/views_page/page_music/page_player/store/store_player_audio_info";
+import {store_player_audio_logic} from "@/views_page/page_music/page_player/store/store_player_audio_logic";
+import {store_player_sound_effects} from "@/views_page/page_music/page_player/store/store_player_sound_effects";
+import {store_player_sound_speed} from "@/views_page/page_music/page_player/store/store_player_sound_speed";
+import {store_player_sound_more} from "@/views_page/page_music/page_player/store/store_player_sound_more";
+import {store_playlist_appearance} from '@/views_components/components_music/player_list/store/store_playlist_appearance'
+import {store_playlist_list_info} from "@/views_components/components_music/player_list/store/store_playlist_list_info"
+import {store_view_media_page_logic} from "@/views_page/page_music/page_media/store/store_view_media_page_logic";
 import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
-import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
+import {store_playlist_list_logic} from "@/views_components/components_music/player_list/store/store_playlist_list_logic";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {store_playlist_list_fetchData} from "@/store/view/playlist/store_playlist_list_fetchData";
+import {store_playlist_list_fetchData} from "@/views_components/components_music/player_list/store/store_playlist_list_fetchData";
 import {Audio_howler} from "@/data_models/song_Audio_Out/Audio_howler";
 import {Audio_node_mpv} from "@/data_models/song_Audio_Out/Audio_node_mpv";
-import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
+import {store_player_tag_modify} from "@/views_page/page_music/page_player/store/store_player_tag_modify";
 import {Get_AnnotationInfo_To_LocalSqlite} from "@/data_access/sqlite3_local_configs/class_Get_AnnotationInfo_To_LocalSqlite";
 import {store_local_data_set_artistInfo} from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
+import {
+  Get_Navidrome_Temp_Data_To_LocalSqlite
+} from "@/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   if(id != null && id.length > 0 && id != 'undefined') {

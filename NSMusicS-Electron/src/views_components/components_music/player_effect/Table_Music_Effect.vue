@@ -1,8 +1,8 @@
 <script setup lang="ts">
 //////
-import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
-import {store_router_data_logic} from "@/store/router/store_router_data_logic";
-import {store_player_appearance} from "@/store/player/store_player_appearance";
+import {store_player_audio_logic} from "@/views_page/page_music/page_player/store/store_player_audio_logic";
+import {store_router_data_logic} from "@/router/store/store_router_data_logic";
+import {store_player_appearance} from "@/views_page/page_music/page_player/store/store_player_appearance";
 
 import { useI18n } from 'vue-i18n'
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";

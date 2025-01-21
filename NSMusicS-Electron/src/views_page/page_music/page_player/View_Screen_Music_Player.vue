@@ -34,7 +34,7 @@ const computed_i18n_Label_ViewSetConfig_Cover_4 = computed(() => t('nsmusics.vie
 const computed_i18n_Label_Lyric_Not_Find = computed(() => t('HeaderNoLyrics'));
 
 // audio_class & player_bar & player_view
-import {store_player_view} from "@/store/player/store_player_view";
+import {store_player_view} from "@/views_page/page_music/page_player/store/store_player_view";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 
 ////// lyircs load
@@ -420,9 +420,9 @@ import player_theme_1_png from '@/assets/img/player_theme_1.png'
 import player_theme_2_png from '@/assets/img/player_theme_2.png'
 import player_theme_3_png from '@/assets/img/player_theme_3.png'
 import player_theme_4_png from '@/assets/img/player_theme_4.png'
-import Animation_1715591164841 from '@/assets/lottie_json/Animation - 1715591164841.js'
-import Animation_1715392202806 from '@/assets/lottie_json/Animation - 1715392202806.js'
-import Animation_1715417974362 from '@/assets/lottie_json/Animation - 1715417974362.js'
+import Animation_1715591164841 from '@/assets/lottie_json/Animation - 1715591164841.json'
+import Animation_1715392202806 from '@/assets/lottie_json/Animation - 1715392202806.json'
+import Animation_1715417974362 from '@/assets/lottie_json/Animation - 1715417974362.json'
 const player_theme_1 = ref<PlayerTheme_LyricItem>(
     {
       id: 0,
@@ -570,12 +570,12 @@ const unwatch_player_collapsed = watchEffect(() => {
 
 ////// Animation lottie Load // lottie-web will cause memory leaks，so replace lottie-player_configs
 import "@lottiefiles/lottie-player";
-import {store_player_appearance} from "@/store/player/store_player_appearance";
-import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-import {store_player_audio_logic} from "@/store/player/store_player_audio_logic"
+import {store_player_appearance} from "@/views_page/page_music/page_player/store/store_player_appearance";
+import {store_player_audio_info} from "@/views_page/page_music/page_player/store/store_player_audio_info";
+import {store_player_audio_logic} from "@/views_page/page_music/page_player/store/store_player_audio_logic"
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-import Table_Album_Model_1_Cover from "@/views_page/page_music/view_page_player/components/Table_Album_Model_1_Cover.vue";
+import Table_Album_Model_1_Cover from "@/views_page/page_music/page_player/components/Table_Album_Model_1_Cover.vue";
 import {ArrowsMaximize, ArrowsMinimize} from "@vicons/tabler";
 const clear_lottie_animationInstance = ref(false)
 const animationInstance_model_1_spectrum = ref<any>(null);

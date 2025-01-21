@@ -1,10 +1,10 @@
 import {reactive, watch} from 'vue'
 import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
-import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
+import {store_view_media_page_info} from "@/views_page/page_music/page_media/store/store_view_media_page_info";
+import {store_view_album_page_info} from "@/views_page/page_music/page_album/store/store_view_album_page_info";
 import {store_server_users} from "@/store/server/store_server_users";
 import {Browsing_ApiService_of_ND} from "@/data_access/servers_configs/navidrome_api/services_normal/browsing/index_service";
-import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info";
+import {store_view_artist_page_info} from "@/views_page/page_music/page_artist/store/store_view_artist_page_info"
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 
 export const store_player_tag_modify = reactive({

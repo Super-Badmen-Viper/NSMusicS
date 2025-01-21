@@ -25,4 +25,16 @@ export class Browsing_ApiService_of_ND extends Navidrome_Api_Services_Normal {
     public async getArtist(username: string,token: string,salt: string,id: string): Promise<any> {
         return this.sendRequest(username,token,salt,'getArtist', { id });
     }
+
+    public async getRandomSongs(
+        username: string,token: string,salt: string,
+        size: string,
+        fromYear: string, toYear: string
+    ): Promise<any> {
+        return this.sendRequest(username,token,salt,'getRandomSongs', {
+            size,
+            fromYear, toYear
+        });
+    }
+
 }

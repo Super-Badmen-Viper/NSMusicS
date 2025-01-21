@@ -1,7 +1,7 @@
 import {reactive, watch} from 'vue'
-import {store_router_data_logic} from "@/store/router/store_router_data_logic";
-import {store_router_data_info} from "@/store/router/store_router_data_info";
-import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
+import {store_router_data_logic} from "@/router/store/store_router_data_logic";
+import {store_router_data_info} from "@/router/store/store_router_data_info";
+import {store_view_album_page_fetchData} from "@/views_page/page_music/page_album/store/store_view_album_page_fetchData";
 
 export const store_router_history_data_of_album = reactive({
     router_history_model_of_Album_scroll: false,

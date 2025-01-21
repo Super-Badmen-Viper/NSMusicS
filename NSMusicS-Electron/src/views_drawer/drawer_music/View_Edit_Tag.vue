@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Table_Edit_Tag from '@/views_components/tag_list/Table_Edit_Tag.vue'
+  import Table_Edit_Tag from '@/views_components/components_music/tag_list/Table_Edit_Tag.vue'
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import Table_Menu_AppSetting from '@/views_page/page_music/page_setting/Table_Menu_AppSetting_Line_Virtual.vue'
-import {store_router_data_info} from "@/store/router/store_router_data_info";
+import {store_router_data_info} from "@/router/store/store_router_data_info";
 
 onMounted(async () => {
   store_router_data_info.router_select = 'apps'

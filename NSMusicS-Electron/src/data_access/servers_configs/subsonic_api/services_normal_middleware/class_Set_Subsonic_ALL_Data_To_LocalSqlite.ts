@@ -14,9 +14,9 @@ import {
     store_local_data_set_artistInfo
 } from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
 import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
-import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
+import {store_playlist_list_info} from "@/views_components/components_music/player_list/store/store_playlist_list_info"
 import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
+import {store_playlist_list_logic} from "@/views_components/components_music/player_list/store/store_playlist_list_logic"
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 
 export class Set_Subsonic_ALL_Data_To_LocalSqlite{

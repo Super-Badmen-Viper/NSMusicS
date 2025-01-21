@@ -34,31 +34,31 @@
   import {darkTheme, NConfigProvider, NIcon} from 'naive-ui'
   import {h, onMounted, computed, watch, provide, ref} from 'vue';
   import {RouterLink, RouterView, useRouter} from 'vue-router';
-  import Bar_Music_Player from '@/views_components/player_bar/Bar_Music_Player.vue'
-  import Bar_Music_PlayList from '@/views_drawer/View_Player_PlayList.vue'
-  import View_Screen_Music_Player from '@/views_page/view_page_player/View_Screen_Music_Player.vue'
+  import Bar_Music_Player from '@/views_components/components_music/player_bar/Bar_Music_Player.vue'
+  import Bar_Music_PlayList from '@/views_drawer/drawer_music/View_Player_PlayList.vue'
+  import View_Screen_Music_Player from '@/views_page/page_music/page_player/View_Screen_Music_Player.vue'
   import {store_app_configs_info} from '@/store/app/store_app_configs_info'
-  import {store_player_appearance} from "@/store/player/store_player_appearance";
-  import {store_player_sound_effects} from "@/store/player/store_player_sound_effects";
-  import {store_player_sound_speed} from "@/store/player/store_player_sound_speed";
-  import {store_player_sound_more} from "@/store/player/store_player_sound_more";
-  import {store_playlist_appearance} from '@/store/view/playlist/store_playlist_appearance'
-  import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info"
-  import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic"
+  import {store_player_appearance} from "@/views_page/page_music/page_player/store/store_player_appearance";
+  import {store_player_sound_effects} from "@/views_page/page_music/page_player/store/store_player_sound_effects";
+  import {store_player_sound_speed} from "@/views_page/page_music/page_player/store/store_player_sound_speed";
+  import {store_player_sound_more} from "@/views_page/page_music/page_player/store/store_player_sound_more";
+  import {store_playlist_appearance} from '@/views_components/components_music/player_list/store/store_playlist_appearance'
+  import {store_playlist_list_info} from "@/views_components/components_music/player_list/store/store_playlist_list_info"
+  import {store_playlist_list_logic} from "@/views_components/components_music/player_list/store/store_playlist_list_logic"
   import {store_server_user_model} from '@/store/server/store_server_user_model'
-  import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
-  import {store_view_album_page_logic} from "@/store/view/album/store_view_album_page_logic"
-  import {store_view_artist_page_info} from "@/store/view/artist/store_view_artist_page_info"
-  import {store_view_artist_page_logic} from "@/store/view/artist/store_view_artist_page_logic"
-  import {store_router_data_info} from "@/store/router/store_router_data_info";
-  import {store_router_data_logic} from "@/store/router/store_router_data_logic";
+  import {store_view_media_page_logic} from "@/views_page/page_music/page_media/store/store_view_media_page_logic";
+  import {store_view_album_page_logic} from "@/views_page/page_music/page_album/store/store_view_album_page_logic"
+  import {store_view_artist_page_info} from "@/views_page/page_music/page_artist/store/store_view_artist_page_info"
+  import {store_view_artist_page_logic} from "@/views_page/page_music/page_artist/store/store_view_artist_page_logic"
+  import {store_router_data_info} from "@/router/store/store_router_data_info";
+  import {store_router_data_logic} from "@/router/store/store_router_data_logic";
   import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
   import {store_app_configs_logic_load} from "@/store/app/store_app_configs_logic_load";
   import {store_app_configs_logic_theme} from "@/store/app/store_app_configs_logic_theme";
-  import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
-  import {store_view_home_page_fetchData} from "@/store/view/home/store_view_home_page_fetchData";
-  import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
-  import {store_view_artist_page_fetchData} from "@/store/view/artist/store_view_artist_page_fetchData";
+  import {store_view_media_page_fetchData} from "@/views_page/page_music/page_media/store/store_view_media_page_fetchData";
+  import {store_view_home_page_fetchData} from "@/views_page/page_music/page_home/store/store_view_home_page_fetchData";
+  import {store_view_album_page_fetchData} from "@/views_page/page_music/page_album/store/store_view_album_page_fetchData";
+  import {store_view_artist_page_fetchData} from "@/views_page/page_music/page_artist/store/store_view_artist_page_fetchData";
 
   ////// BrowserWindow
   import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
@@ -237,9 +237,9 @@
   store_router_data_info.router = useRouter();
   import routers from './router'
   import {store_app_configs_logic_update} from "@/store/app/store_app_configs_logic_update";
-  import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
-  import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
-  import {store_view_album_page_info} from "@/store/view/album/store_view_album_page_info";
+  import {store_player_audio_logic} from "@/views_page/page_music/page_player/store/store_player_audio_logic";
+  import {store_view_media_page_info} from "@/views_page/page_music/page_media/store/store_view_media_page_info";
+  import {store_view_album_page_info} from "@/views_page/page_music/page_album/store/store_view_album_page_info";
   routers.beforeEach((to, from, next) => {
     if(to.name !== from.name){
       store_router_data_logic.clear_Files_temporary()
@@ -614,9 +614,9 @@
   const computed_i18n_Label_Update = computed(() => t('filter.recentlyUpdated'));
 
   ////
-  import {store_player_tag_modify} from "@/store/player/store_player_tag_modify";
-  import View_Edit_Tag from "@/views_drawer/View_Edit_Tag.vue";
-  import View_Player_Effect from "@/views_drawer/View_Player_Effect.vue";
+  import {store_player_tag_modify} from "@/views_page/page_music/page_player/store/store_player_tag_modify";
+  import View_Edit_Tag from "@/views_drawer/drawer_music/View_Edit_Tag.vue";
+  import View_Player_Effect from "@/views_drawer/drawer_music/View_Player_Effect.vue";
   const playlist_contextmenu = ref(null as any)
   provide("message", playlist_contextmenu);
 

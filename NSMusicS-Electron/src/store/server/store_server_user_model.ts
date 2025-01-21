@@ -1,29 +1,19 @@
-import {reactive, ref, watch} from 'vue'
+import {reactive, watch} from 'vue'
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-import {store_router_data_info} from "@/store/router/store_router_data_info";
-import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+import {store_router_data_info} from "@/router/store/store_router_data_info";
 import {
     Set_Navidrome_ALL_Data_To_LocalSqlite
 } from "@/data_access/servers_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
-import {
-    Get_PlaylistInfo_From_LocalSqlite
-} from "@/data_access/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
-import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
-import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
-import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
-import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media";
-import {store_router_history_data_of_album} from "@/store/router/store_router_history_data_of_album";
-import {store_router_history_data_of_artist} from "@/store/router/store_router_history_data_of_artist";
-import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-import {store_view_artist_page_logic} from "@/store/view/artist/store_view_artist_page_logic";
-import {store_router_data_logic} from "@/store/router/store_router_data_logic";
-import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
+import {store_playlist_list_info} from "@/views_components/components_music/player_list/store/store_playlist_list_info"
+import {store_player_audio_info} from "@/views_page/page_music/page_player/store/store_player_audio_info";
+import {store_router_data_logic} from "@/router/store/store_router_data_logic";
+import {store_playlist_list_logic} from "@/views_components/components_music/player_list/store/store_playlist_list_logic"
 import {store_app_configs_logic_load} from "@/store/app/store_app_configs_logic_load";
 import {
     User_Authorization_ApiWebService_of_ND
 } from "@/data_access/servers_configs/navidrome_api/services_web/user_authorization/index_service";
-import {store_player_audio_logic} from "@/store/player/store_player_audio_logic";
+import {store_player_audio_logic} from "@/views_page/page_music/page_player/store/store_player_audio_logic";
 import {Audio_node_mpv} from "@/data_models/song_Audio_Out/Audio_node_mpv";
 import {Audio_howler} from "@/data_models/song_Audio_Out/Audio_howler";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
@@ -53,6 +43,8 @@ export const store_server_user_model = reactive({
     playlist_tracks: 'playlist_tracks',
 
     library_path: '',
+
+    random_play_model: false,
 
     async switchToMode_Local(){
         this.album = 'album'

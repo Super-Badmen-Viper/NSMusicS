@@ -1,6 +1,6 @@
 import {reactive, watch} from 'vue'
-import {store_view_home_page_fetchData} from "@/store/view/home/store_view_home_page_fetchData";
-import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
+import {store_view_home_page_fetchData} from "@/views_page/page_music/page_home/store/store_view_home_page_fetchData";
+import {store_view_media_page_logic} from "@/views_page/page_music/page_media/store/store_view_media_page_logic";
 
 export const store_view_home_page_logic = reactive({
     list_data_StartUpdate: false,

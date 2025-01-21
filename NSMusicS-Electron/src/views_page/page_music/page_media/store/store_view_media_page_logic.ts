@@ -1,17 +1,17 @@
 import {reactive, watch} from 'vue'
-import {store_playlist_list_logic} from "@/store/view/playlist/store_playlist_list_logic";
+import {store_playlist_list_logic} from "@/views_components/components_music/player_list/store/store_playlist_list_logic"
 import {Set_LibraryInfo_To_LocalSqlite} from "@/data_access/sqlite3_local_configs/class_Set_LibraryInfo_To_LocalSqlite";
-import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
-import {store_router_history_data_of_media} from "@/store/router/store_router_history_data_of_media";
-import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
-import {store_router_data_info} from "@/store/router/store_router_data_info";
+import {store_view_media_page_info} from "@/views_page/page_music/page_media/store/store_view_media_page_info";
+import {store_router_history_data_of_media} from "@/router/store/store_router_history_data_of_media";
+import {store_view_media_page_fetchData} from "@/views_page/page_music/page_media/store/store_view_media_page_fetchData";
+import {store_router_data_info} from "@/router/store/store_router_data_info";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {store_local_data_set_annotionInfo} from "@/store/local/local_data_synchronization/store_local_data_set_annotionInfo";
 import {store_local_data_set_playlistInfo} from "@/store/local/local_data_synchronization/store_local_data_set_playlistInfo";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {store_server_data_set_playlistInfo} from "@/store/server/server_data_synchronization/store_server_data_set_playlistInfo";
 import {store_server_data_set_mediaInfo} from "@/store/server/server_data_synchronization/store_server_data_set_mediaInfo";
-import {store_player_appearance} from "@/store/player/store_player_appearance";
+import {store_player_appearance} from "@/views_page/page_music/page_player/store/store_player_appearance";
 
 export const store_view_media_page_logic = reactive({
     list_data_StartUpdate: false,
@@ -35,6 +35,8 @@ export const store_view_media_page_logic = reactive({
 
     page_songlists_bool_show_search_area: false,
     page_songlists_input_search_Value: '',
+
+    page_songlists_random_play: false,
 
     get_duration_formatTime(currentTime: number): string {
         const minutes = Math.floor(currentTime / 60);

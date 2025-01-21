@@ -2,9 +2,14 @@ import {reactive, ref, watch} from 'vue'
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {Audio_node_mpv} from "@/data_models/song_Audio_Out/Audio_node_mpv";
 import {Audio_howler} from "@/data_models/song_Audio_Out/Audio_howler";
-import {store_player_audio_info} from "@/store/player/store_player_audio_info";
-import {store_player_view} from "./store_player_view";
+import {store_player_audio_info} from "@/views_page/page_music/page_player/store/store_player_audio_info";
+import {store_player_view} from "@/views_page/page_music/page_player/store/store_player_view";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
+import {store_player_tag_modify} from "@/views_page/page_music/page_player/store/store_player_tag_modify";
+import {
+    store_playlist_list_logic
+} from "@/views_components/components_music/player_list/store/store_playlist_list_logic";
+import {store_player_appearance} from "@/views_page/page_music/page_player/store/store_player_appearance";
 
 export const store_player_audio_logic = reactive({
     player: new Audio_node_mpv(),
@@ -113,6 +118,25 @@ export const store_player_audio_logic = reactive({
                 }
             }
         }
+    },
+    update_current_media_info(media_file:any,index:number){
+        store_player_audio_info.this_audio_play_id = media_file.play_id
+        store_player_audio_info.this_audio_file_path = media_file.path
+        store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
+        store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
+        store_player_audio_info.this_audio_artist_name = media_file.artist
+        store_player_audio_info.this_audio_artist_id = media_file.artist_id
+        store_player_audio_info.this_audio_song_name = media_file.title
+        store_player_audio_info.this_audio_song_id = media_file.id
+        store_player_audio_info.this_audio_song_rating = media_file.rating
+        store_player_audio_info.this_audio_song_favorite = media_file.favorite
+        store_player_audio_info.this_audio_album_id = media_file.album_id
+        store_player_audio_info.this_audio_album_name = media_file.album
+        store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
+        //
+        store_player_tag_modify.player_current_media_starred = media_file.favorite
+        store_player_tag_modify.player_current_media_playCount = media_file.play_count
+        store_player_tag_modify.player_current_media_playDate = media_file.play_date
     }
 });
 watch(() => store_player_audio_logic.player_select, async (newValue) => {

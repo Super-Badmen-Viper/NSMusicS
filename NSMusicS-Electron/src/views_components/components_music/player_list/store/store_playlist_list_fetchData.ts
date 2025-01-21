@@ -1,17 +1,15 @@
 import { reactive } from 'vue'
-import {store_view_media_page_info} from "@/store/view/media/store_view_media_page_info";
-import {store_player_appearance} from "@/store/player/store_player_appearance";
-import {store_view_album_page_fetchData} from "@/store/view/album/store_view_album_page_fetchData";
-import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
+import {store_view_media_page_info} from "@/views_page/page_music/page_media/store/store_view_media_page_info";
+import {store_view_media_page_logic} from "@/views_page/page_music/page_media/store/store_view_media_page_logic";
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "@/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {store_view_media_page_fetchData} from "@/store/view/media/store_view_media_page_fetchData";
-import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
+import {store_view_media_page_fetchData} from "@/views_page/page_music/page_media/store/store_view_media_page_fetchData";
+import {store_playlist_list_info} from "@/views_components/components_music/player_list/store/store_playlist_list_info"
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-import {store_player_audio_info} from "@/store/player/store_player_audio_info";
+import {store_player_audio_info} from "@/views_page/page_music/page_player/store/store_player_audio_info";
 
 export const store_playlist_list_fetchData = reactive({
     async fetchData_PlayList(){
@@ -37,9 +35,20 @@ export const store_playlist_list_fetchData = reactive({
     _album_id: '',
     _artist_id: '',
     async fetchData_PlayList_of_server_web_end(){
-        this._start += 100;
-        this._end += 100;
-        await this.fetchData_PlayList_of_server_web()
+        if(!store_server_user_model.random_play_model) {
+            this._start += 100;
+            this._end += 100;
+            await this.fetchData_PlayList_of_server_web()
+        }else{
+            let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
+            await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
+                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                store_server_user_model.token,
+                store_server_user_model.salt,
+                10, '', ''
+            )
+        }
     },
     async fetchData_PlayList_of_server_web(){
         const _search = (store_view_media_page_logic.page_songlists_keywordFilter || '').match(/%([^%]+)%/)?.[1] || '';

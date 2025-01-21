@@ -19,30 +19,30 @@ import {h, watch} from "vue";
 import {NIcon} from "naive-ui";
 
 //////
-import Group_1_1 from "@/views_page/view_page_server_setting/components/group_1/group_1_1.vue";
-import Group_1_2 from "@/views_page/view_page_server_setting/components/group_1/group_1_2.vue";
-import Group_1_3 from "@/views_page/view_page_server_setting/components/group_1/group_1_3.vue";
-import Group_1_4_1 from "@/views_page/view_page_server_setting/components/group_1/group_1_4_1.vue";
-import Group_1_4_2 from "@/views_page/view_page_server_setting/components/group_1/group_1_4_2.vue";
-import Group_1_4_3 from "@/views_page/view_page_server_setting/components/group_1/group_1_4_3.vue";
-import Group_1_4_4 from "@/views_page/view_page_server_setting/components/group_1/group_1_4_4.vue";
-import Group_1_5_1 from "@/views_page/view_page_server_setting/components/group_1/group_1_5_1.vue";
-import Group_1_5_2 from "@/views_page/view_page_server_setting/components/group_1/group_1_5_2.vue";
-import Group_1_5_3 from "@/views_page/view_page_server_setting/components/group_1/group_1_5_3.vue";
-import Group_1_5_4 from "@/views_page/view_page_server_setting/components/group_1/group_1_5_4.vue";
-import Group_2_1 from "@/views_page/view_page_server_setting/components/group_2/group_2_1.vue";
-import Group_2_2 from "@/views_page/view_page_server_setting/components/group_2/group_2_2.vue";
-import Group_2_3 from "@/views_page/view_page_server_setting/components/group_2/group_2_3.vue";
-import Group_3_1 from "@/views_page/view_page_server_setting/components/group_3/group_3_1.vue";
-import Group_3_2 from "@/views_page/view_page_server_setting/components/group_3/group_3_2.vue";
-import Group_4_1 from "@/views_page/view_page_server_setting/components/group_4/group_4_1.vue";
-import Group_4_2 from "@/views_page/view_page_server_setting/components/group_4/group_4_2.vue";
-import Group_4_3 from "@/views_page/view_page_server_setting/components/group_4/group_4_3.vue";
-import Group_4_4 from "@/views_page/view_page_server_setting/components/group_4/group_4_4.vue";
-import Group_4_5_1 from "@/views_page/view_page_server_setting/components/group_4/group_4_5_1.vue";
-import Group_4_5_2 from "@/views_page/view_page_server_setting/components/group_4/group_4_5_2.vue";
-import Group_4_5_3 from "@/views_page/view_page_server_setting/components/group_4/group_4_5_3.vue";
-import Group_4_6 from "@/views_page/view_page_server_setting/components/group_4/group_4_6.vue";
+import Group_1_1 from "@/views_page/page_server/page_setting/components/group_1/group_1_1.vue";
+import Group_1_2 from "@/views_page/page_server/page_setting/components/group_1/group_1_2.vue";
+import Group_1_3 from "@/views_page/page_server/page_setting/components/group_1/group_1_3.vue";
+import Group_1_4_1 from "@/views_page/page_server/page_setting/components/group_1/group_1_4_1.vue";
+import Group_1_4_2 from "@/views_page/page_server/page_setting/components/group_1/group_1_4_2.vue";
+import Group_1_4_3 from "@/views_page/page_server/page_setting/components/group_1/group_1_4_3.vue";
+import Group_1_4_4 from "@/views_page/page_server/page_setting/components/group_1/group_1_4_4.vue";
+import Group_1_5_1 from "@/views_page/page_server/page_setting/components/group_1/group_1_5_1.vue";
+import Group_1_5_2 from "@/views_page/page_server/page_setting/components/group_1/group_1_5_2.vue";
+import Group_1_5_3 from "@/views_page/page_server/page_setting/components/group_1/group_1_5_3.vue";
+import Group_1_5_4 from "@/views_page/page_server/page_setting/components/group_1/group_1_5_4.vue";
+import Group_2_1 from "@/views_page/page_server/page_setting/components/group_2/group_2_1.vue";
+import Group_2_2 from "@/views_page/page_server/page_setting/components/group_2/group_2_2.vue";
+import Group_2_3 from "@/views_page/page_server/page_setting/components/group_2/group_2_3.vue";
+import Group_3_1 from "@/views_page/page_server/page_setting/components/group_3/group_3_1.vue";
+import Group_3_2 from "@/views_page/page_server/page_setting/components/group_3/group_3_2.vue";
+import Group_4_1 from "@/views_page/page_server/page_setting/components/group_4/group_4_1.vue";
+import Group_4_2 from "@/views_page/page_server/page_setting/components/group_4/group_4_2.vue";
+import Group_4_3 from "@/views_page/page_server/page_setting/components/group_4/group_4_3.vue";
+import Group_4_4 from "@/views_page/page_server/page_setting/components/group_4/group_4_4.vue";
+import Group_4_5_1 from "@/views_page/page_server/page_setting/components/group_4/group_4_5_1.vue";
+import Group_4_5_2 from "@/views_page/page_server/page_setting/components/group_4/group_4_5_2.vue";
+import Group_4_5_3 from "@/views_page/page_server/page_setting/components/group_4/group_4_5_3.vue";
+import Group_4_6 from "@/views_page/page_server/page_setting/components/group_4/group_4_6.vue";
 function renderIcon (icon: any) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }

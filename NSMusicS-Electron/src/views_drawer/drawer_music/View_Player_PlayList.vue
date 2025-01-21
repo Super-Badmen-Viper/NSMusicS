@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Table_Music_PlayList from '@/views_components/player_list/Table_Music_PlayList_Line_Virtual.vue'
+import Table_Music_PlayList from '@/views_components/components_music/player_list/Table_Music_PlayList_Line_Virtual.vue'
 </script>
 
 <template>

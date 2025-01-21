@@ -1,12 +1,8 @@
 import { reactive, ref } from 'vue'
-import {
-    Set_PlaylistInfo_To_LocalSqlite
-} from "@/data_access/sqlite3_local_configs/class_Set_PlaylistInfo_To_LocalSqlite";
-import {store_playlist_list_info} from "@/store/view/playlist/store_playlist_list_info";
+import {store_playlist_list_info} from "@/views_components/components_music/player_list/store/store_playlist_list_info"
 import {
     Get_PlaylistInfo_From_LocalSqlite
 } from "@/data_access/sqlite3_local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
-import {store_view_media_page_logic} from "@/store/view/media/store_view_media_page_logic";
 import {
     store_local_data_set_playlistInfo
 } from "@/store/local/local_data_synchronization/store_local_data_set_playlistInfo";
