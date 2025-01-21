@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <item>
-<version>1.2.0</version>
+<version>1.2.2</version>
 <url> </url>
 <changelog>https://github.com/Super-Badmen-Viper/NSMusicS/releases</changelog>
 <changelog_explain>
@@ -12,7 +12,7 @@
     增加服务器配置种类，兼容emby-api[进行中];
     增加服务器配置种类，兼容jellyfin-api[进行中];
     增加迷你播放窗口，竖向模式为仿制AppleMusic迷你播放悬浮窗，横向模式为桌面歌词[进行中];
-    1.2.0已更新内容;
+    1.2.2已更新内容;
     优化本地模式的音乐库管理逻辑，使其更加符合本地用户的使用习惯[√];
     按媒体库文件夹目录对歌曲进行筛选[√];
     为每一个按钮都添加鼠标悬浮国际化提示说明，提高用户使用友好性[√];
