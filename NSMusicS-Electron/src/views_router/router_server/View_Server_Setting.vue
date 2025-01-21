@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import Table_Artist_List_ALL from '@/views_page/view_page_artist/Table_Artist_List_ALL_Grid_Virtual.vue'
+import servers from '@/views_page/page_server/page_setting/Table_Server_Setting.vue'
 import {store_router_data_info} from "@/store/router/store_router_data_info";
 
 onMounted(async () => {
-  store_router_data_info.router_select = 'artist'
+  store_router_data_info.router_select = 'servers'
 });
-
 </script>
-
 <template>
   <div class="view_show">
-    <Table_Artist_List_ALL/>
+    <servers/>
   </div>
 </template>
 
