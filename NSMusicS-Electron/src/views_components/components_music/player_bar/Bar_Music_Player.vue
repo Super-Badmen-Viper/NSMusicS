@@ -372,6 +372,7 @@ if(isElectron) {
 }
 ////// player_configs player_button order area
 import { useMessage } from 'naive-ui'
+import {store_server_user_model} from "@/store/server/store_server_user_model";
 const message = useMessage()
 const backpanel_order_leave = () => {
   if(store_player_appearance.player_show === false) {
@@ -415,7 +416,11 @@ async function Play_Media_Order(model_num: string, increased: number) {
   if(store_server_user_model.model_server_type_of_local){
     last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length
   }else if(store_server_user_model.model_server_type_of_web){
-    last_index = store_playlist_list_fetchData._totalCount || store_playlist_list_info.playlist_MediaFiles_temporary.length
+    if(!store_server_user_model.random_play_model) {
+      last_index = store_playlist_list_fetchData._totalCount || store_playlist_list_info.playlist_MediaFiles_temporary.length
+    }else{
+      last_index = store_playlist_list_info.playlist_MediaFiles_temporary.length
+    }
   }
   if (last_index > 0) {
     let index = store_playlist_list_info.playlist_MediaFiles_temporary.findIndex(
@@ -428,7 +433,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
       if (model_num === 'playback-1') {
         index += increased;
         if (index >= last_index) {
-          if(store_player_audio_logic.player_is_play_ended === true){
+          if(store_player_audio_logic.player_is_play_ended){
             stop_play = true;
             store_player_audio_logic.player_is_play_ended = false;
           }else{
@@ -461,16 +466,15 @@ async function Play_Media_Order(model_num: string, increased: number) {
         }else{
           index += increased;
           if (index >= last_index) {
-            if(index === store_playlist_list_info.playlist_MediaFiles_temporary.length){
-              let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-              await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
-                  store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                  store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                  store_server_user_model.token,
-                  store_server_user_model.salt,
-                  10, '', ''
-              )
-            }
+            store_server_user_model.random_play_model_add = true
+            let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
+            await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
+                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                store_server_user_model.token,
+                store_server_user_model.salt,
+                10, '', ''
+            )
           }else if(index < 0){
             index = last_index - 1;
           }
@@ -479,36 +483,38 @@ async function Play_Media_Order(model_num: string, increased: number) {
         stop_play = true;
       }
 
-      if (!stop_play) {
-        if (store_server_user_model.model_server_type_of_web) {
-          if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length) {
-            await store_playlist_list_fetchData.fetchData_PlayList_of_server_web_end();
+      if(!store_server_user_model.random_play_model || index < last_index) {
+        if (!stop_play) {
+          if (store_server_user_model.model_server_type_of_web) {
+            if (index >= store_playlist_list_info.playlist_MediaFiles_temporary.length) {
+              await store_playlist_list_fetchData.fetchData_PlayList_of_server_web_end();
+            }
           }
-        }
-        const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
-        store_player_audio_info.this_audio_play_id = media_file.play_id
-        store_player_audio_info.this_audio_file_path = media_file.path;
-        store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
-        store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url;
-        store_player_audio_info.this_audio_artist_name = media_file.artist;
-        store_player_audio_info.this_audio_artist_id = media_file.artist_id
-        store_player_audio_info.this_audio_song_name = media_file.title
-        store_player_audio_info.this_audio_song_id = media_file.id
-        store_player_audio_info.this_audio_song_rating = media_file.rating
-        store_player_audio_info.this_audio_song_favorite = media_file.favorite
-        store_player_audio_info.this_audio_album_id = media_file.album_id
-        store_player_audio_info.this_audio_album_name = media_file.album
-        //
-        store_player_tag_modify.player_current_media_starred = media_file.favorite
-        store_player_tag_modify.player_current_media_playCount = media_file.play_count
-        store_player_tag_modify.player_current_media_playDate = media_file.play_date
-        //
-        store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
-        console.log(media_file);
+          const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
+          store_player_audio_info.this_audio_play_id = media_file.play_id
+          store_player_audio_info.this_audio_file_path = media_file.path;
+          store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
+          store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url;
+          store_player_audio_info.this_audio_artist_name = media_file.artist;
+          store_player_audio_info.this_audio_artist_id = media_file.artist_id
+          store_player_audio_info.this_audio_song_name = media_file.title
+          store_player_audio_info.this_audio_song_id = media_file.id
+          store_player_audio_info.this_audio_song_rating = media_file.rating
+          store_player_audio_info.this_audio_song_favorite = media_file.favorite
+          store_player_audio_info.this_audio_album_id = media_file.album_id
+          store_player_audio_info.this_audio_album_name = media_file.album
+          //
+          store_player_tag_modify.player_current_media_starred = media_file.favorite
+          store_player_tag_modify.player_current_media_playCount = media_file.play_count
+          store_player_tag_modify.player_current_media_playDate = media_file.play_date
+          //
+          store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = index
+          console.log(media_file);
 
-        store_playlist_list_logic.media_page_handleItemDbClick = false
-        // store_player_appearance.player_mode_of_lock_playlist = false
-        store_player_audio_info.this_audio_restart_play = true
+          store_playlist_list_logic.media_page_handleItemDbClick = false
+          // store_player_appearance.player_mode_of_lock_playlist = false
+          store_player_audio_info.this_audio_restart_play = true
+        }
       }
     }
   }
@@ -654,6 +660,7 @@ import {store_local_data_set_artistInfo} from "@/store/local/local_data_synchron
 import {
   Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "@/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
+import {store_server_users} from "@/store/server/store_server_users";
 
 const handleItemClick_Favorite = (id: any,favorite: Boolean) => {
   if(id != null && id.length > 0 && id != 'undefined') {

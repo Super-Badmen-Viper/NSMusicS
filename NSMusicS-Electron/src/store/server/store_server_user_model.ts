@@ -45,6 +45,7 @@ export const store_server_user_model = reactive({
     library_path: '',
 
     random_play_model: false,
+    random_play_model_add: false,
 
     async switchToMode_Local(){
         this.album = 'album'

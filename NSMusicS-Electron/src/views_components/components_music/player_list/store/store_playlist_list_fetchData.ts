@@ -39,15 +39,6 @@ export const store_playlist_list_fetchData = reactive({
             this._start += 100;
             this._end += 100;
             await this.fetchData_PlayList_of_server_web()
-        }else{
-            let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-            await get_Navidrome_Temp_Data_To_LocalSqlite.get_random_song_list(
-                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                store_server_user_model.token,
-                store_server_user_model.salt,
-                10, '', ''
-            )
         }
     },
     async fetchData_PlayList_of_server_web(){

@@ -653,12 +653,16 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                         /// Data synchronization
                         store_playlist_list_fetchData.fetchData_PlayList_of_data_synchronization_to_Media()
                     }
+                    const index = store_server_user_model.random_play_model_add
+                        ? store_playlist_list_info.playlist_MediaFiles_temporary.length - 10: 0
                     store_player_audio_logic.update_current_media_info(
-                        store_playlist_list_info.playlist_MediaFiles_temporary[0],
-                        0
+                        store_playlist_list_info.playlist_MediaFiles_temporary[index],
+                        index
                     )
                     store_playlist_list_logic.media_page_handleItemDbClick = false
                     store_player_audio_info.this_audio_restart_play = true
+
+                    store_server_user_model.random_play_model_add = false
                 }
             })
             store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds = store_view_media_page_info.media_Files_temporary.map(item => item.id);
