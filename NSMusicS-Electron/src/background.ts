@@ -406,6 +406,10 @@ async function createWindow() {
     else {
         context.mainWindow.loadFile('index.html')
     }
+    ///
+    ipc.handle('window-get-node-env', async (event) => {
+        return process.env.NODE_ENV === 'development'
+    });
     /// electron
     let originalBounds: any = null;
     let isFullscreen = false;
@@ -1555,10 +1559,10 @@ async function Set_ReadLocalMusicInfo_Add_LocalSqlite(directoryPath: any[]) {
                 albums: Array.from(albumMap.values())
                     .filter(album => album.artist_id === artist.id)
                     .map(album => {
-                        const albumSongsCount = album.media.length;
+                        const albumMediasCount = album.media.length;
                         return {
                             ...album,
-                            song_count: albumSongsCount,
+                            song_count: albumMediasCount,
                             media: album.media.map(media => ({
                                 ...media,
                                 album_id: album.id,

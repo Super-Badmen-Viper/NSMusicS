@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { store_server_user_model } from "@/store_router/server/store_server_user_model";
+import { store_server_user_model } from "@/store/server/store_server_user_model";
 
 export class Navidrome_Api_Services_Web {
     protected readonly baseUrl: string;

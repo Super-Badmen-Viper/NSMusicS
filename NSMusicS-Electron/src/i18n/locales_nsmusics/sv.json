@@ -3,7 +3,7 @@
         "siderbar_menu": {
             "guessLike": "Gissa Gillar",
             "karaoke": "Karaoke",
-            "identifySong": "Identifiera",
+            "identifyMedia": "Identifiera",
             "scoreGeneration": "Noter",
             "lyricsProduction": "Skapa",
             "musicCommunity": "Gemenskap"
@@ -15,16 +15,16 @@
             "playback_4": "Slumpmässigt uppspelning"
         },
         "view_page": {
-            "allSong": "Alla Låtar",
-            "loveSong": "Favoritlåtar",
+            "allMedia": "Alla Låtar",
+            "loveMedia": "Favoritlåtar",
             "allAlbum": "Alla Album",
             "loveAlbum": "Favoritalbum",
             "allArtist": "Alla Artister",
             "loveArtist": "Favoritartister",
             "recentPlay": "Nyligen Spelade",
-            "countSong": "sång",
+            "countMedia": "sång",
             "countList": "grupp",
-            "selectedSong": "Vald",
+            "selectedMedia": "Vald",
             "selectLibrary": "Importera lokal bibliotek",
             "selectLibrary_explain": "Välj en lokal mapp för att importera alla låtar från mappen",
             "selectLibrary_end_explain": "Efter att du har klickat på OK, utför inga åtgärder. När importen är framgångsrik kommer systemet att avsluta denna app. Vänligen starta om appen manuellt för att fortsätta.",

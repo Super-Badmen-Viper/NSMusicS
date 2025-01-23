@@ -3,7 +3,7 @@
         "siderbar_menu": {
             "guessLike": "Takhle Mám",
             "karaoke": "Karaoke",
-            "identifySong": "Rozpoznat",
+            "identifyMedia": "Rozpoznat",
             "scoreGeneration": "Noty",
             "lyricsProduction": "Vytvořit",
             "musicCommunity": "Komunita"
@@ -15,16 +15,16 @@
             "playback_4": "Náhodné přehrávání"
         },
         "view_page": {
-            "allSong": "Všechny Skvely",
-            "loveSong": "Oblíbené",
+            "allMedia": "Všechny Skvely",
+            "loveMedia": "Oblíbené",
             "allAlbum": "Všechny Alby",
             "loveAlbum": "Oblíbené Alby",
             "allArtist": "Všichni Umělci",
             "loveArtist": "Oblíbení Umělci",
             "recentPlay": "Nedávno Přehráno",
-            "countSong": "píseň",
+            "countMedia": "píseň",
             "countList": "sestava",
-            "selectedSong": "Vybráno",
+            "selectedMedia": "Vybráno",
             "selectLibrary": "Importovat místní knihovnu",
             "selectLibrary_explain": "Vyberte místní adresář pro import všech písní z adresáře",
             "selectLibrary_end_explain": "Po kliknutí na potvrzení neprovádějte žádné operace. Po úspěšném importu bude aplikace ukončena. Znovu ji spusťte ručně pro pokračování.",

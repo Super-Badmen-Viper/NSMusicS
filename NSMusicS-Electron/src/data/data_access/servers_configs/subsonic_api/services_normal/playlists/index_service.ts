@@ -1,4 +1,4 @@
-import {Subsonic_Api_Services_Normal} from "../../../../servers_configs/subsonic_api/services_normal/Subsonic_Api_Services_Normal";
+import {Subsonic_Api_Services_Normal} from "../Subsonic_Api_Services_Normal";
 
 export class Playlists_ApiService_of_ND extends Subsonic_Api_Services_Normal {
     public async getPlaylists_all(username: string,token: string,salt: string): Promise<any> {

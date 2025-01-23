@@ -1,4 +1,4 @@
-import {store_app_configs_info} from "@/store_router/app/store_app_configs_info";
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import { isElectron } from '@/utils/electron/isElectron';
 
 export class Set_ServerInfo_To_LocalSqlite {

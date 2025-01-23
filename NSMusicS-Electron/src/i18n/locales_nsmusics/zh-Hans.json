@@ -3,7 +3,7 @@
         "siderbar_menu": {
             "guessLike": "猜你喜欢",
             "karaoke": "K歌",
-            "identifySong": "听歌识曲",
+            "identifyMedia": "听歌识曲",
             "scoreGeneration": "乐谱生成",
             "lyricsProduction": "歌词制作",
             "musicCommunity": "音乐社区"
@@ -15,16 +15,16 @@
             "playback_4": "随机播放"
         },
         "view_page": {
-            "allSong": "所有歌曲",
-            "loveSong": "收藏歌曲",
+            "allMedia": "所有歌曲",
+            "loveMedia": "收藏歌曲",
             "allAlbum": "所有专辑",
             "loveAlbum": "收藏专辑",
             "allArtist": "所有歌手",
             "loveArtist": "收藏歌手",
             "recentPlay": "最近播放",
-            "countSong": "首",
+            "countMedia": "首",
             "countList": "组",
-            "selectedSong": "选中",
+            "selectedMedia": "选中",
             "selectLibrary": "导入本地(模式)库",
             "selectLibrary_explain": "选中一个本地文件夹，将文件夹所有的歌曲导入",
             "selectLibrary_end_explain": "点击确认后，请不要进行任何操作，导入成功后，系统将退出此应用，请再次手动启动此应用即可",

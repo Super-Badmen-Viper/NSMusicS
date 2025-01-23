@@ -1,5 +1,5 @@
 import {reactive} from 'vue'
-import {Playlists_ApiService_of_ND} from "@/data_access/servers_configs/navidrome_api/services_normal/playlists/index_service";
+import {Playlists_ApiService_of_ND} from "../../../data/data_access/servers_configs/navidrome_api/services_normal/playlists/index_service";
 import {store_server_users} from "@/store/server/store_server_users";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 
@@ -40,7 +40,7 @@ export const store_server_data_set_playlistInfo = reactive({
         }
     },
     async Set_Selected_MediaInfo_Delete_Selected_Playlist(ids: string[], playlist_id: string){
-        const indexs = await this.Set_PlaylistInfo_To_Update_GetPlaylist_SongIndex_of_ND(
+        const indexs = await this.Set_PlaylistInfo_To_Update_GetPlaylist_MediaIndex_of_ND(
             playlist_id, ids
         );
         for (let i = 0; i < indexs.length; i++) {
@@ -56,7 +56,7 @@ export const store_server_data_set_playlistInfo = reactive({
             }
         }
         // for (const id of ids) {
-        //     const indexs = await this.Set_PlaylistInfo_To_Update_GetPlaylist_SongIndex_of_ND(
+        //     const indexs = await this.Set_PlaylistInfo_To_Update_GetPlaylist_MediaIndex_of_ND(
         //         playlist_id, [id]
         //     )
         //     await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
@@ -66,7 +66,7 @@ export const store_server_data_set_playlistInfo = reactive({
         // }
     },
 
-    async Set_PlaylistInfo_To_Update_GetPlaylist_SongIndex_of_ND(playlist_id: string, ids: string[]) {
+    async Set_PlaylistInfo_To_Update_GetPlaylist_MediaIndex_of_ND(playlist_id: string, ids: string[]) {
         const getPlaylist_id = await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
             .getPlaylist_id(
                 store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,

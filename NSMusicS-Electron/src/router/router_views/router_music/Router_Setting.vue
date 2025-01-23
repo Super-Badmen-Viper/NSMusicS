@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import TableSetting from '@/views/view_music/page_music/page_setting/Table_Setting.vue'
-import {store_router_data_info} from "@/router/store_router/store_router_data_info";
+import TableSetting from '@/views/view_music/music_page/page_setting/Table_Setting.vue'
+import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 
 onMounted(async () => {
   store_router_data_info.router_select = 'apps'

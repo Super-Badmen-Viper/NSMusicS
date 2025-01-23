@@ -3,7 +3,7 @@
         "siderbar_menu": {
             "guessLike": "Свиђа ти",
             "karaoke": "Караке",
-            "identifySong": "Идентификуј",
+            "identifyMedia": "Идентификуј",
             "scoreGeneration": "Ноте",
             "lyricsProduction": "Производња",
             "musicCommunity": "Заједница"
@@ -15,16 +15,16 @@
             "playback_4": "Насумично пуштање"
         },
         "view_page": {
-            "allSong": "Све песме",
-            "loveSong": "Омиљене",
+            "allMedia": "Све песме",
+            "loveMedia": "Омиљене",
             "allAlbum": "Сви албуми",
             "loveAlbum": "Омиљени албуми",
             "allArtist": "Сви уметници",
             "loveArtist": "Омиљени уметници",
             "recentPlay": "Недавно пуштано",
-            "countSong": "песма",
+            "countMedia": "песма",
             "countList": "група",
-            "selectedSong": "Изабрано",
+            "selectedMedia": "Изабрано",
             "selectLibrary": "Увези локалну библиотеку",
             "selectLibrary_explain": "Изаберите локалну фасциклу да увезете све песме из ње",
             "selectLibrary_end_explain": "Пошто кликнете на у реду, не вршите ниједну операцију. Након успешне импортације, систем ће изаћи из овог програма. Ручно поново покрените програм да бисте наставили.",

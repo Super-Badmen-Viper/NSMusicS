@@ -1,6 +1,6 @@
 import moment from "moment/moment";
-import { store_server_user_model } from '@/store_router/server/store_server_user_model'
-import {store_app_configs_info} from "@/store_router/app/store_app_configs_info";
+import { store_server_user_model } from '@/store/server/store_server_user_model'
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron';
 

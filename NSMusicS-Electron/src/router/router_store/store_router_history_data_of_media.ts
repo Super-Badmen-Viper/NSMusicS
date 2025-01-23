@@ -1,7 +1,7 @@
 import { reactive, watch } from 'vue';
-import { store_router_data_logic } from '@/router/store_router/store_router_data_logic';
-import { store_router_data_info } from '@/router/store_router/store_router_data_info';
-import { store_view_media_page_fetchData } from "../../views/view_music/page_music/page_media/store/store_view_media_page_fetchData";
+import { store_router_data_logic } from '@/router/router_store/store_router_data_logic';
+import { store_router_data_info } from '@/router/router_store/store_router_data_info';
+import { store_view_media_page_fetchData } from "../../views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
 
 export const store_router_history_data_of_media = reactive({
     router_history_model_of_Media_scroll: false,

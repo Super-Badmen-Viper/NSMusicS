@@ -3,7 +3,7 @@
         "siderbar_menu": {
             "guessLike": "Понрав.",
             "karaoke": "Караоке",
-            "identifySong": "Идентификатор",
+            "identifyMedia": "Идентификатор",
             "scoreGeneration": "Ноты",
             "lyricsProduction": "Текст",
             "musicCommunity": "Сообщество"
@@ -15,16 +15,16 @@
             "playback_4": "Случайное воспроизведение"
         },
         "view_page": {
-            "allSong": "Все песни",
-            "loveSong": "Избранные",
+            "allMedia": "Все песни",
+            "loveMedia": "Избранные",
             "allAlbum": "Все альбомы",
             "loveAlbum": "Избранные альбомы",
             "allArtist": "Все артисты",
             "loveArtist": "Избранные артисты",
             "recentPlay": "Недавно",
-            "countSong": "песня",
+            "countMedia": "песня",
             "countList": "группа",
-            "selectedSong": "Выбрано",
+            "selectedMedia": "Выбрано",
             "selectLibrary": "Импорт локальной библиотеки",
             "selectLibrary_explain": "Выберите локальную папку для импорта всех песен из папки",
             "selectLibrary_end_explain": "После нажатия кнопки подтверждения, пожалуйста, не выполняйте никаких действий. После успешного импорта приложение будет закрыто. Пожалуйста, вручную перезапустите приложение, чтобы продолжить.",

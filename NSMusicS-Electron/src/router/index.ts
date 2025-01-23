@@ -6,7 +6,7 @@ const router = createRouter({
     {
       path: '/home',
       name: 'home',
-      component: () => import('@/views_router/router_music/View_Home_MusicLibrary_Browse.vue'),
+      component: () => import('@/router/router_views/router_music/Router_Home.vue'),
       meta: {
         cleanup: true
       }
@@ -14,7 +14,7 @@ const router = createRouter({
     {
       path: '/apps',
       name: 'apps',
-      component: () => import('@/views_router/router_music/View_Menu_AppSetting.vue'),
+      component: () => import('@/router/router_views/router_music/Router_Setting.vue'),
       meta: {
         cleanup: true
       }
@@ -22,7 +22,7 @@ const router = createRouter({
     {
       path: '/song',
       name: 'song',
-      component: () => import('@/views_router/router_music/View_Song_List_ALL.vue'),
+      component: () => import('@/router/router_views/router_music/Router_Media.vue'),
       meta: {
         cleanup: true
       }
@@ -30,7 +30,7 @@ const router = createRouter({
     {
       path: '/album',
       name: 'album',
-      component: () => import('@/views_router/router_music/View_Album_List_ALL.vue'),
+      component: () => import('@/router/router_views/router_music/Router_Album.vue'),
       meta: {
         cleanup: true
       }
@@ -38,7 +38,15 @@ const router = createRouter({
     {
       path: '/artist',
       name: 'artist',
-      component: () => import('@/views_router/router_music/View_Artist_List_ALL.vue'),
+      component: () => import('@/router/router_views/router_music/Router_Artist.vue'),
+      meta: {
+        cleanup: true
+      }
+    },
+    {
+      path: '/genre',
+      name: 'genre',
+      component: () => import('@/router/router_views/router_music/Router_Genre.vue'),
       meta: {
         cleanup: true
       }
@@ -46,7 +54,7 @@ const router = createRouter({
     {
       path: '/servers',
       name: 'servers',
-      component: () => import('@/views_router/router_server/View_Server_Setting.vue'),
+      component: () => import('@/router/router_views/router_server/View_Server_Setting.vue'),
       meta: {
         cleanup: true
       }
@@ -54,7 +62,7 @@ const router = createRouter({
     {
       path: '/library',
       name: 'library',
-      component: () => import('@/views_router/router_server/View_Server_Library.vue'),
+      component: () => import('@/router/router_views/router_server/View_Server_Library.vue'),
       meta: {
         cleanup: true
       }
@@ -62,7 +70,7 @@ const router = createRouter({
     {
       path: '/update',
       name: 'update',
-      component: () => import('../views_router/View_Updateing.vue'),
+      component: () => import('@/router/router_views/View_Updateing.vue'),
       meta: {
         cleanup: true
       }

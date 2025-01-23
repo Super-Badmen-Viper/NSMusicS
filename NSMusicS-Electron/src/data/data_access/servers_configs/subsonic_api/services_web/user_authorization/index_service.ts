@@ -1,9 +1,9 @@
 import {
     Subsonic_Api_Services_Web
-} from "../../../../servers_configs/subsonic_api/services_web/Subsonic_Api_Services_Web";
-import {store_server_users} from "@/store_router/server/store_server_users";
+} from "../Subsonic_Api_Services_Web";
+import {store_server_users} from "@/store/server/store_server_users";
 import axios from "axios";
-import {store_server_user_model} from "@/store_router/server/store_server_user_model";
+import {store_server_user_model} from "@/store/server/store_server_user_model";
 
 export class User_Authorization_ApiWebService_of_ND extends Subsonic_Api_Services_Web {
     public async get_token() {

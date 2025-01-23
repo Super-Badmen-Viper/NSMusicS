@@ -1,28 +1,28 @@
-import {store_server_users} from "@/store_router/server/store_server_users";
-import {store_view_home_page_info} from "../../../../views/view_music/page_music/page_home/store/store_view_home_page_info";
-import {Home_Lists_ApiWebService_of_ND} from "../../../servers_configs/navidrome_api/services_web/page_lists/home_lists/index_service";
-import {store_view_artist_page_info} from "../../../../views/view_music/page_music/page_artist/store/store_view_artist_page_info"
-import {store_view_album_page_info} from "../../../../views/view_music/page_music/page_album/store/store_view_album_page_info";
-import {Media_library_scanning_ApiService_of_ND} from "../../../servers_configs/navidrome_api/services_normal/media_library_scanning/index_service";
-import {store_view_media_page_info} from "../../../../views/view_music/page_music/page_media/store/store_view_media_page_info";
-import {Artist_Lists_ApiWebService_of_ND} from "../../../servers_configs/navidrome_api/services_web/page_lists/artist_lists/index_service";
-import {Album_Lists_ApiWebService_of_ND} from "../../../servers_configs/navidrome_api/services_web/page_lists/album_lists/index_service";
-import {Media_Lists_ApiWebService_of_ND} from "../../../servers_configs/navidrome_api/services_web/page_lists/song_lists/index_service";
-import {Playlists_ApiService_of_ND} from "../../../servers_configs/navidrome_api/services_normal/playlists/index_service";
-import {Album$Medias_Lists_ApiService_of_ND} from "../../../servers_configs/navidrome_api/services_normal/album$songs_lists/index_service";
-import {Browsing_ApiService_of_ND} from "../../../servers_configs/navidrome_api/services_normal/browsing/index_service";
-import {store_playlist_list_info} from "../../../../views/view_music/components_music/player_list/store/store_playlist_list_info"
-import {store_app_configs_logic_save} from "@/store_router/app/store_app_configs_logic_save";
-import {store_playlist_list_fetchData} from "../../../../views/view_music/components_music/player_list/store/store_playlist_list_fetchData";
+import {store_server_users} from "@/store/server/store_server_users";
+import {store_view_home_page_info} from "../../../../../views/view_music/music_page/page_home/store/store_view_home_page_info";
+import {Home_Lists_ApiWebService_of_ND} from "../services_web/page_lists/home_lists/index_service";
+import {store_view_artist_page_info} from "../../../../../views/view_music/music_page/page_artist/store/store_view_artist_page_info"
+import {store_view_album_page_info} from "../../../../../views/view_music/music_page/page_album/store/store_view_album_page_info";
+import {Media_library_scanning_ApiService_of_ND} from "../services_normal/media_library_scanning/index_service";
+import {store_view_media_page_info} from "../../../../../views/view_music/music_page/page_media/store/store_view_media_page_info";
+import {Artist_Lists_ApiWebService_of_ND} from "../services_web/page_lists/artist_lists/index_service";
+import {Album_Lists_ApiWebService_of_ND} from "../services_web/page_lists/album_lists/index_service";
+import {Media_Lists_ApiWebService_of_ND} from "../services_web/page_lists/song_lists/index_service";
+import {Playlists_ApiService_of_ND} from "../services_normal/playlists/index_service";
+import {Album$Medias_Lists_ApiService_of_ND} from "../services_normal/album$songs_lists/index_service";
+import {Browsing_ApiService_of_ND} from "../services_normal/browsing/index_service";
+import {store_playlist_list_info} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_info"
+import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {store_playlist_list_fetchData} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_fetchData";
 import {
     Media_Retrieval_ApiService_of_ND
-} from "../../../servers_configs/navidrome_api/services_normal/media_retrieval/index_service";
-import {store_player_audio_logic} from "../../../../views/view_music/page_music/page_player/store/store_player_audio_logic";
-import {store_server_user_model} from "../../../../store/server/store_server_user_model";
+} from "../services_normal/media_retrieval/index_service";
+import {store_player_audio_logic} from "../../../../../views/view_music/music_page/page_player/store/store_player_audio_logic";
+import {store_server_user_model} from "../../../../../store/server/store_server_user_model";
 import {
     store_playlist_list_logic
-} from "../../../../views/view_music/components_music/player_list/store/store_playlist_list_logic";
-import {store_player_audio_info} from "../../../../views/view_music/page_music/page_player/store/store_player_audio_info";
+} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_logic";
+import {store_player_audio_info} from "../../../../../views/view_music/music_page/page_player/store/store_player_audio_info";
 
 export class Get_Navidrome_Temp_Data_To_LocalSqlite{
     private home_Lists_ApiWebService_of_ND = new Home_Lists_ApiWebService_of_ND(

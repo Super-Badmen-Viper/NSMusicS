@@ -3,7 +3,7 @@
         "siderbar_menu": {
             "guessLike": "Empfehlungen",
             "karaoke": "Karaoke",
-            "identifySong": "Identifizieren",
+            "identifyMedia": "Identifizieren",
             "scoreGeneration": "Noten",
             "lyricsProduction": "Lyrisch",
             "musicCommunity": "Gemeinschaft"
@@ -15,16 +15,16 @@
             "playback_4": "Zufälliges Abspielen"
         },
         "view_page": {
-            "allSong": "Alle Lieder",
-            "loveSong": "Favorit-Songs",
+            "allMedia": "Alle Lieder",
+            "loveMedia": "Favorit-Medias",
             "allAlbum": "Alle Alben",
             "loveAlbum": "Favorit-Alben",
             "allArtist": "Alle Künstler",
             "loveArtist": "Favorit-Künstler",
             "recentPlay": "Zuletzt gespielt",
-            "countSong": "Lied",
+            "countMedia": "Lied",
             "countList": "Gruppe",
-            "selectedSong": "Ausgewählt",
+            "selectedMedia": "Ausgewählt",
             "selectLibrary": "Lokale Bibliothek importieren",
             "selectLibrary_explain": "Wählen Sie einen lokalen Ordner aus, um alle Lieder aus dem Ordner zu importieren",
             "selectLibrary_end_explain": "Nach dem Klicken auf OK führen Sie keine Operationen durch. Nachdem der Import erfolgreich war, wird die Anwendung beendet. Starten Sie die Anwendung erneut manuell, um fortzufahren.",
@@ -54,7 +54,7 @@
             "routerModel_type_2_explain": "Beim Wechsel der Seiten werden die aktuellen Seitendaten beibehalten und die Daten anderer Seiten gelöscht, eine automatische Speicherbereinigung ausgelöst (niedrige Frequenz)",
             "routerModel_type_3": "Qualitätsmodus",
             "routerModel_type_3_explain": "Beim Wechsel der Seiten werden die aktuellen Seitendaten beibehalten und die Daten anderer Seiten gelöscht, die automatische Speicherbereinigung wird vollständig deaktiviert",
-            "desktop_lyrics": "Desktop-Songtexte",
+            "desktop_lyrics": "Desktop-Mediatexte",
             "theme_automatic_switching": "Automatisches Ändern des Themes",
             "theme_automatic_switching_explain": "Ob zwischen hellen und dunklen Themen gewechselt werden soll, basierend auf dem System",
             "dolby_switching": "Dolby-Audiowiedergabe",

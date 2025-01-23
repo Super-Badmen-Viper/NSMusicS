@@ -5,8 +5,8 @@ import {
 
 ////// this_view views_components of navie ui
 import {ref, onMounted, watch} from 'vue';
-import {store_player_audio_info} from "@/views/view_music/page_music/page_player/store/store_player_audio_info";
-import {store_playlist_list_info} from "@/views/view_music/components_music/player_list/store/store_playlist_list_info";
+import {store_player_audio_info} from "@/views/view_music/music_page/page_player/store/store_player_audio_info";
+import {store_playlist_list_info} from "@/views/view_music/music_components/player_list/store/store_playlist_list_info";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 
 ////// scrollbar of playlist_view
@@ -78,7 +78,7 @@ const handleImageError = async (item: any) => {
 ////// i18n auto lang
 import { useI18n } from 'vue-i18n'
 import {VueDraggable} from "vue-draggable-plus";
-import {store_playlist_list_fetchData} from "@/views/view_music/components_music/player_list/store/store_playlist_list_fetchData";
+import {store_playlist_list_fetchData} from "@/views/view_music/music_components/player_list/store/store_playlist_list_fetchData";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 const { t } = useI18n({
   inheritLocale: true
@@ -88,20 +88,20 @@ const { t } = useI18n({
 import {
   store_local_data_set_mediaInfo
 } from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
-import {store_playlist_list_logic} from "@/views/view_music/components_music/player_list/store/store_playlist_list_logic";
+import {store_playlist_list_logic} from "@/views/view_music/music_components/player_list/store/store_playlist_list_logic";
 import {NIcon, useMessage} from 'naive-ui'
 const message = useMessage()
 
 ////// right menu
 import { inject } from "vue";
-import {store_player_tag_modify} from "@/views/view_music/page_music/page_player/store/store_player_tag_modify";
-import {store_router_data_logic} from "@/router/store_router/store_router_data_logic";
-import {store_router_history_data_of_media} from "@/router/store_router/store_router_history_data_of_media";
+import {store_player_tag_modify} from "@/views/view_music/music_page/page_player/store/store_player_tag_modify";
+import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
+import {store_router_history_data_of_media} from "@/router/router_store/store_router_history_data_of_media";
 import {
   store_view_media_page_fetchData
-} from "@/views/view_music/page_music/page_media/store/store_view_media_page_fetchData";
-import {store_view_media_page_logic} from "@/views/view_music/page_music/page_media/store/store_view_media_page_logic";
-import {store_player_audio_logic} from "@/views/view_music/page_music/page_player/store/store_player_audio_logic";
+} from "@/views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
+import {store_view_media_page_logic} from "@/views/view_music/music_page/page_media/store/store_view_media_page_logic";
+import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
 const contextmenu = inject("playlist_contextmenu", null);
 async function update_playlist_addMediaFile(id: any, playlist_id: any){
   try{

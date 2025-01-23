@@ -9,56 +9,63 @@
     PeopleCommunity16Regular,
     SlideMicrophone32Regular,
     TextIndentIncreaseLtr20Filled,
-    Settings48Regular
+    Settings48Regular,
+    TagMultiple24Regular,
   } from '@vicons/fluent'
   import {
     AlbumFilled,
     MusicNoteRound,
     BrowserUpdatedFilled ,
     MinusRound,
-    QueueMusicRound
+    LibraryMusicOutlined,
+    VideoLibraryOutlined,
+    PhotoLibraryOutlined,
+    LibraryBooksOutlined,
+    LocalLibraryOutlined
   } from '@vicons/material'
   import {
     Close,
     Hearing,
     UserAvatarFilledAlt,
     MediaCast,
-    BareMetalServer
+    BareMetalServer,
+    MediaLibrary,
   } from '@vicons/carbon'
   import {
     ArrowsMaximize,
     ArrowsMinimize,
+    Server,
   } from '@vicons/tabler'
 
   ////// views_components
   import {darkTheme, NConfigProvider, NIcon} from 'naive-ui'
   import {h, onMounted, computed, watch, provide, ref} from 'vue';
   import {RouterLink, RouterView, useRouter} from 'vue-router';
-  import Bar_Music_Player from '@/views_components/components_music/player_bar/Bar_Music_Player.vue'
-  import Bar_Music_PlayList from '@/views_drawer/drawer_music/View_Player_PlayList.vue'
-  import View_Screen_Music_Player from '@/views_page/page_music/page_player/View_Screen_Music_Player.vue'
+  import Bar_Music_Player from '@/views/view_music/music_components/player_bar/Bar_Music_Player.vue'
+  import Bar_Music_PlayList from '@/views/view_music/music_drawer/View_Player_PlayList.vue'
+  import View_Screen_Music_Player from '@/views/view_music/music_page/page_player/View_Screen_Music_Player.vue'
   import {store_app_configs_info} from '@/store/app/store_app_configs_info'
-  import {store_player_appearance} from "@/views_page/page_music/page_player/store/store_player_appearance";
-  import {store_player_sound_effects} from "@/views_page/page_music/page_player/store/store_player_sound_effects";
-  import {store_player_sound_speed} from "@/views_page/page_music/page_player/store/store_player_sound_speed";
-  import {store_player_sound_more} from "@/views_page/page_music/page_player/store/store_player_sound_more";
-  import {store_playlist_appearance} from '@/views_components/components_music/player_list/store/store_playlist_appearance'
-  import {store_playlist_list_info} from "@/views_components/components_music/player_list/store/store_playlist_list_info"
-  import {store_playlist_list_logic} from "@/views_components/components_music/player_list/store/store_playlist_list_logic"
+  import {store_player_appearance} from "@/views/view_music/music_page/page_player/store/store_player_appearance";
+  import {store_player_sound_effects} from "@/views/view_music/music_page/page_player/store/store_player_sound_effects";
+  import {store_player_sound_speed} from "@/views/view_music/music_page/page_player/store/store_player_sound_speed";
+  import {store_player_sound_more} from "@/views/view_music/music_page/page_player/store/store_player_sound_more";
+  import {store_playlist_appearance} from '@/views/view_music/music_components/player_list/store/store_playlist_appearance'
+  import {store_playlist_list_info} from "@/views/view_music/music_components/player_list/store/store_playlist_list_info"
+  import {store_playlist_list_logic} from "@/views/view_music/music_components/player_list/store/store_playlist_list_logic"
   import {store_server_user_model} from '@/store/server/store_server_user_model'
-  import {store_view_media_page_logic} from "@/views_page/page_music/page_media/store/store_view_media_page_logic";
-  import {store_view_album_page_logic} from "@/views_page/page_music/page_album/store/store_view_album_page_logic"
-  import {store_view_artist_page_info} from "@/views_page/page_music/page_artist/store/store_view_artist_page_info"
-  import {store_view_artist_page_logic} from "@/views_page/page_music/page_artist/store/store_view_artist_page_logic"
-  import {store_router_data_info} from "@/router/store/store_router_data_info";
-  import {store_router_data_logic} from "@/router/store/store_router_data_logic";
+  import {store_view_media_page_logic} from "@/views/view_music/music_page/page_media/store/store_view_media_page_logic";
+  import {store_view_album_page_logic} from "@/views/view_music/music_page/page_album/store/store_view_album_page_logic"
+  import {store_view_artist_page_info} from "@/views/view_music/music_page/page_artist/store/store_view_artist_page_info"
+  import {store_view_artist_page_logic} from "@/views/view_music/music_page/page_artist/store/store_view_artist_page_logic"
+  import {store_router_data_info} from "@/router/router_store/store_router_data_info";
+  import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
   import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
   import {store_app_configs_logic_load} from "@/store/app/store_app_configs_logic_load";
   import {store_app_configs_logic_theme} from "@/store/app/store_app_configs_logic_theme";
-  import {store_view_media_page_fetchData} from "@/views_page/page_music/page_media/store/store_view_media_page_fetchData";
-  import {store_view_home_page_fetchData} from "@/views_page/page_music/page_home/store/store_view_home_page_fetchData";
-  import {store_view_album_page_fetchData} from "@/views_page/page_music/page_album/store/store_view_album_page_fetchData";
-  import {store_view_artist_page_fetchData} from "@/views_page/page_music/page_artist/store/store_view_artist_page_fetchData";
+  import {store_view_media_page_fetchData} from "@/views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
+  import {store_view_home_page_fetchData} from "@/views/view_music/music_page/page_home/store/store_view_home_page_fetchData";
+  import {store_view_album_page_fetchData} from "@/views/view_music/music_page/page_album/store/store_view_album_page_fetchData";
+  import {store_view_artist_page_fetchData} from "@/views/view_music/music_page/page_artist/store/store_view_artist_page_fetchData";
 
   ////// BrowserWindow
   import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
@@ -84,43 +91,144 @@
   function renderRouterLink (nameValue: any, defaultValue: any){
     return () => h(RouterLink, {to: { name: nameValue }}, { default: () => defaultValue })
   }
-  function create_menuOptions_appBar(){
-    store_app_configs_info.app_view_menuOptions = []
-    store_app_configs_info.app_view_menuOptions.push(
-        {label: computed(() => renderRouterLink('apps',t('common.setting'))), key: 'apps', icon: renderIcon(Settings48Regular),},
-        {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-    )
-    store_app_configs_info.app_view_menuOptions.push(
-        {label: computed(() => renderRouterLink('home',t('common.home'))),key: 'home',icon: renderIcon(Home28Regular),},
-        {label: computed(() => renderRouterLink('album',t('entity.album_other'))),key: 'album',icon: renderIcon(AlbumFilled)},
-        {label: computed(() => renderRouterLink('song',t('entity.track_other'))),key: 'song',icon: renderIcon(MusicNoteRound)},
-        {label: computed(() => renderRouterLink('artist',t('entity.artist_other'))),key: 'artist',icon: renderIcon(UserAvatarFilledAlt)},
-        // {label: computed(() => renderRouterLink('update',t('entity.genre_other'))),key: 'View_Genre_List_ALL',icon: renderIcon(Flag16Regular)},
-    )
-    if(store_app_configs_info.menuOptions_selectd_model_1)
+  async function create_menuOptions_appBar(){
+    const node_env = await ipcRenderer.invoke('window-get-node-env')
+    if(node_env) {
+      store_app_configs_info.app_view_menuOptions = []
       store_app_configs_info.app_view_menuOptions.push(
-          {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-          {label: computed(() => renderRouterLink('servers',t('page.appMenu.manageServers'))),key: 'servers',icon: renderIcon(BareMetalServer)},
-          {label: computed(() => renderRouterLink('library',t('HeaderLibraries'))),key: 'library',icon: renderIcon(MediaCast)},
+          {
+            label: computed(() => renderRouterLink('apps', t('LabelSystem') + t('common.setting'))),
+            key: 'apps',
+            icon: renderIcon(Settings48Regular),
+          },
+          {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
       )
-    if(store_app_configs_info.menuOptions_selectd_model_2)
       store_app_configs_info.app_view_menuOptions.push(
-          {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-          {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.karaoke'))),key: 'update',icon: renderIcon(SlideMicrophone32Regular)},
+          {
+            label: computed(() => renderRouterLink('home', t('common.home'))),
+            key: 'home',
+            icon: renderIcon(Home28Regular),
+          },
+          {
+            label: computed(() => renderRouterLink('album', t('entity.album_other'))),
+            key: 'album',
+            icon: renderIcon(AlbumFilled)
+          },
+          {
+            label: computed(() => renderRouterLink('song', t('entity.track_other'))),
+            key: 'song',
+            icon: renderIcon(MusicNoteRound)
+          },
+          {
+            label: computed(() => renderRouterLink('artist', t('entity.artist_other'))),
+            key: 'artist',
+            icon: renderIcon(UserAvatarFilledAlt)
+          },
+          {
+            label: computed(() => renderRouterLink('genre', t('entity.genre_other'))),
+            key: 'genre',
+            icon: renderIcon(TagMultiple24Regular)
+          },
+          // {
+          //   label: computed(() => t('TabMusic')),
+          //   icon: renderIcon(LibraryMusicOutlined),
+          //   children: [
+          //
+          //   ]
+          // },
       )
-    if(store_app_configs_info.menuOptions_selectd_model_3)
+      if (store_app_configs_info.menuOptions_selectd_model_2)
+        store_app_configs_info.app_view_menuOptions.push(
+            {
+              label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.karaoke'))),
+              key: 'update',
+              icon: renderIcon(SlideMicrophone32Regular)
+            },
+        )
+      if (store_app_configs_info.menuOptions_selectd_model_1)
+        store_app_configs_info.app_view_menuOptions.push(
+            {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
+            {
+              label: computed(() => renderRouterLink('servers', t('page.appMenu.manageServers'))),
+              key: 'servers',
+              icon: renderIcon(BareMetalServer)
+            },
+            {
+              label: computed(() => renderRouterLink('update', t('HeaderLibraries'))),
+              key: 'library',
+              icon: renderIcon(MediaLibrary)
+            },
+        )
+      if (store_app_configs_info.menuOptions_selectd_model_3)
+        store_app_configs_info.app_view_menuOptions.push(
+            {
+              label: computed(() =>
+                  renderRouterLink('update', t('HeaderVideos'))),
+              key: 'update',
+              icon: renderIcon(VideoLibraryOutlined)
+            },
+            {
+              label: computed(() =>
+                  renderRouterLink('update', t('Photo'))),
+              key: 'update',
+              icon: renderIcon(PhotoLibraryOutlined)
+            },
+            {
+              label: computed(() =>
+                  renderRouterLink('update', t('Books'))),
+              key: 'update',
+              icon: renderIcon(LibraryBooksOutlined)
+            },
+            {
+              label: computed(() =>
+                  renderRouterLink('update', t('Folders'))),
+              key: 'update',
+              icon: renderIcon(LocalLibraryOutlined)
+            },
+        )
+    }
+    else{
+      store_app_configs_info.app_view_menuOptions = []
       store_app_configs_info.app_view_menuOptions.push(
+          {label: computed(() => renderRouterLink('apps',t('common.setting'))), key: 'apps', icon: renderIcon(Settings48Regular),},
           {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-          {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.guessLike'))),key: 'update',icon: renderIcon(DocumentHeart20Regular)},
-          {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.identifySong'))),key: 'update',icon: renderIcon(Hearing)},
-          {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'update',icon: renderIcon(QueueMusicRound)},
-          {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'update',icon: renderIcon(TextIndentIncreaseLtr20Filled)},
       )
-    if(store_app_configs_info.menuOptions_selectd_model_4)
       store_app_configs_info.app_view_menuOptions.push(
-          {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
-          {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.musicCommunity'))),key: 'update',icon: renderIcon(PeopleCommunity16Regular)},
+          {label: computed(() => renderRouterLink('home',t('common.home'))),key: 'home',icon: renderIcon(Home28Regular),},
+          {label: computed(() => renderRouterLink('album',t('entity.album_other'))),key: 'album',icon: renderIcon(AlbumFilled)},
+          {label: computed(() => renderRouterLink('song',t('entity.track_other'))),key: 'song',icon: renderIcon(MusicNoteRound)},
+          {label: computed(() => renderRouterLink('artist',t('entity.artist_other'))),key: 'artist',icon: renderIcon(UserAvatarFilledAlt)},
+          {label: computed(() => renderRouterLink('genre',t('entity.genre_other'))),key: 'genre',icon: renderIcon(TagMultiple24Regular)},
+          // {label: computed(() => renderRouterLink('update',t('entity.genre_other'))),key: 'View_Genre_List_ALL',icon: renderIcon(Flag16Regular)},
       )
+      if(store_app_configs_info.menuOptions_selectd_model_1)
+        store_app_configs_info.app_view_menuOptions.push(
+            {key: 'divider-1',type: 'divider',props: {style: {marginLeft: '22px'}}},
+            {label: computed(() => renderRouterLink('servers',t('page.appMenu.manageServers'))),key: 'servers',icon: renderIcon(BareMetalServer)},
+            {label: computed(() => renderRouterLink('library',t('HeaderLibraries'))),key: 'library',icon: renderIcon(MediaCast)},
+        )
+      // if (store_app_configs_info.menuOptions_selectd_model_3)
+      //   store_app_configs_info.app_view_menuOptions.push(
+      //       {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
+      //       {
+      //         label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.guessLike'))),
+      //         key: 'update',
+      //         icon: renderIcon(DocumentHeart20Regular)
+      //       },
+      //       // {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.identifyMedia'))),key: 'update',icon: renderIcon(Hearing)},
+      //       // {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.scoreGeneration'))),key: 'update',icon: renderIcon(QueueMusicRound)},
+      //       // {label: computed(() => renderRouterLink('update',t('nsmusics.siderbar_menu.lyricsProduction'))),key: 'update',icon: renderIcon(TextIndentIncreaseLtr20Filled)},
+      //   )
+      // if (store_app_configs_info.menuOptions_selectd_model_4)
+      //   store_app_configs_info.app_view_menuOptions.push(
+      //       {key: 'divider-1', type: 'divider', props: {style: {marginLeft: '22px'}}},
+      //       {
+      //         label: computed(() => renderRouterLink('update', t('nsmusics.siderbar_menu.musicCommunity'))),
+      //         key: 'update',
+      //         icon: renderIcon(PeopleCommunity16Regular)
+      //       },
+      //   )
+    }
   }
 
   ////// player view
@@ -233,13 +341,13 @@
   }
   provide('get_playerbar_to_switch_playerview', get_playerbar_to_switch_playerview);
 
-  ////// router custom class
+  ////// router_music custom class
   store_router_data_info.router = useRouter();
   import routers from './router'
   import {store_app_configs_logic_update} from "@/store/app/store_app_configs_logic_update";
-  import {store_player_audio_logic} from "@/views_page/page_music/page_player/store/store_player_audio_logic";
-  import {store_view_media_page_info} from "@/views_page/page_music/page_media/store/store_view_media_page_info";
-  import {store_view_album_page_info} from "@/views_page/page_music/page_album/store/store_view_album_page_info";
+  import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
+  import {store_view_media_page_info} from "@/views/view_music/music_page/page_media/store/store_view_media_page_info";
+  import {store_view_album_page_info} from "@/views/view_music/music_page/page_album/store/store_view_album_page_info";
   routers.beforeEach((to, from, next) => {
     if(to.name !== from.name){
       store_router_data_logic.clear_Files_temporary()
@@ -273,6 +381,9 @@
         store_router_data_info.router_select_model_artist = true
         store_router_data_info.router_name = to.name
         Init_page_artistlists_statistic_Data()
+      }else if(to.name === 'genre'){
+        store_router_data_info.router_select_model_genre = true
+        store_router_data_info.router_name = to.name
       }else if(to.name === 'servers'){
         store_router_data_info.router_select_model_server_setting = true
         store_router_data_info.router_name = to.name
@@ -309,11 +420,11 @@
     store_view_media_page_logic.page_songlists = []
     ///
     const temp_Play_List_ALL: Play_List = {
-      label: computed(() => t('nsmusics.view_page.allSong')),
+      label: computed(() => t('nsmusics.view_page.allMedia')),
       value: 'song_list_all',
       id: 'song_list_all',
-      name: computed(() => t('nsmusics.view_page.allSong')),
-      comment: computed(() => t('nsmusics.view_page.allSong')),
+      name: computed(() => t('nsmusics.view_page.allMedia')),
+      comment: computed(() => t('nsmusics.view_page.allMedia')),
       duration: 0,
       song_count: store_view_media_page_info.media_item_count + ' *',
       public: 0,
@@ -335,11 +446,11 @@
     store_view_media_page_logic.page_songlists.push(temp_Play_List_ALL)
     ///
     const temp_Play_List_Love: Play_List = {
-      label: computed(() => t('nsmusics.view_page.loveSong')),
+      label: computed(() => t('nsmusics.view_page.loveMedia')),
       value: 'song_list_love',
       id: 'song_list_love',
-      name: computed(() => t('nsmusics.view_page.loveSong')),
-      comment: computed(() => t('nsmusics.view_page.loveSong')),
+      name: computed(() => t('nsmusics.view_page.loveMedia')),
+      comment: computed(() => t('nsmusics.view_page.loveMedia')),
       duration: 0,
       song_count: store_view_media_page_info.media_starred_count + ' *',
       public: 0,
@@ -614,9 +725,9 @@
   const computed_i18n_Label_Update = computed(() => t('filter.recentlyUpdated'));
 
   ////
-  import {store_player_tag_modify} from "@/views_page/page_music/page_player/store/store_player_tag_modify";
-  import View_Edit_Tag from "@/views_drawer/drawer_music/View_Edit_Tag.vue";
-  import View_Player_Effect from "@/views_drawer/drawer_music/View_Player_Effect.vue";
+  import {store_player_tag_modify} from "@/views/view_music/music_page/page_player/store/store_player_tag_modify";
+  import View_Edit_Tag from "@/views/view_music/music_drawer/View_Edit_Tag.vue";
+  import View_Player_Effect from "@/views/view_music/music_drawer/View_Player_Effect.vue";
   const playlist_contextmenu = ref(null as any)
   provide("message", playlist_contextmenu);
 
@@ -792,6 +903,9 @@
             <!--Artist View-->
             <RouterView class="view_show_table"
                         v-else-if="store_router_data_info.router_select_model_artist"></RouterView>
+            <!--Genre View-->
+            <RouterView class="view_show_table"
+                        v-else-if="store_router_data_info.router_select_model_genre"></RouterView>
             <!--Server_setting View-->
             <RouterView class="view_show_table"
                         v-else-if="store_router_data_info.router_select_model_server_setting"></RouterView>

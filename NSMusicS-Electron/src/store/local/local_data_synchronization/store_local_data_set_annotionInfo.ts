@@ -1,5 +1,5 @@
 import {reactive} from 'vue'
-import {Set_AnnotationInfo_To_LocalSqlite} from "@/data_access/sqlite3_local_configs/class_Set_AnnotationInfo_To_LocalSqlite";
+import {Set_AnnotationInfo_To_LocalSqlite} from "../../../data/data_access/local_configs/class_Set_AnnotationInfo_To_LocalSqlite";
 import {
     store_server_data_set_annotionInfo
 } from "@/store/server/server_data_synchronization/store_server_data_set_annotionInfo";

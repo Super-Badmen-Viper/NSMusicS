@@ -3,7 +3,7 @@
         "siderbar_menu": {
             "guessLike": "Vind je leuk",
             "karaoke": "Karaoke",
-            "identifySong": "Lied ident.",
+            "identifyMedia": "Lied ident.",
             "scoreGeneration": "Noten",
             "lyricsProduction": "Tekst maken",
             "musicCommunity": "Muziekgemeen"
@@ -15,16 +15,16 @@
             "playback_4": "Willekeurig afspelen"
         },
         "view_page": {
-            "allSong": "Alle nummers",
-            "loveSong": "Favorieten",
+            "allMedia": "Alle nummers",
+            "loveMedia": "Favorieten",
             "allAlbum": "Alle albums",
             "loveAlbum": "Favoriete albums",
             "allArtist": "Alle artiesten",
             "loveArtist": "Favoriete artiesten",
             "recentPlay": "Recent gespeeld",
-            "countSong": "lied",
+            "countMedia": "lied",
             "countList": "groep",
-            "selectedSong": "Geselecteerd",
+            "selectedMedia": "Geselecteerd",
             "selectLibrary": "Importeer lokale bibliotheek",
             "selectLibrary_explain": "Selecteer een lokale map om alle liedjes uit de map te importeren",
             "selectLibrary_end_explain": "Na het klikken op OK, voer alstublieft geen enkele bewerking uit. Zodra de import is gelukt, zal het systeem deze applicatie afsluiten. Start het opnieuw handmatig om door te gaan.",

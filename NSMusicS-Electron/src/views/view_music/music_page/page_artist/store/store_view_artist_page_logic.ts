@@ -1,5 +1,5 @@
 import {reactive, watch} from 'vue'
-import {store_router_history_data_of_artist} from "@/router/store_router/store_router_history_data_of_artist";
+import {store_router_history_data_of_artist} from "@/router/router_store/store_router_history_data_of_artist";
 import {store_view_artist_page_fetchData} from "./store_view_artist_page_fetchData";
 
 export const store_view_artist_page_logic = reactive({

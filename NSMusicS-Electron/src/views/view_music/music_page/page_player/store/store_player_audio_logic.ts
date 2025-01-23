@@ -8,7 +8,7 @@ import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 import {store_player_tag_modify} from "./store_player_tag_modify";
 import {
     store_playlist_list_logic
-} from "../../../components_music/player_list/store/store_playlist_list_logic";
+} from "../../../music_components/player_list/store/store_playlist_list_logic";
 import {store_player_appearance} from "./store_player_appearance";
 
 export const store_player_audio_logic = reactive({

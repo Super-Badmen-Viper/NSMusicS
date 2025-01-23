@@ -39,9 +39,14 @@ export const store_app_configs_info = reactive({
     app_view_left_menu_collapsed: true,
     app_view_left_menu_show: false,
     app_view_left_menu_select_activeKey: '',
-
-    menu_app_setting_select_tab_name: 'tab_pane_1',
-    server_setting_select_tab_name: 'tab_pane_1',
+    // music
+    app_view_page_music_menuOptions: [],
+    app_view_page_music_menuOptions_select_activeKey: '',
+    app_view_page_music_setting_select_tab_name: 'tab_pane_1',
+    // server
+    app_view_page_server_menuOptions: [],
+    app_view_page_server_menuOptions_select_activeKey: '',
+    app_view_page_server_setting_select_tab_name: 'tab_pane_1',
 });
 watch(() => store_app_configs_info.lang, (newValue) => {
     console.log(newValue)

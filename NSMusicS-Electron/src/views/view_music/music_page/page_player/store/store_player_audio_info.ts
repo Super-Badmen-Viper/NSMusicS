@@ -1,12 +1,12 @@
 import {reactive, watch} from 'vue'
 import {store_view_media_page_info} from "../../page_media/store/store_view_media_page_info";
 import {store_player_appearance} from "./store_player_appearance";
-import {store_playlist_list_info} from "../../../components_music/player_list/store/store_playlist_list_info"
+import {store_playlist_list_info} from "../../../music_components/player_list/store/store_playlist_list_info"
 import {store_app_configs_logic_load} from "@/store/app/store_app_configs_logic_load";
 import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
-import {store_playlist_appearance} from "../../../components_music/player_list/store/store_playlist_appearance";
-import {store_playlist_list_logic} from "../../../components_music/player_list/store/store_playlist_list_logic"
-import {store_playlist_list_fetchData} from "../../../components_music/player_list/store/store_playlist_list_fetchData";
+import {store_playlist_appearance} from "../../../music_components/player_list/store/store_playlist_appearance";
+import {store_playlist_list_logic} from "../../../music_components/player_list/store/store_playlist_list_logic"
+import {store_playlist_list_fetchData} from "../../../music_components/player_list/store/store_playlist_list_fetchData";
 import {store_player_tag_modify} from "./store_player_tag_modify";
 import error_album from '@/assets/img/error_album.jpg'
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';

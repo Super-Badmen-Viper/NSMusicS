@@ -1,6 +1,6 @@
 import {
     Subsonic_Api_Services_Web
-} from "../../../../../servers_configs/subsonic_api/services_web/Subsonic_Api_Services_Web";
+} from "../../Subsonic_Api_Services_Web";
 
 export class Artist_Lists_ApiWebService_of_ND extends Subsonic_Api_Services_Web {
     public async getArtistList_ALL(

@@ -3,7 +3,7 @@
         "siderbar_menu": {
             "guessLike": "Lubisz",
             "karaoke": "Karaoke",
-            "identifySong": "Zidentyfikuj",
+            "identifyMedia": "Zidentyfikuj",
             "scoreGeneration": "Nuty",
             "lyricsProduction": "Twórz",
             "musicCommunity": "Społeczność"
@@ -15,16 +15,16 @@
             "playback_4": "Odtwarzanie losowe"
         },
         "view_page": {
-            "allSong": "Wszystkie utwory",
-            "loveSong": "Ulubione",
+            "allMedia": "Wszystkie utwory",
+            "loveMedia": "Ulubione",
             "allAlbum": "Wszystkie albumy",
             "loveAlbum": "Ulubione albumy",
             "allArtist": "Wszyscy artyści",
             "loveArtist": "Ulubieni artyści",
             "recentPlay": "Ostatnio odtwarzane",
-            "countSong": "utwór",
+            "countMedia": "utwór",
             "countList": "grupa",
-            "selectedSong": "Wybrany",
+            "selectedMedia": "Wybrany",
             "selectLibrary": "Importuj bibliotekę lokalną",
             "selectLibrary_explain": "Wybierz folder lokalny, aby zaimportować wszystkie utwory z folderu",
             "selectLibrary_end_explain": "Po kliknięciu OK nie wykonuj żadnych działań. Po pomyślnym zaimportowaniu system zamknie tę aplikację. Proszę ręcznie uruchomić aplikację ponownie, aby kontynuować.",

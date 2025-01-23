@@ -1,7 +1,7 @@
 import {reactive, watch} from 'vue'
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {store_view_media_page_info} from "../../../page_music/page_media/store/store_view_media_page_info";
+import {store_view_media_page_info} from "../../../music_page/page_media/store/store_view_media_page_info";
 
 export const store_playlist_list_info = reactive({
     playlist_names_ALLLists: [],

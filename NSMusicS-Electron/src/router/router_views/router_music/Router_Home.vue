@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import Table_Home_List_ALL_Line from '@/views/view_music/page_music/page_home/Table_Home.vue'
-import {store_router_data_info} from "@/router/store_router/store_router_data_info";
+import Table_Home_List_ALL_Line from '@/views/view_music/music_page/page_home/Table_Home.vue'
+import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 
 onMounted(async () => {
   store_router_data_info.router_select = 'home'

@@ -1,21 +1,21 @@
 import {reactive, watch} from 'vue'
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-import {store_router_data_info} from "@/router/store/store_router_data_info";
+import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 import {
     Set_Navidrome_ALL_Data_To_LocalSqlite
-} from "@/data_access/servers_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
+} from "../../data/data_access/servers_configs/navidrome_api/services_normal_middleware/class_Set_Navidrome_ALL_Data_To_LocalSqlite";
 import {store_server_users} from "@/store/server/store_server_users";
-import {store_playlist_list_info} from "@/views_components/components_music/player_list/store/store_playlist_list_info"
-import {store_player_audio_info} from "@/views_page/page_music/page_player/store/store_player_audio_info";
-import {store_router_data_logic} from "@/router/store/store_router_data_logic";
-import {store_playlist_list_logic} from "@/views_components/components_music/player_list/store/store_playlist_list_logic"
+import {store_playlist_list_info} from "../../views/view_music/music_components/player_list/store/store_playlist_list_info"
+import {store_player_audio_info} from "../../views/view_music/music_page/page_player/store/store_player_audio_info";
+import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
+import {store_playlist_list_logic} from "../../views/view_music/music_components/player_list/store/store_playlist_list_logic"
 import {store_app_configs_logic_load} from "@/store/app/store_app_configs_logic_load";
 import {
     User_Authorization_ApiWebService_of_ND
-} from "@/data_access/servers_configs/navidrome_api/services_web/user_authorization/index_service";
-import {store_player_audio_logic} from "@/views_page/page_music/page_player/store/store_player_audio_logic";
-import {Audio_node_mpv} from "@/data_models/song_Audio_Out/Audio_node_mpv";
-import {Audio_howler} from "@/data_models/song_Audio_Out/Audio_howler";
+} from "../../data/data_access/servers_configs/navidrome_api/services_web/user_authorization/index_service";
+import {store_player_audio_logic} from "../../views/view_music/music_page/page_player/store/store_player_audio_logic";
+import {Audio_node_mpv} from "../../data/data_models/song_Audio_Out/Audio_node_mpv";
+import {Audio_howler} from "../../data/data_models/song_Audio_Out/Audio_howler";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 
 export const store_server_user_model = reactive({

@@ -3,7 +3,7 @@
         "siderbar_menu": {
             "guessLike": "guess",
             "karaoke": "karaoke",
-            "identifySong": "identify",
+            "identifyMedia": "identify",
             "scoreGeneration": "score",
             "lyricsProduction": "lyrics",
             "musicCommunity": "colony"
@@ -15,16 +15,16 @@
             "playback_4": "Random Playback"
         },
         "view_page": {
-            "allSong": "all Song",
-            "loveSong": "love Song",
+            "allMedia": "all Media",
+            "loveMedia": "love Media",
             "allAlbum": "all Album",
             "loveAlbum": "love Album",
             "allArtist": "all Artist",
             "loveArtist": "love Artist",
             "recentPlay": "recent Play",
-            "countSong": "song",
+            "countMedia": "song",
             "countList": "set",
-            "selectedSong": "Selected",
+            "selectedMedia": "Selected",
             "selectLibrary": "Import Local (Mode) Library",
             "selectLibrary_explain": "Select a local folder to import all songs from the folder",
             "selectLibrary_end_explain": "After clicking OK, please do not perform any operations. Once the import is successful, the system will exit this application. Please manually restart the application to continue.",

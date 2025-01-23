@@ -3,7 +3,7 @@
         "siderbar_menu": {
             "guessLike": "Te Gusta",
             "karaoke": "Karaoke",
-            "identifySong": "Identificar",
+            "identifyMedia": "Identificar",
             "scoreGeneration": "Partituras",
             "lyricsProduction": "Creación",
             "musicCommunity": "Comunidad"
@@ -15,16 +15,16 @@
             "playback_4": "Reproducción aleatoria"
         },
         "view_page": {
-            "allSong": "Todas las Canciones",
-            "loveSong": "Canciones Favoritas",
+            "allMedia": "Todas las Canciones",
+            "loveMedia": "Canciones Favoritas",
             "allAlbum": "Todos los Álbumes",
             "loveAlbum": "Álbumes Favoritos",
             "allArtist": "Todos los Artistas",
             "loveArtist": "Artistas Favoritos",
             "recentPlay": "Reproducciones Recientes",
-            "countSong": "canción",
+            "countMedia": "canción",
             "countList": "grupo",
-            "selectedSong": "Seleccionado",
+            "selectedMedia": "Seleccionado",
             "selectLibrary": "Importar Biblioteca Local",
             "selectLibrary_explain": "Seleccione una carpeta local para importar todas las canciones de la carpeta",
             "selectLibrary_end_explain": "Después de hacer clic en Aceptar, no realice ninguna operación. Una vez que la importación haya sido exitosa, el sistema saldrá de la aplicación. Por favor, reinicie la aplicación manualmente para continuar.",

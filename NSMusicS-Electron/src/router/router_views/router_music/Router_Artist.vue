@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import TableArtist from '@/views/view_music/page_music/page_artist/Table_Artist.vue'
-import {store_router_data_info} from "@/router/store_router/store_router_data_info";
+import TableArtist from '@/views/view_music/music_page/page_artist/Table_Artist.vue'
+import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 
 onMounted(async () => {
   store_router_data_info.router_select = 'artist'

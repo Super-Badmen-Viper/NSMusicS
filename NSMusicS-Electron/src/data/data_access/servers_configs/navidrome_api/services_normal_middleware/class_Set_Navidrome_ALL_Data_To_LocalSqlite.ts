@@ -1,23 +1,23 @@
-import {Playlists_ApiService_of_ND} from "../../../servers_configs/navidrome_api/services_normal/playlists/index_service";
-import {Browsing_ApiService_of_ND} from "../../../servers_configs/navidrome_api/services_normal/browsing/index_service";
+import {Playlists_ApiService_of_ND} from "../services_normal/playlists/index_service";
+import {Browsing_ApiService_of_ND} from "../services_normal/browsing/index_service";
 import {
     Media_Retrieval_ApiService_of_ND
-} from "../../../servers_configs/navidrome_api/services_normal/media_retrieval/index_service";
-import {store_server_users} from "@/store_router/server/store_server_users";
+} from "../services_normal/media_retrieval/index_service";
+import {store_server_users} from "@/store/server/store_server_users";
 import {
     Album$Medias_Lists_ApiService_of_ND
-} from "../../../servers_configs/navidrome_api/services_normal/album$songs_lists/index_service";
-import {Set_AlbumInfo_To_LocalSqlite} from "@/data_access/local_configs/class_Set_AlbumInfo_To_LocalSqlite";
-import {Set_MediaInfo_To_LocalSqlite} from "@/data_access/local_configs/class_Set_MediaInfo_To_LocalSqlite";
-import {store_local_data_set_albumInfo} from "@/store_router/local/local_data_synchronization/store_local_data_set_albumInfo";
+} from "../services_normal/album$songs_lists/index_service";
+import {Set_AlbumInfo_To_LocalSqlite} from "../../../local_configs/class_Set_AlbumInfo_To_LocalSqlite";
+import {Set_MediaInfo_To_LocalSqlite} from "../../../local_configs/class_Set_MediaInfo_To_LocalSqlite";
+import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
 import {
     store_local_data_set_artistInfo
-} from "@/store_router/local/local_data_synchronization/store_local_data_set_artistInfo";
-import {store_local_data_set_mediaInfo} from "@/store_router/local/local_data_synchronization/store_local_data_set_mediaInfo";
-import {store_playlist_list_info} from "../../../../views/view_music/components_music/player_list/store/store_playlist_list_info"
-import {store_server_user_model} from "@/store_router/server/store_server_user_model";
-import {store_playlist_list_logic} from "../../../../views/view_music/components_music/player_list/store/store_playlist_list_logic"
-import {store_app_configs_info} from "@/store_router/app/store_app_configs_info";
+} from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
+import {store_local_data_set_mediaInfo} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
+import {store_playlist_list_info} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_info"
+import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {store_playlist_list_logic} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_logic"
+import {store_app_configs_info} from "@/store/app/store_app_configs_info";
 import { isElectron } from '@/utils/electron/isElectron';
 
 export class Set_Navidrome_ALL_Data_To_LocalSqlite{

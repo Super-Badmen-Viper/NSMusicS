@@ -1,7 +1,7 @@
 import {reactive, watch} from 'vue'
-import {store_router_history_data_of_album} from "@/router/store_router/store_router_history_data_of_album";
+import {store_router_history_data_of_album} from "@/router/router_store/store_router_history_data_of_album";
 import {store_view_album_page_fetchData} from "./store_view_album_page_fetchData";
-import {store_router_data_info} from "@/router/store_router/store_router_data_info";
+import {store_router_data_info} from "@/router/router_store/store_router_data_info";
 import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
 
 export const store_view_album_page_logic = reactive({

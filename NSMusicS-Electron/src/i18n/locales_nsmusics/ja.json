@@ -3,7 +3,7 @@
         "siderbar_menu": {
             "guessLike": "推薦",
             "karaoke": "カラオケ",
-            "identifySong": "識別",
+            "identifyMedia": "識別",
             "scoreGeneration": "楽譜",
             "lyricsProduction": "歌詞制作",
             "musicCommunity": "コミュニティ"
@@ -15,16 +15,16 @@
             "playback_4": "ランダムプレイ"
         },
         "view_page": {
-            "allSong": "全曲",
-            "loveSong": "お気に入り",
+            "allMedia": "全曲",
+            "loveMedia": "お気に入り",
             "allAlbum": "全アルバム",
             "loveAlbum": "お気に入りアルバム",
             "allArtist": "全アーティスト",
             "loveArtist": "お気に入りアーティスト",
             "recentPlay": "最近再生",
-            "countSong": "曲",
+            "countMedia": "曲",
             "countList": "組",
-            "selectedSong": "選択",
+            "selectedMedia": "選択",
             "selectLibrary": "ローカルライブラリのインポート",
             "selectLibrary_explain": "すべての曲をインポートするローカルフォルダを選択してください",
             "selectLibrary_end_explain": "確認をクリックした後、操作を行わないでください。インポートが成功した後、アプリケーションは終了します。再度手動でアプリケーションを起動してください。",

@@ -3,7 +3,7 @@
         "siderbar_menu": {
             "guessLike": "Ricorda",
             "karaoke": "Karaoke",
-            "identifySong": "Riconosci",
+            "identifyMedia": "Riconosci",
             "scoreGeneration": "Partitura",
             "lyricsProduction": "Creazione",
             "musicCommunity": "Comunità"
@@ -15,16 +15,16 @@
             "playback_4": "Riproduzione casuale"
         },
         "view_page": {
-            "allSong": "Tutte le canzoni",
-            "loveSong": "Preferiti",
+            "allMedia": "Tutte le canzoni",
+            "loveMedia": "Preferiti",
             "allAlbum": "Tutti gli album",
             "loveAlbum": "Preferiti album",
             "allArtist": "Tutti gli artisti",
             "loveArtist": "Preferiti artisti",
             "recentPlay": "Riprodotti recenti",
-            "countSong": "canzone",
+            "countMedia": "canzone",
             "countList": "gruppo",
-            "selectedSong": "Selezionato",
+            "selectedMedia": "Selezionato",
             "selectLibrary": "Importa libreria locale",
             "selectLibrary_explain": "Seleziona una cartella locale per importare tutte le canzoni dalla cartella",
             "selectLibrary_end_explain": "Dopo aver fatto clic su OK, non eseguire alcuna operazione. Una volta completato l'importo, l'applicazione verrà chiusa. Riavviare manualmente l'applicazione per continuare.",

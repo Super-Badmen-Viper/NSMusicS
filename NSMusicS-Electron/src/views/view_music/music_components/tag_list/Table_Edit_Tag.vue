@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {store_player_tag_modify} from "@/views/view_music/page_music/page_player/store/store_player_tag_modify";
+import {store_player_tag_modify} from "@/views/view_music/music_page/page_player/store/store_player_tag_modify";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 
 import { useI18n } from 'vue-i18n'
@@ -8,9 +8,9 @@ const { t } = useI18n({
 })
 import { useMessage } from 'naive-ui'
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-import {store_view_media_page_info} from "@/views/view_music/page_music/page_media/store/store_view_media_page_info";
-import {store_view_album_page_info} from "@/views/view_music/page_music/page_album/store/store_view_album_page_info";
-import {store_view_artist_page_info} from "@/views/view_music/page_music/page_artist/store/store_view_artist_page_info";
+import {store_view_media_page_info} from "@/views/view_music/music_page/page_media/store/store_view_media_page_info";
+import {store_view_album_page_info} from "@/views/view_music/music_page/page_album/store/store_view_album_page_info";
+import {store_view_artist_page_info} from "@/views/view_music/music_page/page_artist/store/store_view_artist_page_info";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 const message = useMessage()
 

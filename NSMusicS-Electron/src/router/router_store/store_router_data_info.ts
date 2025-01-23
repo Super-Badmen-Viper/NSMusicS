@@ -1,11 +1,11 @@
 import {reactive, watch} from 'vue'
-import {store_view_home_page_fetchData} from "../../views/view_music/page_music/page_home/store/store_view_home_page_fetchData";
-import {store_view_media_page_fetchData} from "../../views/view_music/page_music/page_media/store/store_view_media_page_fetchData";
-import {store_view_album_page_fetchData} from "../../views/view_music/page_music/page_album/store/store_view_album_page_fetchData";
-import {store_view_artist_page_fetchData} from "../../views/view_music/page_music/page_artist/store/store_view_artist_page_fetchData";
+import {store_view_home_page_fetchData} from "../../views/view_music/music_page/page_home/store/store_view_home_page_fetchData";
+import {store_view_media_page_fetchData} from "../../views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
+import {store_view_album_page_fetchData} from "../../views/view_music/music_page/page_album/store/store_view_album_page_fetchData";
+import {store_view_artist_page_fetchData} from "../../views/view_music/music_page/page_artist/store/store_view_artist_page_fetchData";
 import {store_server_user_model} from "@/store/server/store_server_user_model";
 import {store_app_configs_info} from "@/store/app/store_app_configs_info";
-import {store_playlist_appearance} from "../../views/view_music/components_music/player_list/store/store_playlist_appearance";
+import {store_playlist_appearance} from "../../views/view_music/music_components/player_list/store/store_playlist_appearance";
 
 export const store_router_data_info = reactive({
     router: null,
