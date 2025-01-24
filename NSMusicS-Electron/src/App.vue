@@ -44,7 +44,7 @@
   import Bar_Music_Player from '@/views/view_music/music_components/player_bar/Bar_Music_Player.vue'
   import Bar_Music_PlayList from '@/views/view_music/music_drawer/View_Player_PlayList.vue'
   import View_Screen_Music_Player from '@/views/view_music/music_page/page_player/View_Screen_Music_Player.vue'
-  import {store_app_configs_info} from '@/store/app/store_app_configs_info'
+  import {store_app_configs_info} from '@/data/data_stores/app/store_app_configs_info'
   import {store_player_appearance} from "@/views/view_music/music_page/page_player/store/store_player_appearance";
   import {store_player_sound_effects} from "@/views/view_music/music_page/page_player/store/store_player_sound_effects";
   import {store_player_sound_speed} from "@/views/view_music/music_page/page_player/store/store_player_sound_speed";
@@ -52,16 +52,16 @@
   import {store_playlist_appearance} from '@/views/view_music/music_components/player_list/store/store_playlist_appearance'
   import {store_playlist_list_info} from "@/views/view_music/music_components/player_list/store/store_playlist_list_info"
   import {store_playlist_list_logic} from "@/views/view_music/music_components/player_list/store/store_playlist_list_logic"
-  import {store_server_user_model} from '@/store/server/store_server_user_model'
+  import {store_server_user_model} from '@/data/data_stores/server/store_server_user_model'
   import {store_view_media_page_logic} from "@/views/view_music/music_page/page_media/store/store_view_media_page_logic";
   import {store_view_album_page_logic} from "@/views/view_music/music_page/page_album/store/store_view_album_page_logic"
   import {store_view_artist_page_info} from "@/views/view_music/music_page/page_artist/store/store_view_artist_page_info"
   import {store_view_artist_page_logic} from "@/views/view_music/music_page/page_artist/store/store_view_artist_page_logic"
   import {store_router_data_info} from "@/router/router_store/store_router_data_info";
   import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
-  import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
-  import {store_app_configs_logic_load} from "@/store/app/store_app_configs_logic_load";
-  import {store_app_configs_logic_theme} from "@/store/app/store_app_configs_logic_theme";
+  import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
+  import {store_app_configs_logic_load} from "@/data/data_stores/app/store_app_configs_logic_load";
+  import {store_app_configs_logic_theme} from "@/data/data_stores/app/store_app_configs_logic_theme";
   import {store_view_media_page_fetchData} from "@/views/view_music/music_page/page_media/store/store_view_media_page_fetchData";
   import {store_view_home_page_fetchData} from "@/views/view_music/music_page/page_home/store/store_view_home_page_fetchData";
   import {store_view_album_page_fetchData} from "@/views/view_music/music_page/page_album/store/store_view_album_page_fetchData";
@@ -344,7 +344,7 @@
   ////// router_music custom class
   store_router_data_info.router = useRouter();
   import routers from './router'
-  import {store_app_configs_logic_update} from "@/store/app/store_app_configs_logic_update";
+  import {store_app_configs_logic_update} from "@/data/data_stores/app/store_app_configs_logic_update";
   import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
   import {store_view_media_page_info} from "@/views/view_music/music_page/page_media/store/store_view_media_page_info";
   import {store_view_album_page_info} from "@/views/view_music/music_page/page_album/store/store_view_album_page_info";

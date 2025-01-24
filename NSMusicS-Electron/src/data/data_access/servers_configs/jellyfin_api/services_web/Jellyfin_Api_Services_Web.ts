@@ -15,7 +15,6 @@ export class Jellyfin_Api_Services_Web {
         };
         const queryString = new URLSearchParams(params).toString();
         const url = `${this.baseUrl}/${endpoint}?${queryString}`;
-
         try {
             const response = await axios.get(url, { headers });
             return response.data;

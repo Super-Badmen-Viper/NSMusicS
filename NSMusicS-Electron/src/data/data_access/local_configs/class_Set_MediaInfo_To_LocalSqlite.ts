@@ -1,5 +1,5 @@
-import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
+import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 import { isElectron } from '@/utils/electron/isElectron';
 
 export class Set_MediaInfo_To_LocalSqlite {

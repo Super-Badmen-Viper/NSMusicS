@@ -16,8 +16,8 @@ export class Browsing_ApiService_of_ND extends Navidrome_Api_Services_Normal {
     public async getMusicDirectory_id(username: string,token: string,salt: string,id: string): Promise<any> {
         return this.sendRequest(username,token,salt,'getMusicDirectory', { id });
     }
-    public async getMedia(username: string,token: string,salt: string,id: string): Promise<any> {
-        return this.sendRequest(username,token,salt,'getMedia', { id });
+    public async getSong(username: string,token: string,salt: string,id: string): Promise<any> {
+        return this.sendRequest(username,token,salt,'getSong', { id });
     }
     public async getAlbum(username: string,token: string,salt: string,id: string): Promise<any> {
         return this.sendRequest(username,token,salt,'getAlbum', { id });
@@ -26,12 +26,12 @@ export class Browsing_ApiService_of_ND extends Navidrome_Api_Services_Normal {
         return this.sendRequest(username,token,salt,'getArtist', { id });
     }
 
-    public async getRandomMedias(
+    public async getRandomSongs(
         username: string,token: string,salt: string,
         size: string,
         fromYear: string, toYear: string
     ): Promise<any> {
-        return this.sendRequest(username,token,salt,'getRandomMedias', {
+        return this.sendRequest(username,token,salt,'getRandomSongs', {
             size,
             fromYear, toYear
         });

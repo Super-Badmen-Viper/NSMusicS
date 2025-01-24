@@ -16,8 +16,8 @@ export class Browsing_ApiService_of_ND extends Subsonic_Api_Services_Normal {
     public async getMusicDirectory_id(username: string,token: string,salt: string,id: string): Promise<any> {
         return this.sendRequest(username,token,salt,'getMusicDirectory', { id });
     }
-    public async getMedia(username: string,token: string,salt: string,id: string): Promise<any> {
-        return this.sendRequest(username,token,salt,'getMedia', { id });
+    public async getSong(username: string,token: string,salt: string,id: string): Promise<any> {
+        return this.sendRequest(username,token,salt,'getSong', { id });
     }
     public async getAlbum(username: string,token: string,salt: string,id: string): Promise<any> {
         return this.sendRequest(username,token,salt,'getAlbum', { id });

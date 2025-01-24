@@ -2,20 +2,20 @@ import {reactive, watch} from 'vue'
 import {store_view_media_page_info} from "../../page_media/store/store_view_media_page_info";
 import {store_player_appearance} from "./store_player_appearance";
 import {store_playlist_list_info} from "../../../music_components/player_list/store/store_playlist_list_info"
-import {store_app_configs_logic_load} from "@/store/app/store_app_configs_logic_load";
-import {store_local_data_set_albumInfo} from "@/store/local/local_data_synchronization/store_local_data_set_albumInfo";
+import {store_app_configs_logic_load} from "@/data/data_stores/app/store_app_configs_logic_load";
+import {store_local_data_set_albumInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_albumInfo";
 import {store_playlist_appearance} from "../../../music_components/player_list/store/store_playlist_appearance";
 import {store_playlist_list_logic} from "../../../music_components/player_list/store/store_playlist_list_logic"
 import {store_playlist_list_fetchData} from "../../../music_components/player_list/store/store_playlist_list_fetchData";
 import {store_player_tag_modify} from "./store_player_tag_modify";
 import error_album from '@/assets/img/error_album.jpg'
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
-import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {Get_AnnotationInfo_To_LocalSqlite} from "../../../../../data/data_access/local_configs/class_Get_AnnotationInfo_To_LocalSqlite";
 import {store_view_album_page_info} from "../../page_album/store/store_view_album_page_info";
 import {store_player_audio_logic} from "./store_player_audio_logic";
 import {store_view_album_page_logic} from "../../page_album/store/store_view_album_page_logic"
-import {store_local_data_set_artistInfo} from "@/store/local/local_data_synchronization/store_local_data_set_artistInfo";
+import {store_local_data_set_artistInfo} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_artistInfo";
 import {store_view_artist_page_info} from "../../page_artist/store/store_view_artist_page_info"
 
 export const store_player_audio_info = reactive({

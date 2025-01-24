@@ -1,4 +1,4 @@
-import {store_server_users} from "@/store/server/store_server_users";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {store_view_home_page_info} from "../../../../../views/view_music/music_page/page_home/store/store_view_home_page_info";
 import {Home_Lists_ApiWebService_of_ND} from "../services_web/page_lists/home_lists/index_service";
 import {store_view_artist_page_info} from "../../../../../views/view_music/music_page/page_artist/store/store_view_artist_page_info"
@@ -12,13 +12,13 @@ import {Playlists_ApiService_of_ND} from "../services_normal/playlists/index_ser
 import {Album$Medias_Lists_ApiService_of_ND} from "../services_normal/album$songs_lists/index_service";
 import {Browsing_ApiService_of_ND} from "../services_normal/browsing/index_service";
 import {store_playlist_list_info} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_info"
-import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {store_playlist_list_fetchData} from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_fetchData";
 import {
     Media_Retrieval_ApiService_of_ND
 } from "../services_normal/media_retrieval/index_service";
 import {store_player_audio_logic} from "../../../../../views/view_music/music_page/page_player/store/store_player_audio_logic";
-import {store_server_user_model} from "../../../../../store/server/store_server_user_model";
+import {store_server_user_model} from "../../../../data_stores/server/store_server_user_model";
 import {
     store_playlist_list_logic
 } from "../../../../../views/view_music/music_components/player_list/store/store_playlist_list_logic";
@@ -574,13 +574,13 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         fromYear: string, toYear: string
     ){
         let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
-        const getRandomMedias = await browsing_ApiService_of_ND.getRandomMedias(
+        const getRandomSongs = await browsing_ApiService_of_ND.getRandomSongs(
             username, token, salt,
             size,
             fromYear, toYear
         );
         let media_Retrieval_ApiService_of_ND = new Media_Retrieval_ApiService_of_ND(url);
-        let songlist = getRandomMedias["subsonic-response"]["randomMedias"]["song"];
+        let songlist = getRandomSongs["subsonic-response"]["randomSongs"]["song"];
         if (Array.isArray(songlist) && songlist.length > 0) {
             let last_index = 0
             songlist.map(async (song: any, index: number) => {
@@ -649,10 +649,6 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
                     play_id: new_song.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000
                 });
                 if(index === songlist.length - 1){
-                    if(store_server_user_model.model_server_type_of_web){
-                        /// Data synchronization
-                        store_playlist_list_fetchData.fetchData_PlayList_of_data_synchronization_to_Media()
-                    }
                     const index = store_server_user_model.random_play_model_add
                         ? store_playlist_list_info.playlist_MediaFiles_temporary.length - 10: 0
                     store_player_audio_logic.update_current_media_info(

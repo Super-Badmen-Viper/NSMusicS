@@ -42,7 +42,7 @@ export class Media_Retrieval_ApiService_of_ND extends Navidrome_Api_Services_Nor
         id: string
     ){
         return this.sendRequest(
-            username, token, salt, 'getLyricsByMediaId.view', {
+            username, token, salt, 'getLyricsBySongId.view', {
                 id
             });
     }

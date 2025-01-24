@@ -1,5 +1,5 @@
 import {reactive, ref, watch} from 'vue'
-import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {Audio_node_mpv} from "../../../../../data/data_models/song_Audio_Out/Audio_node_mpv";
 import {Audio_howler} from "../../../../../data/data_models/song_Audio_Out/Audio_howler";
 import {store_player_audio_info} from "./store_player_audio_info";

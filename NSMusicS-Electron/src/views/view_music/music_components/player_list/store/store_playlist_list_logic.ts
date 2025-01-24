@@ -5,8 +5,8 @@ import {
 } from "../../../../../data/data_access/local_configs/class_Get_PlaylistInfo_From_LocalSqlite";
 import {
     store_local_data_set_playlistInfo
-} from "@/store/local/local_data_synchronization/store_local_data_set_playlistInfo";
-import {store_server_user_model} from "@/store/server/store_server_user_model";
+} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_playlistInfo";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 
 export const store_playlist_list_logic = reactive({
     async reset_data() {

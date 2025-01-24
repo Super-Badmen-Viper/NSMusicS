@@ -1,5 +1,5 @@
 import {reactive, watch} from 'vue'
-import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 
 export const store_app_configs_info = reactive({
     desktop_system_kind: 'win32',

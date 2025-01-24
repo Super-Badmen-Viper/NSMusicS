@@ -7,7 +7,7 @@ import {
 import {ref, onMounted, watch} from 'vue';
 import {store_player_audio_info} from "@/views/view_music/music_page/page_player/store/store_player_audio_info";
 import {store_playlist_list_info} from "@/views/view_music/music_components/player_list/store/store_playlist_list_info";
-import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 
 ////// scrollbar of playlist_view
 const scrollbar = ref(null as any);
@@ -79,7 +79,7 @@ const handleImageError = async (item: any) => {
 import { useI18n } from 'vue-i18n'
 import {VueDraggable} from "vue-draggable-plus";
 import {store_playlist_list_fetchData} from "@/views/view_music/music_components/player_list/store/store_playlist_list_fetchData";
-import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 const { t } = useI18n({
   inheritLocale: true
 })
@@ -87,7 +87,7 @@ const { t } = useI18n({
 //////
 import {
   store_local_data_set_mediaInfo
-} from "@/store/local/local_data_synchronization/store_local_data_set_mediaInfo";
+} from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_mediaInfo";
 import {store_playlist_list_logic} from "@/views/view_music/music_components/player_list/store/store_playlist_list_logic";
 import {NIcon, useMessage} from 'naive-ui'
 const message = useMessage()

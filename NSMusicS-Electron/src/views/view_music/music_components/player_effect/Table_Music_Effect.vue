@@ -5,7 +5,7 @@ import {store_router_data_logic} from "@/router/router_store/store_router_data_l
 import {store_player_appearance} from "@/views/view_music/music_page/page_player/store/store_player_appearance";
 
 import { useI18n } from 'vue-i18n'
-import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 const { t } = useI18n({
   inheritLocale: true
 })

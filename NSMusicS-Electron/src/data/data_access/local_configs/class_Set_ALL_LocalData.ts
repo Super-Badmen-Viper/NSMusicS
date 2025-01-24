@@ -1,7 +1,7 @@
-import {store_app_configs_info} from "@/store/app/store_app_configs_info";
+import {store_app_configs_info} from "@/data/data_stores/app/store_app_configs_info";
 import { isElectron } from '@/utils/electron/isElectron';
-import {store_local_db_info} from "@/store/local/store_local_db_info";
-import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {store_local_db_info} from "@/data/data_stores/local/store_local_db_info";
+import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 
 export class Set_ALL_LocalData {
     public Set_ALL_LocalData_To_Delete() {

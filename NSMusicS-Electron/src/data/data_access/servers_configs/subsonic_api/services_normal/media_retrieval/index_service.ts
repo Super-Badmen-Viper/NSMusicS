@@ -42,7 +42,7 @@ export class Media_Retrieval_ApiService_of_ND extends Subsonic_Api_Services_Norm
         id: string
     ){
         return this.sendRequest(
-            username, token, salt, 'getLyricsByMediaId.view', {
+            username, token, salt, 'getLyricsBySongId.view', {
                 id
             });
     }

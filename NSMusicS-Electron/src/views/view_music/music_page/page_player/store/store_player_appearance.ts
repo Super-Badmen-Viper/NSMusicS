@@ -1,6 +1,6 @@
 import {reactive, ref, watch} from 'vue'
 import {store_player_audio_logic} from "./store_player_audio_logic";
-import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 
 export const store_player_appearance = reactive({
     player_show: false,

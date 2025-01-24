@@ -4,11 +4,11 @@ import {store_view_media_page_logic} from "../../../music_page/page_media/store/
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "../../../../../data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
-import {store_server_users} from "@/store/server/store_server_users";
-import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {store_view_media_page_fetchData} from "../../../music_page/page_media/store/store_view_media_page_fetchData";
 import {store_playlist_list_info} from "./store_playlist_list_info"
-import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {store_player_audio_info} from "../../../music_page/page_player/store/store_player_audio_info";
 
 export const store_playlist_list_fetchData = reactive({

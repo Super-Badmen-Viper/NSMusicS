@@ -1,6 +1,6 @@
 <script setup lang="ts">
 ////// this_view resource of vicons_svg
-import { store_app_configs_info } from '@/store/app/store_app_configs_info'
+import { store_app_configs_info } from '@/data/data_stores/app/store_app_configs_info'
 import {
   NotificationsOutline
 } from '@vicons/ionicons5'

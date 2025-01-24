@@ -3,11 +3,11 @@ import {store_view_home_page_info} from "./store_view_home_page_info";
 import {
     Get_HomeDataInfos_From_LocalSqlite
 } from "../../../../../data/data_access/local_configs/class_Get_HomeDataInfos_From_LocalSqlite";
-import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import {
     Get_Navidrome_Temp_Data_To_LocalSqlite
 } from "../../../../../data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
-import {store_server_users} from "@/store/server/store_server_users";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
 
 export const store_view_home_page_fetchData = reactive({
     async fetchData_Home(){

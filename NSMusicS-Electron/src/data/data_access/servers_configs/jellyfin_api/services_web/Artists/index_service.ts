@@ -1,40 +1,65 @@
-import {Navidrome_Api_Services_Normal} from "../Navidrome_Api_Services_Normal";
+import {Jellyfin_Api_Services_Web} from "../Jellyfin_Api_Services_Web";
 
-export class Browsing_ApiService_of_ND extends Navidrome_Api_Services_Normal {
-    public async getMusicFolders(username: string,token: string,salt: string): Promise<any> {
-        return this.sendRequest(username,token,salt,'getMusicFolders');
-    }
-    public async getIndexes_all(username: string,token: string,salt: string): Promise<any> {
-        return this.sendRequest(username,token,salt,'getIndexes');
-    }
-    public async getArtists_ALL(username: string,token: string,salt: string): Promise<any> {
-        return this.sendRequest(username,token,salt,'getArtists');
-    }
-    public async getGenres(username: string,token: string,salt: string): Promise<any> {
-        return this.sendRequest(username,token,salt,'getGenres');
-    }
-    public async getMusicDirectory_id(username: string,token: string,salt: string,id: string): Promise<any> {
-        return this.sendRequest(username,token,salt,'getMusicDirectory', { id });
-    }
-    public async getMedia(username: string,token: string,salt: string,id: string): Promise<any> {
-        return this.sendRequest(username,token,salt,'getMedia', { id });
-    }
-    public async getAlbum(username: string,token: string,salt: string,id: string): Promise<any> {
-        return this.sendRequest(username,token,salt,'getAlbum', { id });
-    }
-    public async getArtist(username: string,token: string,salt: string,id: string): Promise<any> {
-        return this.sendRequest(username,token,salt,'getArtist', { id });
-    }
-
-    public async getRandomMedias(
-        username: string,token: string,salt: string,
-        size: string,
-        fromYear: string, toYear: string
+export class Artists_ApiService_of_Je extends Jellyfin_Api_Services_Web {
+    /*
+    sortOrder:
+        Ascending、Descending
+    sortBy:
+        "Default" "AiredEpisodeOrder"
+        "Album" "AlbumArtist" "Artist"
+        "DateCreated" "OfficialRating" "DatePlayed" "PremiereDate" "StartDate"
+        "SortName" "Name" "Random" "Runtime"
+        "CommunityRating" "ProductionYear" "PlayCount" "CriticRating"
+        "IsFolder" "IsUnplayed" "IsPlayed"
+        "SeriesSortName" "VideoBitRate" "AirTime" "Studio"
+        "IsFavoriteOrLiked" "DateLastContentAdded" "SeriesDatePlayed"
+        "ParentIndexNumber" "IndexNumber" "SimilarityScore" "SearchScore"
+    filters:
+        "IsFolder" "IsNotFolder"
+        "IsUnplayed" "IsPlayed"
+        "IsFavorite" "IsResumable"
+        "Likes" "Dislikes" "IsFavoriteOrLikes"
+     */
+    public async getArtists_ALL(
+        userId: string,
+        searchTerm: string,
+        sortBy: string, sortOrder: string,
+        filters: string, isFavorite: string, years: string, officialRatings: string,
+        genres: string, genreIds: string,
+        tags: string,
     ): Promise<any> {
-        return this.sendRequest(username,token,salt,'getRandomMedias', {
-            size,
-            fromYear, toYear
+        return this.sendRequest('Artists', {
+            userId,
+            searchTerm,
+            sortBy, sortOrder,
+            filters, isFavorite, years, officialRatings,
+            genres, genreIds,
+            tags
+        });
+    }
+    public async getAlbumArtists_ALL(
+        userId: string,
+        searchTerm: string,
+        sortBy: string, sortOrder: string,
+        filters: string, isFavorite: string, years: string, officialRatings: string,
+        genres: string, genreIds: string,
+        tags: string,
+    ): Promise<any> {
+        return this.sendRequest('Artists/AlbumArtists', {
+            userId,
+            searchTerm,
+            sortBy, sortOrder,
+            filters, isFavorite, years, officialRatings,
+            genres, genreIds,
+            tags
         });
     }
 
+    // 获取所有歌手
+    // 获取选中 - 歌手 - 所有专辑：AlbumArtistIds(歌手id)
+    // Items?SortOrder=Descending%2CDescending%2CAscending&IncludeItemTypes=MusicAlbum&Recursive=true&Fields=ParentId%2CPrimaryImageAspectRatio%2CParentId%2CPrimaryImageAspectRatio&Limit=100&StartIndex=0&CollapseBoxSetItems=false
+    //      &AlbumArtistIds=eb360b088fd1f36947216e221315e9fe
+    //          &SortBy=PremiereDate%2CProductionYear%2CSortname
+    // 获取选中 - 专辑 - 所有乐曲：ParentId(专辑id)
+    // Items?ParentId=c64c056eb40fa96434ab774ff14c03be&Fields=ItemCounts%2CPrimaryImageAspectRatio%2CCanDelete%2CMediaSourceCount&SortBy=ParentIndexNumber%2CIndexNumber%2CSortName
 }

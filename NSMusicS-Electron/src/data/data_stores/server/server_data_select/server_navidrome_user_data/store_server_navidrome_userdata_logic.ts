@@ -1,7 +1,7 @@
 import {reactive} from 'vue'
-import {store_server_users} from "@/store/server/store_server_users";
-import {store_server_user_model} from "@/store/server/store_server_user_model";
-import {store_app_configs_logic_save} from "@/store/app/store_app_configs_logic_save";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
+import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
 import {
     User_Authorization_ApiWebService_of_ND
 } from "../../../../data_access/servers_configs/navidrome_api/services_web/user_authorization/index_service";

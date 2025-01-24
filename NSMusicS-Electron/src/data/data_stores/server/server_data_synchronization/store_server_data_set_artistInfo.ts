@@ -1,11 +1,11 @@
 import {reactive} from 'vue'
 
-import {store_server_users} from "@/store/server/store_server_users";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
 
 import {
     Media_Annotation_ApiService_of_ND
 } from "../../../data_access/servers_configs/navidrome_api/services_normal/media_annotation/index_service";
-import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 
 export const store_server_data_set_artistInfo = reactive({
     async Set_ArtistInfo_To_Favorite(id: string, value: Boolean) {

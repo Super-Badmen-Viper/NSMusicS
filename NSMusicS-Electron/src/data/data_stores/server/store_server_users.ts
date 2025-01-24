@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import {store_server_user_model} from "@/store/server/store_server_user_model";
+import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import { isElectron } from '@/utils/electron/isElectron';
 
 export const store_server_users = reactive({
