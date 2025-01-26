@@ -21,6 +21,7 @@ import {store_playlist_list_fetchData} from "../../../music_components/player_li
 import {store_player_tag_modify} from "../../page_player/store/store_player_tag_modify";
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron';
+import {store_player_audio_logic} from "../../page_player/store/store_player_audio_logic";
 
 export const store_view_album_page_fetchData = reactive({
     async fetchData_Album(){
@@ -257,26 +258,8 @@ export const store_view_album_page_fetchData = reactive({
         if(store_playlist_list_info.playlist_MediaFiles_temporary.length > 0){
             store_player_appearance.player_mode_of_lock_playlist = false
             const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[0]
-            store_player_audio_info.this_audio_play_id = media_file.play_id
-            store_player_audio_info.this_audio_file_path = media_file.path
-            store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
-            store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
-            store_player_audio_info.this_audio_artist_name = media_file.artist
-            store_player_audio_info.this_audio_song_name = media_file.title
-            store_player_audio_info.this_audio_album_id = media_file.album_id
-            store_player_audio_info.this_audio_album_favorite = media_file.favorite
-            store_player_audio_info.this_audio_album_name = media_file.album
-            store_player_audio_info.this_audio_Index_of_absolute_positioning_in_list = media_file.absoluteIndex
-            ///
-            store_player_audio_info.this_audio_song_id = media_file.id
-            store_player_audio_info.this_audio_song_rating = media_file.rating
-            store_player_audio_info.this_audio_song_favorite = media_file.favorite
+            store_player_audio_logic.update_current_media_info(media_file, media_file.absoluteIndex)
             //
-            store_player_tag_modify.player_current_media_starred = media_file.favorite
-            store_player_tag_modify.player_current_media_playCount = media_file.play_count
-            store_player_tag_modify.player_current_media_playDate = media_file.play_date
-            //
-
             store_playlist_list_logic.media_page_handleItemDbClick = false
         }
     },
@@ -335,10 +318,14 @@ export const store_view_album_page_fetchData = reactive({
         let _starred = '';
         let playlist_id = '';
         if (selected === 'album_list_love') {
-            _starred = true
+            _starred = 'true'
         } else if (selected === 'album_list_recently') {
-            _order = 'DESC'
-            _sort = 'playDate'
+            _order = 'desc'
+            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+                _sort = 'playDate'
+            }else{
+                _sort = 'DatePlayed'
+            }
         } else if (selected != 'album_list_all') {
             playlist_id = selected
         }

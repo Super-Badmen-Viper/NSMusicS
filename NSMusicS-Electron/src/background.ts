@@ -561,9 +561,8 @@ async function createWindow() {
                 return filePath;
             else
                 return 'file:///' + path.join(driveDbPath, 'error_album.jpg');
-        } catch (error) {
-            console.error('Error handling window-get-imagePath:', error);
-            return 'file:///' + path.join(driveDbPath, 'error_album.jpg');;
+        } catch {
+            return 'file:///' + path.join(driveDbPath, 'error_album.jpg');
         }
     });
     ipc.handle('window-get-LyricPath', (event, mediaPath) => {

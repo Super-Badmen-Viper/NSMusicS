@@ -25,10 +25,7 @@ const handleItemDbClick = (media_file:any,index:number) => {
     /// Data synchronization
     store_playlist_list_fetchData.fetchData_PlayList_of_data_synchronization_to_Media()
   }
-  store_player_audio_logic.update_current_media_info(
-      media_file,
-      index
-  )
+  store_player_audio_logic.update_current_media_info(media_file, index)
   store_playlist_list_logic.media_page_handleItemDbClick = false
   store_player_audio_info.this_audio_restart_play = true
 }

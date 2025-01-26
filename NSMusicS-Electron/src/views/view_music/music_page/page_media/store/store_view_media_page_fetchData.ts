@@ -391,10 +391,14 @@ export const store_view_media_page_fetchData = reactive({
         let _starred = '';
         let playlist_id = '';
         if (selected === 'song_list_love') {
-            _starred = true
+            _starred = 'true'
         } else if (selected === 'song_list_recently') {
-            _order = 'DESC'
-            _sort = 'playDate'
+            _order = 'desc'
+            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+                _sort = 'playDate'
+            }else{
+                _sort = 'DatePlayed'
+            }
         } else if (selected != 'song_list_all') {
             playlist_id = selected
         }
@@ -411,20 +415,13 @@ export const store_view_media_page_fetchData = reactive({
                 store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : ''
             )
         }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
-            const sortByMapping: { [key: string]: string } = {
-                'title': 'SortName',
-                'artist': 'Artist',
-                'album': 'Album',
-                'created_at': 'DateCreated',
-                'playDate': 'DatePlayed'
-            };
-            const sortBy = sortByMapping[_sort] || 'Default';
-            const sortOrder = _order === 'DESC' ? 'Descending' : 'Ascending'
-
+            const sortBy = _sort != 'id' ? _sort : 'IndexNumber';
+            const sortOrder = _order === 'desc' ? 'Descending' : 'Ascending'
             let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
             await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list(
                 playlist_id,
-                store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music, _search,
+                store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music,
+                _search,
                 sortBy, sortOrder,
                 String(this._end - this._start), String(this._start),
                 'Audio',

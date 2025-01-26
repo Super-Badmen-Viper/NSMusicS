@@ -34,8 +34,7 @@ export class Jellyfin_Api_Services_Web {
                 headers,
             });
             return response.data;
-        } catch (error: any) {
-            console.error('请求失败:', error);
+        } catch {
             return undefined;
         }
     }

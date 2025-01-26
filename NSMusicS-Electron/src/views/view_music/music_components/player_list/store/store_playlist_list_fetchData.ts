@@ -53,10 +53,14 @@ export const store_playlist_list_fetchData = reactive({
         let _starred = '';
         let playlist_id = '';
         if (selected === 'song_list_love') {
-            _starred = true
+            _starred = 'true'
         } else if (selected === 'song_list_recently') {
-            _order = 'DESC'
-            _sort = 'playDate'
+            _order = 'desc'
+            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+                _sort = 'playDate'
+            }else{
+                _sort = 'DatePlayed'
+            }
         } else if (selected != 'song_list_all') {
             playlist_id = selected
         }

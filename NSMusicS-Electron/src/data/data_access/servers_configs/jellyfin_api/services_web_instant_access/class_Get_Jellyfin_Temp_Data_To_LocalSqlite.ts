@@ -300,87 +300,84 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         if (Array.isArray(songlist) && songlist.length > 0) {
             store_playlist_list_fetchData._totalCount = songlist.length
             if(sortBy === 'DatePlayed'){
-                songlist = songlist.filter(song => song.playCount > 0)
+                songlist = songlist.filter(song => song.UserData.PlayCount > 0)
             }
             let last_index = store_view_media_page_info.media_Files_temporary.length
             store_view_media_page_info.media_File_metadata = [];
-            songlist.map(async (song: any, index: number) => {
-                let lyrics = ''
-                let medium_image_url = null
-                try {
-                    const getAudio_lyrics_id = await this.audio_ApiService_of_Je.getAudio_lyrics_id(song.Id)
-                    lyrics = this.convertToLRC_Array(
-                        getAudio_lyrics_id.Lyrics
-                    )
-                    const getItems_Image = await this.items_ApiService_of_Je.getItems_Image(song.Id)
-                    medium_image_url = getItems_Image.length > 0 ? getItems_Image[0].Path : ''
-                }catch (e) {
-                    console.error(e)
-                }
-
-                // if(playlist_id !== '') {
-                //     song.id = song.mediaFileId
-                // }
-                store_view_media_page_info.media_File_metadata.push(
-                    song
-                )
-                store_view_media_page_info.media_Files_temporary.push(
-                    {
-                        absoluteIndex: index + 1 + last_index,
-                        favorite: song.UserData.IsFavorite,
-                        rating: 0,//song.rating
-                        duration_txt: this.formatTime(song.RunTimeTicks),
-                        id: song.Id,
-                        title: song.Name,
-                        path: store_server_users.server_config_of_current_user_of_sqlite?.url + '/Audio/' + song.Id + '/stream',
-                        artist:song.Artists.length > 0 ? song.Artists[0] : '',
-                        album: song.Album,
-                        artist_id: song.ArtistItems.length > 0 ? song.ArtistItems[0].Id : '',
-                        album_id: song.AlbumId,
-                        album_artist: '',
-                        has_cover_art: 0,
-                        track_number: 0,
-                        disc_number: 0,
-                        year: song.ProductionYear,
-                        size: '',
-                        suffix: '',
-                        duration: song.RunTimeTicks,
-                        bit_rate: '',
-                        genre: '',
-                        compilation: 0,
-                        created_at: song.PremiereDate,
-                        updated_at: '',
-                        full_text: '',
-                        album_artist_id: '',
-                        order_album_name: '',
-                        order_album_artist_name: '',
-                        order_artist_name: '',
-                        sort_album_name: '',
-                        sort_artist_name: '',
-                        sort_album_artist_name: '',
-                        sort_title: '',
-                        disc_subtitle: '',
-                        mbz_track_id: '',
-                        mbz_album_id: '',
-                        mbz_artist_id: '',
-                        mbz_album_artist_id: '',
-                        mbz_album_type: '',
-                        mbz_album_comment: '',
-                        catalog_num: '',
-                        comment: '',
-                        lyrics: lyrics,
-                        bpm: 0,
-                        channels: 0,
-                        order_title: '',
-                        mbz_release_track_id: '',
-                        rg_album_gain: 0,
-                        rg_album_peak: 0,
-                        rg_track_gain: 0,
-                        rg_track_peak: 0,
-                        medium_image_url: medium_image_url
-                    }
-                )
-            })
+            // 使用 Promise.all 确保所有异步操作完成
+            await Promise.all(songlist.map(async (song: any, index: number) => {
+                // 获取歌词
+                const getAudio_lyrics_id = await this.audio_ApiService_of_Je.getAudio_lyrics_id(song.Id);
+                const lyrics = getAudio_lyrics_id != undefined
+                    ? this.convertToLRC_Array(getAudio_lyrics_id.Lyrics) : '';
+                // 获取封面图片
+                const getItems_Image = await this.items_ApiService_of_Je.getItems_Image(song.Id);
+                const medium_image_url = Array.isArray(getItems_Image) && getItems_Image.length > 0
+                    ? getItems_Image[0].Path : '';
+                // 生成音频 URL
+                const blobUrl =
+                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Audio/' +
+                    song.Id + '/universal?UserId=' +
+                    store_server_user_model.userid_of_Je + '&MaxStreamingBitrate=1145761093&Container=opus%2Cwebm%7Copus%2Cts%7Cmp3%2Cmp3%2Caac%2Cm4a%7Caac%2Cm4b%7Caac%2Cflac%2Cwebma%2Cwebm%7Cwebma%2Cwav%2Cogg&TranscodingContainer=mp4&TranscodingProtocol=hls&AudioCodec=aac&api_key=' +
+                    store_server_user_model.authorization_of_Je + '&StartTimeTicks=0&EnableRedirection=true&EnableRemoteMedia=false&EnableAudioVbrEncoding=true';
+                //
+                store_view_media_page_info.media_File_metadata.push(song);
+                store_view_media_page_info.media_Files_temporary.push({
+                    absoluteIndex: index + 1 + last_index, // 确保按顺序生成
+                    favorite: song.UserData.IsFavorite,
+                    rating: 0, // song.rating
+                    duration_txt: this.formatTime(song.RunTimeTicks),
+                    id: song.Id,
+                    title: song.Name,
+                    path: blobUrl,
+                    artist: song.Artists.length > 0 ? song.Artists[0] : '',
+                    album: song.Album,
+                    artist_id: song.ArtistItems.length > 0 ? song.ArtistItems[0].Id : '',
+                    album_id: song.AlbumId,
+                    album_artist: '',
+                    has_cover_art: 0,
+                    track_number: 0,
+                    disc_number: 0,
+                    year: song.ProductionYear,
+                    size: '',
+                    suffix: '',
+                    duration: song.RunTimeTicks,
+                    bit_rate: '',
+                    genre: '',
+                    compilation: 0,
+                    created_at: song.PremiereDate,
+                    updated_at: '',
+                    full_text: '',
+                    album_artist_id: '',
+                    order_album_name: '',
+                    order_album_artist_name: '',
+                    order_artist_name: '',
+                    sort_album_name: '',
+                    sort_artist_name: '',
+                    sort_album_artist_name: '',
+                    sort_title: '',
+                    disc_subtitle: '',
+                    mbz_track_id: '',
+                    mbz_album_id: '',
+                    mbz_artist_id: '',
+                    mbz_album_artist_id: '',
+                    mbz_album_type: '',
+                    mbz_album_comment: '',
+                    catalog_num: '',
+                    comment: '',
+                    lyrics: lyrics,
+                    bpm: 0,
+                    channels: 0,
+                    order_title: '',
+                    mbz_release_track_id: '',
+                    rg_album_gain: 0,
+                    rg_album_peak: 0,
+                    rg_track_gain: 0,
+                    rg_track_peak: 0,
+                    medium_image_url: medium_image_url
+                });
+            }));
+            store_view_media_page_info.media_Files_temporary.sort((a, b) => a.absoluteIndex - b.absoluteIndex);
         }
     }
     public async get_album_list(
@@ -673,10 +670,8 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                 if(index === songlist.length - 1){
                     const index = store_server_user_model.random_play_model_add
                         ? store_playlist_list_info.playlist_MediaFiles_temporary.length - 10: 0
-                    store_player_audio_logic.update_current_media_info(
-                        store_playlist_list_info.playlist_MediaFiles_temporary[index],
-                        index
-                    )
+                    const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
+                    store_player_audio_logic.update_current_media_info(media_file, index)
                     store_playlist_list_logic.media_page_handleItemDbClick = false
                     store_player_audio_info.this_audio_restart_play = true
 
@@ -734,37 +729,20 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
     }
     private convertToLRC_Array(lyrics: {
         Text: string;
-        Start: number; // 原始值（例如 1699400000）
+        Start: number;
     }[]): string {
-        const metadata = [
-            '[ti:That That]',
-            '[ar:PSY/SUGA]',
-            '[al:That That]',
-            '[by:Your Name]',
-            ''
-        ].join('\n');
-
-        // 倍率常数
         const SCALE_FACTOR = 0.0000001;
-
         const lrcLines = lyrics
             .map((item) => {
-                // 应用倍率常数转换为秒
                 const totalSeconds = item.Start * SCALE_FACTOR;
-
-                // 分解分钟、秒和厘秒
                 const minutes = Math.floor(totalSeconds / 60);
                 const seconds = Math.floor(totalSeconds % 60);
-                const centiseconds = Math.floor((totalSeconds * 100) % 100); // 提取小数点后两位
-
-                // 格式化为 [mm:ss.xx]
+                const centiseconds = Math.floor((totalSeconds * 100) % 100);
                 const time = `[${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(centiseconds).padStart(2, '0')}]`;
-
                 return `${time}${item.Text}`;
             })
             .join('\n');
-
-        return `${metadata}\n${lrcLines}`;
+        return `${lrcLines}`;
     }
 
     /// file count

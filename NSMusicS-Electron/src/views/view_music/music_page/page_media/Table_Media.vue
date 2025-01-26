@@ -77,15 +77,32 @@ type SortItem = {
   key: string;
   state_Sort: state_Sort;
 };
-const options_Sort_key = ref<SortItem[]>([
-  {label:computed(() => t('filter.title')), key: 'title', state_Sort: state_Sort.Default },
-  {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
-  {label:computed(() => t('entity.album_other')), key: 'album', state_Sort: state_Sort.Default },
-  {label:computed(() => t('filter.releaseYear')), key: 'year', state_Sort: state_Sort.Default },
-  {label:computed(() => t('filter.duration')), key: 'duration', state_Sort: state_Sort.Default },
-  {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
-  {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
-]);
+const options_Sort_key = ref<SortItem[]>([]);
+if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
+  options_Sort_key.value = [
+    {label:computed(() => t('OptionTrackName')), key: 'Name', state_Sort: state_Sort.Default },
+    {label:computed(() => t('AlbumArtist')), key: 'AlbumArtist', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Artist')), key: 'Artist', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Album')), key: 'Album', state_Sort: state_Sort.Default },
+    {label:computed(() => t('DateAdded')), key: 'DateCreated', state_Sort: state_Sort.Default },
+
+    {label:computed(() => t('DatePlayed')), key: 'DatePlayed', state_Sort: state_Sort.Default },
+    {label:computed(() => t('PlayCount')), key: 'PlayCount', state_Sort: state_Sort.Default },
+    {label:computed(() => t('ReleaseDate')), key: 'PremiereDate', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Runtime')), key: 'Runtime', state_Sort: state_Sort.Default },
+    {label:computed(() => t('OptionRandom')), key: 'Random', state_Sort: state_Sort.Default },
+  ]
+}else{
+  options_Sort_key.value = [
+    {label:computed(() => t('filter.title')), key: 'title', state_Sort: state_Sort.Default },
+    {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
+    {label:computed(() => t('entity.album_other')), key: 'album', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.releaseYear')), key: 'year', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.duration')), key: 'duration', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
+  ]
+}
 let options_Sort = computed(() => {
   if(store_view_media_page_logic.page_songlists_options_Sort_key != null && store_view_media_page_logic.page_songlists_options_Sort_key.length > 0){
     options_Sort_key.value.forEach(element => {
@@ -120,13 +137,6 @@ let options_Sort = computed(() => {
     };
   });
 });
-// onMounted(() => {
-//   if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
-//     options_Sort = options_Sort.filter((row: any) =>
-//         row.key !== 'year' && row.key !== 'duration' && row.key !== 'updated_at'
-//     );
-//   }
-// })
 const handleSelect_Sort = (key: string | number) => {
   let _state_Sort_: state_Sort = state_Sort.Default;
   let idx: number = -1;
@@ -140,16 +150,16 @@ const handleSelect_Sort = (key: string | number) => {
   }
   switch (_state_Sort_) {
     case state_Sort.Ascend:
-      options_Sort_key.value[idx].state_Sort = state_Sort.Descend;
-      _state_Sort_ = state_Sort.Descend;
-      break;
-    case state_Sort.Descend:
       options_Sort_key.value[idx].state_Sort = state_Sort.Default;
       _state_Sort_ = state_Sort.Default;
       break;
-    case state_Sort.Default:
+    case state_Sort.Descend:
       options_Sort_key.value[idx].state_Sort = state_Sort.Ascend;
       _state_Sort_ = state_Sort.Ascend;
+      break;
+    case state_Sort.Default:
+      options_Sort_key.value[idx].state_Sort = state_Sort.Descend;
+      _state_Sort_ = state_Sort.Descend;
       break;
   }
   store_view_media_page_logic.list_options_Hand_Sort = true
@@ -326,10 +336,7 @@ const handleItemDbClick = (media_file:any,index:number) => {
         store_server_user_model.random_play_model = false
       }
       //
-      store_player_audio_logic.update_current_media_info(
-          media_file,
-          index
-      )
+      store_player_audio_logic.update_current_media_info(media_file, index)
       store_playlist_list_logic.media_page_handleItemDbClick = true
       store_player_appearance.player_mode_of_lock_playlist = false
       store_player_audio_info.this_audio_restart_play = true
