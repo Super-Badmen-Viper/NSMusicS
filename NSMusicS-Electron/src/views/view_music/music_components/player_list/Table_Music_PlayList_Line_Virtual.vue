@@ -20,12 +20,12 @@ onMounted(() => {
 });
 
 /////// emits audio_info of artistlist_view_list
-const handleItemDbClick = (media_file:any,index:number) => {
+const handleItemDbClick = async (media_file:any,index:number) => {
   if(store_server_user_model.model_server_type_of_web){
     /// Data synchronization
     store_playlist_list_fetchData.fetchData_PlayList_of_data_synchronization_to_Media()
   }
-  store_player_audio_logic.update_current_media_info(media_file, index)
+  await store_player_audio_logic.update_current_media_info(media_file, index)
   store_playlist_list_logic.media_page_handleItemDbClick = false
   store_player_audio_info.this_audio_restart_play = true
 }

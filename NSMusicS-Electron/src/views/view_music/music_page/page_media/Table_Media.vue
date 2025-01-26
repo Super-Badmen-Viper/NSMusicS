@@ -92,7 +92,8 @@ if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfi
     {label:computed(() => t('Runtime')), key: 'Runtime', state_Sort: state_Sort.Default },
     {label:computed(() => t('OptionRandom')), key: 'Random', state_Sort: state_Sort.Default },
   ]
-}else{
+}
+else{
   options_Sort_key.value = [
     {label:computed(() => t('filter.title')), key: 'title', state_Sort: state_Sort.Default },
     {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
@@ -326,7 +327,7 @@ const get_router_history_model_next = () =>  {
 const handleItemClick = () => {
   click_count++
 }
-const handleItemDbClick = (media_file:any,index:number) => {
+const handleItemDbClick = async (media_file:any,index:number) => {
   if(bool_start_play.value == true){
     if(click_count >= 2){
       click_count = 0
@@ -336,7 +337,7 @@ const handleItemDbClick = (media_file:any,index:number) => {
         store_server_user_model.random_play_model = false
       }
       //
-      store_player_audio_logic.update_current_media_info(media_file, index)
+      await store_player_audio_logic.update_current_media_info(media_file, index)
       store_playlist_list_logic.media_page_handleItemDbClick = true
       store_player_appearance.player_mode_of_lock_playlist = false
       store_player_audio_info.this_audio_restart_play = true
@@ -884,16 +885,6 @@ onBeforeUnmount(() => {
   stopWatching_router_history_model_of_Media_scroll()
   dynamicScroller.value = null;
 });
-
-const back_filter_blurValue  = ref(0);
-const hover_back_img = () => {
-  back_display.value = 'block';
-  back_filter_blurValue.value = 3;
-};
-const leave_back_svg = () => {
-  back_display.value = 'none';
-  back_filter_blurValue.value = 0;
-};
 </script>
 
 <template>
@@ -1118,10 +1109,10 @@ const leave_back_svg = () => {
 
           <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
           <n-dropdown
-              v-if="store_server_user_model.model_server_type_of_local"
-              trigger="click" :show-arrow="true"
-              :options="options_dropdown_play_mode"
-              @select="begin_select_MediaList_ALL_Line_of_playback"
+            v-if="store_server_user_model.model_server_type_of_local && store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'"
+            trigger="click" :show-arrow="true"
+            :options="options_dropdown_play_mode"
+            @select="begin_select_MediaList_ALL_Line_of_playback"
           >
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
@@ -1136,8 +1127,8 @@ const leave_back_svg = () => {
             </n-tooltip>
           </n-dropdown>
           <n-tooltip
-              v-if="store_server_user_model.model_server_type_of_web"
-              trigger="hover" placement="top">
+            v-if="store_server_user_model.model_server_type_of_web && store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'"
+            trigger="hover" placement="top">
             <template #trigger>
               <div>
                 <n-badge
@@ -1167,7 +1158,9 @@ const leave_back_svg = () => {
             </template>
             {{ $t('Shuffle') + ' ' + $t('HeaderLibraries') + ' ' + $t('nsmusics.view_page.allMedia') }}
           </n-tooltip>
-          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
+          <n-divider
+              v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'"
+              vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
 
           <n-tooltip trigger="hover" placement="top">
             <template #trigger>

@@ -9,6 +9,12 @@
  The NSMusicS plan supports multiple server types, such as [Navidrome](https://www.navidrome.org/), [Jellyfin](https://jellyfin.org/), [emby](https://emby.media/), [NSMusicS](https://github.com/Super-Badmen-Viper/NSMusicS). **Subsonic API is not currently supported**. This will likely be added in [later when the new Subsonic API is decided on](https://support.symfonium.app/t/subsonic-servers-participation/1233).  
  
  In addition, NSMusicS also supports local mode to use local music libraries. And plan to support various types of network cloud drives，such as webdev，onedriver....
+
+ After the initial development and improvement of NSMusicS, it will be integrated into various software ecosystems, such as:
+  - [ ] Xiaomi Home Integration for Home Assistant: 
+  [github: ha_xiaomi_home](https://github.com/XiaoMi/ha_xiaomi_home) (米家集成：智能家居系统)
+  - [ ] Xiaomi ecosystem of people, cars, and homes
+  (小米：人车家全生态)
  
 ## NSMusicS-Electron | 九歌 : Desktop-client
 - [x] supporting the Windows10+、MacOS(arm、x64)、Linux platform (which will soon support Docker)

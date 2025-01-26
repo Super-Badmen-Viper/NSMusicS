@@ -277,7 +277,8 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         sortBy: string, sortOrder: string,
         limit: string, startIndex: string,
         includeItemTypes: string,
-        fields: string, enableImageTypes: string, recursive: string, imageTypeLimit: string
+        fields: string, enableImageTypes: string, recursive: string, imageTypeLimit: string,
+        years: string
     ){
         let songlist = []
         if(playlist_id === '') {
@@ -286,14 +287,15 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                 sortBy, sortOrder,
                 limit, startIndex,
                 includeItemTypes,
-                fields, enableImageTypes, recursive, imageTypeLimit
+                fields, enableImageTypes, recursive, imageTypeLimit,
+                years
             )
             songlist = list.Items;
         }else{
             // const {data,totalCount} = await this.items_ApiService_of_Je.getMediaList_of_Playlist(
             //     playlist_id,
             //     _end, _order, _sort, _start,
-            //     year
+            //     years
             // )
             // songlist = data
         }
@@ -306,14 +308,10 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_view_media_page_info.media_File_metadata = [];
             // 使用 Promise.all 确保所有异步操作完成
             await Promise.all(songlist.map(async (song: any, index: number) => {
-                // 获取歌词
-                const getAudio_lyrics_id = await this.audio_ApiService_of_Je.getAudio_lyrics_id(song.Id);
-                const lyrics = getAudio_lyrics_id != undefined
-                    ? this.convertToLRC_Array(getAudio_lyrics_id.Lyrics) : '';
                 // 获取封面图片
-                const getItems_Image = await this.items_ApiService_of_Je.getItems_Image(song.Id);
-                const medium_image_url = Array.isArray(getItems_Image) && getItems_Image.length > 0
-                    ? getItems_Image[0].Path : '';
+                const medium_image_url =
+                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Items/' +
+                    song.Id + '/Images/Primary?api_key=' + store_server_user_model.authorization_of_Je
                 // 生成音频 URL
                 const blobUrl =
                     store_server_users.server_config_of_current_user_of_sqlite?.url + '/Audio/' +
@@ -365,7 +363,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     mbz_album_comment: '',
                     catalog_num: '',
                     comment: '',
-                    lyrics: lyrics,
+                    lyrics: '',
                     bpm: 0,
                     channels: 0,
                     order_title: '',
@@ -377,7 +375,6 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     medium_image_url: medium_image_url
                 });
             }));
-            store_view_media_page_info.media_Files_temporary.sort((a, b) => a.absoluteIndex - b.absoluteIndex);
         }
     }
     public async get_album_list(
@@ -671,7 +668,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     const index = store_server_user_model.random_play_model_add
                         ? store_playlist_list_info.playlist_MediaFiles_temporary.length - 10: 0
                     const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
-                    store_player_audio_logic.update_current_media_info(media_file, index)
+                    await store_player_audio_logic.update_current_media_info(media_file, index)
                     store_playlist_list_logic.media_page_handleItemDbClick = false
                     store_player_audio_info.this_audio_restart_play = true
 

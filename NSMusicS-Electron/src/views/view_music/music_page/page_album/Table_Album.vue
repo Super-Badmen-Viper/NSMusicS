@@ -210,16 +210,16 @@ const handleSelect_Sort = (key: string | number) => {
   }
   switch (_state_Sort_) {
     case state_Sort.Ascend:
-      options_Sort_key.value[idx].state_Sort = state_Sort.Descend;
-      _state_Sort_ = state_Sort.Descend;
-      break;
-    case state_Sort.Descend:
       options_Sort_key.value[idx].state_Sort = state_Sort.Default;
       _state_Sort_ = state_Sort.Default;
       break;
-    case state_Sort.Default:
+    case state_Sort.Descend:
       options_Sort_key.value[idx].state_Sort = state_Sort.Ascend;
       _state_Sort_ = state_Sort.Ascend;
+      break;
+    case state_Sort.Default:
+      options_Sort_key.value[idx].state_Sort = state_Sort.Descend;
+      _state_Sort_ = state_Sort.Descend;
       break;
   }
   const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];

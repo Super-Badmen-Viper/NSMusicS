@@ -6,10 +6,10 @@ import {store_player_audio_info} from "./store_player_audio_info";
 import {store_player_view} from "./store_player_view";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 import {store_player_tag_modify} from "./store_player_tag_modify";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {
-    store_playlist_list_logic
-} from "../../../music_components/player_list/store/store_playlist_list_logic";
-import {store_player_appearance} from "./store_player_appearance";
+    Audio_ApiService_of_Je
+} from "../../../../../data/data_access/servers_configs/jellyfin_api/services_web/Audio/index_service";
 
 export const store_player_audio_logic = reactive({
     player: new Audio_node_mpv(),
@@ -119,10 +119,9 @@ export const store_player_audio_logic = reactive({
             }
         }
     },
-    update_current_media_info(media_file:any,index:number){
+    async update_current_media_info(media_file:any,index:number){
         store_player_audio_info.this_audio_play_id = media_file.play_id
         store_player_audio_info.this_audio_file_path = media_file.path
-        store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
         store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
         store_player_audio_info.this_audio_artist_name = media_file.artist
         store_player_audio_info.this_audio_artist_id = media_file.artist_id
@@ -137,6 +136,36 @@ export const store_player_audio_logic = reactive({
         store_player_tag_modify.player_current_media_starred = media_file.favorite
         store_player_tag_modify.player_current_media_playCount = media_file.play_count
         store_player_tag_modify.player_current_media_playDate = media_file.play_date
+        //
+        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            const audio_ApiService_of_Je = new Audio_ApiService_of_Je(
+                store_server_users.server_config_of_current_user_of_sqlite?.url
+            )
+            // 获取歌词
+            const getAudio_lyrics_id = await audio_ApiService_of_Je.getAudio_lyrics_id(media_file.id);
+            const lyrics = getAudio_lyrics_id != undefined
+                ? this.convertToLRC_Array_of_Je(getAudio_lyrics_id.Lyrics) : '';
+            store_player_audio_info.this_audio_lyrics_string = lyrics;
+        }else{
+            store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
+        }
+    },
+    convertToLRC_Array_of_Je(lyrics: {
+        Text: string;
+        Start: number;
+    }[]): string {
+        const SCALE_FACTOR = 0.0000001;
+        const lrcLines = lyrics
+            .map((item) => {
+                const totalSeconds = item.Start * SCALE_FACTOR;
+                const minutes = Math.floor(totalSeconds / 60);
+                const seconds = Math.floor(totalSeconds % 60);
+                const centiseconds = Math.floor((totalSeconds * 100) % 100);
+                const time = `[${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(centiseconds).padStart(2, '0')}]`;
+                return `${time}${item.Text}`;
+            })
+            .join('\n');
+        return `${lrcLines}`;
     }
 });
 watch(() => store_player_audio_logic.player_select, async (newValue) => {

@@ -492,7 +492,7 @@ async function Play_Media_Order(model_num: string, increased: number) {
             }
           }
           const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[index]
-          store_player_audio_logic.update_current_media_info(media_file, index)
+          await store_player_audio_logic.update_current_media_info(media_file, index)
           console.log(media_file);
 
           store_playlist_list_logic.media_page_handleItemDbClick = false

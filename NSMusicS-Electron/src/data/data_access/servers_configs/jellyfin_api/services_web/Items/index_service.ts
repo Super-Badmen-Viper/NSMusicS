@@ -56,7 +56,8 @@ export class Items_ApiService_of_Je extends Jellyfin_Api_Services_Web {
         sortBy: string, sortOrder: string,
         limit: string, startIndex: string,
         includeItemTypes: string,
-        fields: string, enableImageTypes: string, recursive: string, imageTypeLimit: string
+        fields: string, enableImageTypes: string, recursive: string, imageTypeLimit: string,
+        years: string
     ): Promise<any> {
         return this.sendRequest(
             'GET',
@@ -74,6 +75,7 @@ export class Items_ApiService_of_Je extends Jellyfin_Api_Services_Web {
                 enableImageTypes,
                 recursive,
                 imageTypeLimit,
+                years
             }
         );
     }

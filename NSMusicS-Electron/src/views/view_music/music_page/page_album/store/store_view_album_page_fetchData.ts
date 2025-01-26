@@ -258,7 +258,7 @@ export const store_view_album_page_fetchData = reactive({
         if(store_playlist_list_info.playlist_MediaFiles_temporary.length > 0){
             store_player_appearance.player_mode_of_lock_playlist = false
             const media_file = store_playlist_list_info.playlist_MediaFiles_temporary[0]
-            store_player_audio_logic.update_current_media_info(media_file, media_file.absoluteIndex)
+            await store_player_audio_logic.update_current_media_info(media_file, media_file.absoluteIndex)
             //
             store_playlist_list_logic.media_page_handleItemDbClick = false
         }

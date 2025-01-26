@@ -425,7 +425,8 @@ export const store_view_media_page_fetchData = reactive({
                 sortBy, sortOrder,
                 String(this._end - this._start), String(this._start),
                 'Audio',
-                'ParentId', 'Primary', 'true', '1'
+                'ParentId', 'Primary', 'true', '1',
+                store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : ''
             )
         }
     },
