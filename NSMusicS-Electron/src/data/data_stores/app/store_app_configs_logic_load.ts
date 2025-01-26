@@ -24,6 +24,10 @@ import {store_view_media_page_fetchData} from "../../../views/view_music/music_p
 import error_album from '@/assets/img/error_album.jpg'
 import {store_local_db_info} from "@/data/data_stores/local/store_local_db_info";
 import {isElectron} from "@/utils/electron/isElectron";
+import {Users_ApiService_of_Je} from "../../data_access/servers_configs/jellyfin_api/services_web/Users/index_service";
+import {
+    Library_ApiService_of_Je
+} from "../../data_access/servers_configs/jellyfin_api/services_web/Library/index_service";
 
 export const store_app_configs_logic_load = reactive({
     app_configs_loading: false,
@@ -40,7 +44,7 @@ export const store_app_configs_logic_load = reactive({
             store_server_user_model.model_server_type_of_web = '' + system_Configs_Read.app_Configs.value['model_server_type_of_web'] === 'true'
             store_server_user_model.model_server_type_of_local = '' + system_Configs_Read.app_Configs.value['model_server_type_of_local'] === 'true'
             store_server_user_model.model_server_type_of_local_server_download = '' + system_Configs_Read.app_Configs.value['model_server_type_of_local_server_download'] === 'true'
-            store_server_user_model.authorization = '' + system_Configs_Read.app_Configs.value['authorization']
+            store_server_user_model.authorization_of_nd = '' + system_Configs_Read.app_Configs.value['authorization_of_nd']
             store_server_user_model.client_unique_id = '' + system_Configs_Read.app_Configs.value['client_unique_id']
             store_view_media_page_info.media_page_sizes = Number('' + system_Configs_Read.app_Configs.value['media_page_sizes'])
             store_view_album_page_info.album_page_sizes = Number('' + system_Configs_Read.app_Configs.value['album_page_sizes'])
@@ -264,6 +268,47 @@ export const store_app_configs_logic_load = reactive({
             store_server_user_model.username = username
             store_server_user_model.salt = salt
             store_server_user_model.token = token
+            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+                store_server_user_model.authorization_of_Je =
+                    store_server_users.server_config_of_current_user_of_sqlite?.user_name
+                // load User
+                const userService = new Users_ApiService_of_Je(
+                    store_server_users.server_config_of_current_user_of_sqlite?.url
+                )
+                const result = await userService.getUsers_ALL()
+                let server_set_of_addUser_of_apikey_user_option = []
+                store_server_user_model.userid_of_Je = ''
+                if(result) {
+                    if(Array.isArray(result) && result.length > 0) {
+                        result.forEach((row: any, index: number) => {
+                            server_set_of_addUser_of_apikey_user_option.push({
+                                label: row.Name,
+                                value: row.Id
+                            });
+                        });
+                        store_server_user_model.userid_of_Je = server_set_of_addUser_of_apikey_user_option[0].value
+                        // load Library parentid_of_Je
+                        const library_ApiService_of_Je = new Library_ApiService_of_Je(
+                            store_server_users.server_config_of_current_user_of_sqlite?.url
+                        )
+                        const result_parentIds = await library_ApiService_of_Je.getLibrary_MediaFolders_ALL()
+                        store_server_user_model.parentid_of_Je = []
+                        if(result_parentIds.Items){
+                            if(Array.isArray(result_parentIds.Items) && result_parentIds.Items.length > 0) {
+                                result_parentIds.Items.forEach((row: any, index: number) => {
+                                    store_server_user_model.parentid_of_Je.push({
+                                        label: row.Name,
+                                        value: row.Id
+                                    });
+                                    if(row.CollectionType === 'music'){
+                                        store_server_user_model.parentid_of_Je_Music = row.Id
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            }
 
             /// playlist media_file_id_of_list
             if(store_server_user_model.model_server_type_of_local) {

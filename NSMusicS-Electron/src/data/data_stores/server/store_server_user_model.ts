@@ -27,11 +27,16 @@ export const store_server_user_model = reactive({
     salt: '',
     token: '',
     password: '',
+    authorization_of_nd: '',
+
+    userid_of_Je: '',
+    authorization_of_Je: '',
+    parentid_of_Je: [],
+    parentid_of_Je_Music: '',
 
     model_server_type_of_web: true,
     model_server_type_of_local: false,
     model_server_type_of_local_server_download: false,
-    authorization: '',
     client_unique_id: '',
     server_get_count: 15,
 
@@ -144,7 +149,7 @@ export const store_server_user_model = reactive({
                 store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
                 store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
             );
-        }else if(user_config?.type === 'subsonic'){
+        }else if(user_config?.type === 'jellyfin'){
 
         }
     },

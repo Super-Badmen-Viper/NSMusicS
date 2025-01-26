@@ -97,6 +97,7 @@
     unwatch_menuOptions_selectd_model_2()
     unwatch_menuOptions_selectd_model_3()
     unwatch_menuOptions_selectd_model_4()
+    unwatch_server_set_of_addUser_of_type()
   })
 
   ////// this_view views_components
@@ -111,6 +112,9 @@
   import {store_player_appearance} from "@/views/view_music/music_page/page_player/store/store_player_appearance";
   import {store_router_data_logic} from "@/router/router_store/store_router_data_logic";
   import {store_server_data_select_logic} from "@/data/data_stores/server/server_data_select/store_server_data_select_logic";
+  import {
+    Users_ApiService_of_Je
+  } from "@/data/data_access/servers_configs/jellyfin_api/services_web/Users/index_service";
   const theme_value = ref('lightTheme')
   const theme_options = ref([
     {
@@ -135,7 +139,7 @@
   ////// server
   const Type_Server_Kinds = [
     {
-      value: "NSMusicS",
+      value: "nsmusics",
       label: "NSMusicS"
     },
     {
@@ -147,7 +151,7 @@
       label: 'navidrome'
     },
     {
-      value: "Jellyfin",
+      value: "jellyfin",
       label: "Jellyfin"
     },
     {
@@ -166,7 +170,6 @@
     s.value = s.value.toLowerCase()
     return s
   })
-  const Type_Server_Selected = ref(Type_Server_Kinds[2].value)
   const Type_Server_Add = ref(false)
   const Type_Server_Model_Open_Value = ref('local')
   const Type_Server_Model_Open_Option = ref([
@@ -186,27 +189,99 @@
     else
       Type_Server_Model_Open_Value.value = Type_Server_Model_Open_Option.value[1].value
   });
-  const server_set_of_addUser_of_type = ref('')
-  const server_set_of_addUser_of_servername = ref('')
-  const server_set_of_addUser_of_url = ref('')
+  const server_set_of_addUser_of_type = ref(Type_Server_Kinds[2].value)
+  let unwatch_server_set_of_addUser_of_type = watch(() => server_set_of_addUser_of_type.value, (newValue) => {
+    if(newValue === 'jellyfin') {
+      server_login_model_of_apikey.value = true
+    }else{
+      server_login_model_of_apikey.value = false
+    }
+  });
+  const server_set_of_addUser_of_servername = ref('jellyfin')
+  const server_set_of_addUser_of_url = ref('http://localhost:8096')
   const server_set_of_addUser_of_username = ref('')
   const server_set_of_addUser_of_password = ref('')
+  const server_login_model_of_apikey = ref(false)
+  const server_set_of_addUser_of_apikey = ref('5bddae4d151945799b86de39c5fc1137')
+  const server_set_of_addUser_of_apikey_user_option = ref([])
+  const server_set_of_addUser_of_apikey_load_complete = ref(false)
+  async function update_server_apikey_user_option(init: any) {
+    store_server_user_model.authorization_of_Je = server_set_of_addUser_of_apikey.value
+    // load User
+    const userService = new Users_ApiService_of_Je(server_set_of_addUser_of_url.value)
+    const result = await userService.getUsers_ALL()
+    server_set_of_addUser_of_apikey_user_option.value = []
+    store_server_user_model.userid_of_Je = ''
+    server_set_of_addUser_of_apikey_load_complete.value = false
+    if(result) {
+      if(Array.isArray(result) && result.length > 0) {
+        result.forEach((row: any, index: number) => {
+          server_set_of_addUser_of_apikey_user_option.value.push({
+            label: row.Name,
+            value: row.Id
+          });
+        });
+        if(init != true || init != 'true') {
+          store_server_user_model.userid_of_Je =
+              server_set_of_addUser_of_apikey_user_option.value[0].value
+        }else{
+          store_server_user_model.userid_of_Je = init
+        }
+        // load Library parentid_of_Je
+        const library_ApiService_of_Je = new Library_ApiService_of_Je(server_set_of_addUser_of_url.value)
+        const result_parentIds = await library_ApiService_of_Je.getLibrary_MediaFolders_ALL()
+        store_server_user_model.parentid_of_Je = []
+        if(result_parentIds.Items){
+          if(Array.isArray(result_parentIds.Items) && result_parentIds.Items.length > 0) {
+            result_parentIds.Items.forEach((row: any, index: number) => {
+              store_server_user_model.parentid_of_Je.push({
+                label: row.Name,
+                value: row.Id
+              });
+              if(row.CollectionType === 'music'){
+                store_server_user_model.parentid_of_Je_Music = row.Id
+              }
+            });
+          }
+        }
+        // complete
+        server_set_of_addUser_of_apikey_load_complete.value = true
+      }
+    }
+  }
   /// server add
   async function update_server_addUser() {
-    server_set_of_addUser_of_type.value = Type_Server_Selected.value;
     try{
       server_set_of_addUser_of_url.value = server_set_of_addUser_of_url.value.replace(/\/$/, '')
-      const result = await store_server_data_select_logic.update_server_addUser(
-          server_set_of_addUser_of_servername.value,
-          server_set_of_addUser_of_url.value,
-          server_set_of_addUser_of_username.value,
-          server_set_of_addUser_of_password.value,
-          server_set_of_addUser_of_type.value
-      )
-      if(result){
+      let result = null;
+      if(server_set_of_addUser_of_type.value === 'navidrome') {
+        result = await store_server_data_select_logic.update_server_addUser(
+            server_set_of_addUser_of_servername.value,
+            server_set_of_addUser_of_url.value,
+            server_set_of_addUser_of_username.value,
+            server_set_of_addUser_of_password.value,
+            server_set_of_addUser_of_type.value
+        )
+      }else if(server_set_of_addUser_of_type.value === 'jellyfin') {
+        if(server_set_of_addUser_of_apikey.value.length > 0 &&
+            store_server_user_model.userid_of_Je.length > 0){
+          if(server_set_of_addUser_of_apikey_load_complete.value) {
+            result = await store_server_data_select_logic.update_server_addUser(
+                server_set_of_addUser_of_servername.value,
+                server_set_of_addUser_of_url.value,
+
+                server_set_of_addUser_of_apikey.value,
+                store_server_user_model.userid_of_Je,
+
+                server_set_of_addUser_of_type.value
+            )
+          }
+        }
+      }
+      if (result) {
         message.success(t('form.addServer.success'))
-      }else{
-        message.error(t('error.invalidServer'),{ duration: 3000 })
+      } else {
+        message.error(t('error.invalidServer'), {duration: 3000})
       }
     }catch (e) {
       message.error(t('error.invalidServer'),{ duration: 3000 })
@@ -220,24 +295,40 @@
           id,
           type
       )
-      if(result){
+      if (result) {
         message.success(t('form.updateServer.success'))
-      }else{
-        message.error(t('error.invalidServer'),{ duration: 3000 })
+      } else {
+        message.error(t('error.invalidServer'), {duration: 3000})
       }
     }catch{
       message.error(t('error.invalidServer'),{ duration: 3000 })
     }
   }
   /// server update
-  async function update_server_setUser(id:string, server_name:string, url:string, user_name:string, password:string, type: string) {
+  async function update_server_setUser(
+      id:string, server_name:string, url:string,
+      user_name:string, password:string,
+      type: string
+  ) {
     try {
-      const result = await store_server_data_select_logic.update_server_setUser(
-          id,
-          server_name, url,
-          user_name, password,
-          type
-      )
+      let result = null;
+      if(server_set_of_addUser_of_type.value === 'navidrome') {
+        result = await store_server_data_select_logic.update_server_setUser(
+            id,
+            server_name, url,
+            user_name, password,
+            type
+        )
+      }else if(server_set_of_addUser_of_type.value === 'jellyfin') {
+        if(server_set_of_addUser_of_apikey_load_complete.value){
+          result = await store_server_data_select_logic.update_server_setUser(
+              id,
+              server_name, url,
+              user_name, password,
+              type
+          )
+        }
+      }
       if(result){
         message.success(t('form.updateServer.success'))
       }else{
@@ -261,8 +352,8 @@
           message.success(t('form.updateServer.success'))
           if(user_config?.type === 'navidrome'){
             store_server_user_model.server_select_kind = 'navidrome'
-          }else if(user_config?.type === 'subsonic'){
-            store_server_user_model.server_select_kind = 'subsonic'
+          }else if(user_config?.type === 'jellyfin'){
+            store_server_user_model.server_select_kind = 'jellyfin'
           }
         } else {
           message.error(t('error.invalidServer'), {duration: 3000})
@@ -626,6 +717,10 @@
   //////
   import { openLink } from '@/utils/electron/openLink';
   import {store_local_data_select_logic} from "@/data/data_stores/local/local_data_select/store_local_data_select_logic";
+  import error_album from "*.jpg";
+  import {
+    Library_ApiService_of_Je
+  } from "@/data/data_access/servers_configs/jellyfin_api/services_web/Library/index_service";
 </script>
 <template>
   <div class="view">
@@ -712,7 +807,15 @@
                                 >
                                   <div
                                       class="server_item_info"
-                                      @click="item.show = !item.show"
+                                      @click="() => {
+                                        item.show = !item.show;
+                                        if(item.type === 'jellyfin'){
+                                          server_login_model_of_apikey = true
+                                        }else{
+                                          server_login_model_of_apikey = false
+                                        }
+                                        update_server_apikey_user_option(item.password);
+                                      }"
                                       style="
                             width: 230px;
                             height: 54px;
@@ -757,6 +860,26 @@
                                                 <n-input clearable size="small" v-model:value="item.url" placeholder=""/>
                                               </n-input-group>
                                             </n-space>
+                                          </n-form>
+                                          <n-form v-if="server_login_model_of_apikey" style="margin-top: -12px;">
+                                            <n-space vertical style="margin-bottom: 10px;">
+                                              <span>{{ $t('HeaderApiKey') }}</span>
+                                              <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_apikey"/>
+                                              <n-button strong secondary type="info"
+                                                        @click="update_server_apikey_user_option(true)">
+                                                {{ $t('ButtonOk') }}
+                                              </n-button>
+                                            </n-space>
+                                            <n-space vertical style="margin-bottom: 10px;">
+                                              <span>{{ $t('LabelSelectUsers') }}</span>
+                                              <n-select
+                                                  v-model:value="store_server_user_model.userid_of_Je"
+                                                  :options="server_set_of_addUser_of_apikey_user_option"
+                                                  style="width: 220px;margin-top: 6px;"
+                                              />
+                                            </n-space>
+                                          </n-form>
+                                          <n-form v-else style="margin-top: -12px;">
                                             <n-space vertical size="small" style="margin-bottom: 10px;">
                                               <span>{{ $t('form.addServer.input_username') }}</span>
                                               <n-input clearable size="small" v-model:value="item.user_name" placeholder=""/>
@@ -1115,7 +1238,7 @@
                           </template>
                         </n-button>
                       </n-space>
-                      <n-radio-group v-model:value="Type_Server_Selected">
+                      <n-radio-group v-model:value="server_set_of_addUser_of_type">
                         <n-radio-button
                             style="text-align: center;width: 133px;"
                             disabled
@@ -1137,7 +1260,7 @@
                             :label="Type_Server_Kinds[2].label"
                         />
                       </n-radio-group>
-                      <n-radio-group v-model:value="Type_Server_Selected">
+                      <n-radio-group v-model:value="server_set_of_addUser_of_type">
                         <n-radio-button
                             style="text-align: center;width: 133px;"
                             :key="Type_Server_Kinds[3].value"
@@ -1152,7 +1275,7 @@
                             :label="Type_Server_Kinds[4].label"
                         />
                       </n-radio-group>
-                      <n-radio-group v-model:value="Type_Server_Selected">
+                      <n-radio-group v-model:value="server_set_of_addUser_of_type">
                         <n-radio-button
                             style="text-align: center;width: 133px;"
                             disabled
@@ -1180,7 +1303,25 @@
                           </n-input-group>
                         </n-space>
                       </n-form>
-                      <n-form style="margin-top: -12px;">
+                      <n-form v-if="server_login_model_of_apikey" style="margin-top: -12px;">
+                        <n-space vertical style="margin-bottom: 10px;">
+                          <span>{{ $t('HeaderApiKey') }}</span>
+                          <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_apikey"/>
+                          <n-button strong secondary type="info"
+                                    @click="update_server_apikey_user_option(true)">
+                            {{ $t('ButtonOk') }}
+                          </n-button>
+                        </n-space>
+                        <n-space vertical style="margin-bottom: 10px;">
+                          <span>{{ $t('LabelSelectUsers') }}</span>
+                          <n-select
+                              v-model:value="store_server_user_model.userid_of_Je"
+                              :options="server_set_of_addUser_of_apikey_user_option"
+                              style="width: 220px;margin-top: 6px;"
+                          />
+                        </n-space>
+                      </n-form>
+                      <n-form v-else style="margin-top: -12px;">
                         <n-space vertical style="margin-bottom: 10px;">
                           <span>{{ $t('form.addServer.input_username') }}</span>
                           <n-input clearable placeholder="" v-model:value="server_set_of_addUser_of_username"/>

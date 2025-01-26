@@ -11,7 +11,7 @@ export class Navidrome_Api_Services_Web {
         params?: Record<string, string>
     ): Promise<any> {
         const headers = {
-            'x-nd-authorization': `Bearer ${store_server_user_model.authorization}`,
+            'x-nd-authorization': `Bearer ${store_server_user_model.authorization_of_nd}`,
             'x-nd-client-unique-id': store_server_user_model.client_unique_id,
         };
         const queryString = new URLSearchParams(params).toString();

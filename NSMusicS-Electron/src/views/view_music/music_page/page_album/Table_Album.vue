@@ -61,6 +61,7 @@ const itemSecondarySize = ref(185);
 import error_album from '@/assets/img/error_album.jpg'
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
 import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
 const errorHandled = ref(new Map());
 const handleImageError = async (item: any) => {
   let result_src = error_album
@@ -155,7 +156,7 @@ const options_Sort_key = ref<SortItem[]>([
   {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
   // {label:'更新时间(外部信息)', key: 'external_info_updated_at', state_Sort: state_Sort.Default }
 ]);
-const options_Sort = computed(() => {
+let options_Sort = computed(() => {
   if(store_view_album_page_logic.page_albumlists_options_Sort_key != null && store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0){
     options_Sort_key.value.forEach(element => {
       if(element.key === store_view_album_page_logic.page_albumlists_options_Sort_key[0].columnKey)
@@ -189,6 +190,13 @@ const options_Sort = computed(() => {
     };
   });
 });
+onMounted(() => {
+  if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
+    options_Sort = options_Sort.filter((row: any) =>
+        row.key !== 'min_year' && row.key !== 'duration' && row.key !== 'updated_at'
+    );
+  }
+})
 const handleSelect_Sort = (key: string | number) => {
   let _state_Sort_: state_Sort = state_Sort.Default;
   let idx: number = -1;

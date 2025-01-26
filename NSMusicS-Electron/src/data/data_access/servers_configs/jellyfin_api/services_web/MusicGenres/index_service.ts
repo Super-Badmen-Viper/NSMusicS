@@ -1,8 +1,15 @@
 import {Jellyfin_Api_Services_Web} from "../Jellyfin_Api_Services_Web"
 
 export class MusicGenres_ApiService_of_Je extends Jellyfin_Api_Services_Web {
+    /**
+     * 获取所有音乐流派信息
+     * @returns 响应数据
+     */
     public async getMusicGenres_ALL(): Promise<any> {
-        return this.sendRequest(`/MusicGenres`);
+        return this.sendRequest(
+            'GET',
+            'MusicGenres'
+        );
     }
 
     // 获取所有流派

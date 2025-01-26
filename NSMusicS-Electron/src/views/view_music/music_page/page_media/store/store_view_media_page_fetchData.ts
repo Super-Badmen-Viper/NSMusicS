@@ -15,6 +15,9 @@ import {store_view_album_page_fetchData} from "../../page_album/store/store_view
 import {store_playlist_list_fetchData} from "../../../music_components/player_list/store/store_playlist_list_fetchData";
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron';
+import {
+    Get_Jellyfin_Temp_Data_To_LocalSqlite
+} from "../../../../../data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
 
 export const store_view_media_page_fetchData = reactive({
     async fetchData_Media(){
@@ -367,8 +370,13 @@ export const store_view_media_page_fetchData = reactive({
         }
     },
     async fetchData_Media_of_server_web_end(){
-        this._start += 100;
-        this._end += 100;
+        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            this._start += 100;
+            this._end += 100;
+        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            this._end += 100;
+            this._start = this._end - 99;
+        }
         await this.fetchData_Media_of_server_web()
     },
     async fetchData_Media_of_server_web(){
@@ -390,17 +398,39 @@ export const store_view_media_page_fetchData = reactive({
         } else if (selected != 'song_list_all') {
             playlist_id = selected
         }
-        let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-        await get_Navidrome_Temp_Data_To_LocalSqlite.get_media_list(
-            store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-            store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-            store_server_user_model.token,
-            store_server_user_model.salt,
-            String(this._end), _order, _sort, String(this._start),
-            _search, _starred, playlist_id,
-            this._album_id, this._artist_id,
-            store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : ''
-        )
+        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
+            await get_Navidrome_Temp_Data_To_LocalSqlite.get_media_list(
+                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                store_server_user_model.token,
+                store_server_user_model.salt,
+                String(this._end), _order, _sort, String(this._start),
+                _search, _starred, playlist_id,
+                this._album_id, this._artist_id,
+                store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : ''
+            )
+        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            const sortByMapping: { [key: string]: string } = {
+                'title': 'SortName',
+                'artist': 'Artist',
+                'album': 'Album',
+                'created_at': 'DateCreated',
+                'playDate': 'DatePlayed'
+            };
+            const sortBy = sortByMapping[_sort] || 'Default';
+            const sortOrder = _order === 'DESC' ? 'Descending' : 'Ascending'
+
+            let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
+            await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list(
+                playlist_id,
+                store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music, _search,
+                sortBy, sortOrder,
+                String(this._end - this._start), String(this._start),
+                'Audio',
+                'ParentId', 'Primary', 'true', '1'
+            )
+        }
     },
     fetchData_Media_of_data_synchronization_to_playlist(){
         store_view_media_page_info.media_Files_temporary.forEach((row) => {

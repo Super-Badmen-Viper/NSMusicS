@@ -17,7 +17,7 @@ export class User_Authorization_ApiWebService_of_ND extends Navidrome_Api_Servic
         };
         try {
             const response = await axios.post(url, data, { headers });
-            store_server_user_model.authorization = response.data.token
+            store_server_user_model.authorization_of_nd = response.data.token
             store_server_user_model.client_unique_id = response.data.id
         } catch (error: any) {
             console.error('Error inserting data:', error);

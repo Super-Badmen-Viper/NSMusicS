@@ -86,7 +86,7 @@ const options_Sort_key = ref<SortItem[]>([
   {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
   {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
 ]);
-const options_Sort = computed(() => {
+let options_Sort = computed(() => {
   if(store_view_media_page_logic.page_songlists_options_Sort_key != null && store_view_media_page_logic.page_songlists_options_Sort_key.length > 0){
     options_Sort_key.value.forEach(element => {
       if(element.key === store_view_media_page_logic.page_songlists_options_Sort_key[0].columnKey)
@@ -120,6 +120,13 @@ const options_Sort = computed(() => {
     };
   });
 });
+// onMounted(() => {
+//   if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
+//     options_Sort = options_Sort.filter((row: any) =>
+//         row.key !== 'year' && row.key !== 'duration' && row.key !== 'updated_at'
+//     );
+//   }
+// })
 const handleSelect_Sort = (key: string | number) => {
   let _state_Sort_: state_Sort = state_Sort.Default;
   let idx: number = -1;

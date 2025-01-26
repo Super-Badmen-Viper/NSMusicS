@@ -2,11 +2,9 @@ import {reactive} from 'vue'
 import {
     store_server_navidrome_userdata_logic
 } from "@/data/data_stores/server/server_data_select/server_navidrome_user_data/store_server_navidrome_userdata_logic";
-import {
-    store_server_subsonic_userdata_logic
-} from "@/data/data_stores/server/server_data_select/server_subsonic_user_data/store_server_subsonic_userdata_logic";
 import {Set_ServerInfo_To_LocalSqlite} from "../../../data_access/local_configs/class_Set_ServerInfo_To_LocalSqlite";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
+import {store_server_jellyfin_userdata_logic} from "./server_jellyfin_user_data/store_server_jellyfin_userdata_logic";
 
 export const store_server_data_select_logic = reactive({
     /// server add
@@ -25,14 +23,14 @@ export const store_server_data_select_logic = reactive({
                 server_set_of_addUser_of_password,
                 type
             );
-        }else if(type === 'subsonic'){
-            return store_server_subsonic_userdata_logic.subsonic_update_server_addUser(
+        }else if(type === 'jellyfin'){
+            return store_server_jellyfin_userdata_logic.jellyfin_update_server_addUser(
                 server_set_of_addUser_of_servername,
                 server_set_of_addUser_of_url,
                 server_set_of_addUser_of_username,
                 server_set_of_addUser_of_password,
                 type
-            );
+            )
         }
         return false
     },
@@ -50,13 +48,13 @@ export const store_server_data_select_logic = reactive({
                 user_name, password,
                 type
             );
-        }else if(type === 'subsonic'){
-            return store_server_subsonic_userdata_logic.subsonic_update_server_setUser(
+        }else if(type === 'jellyfin'){
+            return store_server_jellyfin_userdata_logic.jellyfin_update_server_setUser(
                 id,
                 server_name, url,
                 user_name, password,
                 type
-            );
+            )
         }
         return false
     },
@@ -70,10 +68,10 @@ export const store_server_data_select_logic = reactive({
             return store_server_navidrome_userdata_logic.navidrome_update_server_config_of_current_user_of_sqlite(
                 value
             );
-        }else if(type === 'subsonic'){
-            return store_server_subsonic_userdata_logic.subsonic_update_server_config_of_current_user_of_sqlite(
+        }else if(type === 'jellyfin'){
+            return store_server_jellyfin_userdata_logic.jellyfin_update_server_config_of_current_user_of_sqlite(
                 value
-            );
+            )
         }
         return false
     },
