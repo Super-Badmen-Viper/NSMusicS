@@ -104,6 +104,37 @@ export class Artists_ApiService_of_Je extends Jellyfin_Api_Services_Web {
         );
     }
 
+    public async getArtists_List_Quick_Filters(
+        userId: string, parentId: string,
+        filters: string
+    ): Promise<any> {
+        return this.sendRequest(
+            'GET',
+            'Artists',
+            {
+                userId,
+                parentId,
+                filters
+            }
+        );
+    }
+    public async getArtists_List_Quick(
+        userId: string, parentId: string,
+        includeItemTypes: string,
+        Recursive: string
+    ): Promise<any> {
+        return this.sendRequest(
+            'GET',
+            'Artists',
+            {
+                userId,
+                parentId,
+                includeItemTypes,
+                Recursive
+            }
+        );
+    }
+
     // 获取所有歌手
     // 获取选中 - 歌手 - 所有专辑：AlbumArtistIds(歌手id)
     // Items?SortOrder=Descending%2CDescending%2CAscending&IncludeItemTypes=MusicAlbum&Recursive=true&Fields=ParentId%2CPrimaryImageAspectRatio%2CParentId%2CPrimaryImageAspectRatio&Limit=100&StartIndex=0&CollapseBoxSetItems=false

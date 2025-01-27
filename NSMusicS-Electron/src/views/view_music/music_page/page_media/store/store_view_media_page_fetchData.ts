@@ -394,9 +394,8 @@ export const store_view_media_page_fetchData = reactive({
             _starred = 'true'
         } else if (selected === 'song_list_recently') {
             _order = 'desc'
+            _sort = 'playDate'
             if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
-                _sort = 'playDate'
-            }else{
                 _sort = 'DatePlayed'
             }
         } else if (selected != 'song_list_all') {
@@ -415,8 +414,11 @@ export const store_view_media_page_fetchData = reactive({
                 store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : ''
             )
         }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
-            const sortBy = _sort != 'id' ? _sort : 'IndexNumber';
-            const sortOrder = _order === 'desc' ? 'Descending' : 'Ascending'
+            const sortBy = _sort === 'DatePlayed'
+                ? 'DatePlayed,SortName' : (_sort != 'id' ? _sort : 'IndexNumber');
+            const sortOrder = _sort === 'DatePlayed'
+                ? 'Descending' : (_order === 'desc' ? 'Descending' : 'Ascending');
+            const filter = _starred === 'true' ? 'IsFavorite' : ''
             let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
             await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list(
                 playlist_id,
@@ -426,7 +428,8 @@ export const store_view_media_page_fetchData = reactive({
                 String(this._end - this._start), String(this._start),
                 'Audio',
                 'ParentId', 'Primary', 'true', '1',
-                store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : ''
+                store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : '',
+                filter
             )
         }
     },

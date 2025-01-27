@@ -321,9 +321,8 @@ export const store_view_album_page_fetchData = reactive({
             _starred = 'true'
         } else if (selected === 'album_list_recently') {
             _order = 'desc'
+            _sort = 'playDate'
             if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
-                _sort = 'playDate'
-            }else{
                 _sort = 'DatePlayed'
             }
         } else if (selected != 'album_list_all') {

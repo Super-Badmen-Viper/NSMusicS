@@ -26,13 +26,17 @@ import {store_player_audio_info} from "../../../../../views/view_music/music_pag
 import {Items_ApiService_of_Je} from "../services_web/Items/index_service";
 
 import {Audio_ApiService_of_Je} from "../services_web/Audio/index_service";
+import {Artists_ApiService_of_Je} from "../services_web/Artists/index_service";
+import axios from "axios";
 
 export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
     private audio_ApiService_of_Je = new Audio_ApiService_of_Je(
         store_server_users.server_config_of_current_user_of_sqlite?.url
     )
-    // 'title' 'artist' 'album' 'year' 'duration' 'created_at' 'updated_at'
     private items_ApiService_of_Je = new Items_ApiService_of_Je(
+        store_server_users.server_config_of_current_user_of_sqlite?.url
+    )
+    private artists_ApiService_of_Je = new Artists_ApiService_of_Je(
         store_server_users.server_config_of_current_user_of_sqlite?.url
     )
 
@@ -278,26 +282,35 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
         limit: string, startIndex: string,
         includeItemTypes: string,
         fields: string, enableImageTypes: string, recursive: string, imageTypeLimit: string,
-        years: string
+        years: string, filters: string
     ){
         let songlist = []
         if(playlist_id === '') {
-            const list = await this.items_ApiService_of_Je.getItems_SongList(
+            const list = await this.items_ApiService_of_Je.getItems_List(
                 userId, parentId, searchTerm,
                 sortBy, sortOrder,
                 limit, startIndex,
                 includeItemTypes,
                 fields, enableImageTypes, recursive, imageTypeLimit,
-                years
+                years, filters
             )
             songlist = list.Items;
+            store_view_media_page_info.media_item_count = list.TotalRecordCount
         }else{
-            // const {data,totalCount} = await this.items_ApiService_of_Je.getMediaList_of_Playlist(
-            //     playlist_id,
-            //     _end, _order, _sort, _start,
-            //     years
-            // )
-            // songlist = data
+            const response_playlMedias = await axios(
+                store_server_users.server_config_of_current_user_of_sqlite?.url + '/Playlists/' +
+                playlist_id + '/Items?Fields=PrimaryImageAspectRatio&EnableImageTypes=Primary%2CBackdrop%2CBanner%2CThumb&UserId=' +
+                store_server_user_model.userid_of_Je + '&api_key=' +
+                store_server_user_model.authorization_of_Je
+            );
+            songlist = Array.isArray(response_playlMedias.data.Items)
+                ? response_playlMedias.data.Items
+                : [];
+            if(store_view_media_page_info.media_Files_temporary.length > 0 && songlist.length > 0){
+                if(store_view_media_page_info.media_Files_temporary[0].id === songlist[0].Id){
+                    songlist = []
+                }
+            }
         }
         if (Array.isArray(songlist) && songlist.length > 0) {
             store_playlist_list_fetchData._totalCount = songlist.length
@@ -743,66 +756,120 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
     }
 
     /// file count
-    public async get_count_of_media_file(
-        url: string,
-        username: string,token: string,salt: string
-    ){
+    public async get_count_of_media_file(){
         try{
-            let media_library_scanning_ApiService_of_ND = new Media_library_scanning_ApiService_of_ND(url);
-            const getScanStatus = await media_library_scanning_ApiService_of_ND.getScanStatus(username, token, salt);
-            store_view_media_page_info.media_item_count = Number(getScanStatus["subsonic-response"]["scanStatus"]["count"]);
+            const list_audio = await this.items_ApiService_of_Je.getItems_List_Quick_Filters(
+                store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music,
+                'Audio','ParentId',
+                ''
+            )
+            store_view_media_page_info.media_item_count = list_audio.TotalRecordCount
         }catch{}
     }
-    public async get_count_of_artist_album(
-        url: string,
-        username: string,token: string,salt: string
-    ){
+    public async get_count_of_artist_album(){
         try{
-            let browsing_ApiService_of_ND = new Browsing_ApiService_of_ND(url);
-            const getArtists_ALL = await browsing_ApiService_of_ND.getArtists_ALL(username, token, salt);
-            const list = getArtists_ALL["subsonic-response"]["artists"]["index"];
-            if(list != undefined && Array.isArray(list)) {
-                store_view_artist_page_info.artist_item_count = list.reduce((total, item) => total + item.artist.length, 0);
-                store_view_album_page_info.album_item_count = list.reduce((sum, index) => {
-                    return sum + index.artist.reduce((artistSum, artist) => {
-                        return artistSum + artist.albumCount;
-                    }, 0);
-                }, 0);
-            }
+            const list_album = await this.items_ApiService_of_Je.getItems_List_Quick_Filters(
+                store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music,
+                'MusicAlbum','ParentId',
+                ''
+            )
+            store_view_album_page_info.album_item_count = list_album.TotalRecordCount
+            //
+            const list_artist = await this.artists_ApiService_of_Je.getArtists_List_Quick(
+                store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music,
+            )
+            store_view_artist_page_info.artist_item_count = list_artist.TotalRecordCount
         }catch{}
     }
     /// starred count
-    public async get_count_of_starred(
-        url: string,
-        username: string,token: string,salt: string
-    ){
+    public async get_count_of_starred(){
         try{
-            let album$Medias_Lists_ApiService_of_ND = new Album$Medias_Lists_ApiService_of_ND(url);
-            const getStarred2_all = await album$Medias_Lists_ApiService_of_ND.getStarred2_all(username, token, salt);
-            const starred2_artist = getStarred2_all["subsonic-response"]["starred2"]["artist"];
-            const starred2_album = getStarred2_all["subsonic-response"]["starred2"]["album"];
-            const starred2_song = getStarred2_all["subsonic-response"]["starred2"]["song"];
-            if(starred2_song != undefined)
-                store_view_media_page_info.media_starred_count = starred2_song.length ||0
-            if(starred2_album != undefined)
-                store_view_album_page_info.album_starred_count = starred2_album.length ||0
-            if(starred2_artist != undefined)
-                store_view_artist_page_info.artist_starred_count = starred2_artist.length || 0
+            const list_audio = await this.items_ApiService_of_Je.getItems_List_Quick_Filters(
+                store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music,
+                'Audio','ParentId',
+                'IsFavorite'
+            )
+            store_view_media_page_info.media_starred_count = list_audio.TotalRecordCount
+            //
+            const list_album = await this.items_ApiService_of_Je.getItems_List_Quick_Filters(
+                store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music,
+                'MusicAlbum','ParentId',
+                'IsFavorite'
+            )
+            store_view_album_page_info.album_starred_count = list_album.TotalRecordCount
+            //
+            const list_artist = await this.artists_ApiService_of_Je.getArtists_List_Quick_Filters(
+                store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music,
+                'IsFavorite'
+            )
+            store_view_artist_page_info.artist_starred_count = list_artist.TotalRecordCount
         }catch{}
     }
     /// playlist count
-    public async get_count_of_playlist(
-        url: string,
-        username: string,token: string,salt: string
-    ){
+    public async get_count_of_playlist(){
         try{
-            let playlists_ApiService_of_ND = new Playlists_ApiService_of_ND(url);
-            const getPlaylists_all = await playlists_ApiService_of_ND.getPlaylists_all(username, token, salt);
-            const playlists = getPlaylists_all["subsonic-response"]["playlists"]["playlist"];
-            if(playlists != undefined)
-                store_view_media_page_info.media_playlist_count = playlists.length || 0;
+            const response = await axios(
+                store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
+                store_server_user_model.userid_of_Je + '/Items?IncludeItemTypes=Playlist&Recursive=true&api_key=' +
+                store_server_user_model.authorization_of_Je
+            );
+            store_view_media_page_info.media_playlist_count = response.data.TotalRecordCount
         }catch{}
     }
+
+    public async get_playlist_je(){
+        const response_playlists = await axios(
+            store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
+            store_server_user_model.userid_of_Je + '/Items?IncludeItemTypes=Playlist&Recursive=true&api_key=' +
+            store_server_user_model.authorization_of_Je
+        );
+        const playlists = response_playlists.data.Items;
+        store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = [];
+        if (playlists != null) {
+            for (const playlist of playlists) {
+                let playlist_tracks = []
+                const response_playlMedias = await axios(
+                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/Playlists/' +
+                    playlist.Id + '/Items?Fields=PrimaryImageAspectRatio&EnableImageTypes=Primary%2CBackdrop%2CBanner%2CThumb&UserId=' +
+                    store_server_user_model.userid_of_Je + '&api_key=' +
+                    store_server_user_model.authorization_of_Je
+                );
+                const playlMedias = Array.isArray(response_playlMedias.data.Items)
+                    ? response_playlMedias.data.Items
+                    : [];
+                for (const song of playlMedias) {
+                    const sqlite_song = {
+                        id: playlist.Id,
+                        playlist_id: playlist.Id,
+                        media_file_id: song.Id
+                    };
+                    playlist_tracks.push(sqlite_song);
+                }
+                store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
+                    playlist: {
+                        label: playlist.Name,
+                        value: playlist.Id,
+                        id: playlist.Id,
+                        name: playlist.Name,
+                        comment: '',
+                        duration: playlist.RunTimeTicks || 0,
+                        song_count: playlist.ChildCount || 0,
+                        public: 0,
+                        created_at: '',
+                        updated_at: '',
+                        path: '',
+                        sync: 0,
+                        size: 0,
+                        rules: null,
+                        evaluated_at: '',
+                        owner_id: store_server_user_model.username,
+                    },
+                    playlist_tracks: playlist_tracks
+                });
+            }
+        }
+    }
+
     /// recently count
     public async get_count_of_recently_media(
         url: string,

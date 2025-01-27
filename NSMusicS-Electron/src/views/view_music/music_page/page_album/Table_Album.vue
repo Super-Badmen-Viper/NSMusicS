@@ -190,13 +190,6 @@ let options_Sort = computed(() => {
     };
   });
 });
-onMounted(() => {
-  if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
-    options_Sort = options_Sort.filter((row: any) =>
-        row.key !== 'min_year' && row.key !== 'duration' && row.key !== 'updated_at'
-    );
-  }
-})
 const handleSelect_Sort = (key: string | number) => {
   let _state_Sort_: state_Sort = state_Sort.Default;
   let idx: number = -1;
@@ -222,8 +215,10 @@ const handleSelect_Sort = (key: string | number) => {
       _state_Sort_ = state_Sort.Descend;
       break;
   }
-  const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
-  store_view_album_page_logic.page_albumlists_options_Sort_key = sortersArray
+  store_view_album_page_logic.page_albumlists_options_Sort_key = [{
+    columnKey: String(key),
+    order: _state_Sort_
+  }];
 
   scrollTo(0)
 }

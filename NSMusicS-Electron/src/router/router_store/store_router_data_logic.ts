@@ -18,6 +18,9 @@ import {
 } from "../../data/data_access/servers_configs/navidrome_api/services_web_instant_access/class_Get_Navidrome_Temp_Data_To_LocalSqlite";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import { isElectron } from '@/utils/electron/isElectron';
+import {
+    Get_Jellyfin_Temp_Data_To_LocalSqlite
+} from "../../data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
 
 export const store_router_data_logic = reactive({
     reset_data(){
@@ -161,7 +164,7 @@ export const store_router_data_logic = reactive({
         store_view_album_page_logic.page_albumlists_input_search_Value = value
     },
 
-    get_page_top_info(){
+    async get_page_top_info(){
         if(isElectron) {
             if (store_server_user_model.model_server_type_of_local) {
                 const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
@@ -261,32 +264,42 @@ export const store_router_data_logic = reactive({
                     db.exec('PRAGMA foreign_keys = ON');
                     db.close();
                 }
-            } else if (store_server_user_model.model_server_type_of_web) {
-                let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-                get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_media_file(
-                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                    store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                    store_server_user_model.token,
-                    store_server_user_model.salt,
-                )
-                get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_artist_album(
-                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                    store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                    store_server_user_model.token,
-                    store_server_user_model.salt,
-                )
-                get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_starred(
-                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                    store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                    store_server_user_model.token,
-                    store_server_user_model.salt,
-                )
-                get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_playlist(
-                    store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-                    store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-                    store_server_user_model.token,
-                    store_server_user_model.salt,
-                )
+            }
+            else if (store_server_user_model.model_server_type_of_web) {
+                if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+                    let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
+                    await get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_media_file(
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                        store_server_user_model.token,
+                        store_server_user_model.salt,
+                    )
+                    await get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_artist_album(
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                        store_server_user_model.token,
+                        store_server_user_model.salt,
+                    )
+                    await get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_starred(
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                        store_server_user_model.token,
+                        store_server_user_model.salt,
+                    )
+                    await get_Navidrome_Temp_Data_To_LocalSqlite.get_count_of_playlist(
+                        store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                        store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                        store_server_user_model.token,
+                        store_server_user_model.salt,
+                    )
+                }
+                else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
+                    let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
+                    await get_Jellyfin_Temp_Data_To_LocalSqlite.get_count_of_media_file()
+                    await get_Jellyfin_Temp_Data_To_LocalSqlite.get_count_of_artist_album()
+                    await get_Jellyfin_Temp_Data_To_LocalSqlite.get_count_of_starred()
+                    await get_Jellyfin_Temp_Data_To_LocalSqlite.get_count_of_playlist()
+                }
             }
         } else {
             // other

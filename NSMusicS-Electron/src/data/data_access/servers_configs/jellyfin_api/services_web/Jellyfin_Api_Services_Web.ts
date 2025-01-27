@@ -1,7 +1,5 @@
 import axios from 'axios';
 import { store_server_user_model } from "@/data/data_stores/server/store_server_user_model";
-import {Users_ApiService_of_Je} from "./Users/index_service";
-import {Library_ApiService_of_Je} from "./Library/index_service";
 
 export class Jellyfin_Api_Services_Web {
     protected readonly baseUrl: string;

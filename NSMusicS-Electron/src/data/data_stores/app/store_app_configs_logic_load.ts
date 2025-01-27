@@ -421,7 +421,7 @@ export const store_app_configs_logic_load = reactive({
 
         /// close
         try {
-            store_router_data_logic.get_page_top_info()
+            await store_router_data_logic.get_page_top_info()
         }catch{ }
         store_app_configs_info.app_view_left_menu_select_activeKey = '' + system_Configs_Read.app_Configs.value['app_view_left_menu_select_activeKey']
         store_router_data_info.router_name = '' + system_Configs_Read.app_Configs.value['router_name']

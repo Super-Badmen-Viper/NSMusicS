@@ -141,7 +141,6 @@ export const store_player_audio_logic = reactive({
             const audio_ApiService_of_Je = new Audio_ApiService_of_Je(
                 store_server_users.server_config_of_current_user_of_sqlite?.url
             )
-            // 获取歌词
             const getAudio_lyrics_id = await audio_ApiService_of_Je.getAudio_lyrics_id(media_file.id);
             const lyrics = getAudio_lyrics_id != undefined
                 ? this.convertToLRC_Array_of_Je(getAudio_lyrics_id.Lyrics) : '';

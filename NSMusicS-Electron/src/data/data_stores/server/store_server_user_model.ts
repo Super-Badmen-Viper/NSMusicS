@@ -17,6 +17,9 @@ import {store_player_audio_logic} from "../../../views/view_music/music_page/pag
 import {Audio_node_mpv} from "../../data_models/song_Audio_Out/Audio_node_mpv";
 import {Audio_howler} from "../../data_models/song_Audio_Out/Audio_howler";
 import {ipcRenderer, isElectron} from '@/utils/electron/isElectron';
+import {
+    Get_Jellyfin_Temp_Data_To_LocalSqlite
+} from "../../data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
 
 export const store_server_user_model = reactive({
     model_select: 'server',
@@ -150,7 +153,8 @@ export const store_server_user_model = reactive({
                 store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
             );
         }else if(user_config?.type === 'jellyfin'){
-
+            let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
+            await get_Jellyfin_Temp_Data_To_LocalSqlite.get_playlist_je()
         }
     },
 })

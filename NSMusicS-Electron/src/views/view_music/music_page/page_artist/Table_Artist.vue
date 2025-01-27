@@ -191,8 +191,10 @@ const handleSelect_Sort = (key: string | number) => {
       _state_Sort_ = state_Sort.Descend;
       break;
   }
-  const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
-  store_view_artist_page_logic.page_artistlists_options_Sort_key = sortersArray
+  store_view_artist_page_logic.page_artistlists_options_Sort_key = [{
+    columnKey: String(key),
+    order: _state_Sort_
+  }];
 
   scrollTo(0)
 }

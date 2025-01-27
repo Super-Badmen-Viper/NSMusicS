@@ -78,22 +78,7 @@ type SortItem = {
   state_Sort: state_Sort;
 };
 const options_Sort_key = ref<SortItem[]>([]);
-if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
-  options_Sort_key.value = [
-    {label:computed(() => t('OptionTrackName')), key: 'Name', state_Sort: state_Sort.Default },
-    {label:computed(() => t('AlbumArtist')), key: 'AlbumArtist', state_Sort: state_Sort.Default },
-    {label:computed(() => t('Artist')), key: 'Artist', state_Sort: state_Sort.Default },
-    {label:computed(() => t('Album')), key: 'Album', state_Sort: state_Sort.Default },
-    {label:computed(() => t('DateAdded')), key: 'DateCreated', state_Sort: state_Sort.Default },
-
-    {label:computed(() => t('DatePlayed')), key: 'DatePlayed', state_Sort: state_Sort.Default },
-    {label:computed(() => t('PlayCount')), key: 'PlayCount', state_Sort: state_Sort.Default },
-    {label:computed(() => t('ReleaseDate')), key: 'PremiereDate', state_Sort: state_Sort.Default },
-    {label:computed(() => t('Runtime')), key: 'Runtime', state_Sort: state_Sort.Default },
-    {label:computed(() => t('OptionRandom')), key: 'Random', state_Sort: state_Sort.Default },
-  ]
-}
-else{
+if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
   options_Sort_key.value = [
     {label:computed(() => t('filter.title')), key: 'title', state_Sort: state_Sort.Default },
     {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
@@ -102,6 +87,18 @@ else{
     {label:computed(() => t('filter.duration')), key: 'duration', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
     {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
+  ]
+}else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
+  options_Sort_key.value = [
+    {label:computed(() => t('OptionTrackName')), key: 'Name', state_Sort: state_Sort.Default },
+    {label:computed(() => t('AlbumArtist')), key: 'AlbumArtist', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Artist')), key: 'Artist', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Album')), key: 'Album', state_Sort: state_Sort.Default },
+    {label:computed(() => t('DateAdded')), key: 'DateCreated', state_Sort: state_Sort.Default },
+    {label:computed(() => t('PlayCount')), key: 'PlayCount', state_Sort: state_Sort.Default },
+    {label:computed(() => t('ReleaseDate')), key: 'PremiereDate', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Runtime')), key: 'Runtime', state_Sort: state_Sort.Default },
+    {label:computed(() => t('OptionRandom')), key: 'Random', state_Sort: state_Sort.Default },
   ]
 }
 let options_Sort = computed(() => {
@@ -164,8 +161,10 @@ const handleSelect_Sort = (key: string | number) => {
       break;
   }
   store_view_media_page_logic.list_options_Hand_Sort = true
-  const sortersArray: { columnKey: string; order: string }[] = [{ columnKey: String(key), order: _state_Sort_ }];
-  store_view_media_page_logic.page_songlists_options_Sort_key = sortersArray
+  store_view_media_page_logic.page_songlists_options_Sort_key = [{
+    columnKey: String(key),
+    order: _state_Sort_
+  }];
 
   scrollTo(0)
 }
@@ -1049,7 +1048,7 @@ onBeforeUnmount(() => {
             </n-card>
           </n-modal>
 
-          <n-divider vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
+          <n-divider v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'" vertical style="width: 2px;height: 20px;margin-top: -4px;"/>
           <n-tooltip
               v-if="store_view_media_page_logic.page_songlists_selected !== 'song_list_recently'"
               trigger="hover" placement="top">
