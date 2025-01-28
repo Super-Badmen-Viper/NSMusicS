@@ -10,6 +10,11 @@ import {store_server_users} from "@/data/data_stores/server/store_server_users";
 import {
     Audio_ApiService_of_Je
 } from "../../../../../data/data_access/servers_configs/jellyfin_api/services_web/Audio/index_service";
+import {store_server_user_model} from "../../../../../data/data_stores/server/store_server_user_model";
+import {store_view_media_page_info} from "../../page_media/store/store_view_media_page_info";
+import {
+    UserPlayedItems_ApiService_of_Je
+} from "../../../../../data/data_access/servers_configs/jellyfin_api/services_web/UserPlayedItems/index_service";
 
 export const store_player_audio_logic = reactive({
     player: new Audio_node_mpv(),
@@ -120,6 +125,18 @@ export const store_player_audio_logic = reactive({
         }
     },
     async update_current_media_info(media_file:any,index:number){
+        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            const audio_ApiService_of_Je = new Audio_ApiService_of_Je(
+                store_server_users.server_config_of_current_user_of_sqlite?.url
+            )
+            const getAudio_lyrics_id = await audio_ApiService_of_Je.getAudio_lyrics_id(media_file.id);
+            const lyrics = getAudio_lyrics_id != undefined
+                ? this.convertToLRC_Array_of_Je(getAudio_lyrics_id.Lyrics) : '';
+            store_player_audio_info.this_audio_lyrics_string = lyrics;
+        }else{
+            store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
+        }
+        //
         store_player_audio_info.this_audio_play_id = media_file.play_id
         store_player_audio_info.this_audio_file_path = media_file.path
         store_player_audio_info.this_audio_file_medium_image_url = media_file.medium_image_url
@@ -136,18 +153,6 @@ export const store_player_audio_logic = reactive({
         store_player_tag_modify.player_current_media_starred = media_file.favorite
         store_player_tag_modify.player_current_media_playCount = media_file.play_count
         store_player_tag_modify.player_current_media_playDate = media_file.play_date
-        //
-        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
-            const audio_ApiService_of_Je = new Audio_ApiService_of_Je(
-                store_server_users.server_config_of_current_user_of_sqlite?.url
-            )
-            const getAudio_lyrics_id = await audio_ApiService_of_Je.getAudio_lyrics_id(media_file.id);
-            const lyrics = getAudio_lyrics_id != undefined
-                ? this.convertToLRC_Array_of_Je(getAudio_lyrics_id.Lyrics) : '';
-            store_player_audio_info.this_audio_lyrics_string = lyrics;
-        }else{
-            store_player_audio_info.this_audio_lyrics_string = media_file.lyrics
-        }
     },
     convertToLRC_Array_of_Je(lyrics: {
         Text: string;

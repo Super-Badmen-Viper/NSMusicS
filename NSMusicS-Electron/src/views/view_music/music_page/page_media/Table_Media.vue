@@ -1543,7 +1543,8 @@ onBeforeUnmount(() => {
           {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>
         <v-contextmenu-divider />
-        <v-contextmenu-item>
+        <v-contextmenu-item
+            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'">
           <rate
             class="viaSlot"
             style="margin-left: -12px;margin-top: -12px;height: 16px;"

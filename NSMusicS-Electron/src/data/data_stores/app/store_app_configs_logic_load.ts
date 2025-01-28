@@ -62,9 +62,9 @@ export const store_app_configs_logic_load = reactive({
                 }
             });
             if(
-                store_router_data_logic.clear_Memory_Model === false &&
-                store_router_data_logic.clear_UserExperience_Model === false &&
-                store_router_data_logic.clear_Equilibrium_Model === false
+                !store_router_data_logic.clear_Memory_Model &&
+                !store_router_data_logic.clear_UserExperience_Model &&
+                !store_router_data_logic.clear_Equilibrium_Model
             ) {
                 store_router_data_logic.clear_Equilibrium_Model = true
             }

@@ -1,10 +1,12 @@
-import { reactive } from 'vue'
+import {reactive, watch} from 'vue'
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
 import { isElectron } from '@/utils/electron/isElectron';
 
 export const store_server_users = reactive({
     percentage_of_local: 0,
     percentage_of_nd: 0,
+
+    server_select: '',
     
     server_config_of_current_user_of_sqlite: undefined as Server_Configs_Props | undefined,
     server_config_of_all_user_of_sqlite: [] as Server_Configs_Props[],

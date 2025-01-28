@@ -1148,7 +1148,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                width: store_player_appearance.player_show ? '160px' : '132px'
              }"
         >
-          <n-space justify="end">
+          <n-space justify="end" v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-rate clearable size="small"
@@ -1158,7 +1158,11 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
               {{ $t('filter.rating') }}
             </n-tooltip>
           </n-space>
-          <n-space justify="space-between" style="margin-top: 6px;">
+          <n-space justify="space-between"
+                   :style="{
+                      marginTop: store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
+                      ? '6px' : '28.5px'
+                   }">
             <n-tooltip trigger="hover" placement="top"
                        v-if="store_player_appearance.player_show">
               <template #trigger>

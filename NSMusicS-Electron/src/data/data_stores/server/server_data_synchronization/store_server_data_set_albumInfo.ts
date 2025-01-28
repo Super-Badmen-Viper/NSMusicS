@@ -22,11 +22,15 @@ export const store_server_data_set_albumInfo = reactive({
         }
     },
     async Set_AlbumInfo_To_Rating(id: any, value: any) {
-        await new Media_Annotation_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
-            .set_rating(
-                store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
-                id,
-                String(value));
+        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            await new Media_Annotation_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
+                .set_rating(
+                    store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
+                    id,
+                    String(value));
+        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            // Jellyfin does not support rating
+        }
     },
     async Set_AlbumInfo_To_PlayCount_of_Album(item_id: any) {
         await new Media_Annotation_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
