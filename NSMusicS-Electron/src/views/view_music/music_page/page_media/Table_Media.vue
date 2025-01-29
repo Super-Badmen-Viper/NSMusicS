@@ -501,14 +501,14 @@ async function update_playlist_addPlaylist(){
   try{
     if(store_server_user_model.model_select === 'server'){
       // send json to server
-      let getCreatePlaylist_set_id = await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
+      let getCreatePlaylist_set_id = await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist(
           playlist_set_of_addPlaylist_of_playlistname.value,
           playlist_set_of_addPlaylist_of_public.value
       )
       console.log('CreatePlaylist_of_ND: ' + store_server_user_model.username + ': ' +
           getCreatePlaylist_set_id
       )
-      await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(
+      await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist(
           getCreatePlaylist_set_id,
           playlist_set_of_addPlaylist_of_playlistname.value,
           playlist_set_of_addPlaylist_of_comment.value,
@@ -566,7 +566,7 @@ async function update_playlist_updatePlaylist(){
     Type_Update_Playlist.value = !Type_Update_Playlist.value
 
     if(store_server_user_model.model_select === 'server'){
-      await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(
+      await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist(
           playlist_update_emit_id.value,
           playlist_set_of_updatePlaylist_of_playlistcomment.value,
           playlist_set_of_updatePlaylist_of_comment.value,
@@ -583,7 +583,7 @@ async function update_playlist_deletePlaylist(){
     Type_Update_Playlist.value = !Type_Update_Playlist.value
 
     if(store_server_user_model.model_select === 'server'){
-      await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_DeletePlaylist_of_ND(
+      await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_DeletePlaylist(
           playlist_update_emit_id.value
       )
     }
@@ -1539,12 +1539,14 @@ onBeforeUnmount(() => {
         <v-contextmenu-item @click="menu_item_add_to_playlist_next">
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
-        <v-contextmenu-item @click="menu_item_edit_selected_media_tags">
+        <v-contextmenu-item
+            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'"
+            @click="menu_item_edit_selected_media_tags">
           {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>
-        <v-contextmenu-divider />
+        <v-contextmenu-divider v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'"/>
         <v-contextmenu-item
-            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'">
+          v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'">
           <rate
             class="viaSlot"
             style="margin-left: -12px;margin-top: -12px;height: 16px;"

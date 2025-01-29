@@ -1161,7 +1161,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
           <n-space justify="space-between"
                    :style="{
                       marginTop: store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
-                      ? '6px' : '28.5px'
+                      ? '6px' : '16px'
                    }">
             <n-tooltip trigger="hover" placement="top"
                        v-if="store_player_appearance.player_show">
@@ -1170,13 +1170,18 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                   size="tiny" text
                   @click="store_player_audio_logic.drawer_theme_show = !store_player_audio_logic.drawer_theme_show">
                   <template #icon>
-                    <n-icon :size="22"><Settings24Regular /></n-icon>
+                    <n-icon
+                        :size="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
+                        ? 22 : 26">
+                      <Settings24Regular />
+                    </n-icon>
                   </template>
                 </n-button>
               </template>
               {{ $t('Play') + $t('nsmusics.view_player.view_seting.viewSeting')}}
             </n-tooltip>
-            <n-tooltip trigger="hover" placement="top">
+            <n-tooltip trigger="hover" placement="top"
+                       v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'">
               <template #trigger>
                 <n-button size="tiny" text
                           @click="() => {
@@ -1188,7 +1193,9 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                         store_player_tag_modify.player_show_tag_modify = !store_player_tag_modify.player_show_tag_modify
                       }">
                   <template #icon>
-                    <n-icon :size="22"><Tag16Regular/></n-icon>
+                    <n-icon :size="22">
+                      <Tag16Regular/>
+                    </n-icon>
                   </template>
                 </n-button>
               </template>
@@ -1198,8 +1205,17 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
               <template #trigger>
                 <n-button size="tiny" text @click="handleItemClick_Favorite(store_player_audio_info.this_audio_song_id,store_player_audio_info.this_audio_song_favorite);">
                   <template #icon>
-                    <n-icon v-if="store_player_audio_info.this_audio_song_favorite" :size="22" color="red"><Heart28Filled/></n-icon>
-                    <n-icon v-else :size="22"><Heart24Regular/></n-icon>
+                    <n-icon v-if="store_player_audio_info.this_audio_song_favorite"
+                            :size="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
+                            ? 22 : 26"
+                            color="red">
+                      <Heart28Filled/>
+                    </n-icon>
+                    <n-icon v-else
+                            :size="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
+                            ? 22 : 26">
+                      <Heart24Regular/>
+                    </n-icon>
                   </template>
                 </n-button>
               </template>
@@ -1209,7 +1225,10 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
               <template #trigger>
                 <n-button size="tiny" text @click="Set_Player_Show_Sound_effects">
                   <template #icon>
-                    <n-icon :size="22"><DeviceEq24Filled/></n-icon>
+                    <n-icon :size="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
+                            ? 22 : 26">
+                      <DeviceEq24Filled/>
+                    </n-icon>
                   </template>
                 </n-button>
               </template>
@@ -1219,7 +1238,10 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
               <template #trigger>
                 <n-button size="tiny" text @click="Set_Player_Show_Sound_speed">
                   <template #icon>
-                    <n-icon :size="22"><TopSpeed20Regular/></n-icon>
+                    <n-icon :size="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
+                            ? 22 : 26">
+                      <TopSpeed20Regular/>
+                    </n-icon>
                   </template>
                 </n-button>
               </template>
@@ -1229,7 +1251,10 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
               <template #trigger>
                 <n-button size="tiny" text @click="Set_Player_Show_Sound_more">
                   <template #icon>
-                    <n-icon :size="22"><MoreCircle32Regular/></n-icon>
+                    <n-icon :size="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
+                            ? 22 : 26">
+                      <MoreCircle32Regular/>
+                    </n-icon>
                   </template>
                 </n-button>
               </template>

@@ -1019,7 +1019,9 @@ onBeforeUnmount(() => {
         <v-contextmenu-item @click="menu_item_add_to_playlist_next">
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
-        <v-contextmenu-item @click="menu_item_edit_selected_media_tags">
+        <v-contextmenu-item
+            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'"
+            @click="menu_item_edit_selected_media_tags">
           {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>
       </v-contextmenu>

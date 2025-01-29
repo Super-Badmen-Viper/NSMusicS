@@ -26,7 +26,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
             }
         ).replace(/\//g, '-');
     }
-    public Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(name: string,comment: string, duration: number,song_count: number, _public_: number,owner_id: string) {
+    public Set_PlaylistInfo_To_Update_CreatePlaylist(name: string,comment: string, duration: number,song_count: number, _public_: number,owner_id: string) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             ///
@@ -68,7 +68,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         }
         return undefined
     }
-    public Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(id: string, name: string,comment: string, duration: number,song_count: number, _public_: number,owner_id: string) {
+    public Set_PlaylistInfo_To_Update_SetPlaylist(id: string, name: string,comment: string, duration: number,song_count: number, _public_: number,owner_id: string) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');
@@ -121,7 +121,7 @@ export class Set_PlaylistInfo_To_LocalSqlite {
         }
         return undefined
     }
-    public Set_PlaylistInfo_To_Update_DeletePlaylist_of_ND(id:string) {
+    public Set_PlaylistInfo_To_Update_DeletePlaylist(id:string) {
         if(isElectron) {
             const db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
             db.pragma('journal_mode = WAL');

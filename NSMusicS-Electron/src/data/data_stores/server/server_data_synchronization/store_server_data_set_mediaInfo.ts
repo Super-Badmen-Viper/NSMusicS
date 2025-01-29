@@ -14,6 +14,9 @@ import {
 import {
     UserFavoriteItems_ApiService_of_Je
 } from "../../../data_access/servers_configs/jellyfin_api/services_web/UserFavoriteItems/index_service";
+import {
+    Playlists_ApiService_of_Je
+} from "../../../data_access/servers_configs/jellyfin_api/services_web/Playlists/index_service";
 
 export const store_server_data_set_mediaInfo = reactive({
     async Set_MediaInfo_To_Favorite(id: string, value: Boolean){
@@ -67,18 +70,34 @@ export const store_server_data_set_mediaInfo = reactive({
     },
 
     async Set_MediaInfo_Add_Selected_Playlist(media_file_id: any, playlist_id: any){
-        await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
-            .updatePlaylist_songIdToAdd(
-                store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
-                playlist_id, media_file_id);
+        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
+                .updatePlaylist_songIdToAdd(
+                    store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
+                    playlist_id, media_file_id);
+        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).postPlaylists_Add(
+                playlist_id,
+                media_file_id,
+                store_server_user_model.userid_of_Je
+            )
+        }
     },
     async Set_MediaInfo_Delete_Selected_Playlist(media_file_id: any, playlist_id: any){
-        const index = await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_GetPlaylist_MediaIndex_of_ND(
-            playlist_id, [media_file_id]
-        )
-        await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
-            .updatePlaylist_songIndexToRemove(
-                store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
-                playlist_id, index[0]);
+        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            const index = await store_server_data_set_playlistInfo.Set_PlaylistInfo_To_Update_GetPlaylist_MediaIndex(
+                playlist_id, [media_file_id]
+            )
+            await new Playlists_ApiService_of_ND(store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest')
+                .updatePlaylist_songIndexToRemove(
+                    store_server_user_model.username, store_server_user_model.token, store_server_user_model.salt,
+                    playlist_id, index[0]);
+        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            // Jellyfin does not support rating Delete Selected Playlist_item
+            // await new Playlists_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).delPlaylists_Remove(
+            //     playlist_id,
+            //     media_file_id
+            // )
+        }
     }
 });

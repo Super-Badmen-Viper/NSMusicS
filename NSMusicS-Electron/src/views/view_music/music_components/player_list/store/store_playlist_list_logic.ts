@@ -7,6 +7,8 @@ import {
     store_local_data_set_playlistInfo
 } from "@/data/data_stores/local/local_data_synchronization/store_local_data_set_playlistInfo";
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
+import axios from "axios";
 
 export const store_playlist_list_logic = reactive({
     async reset_data() {
@@ -40,7 +42,7 @@ export const store_playlist_list_logic = reactive({
     playlist_contextmenu: ref(null as any),
 
     get_playlist_tracks_temporary_add(value: any){
-        const playlist = store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist_of_ND(
+        const playlist = store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_CreatePlaylist(
             value,
             'admin',0,0,0,'admin'
         )
@@ -60,7 +62,7 @@ export const store_playlist_list_logic = reactive({
         this.playlist_names_StartUpdate = true
     },
     get_playlist_tracks_temporary_update(value: any){
-        store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist_of_ND(
+        store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_SetPlaylist(
             value.id,value.name,
             'admin',0,0,0,'admin'
         )
@@ -80,7 +82,7 @@ export const store_playlist_list_logic = reactive({
         }
     },
     get_playlist_tracks_temporary_delete(value: any){
-        store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_DeletePlaylist_of_ND(value)
+        store_local_data_set_playlistInfo.Set_PlaylistInfo_To_Update_DeletePlaylist(value)
         const index = store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.findIndex((list: any) => list.playlist.id === value);
         if (index >= 0) {
             store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.splice(index,1)
@@ -96,20 +98,58 @@ export const store_playlist_list_logic = reactive({
             });
         }
     },
-    get_playlist_tracks_temporary_update_media_file(value: any){
+    async get_playlist_tracks_temporary_update_media_file(value: any){
         store_playlist_list_info.playlist_names_ALLLists = []
         store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = []
-        let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
-        get_PlaylistInfo_From_LocalSqlite.Get_Playlist().forEach((item:Play_List) =>{
-            store_playlist_list_info.playlist_names_ALLLists.push({
-                label: item.name,
-                value: item.id
-            })
-            store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
-                playlist: item,
-                playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id)
-            })
-        });
+        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            let get_PlaylistInfo_From_LocalSqlite = new Get_PlaylistInfo_From_LocalSqlite()
+            get_PlaylistInfo_From_LocalSqlite.Get_Playlist().forEach((item: Play_List) => {
+                store_playlist_list_info.playlist_names_ALLLists.push({
+                    label: item.name,
+                    value: item.id
+                })
+                store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
+                    playlist: item,
+                    playlist_tracks: get_PlaylistInfo_From_LocalSqlite.Get_Playlist_Tracks(item.id)
+                })
+            });
+        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            const response_playlists = await axios(
+                store_server_users.server_config_of_current_user_of_sqlite?.url + '/Users/' +
+                store_server_user_model.userid_of_Je + '/Items?IncludeItemTypes=Playlist&Recursive=true&api_key=' +
+                store_server_user_model.authorization_of_Je
+            );
+            const playlists = response_playlists.data.Items;
+            if (playlists != null) {
+                for (const playlist of playlists) {
+                    store_playlist_list_info.playlist_names_ALLLists.push({
+                        label: playlist.Name,
+                        value: playlist.Id
+                    })
+                    store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
+                        playlist: {
+                            label: playlist.Name,
+                            value: playlist.Id,
+                            id: playlist.Id,
+                            name: playlist.Name,
+                            comment: '',
+                            duration: playlist.RunTimeTicks || 0,
+                            song_count: playlist.ChildCount || 0,
+                            public: 0,
+                            created_at: '',
+                            updated_at: '',
+                            path: '',
+                            sync: 0,
+                            size: 0,
+                            rules: null,
+                            evaluated_at: '',
+                            owner_id: store_server_user_model.username,
+                        },
+                        playlist_tracks: []
+                    });
+                }
+            }
+        }
         // store_view_media_page_logic.list_data_StartUpdate = true
     },
 });

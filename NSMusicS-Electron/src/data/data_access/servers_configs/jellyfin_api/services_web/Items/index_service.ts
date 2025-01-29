@@ -106,4 +106,13 @@ export class Items_ApiService_of_Je extends Jellyfin_Api_Services_Web {
             }
         );
     }
+
+    public async delItems_List_Quick(
+        itemId: string
+    ): Promise<any> {
+        return this.sendRequest(
+            'DELETE',
+            `Items/${itemId}`
+        );
+    }
 }

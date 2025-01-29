@@ -9,12 +9,18 @@ export class Playlists_ApiService_of_Je extends Jellyfin_Api_Services_Web {
      * @returns 响应数据
      */
     public async postPlaylists_Create(
-        name: string, ids: string, mediaType: string
+        name: string, ids: string, mediaType: string,
+        userId: string
     ): Promise<any> {
         return this.sendRequest(
             'POST',
             'Playlists',
-            { Name: name, Ids: ids, MediaType: mediaType } // 查询参数
+            {
+                Name: name,
+                Ids: ids,
+                MediaType: mediaType,
+                userId
+            }
         );
     }
 
@@ -23,10 +29,11 @@ export class Playlists_ApiService_of_Je extends Jellyfin_Api_Services_Web {
      * @param playlistId 播放列表 ID
      * @returns 响应数据
      */
-    public async getPlaylists_id(playlistId: string): Promise<any> {
+    public async getPlaylists_id(playlistId: string, userId: string): Promise<any> {
         return this.sendRequest(
             'GET',
-            `Playlists/${playlistId}`
+            `Playlists/${playlistId}`,
+            { userId } // 查询参数
         );
     }
 
@@ -36,11 +43,11 @@ export class Playlists_ApiService_of_Je extends Jellyfin_Api_Services_Web {
      * @param ids 媒体项 ID 列表（逗号分隔）
      * @returns 响应数据
      */
-    public async postPlaylists_Add(playlistId: string, ids: string): Promise<any> {
+    public async postPlaylists_Add(playlistId: string, ids: string, userId: string): Promise<any> {
         return this.sendRequest(
             'POST',
             `Playlists/${playlistId}/Items`,
-            { ids } // 查询参数
+            { ids,userId } // 查询参数
         );
     }
 

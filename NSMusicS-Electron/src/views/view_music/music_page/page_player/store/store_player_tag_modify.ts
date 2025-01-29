@@ -196,7 +196,8 @@ watch(() => store_player_tag_modify.player_show_tag_modify, async (newValue) => 
                     //
                     store_player_tag_modify.player_current_artist_id = item.id
                 }
-            } else if (store_server_user_model.model_server_type_of_web) {
+            }
+            else if (store_server_user_model.model_server_type_of_web) {
                 /// show(no modify) web media_file_metadata
                 if (store_player_tag_modify.player_show_tag_kind === 'media') {
                     if (store_view_media_page_info.media_File_metadata != undefined && store_view_media_page_info.media_File_metadata.length > 0) {

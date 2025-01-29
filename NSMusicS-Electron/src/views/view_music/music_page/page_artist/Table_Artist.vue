@@ -402,6 +402,7 @@ import {store_view_album_page_fetchData} from "@/views/view_music/music_page/pag
 import {store_playlist_list_fetchData} from "@/views/view_music/music_components/player_list/store/store_playlist_list_fetchData";
 import {store_player_tag_modify} from "@/views/view_music/music_page/page_player/store/store_player_tag_modify";
 import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()
@@ -918,7 +919,9 @@ onBeforeUnmount(() => {
         <v-contextmenu-item @click="menu_item_add_to_playlist_next">
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
-        <v-contextmenu-item @click="menu_item_edit_selected_media_tags">
+        <v-contextmenu-item
+            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'"
+            @click="menu_item_edit_selected_media_tags">
           {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>
       </v-contextmenu>

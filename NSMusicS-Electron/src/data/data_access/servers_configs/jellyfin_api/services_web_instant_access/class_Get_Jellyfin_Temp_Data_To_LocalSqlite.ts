@@ -28,6 +28,9 @@ import {Items_ApiService_of_Je} from "../services_web/Items/index_service";
 import {Audio_ApiService_of_Je} from "../services_web/Audio/index_service";
 import {Artists_ApiService_of_Je} from "../services_web/Artists/index_service";
 import axios from "axios";
+import {
+    store_view_media_page_logic
+} from "../../../../../views/view_music/music_page/page_media/store/store_view_media_page_logic";
 
 export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
     private audio_ApiService_of_Je = new Audio_ApiService_of_Je(
@@ -824,6 +827,7 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
             store_server_user_model.authorization_of_Je
         );
         const playlists = response_playlists.data.Items;
+        store_playlist_list_info.playlist_names_ALLLists = [];
         store_playlist_list_info.playlist_tracks_temporary_of_ALLLists = [];
         if (playlists != null) {
             for (const playlist of playlists) {
@@ -845,6 +849,10 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     };
                     playlist_tracks.push(sqlite_song);
                 }
+                store_playlist_list_info.playlist_names_ALLLists.push({
+                    label: playlist.Name,
+                    value: playlist.Id
+                })
                 store_playlist_list_info.playlist_tracks_temporary_of_ALLLists.push({
                     playlist: {
                         label: playlist.Name,
@@ -866,6 +874,31 @@ export class Get_Jellyfin_Temp_Data_To_LocalSqlite{
                     },
                     playlist_tracks: playlist_tracks
                 });
+                const isDuplicate = store_view_media_page_logic.page_songlists.some(
+                    (item: Play_List) => item.id === playlist.Id
+                );
+                if (!isDuplicate) {
+                    const temp_playlist: Play_List = {
+                        label: playlist.Name,
+                        value: playlist.Id,
+                        id: playlist.Id,
+                        name: playlist.Name,
+                        comment: '',
+                        duration: playlist.RunTimeTicks,
+                        song_count: playlist.ChildCount + ' *',
+                        public: '',
+                        created_at: '',
+                        updated_at: '',
+                        path: '',
+                        sync: '',
+                        size: '',
+                        rules: '',
+                        evaluated_at: '',
+                        owner_id: store_server_user_model.userid_of_Je,
+                    };
+                    store_view_media_page_logic.page_songlists_options.push(temp_playlist);
+                    store_view_media_page_logic.page_songlists.push(temp_playlist);
+                }
             }
         }
     }
