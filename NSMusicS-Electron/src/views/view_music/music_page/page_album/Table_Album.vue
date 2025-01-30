@@ -146,16 +146,29 @@ type SortItem = {
   key: string;
   state_Sort: state_Sort;
 };
-const options_Sort_key = ref<SortItem[]>([
-  {label:computed(() => t('entity.album_other')), key: 'name', state_Sort: state_Sort.Default },
-  {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
-  {label:computed(() => t('filter.toYear')), key: 'min_year', state_Sort: state_Sort.Default },
-  // {label:computed(() => t('filter.fromYear')), key: 'max_year', state_Sort: state_Sort.Default },
-  {label:computed(() => t('common.duration')), key: 'duration', state_Sort: state_Sort.Default },
-  {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
-  {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
-  // {label:'更新时间(外部信息)', key: 'external_info_updated_at', state_Sort: state_Sort.Default }
-]);
+const options_Sort_key = ref<SortItem[]>([]);
+if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+  options_Sort_key.value = [
+    {label:computed(() => t('entity.album_other')), key: 'name', state_Sort: state_Sort.Default },
+    {label:computed(() => t('entity.artist_other')), key: 'artist', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.toYear')), key: 'min_year', state_Sort: state_Sort.Default },
+    {label:computed(() => t('common.duration')), key: 'duration', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.dateAdded')), key: 'created_at', state_Sort: state_Sort.Default },
+    {label:computed(() => t('filter.recentlyUpdated')), key: 'updated_at', state_Sort: state_Sort.Default },
+  ]
+}else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
+  options_Sort_key.value = [
+    {label:computed(() => t('OptionTrackName')), key: 'Name', state_Sort: state_Sort.Default },
+    {label:computed(() => t('AlbumArtist')), key: 'AlbumArtist', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Artist')), key: 'Artist', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Album')), key: 'Album', state_Sort: state_Sort.Default },
+    {label:computed(() => t('DateAdded')), key: 'DateCreated', state_Sort: state_Sort.Default },
+    {label:computed(() => t('PlayCount')), key: 'PlayCount', state_Sort: state_Sort.Default },
+    {label:computed(() => t('ReleaseDate')), key: 'PremiereDate', state_Sort: state_Sort.Default },
+    {label:computed(() => t('Runtime')), key: 'Runtime', state_Sort: state_Sort.Default },
+    {label:computed(() => t('OptionRandom')), key: 'Random', state_Sort: state_Sort.Default },
+  ]
+}
 let options_Sort = computed(() => {
   if(store_view_album_page_logic.page_albumlists_options_Sort_key != null && store_view_album_page_logic.page_albumlists_options_Sort_key.length > 0){
     options_Sort_key.value.forEach(element => {
@@ -1020,7 +1033,7 @@ onBeforeUnmount(() => {
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
         <v-contextmenu-item
-            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'"
+            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'"
             @click="menu_item_edit_selected_media_tags">
           {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>

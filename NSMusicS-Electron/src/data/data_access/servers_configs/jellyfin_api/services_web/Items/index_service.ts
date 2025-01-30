@@ -35,22 +35,6 @@ export class Items_ApiService_of_Je extends Jellyfin_Api_Services_Web {
     // StartIndex=0 Limit=100
     // ImageTypeLimit=1 Recursive=true
     // ParentId=28e9960207c978c0d9aaefc8ae2d3a79
-    /**
-     * 获取歌曲列表
-     * @param userId 用户 ID
-     * @param parentId 父级 ID（如专辑 ID 或文件夹 ID）
-     * @param searchTerm 搜索关键词
-     * @param sortBy 排序字段
-     * @param sortOrder 排序顺序（如 "Ascending" 或 "Descending"）
-     * @param limit 返回结果的最大数量
-     * @param startIndex 起始索引（用于分页）
-     * @param includeItemTypes 包含的项目类型（如 "Audio"）
-     * @param fields 返回的字段列表（如 "Name,Artist"）
-     * @param enableImageTypes 启用的图片类型（如 "Primary,Backdrop"）
-     * @param recursive 是否递归搜索子文件夹（如 "true" 或 "false"）
-     * @param imageTypeLimit 图片类型数量限制
-     * @returns 响应数据
-     */
     public async getItems_List(
         userId: string, parentId: string, searchTerm: string,
         sortBy: string, sortOrder: string,
@@ -63,20 +47,12 @@ export class Items_ApiService_of_Je extends Jellyfin_Api_Services_Web {
             'GET',
             'Items',
             {
-                userId,
-                parentId,
-                searchTerm,
-                sortBy,
-                sortOrder,
-                limit,
-                startIndex,
+                userId, parentId, searchTerm,
+                sortBy, sortOrder,
+                limit, startIndex,
                 includeItemTypes,
-                fields,
-                enableImageTypes,
-                recursive,
-                imageTypeLimit,
-                years,
-                filters
+                fields, enableImageTypes, recursive, imageTypeLimit,
+                years, filters
             }
         );
     }
@@ -87,6 +63,47 @@ export class Items_ApiService_of_Je extends Jellyfin_Api_Services_Web {
     // ImageTypeLimit=1 Recursive=true
     // ParentId=28e9960207c978c0d9aaefc8ae2d3a79
 
+    public async getItems_List_Last(
+        userId: string, parentId: string,
+        limit: string,
+        includeItemTypes: string,
+        fields: string, enableImageTypes: string, recursive: string, imageTypeLimit: string,
+        filters: string, enableTotalRecordCount: string
+    ): Promise<any> {
+        return this.sendRequest(
+            'GET',
+            'Items/Latest',
+            {
+                userId, parentId,
+                limit,
+                includeItemTypes,
+                fields, enableImageTypes, recursive, imageTypeLimit,
+                filters, enableTotalRecordCount
+            }
+        );
+    }
+
+    public async getItems_List_Home_Filters(
+        userId: string, parentId: string,
+        sortBy: string, sortOrder: string,
+        limit: string,
+        includeItemTypes: string,
+        fields: string, enableImageTypes: string, recursive: string, imageTypeLimit: string,
+        filters: string, enableTotalRecordCount: string
+    ): Promise<any> {
+        return this.sendRequest(
+            'GET',
+            'Items',
+            {
+                userId, parentId,
+                sortBy, sortOrder,
+                limit,
+                includeItemTypes,
+                fields, enableImageTypes, recursive, imageTypeLimit,
+                filters, enableTotalRecordCount
+            }
+        );
+    }
 
     public async getItems_List_Quick_Filters(
         userId: string, parentId: string,
@@ -98,8 +115,7 @@ export class Items_ApiService_of_Je extends Jellyfin_Api_Services_Web {
             'GET',
             'Items',
             {
-                userId,
-                parentId,
+                userId, parentId,
                 includeItemTypes,
                 Fields,
                 filters

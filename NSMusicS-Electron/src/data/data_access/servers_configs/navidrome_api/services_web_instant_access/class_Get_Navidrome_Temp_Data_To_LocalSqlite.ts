@@ -38,9 +38,6 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         store_server_users.server_config_of_current_user_of_sqlite?.url + '/api',
     )
 
-    /*
-    _order: title,album,artist,playCount,playDate,year,duration,createdAt,rating,starred
-     */
     public async get_home_list(
         url: string,
         username: string,token: string,salt: string

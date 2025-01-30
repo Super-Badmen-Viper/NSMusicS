@@ -20,63 +20,35 @@ export class Artists_ApiService_of_Je extends Jellyfin_Api_Services_Web {
         "IsFavorite" "IsResumable"
         "Likes" "Dislikes" "IsFavoriteOrLikes"
      */
-    /**
-     * 获取所有艺术家信息
-     * @param userId 用户 ID
-     * @param searchTerm 搜索关键词
-     * @param sortBy 排序字段
-     * @param sortOrder 排序顺序（如 "Ascending" 或 "Descending"）
-     * @param filters 过滤条件
-     * @param isFavorite 是否收藏（如 "true" 或 "false"）
-     * @param years 年份过滤（如 "2020,2021"）
-     * @param officialRatings 官方评级过滤
-     * @param genres 流派过滤（如 "Rock,Pop"）
-     * @param genreIds 流派 ID 过滤（如 "123,456"）
-     * @param tags 标签过滤
-     * @returns 响应数据
-     */
     public async getArtists_ALL(
-        userId: string,
-        searchTerm: string,
+        userId: string, parentId: string, searchTerm: string,
         sortBy: string, sortOrder: string,
-        filters: string, isFavorite: string, years: string, officialRatings: string,
-        genres: string, genreIds: string,
-        tags: string,
+        limit: string, startIndex: string,
+        includeItemTypes: string,
+        fields: string, enableImageTypes: string, recursive: string, imageTypeLimit: string,
+        years: string, filters: string
     ): Promise<any> {
         return this.sendRequest(
             'GET',
             'Artists',
             {
                 userId,
+                parentId,
                 searchTerm,
                 sortBy,
                 sortOrder,
-                filters,
-                isFavorite,
+                limit,
+                startIndex,
+                includeItemTypes,
+                fields,
+                enableImageTypes,
+                recursive,
+                imageTypeLimit,
                 years,
-                officialRatings,
-                genres,
-                genreIds,
-                tags,
+                filters
             }
         );
     }
-
-    /**
-     * 获取所有专辑艺术家信息
-     * @param userId 用户 ID
-     * @param searchTerm 搜索关键词
-     * @param sortBy 排序字段
-     * @param sortOrder 排序顺序（如 "Ascending" 或 "Descending"）
-     * @param filters 过滤条件
-     * @param isFavorite 是否收藏（如 "true" 或 "false"）
-     * @param years 年份过滤（如 "2020,2021"）
-     * @param officialRatings 官方评级过滤
-     * @param genres 流派过滤（如 "Rock,Pop"）
-     * @param genreIds 流派 ID 过滤（如 "123,456"）
-     * @param tags 标签过滤
-     * @returns 响应数据
-     */
     public async getAlbumArtists_ALL(
         userId: string,
         searchTerm: string,

@@ -22,6 +22,9 @@ import {store_player_tag_modify} from "../../page_player/store/store_player_tag_
 import error_album from '@/assets/img/error_album.jpg'
 import { isElectron } from '@/utils/electron/isElectron';
 import {store_player_audio_logic} from "../../page_player/store/store_player_audio_logic";
+import {
+    Get_Jellyfin_Temp_Data_To_LocalSqlite
+} from "../../../../../data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
 
 export const store_view_album_page_fetchData = reactive({
     async fetchData_Album(){
@@ -328,15 +331,34 @@ export const store_view_album_page_fetchData = reactive({
         } else if (selected != 'album_list_all') {
             playlist_id = selected
         }
-        let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
-        await get_Navidrome_Temp_Data_To_LocalSqlite.get_album_list(
-            store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
-            store_server_users.server_config_of_current_user_of_sqlite?.user_name,
-            store_server_user_model.token,
-            store_server_user_model.salt,
-            String(this._end),_order,_sort,String(this._start),
-            _search,_starred,
-            this._artist_id
-        )
+        if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+            let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
+            await get_Navidrome_Temp_Data_To_LocalSqlite.get_album_list(
+                store_server_users.server_config_of_current_user_of_sqlite?.url + '/rest',
+                store_server_users.server_config_of_current_user_of_sqlite?.user_name,
+                store_server_user_model.token,
+                store_server_user_model.salt,
+                String(this._end), _order, _sort, String(this._start),
+                _search, _starred,
+                this._artist_id
+            )
+        }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+            const sortBy = _sort === 'DatePlayed'
+                ? 'DatePlayed,SortName' : (_sort != 'id' ? _sort : 'IndexNumber');
+            const sortOrder = _sort === 'DatePlayed'
+                ? 'Descending' : (_order === 'desc' ? 'Descending' : 'Ascending');
+            const filter = _starred === 'true' ? 'IsFavorite' : ''
+            let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
+            await get_Jellyfin_Temp_Data_To_LocalSqlite.get_album_list(
+                store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music,
+                _search,
+                sortBy, sortOrder,
+                String(this._end - this._start), String(this._start),
+                'MusicAlbum',
+                'ParentId', 'Primary', 'true', '1',
+                store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : '',
+                filter
+            )
+        }
     }
 });

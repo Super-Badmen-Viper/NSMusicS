@@ -1148,7 +1148,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                width: store_player_appearance.player_show ? '160px' : '132px'
              }"
         >
-          <n-space justify="end" v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'">
+          <n-space justify="end" v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
             <n-tooltip trigger="hover" placement="top">
               <template #trigger>
                 <n-rate clearable size="small"
@@ -1160,7 +1160,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
           </n-space>
           <n-space justify="space-between"
                    :style="{
-                      marginTop: store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
+                      marginTop: store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'
                       ? '6px' : '16px'
                    }">
             <n-tooltip trigger="hover" placement="top"
@@ -1171,7 +1171,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                   @click="store_player_audio_logic.drawer_theme_show = !store_player_audio_logic.drawer_theme_show">
                   <template #icon>
                     <n-icon
-                        :size="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
+                        :size="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'
                         ? 22 : 26">
                       <Settings24Regular />
                     </n-icon>
@@ -1181,7 +1181,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
               {{ $t('Play') + $t('nsmusics.view_player.view_seting.viewSeting')}}
             </n-tooltip>
             <n-tooltip trigger="hover" placement="top"
-                       v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'">
+                       v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
               <template #trigger>
                 <n-button size="tiny" text
                           @click="() => {
@@ -1206,13 +1206,13 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
                 <n-button size="tiny" text @click="handleItemClick_Favorite(store_player_audio_info.this_audio_song_id,store_player_audio_info.this_audio_song_favorite);">
                   <template #icon>
                     <n-icon v-if="store_player_audio_info.this_audio_song_favorite"
-                            :size="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
+                            :size="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'
                             ? 22 : 26"
                             color="red">
                       <Heart28Filled/>
                     </n-icon>
                     <n-icon v-else
-                            :size="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
+                            :size="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'
                             ? 22 : 26">
                       <Heart24Regular/>
                     </n-icon>
@@ -1225,7 +1225,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
               <template #trigger>
                 <n-button size="tiny" text @click="Set_Player_Show_Sound_effects">
                   <template #icon>
-                    <n-icon :size="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
+                    <n-icon :size="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'
                             ? 22 : 26">
                       <DeviceEq24Filled/>
                     </n-icon>
@@ -1238,7 +1238,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
               <template #trigger>
                 <n-button size="tiny" text @click="Set_Player_Show_Sound_speed">
                   <template #icon>
-                    <n-icon :size="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
+                    <n-icon :size="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'
                             ? 22 : 26">
                       <TopSpeed20Regular/>
                     </n-icon>
@@ -1251,7 +1251,7 @@ watch(() => store_player_audio_logic.player_click_state_of_play_skip_forward, (n
               <template #trigger>
                 <n-button size="tiny" text @click="Set_Player_Show_Sound_more">
                   <template #icon>
-                    <n-icon :size="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'
+                    <n-icon :size="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'
                             ? 22 : 26">
                       <MoreCircle32Regular/>
                     </n-icon>

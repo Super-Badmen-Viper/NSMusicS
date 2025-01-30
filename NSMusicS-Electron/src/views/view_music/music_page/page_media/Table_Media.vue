@@ -562,7 +562,6 @@ async function update_playlist_updatePlaylist(){
       id: playlist_update_emit_id.value,
       name: playlist_set_of_updatePlaylist_of_playlistcomment.value
     }
-    store_playlist_list_logic.get_playlist_tracks_temporary_update(playlist)
     Type_Update_Playlist.value = !Type_Update_Playlist.value
 
     if(store_server_user_model.model_select === 'server'){
@@ -572,6 +571,8 @@ async function update_playlist_updatePlaylist(){
           playlist_set_of_updatePlaylist_of_comment.value,
           playlist_set_of_updatePlaylist_of_public.value
       )
+    }else{
+      store_playlist_list_logic.get_playlist_tracks_temporary_update(playlist)
     }
   }catch (e) {
     console.error(e)
@@ -1540,13 +1541,13 @@ onBeforeUnmount(() => {
           {{ $t('player.addNext') }}
         </v-contextmenu-item>
         <v-contextmenu-item
-            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'"
+            v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'"
             @click="menu_item_edit_selected_media_tags">
           {{ $t('page.contextMenu.showDetails') }}
         </v-contextmenu-item>
-        <v-contextmenu-divider v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'"/>
+        <v-contextmenu-divider v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'"/>
         <v-contextmenu-item
-          v-if="store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome'">
+          v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
           <rate
             class="viaSlot"
             style="margin-left: -12px;margin-top: -12px;height: 16px;"
@@ -1596,7 +1597,9 @@ onBeforeUnmount(() => {
           :options="store_playlist_list_info.playlist_names_ALLLists" style="width: 166px;"
           @update:value="update_playlist_set_of_updatePlaylist_of_playlistname" />
         <n-form>
-          <n-space vertical style="margin-bottom: 10px;">
+          <n-space
+              v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'"
+              vertical style="margin-bottom: 10px;">
             <span>{{ $t('common.name') }}</span>
             <n-input clearable placeholder="" v-model:value="playlist_set_of_updatePlaylist_of_playlistcomment"/>
           </n-space>
@@ -1619,6 +1622,7 @@ onBeforeUnmount(() => {
             {{ $t('common.delete') }}
           </n-button>
           <n-button strong secondary type="info"
+                    v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'"
                     @click="update_playlist_updatePlaylist();">
             {{ $t('common.save') }}
           </n-button>

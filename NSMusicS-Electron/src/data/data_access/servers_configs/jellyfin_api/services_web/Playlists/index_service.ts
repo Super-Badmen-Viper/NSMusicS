@@ -1,13 +1,6 @@
 import {Jellyfin_Api_Services_Web} from "../Jellyfin_Api_Services_Web"
 
 export class Playlists_ApiService_of_Je extends Jellyfin_Api_Services_Web {
-    /**
-     * 创建播放列表
-     * @param name 播放列表名称
-     * @param ids 媒体项 ID 列表（逗号分隔）
-     * @param mediaType 媒体类型
-     * @returns 响应数据
-     */
     public async postPlaylists_Create(
         name: string, ids: string, mediaType: string,
         userId: string
@@ -23,45 +16,26 @@ export class Playlists_ApiService_of_Je extends Jellyfin_Api_Services_Web {
             }
         );
     }
-
-    /**
-     * 获取播放列表详情
-     * @param playlistId 播放列表 ID
-     * @returns 响应数据
-     */
-    public async getPlaylists_id(playlistId: string, userId: string): Promise<any> {
+    public async postPlaylists_Update(playlistId: string, isPublic: boolean, name: string): Promise<any> {
         return this.sendRequest(
-            'GET',
+            'POST',
             `Playlists/${playlistId}`,
-            { userId } // 查询参数
+            undefined,
+            { Name: name, IsPublic: isPublic}
         );
     }
-
-    /**
-     * 向播放列表添加媒体项
-     * @param playlistId 播放列表 ID
-     * @param ids 媒体项 ID 列表（逗号分隔）
-     * @returns 响应数据
-     */
     public async postPlaylists_Add(playlistId: string, ids: string, userId: string): Promise<any> {
         return this.sendRequest(
             'POST',
             `Playlists/${playlistId}/Items`,
-            { ids,userId } // 查询参数
+            { ids,userId }
         );
     }
-
-    /**
-     * 从播放列表移除媒体项
-     * @param playlistId 播放列表 ID
-     * @param entryIds 媒体项 ID 列表（逗号分隔）
-     * @returns 响应数据
-     */
     public async delPlaylists_Remove(playlistId: string, entryIds: string): Promise<any> {
         return this.sendRequest(
             'DELETE',
             `Playlists/${playlistId}/Items`,
-            { entryIds } // 查询参数
+            { entryIds }
         );
     }
 }
