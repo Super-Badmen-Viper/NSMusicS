@@ -49,29 +49,33 @@ export class Artists_ApiService_of_Je extends Jellyfin_Api_Services_Web {
             }
         );
     }
+
     public async getAlbumArtists_ALL(
-        userId: string,
-        searchTerm: string,
+        userId: string, parentId: string, searchTerm: string,
         sortBy: string, sortOrder: string,
-        filters: string, isFavorite: string, years: string, officialRatings: string,
-        genres: string, genreIds: string,
-        tags: string,
+        limit: string, startIndex: string,
+        includeItemTypes: string,
+        fields: string, enableImageTypes: string, recursive: string, imageTypeLimit: string,
+        years: string, filters: string
     ): Promise<any> {
         return this.sendRequest(
             'GET',
             'Artists/AlbumArtists',
             {
                 userId,
+                parentId,
                 searchTerm,
                 sortBy,
                 sortOrder,
-                filters,
-                isFavorite,
+                limit,
+                startIndex,
+                includeItemTypes,
+                fields,
+                enableImageTypes,
+                recursive,
+                imageTypeLimit,
                 years,
-                officialRatings,
-                genres,
-                genreIds,
-                tags,
+                filters
             }
         );
     }

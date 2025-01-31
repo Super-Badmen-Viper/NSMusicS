@@ -33,10 +33,17 @@ export const store_server_data_set_mediaInfo = reactive({
                         id,'','');
             }
         }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
-            await new UserFavoriteItems_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).getUserFavoriteItems_Quick(
-                store_server_user_model.userid_of_Je,
-                id,
-            )
+            if (!value) {
+                await new UserFavoriteItems_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).getUserFavoriteItems_Quick(
+                    store_server_user_model.userid_of_Je,
+                    id,
+                )
+            } else {
+                await new UserFavoriteItems_ApiService_of_Je(store_server_users.server_config_of_current_user_of_sqlite?.url).delUserFavoriteItems_Quick(
+                    store_server_user_model.userid_of_Je,
+                    id,
+                )
+            }
         }
     },
     async Set_MediaInfo_To_Rating(id: any, value: number){

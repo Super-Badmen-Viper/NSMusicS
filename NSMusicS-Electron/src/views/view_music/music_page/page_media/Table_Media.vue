@@ -358,6 +358,9 @@ const handleItemClick_title = (title:string) => {
     store_view_media_page_logic.page_songlists_bool_show_search_area = true
     store_view_media_page_logic.page_songlists_input_search_Value = title
     store_view_media_page_logic.get_page_songlists_keyword(title)
+    if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+
+    }
   }
 }
 const handleItemClick_artist = (artist:string) => {
@@ -375,6 +378,9 @@ const handleItemClick_artist = (artist:string) => {
     store_view_media_page_logic.page_songlists_bool_show_search_area = true
     store_view_media_page_logic.page_songlists_input_search_Value = artist
     store_view_media_page_logic.get_page_songlists_keyword(artist)
+    if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+
+    }
   }
 }
 const handleItemClick_album = (album_id:string) => {
@@ -769,7 +775,7 @@ const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 function menu_item_add_to_playlist_end() {
   const item: Media_File | undefined = store_view_media_page_info.media_Files_temporary.find((mediaFile: Media_File) => mediaFile.id === store_playlist_list_info.playlist_Menu_Item_Id);
   if (item != undefined && item != 'undefined') {
-    const newItem: Media_File = JSON.parse(JSON.stringify(item));
+    const newItem: any = JSON.parse(JSON.stringify(item));
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
     store_playlist_list_info.playlist_MediaFiles_temporary.push(newItem);
     store_playlist_list_info.playlist_MediaFiles_temporary.forEach((item: any, index: number) => {
@@ -790,7 +796,7 @@ function menu_item_add_to_playlist_next() {
         (item: any) => item.id === store_player_audio_info.this_audio_song_id
     );
 
-    const newItem: Media_File = JSON.parse(JSON.stringify(item));
+    const newItem: any = JSON.parse(JSON.stringify(item));
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
     store_playlist_list_info.playlist_MediaFiles_temporary.splice(index + 1, 0, newItem);
 
@@ -836,6 +842,16 @@ const onScroll = async () => {
 /////
 const onRefreshSharp = async () => {
   if(store_server_user_model.model_server_type_of_web){
+    if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+      store_player_appearance.player_mode_of_medialist_from_external_import = true
+      store_view_media_page_fetchData._album_id = ''
+      store_view_media_page_fetchData._artist_id = ''
+      store_view_album_page_fetchData._artist_id = ''
+      store_view_media_page_logic.page_songlists_keyword = ''
+      input_search_InstRef.value?.clear()
+      store_view_media_page_logic.page_songlists_keywordFilter = ""
+      store_view_media_page_logic.page_songlists_bool_show_search_area = false
+    }
     store_view_media_page_fetchData.fetchData_Media_of_server_web_start()
   }else if(store_server_user_model.model_server_type_of_local){
     store_view_media_page_logic.page_songlists_bool_show_search_area = true;
@@ -1480,7 +1496,10 @@ onBeforeUnmount(() => {
               </div>
               <div style="margin-left: auto; margin-right: 0px; width: 40px; display: flex; flex-direction: row;">
                 <button
-                  @click="handleItemClick_Favorite(item.id, item.favorite); item.favorite = !item.favorite;"
+                  @click="()=>{
+                    handleItemClick_Favorite(item.id, item.favorite);
+                    item.favorite = !item.favorite;
+                  }"
                   style="
                     border: 0px; background-color: transparent;
                     width: 28px; height: 28px;

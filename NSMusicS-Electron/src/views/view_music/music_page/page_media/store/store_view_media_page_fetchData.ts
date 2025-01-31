@@ -262,71 +262,107 @@ export const store_view_media_page_fetchData = reactive({
     },
     async fetchData_Media_Find_This_Album(id: string){
         if(isElectron) {
-            let db: any = null;
-            db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
-            db.pragma('journal_mode = WAL');
-            db.exec('PRAGMA foreign_keys = OFF');
-            let stmt_media_file = null;
-            let stmt_media_file_string = '';
-            stmt_media_file_string = `SELECT *
-                                      FROM ${store_server_user_model.media_file}
-                                      WHERE album_id = '${id}'`;
-            stmt_media_file = db.prepare(stmt_media_file_string);
-            const rows = stmt_media_file.all();
-            rows.forEach((row: Media_File, index: number) => {
-                row.absoluteIndex = index;
-                row.selected = false;
-                row.duration_txt = store_view_media_page_logic.get_duration_formatTime(row.duration);
-                if (row.medium_image_url == null || row.medium_image_url.length == 0) {
-                    if(row.medium_image_url) {
-                        const fileName = row.medium_image_url.split(/[\\/]/).pop(); // 兼容 Windows 和 Unix 路径分隔符
-                        const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg');
-                        row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`;
-                    }else{
-                        row.medium_image_url = error_album
-                    }
+            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+                if (store_server_user_model.model_server_type_of_local) {
+                    let db: any = null;
+                    db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+                    db.pragma('journal_mode = WAL');
+                    db.exec('PRAGMA foreign_keys = OFF');
+                    let stmt_media_file = null;
+                    let stmt_media_file_string = '';
+                    stmt_media_file_string = `SELECT *
+                                              FROM ${store_server_user_model.media_file}
+                                              WHERE album_id = '${id}'`;
+                    stmt_media_file = db.prepare(stmt_media_file_string);
+                    const rows = stmt_media_file.all();
+                    rows.forEach((row: Media_File, index: number) => {
+                        row.absoluteIndex = index;
+                        row.selected = false;
+                        row.duration_txt = store_view_media_page_logic.get_duration_formatTime(row.duration);
+                        if (row.medium_image_url == null || row.medium_image_url.length == 0) {
+                            if (row.medium_image_url) {
+                                const fileName = row.medium_image_url.split(/[\\/]/).pop(); // 兼容 Windows 和 Unix 路径分隔符
+                                const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg');
+                                row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`;
+                            } else {
+                                row.medium_image_url = error_album
+                            }
+                        }
+                        store_view_media_page_info.media_Files_temporary.push(row);
+                    });
+                    store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
+                        item.absoluteIndex = index + 1;
+                    });
+                }else if (store_server_user_model.model_server_type_of_web) {
+                    this._start = 0;
+                    this._end = 100;
+                    this._album_id = id
+                    await this.fetchData_Media_of_server_web(true)
+                    this._album_id = ''
                 }
-                store_view_media_page_info.media_Files_temporary.push(row);
-            });
-            store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
-                item.absoluteIndex = index + 1;
-            });
-        } else {
+            }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+                this._start = 0;
+                this._end = 100;
+                this._album_id = id
+                await this.fetchData_Media_of_server_web(true)
+                this._album_id = ''
+            }
+        }
+        else {
             // other
         }
     },
     async fetchData_Media_Find_This_Artist(id: string){
         if(isElectron) {
-            let db: any = null;
-            db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
-            db.pragma('journal_mode = WAL');
-            db.exec('PRAGMA foreign_keys = OFF');
-            let stmt_media_file = null;
-            let stmt_media_file_string = '';
-            stmt_media_file_string = `SELECT *
-                                      FROM ${store_server_user_model.media_file}
-                                      WHERE artist_id = '${id}'`;
-            stmt_media_file = db.prepare(stmt_media_file_string);
-            const rows = stmt_media_file.all();
-            rows.forEach((row: Media_File, index: number) => {
-                row.absoluteIndex = index;
-                row.selected = false;
-                row.duration_txt = store_view_media_page_logic.get_duration_formatTime(row.duration);
-                if (row.medium_image_url == null || row.medium_image_url.length == 0) {
-                    if(row.medium_image_url) {
-                        const fileName = row.medium_image_url.split(/[\\/]/).pop(); // 兼容 Windows 和 Unix 路径分隔符
-                        const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg');
-                        row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`;
-                    }else{
-                        row.medium_image_url = error_album
-                    }
+            if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
+                if (store_server_user_model.model_server_type_of_local) {
+                    let db: any = null;
+                    db = require('better-sqlite3')(store_app_configs_info.navidrome_db);
+                    db.pragma('journal_mode = WAL');
+                    db.exec('PRAGMA foreign_keys = OFF');
+                    let stmt_media_file = null;
+                    let stmt_media_file_string = '';
+                    stmt_media_file_string = `SELECT *
+                                              FROM ${store_server_user_model.media_file}
+                                              WHERE artist_id = '${id}'`;
+                    stmt_media_file = db.prepare(stmt_media_file_string);
+                    const rows = stmt_media_file.all();
+                    rows.forEach((row: Media_File, index: number) => {
+                        row.absoluteIndex = index;
+                        row.selected = false;
+                        row.duration_txt = store_view_media_page_logic.get_duration_formatTime(row.duration);
+                        if (row.medium_image_url == null || row.medium_image_url.length == 0) {
+                            if (row.medium_image_url) {
+                                const fileName = row.medium_image_url.split(/[\\/]/).pop(); // 兼容 Windows 和 Unix 路径分隔符
+                                const newFileName = fileName.replace(/\.(mp3|flac)$/i, '.jpg');
+                                row.medium_image_url = `${store_app_configs_info.driveTempPath}/${encodeURIComponent(newFileName)}`;
+                            } else {
+                                row.medium_image_url = error_album
+                            }
+                        }
+                        store_view_media_page_info.media_Files_temporary.push(row);
+                    });
+                    store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
+                        item.absoluteIndex = index + 1;
+                    });
                 }
-                store_view_media_page_info.media_Files_temporary.push(row);
-            });
-            store_view_media_page_info.media_Files_temporary.forEach((item: any, index: number) => {
-                item.absoluteIndex = index + 1;
-            });
-        } else {
+                else if (store_server_user_model.model_server_type_of_web) {
+                    this._start = 0;
+                    this._end = 100;
+                    this._artist_id = id
+                    await this.fetchData_Media_of_server_web(true)
+                    this._artist_id = ''
+                }
+            }
+            else if (store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+                this._start = 0;
+                this._end = 100;
+                this._artist_id = id
+                await this.fetchData_Media_of_server_web(true)
+                this._artist_id = ''
+            }
+        }
+        else {
             // other
         }
     },
@@ -361,7 +397,7 @@ export const store_view_media_page_fetchData = reactive({
         store_view_media_page_info.media_Files_temporary = [];
         this._start = 0;
         this._end = 100;
-        await this.fetchData_Media_of_server_web()
+        await this.fetchData_Media_of_server_web(false)
 
         if(store_player_appearance.player_mode_of_medialist_from_external_import) {
             store_view_media_page_fetchData._album_id = ''
@@ -377,9 +413,11 @@ export const store_view_media_page_fetchData = reactive({
             this._end += 100;
             this._start = this._end - 99;
         }
-        await this.fetchData_Media_of_server_web()
+        await this.fetchData_Media_of_server_web(false)
     },
-    async fetchData_Media_of_server_web(){
+    async fetchData_Media_of_server_web(
+        find_model: boolean
+    ){
         const _search = (store_view_media_page_logic.page_songlists_keywordFilter || '').match(/%([^%]+)%/)?.[1] || '';
         const selected = store_view_media_page_logic.page_songlists_selected;
         ///
@@ -399,7 +437,9 @@ export const store_view_media_page_fetchData = reactive({
                 _sort = 'DatePlayed'
             }
         } else if (selected != 'song_list_all') {
-            playlist_id = selected
+            if(!find_model) {
+                playlist_id = selected
+            }
         }
         if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
             let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
@@ -419,18 +459,28 @@ export const store_view_media_page_fetchData = reactive({
             const sortOrder = _sort === 'DatePlayed'
                 ? 'Descending' : (_order === 'desc' ? 'Descending' : 'Ascending');
             const filter = _starred === 'true' ? 'IsFavorite' : ''
+            // jellyfin not support search artist and album list of musicdata
             let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
-            await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list(
-                playlist_id,
-                store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music,
-                _search,
-                sortBy, sortOrder,
-                String(this._end - this._start), String(this._start),
-                'Audio',
-                'ParentId', 'Primary', 'true', '1',
-                store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : '',
-                filter
-            )
+            if(this._artist_id.length === 0) {
+                const prarentId = this._album_id.length === 0
+                    ? store_server_user_model.parentid_of_Je_Music : this._album_id
+                await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list(
+                    playlist_id,
+                    store_server_user_model.userid_of_Je, prarentId,
+                    _search,
+                    sortBy, sortOrder,
+                    String(this._end - this._start), String(this._start),
+                    'Audio',
+                    'ParentId', 'Primary', 'true', '1',
+                    store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : '',
+                    filter
+                )
+            }else{
+                await get_Jellyfin_Temp_Data_To_LocalSqlite.get_media_list_of_artist(
+                    this._artist_id,
+                    String(this._end - this._start), String(this._start),
+                )
+            }
         }
     },
     fetchData_Media_of_data_synchronization_to_playlist(){

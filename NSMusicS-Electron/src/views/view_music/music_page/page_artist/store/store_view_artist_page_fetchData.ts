@@ -211,7 +211,9 @@ export const store_view_artist_page_fetchData = reactive({
         }
     },
     async fetchData_This_Artist_MediaList(artist_id:any){
-        store_player_appearance.player_mode_of_medialist_from_external_import = true;
+        if(store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin') {
+            store_player_appearance.player_mode_of_medialist_from_external_import = true;
+        }
 
         store_view_media_page_logic.page_songlists_keywordFilter = `WHERE artist_id = '${artist_id}'`
         store_view_media_page_logic.page_songlists_selected = 'song_list_all'
@@ -297,20 +299,16 @@ export const store_view_artist_page_fetchData = reactive({
                 _search, _starred
             )
         }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
-            const sortBy = _sort === 'DatePlayed'
-                ? 'DatePlayed,SortName' : (_sort != 'id' ? _sort : 'IndexNumber');
-            const sortOrder = _sort === 'DatePlayed'
-                ? 'Descending' : (_order === 'desc' ? 'Descending' : 'Ascending');
             const filter = _starred === 'true' ? 'IsFavorite' : ''
             let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
             await get_Jellyfin_Temp_Data_To_LocalSqlite.get_artist_list(
                 store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music,
                 _search,
-                sortBy, sortOrder,
+                '', '',
                 String(this._end - this._start), String(this._start),
                 'Artist',
                 'ParentId', 'Primary', 'true', '1',
-                store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : '',
+                '',
                 filter
             )
         }

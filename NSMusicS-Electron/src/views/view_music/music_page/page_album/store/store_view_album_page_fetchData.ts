@@ -319,7 +319,6 @@ export const store_view_album_page_fetchData = reactive({
             store_view_album_page_logic.page_albumlists_options_Sort_key[0].order.replace('end', '') : 'ASC';
         ///
         let _starred = '';
-        let playlist_id = '';
         if (selected === 'album_list_love') {
             _starred = 'true'
         } else if (selected === 'album_list_recently') {
@@ -328,8 +327,6 @@ export const store_view_album_page_fetchData = reactive({
             if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
                 _sort = 'DatePlayed'
             }
-        } else if (selected != 'album_list_all') {
-            playlist_id = selected
         }
         if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidrome') {
             let get_Navidrome_Temp_Data_To_LocalSqlite = new Get_Navidrome_Temp_Data_To_LocalSqlite()
@@ -348,17 +345,31 @@ export const store_view_album_page_fetchData = reactive({
             const sortOrder = _sort === 'DatePlayed'
                 ? 'Descending' : (_order === 'desc' ? 'Descending' : 'Ascending');
             const filter = _starred === 'true' ? 'IsFavorite' : ''
+            const find_artist_albums = this._artist_id.length === 0;
+            // const find_artist_albums = this._artist_id.length > 0
+            // getItems_List_Find_Artist_ALL_Album
             let get_Jellyfin_Temp_Data_To_LocalSqlite = new Get_Jellyfin_Temp_Data_To_LocalSqlite()
-            await get_Jellyfin_Temp_Data_To_LocalSqlite.get_album_list(
-                store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music,
-                _search,
-                sortBy, sortOrder,
-                String(this._end - this._start), String(this._start),
-                'MusicAlbum',
-                'ParentId', 'Primary', 'true', '1',
-                store_view_media_page_logic.page_songlists_filter_year > 0 ? store_view_media_page_logic.page_songlists_filter_year : '',
-                filter
-            )
+            if(find_artist_albums) {
+                await get_Jellyfin_Temp_Data_To_LocalSqlite.get_album_list(
+                    store_server_user_model.userid_of_Je, store_server_user_model.parentid_of_Je_Music,
+                    _search,
+                    sortBy, sortOrder,
+                    String(this._end - this._start), String(this._start),
+                    'MusicAlbum',
+                    'ParentId', 'Primary', 'true', '1',
+                    store_view_album_page_logic.page_albumlists_filter_year > 0 ? store_view_album_page_logic.page_albumlists_filter_year : '',
+                    filter
+                )
+            }else{
+                await get_Jellyfin_Temp_Data_To_LocalSqlite.get_album_list_find_artist_id(
+                    store_server_user_model.userid_of_Je, this._artist_id,
+                    sortBy, sortOrder,
+                    String(this._end - this._start), String(this._start),
+                    'MusicAlbum',
+                    'ParentId,PrimaryImageAspectRatio,ParentId,PrimaryImageAspectRatio', 'true',
+                    'false'
+                )
+            }
         }
     }
 });

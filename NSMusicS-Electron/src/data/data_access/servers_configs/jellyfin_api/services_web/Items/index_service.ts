@@ -29,12 +29,19 @@ export class Items_ApiService_of_Je extends Jellyfin_Api_Services_Web {
         "UserRootFolder" "UserView" "Year"
      */
 
-    // IncludeItemTypes=Audio
-    // SortBy=Album,SortName SortOrder=Ascending
-    // Fields=ParentId EnableImageTypes=Primary
-    // StartIndex=0 Limit=100
-    // ImageTypeLimit=1 Recursive=true
-    // ParentId=28e9960207c978c0d9aaefc8ae2d3a79
+    // http://localhost:8096/Users/3a992c45695c485c996a291091513934/Items/4ce074653b0dab7d21aa1638e9030e6a
+    public async getItems_Info(
+        userId: string, itemId: string,
+    ): Promise<any> {
+        return this.sendRequest(
+            'GET',
+            `Items/${itemId}`,
+            {
+                userId
+            }
+        );
+    }
+
     public async getItems_List(
         userId: string, parentId: string, searchTerm: string,
         sortBy: string, sortOrder: string,
@@ -56,69 +63,25 @@ export class Items_ApiService_of_Je extends Jellyfin_Api_Services_Web {
             }
         );
     }
-    // IncludeItemTypes=MusicAlbum
-    // SortBy=SortName SortOrder=Ascending
-    // Fields=PrimaryImageAspectRatio,SortName EnableImageTypes=Primary,Backdrop,Banner,Thumb
-    // StartIndex=0 Limit=100
-    // ImageTypeLimit=1 Recursive=true
-    // ParentId=28e9960207c978c0d9aaefc8ae2d3a79
 
-    public async getItems_List_Last(
-        userId: string, parentId: string,
-        limit: string,
-        includeItemTypes: string,
-        fields: string, enableImageTypes: string, recursive: string, imageTypeLimit: string,
-        filters: string, enableTotalRecordCount: string
-    ): Promise<any> {
-        return this.sendRequest(
-            'GET',
-            'Items/Latest',
-            {
-                userId, parentId,
-                limit,
-                includeItemTypes,
-                fields, enableImageTypes, recursive, imageTypeLimit,
-                filters, enableTotalRecordCount
-            }
-        );
-    }
-
-    public async getItems_List_Home_Filters(
-        userId: string, parentId: string,
+    public async getItems_List_Find_Artist_ALL_Album(
+        userId: string, albumArtistIds: string,
         sortBy: string, sortOrder: string,
-        limit: string,
+        limit: string, startIndex: string,
         includeItemTypes: string,
-        fields: string, enableImageTypes: string, recursive: string, imageTypeLimit: string,
-        filters: string, enableTotalRecordCount: string
+        fields: string, recursive: string,
+        collapseBoxSetItems: string
     ): Promise<any> {
         return this.sendRequest(
             'GET',
             'Items',
             {
-                userId, parentId,
+                userId, albumArtistIds,
                 sortBy, sortOrder,
-                limit,
+                limit, startIndex,
                 includeItemTypes,
-                fields, enableImageTypes, recursive, imageTypeLimit,
-                filters, enableTotalRecordCount
-            }
-        );
-    }
-
-    public async getItems_List_Quick_Filters(
-        userId: string, parentId: string,
-        includeItemTypes: string,
-        Fields: string,
-        filters: string
-    ): Promise<any> {
-        return this.sendRequest(
-            'GET',
-            'Items',
-            {
-                userId, parentId,
-                includeItemTypes,
-                Fields,
-                filters
+                fields, recursive,
+                collapseBoxSetItems
             }
         );
     }

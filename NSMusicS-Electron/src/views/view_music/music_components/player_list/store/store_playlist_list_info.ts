@@ -1,7 +1,6 @@
 import {reactive, watch} from 'vue'
 import {store_app_configs_logic_save} from "@/data/data_stores/app/store_app_configs_logic_save";
-import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
-import {store_view_media_page_info} from "../../../music_page/page_media/store/store_view_media_page_info";
+import {store_playlist_list_fetchData} from "@/views/view_music/music_components/player_list/store/store_playlist_list_fetchData";
 
 export const store_playlist_list_info = reactive({
     playlist_names_ALLLists: [],
@@ -66,6 +65,7 @@ export const store_playlist_list_info = reactive({
     },
 });
 watch(() => store_playlist_list_info.playlist_MediaFiles_temporary, async (newValue) => {
+    store_playlist_list_fetchData._totalCount = newValue.length;
     store_app_configs_logic_save.save_system_playlist_item_id_config();
 });
 watch(() => store_playlist_list_info.playlist_MediaFiles_temporary_Sort_Items, async (newValue) => {

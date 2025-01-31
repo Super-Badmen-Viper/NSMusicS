@@ -28,6 +28,7 @@ const { t } = useI18n({
 ////// passed as argument
 import {store_view_home_page_info} from "@/views/view_music/music_page/page_home/store/store_view_home_page_info"
 import {store_server_user_model} from "@/data/data_stores/server/store_server_user_model";
+import {store_server_users} from "@/data/data_stores/server/store_server_users";
 
 ////// albumlist_view page_layout gridItems
 const item_album = ref<number>(160)
@@ -291,7 +292,7 @@ async function menu_item_add_to_playlist_end() {
   store_view_media_page_info.media_Files_temporary = []
 
   for (let item of matchingItems) {
-    const newItem: Media_File = JSON.parse(JSON.stringify(item));
+    const newItem: any = JSON.parse(JSON.stringify(item));
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
     store_playlist_list_info.playlist_MediaFiles_temporary.push(newItem);
     store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id);
@@ -511,7 +512,7 @@ onBeforeUnmount(() => {
                     >
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
-                    <div class="hover_buttons_top">
+                    <div class="hover_buttons_top" v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
                       <rate
                           class="viaSlot" style="margin-right: 8px;"
                           :length="5"
@@ -541,7 +542,10 @@ onBeforeUnmount(() => {
                       </button>
                       <button
                           class="love_this_album"
-                          @click="handleItemClick_Favorite(item.id,item.favorite);item.favorite = !item.favorite;"
+                          @click="()=>{
+                            handleItemClick_Favorite(item.id, item.favorite);
+                            item.favorite = !item.favorite;
+                          }"
                           style="
                           border: 0px;background-color: transparent;
                           width: 28px;height: 28px;
@@ -646,7 +650,7 @@ onBeforeUnmount(() => {
                     >
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
-                    <div class="hover_buttons_top">
+                    <div class="hover_buttons_top" v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
                       <rate
                           class="viaSlot" style="margin-right: 8px;"
                           :length="5"
@@ -675,14 +679,16 @@ onBeforeUnmount(() => {
                         <icon :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><Open28Filled/></icon>
                       </button>
                       <button
-                          class="love_this_album"
-                          @click="handleItemClick_Favorite(item.id,item.favorite);item.favorite = !item.favorite;"
-                          style="
-                        border: 0px;background-color: transparent;
-                        width: 28px;height: 28px;
-                        cursor: pointer;
-                      "
-                      >
+                        class="love_this_album"
+                        @click="()=>{
+                          handleItemClick_Favorite(item.id, item.favorite);
+                          item.favorite = !item.favorite;
+                        }"
+                        style="
+                          border: 0px;background-color: transparent;
+                          width: 28px;height: 28px;
+                          cursor: pointer;
+                        ">
                         <icon v-if="item.favorite" :size="20" color="red" style="margin-left: -2px;margin-top: 3px;"><Heart28Filled/></icon>
                         <icon v-else :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><Heart24Regular/></icon>
                       </button>
@@ -781,7 +787,7 @@ onBeforeUnmount(() => {
                     >
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
-                    <div class="hover_buttons_top">
+                    <div class="hover_buttons_top" v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
                       <rate
                           class="viaSlot" style="margin-right: 8px;"
                           :length="5"
@@ -810,14 +816,16 @@ onBeforeUnmount(() => {
                         <icon :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><Open28Filled/></icon>
                       </button>
                       <button
-                          class="love_this_album"
-                          @click="handleItemClick_Favorite(item.id,item.favorite);item.favorite = !item.favorite;"
-                          style="
+                        class="love_this_album"
+                        @click="()=>{
+                            handleItemClick_Favorite(item.id, item.favorite);
+                            item.favorite = !item.favorite;
+                          }"
+                        style="
                           border: 0px;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
-                        "
-                      >
+                        ">
                         <icon v-if="item.favorite" :size="20" color="red" style="margin-left: -2px;margin-top: 3px;"><Heart28Filled/></icon>
                         <icon v-else :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><Heart24Regular/></icon>
                       </button>
@@ -916,7 +924,7 @@ onBeforeUnmount(() => {
                     >
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
-                    <div class="hover_buttons_top">
+                    <div class="hover_buttons_top" v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
                       <rate
                           class="viaSlot" style="margin-right: 8px;"
                           :length="5"
@@ -945,14 +953,16 @@ onBeforeUnmount(() => {
                         <icon :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><Open28Filled/></icon>
                       </button>
                       <button
-                          class="love_this_album"
-                          @click="handleItemClick_Favorite(item.id,item.favorite);item.favorite = !item.favorite;"
-                          style="
-                        border: 0px;background-color: transparent;
-                        width: 28px;height: 28px;
-                        cursor: pointer;
-                      "
-                      >
+                        class="love_this_album"
+                        @click="()=>{
+                            handleItemClick_Favorite(item.id, item.favorite);
+                            item.favorite = !item.favorite;
+                          }"
+                        style="
+                          border: 0px;background-color: transparent;
+                          width: 28px;height: 28px;
+                          cursor: pointer;
+                        ">
                         <icon v-if="item.favorite" :size="20" color="red" style="margin-left: -2px;margin-top: 3px;"><Heart28Filled/></icon>
                         <icon v-else :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><Heart24Regular/></icon>
                       </button>

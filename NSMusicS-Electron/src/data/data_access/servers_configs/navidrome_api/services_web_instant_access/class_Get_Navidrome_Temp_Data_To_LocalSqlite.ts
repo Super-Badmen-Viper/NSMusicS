@@ -268,22 +268,20 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         year:string
     ){
         let songlist = []
-        if(playlist_id === '') {
+        if(playlist_id === '') { // find_model
             const {data,totalCount} = await this.song_Lists_ApiWebService_of_ND.getMediaList_ALL(
                 _end, _order, _sort, _start,
                 _search, _starred, _album_id, _artist_id,
                 year
             );
             songlist = data
-            store_playlist_list_fetchData._totalCount = totalCount
-        }else{
+        }else{ // ! find_model
             const {data,totalCount} = await this.song_Lists_ApiWebService_of_ND.getMediaList_of_Playlist(
                 playlist_id,
                 _end, _order, _sort, _start,
                 year
             )
             songlist = data
-            store_playlist_list_fetchData._totalCount = totalCount
         }
         if (Array.isArray(songlist) && songlist.length > 0) {
             if(_sort === 'playDate'){
@@ -479,17 +477,15 @@ export class Get_Navidrome_Temp_Data_To_LocalSqlite{
         let songlist = []
         if(playlist_id === '') {
             const {data,totalCount} = await this.song_Lists_ApiWebService_of_ND.getMediaList_ALL(
-                _end, _order, _sort, _start, _search, _starred, _album_id, _artist_id
+                _end, _order, _sort, _start, _search, _starred, _album_id, _artist_id, ''
             );
             songlist = data
-            store_playlist_list_fetchData._totalCount = totalCount
         }else{
             const {data,totalCount} = await this.song_Lists_ApiWebService_of_ND.getMediaList_of_Playlist(
                 playlist_id,
-                _end, _order, _sort, _start
+                _end, _order, _sort, _start, ''
             )
             songlist = data
-            store_playlist_list_fetchData._totalCount = totalCount
         }
         if (Array.isArray(songlist) && songlist.length > 0) {
             if(_sort === 'playDate'){

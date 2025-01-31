@@ -921,7 +921,7 @@
                           <n-space vertical>
                             <n-space vertical>
                               <n-space vertical>
-                                <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_1') + ' - ' + $t('nsmusics.view_page.routerModel_type_3') }}</span>
+                                <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_1') + ' - ' + $t('Suggestions')+ $t('ButtonActivate') }}</span>
                                 <div style="margin-top: -10px;">
                                   <span style="font-size:12px;">{{ $t('nsmusics.view_page.modelServer_type_1_explain') }}</span>
                                 </div>
@@ -940,15 +940,15 @@
                               >
                               </n-switch>
                             </n-space>
-                            <n-space vertical
-                                     >
+                            <n-space vertical>
                               <n-space vertical>
-                                <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_2') }}</span>
+                                <span style="font-size:16px;font-weight: 600;">{{ $t('nsmusics.view_page.modelServer_type_2') + ' - ' + $t('Experimental') + ' - ' + $t('DisablePlugin')}}</span>
                                 <div style="margin-top: -10px;">
                                   <span style="font-size:12px;">{{ $t('nsmusics.view_page.modelServer_type_2_explain') }}</span>
                                 </div>
                               </n-space>
                               <n-switch
+                                  disabled
                                   v-model:value="store_server_user_model.model_server_type_of_local"
                                   @update:value="() => {
                                     store_server_user_model.model_server_type_of_local_server_download = true

@@ -160,12 +160,10 @@ if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidro
   options_Sort_key.value = [
     {label:computed(() => t('OptionTrackName')), key: 'Name', state_Sort: state_Sort.Default },
     {label:computed(() => t('AlbumArtist')), key: 'AlbumArtist', state_Sort: state_Sort.Default },
-    {label:computed(() => t('Artist')), key: 'Artist', state_Sort: state_Sort.Default },
-    {label:computed(() => t('Album')), key: 'Album', state_Sort: state_Sort.Default },
-    {label:computed(() => t('DateAdded')), key: 'DateCreated', state_Sort: state_Sort.Default },
-    {label:computed(() => t('PlayCount')), key: 'PlayCount', state_Sort: state_Sort.Default },
-    {label:computed(() => t('ReleaseDate')), key: 'PremiereDate', state_Sort: state_Sort.Default },
-    {label:computed(() => t('Runtime')), key: 'Runtime', state_Sort: state_Sort.Default },
+    {label:computed(() => t('CommunityRating')), key: 'CommunityRating', state_Sort: state_Sort.Default },
+    {label:computed(() => t('OptionCriticRating')), key: 'CriticRating', state_Sort: state_Sort.Default },
+    {label:computed(() => t('OptionDateAdded')), key: 'DateCreated', state_Sort: state_Sort.Default },
+    {label:computed(() => t('OptionReleaseDate')), key: 'ProductionYear', state_Sort: state_Sort.Default },
     {label:computed(() => t('OptionRandom')), key: 'Random', state_Sort: state_Sort.Default },
   ]
 }
@@ -343,13 +341,28 @@ onMounted(() => {
   if (store_server_user_model.model_server_type_of_local) {
     scrollTo(store_router_history_data_of_album.router_history_model_of_Album_scroller_value)
   }else if (store_server_user_model.model_server_type_of_web) {
-
+    if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+      /// 兼容行为：打开指定艺术家，直接跳转乐曲页面，路由刷新到专辑页面需要清空数据
+      store_player_appearance.player_mode_of_medialist_from_external_import = true
+      store_view_media_page_fetchData._album_id = ''
+      store_view_media_page_fetchData._artist_id = ''
+      store_view_album_page_fetchData._artist_id = ''
+    }
   }
 });
 
 ////// select Dtatsource of albumlists
 const breadcrumbItems = ref('所有专辑');
 const page_albumlists_handleSelected_updateValue = (value: any) => {
+  // clear search，防止出现Jellyfin模式下列表切换未清除搜素数据
+  if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+    store_view_media_page_fetchData._album_id = ''
+    store_view_media_page_fetchData._artist_id = ''
+    store_view_album_page_fetchData._artist_id = ''
+    input_search_InstRef.value?.clear()
+    store_view_album_page_logic.page_albumlists_keyword = ""
+  }
+  //
   store_view_album_page_logic.page_albumlists_selected = value
   console.log('selected_value_for_albumlistall：'+value);
   breadcrumbItems.value = store_view_album_page_logic.page_albumlists_options.find(option => option.value === value)?.label || '';
@@ -389,7 +402,11 @@ const handleItemClick_artist = (artist_id:string) => {
     click_search()
     scrollTo(0)
   }else if(store_server_user_model.model_server_type_of_web){
-    store_view_album_page_fetchData._artist_id = ''
+    if(store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin') {
+      store_view_album_page_fetchData._artist_id = ''
+    }else{
+      store_view_album_page_fetchData._artist_id = artist_id
+    }
     bool_show_search_area.value = true
   }
   store_view_album_page_logic.page_albumlists_keyword = artist_id
@@ -438,29 +455,29 @@ const handleItemClick_Rating = (id_rating: any) => {
 }
 
 const contextmenu = ref(null as any)
-  const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
-  const message = useMessage()
-  async function update_playlist_addAlbum(id: any, playlist_id: any){
-    try{
-      await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(id)
-      const matchingIds: string[] = [];
-      store_view_media_page_info.media_Files_temporary.forEach((item: Media_File) => {
-        if (item.album_id === id) {
-          matchingIds.push(item.id);
-        }
-      });
-      store_view_media_page_info.media_Files_temporary = []
-      for (let item_id of matchingIds) {
-        ////
-        await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(item_id,playlist_id)
+const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
+const message = useMessage()
+async function update_playlist_addAlbum(id: any, playlist_id: any){
+  try{
+    await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(id)
+    const matchingIds: string[] = [];
+    store_view_media_page_info.media_Files_temporary.forEach((item: Media_File) => {
+      if (item.album_id === id) {
+        matchingIds.push(item.id);
       }
+    });
+    store_view_media_page_info.media_Files_temporary = []
+    for (let item_id of matchingIds) {
       ////
-      message.success(t('common.add'))
-      store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
-    }catch (e) {
-      console.error(e)
+      await store_local_data_set_mediaInfo.Set_MediaInfo_Add_Selected_Playlist(item_id,playlist_id)
     }
+    ////
+    message.success(t('common.add'))
+    store_playlist_list_logic.get_playlist_tracks_temporary_update_media_file(true)
+  }catch (e) {
+    console.error(e)
   }
+}
 async function menu_item_add_to_playlist_end() {
   await store_view_media_page_fetchData.fetchData_Media_Find_This_Album(store_playlist_list_info.playlist_Menu_Item_Id);
   const matchingItems = store_view_media_page_info.media_Files_temporary.filter(
@@ -470,7 +487,7 @@ async function menu_item_add_to_playlist_end() {
   store_view_media_page_info.media_Files_temporary = []
 
   for (let item of matchingItems) {
-    const newItem: Media_File = JSON.parse(JSON.stringify(item));
+    const newItem: any = JSON.parse(JSON.stringify(item));
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
     store_playlist_list_info.playlist_MediaFiles_temporary.push(newItem);
     store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id);
@@ -542,6 +559,11 @@ const onScroll = async () => {
 //////
 const onRefreshSharp = async () => {
   if(store_server_user_model.model_server_type_of_web){
+    if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+      store_view_album_page_logic.page_albumlists_keyword = ''
+      input_search_InstRef.value?.clear()
+      bool_show_search_area.value = false
+    }
     store_view_album_page_fetchData.fetchData_Album_of_server_web_start()
   }else if(store_server_user_model.model_server_type_of_local){
     scrollTo(0)
@@ -941,7 +963,7 @@ onBeforeUnmount(() => {
                     >
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
-                    <div class="hover_buttons_top">
+                    <div class="hover_buttons_top" v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
                       <rate
                         class="viaSlot" style="margin-right: 8px;"
                         :length="5"
@@ -971,13 +993,15 @@ onBeforeUnmount(() => {
                       </button>
                       <button
                         class="love_this_album"
-                        @click="handleItemClick_Favorite(item.id,item.favorite);item.favorite = !item.favorite;"
+                        @click="()=>{
+                          handleItemClick_Favorite(item.id, item.favorite);
+                          item.favorite = !item.favorite;
+                        }"
                         style="
                           border: 0px;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
-                        "
-                      >
+                        ">
                         <icon v-if="item.favorite" :size="20" color="red" style="margin-left: -2px;margin-top: 3px;"><Heart28Filled/></icon>
                         <icon v-else :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><Heart24Regular/></icon>
                       </button>
@@ -1002,7 +1026,11 @@ onBeforeUnmount(() => {
                         if(store_server_user_model.model_server_type_of_local) {
                           handleItemClick_artist(item.artist_id)
                         }else if(store_server_user_model.model_server_type_of_web) {
-                          handleItemClick_artist(item.artist)
+                          if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin') {
+                            handleItemClick_artist(item.artist_id)
+                          }else{
+                            handleItemClick_artist(item.artist)
+                          }
                         }
                       }"
                     >

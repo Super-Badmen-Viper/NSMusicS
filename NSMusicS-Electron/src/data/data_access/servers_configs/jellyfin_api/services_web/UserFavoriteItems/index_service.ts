@@ -12,4 +12,15 @@ export class UserFavoriteItems_ApiService_of_Je extends Jellyfin_Api_Services_We
             }
         );
     }
+    public async delUserFavoriteItems_Quick(
+        userId: string, itemId: string,
+    ): Promise<any> {
+        return this.sendRequest(
+            'DELETE',
+            `UserFavoriteItems/${itemId}`,
+            {
+                userId
+            }
+        );
+    }
 }

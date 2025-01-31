@@ -348,6 +348,7 @@
   import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
   import {store_view_media_page_info} from "@/views/view_music/music_page/page_media/store/store_view_media_page_info";
   import {store_view_album_page_info} from "@/views/view_music/music_page/page_album/store/store_view_album_page_info";
+  import {store_server_users} from "@/data/data_stores/server/store_server_users";
   routers.beforeEach((to, from, next) => {
     if(to.name !== from.name){
       store_router_data_logic.clear_Files_temporary()
@@ -589,31 +590,33 @@
     });
     store_view_album_page_logic.page_albumlists.push(temp_Play_List_Love)
     //////
-    const temp_Play_List_Recently: Play_List = {
-      label: computed(() => t('nsmusics.view_page.recentPlay')),
-      value: 'album_list_recently',
-      id: 'album_list_recently',
-      name: computed(() => t('nsmusics.view_page.recentPlay')),
-      comment: computed(() => t('nsmusics.view_page.recentPlay')),
-      duration: 0,
-      song_count: store_view_album_page_info.album_recently_count > 0 ? store_view_album_page_info.album_recently_count : '*' + ' *',
-      public: 0,
-      created_at: '',
-      updated_at: '',
-      path: '',
-      sync: 0,
-      size: 0,
-      rules: null,
-      evaluated_at: '',
-      owner_id: ''
+    if(store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin') {
+      const temp_Play_List_Recently: Play_List = {
+        label: computed(() => t('nsmusics.view_page.recentPlay')),
+        value: 'album_list_recently',
+        id: 'album_list_recently',
+        name: computed(() => t('nsmusics.view_page.recentPlay')),
+        comment: computed(() => t('nsmusics.view_page.recentPlay')),
+        duration: 0,
+        song_count: store_view_album_page_info.album_recently_count > 0 ? store_view_album_page_info.album_recently_count : '*' + ' *',
+        public: 0,
+        created_at: '',
+        updated_at: '',
+        path: '',
+        sync: 0,
+        size: 0,
+        rules: null,
+        evaluated_at: '',
+        owner_id: ''
+      }
+      store_view_album_page_logic.page_albumlists_options.push(temp_Play_List_Recently);
+      store_view_album_page_logic.page_albumlists_statistic.push({
+        label: temp_Play_List_Recently.label,
+        album_count: temp_Play_List_Recently.song_count.toString(),
+        id: temp_Play_List_Recently.id
+      });
+      store_view_album_page_logic.page_albumlists.push(temp_Play_List_Recently)
     }
-    store_view_album_page_logic.page_albumlists_options.push(temp_Play_List_Recently);
-    store_view_album_page_logic.page_albumlists_statistic.push({
-      label: temp_Play_List_Recently.label,
-      album_count: temp_Play_List_Recently.song_count.toString(),
-      id: temp_Play_List_Recently.id
-    });
-    store_view_album_page_logic.page_albumlists.push(temp_Play_List_Recently)
     //////
     store_view_album_page_logic.page_albumlists_statistic.push({
       label: computed(() => t('entity.playlist_other')),
@@ -679,31 +682,33 @@
     });
     store_view_artist_page_logic.page_artistlists.push(temp_Play_List_Love)
     //////
-    const temp_Play_List_Recently: Play_List = {
-      label: computed(() => t('nsmusics.view_page.recentPlay')),
-      value: 'artist_list_recently',
-      id: 'artist_list_recently',
-      name: computed(() => t('nsmusics.view_page.recentPlay')),
-      comment: computed(() => t('nsmusics.view_page.recentPlay')),
-      duration: 0,
-      song_count: store_view_artist_page_info.artist_recently_count > 0 ? store_view_artist_page_info.artist_recently_count : '*' + ' *',
-      public: 0,
-      created_at: '',
-      updated_at: '',
-      path: '',
-      sync: 0,
-      size: 0,
-      rules: null,
-      evaluated_at: '',
-      owner_id: ''
+    if(store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin') {
+      const temp_Play_List_Recently: Play_List = {
+        label: computed(() => t('nsmusics.view_page.recentPlay')),
+        value: 'artist_list_recently',
+        id: 'artist_list_recently',
+        name: computed(() => t('nsmusics.view_page.recentPlay')),
+        comment: computed(() => t('nsmusics.view_page.recentPlay')),
+        duration: 0,
+        song_count: store_view_artist_page_info.artist_recently_count > 0 ? store_view_artist_page_info.artist_recently_count : '*' + ' *',
+        public: 0,
+        created_at: '',
+        updated_at: '',
+        path: '',
+        sync: 0,
+        size: 0,
+        rules: null,
+        evaluated_at: '',
+        owner_id: ''
+      }
+      store_view_artist_page_logic.page_artistlists_options.push(temp_Play_List_Recently);
+      store_view_artist_page_logic.page_artistlists_statistic.push({
+        label: temp_Play_List_Recently.label,
+        artist_count: temp_Play_List_Recently.song_count.toString(),
+        id: temp_Play_List_Recently.id
+      });
+      store_view_artist_page_logic.page_artistlists.push(temp_Play_List_Recently)
     }
-    store_view_artist_page_logic.page_artistlists_options.push(temp_Play_List_Recently);
-    store_view_artist_page_logic.page_artistlists_statistic.push({
-      label: temp_Play_List_Recently.label,
-      artist_count: temp_Play_List_Recently.song_count.toString(),
-      id: temp_Play_List_Recently.id
-    });
-    store_view_artist_page_logic.page_artistlists.push(temp_Play_List_Recently)
     //////
     store_view_artist_page_logic.page_artistlists_statistic.push({
       label: computed(() => t('entity.playlist_other')),

@@ -135,15 +135,7 @@ if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'navidro
   ]
 }else if(store_server_users.server_config_of_current_user_of_sqlite?.type === 'jellyfin'){
   options_Sort_key.value = [
-    {label:computed(() => t('OptionTrackName')), key: 'Name', state_Sort: state_Sort.Default },
-    {label:computed(() => t('AlbumArtist')), key: 'AlbumArtist', state_Sort: state_Sort.Default },
-    {label:computed(() => t('Artist')), key: 'Artist', state_Sort: state_Sort.Default },
-    {label:computed(() => t('Album')), key: 'Album', state_Sort: state_Sort.Default },
-    {label:computed(() => t('DateAdded')), key: 'DateCreated', state_Sort: state_Sort.Default },
-    {label:computed(() => t('PlayCount')), key: 'PlayCount', state_Sort: state_Sort.Default },
-    {label:computed(() => t('ReleaseDate')), key: 'PremiereDate', state_Sort: state_Sort.Default },
-    {label:computed(() => t('Runtime')), key: 'Runtime', state_Sort: state_Sort.Default },
-    {label:computed(() => t('OptionRandom')), key: 'Random', state_Sort: state_Sort.Default },
+
   ]
 }
 const options_Sort = computed(() => {
@@ -361,8 +353,17 @@ const Open_this_artist_all_artist_list_click = (artist_id:string) => {
     store_view_album_page_logic.page_albumlists_selected = 'album_list_all'
     store_playlist_list_fetchData._artist_id = artist_id
   }
-  console.log('artist_list_of_artist_id_artist_click：'+artist_id);
-  store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
+  if(store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin') {
+    console.log('artist_list_of_artist_id_artist_click：' + artist_id);
+    store_router_data_logic.get_album_list_of_artist_id_by_artist_info(artist_id)
+  }else{
+    // Jellyfin 有相当一部分flac媒体无法识别为专辑，艺术家只有歌曲没有专辑也是666，属实是垃圾得很，歌单列表项只能添加不能删除是什么牛马操作？
+    // NSMusicS-GO 即将强势霸取Github开源音乐生态江山榜首
+    // 直接在乐曲页面打开，而非是专辑页面，因为这几把根本就识别不了
+    store_player_appearance.player_mode_of_medialist_from_external_import = false
+    store_view_media_page_logic.page_songlists_keyword = artist_id
+    store_router_data_info.router.push('song')
+  }
 }
 const Play_this_artist_all_media_list_click = async (artist_id: string) => {
   if(store_server_user_model.model_server_type_of_web){
@@ -417,6 +418,11 @@ import {store_playlist_list_fetchData} from "@/views/view_music/music_components
 import {store_player_tag_modify} from "@/views/view_music/music_page/page_player/store/store_player_tag_modify";
 import {store_player_audio_logic} from "@/views/view_music/music_page/page_player/store/store_player_audio_logic";
 import {store_server_users} from "@/data/data_stores/server/store_server_users";
+import {
+  Get_Jellyfin_Temp_Data_To_LocalSqlite
+} from "@/data/data_access/servers_configs/jellyfin_api/services_web_instant_access/class_Get_Jellyfin_Temp_Data_To_LocalSqlite";
+import {store_router_data_info} from "@/router/router_store/store_router_data_info";
+import {store_player_appearance} from "@/views/view_music/music_page/page_player/store/store_player_appearance";
 const contextmenu = ref(null as any)
 const menu_item_add_to_songlist = computed(() => t('form.addToPlaylist.title'));
 const message = useMessage()
@@ -450,7 +456,7 @@ async function menu_item_add_to_playlist_end() {
   store_view_media_page_info.media_Files_temporary = []
 
   for (let item of matchingItems) {
-    const newItem: Media_File = JSON.parse(JSON.stringify(item));
+    const newItem: any = JSON.parse(JSON.stringify(item));
     newItem.play_id = newItem.id + 'copy&' + Math.floor(Math.random() * 90000) + 10000;
     store_playlist_list_info.playlist_MediaFiles_temporary.push(newItem);
     store_playlist_list_info.playlist_datas_CurrentPlayList_ALLMediaIds.push(newItem.id);
@@ -609,7 +615,11 @@ onBeforeUnmount(() => {
           </n-tooltip>
 
           <n-dropdown
-              v-if="!(store_server_user_model.model_server_type_of_web && store_view_artist_page_logic.page_artistlists_selected === 'artist_list_recently')"
+              v-if="!(
+                  store_server_user_model.model_server_type_of_web &&
+                  store_view_artist_page_logic.page_artistlists_selected === 'artist_list_recently')
+                  && store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'
+              "
               trigger="click" :show-arrow="true"
               :options="options_Sort" @select="handleSelect_Sort">
             <n-tooltip trigger="hover" placement="top">
@@ -847,7 +857,7 @@ onBeforeUnmount(() => {
                     >
                       <icon :size="42" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><PlayCircle24Regular/></icon>
                     </button>
-                    <div class="hover_buttons_top">
+                    <div class="hover_buttons_top" v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
                       <rate
                           class="viaSlot" style="margin-right: 8px;"
                           :length="5"
@@ -876,14 +886,16 @@ onBeforeUnmount(() => {
                         <icon :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><Open28Filled/></icon>
                       </button>
                       <button
-                          class="love_this_artist"
-                          @click="handleItemClick_Favorite(item.id,item.favorite);item.favorite = !item.favorite;"
-                          style="
+                        class="love_this_artist"
+                        @click="()=>{
+                            handleItemClick_Favorite(item.id, item.favorite);
+                            item.favorite = !item.favorite;
+                          }"
+                        style="
                           border: 0px;background-color: transparent;
                           width: 28px;height: 28px;
                           cursor: pointer;
-                        "
-                      >
+                        ">
                         <icon v-if="item.favorite" :size="20" color="red" style="margin-left: -2px;margin-top: 3px;"><Heart28Filled/></icon>
                         <icon v-else :size="20" color="#FFFFFF" style="margin-left: -2px;margin-top: 3px;"><Heart24Regular/></icon>
                       </button>
@@ -900,12 +912,12 @@ onBeforeUnmount(() => {
                       {{ item.name }}
                     </span>
                   </div>
-                  <div>
+                  <div v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
                     <span id="artist_artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">
                        {{ $t('entity.album_other') + ': ' + item.album_count }}
                     </span>
                   </div>
-                  <div>
+                  <div v-if="store_server_users.server_config_of_current_user_of_sqlite?.type != 'jellyfin'">
                     <span id="artist_artist_name" :style="{ maxWidth: item_artist_txt + 'px' }">
                       {{ $t('entity.track_other') + ': ' + item.song_count }}
                     </span>
